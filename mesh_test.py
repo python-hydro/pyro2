@@ -11,17 +11,22 @@ import mesh.patch
 import pylab
 import time
 
-myp = mesh.patch.cellCentered2d(16,32, xmax=1.0, ymax=2.0)
-myp.registerVar("a")
-myp.init()
+myg = mesh.patch.grid2d(16,32, xmax=1.0, ymax=2.0)
 
-print myp.__class__.__name__
+mydata = mesh.patch.ccData2d(myg)
 
-a = myp.getVarPtr("a")
+bc = mesh.patch.bcObject()
+
+mydata.registerVar("a", bc)
+mydata.create()
+
+print mydata.__class__.__name__
+
+a = mydata.getVarPtr("a")
 
 print type(a)
 
-a[:,:] = numpy.exp(-(myp.x2d - 0.5)**2 - (myp.y2d - 1.0)**2)
+a[:,:] = numpy.exp(-(myg.x2d - 0.5)**2 - (myg.y2d - 1.0)**2)
 
 pylab.ion()
 
@@ -31,7 +36,7 @@ pylab.clf()
 # contiguous in memory, and the plotting routines interpret this
 # as the 'x' axis, so we transpose here.
 pylab.imshow(numpy.transpose(a), interpolation="nearest", origin="lower", 
-             extent=[myp.xmin, myp.xmax, myp.ymin, myp.ymax])
+             extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
 pylab.draw()
 
@@ -39,13 +44,13 @@ pylab.show()
 
 
 n = 0
-while (n < myp.nx):
+while (n < myg.nx):
     print n
-    a[:,:] = numpy.exp(-(myp.x2d - 0.5 + n*myp.dx)**2 - (myp.y2d - 1.0)**2)
+    a[:,:] = numpy.exp(-(myg.x2d - 0.5 + n*myg.dx)**2 - (myg.y2d - 1.0)**2)
 
     pylab.clf()
     pylab.imshow(numpy.transpose(a), interpolation="nearest", origin="lower",
-             extent=[myp.xmin, myp.xmax, myp.ymin, myp.ymax])
+             extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
     pylab.draw()
     
