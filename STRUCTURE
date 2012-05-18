@@ -1,0 +1,52 @@
+pyro/
+
+  advection/
+     main.py           -- main driver
+     ...
+
+     problems/         -- advection problem initializations
+       gaussian.py
+       tophat.py
+     test/             -- stored benchmark files for testing
+
+  compressible/
+     main.py           -- main driver
+     eos.py
+     riemann.py
+
+     problems/         -- compressible problem initializations
+     test/             -- stored benchmark files for testing
+
+  incompressible/
+     main.py           -- main driver 
+
+     problems/         -- incompressible problem initializations    
+     test/             -- stored benchmark files for testing
+
+  mesh/
+     patch.py
+     reconstruction.py
+ 
+  multigrid/
+     main.py           -- main driver
+     multigrid.py
+
+     problems/         -- multigrid problem initializations
+     test/             -- stored benchmark files for testing
+
+  util/
+     compare.py
+     profile.py
+     runparams.py
+
+  vis/
+ 
+     
+ 
+
+
+There are 4 different solvers that we can run: advection,
+compressible, incompressible, and multigrid.
+
+
+ 
