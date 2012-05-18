@@ -1,0 +1,9 @@
+-- use NumPy vectorization when possible.
+
+   Here's an example (Laplace's equation):
+
+   http://www.scipy.org/PerformancePython
+
+   u[1:-1, 1:-1] = ((u[0:-2, 1:-1] + u[2:, 1:-1])*dy2 +
+                    (u[1:-1,0:-2] + u[1:-1, 2:])*dx2)*dnr_inv
+ 
