@@ -9,13 +9,20 @@ pyro/
        tophat.py
      test/             -- stored benchmark files for testing
 
-  compressible/
+  compressible/        -- compressible hydrodynamics solver
      main.py           -- main driver
      eos.py
      riemann.py
 
      problems/         -- compressible problem initializations
      test/             -- stored benchmark files for testing
+
+
+  diffusion/           -- thermal diffusion solver (w/ multigrid)
+     main.py
+
+     problems/
+     test/
 
   incompressible/
      main.py           -- main driver 

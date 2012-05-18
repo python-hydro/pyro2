@@ -43,8 +43,9 @@ pylab.draw()
 pylab.show()
 
 
+# demonstrate that we can update plots while the code is running
 n = 0
-while (n < myg.nx):
+while (n < 4):
     print n
     a[:,:] = numpy.exp(-(myg.x2d - 0.5 + n*myg.dx)**2 - (myg.y2d - 1.0)**2)
 
@@ -54,10 +55,20 @@ while (n < myg.nx):
 
     pylab.draw()
     
-    time.sleep(5)
+    time.sleep(1)
 
     n += 1
 
 
-print "here"
 
+
+# output
+print "write"
+print myg
+print mydata
+mydata.write("mesh_test")
+
+print "read"
+myg2, myd2 = mesh.patch.read("mesh_test")
+print myg2
+print myd2

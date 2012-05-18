@@ -35,6 +35,7 @@ fill the ghost cells
 
 import sys
 import numpy
+import pickle
 
 class bcObject:
     """
@@ -166,9 +167,9 @@ class grid2d:
     def __str__(self):
         """ print out some basic information about the grid object """
 
-        string = "2-d patch: nx = " + \
-            `self.nx` + ', ny = ' + \
-            `self.ny` + ', ng = '
+        string = "2-d grid: nx = " + `self.nx` + \
+                         ", ny = " + `self.ny` + \
+                         ", ng = " + `self.ng`
 
         return string
         
@@ -249,14 +250,26 @@ class ccData2d:
     def __str__(self):
         """ print out some basic information about the ccData2d object """
 
-        string = "cc data: nx = " + \
-            `self.nx` + ', ny = ' + \
-            `self.ny` + ', ng = ' + \
-            `self.ng` + "\n" + \
-                 "           nvars = " + `self.nvars` + "\n" + \
-                 "           variables: " + `self.vars`
+        string = "cc data: nx = " + `self.grid.nx` + \
+                        ", ny = " + `self.grid.ny` + \
+                        ", ng = " + `self.grid.ng` + "\n" + \
+                 "         nvars = " + `self.nvar` + "\n" + \
+                 "         variables: \n" 
+                 
+        ilo = self.grid.ilo
+        ihi = self.grid.ihi
+        jlo = self.grid.jlo
+        jhi = self.grid.jhi
+
+        n = 0
+        while (n < self.nvar):
+            string += "            " + self.vars[n] + \
+                ": min = " + `numpy.min(self.data[n,ilo:ihi,jlo:jhi])` + \
+                 " max = " + `numpy.max(self.data[n,ilo:ihi,jlo:jhi])`
+            n += 1
+ 
         return string
-        
+    
 
     def getVarPtr(self, name):
         """
@@ -428,3 +441,26 @@ class ccData2d:
                 j += 1
 
 
+    def write(self, filename):
+        """
+        write out the ccData2d object to disk, stored in the file
+        filename.  We use a python binary format (via pickle).  This
+        stores a representation of the entire object.
+        """
+        pF = open(filename + ".pyro", "wb")
+        pickle.dump(self, pF, pickle.HIGHEST_PROTOCOL)
+        pF.close()
+
+
+def read(filename):
+    """
+    read a ccData object from a file and return it and the grid info
+    """
+
+    pF = open(filename + ".pyro", "rb")
+    data = pickle.load(pF)
+    pF.close()
+    
+    return data.grid, data
+
+        
