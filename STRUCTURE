@@ -48,5 +48,14 @@ pyro/
 There are 4 different solvers that we can run: advection,
 compressible, incompressible, and multigrid.
 
+These are run directly from the respective directory.  Beneath each
+solver directory is a problems/ directory which contains the
+initialization routines for different problems and a test/ directory
+which stores known output for comparison purposes.
 
  
+Each routine should have its own built in unit test accessible by
+simply running the python file directly (i.e. not importing it).
+
+Python modules overview:
+http://docs.python.org/tutorial/modules.html
