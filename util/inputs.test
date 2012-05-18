@@ -1,0 +1,11 @@
+[driver]
+nsteps = 100         ; comment
+max_time = 0.25
+
+[riemann]
+tol = 1.e-10
+max_iter = 10
+
+[io]
+basename = myfile_
+
