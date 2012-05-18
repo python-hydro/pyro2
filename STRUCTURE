@@ -9,6 +9,10 @@ pyro/
        tophat.py
      test/             -- stored benchmark files for testing
 
+
+  common/              -- routines that are commonly used across all solvers
+
+
   compressible/        -- compressible hydrodynamics solver
      main.py           -- main driver
      eos.py
