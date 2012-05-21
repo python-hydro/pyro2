@@ -11,3 +11,11 @@
 -- tree:
 
   tree -I CVS -A -C 
+
+
+-- output library w/ colors
+ 
+  WARNING()
+  ERROR()
+
+
