@@ -18,7 +18,7 @@ def initialize():
     ymin = runparams.getParam("mesh.ymin")
     ymax = runparams.getParam("mesh.ymax")
     
-    myGrid = patch.grid2d(nx, ny, xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+    myGrid = patch.grid2d(nx, ny, xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax, ng=4)
 
 
     # create the variables
