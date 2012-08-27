@@ -44,8 +44,15 @@ except IndexError:
 try: problemName = next[1]
 except IndexError:
     print 'ERROR: problem name not specified on command line'
-    print 'USAGE: pyro.py [options] <solver name> <problem name> <input file>'
+    print usage
     sys.exit(2)
+
+try: paramFile = next[2]
+except IndexError:
+    print 'ERROR: parameter file not specified on command line'
+    print usage
+    sys.exit(2)
+
 
 
 # actually import the solver-specific stuff under the 'solver' namespace
@@ -57,10 +64,14 @@ exec 'import ' + solverName + ' as solver'
 #-----------------------------------------------------------------------------
 
 # parameter defaults
+runparams.LoadParams("_defaults")
 runparams.LoadParams(solverName + "/_defaults")
 
 # problem-specific runtime parameters
 runparams.LoadParams(solverName + "/problems/_" + problemName + ".defaults")
+
+# now read in the inputs file
+runparams.LoadParams(paramFile)
 
 runparams.PrintParamFile()
 
@@ -83,21 +94,30 @@ exec problemName + '.fillPatch(myData)'
 # debugging -- look at the data
 dens = myData.getVarPtr("density")
 myg = myData.grid
-pylab.imshow(numpy.transpose(dens), interpolation="nearest", origin="lower", 
-             extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
-
-pylab.draw()
-
-pylab.show()
 
 
 #-----------------------------------------------------------------------------
 # evolve
 #-----------------------------------------------------------------------------
+tmax = runparams.getParam("driver.tmax")
 
-dt = 1
+pylab.ion()
 
-solver.evolve(myData, dt)
+t = 0.0
+while (t < tmax):
+
+    # get the timestep
+    dt = solver.timestep(myData)
+
+    if (t + dt > tmax):
+        dt = tmax - t
+
+    solver.evolve(myData, dt)
+
+    t += dt
+
+    print t, dt
+    solver.dovis(myData)
 
 
 

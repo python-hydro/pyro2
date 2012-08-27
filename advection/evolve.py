@@ -7,16 +7,12 @@ def evolve(myData, dt):
     
     dens = myData.getVarPtr("density")
 
-    splitting = runparams.getParam("driver.splitting")
+    splitting = runparams.getParam("solver.splitting")
 
     dtdx = dt/myData.grid.dx
     dtdy = dt/myData.grid.dy
 
-    print "splitting = ", splitting
-
     if splitting == "unsplit":
-
-        print "here"
 
         [flux_x, flux_y] =  unsplitFluxes(myData.grid, dt, dens)
 
