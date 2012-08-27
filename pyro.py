@@ -106,6 +106,10 @@ pylab.ion()
 t = 0.0
 while (t < tmax):
 
+    # fill boundary conditions
+    myData.fillBC("density")
+
+
     # get the timestep
     dt = solver.timestep(myData)
 
