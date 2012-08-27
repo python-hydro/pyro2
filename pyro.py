@@ -16,6 +16,10 @@ usage = """
 
 print 'pyro ...'
 
+#-----------------------------------------------------------------------------
+# command line arguments / solver setup
+#-----------------------------------------------------------------------------
+
 # parse the runtime arguments.  We specify a solver (which we import
 # locally under the namespace 'solver', the problem name, and the
 # input file name

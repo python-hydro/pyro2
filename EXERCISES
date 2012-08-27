@@ -1,0 +1,26 @@
+advection:
+
+   implement PPM
+   implement 1-d solver
+
+
+compressible:
+
+   add species
+
+
+incompressible:
+
+   add viscosity
+
+
+diffusion:
+
+   add non-constant diffusivity
+
+
+multigrid:
+
+   demonstrate convergence
+
+
