@@ -1,0 +1,38 @@
+# simple inputs files for the unsplit CTU hydro scheme
+
+[driver]
+max_steps = 500
+tmax = 1.0
+
+cfl = 0.5
+
+max_dt_change = 1.e33
+init_tstep_factor = 1.0
+
+splitting = unsplit
+
+
+[io]
+basename = smooth_unsplit_new_
+nplot = 10
+
+[mesh]
+nx = 40
+ny = 40
+xmax = 1.0
+ymax = 1.0
+
+xlboundary = periodic
+xrboundary = periodic
+
+ylboundary = periodic
+yrboundary = periodic
+
+
+[advection]
+u = 1.0
+v = 1.0
+
+limiter = 2
+
+
