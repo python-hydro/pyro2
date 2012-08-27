@@ -1,0 +1,23 @@
+[driver]
+cfl       = 0.8           ; advective CFL number
+splitting = "unsplit"     ; split or unsplit timestepping?
+
+
+[advection]
+u = 1.0      ; advective velocity in x-direction
+v = 1.0      ; advective velocity in y-direction
+
+
+[mesh]
+xmin = 0.0                ; domain minumum x-coordinate
+xmax = 1.0                ; domain maximum x-coordinate
+ymin = 0.0                ; domain minimum y-coordinate
+ymax = 1.0                ; domain maximum y-coordinate
+xlboundary = reflect     ; minimum x BC ('reflect', 'outflow', or 'periodic')
+xrboundary = reflect     ; maximum x BC ('reflect', 'outflow', or 'periodic') 
+ylboundary = reflect     ; minimum y BC ('reflect', 'outflow', or 'periodic')
+yrboundary = reflect     ; maximum y BC ('reflect', 'outflow', or 'periodic')
+nx = 25                   ; number of zones in the x-direction
+ny = 25                   ; number of zones in the y-direction
+
+

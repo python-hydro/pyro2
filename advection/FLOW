@@ -1,0 +1,18 @@
+
+create grid
+
+initial conditions
+
+main loop
+
+   fill ghost cells
+
+   compute dt
+
+   compute fluxes
+
+   conservative update
+
+   output
+
+   

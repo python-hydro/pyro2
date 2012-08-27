@@ -23,7 +23,7 @@ create the data that lives on that grid
 
 initialize some data
 
-   dens = data.getPtr("density")
+   dens = data.getVarPtr("density")
    dens[:,:] = ...
 
 
@@ -463,4 +463,20 @@ def read(filename):
     
     return data.grid, data
 
+
+def ccDataClone(old):
+
+    if (not isinstance(old, ccData2d)):
+        sys.exit("Can't clone object")
+
+    new = ccData2d(old.grid)
+
+    n = 0
+    while (n < old.nvar):
+        new.registerVar(old.vars[n], old.BCs[old.vars[n]])
+        n += 1
+
+    new.create()
+
+    return new
         
