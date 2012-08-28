@@ -1,7 +1,7 @@
 import numpy
 import mesh.patch as patch
 from util import runparams
-
+from vars import *
 
 
 def initialize():
@@ -78,5 +78,12 @@ def initialize():
 
         
     myData.create()
+
+
+    idens = myData.vars.index("density")
+    ixmom = myData.vars.index("x-momentum")
+    iymom = myData.vars.index("y-momentum")
+    iener = myData.vars.index("energy")
+
 
     return myGrid, myData
