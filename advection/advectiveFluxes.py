@@ -24,9 +24,14 @@ def unsplitFluxes(myGrid, dt, a):
     # monotonized central differences
     #--------------------------------------------------------------------------
 
-    #limiter = runparams.getParam("advection.limiter")
+    limiter = runparams.getParam("advection.limiter")
 
-    ldelta_a = reconstruction.limit(1, myGrid, a)
+    if (limiter == 1):
+        ldelta_a = reconstruction.limit4(1, myGrid, a)
+
+    else:
+        ldelta_a = reconstruction.nolimit(1, myGrid, a)
+
 
 
     # in the pure advection case, there is no Riemann problem we need to
@@ -66,7 +71,11 @@ def unsplitFluxes(myGrid, dt, a):
 
 
     # y-direction
-    ldelta_a = reconstruction.limit(2, myGrid, a)
+    if (limiter == 1):
+        ldelta_a = reconstruction.limit4(2, myGrid, a)
+
+    else:
+        ldelta_a = reconstruction.nolimit(2, myGrid, a)
 
     a_y = numpy.zeros((myGrid.qx,myGrid.qy), dtype=numpy.float64)
 

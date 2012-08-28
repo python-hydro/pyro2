@@ -2,3 +2,12 @@
 
 tmax = 1.0
 
+
+[io]
+
+basename = pyro_
+
+[vis]
+
+store_images = 0
+

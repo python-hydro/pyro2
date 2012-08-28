@@ -107,6 +107,7 @@ tmax = runparams.getParam("driver.tmax")
 
 pylab.ion()
 
+n = 0
 t = 0.0
 while (t < tmax):
 
@@ -123,9 +124,10 @@ while (t < tmax):
     solver.evolve(myData, dt)
 
     t += dt
+    n += 1
+    print "%5d %10.5f %10.5f" % (n, t, dt)
 
-    print t, dt
-    solver.dovis(myData)
-
+    solver.dovis(myData, n)
+    
 
 
