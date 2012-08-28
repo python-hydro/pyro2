@@ -457,7 +457,11 @@ def read(filename):
     read a ccData object from a file and return it and the grid info
     """
 
-    pF = open(filename + ".pyro", "rb")
+    # if we come in with .pyro, we don't need to add it again
+    if (filename.find(".pyro") < 0):
+        filename += ".pyro"
+
+    pF = open(filename, "rb")
     data = pickle.load(pF)
     pF.close()
     
