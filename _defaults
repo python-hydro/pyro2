@@ -6,6 +6,8 @@ tmax = 1.0
 [io]
 
 basename = pyro_
+tplot = 0.1
+
 
 [vis]
 

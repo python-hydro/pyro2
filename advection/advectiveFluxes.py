@@ -62,6 +62,7 @@ def unsplitFluxes(myGrid, dt, a):
     qx = myGrid.qx
     qy = myGrid.qy
 
+    # upwind
     if (u < 0):
         # a_x[i,j] = a[i,j] - 0.5*(1.0 + cx)*ldelta_a[i,j]
         a_x[:,:] = a[:,:] - 0.5*(1.0 + cx)*ldelta_a[:,:]
@@ -80,9 +81,7 @@ def unsplitFluxes(myGrid, dt, a):
     a_y = numpy.zeros((myGrid.qx,myGrid.qy), dtype=numpy.float64)
 
     
-    # the fluxes are going to be defined on the left edge of the
-    # computational zones
-
+    # upwind
     if (v < 0):
         # a_y[i,j] = a[i,j] - 0.5*(1.0 + cy)*ldelta_a[i,j]
         a_y[:,:] = a[:,:] - 0.5*(1.0 + cy)*ldelta_a[:,:]

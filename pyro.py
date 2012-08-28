@@ -123,10 +123,24 @@ while (t < tmax):
 
     solver.evolve(myData, dt)
 
+
+    # increment the time
     t += dt
     n += 1
     print "%5d %10.5f %10.5f" % (n, t, dt)
 
+
+    # output
+    tplot = runparams.getParam("io.tplot")
+    print dt, tplot, t % tplot
+    if (t % tplot <= dt):
+
+        print "outputting..."
+        basename = runparams.getParam("io.basename")
+        myData.write(basename + "%4.4d" % (n))
+
+
+    # visualization
     solver.dovis(myData, n)
     
 
