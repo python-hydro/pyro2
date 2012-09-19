@@ -23,3 +23,14 @@ def dens(pres, eint):
     return dens
 
 
+
+def rhoe(pres):
+    """ given the pressure, return (rho * e) """
+
+    gamma = runparams.getParam("eos.gamma")
+
+    rhoe = p/(gamma - 1.0)
+
+    return rhoe
+
+

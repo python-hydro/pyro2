@@ -265,6 +265,11 @@ def unsplitFluxes(myData, dt):
     #=========================================================================
     # compute transverse fluxes
     #=========================================================================
+    F_x = numpy.zeros((myg.qx, myg.qy, myData.nvar),  dtype=numpy.float64)
+    F_y = numpy.zeros((myg.qx, myg.qy, myData.nvar),  dtype=numpy.float64)    
+
+    F_x = riemann(1, myg, U_xl, U_xr)
+    F_y = riemann(1, myg, U_yl, U_yr)
 
 
     #=========================================================================
@@ -312,6 +317,41 @@ def unsplitFluxes(myData, dt):
                     i, j-1/2                                                    
                                        
     """
+
+    # should vectorize this
+    j = myg.jlo-2
+    while (j <= myg.jhi+2):
+
+        i = myg.ilo-2
+        while (i <= myg.ihi+2):
+
+            n = 0
+            while (n < myData.nvars):
+
+                U_xl[i,j,n] = U_xl[i,j,n] - \
+                    0.5*dt/myg.dy * (F_y[i-1,j+1,n] - F_y[i-1,j,n])
+                
+                U_xr[i,j,n] = U_xr[i,j,n] - \
+                    0.5*dt/myg.dy * (F_y[i,j+1,n] - F_y[i,j,n])
+
+                U_yl[i,j,n] = U_yl[i,j,n] - \
+                    0.5*dt/myg.dx * (F_x[i+1,j-1,n] - F_x[i,j-1,n])
+                
+                U_yr[i,j,n] = U_yr[i,j,n] - \
+                    0.5*dt/myg.dx * (F_x[i+1,j,n] - F_x[i,j,n])
+
+
+
+    #=========================================================================
+    # construct the fluxes normal to the interfaces
+    #=========================================================================
+    
+    # up until now, F_x and F_y stored the transverse fluxes, now we
+    # overwrite with the fluxes normal to the interfaces
+
+    F_x = riemann(1, myg, U_xl, U_xr)
+    F_y = riemann(1, myg, U_yl, U_yr)
+
 
     #=========================================================================    
     # apply artifical viscosity
