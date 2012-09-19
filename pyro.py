@@ -4,6 +4,7 @@ import sys
 import getopt
 import numpy
 import pylab
+import time
 
 from util import runparams
 
@@ -110,6 +111,9 @@ t = 0.0
 basename = runparams.getParam("io.basename")
 myData.write(basename + "%4.4d" % (n))
 
+solver.dovis(myData, 0)
+solver.dovis(myData, 0)
+time.sleep(100)
 
 nout = 0
 
