@@ -31,5 +31,5 @@ yr_boundary = outflow
 
 
 [sedov]
-r_init = 0.005
+r_init = 0.01
 
