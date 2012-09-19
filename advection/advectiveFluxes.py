@@ -9,6 +9,7 @@ solve
 from util import runparams
 import numpy
 import mesh.reconstruction as reconstruction
+import mesh.reconstruction_f as reconstruction_f
 
 def unsplitFluxes(myGrid, dt, a):
 
@@ -31,6 +32,8 @@ def unsplitFluxes(myGrid, dt, a):
 
     else:
         ldelta_a = reconstruction.nolimit(1, myGrid, a)
+        #ldelta_a = numpy.zeros((myGrid.qx, myGrid.qx), dtype=numpy.float64)
+        #ldelta_a = reconstruction_f.nolimit(1, a, myGrid.qx, myGrid.qy, myGrid.ng)
 
 
 
@@ -77,6 +80,8 @@ def unsplitFluxes(myGrid, dt, a):
 
     else:
         ldelta_a = reconstruction.nolimit(2, myGrid, a)
+        #ldelta_a = numpy.zeros((myGrid.qx, myGrid.qx), dtype=numpy.float64)
+        #ldelta_a = reconstruction_f.nolimit(2, a, myGrid.qx, myGrid.qy, myGrid.ng)
 
     a_y = numpy.zeros((myGrid.qx,myGrid.qy), dtype=numpy.float64)
 
