@@ -1,6 +1,7 @@
 from util import runparams
 #from unsplitFluxes import *
-from vars import *
+import vars    
+import numpy
 
 def evolve(myData, dt):
 
@@ -10,40 +11,47 @@ def evolve(myData, dt):
     ener = myData.getVarPtr("energy")
 
     grav = runparams.getParam("compressible.grav")
+
+    myg = myData.grid
     
     
     #(Flux_x, Flux_y) = unsplitFluxes(myData, dt)
-
+    Flux_x = numpy.zeros((myg.qx, myg.qy, myData.nvar),  dtype=numpy.float64)
+    Flux_y = numpy.zeros((myg.qx, myg.qy, myData.nvar),  dtype=numpy.float64)
 
     old_dens = dens.copy()
     old_ymom = ymom.copy()
 
     # conservative update
-    myg = myData.grid
+
+    dtdx = dt/myg.dx
+    dtdy = dt/myg.dy
+
+    print 'idens = ', vars.idens
 
     dens[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] += \
-        dtdx*(Flux_x[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,idens] - \
-              Flux_x[myg.ilo+1:myg.ihi+2,myg.jlo  :myg.jhi+1,idens]) + \
-        dtdy*(Flux_y[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,idens] - \
-              Flux_y[myg.ilo  :myg.ihi+1,myg.jlo+1:myg.jhi+2,idens])    
+        dtdx*(Flux_x[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,vars.idens] - \
+              Flux_x[myg.ilo+1:myg.ihi+2,myg.jlo  :myg.jhi+1,vars.idens]) + \
+        dtdy*(Flux_y[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,vars.idens] - \
+              Flux_y[myg.ilo  :myg.ihi+1,myg.jlo+1:myg.jhi+2,vars.idens])    
 
     xmom[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] += \
-        dtdx*(Flux_x[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,ixmom] - \
-              Flux_x[myg.ilo+1:myg.ihi+2,myg.jlo  :myg.jhi+1,ixmom]) + \
-        dtdy*(Flux_y[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,ixmom] - \
-              Flux_y[myg.ilo  :myg.ihi+1,myg.jlo+1:myg.jhi+2,ixmom])    
+        dtdx*(Flux_x[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,vars.ixmom] - \
+              Flux_x[myg.ilo+1:myg.ihi+2,myg.jlo  :myg.jhi+1,vars.ixmom]) + \
+        dtdy*(Flux_y[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,vars.ixmom] - \
+              Flux_y[myg.ilo  :myg.ihi+1,myg.jlo+1:myg.jhi+2,vars.ixmom])    
 
     ymom[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] += \
-        dtdx*(Flux_x[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,iymom] - \
-              Flux_x[myg.ilo+1:myg.ihi+2,myg.jlo  :myg.jhi+1,iymom]) + \
-        dtdy*(Flux_y[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,iymom] - \
-              Flux_y[myg.ilo  :myg.ihi+1,myg.jlo+1:myg.jhi+2,iymom])    
+        dtdx*(Flux_x[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,vars.iymom] - \
+              Flux_x[myg.ilo+1:myg.ihi+2,myg.jlo  :myg.jhi+1,vars.iymom]) + \
+        dtdy*(Flux_y[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,vars.iymom] - \
+              Flux_y[myg.ilo  :myg.ihi+1,myg.jlo+1:myg.jhi+2,vars.iymom])    
 
     ener[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] += \
-        dtdx*(Flux_x[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,iener] - \
-              Flux_x[myg.ilo+1:myg.ihi+2,myg.jlo  :myg.jhi+1,iener]) + \
-        dtdy*(Flux_y[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,iener] - \
-              Flux_y[myg.ilo  :myg.ihi+1,myg.jlo+1:myg.jhi+2,iener])    
+        dtdx*(Flux_x[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,vars.iener] - \
+              Flux_x[myg.ilo+1:myg.ihi+2,myg.jlo  :myg.jhi+1,vars.iener]) + \
+        dtdy*(Flux_y[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,vars.iener] - \
+              Flux_y[myg.ilo  :myg.ihi+1,myg.jlo+1:myg.jhi+2,vars.iener])    
 
 
     # gravitational source terms
