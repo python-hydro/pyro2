@@ -113,14 +113,13 @@ myData.write(basename + "%4.4d" % (n))
 
 solver.dovis(myData, 0)
 solver.dovis(myData, 0)
-time.sleep(100)
 
 nout = 0
 
 while (t < tmax):
 
     # fill boundary conditions
-    myData.fillBC("density")
+    myData.fillBCAll()
 
     # get the timestep
     dt = solver.timestep(myData)

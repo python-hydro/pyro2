@@ -289,6 +289,14 @@ class ccData2d:
         n = self.vars.index(name)
         self.data[n,:,:] = 0.0
         
+
+    def fillBCAll(self):
+        """
+        fill boundary conditions on all variables
+        """
+        for name in self.vars:
+            self.fillBC(name)
+
                 
     def fillBC(self, name):
         """ 
