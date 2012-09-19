@@ -265,9 +265,6 @@ def unsplitFluxes(myData, dt):
     #=========================================================================
     # compute transverse fluxes
     #=========================================================================
-    F_x = numpy.zeros((myg.qx, myg.qy, myData.nvar),  dtype=numpy.float64)
-    F_y = numpy.zeros((myg.qx, myg.qy, myData.nvar),  dtype=numpy.float64)    
-
     F_x = riemann(1, myg, U_xl, U_xr)
     F_y = riemann(1, myg, U_yl, U_yr)
 
