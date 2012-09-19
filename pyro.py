@@ -109,6 +109,9 @@ pylab.ion()
 
 n = 0
 t = 0.0
+
+nout = 0
+
 while (t < tmax):
 
     # fill boundary conditions
@@ -132,13 +135,12 @@ while (t < tmax):
 
     # output
     tplot = runparams.getParam("io.tplot")
-    print dt, tplot, t % tplot
-    if (t % tplot <= dt):
+    if (t >= (nout + 1)*tplot):
 
         print "outputting..."
         basename = runparams.getParam("io.basename")
         myData.write(basename + "%4.4d" % (n))
-
+        nout += 1
 
     # visualization
     solver.dovis(myData, n)
