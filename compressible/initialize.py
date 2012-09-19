@@ -55,7 +55,7 @@ def initialize():
 
     # x-momentum -- if we are reflecting in x, then we need to
     # reflect odd
-    bcparam_x = bcparam.copy()
+    bcparam_x = list(bcparam)
     if (xlb_type == "reflect"): bcparam_x[0] = "reflect-odd"
     if (xrb_type == "reflect"): bcparam_x[1] = "reflect-odd"
 
@@ -67,7 +67,7 @@ def initialize():
 
     # y-momentum -- if we are reflecting in y, then we need to
     # reflect odd
-    bcparam_y = bcparam.copy()
+    bcparam_y = list(bcparam)
     if (ylb_type == "reflect"): bcparam_y[2] = "reflect-odd"
     if (yrb_type == "reflect"): bcparam_y[3] = "reflect-odd"
 

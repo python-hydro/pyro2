@@ -347,12 +347,11 @@ class ccData2d:
                 
         elif (self.BCs[name].xrb == "reflect-even"):
 
-            print "+x re"
             i = 0
             while i < self.grid.ng:
                 i_bnd = self.grid.ihi+1+i
                 i_src = self.grid.ihi-i
-                print i_bnd, i_src
+
                 self.data[n,i_bnd,:] = self.data[n,i_src,:]
                 i += 1
 
@@ -419,7 +418,6 @@ class ccData2d:
                 j_bnd = self.grid.jhi+1+j
                 j_src = self.grid.jhi-j
 
-                print j_bnd, j_src
                 self.data[n,:,j_bnd] = self.data[n,:,j_src]
                 j += 1
 

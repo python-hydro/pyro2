@@ -1,11 +1,17 @@
+! this library implements the limiting functions used in the
+! reconstruction.  We use F90 for both speed and clarity, since
+! the numpy array notations can sometimes be confusing.
+
 subroutine nolimit(idir, a, lda, qx, qy, ng)
 
   implicit none
 
   integer, intent(in) :: idir
   integer, intent(in) :: qx, qy, ng
-  double precision, intent(inout) :: a(qx, qy)
-  double precision, intent(  out) :: lda(qx, qy)
+
+  ! 0-based indexing to match python
+  double precision, intent(inout) :: a(0:qx-1, 0:qy-1)
+  double precision, intent(  out) :: lda(0:qx-1, 0:qy-1)
 
 !f2py intent(in) :: idir
 !f2py depend(qx, qy) :: a, lda
@@ -20,7 +26,7 @@ subroutine nolimit(idir, a, lda, qx, qy, ng)
 
   ! 1-based indexing in Fortran, instead of 0-based a la Python
   nx = qx - 2*ng; ny = qy - 2*ng
-  ilo = ng+1; ihi = ng+nx; jlo = ng+1; jhi = ng+ny
+  ilo = ng; ihi = ng+nx-1; jlo = ng; jhi = ng+ny-1
 
   lda(:,:) = 0.0
 

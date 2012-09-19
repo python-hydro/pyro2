@@ -95,10 +95,6 @@ exec 'from ' + solverName + '.problems import *'
 exec problemName + '.fillPatch(myData)'
 
 
-# debugging -- look at the data
-dens = myData.getVarPtr("density")
-myg = myData.grid
-
 
 #-----------------------------------------------------------------------------
 # evolve
@@ -110,13 +106,17 @@ pylab.ion()
 n = 0
 t = 0.0
 
+# output the 0th data
+basename = runparams.getParam("io.basename")
+myData.write(basename + "%4.4d" % (n))
+
+
 nout = 0
 
 while (t < tmax):
 
     # fill boundary conditions
     myData.fillBC("density")
-
 
     # get the timestep
     dt = solver.timestep(myData)
