@@ -244,7 +244,8 @@ def riemann(idir, myg, U_l, U_r):
                 F[i,j,vars.iymom] = rho_state*un_state**2 + p_state
 
             F[i,j,vars.iener] = rho_state*un_state + \
-                0.5*rho_state*un_state**3 + p_state*un_state
+                0.5*rho_state*(un_state**2 + ut_state**2)*un_state + \
+                p_state*un_state
 
             i += 1
         j += 1

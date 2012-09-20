@@ -10,19 +10,19 @@ def fillPatch(myPatch):
 
     # make sure that we are passed a valid patch object
     if not isinstance(myPatch, patch.ccData2d):
-        print "ERROR: patch invalid in smooth.py"
+        print "ERROR: patch invalid in sedov.py"
         print myPatch.__class__
         sys.exit()
 
-    # get the density, momenta, and energy as separate variables                
+    # get the density, momenta, and energy as separate variables
     dens = myPatch.getVarPtr("density")
     xmom = myPatch.getVarPtr("x-momentum")
     ymom = myPatch.getVarPtr("y-momentum")
     ener = myPatch.getVarPtr("energy")
 
-    # initialize the components, remember, that ener here is                    
-    # rho*eint + 0.5*rho*v**2, where eint is the specific                       
-    # internal energy (erg/g)                                                   
+    # initialize the components, remember, that ener here is rho*eint
+    # + 0.5*rho*v**2, where eint is the specific internal energy
+    # (erg/g)
     dens[:,:] = 1.0
     xmom[:,:] = 0.0
     ymom[:,:] = 0.0
