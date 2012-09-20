@@ -348,3 +348,15 @@ def unsplitFluxes(myData, dt):
 
 
 
+def interfaceStates(idir, myg, dt, 
+                    r, u, v, p, 
+                    ldelta_r, ldelta_u, ldelta_v, ldelta_p):
+
+    V_l = numpy.zeros((myg.qx, myg.qy, myData.nvar),  dtype=numpy.float64)
+    V_r = numpy.zeros((myg.qx, myg.qy, myData.nvar),  dtype=numpy.float64)
+    
+    
+
+
+    return V_l, V_r
+
