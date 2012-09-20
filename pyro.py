@@ -111,8 +111,9 @@ t = 0.0
 basename = runparams.getParam("io.basename")
 myData.write(basename + "%4.4d" % (n))
 
-solver.dovis(myData, 0)
-solver.dovis(myData, 0)
+dovis = runparams.getParam("vis.dovis")
+if (dovis): solver.dovis(myData, 0)
+
 
 nout = 0
 
@@ -146,7 +147,7 @@ while (t < tmax):
         nout += 1
 
     # visualization
-    solver.dovis(myData, n)
+    if (dovis): solver.dovis(myData, n)
     
 
 

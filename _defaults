@@ -11,5 +11,6 @@ tplot = 0.1
 
 [vis]
 
+dovis = 1
 store_images = 0
 
