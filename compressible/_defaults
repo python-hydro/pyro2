@@ -14,7 +14,6 @@ z1 = 0.85                 ; flattening z1 parameter
 delta = 0.33              ; flattening delta parameter
 cvisc = 0.0               ; artifical viscosity coefficient
 limiter = 1               ; limiter (1 = second order, 2 = forth order)
-hotf = t                  ; use high-order transverse fluxes (logical = {t,f})
 grav = 0.0                ; gravitational acceleration (in y-direction)
 
 
