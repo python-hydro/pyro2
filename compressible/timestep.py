@@ -29,7 +29,7 @@ def timestep(myData):
     ener = myData.getVarPtr("energy")
 
 
-    # we need to compute the pressure                                           
+    # we need to compute the pressure
     u = xmom/dens
     v = ymom/dens
 
@@ -37,16 +37,13 @@ def timestep(myData):
 
     p = eos.pres(dens, e)
 
-    # compute the sounds speed                                                  
+    # compute the sounds speed
     gamma = runparams.getParam("eos.gamma")
 
     cs = numpy.sqrt(gamma*p/dens)
 
-    print dens.min(), dens.max()
-    print ener.min(), ener.max()
-    print cs.min(), cs.max()
 
-    # the timestep is min(dx/(|u| + cs), dy/(|v| + cs))                         
+    # the timestep is min(dx/(|u| + cs), dy/(|v| + cs))
     xtmp = myData.grid.dx/(abs(u) + cs)
     ytmp = myData.grid.dy/(abs(v) + cs)
 
