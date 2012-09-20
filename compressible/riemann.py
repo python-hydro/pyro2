@@ -57,6 +57,7 @@ def riemann(idir, myg, U_l, U_r):
             rhoe_l = U_l[i,j,vars.iener] - 0.5*rho_l*(u_l**2 + v_l**2)
             e_l = rhoe_l/rho_l
             p_l   = eos.pres(rho_l, e_l)
+            p_l = max(p_l, smallp)
 
             rho_r  = U_r[i,j,vars.idens]
             u_r    = U_r[i,j,vars.ixmom]/rho_r
@@ -64,7 +65,7 @@ def riemann(idir, myg, U_l, U_r):
             rhoe_r = U_r[i,j,vars.iener] - 0.5*rho_r*(u_r**2 + v_r**2)
             e_r = rhoe_r/rho_r
             p_r   = eos.pres(rho_r, e_r)
-
+            p_r = max(p_r, smallp)
             
             # un = normal velocity
             # ut = transverse velocity
@@ -243,7 +244,7 @@ def riemann(idir, myg, U_l, U_r):
                 F[i,j,vars.ixmom] = rho_state*ut_state*un_state
                 F[i,j,vars.iymom] = rho_state*un_state**2 + p_state
 
-            F[i,j,vars.iener] = rho_state*un_state + \
+            F[i,j,vars.iener] = rhoe_state*un_state + \
                 0.5*rho_state*(un_state**2 + ut_state**2)*un_state + \
                 p_state*un_state
 
