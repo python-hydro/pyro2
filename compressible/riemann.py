@@ -238,9 +238,9 @@ def riemann(idir, myg, U_l, U_r):
 
             if (idir == 1):
                 F[i,j,vars.ixmom] = rho_state*un_state**2 + p_state
-                F[i,j,vars.iymom] = rho_state*ut_state
+                F[i,j,vars.iymom] = rho_state*ut_state*un_state
             else:
-                F[i,j,vars.ixmom] = rho_state*ut_state
+                F[i,j,vars.ixmom] = rho_state*ut_state*un_state
                 F[i,j,vars.iymom] = rho_state*un_state**2 + p_state
 
             F[i,j,vars.iener] = rho_state*un_state + \
