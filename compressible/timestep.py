@@ -49,6 +49,4 @@ def timestep(myData):
 
     dt = cfl*min(xtmp.min(), ytmp.min())
 
-    print dt
-
     return dt
