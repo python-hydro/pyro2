@@ -123,7 +123,8 @@ Updating U_{i,j}:
 import numpy
 import vars
 import eos
-
+import mesh.reconstruction_f as reconstruction_f
+from riemann import *
 
 def unsplitFluxes(myData, dt):
     """
@@ -182,10 +183,10 @@ def unsplitFluxes(myData, dt):
     ldelta_v = numpy.zeros((myg.qx, myg.qx), dtype=numpy.float64)
     ldelta_p = numpy.zeros((myg.qx, myg.qx), dtype=numpy.float64)
 
-    ldelta_r = xi*reconstruction_f.limit4(1, r, myg.qx, myg.qy, myg.ng)
-    ldelta_u = xi*reconstruction_f.limit4(1, u, myg.qx, myg.qy, myg.ng)
-    ldelta_v = xi*reconstruction_f.limit4(1, v, myg.qx, myg.qy, myg.ng)
-    ldelta_p = xi*reconstruction_f.limit4(1, p, myg.qx, myg.qy, myg.ng)
+    ldelta_r = xi*reconstruction_f.nolimit(1, r, myg.qx, myg.qy, myg.ng)
+    ldelta_u = xi*reconstruction_f.nolimit(1, u, myg.qx, myg.qy, myg.ng)
+    ldelta_v = xi*reconstruction_f.nolimit(1, v, myg.qx, myg.qy, myg.ng)
+    ldelta_p = xi*reconstruction_f.nolimit(1, p, myg.qx, myg.qy, myg.ng)
     
     
     # left and right primitive variable states
@@ -217,10 +218,10 @@ def unsplitFluxes(myData, dt):
     #=========================================================================
 
     # monotonized central differences in y-direction
-    ldelta_r = xi*reconstruction_f.limit4(2, r, myg.qx, myg.qy, myg.ng)
-    ldelta_u = xi*reconstruction_f.limit4(2, u, myg.qx, myg.qy, myg.ng)
-    ldelta_v = xi*reconstruction_f.limit4(2, v, myg.qx, myg.qy, myg.ng)
-    ldelta_p = xi*reconstruction_f.limit4(2, p, myg.qx, myg.qy, myg.ng)
+    ldelta_r = xi*reconstruction_f.nolimit(2, r, myg.qx, myg.qy, myg.ng)
+    ldelta_u = xi*reconstruction_f.nolimit(2, u, myg.qx, myg.qy, myg.ng)
+    ldelta_v = xi*reconstruction_f.nolimit(2, v, myg.qx, myg.qy, myg.ng)
+    ldelta_p = xi*reconstruction_f.nolimit(2, p, myg.qx, myg.qy, myg.ng)
     
     
     # left and right primitive variable states
@@ -313,7 +314,7 @@ def unsplitFluxes(myData, dt):
         while (i <= myg.ihi+2):
 
             n = 0
-            while (n < myData.nvars):
+            while (n < myData.nvar):
 
                 U_xl[i,j,n] = U_xl[i,j,n] - \
                     0.5*dt/myg.dy * (F_y[i-1,j+1,n] - F_y[i-1,j,n])
@@ -327,6 +328,9 @@ def unsplitFluxes(myData, dt):
                 U_yr[i,j,n] = U_yr[i,j,n] - \
                     0.5*dt/myg.dx * (F_x[i+1,j,n] - F_x[i,j,n])
 
+                n += 1
+            i += 1
+        j += 1
 
 
     #=========================================================================
@@ -352,11 +356,47 @@ def interfaceStates(idir, myg, dt,
                     r, u, v, p, 
                     ldelta_r, ldelta_u, ldelta_v, ldelta_p):
 
-    V_l = numpy.zeros((myg.qx, myg.qy, myData.nvar),  dtype=numpy.float64)
-    V_r = numpy.zeros((myg.qx, myg.qy, myData.nvar),  dtype=numpy.float64)
-    
+    V_l = numpy.zeros((myg.qx, myg.qy, vars.nvar),  dtype=numpy.float64)
+    V_r = numpy.zeros((myg.qx, myg.qy, vars.nvar),  dtype=numpy.float64)
     
 
+    # this is the loop over zones.  For zone i, we see V_l[i+1] and V_r[i]
+    j = myg.jlo-2
+    while (j <= myg.jhi+2):
+
+        i = myg.ilo-2
+        while (i <= myg.ihi+2):
+
+            if (idir == 1):
+
+                V_l[i+1,j,vars.irho] = r[i,j]
+                V_r[i,  j,vars.irho] = r[i,j]
+
+                V_l[i+1,j,vars.iu] = u[i,j]
+                V_r[i,  j,vars.iu] = u[i,j]
+
+                V_l[i+1,j,vars.iv] = v[i,j]
+                V_r[i,  j,vars.iv] = v[i,j]
+
+                V_l[i+1,j,vars.ip] = p[i,j]
+                V_r[i,  j,vars.ip] = p[i,j]
+    
+            else:
+
+                V_l[i,j+1,vars.irho] = r[i,j]
+                V_r[i,j,  vars.irho] = r[i,j]
+
+                V_l[i,j+1,vars.iu] = u[i,j]
+                V_r[i,j,  vars.iu] = u[i,j]
+
+                V_l[i,j+1,vars.iv] = v[i,j]
+                V_r[i,j,  vars.iv] = v[i,j]
+
+                V_l[i,j+1,vars.ip] = p[i,j]
+                V_r[i,j,  vars.ip] = p[i,j]
+
+            i += 1
+        j += 1
 
     return V_l, V_r
 

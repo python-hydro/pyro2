@@ -18,7 +18,7 @@ def dens(pres, eint):
 
     gamma = runparams.getParam("eos.gamma")
 
-    dens = p/(eint*(gamma - 1.0))
+    dens = pres/(eint*(gamma - 1.0))
 
     return dens
 
@@ -29,7 +29,7 @@ def rhoe(pres):
 
     gamma = runparams.getParam("eos.gamma")
 
-    rhoe = p/(gamma - 1.0)
+    rhoe = pres/(gamma - 1.0)
 
     return rhoe
 

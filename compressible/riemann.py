@@ -1,12 +1,15 @@
 import numpy
 import math
 import vars
+import eos
+from util import runparams
+
 
 smallc = 1.e-10
 smallrho = 1.e-10
 smallp = 1.e-10
 
-def riemann(idir, myGrid, U_l, U_r):
+def riemann(idir, myg, U_l, U_r):
     """
     Solve riemann shock tube problem for a general equation of
     state using the method of Colella, Glaz, and Ferguson.  See
@@ -37,7 +40,9 @@ def riemann(idir, myGrid, U_l, U_r):
 
     """
 
-    F = numpy.zeros((myg.qx, myg.qy, myData.nvar),  dtype=numpy.float64)
+    gamma = runparams.getParam("eos.gamma")
+        
+    F = numpy.zeros((myg.qx, myg.qy, vars.nvar),  dtype=numpy.float64)
 
     j = myg.jlo-1
     while (j <= myg.jhi+1):
@@ -66,9 +71,15 @@ def riemann(idir, myGrid, U_l, U_r):
             if (idir == 1):
                 un_l = u_l
                 ut_l = v_l
+
+                un_r = u_r
+                ut_r = v_r
             else:
                 un_l = v_l
                 ut_l = u_l
+                
+                un_r = v_r
+                ut_r = u_r
 
 
             # define the Lagrangian sound speed
@@ -113,7 +124,7 @@ def riemann(idir, myGrid, U_l, U_r):
 
                 if (pstar > p_l):
                     # the wave is a shock -- find the shock speed
-                    sigma = (lambda_l + lambdastar_l)/2.0_dp_t
+                    sigma = (lambda_l + lambdastar_l)/2.0
 
                     if (sigma > 0.0):
                         # shock is moving to the right -- solution is L state
@@ -170,7 +181,7 @@ def riemann(idir, myGrid, U_l, U_r):
 
                 if (pstar > p_r):
                     # the wave if a shock -- find the shock speed 
-                    sigma = (lambda_r + lambdastar_r)/2.0_dp_t
+                    sigma = (lambda_r + lambdastar_r)/2.0
 
                     if (sigma > 0.0):
                         # shock is moving to the right -- solution is *R state
@@ -232,7 +243,10 @@ def riemann(idir, myGrid, U_l, U_r):
                 F[i,j,vars.ixmom] = rho_state*ut_state
                 F[i,j,vars.iymom] = rho_state*un_state**2 + p_state
 
-            F[i,j,vars.iener] = rhe_state*u_state + \
-                0.5*rho_state*u_state**3 + p_state*u_state
+            F[i,j,vars.iener] = rho_state*un_state + \
+                0.5*rho_state*un_state**3 + p_state*un_state
+
+            i += 1
+        j += 1
 
     return F

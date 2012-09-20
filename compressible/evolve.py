@@ -1,5 +1,5 @@
 from util import runparams
-#from unsplitFluxes import *
+from unsplitFluxes import *
 import vars    
 import numpy
 
@@ -15,9 +15,9 @@ def evolve(myData, dt):
     myg = myData.grid
     
     
-    #(Flux_x, Flux_y) = unsplitFluxes(myData, dt)
-    Flux_x = numpy.zeros((myg.qx, myg.qy, myData.nvar),  dtype=numpy.float64)
-    Flux_y = numpy.zeros((myg.qx, myg.qy, myData.nvar),  dtype=numpy.float64)
+    (Flux_x, Flux_y) = unsplitFluxes(myData, dt)
+    #Flux_x = numpy.zeros((myg.qx, myg.qy, myData.nvar),  dtype=numpy.float64)
+    #Flux_y = numpy.zeros((myg.qx, myg.qy, myData.nvar),  dtype=numpy.float64)
 
     old_dens = dens.copy()
     old_ymom = ymom.copy()
