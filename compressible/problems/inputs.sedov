@@ -3,13 +3,15 @@ max_steps = 2000
 tmax = 0.05
 splitting = unsplit
 
+
 [compressible]
 limiter = 2
 cvisc = 0.1
 
+
 [io]
 basename = sedov_unsplit_
-nplot = 10
+tplot = 0.01
 
 
 [eos]
@@ -29,9 +31,9 @@ yl_boundary = outflow
 yr_boundary = outflow
 
 
-
 [sedov]
 r_init = 0.01
 
+
 [vis]
-dovis = 0
+dovis = 1

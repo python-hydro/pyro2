@@ -184,10 +184,10 @@ def unsplitFluxes(myData, dt):
     ldelta_v = numpy.zeros((myg.qx, myg.qx), dtype=numpy.float64)
     ldelta_p = numpy.zeros((myg.qx, myg.qx), dtype=numpy.float64)
 
-    ldelta_r = xi*reconstruction_f.nolimit(1, r, myg.qx, myg.qy, myg.ng)
-    ldelta_u = xi*reconstruction_f.nolimit(1, u, myg.qx, myg.qy, myg.ng)
-    ldelta_v = xi*reconstruction_f.nolimit(1, v, myg.qx, myg.qy, myg.ng)
-    ldelta_p = xi*reconstruction_f.nolimit(1, p, myg.qx, myg.qy, myg.ng)
+    ldelta_r = xi*reconstruction_f.limit2(1, r, myg.qx, myg.qy, myg.ng)
+    ldelta_u = xi*reconstruction_f.limit2(1, u, myg.qx, myg.qy, myg.ng)
+    ldelta_v = xi*reconstruction_f.limit2(1, v, myg.qx, myg.qy, myg.ng)
+    ldelta_p = xi*reconstruction_f.limit2(1, p, myg.qx, myg.qy, myg.ng)
     
     
     # left and right primitive variable states
@@ -219,10 +219,10 @@ def unsplitFluxes(myData, dt):
     #=========================================================================
 
     # monotonized central differences in y-direction
-    ldelta_r = xi*reconstruction_f.nolimit(2, r, myg.qx, myg.qy, myg.ng)
-    ldelta_u = xi*reconstruction_f.nolimit(2, u, myg.qx, myg.qy, myg.ng)
-    ldelta_v = xi*reconstruction_f.nolimit(2, v, myg.qx, myg.qy, myg.ng)
-    ldelta_p = xi*reconstruction_f.nolimit(2, p, myg.qx, myg.qy, myg.ng)
+    ldelta_r = xi*reconstruction_f.limit2(2, r, myg.qx, myg.qy, myg.ng)
+    ldelta_u = xi*reconstruction_f.limit2(2, u, myg.qx, myg.qy, myg.ng)
+    ldelta_v = xi*reconstruction_f.limit2(2, v, myg.qx, myg.qy, myg.ng)
+    ldelta_p = xi*reconstruction_f.limit2(2, p, myg.qx, myg.qy, myg.ng)
     
     
     # left and right primitive variable states

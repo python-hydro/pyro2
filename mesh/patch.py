@@ -265,7 +265,7 @@ class ccData2d:
         while (n < self.nvar):
             string += "            " + self.vars[n] + \
                 ": min = " + `numpy.min(self.data[n,ilo:ihi,jlo:jhi])` + \
-                 " max = " + `numpy.max(self.data[n,ilo:ihi,jlo:jhi])`
+                 " max = " + `numpy.max(self.data[n,ilo:ihi,jlo:jhi])` + "\n"
             n += 1
  
         return string
