@@ -80,7 +80,7 @@ def fillPatch(myPatch):
 
     else:
         i = myg.ilo
-        while i <= myf.ihi:
+        while i <= myg.ihi:
 
             j = myg.jlo
             while j <= myg.jhi:
