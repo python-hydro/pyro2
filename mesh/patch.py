@@ -193,6 +193,13 @@ class ccData2d:
         myData.registerVar('x-momentum', bcObject)
         ...
 
+
+    Register any auxillary data -- these are any parameters that are
+    needed to interpret the data outside of the simulation (for
+    example, the gamma for the equation of state).
+
+        mydata.setAux(keyword, value)
+
     finally, finish the initialization of the patch
 
         myPatch.create()
@@ -200,6 +207,7 @@ class ccData2d:
     This last step actually allocates the storage for the state
     variables.  Once this is done, the patch is considered to be
     locked.  New variables cannot be added.
+    
     """
 
     def __init__ (self, grid, dtype=numpy.float64):
@@ -219,6 +227,8 @@ class ccData2d:
         self.vars = []
         self.nvar = 0
 
+        self.aux = {}
+
         self.BCs = {}
 
 
@@ -233,6 +243,13 @@ class ccData2d:
         self.nvar += 1
 
         self.BCs[name] = bcObject
+
+
+    def setAux(self, keyword, value):
+        """ 
+        set any auxillary (scalar) data
+        """
+        self.aux[keyword] = value
 
 
     def create(self):
@@ -280,6 +297,13 @@ class ccData2d:
         n = self.vars.index(name)
         return self.data[n,:,:]
 
+    
+    def getAux(self, keyword):
+        if keyword in self.aux.keys():
+            return self.aux[keyword]
+        else:
+            return None
+        
 
     def getVarPtrByIndex(self, index):
         return self.data[index,:,:]
