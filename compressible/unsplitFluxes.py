@@ -371,6 +371,9 @@ def unsplitFluxes(myData, dt):
                                        
     """
 
+    pfd = profile.timer("transverse flux addition")
+    pfd.begin()
+
     # should vectorize this
     j = myg.jlo-2
     while (j <= myg.jhi+2):
@@ -378,25 +381,22 @@ def unsplitFluxes(myData, dt):
         i = myg.ilo-2
         while (i <= myg.ihi+2):
 
-            n = 0
-            while (n < myData.nvar):
-
-                U_xl[i,j,n] = U_xl[i,j,n] - \
-                    0.5*dt/myg.dy * (F_y[i-1,j+1,n] - F_y[i-1,j,n])
+            U_xl[i,j,:] = U_xl[i,j,:] - \
+                0.5*dt/myg.dy * (F_y[i-1,j+1,:] - F_y[i-1,j,:])
                 
-                U_xr[i,j,n] = U_xr[i,j,n] - \
-                    0.5*dt/myg.dy * (F_y[i,j+1,n] - F_y[i,j,n])
+            U_xr[i,j,:] = U_xr[i,j,:] - \
+                0.5*dt/myg.dy * (F_y[i,j+1,:] - F_y[i,j,:])
 
-                U_yl[i,j,n] = U_yl[i,j,n] - \
-                    0.5*dt/myg.dx * (F_x[i+1,j-1,n] - F_x[i,j-1,n])
+            U_yl[i,j,:] = U_yl[i,j,:] - \
+                0.5*dt/myg.dx * (F_x[i+1,j-1,:] - F_x[i,j-1,:])
                 
-                U_yr[i,j,n] = U_yr[i,j,n] - \
-                    0.5*dt/myg.dx * (F_x[i+1,j,n] - F_x[i,j,n])
+            U_yr[i,j,:] = U_yr[i,j,:] - \
+                0.5*dt/myg.dx * (F_x[i+1,j,:] - F_x[i,j,:])
 
-                n += 1
             i += 1
         j += 1
 
+    pfd.end()
 
     #=========================================================================
     # construct the fluxes normal to the interfaces
