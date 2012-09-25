@@ -31,7 +31,11 @@ def dovis(myData, n):
 
     pylab.subplot(221)
 
-    pylab.imshow(numpy.transpose(dens[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]), 
+    # pylab.imshow(numpy.transpose(dens[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]), 
+    #              interpolation="nearest", origin="lower",
+    #              extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
+
+    pylab.imshow(dens[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1], 
                  interpolation="nearest", origin="lower",
                  extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
@@ -46,7 +50,11 @@ def dovis(myData, n):
 
     magvel = numpy.sqrt(u**2 + v**2)
 
-    pylab.imshow(numpy.transpose(magvel[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]), 
+    # pylab.imshow(numpy.transpose(magvel[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]), 
+    #              interpolation="nearest", origin="lower",
+    #              extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
+
+    pylab.imshow(magvel[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1], 
                  interpolation="nearest", origin="lower",
                  extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
@@ -59,7 +67,11 @@ def dovis(myData, n):
 
     pylab.subplot(223)
 
-    pylab.imshow(numpy.transpose(p[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]), 
+    # pylab.imshow(numpy.transpose(p[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]), 
+    #              interpolation="nearest", origin="lower",
+    #              extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
+
+    pylab.imshow(p[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1], 
                  interpolation="nearest", origin="lower",
                  extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
@@ -72,7 +84,11 @@ def dovis(myData, n):
 
     pylab.subplot(224)
 
-    pylab.imshow(numpy.transpose(e[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]), 
+    # pylab.imshow(numpy.transpose(e[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]), 
+    #              interpolation="nearest", origin="lower",
+    #              extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
+
+    pylab.imshow(e[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1], 
                  interpolation="nearest", origin="lower",
                  extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 

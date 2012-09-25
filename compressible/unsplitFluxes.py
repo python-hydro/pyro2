@@ -308,8 +308,19 @@ def unsplitFluxes(myData, dt):
     pfc = profile.timer("riemann")
     pfc.begin()
 
-    F_x = riemann(1, myg, U_xl, U_xr)
-    F_y = riemann(2, myg, U_yl, U_yr)
+    #F_x = riemann(1, myg, U_xl, U_xr)
+    #F_y = riemann(2, myg, U_yl, U_yr)
+
+    F_x = numpy.zeros((myg.qx, myg.qy, vars.nvar),  dtype=numpy.float64)
+    F_y = numpy.zeros((myg.qx, myg.qy, vars.nvar),  dtype=numpy.float64)
+
+    F_x = interface_f.riemann(1, myg.qx, myg.qy, myg.ng, 
+                              vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener, 
+                              gamma, U_xl, U_xr)
+
+    F_y = interface_f.riemann(2, myg.qx, myg.qy, myg.ng, 
+                              vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener, 
+                              gamma, U_yl, U_yr)
 
     pfc.end()
 
@@ -396,8 +407,16 @@ def unsplitFluxes(myData, dt):
 
     pfc.begin()
         
-    F_x = riemann(1, myg, U_xl, U_xr)
-    F_y = riemann(2, myg, U_yl, U_yr)
+    #F_x = riemann(1, myg, U_xl, U_xr)
+    #F_y = riemann(2, myg, U_yl, U_yr)
+
+    F_x = interface_f.riemann(1, myg.qx, myg.qy, myg.ng, 
+                              vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener, 
+                              gamma, U_xl, U_xr)
+
+    F_y = interface_f.riemann(2, myg.qx, myg.qy, myg.ng, 
+                              vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener, 
+                              gamma, U_yl, U_yr)
 
     pfc.end()
 
