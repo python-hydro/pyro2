@@ -5,7 +5,7 @@ import getopt
 import numpy
 import pylab
 import time
-
+from util import profile
 from util import runparams
 
 usage = """
@@ -16,6 +16,9 @@ usage = """
 
 
 print 'pyro ...'
+
+pf = profile.timer("main")
+pf.begin()
 
 #-----------------------------------------------------------------------------
 # command line arguments / solver setup
@@ -120,7 +123,10 @@ nout = 0
 while (t < tmax):
 
     # fill boundary conditions
+    pfb = profile.timer("fillBC")
+    pfb.begin()
     myData.fillBCAll()
+    pfb.end()
 
     # get the timestep
     dt = solver.timestep(myData)
@@ -138,16 +144,28 @@ while (t < tmax):
 
 
     # output
+    
     tplot = runparams.getParam("io.tplot")
     if (t >= (nout + 1)*tplot):
+
+        pfc = profile.timer("output")
+        pfc.begin()
 
         print "outputting..."
         basename = runparams.getParam("io.basename")
         myData.write(basename + "%4.4d" % (n))
         nout += 1
 
+        pfc.end()
+
+
     # visualization
-    if (dovis): solver.dovis(myData, n)
-    
+    if (dovis): 
+        pfd = profile.timer("vis")
+        pfd.begin()
+        solver.dovis(myData, n)
+        pfd.end()
 
+pf.end()
 
+profile.timeReport()

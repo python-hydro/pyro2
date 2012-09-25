@@ -1,9 +1,13 @@
 from util import runparams
+from util import profile
 from unsplitFluxes import *
 import vars    
 import numpy
 
 def evolve(myData, dt):
+
+    pf = profile.timer("evolve")
+    pf.begin()
 
     dens = myData.getVarPtr("density")
     xmom = myData.getVarPtr("x-momentum")
@@ -58,3 +62,5 @@ def evolve(myData, dt):
     ymom += 0.5*dt*(dens + old_dens)*grav
     ener += 0.5*dt*(ymom + old_ymom)*grav
 
+
+    pf.end()
