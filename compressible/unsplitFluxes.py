@@ -127,6 +127,7 @@ import mesh.reconstruction_f as reconstruction_f
 from riemann import *
 from util import runparams
 from util import profile
+import interface_f
 
 def unsplitFluxes(myData, dt):
     """
@@ -174,10 +175,22 @@ def unsplitFluxes(myData, dt):
     # compute the flattening coefficients
     #=========================================================================
 
-    # this is directionally independent
-    xi = 1.0
-
+    # there is a single flattening coefficient (xi) for all directions
+    xi_x = numpy.zeros((myg.qx, myg.qx), dtype=numpy.float64)
+    xi_y = numpy.zeros((myg.qx, myg.qx), dtype=numpy.float64)
+    xi   = numpy.zeros((myg.qx, myg.qx), dtype=numpy.float64)
     
+    smallp = 1.e-10
+    delta = 0.33
+    z0 = 0.75
+    z1 = 0.85
+
+    xi_x = reconstruction_f.flatten(1, p, u, myg.qx, myg.qy, myg.ng, smallp, delta, z0, z1)
+    xi_y = reconstruction_f.flatten(2, p, v, myg.qx, myg.qy, myg.ng, smallp, delta, z0, z1)
+
+    xi = reconstruction_f.flatten_multid(xi_x, xi_y, p, myg.qx, myg.qy, myg.ng)
+
+
     #=========================================================================
     # x-direction
     #=========================================================================
@@ -191,10 +204,10 @@ def unsplitFluxes(myData, dt):
     ldelta_v = numpy.zeros((myg.qx, myg.qx), dtype=numpy.float64)
     ldelta_p = numpy.zeros((myg.qx, myg.qx), dtype=numpy.float64)
 
-    ldelta_r = xi*reconstruction_f.limit2(1, r, myg.qx, myg.qy, myg.ng)
-    ldelta_u = xi*reconstruction_f.limit2(1, u, myg.qx, myg.qy, myg.ng)
-    ldelta_v = xi*reconstruction_f.limit2(1, v, myg.qx, myg.qy, myg.ng)
-    ldelta_p = xi*reconstruction_f.limit2(1, p, myg.qx, myg.qy, myg.ng)
+    ldelta_r = xi*reconstruction_f.limit4(1, r, myg.qx, myg.qy, myg.ng)
+    ldelta_u = xi*reconstruction_f.limit4(1, u, myg.qx, myg.qy, myg.ng)
+    ldelta_v = xi*reconstruction_f.limit4(1, v, myg.qx, myg.qy, myg.ng)
+    ldelta_p = xi*reconstruction_f.limit4(1, p, myg.qx, myg.qy, myg.ng)
     
     pfa.end()
     
@@ -202,10 +215,20 @@ def unsplitFluxes(myData, dt):
     pfb = profile.timer("interfaceStates")
     pfb.begin()
 
-    (V_l, V_r) = interfaceStates(1, myg, dt, 
-                                 r, u, v, p, 
-                                 ldelta_r, ldelta_u, ldelta_v, ldelta_p)
+    # (V_l, V_r) = interfaceStates(1, myg, dt, 
+    #                              r, u, v, p, 
+    #                              ldelta_r, ldelta_u, ldelta_v, ldelta_p)
+    gamma = runparams.getParam("eos.gamma")
 
+    V_l = numpy.zeros((myg.qx, myg.qy, vars.nvar),  dtype=numpy.float64)
+    V_r = numpy.zeros((myg.qx, myg.qy, vars.nvar),  dtype=numpy.float64)
+
+    (V_l, V_r) = interface_f.states(1, myg.qx, myg.qy, myg.ng, myg.dx, dt,
+                                    vars.nvar,
+                                    gamma,
+                                    r, u, v, p,
+                                    ldelta_r, ldelta_u, ldelta_v, ldelta_p)                                    
+    
     pfb.end()
                     
 
@@ -234,19 +257,25 @@ def unsplitFluxes(myData, dt):
     # monotonized central differences in y-direction
     pfa.begin()
 
-    ldelta_r = xi*reconstruction_f.limit2(2, r, myg.qx, myg.qy, myg.ng)
-    ldelta_u = xi*reconstruction_f.limit2(2, u, myg.qx, myg.qy, myg.ng)
-    ldelta_v = xi*reconstruction_f.limit2(2, v, myg.qx, myg.qy, myg.ng)
-    ldelta_p = xi*reconstruction_f.limit2(2, p, myg.qx, myg.qy, myg.ng)
+    ldelta_r = xi*reconstruction_f.limit4(2, r, myg.qx, myg.qy, myg.ng)
+    ldelta_u = xi*reconstruction_f.limit4(2, u, myg.qx, myg.qy, myg.ng)
+    ldelta_v = xi*reconstruction_f.limit4(2, v, myg.qx, myg.qy, myg.ng)
+    ldelta_p = xi*reconstruction_f.limit4(2, p, myg.qx, myg.qy, myg.ng)
 
     pfa.end()
     
     # left and right primitive variable states
     pfb.begin()
 
-    (V_l, V_r) = interfaceStates(2, myg, dt, 
-                                 r, u, v, p, 
-                                 ldelta_r, ldelta_u, ldelta_v, ldelta_p)
+    # (V_l, V_r) = interfaceStates(2, myg, dt, 
+    #                              r, u, v, p, 
+    #                              ldelta_r, ldelta_u, ldelta_v, ldelta_p)
+
+    (V_l, V_r) = interface_f.states(2, myg.qx, myg.qy, myg.ng, myg.dy, dt,
+                                    vars.nvar,
+                                    gamma,
+                                    r, u, v, p,
+                                    ldelta_r, ldelta_u, ldelta_v, ldelta_p)                                    
 
     pfb.end()
 
@@ -276,7 +305,7 @@ def unsplitFluxes(myData, dt):
     #=========================================================================
     # compute transverse fluxes
     #=========================================================================
-    pfc.timer("riemann")
+    pfc = profile.timer("riemann")
     pfc.begin()
 
     F_x = riemann(1, myg, U_xl, U_xr)
@@ -463,6 +492,9 @@ def interfaceStates(idir, myg, dt,
         i = myg.ilo-2
         while (i <= myg.ihi+2):
 
+            pfa = profile.timer("interface eval/vec")
+            pfa.begin()
+
             dV = numpy.array([ldelta_r[i,j], ldelta_u[i,j], 
                               ldelta_v[i,j], ldelta_p[i,j]])
             V  = numpy.array([r[i,j], u[i,j], v[i,j], p[i,j]])
@@ -521,6 +553,10 @@ def interfaceStates(idir, myg, dt,
                 factor = 0.5*(1.0 + dtdx*min(eval[0], 0.0))
                 V_r[i,j,  :] = V[:] - factor*dV[:]
 
+            pfa.end()
+
+            pfb = profile.timer("states")
+            pfb.begin()
 
             # compute the Vhat functions
             betal = numpy.zeros((4), dtype=numpy.float64)
@@ -548,7 +584,8 @@ def interfaceStates(idir, myg, dt,
                     V_r[i,j,  m] += sum_r
 
                 m += 1
-
+                
+            pfb.end()
 
             i += 1
         j += 1
