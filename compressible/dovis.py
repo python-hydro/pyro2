@@ -95,7 +95,7 @@ def dovis(myData, n):
 
 
     pylab.draw()
-    pylab.show()
+    #pylab.show()
 
     store = runparams.getParam("vis.store_images")
 
