@@ -1,0 +1,25 @@
+[quadrant]
+rho1 = 1.4                 ; quadrant 1 initial density
+u1 = 0.0                   ; quadrant 1 initial x-velocity
+v1 = 0.0                   ; quadrant 1 initial y-velocity
+p1 = 1.5                   ; quadrant 1 initial pressure
+ 
+rho2 = 0.532258064516129   ; quadrant 2 initial density
+u2 = 1.206045378311055     ; quadrant 2 initial x-velocity
+v2 = 0.0                   ; quadrant 2 initial y-velocity
+p2 = 0.3                   ; quadrant 2 initial pressure
+ 
+rho3 = 0.137992831541219   ; quadrant 3 initial density
+u3 = 1.206045378311055     ; quadrant 3 initial x-velocity
+v3 = 1.206045378311055     ; quadrant 3 initial y-velocity
+p3 = 0.029032258064516     ; quadrant 3 initial pressure
+ 
+rho4 = 0.532258064516129   ; quadrant 4 initial density
+u4 = 0.0                   ; quadrant 4 initial x-velocity
+v4 = 1.206045378311055     ; quadrant 4 initial y-velocity
+p4 = 0.3                   ; quadrant 4 initial pressure
+
+cx = 0.5                   ; corner x position
+cy = 0.5                   ; corner y position
+
+ 
