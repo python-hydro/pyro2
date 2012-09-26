@@ -12,6 +12,7 @@ def makeplot(myd, solverName):
     exec 'import ' + solverName + ' as solver'
 
     solver.dovis(myd, 0)
+    pylab.show()
 
 
 if __name__== "__main__":
