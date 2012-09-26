@@ -1,0 +1,43 @@
+[driver]
+max_steps = 500
+tmax = 0.5
+splitting = unsplit
+
+
+[compressible]
+limiter = 2
+cvisc = 0.1
+
+
+[io]
+basename = sedov_unsplit_
+tplot = 0.01
+
+
+[eos]
+gamma = 1.4
+
+
+[mesh]
+nx = 256
+ny = 128
+xmax = 2.0
+ymax = 1.0
+
+xlboundary = periodic
+xrboundary = periodic
+
+ylboundary = outflow
+yrboundary = outflow
+
+
+[kh]
+rho_1 = 1
+v_1 = -1.0
+
+rho_2 = 2
+v_2 = 1.0
+
+
+[vis]
+dovis = 1
