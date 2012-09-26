@@ -22,9 +22,3 @@ def dovis(myData, n):
 
     pylab.draw()
 
-    store = runparams.getParam("vis.store_images")
-
-    if (store == 1):
-        basename = runparams.getParam("io.basename")
-        pylab.savefig(basename + "%4.4d" % (n) + ".png")
-

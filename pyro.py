@@ -175,7 +175,14 @@ while (myData.t < tmax and n < max_steps):
     if (dovis): 
         pfd = profile.timer("vis")
         pfd.begin()
+
         solver.dovis(myData, n)
+        store = runparams.getParam("vis.store_images")
+
+        if (store == 1):
+            basename = runparams.getParam("io.basename")
+            pylab.savefig(basename + "%4.4d" % (n) + ".png")
+
         pfd.end()
 
 pf.end()

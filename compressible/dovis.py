@@ -1,6 +1,5 @@
 import pylab
 import numpy
-from util import runparams
 from matplotlib.font_manager import FontProperties
 import eos
 
@@ -130,10 +129,4 @@ def dovis(myData, n):
 
     pylab.draw()
     #pylab.show()
-
-    store = runparams.getParam("vis.store_images")
-
-    if (store == 1):
-        basename = runparams.getParam("io.basename")
-        pylab.savefig(basename + "%4.4d" % (n) + ".png")
 
