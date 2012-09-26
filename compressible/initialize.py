@@ -75,6 +75,11 @@ def initialize():
 
     myData.registerVar("y-momentum", bcObj)    
 
+
+    # store the EOS gamma as an auxillary quantity so we can have a
+    # self-contained object stored in output files to make plots
+    gamma = runparams.getParam("eos.gamma")
+    myData.setAux("gamma", gamma)
         
     myData.create()
 
