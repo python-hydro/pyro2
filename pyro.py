@@ -8,6 +8,7 @@ import time
 from util import profile
 from util import runparams
 import os
+from util import msg
 
 usage = """
        usage:
@@ -16,7 +17,7 @@ usage = """
 """
 
 
-print 'pyro ...'
+msg.bold('pyro ...')
 
 pf = profile.timer("main")
 pf.begin()
@@ -36,7 +37,7 @@ if len(sys.argv) == 1:
 
 try: opts, next = getopt.getopt(sys.argv[1:], "i")
 except getopt.GetoptError:
-    print "invalid calling sequence"
+    msg.fail("invalid calling sequence")
     sys.exit(2)
 
 for o, a in opts:
@@ -46,22 +47,18 @@ for o, a in opts:
 
 try: solverName = next[0]
 except IndexError:
-    print "ERROR: solver name not specified on command line"
     print usage
-    sys.exit(2)
+    msg.fail("ERROR: solver name not specified on command line")
 
 try: problemName = next[1]
 except IndexError:
-    print 'ERROR: problem name not specified on command line'
     print usage
-    sys.exit(2)
+    msg.fail("ERROR: problem name not specified on command line")
 
 try: paramFile = next[2]
 except IndexError:
-    print 'ERROR: parameter file not specified on command line'
     print usage
-    sys.exit(2)
-
+    msg.fail("ERROR: parameter file not specified on command line")
 
 
 # actually import the solver-specific stuff under the 'solver' namespace
@@ -84,9 +81,7 @@ if (not os.path.isfile(paramFile)):
     # check if the param file lives in the solver's problems directory
     paramFile = solverName + "/problems/" + paramFile
     if (not os.path.isfile(paramFile)):
-        print 'ERROR: inputs file does not exist'
-        print paramFile
-        sys.exit(2)
+        msg.fail("ERROR: inputs file does not exist")
 
 runparams.LoadParams(paramFile)
 
@@ -163,7 +158,7 @@ while (myData.t < tmax and n < max_steps):
         pfc = profile.timer("output")
         pfc.begin()
 
-        print "outputting..."
+        msg.warning("outputting...")
         basename = runparams.getParam("io.basename")
         myData.write(basename + "%4.4d" % (n))
         nout += 1
