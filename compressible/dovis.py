@@ -17,7 +17,10 @@ def dovis(myData, n):
     v = ymom/dens
 
     # get the pressure
-    e = (ener - 0.5*(xmom**2 + ymom**2)/dens)/dens
+    magvel = u**2 + v**2   # temporarily |U|^2
+    e = (ener - 0.5*magvel)/dens
+
+    magvel = numpy.sqrt(magvel)
 
     p = eos.pres(dens, e)
 
@@ -31,11 +34,7 @@ def dovis(myData, n):
 
     pylab.subplot(221)
 
-    # pylab.imshow(numpy.transpose(dens[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]), 
-    #              interpolation="nearest", origin="lower",
-    #              extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
-
-    pylab.imshow(dens[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1], 
+    pylab.imshow(numpy.transpose(dens[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]), 
                  interpolation="nearest", origin="lower",
                  extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
@@ -48,13 +47,8 @@ def dovis(myData, n):
 
     pylab.subplot(222)
 
-    magvel = numpy.sqrt(u**2 + v**2)
 
-    # pylab.imshow(numpy.transpose(magvel[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]), 
-    #              interpolation="nearest", origin="lower",
-    #              extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
-
-    pylab.imshow(magvel[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1], 
+    pylab.imshow(numpy.transpose(magvel[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]), 
                  interpolation="nearest", origin="lower",
                  extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
@@ -67,11 +61,7 @@ def dovis(myData, n):
 
     pylab.subplot(223)
 
-    # pylab.imshow(numpy.transpose(p[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]), 
-    #              interpolation="nearest", origin="lower",
-    #              extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
-
-    pylab.imshow(p[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1], 
+    pylab.imshow(numpy.transpose(p[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]), 
                  interpolation="nearest", origin="lower",
                  extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
@@ -84,11 +74,7 @@ def dovis(myData, n):
 
     pylab.subplot(224)
 
-    # pylab.imshow(numpy.transpose(e[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]), 
-    #              interpolation="nearest", origin="lower",
-    #              extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
-
-    pylab.imshow(e[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1], 
+    pylab.imshow(numpy.transpose(e[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]), 
                  interpolation="nearest", origin="lower",
                  extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
