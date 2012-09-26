@@ -75,8 +75,7 @@ def LoadParams(file):
     except IOError:
         print 'ERROR: parameter file does not exist: ', file
         sys.exit()
-    else:
-        f.close()
+
 
     # we could use the ConfigParser, but we actually want to have
     # our configuration files be self-documenting, of the format
@@ -84,7 +83,7 @@ def LoadParams(file):
     sec = re.compile(r'^\[(.*)\]')
     eq = re.compile(r'^([^=#]+)=([^;]+);{0,1}(.*)')
 
-    for line in open(file, "r").readlines():
+    for line in f.readlines():
 
         if sec.search(line): 
             lbracket, section, rbracket = sec.split(line)
