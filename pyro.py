@@ -7,6 +7,7 @@ import pylab
 import time
 from util import profile
 from util import runparams
+import os
 
 usage = """
        usage:
@@ -79,6 +80,14 @@ runparams.LoadParams(solverName + "/_defaults")
 runparams.LoadParams(solverName + "/problems/_" + problemName + ".defaults")
 
 # now read in the inputs file
+if (not os.path.isfile(paramFile)):
+    # check if the param file lives in the solver's problems directory
+    paramFile = solverName + "/problems/" + paramFile
+    if (not os.path.isfile(paramFile)):
+        print 'ERROR: inputs file does not exist'
+        print paramFile
+        sys.exit(2)
+
 runparams.LoadParams(paramFile)
 
 runparams.PrintParamFile()
