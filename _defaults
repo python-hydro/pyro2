@@ -1,7 +1,7 @@
 [driver]
 
 tmax = 1.0
-
+max_steps = 10000
 
 [io]
 

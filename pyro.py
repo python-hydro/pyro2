@@ -104,6 +104,7 @@ exec problemName + '.fillPatch(myData)'
 # evolve
 #-----------------------------------------------------------------------------
 tmax = runparams.getParam("driver.tmax")
+max_steps = runparams.getParam("driver.max_steps")
 
 pylab.ion()
 
@@ -120,7 +121,7 @@ if (dovis): solver.dovis(myData, 0)
 
 nout = 0
 
-while (t < tmax):
+while (t < tmax and n < max_steps):
 
     # fill boundary conditions
     pfb = profile.timer("fillBC")
