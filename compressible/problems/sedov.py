@@ -2,11 +2,12 @@ import sys
 from util import runparams
 import mesh.patch as patch
 import numpy
+from util import msg
 
 def fillPatch(myPatch):
     """ initialize the sedov problem """
 
-    print "initializing the sedov problem..."
+    msg.bold("initializing the sedov problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(myPatch, patch.ccData2d):

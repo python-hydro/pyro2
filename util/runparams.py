@@ -39,9 +39,16 @@ getParam method:
 An earlier version of this was based on the Python Cookbook, 4.11, but
 we not longer use the ConfigParser module, instead roll our own regex.
 
+If the optional flag noNew=1 is set, then the LoadParams function will
+not define any new parameters, but only overwrite existing ones.  This
+is useful for reading in an inputs file that overrides previously read
+default values.
+
 """
 
-import string, sys, re
+import string
+import re
+from util import msg
 
 # we will keep track of the parameters and their comments globally
 globalParams = {}
@@ -63,7 +70,7 @@ def isFloat(string):
     else: return 1
 
 
-def LoadParams(file):
+def LoadParams(file, noNew=0):
     """
     returns a dictionary with keys of the form
     <section>.<option> and the corresponding values
@@ -73,8 +80,7 @@ def LoadParams(file):
     # check to see whether the file exists
     try: f = open(file, 'r')
     except IOError:
-        print 'ERROR: parameter file does not exist: ', file
-        sys.exit()
+        msg.fail("ERROR: parameter file does not exist: %s" % (file))
 
 
     # we could use the ConfigParser, but we actually want to have
@@ -92,14 +98,24 @@ def LoadParams(file):
         elif eq.search(line):
             left, item, value, comment, right = eq.split(line) 		
             item = string.lower(item.strip())
+
+            # define the key
+            key = section + "." + item
             
+            # if we have noNew = 1, then we only want to override existing
+            # key/values
+            if (noNew):
+                if (not key in globalParams.keys()):
+                    msg.warning("warning, key: %s not defined" % (key))
+                    continue
+
             # check in turn whether this is an interger, float, or string
             if (isInt(value)):
-                globalParams[section + "." + item] = int(value)
+                globalParams[key] = int(value)
             elif (isFloat(value)):
-                globalParams[section + "." + item] = float(value)
+                globalParams[key] = float(value)
             else:
-                globalParams[section + "." + item] = value.strip()
+                globalParams[key] = value.strip()
 
             # if the comment already exists (i.e. from reading in _defaults)
             # and we are just resetting the value of the parameter (i.e.
@@ -107,11 +123,11 @@ def LoadParams(file):
             # comment
             if comment.strip() == "":
                 try:
-                    comment = globalParamComments[section + '.' + item]
+                    comment = globalParamComments[key]
                 except KeyError:
                     comment = ""
                     
-            globalParamComments[section + "." + item] = comment.strip()
+            globalParamComments[key] = comment.strip()
     
     
 def getParam(key):
@@ -120,13 +136,13 @@ def getParam(key):
     input key
     """
     if globalParams == {}:
-        print "WARNING: runtime parameters not yet initialized"
+        msg.warning("WARNING: runtime parameters not yet initialized")
         LoadParams("_defaults")
         
     if key in globalParams.keys():
         return globalParams[key]
     else:
-        print "ERROR: runtime parameter ", key, " not found"
+        msg.fail("ERROR: runtime parameter %s not found" % (key))
         
 
 def PrintAllParams():
@@ -145,8 +161,8 @@ def PrintParamFile():
 
     try: f = open('inputs.auto', 'w')
     except IOError:
-        print 'ERROR: unable to open inputs.auto'
-        sys.exit()
+        msg.fail("ERROR: unable to open inputs.auto")
+
 
     f.write('# automagically generated parameter file\n')
     

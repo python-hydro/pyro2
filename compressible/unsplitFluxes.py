@@ -181,9 +181,10 @@ def unsplitFluxes(myData, dt):
     xi   = numpy.zeros((myg.qx, myg.qx), dtype=numpy.float64)
     
     smallp = 1.e-10
-    delta = 0.33
-    z0 = 0.75
-    z1 = 0.85
+
+    delta = runparams.getParam("compressible.delta")
+    z0 = runparams.getParam("compressible.z0")
+    z1 = runparams.getParam("compressible.z1")
 
     xi_x = reconstruction_f.flatten(1, p, u, myg.qx, myg.qy, myg.ng, smallp, delta, z0, z1)
     xi_y = reconstruction_f.flatten(2, p, v, myg.qx, myg.qy, myg.ng, smallp, delta, z0, z1)

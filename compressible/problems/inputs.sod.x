@@ -13,8 +13,8 @@ nx = 128
 ny = 10
 xmax = 1.0
 ymax = .05
-xl_boundary = outflow
-xr_boundary = outflow
+xlboundary = outflow
+xrboundary = outflow
 
 [sod]
 direction = x

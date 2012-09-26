@@ -24,11 +24,11 @@ ny = 64
 xmax = 1.0
 ymax = 1.0
 
-xl_boundary = outflow
-xr_boundary = outflow
+xlboundary = outflow
+xrboundary = outflow
 
-yl_boundary = outflow
-yr_boundary = outflow
+ylboundary = outflow
+yrboundary = outflow
 
 
 [sedov]

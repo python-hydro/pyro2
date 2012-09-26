@@ -1,23 +1,13 @@
-"""
-  ---------------------------------------------------------------------
-  Copyright (C) 2003, 2004  Michael Zingale
-
-  This software is distributed under the terms of the GNU General
-  Public License, version 2.  See COPYING for details.  It is covered
-  by no warantee whatsoever, explicit or implied.
-  ---------------------------------------------------------------------
-"""
-
-
 import sys
 from util import runparams
 import mesh.patch as patch
 import numpy
+from util import msg
 
 def fillPatch(myPatch):
     """ initialize the tophat advection problem """
 
-    print "initializing the tophat advection problem..."
+    msg.bold("initializing the tophat advection problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(myPatch, patch.ccData2d):

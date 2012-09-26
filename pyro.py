@@ -83,7 +83,7 @@ if (not os.path.isfile(paramFile)):
     if (not os.path.isfile(paramFile)):
         msg.fail("ERROR: inputs file does not exist")
 
-runparams.LoadParams(paramFile)
+runparams.LoadParams(paramFile, noNew=1)
 
 runparams.PrintParamFile()
 
