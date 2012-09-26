@@ -15,8 +15,8 @@ tplot = 0.1
 
 
 [mesh]
-nx = 128
-ny = 128
+nx = 256
+ny = 256
 xmax = 1.0
 ymax = 1.0
 
