@@ -116,6 +116,9 @@ class grid2d:
         type of boundary conditions (assume reflecting).
         """
 
+        # time 
+        self.t = -1.0
+
         # size of grid
         self.nx = nx
         self.ny = ny

@@ -6,7 +6,7 @@ tmax = 0.25
 
 [io]
 basename = sod_x
-tplot = 0.001
+tplot = 0.05
 
 [mesh]
 nx = 128

@@ -118,19 +118,21 @@ max_steps = runparams.getParam("driver.max_steps")
 pylab.ion()
 
 n = 0
-t = 0.0
+myData.t = 0.0
 
 # output the 0th data
 basename = runparams.getParam("io.basename")
 myData.write(basename + "%4.4d" % (n))
 
 dovis = runparams.getParam("vis.dovis")
-if (dovis): solver.dovis(myData, 0)
-
+if (dovis): 
+    pylab.figure(num=1, figsize=(8,6), dpi=100, facecolor='w')
+    solver.dovis(myData, 0)
+    
 
 nout = 0
 
-while (t < tmax and n < max_steps):
+while (myData.t < tmax and n < max_steps):
 
     # fill boundary conditions
     pfb = profile.timer("fillBC")
@@ -141,22 +143,22 @@ while (t < tmax and n < max_steps):
     # get the timestep
     dt = solver.timestep(myData)
 
-    if (t + dt > tmax):
-        dt = tmax - t
+    if (myData.t + dt > tmax):
+        dt = tmax - myData.t
 
     solver.evolve(myData, dt)
 
 
     # increment the time
-    t += dt
+    myData.t += dt
     n += 1
-    print "%5d %10.5f %10.5f" % (n, t, dt)
+    print "%5d %10.5f %10.5f" % (n, myData.t, dt)
 
 
     # output
     
     tplot = runparams.getParam("io.tplot")
-    if (t >= (nout + 1)*tplot):
+    if (myData.t >= (nout + 1)*tplot):
 
         pfc = profile.timer("output")
         pfc.begin()
