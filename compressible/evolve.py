@@ -31,7 +31,6 @@ def evolve(myData, dt):
     dtdx = dt/myg.dx
     dtdy = dt/myg.dy
 
-    print 'idens = ', vars.idens
 
     dens[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] += \
         dtdx*(Flux_x[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,vars.idens] - \
