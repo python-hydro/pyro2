@@ -1,0 +1,11 @@
+-- All top-level code is python
+
+-- some numerically intense low level functions (e.g. slope
+   reconstruction) are in F90, coded with f2py
+
+   o F90 routines need to standalone -- they cannot have
+     any dependencies from other files
+
+   o used only in cases where numpy array notation would result in
+     code that is harded to understand at a glance
+
