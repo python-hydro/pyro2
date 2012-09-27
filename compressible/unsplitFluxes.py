@@ -124,7 +124,6 @@ import numpy
 import vars
 import eos
 import mesh.reconstruction_f as reconstruction_f
-from riemann import *
 from util import runparams
 from util import profile
 import interface_f
@@ -315,13 +314,13 @@ def unsplitFluxes(myData, dt):
     F_x = numpy.zeros((myg.qx, myg.qy, vars.nvar),  dtype=numpy.float64)
     F_y = numpy.zeros((myg.qx, myg.qy, vars.nvar),  dtype=numpy.float64)
 
-    F_x = interface_f.riemann(1, myg.qx, myg.qy, myg.ng, 
-                              vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener, 
-                              gamma, U_xl, U_xr)
+    F_x = interface_f.riemann_cgf(1, myg.qx, myg.qy, myg.ng, 
+                                  vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener, 
+                                  gamma, U_xl, U_xr)
 
-    F_y = interface_f.riemann(2, myg.qx, myg.qy, myg.ng, 
-                              vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener, 
-                              gamma, U_yl, U_yr)
+    F_y = interface_f.riemann_cgf(2, myg.qx, myg.qy, myg.ng, 
+                                  vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener, 
+                                  gamma, U_yl, U_yr)
 
     pfc.end()
 
@@ -427,13 +426,13 @@ def unsplitFluxes(myData, dt):
     #F_x = riemann(1, myg, U_xl, U_xr)
     #F_y = riemann(2, myg, U_yl, U_yr)
 
-    F_x = interface_f.riemann(1, myg.qx, myg.qy, myg.ng, 
-                              vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener, 
-                              gamma, U_xl, U_xr)
+    F_x = interface_f.riemann_cgf(1, myg.qx, myg.qy, myg.ng, 
+                                  vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener, 
+                                  gamma, U_xl, U_xr)
 
-    F_y = interface_f.riemann(2, myg.qx, myg.qy, myg.ng, 
-                              vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener, 
-                              gamma, U_yl, U_yr)
+    F_y = interface_f.riemann_cgf(2, myg.qx, myg.qy, myg.ng, 
+                                  vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener, 
+                                  gamma, U_yl, U_yr)
 
     pfc.end()
 
