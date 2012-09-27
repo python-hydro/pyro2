@@ -2,11 +2,13 @@ advection:
 
    implement PPM
    implement 1-d solver
-
+   demonstrate convergence
 
 compressible:
 
    add species
+   implement a split solver
+   implement PPM
 
 
 incompressible:
