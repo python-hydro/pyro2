@@ -785,3 +785,83 @@ subroutine consFlux(idir, gamma, idens, ixmom, iymom, iener, nvar, U_state, F)
 
 end subroutine consFlux
   
+
+subroutine artificial_viscosity(qx, qy, ng, dx, dy, &
+                                cvisc, u, v, avisco_x, avisco_y)
+
+  implicit none
+  integer, intent(in) :: qx, qy, ng
+  double precision, intent(in) :: dx, dy
+  double precision, intent(in) :: cvisc
+
+  ! 0-based indexing to match python
+  double precision, intent(in) :: u(0:qx-1, 0:qy-1)
+  double precision, intent(in) :: v(0:qx-1, 0:qy-1)
+  double precision, intent(out) :: avisco_x(0:qx-1, 0:qy-1)
+  double precision, intent(out) :: avisco_y(0:qx-1, 0:qy-1)
+
+!f2py depend(qx, qy) :: u, v
+!f2py depend(qx, qy) :: avisco_x, avisco_y
+!f2py intent(in) :: u, v
+!f2py intent(out) :: avisco_x, avisco_y
+
+  ! compute the artifical viscosity.  Here, we compute edge-centered
+  ! approximations to the divergence of the velocity.  This follows 
+  ! directly Colella & Woodward (1984) Eq. 4.5
+  !
+  ! data locations:
+  !
+  !   j+3/2--+---------+---------+---------+
+  !          |         |         |         |
+  !     j+1  +         |         |         |
+  !          |         |         |         |
+  !   j+1/2--+---------+---------+---------+
+  !          |         |         |         |
+  !        j +         X         |         |
+  !          |         |         |         |
+  !   j-1/2--+---------+----Y----+---------+ 
+  !          |         |         |         |
+  !      j-1 +         |         |         |
+  !          |         |         |         | 
+  !   j-3/2--+---------+---------+---------+
+  !          |    |    |    |    |    |    | 
+  !              i-1        i        i+1   
+  !        i-3/2     i-1/2     i+1/2     i+3/2 
+  !
+  ! X is the location of avisco_x(i,j)
+  ! Y is the location of avisco_y(i,j)
+
+  integer :: ilo, ihi, jlo, jhi
+  integer :: nx, ny
+ 
+  integer :: i, j
+
+  double precision :: divU_x, divU_y
+
+  nx = qx - 2*ng; ny = qy - 2*ng
+  ilo = ng; ihi = ng+nx-1; jlo = ng; jhi = ng+ny-1
+
+  do j = jlo-1, jhi+1
+     do i = ilo-1, ihi+1
+
+        ! start by computing the divergence on the x-interface.  The
+        ! x-difference is simply the difference of the cell-centered
+        ! x-velocities on either side of the x-interface.  For the
+        ! y-difference, first average the four cells to the node on
+        ! each end of the edge, and then difference these to find the
+        ! edge centered y difference.
+        divU_x = (u(i,j) - u(i-1,j))/dx + &
+             0.25d0*(v(i,j+1) + v(i-1,j+1) - v(i,j-1) - v(i-1,j-1))/dy
+
+        avisco_x(i,j) = cvisc*max(-divU_x*dx, 0.0d0)
+
+        ! now the y-interface value
+        divU_y = 0.25d0*(u(i+1,j) + u(i+1,j-1) - u(i-1,j) - u(i-1,j-1))/dx + &
+             (v(i,j) - v(i,j-1))/dy
+
+        avisco_y(i,j) = cvisc*max(-divU_y*dy, 0.0d0)
+        
+     enddo
+  enddo
+
+end subroutine artificial_viscosity

@@ -437,8 +437,58 @@ def unsplitFluxes(myData, dt):
     pfc.end()
 
     #=========================================================================
-    # apply artifical viscosity
+    # apply artificial viscosity
     #=========================================================================
+    cvisc = runparams.getParam("compressible.cvisc")
+
+    (avisco_x, avisco_y) = interface_f.artificial_viscosity( \
+                              myg.qx, myg.qy, myg.ng, myg.dx, myg.dy, \
+                              cvisc, u, v)
+
+    # F_x = F_x + avisco_x * (U(i-1,j) - U(i,j))
+    F_x[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,vars.idens] += \
+        avisco_x[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2]* \
+          (dens[myg.ilo-3:myg.ihi+1,myg.jlo-2:myg.jhi+2] - \
+           dens[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2])
+
+    F_x[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,vars.ixmom] += \
+        avisco_x[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2]* \
+          (xmom[myg.ilo-3:myg.ihi+1,myg.jlo-2:myg.jhi+2] - \
+           xmom[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2])
+
+    F_x[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,vars.iymom] += \
+        avisco_x[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2]* \
+          (ymom[myg.ilo-3:myg.ihi+1,myg.jlo-2:myg.jhi+2] - \
+           ymom[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2])
+
+    F_x[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,vars.iener] += \
+        avisco_x[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2]* \
+          (ener[myg.ilo-3:myg.ihi+1,myg.jlo-2:myg.jhi+2] - \
+           ener[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2])
+
+
+    # F_y = F_y + avisco_y * (U(i,j-1) - U(i,j))
+    F_y[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,vars.idens] += \
+        avisco_y[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2]* \
+          (dens[myg.ilo-2:myg.ihi+2,myg.jlo-3:myg.jhi+1] - \
+           dens[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2])
+
+    F_y[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,vars.ixmom] += \
+        avisco_y[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2]* \
+          (xmom[myg.ilo-2:myg.ihi+2,myg.jlo-3:myg.jhi+1] - \
+           xmom[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2])
+
+    F_y[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,vars.iymom] += \
+        avisco_y[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2]* \
+          (ymom[myg.ilo-2:myg.ihi+2,myg.jlo-3:myg.jhi+1] - \
+           ymom[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2])
+
+    F_y[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,vars.iener] += \
+        avisco_y[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2]* \
+          (ener[myg.ilo-2:myg.ihi+2,myg.jlo-3:myg.jhi+1] - \
+           ener[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2])
+
+    
 
     pf.end()
 

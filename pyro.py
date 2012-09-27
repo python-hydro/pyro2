@@ -182,4 +182,5 @@ while (myData.t < tmax and n < max_steps):
 
 pf.end()
 
+runparams.printUnusedParams()
 profile.timeReport()

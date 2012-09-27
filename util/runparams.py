@@ -54,6 +54,10 @@ from util import msg
 globalParams = {}
 globalParamComments = {}
 
+# for debugging -- keep track of which parameters were actually looked-
+# up
+usedParams = []
+
 # some utility functions to automagically determine what the data
 # types are
 def isInt(string):
@@ -138,12 +142,25 @@ def getParam(key):
     if globalParams == {}:
         msg.warning("WARNING: runtime parameters not yet initialized")
         LoadParams("_defaults")
+
+    # debugging
+    if not key in usedParams:
+        usedParams.append(key)
         
     if key in globalParams.keys():
         return globalParams[key]
     else:
         msg.fail("ERROR: runtime parameter %s not found" % (key))
         
+
+def printUnusedParams():
+    """
+    print out the list of parameters that were defined by never used
+    """
+    for key in globalParams.keys():
+        if not key in usedParams:
+            msg.warning("parameter %s never used" % (key))
+    
 
 def PrintAllParams():
     keys = globalParams.keys()
