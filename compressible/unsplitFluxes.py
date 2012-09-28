@@ -179,16 +179,21 @@ def unsplitFluxes(myData, dt):
     #=========================================================================
 
     # there is a single flattening coefficient (xi) for all directions
-    smallp = 1.e-10
+    use_flattening = runparams.getParam("compressible.use_flattening")
 
-    delta = runparams.getParam("compressible.delta")
-    z0 = runparams.getParam("compressible.z0")
-    z1 = runparams.getParam("compressible.z1")
+    if (use_flattening):
+        smallp = 1.e-10
 
-    xi_x = reconstruction_f.flatten(1, p, u, myg.qx, myg.qy, myg.ng, smallp, delta, z0, z1)
-    xi_y = reconstruction_f.flatten(2, p, v, myg.qx, myg.qy, myg.ng, smallp, delta, z0, z1)
+        delta = runparams.getParam("compressible.delta")
+        z0 = runparams.getParam("compressible.z0")
+        z1 = runparams.getParam("compressible.z1")
 
-    xi = reconstruction_f.flatten_multid(xi_x, xi_y, p, myg.qx, myg.qy, myg.ng)
+        xi_x = reconstruction_f.flatten(1, p, u, myg.qx, myg.qy, myg.ng, smallp, delta, z0, z1)
+        xi_y = reconstruction_f.flatten(2, p, v, myg.qx, myg.qy, myg.ng, smallp, delta, z0, z1)
+
+        xi = reconstruction_f.flatten_multid(xi_x, xi_y, p, myg.qx, myg.qy, myg.ng)
+    else:
+        xi = 1.0
 
 
     #=========================================================================
