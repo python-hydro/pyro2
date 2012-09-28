@@ -22,21 +22,3 @@ grav = 0.0                ; gravitational acceleration (in y-direction)
 riemann = HLLC            ; HLLC or CGF
 
 
-[mesh]
-xmin = 0.0                ; domain minumum x-coordinate
-xmax = 1.0                ; domain maximum x-coordinate
-ymin = 0.0                ; domain minimum y-coordinate
-ymax = 1.0                ; domain maximum y-coordinate
-
-xlboundary = reflect     ; minimum x BC ('reflect', 'outflow', or 'periodic')
-xrboundary = reflect     ; maximum x BC ('reflect', 'outflow', or 'periodic') 
-ylboundary = reflect     ; minimum y BC ('reflect', 'outflow', or 'periodic')
-yrboundary = reflect     ; maximum y BC ('reflect', 'outflow', or 'periodic')
-
-nx = 25                   ; number of zones in the x-direction
-ny = 25                   ; number of zones in the y-direction
-
-
-
-
-
