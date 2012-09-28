@@ -110,6 +110,9 @@ exec problemName + '.fillPatch(myData)'
 tmax = runparams.getParam("driver.tmax")
 max_steps = runparams.getParam("driver.max_steps")
 
+init_tstep_factor = runparams.getParam("driver.init_tstep_factor")
+max_dt_change = runparams.getParam("driver.max_dt_change")
+
 pylab.ion()
 
 n = 0
@@ -137,10 +140,17 @@ while (myData.t < tmax and n < max_steps):
 
     # get the timestep
     dt = solver.timestep(myData)
+    if (n == 0):
+        dt = init_tstep_factor*dt
+        dtOld = dt
+    else:
+        dt = min(max_dt_change*dtOld, dt)
+        dtOld = dt
 
     if (myData.t + dt > tmax):
         dt = tmax - myData.t
 
+    # evolve for a single timestep
     solver.evolve(myData, dt)
 
 
@@ -151,7 +161,6 @@ while (myData.t < tmax and n < max_steps):
 
 
     # output
-    
     tplot = runparams.getParam("io.tplot")
     if (myData.t >= (nout + 1)*tplot):
 
