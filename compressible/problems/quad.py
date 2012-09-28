@@ -4,7 +4,7 @@ import mesh.patch as patch
 import numpy
 from util import msg
 
-def fillPatch(myPatch):
+def initData(myPatch):
     """ initialize the quadrant problem """
 
     msg.bold("initializing the quadrant problem...")

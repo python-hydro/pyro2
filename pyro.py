@@ -100,7 +100,7 @@ myGrid, myData = solver.initialize()
 # initialize the data
 exec 'from ' + solverName + '.problems import *'
 
-exec problemName + '.fillPatch(myData)'
+exec problemName + '.initData(myData)'
 
 
 

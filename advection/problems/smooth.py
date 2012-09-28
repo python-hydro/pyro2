@@ -4,7 +4,7 @@ import mesh.patch as patch
 import numpy
 from util import msg
 
-def fillPatch(myPatch):
+def initData(myPatch):
     """ initialize the smooth advection problem """
 
     msg.bold("initializing the smooth advection problem...")

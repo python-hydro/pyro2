@@ -5,7 +5,7 @@ import numpy
 from util import msg
 import math
 
-def fillPatch(myPatch):
+def initData(myPatch):
     """ initialize the Kelvin-Helmholtz problem """
 
     msg.bold("initializing the sedov problem...")

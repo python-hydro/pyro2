@@ -19,3 +19,23 @@ n_out = 10000              ; number of timesteps between writing output files
 dovis = 1                  ; runtime visualization? (1=yes, 0=no)
 store_images = 0           ; store vis images to files (1=yes, 0=no)
 
+
+[mesh]
+
+xmin = 0.0                ; domain minumum x-coordinate
+xmax = 1.0                ; domain maximum x-coordinate
+ymin = 0.0                ; domain minimum y-coordinate
+ymax = 1.0                ; domain maximum y-coordinate
+
+xlboundary = reflect     ; minimum x BC ('reflect', 'outflow', or 'periodic')
+xrboundary = reflect     ; maximum x BC ('reflect', 'outflow', or 'periodic') 
+ylboundary = reflect     ; minimum y BC ('reflect', 'outflow', or 'periodic')
+yrboundary = reflect     ; maximum y BC ('reflect', 'outflow', or 'periodic')
+
+nx = 25                   ; number of zones in the x-direction
+ny = 25                   ; number of zones in the y-direction
+
+
+
+
+
