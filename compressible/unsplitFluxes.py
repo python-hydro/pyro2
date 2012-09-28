@@ -7,10 +7,14 @@ assumption.
 There are several different options for this solver (they are all
 discussed in the Colella paper).
 
-  limiter          = 1 to use the 2nd order MC limiter 
+  limiter          = 0 to use no limiting
+                   = 1 to use the 2nd order MC limiter 
                    = 2 to use the 4th order MC limiter
 
-  use_flattening   = t to use the multidimensional flattening 
+  riemann          = HLLC to use the HLLC solver
+                   = CGF to use the Colella, Glaz, and Ferguson solver
+
+  use_flattening   = 1 to use the multidimensional flattening 
                      algorithm at shocks
 
   delta, z0, z1      these are the flattening parameters.  The default
@@ -175,10 +179,6 @@ def unsplitFluxes(myData, dt):
     #=========================================================================
 
     # there is a single flattening coefficient (xi) for all directions
-    xi_x = numpy.zeros((myg.qx, myg.qx), dtype=numpy.float64)
-    xi_y = numpy.zeros((myg.qx, myg.qx), dtype=numpy.float64)
-    xi   = numpy.zeros((myg.qx, myg.qx), dtype=numpy.float64)
-    
     smallp = 1.e-10
 
     delta = runparams.getParam("compressible.delta")
@@ -198,16 +198,19 @@ def unsplitFluxes(myData, dt):
     # monotonized central differences in x-direction
     pfa = profile.timer("limiting")
     pfa.begin()
-    
-    ldelta_r = numpy.zeros((myg.qx, myg.qx), dtype=numpy.float64)
-    ldelta_u = numpy.zeros((myg.qx, myg.qx), dtype=numpy.float64)
-    ldelta_v = numpy.zeros((myg.qx, myg.qx), dtype=numpy.float64)
-    ldelta_p = numpy.zeros((myg.qx, myg.qx), dtype=numpy.float64)
 
-    ldelta_r = xi*reconstruction_f.limit4(1, r, myg.qx, myg.qy, myg.ng)
-    ldelta_u = xi*reconstruction_f.limit4(1, u, myg.qx, myg.qy, myg.ng)
-    ldelta_v = xi*reconstruction_f.limit4(1, v, myg.qx, myg.qy, myg.ng)
-    ldelta_p = xi*reconstruction_f.limit4(1, p, myg.qx, myg.qy, myg.ng)
+    limiter = runparams.getParam("compressible.limiter")
+    if (limiter == 0):
+        limitFunc = reconstruction_f.nolimit
+    elif (limiter == 1):
+        limitFunc = reconstruction_f.limit2
+    else:
+        limitFunc = reconstruction_f.limit4
+    
+    ldelta_r = xi*limitFunc(1, r, myg.qx, myg.qy, myg.ng)
+    ldelta_u = xi*limitFunc(1, u, myg.qx, myg.qy, myg.ng)
+    ldelta_v = xi*limitFunc(1, v, myg.qx, myg.qy, myg.ng)
+    ldelta_p = xi*limitFunc(1, p, myg.qx, myg.qy, myg.ng)
     
     pfa.end()
     
@@ -215,9 +218,6 @@ def unsplitFluxes(myData, dt):
     pfb = profile.timer("interfaceStates")
     pfb.begin()
 
-    # (V_l, V_r) = interfaceStates(1, myg, dt, 
-    #                              r, u, v, p, 
-    #                              ldelta_r, ldelta_u, ldelta_v, ldelta_p)
     gamma = runparams.getParam("eos.gamma")
 
     V_l = numpy.zeros((myg.qx, myg.qy, vars.nvar),  dtype=numpy.float64)
@@ -257,19 +257,15 @@ def unsplitFluxes(myData, dt):
     # monotonized central differences in y-direction
     pfa.begin()
 
-    ldelta_r = xi*reconstruction_f.limit4(2, r, myg.qx, myg.qy, myg.ng)
-    ldelta_u = xi*reconstruction_f.limit4(2, u, myg.qx, myg.qy, myg.ng)
-    ldelta_v = xi*reconstruction_f.limit4(2, v, myg.qx, myg.qy, myg.ng)
-    ldelta_p = xi*reconstruction_f.limit4(2, p, myg.qx, myg.qy, myg.ng)
+    ldelta_r = xi*limitFunc(2, r, myg.qx, myg.qy, myg.ng)
+    ldelta_u = xi*limitFunc(2, u, myg.qx, myg.qy, myg.ng)
+    ldelta_v = xi*limitFunc(2, v, myg.qx, myg.qy, myg.ng)
+    ldelta_p = xi*limitFunc(2, p, myg.qx, myg.qy, myg.ng)
 
     pfa.end()
     
     # left and right primitive variable states
     pfb.begin()
-
-    # (V_l, V_r) = interfaceStates(2, myg, dt, 
-    #                              r, u, v, p, 
-    #                              ldelta_r, ldelta_u, ldelta_v, ldelta_p)
 
     (V_l, V_r) = interface_f.states(2, myg.qx, myg.qy, myg.ng, myg.dy, dt,
                                     vars.nvar,
@@ -308,19 +304,23 @@ def unsplitFluxes(myData, dt):
     pfc = profile.timer("riemann")
     pfc.begin()
 
-    #F_x = riemann(1, myg, U_xl, U_xr)
-    #F_y = riemann(2, myg, U_yl, U_yr)
+    riemann = runparams.getParam("compressible.riemann")
 
-    F_x = numpy.zeros((myg.qx, myg.qy, vars.nvar),  dtype=numpy.float64)
-    F_y = numpy.zeros((myg.qx, myg.qy, vars.nvar),  dtype=numpy.float64)
+    if (riemann == "HLLC"):
+        riemannFunc = interface_f.riemann_hllc
+    elif (riemann == "CGF"):
+        riemannFunc = interface_f.riemann_cgf
+    else:
+        msg.fail("ERROR: Riemann solver undefined")
 
-    F_x = interface_f.riemann_hllc(1, myg.qx, myg.qy, myg.ng, 
-                                  vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener, 
-                                  gamma, U_xl, U_xr)
 
-    F_y = interface_f.riemann_hllc(2, myg.qx, myg.qy, myg.ng, 
-                                  vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener, 
-                                  gamma, U_yl, U_yr)
+    F_x = riemannFunc(1, myg.qx, myg.qy, myg.ng, 
+                      vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener, 
+                      gamma, U_xl, U_xr)
+
+    F_y = riemannFunc(2, myg.qx, myg.qy, myg.ng, 
+                      vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener, 
+                      gamma, U_yl, U_yr)
 
     pfc.end()
 
@@ -423,16 +423,13 @@ def unsplitFluxes(myData, dt):
 
     pfc.begin()
         
-    #F_x = riemann(1, myg, U_xl, U_xr)
-    #F_y = riemann(2, myg, U_yl, U_yr)
+    F_x = riemannFunc(1, myg.qx, myg.qy, myg.ng, 
+                      vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener, 
+                      gamma, U_xl, U_xr)
 
-    F_x = interface_f.riemann_hllc(1, myg.qx, myg.qy, myg.ng, 
-                                  vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener, 
-                                  gamma, U_xl, U_xr)
-
-    F_y = interface_f.riemann_hllc(2, myg.qx, myg.qy, myg.ng, 
-                                  vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener, 
-                                  gamma, U_yl, U_yr)
+    F_y = riemannFunc(2, myg.qx, myg.qy, myg.ng, 
+                      vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener, 
+                      gamma, U_yl, U_yr)
 
     pfc.end()
 

@@ -1,6 +1,5 @@
 [driver]
 cfl = 0.8
-splitting = unsplit
 
 
 [eos]
@@ -8,13 +7,19 @@ gamma = 1.4    ; pres = rho ener (gamma - 1)
 
 
 [compressible]
-use_flattening = t        ; apply flattening (logical = {t,f})
+use_flattening = 1        ; apply flattening at shocks (1)
+
 z0 = 0.75                 ; flattening z0 parameter
 z1 = 0.85                 ; flattening z1 parameter
 delta = 0.33              ; flattening delta parameter
+
 cvisc = 0.0               ; artifical viscosity coefficient
-limiter = 1               ; limiter (1 = second order, 2 = forth order)
+
+limiter = 1               ; limiter (0 = none, 1 = 2nd order, 2 = 4th order)
+
 grav = 0.0                ; gravitational acceleration (in y-direction)
+
+riemann = HLLC            ; HLLC or CGF
 
 
 [mesh]
@@ -22,10 +27,12 @@ xmin = 0.0                ; domain minumum x-coordinate
 xmax = 1.0                ; domain maximum x-coordinate
 ymin = 0.0                ; domain minimum y-coordinate
 ymax = 1.0                ; domain maximum y-coordinate
+
 xlboundary = reflect     ; minimum x BC ('reflect', 'outflow', or 'periodic')
 xrboundary = reflect     ; maximum x BC ('reflect', 'outflow', or 'periodic') 
 ylboundary = reflect     ; minimum y BC ('reflect', 'outflow', or 'periodic')
 yrboundary = reflect     ; maximum y BC ('reflect', 'outflow', or 'periodic')
+
 nx = 25                   ; number of zones in the x-direction
 ny = 25                   ; number of zones in the y-direction
 
