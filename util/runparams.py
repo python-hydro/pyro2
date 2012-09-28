@@ -76,8 +76,8 @@ def isFloat(string):
 
 def LoadParams(file, noNew=0):
     """
-    returns a dictionary with keys of the form
-    <section>.<option> and the corresponding values
+    reads lines from file and makes dictionary pairs from the data
+    to store in globalParams.
     """
     global globalParams
 
@@ -132,7 +132,39 @@ def LoadParams(file, noNew=0):
                     comment = ""
                     
             globalParamComments[key] = comment.strip()
-    
+
+
+def CommandLineParams(cmdStrings):
+    """
+    finds dictionary pairs from a string that came from the
+    commandline.  Stores the parameters in globalParams only if they 
+    already exist.
+    """
+    global globalParams
+
+
+    # we expect things in the string in the form:
+    #  ["sec.opt=value",  "sec.opt=value"]
+    # with each opt an element in the list
+
+    for item in cmdStrings:
+
+        # break it apart
+        key, value = item.split("=")
+            
+        # we only want to override existing keys/values
+        if (not key in globalParams.keys()):
+            msg.warning("warning, key: %s not defined" % (key))
+            continue
+
+        # check in turn whether this is an interger, float, or string
+        if (isInt(value)):
+            globalParams[key] = int(value)
+        elif (isFloat(value)):
+            globalParams[key] = float(value)
+        else:
+            globalParams[key] = value.strip()
+
     
 def getParam(key):
     """

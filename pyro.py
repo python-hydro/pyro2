@@ -61,6 +61,10 @@ except IndexError:
     msg.fail("ERROR: parameter file not specified on command line")
 
 
+otherCmds = []
+if (len(next) > 3):
+    otherCmds = next[3:]
+
 # actually import the solver-specific stuff under the 'solver' namespace
 exec 'import ' + solverName + ' as solver'
 
@@ -85,6 +89,10 @@ if (not os.path.isfile(paramFile)):
 
 runparams.LoadParams(paramFile, noNew=1)
 
+# and any commandline overrides
+runparams.CommandLineParams(otherCmds)
+
+# write out the inputs.auto
 runparams.PrintParamFile()
 
 
