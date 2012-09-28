@@ -51,7 +51,6 @@ def dovis(myData, n):
         fig, axes = pylab.subplots(nrows=4, ncols=1, num=1)
         orientation = "horizontal"
         if (L_x > 4*L_y):
-            print "here"
             shrink = 0.75
 
     elif (L_y > 2*L_x):
