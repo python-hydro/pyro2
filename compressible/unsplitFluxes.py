@@ -379,45 +379,28 @@ def unsplitFluxes(myData, dt):
     pfd = profile.timer("transverse flux addition")
     pfd.begin()
 
+    # U_xl[i,j,:] = U_xl[i,j,:] - 0.5*dt/dy * (F_y[i-1,j+1,:] - F_y[i-1,j,:])
     U_xl[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,:] += \
         - 0.5*dt/myg.dy * (F_y[myg.ilo-3:myg.ihi+1,myg.jlo-1:myg.jhi+3,:] - \
                            F_y[myg.ilo-3:myg.ihi+1,myg.jlo-2:myg.jhi+2,:])    
 
+    # U_xr[i,j,:] = U_xr[i,j,:] - 0.5*dt/dy * (F_y[i,j+1,:] - F_y[i,j,:])
     U_xr[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,:] += \
         - 0.5*dt/myg.dy * (F_y[myg.ilo-2:myg.ihi+2,myg.jlo-1:myg.jhi+3,:] - \
                            F_y[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,:])    
 
+    # U_yl[i,j,:] = U_yl[i,j,:] - 0.5*dt/dx * (F_x[i+1,j-1,:] - F_x[i,j-1,:])
     U_yl[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,:] += \
         - 0.5*dt/myg.dx * (F_x[myg.ilo-1:myg.ihi+3,myg.jlo-3:myg.jhi+1,:] - \
                            F_x[myg.ilo-2:myg.ihi+2,myg.jlo-3:myg.jhi+1,:])
                 
+    # U_yr[i,j,:] = U_yr[i,j,:] - 0.5*dt/dx * (F_x[i+1,j,:] - F_x[i,j,:])
     U_yr[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,:] += \
         - 0.5*dt/myg.dx * (F_x[myg.ilo-1:myg.ihi+3,myg.jlo-2:myg.jhi+2,:] - \
                            F_x[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,:])
 
-    # should vectorize this
-    # j = myg.jlo-2
-    # while (j <= myg.jhi+2):
-
-    #     i = myg.ilo-2
-    #     while (i <= myg.ihi+2):
-
-    #         U_xl[i,j,:] = U_xl[i,j,:] - \
-    #             0.5*dt/myg.dy * (F_y[i-1,j+1,:] - F_y[i-1,j,:])
-                
-    #         U_xr[i,j,:] = U_xr[i,j,:] - \
-    #             0.5*dt/myg.dy * (F_y[i,j+1,:] - F_y[i,j,:])
-
-    #         U_yl[i,j,:] = U_yl[i,j,:] - \
-    #             0.5*dt/myg.dx * (F_x[i+1,j-1,:] - F_x[i,j-1,:])
-                
-    #         U_yr[i,j,:] = U_yr[i,j,:] - \
-    #             0.5*dt/myg.dx * (F_x[i+1,j,:] - F_x[i,j,:])
-
-    #         i += 1
-    #     j += 1
-
     pfd.end()
+
 
     #=========================================================================
     # construct the fluxes normal to the interfaces
