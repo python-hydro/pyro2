@@ -513,7 +513,9 @@ subroutine riemann_HLLC(idir, qx, qy, ng, &
 !f2py intent(in) :: U_l, U_r
 !f2py intent(out) :: F
 
-  ! this Riemann solver follows directly out of Toro's book.
+  ! this is the HLLC Riemann solver.  The implementation follows
+  ! directly out of Toro's book.  Note: this does not handle the
+  ! transonic rarefaction.
 
   integer :: ilo, ihi, jlo, jhi
   integer :: nx, ny
