@@ -1,19 +1,21 @@
 [driver]
 
-tmax = 1.0
-max_steps = 10000
+tmax = 1.0                 ; maximum simulation time to evolve
+max_steps = 10000          ; maximum number of steps to take
 
-init_tstep_factor = 0.01    ; first timestep = init_tstep_factor * CFL timestep
+init_tstep_factor = 0.01   ; first timestep = init_tstep_factor * CFL timestep
 max_dt_change = 2.0        ; max amount the timestep can change between steps
+
 
 [io]
 
-basename = pyro_
-tplot = 0.1
+basename = pyro_           ; basename for output files
+dt_out = 0.1               ; simulation time between writing output files
+n_out = 10000              ; number of timesteps between writing output files
 
 
 [vis]
 
-dovis = 1
-store_images = 0
+dovis = 1                  ; runtime visualization? (1=yes, 0=no)
+store_images = 0           ; store vis images to files (1=yes, 0=no)
 

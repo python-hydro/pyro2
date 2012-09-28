@@ -4,19 +4,19 @@
 max_steps = 500
 tmax = 1.0
 
+max_dt_change = 1.e33
+init_tstep_factor = 1.0
+
 
 [solver]
 cfl = 0.8
-
-max_dt_change = 1.e33
-init_tstep_factor = 1.0
 
 splitting = unsplit
 
 
 [io]
 basename = smooth_unsplit_new_
-nplot = 10
+dt_out = 0.2
 
 [mesh]
 nx = 32

@@ -161,8 +161,10 @@ while (myData.t < tmax and n < max_steps):
 
 
     # output
-    tplot = runparams.getParam("io.tplot")
-    if (myData.t >= (nout + 1)*tplot):
+    dt_out = runparams.getParam("io.dt_out")
+    n_out = runparams.getParam("io.n_out")
+
+    if (myData.t >= (nout + 1)*dt_out or n%n_out == 0):
 
         pfc = profile.timer("output")
         pfc.begin()
