@@ -14,7 +14,13 @@ class termColors:
 def fail(str):
     new_str = termColors.FAIL + str + termColors.ENDC
     print new_str
-    sys.exit()
+
+    # only exit if we are not running in interactive mode.  sys.ps1 is
+    # only defined in interactive mode.
+    if hasattr(sys, 'ps1'):
+        return
+    else:
+        sys.exit()
 
 def warning(str):
     new_str = termColors.WARNING + str + termColors.ENDC

@@ -33,9 +33,9 @@ fill the ghost cells
 
 """
 
-import sys
 import numpy
 import pickle
+from util import msg
 
 class bcObject:
     """
@@ -52,36 +52,43 @@ class bcObject:
         if (xlb in valid):
             self.xlb = xlb
         else:
-            sys.exit("ERROR: xlb = %s invalid BC" % (xlb))
+            msg.fail("ERROR: xlb = %s invalid BC" % (xlb))
 
         # +x boundary
         if (xrb in valid):
             self.xrb = xrb
         else:
-            sys.exit("ERROR: xrb = %s invalid BC" % (xrb))
+            msg.fail("ERROR: xrb = %s invalid BC" % (xrb))
 
         # -y boundary
         if (ylb in valid):
             self.ylb = ylb
         else:
-            sys.exit("ERROR: ylb = %s invalid BC" % (ylb))
+            msg.fail("ERROR: ylb = %s invalid BC" % (ylb))
 
         # +y boundary
         if (yrb in valid):
             self.yrb = yrb
         else:
-            sys.exit("ERROR: yrb = %s invalid BC" % (yrb))
+            msg.fail("ERROR: yrb = %s invalid BC" % (yrb))
 
 
         # periodic checks
         if ((xlb == "periodic" and not xrb == "periodic") or
             (xrb == "periodic" and not xlb == "periodic")):
-            sys.exit("ERROR: both xlb and xrb must be periodic")
+            msg.fail("ERROR: both xlb and xrb must be periodic")
 
         if ((ylb == "periodic" and not yrb == "periodic") or
             (yrb == "periodic" and not ylb == "periodic")):
-            sys.exit("ERROR: both ylb and yrb must be periodic")
+            msg.fail("ERROR: both ylb and yrb must be periodic")
 
+    def __str__(self):
+        """ print out some basic information about the BC object """
+
+        string = "BCs: -x: %s  +x: %s  -y: %s  +y: %s" % \
+            (self.xlb, self.xrb, self.ylb, self.yrb)
+
+        return string
 
     
 class grid2d:
@@ -234,6 +241,8 @@ class ccData2d:
 
         self.BCs = {}
 
+        self.initialized = 0
+
 
     def registerVar(self, name, bcObject):
         """ 
@@ -241,6 +250,9 @@ class ccData2d:
         bcObject that describes the boundary conditions for that
         variable.
         """
+
+        if (self.initialized == 1):
+            msg.fail("ERROR: grid already initialized")
 
         self.vars.append(name)
         self.nvar += 1
@@ -261,14 +273,22 @@ class ccData2d:
         the storage for the state data
         """
 
+        if (self.initialized) == 1:
+            msg.fail("ERROR: grid already initialized")
+
         self.data = numpy.zeros((self.nvar,
                                  2*self.grid.ng+self.grid.nx, 
                                  2*self.grid.ng+self.grid.ny),
                                 dtype=self.dtype)
+        self.initialized = 1
 
         
     def __str__(self):
         """ print out some basic information about the ccData2d object """
+
+        if (self.initialized == 0):
+            string = "ccData2d object not yet initialized"
+            return string
 
         string = "cc data: nx = " + `self.grid.nx` + \
                         ", ny = " + `self.grid.ny` + \
@@ -283,9 +303,10 @@ class ccData2d:
 
         n = 0
         while (n < self.nvar):
-            string += "            " + self.vars[n] + \
-                ": min = " + `numpy.min(self.data[n,ilo:ihi,jlo:jhi])` + \
-                 " max = " + `numpy.max(self.data[n,ilo:ihi,jlo:jhi])` + "\n"
+            string += "      %24s: min: %15.10f    max: %15.10f\n" % \
+                (self.vars[n],
+                 numpy.min(self.data[n,ilo:ihi,jlo:jhi]), 
+                 numpy.max(self.data[n,ilo:ihi,jlo:jhi]) )
             n += 1
  
         return string
@@ -504,7 +525,7 @@ def read(filename):
 def ccDataClone(old):
 
     if (not isinstance(old, ccData2d)):
-        sys.exit("Can't clone object")
+        msg.fail("Can't clone object")
 
     new = ccData2d(old.grid)
 
