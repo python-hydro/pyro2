@@ -20,5 +20,7 @@ def dovis(myData, n):
 
     pylab.colorbar()
 
+    pylab.figtext(0.05,0.0125, "t = %10.5f" % myData.t)
+
     pylab.draw()
 
