@@ -37,6 +37,7 @@ import numpy
 import pickle
 from util import msg
 
+
 class bcObject:
     """
     boundary condition container -- hold the BCs on each boundary
@@ -287,12 +288,12 @@ class ccData2d:
         """ print out some basic information about the ccData2d object """
 
         if (self.initialized == 0):
-            string = "ccData2d object not yet initialized"
-            return string
+            myStr = "ccData2d object not yet initialized"
+            return myStr
 
-        string = "cc data: nx = " + `self.grid.nx` + \
-                        ", ny = " + `self.grid.ny` + \
-                        ", ng = " + `self.grid.ng` + "\n" + \
+        myStr = "cc data: nx = " + `self.grid.nx` + \
+                       ", ny = " + `self.grid.ny` + \
+                       ", ng = " + `self.grid.ng` + "\n" + \
                  "         nvars = " + `self.nvar` + "\n" + \
                  "         variables: \n" 
                  
@@ -303,13 +304,18 @@ class ccData2d:
 
         n = 0
         while (n < self.nvar):
-            string += "      %24s: min: %15.10f    max: %15.10f\n" % \
+            myStr += "      %16s: min: %15.10f    max: %15.10f\n" % \
                 (self.vars[n],
                  numpy.min(self.data[n,ilo:ihi,jlo:jhi]), 
                  numpy.max(self.data[n,ilo:ihi,jlo:jhi]) )
+            myStr += "      %16s  BCs: -x: %-12s +x: %-12s -y: %-12s +y: %-12s\n" %\
+                (" " , self.BCs[self.vars[n]].xlb, 
+                       self.BCs[self.vars[n]].xrb, 
+                       self.BCs[self.vars[n]].ylb, 
+                       self.BCs[self.vars[n]].yrb)
             n += 1
  
-        return string
+        return myStr
     
 
     def getVarPtr(self, name):
