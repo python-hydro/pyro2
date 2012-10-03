@@ -24,3 +24,8 @@
   ERROR()
 
 
+-- note for interactive plots, we need to have the matplotlib backend
+   set to TkAgg.  In ~/.matplotlib/matplotlibrc, set:
+
+   backend: TkAgg
+
