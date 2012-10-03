@@ -506,6 +506,42 @@ class ccData2d:
         pF.close()
 
 
+    def prettyPrint(self, varname):
+        """
+        print out a small dataset to the screen with the ghost cells
+        a different color, to make things stand out
+        """
+
+        a = self.getVarPtr(varname)
+
+        if (self.dtype == numpy.int):
+            fmt = "%4d"
+        elif (self.dtype == numpy.float64):
+            fmt = "%12.6g"
+        else:
+            msg.fail("ERROR: dtype not supported")
+        
+        j = 0
+        while j < self.grid.qy:
+            i = 0
+            while i < self.grid.qx:
+
+                if (j < self.grid.jlo or j > self.grid.jhi or
+                    i < self.grid.ilo or i > self.grid.ihi):
+                    gc = 1
+                else:
+                    gc = 0
+
+                if (gc):
+                    print "\033[31m" + fmt % (a[i,j]) + "\033[0m" ,
+                else:
+                    print fmt % (a[i,j]) ,
+
+                i += 1
+
+            print " "
+            j += 1
+
 def read(filename):
     """
     read a ccData object from a file and return it and the grid info

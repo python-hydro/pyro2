@@ -56,16 +56,17 @@ mydata.fillBC("reflect-odd")
 
 
 print "outflow"
-print a
+mydata.prettyPrint("outflow")
 
 print " "
 print "periodic"
-print b
+mydata.prettyPrint("periodic")
 
 print " "
 print "reflect-even"
-print c
+mydata.prettyPrint("reflect-even")
 
 print " "
 print "reflect-odd"
-print d
+mydata.prettyPrint("reflect-odd")
+
