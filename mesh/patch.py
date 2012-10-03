@@ -580,3 +580,30 @@ def ccDataClone(old):
 
     return new
         
+
+if __name__== "__main__":
+
+    # illustrate basic mesh operations
+
+    myg = grid2d(16,32, xmax=1.0, ymax=2.0)
+
+    mydata = ccData2d(myg)
+
+    bc = bcObject()
+
+    mydata.registerVar("a", bc)
+    mydata.create()
+
+
+    a = mydata.getVarPtr("a")
+    a[:,:] = numpy.exp(-(myg.x2d - 0.5)**2 - (myg.y2d - 1.0)**2)
+
+    print mydata
+
+    # output
+    print "writing\n"
+    mydata.write("mesh_test")
+
+    print "reading\n"
+    myg2, myd2 = read("mesh_test")
+    print myd2
