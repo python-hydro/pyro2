@@ -1,57 +1,44 @@
 pyro/
 
-  advection/
-     main.py           -- main driver
-     ...
+  advection/           -- linear advection solver
 
      problems/         -- advection problem initializations
-       gaussian.py
-       tophat.py
      test/             -- stored benchmark files for testing
 
 
-  common/              -- routines that are commonly used across all solvers
+  analysis/            -- analysis routines for working on the output
 
 
   compressible/        -- compressible hydrodynamics solver
-     main.py           -- main driver
-     eos.py
-     riemann.py
 
      problems/         -- compressible problem initializations
      test/             -- stored benchmark files for testing
 
 
   diffusion/           -- thermal diffusion solver (w/ multigrid)
-     main.py
 
      problems/
      test/
 
+
   incompressible/
-     main.py           -- main driver 
 
      problems/         -- incompressible problem initializations    
      test/             -- stored benchmark files for testing
 
+
   mesh/
-     patch.py
-     reconstruction.py
+
  
   multigrid/
-     main.py           -- main driver
-     multigrid.py
 
      problems/         -- multigrid problem initializations
      test/             -- stored benchmark files for testing
 
-  util/
-     compare.py
-     profile.py
-     runparams.py
 
-  vis/
- 
+  util/
+
+
      
  
 
