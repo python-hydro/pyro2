@@ -55,9 +55,10 @@ rerr = aerr/dens_analytic[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]
 
 # note that the numpy norm does not normalize by the number of elements, 
 # so we explicitly do so here
-print "error norms (absolute, relative): ", \
-    numpy.linalg.norm(aerr/(myg.nx*myg.ny)), \
-    numpy.linalg.norm(rerr/(myg.nx*myg.ny))
+l2a = numpy.sqrt(numpy.sum(aerr**2)/(myg.nx*myg.ny))
+l2r = numpy.sqrt(numpy.sum(rerr**2)/(myg.nx*myg.ny))
+print "error norms (absolute, relative): ", l2a, l2r
+
 
 
 
