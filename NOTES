@@ -29,3 +29,9 @@
 
    backend: TkAgg
 
+-- x[(x > 3) & (x < 7)]
+   x[numpy.where( (x > 3.0) & (x < 7.0) )]
+
+ b = numpy.argsort(a)
+ a[b] is sorted
+
