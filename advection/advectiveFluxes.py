@@ -8,7 +8,6 @@ solve
 
 from util import runparams
 import numpy
-import mesh.reconstruction as reconstruction
 import mesh.reconstruction_f as reconstruction_f
 
 def unsplitFluxes(myGrid, dt, a):
@@ -27,13 +26,12 @@ def unsplitFluxes(myGrid, dt, a):
 
     limiter = runparams.getParam("advection.limiter")
 
-    if (limiter == 1):
-        ldelta_a = reconstruction.limit4(1, myGrid, a)
-
-    else:
-        #ldelta_a = reconstruction.nolimit(1, myGrid, a)
-        ldelta_a = numpy.zeros((myGrid.qx, myGrid.qx), dtype=numpy.float64)
+    if (limiter == 0):
         ldelta_a = reconstruction_f.nolimit(1, a, myGrid.qx, myGrid.qy, myGrid.ng)
+    elif (limiter == 1):
+        ldelta_a = reconstruction_f.limit2(1, a, myGrid.qx, myGrid.qy, myGrid.ng)
+    else:
+        ldelta_a = reconstruction_f.limit4(1, a, myGrid.qx, myGrid.qy, myGrid.ng)
 
 
 
@@ -75,13 +73,14 @@ def unsplitFluxes(myGrid, dt, a):
 
 
     # y-direction
-    if (limiter == 1):
-        ldelta_a = reconstruction.limit4(2, myGrid, a)
-
-    else:
-        #ldelta_a = reconstruction.nolimit(2, myGrid, a)
-        ldelta_a = numpy.zeros((myGrid.qx, myGrid.qx), dtype=numpy.float64)
+    if (limiter == 0):
         ldelta_a = reconstruction_f.nolimit(2, a, myGrid.qx, myGrid.qy, myGrid.ng)
+    elif (limiter == 1):
+        ldelta_a = reconstruction_f.limit2(2, a, myGrid.qx, myGrid.qy, myGrid.ng)
+    else:
+        ldelta_a = reconstruction_f.limit4(2, a, myGrid.qx, myGrid.qy, myGrid.ng)
+
+
 
     a_y = numpy.zeros((myGrid.qx,myGrid.qy), dtype=numpy.float64)
 
