@@ -227,9 +227,9 @@ def PrintParamFile():
             f.write('\n')
             f.write('[' + section + ']\n')
 
-        if (isInt(globalParams[key])):
+        if (isinstance(globalParams[key], int)):
             value = '%d' % globalParams[key]
-        elif (isFloat(globalParams[key])):
+        elif (isinstance(globalParams[key], float)):
             value = '%f' % globalParams[key]
         else:
             value = globalParams[key]
