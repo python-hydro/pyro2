@@ -1,5 +1,4 @@
 import sys
-from util import runparams
 import mesh.patch as patch
 import numpy
 from util import msg
@@ -17,11 +16,11 @@ def initData(myPatch):
 
     dens = myPatch.getVarPtr("density")
 
-    xmin = runparams.getParam("mesh.xmin")
-    xmax = runparams.getParam("mesh.xmax")
+    xmin = myPatch.grid.xmin
+    xmax = myPatch.grid.xmax
 
-    ymin = runparams.getParam("mesh.ymin")
-    ymax = runparams.getParam("mesh.ymax")
+    ymin = myPatch.grid.ymin
+    ymax = myPatch.grid.ymax
 
     xctr = 0.5*(xmin + xmax)
     yctr = 0.5*(ymin + ymax)
