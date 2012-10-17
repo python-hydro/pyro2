@@ -2,14 +2,14 @@
 
 [driver]
 max_steps = 200
-tmax = 0.25
+tmax = 0.2
 
 [compressible]
 limiter = 1
 
 [io]
-basename = sod_x
-tplot = 0.05
+basename = sod_x_
+dt_out = 0.05
 
 [mesh]
 nx = 128

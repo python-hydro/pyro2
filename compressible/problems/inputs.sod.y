@@ -2,11 +2,11 @@
 
 [driver]
 max_steps = 200
-tmax = 0.25
+tmax = 0.2
 
 [io]
 basename = sod_y_
-tplot = 0.001
+dt_out = 0.05
 
 [mesh]
 nx = 10
