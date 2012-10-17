@@ -89,4 +89,6 @@ def initialize():
     vars.iymom = myData.vars.index("y-momentum")
     vars.iener = myData.vars.index("energy")
 
+    print myData
+
     return myGrid, myData
