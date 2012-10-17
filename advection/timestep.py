@@ -16,7 +16,7 @@ def timestep(myData):
     compute the CFL timestep for the current patch.
     """
 
-    cfl = runparams.getParam("solver.cfl")
+    cfl = runparams.getParam("driver.cfl")
     
     u = runparams.getParam("advection.u")
     v = runparams.getParam("advection.v")
