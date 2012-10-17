@@ -10,7 +10,7 @@ usage = """
       compare the output in file from the smooth advection problem to
       the analytic solution.
 
-      usage: ./smooth_compare.py file
+      usage: ./smooth_error.py file
 """
 
 def abort(string):
