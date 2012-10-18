@@ -27,14 +27,7 @@ myg2, myd2 = mesh.patch.read(file2)
 
 
 # compare the grids
-if (not myg1.nx == myg2.nx): abort("ERROR: nx doesn't match")
-if (not myg1.ny == myg2.ny): abort("ERROR: ny doesn't match")
-
-if (not myg1.xmin == myg2.xmin): abort("ERROR: xmin doesn't match")
-if (not myg1.xmax == myg2.xmax): abort("ERROR: xmax doesn't match")
-if (not myg1.ymin == myg2.ymin): abort("ERROR: ymin doesn't match")
-if (not myg1.ymax == myg2.ymax): abort("ERROR: ymax doesn't match")
-
+if (not myg1 == myg2): abort("ERROR: grids don't agree")
 
 # compare the data
 if (not myd1.vars == myd2.vars): abort("ERROR: variable lists doesn't agree")
