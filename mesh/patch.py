@@ -184,7 +184,20 @@ class grid2d:
                          ", ng = " + `self.ng`
 
         return string
-        
+
+
+    def __eq__(self, other):
+        """ are two grids equivalent? """
+        result = (self.nx == other.nx) and \
+                 (self.ny == other.ny) and \
+                 (self.ng == other.ng) and \
+                 (self.xmin == other.xmin) and \
+                 (self.xmax == other.xmax) and \
+                 (self.ymin == other.ymin) and \
+                 (self.ymax == other.ymax)
+
+        return result
+
 
 class ccData2d:
     """
