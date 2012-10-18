@@ -52,9 +52,6 @@ import mesh.patch as patch
 import math
 import numpy
 
-DIRICHLET = 1
-NEUMANN = 2
-PERIODIC = 3
 
 def error(myg, r):
 
