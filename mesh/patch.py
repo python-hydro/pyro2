@@ -528,6 +528,141 @@ class ccData2d:
                 j += 1
 
 
+    def restrict(self, varname):
+        """
+        restrict the variable varname to a coarser grid (factor of 2
+        coarser) and return an array with the resulting data (and same
+        number of ghostcells)            
+        """
+
+        fG = self.grid
+        fData = self.getVarPtr(varname)
+
+        # allocate an array for the coarsely gridded data
+        ng_c = fG.ng
+        nx_c = fG.nx/2
+        ny_c = fG.ny/2
+
+        cData = numpy.zeros((2*ng_c+nx_c, 2*ng_c+ny_c), dtype=self.dtype)
+
+        ilo_c = ng_c
+        ihi_c = ng_c+nx_c-1
+
+        jlo_c = ng_c
+        jhi_c = ng_c+ny_c-1
+
+        # fill the coarse array with the restricted data -- just
+        # average the 4 fine cells into the corresponding coarse cell
+        # that encompasses them.
+
+        # This is done by shifting our view into the fData array and
+        # using a stride of 2 in the indexing.
+        cData[ilo_c:ihi_c+1,jlo_c:jhi_c+1] = \
+            0.25*(fData[fG.ilo  :fG.ihi+1:2,fG.jlo  :fG.jhi+1:2] + 
+                  fData[fG.ilo+1:fG.ihi+1:2,fG.jlo  :fG.jhi+1:2] +
+                  fData[fG.ilo  :fG.ihi+1:2,fG.jlo+1:fG.jhi+1:2] +
+                  fData[fG.ilo+1:fG.ihi+1:2,fG.jlo+1:fG.jhi+1:2])
+                  
+        return cData
+
+
+    def prolong(self, varname):
+        """
+        prolong the data in the current (coarse) grid to a finer
+        (factor of 2 finer) grid.  Return an array with the resulting
+        data (and same number of ghostcells).
+
+        We will reconstruct the data in the zone from the
+        zone-averaged variables using the same limited slopes as in
+        the advection routine.  Getting a good multidimensional
+        reconstruction polynomial is hard -- we want it to be bilinear
+        and monotonic -- we settle for having each slope be
+        independently monotonic:
+
+                  (x)         (y)
+        f(x,y) = m    x/dx + m    y/dy + <f> 
+
+        where the m's are the limited differences in each direction.
+        When averaged over the parent cell, this reproduces <f>.
+
+        Each zone's reconstrution will be averaged over 4 children.  
+
+        +-----------+     +-----+-----+ 
+        |           |     |     |     |
+        |           |     |  3  |  4  |
+        |    <f>    | --> +-----+-----+ 
+        |           |     |     |     |     
+        |           |     |  1  |  2  |  
+        +-----------+     +-----+-----+ 
+
+        We will fill each of the finer resolution zones by filling all
+        the 1's together, using a stride 2 into the fine array.  Then
+        the 2's and ..., this allows us to operate in a vector
+        fashion.  All operations will use the same slopes for their
+        respective parents.
+
+        """
+
+        cG = self.grid
+        cData = self.getVarPtr(varname)
+
+        # allocate an array for the coarsely gridded data
+        ng_f = cG.ng
+        nx_f = cG.nx*2
+        ny_f = cG.ny*2
+
+        fData = numpy.zeros((2*ng_f+nx_f, 2*ng_f+ny_f), dtype=self.dtype)
+
+        ilo_f = ng_f
+        ihi_f = ng_f+nx_f-1
+
+        jlo_f = ng_f
+        jhi_f = ng_f+ny_f-1
+
+        # slopes for the coarse data
+        m_x = cG.scratchArray()
+        m_x[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] = \
+            0.5*(cData[cG.ilo+1:cG.ihi+2,cG.jlo:cG.jhi+1] -
+                 cData[cG.ilo-1:cG.ihi  ,cG.jlo:cG.jhi+1])
+
+        m_y = cG.scratchArray()
+        m_y[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] = \
+            0.5*(cData[cG.ilo:cG.ihi+1,cG.jlo+1:cG.jhi+2] -
+                 cData[cG.ilo:cG.ihi+1,cG.jlo-1:cG.jhi  ])
+
+
+
+        # fill the '1' children
+        fData[ilo_f:ihi_f+1:2,jlo_f:jhi_f+1:2] = \
+            U_c[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
+            - 0.25*m_x[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
+            - 0.25*m_y[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1]
+
+
+        # fill the '2' children
+        fData[ilo_f+1:ihi_f+1:2,jlo_f:jhi_f+1:2] = \
+            U_c[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
+            + 0.25*m_x[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
+            - 0.25*m_y[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1]
+
+
+        # fill the '3' children
+        fData[ilo_f:ihi_f+1:2,jlo_f+1:jhi_f+1:2] = \
+            U_c[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
+            - 0.25*m_x[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
+            + 0.25*m_y[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1]
+
+
+        # fill the '4' children
+        U_f[ilo_f+1:ihi_f+1:2,jlo_f+1:jhi_f+1:2] = \
+            U_c[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
+            + 0.25*m_x[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
+            + 0.25*m_y[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1]
+
+                  
+        return fData
+
+
     def write(self, filename):
         """
         write out the ccData2d object to disk, stored in the file
@@ -593,6 +728,7 @@ def read(filename):
 
 def ccDataClone(old):
 
+    # copy method?
     if (not isinstance(old, ccData2d)):
         msg.fail("Can't clone object")
 
