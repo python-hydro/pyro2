@@ -47,7 +47,8 @@ class bcObject:
     def __init__ (self, xlb="outflow", xrb="outflow", 
                   ylb="outflow", yrb="outflow"):
 
-        valid = ["outflow", "periodic", "reflect-even", "reflect-odd"]
+        valid = ["outflow", "periodic", "reflect-even", "reflect-odd",
+                 "dirichlet", "neumann"]
 
         # -x boundary
         if (xlb in valid):
@@ -366,11 +367,17 @@ class ccData2d:
     
         # there is only a single grid, so every boundary is on
         # a physical boundary (except if we are periodic)
+
+        # Note: we piggy-back on outflow and reflect-odd for
+        # Neumann and Dirichlet homogeneous BCs respectively, but
+        # this only works for a single ghost cell
+
     
         n = self.vars.index(name)
 
         # -x boundary
-        if (self.BCs[name].xlb == "outflow"):
+        if (self.BCs[name].xlb == "outflow" or 
+            self.BCs[name].xlb == "neumann"):
 
             i = 0
             while i < self.grid.ilo:
@@ -384,7 +391,8 @@ class ccData2d:
                 self.data[n,i,:] = self.data[n,2*self.grid.ng-i-1,:]
                 i += 1
 
-        elif (self.BCs[name].xlb == "reflect-odd"):
+        elif (self.BCs[name].xlb == "reflect-odd" or
+              self.BCs[name].xlb == "dirichlet"):
         
             i = 0
             while i < self.grid.ilo:
@@ -400,7 +408,8 @@ class ccData2d:
             
 
         # +x boundary
-        if (self.BCs[name].xrb == "outflow"):
+        if (self.BCs[name].xrb == "outflow" or
+            self.BCs[name].xrb == "neumann"):
 
             i = self.grid.ihi+1
             while i < self.grid.nx+2*self.grid.ng:
@@ -417,7 +426,8 @@ class ccData2d:
                 self.data[n,i_bnd,:] = self.data[n,i_src,:]
                 i += 1
 
-        elif (self.BCs[name].xrb == "reflect-odd"):
+        elif (self.BCs[name].xrb == "reflect-odd" or
+              self.BCs[name].xrb == "dirichlet"):
 
             i = 0
             while i < self.grid.ng:
@@ -436,7 +446,8 @@ class ccData2d:
 
 
         # -y boundary
-        if (self.BCs[name].ylb == "outflow"):
+        if (self.BCs[name].ylb == "outflow" or
+            self.BCs[name].ylb == "neumann"):
 
             j = 0
             while j < self.grid.jlo:
@@ -450,7 +461,8 @@ class ccData2d:
                 self.data[n,:,j] = self.data[n,:,2*self.grid.ng-j-1]
                 j += 1
 
-        elif (self.BCs[name].ylb == "reflect-odd"):
+        elif (self.BCs[name].ylb == "reflect-odd" or
+              self.BCs[name].ylb == "dirichlet"):
 
             j = 0
             while j < self.grid.jlo:
@@ -466,7 +478,8 @@ class ccData2d:
                 
 
         # +y boundary
-        if (self.BCs[name].yrb == "outflow"):
+        if (self.BCs[name].yrb == "outflow" or
+            self.BCs[name].yrb == "neumann"):
 
             j = self.grid.jhi+1
             while j < self.grid.ny+2*self.grid.ng:
@@ -483,7 +496,8 @@ class ccData2d:
                 self.data[n,:,j_bnd] = self.data[n,:,j_src]
                 j += 1
 
-        elif (self.BCs[name].yrb == "reflect-odd"):
+        elif (self.BCs[name].yrb == "reflect-odd" or
+              self.BCs[name].yrb == "dirichlet"):
 
             j = 0
             while j < self.grid.ng:
