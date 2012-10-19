@@ -92,7 +92,7 @@ class ccMG2d:
             print "ERROR: multigrid currently requires a square domain"
             return -1
         
-        self.nsmooth = 2
+        self.nsmooth = 3
 
         self.maxCycles = 100
         
@@ -165,6 +165,8 @@ class ccMG2d:
 
         self.y2d = solGrid.y2d
 
+        self.solGrid = solGrid
+
         # store the source norm
         self.sourceNorm = 0.0
 
@@ -183,14 +185,14 @@ class ccMG2d:
 
     def initSolution(self, data):
         v = self.grids[self.nlevels-1].getVarPtr("v")
-        v[self.grid.ilo:self.grid.ihi+1,self.grid.jlo:self.grid.jhi+1] = data
+        v[:,:] = data
 
         self.initializedSolution = 1
 
 
     def initRHS(self, data):
         f = self.grids[self.nlevels-1].getVarPtr("f")
-        f[self.imin:self.imax+1,self.jmin:self.jmax+1] = data
+        f[:,:] = data
 
         # store the source norm
         self.sourceNorm = error(self.grids[self.nlevels-1].grid, f)
@@ -347,8 +349,8 @@ class ccMG2d:
                 print "  <<< bottom solve >>>\n"
 
             bP = self.grids[0]
-            v = bP.getVar("v")
-            f = bP.getVar("f")        
+            v = bP.getVarPtr("v")
+            f = bP.getVarPtr("f")        
 
             v[bP.grid.ilo] = -0.125*f[bP.grid.ilo]*bP.grid.dx*bP.grid.dx
 
@@ -366,7 +368,7 @@ class ccMG2d:
                 e = cP.prolong("v")
 
                 # correct the solution on the current grid
-                v = fP.getVar("v")
+                v = fP.getVarPtr("v")
                 v += e
 
                 if self.verbose:
@@ -374,7 +376,7 @@ class ccMG2d:
                     r = fP.getVarPtr("r")
 
                     print "  level = %d, nx = %d, ny = %d" % \
-                        (level, fP.nx, fP.ny)
+                        (level, fP.grid.nx, fP.grid.ny)
 
                     print "  before G-S, residual L2 norm = %g" % \
                           (error(fP.grid, r) )
@@ -400,14 +402,14 @@ class ccMG2d:
 
             relativeError = error(solnP.grid, diff)
 
-            oldSolution = solnP.getVar("v").copy()
+            oldSolution = solnP.getVarPtr("v").copy()
 
             # compute the residual error, relative to the source norm
             self.computeResidual(self.nlevels-1)
             r = fP.getVarPtr("r")
 
             if (self.sourceNorm != 0.0):
-                residualError = error(fP.grid, r)/self.sourceNormimin
+                residualError = error(fP.grid, r)/self.sourceNorm
             else:
                 residualError = error(fP.grid, r)
 
