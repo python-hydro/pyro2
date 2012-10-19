@@ -174,7 +174,19 @@ class grid2d:
         y2d.shape = (2*self.ng+self.ny, 2*self.ng+self.nx)
         y2d = numpy.transpose(y2d)
         self.y2d = y2d
-                                                                        
+
+
+    def scratchArray(self, dtype=numpy.float64):
+        """ 
+        return a standard numpy array dimensioned to have the size
+        and number of ghostcells as the parent grid
+        """
+
+        array = numpy.zeros((2*self.ng+self.nx, 2*self.ng+self.ny),
+                            dtype=dtype)
+
+        return array
+
 
     def __str__(self):
         """ print out some basic information about the grid object """
@@ -308,8 +320,8 @@ class ccData2d:
         myStr = "cc data: nx = " + `self.grid.nx` + \
                        ", ny = " + `self.grid.ny` + \
                        ", ng = " + `self.grid.ng` + "\n" + \
-                 "         nvars = " + `self.nvar` + "\n" + \
-                 "         variables: \n" 
+                 "   nvars = " + `self.nvar` + "\n" + \
+                 "   variables: \n" 
                  
         ilo = self.grid.ilo
         ihi = self.grid.ihi
@@ -318,11 +330,11 @@ class ccData2d:
 
         n = 0
         while (n < self.nvar):
-            myStr += "      %16s: min: %15.10f    max: %15.10f\n" % \
+            myStr += "%16s: min: %15.10f    max: %15.10f\n" % \
                 (self.vars[n],
                  numpy.min(self.data[n,ilo:ihi,jlo:jhi]), 
                  numpy.max(self.data[n,ilo:ihi,jlo:jhi]) )
-            myStr += "      %16s  BCs: -x: %-12s +x: %-12s -y: %-12s +y: %-12s\n" %\
+            myStr += "%16s  BCs: -x: %-12s +x: %-12s -y: %-12s +y: %-12s\n" %\
                 (" " , self.BCs[self.vars[n]].xlb, 
                        self.BCs[self.vars[n]].xrb, 
                        self.BCs[self.vars[n]].ylb, 
@@ -634,28 +646,28 @@ class ccData2d:
 
         # fill the '1' children
         fData[ilo_f:ihi_f+1:2,jlo_f:jhi_f+1:2] = \
-            U_c[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
+            cData[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
             - 0.25*m_x[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
             - 0.25*m_y[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1]
 
 
         # fill the '2' children
         fData[ilo_f+1:ihi_f+1:2,jlo_f:jhi_f+1:2] = \
-            U_c[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
+            cData[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
             + 0.25*m_x[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
             - 0.25*m_y[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1]
 
 
         # fill the '3' children
         fData[ilo_f:ihi_f+1:2,jlo_f+1:jhi_f+1:2] = \
-            U_c[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
+            cData[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
             - 0.25*m_x[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
             + 0.25*m_y[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1]
 
 
         # fill the '4' children
-        U_f[ilo_f+1:ihi_f+1:2,jlo_f+1:jhi_f+1:2] = \
-            U_c[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
+        fData[ilo_f+1:ihi_f+1:2,jlo_f+1:jhi_f+1:2] = \
+            cData[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
             + 0.25*m_x[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
             + 0.25*m_y[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1]
 
@@ -685,7 +697,7 @@ class ccData2d:
         if (self.dtype == numpy.int):
             fmt = "%4d"
         elif (self.dtype == numpy.float64):
-            fmt = "%12.6g"
+            fmt = "%10.5g"
         else:
             msg.fail("ERROR: dtype not supported")
         
