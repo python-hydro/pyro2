@@ -38,7 +38,7 @@ def error(myg, r):
 nx = 128
 ny = 128
 
-nproj = 3
+nproj = 2
 
 # create a mesh containing the x- and y-velocities, and periodic boundary
 # conditions
