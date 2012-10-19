@@ -49,18 +49,24 @@ bcObj = patch.bcObject(xlb="periodic", xrb="periodic",
 
 U = patch.ccData2d(myg)
 
-U.registerVar('u', bcObj)
-U.registerVar('v', bcObj)
 U.registerVar('u-old', bcObj)
 U.registerVar('v-old', bcObj)
+U.registerVar('u+gphi', bcObj)
+U.registerVar('v+gphi', bcObj)
+U.registerVar('u', bcObj)
+U.registerVar('v', bcObj)
+
+U.registerVar('divU', bcObj)
+
 U.registerVar('phi-old', bcObj)
+U.registerVar('phi', bcObj)
+U.registerVar('dphi', bcObj)
+
 U.registerVar('gradphi_x-old', bcObj)
 U.registerVar('gradphi_y-old', bcObj)
-U.registerVar('divU', bcObj)
-U.registerVar('phi', bcObj)
 U.registerVar('gradphi_x', bcObj)
 U.registerVar('gradphi_y', bcObj)
-U.registerVar('dphi', bcObj)
+
 U.create()
 
 # initialize a divergence free velocity field,
@@ -100,6 +106,13 @@ gradphi_y[:,:] = phi*(-2.0*(myg.y2d-y0)/R**2)
 
 u += gradphi_x
 v += gradphi_y
+
+
+u_plus_gradphi = U.getVarPtr('u+gphi')
+v_plus_gradphi = U.getVarPtr('v+gphi')
+
+u_plus_gradphi[:,:] = u[:,:]
+v_plus_gradphi[:,:] = v[:,:]
 
 
 # use the mesh class to enforce the periodic BCs on the velocity field
