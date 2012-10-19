@@ -185,8 +185,22 @@ class ccMG2d:
         
 
     def initSolution(self, data):
+        """
+        initialize the solution to the elliptic problem by passing in
+        a value for all defined zones
+        """
         v = self.grids[self.nlevels-1].getVarPtr("v")
         v[:,:] = data
+
+        self.initializedSolution = 1
+
+
+    def initZeros(self):
+        """
+        set the initial solution to zero
+        """
+        v = self.grids[self.nlevels-1].getVarPtr("v")
+        v[:,:] = 0.0
 
         self.initializedSolution = 1
 
