@@ -14,7 +14,8 @@ a = myd.getVarPtr("a")
 
 a[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1].flat = numpy.arange(myg.nx*myg.ny)
 
-print "original array"
+print "restriction test"
+print "original (fine) array"
 myd.prettyPrint("a")
 
 
@@ -34,8 +35,9 @@ cd.prettyPrint("a")
 
 
 print " "
-print "restricted array w/ ghost cells"
-cd.fillBC("a")
+print "prolongation test"
+print "original (coarse) array w/ ghost cells"
+a_coarse[:,:].flat = numpy.arange(cg.qx*cg.qy)
 cd.prettyPrint("a")
 
 
