@@ -18,8 +18,14 @@ def makeplot(myd, variable):
                        interpolation="nearest", origin="lower",
                        extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
+    pylab.colorbar()
+
     #pylab.axis("off")
-    pylab.savefig("plot.png")
+
+    pylab.xlabel("x")
+    pylab.ylabel("y")
+
+    pylab.savefig("plot.png", bbox_inches="tight")
     pylab.show()
 
 
