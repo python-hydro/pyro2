@@ -57,8 +57,9 @@ def error(myg, r):
 
     # L2 norm of elements in r, multiplied by dx*dy to
     # normalize
-    #return sqrt(dx*dy*sum(r[imin:imax+1,jmin:jmax+1].flat**2))
-    return max(r[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1].flat)
+    return numpy.sqrt(myg.dx*myg.dy*
+                      numpy.sum((r[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]**2).flat))
+    #return max(r[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1].flat)
 
 class ccMG2d:
     """ 
@@ -92,7 +93,7 @@ class ccMG2d:
             print "ERROR: multigrid currently requires a square domain"
             return -1
         
-        self.nsmooth = 3
+        self.nsmooth = 10
 
         self.maxCycles = 100
         
@@ -148,24 +149,24 @@ class ccMG2d:
 
 
         # provide coordinate and indexing information for the solution mesh
-        solGrid = self.grids[self.nlevels-1].grid
+        solnGrid = self.grids[self.nlevels-1].grid
 
-        self.ilo = solGrid.ilo
-        self.ihi = solGrid.ihi
-        self.jlo = solGrid.jlo
-        self.jhi = solGrid.jhi
+        self.ilo = solnGrid.ilo
+        self.ihi = solnGrid.ihi
+        self.jlo = solnGrid.jlo
+        self.jhi = solnGrid.jhi
         
-        self.x  = solGrid.x
-        self.dx = solGrid.dx
+        self.x  = solnGrid.x
+        self.dx = solnGrid.dx
 
-        self.x2d = solGrid.x2d
+        self.x2d = solnGrid.x2d
 
-        self.y  = solGrid.y
-        self.dy = solGrid.dy   # note, dy = dx is assumed 
+        self.y  = solnGrid.y
+        self.dy = solnGrid.dy   # note, dy = dx is assumed 
 
-        self.y2d = solGrid.y2d
+        self.y2d = solnGrid.y2d
 
-        self.solGrid = solGrid
+        self.solnGrid = solnGrid
 
         # store the source norm
         self.sourceNorm = 0.0

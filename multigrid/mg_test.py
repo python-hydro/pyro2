@@ -17,6 +17,7 @@ The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)
 import numpy
 import mesh.patch as patch
 import multigrid
+import pylab
 
 # the analytic solution
 def true(x,y):
@@ -24,11 +25,11 @@ def true(x,y):
 
 
 # the L2 error norm
-def error(imin, imax, dx, jmin, jmax, dy, r):
+def error(myg, r):
 
     # L2 norm of elements in r, multiplied by dx to
     # normalize
-    return numpy.sqrt(dx*dy*numpy.sum((r[imin:imax+1,jmin:jmax+1]**2).flat))
+    return numpy.sqrt(myg.dx*myg.dy*numpy.sum((r[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]**2).flat))
 
 
 # the righthand side
@@ -37,8 +38,8 @@ def f(x,y):
 
                 
 # test the multigrid solver
-nx = 128
-ny = 128
+nx = 64
+ny = 64
 
 
 # create the multigrid object
@@ -48,7 +49,7 @@ a = multigrid.ccMG2d(nx, ny,
                      verbose=1)
 
 # initialize the solution to 0
-init = a.solGrid.scratchArray()
+init = a.solnGrid.scratchArray()
 
 a.initSolution(init)
 
@@ -60,20 +61,33 @@ a.initRHS(rhs)
 a.solve(rtol=1.e-11)
 
 # alternately, we can just use smoothing by uncommenting the following
-#a.smooth(a.nlevels-1,5000)
+#a.smooth(a.nlevels-1,50000)
 
 # get the solution 
 v = a.getSolution()
 
-# compute the true solution from the analytic expression
+# compute the error from the analytic solution
 b = true(a.x2d,a.y2d)
-
-# compute the error
 e = v - b
 
-print "L2 error = %g, rel. err from previous cycle = %g, num. cycles = %d" % \
-      (error(a.ilo,a.ihi, a.dx, a.jlo, a.jhi, a.dy, e), 
-       a.relativeError, a.numCycles)
+print " L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
+      (error(a.solnGrid, e), a.relativeError, a.numCycles)
 
+
+# plot it
+#pylab.figure(num=1, figsize=(2.10,2.10), dpi=100, facecolor='w')
+pylab.figure(num=1, figsize=(5.0,5.0), dpi=100, facecolor='w')
+
+pylab.imshow(numpy.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]), 
+          interpolation="nearest", origin="lower",
+          extent=[a.xmin, a.xmax, a.ymin, a.ymax])
+
+#pylab.axis("off")
+#pylab.subplots_adjust(bottom=0.0, top=1.0, left=0.0, right=1.0)
+
+pylab.xlabel("x")
+pylab.ylabel("y")
+
+pylab.savefig("mg_test.png")
 
 
