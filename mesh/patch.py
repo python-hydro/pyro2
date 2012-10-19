@@ -332,8 +332,8 @@ class ccData2d:
         while (n < self.nvar):
             myStr += "%16s: min: %15.10f    max: %15.10f\n" % \
                 (self.vars[n],
-                 numpy.min(self.data[n,ilo:ihi,jlo:jhi]), 
-                 numpy.max(self.data[n,ilo:ihi,jlo:jhi]) )
+                 numpy.min(self.data[n,ilo:ihi+1,jlo:jhi+1]), 
+                 numpy.max(self.data[n,ilo:ihi+1,jlo:jhi+1]) )
             myStr += "%16s  BCs: -x: %-12s +x: %-12s -y: %-12s +y: %-12s\n" %\
                 (" " , self.BCs[self.vars[n]].xlb, 
                        self.BCs[self.vars[n]].xrb, 
