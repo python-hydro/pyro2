@@ -8,9 +8,9 @@
 
 
 
-
-
-
-
+-- cmp method in both grid and ccData2d
+  
+   then we can do a comparison by simply testing whether
+   myd1 == myd2
 
 
