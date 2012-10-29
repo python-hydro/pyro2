@@ -91,3 +91,8 @@ pylab.ylabel("y")
 pylab.savefig("mg_test.png")
 
 
+# store the output for later comparison
+myData = a.getSolutionObjPtr()
+myData.write("mg_test")
+
+

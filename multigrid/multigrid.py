@@ -2,18 +2,26 @@
 
 The multigrid module provides a framework for solving elliptic
 problems.  A multigrid object is just a list of grids, from the finest
-mesh down (by factors of two) to a single interior zone (each grid
-has the same number of guardcells).
+mesh down (by factors of two) to a single interior zone (each grid has
+the same number of guardcells).
 
-The main multigrid class (MGcc) is setup to solve Poisson's equation
-with homogeneous Dirichlet or Neumann BCs, or on periodic domain.
+The main multigrid class (MGcc) is setup to solve a constant-coefficient
+Helmholtz equation:
+
+(alpha - beta L) phi = f
+
+where L is the Laplacian and alpha and beta are constants.  If alpha =
+0 and beta = -1, then this is the Poisson equation.
+
+We support homogeneous Dirichlet or Neumann BCs, or on periodic domain.
 
 The general usage is as follows:
 
-> a = multigrid.ccMG2d(nx, ny, verbose=1)
+> a = multigrid.ccMG2d(nx, ny, verbose=1, alpha=alpha, beta=beta)
 
 this creates the multigrid object a, with a finest grid of nx by ny
-zones and the default boundary condition types.  Setting verbose = 1
+zones and the default boundary condition types.  alpha and beta are
+the coefficients of the Helmholtz equation.  Setting verbose = 1
 causing debugging information to be output, so you can see the
 residual errors in each of the V-cycles.
 
@@ -72,6 +80,7 @@ class ccMG2d:
     def __init__(self, nx, ny, xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0,
                  xlBCtype="dirichlet", xrBCtype="dirichlet",
                  ylBCtype="dirichlet", yrBCtype="dirichlet",
+                 alpha=0.0, beta=-1.0,
                  verbose=0):
 
         if (nx != ny):
@@ -93,6 +102,9 @@ class ccMG2d:
             print "ERROR: multigrid currently requires a square domain"
             return -1
         
+        self.alpha = alpha
+        self.beta = beta
+
         self.nsmooth = 10
 
         self.maxCycles = 100
@@ -184,6 +196,11 @@ class ccMG2d:
         return v.copy()
         
 
+    def getSolutionObjPtr(self):
+        myData = self.grids[self.nlevels-1]
+        return myData
+
+
     def initSolution(self, data):
         """
         initialize the solution to the elliptic problem by passing in
@@ -229,18 +246,22 @@ class ccMG2d:
 
         myg = self.grids[level].grid
 
-        # compute the residual (assuming dx = dy)
+        # compute the residual 
+        # r = f - alpha phi + beta L phi
         r[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
             f[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] - \
-            (v[myg.ilo-1:myg.ihi  ,myg.jlo  :myg.jhi+1] +
-             v[myg.ilo+1:myg.ihi+2,myg.jlo  :myg.jhi+1] +
-             v[myg.ilo  :myg.ihi+1,myg.jlo-1:myg.jhi  ] +
+            self.alpha*v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] + \
+            self.beta*( 
+            (v[myg.ilo-1:myg.ihi  ,myg.jlo  :myg.jhi+1] + 
+             v[myg.ilo+1:myg.ihi+2,myg.jlo  :myg.jhi+1] - 
+             2.0*v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])/(myg.dx*myg.dx) + 
+            (v[myg.ilo  :myg.ihi+1,myg.jlo-1:myg.jhi  ] +
              v[myg.ilo  :myg.ihi+1,myg.jlo+1:myg.jhi+2] -
-             4.0*v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])/(myg.dx*myg.dx)
+             2.0*v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])/(myg.dy*myg.dy) )
         
         
     def smooth(self, level, nsmooth):
-
+        """ use Gauss-Seidel iterations to smooth """
         v = self.grids[level].getVarPtr("v")
         f = self.grids[level].getVarPtr("f")
 
@@ -248,43 +269,48 @@ class ccMG2d:
 
         self.grids[level].fillBC("v")
 
-        # assume we are solving u_{i+1} - 2 u_i + u_{i-1} = dx**2 f
         # do red-black G-S
         i = 0
         while (i < nsmooth):
+            
+            xcoeff = self.beta/myg.dx**2
+            ycoeff = self.beta/myg.dy**2
 
             # do the red black updating in four decoupled groups
             v[myg.ilo:myg.ihi+1:2,myg.jlo:myg.jhi+1:2] = \
-                0.25*(v[myg.ilo-1:myg.ihi  :2,myg.jlo  :myg.jhi+1:2] +
-                      v[myg.ilo+1:myg.ihi+2:2,myg.jlo  :myg.jhi+1:2] +
-                      v[myg.ilo  :myg.ihi+1:2,myg.jlo-1:myg.jhi  :2] +
-                      v[myg.ilo  :myg.ihi+1:2,myg.jlo+1:myg.jhi+2:2] -
-                      myg.dx*myg.dx*f[myg.ilo:myg.ihi+1:2,myg.jlo:myg.jhi+1:2])
-
+                (f[myg.ilo:myg.ihi+1:2,myg.jlo:myg.jhi+1:2] +
+                 xcoeff*(v[myg.ilo+1:myg.ihi+2:2,myg.jlo  :myg.jhi+1:2] +
+                         v[myg.ilo-1:myg.ihi  :2,myg.jlo  :myg.jhi+1:2]) +
+                 ycoeff*(v[myg.ilo  :myg.ihi+1:2,myg.jlo+1:myg.jhi+2:2] +
+                         v[myg.ilo  :myg.ihi+1:2,myg.jlo-1:myg.jhi  :2])) / \
+                (self.alpha + 2.0*xcoeff + 2.0*ycoeff)
 
             v[myg.ilo+1:myg.ihi+1:2,myg.jlo+1:myg.jhi+1:2] = \
-                0.25*(v[myg.ilo  :myg.ihi  :2,myg.jlo+1:myg.jhi+1:2] +
-                      v[myg.ilo+2:myg.ihi+2:2,myg.jlo+1:myg.jhi+1:2] +
-                      v[myg.ilo+1:myg.ihi+1:2,myg.jlo  :myg.jhi  :2] +
-                      v[myg.ilo+1:myg.ihi+1:2,myg.jlo+2:myg.jhi+2:2] -
-                      myg.dx*myg.dx*f[myg.ilo+1:myg.ihi+1:2,myg.jlo+1:myg.jhi+1:2])
+                (f[myg.ilo+1:myg.ihi+1:2,myg.jlo+1:myg.jhi+1:2] +
+                 xcoeff*(v[myg.ilo+2:myg.ihi+2:2,myg.jlo+1:myg.jhi+1:2] +
+                         v[myg.ilo  :myg.ihi  :2,myg.jlo+1:myg.jhi+1:2]) +
+                 ycoeff*(v[myg.ilo+1:myg.ihi+1:2,myg.jlo+2:myg.jhi+2:2] +
+                         v[myg.ilo+1:myg.ihi+1:2,myg.jlo  :myg.jhi  :2])) / \
+                (self.alpha + 2.0*xcoeff + 2.0*ycoeff)
             
             self.grids[level].fillBC("v")
                                                      
             v[myg.ilo+1:myg.ihi+1:2,myg.jlo:myg.jhi+1:2] = \
-                0.25*(v[myg.ilo  :myg.ihi  :2,myg.jlo  :myg.jhi+1:2] +
-                      v[myg.ilo+2:myg.ihi+2:2,myg.jlo  :myg.jhi+1:2] +
-                      v[myg.ilo+1:myg.ihi+1:2,myg.jlo-1:myg.jhi  :2] +
-                      v[myg.ilo+1:myg.ihi+1:2,myg.jlo+1:myg.jhi+2:2] -
-                      myg.dx*myg.dx*f[myg.ilo+1:myg.ihi+1:2,myg.jlo:myg.jhi+1:2])
-
+                (f[myg.ilo+1:myg.ihi+1:2,myg.jlo:myg.jhi+1:2] +
+                 xcoeff*(v[myg.ilo+2:myg.ihi+2:2,myg.jlo  :myg.jhi+1:2] +
+                         v[myg.ilo  :myg.ihi  :2,myg.jlo  :myg.jhi+1:2]) +
+                 ycoeff*(v[myg.ilo+1:myg.ihi+1:2,myg.jlo+1:myg.jhi+2:2] +
+                         v[myg.ilo+1:myg.ihi+1:2,myg.jlo-1:myg.jhi  :2])) / \
+                (self.alpha + 2.0*xcoeff + 2.0*ycoeff)
 
             v[myg.ilo:myg.ihi+1:2,myg.jlo+1:myg.jhi+1:2] = \
-                0.25*(v[myg.ilo-1:myg.ihi  :2,myg.jlo+1:myg.jhi+1:2] +
-                      v[myg.ilo+1:myg.ihi+2:2,myg.jlo+1:myg.jhi+1:2] +
-                      v[myg.ilo  :myg.ihi+1:2,myg.jlo  :myg.jhi  :2] +
-                      v[myg.ilo  :myg.ihi+1:2,myg.jlo+2:myg.jhi+2:2] -
-                      myg.dx*myg.dx*f[myg.ilo:myg.ihi+1:2,myg.jlo+1:myg.jhi+1:2])
+                (f[myg.ilo:myg.ihi+1:2,myg.jlo+1:myg.jhi+1:2] +
+                 xcoeff*(v[myg.ilo+1:myg.ihi+2:2,myg.jlo+1:myg.jhi+1:2] +
+                         v[myg.ilo-1:myg.ihi  :2,myg.jlo+1:myg.jhi+1:2]) +
+                 ycoeff*(v[myg.ilo  :myg.ihi+1:2,myg.jlo+2:myg.jhi+2:2] +
+                         v[myg.ilo  :myg.ihi+1:2,myg.jlo  :myg.jhi  :2])) / \
+                (self.alpha + 2.0*xcoeff + 2.0*ycoeff)
+
 
             self.grids[level].fillBC("v")
                                                      
