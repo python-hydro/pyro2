@@ -1,7 +1,7 @@
 import numpy
 import mesh.patch as patch
 from util import runparams
-import msg
+from util import msg
 
 
 def initialize():

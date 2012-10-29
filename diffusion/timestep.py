@@ -2,7 +2,9 @@ from util import runparams
 
 """
 The diffusion timestep module computes the timestep using the explicit
-timestep constraint as the starting point.  We then
+timestep constraint as the starting point.  We then multiply by the
+CFL number to get the timestep.  Since we are doing an implicit
+discretization, we do not require CFL < 1.
 """
 
 def timestep(myData):
@@ -12,12 +14,11 @@ def timestep(myData):
 
     cfl = runparams.getParam("driver.cfl")
     
-    u = runparams.getParam("advection.u")
-    v = runparams.getParam("advection.v")
+    k = runparams.getParam("diffusion.k")
     
-    # the timestep is min(dx/|u|, dy|v|)
-    xtmp = myData.grid.dx/max(abs(u),SMALL)
-    ytmp = myData.grid.dy/max(abs(v),SMALL)
+    # the timestep is min(dx**2/k, dy**2/k)
+    xtmp = myData.grid.dx**2/k
+    ytmp = myData.grid.dy**2/k
 
     dt = cfl*min(xtmp, ytmp)
 

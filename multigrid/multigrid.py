@@ -131,6 +131,10 @@ class ccMG2d:
         i = 0
         nx_t = ny_t = 1
 
+        if (self.verbose):
+            print "alpha = ", self.alpha
+            print "beta  = ", self.beta
+
         while (i < self.nlevels):
             
             # create the grid
@@ -207,7 +211,7 @@ class ccMG2d:
         a value for all defined zones
         """
         v = self.grids[self.nlevels-1].getVarPtr("v")
-        v[:,:] = data
+        v[:,:] = data.copy()
 
         self.initializedSolution = 1
 
@@ -224,11 +228,13 @@ class ccMG2d:
 
     def initRHS(self, data):
         f = self.grids[self.nlevels-1].getVarPtr("f")
-        f[:,:] = data
+        f[:,:] = data.copy()
 
         # store the source norm
         self.sourceNorm = error(self.grids[self.nlevels-1].grid, f)
-        
+
+        if (self.verbose):
+            print "Source norm = ", self.sourceNorm
 
         # note: if we wanted to do inhomogeneous Dirichlet BCs, we 
         # would modify the source term, f, here to include a boundary
@@ -258,6 +264,11 @@ class ccMG2d:
             (v[myg.ilo  :myg.ihi+1,myg.jlo-1:myg.jhi  ] +
              v[myg.ilo  :myg.ihi+1,myg.jlo+1:myg.jhi+2] -
              2.0*v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])/(myg.dy*myg.dy) )
+
+        print "in residual"
+        print numpy.min(r), numpy.min(f)
+        print numpy.max(r), numpy.max(f)
+        
         
         
     def smooth(self, level, nsmooth):
@@ -272,7 +283,9 @@ class ccMG2d:
         # do red-black G-S
         i = 0
         while (i < nsmooth):
-            
+
+            print "min/max", numpy.min(v), numpy.max(v)
+
             xcoeff = self.beta/myg.dx**2
             ycoeff = self.beta/myg.dy**2
 

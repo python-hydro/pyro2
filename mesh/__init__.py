@@ -1,2 +1,2 @@
-__all__ = ['patch', 'multigrid']
+__all__ = ['patch']
 
