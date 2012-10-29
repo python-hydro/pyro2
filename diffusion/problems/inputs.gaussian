@@ -1,0 +1,33 @@
+# simple inputs files for the unsplit CTU hydro scheme
+
+[driver]
+max_steps = 500
+tmax = 1.0
+
+max_dt_change = 1.e33
+init_tstep_factor = 1.0
+
+cfl = 1.0
+
+[io]
+basename = gaussian_
+dt_out = 0.2
+
+
+[mesh]
+nx = 64
+ny = 64
+xmax = 1.0
+ymax = 1.0
+
+xlboundary = neumann
+xrboundary = neumann
+
+ylboundary = neumann
+yrboundary = neumann
+
+
+[diffusion]
+k = 1.0
+
+

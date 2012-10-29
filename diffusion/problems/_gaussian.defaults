@@ -1,0 +1,5 @@
+[gaussian]
+t_0     = 0.001
+phi_0   = 1.0
+phi_max = 2.0
+
