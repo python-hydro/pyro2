@@ -6,6 +6,7 @@ def evolve(myd, dt):
 
     
     phi = myData.getVarPtr("phi")
+    myg = myData.grid
 
     # diffusion coefficient
     k = runparams.getparam("diffusion.k")
@@ -24,7 +25,15 @@ def evolve(myd, dt):
 
     # form the RHS: f = phi + (dt/2) k L phi  (where L is the Laplacian)
     f = mg.solnGrid.scratchArray()
-                        
+    f[mg.imin:mg.imax+1,mg.jmin:mg.jmax+1] = \
+        phi[myg.imin:myg.imax+1,myg.jmin:myg.jmax+1] + 0.5*dt*k * \
+        ((phi[myg.imin+1:myg.imax+2,myg.jmin:myg.jmax+1] +
+          phi[myg.imin-1:myg.imax  ,myg.jmin:myg.jmax+1] -
+          2.0*phi[myg.imin:myg.imax+1,myg.jmin:myg.jmax+1])/myg.dx**2 +
+         (phi[myg.imin:myg.imax+1,myg.jmin+1:myg.jmax+2] +
+          phi[myg.imin:myg.imax+1,myg.jmin-1:myg.jmax  ] -
+          2.0*phi[myg.imin:myg.imax+1,myg.jmin:myg.jmax+1])/myg.dy**2)
+
     mg.initRHS(f)
 
 
