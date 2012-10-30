@@ -11,7 +11,7 @@ cfl = 1.0
 
 [io]
 basename = gaussian_
-dt_out = 0.01
+dt_out = 0.005
 
 
 [mesh]
