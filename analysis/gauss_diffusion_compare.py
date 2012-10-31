@@ -45,7 +45,6 @@ def process(file):
     rmax = numpy.sqrt(myg.xmax**2 + myg.ymax**2)
 
     nbins = numpy.int(numpy.sqrt(myg.nx**2 + myg.ny**2))
-    nbins = 2*nbins
 
     # bins holds the edges, so there is one more value than actual bin
     # bin_centers holds the center value of the bin
@@ -128,10 +127,12 @@ while (n < len(sys.argv)):
 
     n += 1
 
-ax.set_ylabel(r"$\phi$")
-ax.set_ylim(1.,1.1)
 ax.set_xlim(0,0.7)
-#ax.set_yscale('log')
+ax.set_xlabel(r"$r$")
+
+ax.set_ylim(1.,1.1)
+ax.set_ylabel(r"$\phi$")
+
 fig.set_size_inches(5.0,5.0)
 
 pylab.savefig("gauss_diffusion_compare.png", bbox_inches="tight")
