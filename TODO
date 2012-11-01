@@ -14,3 +14,9 @@
    myd1 == myd2
 
 
+-- how do we handle corner BCs?
+
+   for reflect-odd all around, it doesn't look right
+
+   what about 2 different BCs meeting at a corner -- who wins?
+
