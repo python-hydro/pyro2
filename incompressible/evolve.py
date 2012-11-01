@@ -64,6 +64,7 @@ def evolve(myData, dt):
     u_MAC, v_MAC = incomp_interface_f.mac_vels(myg.qx, myg.qy, myg.ng, 
                                                myg.dx, myg.dy, dt,
                                                u, v,
+                                               ldelta_u, ldelta_v,
                                                gradp_x, gradp_y,
                                                utrans, vtrans)
 

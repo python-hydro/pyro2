@@ -22,3 +22,5 @@ for the incompressible solver
 
  -- upwinding split in 2: one with uadv, one w/o
 
+ -- riemann_upwind and riemann_burgers
+
