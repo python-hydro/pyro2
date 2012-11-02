@@ -17,8 +17,13 @@ def evolve(myData, dt):
     dtdy = dt/myg.dy
 
     #-------------------------------------------------------------------------
-    # create the limited slopes of u and v
+    # create the limited slopes of u and v (in both directions)
     #-------------------------------------------------------------------------
+    ldelta_ux = reconstruction_f.limit4(1, u, myGrid.qx, myGrid.qy, myGrid.ng)
+    ldelta_vx = reconstruction_f.limit4(1, v, myGrid.qx, myGrid.qy, myGrid.ng)
+
+    ldelta_uy = reconstruction_f.limit4(2, u, myGrid.qx, myGrid.qy, myGrid.ng)
+    ldelta_vy = reconstruction_f.limit4(2, v, myGrid.qx, myGrid.qy, myGrid.ng)
 
 
     #-------------------------------------------------------------------------
@@ -29,11 +34,9 @@ def evolve(myData, dt):
         incomp_interface_f.trans_vels(myg.qx, myg.qy, myg.ng, 
                                       myg.dx, myg.dy, dt,
                                       u, v,
-                                      ldelta_u, ldelta_v)
+                                      ldelta_ux, ldelta_vy)
 
     
-
-
     #-------------------------------------------------------------------------
     # get the advective velocities
     #-------------------------------------------------------------------------
@@ -64,7 +67,8 @@ def evolve(myData, dt):
     u_MAC, v_MAC = incomp_interface_f.mac_vels(myg.qx, myg.qy, myg.ng, 
                                                myg.dx, myg.dy, dt,
                                                u, v,
-                                               ldelta_u, ldelta_v,
+                                               ldelta_ux, ldelta_vx,
+                                               ldelta_uy, ldelta_vy,
                                                gradp_x, gradp_y,
                                                utrans, vtrans)
 
@@ -79,67 +83,149 @@ def evolve(myData, dt):
     # velocities.
 
     # create the multigrid object
+    MG = multigrid.ccMg2d(myg.nx, myg.ny,
+                          xlBCtype="periodic", xrBCtype="periodic",
+                          ylBCtype="periodic", yrBCtype="periodic",
+                          xmin=myg.xmin, xmax=myg.xmax,
+                          ymin=myg.ymin, ymax=myg.ymax,
+                          verbose=0)
 
+    # first compute divU
+    divU = MG.solnGrid.scratchArray()
 
-    # create the divU source term
-
+    # MAC velocities are edge-centered.  divU is cell-centered.
+    divU[MG.ilo:MG.ihi+1,MG.jlo:MG.jhi+1] = \
+        (u_MAC[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
+         u_MAC[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx + \
+        (v_MAC[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
+         v_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1])/myg.dy
     
+    MG.initRHS(divU)
+        
     # solve the Poisson problem
-
+    MG.initZeros()
+    MG.solve(rtol=1.e-12)
 
     # update the normal velocities with the pressure gradient -- these
     # constitute our advective velocities
+    phi_MAC = myData.getVarPtr("phi-MAC")
+    solution = MG.getSolution()
 
+    phi_MAC[myg.ilo-1:myg.ihi+2:myg.jlo-1:myg.jhi+2] = \
+        solution[MG.ilo-1:MG.ihi+2:MG.jlo-1:MG.jhi+2]
+
+    # we need the MAC velocities on all edges of the computational domain
+    u_MAC[myg.ilo:myg.ihi+2:myg.jlo:myg.jhi+1] -= \
+        (phi_MAC[myg.ilo  :myg.ihi+2,myg.jlo:myg.jhi+1] -
+         phi_MAC[myg.ilo-1:myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx
+
+    v_MAC[myg.ilo:myg.ihi+1:myg.jlo:myg.jhi+2] -= \
+        (phi_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+2] -
+         phi_MAC[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi+1])/myg.dy
 
 
     #-------------------------------------------------------------------------
     # recompute the interface states, using the advective velocity
     # from above
     # -------------------------------------------------------------------------
-    u_x, v_x, u_y, v_y = incomp_interface_f.states(myg.qx, myg.qy, myg.ng, 
-                                                   myg.dx, myg.dy, dt,
-                                                   u, v,
-                                                   gradp_x, gradp_y,
-                                                   utrans, vtrans,
-                                                   uadv, vadv)
+    u_xint, v_xint, u_yint, v_yint = \
+        incomp_interface_f.states(myg.qx, myg.qy, myg.ng, 
+                                  myg.dx, myg.dy, dt,
+                                  u, v,
+                                  gradp_x, gradp_y,
+                                  utrans, vtrans,
+                                  uadv, vadv)
 
 
     #-------------------------------------------------------------------------
     # compute (U.grad)U
     #-------------------------------------------------------------------------
 
+    # we want u_MAC U_x + v_MAC U_y
+    advect_x = myg.scratchArray()
+    advect_y = myg.scratchArray()
+
+    advect_x[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
+        0.5*(u_MAC[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1] + 
+             u_MAC[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1]) * \
+             (u_xint[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
+              u_xint[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx + \
+        0.5*(v_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1] + 
+             v_MAC[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2]) * \
+             (u_yint[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
+              u_yint[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1])/myg.dy 
+
+    advect_y[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
+        0.5*(u_MAC[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1] + 
+             u_MAC[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1]) * \
+             (v_xint[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
+              v_xint[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx + \
+        0.5*(v_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1] + 
+             v_MAC[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2]) * \
+             (v_yint[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
+              v_yint[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1])/myg.dy 
 
 
     #-------------------------------------------------------------------------
     # update U to get the provisional velocity field
     #-------------------------------------------------------------------------
+    u[:,:] -= dt*advect_x[:,:]
+    v[:,:] -= dt*advect_y[:,:]
 
+    myData.fillBC("x-velocity")
+    myData.fillBC("y-velocity")
 
 
     #-------------------------------------------------------------------------
     # project the final velocity
     #-------------------------------------------------------------------------
 
-
-
-
-
-    [flux_x, flux_y] =  unsplitFluxes(myData.grid, dt, dens)
-
-    """
-    do the differencing for the fluxes now.  Here, we use slices so we
-    avoid slow loops in python.  This is equivalent to:
-
-    myPatch.data[i,j] = myPatch.data[i,j] + \
-                            dtdx*(flux_x[i,j] - flux_x[i+1,j]) + \
-                            dtdy*(flux_y[i,j] - flux_y[i,j+1])
-    """
-
-    qx = myData.grid.qx
-    qy = myData.grid.qy
-    dens[0:qx-1,0:qy-1] = dens[0:qx-1,0:qy-1] + \
-        dtdx*(flux_x[0:qx-1,0:qy-1] - flux_x[1:qx,0:qy-1]) + \
-        dtdy*(flux_y[0:qx-1,0:qy-1] - flux_y[0:qx-1,1:qy])
-            
-
+    # now we solve L phi = D (U* /dt)
     
+    # create the multigrid object
+    MG = multigrid.ccMg2d(myg.nx, myg.ny,
+                          xlBCtype="periodic", xrBCtype="periodic",
+                          ylBCtype="periodic", yrBCtype="periodic",
+                          xmin=myg.xmin, xmax=myg.xmax,
+                          ymin=myg.ymin, ymax=myg.ymax,
+                          verbose=0)
+
+    # first compute divU
+
+    # u/v are cell-centered, divU is cell-centered
+    divU[MG.ilo:MG.ihi+1,MG.jlo:MG.jhi+1] = \
+        0.5*(u[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
+             u[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1])/myg.dx + \
+        0.5*(v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
+             v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
+    
+    MG.initRHS(divU/dt)
+
+    # initial guess of zero
+    # should use old phi, but we need a method to take a variable on the myData grid
+    # and put it on the MG grid for us (getVarCopy("phi", MG.solnGrid) ? )
+    MG.initZeros()
+
+    # solve
+    MG.solve(rtol=1.e-12)
+
+    # store the solution
+    phi = myPatch.getVar("phi")
+    solution = MG.getSolution()
+
+    phi[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2] = \
+        solution[MG.ilo-1:MG.ihi+2,MG.jlo-1:MG.jhi+2]
+
+    # compute the cell-centered gradient of phi and update the velocities
+    
+    # u = u - grad_x phi dt
+    u[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] -= \
+        dt*0.5*(phi[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
+                phi[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1])
+
+    v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] -= \
+        dt*0.5*(phi[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
+                phi[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])
+
+    myData.fillBC("x-velocity")
+    myData.fillBC("y-velocity")

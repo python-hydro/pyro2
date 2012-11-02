@@ -1,6 +1,6 @@
 subroutine trans_vels(qx, qy, ng, dx, dy, dt, &
                       u, v, &
-                      ldelta_u, ldelta_v, &
+                      ldelta_ux, ldelta_vy, &
                       utrans, vtrans)
 
   implicit none
@@ -12,15 +12,15 @@ subroutine trans_vels(qx, qy, ng, dx, dy, dt, &
   double precision, intent(inout) :: u(0:qx-1, 0:qy-1)
   double precision, intent(inout) :: v(0:qx-1, 0:qy-1)
 
-  double precision, intent(inout) :: ldelta_u(0:qx-1, 0:qy-1)
-  double precision, intent(inout) :: ldelta_v(0:qx-1, 0:qy-1)
+  double precision, intent(inout) :: ldelta_ux(0:qx-1, 0:qy-1)
+  double precision, intent(inout) :: ldelta_vy(0:qx-1, 0:qy-1)
 
   double precision, intent(  out) :: utrans(0:qx-1, 0:qy-1)
   double precision, intent(  out) :: vtrans(0:qx-1, 0:qy-1)
 
-!f2py depend(qx, qy) :: u, v, ldelta_u, ldelta_v
+!f2py depend(qx, qy) :: u, v, ldelta_ux, ldelta_vy
 !f2py depend(qx, qy) :: utrans, vtrans
-!f2py intent(in) :: u, v, ldelta_u, ldelta_v
+!f2py intent(in) :: u, v, ldelta_ux, ldelta_vy
 !f2py intent(out) :: utrans, vtrans
  
   ! construct the transverse states of u and v --- these will be
@@ -49,8 +49,8 @@ subroutine trans_vels(qx, qy, ng, dx, dy, dt, &
   do j = jlo-2, jhi+2
      do i = ilo-2, ihi+2
         
-        q_l(i+1,j) = u(i,j) + 0.5d0*(1.0d0 - dtdx*u(i,j))*ldelta_u(i,j)
-        q_r(i  ,j) = u(i,j) - 0.5d0*(1.0d0 + dtdx*u(i,j))*ldelta_u(i,j)
+        q_l(i+1,j) = u(i,j) + 0.5d0*(1.0d0 - dtdx*u(i,j))*ldelta_ux(i,j)
+        q_r(i  ,j) = u(i,j) - 0.5d0*(1.0d0 + dtdx*u(i,j))*ldelta_ux(i,j)
 
      enddo
   enddo
@@ -77,13 +77,13 @@ subroutine trans_vels(qx, qy, ng, dx, dy, dt, &
   do j = jlo-2, jhi+2
      do i = ilo-2, ihi+2
         
-        q_l(i,j+1) = v(i,j) + 0.5d0*(1.0d0 - dtdy*v(i,j))*ldelta_v(i,j)
-        q_r(i,j  ) = v(i,j) - 0.5d0*(1.0d0 + dtdy*v(i,j))*ldelta_v(i,j)
+        q_l(i,j+1) = v(i,j) + 0.5d0*(1.0d0 - dtdy*v(i,j))*ldelta_vy(i,j)
+        q_r(i,j  ) = v(i,j) - 0.5d0*(1.0d0 + dtdy*v(i,j))*ldelta_vy(i,j)
 
      enddo
   enddo
 
-  ! Riemann problem 
+  ! Riemann problem for Burger's equation
   do j = jlo-1, jhi+1
      do i = ilo-1, ihi+1
         if (q_l(i,j) > 0.0d0 .and. (q_l(i,j) + q_r(i,j)) > 0.0d0) then
@@ -102,7 +102,8 @@ end subroutine trans_vels
 
 subroutine mac_vels(qx, qy, ng, dx, dy, dt, &
                     u, v, &
-                    ldelta_u, ldelta_v, &
+                    ldelta_ux, ldelta_vx, &
+                    ldelta_uy, ldelta_vy, &
                     gradp_x, gradp_y,
                     utrans, vtrans,
                     u_MAC, v_MAC)
@@ -116,8 +117,11 @@ subroutine mac_vels(qx, qy, ng, dx, dy, dt, &
   double precision, intent(inout) :: u(0:qx-1, 0:qy-1)
   double precision, intent(inout) :: v(0:qx-1, 0:qy-1)
 
-  double precision, intent(inout) :: ldelta_u(0:qx-1, 0:qy-1)
-  double precision, intent(inout) :: ldelta_v(0:qx-1, 0:qy-1)
+  double precision, intent(inout) :: ldelta_ux(0:qx-1, 0:qy-1)
+  double precision, intent(inout) :: ldelta_vx(0:qx-1, 0:qy-1)
+
+  double precision, intent(inout) :: ldelta_uy(0:qx-1, 0:qy-1)
+  double precision, intent(inout) :: ldelta_vy(0:qx-1, 0:qy-1)
 
   double precision, intent(inout) :: gradp_x(0:qx-1, 0:qy-1)
   double precision, intent(inout) :: gradp_y(0:qx-1, 0:qy-1)
@@ -128,42 +132,131 @@ subroutine mac_vels(qx, qy, ng, dx, dy, dt, &
   double precision, intent(  out) :: u_MAC(0:qx-1, 0:qy-1)
   double precision, intent(  out) :: v_MAC(0:qx-1, 0:qy-1)
 
-!f2py depend(qx, qy) :: u, v, ldelta_u, ldelta_v
+!f2py depend(qx, qy) :: u, v
+!f2py depend(qx, qy) :: ldelta_ux, ldelta_vx, ldelta_uy, ldelta_vy
 !f2py depend(qx, qy) :: gradp_x, gradp_y
 !f2py depend(qx, qy) :: utrans, vtrans
 !f2py depend(qx, qy) :: u_MAC, v_MAC
-!f2py intent(in) :: u, v, ldelta_u, ldelta_v, gradp_x, gradp_y, utrans, vtrans
+!f2py intent(in) :: u, v, gradp_x, gradp_y, utrans, vtrans
+!f2py intent(in) :: ldelta_ux, ldelta_vx, ldelta_uy, ldelta_vy
 !f2py intent(out) :: u_MAC, v_MAC
 
   integer :: ilo, ihi, jlo, jhi
   integer :: nx, ny
   integer :: i, j
 
-  double precision :: q_l(0:qx-1, 0:qy-1), q_r(0:qx-1, 0:qy-1)
+  double precision :: u_xl(0:qx-1, 0:qy-1), u_xr(0:qx-1, 0:qy-1)
+  double precision :: u_yl(0:qx-1, 0:qy-1), u_yr(0:qx-1, 0:qy-1)
+  double precision :: v_xl(0:qx-1, 0:qy-1), v_xr(0:qx-1, 0:qy-1)
+  double precision :: v_yl(0:qx-1, 0:qy-1), v_yr(0:qx-1, 0:qy-1)
+
+  double precision :: u_xint(0:qx-1, 0:qy-1), u_yint(0:qx-1, 0:qy-1)  
+  double precision :: v_xint(0:qx-1, 0:qy-1), v_yint(0:qx-1, 0:qy-1)  
 
   nx = qx - 2*ng; ny = qy - 2*ng
   ilo = ng; ihi = ng+nx-1; jlo = ng; jhi = ng+ny-1
   
   ! u on x-edges
+  dtdx = dt/dx
+
   do j = jlo-2, jhi+2
      do i = ilo-2, ihi+2        
-        q_l(i+1,j) = u(i,j) + 0.5d0*(1.0d0 - dtdx*u(i,j))*ldelta_u(i,j)
-        q_r(i  ,j) = u(i,j) - 0.5d0*(1.0d0 + dtdx*u(i,j))*ldelta_u(i,j)
+        u_xl(i+1,j) = u(i,j) + 0.5d0*(1.0d0 - dtdx*u(i,j))*ldelta_ux(i,j)
+        u_xr(i  ,j) = u(i,j) - 0.5d0*(1.0d0 + dtdx*u(i,j))*ldelta_ux(i,j)
      enddo
   enddo
 
-  ! Riemann problem -- use utrans for the upwinding velocity
-  call riemann_upwind()
+  ! Riemann problem -- use utrans for the upwinding velocity.  The resulting
+  ! quantity, u_xint, is what is used in the transverse difference
+  call upwind(qx, qy, ng, &
+              u_xl, u_xr, &
+              utrans, &
+              u_xint)
+
+
+  ! v on x-edges -- needed for the transverse term
+  do j = jlo-2, jhi+2
+     do i = ilo-2, ihi+2        
+        v_xl(i+1,j) = v(i,j) + 0.5d0*(1.0d0 - dtdx*u(i,j))*ldelta_vx(i,j)
+        v_xr(i  ,j) = v(i,j) - 0.5d0*(1.0d0 + dtdx*u(i,j))*ldelta_vx(i,j)
+     enddo
+  enddo
+
+  ! Riemann problem -- use utrans for the upwinding velocity.  The resulting
+  ! quantity, u_xint, is what is used in the transverse difference
+  call upwind(qx, qy, ng, &
+              v_xl, v_xr, &
+              utrans, &
+              v_xint)
+
+
+  ! u on y-edges -- needed for the transverse term
+  dtdy = dt/dy
+
+  do j = jlo-2, jhi+2
+     do i = ilo-2, ihi+2        
+        u_yl(i,j+1) = u(i,j) + 0.5d0*(1.0d0 - dtdy*v(i,j))*ldelta_uy(i,j)
+        u_yr(i,j  ) = u(i,j) - 0.5d0*(1.0d0 + dtdy*v(i,j))*ldelta_uy(i,j)
+     enddo
+  enddo
+
+  ! Riemann problem -- use vtrans for the upwinding velocity.  The resulting
+  ! quantity, v_yint, is what is used in the transverse difference
+  call upwind(qx, qy, ng, &
+              u_yl, u_yr, &
+              vtrans, &
+              u_yint)
 
 
   ! v on y-edges
+  do j = jlo-2, jhi+2
+     do i = ilo-2, ihi+2        
+        v_yl(i,j+1) = v(i,j) + 0.5d0*(1.0d0 - dtdy*v(i,j))*ldelta_vy(i,j)
+        v_yr(i,j  ) = v(i,j) - 0.5d0*(1.0d0 + dtdy*v(i,j))*ldelta_vy(i,j)
+     enddo
+  enddo
+  
+  ! Riemann problem -- use vtrans for the upwinding velocity.  The resulting
+  ! quantity, v_yint, is what is used in the transverse difference
+  call upwind(qx, qy, ng, &
+              v_yl, v_yr, &
+              vtrans, &
+              v_yint)
 
 
-  ! Riemann problem -- use vtrans for the upwinding velocity
-  call riemann_upwind()
+  ! add the transverse flux differences to the preliminary interface states
+  do j = jlo-2, jhi+2
+     do i = ilo-2, ihi+2        
+
+        ! v du/dy is the transverse term for the u normal states
+        vbar = 0.5d0*(vtrans(i,j) + vtrans(i,j+1))
+        vu_y = vbar*(u_yint(i,j+1) - u_yint(i,j))
+        
+        u_xl(i+1,j) = u_xl(i+1,j) - 0.5*dtdy*vu_y - 0.5*dt*gradp_x(i,j)
+        u_xr(i  ,j) = u_xr(i  ,j) - 0.5*dtdy*vu_y - 0.5*dt*gradp_x(i,j)
+
+        ! u dv/dx is the transverse term for the v normal states
+        ubar = 0.5d0*(utrans(i,j) + utrans(i+1,j)
+        uv_x = ubar*(v_xint(i+1,j) - v_xint(i,j))
+
+        v_yl(i,j+1) = v_yl(i,j+1) - 0.5*dtdx*uv_x - 0.5*dt*gradp_y(i,j)
+        v_yl(i,j  ) = v_yl(i,j  ) - 0.5*dtdx*uv_x - 0.5*dt*gradp_y(i,j)
+
+     enddo
+  enddo
 
 
-  ! transverse flux differences 
+  ! Riemann problem -- this follows Burger's equation.  We don't use
+  ! any input velocity for the upwinding.
+  
+  ! we only need u on x faces and v on y faces
+  call riemann_and_upwind(qx, qy, ng, &
+                          u_xl, u_xr, &
+                          u_MAC)
 
-
-  ! Riemann problem -- this follows Burger's equation
+  call riemann_and_upwind(qx, qy, ng, &
+                          v_yl, v_yr, &
+                          v_MAC)
+  
+  
+end subroutine mac_vels
