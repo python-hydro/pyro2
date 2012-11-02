@@ -1,3 +1,4 @@
+!xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 subroutine trans_vels(qx, qy, ng, dx, dy, dt, &
                       u, v, &
                       ldelta_ux, ldelta_vy, &
@@ -36,7 +37,6 @@ subroutine trans_vels(qx, qy, ng, dx, dy, dt, &
   integer :: i, j
 
   double precision :: q_l(0:qx-1, 0:qy-1), q_r(0:qx-1, 0:qy-1)
-
   
 
   nx = qx - 2*ng; ny = qy - 2*ng
@@ -99,7 +99,7 @@ subroutine trans_vels(qx, qy, ng, dx, dy, dt, &
 end subroutine trans_vels
 
 
-
+!xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 subroutine mac_vels(qx, qy, ng, dx, dy, dt, &
                     u, v, &
                     ldelta_ux, ldelta_vx, &
@@ -257,6 +257,92 @@ subroutine mac_vels(qx, qy, ng, dx, dy, dt, &
   call riemann_and_upwind(qx, qy, ng, &
                           v_yl, v_yr, &
                           v_MAC)
-  
-  
+    
 end subroutine mac_vels
+
+
+!xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+subroutine upwind(qx, qy, ng, q_l, q_r, s, q_int)
+
+  ! upwind the left and right states based on the specified input
+  ! velocity, s.  The resulting interface state is q_int
+
+  implicit none
+
+  integer :: qx, qy, ng
+  double precision :: q_l(0:qx-1, 0:qy-1), q_r(0:qx-1, 0:qy-1)
+  double precision :: s(0:qx-1, 0:qy-1)
+  double precision :: q_int(0:qx-1, 0:qy-1)
+
+  integer :: ilo, ihi, jlo, jhi
+  integer :: nx, ny
+  integer :: i, j
+
+  nx = qx - 2*ng; ny = qy - 2*ng
+  ilo = ng; ihi = ng+nx-1; jlo = ng; jhi = ng+ny-1
+
+  do j = jlo-1, jhi+1
+     do i = ilo-1, ihi+1
+
+        if (s(i,j) > 0.0d0) then
+           q_int(i,j) = q_l(i,j)
+        else if (s(i,j) == 0.0d0) then
+           q_int(i,j) = 0.5d0*(q_l(i,j) + q_r(i,j))
+        else
+           q_int(i,j) = q_r(i,j)
+        endif
+
+     enddo
+  enddo
+
+end subroutine upwind
+
+
+!xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+subroutine riemann_and_upwind(qx, qy, ng, q_l, q_r, q_int)
+
+  ! Solve the Burger's Riemann problem given the input left and right
+  ! states and use the resulting velocity through the interface to return
+  ! the upwinded state, q_int.  (This differs from upwind, above, in that
+  ! we don't take in a velocity to upwind with).
+  !
+  ! This uses the expressions from Almgren, Bell, and Szymczak 1996.
+
+  implicit none
+
+  integer :: qx, qy, ng
+  double precision :: q_l(0:qx-1, 0:qy-1), q_r(0:qx-1, 0:qy-1)
+  double precision :: q_int(0:qx-1, 0:qy-1)
+
+  integer :: ilo, ihi, jlo, jhi
+  integer :: nx, ny
+  integer :: i, j
+
+  double precision :: s
+
+  nx = qx - 2*ng; ny = qy - 2*ng
+  ilo = ng; ihi = ng+nx-1; jlo = ng; jhi = ng+ny-1
+
+  do j = jlo-1, jhi+1
+     do i = ilo-1, ihi+1
+
+        if (q_l(i,j) > 0.0d0 .and. q_l(i,j) + q_r(i,j) > 0.0d0) then
+           s = q_l(i,j)
+        else if (q_l(i,j) <= 0.0d0 .and. q_r(i,j) >= 0.0d0) then
+           s = 0.0d0
+        else
+           s = q_r(i,j)
+        endif
+
+        if (s > 0.0d0) then
+           q_int(i,j) = q_l(i,j)
+        else if (s == 0.0d0) then
+           q_int(i,j) = 0.5d0*(q_l(i,j) + q_r(i,j))
+        else
+           q_int(i,j) = q_r(i,j)
+        endif
+
+     enddo
+  enddo
+
+end subroutine riemann_and_upwind

@@ -24,3 +24,9 @@ for the incompressible solver
 
  -- riemann_upwind and riemann_burgers
 
+
+-----
+
+-- why does our Riemann problem differ from the Burger's Riemann in Toro?
+
+-- what are the appropriate BCs on phi given physical boundaries?
