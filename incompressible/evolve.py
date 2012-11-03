@@ -134,9 +134,11 @@ def evolve(myData, dt):
         incomp_interface_f.states(myg.qx, myg.qy, myg.ng, 
                                   myg.dx, myg.dy, dt,
                                   u, v,
+                                  ldelta_ux, ldelta_vx,
+                                  ldelta_uy, ldelta_vy,
                                   gradp_x, gradp_y,
                                   utrans, vtrans,
-                                  uadv, vadv)
+                                  u_MAC, v_MAC)
 
 
     #-------------------------------------------------------------------------
@@ -212,7 +214,7 @@ def evolve(myData, dt):
     MG.solve(rtol=1.e-12)
 
     # store the solution
-    phi = myPatch.getVar("phi")
+    phi = myData.getVarPtr("phi")
     solution = MG.getSolution()
 
     phi[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2] = \
