@@ -13,6 +13,8 @@ def evolve(myData, dt):
     gradp_x = myData.getVarPtr("gradp_x")
     gradp_y = myData.getVarPtr("gradp_y")
 
+    phi = myData.getVarPtr("phi")
+
     myg = myData.grid
 
     dtdx = dt/myg.dx
@@ -214,16 +216,20 @@ def evolve(myData, dt):
     
     MG.initRHS(divU/dt)
 
-    # initial guess of zero
-    # should use old phi, but we need a method to take a variable on the myData grid
-    # and put it on the MG grid for us (getVarCopy("phi", MG.solnGrid) ? )
-    MG.initZeros()
+    # should use old phi, but we need a method to take a variable on
+    # the myData grid and put it on the MG grid for us
+    # (getVarCopy("phi", MG.solnGrid) ? )
+
+    #MG.initZeros()
+    phiGuess = MG.solnGrid.scratchArray()
+    phiGuess[MG.ilo-1:MG.ihi+2,MG.jlo-1:MG.jhi+2] = \
+        phi[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]
+    MG.initSolution(phiGuess)
 
     # solve
     MG.solve(rtol=1.e-12)
 
     # store the solution
-    phi = myData.getVarPtr("phi")
     solution = MG.getSolution()
 
     phi[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2] = \
