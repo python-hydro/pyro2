@@ -8,10 +8,10 @@ def evolve(myData, dt):
 
     
     u = myData.getVarPtr("x-velocity")
-    v = myData.getVarPtr("x-velocity")
+    v = myData.getVarPtr("y-velocity")
 
-    gradp_x = myData.getVarPtr("gradp_y")
-    gradp_y = myData.getVarPtr("gradp_x")
+    gradp_x = myData.getVarPtr("gradp_x")
+    gradp_y = myData.getVarPtr("gradp_y")
 
     myg = myData.grid
 
