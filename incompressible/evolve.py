@@ -111,15 +111,15 @@ def evolve(myData, dt):
     phi_MAC = myData.getVarPtr("phi-MAC")
     solution = MG.getSolution()
 
-    phi_MAC[myg.ilo-1:myg.ihi+2:myg.jlo-1:myg.jhi+2] = \
-        solution[MG.ilo-1:MG.ihi+2:MG.jlo-1:MG.jhi+2]
+    phi_MAC[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2] = \
+        solution[MG.ilo-1:MG.ihi+2,MG.jlo-1:MG.jhi+2]
 
     # we need the MAC velocities on all edges of the computational domain
-    u_MAC[myg.ilo:myg.ihi+2:myg.jlo:myg.jhi+1] -= \
+    u_MAC[myg.ilo:myg.ihi+2,myg.jlo:myg.jhi+1] -= \
         (phi_MAC[myg.ilo  :myg.ihi+2,myg.jlo:myg.jhi+1] -
          phi_MAC[myg.ilo-1:myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx
 
-    v_MAC[myg.ilo:myg.ihi+1:myg.jlo:myg.jhi+2] -= \
+    v_MAC[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+2] -= \
         (phi_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+2] -
          phi_MAC[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi+1])/myg.dy
 

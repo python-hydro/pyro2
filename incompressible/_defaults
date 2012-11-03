@@ -1,0 +1,5 @@
+[incompressible]
+
+
+[driver]
+cfl = 0.8
