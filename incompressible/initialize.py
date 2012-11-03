@@ -53,6 +53,8 @@ def initialize():
     # phi -- used for the projections
     myData.registerVar("phi-MAC", bcObj)
     myData.registerVar("phi", bcObj)
+    myData.registerVar("gradp_x", bcObj)
+    myData.registerVar("gradp_y", bcObj)
 
     myData.create()
 

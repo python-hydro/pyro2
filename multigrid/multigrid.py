@@ -265,11 +265,6 @@ class ccMG2d:
              v[myg.ilo  :myg.ihi+1,myg.jlo+1:myg.jhi+2] -
              2.0*v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])/(myg.dy*myg.dy) )
 
-        print "in residual"
-        print numpy.min(r), numpy.min(f)
-        print numpy.max(r), numpy.max(f)
-        
-        
         
     def smooth(self, level, nsmooth):
         """ use Gauss-Seidel iterations to smooth """
@@ -283,8 +278,6 @@ class ccMG2d:
         # do red-black G-S
         i = 0
         while (i < nsmooth):
-
-            print "min/max", numpy.min(v), numpy.max(v)
 
             xcoeff = self.beta/myg.dx**2
             ycoeff = self.beta/myg.dy**2

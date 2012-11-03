@@ -1,5 +1,7 @@
 from util import runparams
-
+import mesh.reconstruction_f as reconstruction_f
+import incomp_interface_f
+import multigrid.multigrid as multigrid
 
 def evolve(myData, dt):
     """ evolve the incompressible equations through one timestep """
@@ -19,11 +21,11 @@ def evolve(myData, dt):
     #-------------------------------------------------------------------------
     # create the limited slopes of u and v (in both directions)
     #-------------------------------------------------------------------------
-    ldelta_ux = reconstruction_f.limit4(1, u, myGrid.qx, myGrid.qy, myGrid.ng)
-    ldelta_vx = reconstruction_f.limit4(1, v, myGrid.qx, myGrid.qy, myGrid.ng)
+    ldelta_ux = reconstruction_f.limit4(1, u, myg.qx, myg.qy, myg.ng)
+    ldelta_vx = reconstruction_f.limit4(1, v, myg.qx, myg.qy, myg.ng)
 
-    ldelta_uy = reconstruction_f.limit4(2, u, myGrid.qx, myGrid.qy, myGrid.ng)
-    ldelta_vy = reconstruction_f.limit4(2, v, myGrid.qx, myGrid.qy, myGrid.ng)
+    ldelta_uy = reconstruction_f.limit4(2, u, myg.qx, myg.qy, myg.ng)
+    ldelta_vy = reconstruction_f.limit4(2, v, myg.qx, myg.qy, myg.ng)
 
 
     #-------------------------------------------------------------------------
@@ -83,7 +85,7 @@ def evolve(myData, dt):
     # velocities.
 
     # create the multigrid object
-    MG = multigrid.ccMg2d(myg.nx, myg.ny,
+    MG = multigrid.ccMG2d(myg.nx, myg.ny,
                           xlBCtype="periodic", xrBCtype="periodic",
                           ylBCtype="periodic", yrBCtype="periodic",
                           xmin=myg.xmin, xmax=myg.xmax,
@@ -183,7 +185,7 @@ def evolve(myData, dt):
     # now we solve L phi = D (U* /dt)
     
     # create the multigrid object
-    MG = multigrid.ccMg2d(myg.nx, myg.ny,
+    MG = multigrid.ccMG2d(myg.nx, myg.ny,
                           xlBCtype="periodic", xrBCtype="periodic",
                           ylBCtype="periodic", yrBCtype="periodic",
                           xmin=myg.xmin, xmax=myg.xmax,
@@ -219,13 +221,16 @@ def evolve(myData, dt):
     # compute the cell-centered gradient of phi and update the velocities
     
     # u = u - grad_x phi dt
-    u[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] -= \
-        dt*0.5*(phi[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
-                phi[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1])
+    gradp_x[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
+        0.5*(phi[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
+             phi[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1])/myg.dx
 
-    v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] -= \
-        dt*0.5*(phi[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
-                phi[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])
+    gradp_y[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
+        0.5*(phi[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
+             phi[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
+
+    u[:,:] -= dt*gradp_x
+    v[:,:] -= dt*gradp_y
 
     myData.fillBC("x-velocity")
     myData.fillBC("y-velocity")
