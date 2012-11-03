@@ -37,7 +37,7 @@ subroutine trans_vels(qx, qy, ng, dx, dy, dt, &
   integer :: i, j
 
   double precision :: q_l(0:qx-1, 0:qy-1), q_r(0:qx-1, 0:qy-1)
-  
+  double precision :: dtdx, dtdy
 
   nx = qx - 2*ng; ny = qy - 2*ng
   ilo = ng; ihi = ng+nx-1; jlo = ng; jhi = ng+ny-1
@@ -153,6 +153,9 @@ subroutine mac_vels(qx, qy, ng, dx, dy, dt, &
   double precision :: u_xint(0:qx-1, 0:qy-1), u_yint(0:qx-1, 0:qy-1)  
   double precision :: v_xint(0:qx-1, 0:qy-1), v_yint(0:qx-1, 0:qy-1)  
 
+  double precision :: dtdx, dtdy
+  double precision :: ubar, vbar, uv_x, vu_y
+
   nx = qx - 2*ng; ny = qy - 2*ng
   ilo = ng; ihi = ng+nx-1; jlo = ng; jhi = ng+ny-1
   
@@ -236,7 +239,7 @@ subroutine mac_vels(qx, qy, ng, dx, dy, dt, &
         u_xr(i  ,j) = u_xr(i  ,j) - 0.5*dtdy*vu_y - 0.5*dt*gradp_x(i,j)
 
         ! u dv/dx is the transverse term for the v normal states
-        ubar = 0.5d0*(utrans(i,j) + utrans(i+1,j)
+        ubar = 0.5d0*(utrans(i,j) + utrans(i+1,j))
         uv_x = ubar*(v_xint(i+1,j) - v_xint(i,j))
 
         v_yl(i,j+1) = v_yl(i,j+1) - 0.5*dtdx*uv_x - 0.5*dt*gradp_y(i,j)
@@ -321,6 +324,9 @@ subroutine states(qx, qy, ng, dx, dy, dt, &
   double precision :: v_xl(0:qx-1, 0:qy-1), v_xr(0:qx-1, 0:qy-1)
   double precision :: v_yl(0:qx-1, 0:qy-1), v_yr(0:qx-1, 0:qy-1)
 
+  double precision :: dtdx, dtdy
+  double precision :: ubar, vbar, uv_x, vu_y, uu_x, vv_y
+
   nx = qx - 2*ng; ny = qy - 2*ng
   ilo = ng; ihi = ng+nx-1; jlo = ng; jhi = ng+ny-1
   
@@ -396,7 +402,7 @@ subroutine states(qx, qy, ng, dx, dy, dt, &
   do j = jlo-2, jhi+2
      do i = ilo-2, ihi+2        
 
-        ubar = 0.5d0*(utrans(i,j) + utrans(i+1,j)
+        ubar = 0.5d0*(utrans(i,j) + utrans(i+1,j))
         vbar = 0.5d0*(vtrans(i,j) + vtrans(i,j+1))
 
         ! v du/dy is the transverse term for the u states on x-interfaces
