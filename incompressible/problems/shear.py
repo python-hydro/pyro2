@@ -72,6 +72,7 @@ def initData(myPatch):
         i += 1
         
     
-
+    print "extrema: ", numpy.min(u.flat), numpy.max(u.flat)
+    
     
                              

@@ -31,7 +31,8 @@ def evolve(myData, dt):
     #-------------------------------------------------------------------------
     # create the transverse velocities to be used in the advection
     #-------------------------------------------------------------------------
-    
+    print "  making transverse velocities"
+
     utrans, vtrans = \
         incomp_interface_f.trans_vels(myg.qx, myg.qy, myg.ng, 
                                       myg.dx, myg.dy, dt,
@@ -66,6 +67,8 @@ def evolve(myData, dt):
 
     # this returns u on x-interfaces and v on y-interfaces.  These
     # constitute the MAC grid
+    print "  making MAC velocities"
+
     u_MAC, v_MAC = incomp_interface_f.mac_vels(myg.qx, myg.qy, myg.ng, 
                                                myg.dx, myg.dy, dt,
                                                u, v,
@@ -83,6 +86,8 @@ def evolve(myData, dt):
     # we will solve L phi = D U^MAC, where phi is cell centered, and
     # U^MAC is the MAC-type staggered grid of the advective
     # velocities.
+
+    print "  MAC projection"
 
     # create the multigrid object
     MG = multigrid.ccMG2d(myg.nx, myg.ny,
@@ -130,6 +135,8 @@ def evolve(myData, dt):
     # recompute the interface states, using the advective velocity
     # from above
     # -------------------------------------------------------------------------
+    print "  making u, v edge states"
+
     u_xint, v_xint, u_yint, v_yint = \
         incomp_interface_f.states(myg.qx, myg.qy, myg.ng, 
                                   myg.dx, myg.dy, dt,
@@ -142,8 +149,12 @@ def evolve(myData, dt):
 
 
     #-------------------------------------------------------------------------
-    # compute (U.grad)U
+    # update U to get the provisional velocity field
     #-------------------------------------------------------------------------
+
+    print "  doing provisional update of u, v"
+
+    # compute (U.grad)U
 
     # we want u_MAC U_x + v_MAC U_y
     advect_x = myg.scratchArray()
@@ -170,9 +181,6 @@ def evolve(myData, dt):
               v_yint[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1])/myg.dy 
 
 
-    #-------------------------------------------------------------------------
-    # update U to get the provisional velocity field
-    #-------------------------------------------------------------------------
     u[:,:] -= dt*advect_x[:,:]
     v[:,:] -= dt*advect_y[:,:]
 
@@ -185,6 +193,7 @@ def evolve(myData, dt):
     #-------------------------------------------------------------------------
 
     # now we solve L phi = D (U* /dt)
+    print "  final projection"
     
     # create the multigrid object
     MG = multigrid.ccMG2d(myg.nx, myg.ny,
