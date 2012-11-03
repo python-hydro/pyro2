@@ -22,10 +22,10 @@ def timestep(myData):
     v = myData.getVarPtr("y-velocity")
     
     # the timestep is min(dx/|u|, dy|v|)
-    xtmp = myPatch.dx/(abs(u))
-    ytmp = myPatch.dy/(abs(v))
+    xtmp = myData.grid.dx/(abs(u))
+    ytmp = myData.grid.dy/(abs(v))
 
-    dt = cfl*minimum(xtmp.min(), ytmp.min())
+    dt = cfl*min(xtmp.min(), ytmp.min())
 
     return dt
 

@@ -19,6 +19,7 @@ from util import runparams
 import mesh.patch as patch
 import numpy
 from util import msg
+import math
 
 def initData(myPatch):
     """ initialize the incompressible shear problem """
@@ -40,11 +41,13 @@ def initData(myPatch):
     u = myPatch.getVarPtr("x-velocity")
     v = myPatch.getVarPtr("y-velocity")
 
-    if (myPatch.xmin != 0 or myPatch.xmax != 1 or
-        myPatch.ymin != 0 or myPatch.ymax != 1):
+    myg = myPatch.grid
+
+    if (myg.xmin != 0 or myg.xmax != 1 or
+        myg.ymin != 0 or myg.ymax != 1):
         msg.fail("ERROR: domain should be a unit square")
         
-    y_half = 0.5*(myPatch.ymin + myPatch.ymax)
+    y_half = 0.5*(myg.ymin + myg.ymax)
 
     print 'y_half = ', y_half
     print 'delta_s = ', delta_s
@@ -52,8 +55,6 @@ def initData(myPatch):
     
     # there is probably an easier way to do this without loops, but
     # for now, we will just do an explicit loop.
-    myg = myPatch.grid
-
     i = myg.ilo
     while i <= myg.ihi:
 
