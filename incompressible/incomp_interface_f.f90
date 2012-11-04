@@ -447,7 +447,7 @@ subroutine states(qx, qy, ng, dx, dy, dt, &
               v_xint)
 
   call upwind(qx, qy, ng, &
-              u_yl, u_yl, &
+              u_yl, u_yr, &
               v_MAC, &
               u_yint)
 
