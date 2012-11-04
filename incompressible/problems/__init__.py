@@ -1,1 +1,1 @@
-__all__ = ['shear']
+__all__ = ['shear', 'converge']
