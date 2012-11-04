@@ -11,7 +11,7 @@ def dovis(myData, n):
 
     myg = myData.grid
 
-    fig, axes = pylab.subplots(nrows=1, ncols=2, num=1)
+    fig, axes = pylab.subplots(nrows=2, ncols=2, num=1)
     
     # x-velocity
     ax = axes.flat[0]
@@ -24,7 +24,7 @@ def dovis(myData, n):
     ax.set_ylabel("y")
     ax.set_title("x-velocity")
 
-    pylab.colorbar(img, ax=ax, orientation="horizontal")
+    pylab.colorbar(img, ax=ax)
 
 
     # y-velocity
@@ -38,7 +38,55 @@ def dovis(myData, n):
     ax.set_ylabel("y")
     ax.set_title("y-velocity")
 
-    pylab.colorbar(img, ax=ax, orientation="horizontal")
+    pylab.colorbar(img, ax=ax)
+
+
+    # vorticity
+    ax = axes.flat[2]
+    
+    vort = myg.scratchArray()
+    vort[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
+        0.5*(v[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
+             v[myg.ilo-1:myg.ihi,myg.jlo:myg.jhi+1])/myg.dx - \
+         0.5*(u[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
+              u[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi])/myg.dy
+
+
+    img = ax.imshow(numpy.transpose(vort[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]), 
+                    interpolation="nearest", origin="lower",
+                    extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
+
+    ax.set_xlabel("x")
+    ax.set_ylabel("y")
+    ax.set_title(r"$\nabla \times U$")
+
+    pylab.colorbar(img, ax=ax)
+
+
+    # div U
+    ax = axes.flat[3]
+    
+    divU = myg.scratchArray()
+
+    divU[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
+        0.5*(u[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
+             u[myg.ilo-1:myg.ihi,myg.jlo:myg.jhi+1])/myg.dx + \
+        0.5*(v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
+             v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi])/myg.dy
+
+
+    img = ax.imshow(numpy.transpose(divU[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]), 
+                    interpolation="nearest", origin="lower",
+                    extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
+
+    ax.set_xlabel("x")
+    ax.set_ylabel("y")
+    ax.set_title(r"$\nabla \cdot U$")
+
+    pylab.colorbar(img, ax=ax)
+
+
+
 
     pylab.figtext(0.05,0.0125, "t = %10.5f" % myData.t)
 

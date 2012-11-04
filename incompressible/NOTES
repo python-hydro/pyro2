@@ -30,3 +30,9 @@ for the incompressible solver
 -- why does our Riemann problem differ from the Burger's Riemann in Toro?
 
 -- what are the appropriate BCs on phi given physical boundaries?
+
+-- how big of a div.U should we expect for a cell-centered projection?
+   what about if we did nodal?
+
+   is this cell-centered projection "approximate"?
+
