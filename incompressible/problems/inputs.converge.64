@@ -5,7 +5,7 @@ max_steps = 1000
 tmax = 0.5
 cfl = 0.5
 init_tstep_factor = 1.0
-fix_dt = 1.25e-3
+fix_dt = 2.5e-3
 
 
 [incompressible]
@@ -13,13 +13,13 @@ num_init_proj = 0
 
 
 [io]
-basename = converge_128_
+basename = converge_64_
 n_out = 20
 
 
 [mesh]
-nx = 128
-ny = 128
+nx = 64
+ny = 64
 xmax = 1.0
 ymax = 1.0
 
