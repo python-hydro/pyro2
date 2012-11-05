@@ -20,3 +20,11 @@
 
    what about 2 different BCs meeting at a corner -- who wins?
 
+
+-- ii = numpy.arange(10)
+   a = numpy.arange(40)
+>>> print a[ii]
+[0 1 2 3 4 5 6 7 8 9]
+>>> print a[ii+1]
+[ 1  2  3  4  5  6  7  8  9 10]
+
