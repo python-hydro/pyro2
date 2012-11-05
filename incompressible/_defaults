@@ -1,4 +1,5 @@
 [incompressible]
+limiter = 2               ; limiter (0 = none, 1 = 2nd order, 2 = 4th order)
 
 
 [driver]
