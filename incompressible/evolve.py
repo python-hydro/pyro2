@@ -23,11 +23,19 @@ def evolve(myData, dt):
     #-------------------------------------------------------------------------
     # create the limited slopes of u and v (in both directions)
     #-------------------------------------------------------------------------
-    ldelta_ux = reconstruction_f.limit4(1, u, myg.qx, myg.qy, myg.ng)
-    ldelta_vx = reconstruction_f.limit4(1, v, myg.qx, myg.qy, myg.ng)
+    limiter = runparams.getParam("incompressible.limiter")
+    if (limiter == 0):
+        limitFunc = reconstruction_f.nolimit
+    elif (limiter == 1):
+        limitFunc = reconstruction_f.limit2
+    else:
+        limitFunc = reconstruction_f.limit4
+    
+    ldelta_ux = limitFunc(1, u, myg.qx, myg.qy, myg.ng)
+    ldelta_vx = limitFunc(1, v, myg.qx, myg.qy, myg.ng)
 
-    ldelta_uy = reconstruction_f.limit4(2, u, myg.qx, myg.qy, myg.ng)
-    ldelta_vy = reconstruction_f.limit4(2, v, myg.qx, myg.qy, myg.ng)
+    ldelta_uy = limitFunc(2, u, myg.qx, myg.qy, myg.ng)
+    ldelta_vy = limitFunc(2, v, myg.qx, myg.qy, myg.ng)
 
 
     #-------------------------------------------------------------------------
