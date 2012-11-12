@@ -31,7 +31,7 @@ def evolve(myd, dt):
                           ylBCtype=myd.BCs['phi'].ylb, 
                           yrBCtype=myd.BCs['phi'].yrb, 
                           alpha=1.0, beta=0.5*dt*k, 
-                          verbose=1)
+                          verbose=0)
 
 
     # form the RHS: f = phi + (dt/2) k L phi  (where L is the Laplacian)
