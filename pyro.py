@@ -120,6 +120,7 @@ max_steps = runparams.getParam("driver.max_steps")
 
 init_tstep_factor = runparams.getParam("driver.init_tstep_factor")
 max_dt_change = runparams.getParam("driver.max_dt_change")
+fix_dt = runparams.getParam("driver.fix_dt")
 
 pylab.ion()
 
@@ -148,13 +149,16 @@ while (myData.t < tmax and n < max_steps):
 
     # get the timestep
     dt = solver.timestep(myData)
-    if (n == 0):
-        dt = init_tstep_factor*dt
-        dtOld = dt
+    if (fix_dt > 0.0):
+        dt = fix_dt
     else:
-        dt = min(max_dt_change*dtOld, dt)
-        dtOld = dt
-
+        if (n == 0):
+            dt = init_tstep_factor*dt
+            dtOld = dt
+        else:
+            dt = min(max_dt_change*dtOld, dt)
+            dtOld = dt
+            
     if (myData.t + dt > tmax):
         dt = tmax - myData.t
 

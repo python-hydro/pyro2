@@ -44,33 +44,65 @@ class bcObject:
     for a single variable
     """
 
-    def __init__ (self, xlb="outflow", xrb="outflow", 
-                  ylb="outflow", yrb="outflow"):
+    def __init__ (self, 
+                  xlb="outflow", xrb="outflow", 
+                  ylb="outflow", yrb="outflow",
+                  oddReflectDir=""):
 
-        valid = ["outflow", "periodic", "reflect-even", "reflect-odd",
+        valid = ["outflow", "periodic", 
+                 "reflect", "reflect-even", "reflect-odd",
                  "dirichlet", "neumann"]
+
+        # note: "reflect" is ambiguous and will be converted into
+        # either reflect-even (the default) or reflect-odd if
+        # oddReflectDir specifies the corresponding direction ("x",
+        # "y")
 
         # -x boundary
         if (xlb in valid):
             self.xlb = xlb
+            if (self.xlb == "reflect"):
+                if (oddReflectDir == "x"):
+                    self.xlb = "reflect-odd"
+                else:
+                    self.xlb = "reflect-even"
+            
         else:
             msg.fail("ERROR: xlb = %s invalid BC" % (xlb))
 
         # +x boundary
         if (xrb in valid):
             self.xrb = xrb
+            if (self.xrb == "reflect"):
+                if (oddReflectDir == "x"):
+                    self.xrb = "reflect-odd"
+                else:
+                    self.xrb = "reflect-even"
+
         else:
             msg.fail("ERROR: xrb = %s invalid BC" % (xrb))
 
         # -y boundary
         if (ylb in valid):
             self.ylb = ylb
+            if (self.ylb == "reflect"):
+                if (oddReflectDir == "y"):
+                    self.ylb = "reflect-odd"
+                else:
+                    self.ylb = "reflect-even"
+
         else:
             msg.fail("ERROR: ylb = %s invalid BC" % (ylb))
 
         # +y boundary
         if (yrb in valid):
             self.yrb = yrb
+            if (self.yrb == "reflect"):
+                if (oddReflectDir == "y"):
+                    self.yrb = "reflect-odd"
+                else:
+                    self.yrb = "reflect-even"
+
         else:
             msg.fail("ERROR: yrb = %s invalid BC" % (yrb))
 

@@ -22,4 +22,15 @@ if [ $err -ne 0 ]; then
 fi
 cd ..
 
+# incompressible interface stuff
+echo "making incomp_interface_f.so..."
+cd incompressible
+make >> /dev/null
+err=$?
+if [ $err -ne 0 ]; then
+    echo "Error making incomp_interface_f.so"
+    exit $err
+fi
+cd ..
+
 echo "done"

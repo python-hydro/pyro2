@@ -1,0 +1,38 @@
+on nan, there seems to be no substantial difference between
+
+  development/pyro
+
+and
+
+  development/pyro_good
+
+for the incompressible solver
+
+ -- no difference with advection_term.c
+
+ -- in driver, we call a new routine, makeTransverseVels 
+
+    we then pass utrans intro interface states and get out uAdv
+
+ -- lots of differences with interface_states.c
+
+ -- new routine makeTransverseVels
+
+ -- normal_interface_states -- lots of changes
+
+ -- upwinding split in 2: one with uadv, one w/o
+
+ -- riemann_upwind and riemann_burgers
+
+
+-----
+
+-- why does our Riemann problem differ from the Burger's Riemann in Toro?
+
+-- what are the appropriate BCs on phi given physical boundaries?
+
+-- how big of a div.U should we expect for a cell-centered projection?
+   what about if we did nodal?
+
+   is this cell-centered projection "approximate"?
+

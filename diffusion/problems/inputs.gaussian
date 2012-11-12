@@ -31,3 +31,7 @@ yrboundary = neumann
 k = 1.0
 
 
+[gaussian]
+t_0 = 0.0001
+
+
