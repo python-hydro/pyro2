@@ -6,12 +6,15 @@ def dovis(myData, n):
 
     pylab.clf()
 
+    pylab.rc("font", size=10)
+
     u = myData.getVarPtr("x-velocity")
     v = myData.getVarPtr("y-velocity")
 
     myg = myData.grid
 
     fig, axes = pylab.subplots(nrows=2, ncols=2, num=1)
+    pylab.subplots_adjust(hspace=0.25)
     
     # x-velocity
     ax = axes.flat[0]
