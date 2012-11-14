@@ -41,6 +41,9 @@ def dovis(myData, n):
     orientation = "vertical"
     shrink = 1.0
 
+    sparseX = 0
+    allYlabel = 1
+
     if (L_x > 2*L_y):
 
         # we want 4 rows:
@@ -59,8 +62,10 @@ def dovis(myData, n):
         # 
         #  rho  |U|  p  e
         fig, axes = pylab.subplots(nrows=1, ncols=4, num=1)        
-        if (L_y > 4*L_x):
+        if (L_y >= 3*L_x):
             shrink = 0.5
+            sparseX = 1
+            allYlabel = 0
 
     else:
         # 2x2 grid of plots with 
@@ -81,6 +86,9 @@ def dovis(myData, n):
     ax.set_ylabel("y")
     ax.set_title(r"$\rho$")
 
+    if sparseX:
+        ax.xaxis.set_major_locator(pylab.MaxNLocator(3))
+
     pylab.colorbar(img, ax=ax, orientation=orientation, shrink=shrink)
 
 
@@ -92,8 +100,11 @@ def dovis(myData, n):
                     extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
     ax.set_xlabel("x")
-    ax.set_ylabel("y")
+    if (allYlabel): ax.set_ylabel("y")
     ax.set_title("U")
+
+    if sparseX:
+        ax.xaxis.set_major_locator(pylab.MaxNLocator(3))
 
     pylab.colorbar(img, ax=ax, orientation=orientation, shrink=shrink)
 
@@ -105,8 +116,11 @@ def dovis(myData, n):
                     extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
     ax.set_xlabel("x")
-    ax.set_ylabel("y")
+    if (allYlabel): ax.set_ylabel("y")
     ax.set_title("p")
+
+    if sparseX:
+        ax.xaxis.set_major_locator(pylab.MaxNLocator(3))
 
     pylab.colorbar(img, ax=ax, orientation=orientation, shrink=shrink)
 
@@ -118,8 +132,11 @@ def dovis(myData, n):
                     extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
     ax.set_xlabel("x")
-    ax.set_ylabel("y")
+    if (allYlabel): ax.set_ylabel("y")
     ax.set_title("e")
+
+    if sparseX:
+        ax.xaxis.set_major_locator(pylab.MaxNLocator(3))
 
     pylab.colorbar(img, ax=ax, orientation=orientation, shrink=shrink)
 
