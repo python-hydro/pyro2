@@ -232,7 +232,7 @@ def unsplitFluxes(myData, dt):
                                     vars.nvar,
                                     gamma,
                                     r, u, v, p,
-                                    ldelta_r, ldelta_u, ldelta_v, ldelta_p)                                    
+                                    ldelta_r, ldelta_u, ldelta_v, ldelta_p) 
     
     pfb.end()
                     
@@ -301,7 +301,36 @@ def unsplitFluxes(myData, dt):
     #=========================================================================
     # apply source terms
     #=========================================================================
-    
+    grav = runparams.getParam("compressible.grav")
+
+    # ymom_xl[i,j] += 0.5*dt*dens[i-1,j]*grav
+    U_xl[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2,vars.iymom] += \
+        0.5*dt*dens[myg.ilo-2:myg.ihi+1,myg.jlo-1:myg.jhi+2]*grav
+
+    U_xl[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2,vars.iener] += \
+        0.5*dt*ymom[myg.ilo-2:myg.ihi+1,myg.jlo-1:myg.jhi+2]*grav
+
+    # ymom_xr[i,j] += 0.5*dt*dens[i,j]*grav
+    U_xr[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2,vars.iymom] += \
+        0.5*dt*dens[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]*grav
+
+    U_xr[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2,vars.iener] += \
+        0.5*dt*ymom[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]*grav
+
+    # ymom_yl[i,j] += 0.5*dt*dens[i,j-1]*grav
+    U_yl[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2,vars.iymom] += \
+        0.5*dt*dens[myg.ilo-1:myg.ihi+2,myg.jlo-2:myg.jhi+1]*grav
+
+    U_yl[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2,vars.iener] += \
+        0.5*dt*ymom[myg.ilo-1:myg.ihi+2,myg.jlo-2:myg.jhi+1]*grav
+
+    # ymom_yr[i,j] += 0.5*dt*dens[i,j]*grav
+    U_yr[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2,vars.iymom] += \
+        0.5*dt*dens[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]*grav
+
+    U_yr[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2,vars.iener] += \
+        0.5*dt*ymom[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]*grav
+
 
     #=========================================================================
     # compute transverse fluxes
