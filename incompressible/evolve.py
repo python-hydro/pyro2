@@ -37,18 +37,6 @@ def evolve(myData, dt):
     ldelta_uy = limitFunc(2, u, myg.qx, myg.qy, myg.ng)
     ldelta_vy = limitFunc(2, v, myg.qx, myg.qy, myg.ng)
 
-
-    #-------------------------------------------------------------------------
-    # create the transverse velocities to be used in the advection
-    #-------------------------------------------------------------------------
-    print "  making transverse velocities"
-
-    utrans, vtrans = \
-        incomp_interface_f.trans_vels(myg.qx, myg.qy, myg.ng, 
-                                      myg.dx, myg.dy, dt,
-                                      u, v,
-                                      ldelta_ux, ldelta_vy)
-
     
     #-------------------------------------------------------------------------
     # get the advective velocities
@@ -84,8 +72,7 @@ def evolve(myData, dt):
                                                u, v,
                                                ldelta_ux, ldelta_vx,
                                                ldelta_uy, ldelta_vy,
-                                               gradp_x, gradp_y,
-                                               utrans, vtrans)
+                                               gradp_x, gradp_y)
 
 
     #-------------------------------------------------------------------------
@@ -154,7 +141,6 @@ def evolve(myData, dt):
                                   ldelta_ux, ldelta_vx,
                                   ldelta_uy, ldelta_vy,
                                   gradp_x, gradp_y,
-                                  utrans, vtrans,
                                   u_MAC, v_MAC)
 
 
