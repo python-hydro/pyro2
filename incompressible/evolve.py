@@ -176,9 +176,16 @@ def evolve(myData, dt):
              (v_yint[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
               v_yint[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1])/myg.dy 
 
+             
+    proj_type = runparams.getParam("incompressible.proj_type")
 
-    u[:,:] -= dt*advect_x[:,:]
-    v[:,:] -= dt*advect_y[:,:]
+    if (proj_type == 1):
+        u[:,:] -= (dt*advect_x[:,:] + dt*gradp_x[:,:])
+        v[:,:] -= (dt*advect_y[:,:] + dt*gradp_y[:,:])
+
+    elif (proj_type == 2):
+        u[:,:] -= dt*advect_x[:,:]
+        v[:,:] -= dt*advect_y[:,:]
 
     myData.fillBC("x-velocity")
     myData.fillBC("y-velocity")
@@ -201,7 +208,7 @@ def evolve(myData, dt):
 
     # first compute divU
 
-    # u/v are cell-centered, divU is cell-centered
+    # u/v are cell-centered, divU is cell-centered    
     divU[MG.ilo:MG.ihi+1,MG.jlo:MG.jhi+1] = \
         0.5*(u[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
              u[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1])/myg.dx + \
@@ -210,11 +217,7 @@ def evolve(myData, dt):
     
     MG.initRHS(divU/dt)
 
-    # should use old phi, but we need a method to take a variable on
-    # the myData grid and put it on the MG grid for us
-    # (getVarCopy("phi", MG.solnGrid) ? )
-
-    #MG.initZeros()
+    # use the old phi as our initial guess
     phiGuess = MG.solnGrid.scratchArray()
     phiGuess[MG.ilo-1:MG.ihi+2,MG.jlo-1:MG.jhi+2] = \
         phi[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]
@@ -229,19 +232,31 @@ def evolve(myData, dt):
     phi[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2] = \
         solution[MG.ilo-1:MG.ihi+2,MG.jlo-1:MG.jhi+2]
 
-    # compute the cell-centered gradient of phi and update the velocities
-    
-    # u = u - grad_x phi dt
-    gradp_x[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
+    # compute the cell-centered gradient of p and update the velocities
+    # this differs depending on what we projected.
+    gradphi_x = myg.scratchArray()
+    gradphi_y = myg.scratchArray()
+
+    gradphi_x[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
         0.5*(phi[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
              phi[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1])/myg.dx
 
-    gradp_y[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
+    gradphi_y[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
         0.5*(phi[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
              phi[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
 
-    u[:,:] -= dt*gradp_x
-    v[:,:] -= dt*gradp_y
+    # u = u - grad_x phi dt
+    u[:,:] -= dt*gradphi_x
+    v[:,:] -= dt*gradphi_y
+
+    # store gradp for the next step
+    if (proj_type == 1):
+        gradp_x[:,:] += gradphi_x[:,:]
+        gradp_y[:,:] += gradphi_y[:,:]
+
+    elif (proj_type == 2):
+        gradp_x[:,:] = gradphi_x[:,:]
+        gradp_y[:,:] = gradphi_y[:,:]
 
     myData.fillBC("x-velocity")
     myData.fillBC("y-velocity")
