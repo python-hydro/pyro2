@@ -106,6 +106,7 @@ class ccMG2d:
         self.beta = beta
 
         self.nsmooth = 10
+        self.nbottomSmooth = 50
 
         self.maxCycles = 100
         
@@ -118,9 +119,9 @@ class ccMG2d:
         self.initializedSolution = 0
         self.initializedRHS = 0
         
-        # assume that self.nx = 2^nlevels and that nx = ny
-        # this defines nlevels such that we end exactly on a 1x1 grid
-        self.nlevels = int(math.log(self.nx)/math.log(2.0)) + 1
+        # assume that self.nx = 2^(nlevels-1) and that nx = ny
+        # this defines nlevels such that we end exactly on a 2x2 grid
+        self.nlevels = int(math.log(self.nx)/math.log(2.0)) 
 
         # a multigrid object will be a list of grids
         self.grids = []
@@ -129,7 +130,7 @@ class ccMG2d:
         # grid and self.grids[nlevel-1] will be the finest grid
         # we store the solution, v, the rhs, f.
         i = 0
-        nx_t = ny_t = 1
+        nx_t = ny_t = 2
 
         if (self.verbose):
             print "alpha = ", self.alpha
@@ -391,15 +392,20 @@ class ccMG2d:
                 level -= 1
 
 
-            # solve the discrete coarse problem exactly
+            # solve the discrete coarse problem.  We could use any 
+            # number of different matrix solvers here (like CG), but
+            # since we are 2x2 by design at this point, we will just
+            # smooth
             if self.verbose:
-                print "  <<< bottom solve >>>\n"
+                print "  bottom solve:"
 
             bP = self.grids[0]
-            v = bP.getVarPtr("v")
-            f = bP.getVarPtr("f")        
 
-            v[bP.grid.ilo] = -0.125*f[bP.grid.ilo]*bP.grid.dx*bP.grid.dx
+            if self.verbose:
+                print "  level = %d, nx = %d, ny = %d\n" %  \
+                    (level, bP.grid.nx, bP.grid.ny)
+
+            self.smooth(0, self.nbottomSmooth)
 
             bP.fillBC("v")
 
