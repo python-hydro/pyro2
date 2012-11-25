@@ -771,12 +771,12 @@ def read(filename):
 
 
 def ccDataClone(old):
+    """ create a new ccData2d object that is a copy of an existing one """
 
-    # copy method?
     if (not isinstance(old, ccData2d)):
         msg.fail("Can't clone object")
 
-    new = ccData2d(old.grid)
+    new = ccData2d(old.grid, dtype=old.dtype)
 
     n = 0
     while (n < old.nvar):
@@ -784,6 +784,10 @@ def ccDataClone(old):
         n += 1
 
     new.create()
+
+    new.aux = old.aux.copy()
+    new.data = old.data.copy()
+    
 
     return new
         
