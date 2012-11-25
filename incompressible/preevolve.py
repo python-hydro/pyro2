@@ -107,3 +107,5 @@ def preevolve(myData):
     gp_x[:,:] = new_gp_x[:,:]
     gp_y[:,:] = new_gp_y[:,:]
 
+
+    print "done with the pre-evolution"
