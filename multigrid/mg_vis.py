@@ -46,14 +46,13 @@ ny = 64
 a = multigrid_vis.ccMG2d(nx, ny,
                      xlBCtype="dirichlet", ylBCtype="dirichlet",
                      xrBCtype="dirichlet", yrBCtype="dirichlet",
-                     verbose=1)
+                     verbose=0)
 
 pylab.ion()
-pylab.figure(num=1, figsize=(8,6), dpi=100, facecolor='w')
+
+pylab.figure(num=1, figsize=(8,4), dpi=100, facecolor='w')
 
 
-a.drawV(a.nlevels-3, 1)
-pylab.show()
 
 # initialize the solution to 0
 init = a.solnGrid.scratchArray()

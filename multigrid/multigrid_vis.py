@@ -60,6 +60,7 @@ import mesh.patch as patch
 import math
 import numpy
 import pylab
+import matplotlib
 
 def error(myg, r):
 
@@ -106,7 +107,7 @@ class ccMG2d:
         self.beta = beta
 
         self.nsmooth = 10
-        self.nbottomSmooth = 50
+        self.nbottomSmooth = 10
 
         self.maxCycles = 100
         
@@ -196,7 +197,13 @@ class ccMG2d:
         self.relativeError = 1.e33
 
 
-    def drawV(self, currentLevel, up):
+        # keep track of where we are in the V
+        self.currentLevel = -1
+        self.upOrDown = ""
+
+
+
+    def drawV(self):
 
         xdown = numpy.linspace(0.0, 0.5, self.nlevels)
         xup = numpy.linspace(0.5, 1.0, self.nlevels)
@@ -210,20 +217,25 @@ class ccMG2d:
         pylab.scatter(xdown, ydown, marker="o", color="k")
         pylab.scatter(xup, yup, marker="o", color="k")
 
-        if (not up):
-            pylab.scatter(xdown[self.nlevels-currentLevel+1], ydown[self.nlevels-currentLevel+1], 
+        print "in drawV: ", self.currentLevel, self.nlevels
+
+        if (self.upOrDown == "down"):
+            pylab.scatter(xdown[self.nlevels-self.currentLevel-1], ydown[self.nlevels-self.currentLevel-1], 
                           marker="o", color="r", zorder=100)
 
         else:
-            pylab.scatter(xup[currentLevel], yup[currentLevel], 
+            pylab.scatter(xup[self.currentLevel], yup[self.currentLevel], 
                           marker="o", color="r", zorder=100)
 
 
-    def drawSolution(self, currentLevel):
-        
-        myg = self.grids[currentLevel].grid
+        pylab.axis("off")
 
-        v = self.grids[currentLevel].getVarPtr("v")
+
+    def drawSolution(self):
+        
+        myg = self.grids[self.currentLevel].grid
+
+        v = self.grids[self.currentLevel].getVarPtr("v")
 
         pylab.imshow(numpy.transpose(v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
                      interpolation="nearest", origin="lower",
@@ -232,8 +244,14 @@ class ccMG2d:
         pylab.xlabel("x")
         pylab.ylabel("y")
         
-        pylab.colorbar()
+
+        formatter = matplotlib.ticker.ScalarFormatter(useMathText=True)
+        cb = pylab.colorbar(format=formatter)
     
+        cb.ax.yaxis.offsetText.set_fontsize("small")
+        cl = pylab.getp(cb.ax, 'ymajorticklabels')
+        pylab.setp(cl, fontsize="small")
+
 
     def getSolution(self):
         v = self.grids[self.nlevels-1].getVarPtr("v")
@@ -365,10 +383,10 @@ class ccMG2d:
             pylab.clf()
 
             pylab.subplot(121)
-            self.drawSolution(level)
+            self.drawSolution()
 
             pylab.subplot(122)
-            self.drawV(level, 1)
+            self.drawV()
 
             pylab.draw()
                                                      
@@ -408,6 +426,11 @@ class ccMG2d:
 
             level = self.nlevels-1
             while (level > 0):
+
+                print "in smooth", level
+
+                self.currentLevel = level
+                self.upOrDown = "down"
 
                 fP = self.grids[level]
                 cP = self.grids[level-1]
@@ -450,6 +473,9 @@ class ccMG2d:
             if self.verbose:
                 print "  bottom solve:"
 
+                
+            self.currentLevel = 0
+
             bP = self.grids[0]
 
             if self.verbose:
@@ -464,6 +490,9 @@ class ccMG2d:
             # ascending part
             level = 1
             while (level < self.nlevels):
+
+                self.currentLevel = level
+                self.upOrDown = "up"
 
                 fP = self.grids[level]
                 cP = self.grids[level-1]
