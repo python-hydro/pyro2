@@ -23,7 +23,7 @@ def plot_convergence():
     pylab.xlabel("number of zones")
     pylab.ylabel("L2 norm of abs error")
 
-    pylab.title(r"convergence for multigrid solver", fontsize=11)
+    pylab.title(r"convergence for incompressible solver", fontsize=11)
 
     f = pylab.gcf()
     f.set_size_inches(5.0,5.0)
