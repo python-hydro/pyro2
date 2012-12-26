@@ -56,6 +56,8 @@ a.dx and a.dy are the grid spacings
 
 """
 
+frame = 0
+
 import mesh.patch as patch
 import math
 import numpy
@@ -106,7 +108,7 @@ class ccMG2d:
         self.alpha = alpha
         self.beta = beta
 
-        self.nsmooth = 10
+        self.nsmooth = 5
         self.nbottomSmooth = 10
 
         self.maxCycles = 100
@@ -198,6 +200,7 @@ class ccMG2d:
 
 
         # keep track of where we are in the V
+        self.currentCycle = -1
         self.currentLevel = -1
         self.upOrDown = ""
 
@@ -214,20 +217,18 @@ class ccMG2d:
         pylab.plot(xdown, ydown, lw=2, color="k")
         pylab.plot(xup, yup, lw=2, color="k")
 
-        pylab.scatter(xdown, ydown, marker="o", color="k")
-        pylab.scatter(xup, yup, marker="o", color="k")
-
-        print "in drawV: ", self.currentLevel, self.nlevels
+        pylab.scatter(xdown, ydown, marker="o", color="k", s=40)
+        pylab.scatter(xup, yup, marker="o", color="k", s=40)
 
         if (self.upOrDown == "down"):
             pylab.scatter(xdown[self.nlevels-self.currentLevel-1], ydown[self.nlevels-self.currentLevel-1], 
-                          marker="o", color="r", zorder=100)
+                          marker="o", color="r", zorder=100, s=38)
 
         else:
             pylab.scatter(xup[self.currentLevel], yup[self.currentLevel], 
-                          marker="o", color="r", zorder=100)
+                          marker="o", color="r", zorder=100, s=38)
 
-
+        pylab.text(0.7, 0.1, "V-cycle %d" % (self.currentCycle))
         pylab.axis("off")
 
 
@@ -245,8 +246,13 @@ class ccMG2d:
         pylab.ylabel("y")
         
 
+        if (self.currentLevel == self.nlevels-1):
+            pylab.title(r"solving $L\phi = f$")
+        else:
+            pylab.title(r"solving $Le = r$")
+
         formatter = matplotlib.ticker.ScalarFormatter(useMathText=True)
-        cb = pylab.colorbar(format=formatter)
+        cb = pylab.colorbar(format=formatter, shrink=0.5)
     
         cb.ax.yaxis.offsetText.set_fontsize("small")
         cl = pylab.getp(cb.ax, 'ymajorticklabels')
@@ -325,6 +331,9 @@ class ccMG2d:
 
         
     def smooth(self, level, nsmooth):
+
+        global frame
+
         """ use Gauss-Seidel iterations to smooth """
         v = self.grids[level].getVarPtr("v")
         f = self.grids[level].getVarPtr("f")
@@ -385,11 +394,16 @@ class ccMG2d:
             pylab.subplot(121)
             self.drawSolution()
 
-            pylab.subplot(122)
+            pylab.subplot(122)        
             self.drawV()
 
+            pylab.suptitle(r"multigrid solution of $u_{xx} + u_{yy} = -2 [(1-6x^2)y^2(1-y^2) + (1-6y^2)x^2(1-x^2)]$",
+                           fontsize=18)
+
             pylab.draw()
-                                                     
+            pylab.savefig("mg_%4.4d.png" % (frame))
+            frame += 1
+
             i += 1
 
 
@@ -413,6 +427,8 @@ class ccMG2d:
         cycle = 1
 
         while (not converged and cycle <= self.maxCycles):
+
+            self.currentCycle = cycle
 
             # zero out the solution on all but the finest grid
             level = 0

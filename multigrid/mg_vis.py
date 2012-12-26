@@ -50,7 +50,7 @@ a = multigrid_vis.ccMG2d(nx, ny,
 
 pylab.ion()
 
-pylab.figure(num=1, figsize=(8,4), dpi=100, facecolor='w')
+pylab.figure(num=1, figsize=(12.8,7.2), dpi=100, facecolor='w')
 
 
 
