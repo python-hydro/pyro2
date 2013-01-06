@@ -84,7 +84,7 @@ class ccMG2d:
                  xlBCtype="dirichlet", xrBCtype="dirichlet",
                  ylBCtype="dirichlet", yrBCtype="dirichlet",
                  alpha=0.0, beta=-1.0,
-                 verbose=0):
+                 verbose=0, trueFunc=None):
 
         if (nx != ny):
             print "ERROR: multigrid currently requires nx = ny"
@@ -114,6 +114,10 @@ class ccMG2d:
         self.maxCycles = 100
         
         self.verbose = verbose
+
+        if (not trueFunc == None):
+            self.trueFunc = trueFunc
+
 
         # a small number used in computing the error, so we don't divide by 0
         self.small = 1.e-16
@@ -242,7 +246,7 @@ class ccMG2d:
                      interpolation="nearest", origin="lower",
                      extent=[self.xmin, self.xmax, self.ymin, self.ymax])
 
-        pylab.xlabel("x")
+        #pylab.xlabel("x")
         pylab.ylabel("y")
         
 
@@ -250,6 +254,56 @@ class ccMG2d:
             pylab.title(r"solving $L\phi = f$")
         else:
             pylab.title(r"solving $Le = r$")
+
+        formatter = matplotlib.ticker.ScalarFormatter(useMathText=True)
+        cb = pylab.colorbar(format=formatter, shrink=0.5)
+    
+        cb.ax.yaxis.offsetText.set_fontsize("small")
+        cl = pylab.getp(cb.ax, 'ymajorticklabels')
+        pylab.setp(cl, fontsize="small")
+
+
+    def drawMainSolution(self):
+        
+        myg = self.grids[self.nlevels-1].grid
+
+        v = self.grids[self.nlevels-1].getVarPtr("v")
+
+        pylab.imshow(numpy.transpose(v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
+                     interpolation="nearest", origin="lower",
+                     extent=[self.xmin, self.xmax, self.ymin, self.ymax])
+
+        pylab.xlabel("x")
+        pylab.ylabel("y")
+        
+
+        pylab.title(r"current fine grid solution")
+
+        formatter = matplotlib.ticker.ScalarFormatter(useMathText=True)
+        cb = pylab.colorbar(format=formatter, shrink=0.5)
+    
+        cb.ax.yaxis.offsetText.set_fontsize("small")
+        cl = pylab.getp(cb.ax, 'ymajorticklabels')
+        pylab.setp(cl, fontsize="small")
+
+
+    def drawMainError(self):
+        
+        myg = self.grids[self.nlevels-1].grid
+
+        v = self.grids[self.nlevels-1].getVarPtr("v")
+
+        e = v - self.trueFunc(myg.x2d, myg.y2d)
+
+        pylab.imshow(numpy.transpose(e[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
+                     interpolation="nearest", origin="lower",
+                     extent=[self.xmin, self.xmax, self.ymin, self.ymax])
+
+        pylab.xlabel("x")
+        pylab.ylabel("y")
+        
+
+        pylab.title(r"current fine grid error")
 
         formatter = matplotlib.ticker.ScalarFormatter(useMathText=True)
         cb = pylab.colorbar(format=formatter, shrink=0.5)
@@ -391,11 +445,18 @@ class ccMG2d:
 
             pylab.clf()
 
-            pylab.subplot(121)
+            pylab.subplot(221)
             self.drawSolution()
 
-            pylab.subplot(122)        
+            pylab.subplot(222)        
             self.drawV()
+
+            pylab.subplot(223)        
+            self.drawMainSolution()
+
+            pylab.subplot(224)        
+            self.drawMainError()
+
 
             pylab.suptitle(r"multigrid solution of $u_{xx} + u_{yy} = -2 [(1-6x^2)y^2(1-y^2) + (1-6y^2)x^2(1-x^2)]$",
                            fontsize=18)

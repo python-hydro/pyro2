@@ -46,7 +46,7 @@ ny = 64
 a = multigrid_vis.ccMG2d(nx, ny,
                      xlBCtype="dirichlet", ylBCtype="dirichlet",
                      xrBCtype="dirichlet", yrBCtype="dirichlet",
-                     verbose=0)
+                     verbose=0, trueFunc=true)
 
 pylab.ion()
 
