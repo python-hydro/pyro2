@@ -197,7 +197,7 @@ class grid2d:
         self.yr = (numpy.arange(ny+2*ng) + 1.0 - ng)*self.dy + ymin
         self.y = 0.5*(self.yl + self.yr)
 
-        # 2-d versions of the zone coordinates
+        # 2-d versions of the zone coordinates (replace with meshgrid?)
         x2d = numpy.repeat(self.x, 2*self.ng+self.ny)
         x2d.shape = (2*self.ng+self.nx, 2*self.ng+self.ny)
         self.x2d = x2d
