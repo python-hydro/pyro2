@@ -12,15 +12,15 @@ n_out = 100
 
 [mesh]
 nx = 128
-ny = 256
+ny = 384
 xmax = 1.0
-ymax = 2.0
+ymax = 3.0
 
 xlboundary = periodic
 xrboundary = periodic
 
 ylboundary = reflect
-yrboundary = outflow
+yrboundary = reflect
 
 
 [rt]
