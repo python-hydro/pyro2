@@ -1,0 +1,33 @@
+# simple inputs files for the four-corner problem.
+
+[driver]
+max_steps = 1000
+tmax = 100.0
+
+
+[io]
+basename = rt_
+n_out = 100
+
+
+[mesh]
+nx = 128
+ny = 256
+xmax = 1.0
+ymax = 2.0
+
+xlboundary = periodic
+xrboundary = periodic
+
+ylboundary = reflect
+yrboundary = outflow
+
+
+[rt]
+
+
+
+[compressible]
+grav = -1.0
+
+limiter = 2
