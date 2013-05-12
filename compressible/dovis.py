@@ -143,7 +143,9 @@ def dovis(myData, n):
 
     pylab.figtext(0.05,0.0125, "t = %10.5f" % myData.t)
 
-    #fig.tight_layout()
+    try: fig.tight_layout()
+    except:
+        pass
 
 
     pylab.draw()
