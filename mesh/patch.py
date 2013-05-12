@@ -37,6 +37,23 @@ import numpy
 import pickle
 from util import msg
 
+valid = ["outflow", "periodic", 
+         "reflect", "reflect-even", "reflect-odd",
+         "dirichlet", "neumann"]
+
+extBCs = {}
+
+def defineBC(type, function):
+    """ 
+    use this to extend the types of boundary conditions supported
+    on a solver-by-solver basis.  Here we pass in the reference to
+    a function that can be called with the data that needs to be
+    filled. 
+    """
+
+    valid.append(type)
+    extBCs[type] = function
+
 
 class bcObject:
     """
@@ -48,10 +65,6 @@ class bcObject:
                   xlb="outflow", xrb="outflow", 
                   ylb="outflow", yrb="outflow",
                   oddReflectDir=""):
-
-        valid = ["outflow", "periodic", 
-                 "reflect", "reflect-even", "reflect-odd",
-                 "dirichlet", "neumann"]
 
         # note: "reflect" is ambiguous and will be converted into
         # either reflect-even (the default) or reflect-odd if
@@ -532,7 +545,12 @@ class ccData2d:
             while j < self.grid.jlo:
                 self.data[n,:,j] = self.data[n,:,self.grid.jhi-self.grid.ng+j+1]
                 j += 1
-                
+
+        else:
+            if self.BCs[name].ylb in extBCs.keys():
+
+                extBCs[self.BCs[name].ylb](self.BCs[name].ylb, "ylb", name, self)
+
 
         # +y boundary
         if (self.BCs[name].yrb == "outflow" or
@@ -570,6 +588,11 @@ class ccData2d:
             while j < 2*self.grid.ng + self.grid.ny:
                 self.data[n,:,j] = self.data[n,:,j-self.grid.jhi-1+self.grid.ng]
                 j += 1
+
+        else:
+            if self.BCs[name].yrb in extBCs.keys():
+
+                extBCs[self.BCs[name].yrb](self.BCs[name].yrb, "yrb", name, self)
 
 
     def restrict(self, varname):
