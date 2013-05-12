@@ -24,7 +24,7 @@ yrboundary = reflect
 
 
 [rt]
-
+amp = 0.5
 
 
 [compressible]
