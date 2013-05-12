@@ -1,6 +1,7 @@
 import numpy
 import mesh.patch as patch
 from util import runparams
+import BC
 
 def initialize():
     """ 
@@ -24,6 +25,11 @@ def initialize():
 
     # create the variables
     myData = patch.ccData2d(myGrid)
+
+
+    # define solver specific boundary condition routines
+    patch.defineBC("hse", BC.user)
+
 
     # first figure out the boundary conditions.  Note: the action
     # can depend on the variable (for reflecting BCs)
