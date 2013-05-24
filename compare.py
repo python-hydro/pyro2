@@ -20,9 +20,6 @@ def compare(myg1, myd1, myg2, myd2):
     if (not myg1 == myg2): 
         return "gridbad"
 
-    print " "
-    print "grids agree"
-
     # compare the data
     if (not myd1.vars == myd2.vars):
         return "namesbad"

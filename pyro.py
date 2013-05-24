@@ -227,16 +227,23 @@ pf.end()
 # are we comparing to a benchmark?
 if compBench:
     compFile = solverName + "/tests/" + basename + "%4.4d" % (n)
-    print "comparing to: ", compFile
+    msg.warning("comparing to: %s " % (compFile) )
     benchGrid, benchData = patch.read(compFile)
 
     result = compare.compare(myGrid, myData, benchGrid, benchData)
     
     if result == 0:
-        msg.success("results match benchmark")
+        msg.success("results match benchmark\n")
     else:
-        msg.fail("ERROR: " + compare.errors[result])
+        msg.fail("ERROR: " + compare.errors[result] + "\n")
 
+
+# are we storing a benchmark?
+if makeBench:
+    benchFile = solverName + "/tests/" + basename + "%4.4d" % (n)
+    msg.warning("storing new benchmark: %s\n " % (benchFile) )
+    myData.write(benchFile)
+    
 
 runparams.printUnusedParams()
 profile.timeReport()
