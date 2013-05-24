@@ -1,3 +1,11 @@
+# these defaults seem to be equivalent to Configuration 3 from
+# Shulz-Rinne et al. SIAM J. Sci. Comput., 14, 6, 1394-1414, 1993
+#
+# Also, with the numbers written out, this is Configuration 3 from
+# Lax and Liu, SIAM J. Sci. Comput., 19, 2, 319-340, 1998
+#
+# See also LeVeque JCP 131, 327-353, 1997
+
 [quadrant]
 rho1 = 1.5                 ; quadrant 1 initial density
 u1 = 0.0                   ; quadrant 1 initial x-velocity
