@@ -1,5 +1,5 @@
 [quadrant]
-rho1 = 1.4                 ; quadrant 1 initial density
+rho1 = 1.5                 ; quadrant 1 initial density
 u1 = 0.0                   ; quadrant 1 initial x-velocity
 v1 = 0.0                   ; quadrant 1 initial y-velocity
 p1 = 1.5                   ; quadrant 1 initial pressure
