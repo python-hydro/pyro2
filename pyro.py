@@ -35,15 +35,28 @@ if len(sys.argv) == 1:
     sys.exit(2)
 
 
-try: opts, next = getopt.getopt(sys.argv[1:], "i")
+# commandline argument defaults
+makeBench = 0
+compareBench = 0
+
+try: opts, next = getopt.getopt(sys.argv[1:], "", 
+                                ["make_benchmark", "compare_benchmark"])
+
 except getopt.GetoptError:
     msg.fail("invalid calling sequence")
     sys.exit(2)
 
 for o, a in opts:
 
-    if o == "-i":
-        print "-i passed"
+    if o == "--make_benchmark":
+        makeBench = 1
+
+    if o == "--compare_benchmark":
+        compBench = 1
+
+if makeBench and compBench:
+    msg.fail("ERROR: cannot have both --make_benchmark and --compare_benchmark")
+
 
 try: solverName = next[0]
 except IndexError:
@@ -208,6 +221,15 @@ while (myData.t < tmax and n < max_steps):
         pfd.end()
 
 pf.end()
+
+# are we comparing to a benchmark?
+if compBench:
+    compFile = solverName + "/tests/" + basename + "%4.4d" % (n)
+    print "comparing to: ", compFile
+    benchGrid, benchData = patch.read(compFile)
+
+    result = compare.compare(myGrid, myData, benchGrid, benchData)
+
 
 runparams.printUnusedParams()
 profile.timeReport()

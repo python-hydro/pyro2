@@ -9,47 +9,67 @@ usage = """
       usage: ./compare.py file1 file2
 """
 
-def abort(string):
-    print string
-    sys.exit(2)
+errors = {"gridbad": "grids don't agree",
+          "namesbad": "variable lists don't agree",
+          "varerr": "one or more variables don't agree"}
 
 
-if not len(sys.argv) == 3:
-    print usage
-    sys.exit(2)
+def compare(myg1, myd1, myg2, myd2):
+
+    # compare the grids
+    if (not myg1 == myg2): 
+        return "gridbad"
+
+    print " "
+    print "grids agree"
+
+    # compare the data
+    if (not myd1.vars == myd2.vars):
+        return "namesbad"
 
 
-file1 = sys.argv[1]
-file2 = sys.argv[2]
+    print " "
+    print "variable comparisons:"
 
-myg1, myd1 = mesh.patch.read(file1)
-myg2, myd2 = mesh.patch.read(file2)
+    result = 0
 
+    n = 0
+    while (n < myd1.nvar):
 
-# compare the grids
-if (not myg1 == myg2): abort("ERROR: grids don't agree")
+        d1 = myd1.getVarPtr(myd1.vars[n])
+        d2 = myd2.getVarPtr(myd2.vars[n])
 
-# compare the data
-if (not myd1.vars == myd2.vars): abort("ERROR: variable lists doesn't agree")
+        err = numpy.max(numpy.abs(d1[myg1.ilo:myg1.ihi+1,myg1.jlo:myg1.jhi+1] -
+                                  d2[myg2.ilo:myg2.ihi+1,myg2.jlo:myg2.jhi+1]))
 
-print " "
-print "grids agree"
+        print "%20s error = %20.10g" % (myd1.vars[n], err)
 
-print " "
-print "variable comparisons:"
+        if not err == 0:
+            result = "varerr"
 
-n = 0
-while (n < myd1.nvar):
+        n += 1
 
-    d1 = myd1.getVarPtr(myd1.vars[n])
-    d2 = myd2.getVarPtr(myd2.vars[n])
-
-    err = numpy.max(numpy.abs(d1[myg1.ilo:myg1.ihi+1,myg1.jlo:myg1.jhi+1] -
-                              d2[myg2.ilo:myg2.ihi+1,myg2.jlo:myg2.jhi+1]))
-
-    print "%20s error = %20.10g" % (myd1.vars[n], err)
-
-    n += 1
+    return result
 
 
+if __name__== "__main__":
 
+    if not len(sys.argv) == 3:
+        print usage
+        sys.exit(2)
+
+    file1 = sys.argv[1]
+    file2 = sys.argv[2]
+
+    myg1, myd1 = mesh.patch.read(file1)
+    myg2, myd2 = mesh.patch.read(file2)
+
+    result = compare(myg1, myd1, myg2, myd2)
+
+    if (result == 0):
+        print "SUCCESS: files agree"
+    else:
+        print "ERROR: ", errors[result]
+
+
+    
