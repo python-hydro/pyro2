@@ -9,6 +9,8 @@ from util import profile
 from util import runparams
 import os
 from util import msg
+import compare
+import mesh.patch as patch
 
 usage = """
        usage:
@@ -37,7 +39,7 @@ if len(sys.argv) == 1:
 
 # commandline argument defaults
 makeBench = 0
-compareBench = 0
+compBench = 0
 
 try: opts, next = getopt.getopt(sys.argv[1:], "", 
                                 ["make_benchmark", "compare_benchmark"])
@@ -229,6 +231,11 @@ if compBench:
     benchGrid, benchData = patch.read(compFile)
 
     result = compare.compare(myGrid, myData, benchGrid, benchData)
+    
+    if result == 0:
+        msg.success("results match benchmark")
+    else:
+        msg.fail("ERROR: " + compare.errors[result])
 
 
 runparams.printUnusedParams()
