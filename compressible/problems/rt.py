@@ -62,9 +62,9 @@ def initData(myPatch):
         j += 1
 
 
-    ymom[:,:] = amp*numpy.sin(2.0*math.pi*myg.x2d/(myg.xmax-myg.xmin))*numpy.exp(-(myg.y2d-ycenter)**2/sigma**2)
+    ymom[:,:] = amp*numpy.cos(2.0*math.pi*myg.x2d/(myg.xmax-myg.xmin))*numpy.exp(-(myg.y2d-ycenter)**2/sigma**2)
 
-    ymom *= dens*ymom
+    ymom *= dens
 
     # set the energy (P = cs2*dens)
     ener[:,:] = p[:,:]/(gamma - 1.0) + \

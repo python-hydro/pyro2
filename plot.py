@@ -11,10 +11,11 @@ def makeplot(myd, solverName):
 
     exec 'import ' + solverName + ' as solver'
 
-    pylab.figure(num=1, figsize=(6.5,5.25), dpi=100, facecolor='w')
+    pylab.figure(num=1, figsize=(8,4.5), dpi=100, facecolor='w')
 
     solver.dovis(myd, 0)
     pylab.savefig("plot.png")
+    pylab.savefig("plot.eps")
     pylab.show()
 
 
