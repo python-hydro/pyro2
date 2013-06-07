@@ -122,15 +122,15 @@ while (n < len(sys.argv)):
     bins, phi_exact, phi_bin = process(file)
         
     # plot
-    ax.plot(bins, phi_exact)
+    ax.plot(bins, phi_exact, color="0.5")
     ax.scatter(bins, phi_bin, marker="x", s=7, color="r")
 
     n += 1
 
-ax.set_xlim(0,0.7)
+ax.set_xlim(0,0.4)
 ax.set_xlabel(r"$r$")
 
-ax.set_ylim(1.,1.1)
+ax.set_ylim(1.,1.05)
 ax.set_ylabel(r"$\phi$")
 
 fig.set_size_inches(5.0,5.0)

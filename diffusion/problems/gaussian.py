@@ -52,3 +52,13 @@ def initData(myData):
 
     
                              
+def finalize():
+    """ print out any information to the user at the end of the run """
+
+    msg = """
+          The solution can be compared to the analytic solution with
+          the script analysis/gauss_diffusion_compare.py
+          """
+
+    print msg
+
