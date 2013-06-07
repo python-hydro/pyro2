@@ -26,7 +26,10 @@ def plot_convergence():
 
     pylab.xlim(8,512)
 
+    pylab.tight_layout()
+
     pylab.savefig("mg_converge.png", bbox_inches="tight")
+    pylab.savefig("mg_converge.eps", bbox_inches="tight")
 
     
 
