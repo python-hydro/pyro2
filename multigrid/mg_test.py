@@ -38,8 +38,8 @@ def f(x,y):
 
                 
 # test the multigrid solver
-nx = 64
-ny = 64
+nx = 256
+ny = nx
 
 
 # create the multigrid object
