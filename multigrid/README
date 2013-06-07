@@ -1,0 +1,4 @@
+mg_test.py provides a simple test of the multigrid solver.
+
+Make sure that the main pyro directory is in your PYTHONPATH in order
+for this to run.
