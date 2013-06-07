@@ -71,8 +71,6 @@ def initData(myPatch):
         0.5*(xmom[:,:]**2 + ymom[:,:]**2)/dens[:,:]
 
 
-        
-    
-
-    
-                             
+def finalize():
+    """ print out any information to the user at the end of the run """
+    pass

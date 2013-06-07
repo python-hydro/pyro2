@@ -224,6 +224,7 @@ while (myData.t < tmax and n < max_steps):
 
 pf.end()
 
+
 # are we comparing to a benchmark?
 if compBench:
     compFile = solverName + "/tests/" + basename + "%4.4d" % (n)
@@ -247,3 +248,5 @@ if makeBench:
 
 runparams.printUnusedParams()
 profile.timeReport()
+
+exec problemName + '.finalize()'

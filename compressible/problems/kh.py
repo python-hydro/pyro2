@@ -81,5 +81,6 @@ def initData(myPatch):
         i += 1
 
 
-
-
+def finalize():
+    """ print out any information to the user at the end of the run """
+    pass
