@@ -3,6 +3,7 @@ from util import runparams
 import mesh.patch as patch
 import numpy
 from util import msg
+import math
 
 def initData(myPatch):
     """ initialize the sedov problem """
@@ -33,7 +34,7 @@ def initData(myPatch):
     r_init = runparams.getParam("sedov.r_init")
 
     gamma = runparams.getParam("eos.gamma")
-    pi = 3.14159
+    pi = math.pi
 
     xmin = runparams.getParam("mesh.xmin")
     xmax = runparams.getParam("mesh.xmax")
