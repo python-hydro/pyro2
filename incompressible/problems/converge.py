@@ -54,4 +54,11 @@ def initData(myPatch):
                              
 def finalize():
     """ print out any information to the user at the end of the run """
-    pass
+
+    msg = """
+          Comparisons to the analytic solution can be done using
+          analysis/incomp_converge_error.py
+          """
+
+    print msg
+
