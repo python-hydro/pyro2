@@ -1,0 +1,26 @@
+The latest version of pyro is always available at:
+
+http://bender.astro.sunysb.edu/hydro_by_example/
+
+To get started:
+
+ -- make sure you have numpy, f2py, and matplotlib installed on your machine
+  
+    (on a Fedora box, do: yum install numpy numpy-f2py python-matplotlib)
+
+ -- set the PYTHONPATH environment to point to the pyro2/ directory in 
+    your .bashrc (or .tcshrc, depending on which shell you use)
+
+ -- build the Fortran source.  In pyro2/, type:
+  
+      ./mk.sh
+
+ -- run a quick test of the advection solver:
+
+      ./pyro.py advection smooth inputs.smooth
+
+
+Join the mailing list to say up-to-date:
+
+http://bender.astro.sunysb.edu/mailman/listinfo/pyro-help
+
