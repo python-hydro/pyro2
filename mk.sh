@@ -1,5 +1,12 @@
 #!/bin/sh
 
+# this script builds each of the shared-object libraries that
+# interface Fortran with python for some lower-level pyro routines.
+# f2py is used.  In each case, we simply 'cd' into the appropriate
+# directory and do 'make'.  In case of a failure, you can try manually
+# building the routine yourself with the 1-line f2py command in the
+# makefile.
+
 # reconstruction library
 echo "making reconstruction_f.so..."
 cd mesh
