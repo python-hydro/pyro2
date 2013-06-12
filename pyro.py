@@ -258,6 +258,9 @@ while (myData.t < tmax and n < max_steps):
 pf.end()
 
 
+#-----------------------------------------------------------------------------
+# benchmarks (for regression testing)
+#-----------------------------------------------------------------------------
 # are we comparing to a benchmark?
 if compBench:
     compFile = solverName + "/tests/" + basename + "%4.4d" % (n)
@@ -279,6 +282,9 @@ if makeBench:
     myData.write(benchFile)
     
 
+#-----------------------------------------------------------------------------
+# final reports
+#-----------------------------------------------------------------------------
 runparams.printUnusedParams()
 profile.timeReport()
 
