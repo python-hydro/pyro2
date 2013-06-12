@@ -15,8 +15,41 @@ import mesh.patch as patch
 usage = """
        usage:
 
-      ./pyro [options] <solver name> <problem name> <input file>
-"""
+      ./pyro [options] <solver> <problem> <input file> [runtime parameters]
+
+      <solver> is one of:
+          advection
+          compressible
+          diffusion
+          incompressible
+
+      <problem> is one of the problems defined in the solver's problems/
+      sub-directory
+
+      <input file> is the inputs file to use for that problem.  You can
+      refer to a file in the solver's problem directory directly, without
+      giving the path
+
+
+      [options] include:
+         --make_benchmark : store the output of this run as the new
+                            reference solution in the solver's tests/
+                            sub-directory
+
+         --compare_benchmark : compare the final result of this run
+                               to the stored benchmark for this problem
+                               (looking in the solver's tests/ sub-
+                               directory).
+
+      [runtime parameters] override any of the runtime defaults of
+      parameters specified in the inputs file.  For instance, to turn
+      off runtime visualization, add:
+
+         vis.dovis=0
+
+      to the end of the commandline.
+
+      """
 
 
 msg.bold('pyro ...')
