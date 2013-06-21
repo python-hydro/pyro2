@@ -56,6 +56,9 @@ def dovis(myData, n):
         if (L_x > 4*L_y):
             shrink = 0.75
 
+        onLeft = list(range(nvar))
+
+
     elif (L_y > 2*L_x):
 
         # we want 4 columns:
@@ -67,6 +70,8 @@ def dovis(myData, n):
             sparseX = 1
             allYlabel = 0
 
+        onLeft = [0]
+
     else:
         # 2x2 grid of plots with 
         #
@@ -74,6 +79,10 @@ def dovis(myData, n):
         #    p     e
         fig, axes = pylab.subplots(nrows=2, ncols=2, num=1)
         pylab.subplots_adjust(hspace=0.25)
+
+        onLeft = [0,2]
+
+
 
 
     ax = axes.flat[0]
@@ -86,6 +95,9 @@ def dovis(myData, n):
     ax.set_ylabel("y")
     ax.set_title(r"$\rho$")
 
+    if not 0 in onLeft:
+        ax.yaxis.offsetText.set_visible(False)
+        
     if sparseX:
         ax.xaxis.set_major_locator(pylab.MaxNLocator(3))
 
@@ -103,6 +115,10 @@ def dovis(myData, n):
     if (allYlabel): ax.set_ylabel("y")
     ax.set_title("U")
 
+    if not 1 in onLeft:
+        ax.get_yaxis().set_visible(False)
+        ax.yaxis.offsetText.set_visible(False)
+
     if sparseX:
         ax.xaxis.set_major_locator(pylab.MaxNLocator(3))
 
@@ -118,6 +134,10 @@ def dovis(myData, n):
     ax.set_xlabel("x")
     if (allYlabel): ax.set_ylabel("y")
     ax.set_title("p")
+
+    if not 2 in onLeft:
+        ax.get_yaxis().set_visible(False)
+        ax.yaxis.offsetText.set_visible(False)
 
     if sparseX:
         ax.xaxis.set_major_locator(pylab.MaxNLocator(3))
@@ -135,6 +155,10 @@ def dovis(myData, n):
     if (allYlabel): ax.set_ylabel("y")
     ax.set_title("e")
 
+    if not 3 in onLeft:
+        ax.get_yaxis().set_visible(False)
+        ax.yaxis.offsetText.set_visible(False)
+
     if sparseX:
         ax.xaxis.set_major_locator(pylab.MaxNLocator(3))
 
@@ -143,9 +167,9 @@ def dovis(myData, n):
 
     pylab.figtext(0.05,0.0125, "t = %10.5f" % myData.t)
 
-    try: fig.tight_layout()
-    except:
-        pass
+    #try: fig.tight_layout()
+    #except:
+    #    pass
 
 
     pylab.draw()
