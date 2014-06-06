@@ -1,5 +1,5 @@
 # pyro
-* A simple python-based tutorial on computational methods for hydrodynamics *
+*A simple python-based tutorial on computational methods for hydrodynamics*
 
 
 The latest version of pyro is always available at:
@@ -15,20 +15,20 @@ http://bender.astro.sunysb.edu/hydro_by_example/
 
 ## Getting Started
 
-  -- make sure you have numpy, f2py, and matplotlib installed on your
-     machine
+  - make sure you have numpy, f2py, and matplotlib installed on your
+    machine
    
      (on a Fedora box, do: yum install numpy numpy-f2py
      python-matplotlib)
 
-  -- set the PYTHONPATH environment to point to the pyro2/ directory
-     in your .bashrc (or .tcshrc, depending on which shell you use)
+  - set the PYTHONPATH environment to point to the pyro2/ directory
+    in your .bashrc (or .tcshrc, depending on which shell you use)
 
-  -- build the Fortran source.  In pyro2/, type:
+  - build the Fortran source.  In pyro2/, type:
   
       ./mk.sh
 
-  -- run a quick test of the advection solver:
+  - run a quick test of the advection solver:
 
       ./pyro.py advection smooth inputs.smooth
 
