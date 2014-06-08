@@ -75,15 +75,12 @@ print " L2 error from true solution = %g\n rel. err from previous cycle = %g\n n
 
 
 # plot it
-#pylab.figure(num=1, figsize=(2.10,2.10), dpi=100, facecolor='w')
 pylab.figure(num=1, figsize=(5.0,5.0), dpi=100, facecolor='w')
 
 pylab.imshow(numpy.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]), 
           interpolation="nearest", origin="lower",
           extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
-#pylab.axis("off")
-#pylab.subplots_adjust(bottom=0.0, top=1.0, left=0.0, right=1.0)
 
 pylab.xlabel("x")
 pylab.ylabel("y")
