@@ -14,6 +14,8 @@ def dovis(myData, n):
     ymom = myData.getVarPtr("y-momentum")
     ener = myData.getVarPtr("energy")
 
+    nvar = 4
+    
     # get the velocities
     u = xmom/dens
     v = ymom/dens
