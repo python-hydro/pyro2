@@ -7,37 +7,21 @@
 # building the routine yourself with the 1-line f2py command in the
 # makefile.
 
-# reconstruction library
-echo "making reconstruction_f.so..."
-cd mesh
-make >> /dev/null
-err=$?
-if [ $err -ne 0 ]; then
-    echo "Error making reconstruction_f.so"
+function build_lib  # args: directory libname
+{
+  echo "making $2"
+  cd $1
+  make >> /dev/null
+  err=$?
+  if [ $err -ne 0 ]; then
+    echo "Error making $2"
     exit $err
-fi
-cd ..
+  fi
+  cd ..
+}
 
-# compressible interface stuff
-echo "making interface_f.so..."
-cd compressible
-make >> /dev/null
-err=$?
-if [ $err -ne 0 ]; then
-    echo "Error making interface_f.so"
-    exit $err
-fi
-cd ..
-
-# incompressible interface stuff
-echo "making incomp_interface_f.so..."
-cd incompressible
-make >> /dev/null
-err=$?
-if [ $err -ne 0 ]; then
-    echo "Error making incomp_interface_f.so"
-    exit $err
-fi
-cd ..
+build_lib mesh reconstruction_f.so
+build_lib compressible interface_f.so
+build_lib  incompressible incomp_interface_f.so
 
 echo "done"
