@@ -15,22 +15,43 @@ http://bender.astro.sunysb.edu/hydro_by_example/
 
 ## Getting Started
 
-  - make sure you have numpy, f2py, and matplotlib installed on your
-    machine
-   
-     (on a Fedora box, do: yum install numpy numpy-f2py
-     python-matplotlib)
+  - There are a few steps to take to get things running. You need to
+     make sure you have numpy, f2py, and matplotlib installed. On a
+     Fedora system, this can be accomplished by doing:
 
-  - set the PYTHONPATH environment to point to the pyro2/ directory
-    in your .bashrc (or .tcshrc, depending on which shell you use)
+       yum install numpy numpy-f2py python-matplotlib python-matplotlib-tk
 
-  - build the Fortran source.  In pyro2/, type:
-  
-      ./mk.sh
+  - You also need to make sure gfortran is present on you system. On
+     a Fedora system, it can be installed as: 
 
-  - run a quick test of the advection solver:
+       yum install gcc-gfortran 
 
-      ./pyro.py advection smooth inputs.smooth
+  - Not all matplotlib backends allow for the interactive plotting as
+     pyro is run. One that does is the TkAgg backend. This can be made
+     the default by creating a file ~/.matplotlib/matplotlibrc with
+     the content:
+
+       backend: TkAgg 
+
+     You can check what backend is your current default in python via: 
+
+       import matplotlib.pyplot 
+       print matplotlib.pyplot.get_backend() 
+
+  - The remaining steps are: 
+
+      * Set the PYTHONPATH environment variable to point to the pyro2/ directory.
+
+      * Build the Fortran source. In pyro2/ type 
+
+          ./mk.sh 
+
+      * Run a quick test of the advection solver: 
+
+          ./pyro.py advection smooth inputs.smooth 
+
+        you should see a graphing window pop up with a smooth pulse
+        advecting diagonally through the periodic domain.
 
 
 ## Working With Data
