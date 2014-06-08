@@ -1,0 +1,26 @@
+This is a simple list of the improvements we wish to make to pyro.
+
+
+coding:
+
+  -- rewrite to adhere to python style guidelines
+
+  -- docstrings should be added everywhere possible
+
+  -- output library w/ colors
+ 
+     WARNING()
+     ERROR()
+
+  -- is there a way to define a range like ii = [myg.ilo:myg.ihi+1]
+     and then do something like ii+1 to get [myg.ilo+1:myg.ihi+2]?
+
+
+solvers:
+
+  -- Burgers equation (viscous and inviscid)
+
+
+infrastructure:
+
+  -- well-defined unit tests
