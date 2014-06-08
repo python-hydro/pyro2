@@ -1,6 +1,7 @@
 *.pyc
 *.so
 *.png
+*.eps
 *~
 
 inputs.auto
