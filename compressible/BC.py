@@ -9,16 +9,16 @@ some work will necessarily be repeated.
 import eos
 from util import msg, runparams
 
-def user(bcName, bcEdge, variable, myData):
+def user(bcName, bcEdge, variable, my_data):
 
-    dens = myData.getVarPtr("density")
-    xmom = myData.getVarPtr("x-momentum")
-    ymom = myData.getVarPtr("y-momentum")
-    ener = myData.getVarPtr("energy")
+    dens = my_data.getVarPtr("density")
+    xmom = my_data.getVarPtr("x-momentum")
+    ymom = my_data.getVarPtr("y-momentum")
+    ener = my_data.getVarPtr("energy")
 
     grav = runparams.getParam("compressible.grav")
 
-    myg = myData.grid
+    myg = my_data.grid
 
     if (bcName == "hse"):
         

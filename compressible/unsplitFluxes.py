@@ -132,7 +132,7 @@ import mesh.reconstruction_f as reconstruction_f
 from util import profile, runparams
 import vars
 
-def unsplitFluxes(myData, dt):
+def unsplitFluxes(my_data, dt):
     """
     unsplitFluxes returns the fluxes through the x and y interfaces by
     doing an unsplit reconstruction of the interface values and then
@@ -146,7 +146,7 @@ def unsplitFluxes(myData, dt):
     pf = profile.timer("unsplitFluxes")
     pf.begin()
     
-    myg = myData.grid
+    myg = my_data.grid
 
 
     #=========================================================================
@@ -154,10 +154,10 @@ def unsplitFluxes(myData, dt):
     #=========================================================================
     # Q = (rho, u, v, p)
 
-    dens = myData.getVarPtr("density")
-    xmom = myData.getVarPtr("x-momentum")
-    ymom = myData.getVarPtr("y-momentum")
-    ener = myData.getVarPtr("energy")
+    dens = my_data.getVarPtr("density")
+    xmom = my_data.getVarPtr("x-momentum")
+    ymom = my_data.getVarPtr("y-momentum")
+    ener = my_data.getVarPtr("energy")
 
     r = dens
 
@@ -238,8 +238,8 @@ def unsplitFluxes(myData, dt):
                     
 
     # transform interface states back into conserved variables
-    U_xl = numpy.zeros((myg.qx, myg.qy, myData.nvar),  dtype=numpy.float64)
-    U_xr = numpy.zeros((myg.qx, myg.qy, myData.nvar),  dtype=numpy.float64)
+    U_xl = numpy.zeros((myg.qx, myg.qy, my_data.nvar),  dtype=numpy.float64)
+    U_xr = numpy.zeros((myg.qx, myg.qy, my_data.nvar),  dtype=numpy.float64)
 
     U_xl[:,:,vars.idens] = V_l[:,:,vars.irho]
     U_xl[:,:,vars.ixmom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iu]
@@ -282,8 +282,8 @@ def unsplitFluxes(myData, dt):
 
 
     # transform interface states back into conserved variables
-    U_yl = numpy.zeros((myg.qx, myg.qy, myData.nvar),  dtype=numpy.float64)
-    U_yr = numpy.zeros((myg.qx, myg.qy, myData.nvar),  dtype=numpy.float64)
+    U_yl = numpy.zeros((myg.qx, myg.qy, my_data.nvar),  dtype=numpy.float64)
+    U_yr = numpy.zeros((myg.qx, myg.qy, my_data.nvar),  dtype=numpy.float64)
 
     U_yl[:,:,vars.idens] = V_l[:,:,vars.irho]
     U_yl[:,:,vars.ixmom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iu]

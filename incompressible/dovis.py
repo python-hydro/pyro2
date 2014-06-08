@@ -3,16 +3,16 @@ import pylab
 
 from util import runparams
 
-def dovis(myData, n):
+def dovis(my_data, n):
 
     pylab.clf()
 
     pylab.rc("font", size=10)
 
-    u = myData.getVarPtr("x-velocity")
-    v = myData.getVarPtr("y-velocity")
+    u = my_data.getVarPtr("x-velocity")
+    v = my_data.getVarPtr("y-velocity")
 
-    myg = myData.grid
+    myg = my_data.grid
 
     fig, axes = pylab.subplots(nrows=2, ncols=2, num=1)
     pylab.subplots_adjust(hspace=0.25)
@@ -92,7 +92,7 @@ def dovis(myData, n):
 
 
 
-    pylab.figtext(0.05,0.0125, "t = %10.5f" % myData.t)
+    pylab.figtext(0.05,0.0125, "t = %10.5f" % my_data.t)
 
     pylab.draw()
 

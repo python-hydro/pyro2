@@ -14,7 +14,7 @@ step we actually take.
 
 SMALL = 1.e-12
 
-def timestep(myData):
+def timestep(my_data):
     """ 
     compute the CFL timestep for the current patch.
     """
@@ -23,10 +23,10 @@ def timestep(myData):
 
 
     # get the variables we need                                                 
-    dens = myData.getVarPtr("density")
-    xmom = myData.getVarPtr("x-momentum")
-    ymom = myData.getVarPtr("y-momentum")
-    ener = myData.getVarPtr("energy")
+    dens = my_data.getVarPtr("density")
+    xmom = my_data.getVarPtr("x-momentum")
+    ymom = my_data.getVarPtr("y-momentum")
+    ener = my_data.getVarPtr("energy")
 
 
     # we need to compute the pressure
@@ -44,8 +44,8 @@ def timestep(myData):
 
 
     # the timestep is min(dx/(|u| + cs), dy/(|v| + cs))
-    xtmp = myData.grid.dx/(abs(u) + cs)
-    ytmp = myData.grid.dy/(abs(v) + cs)
+    xtmp = my_data.grid.dx/(abs(u) + cs)
+    ytmp = my_data.grid.dy/(abs(v) + cs)
 
     dt = cfl*min(xtmp.min(), ytmp.min())
 

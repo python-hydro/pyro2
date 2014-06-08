@@ -6,7 +6,7 @@ import multigrid.multigrid as multigrid
 import timestep
 from util import runparams
 
-def preevolve(myData):
+def preevolve(my_data):
     """ 
     preevolve is called before we being the timestepping loop.  For
     the incompressible solver, this does an initial projection on the
@@ -15,13 +15,13 @@ def preevolve(myData):
     before this evolve.
     """
 
-    myg = myData.grid
+    myg = my_data.grid
 
-    u = myData.getVarPtr("x-velocity")
-    v = myData.getVarPtr("y-velocity")
+    u = my_data.getVarPtr("x-velocity")
+    v = my_data.getVarPtr("y-velocity")
 
-    myData.fillBC("x-velocity")
-    myData.fillBC("y-velocity")
+    my_data.fillBC("x-velocity")
+    my_data.fillBC("y-velocity")
 
 
     # 1. do the initial projection.  This makes sure that our original
@@ -57,9 +57,9 @@ def preevolve(myData):
     # solve
     MG.solve(rtol=1.e-10)
 
-    # store the solution in our myData object -- include a single
+    # store the solution in our my_data object -- include a single
     # ghostcell
-    phi = myData.getVarPtr("phi")
+    phi = my_data.getVarPtr("phi")
     solution = MG.getSolution()
 
     phi[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2] = \
@@ -82,15 +82,15 @@ def preevolve(myData):
     v[:,:] -= gradp_y
 
     # fill the ghostcells
-    myData.fillBC("x-velocity")
-    myData.fillBC("y-velocity")
+    my_data.fillBC("x-velocity")
+    my_data.fillBC("y-velocity")
 
 
     # 2. now get an approximation to gradp at n-1/2 by going through the
     # evolution.
 
     # store the current solution
-    copyData = patch.ccDataClone(myData)
+    copyData = patch.ccDataClone(my_data)
 
     # get the timestep
     dt = timestep.timestep(copyData)
@@ -99,8 +99,8 @@ def preevolve(myData):
     evolve.evolve(copyData, dt)
 
     # update gradp_x and gradp_y in our main data object
-    gp_x = myData.getVarPtr("gradp_x")
-    gp_y = myData.getVarPtr("gradp_y")
+    gp_x = my_data.getVarPtr("gradp_x")
+    gp_y = my_data.getVarPtr("gradp_y")
 
     new_gp_x = copyData.getVarPtr("gradp_x")
     new_gp_y = copyData.getVarPtr("gradp_y")

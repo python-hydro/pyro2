@@ -109,9 +109,9 @@ except IndexError:
     msg.fail("ERROR: parameter file not specified on command line")
 
 
-otherCmds = []
+other_commands = []
 if (len(next) > 3):
-    otherCmds = next[3:]
+    other_commands = next[3:]
 
 # actually import the solver-specific stuff under the 'solver' namespace
 exec 'import ' + solverName + ' as solver'
@@ -138,7 +138,7 @@ if (not os.path.isfile(paramFile)):
 runparams.LoadParams(paramFile, noNew=1)
 
 # and any commandline overrides
-runparams.CommandLineParams(otherCmds)
+runparams.CommandLineParams(other_commands)
 
 # write out the inputs.auto
 runparams.PrintParamFile()
@@ -149,19 +149,19 @@ runparams.PrintParamFile()
 #-----------------------------------------------------------------------------
 
 # initialize the grid structure
-myGrid, myData = solver.initialize()
+my_grid, my_data = solver.initialize()
     
 
 # initialize the data
 exec 'from ' + solverName + '.problems import *'
 
-exec problemName + '.initData(myData)'
+exec problemName + '.initData(my_data)'
 
 
 #-----------------------------------------------------------------------------
 # pre-evolve
 #-----------------------------------------------------------------------------
-solver.preevolve(myData)
+solver.preevolve(my_data)
 
 
 #-----------------------------------------------------------------------------
@@ -177,30 +177,30 @@ fix_dt = runparams.getParam("driver.fix_dt")
 pylab.ion()
 
 n = 0
-myData.t = 0.0
+my_data.t = 0.0
 
 # output the 0th data
 basename = runparams.getParam("io.basename")
-myData.write(basename + "%4.4d" % (n))
+my_data.write(basename + "%4.4d" % (n))
 
 dovis = runparams.getParam("vis.dovis")
 if (dovis): 
     pylab.figure(num=1, figsize=(8,6), dpi=100, facecolor='w')
-    solver.dovis(myData, 0)
+    solver.dovis(my_data, 0)
     
 
 nout = 0
 
-while (myData.t < tmax and n < max_steps):
+while (my_data.t < tmax and n < max_steps):
 
     # fill boundary conditions
     pfb = profile.timer("fillBC")
     pfb.begin()
-    myData.fillBCAll()
+    my_data.fillBCAll()
     pfb.end()
 
     # get the timestep
-    dt = solver.timestep(myData)
+    dt = solver.timestep(my_data)
     if (fix_dt > 0.0):
         dt = fix_dt
     else:
@@ -211,31 +211,31 @@ while (myData.t < tmax and n < max_steps):
             dt = min(max_dt_change*dtOld, dt)
             dtOld = dt
             
-    if (myData.t + dt > tmax):
-        dt = tmax - myData.t
+    if (my_data.t + dt > tmax):
+        dt = tmax - my_data.t
 
     # evolve for a single timestep
-    solver.evolve(myData, dt)
+    solver.evolve(my_data, dt)
 
 
     # increment the time
-    myData.t += dt
+    my_data.t += dt
     n += 1
-    print "%5d %10.5f %10.5f" % (n, myData.t, dt)
+    print "%5d %10.5f %10.5f" % (n, my_data.t, dt)
 
 
     # output
     dt_out = runparams.getParam("io.dt_out")
     n_out = runparams.getParam("io.n_out")
 
-    if (myData.t >= (nout + 1)*dt_out or n%n_out == 0):
+    if (my_data.t >= (nout + 1)*dt_out or n%n_out == 0):
 
         pfc = profile.timer("output")
         pfc.begin()
 
         msg.warning("outputting...")
         basename = runparams.getParam("io.basename")
-        myData.write(basename + "%4.4d" % (n))
+        my_data.write(basename + "%4.4d" % (n))
         nout += 1
 
         pfc.end()
@@ -246,7 +246,7 @@ while (myData.t < tmax and n < max_steps):
         pfd = profile.timer("vis")
         pfd.begin()
 
-        solver.dovis(myData, n)
+        solver.dovis(my_data, n)
         store = runparams.getParam("vis.store_images")
 
         if (store == 1):
@@ -267,7 +267,7 @@ if compBench:
     msg.warning("comparing to: %s " % (compFile) )
     benchGrid, benchData = patch.read(compFile)
 
-    result = compare.compare(myGrid, myData, benchGrid, benchData)
+    result = compare.compare(my_grid, my_data, benchGrid, benchData)
     
     if result == 0:
         msg.success("results match benchmark\n")
@@ -279,7 +279,7 @@ if compBench:
 if makeBench:
     benchFile = solverName + "/tests/" + basename + "%4.4d" % (n)
     msg.warning("storing new benchmark: %s\n " % (benchFile) )
-    myData.write(benchFile)
+    my_data.write(benchFile)
     
 
 #-----------------------------------------------------------------------------

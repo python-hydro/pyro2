@@ -3,13 +3,13 @@ import pylab
 
 from util import runparams
 
-def dovis(myData, n):
+def dovis(my_data, n):
 
     pylab.clf()
 
-    phi = myData.getVarPtr("phi")
+    phi = my_data.getVarPtr("phi")
 
-    myg = myData.grid
+    myg = my_data.grid
 
     pylab.imshow(numpy.transpose(phi[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]), 
                  interpolation="nearest", origin="lower",
@@ -21,7 +21,7 @@ def dovis(myData, n):
 
     pylab.colorbar()
 
-    pylab.figtext(0.05,0.0125, "t = %10.5f" % myData.t)
+    pylab.figtext(0.05,0.0125, "t = %10.5f" % my_data.t)
 
     pylab.draw()
 

@@ -43,18 +43,18 @@ def initialize():
                                 ylb=ylb_type, yrb=yrb_type,
                                 oddReflectDir="y")
 
-    myData = patch.CellCenterData2d(myGrid)
+    my_data = patch.CellCenterData2d(myGrid)
 
     # velocities
-    myData.registerVar("x-velocity", bcObj_xodd)
-    myData.registerVar("y-velocity", bcObj_yodd)
+    my_data.registerVar("x-velocity", bcObj_xodd)
+    my_data.registerVar("y-velocity", bcObj_yodd)
 
     # phi -- used for the projections
-    myData.registerVar("phi-MAC", bcObj)
-    myData.registerVar("phi", bcObj)
-    myData.registerVar("gradp_x", bcObj)
-    myData.registerVar("gradp_y", bcObj)
+    my_data.registerVar("phi-MAC", bcObj)
+    my_data.registerVar("phi", bcObj)
+    my_data.registerVar("gradp_x", bcObj)
+    my_data.registerVar("gradp_y", bcObj)
 
-    myData.create()
+    my_data.create()
 
-    return myGrid, myData
+    return myGrid, my_data

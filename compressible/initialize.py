@@ -25,7 +25,7 @@ def initialize():
 
 
     # create the variables
-    myData = patch.CellCenterData2d(myGrid)
+    my_data = patch.CellCenterData2d(myGrid)
 
 
     # define solver specific boundary condition routines
@@ -43,8 +43,8 @@ def initialize():
                            ylb=ylb_type, yrb=yrb_type)
 
     # density and energy
-    myData.registerVar("density", bcObj)
-    myData.registerVar("energy", bcObj)
+    my_data.registerVar("density", bcObj)
+    my_data.registerVar("energy", bcObj)
 
     # for velocity, if we are reflecting, we need odd reflection
     # in the normal direction.
@@ -55,7 +55,7 @@ def initialize():
                                 ylb=ylb_type, yrb=yrb_type,
                                 oddReflectDir="x")
 
-    myData.registerVar("x-momentum", bcObj_xodd)    
+    my_data.registerVar("x-momentum", bcObj_xodd)    
 
 
     # y-momentum -- if we are reflecting in y, then we need to
@@ -64,22 +64,22 @@ def initialize():
                                 ylb=ylb_type, yrb=yrb_type,
                                 oddReflectDir="y")
 
-    myData.registerVar("y-momentum", bcObj_yodd)    
+    my_data.registerVar("y-momentum", bcObj_yodd)    
 
 
     # store the EOS gamma as an auxillary quantity so we can have a
     # self-contained object stored in output files to make plots
     gamma = runparams.getParam("eos.gamma")
-    myData.setAux("gamma", gamma)
+    my_data.setAux("gamma", gamma)
         
-    myData.create()
+    my_data.create()
 
 
-    vars.idens = myData.vars.index("density")
-    vars.ixmom = myData.vars.index("x-momentum")
-    vars.iymom = myData.vars.index("y-momentum")
-    vars.iener = myData.vars.index("energy")
+    vars.idens = my_data.vars.index("density")
+    vars.ixmom = my_data.vars.index("x-momentum")
+    vars.iymom = my_data.vars.index("y-momentum")
+    vars.iener = my_data.vars.index("energy")
 
-    print myData
+    print my_data
 
-    return myGrid, myData
+    return myGrid, my_data

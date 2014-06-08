@@ -11,19 +11,19 @@ step we actually take.
 
 SMALL = 1.e-12
 
-def timestep(myData):
+def timestep(my_data):
     """ 
     compute the CFL timestep for the current patch.
     """
 
     cfl = runparams.getParam("driver.cfl")
     
-    u = myData.getVarPtr("x-velocity")
-    v = myData.getVarPtr("y-velocity")
+    u = my_data.getVarPtr("x-velocity")
+    v = my_data.getVarPtr("y-velocity")
     
     # the timestep is min(dx/|u|, dy|v|)
-    xtmp = myData.grid.dx/(abs(u))
-    ytmp = myData.grid.dy/(abs(v))
+    xtmp = my_data.grid.dx/(abs(u))
+    ytmp = my_data.grid.dy/(abs(v))
 
     dt = cfl*min(xtmp.min(), ytmp.min())
 

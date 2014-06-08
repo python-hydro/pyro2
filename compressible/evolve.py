@@ -4,22 +4,22 @@ from unsplitFluxes import *
 from util import profile, runparams
 import vars    
 
-def evolve(myData, dt):
+def evolve(my_data, dt):
 
     pf = profile.timer("evolve")
     pf.begin()
 
-    dens = myData.getVarPtr("density")
-    xmom = myData.getVarPtr("x-momentum")
-    ymom = myData.getVarPtr("y-momentum")
-    ener = myData.getVarPtr("energy")
+    dens = my_data.getVarPtr("density")
+    xmom = my_data.getVarPtr("x-momentum")
+    ymom = my_data.getVarPtr("y-momentum")
+    ener = my_data.getVarPtr("energy")
 
     grav = runparams.getParam("compressible.grav")
 
-    myg = myData.grid
+    myg = my_data.grid
     
     
-    (Flux_x, Flux_y) = unsplitFluxes(myData, dt)
+    (Flux_x, Flux_y) = unsplitFluxes(my_data, dt)
 
     old_dens = dens.copy()
     old_ymom = ymom.copy()

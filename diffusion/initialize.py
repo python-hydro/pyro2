@@ -43,12 +43,12 @@ def initialize():
                            ylb=bcparam[2], yrb=bcparam[3])    
 
 
-    myData = patch.CellCenterData2d(myGrid)
+    my_data = patch.CellCenterData2d(myGrid)
 
-    myData.registerVar("phi", bcObj)
+    my_data.registerVar("phi", bcObj)
 
-    myData.create()
+    my_data.create()
 
-    return myGrid, myData
+    return myGrid, my_data
 
                                                                                     

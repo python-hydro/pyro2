@@ -36,10 +36,10 @@ def initialize():
     bcObj = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
                            ylb=ylb_type, yrb=yrb_type)
 
-    myData = patch.CellCenterData2d(myGrid)
+    my_data = patch.CellCenterData2d(myGrid)
 
-    myData.registerVar("density", bcObj)
+    my_data.registerVar("density", bcObj)
 
-    myData.create()
+    my_data.create()
 
-    return myGrid, myData
+    return myGrid, my_data

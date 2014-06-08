@@ -267,13 +267,13 @@ class CellCenterData2d:
     create the object.  We pass in a grid object to describe where the 
     data lives:
 
-        myData = patch.CellCenterData2d(myGrid)
+        my_data = patch.CellCenterData2d(myGrid)
 
     register any variables that we expect to live on this patch.  Here
     BCObject describes the boundary conditions for that variable.
 
-        myData.registerVar('density', BCObject)
-        myData.registerVar('x-momentum', BCObject)
+        my_data.registerVar('density', BCObject)
+        my_data.registerVar('x-momentum', BCObject)
         ...
 
 

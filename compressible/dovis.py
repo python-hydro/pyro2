@@ -4,16 +4,16 @@ from matplotlib.font_manager import FontProperties
 
 import eos
 
-def dovis(myData, n):
+def dovis(my_data, n):
 
     pylab.clf()
 
     pylab.rc("font", size=10)
 
-    dens = myData.getVarPtr("density")
-    xmom = myData.getVarPtr("x-momentum")
-    ymom = myData.getVarPtr("y-momentum")
-    ener = myData.getVarPtr("energy")
+    dens = my_data.getVarPtr("density")
+    xmom = my_data.getVarPtr("x-momentum")
+    ymom = my_data.getVarPtr("y-momentum")
+    ener = my_data.getVarPtr("energy")
 
     nvar = 4
     
@@ -29,17 +29,17 @@ def dovis(myData, n):
 
     # access gamma from the object instead of using the EOS so we can
     # use dovis outside of a running simulation.
-    gamma = myData.getAux("gamma")
+    gamma = my_data.getAux("gamma")
     p = rhoe*(gamma - 1.0)
 
     e = rhoe/dens
 
-    myg = myData.grid
+    myg = my_data.grid
 
 
     # figure out the geometry
-    L_x = myData.grid.xmax - myData.grid.xmin
-    L_y = myData.grid.ymax - myData.grid.ymin
+    L_x = my_data.grid.xmax - my_data.grid.xmin
+    L_y = my_data.grid.ymax - my_data.grid.ymin
 
     orientation = "vertical"
     shrink = 1.0
@@ -168,7 +168,7 @@ def dovis(myData, n):
     pylab.colorbar(img, ax=ax, orientation=orientation, shrink=shrink)
 
 
-    pylab.figtext(0.05,0.0125, "t = %10.5f" % myData.t)
+    pylab.figtext(0.05,0.0125, "t = %10.5f" % my_data.t)
 
     #try: fig.tight_layout()
     #except:

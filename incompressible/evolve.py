@@ -3,19 +3,19 @@ import mesh.reconstruction_f as reconstruction_f
 import multigrid.multigrid as multigrid
 from util import runparams
 
-def evolve(myData, dt):
+def evolve(my_data, dt):
     """ evolve the incompressible equations through one timestep """
 
     
-    u = myData.getVarPtr("x-velocity")
-    v = myData.getVarPtr("y-velocity")
+    u = my_data.getVarPtr("x-velocity")
+    v = my_data.getVarPtr("y-velocity")
 
-    gradp_x = myData.getVarPtr("gradp_x")
-    gradp_y = myData.getVarPtr("gradp_y")
+    gradp_x = my_data.getVarPtr("gradp_x")
+    gradp_y = my_data.getVarPtr("gradp_y")
 
-    phi = myData.getVarPtr("phi")
+    phi = my_data.getVarPtr("phi")
 
-    myg = myData.grid
+    myg = my_data.grid
 
     dtdx = dt/myg.dx
     dtdy = dt/myg.dy
@@ -112,7 +112,7 @@ def evolve(myData, dt):
 
     # update the normal velocities with the pressure gradient -- these
     # constitute our advective velocities
-    phi_MAC = myData.getVarPtr("phi-MAC")
+    phi_MAC = my_data.getVarPtr("phi-MAC")
     solution = MG.getSolution()
 
     phi_MAC[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2] = \
@@ -187,8 +187,8 @@ def evolve(myData, dt):
         u[:,:] -= dt*advect_x[:,:]
         v[:,:] -= dt*advect_y[:,:]
 
-    myData.fillBC("x-velocity")
-    myData.fillBC("y-velocity")
+    my_data.fillBC("x-velocity")
+    my_data.fillBC("y-velocity")
 
 
     #-------------------------------------------------------------------------
@@ -258,5 +258,5 @@ def evolve(myData, dt):
         gradp_x[:,:] = gradphi_x[:,:]
         gradp_y[:,:] = gradphi_y[:,:]
 
-    myData.fillBC("x-velocity")
-    myData.fillBC("y-velocity")
+    my_data.fillBC("x-velocity")
+    my_data.fillBC("y-velocity")

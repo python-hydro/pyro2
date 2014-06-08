@@ -319,8 +319,8 @@ class ccMG2d:
         
 
     def getSolutionObjPtr(self):
-        myData = self.grids[self.nlevels-1]
-        return myData
+        my_data = self.grids[self.nlevels-1]
+        return my_data
 
 
     def initSolution(self, data):
