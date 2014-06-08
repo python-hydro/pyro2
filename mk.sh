@@ -22,6 +22,6 @@ function build_lib  # args: directory libname
 
 build_lib mesh reconstruction_f.so
 build_lib compressible interface_f.so
-build_lib  incompressible incomp_interface_f.so
+build_lib incompressible incomp_interface_f.so
 
 echo "done"
