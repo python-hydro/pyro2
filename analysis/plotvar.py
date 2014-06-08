@@ -5,7 +5,9 @@ import pylab
 import sys
 import mesh.patch as patch
 
-# plot an output file using the solver's dovis script
+# plot a single variable from an output file 
+#
+# Usage: ./plotvar.py filename variable
 
 def makeplot(myd, variable):
 
@@ -19,8 +21,6 @@ def makeplot(myd, variable):
                        extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
     pylab.colorbar()
-
-    #pylab.axis("off")
 
     pylab.xlabel("x")
     pylab.ylabel("y")
