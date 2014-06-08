@@ -1,7 +1,7 @@
-from util import runparams
-import eos
 import numpy
 
+import eos
+from util import runparams
 
 """
 The timestep module computes the advective timestep (CFL) constraint.

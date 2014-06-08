@@ -1,5 +1,5 @@
-from util import runparams
 from advectiveFluxes import *
+from util import runparams
 
 def evolve(myData, dt):
     """ evolve the advection equations through one timestep """

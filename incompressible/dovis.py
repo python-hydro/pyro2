@@ -1,5 +1,6 @@
-import pylab
 import numpy
+import pylab
+
 from util import runparams
 
 def dovis(myData, n):

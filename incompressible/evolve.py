@@ -1,7 +1,7 @@
-from util import runparams
-import mesh.reconstruction_f as reconstruction_f
 import incomp_interface_f
+import mesh.reconstruction_f as reconstruction_f
 import multigrid.multigrid as multigrid
+from util import runparams
 
 def evolve(myData, dt):
     """ evolve the incompressible equations through one timestep """

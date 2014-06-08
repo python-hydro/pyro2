@@ -1,7 +1,8 @@
 import numpy
+
+import BC
 import mesh.patch as patch
 from util import runparams
-import BC
 
 def initialize():
     """ 

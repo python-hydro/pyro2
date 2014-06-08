@@ -1,8 +1,7 @@
 import numpy
+
 import mesh.patch as patch
 from util import runparams
-
-
 
 def initialize():
     """ 

@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 
-import sys
 import getopt
+import os
+import sys
+import time
+
 import numpy
 import pylab
-import time
-from util import profile
-from util import runparams
-import os
-from util import msg
+
 import compare
 import mesh.patch as patch
+from util import msg, profile, runparams
 
 usage = """
        usage:

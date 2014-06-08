@@ -6,9 +6,10 @@ solve
 
 """
 
-from util import runparams
 import numpy
+
 import mesh.reconstruction_f as reconstruction_f
+from util import runparams
 
 def unsplitFluxes(myGrid, dt, a):
 

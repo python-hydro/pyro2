@@ -56,10 +56,10 @@ a.dx and a.dy are the grid spacings
 
 """
 
-import mesh.patch as patch
 import math
 import numpy
 
+import mesh.patch as patch
 
 def error(myg, r):
 

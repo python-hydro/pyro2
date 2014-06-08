@@ -125,12 +125,12 @@ Updating U_{i,j}:
 """
 
 import numpy
-import vars
+
 import eos
-import mesh.reconstruction_f as reconstruction_f
-from util import runparams
-from util import profile
 import interface_f
+import mesh.reconstruction_f as reconstruction_f
+from util import profile, runparams
+import vars
 
 def unsplitFluxes(myData, dt):
     """

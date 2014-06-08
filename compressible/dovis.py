@@ -1,6 +1,7 @@
-import pylab
 import numpy
+import pylab
 from matplotlib.font_manager import FontProperties
+
 import eos
 
 def dovis(myData, n):

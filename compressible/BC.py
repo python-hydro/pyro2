@@ -6,9 +6,8 @@ Note: the pyro BC routines operate on a single variable at a time, so
 some work will necessarily be repeated.
 """
 
-from util import msg
-from util import runparams
 import eos
+from util import msg, runparams
 
 def user(bcName, bcEdge, variable, myData):
 

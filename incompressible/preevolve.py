@@ -1,9 +1,10 @@
 import numpy
+
+import evolve
 import mesh.patch as patch
-from util import runparams
 import multigrid.multigrid as multigrid
 import timestep
-import evolve
+from util import runparams
 
 def preevolve(myData):
     """ 

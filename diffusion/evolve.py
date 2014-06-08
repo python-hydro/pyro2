@@ -1,6 +1,7 @@
-from util import runparams
-import multigrid.multigrid as multigrid
 import numpy
+
+import multigrid.multigrid as multigrid
+from util import runparams
 
 def evolve(myd, dt):
     """ diffusion through dt using C-N implicit solve with multigrid """

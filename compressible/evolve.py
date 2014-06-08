@@ -1,8 +1,8 @@
-from util import runparams
-from util import profile
-from unsplitFluxes import *
-import vars    
 import numpy
+
+from unsplitFluxes import *
+from util import profile, runparams
+import vars    
 
 def evolve(myData, dt):
 
