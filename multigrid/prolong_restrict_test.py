@@ -4,9 +4,9 @@ import mesh.patch as patch
 import numpy
 
 # create our base grid and initialize it with sequential data
-myg = patch.grid2d(4,8,ng=1)
-myd = patch.ccData2d(myg)
-bc = patch.bcObject()
+myg = patch.Grid2d(4,8,ng=1)
+myd = patch.CellCenterData2d(myg)
+bc = patch.BCObject()
 myd.registerVar("a", bc)
 myd.create()
 
@@ -23,8 +23,8 @@ myd.prettyPrint("a")
 print " "
 print "restricted array"
 
-cg = patch.grid2d(2,4,ng=1)
-cd = patch.ccData2d(cg)
+cg = patch.Grid2d(2,4,ng=1)
+cd = patch.CellCenterData2d(cg)
 cd.registerVar("a", bc)
 cd.create()
 
@@ -46,8 +46,8 @@ cd.prettyPrint("a")
 print " "
 print "prolonged array"
 
-fg = patch.grid2d(4,8,ng=1)
-fd = patch.ccData2d(fg)
+fg = patch.Grid2d(4,8,ng=1)
+fd = patch.CellCenterData2d(fg)
 fd.registerVar("a", bc)
 fd.create()
 

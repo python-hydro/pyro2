@@ -10,7 +10,7 @@ def initData(myPatch):
     msg.bold("initializing the quadrant problem...")
 
     # make sure that we are passed a valid patch object
-    if not isinstance(myPatch, patch.ccData2d):
+    if not isinstance(myPatch, patch.CellCenterData2d):
         print "ERROR: patch invalid in quad.py"
         print myPatch.__class__
         sys.exit()

@@ -17,7 +17,7 @@ def initialize():
     ymin = runparams.getParam("mesh.ymin")
     ymax = runparams.getParam("mesh.ymax")
     
-    myGrid = patch.grid2d(nx, ny, xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax, ng=1)
+    myGrid = patch.Grid2d(nx, ny, xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax, ng=1)
 
 
     # create the variables
@@ -39,11 +39,11 @@ def initialize():
             msg.fail("invalid BC")
 
 
-    bcObj = patch.bcObject(xlb=bcparam[0], xrb=bcparam[1], 
+    bcObj = patch.BCObject(xlb=bcparam[0], xrb=bcparam[1], 
                            ylb=bcparam[2], yrb=bcparam[3])    
 
 
-    myData = patch.ccData2d(myGrid)
+    myData = patch.CellCenterData2d(myGrid)
 
     myData.registerVar("phi", bcObj)
 

@@ -139,15 +139,15 @@ class ccMG2d:
         while (i < self.nlevels):
             
             # create the grid
-            myGrid = patch.grid2d(nx_t, ny_t, ng=self.ng,
+            myGrid = patch.Grid2d(nx_t, ny_t, ng=self.ng,
                                   xmin=xmin, xmax=xmax,
                                   ymin=ymin, ymax=ymax)
 
-            # add a ccData2d object for this level to our list
-            self.grids.append(patch.ccData2d(myGrid, dtype=numpy.float64))
+            # add a CellCenterData2d object for this level to our list
+            self.grids.append(patch.CellCenterData2d(myGrid, dtype=numpy.float64))
 
             # create the boundary condition object
-            bcObj = patch.bcObject(xlb=xlBCtype, xrb=xrBCtype,
+            bcObj = patch.BCObject(xlb=xlBCtype, xrb=xrBCtype,
                                    ylb=ylBCtype, yrb=yrBCtype)
 
             self.grids[i].registerVar("v", bcObj)

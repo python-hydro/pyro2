@@ -6,14 +6,14 @@ Typical usage:
 
 create the grid
 
-   grid = grid2d(nx, ny)
+   grid = Grid2d(nx, ny)
 
 
 create the data that lives on that grid
 
-   data = ccData2d(grid)
+   data = CellCenterData2d(grid)
 
-   bcObj = bcObject(xlb="reflect", xrb="reflect", 
+   bcObj = BCObject(xlb="reflect", xrb="reflect", 
                     ylb="outflow", yrb="outflow")
    data.registerVar("density", bcObj)
    ...
@@ -56,7 +56,7 @@ def defineBC(type, function):
     extBCs[type] = function
 
 
-class bcObject:
+class BCObject:
     """
     boundary condition container -- hold the BCs on each boundary
     for a single variable
@@ -139,7 +139,7 @@ class bcObject:
         return string
 
     
-class grid2d:
+class Grid2d:
     """
     the 2-d grid class.  The grid object will contain the coordinate
     information (at various centerings).
@@ -257,23 +257,23 @@ class grid2d:
         return result
 
 
-class ccData2d:
+class CellCenterData2d:
     """
     the cell-centered data that lives on a grid.
 
-    a ccData2d object is built in a multi-step process before it can
-    be used.
+    a CellCenterData2d object is built in a multi-step process before 
+    it can be used.
 
     create the object.  We pass in a grid object to describe where the 
     data lives:
 
-        myData = patch.ccData2d(myGrid)
+        myData = patch.CellCenterData2d(myGrid)
 
     register any variables that we expect to live on this patch.  Here
-    bcObject describes the boundary conditions for that variable.
+    BCObject describes the boundary conditions for that variable.
 
-        myData.registerVar('density', bcObject)
-        myData.registerVar('x-momentum', bcObject)
+        myData.registerVar('density', BCObject)
+        myData.registerVar('x-momentum', BCObject)
         ...
 
 
@@ -317,10 +317,10 @@ class ccData2d:
         self.initialized = 0
 
 
-    def registerVar(self, name, bcObject):
+    def registerVar(self, name, bc_object):
         """ 
-        register a variable with ccData2d object.  Here we pass in a
-        bcObject that describes the boundary conditions for that
+        register a variable with CellCenterData2d object.  Here we pass in 
+        a BCObject that describes the boundary conditions for that
         variable.
         """
 
@@ -330,7 +330,7 @@ class ccData2d:
         self.vars.append(name)
         self.nvar += 1
 
-        self.BCs[name] = bcObject
+        self.BCs[name] = bc_object
 
 
     def setAux(self, keyword, value):
@@ -357,10 +357,11 @@ class ccData2d:
 
         
     def __str__(self):
-        """ print out some basic information about the ccData2d object """
+        """ print out some basic information about the CellCenterData2d 
+            object """
 
         if (self.initialized == 0):
-            myStr = "ccData2d object not yet initialized"
+            myStr = "CellCenterData2d object not yet initialized"
             return myStr
 
         myStr = "cc data: nx = " + `self.grid.nx` + \
@@ -394,7 +395,7 @@ class ccData2d:
         """
         return a pointer to the data array for the variable described
         by name.  Any changes made to this are automatically reflected
-        in the ccData2d object
+        in the CellCenterData2d object
         """
         n = self.vars.index(name)
         return self.data[n,:,:]
@@ -431,9 +432,9 @@ class ccData2d:
 
         we do periodic, reflect-even, reflect-odd, and outflow
 
-        each variable name has a corresponding bcObject stored in the
-        ccData2d object -- we refer to this to figure out the action
-        to take at each boundary.
+        each variable name has a corresponding BCObject stored in the
+        CellCenterData2d object -- we refer to this to figure out the 
+        action to take at each boundary.
         """
     
         # there is only a single grid, so every boundary is on
@@ -733,9 +734,9 @@ class ccData2d:
 
     def write(self, filename):
         """
-        write out the ccData2d object to disk, stored in the file
-        filename.  We use a python binary format (via pickle).  This
-        stores a representation of the entire object.
+        write out the CellCenterData2d object to disk, stored in the 
+        file filename.  We use a python binary format (via pickle).  
+        This stores a representation of the entire object.
         """
         pF = open(filename + ".pyro", "wb")
         pickle.dump(self, pF, pickle.HIGHEST_PROTOCOL)
@@ -780,7 +781,8 @@ class ccData2d:
 
 def read(filename):
     """
-    read a ccData object from a file and return it and the grid info
+    read a CellCenterData object from a file and return it and the grid 
+    info
     """
 
     # if we come in with .pyro, we don't need to add it again
@@ -795,12 +797,12 @@ def read(filename):
 
 
 def ccDataClone(old):
-    """ create a new ccData2d object that is a copy of an existing one """
+    """ create a new CellCenterData2d object that is a copy of an existing one """
 
-    if (not isinstance(old, ccData2d)):
+    if (not isinstance(old, CellCenterData2d)):
         msg.fail("Can't clone object")
 
-    new = ccData2d(old.grid, dtype=old.dtype)
+    new = CellCenterData2d(old.grid, dtype=old.dtype)
 
     n = 0
     while (n < old.nvar):
@@ -820,11 +822,11 @@ if __name__== "__main__":
 
     # illustrate basic mesh operations
 
-    myg = grid2d(16,32, xmax=1.0, ymax=2.0)
+    myg = Grid2d(16,32, xmax=1.0, ymax=2.0)
 
-    mydata = ccData2d(myg)
+    mydata = CellCenterData2d(myg)
 
-    bc = bcObject()
+    bc = BCObject()
 
     mydata.registerVar("a", bc)
     mydata.create()

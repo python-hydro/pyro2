@@ -17,7 +17,7 @@ def initialize():
     ymin = runparams.getParam("mesh.ymin")
     ymax = runparams.getParam("mesh.ymax")
     
-    myGrid = patch.grid2d(nx, ny, 
+    myGrid = patch.Grid2d(nx, ny, 
                           xmin=xmin, xmax=xmax, 
                           ymin=ymin, ymax=ymax, ng=4)
 
@@ -30,20 +30,20 @@ def initialize():
     ylb_type = runparams.getParam("mesh.ylboundary")
     yrb_type = runparams.getParam("mesh.yrboundary")
 
-    bcObj = patch.bcObject(xlb=xlb_type, xrb=xrb_type, 
+    bcObj = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
                            ylb=ylb_type, yrb=yrb_type)
 
     # if we are reflecting, we need odd reflection in the normal
     # directions for the velocity
-    bcObj_xodd = patch.bcObject(xlb=xlb_type, xrb=xrb_type, 
+    bcObj_xodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
                                 ylb=ylb_type, yrb=yrb_type,
                                 oddReflectDir="x")
 
-    bcObj_yodd = patch.bcObject(xlb=xlb_type, xrb=xrb_type, 
+    bcObj_yodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
                                 ylb=ylb_type, yrb=yrb_type,
                                 oddReflectDir="y")
 
-    myData = patch.ccData2d(myGrid)
+    myData = patch.CellCenterData2d(myGrid)
 
     # velocities
     myData.registerVar("x-velocity", bcObj_xodd)

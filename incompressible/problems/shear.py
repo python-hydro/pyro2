@@ -27,7 +27,7 @@ def initData(myPatch):
     msg.bold("initializing the incompressible shear problem...")
 
     # make sure that we are passed a valid patch object
-    if not isinstance(myPatch, patch.ccData2d):
+    if not isinstance(myPatch, patch.CellCenterData2d):
         print myPatch.__class__
         msg.fail("ERROR: patch invalid in shear.py")
 

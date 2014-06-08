@@ -32,7 +32,7 @@ myg, myd = patch.read(file1)
 
 
 # create a new data object on the same grid
-analytic = patch.ccData2d(myg, dtype=numpy.float64)
+analytic = patch.CellCenterData2d(myg, dtype=numpy.float64)
 
 bco = myd.BCs[myd.vars[0]]
 analytic.registerVar("density", bco)

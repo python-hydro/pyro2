@@ -5,23 +5,23 @@ import mesh.patch
 import pylab
 import time
 
-myg = mesh.patch.grid2d(4,4, ng = 2, xmax=1.0, ymax=1.0)
+myg = mesh.patch.Grid2d(4,4, ng = 2, xmax=1.0, ymax=1.0)
 
-mydata = mesh.patch.ccData2d(myg, dtype=numpy.int)
+mydata = mesh.patch.CellCenterData2d(myg, dtype=numpy.int)
 
-bco = mesh.patch.bcObject(xlb="outflow", xrb="outflow",
+bco = mesh.patch.BCObject(xlb="outflow", xrb="outflow",
                           ylb="outflow", yrb="outflow")
 mydata.registerVar("outflow", bco)
 
-bcp = mesh.patch.bcObject(xlb="periodic", xrb="periodic",
+bcp = mesh.patch.BCObject(xlb="periodic", xrb="periodic",
                           ylb="periodic", yrb="periodic")
 mydata.registerVar("periodic", bcp)
 
-bcre = mesh.patch.bcObject(xlb="reflect-even", xrb="reflect-even",
+bcre = mesh.patch.BCObject(xlb="reflect-even", xrb="reflect-even",
                            ylb="reflect-even", yrb="reflect-even")
 mydata.registerVar("reflect-even", bcre)
 
-bcro = mesh.patch.bcObject(xlb="reflect-odd", xrb="reflect-odd",
+bcro = mesh.patch.BCObject(xlb="reflect-odd", xrb="reflect-odd",
                            ylb="reflect-odd", yrb="reflect-odd")
 mydata.registerVar("reflect-odd", bcro)
 

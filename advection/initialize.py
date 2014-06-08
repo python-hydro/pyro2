@@ -17,7 +17,7 @@ def initialize():
     ymin = runparams.getParam("mesh.ymin")
     ymax = runparams.getParam("mesh.ymax")
     
-    myGrid = patch.grid2d(nx, ny, 
+    myGrid = patch.Grid2d(nx, ny, 
                           xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax, ng=4)
 
 
@@ -33,10 +33,10 @@ def initialize():
     ylb_type = runparams.getParam("mesh.ylboundary")
     yrb_type = runparams.getParam("mesh.yrboundary")
 
-    bcObj = patch.bcObject(xlb=xlb_type, xrb=xrb_type, 
+    bcObj = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
                            ylb=ylb_type, yrb=yrb_type)
 
-    myData = patch.ccData2d(myGrid)
+    myData = patch.CellCenterData2d(myGrid)
 
     myData.registerVar("density", bcObj)
 

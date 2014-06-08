@@ -42,12 +42,12 @@ nproj = 2
 
 # create a mesh containing the x- and y-velocities, and periodic boundary
 # conditions
-myg = patch.grid2d(nx, ny, ng=1)
+myg = patch.Grid2d(nx, ny, ng=1)
 
-bcObj = patch.bcObject(xlb="periodic", xrb="periodic",
+bcObj = patch.BCObject(xlb="periodic", xrb="periodic",
                        ylb="periodic", yrb="periodic")
 
-U = patch.ccData2d(myg)
+U = patch.CellCenterData2d(myg)
 
 U.registerVar('u-old', bcObj)
 U.registerVar('v-old', bcObj)

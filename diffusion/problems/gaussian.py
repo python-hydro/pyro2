@@ -18,7 +18,7 @@ def initData(myData):
     msg.bold("initializing the Gaussian diffusion problem...")
 
     # make sure that we are passed a valid patch object
-    if not isinstance(myData, patch.ccData2d):
+    if not isinstance(myData, patch.CellCenterData2d):
         print "ERROR: patch invalid in diffuse.py"
         print myData.__class__
         sys.exit()

@@ -19,13 +19,13 @@ def initialize():
     ymin = runparams.getParam("mesh.ymin")
     ymax = runparams.getParam("mesh.ymax")
     
-    myGrid = patch.grid2d(nx, ny, 
+    myGrid = patch.Grid2d(nx, ny, 
                           xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax, 
                           ng=4)
 
 
     # create the variables
-    myData = patch.ccData2d(myGrid)
+    myData = patch.CellCenterData2d(myGrid)
 
 
     # define solver specific boundary condition routines
@@ -39,7 +39,7 @@ def initialize():
     ylb_type = runparams.getParam("mesh.ylboundary")
     yrb_type = runparams.getParam("mesh.yrboundary")    
     
-    bcObj = patch.bcObject(xlb=xlb_type, xrb=xrb_type,
+    bcObj = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
                            ylb=ylb_type, yrb=yrb_type)
 
     # density and energy
@@ -51,7 +51,7 @@ def initialize():
 
     # x-momentum -- if we are reflecting in x, then we need to
     # reflect odd
-    bcObj_xodd = patch.bcObject(xlb=xlb_type, xrb=xrb_type,
+    bcObj_xodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
                                 ylb=ylb_type, yrb=yrb_type,
                                 oddReflectDir="x")
 
@@ -60,7 +60,7 @@ def initialize():
 
     # y-momentum -- if we are reflecting in y, then we need to
     # reflect odd
-    bcObj_yodd = patch.bcObject(xlb=xlb_type, xrb=xrb_type,
+    bcObj_yodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
                                 ylb=ylb_type, yrb=yrb_type,
                                 oddReflectDir="y")
 
