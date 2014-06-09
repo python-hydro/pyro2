@@ -32,12 +32,12 @@ def initialize(rp):
     ylb_type = rp.get_param("mesh.ylboundary")
     yrb_type = rp.get_param("mesh.yrboundary")
 
-    bcObj = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
-                           ylb=ylb_type, yrb=yrb_type)
+    bc = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
+                        ylb=ylb_type, yrb=yrb_type)
 
     my_data = patch.CellCenterData2d(my_grid, runtime_parameters=rp)
 
-    my_data.register_var("density", bcObj)
+    my_data.register_var("density", bc)
 
     my_data.create()
 

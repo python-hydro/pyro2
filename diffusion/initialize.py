@@ -39,13 +39,13 @@ def initialize(rp):
             msg.fail("invalid BC")
 
 
-    bcObj = patch.BCObject(xlb=bcparam[0], xrb=bcparam[1], 
-                           ylb=bcparam[2], yrb=bcparam[3])    
+    bc = patch.BCObject(xlb=bcparam[0], xrb=bcparam[1], 
+                        ylb=bcparam[2], yrb=bcparam[3])    
 
 
     my_data = patch.CellCenterData2d(my_grid, runtime_parameters=rp)
 
-    my_data.register_var("phi", bcObj)
+    my_data.register_var("phi", bc)
 
     my_data.create()
 

@@ -88,8 +88,8 @@ def evolve(my_data, dt):
 
     # create the multigrid object
     MG = multigrid.CellCenterMG2d(myg.nx, myg.ny,
-                                  xlBCtype="periodic", xrBCtype="periodic",
-                                  ylBCtype="periodic", yrBCtype="periodic",
+                                  xl_BC_type="periodic", xr_BC_type="periodic",
+                                  yl_BC_type="periodic", yr_BC_type="periodic",
                                   xmin=myg.xmin, xmax=myg.xmax,
                                   ymin=myg.ymin, ymax=myg.ymax,
                                   verbose=0)
@@ -200,8 +200,8 @@ def evolve(my_data, dt):
     
     # create the multigrid object
     MG = multigrid.CellCenterMG2d(myg.nx, myg.ny,
-                                  xlBCtype="periodic", xrBCtype="periodic",
-                                  ylBCtype="periodic", yrBCtype="periodic",
+                                  xl_BC_type="periodic", xr_BC_type="periodic",
+                                  yl_BC_type="periodic", yr_BC_type="periodic",
                                   xmin=myg.xmin, xmax=myg.xmax,
                                   ymin=myg.ymin, ymax=myg.ymax,
                                   verbose=0)

@@ -44,8 +44,8 @@ ny = nx
 
 # create the multigrid object
 a = multigrid.CellCenterMG2d(nx, ny,
-                             xlBCtype="dirichlet", ylBCtype="dirichlet",
-                             xrBCtype="dirichlet", yrBCtype="dirichlet",
+                             xl_BC_type="dirichlet", yl_BC_type="dirichlet",
+                             xr_BC_type="dirichlet", yr_BC_type="dirichlet",
                              verbose=1)
 
 # initialize the solution to 0

@@ -44,28 +44,28 @@ nproj = 2
 # conditions
 myg = patch.Grid2d(nx, ny, ng=1)
 
-bcObj = patch.BCObject(xlb="periodic", xrb="periodic",
-                       ylb="periodic", yrb="periodic")
+bc = patch.BCObject(xlb="periodic", xrb="periodic",
+                    ylb="periodic", yrb="periodic")
 
 U = patch.CellCenterData2d(myg)
 
-U.register_var('u-old', bcObj)
-U.register_var('v-old', bcObj)
-U.register_var('u+gphi', bcObj)
-U.register_var('v+gphi', bcObj)
-U.register_var('u', bcObj)
-U.register_var('v', bcObj)
+U.register_var('u-old', bc)
+U.register_var('v-old', bc)
+U.register_var('u+gphi', bc)
+U.register_var('v+gphi', bc)
+U.register_var('u', bc)
+U.register_var('v', bc)
 
-U.register_var('divU', bcObj)
+U.register_var('divU', bc)
 
-U.register_var('phi-old', bcObj)
-U.register_var('phi', bcObj)
-U.register_var('dphi', bcObj)
+U.register_var('phi-old', bc)
+U.register_var('phi', bc)
+U.register_var('dphi', bc)
 
-U.register_var('gradphi_x-old', bcObj)
-U.register_var('gradphi_y-old', bcObj)
-U.register_var('gradphi_x', bcObj)
-U.register_var('gradphi_y', bcObj)
+U.register_var('gradphi_x-old', bc)
+U.register_var('gradphi_y-old', bc)
+U.register_var('gradphi_x', bc)
+U.register_var('gradphi_y', bc)
 
 U.create()
 
@@ -132,8 +132,8 @@ divU[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
 
 # create the multigrid object with Neumann BCs
 MG = multigrid.CellCenterMG2d(nx, ny,
-                              xlBCtype="periodic", xrBCtype="periodic",
-                              ylBCtype="periodic", yrBCtype="periodic",
+                              xl_BC_type="periodic", xr_BC_type="periodic",
+                              yl_BC_type="periodic", yr_BC_type="periodic",
                               verbose=1)
 
 

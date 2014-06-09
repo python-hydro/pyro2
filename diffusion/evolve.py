@@ -26,10 +26,10 @@ def evolve(myd, dt):
     mg = multigrid.CellCenterMG2d(myg.nx, myg.ny,
                                   xmin=myg.xmin, xmax=myg.xmax, 
                                   ymin=myg.ymin, ymax=myg.ymax,
-                                  xlBCtype=myd.BCs['phi'].xlb, 
-                                  xrBCtype=myd.BCs['phi'].xrb, 
-                                  ylBCtype=myd.BCs['phi'].ylb, 
-                                  yrBCtype=myd.BCs['phi'].yrb, 
+                                  xl_BC_type=myd.BCs['phi'].xlb, 
+                                  xr_BC_type=myd.BCs['phi'].xrb, 
+                                  yl_BC_type=myd.BCs['phi'].ylb, 
+                                  yr_BC_type=myd.BCs['phi'].yrb, 
                                   alpha=1.0, beta=0.5*dt*k, 
                                   verbose=0)
 

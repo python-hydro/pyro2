@@ -81,8 +81,8 @@ class CellCenterMG2d:
     """
     
     def __init__(self, nx, ny, xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0,
-                 xlBCtype="dirichlet", xrBCtype="dirichlet",
-                 ylBCtype="dirichlet", yrBCtype="dirichlet",
+                 xl_BC_type="dirichlet", xr_BC_type="dirichlet",
+                 yl_BC_type="dirichlet", yr_BC_type="dirichlet",
                  alpha=0.0, beta=-1.0,
                  nsmooth=10, nsmooth_bottom=50,
                  verbose=0, 
@@ -150,19 +150,19 @@ class CellCenterMG2d:
             
             # create the grid
             my_grid = patch.Grid2d(nx_t, ny_t, ng=self.ng,
-                                  xmin=xmin, xmax=xmax,
-                                  ymin=ymin, ymax=ymax)
+                                   xmin=xmin, xmax=xmax,
+                                   ymin=ymin, ymax=ymax)
 
             # add a CellCenterData2d object for this level to our list
             self.grids.append(patch.CellCenterData2d(my_grid, dtype=numpy.float64))
 
             # create the boundary condition object
-            bcObj = patch.BCObject(xlb=xlBCtype, xrb=xrBCtype,
-                                   ylb=ylBCtype, yrb=yrBCtype)
+            bc = patch.BCObject(xlb=xl_BC_type, xrb=xr_BC_type,
+                                ylb=yl_BC_type, yrb=yr_BC_type)
 
-            self.grids[i].register_var("v", bcObj)
-            self.grids[i].register_var("f", bcObj)
-            self.grids[i].register_var("r", bcObj)
+            self.grids[i].register_var("v", bc)
+            self.grids[i].register_var("f", bc)
+            self.grids[i].register_var("r", bc)
 
             self.grids[i].create()
 

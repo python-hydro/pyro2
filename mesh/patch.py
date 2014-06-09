@@ -13,9 +13,9 @@ create the data that lives on that grid
 
    data = CellCenterData2d(grid)
 
-   bcObj = BCObject(xlb="reflect", xrb="reflect", 
-                    ylb="outflow", yrb="outflow")
-   data.register_var("density", bcObj)
+   bc = BCObject(xlb="reflect", xrb="reflect", 
+                 ylb="outflow", yrb="outflow")
+   data.register_var("density", bc)
    ...
 
    data.create()

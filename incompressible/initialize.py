@@ -29,30 +29,30 @@ def initialize(rp):
     ylb_type = rp.get_param("mesh.ylboundary")
     yrb_type = rp.get_param("mesh.yrboundary")
 
-    bcObj = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
-                           ylb=ylb_type, yrb=yrb_type)
+    bc = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
+                        ylb=ylb_type, yrb=yrb_type)
 
     # if we are reflecting, we need odd reflection in the normal
     # directions for the velocity
-    bcObj_xodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
-                                ylb=ylb_type, yrb=yrb_type,
-                                oddReflectDir="x")
+    bc_xodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
+                             ylb=ylb_type, yrb=yrb_type,
+                             oddReflectDir="x")
 
-    bcObj_yodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
-                                ylb=ylb_type, yrb=yrb_type,
-                                oddReflectDir="y")
+    bc_yodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
+                             ylb=ylb_type, yrb=yrb_type,
+                             oddReflectDir="y")
 
     my_data = patch.CellCenterData2d(my_grid, runtime_parameters=rp)
 
     # velocities
-    my_data.register_var("x-velocity", bcObj_xodd)
-    my_data.register_var("y-velocity", bcObj_yodd)
+    my_data.register_var("x-velocity", bc_xodd)
+    my_data.register_var("y-velocity", bc_yodd)
 
     # phi -- used for the projections
-    my_data.register_var("phi-MAC", bcObj)
-    my_data.register_var("phi", bcObj)
-    my_data.register_var("gradp_x", bcObj)
-    my_data.register_var("gradp_y", bcObj)
+    my_data.register_var("phi-MAC", bc)
+    my_data.register_var("phi", bc)
+    my_data.register_var("gradp_x", bc)
+    my_data.register_var("gradp_y", bc)
 
     my_data.create()
 
