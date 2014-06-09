@@ -53,7 +53,7 @@ def initialize(rp):
     # reflect odd
     bc_xodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
                              ylb=ylb_type, yrb=yrb_type,
-                             oddReflectDir="x")
+                             odd_reflect_dir="x")
 
     my_data.register_var("x-momentum", bc_xodd)    
 
@@ -62,7 +62,7 @@ def initialize(rp):
     # reflect odd
     bc_yodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
                              ylb=ylb_type, yrb=yrb_type,
-                             oddReflectDir="y")
+                             odd_reflect_dir="y")
 
     my_data.register_var("y-momentum", bc_yodd)    
 

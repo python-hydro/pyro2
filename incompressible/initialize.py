@@ -36,11 +36,11 @@ def initialize(rp):
     # directions for the velocity
     bc_xodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
                              ylb=ylb_type, yrb=yrb_type,
-                             oddReflectDir="x")
+                             odd_reflect_dir="x")
 
     bc_yodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
                              ylb=ylb_type, yrb=yrb_type,
-                             oddReflectDir="y")
+                             odd_reflect_dir="y")
 
     my_data = patch.CellCenterData2d(my_grid, runtime_parameters=rp)
 
