@@ -49,7 +49,7 @@ a = multigrid.CellCenterMG2d(nx, ny,
                              verbose=1)
 
 # initialize the solution to 0
-init = a.solnGrid.scratch_array()
+init = a.soln_grid.scratch_array()
 
 a.init_solution(init)
 
@@ -71,7 +71,7 @@ b = true(a.x2d,a.y2d)
 e = v - b
 
 print " L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
-      (error(a.solnGrid, e), a.relativeError, a.numCycles)
+      (error(a.soln_grid, e), a.relative_error, a.num_cycles)
 
 
 # plot it

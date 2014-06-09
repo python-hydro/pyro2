@@ -36,7 +36,7 @@ def preevolve(my_data):
                                   verbose=0)
 
     # first compute divU
-    divU = MG.solnGrid.scratch_array()
+    divU = MG.soln_grid.scratch_array()
 
     divU[MG.ilo:MG.ihi+1,MG.jlo:MG.jhi+1] = \
         0.5*(u[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 

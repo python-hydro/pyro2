@@ -95,7 +95,7 @@ def evolve(my_data, dt):
                                   verbose=0)
 
     # first compute divU
-    divU = MG.solnGrid.scratch_array()
+    divU = MG.soln_grid.scratch_array()
 
     # MAC velocities are edge-centered.  divU is cell-centered.
     divU[MG.ilo:MG.ihi+1,MG.jlo:MG.jhi+1] = \
@@ -218,7 +218,7 @@ def evolve(my_data, dt):
     MG.init_RHS(divU/dt)
 
     # use the old phi as our initial guess
-    phiGuess = MG.solnGrid.scratch_array()
+    phiGuess = MG.soln_grid.scratch_array()
     phiGuess[MG.ilo-1:MG.ihi+2,MG.jlo-1:MG.jhi+2] = \
         phi[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]
     MG.init_solution(phiGuess)

@@ -35,7 +35,7 @@ def evolve(myd, dt):
 
 
     # form the RHS: f = phi + (dt/2) k L phi  (where L is the Laplacian)
-    f = mg.solnGrid.scratch_array()
+    f = mg.soln_grid.scratch_array()
     f[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
         phi[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] + 0.5*dt*k * \
         ((phi[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] +

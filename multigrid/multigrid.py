@@ -25,7 +25,7 @@ the coefficients of the Helmholtz equation.  Setting verbose = 1
 causing debugging information to be output, so you can see the
 residual errors in each of the V-cycles.
 
-> a.init_solution(zeros((nx, ny), numpy.float64))
+> a.init_zeros()
 
 this initializes the solution vector with zeros
 
@@ -113,7 +113,7 @@ class CellCenterMG2d:
         self.nsmooth = nsmooth
         self.nbottomSmooth = nsmooth_bottom
 
-        self.maxCycles = 100
+        self.max_cycles = 100
         
         self.verbose = verbose
 
@@ -126,8 +126,8 @@ class CellCenterMG2d:
         self.small = 1.e-16
         
         # keep track of whether we've initialized the solution
-        self.initializedSolution = 0
-        self.initializedRHS = 0
+        self.initialized_solution = 0
+        self.initialized_RHS = 0
         
         # assume that self.nx = 2^(nlevels-1) and that nx = ny
         # this defines nlevels such that we end exactly on a 2x2 grid
@@ -146,15 +146,15 @@ class CellCenterMG2d:
             print "alpha = ", self.alpha
             print "beta  = ", self.beta
 
-        while (i < self.nlevels):
+        while i < self.nlevels:
             
             # create the grid
-            myGrid = patch.Grid2d(nx_t, ny_t, ng=self.ng,
+            my_grid = patch.Grid2d(nx_t, ny_t, ng=self.ng,
                                   xmin=xmin, xmax=xmax,
                                   ymin=ymin, ymax=ymax)
 
             # add a CellCenterData2d object for this level to our list
-            self.grids.append(patch.CellCenterData2d(myGrid, dtype=numpy.float64))
+            self.grids.append(patch.CellCenterData2d(my_grid, dtype=numpy.float64))
 
             # create the boundary condition object
             bcObj = patch.BCObject(xlb=xlBCtype, xrb=xrBCtype,
@@ -176,39 +176,39 @@ class CellCenterMG2d:
 
 
         # provide coordinate and indexing information for the solution mesh
-        solnGrid = self.grids[self.nlevels-1].grid
+        soln_grid = self.grids[self.nlevels-1].grid
 
-        self.ilo = solnGrid.ilo
-        self.ihi = solnGrid.ihi
-        self.jlo = solnGrid.jlo
-        self.jhi = solnGrid.jhi
+        self.ilo = soln_grid.ilo
+        self.ihi = soln_grid.ihi
+        self.jlo = soln_grid.jlo
+        self.jhi = soln_grid.jhi
         
-        self.x  = solnGrid.x
-        self.dx = solnGrid.dx
+        self.x  = soln_grid.x
+        self.dx = soln_grid.dx
 
-        self.x2d = solnGrid.x2d
+        self.x2d = soln_grid.x2d
 
-        self.y  = solnGrid.y
-        self.dy = solnGrid.dy   # note, dy = dx is assumed 
+        self.y  = soln_grid.y
+        self.dy = soln_grid.dy   # note, dy = dx is assumed 
 
-        self.y2d = solnGrid.y2d
+        self.y2d = soln_grid.y2d
 
-        self.solnGrid = solnGrid
+        self.soln_grid = soln_grid
 
         # store the source norm
-        self.sourceNorm = 0.0
+        self.source_norm = 0.0
 
         # after solving, keep track of the number of cycles taken, the
         # relative error from the previous cycle, and the residual error
         # (normalized to the source norm)
-        self.numCycles = 0
-        self.residualError = 1.e33
-        self.relativeError = 1.e33
+        self.num_cycles = 0
+        self.residual_error = 1.e33
+        self.relative_error = 1.e33
 
         # keep track of where we are in the V
-        self.currentCycle = -1
-        self.currentLevel = -1
-        self.upOrDown = ""
+        self.current_cycle = -1
+        self.current_level = -1
+        self.up_or_down = ""
 
         # for visualization -- what frame are we outputting?
         self.vis = vis
@@ -232,23 +232,23 @@ class CellCenterMG2d:
         pylab.scatter(xdown, ydown, marker="o", color="k", s=40)
         pylab.scatter(xup, yup, marker="o", color="k", s=40)
 
-        if self.upOrDown == "down":
-            pylab.scatter(xdown[self.nlevels-self.currentLevel-1], ydown[self.nlevels-self.currentLevel-1], 
+        if self.up_or_down == "down":
+            pylab.scatter(xdown[self.nlevels-self.current_level-1], ydown[self.nlevels-self.current_level-1], 
                           marker="o", color="r", zorder=100, s=38)
 
         else:
-            pylab.scatter(xup[self.currentLevel], yup[self.currentLevel], 
+            pylab.scatter(xup[self.current_level], yup[self.current_level], 
                           marker="o", color="r", zorder=100, s=38)
 
-        pylab.text(0.7, 0.1, "V-cycle %d" % (self.currentCycle))
+        pylab.text(0.7, 0.1, "V-cycle %d" % (self.current_cycle))
         pylab.axis("off")
 
 
     def draw_solution(self):
         
-        myg = self.grids[self.currentLevel].grid
+        myg = self.grids[self.current_level].grid
 
-        v = self.grids[self.currentLevel].get_var("v")
+        v = self.grids[self.current_level].get_var("v")
 
         pylab.imshow(numpy.transpose(v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
                      interpolation="nearest", origin="lower",
@@ -258,7 +258,7 @@ class CellCenterMG2d:
         pylab.ylabel("y")
         
 
-        if self.currentLevel == self.nlevels-1:
+        if self.current_level == self.nlevels-1:
             pylab.title(r"solving $L\phi = f$")
         else:
             pylab.title(r"solving $Le = r$")
@@ -340,7 +340,7 @@ class CellCenterMG2d:
         v = self.grids[self.nlevels-1].get_var("v")
         v[:,:] = data.copy()
 
-        self.initializedSolution = 1
+        self.initialized_solution = 1
 
 
     def init_zeros(self):
@@ -350,7 +350,7 @@ class CellCenterMG2d:
         v = self.grids[self.nlevels-1].get_var("v")
         v[:,:] = 0.0
 
-        self.initializedSolution = 1
+        self.initialized_solution = 1
 
 
     def init_RHS(self, data):
@@ -358,16 +358,16 @@ class CellCenterMG2d:
         f[:,:] = data.copy()
 
         # store the source norm
-        self.sourceNorm = error(self.grids[self.nlevels-1].grid, f)
+        self.source_norm = error(self.grids[self.nlevels-1].grid, f)
 
         if self.verbose:
-            print "Source norm = ", self.sourceNorm
+            print "Source norm = ", self.source_norm
 
         # note: if we wanted to do inhomogeneous Dirichlet BCs, we 
         # would modify the source term, f, here to include a boundary
         # charge
 
-        self.initializedRHS = 1
+        self.initialized_RHS = 1
         
 
     def compute_residual(self, level):
@@ -404,7 +404,7 @@ class CellCenterMG2d:
 
         # do red-black G-S
         i = 0
-        while (i < nsmooth):
+        while i < nsmooth:
 
             xcoeff = self.beta/myg.dx**2
             ycoeff = self.beta/myg.dy**2
@@ -478,27 +478,27 @@ class CellCenterMG2d:
 
         # start by making sure that we've initialized the solution
         # and the RHS
-        if not self.initializedSolution or not self.initializedRHS:
+        if not self.initialized_solution or not self.initialized_RHS:
             msg.fail("ERROR: solution and RHS are not initialized")
 
         # for now, we will just do V-cycles, continuing until we
         # achieve the L2 norm of the relative solution difference is <
         # rtol
         if self.verbose:
-            print "source norm = ", self.sourceNorm
+            print "source norm = ", self.source_norm
             
         oldSolution = self.grids[self.nlevels-1].get_var("v").copy()
         
         converged = 0
         cycle = 1
 
-        while (not converged and cycle <= self.maxCycles):
+        while not converged and cycle <= self.max_cycles:
 
-            self.currentCycle = cycle
+            self.current_cycle = cycle
 
             # zero out the solution on all but the finest grid
             level = 0
-            while (level < self.nlevels-1):
+            while level < self.nlevels-1:
                 v = self.grids[level].zero("v")
                 level += 1            
 
@@ -507,10 +507,10 @@ class CellCenterMG2d:
                 print "<<< beginning V-cycle (cycle %d) >>>\n" % cycle
 
             level = self.nlevels-1
-            while (level > 0):
+            while level > 0:
 
-                self.currentLevel = level
-                self.upOrDown = "down"
+                self.current_level = level
+                self.up_or_down = "down"
 
                 fP = self.grids[level]
                 cP = self.grids[level-1]
@@ -553,7 +553,7 @@ class CellCenterMG2d:
             if self.verbose:
                 print "  bottom solve:"
 
-            self.currentLevel = 0
+            self.current_level = 0
 
             bP = self.grids[0]
 
@@ -568,10 +568,10 @@ class CellCenterMG2d:
             
             # ascending part
             level = 1
-            while (level < self.nlevels):
+            while level < self.nlevels:
 
-                self.currentLevel = level
-                self.upOrDown = "up"
+                self.current_level = level
+                self.up_or_down = "up"
 
                 fP = self.grids[level]
                 cP = self.grids[level-1]
@@ -612,7 +612,7 @@ class CellCenterMG2d:
             diff = (solnP.get_var("v") - oldSolution)/ \
                 (solnP.get_var("v") + self.small)
 
-            relativeError = error(solnP.grid, diff)
+            relative_error = error(solnP.grid, diff)
 
             oldSolution = solnP.get_var("v").copy()
 
@@ -620,22 +620,22 @@ class CellCenterMG2d:
             self.compute_residual(self.nlevels-1)
             r = fP.get_var("r")
 
-            if self.sourceNorm != 0.0:
-                residualError = error(fP.grid, r)/self.sourceNorm
+            if self.source_norm != 0.0:
+                residual_error = error(fP.grid, r)/self.source_norm
             else:
-                residualError = error(fP.grid, r)
+                residual_error = error(fP.grid, r)
 
                 
-            if residualError < rtol:
+            if residual_error < rtol:
                 converged = 1
-                self.numCycles = cycle
-                self.relativeError = relativeError
-                self.residualError = residualError
+                self.num_cycles = cycle
+                self.relative_error = relative_error
+                self.residual_error = residual_error
                 fP.fill_BC("v")
                 
             if self.verbose:
                 print "cycle %d: relative err = %g, residual err = %g\n" % \
-                      (cycle, relativeError, residualError)
+                      (cycle, relative_error, residual_error)
             
             cycle += 1
 
