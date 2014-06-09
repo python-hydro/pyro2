@@ -488,7 +488,18 @@ class CellCenterData2d:
     
     def get_aux(self, keyword):
         """ 
-        get the auxillary data associated with keyword
+        Get the auxillary data associated with keyword
+
+        Parameters
+        ----------
+        keyword : str
+            The name of the auxillary data to access
+
+        Returns
+        -------
+        out : variable type
+            The value corresponding to the keyword
+
         """
         if keyword in self.aux.keys():
             return self.aux[keyword]
@@ -498,7 +509,13 @@ class CellCenterData2d:
 
     def zero(self, name):
         """ 
-        zero out the data array associated with variable name
+        Zero out the data array associated with variable name.
+
+        Parameters
+        ----------
+        name : str
+            The name of the variable to zero
+
         """
         n = self.vars.index(name)
         self.data[n,:,:] = 0.0
@@ -506,7 +523,7 @@ class CellCenterData2d:
 
     def fill_BC_all(self):
         """
-        fill boundary conditions on all variables
+        Fill boundary conditions on all variables.
         """
         for name in self.vars:
             self.fill_BC(name)
@@ -514,14 +531,20 @@ class CellCenterData2d:
                 
     def fill_BC(self, name):
         """ 
-        fill the boundary conditions.  This operates on a single state
-        variable at a time, to allow for maximum flexibility
+        Fill the boundary conditions.  This operates on a single state
+        variable at a time, to allow for maximum flexibility.
 
-        we do periodic, reflect-even, reflect-odd, and outflow
+        We do periodic, reflect-even, reflect-odd, and outflow
 
-        each variable name has a corresponding BCObject stored in the
+        Each variable name has a corresponding BCObject stored in the
         CellCenterData2d object -- we refer to this to figure out the 
         action to take at each boundary.
+
+        Parameters
+        ----------
+        name : str
+            The name of the variable for which to fill the BCs.  
+
         """
     
         # there is only a single grid, so every boundary is on
@@ -682,7 +705,7 @@ class CellCenterData2d:
 
     def restrict(self, varname):
         """
-        restrict the variable varname to a coarser grid (factor of 2
+        Restrict the variable varname to a coarser grid (factor of 2
         coarser) and return an array with the resulting data (and same
         number of ghostcells)            
         """
@@ -720,9 +743,10 @@ class CellCenterData2d:
 
     def prolong(self, varname):
         """
-        prolong the data in the current (coarse) grid to a finer
+        Prolong the data in the current (coarse) grid to a finer
         (factor of 2 finer) grid.  Return an array with the resulting
-        data (and same number of ghostcells).
+        data (and same number of ghostcells).  Only the data for the
+        variable varname will be operated upon.
 
         We will reconstruct the data in the zone from the
         zone-averaged variables using the same limited slopes as in
@@ -828,7 +852,7 @@ class CellCenterData2d:
 
     def pretty_print(self, varname):
         """
-        print out a small dataset to the screen with the ghost cells
+        Print out a small dataset to the screen with the ghost cells
         a different color, to make things stand out
         """
 
@@ -864,8 +888,8 @@ class CellCenterData2d:
 
 def read(filename):
     """
-    read a CellCenterData object from a file and return it and the grid 
-    info
+    Read a CellCenterData object from a file and return it and the grid 
+    info and data.
     """
 
     # if we come in with .pyro, we don't need to add it again
@@ -880,8 +904,20 @@ def read(filename):
 
 
 def cell_center_data_clone(old):
-    """ create a new CellCenterData2d object that is a copy of an existing 
-        one """
+    """ 
+    Create a new CellCenterData2d object that is a copy of an existing 
+    one 
+
+    Parameters
+    ----------
+    old : CellCenterData2d object
+        The CellCenterData2d object we wish to copy
+
+    Note
+    ----
+    It may be that this whole thing can be replaced with a copy.deepcopy()
+
+    """
 
     if not isinstance(old, CellCenterData2d):
         msg.fail("Can't clone object")
