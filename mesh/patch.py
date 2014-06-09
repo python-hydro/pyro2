@@ -401,17 +401,19 @@ class CellCenterData2d:
 
     
     def get_aux(self, keyword):
+        """ 
+        get the auxillary data associated with keyword
+        """
         if keyword in self.aux.keys():
             return self.aux[keyword]
         else:
             return None
         
 
-    def get_var_by_index(self, index):
-        return self.data[index,:,:]
-
-
     def zero(self, name):
+        """ 
+        zero out the data array associated with variable name
+        """
         n = self.vars.index(name)
         self.data[n,:,:] = 0.0
         
