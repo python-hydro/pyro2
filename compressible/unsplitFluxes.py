@@ -181,9 +181,7 @@ def unsplitFluxes(my_data, dt):
     # there is a single flattening coefficient (xi) for all directions
     use_flattening = rp.get_param("compressible.use_flattening")
 
-    if (use_flattening):
-        smallp = 1.e-10
-
+    if use_flattening:
         delta = rp.get_param("compressible.delta")
         z0 = rp.get_param("compressible.z0")
         z1 = rp.get_param("compressible.z1")
@@ -205,9 +203,9 @@ def unsplitFluxes(my_data, dt):
     pfa.begin()
 
     limiter = rp.get_param("compressible.limiter")
-    if (limiter == 0):
+    if limiter == 0:
         limitFunc = reconstruction_f.nolimit
-    elif (limiter == 1):
+    elif limiter == 1:
         limitFunc = reconstruction_f.limit2
     else:
         limitFunc = reconstruction_f.limit4
@@ -225,21 +223,21 @@ def unsplitFluxes(my_data, dt):
 
     gamma = rp.get_param("eos.gamma")
 
-    V_l = numpy.zeros((myg.qx, myg.qy, vars.nvar),  dtype=numpy.float64)
-    V_r = numpy.zeros((myg.qx, myg.qy, vars.nvar),  dtype=numpy.float64)
+    V_l = myg.scratch_array(vars.nvar)
+    V_r = myg.scratch_array(vars.nvar)
 
-    (V_l, V_r) = interface_f.states(1, myg.qx, myg.qy, myg.ng, myg.dx, dt,
-                                    vars.nvar,
-                                    gamma,
-                                    r, u, v, p,
-                                    ldelta_r, ldelta_u, ldelta_v, ldelta_p) 
+    V_l, V_r = interface_f.states(1, myg.qx, myg.qy, myg.ng, myg.dx, dt,
+                                  vars.nvar,
+                                  gamma,
+                                  r, u, v, p,
+                                  ldelta_r, ldelta_u, ldelta_v, ldelta_p) 
     
     pfb.end()
                     
 
     # transform interface states back into conserved variables
-    U_xl = numpy.zeros((myg.qx, myg.qy, my_data.nvar),  dtype=numpy.float64)
-    U_xr = numpy.zeros((myg.qx, myg.qy, my_data.nvar),  dtype=numpy.float64)
+    U_xl = myg.scratch_array(vars.nvar)
+    U_xr = myg.scratch_array(vars.nvar)
 
     U_xl[:,:,vars.idens] = V_l[:,:,vars.irho]
     U_xl[:,:,vars.ixmom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iu]
@@ -272,18 +270,18 @@ def unsplitFluxes(my_data, dt):
     # left and right primitive variable states
     pfb.begin()
 
-    (V_l, V_r) = interface_f.states(2, myg.qx, myg.qy, myg.ng, myg.dy, dt,
-                                    vars.nvar,
-                                    gamma,
-                                    r, u, v, p,
-                                    ldelta_r, ldelta_u, ldelta_v, ldelta_p)                                    
+    V_l, V_r = interface_f.states(2, myg.qx, myg.qy, myg.ng, myg.dy, dt,
+                                  vars.nvar,
+                                  gamma,
+                                  r, u, v, p,
+                                  ldelta_r, ldelta_u, ldelta_v, ldelta_p)                                    
 
     pfb.end()
 
 
     # transform interface states back into conserved variables
-    U_yl = numpy.zeros((myg.qx, myg.qy, my_data.nvar),  dtype=numpy.float64)
-    U_yr = numpy.zeros((myg.qx, myg.qy, my_data.nvar),  dtype=numpy.float64)
+    U_yl = myg.scratch_array(vars.nvar)
+    U_yr = myg.scratch_array(vars.nvar)
 
     U_yl[:,:,vars.idens] = V_l[:,:,vars.irho]
     U_yl[:,:,vars.ixmom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iu]
@@ -340,9 +338,9 @@ def unsplitFluxes(my_data, dt):
 
     riemann = rp.get_param("compressible.riemann")
 
-    if (riemann == "HLLC"):
+    if riemann == "HLLC":
         riemannFunc = interface_f.riemann_hllc
-    elif (riemann == "CGF"):
+    elif riemann == "CGF":
         riemannFunc = interface_f.riemann_cgf
     else:
         msg.fail("ERROR: Riemann solver undefined")
