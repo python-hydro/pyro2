@@ -1,35 +1,35 @@
 """
-The patch module allows for a grid to be created and for data to be
-defined on that grid.
+The patch module defines the classes necessary to describe finite-volume
+data and the grid that it lives on.
 
 Typical usage:
 
-create the grid
+  -- create the grid
 
-   grid = Grid2d(nx, ny)
-
-
-create the data that lives on that grid
-
-   data = CellCenterData2d(grid)
-
-   bc = BCObject(xlb="reflect", xrb="reflect", 
-                 ylb="outflow", yrb="outflow")
-   data.register_var("density", bc)
-   ...
-
-   data.create()
+     grid = Grid2d(nx, ny)
 
 
-initialize some data
+  -- create the data that lives on that grid
 
-   dens = data.get_var("density")
-   dens[:,:] = ...
+     data = CellCenterData2d(grid)
+
+     bc = BCObject(xlb="reflect", xrb="reflect", 
+                   ylb="outflow", yrb="outflow")
+     data.register_var("density", bc)
+     ...
+
+     data.create()
 
 
-fill the ghost cells
+  -- initialize some data
 
-   data.fill_BC("density")
+     dens = data.get_var("density")
+     dens[:,:] = ...
+
+
+  -- fill the ghost cells
+
+     data.fill_BC("density")
 
 """
 
@@ -59,7 +59,7 @@ def define_bc(type, function):
 
 class BCObject:
     """
-    boundary condition container -- hold the BCs on each boundary
+    Boundary condition container -- hold the BCs on each boundary
     for a single variable
     """
 
@@ -67,7 +67,42 @@ class BCObject:
                   xlb="outflow", xrb="outflow", 
                   ylb="outflow", yrb="outflow",
                   odd_reflect_dir=""):
+        """ 
+        Create the BCObject. 
 
+        Parameters
+        ----------
+        xlb : {'outflow', 'periodic', 'reflect', 'reflect-even',
+               'reflect-odd', 'dirichlet', 'neumann', 
+               user-defined}, optional
+            The type of boundary condition to enforce on the lower
+            x boundary.  user-defined requires one to have defined
+            a new boundary condition type using define_bc()
+        xrb : {'outflow', 'periodic', 'reflect', 'reflect-even',
+               'reflect-odd', 'dirichlet', 'neumann', 
+               user-defined}, optional
+            The type of boundary condition to enforce on the upper
+            x boundary.  user-defined requires one to have defined
+            a new boundary condition type using define_bc()
+        ylb : {'outflow', 'periodic', 'reflect', 'reflect-even',
+               'reflect-odd', 'dirichlet', 'neumann', 
+               user-defined}, optional
+            The type of boundary condition to enforce on the lower
+            y boundary.  user-defined requires one to have defined
+            a new boundary condition type using define_bc()
+        yrb : {'outflow', 'periodic', 'reflect', 'reflect-even',
+               'reflect-odd', 'dirichlet', 'neumann', 
+               user-defined}, optional
+            The type of boundary condition to enforce on the upper
+            y boundary.  user-defined requires one to have defined
+            a new boundary condition type using define_bc()
+        odd_reflect_dir : {'x', 'y'}, optional
+            The direction along which reflection should be odd 
+            (sign changes).  If not specified, a boundary condition
+            of 'reflect' will always be set to 'reflect-even'
+
+        """
+       
         # note: "reflect" is ambiguous and will be converted into
         # either reflect-even (the default) or reflect-odd if
         # odd_reflect_dir specifies the corresponding direction ("x",
