@@ -15,7 +15,7 @@ create the data that lives on that grid
 
    bcObj = BCObject(xlb="reflect", xrb="reflect", 
                     ylb="outflow", yrb="outflow")
-   data.registerVar("density", bcObj)
+   data.register_var("density", bcObj)
    ...
 
    data.create()
@@ -23,13 +23,13 @@ create the data that lives on that grid
 
 initialize some data
 
-   dens = data.getVarPtr("density")
+   dens = data.get_var("density")
    dens[:,:] = ...
 
 
 fill the ghost cells
 
-   data.fillBC("density")
+   data.fill_BC("density")
 
 """
 
@@ -45,7 +45,7 @@ valid = ["outflow", "periodic",
 
 extBCs = {}
 
-def defineBC(type, function):
+def define_bc(type, function):
     """ 
     use this to extend the types of boundary conditions supported
     on a solver-by-solver basis.  Here we pass in the reference to
@@ -74,10 +74,10 @@ class BCObject:
         # "y")
 
         # -x boundary
-        if (xlb in valid):
+        if xlb in valid:
             self.xlb = xlb
-            if (self.xlb == "reflect"):
-                if (oddReflectDir == "x"):
+            if self.xlb == "reflect":
+                if oddReflectDir == "x":
                     self.xlb = "reflect-odd"
                 else:
                     self.xlb = "reflect-even"
@@ -86,10 +86,10 @@ class BCObject:
             msg.fail("ERROR: xlb = %s invalid BC" % (xlb))
 
         # +x boundary
-        if (xrb in valid):
+        if xrb in valid:
             self.xrb = xrb
-            if (self.xrb == "reflect"):
-                if (oddReflectDir == "x"):
+            if self.xrb == "reflect":
+                if oddReflectDir == "x":
                     self.xrb = "reflect-odd"
                 else:
                     self.xrb = "reflect-even"
@@ -98,10 +98,10 @@ class BCObject:
             msg.fail("ERROR: xrb = %s invalid BC" % (xrb))
 
         # -y boundary
-        if (ylb in valid):
+        if ylb in valid:
             self.ylb = ylb
-            if (self.ylb == "reflect"):
-                if (oddReflectDir == "y"):
+            if self.ylb == "reflect":
+                if oddReflectDir == "y":
                     self.ylb = "reflect-odd"
                 else:
                     self.ylb = "reflect-even"
@@ -110,10 +110,10 @@ class BCObject:
             msg.fail("ERROR: ylb = %s invalid BC" % (ylb))
 
         # +y boundary
-        if (yrb in valid):
+        if yrb in valid:
             self.yrb = yrb
-            if (self.yrb == "reflect"):
-                if (oddReflectDir == "y"):
+            if self.yrb == "reflect":
+                if oddReflectDir == "y":
                     self.yrb = "reflect-odd"
                 else:
                     self.yrb = "reflect-even"
@@ -223,7 +223,7 @@ class Grid2d:
         self.y2d = y2d
 
 
-    def scratchArray(self, dtype=numpy.float64):
+    def scratch_array(self, dtype=numpy.float64):
         """ 
         return a standard numpy array dimensioned to have the size
         and number of ghostcells as the parent grid
@@ -270,8 +270,8 @@ class CellCenterData2d:
     register any variables that we expect to live on this patch.  Here
     BCObject describes the boundary conditions for that variable.
 
-        my_data.registerVar('density', BCObject)
-        my_data.registerVar('x-momentum', BCObject)
+        my_data.register_var('density', BCObject)
+        my_data.register_var('x-momentum', BCObject)
         ...
 
 
@@ -279,7 +279,7 @@ class CellCenterData2d:
     needed to interpret the data outside of the simulation (for
     example, the gamma for the equation of state).
 
-        mydata.setAux(keyword, value)
+        mydata.set_aux(keyword, value)
 
     finally, finish the initialization of the patch
 
@@ -316,7 +316,7 @@ class CellCenterData2d:
 
         self.rp = runtime_parameters
 
-    def registerVar(self, name, bc_object):
+    def register_var(self, name, bc_object):
         """ 
         register a variable with CellCenterData2d object.  Here we pass in 
         a BCObject that describes the boundary conditions for that
@@ -332,7 +332,7 @@ class CellCenterData2d:
         self.BCs[name] = bc_object
 
 
-    def setAux(self, keyword, value):
+    def set_aux(self, keyword, value):
         """ 
         set any auxillary (scalar) data
         """
@@ -390,7 +390,7 @@ class CellCenterData2d:
         return myStr
     
 
-    def getVarPtr(self, name):
+    def get_var(self, name):
         """
         return a pointer to the data array for the variable described
         by name.  Any changes made to this are automatically reflected
@@ -400,14 +400,14 @@ class CellCenterData2d:
         return self.data[n,:,:]
 
     
-    def getAux(self, keyword):
+    def get_aux(self, keyword):
         if keyword in self.aux.keys():
             return self.aux[keyword]
         else:
             return None
         
 
-    def getVarPtrByIndex(self, index):
+    def get_var_by_index(self, index):
         return self.data[index,:,:]
 
 
@@ -416,15 +416,15 @@ class CellCenterData2d:
         self.data[n,:,:] = 0.0
         
 
-    def fillBCAll(self):
+    def fill_BC_all(self):
         """
         fill boundary conditions on all variables
         """
         for name in self.vars:
-            self.fillBC(name)
+            self.fill_BC(name)
 
                 
-    def fillBC(self, name):
+    def fill_BC(self, name):
         """ 
         fill the boundary conditions.  This operates on a single state
         variable at a time, to allow for maximum flexibility
@@ -600,7 +600,7 @@ class CellCenterData2d:
         """
 
         fG = self.grid
-        fData = self.getVarPtr(varname)
+        fData = self.get_var(varname)
 
         # allocate an array for the coarsely gridded data
         ng_c = fG.ng
@@ -668,7 +668,7 @@ class CellCenterData2d:
         """
 
         cG = self.grid
-        cData = self.getVarPtr(varname)
+        cData = self.get_var(varname)
 
         # allocate an array for the coarsely gridded data
         ng_f = cG.ng
@@ -684,12 +684,12 @@ class CellCenterData2d:
         jhi_f = ng_f+ny_f-1
 
         # slopes for the coarse data
-        m_x = cG.scratchArray()
+        m_x = cG.scratch_array()
         m_x[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] = \
             0.5*(cData[cG.ilo+1:cG.ihi+2,cG.jlo:cG.jhi+1] -
                  cData[cG.ilo-1:cG.ihi  ,cG.jlo:cG.jhi+1])
 
-        m_y = cG.scratchArray()
+        m_y = cG.scratch_array()
         m_y[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] = \
             0.5*(cData[cG.ilo:cG.ihi+1,cG.jlo+1:cG.jhi+2] -
                  cData[cG.ilo:cG.ihi+1,cG.jlo-1:cG.jhi  ])
@@ -738,13 +738,13 @@ class CellCenterData2d:
         pF.close()
 
 
-    def prettyPrint(self, varname):
+    def pretty_print(self, varname):
         """
         print out a small dataset to the screen with the ghost cells
         a different color, to make things stand out
         """
 
-        a = self.getVarPtr(varname)
+        a = self.get_var(varname)
 
         if self.dtype == numpy.int:
             fmt = "%4d"
@@ -791,7 +791,7 @@ def read(filename):
     return data.grid, data
 
 
-def ccDataClone(old):
+def cell_center_data_clone(old):
     """ create a new CellCenterData2d object that is a copy of an existing 
         one """
 
@@ -802,7 +802,7 @@ def ccDataClone(old):
 
     n = 0
     while n < old.nvar:
-        new.registerVar(old.vars[n], old.BCs[old.vars[n]])
+        new.register_var(old.vars[n], old.BCs[old.vars[n]])
         n += 1
 
     new.create()
@@ -824,11 +824,11 @@ if __name__== "__main__":
 
     bc = BCObject()
 
-    mydata.registerVar("a", bc)
+    mydata.register_var("a", bc)
     mydata.create()
 
 
-    a = mydata.getVarPtr("a")
+    a = mydata.get_var("a")
     a[:,:] = numpy.exp(-(myg.x2d - 0.5)**2 - (myg.y2d - 1.0)**2)
 
     print mydata

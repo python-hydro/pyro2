@@ -22,10 +22,10 @@ def timestep(my_data):
 
 
     # get the variables we need                                                 
-    dens = my_data.getVarPtr("density")
-    xmom = my_data.getVarPtr("x-momentum")
-    ymom = my_data.getVarPtr("y-momentum")
-    ener = my_data.getVarPtr("energy")
+    dens = my_data.get_var("density")
+    xmom = my_data.get_var("x-momentum")
+    ymom = my_data.get_var("y-momentum")
+    ener = my_data.get_var("energy")
 
 
     # we need to compute the pressure

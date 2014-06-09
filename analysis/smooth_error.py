@@ -35,15 +35,15 @@ myg, myd = patch.read(file1)
 analytic = patch.CellCenterData2d(myg, dtype=numpy.float64)
 
 bco = myd.BCs[myd.vars[0]]
-analytic.registerVar("density", bco)
+analytic.register_var("density", bco)
 analytic.create()
 
 # use the original initialization routine to set the analytic solution
 smooth.initData(analytic)
 
 # compare the error
-dens_numerical = myd.getVarPtr("density")
-dens_analytic = analytic.getVarPtr("density")
+dens_numerical = myd.get_var("density")
+dens_analytic = analytic.get_var("density")
 
 print "mesh details"
 print myg

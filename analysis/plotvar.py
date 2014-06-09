@@ -15,7 +15,7 @@ def makeplot(myd, variable, outfile):
 
     pylab.figure(num=1, figsize=(6.5,5.25), dpi=100, facecolor='w')
 
-    var = myd.getVarPtr(variable)
+    var = myd.get_var(variable)
     myg = myd.grid
 
     img = pylab.imshow(numpy.transpose(var[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),

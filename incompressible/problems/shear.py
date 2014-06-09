@@ -39,8 +39,8 @@ def initData(my_data):
 
     
     # get the velocities
-    u = my_data.getVarPtr("x-velocity")
-    v = my_data.getVarPtr("y-velocity")
+    u = my_data.get_var("x-velocity")
+    v = my_data.get_var("y-velocity")
 
     myg = my_data.grid
 

@@ -10,10 +10,10 @@ def dovis(my_data, n):
 
     pylab.rc("font", size=10)
 
-    dens = my_data.getVarPtr("density")
-    xmom = my_data.getVarPtr("x-momentum")
-    ymom = my_data.getVarPtr("y-momentum")
-    ener = my_data.getVarPtr("energy")
+    dens = my_data.get_var("density")
+    xmom = my_data.get_var("x-momentum")
+    ymom = my_data.get_var("y-momentum")
+    ener = my_data.get_var("energy")
 
     nvar = 4
     
@@ -29,7 +29,7 @@ def dovis(my_data, n):
 
     # access gamma from the object instead of using the EOS so we can
     # use dovis outside of a running simulation.
-    gamma = my_data.getAux("gamma")
+    gamma = my_data.get_aux("gamma")
     p = rhoe*(gamma - 1.0)
 
     e = rhoe/dens

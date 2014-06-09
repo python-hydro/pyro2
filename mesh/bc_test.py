@@ -11,24 +11,24 @@ mydata = mesh.patch.CellCenterData2d(myg, dtype=numpy.int)
 
 bco = mesh.patch.BCObject(xlb="outflow", xrb="outflow",
                           ylb="outflow", yrb="outflow")
-mydata.registerVar("outflow", bco)
+mydata.register_var("outflow", bco)
 
 bcp = mesh.patch.BCObject(xlb="periodic", xrb="periodic",
                           ylb="periodic", yrb="periodic")
-mydata.registerVar("periodic", bcp)
+mydata.register_var("periodic", bcp)
 
 bcre = mesh.patch.BCObject(xlb="reflect-even", xrb="reflect-even",
                            ylb="reflect-even", yrb="reflect-even")
-mydata.registerVar("reflect-even", bcre)
+mydata.register_var("reflect-even", bcre)
 
 bcro = mesh.patch.BCObject(xlb="reflect-odd", xrb="reflect-odd",
                            ylb="reflect-odd", yrb="reflect-odd")
-mydata.registerVar("reflect-odd", bcro)
+mydata.register_var("reflect-odd", bcro)
 
 mydata.create()
 
 
-a = mydata.getVarPtr("outflow")
+a = mydata.get_var("outflow")
 
 i = myg.ilo
 while (i <= myg.ihi):
@@ -40,33 +40,33 @@ while (i <= myg.ihi):
     i += 1
 
 
-b = mydata.getVarPtr("periodic")
-c = mydata.getVarPtr("reflect-even")
-d = mydata.getVarPtr("reflect-odd")
+b = mydata.get_var("periodic")
+c = mydata.get_var("reflect-even")
+d = mydata.get_var("reflect-odd")
 
 b[:,:] = a[:,:]
 c[:,:] = a[:,:]
 d[:,:] = a[:,:]
 
-mydata.fillBC("outflow")
-mydata.fillBC("periodic")
-mydata.fillBC("reflect-even")
-mydata.fillBC("reflect-odd")
+mydata.fill_BC("outflow")
+mydata.fill_BC("periodic")
+mydata.fill_BC("reflect-even")
+mydata.fill_BC("reflect-odd")
 
 
 
 print "outflow"
-mydata.prettyPrint("outflow")
+mydata.pretty_print("outflow")
 
 print " "
 print "periodic"
-mydata.prettyPrint("periodic")
+mydata.pretty_print("periodic")
 
 print " "
 print "reflect-even"
-mydata.prettyPrint("reflect-even")
+mydata.pretty_print("reflect-even")
 
 print " "
 print "reflect-odd"
-mydata.prettyPrint("reflect-odd")
+mydata.pretty_print("reflect-odd")
 

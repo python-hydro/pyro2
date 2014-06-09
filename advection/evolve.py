@@ -4,7 +4,7 @@ def evolve(my_data, dt):
     """ evolve the advection equations through one timestep """
 
     
-    dens = my_data.getVarPtr("density")
+    dens = my_data.get_var("density")
 
     dtdx = dt/my_data.grid.dx
     dtdy = dt/my_data.grid.dy

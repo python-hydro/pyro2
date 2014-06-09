@@ -157,9 +157,9 @@ class ccMG2d:
             bcObj = patch.BCObject(xlb=xlBCtype, xrb=xrBCtype,
                                    ylb=ylBCtype, yrb=yrBCtype)
 
-            self.grids[i].registerVar("v", bcObj)
-            self.grids[i].registerVar("f", bcObj)
-            self.grids[i].registerVar("r", bcObj)
+            self.grids[i].register_var("v", bcObj)
+            self.grids[i].register_var("f", bcObj)
+            self.grids[i].register_var("r", bcObj)
 
             self.grids[i].create()
 
@@ -240,7 +240,7 @@ class ccMG2d:
         
         myg = self.grids[self.currentLevel].grid
 
-        v = self.grids[self.currentLevel].getVarPtr("v")
+        v = self.grids[self.currentLevel].get_var("v")
 
         pylab.imshow(numpy.transpose(v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
                      interpolation="nearest", origin="lower",
@@ -267,7 +267,7 @@ class ccMG2d:
         
         myg = self.grids[self.nlevels-1].grid
 
-        v = self.grids[self.nlevels-1].getVarPtr("v")
+        v = self.grids[self.nlevels-1].get_var("v")
 
         pylab.imshow(numpy.transpose(v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
                      interpolation="nearest", origin="lower",
@@ -291,7 +291,7 @@ class ccMG2d:
         
         myg = self.grids[self.nlevels-1].grid
 
-        v = self.grids[self.nlevels-1].getVarPtr("v")
+        v = self.grids[self.nlevels-1].get_var("v")
 
         e = v - self.trueFunc(myg.x2d, myg.y2d)
 
@@ -314,7 +314,7 @@ class ccMG2d:
 
 
     def getSolution(self):
-        v = self.grids[self.nlevels-1].getVarPtr("v")
+        v = self.grids[self.nlevels-1].get_var("v")
         return v.copy()
         
 
@@ -328,7 +328,7 @@ class ccMG2d:
         initialize the solution to the elliptic problem by passing in
         a value for all defined zones
         """
-        v = self.grids[self.nlevels-1].getVarPtr("v")
+        v = self.grids[self.nlevels-1].get_var("v")
         v[:,:] = data.copy()
 
         self.initializedSolution = 1
@@ -338,14 +338,14 @@ class ccMG2d:
         """
         set the initial solution to zero
         """
-        v = self.grids[self.nlevels-1].getVarPtr("v")
+        v = self.grids[self.nlevels-1].get_var("v")
         v[:,:] = 0.0
 
         self.initializedSolution = 1
 
 
     def initRHS(self, data):
-        f = self.grids[self.nlevels-1].getVarPtr("f")
+        f = self.grids[self.nlevels-1].get_var("f")
         f[:,:] = data.copy()
 
         # store the source norm
@@ -364,9 +364,9 @@ class ccMG2d:
     def computeResidual(self, level):
         """ compute the residual and store it in the r variable"""
 
-        v = self.grids[level].getVarPtr("v")
-        f = self.grids[level].getVarPtr("f")
-        r = self.grids[level].getVarPtr("r")
+        v = self.grids[level].get_var("v")
+        f = self.grids[level].get_var("f")
+        r = self.grids[level].get_var("r")
 
         myg = self.grids[level].grid
 
@@ -389,12 +389,12 @@ class ccMG2d:
         global frame
 
         """ use Gauss-Seidel iterations to smooth """
-        v = self.grids[level].getVarPtr("v")
-        f = self.grids[level].getVarPtr("f")
+        v = self.grids[level].get_var("v")
+        f = self.grids[level].get_var("f")
 
         myg = self.grids[level].grid
 
-        self.grids[level].fillBC("v")
+        self.grids[level].fill_BC("v")
 
         pylab.clf()
 
@@ -422,7 +422,7 @@ class ccMG2d:
                          v[myg.ilo+1:myg.ihi+1:2,myg.jlo  :myg.jhi  :2])) / \
                 (self.alpha + 2.0*xcoeff + 2.0*ycoeff)
             
-            self.grids[level].fillBC("v")
+            self.grids[level].fill_BC("v")
                                                      
             v[myg.ilo+1:myg.ihi+1:2,myg.jlo:myg.jhi+1:2] = \
                 (f[myg.ilo+1:myg.ihi+1:2,myg.jlo:myg.jhi+1:2] +
@@ -441,7 +441,7 @@ class ccMG2d:
                 (self.alpha + 2.0*xcoeff + 2.0*ycoeff)
 
 
-            self.grids[level].fillBC("v")
+            self.grids[level].fill_BC("v")
 
             pylab.clf()
 
@@ -482,7 +482,7 @@ class ccMG2d:
         if self.verbose:
             print "source norm = ", self.sourceNorm
             
-        oldSolution = self.grids[self.nlevels-1].getVarPtr("v").copy()
+        oldSolution = self.grids[self.nlevels-1].get_var("v").copy()
         
         converged = 0
         cycle = 1
@@ -513,7 +513,7 @@ class ccMG2d:
                 cP = self.grids[level-1]
 
                 # access to the residual
-                r = fP.getVarPtr("r")
+                r = fP.get_var("r")
 
                 if self.verbose:
                     self.computeResidual(level)
@@ -537,7 +537,7 @@ class ccMG2d:
 
 
                 # restrict the residual down to the RHS of the coarser level
-                f_coarse = cP.getVarPtr("f")
+                f_coarse = cP.get_var("f")
                 f_coarse[:,:] = fP.restrict("r")
 
                 level -= 1
@@ -561,7 +561,7 @@ class ccMG2d:
 
             self.smooth(0, self.nbottomSmooth)
 
-            bP.fillBC("v")
+            bP.fill_BC("v")
 
             
             # ascending part
@@ -578,12 +578,12 @@ class ccMG2d:
                 e = cP.prolong("v")
 
                 # correct the solution on the current grid
-                v = fP.getVarPtr("v")
+                v = fP.get_var("v")
                 v += e
 
                 if self.verbose:
                     self.computeResidual(level)
-                    r = fP.getVarPtr("r")
+                    r = fP.get_var("r")
 
                     print "  level = %d, nx = %d, ny = %d" % \
                         (level, fP.grid.nx, fP.grid.ny)
@@ -607,16 +607,16 @@ class ccMG2d:
             # determine convergence
             solnP = self.grids[self.nlevels-1]
 
-            diff = (solnP.getVarPtr("v") - oldSolution)/ \
-                (solnP.getVarPtr("v") + self.small)
+            diff = (solnP.get_var("v") - oldSolution)/ \
+                (solnP.get_var("v") + self.small)
 
             relativeError = error(solnP.grid, diff)
 
-            oldSolution = solnP.getVarPtr("v").copy()
+            oldSolution = solnP.get_var("v").copy()
 
             # compute the residual error, relative to the source norm
             self.computeResidual(self.nlevels-1)
-            r = fP.getVarPtr("r")
+            r = fP.get_var("r")
 
             if (self.sourceNorm != 0.0):
                 residualError = error(fP.grid, r)/self.sourceNorm
@@ -629,7 +629,7 @@ class ccMG2d:
                 self.numCycles = cycle
                 self.relativeError = relativeError
                 self.residualError = residualError
-                fP.fillBC("v")
+                fP.fill_BC("v")
                 
             if self.verbose:
                 print "cycle %d: relative err = %g, residual err = %g\n" % \

@@ -49,38 +49,38 @@ bcObj = patch.BCObject(xlb="periodic", xrb="periodic",
 
 U = patch.CellCenterData2d(myg)
 
-U.registerVar('u-old', bcObj)
-U.registerVar('v-old', bcObj)
-U.registerVar('u+gphi', bcObj)
-U.registerVar('v+gphi', bcObj)
-U.registerVar('u', bcObj)
-U.registerVar('v', bcObj)
+U.register_var('u-old', bcObj)
+U.register_var('v-old', bcObj)
+U.register_var('u+gphi', bcObj)
+U.register_var('v+gphi', bcObj)
+U.register_var('u', bcObj)
+U.register_var('v', bcObj)
 
-U.registerVar('divU', bcObj)
+U.register_var('divU', bcObj)
 
-U.registerVar('phi-old', bcObj)
-U.registerVar('phi', bcObj)
-U.registerVar('dphi', bcObj)
+U.register_var('phi-old', bcObj)
+U.register_var('phi', bcObj)
+U.register_var('dphi', bcObj)
 
-U.registerVar('gradphi_x-old', bcObj)
-U.registerVar('gradphi_y-old', bcObj)
-U.registerVar('gradphi_x', bcObj)
-U.registerVar('gradphi_y', bcObj)
+U.register_var('gradphi_x-old', bcObj)
+U.register_var('gradphi_y-old', bcObj)
+U.register_var('gradphi_x', bcObj)
+U.register_var('gradphi_y', bcObj)
 
 U.create()
 
 # initialize a divergence free velocity field,
 # u = -sin^2(pi x) sin(2 pi y), v = sin^2(pi y) sin(2 pi x)
-u = U.getVarPtr('u')
-v = U.getVarPtr('v')
+u = U.get_var('u')
+v = U.get_var('v')
 
 u[:,:] = -(numpy.sin(math.pi*myg.x2d)**2)*numpy.sin(2.0*math.pi*myg.y2d)
 v[:,:] =  (numpy.sin(math.pi*myg.y2d)**2)*numpy.sin(2.0*math.pi*myg.x2d)
 
 
 # store the original, divergence free velocity field for comparison later
-uold = U.getVarPtr('u-old')
-vold = U.getVarPtr('v-old')
+uold = U.get_var('u-old')
+vold = U.get_var('v-old')
 
 uold[:,:] = u.copy()
 vold[:,:] = v.copy()
@@ -95,9 +95,9 @@ R = 0.1
 x0 = 0.5
 y0 = 0.5
 
-phi = U.getVarPtr('phi-old')
-gradphi_x = U.getVarPtr('gradphi_x-old')
-gradphi_y = U.getVarPtr('gradphi_y-old')
+phi = U.get_var('phi-old')
+gradphi_x = U.get_var('gradphi_x-old')
+gradphi_y = U.get_var('gradphi_y-old')
 
 phi[:,:] = numpy.exp(-((myg.x2d-x0)**2 + (myg.y2d-y0)**2)/R**2)
 
@@ -108,19 +108,19 @@ u += gradphi_x
 v += gradphi_y
 
 
-u_plus_gradphi = U.getVarPtr('u+gphi')
-v_plus_gradphi = U.getVarPtr('v+gphi')
+u_plus_gradphi = U.get_var('u+gphi')
+v_plus_gradphi = U.get_var('v+gphi')
 
 u_plus_gradphi[:,:] = u[:,:]
 v_plus_gradphi[:,:] = v[:,:]
 
 
 # use the mesh class to enforce the periodic BCs on the velocity field
-U.fillBCAll()
+U.fill_BC_all()
 
 
 # now compute the cell-centered, centered-difference divergence
-divU = U.getVarPtr('divU')
+divU = U.get_var('divU')
 
 divU[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
         0.5*(u[myg.ilo+1:myg.ihi+2,myg.jlo  :myg.jhi+1] -
@@ -147,19 +147,19 @@ while (iproj <= nproj):
     MG.initRHS(divU)
     MG.solve(rtol=1.e-12)
 
-    phi = U.getVarPtr('phi')
+    phi = U.get_var('phi')
     solution = MG.getSolution()
 
     phi[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2] = \
         solution[MG.ilo-1:MG.ihi+2,MG.jlo-1:MG.jhi+2]
 
-    dphi = U.getVarPtr('dphi')
-    dphi[:,:] = phi - U.getVarPtr('phi-old')
+    dphi = U.get_var('dphi')
+    dphi[:,:] = phi - U.get_var('phi-old')
 
 
     # compute the gradient of phi using centered differences
-    gradphi_x = U.getVarPtr('gradphi_x')
-    gradphi_y = U.getVarPtr('gradphi_y')
+    gradphi_x = U.get_var('gradphi_x')
+    gradphi_y = U.get_var('gradphi_y')
 
     gradphi_x[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
         0.5*(phi[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
@@ -174,7 +174,7 @@ while (iproj <= nproj):
     u -= gradphi_x
     v -= gradphi_y
 
-    U.fillBCAll()
+    U.fill_BC_all()
 
 
     # recompute the divergence diagnostic

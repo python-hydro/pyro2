@@ -49,7 +49,7 @@ a = multigrid.ccMG2d(nx, ny,
                      verbose=1)
 
 # initialize the solution to 0
-init = a.solnGrid.scratchArray()
+init = a.solnGrid.scratch_array()
 
 a.initSolution(init)
 

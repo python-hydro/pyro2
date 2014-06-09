@@ -6,13 +6,13 @@ def evolve(my_data, dt):
     """ evolve the incompressible equations through one timestep """
 
     
-    u = my_data.getVarPtr("x-velocity")
-    v = my_data.getVarPtr("y-velocity")
+    u = my_data.get_var("x-velocity")
+    v = my_data.get_var("y-velocity")
 
-    gradp_x = my_data.getVarPtr("gradp_x")
-    gradp_y = my_data.getVarPtr("gradp_y")
+    gradp_x = my_data.get_var("gradp_x")
+    gradp_y = my_data.get_var("gradp_y")
 
-    phi = my_data.getVarPtr("phi")
+    phi = my_data.get_var("phi")
 
     myg = my_data.grid
     rp = my_data.rp
@@ -95,7 +95,7 @@ def evolve(my_data, dt):
                           verbose=0)
 
     # first compute divU
-    divU = MG.solnGrid.scratchArray()
+    divU = MG.solnGrid.scratch_array()
 
     # MAC velocities are edge-centered.  divU is cell-centered.
     divU[MG.ilo:MG.ihi+1,MG.jlo:MG.jhi+1] = \
@@ -112,7 +112,7 @@ def evolve(my_data, dt):
 
     # update the normal velocities with the pressure gradient -- these
     # constitute our advective velocities
-    phi_MAC = my_data.getVarPtr("phi-MAC")
+    phi_MAC = my_data.get_var("phi-MAC")
     solution = MG.getSolution()
 
     phi_MAC[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2] = \
@@ -153,8 +153,8 @@ def evolve(my_data, dt):
     # compute (U.grad)U
 
     # we want u_MAC U_x + v_MAC U_y
-    advect_x = myg.scratchArray()
-    advect_y = myg.scratchArray()
+    advect_x = myg.scratch_array()
+    advect_y = myg.scratch_array()
 
     advect_x[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
         0.5*(u_MAC[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1] + 
@@ -187,8 +187,8 @@ def evolve(my_data, dt):
         u[:,:] -= dt*advect_x[:,:]
         v[:,:] -= dt*advect_y[:,:]
 
-    my_data.fillBC("x-velocity")
-    my_data.fillBC("y-velocity")
+    my_data.fill_BC("x-velocity")
+    my_data.fill_BC("y-velocity")
 
 
     #-------------------------------------------------------------------------
@@ -218,7 +218,7 @@ def evolve(my_data, dt):
     MG.initRHS(divU/dt)
 
     # use the old phi as our initial guess
-    phiGuess = MG.solnGrid.scratchArray()
+    phiGuess = MG.solnGrid.scratch_array()
     phiGuess[MG.ilo-1:MG.ihi+2,MG.jlo-1:MG.jhi+2] = \
         phi[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]
     MG.initSolution(phiGuess)
@@ -234,8 +234,8 @@ def evolve(my_data, dt):
 
     # compute the cell-centered gradient of p and update the velocities
     # this differs depending on what we projected.
-    gradphi_x = myg.scratchArray()
-    gradphi_y = myg.scratchArray()
+    gradphi_x = myg.scratch_array()
+    gradphi_y = myg.scratch_array()
 
     gradphi_x[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
         0.5*(phi[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
@@ -258,5 +258,5 @@ def evolve(my_data, dt):
         gradp_x[:,:] = gradphi_x[:,:]
         gradp_y[:,:] = gradphi_y[:,:]
 
-    my_data.fillBC("x-velocity")
-    my_data.fillBC("y-velocity")
+    my_data.fill_BC("x-velocity")
+    my_data.fill_BC("y-velocity")

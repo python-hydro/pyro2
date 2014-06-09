@@ -45,7 +45,7 @@ def initialize(rp):
 
     my_data = patch.CellCenterData2d(my_grid, runtime_parameters=rp)
 
-    my_data.registerVar("phi", bcObj)
+    my_data.register_var("phi", bcObj)
 
     my_data.create()
 

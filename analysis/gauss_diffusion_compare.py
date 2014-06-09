@@ -24,14 +24,14 @@ def process(file):
     # magnitude)
     myg, myd = patch.read(file)
 
-    phi_t = myd.getVarPtr("phi")
+    phi_t = myd.get_var("phi")
     phi = phi_t[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]
 
     # get the problem parameters
-    t_0     = myd.getAux("t_0")
-    phi_0   = myd.getAux("phi_0")
-    phi_max = myd.getAux("phi_max")
-    k       = myd.getAux("k")
+    t_0     = myd.get_aux("t_0")
+    phi_0   = myd.get_aux("phi_0")
+    phi_max = myd.get_aux("phi_max")
+    k       = myd.get_aux("k")
 
     t = myd.t
 

@@ -55,7 +55,7 @@ pylab.figure(num=1, figsize=(12.8,7.2), dpi=100, facecolor='w')
 
 
 # initialize the solution to 0
-init = a.solnGrid.scratchArray()
+init = a.solnGrid.scratch_array()
 
 a.initSolution(init)
 

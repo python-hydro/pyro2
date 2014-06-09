@@ -17,10 +17,10 @@ def initData(my_data):
         sys.exit()
 
     # get the density, momenta, and energy as separate variables
-    dens = my_data.getVarPtr("density")
-    xmom = my_data.getVarPtr("x-momentum")
-    ymom = my_data.getVarPtr("y-momentum")
-    ener = my_data.getVarPtr("energy")
+    dens = my_data.get_var("density")
+    xmom = my_data.get_var("x-momentum")
+    ymom = my_data.get_var("y-momentum")
+    ener = my_data.get_var("energy")
 
     gamma = rp.get_param("eos.gamma")
 

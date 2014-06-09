@@ -16,8 +16,8 @@ def timestep(my_data):
 
     cfl = my_data.rp.get_param("driver.cfl")
     
-    u = my_data.getVarPtr("x-velocity")
-    v = my_data.getVarPtr("y-velocity")
+    u = my_data.get_var("x-velocity")
+    v = my_data.get_var("y-velocity")
     
     # the timestep is min(dx/|u|, dy|v|)
     xtmp = my_data.grid.dx/(abs(u))

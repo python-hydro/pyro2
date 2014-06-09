@@ -23,7 +23,7 @@ def initData(my_data):
         print my_data.__class__
         sys.exit()
 
-    phi = my_data.getVarPtr("phi")
+    phi = my_data.get_var("phi")
 
     xmin = my_data.grid.xmin
     xmax = my_data.grid.xmax
@@ -45,10 +45,10 @@ def initData(my_data):
     phi[:,:] = phi_analytic(dist, 0.0, t_0, k, phi_0, phi_max)
 
     # for later interpretation / analysis, store some auxillary data
-    my_data.setAux("k", k)
-    my_data.setAux("t_0", t_0)
-    my_data.setAux("phi_0", phi_0)
-    my_data.setAux("phi_max", phi_max)
+    my_data.set_aux("k", k)
+    my_data.set_aux("t_0", t_0)
+    my_data.set_aux("phi_0", phi_0)
+    my_data.set_aux("phi_max", phi_max)
 
     
                              

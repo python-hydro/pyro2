@@ -195,9 +195,9 @@ nout = 0
 while my_data.t < tmax and n < max_steps:
 
     # fill boundary conditions
-    pfb = profile.timer("fillBC")
+    pfb = profile.timer("fill_bc")
     pfb.begin()
-    my_data.fillBCAll()
+    my_data.fill_BC_all()
     pfb.end()
 
     # get the timestep

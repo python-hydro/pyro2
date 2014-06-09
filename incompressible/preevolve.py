@@ -16,11 +16,11 @@ def preevolve(my_data):
 
     myg = my_data.grid
 
-    u = my_data.getVarPtr("x-velocity")
-    v = my_data.getVarPtr("y-velocity")
+    u = my_data.get_var("x-velocity")
+    v = my_data.get_var("y-velocity")
 
-    my_data.fillBC("x-velocity")
-    my_data.fillBC("y-velocity")
+    my_data.fill_BC("x-velocity")
+    my_data.fill_BC("y-velocity")
 
 
     # 1. do the initial projection.  This makes sure that our original
@@ -36,7 +36,7 @@ def preevolve(my_data):
                           verbose=0)
 
     # first compute divU
-    divU = MG.solnGrid.scratchArray()
+    divU = MG.solnGrid.scratch_array()
 
     divU[MG.ilo:MG.ihi+1,MG.jlo:MG.jhi+1] = \
         0.5*(u[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
@@ -58,7 +58,7 @@ def preevolve(my_data):
 
     # store the solution in our my_data object -- include a single
     # ghostcell
-    phi = my_data.getVarPtr("phi")
+    phi = my_data.get_var("phi")
     solution = MG.getSolution()
 
     phi[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2] = \
@@ -66,8 +66,8 @@ def preevolve(my_data):
 
     # compute the cell-centered gradient of phi and update the 
     # velocities
-    gradp_x = myg.scratchArray()
-    gradp_y = myg.scratchArray()
+    gradp_x = myg.scratch_array()
+    gradp_y = myg.scratch_array()
 
     gradp_x[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
         0.5*(phi[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
@@ -81,15 +81,15 @@ def preevolve(my_data):
     v[:,:] -= gradp_y
 
     # fill the ghostcells
-    my_data.fillBC("x-velocity")
-    my_data.fillBC("y-velocity")
+    my_data.fill_BC("x-velocity")
+    my_data.fill_BC("y-velocity")
 
 
     # 2. now get an approximation to gradp at n-1/2 by going through the
     # evolution.
 
     # store the current solution
-    copyData = patch.ccDataClone(my_data)
+    copyData = patch.cell_center_data_clone(my_data)
 
     # get the timestep
     dt = timestep.timestep(copyData)
@@ -98,11 +98,11 @@ def preevolve(my_data):
     evolve.evolve(copyData, dt)
 
     # update gradp_x and gradp_y in our main data object
-    gp_x = my_data.getVarPtr("gradp_x")
-    gp_y = my_data.getVarPtr("gradp_y")
+    gp_x = my_data.get_var("gradp_x")
+    gp_y = my_data.get_var("gradp_y")
 
-    new_gp_x = copyData.getVarPtr("gradp_x")
-    new_gp_y = copyData.getVarPtr("gradp_y")
+    new_gp_x = copyData.get_var("gradp_x")
+    new_gp_y = copyData.get_var("gradp_y")
 
     gp_x[:,:] = new_gp_x[:,:]
     gp_y[:,:] = new_gp_y[:,:]

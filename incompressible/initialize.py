@@ -45,14 +45,14 @@ def initialize(rp):
     my_data = patch.CellCenterData2d(my_grid, runtime_parameters=rp)
 
     # velocities
-    my_data.registerVar("x-velocity", bcObj_xodd)
-    my_data.registerVar("y-velocity", bcObj_yodd)
+    my_data.register_var("x-velocity", bcObj_xodd)
+    my_data.register_var("y-velocity", bcObj_yodd)
 
     # phi -- used for the projections
-    my_data.registerVar("phi-MAC", bcObj)
-    my_data.registerVar("phi", bcObj)
-    my_data.registerVar("gradp_x", bcObj)
-    my_data.registerVar("gradp_y", bcObj)
+    my_data.register_var("phi-MAC", bcObj)
+    my_data.register_var("phi", bcObj)
+    my_data.register_var("gradp_x", bcObj)
+    my_data.register_var("gradp_y", bcObj)
 
     my_data.create()
 

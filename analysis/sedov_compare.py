@@ -33,10 +33,10 @@ except:
 # magnitude)
 myg, myd = patch.read(file1)
 
-dens = myd.getVarPtr("density")
-xmom = myd.getVarPtr("x-momentum")
-ymom = myd.getVarPtr("y-momentum")
-ener = myd.getVarPtr("energy")
+dens = myd.get_var("density")
+xmom = myd.get_var("x-momentum")
+ymom = myd.get_var("y-momentum")
+ener = myd.get_var("energy")
 
 rho = dens[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]
 
@@ -44,7 +44,7 @@ u = numpy.sqrt(xmom[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]**2 +
                ymom[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]**2)/rho
 
 e = (ener[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] - 0.5*rho*u*u)/rho
-gamma = myd.getAux("gamma")
+gamma = myd.get_aux("gamma")
 p = rho*e*(gamma - 1.0)
 
 

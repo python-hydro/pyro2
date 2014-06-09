@@ -24,7 +24,7 @@ def initialize(rp):
 
     # first figure out the boundary conditions -- we need to translate
     # between the descriptive type of the boundary specified by the
-    # user and the action that will be performed by the fillBC routine.
+    # user and the action that will be performed by the fill_BC routine.
     # Usually the actions can vary depending on the variable, but we
     # only have one variable.
     xlb_type = rp.get_param("mesh.xlboundary")
@@ -37,7 +37,7 @@ def initialize(rp):
 
     my_data = patch.CellCenterData2d(my_grid, runtime_parameters=rp)
 
-    my_data.registerVar("density", bcObj)
+    my_data.register_var("density", bcObj)
 
     my_data.create()
 

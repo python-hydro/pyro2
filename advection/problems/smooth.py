@@ -16,7 +16,7 @@ def initData(my_data):
         print my_data.__class__
         sys.exit()
 
-    dens = my_data.getVarPtr("density")
+    dens = my_data.get_var("density")
 
     xmin = my_data.grid.xmin
     xmax = my_data.grid.xmax

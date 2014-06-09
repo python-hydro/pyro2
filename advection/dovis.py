@@ -5,7 +5,7 @@ def dovis(my_data, n):
 
     pylab.clf()
 
-    dens = my_data.getVarPtr("density")
+    dens = my_data.get_var("density")
 
     myg = my_data.grid
 

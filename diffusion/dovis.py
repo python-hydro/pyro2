@@ -5,7 +5,7 @@ def dovis(my_data, n):
 
     pylab.clf()
 
-    phi = my_data.getVarPtr("phi")
+    phi = my_data.get_var("phi")
 
     myg = my_data.grid
 

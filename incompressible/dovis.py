@@ -7,8 +7,8 @@ def dovis(my_data, n):
 
     pylab.rc("font", size=10)
 
-    u = my_data.getVarPtr("x-velocity")
-    v = my_data.getVarPtr("y-velocity")
+    u = my_data.get_var("x-velocity")
+    v = my_data.get_var("y-velocity")
 
     myg = my_data.grid
 
@@ -46,7 +46,7 @@ def dovis(my_data, n):
     # vorticity
     ax = axes.flat[2]
     
-    vort = myg.scratchArray()
+    vort = myg.scratch_array()
     vort[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
         0.5*(v[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
              v[myg.ilo-1:myg.ihi,myg.jlo:myg.jhi+1])/myg.dx - \
@@ -68,7 +68,7 @@ def dovis(my_data, n):
     # div U
     ax = axes.flat[3]
     
-    divU = myg.scratchArray()
+    divU = myg.scratch_array()
 
     divU[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
         0.5*(u[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -

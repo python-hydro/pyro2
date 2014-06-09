@@ -29,7 +29,7 @@ def initialize(rp):
 
 
     # define solver specific boundary condition routines
-    patch.defineBC("hse", BC.user)
+    patch.define_bc("hse", BC.user)
 
 
     # first figure out the boundary conditions.  Note: the action
@@ -43,8 +43,8 @@ def initialize(rp):
                            ylb=ylb_type, yrb=yrb_type)
 
     # density and energy
-    my_data.registerVar("density", bcObj)
-    my_data.registerVar("energy", bcObj)
+    my_data.register_var("density", bcObj)
+    my_data.register_var("energy", bcObj)
 
     # for velocity, if we are reflecting, we need odd reflection
     # in the normal direction.
@@ -55,7 +55,7 @@ def initialize(rp):
                                 ylb=ylb_type, yrb=yrb_type,
                                 oddReflectDir="x")
 
-    my_data.registerVar("x-momentum", bcObj_xodd)    
+    my_data.register_var("x-momentum", bcObj_xodd)    
 
 
     # y-momentum -- if we are reflecting in y, then we need to
@@ -64,13 +64,13 @@ def initialize(rp):
                                 ylb=ylb_type, yrb=yrb_type,
                                 oddReflectDir="y")
 
-    my_data.registerVar("y-momentum", bcObj_yodd)    
+    my_data.register_var("y-momentum", bcObj_yodd)    
 
 
     # store the EOS gamma as an auxillary quantity so we can have a
     # self-contained object stored in output files to make plots
     gamma = rp.get_param("eos.gamma")
-    my_data.setAux("gamma", gamma)
+    my_data.set_aux("gamma", gamma)
 
     # initialize the EOS gamma
     eos.init(gamma)

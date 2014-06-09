@@ -41,8 +41,8 @@ myg, myd = patch.read(file1)
 
 
 # numerical solution
-u = myd.getVarPtr("x-velocity")
-v = myd.getVarPtr("y-velocity")
+u = myd.get_var("x-velocity")
+v = myd.get_var("y-velocity")
 
 t = myd.t
 

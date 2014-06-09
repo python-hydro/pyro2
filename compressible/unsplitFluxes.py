@@ -154,10 +154,10 @@ def unsplitFluxes(my_data, dt):
     #=========================================================================
     # Q = (rho, u, v, p)
 
-    dens = my_data.getVarPtr("density")
-    xmom = my_data.getVarPtr("x-momentum")
-    ymom = my_data.getVarPtr("y-momentum")
-    ener = my_data.getVarPtr("energy")
+    dens = my_data.get_var("density")
+    xmom = my_data.get_var("x-momentum")
+    ymom = my_data.get_var("y-momentum")
+    ener = my_data.get_var("energy")
 
     r = dens
 
