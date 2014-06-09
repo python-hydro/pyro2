@@ -195,16 +195,34 @@ class Grid2d:
 
     def __init__ (self, nx, ny, ng=1, \
                   xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0):
-
         """
-        The class constructor function.
+        Create a Grid2d object.
 
         The only data that we require is the number of points that
-        make up the mesh.
+        make up the mesh in each direction.  Optionally we take the 
+        extrema of the domain (default is [0,1]x[0,1]) and number of 
+        ghost cells (default is 1).
 
-        We optionally take the extrema of the domain (assume it is
-        [0,1]x[0,1]), number of ghost cells (assume 1), and the
-        type of boundary conditions (assume reflecting).
+        Note that the Grid2d object only defines the discretization,
+        it does not know about the boundary conditions, as these can
+        vary depending on the variable.  
+
+        Parameters
+        ----------
+        nx : int
+            Number of zones in the x-direction
+        ny : int
+            Number of zones in the y-direction
+        ng : int, optional
+            Number of ghost cells
+        xmin : float, optional
+            Physical coordinate at the lower x boundary
+        xmax : float, optional
+            Physical coordinate at the upper x boundary
+        ymin : float, optional
+            Physical coordinate at the lower y boundary
+        ymax : float, optional
+            Physical coordinate at the upper y boundary
         """
 
         # time 
@@ -258,13 +276,13 @@ class Grid2d:
         self.y2d = y2d
 
 
-    def scratch_array(self, dtype=numpy.float64):
+    def scratch_array(self):
         """ 
         return a standard numpy array dimensioned to have the size
         and number of ghostcells as the parent grid
         """
 
-        return numpy.zeros((self.qx, self.qy), dtype=dtype)
+        return numpy.zeros((self.qx, self.qy), dtype=numpy.float64)
 
 
     def __str__(self):
@@ -292,33 +310,31 @@ class Grid2d:
 
 class CellCenterData2d:
     """
-    the cell-centered data that lives on a grid.
-
-    a CellCenterData2d object is built in a multi-step process before 
+    A class to define cell-centered data that lives on a grid.  A 
+    CellCenterData2d object is built in a multi-step process before 
     it can be used.
 
-    create the object.  We pass in a grid object to describe where the 
-    data lives:
+    -- Create the object.  We pass in a grid object to describe where 
+       the data lives:
 
-        my_data = patch.CellCenterData2d(myGrid)
+       my_data = patch.CellCenterData2d(myGrid)
 
-    register any variables that we expect to live on this patch.  Here
-    BCObject describes the boundary conditions for that variable.
+    -- Register any variables that we expect to live on this patch.  
+       Here BCObject describes the boundary conditions for that variable.
 
-        my_data.register_var('density', BCObject)
-        my_data.register_var('x-momentum', BCObject)
-        ...
+       my_data.register_var('density', BCObject)
+       my_data.register_var('x-momentum', BCObject)
+       ...
 
+    -- Register any auxillary data -- these are any parameters that are
+       needed to interpret the data outside of the simulation (for
+       example, the gamma for the equation of state).
 
-    Register any auxillary data -- these are any parameters that are
-    needed to interpret the data outside of the simulation (for
-    example, the gamma for the equation of state).
+       mydata.set_aux(keyword, value)
 
-        mydata.set_aux(keyword, value)
+    -- Finish the initialization of the patch
 
-    finally, finish the initialization of the patch
-
-        myPatch.create()
+       myPatch.create()
 
     This last step actually allocates the storage for the state
     variables.  Once this is done, the patch is considered to be
@@ -329,10 +345,18 @@ class CellCenterData2d:
     def __init__ (self, grid, dtype=numpy.float64, runtime_parameters=None):
 
         """
-        The class constructor function.
+        Initialize the CellCenterData2d object.  
 
-        The only data that we require is grid object that describes
-        the geometry of the domain.
+        Parameters
+        ----------
+        grid : Grid2d object
+            The grid upon which the data will live
+        dtype : NumPy data type, optional
+            The datatype of the data we wish to create (defaults to
+            numpy.float64
+        runtime_parameters : RuntimeParameters object, optional
+            The runtime parameters that go along with this data
+
         """
         
         self.grid = grid
@@ -353,9 +377,16 @@ class CellCenterData2d:
 
     def register_var(self, name, bc_object):
         """ 
-        register a variable with CellCenterData2d object.  Here we pass in 
-        a BCObject that describes the boundary conditions for that
-        variable.
+        Register a variable with CellCenterData2d object.  
+
+        Parameters
+        ----------
+        name : str
+            The variable name
+        bc_object : BCObject object
+            The boundary conditions that describe the actions to take
+            for this variable at the physical domain boundaries.
+        
         """
 
         if self.initialized == 1:
@@ -369,15 +400,24 @@ class CellCenterData2d:
 
     def set_aux(self, keyword, value):
         """ 
-        set any auxillary (scalar) data
+        Set any auxillary (scalar) data.  This data is simply carried
+        along with the CellCenterData2d object
+
+        Parameters
+        ----------
+        keyword : str
+            The name of the datum
+        value : any time
+            The value to associate with the keyword
+        
         """
         self.aux[keyword] = value
 
 
     def create(self):
         """
-        called after all the variables are registered and allocates
-        the storage for the state data
+        Called after all the variables are registered and allocates
+        the storage for the state data.
         """
 
         if self.initialized == 1:
@@ -427,9 +467,20 @@ class CellCenterData2d:
 
     def get_var(self, name):
         """
-        return a pointer to the data array for the variable described
-        by name.  Any changes made to this are automatically reflected
-        in the CellCenterData2d object
+        Return a data array for the variable described by name.  
+        Any changes made to this are automatically reflected in the 
+        CellCenterData2d object.
+
+        Parameters
+        ----------
+        name : str
+            The name of the variable to access
+
+        Returns
+        -------
+        out : ndarray
+            The array of data corresponding to the variable name
+
         """
         n = self.vars.index(name)
         return self.data[n,:,:]
