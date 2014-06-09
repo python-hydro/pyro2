@@ -48,7 +48,7 @@ a = multigrid.CellCenterMG2d(nx, ny,
                              xr_BC_type="dirichlet", yr_BC_type="dirichlet",
                              verbose=0,
                              nsmooth=5, nsmooth_bottom=10,
-                             vis=1, trueFunc=true, 
+                             vis=1, true_function=true, 
                              vis_title=r"$u_{xx} + u_{yy} = -2[(1-6x^2)y^2(1-y^2) + (1-6y^2)x^2(1-x^2)]$")
 
 pylab.ion()
