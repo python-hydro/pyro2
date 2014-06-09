@@ -16,7 +16,7 @@ The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)
 #from io import *
 import numpy
 import mesh.patch as patch
-import multigrid_vis
+import multigrid
 import pylab
 
 # the analytic solution
@@ -43,10 +43,13 @@ ny = 64
 
 
 # create the multigrid object
-a = multigrid_vis.CellCenterMG2d(nx, ny,
-                                 xlBCtype="dirichlet", ylBCtype="dirichlet",
-                                 xrBCtype="dirichlet", yrBCtype="dirichlet",
-                                 verbose=0, trueFunc=true)
+a = multigrid.CellCenterMG2d(nx, ny,
+                             xlBCtype="dirichlet", ylBCtype="dirichlet",
+                             xrBCtype="dirichlet", yrBCtype="dirichlet",
+                             verbose=0,
+                             nsmooth=5, nsmooth_bottom=10,
+                             vis=1, trueFunc=true, 
+                             vis_title=r"$u_{xx} + u_{yy} = -2[(1-6x^2)y^2(1-y^2) + (1-6y^2)x^2(1-x^2)]$")
 
 pylab.ion()
 

@@ -57,7 +57,10 @@ a.dx and a.dy are the grid spacings
 """
 
 import math
+
 import numpy
+import pylab
+import matplotlib
 
 import mesh.patch as patch
 
@@ -81,7 +84,9 @@ class CellCenterMG2d:
                  xlBCtype="dirichlet", xrBCtype="dirichlet",
                  ylBCtype="dirichlet", yrBCtype="dirichlet",
                  alpha=0.0, beta=-1.0,
-                 verbose=0):
+                 nsmooth=10, nsmooth_bottom=50,
+                 verbose=0, 
+                 trueFunc=None, vis=0, vis_title=""):
 
         if (nx != ny):
             print "ERROR: multigrid currently requires nx = ny"
@@ -105,12 +110,17 @@ class CellCenterMG2d:
         self.alpha = alpha
         self.beta = beta
 
-        self.nsmooth = 10
-        self.nbottomSmooth = 50
+        self.nsmooth = nsmooth
+        self.nbottomSmooth = nsmooth_bottom
 
         self.maxCycles = 100
         
         self.verbose = verbose
+
+        # for visualization purposes, we can set a function name that
+        # provides the true solution to our elliptic problem.
+        if not trueFunc == None:
+            self.trueFunc = trueFunc
 
         # a small number used in computing the error, so we don't divide by 0
         self.small = 1.e-16
@@ -195,7 +205,123 @@ class CellCenterMG2d:
         self.residualError = 1.e33
         self.relativeError = 1.e33
 
+        # keep track of where we are in the V
+        self.currentCycle = -1
+        self.currentLevel = -1
+        self.upOrDown = ""
+
+        # for visualization -- what frame are we outputting?
+        self.vis = vis
+        self.vis_title = vis_title
+        self.frame = 0
+
+    # these draw functions are for visualization purposes and are
+    # not ordinarily used, except for plotting the progression of the
+    # solution within the V
+    def drawV(self):
+
+        xdown = numpy.linspace(0.0, 0.5, self.nlevels)
+        xup = numpy.linspace(0.5, 1.0, self.nlevels)
+
+        ydown = numpy.linspace(1.0, 0.0, self.nlevels)
+        yup = numpy.linspace(0.0, 1.0, self.nlevels)
+
+        pylab.plot(xdown, ydown, lw=2, color="k")
+        pylab.plot(xup, yup, lw=2, color="k")
+
+        pylab.scatter(xdown, ydown, marker="o", color="k", s=40)
+        pylab.scatter(xup, yup, marker="o", color="k", s=40)
+
+        if (self.upOrDown == "down"):
+            pylab.scatter(xdown[self.nlevels-self.currentLevel-1], ydown[self.nlevels-self.currentLevel-1], 
+                          marker="o", color="r", zorder=100, s=38)
+
+        else:
+            pylab.scatter(xup[self.currentLevel], yup[self.currentLevel], 
+                          marker="o", color="r", zorder=100, s=38)
+
+        pylab.text(0.7, 0.1, "V-cycle %d" % (self.currentCycle))
+        pylab.axis("off")
+
+
+    def drawSolution(self):
+        
+        myg = self.grids[self.currentLevel].grid
+
+        v = self.grids[self.currentLevel].get_var("v")
+
+        pylab.imshow(numpy.transpose(v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
+                     interpolation="nearest", origin="lower",
+                     extent=[self.xmin, self.xmax, self.ymin, self.ymax])
+
+        #pylab.xlabel("x")
+        pylab.ylabel("y")
+        
+
+        if (self.currentLevel == self.nlevels-1):
+            pylab.title(r"solving $L\phi = f$")
+        else:
+            pylab.title(r"solving $Le = r$")
+
+        formatter = matplotlib.ticker.ScalarFormatter(useMathText=True)
+        cb = pylab.colorbar(format=formatter, shrink=0.5)
     
+        cb.ax.yaxis.offsetText.set_fontsize("small")
+        cl = pylab.getp(cb.ax, 'ymajorticklabels')
+        pylab.setp(cl, fontsize="small")
+
+
+    def drawMainSolution(self):
+        
+        myg = self.grids[self.nlevels-1].grid
+
+        v = self.grids[self.nlevels-1].get_var("v")
+
+        pylab.imshow(numpy.transpose(v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
+                     interpolation="nearest", origin="lower",
+                     extent=[self.xmin, self.xmax, self.ymin, self.ymax])
+
+        pylab.xlabel("x")
+        pylab.ylabel("y")
+        
+
+        pylab.title(r"current fine grid solution")
+
+        formatter = matplotlib.ticker.ScalarFormatter(useMathText=True)
+        cb = pylab.colorbar(format=formatter, shrink=0.5)
+    
+        cb.ax.yaxis.offsetText.set_fontsize("small")
+        cl = pylab.getp(cb.ax, 'ymajorticklabels')
+        pylab.setp(cl, fontsize="small")
+
+
+    def drawMainError(self):
+        
+        myg = self.grids[self.nlevels-1].grid
+
+        v = self.grids[self.nlevels-1].get_var("v")
+
+        e = v - self.trueFunc(myg.x2d, myg.y2d)
+
+        pylab.imshow(numpy.transpose(e[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
+                     interpolation="nearest", origin="lower",
+                     extent=[self.xmin, self.xmax, self.ymin, self.ymax])
+
+        pylab.xlabel("x")
+        pylab.ylabel("y")
+        
+
+        pylab.title(r"current fine grid error")
+
+        formatter = matplotlib.ticker.ScalarFormatter(useMathText=True)
+        cb = pylab.colorbar(format=formatter, shrink=0.5)
+    
+        cb.ax.yaxis.offsetText.set_fontsize("small")
+        cl = pylab.getp(cb.ax, 'ymajorticklabels')
+        pylab.setp(cl, fontsize="small")
+
+    
+
     def getSolution(self):
         v = self.grids[self.nlevels-1].get_var("v")
         return v.copy()
@@ -320,6 +446,29 @@ class CellCenterMG2d:
 
 
             self.grids[level].fill_BC("v")
+
+            if self.vis == 1:
+                pylab.clf()
+
+                pylab.subplot(221)
+                self.drawSolution()
+
+                pylab.subplot(222)        
+                self.drawV()
+
+                pylab.subplot(223)        
+                self.drawMainSolution()
+
+                pylab.subplot(224)        
+                self.drawMainError()
+
+
+                pylab.suptitle(self.vis_title, fontsize=18)
+
+                pylab.draw()
+                pylab.savefig("mg_%4.4d.png" % (self.frame))
+                self.frame += 1
+
                                                      
             i += 1
 
@@ -345,6 +494,8 @@ class CellCenterMG2d:
 
         while (not converged and cycle <= self.maxCycles):
 
+            self.currentCycle = cycle
+
             # zero out the solution on all but the finest grid
             level = 0
             while (level < self.nlevels-1):
@@ -357,6 +508,9 @@ class CellCenterMG2d:
 
             level = self.nlevels-1
             while (level > 0):
+
+                self.currentLevel = level
+                self.upOrDown = "down"
 
                 fP = self.grids[level]
                 cP = self.grids[level-1]
@@ -399,6 +553,8 @@ class CellCenterMG2d:
             if self.verbose:
                 print "  bottom solve:"
 
+            self.currentLevel = 0
+
             bP = self.grids[0]
 
             if self.verbose:
@@ -413,6 +569,9 @@ class CellCenterMG2d:
             # ascending part
             level = 1
             while (level < self.nlevels):
+
+                self.currentLevel = level
+                self.upOrDown = "up"
 
                 fP = self.grids[level]
                 cP = self.grids[level-1]
