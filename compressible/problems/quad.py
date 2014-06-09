@@ -1,59 +1,60 @@
 import sys
-from util import runparams
 import mesh.patch as patch
 import numpy
 from util import msg
 
-def initData(myPatch):
+def initData(my_data):
     """ initialize the quadrant problem """
 
     msg.bold("initializing the quadrant problem...")
 
+    rp = my_data.rp
+
     # make sure that we are passed a valid patch object
-    if not isinstance(myPatch, patch.CellCenterData2d):
+    if not isinstance(my_data, patch.CellCenterData2d):
         print "ERROR: patch invalid in quad.py"
-        print myPatch.__class__
+        print my_data.__class__
         sys.exit()
 
     # get the density, momenta, and energy as separate variables
-    dens = myPatch.getVarPtr("density")
-    xmom = myPatch.getVarPtr("x-momentum")
-    ymom = myPatch.getVarPtr("y-momentum")
-    ener = myPatch.getVarPtr("energy")
+    dens = my_data.getVarPtr("density")
+    xmom = my_data.getVarPtr("x-momentum")
+    ymom = my_data.getVarPtr("y-momentum")
+    ener = my_data.getVarPtr("energy")
 
     # initialize the components, remember, that ener here is
     # rho*eint + 0.5*rho*v**2, where eint is the specific
     # internal energy (erg/g)
-    r1 = runparams.getParam("quadrant.rho1")
-    u1 = runparams.getParam("quadrant.u1")
-    v1 = runparams.getParam("quadrant.v1")
-    p1 = runparams.getParam("quadrant.p1")
+    r1 = rp.get_param("quadrant.rho1")
+    u1 = rp.get_param("quadrant.u1")
+    v1 = rp.get_param("quadrant.v1")
+    p1 = rp.get_param("quadrant.p1")
 
-    r2 = runparams.getParam("quadrant.rho2")
-    u2 = runparams.getParam("quadrant.u2")
-    v2 = runparams.getParam("quadrant.v2")
-    p2 = runparams.getParam("quadrant.p2")
+    r2 = rp.get_param("quadrant.rho2")
+    u2 = rp.get_param("quadrant.u2")
+    v2 = rp.get_param("quadrant.v2")
+    p2 = rp.get_param("quadrant.p2")
 
-    r3 = runparams.getParam("quadrant.rho3")
-    u3 = runparams.getParam("quadrant.u3")
-    v3 = runparams.getParam("quadrant.v3")
-    p3 = runparams.getParam("quadrant.p3")
+    r3 = rp.get_param("quadrant.rho3")
+    u3 = rp.get_param("quadrant.u3")
+    v3 = rp.get_param("quadrant.v3")
+    p3 = rp.get_param("quadrant.p3")
 
-    r4 = runparams.getParam("quadrant.rho4")
-    u4 = runparams.getParam("quadrant.u4")
-    v4 = runparams.getParam("quadrant.v4")
-    p4 = runparams.getParam("quadrant.p4")
+    r4 = rp.get_param("quadrant.rho4")
+    u4 = rp.get_param("quadrant.u4")
+    v4 = rp.get_param("quadrant.v4")
+    p4 = rp.get_param("quadrant.p4")
 
-    cx = runparams.getParam("quadrant.cx")
-    cy = runparams.getParam("quadrant.cy")
+    cx = rp.get_param("quadrant.cx")
+    cy = rp.get_param("quadrant.cy")
     
-    gamma = runparams.getParam("eos.gamma")
+    gamma = rp.get_param("eos.gamma")
     
-    xmin = runparams.getParam("mesh.xmin")
-    xmax = runparams.getParam("mesh.xmax")
+    xmin = rp.get_param("mesh.xmin")
+    xmax = rp.get_param("mesh.xmax")
 
-    ymin = runparams.getParam("mesh.ymin")
-    ymax = runparams.getParam("mesh.ymax")
+    ymin = rp.get_param("mesh.ymin")
+    ymax = rp.get_param("mesh.ymax")
 
 
     # there is probably an easier way to do this, but for now, we
@@ -62,7 +63,7 @@ def initData(myPatch):
     # compute the total energy (which is what we store).  For now
     # we will just fake this
     
-    myg = myPatch.grid
+    myg = my_data.grid
 
     i = myg.ilo
     while i <= myg.ihi:

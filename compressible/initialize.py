@@ -1,23 +1,23 @@
 import numpy
 
 import BC
+import eos
 import mesh.patch as patch
-from util import runparams
 
-def initialize():
+def initialize(rp):
     """ 
     initialize the grid and variables for compressible flow
     """
     import vars
 
     # setup the grid
-    nx = runparams.getParam("mesh.nx")
-    ny = runparams.getParam("mesh.ny")
+    nx = rp.get_param("mesh.nx")
+    ny = rp.get_param("mesh.ny")
 
-    xmin = runparams.getParam("mesh.xmin")
-    xmax = runparams.getParam("mesh.xmax")
-    ymin = runparams.getParam("mesh.ymin")
-    ymax = runparams.getParam("mesh.ymax")
+    xmin = rp.get_param("mesh.xmin")
+    xmax = rp.get_param("mesh.xmax")
+    ymin = rp.get_param("mesh.ymin")
+    ymax = rp.get_param("mesh.ymax")
     
     myGrid = patch.Grid2d(nx, ny, 
                           xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax, 
@@ -25,7 +25,7 @@ def initialize():
 
 
     # create the variables
-    my_data = patch.CellCenterData2d(myGrid)
+    my_data = patch.CellCenterData2d(myGrid, runtime_parameters=rp)
 
 
     # define solver specific boundary condition routines
@@ -34,10 +34,10 @@ def initialize():
 
     # first figure out the boundary conditions.  Note: the action
     # can depend on the variable (for reflecting BCs)
-    xlb_type = runparams.getParam("mesh.xlboundary")
-    xrb_type = runparams.getParam("mesh.xrboundary")
-    ylb_type = runparams.getParam("mesh.ylboundary")
-    yrb_type = runparams.getParam("mesh.yrboundary")    
+    xlb_type = rp.get_param("mesh.xlboundary")
+    xrb_type = rp.get_param("mesh.xrboundary")
+    ylb_type = rp.get_param("mesh.ylboundary")
+    yrb_type = rp.get_param("mesh.yrboundary")    
     
     bcObj = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
                            ylb=ylb_type, yrb=yrb_type)
@@ -69,8 +69,11 @@ def initialize():
 
     # store the EOS gamma as an auxillary quantity so we can have a
     # self-contained object stored in output files to make plots
-    gamma = runparams.getParam("eos.gamma")
+    gamma = rp.get_param("eos.gamma")
     my_data.setAux("gamma", gamma)
+
+    # initialize the EOS gamma
+    eos.init(gamma)
         
     my_data.create()
 

@@ -1,7 +1,6 @@
 import incomp_interface_f
 import mesh.reconstruction_f as reconstruction_f
 import multigrid.multigrid as multigrid
-from util import runparams
 
 def evolve(my_data, dt):
     """ evolve the incompressible equations through one timestep """
@@ -16,6 +15,7 @@ def evolve(my_data, dt):
     phi = my_data.getVarPtr("phi")
 
     myg = my_data.grid
+    rp = my_data.rp
 
     dtdx = dt/myg.dx
     dtdy = dt/myg.dy
@@ -23,7 +23,7 @@ def evolve(my_data, dt):
     #-------------------------------------------------------------------------
     # create the limited slopes of u and v (in both directions)
     #-------------------------------------------------------------------------
-    limiter = runparams.getParam("incompressible.limiter")
+    limiter = rp.get_param("incompressible.limiter")
     if (limiter == 0):
         limitFunc = reconstruction_f.nolimit
     elif (limiter == 1):
@@ -177,7 +177,7 @@ def evolve(my_data, dt):
               v_yint[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1])/myg.dy 
 
              
-    proj_type = runparams.getParam("incompressible.proj_type")
+    proj_type = rp.get_param("incompressible.proj_type")
 
     if (proj_type == 1):
         u[:,:] -= (dt*advect_x[:,:] + dt*gradp_x[:,:])

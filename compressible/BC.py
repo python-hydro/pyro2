@@ -7,7 +7,7 @@ some work will necessarily be repeated.
 """
 
 import eos
-from util import msg, runparams
+from util import msg
 
 def user(bcName, bcEdge, variable, my_data):
 
@@ -16,7 +16,7 @@ def user(bcName, bcEdge, variable, my_data):
     ymom = my_data.getVarPtr("y-momentum")
     ener = my_data.getVarPtr("energy")
 
-    grav = runparams.getParam("compressible.grav")
+    grav = my_data.rp.get_param("compressible.grav")
 
     myg = my_data.grid
 

@@ -1,38 +1,39 @@
 import sys
-from util import runparams
 import mesh.patch as patch
 import numpy
 from util import msg
 
-def initData(myPatch):
+def initData(my_data):
     """ initialize the bubble problem """
 
     msg.bold("initializing the bubble problem...")
 
+    rp = my_data.rp
+
     # make sure that we are passed a valid patch object
-    if not isinstance(myPatch, patch.CellCenterData2d):
+    if not isinstance(my_data, patch.CellCenterData2d):
         print "ERROR: patch invalid in bubble.py"
-        print myPatch.__class__
+        print my_data.__class__
         sys.exit()
 
     # get the density, momenta, and energy as separate variables
-    dens = myPatch.getVarPtr("density")
-    xmom = myPatch.getVarPtr("x-momentum")
-    ymom = myPatch.getVarPtr("y-momentum")
-    ener = myPatch.getVarPtr("energy")
+    dens = my_data.getVarPtr("density")
+    xmom = my_data.getVarPtr("x-momentum")
+    ymom = my_data.getVarPtr("y-momentum")
+    ener = my_data.getVarPtr("energy")
 
-    gamma = runparams.getParam("eos.gamma")
+    gamma = rp.get_param("eos.gamma")
 
-    grav = runparams.getParam("compressible.grav")
+    grav = rp.get_param("compressible.grav")
 
-    scale_height = runparams.getParam("bubble.scale_height")
-    dens_base = runparams.getParam("bubble.dens_base")
-    dens_cutoff = runparams.getParam("bubble.dens_cutoff")
+    scale_height = rp.get_param("bubble.scale_height")
+    dens_base = rp.get_param("bubble.dens_base")
+    dens_cutoff = rp.get_param("bubble.dens_cutoff")
 
-    x_pert = runparams.getParam("bubble.x_pert")
-    y_pert = runparams.getParam("bubble.y_pert")
-    r_pert = runparams.getParam("bubble.r_pert")
-    pert_amplitude_factor = runparams.getParam("bubble.pert_amplitude_factor")
+    x_pert = rp.get_param("bubble.x_pert")
+    y_pert = rp.get_param("bubble.y_pert")
+    r_pert = rp.get_param("bubble.r_pert")
+    pert_amplitude_factor = rp.get_param("bubble.pert_amplitude_factor")
 
     # initialize the components, remember, that ener here is
     # rho*eint + 0.5*rho*v**2, where eint is the specific
@@ -42,7 +43,7 @@ def initData(myPatch):
     dens[:,:] = dens_cutoff
 
     # set the density to be stratified in the y-direction
-    myg = myPatch.grid
+    myg = my_data.grid
 
     j = myg.jlo
     while j <= myg.jhi:

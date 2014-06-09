@@ -1,26 +1,27 @@
 import sys
-from util import runparams
 import mesh.patch as patch
 import numpy
 from util import msg
 import math
 
-def initData(myPatch):
+def initData(my_data):
     """ initialize the sedov problem """
 
     msg.bold("initializing the sedov problem...")
 
+    rp = my_data.rp
+
     # make sure that we are passed a valid patch object
-    if not isinstance(myPatch, patch.CellCenterData2d):
+    if not isinstance(my_data, patch.CellCenterData2d):
         print "ERROR: patch invalid in sedov.py"
-        print myPatch.__class__
+        print my_data.__class__
         sys.exit()
 
     # get the density, momenta, and energy as separate variables
-    dens = myPatch.getVarPtr("density")
-    xmom = myPatch.getVarPtr("x-momentum")
-    ymom = myPatch.getVarPtr("y-momentum")
-    ener = myPatch.getVarPtr("energy")
+    dens = my_data.getVarPtr("density")
+    xmom = my_data.getVarPtr("x-momentum")
+    ymom = my_data.getVarPtr("y-momentum")
+    ener = my_data.getVarPtr("energy")
 
     # initialize the components, remember, that ener here is rho*eint
     # + 0.5*rho*v**2, where eint is the specific internal energy
@@ -31,16 +32,16 @@ def initData(myPatch):
 
     E_sedov = 1.0
 
-    r_init = runparams.getParam("sedov.r_init")
+    r_init = rp.get_param("sedov.r_init")
 
-    gamma = runparams.getParam("eos.gamma")
+    gamma = rp.get_param("eos.gamma")
     pi = math.pi
 
-    xmin = runparams.getParam("mesh.xmin")
-    xmax = runparams.getParam("mesh.xmax")
+    xmin = rp.get_param("mesh.xmin")
+    xmax = rp.get_param("mesh.xmax")
 
-    ymin = runparams.getParam("mesh.ymin")
-    ymax = runparams.getParam("mesh.ymax")
+    ymin = rp.get_param("mesh.ymin")
+    ymax = rp.get_param("mesh.ymax")
 
     xctr = 0.5*(xmin + xmax)
     yctr = 0.5*(ymin + ymax)
@@ -51,14 +52,14 @@ def initData(myPatch):
     # from this.
     nsub = 4
 
-    i = myPatch.grid.ilo
-    while i <= myPatch.grid.ihi:
+    i = my_data.grid.ilo
+    while i <= my_data.grid.ihi:
 
-        j = myPatch.grid.jlo
-        while j <= myPatch.grid.jhi:
+        j = my_data.grid.jlo
+        while j <= my_data.grid.jhi:
 
-            dist = numpy.sqrt((myPatch.grid.x[i] - xctr)**2 +
-                              (myPatch.grid.y[j] - yctr)**2)
+            dist = numpy.sqrt((my_data.grid.x[i] - xctr)**2 +
+                              (my_data.grid.y[j] - yctr)**2)
 
             if (dist < 2.0*r_init):
                 pzone = 0.0
@@ -69,8 +70,8 @@ def initData(myPatch):
                     jj = 0
                     while jj < nsub:
 
-                        xsub = myPatch.grid.xl[i] + (myPatch.grid.dx/nsub)*(ii + 0.5)
-                        ysub = myPatch.grid.yl[j] + (myPatch.grid.dy/nsub)*(jj + 0.5)
+                        xsub = my_data.grid.xl[i] + (my_data.grid.dx/nsub)*(ii + 0.5)
+                        ysub = my_data.grid.yl[j] + (my_data.grid.dy/nsub)*(jj + 0.5)
 
                         dist = numpy.sqrt((xsub - xctr)**2 + \
                                           (ysub - yctr)**2)

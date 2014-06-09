@@ -129,7 +129,7 @@ import numpy
 import eos
 import interface_f
 import mesh.reconstruction_f as reconstruction_f
-from util import profile, runparams
+from util import profile
 import vars
 
 def unsplitFluxes(my_data, dt):
@@ -147,7 +147,7 @@ def unsplitFluxes(my_data, dt):
     pf.begin()
     
     myg = my_data.grid
-
+    rp = my_data.rp
 
     #=========================================================================
     # compute the primitive variables
@@ -179,14 +179,14 @@ def unsplitFluxes(my_data, dt):
     #=========================================================================
 
     # there is a single flattening coefficient (xi) for all directions
-    use_flattening = runparams.getParam("compressible.use_flattening")
+    use_flattening = rp.get_param("compressible.use_flattening")
 
     if (use_flattening):
         smallp = 1.e-10
 
-        delta = runparams.getParam("compressible.delta")
-        z0 = runparams.getParam("compressible.z0")
-        z1 = runparams.getParam("compressible.z1")
+        delta = rp.get_param("compressible.delta")
+        z0 = rp.get_param("compressible.z0")
+        z1 = rp.get_param("compressible.z1")
 
         xi_x = reconstruction_f.flatten(1, p, u, myg.qx, myg.qy, myg.ng, smallp, delta, z0, z1)
         xi_y = reconstruction_f.flatten(2, p, v, myg.qx, myg.qy, myg.ng, smallp, delta, z0, z1)
@@ -204,7 +204,7 @@ def unsplitFluxes(my_data, dt):
     pfa = profile.timer("limiting")
     pfa.begin()
 
-    limiter = runparams.getParam("compressible.limiter")
+    limiter = rp.get_param("compressible.limiter")
     if (limiter == 0):
         limitFunc = reconstruction_f.nolimit
     elif (limiter == 1):
@@ -223,7 +223,7 @@ def unsplitFluxes(my_data, dt):
     pfb = profile.timer("interfaceStates")
     pfb.begin()
 
-    gamma = runparams.getParam("eos.gamma")
+    gamma = rp.get_param("eos.gamma")
 
     V_l = numpy.zeros((myg.qx, myg.qy, vars.nvar),  dtype=numpy.float64)
     V_r = numpy.zeros((myg.qx, myg.qy, vars.nvar),  dtype=numpy.float64)
@@ -301,7 +301,7 @@ def unsplitFluxes(my_data, dt):
     #=========================================================================
     # apply source terms
     #=========================================================================
-    grav = runparams.getParam("compressible.grav")
+    grav = rp.get_param("compressible.grav")
 
     # ymom_xl[i,j] += 0.5*dt*dens[i-1,j]*grav
     U_xl[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2,vars.iymom] += \
@@ -338,7 +338,7 @@ def unsplitFluxes(my_data, dt):
     pfc = profile.timer("riemann")
     pfc.begin()
 
-    riemann = runparams.getParam("compressible.riemann")
+    riemann = rp.get_param("compressible.riemann")
 
     if (riemann == "HLLC"):
         riemannFunc = interface_f.riemann_hllc
@@ -453,7 +453,7 @@ def unsplitFluxes(my_data, dt):
     #=========================================================================
     # apply artificial viscosity
     #=========================================================================
-    cvisc = runparams.getParam("compressible.cvisc")
+    cvisc = rp.get_param("compressible.cvisc")
 
     (avisco_x, avisco_y) = interface_f.artificial_viscosity( \
                               myg.qx, myg.qy, myg.ng, myg.dx, myg.dy, \

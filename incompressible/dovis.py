@@ -1,8 +1,6 @@
 import numpy
 import pylab
 
-from util import runparams
-
 def dovis(my_data, n):
 
     pylab.clf()

@@ -9,23 +9,25 @@ solve
 import numpy
 
 import mesh.reconstruction_f as reconstruction_f
-from util import runparams
 
-def unsplitFluxes(myGrid, dt, a):
+def unsplitFluxes(my_data, dt, a):
+
+    my_grid = my_data.grid
+    rp = my_data.rp
 
     # get the advection velocities
-    u = runparams.getParam("advection.u")
-    v = runparams.getParam("advection.v")
+    u = rp.get_param("advection.u")
+    v = rp.get_param("advection.v")
 
-    cx = u*dt/myGrid.dx
-    cy = v*dt/myGrid.dy
+    cx = u*dt/my_grid.dx
+    cy = v*dt/my_grid.dy
     
 
     #--------------------------------------------------------------------------
     # monotonized central differences
     #--------------------------------------------------------------------------
 
-    limiter = runparams.getParam("advection.limiter")
+    limiter = rp.get_param("advection.limiter")
     if (limiter == 0):
         limitFunc = reconstruction_f.nolimit
     elif (limiter == 1):
@@ -33,7 +35,7 @@ def unsplitFluxes(myGrid, dt, a):
     else:
         limitFunc = reconstruction_f.limit4
 
-    ldelta_a = limitFunc(1, a, myGrid.qx, myGrid.qy, myGrid.ng)
+    ldelta_a = limitFunc(1, a, my_grid.qx, my_grid.qy, my_grid.ng)
 
 
 
@@ -41,7 +43,7 @@ def unsplitFluxes(myGrid, dt, a):
     # solve -- we just simply do upwinding.  So there is only one 'state'
     # at each interface, and the zone the information comes from depends
     # on the sign of the velocity -- this should be vectorized.
-    a_x = numpy.zeros((myGrid.qx,myGrid.qy), dtype=numpy.float64)
+    a_x = numpy.zeros((my_grid.qx,my_grid.qy), dtype=numpy.float64)
     
     """
     
@@ -62,8 +64,8 @@ def unsplitFluxes(myGrid, dt, a):
     
     """
 
-    qx = myGrid.qx
-    qy = myGrid.qy
+    qx = my_grid.qx
+    qy = my_grid.qy
 
     # upwind
     if (u < 0):
@@ -75,9 +77,9 @@ def unsplitFluxes(myGrid, dt, a):
 
 
     # y-direction
-    ldelta_a = limitFunc(2, a, myGrid.qx, myGrid.qy, myGrid.ng)
+    ldelta_a = limitFunc(2, a, my_grid.qx, my_grid.qy, my_grid.ng)
 
-    a_y = numpy.zeros((myGrid.qx,myGrid.qy), dtype=numpy.float64)
+    a_y = numpy.zeros((my_grid.qx,my_grid.qy), dtype=numpy.float64)
 
     
     # upwind
@@ -94,8 +96,8 @@ def unsplitFluxes(myGrid, dt, a):
     F_xt = u*a_x
     F_yt = v*a_y
 
-    F_x = numpy.zeros((myGrid.qx,myGrid.qy), dtype=numpy.float64)
-    F_y = numpy.zeros((myGrid.qx,myGrid.qy), dtype=numpy.float64)
+    F_x = numpy.zeros((my_grid.qx,my_grid.qy), dtype=numpy.float64)
+    F_y = numpy.zeros((my_grid.qx,my_grid.qy), dtype=numpy.float64)
 
     # the zone where we grab the transverse flux derivative from
     # depends on the sign of the advective velocity
@@ -112,25 +114,25 @@ def unsplitFluxes(myGrid, dt, a):
         my = -1
 
 
-    dtdx2 = 0.5*dt/myGrid.dx
-    dtdy2 = 0.5*dt/myGrid.dy
+    dtdx2 = 0.5*dt/my_grid.dx
+    dtdy2 = 0.5*dt/my_grid.dy
         
-    i = myGrid.ilo
-    while (i <= myGrid.ihi+1):
+    i = my_grid.ilo
+    while (i <= my_grid.ihi+1):
 
-        j = myGrid.jlo
-        while (j <= myGrid.jhi+1):
+        j = my_grid.jlo
+        while (j <= my_grid.jhi+1):
 
             F_x[i,j] = u*(a_x[i,j] - dtdy2*(F_yt[i+mx,j+1] - F_yt[i+mx,j]))
             
             j += 1
         i += 1
 
-    i = myGrid.ilo
-    while (i <= myGrid.ihi+1):
+    i = my_grid.ilo
+    while (i <= my_grid.ihi+1):
 
-        j = myGrid.jlo
-        while (j <= myGrid.jhi+1):
+        j = my_grid.jlo
+        while (j <= my_grid.jhi+1):
 
             F_y[i,j] = v*(a_y[i,j] - dtdx2*(F_xt[i+1,j+my] - F_xt[i,j+my]))
             

@@ -1,5 +1,3 @@
-from util import runparams
-
 """
 The timestep module computes the advective timestep (CFL) constraint.
 The CFL constraint says that information cannot propagate further than
@@ -15,11 +13,13 @@ def timestep(my_data):
     """ 
     compute the CFL timestep for the current patch.
     """
-
-    cfl = runparams.getParam("driver.cfl")
     
-    u = runparams.getParam("advection.u")
-    v = runparams.getParam("advection.v")
+    rp = my_data.rp
+
+    cfl = rp.get_param("driver.cfl")
+    
+    u = rp.get_param("advection.u")
+    v = rp.get_param("advection.v")
     
     # the timestep is min(dx/|u|, dy|v|)
     xtmp = my_data.grid.dx/max(abs(u),SMALL)

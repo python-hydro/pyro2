@@ -1,5 +1,3 @@
-from util import runparams
-
 """
 The diffusion timestep module computes the timestep using the explicit
 timestep constraint as the starting point.  We then multiply by the
@@ -12,9 +10,11 @@ def timestep(my_data):
     compute the CFL timestep for the current patch.
     """
 
-    cfl = runparams.getParam("driver.cfl")
+    rp = my_data.rp
+
+    cfl = rp.get_param("driver.cfl")
     
-    k = runparams.getParam("diffusion.k")
+    k = rp.get_param("diffusion.k")
     
     # the timestep is min(dx**2/k, dy**2/k)
     xtmp = my_data.grid.dx**2/k

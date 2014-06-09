@@ -15,33 +15,34 @@ v(x,y,t=0) = delta_s sin(2 pi x)
 """
 
 import sys
-from util import runparams
 import mesh.patch as patch
 import numpy
 from util import msg
 import math
 
-def initData(myPatch):
+def initData(my_data):
     """ initialize the incompressible shear problem """
 
     msg.bold("initializing the incompressible shear problem...")
 
+    rp = my_data.rp
+
     # make sure that we are passed a valid patch object
-    if not isinstance(myPatch, patch.CellCenterData2d):
-        print myPatch.__class__
+    if not isinstance(my_data, patch.CellCenterData2d):
+        print my_data.__class__
         msg.fail("ERROR: patch invalid in shear.py")
 
 
     # get the necessary runtime parameters
-    rho_s = runparams.getParam("shear.rho_s")
-    delta_s = runparams.getParam("shear.delta_s")
+    rho_s = rp.get_param("shear.rho_s")
+    delta_s = rp.get_param("shear.delta_s")
 
     
     # get the velocities
-    u = myPatch.getVarPtr("x-velocity")
-    v = myPatch.getVarPtr("y-velocity")
+    u = my_data.getVarPtr("x-velocity")
+    v = my_data.getVarPtr("y-velocity")
 
-    myg = myPatch.grid
+    myg = my_data.grid
 
     if (myg.xmin != 0 or myg.xmax != 1 or
         myg.ymin != 0 or myg.ymax != 1):

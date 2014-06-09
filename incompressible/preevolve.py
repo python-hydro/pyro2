@@ -4,7 +4,6 @@ import evolve
 import mesh.patch as patch
 import multigrid.multigrid as multigrid
 import timestep
-from util import runparams
 
 def preevolve(my_data):
     """ 

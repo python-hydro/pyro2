@@ -1,26 +1,27 @@
 import sys
-from util import runparams
 import mesh.patch as patch
 import numpy
 from util import msg
 import math
 
-def initData(myPatch):
+def initData(my_data):
     """ initialize the Kelvin-Helmholtz problem """
 
     msg.bold("initializing the sedov problem...")
 
+    rp = my_data.rp
+
     # make sure that we are passed a valid patch object
-    if not isinstance(myPatch, patch.CellCenterData2d):
-        print myPatch.__class__
+    if not isinstance(my_data, patch.CellCenterData2d):
+        print my_data.__class__
         msg.fail("ERROR: patch invalid in sedov.py")
 
 
     # get the density, momenta, and energy as separate variables
-    dens = myPatch.getVarPtr("density")
-    xmom = myPatch.getVarPtr("x-momentum")
-    ymom = myPatch.getVarPtr("y-momentum")
-    ener = myPatch.getVarPtr("energy")
+    dens = my_data.getVarPtr("density")
+    xmom = my_data.getVarPtr("x-momentum")
+    ymom = my_data.getVarPtr("y-momentum")
+    ener = my_data.getVarPtr("energy")
 
     # initialize the components, remember, that ener here is rho*eint
     # + 0.5*rho*v**2, where eint is the specific internal energy
@@ -31,18 +32,18 @@ def initData(myPatch):
 
     E_sedov = 1.0
 
-    rho_1 = runparams.getParam("kh.rho_1")
-    v_1   = runparams.getParam("kh.v_1")
-    rho_2 = runparams.getParam("kh.rho_2")
-    v_2   = runparams.getParam("kh.v_2")
+    rho_1 = rp.get_param("kh.rho_1")
+    v_1   = rp.get_param("kh.v_1")
+    rho_2 = rp.get_param("kh.rho_2")
+    v_2   = rp.get_param("kh.v_2")
 
-    gamma = runparams.getParam("eos.gamma")
+    gamma = rp.get_param("eos.gamma")
 
-    xmin = runparams.getParam("mesh.xmin")
-    xmax = runparams.getParam("mesh.xmax")
+    xmin = rp.get_param("mesh.xmin")
+    xmax = rp.get_param("mesh.xmax")
 
-    ymin = runparams.getParam("mesh.ymin")
-    ymax = runparams.getParam("mesh.ymax")
+    ymin = rp.get_param("mesh.ymin")
+    ymax = rp.get_param("mesh.ymax")
 
     xctr = 0.5*(xmin + xmax)
     yctr = 0.5*(ymin + ymax)
@@ -54,13 +55,13 @@ def initData(myPatch):
     # from this.
     nsub = 4
 
-    i = myPatch.grid.ilo
-    while i <= myPatch.grid.ihi:
+    i = my_data.grid.ilo
+    while i <= my_data.grid.ihi:
 
-        j = myPatch.grid.jlo
-        while j <= myPatch.grid.jhi:
+        j = my_data.grid.jlo
+        while j <= my_data.grid.jhi:
 
-            if myPatch.grid.y[j] < yctr + 0.01*math.sin(10.0*math.pi*myPatch.grid.x[i]/L_x):
+            if my_data.grid.y[j] < yctr + 0.01*math.sin(10.0*math.pi*my_data.grid.x[i]/L_x):
 
                 # lower half
                 dens[i,j] = rho_1

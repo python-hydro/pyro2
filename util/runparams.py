@@ -1,5 +1,4 @@
-"""
-basic syntax of the parameter file is:
+"""basic syntax of the parameter file is:
 
 # simple parameter file
 
@@ -22,27 +21,25 @@ These two files have the same format.
 
 The calling sequence would then be:
 
-  runparams.LoadParams("_defaults")
-  runparams.LoadParams("inputs")
+  rp = RuntimeParameters()
+  rp.load_params("_defaults")
+  rp.load_params("inputs")
 
 The parser will determine what datatype the parameter is (string,
-integer, float), and store it in a global dictionary (globalParams).
+integer, float), and store it in a RuntimeParameters object.
 If a parameter that already exists is encountered a second time (e.g.,
 there is a default value in _defaults and the user specifies a new
 value in inputs), then the second instance replaces the first.
 
 Runtime parameters can then be accessed via any module through the
-getParam method:
+get_param method:
 
-  tol = runparams.getParam('riemann.tol')
+  tol = rp.get_param('riemann.tol')
 
-An earlier version of this was based on the Python Cookbook, 4.11, but
-we not longer use the ConfigParser module, instead roll our own regex.
-
-If the optional flag noNew=1 is set, then the LoadParams function will
-not define any new parameters, but only overwrite existing ones.  This
-is useful for reading in an inputs file that overrides previously read
-default values.
+If the optional flag no_new=1 is set, then the load_params function
+will not define any new parameters, but only overwrite existing ones.
+This is useful for reading in an inputs file that overrides previously
+read default values.
 
 """
 
@@ -50,202 +47,204 @@ import string
 import re
 from util import msg
 
-# we will keep track of the parameters and their comments globally
-globalParams = {}
-globalParamComments = {}
-
-# for debugging -- keep track of which parameters were actually looked-
-# up
-usedParams = []
 
 # some utility functions to automagically determine what the data
 # types are
-def isInt(string):
+def is_int(string):
     """ is the given string an interger? """
     try: int(string)
     except ValueError: return 0
     else: return 1
 
-
-def isFloat(string):
+def is_float(string):
     """ is the given string a float? """
     try: float(string)
     except ValueError: return 0
     else: return 1
 
 
-def LoadParams(file, noNew=0):
-    """
-    reads lines from file and makes dictionary pairs from the data
-    to store in globalParams.
-    """
-    global globalParams
+class RuntimeParameters:
 
-    # check to see whether the file exists
-    try: f = open(file, 'r')
-    except IOError:
-        msg.fail("ERROR: parameter file does not exist: %s" % (file))
+    def __init__ (self):
 
+        # keep track of the parameters and their comments 
+        self.params = {}
+        self.param_comments = {}
 
-    # we could use the ConfigParser, but we actually want to have
-    # our configuration files be self-documenting, of the format
-    # key = value     ; comment
-    sec = re.compile(r'^\[(.*)\]')
-    eq = re.compile(r'^([^=#]+)=([^;]+);{0,1}(.*)')
+        # for debugging -- keep track of which parameters were
+        # actually looked- up
+        self.used_params = []
 
-    for line in f.readlines():
+    def load_params(self, file, no_new=0):
+        """
+        reads lines from file and makes dictionary pairs from the data
+        to store in self.params
+        """
 
-        if sec.search(line): 
-            lbracket, section, rbracket = sec.split(line)
-            section = string.lower(section.strip())
+        # check to see whether the file exists
+        try: f = open(file, 'r')
+        except IOError:
+            msg.fail("ERROR: parameter file does not exist: %s" % (file))
+
+        # we could use the ConfigParser, but we actually want to
+        # have our configuration files be self-documenting, of the
+        # format key = value ; comment
+        sec = re.compile(r'^\[(.*)\]')
+        eq = re.compile(r'^([^=#]+)=([^;]+);{0,1}(.*)')
+
+        for line in f.readlines():
+
+            if sec.search(line): 
+                lbracket, section, rbracket = sec.split(line)
+                section = string.lower(section.strip())
             
-        elif eq.search(line):
-            left, item, value, comment, right = eq.split(line) 		
-            item = string.lower(item.strip())
+            elif eq.search(line):
+                left, item, value, comment, right = eq.split(line) 
+                item = string.lower(item.strip())
 
-            # define the key
-            key = section + "." + item
+                # define the key
+                key = section + "." + item
             
-            # if we have noNew = 1, then we only want to override existing
-            # key/values
-            if (noNew):
-                if (not key in globalParams.keys()):
-                    msg.warning("warning, key: %s not defined" % (key))
-                    continue
+                # if we have no_new = 1, then we only want to override existing
+                # key/values
+                if (no_new):
+                    if (not key in self.params.keys()):
+                        msg.warning("warning, key: %s not defined" % (key))
+                        continue
+
+                # check in turn whether this is an interger, float, or string
+                if (is_int(value)):
+                    self.params[key] = int(value)
+                elif (is_float(value)):
+                    self.params[key] = float(value)
+                else:
+                    self.params[key] = value.strip()
+
+                # if the comment already exists (i.e. from reading in
+                # _defaults) and we are just resetting the value of
+                # the parameter (i.e.  from reading in inputs), then
+                # we don't want to destroy the comment
+                if comment.strip() == "":
+                    try:
+                        comment = self.param_comments[key]
+                    except KeyError:
+                        comment = ""
+                    
+                self.param_comments[key] = comment.strip()
+
+
+    def command_line_params(self, cmd_strings):
+        """
+        finds dictionary pairs from a string that came from the
+        commandline.  Stores the parameters in globalParams only if they 
+        already exist.
+        
+        we expect things in the string in the form:
+         ["sec.opt=value",  "sec.opt=value"]
+        with each opt an element in the list
+        """
+
+        for item in cmd_strings:
+
+            # break it apart
+            key, value = item.split("=")
+            
+            # we only want to override existing keys/values
+            if (not key in self.params.keys()):
+                msg.warning("warning, key: %s not defined" % (key))
+                continue
 
             # check in turn whether this is an interger, float, or string
-            if (isInt(value)):
-                globalParams[key] = int(value)
-            elif (isFloat(value)):
-                globalParams[key] = float(value)
+            if (is_int(value)):
+                self.params[key] = int(value)
+            elif (is_dloat(value)):
+                self.params[key] = float(value)
             else:
-                globalParams[key] = value.strip()
-
-            # if the comment already exists (i.e. from reading in _defaults)
-            # and we are just resetting the value of the parameter (i.e.
-            # from reading in inputs), then we don't want to destroy the
-            # comment
-            if comment.strip() == "":
-                try:
-                    comment = globalParamComments[key]
-                except KeyError:
-                    comment = ""
-                    
-            globalParamComments[key] = comment.strip()
-
-
-def CommandLineParams(cmdStrings):
-    """
-    finds dictionary pairs from a string that came from the
-    commandline.  Stores the parameters in globalParams only if they 
-    already exist.
-    """
-    global globalParams
-
-
-    # we expect things in the string in the form:
-    #  ["sec.opt=value",  "sec.opt=value"]
-    # with each opt an element in the list
-
-    for item in cmdStrings:
-
-        # break it apart
-        key, value = item.split("=")
-            
-        # we only want to override existing keys/values
-        if (not key in globalParams.keys()):
-            msg.warning("warning, key: %s not defined" % (key))
-            continue
-
-        # check in turn whether this is an interger, float, or string
-        if (isInt(value)):
-            globalParams[key] = int(value)
-        elif (isFloat(value)):
-            globalParams[key] = float(value)
-        else:
-            globalParams[key] = value.strip()
+                self.params[key] = value.strip()
 
     
-def getParam(key):
-    """
-    returns the value of the runtime parameter corresponding to the
-    input key
-    """
-    if globalParams == {}:
-        msg.warning("WARNING: runtime parameters not yet initialized")
-        LoadParams("_defaults")
+    def get_param(self, key):
+        """
+        returns the value of the runtime parameter corresponding to the
+        input key
+        """
 
-    # debugging
-    if not key in usedParams:
-        usedParams.append(key)
+        if self.params == {}:
+            msg.warning("WARNING: runtime parameters not yet initialized")
+            self.load_params("_defaults")
+
+        # debugging
+        if not key in self.used_params:
+            self.used_params.append(key)
         
-    if key in globalParams.keys():
-        return globalParams[key]
-    else:
-        msg.fail("ERROR: runtime parameter %s not found" % (key))
+        if key in self.params.keys():
+            return self.params[key]
+        else:
+            msg.fail("ERROR: runtime parameter %s not found" % (key))
         
 
-def printUnusedParams():
-    """
-    print out the list of parameters that were defined by never used
-    """
-    for key in globalParams.keys():
-        if not key in usedParams:
-            msg.warning("parameter %s never used" % (key))
+    def print_unused_params(self):
+        """
+        print out the list of parameters that were defined by never used
+        """
+        for key in self.params.keys():
+            if not key in self.used_params:
+                msg.warning("parameter %s never used" % (key))
     
 
-def PrintAllParams():
-    keys = globalParams.keys()
-    keys.sort()
+    def print_all_params(self):
+        keys = self.params.keys()
+        keys.sort()
 
-    for key in keys:
-        print key, "=", globalParams[key]
+        for key in keys:
+            print key, "=", self.params[key]
 
-    print " "
+        print " "
     
 
-def PrintParamFile():
-    keys = globalParams.keys()
-    keys.sort()
+    def print_paramfile(self):
+        keys = self.params.keys()
+        keys.sort()
 
-    try: f = open('inputs.auto', 'w')
-    except IOError:
-        msg.fail("ERROR: unable to open inputs.auto")
+        try: f = open('inputs.auto', 'w')
+        except IOError:
+            msg.fail("ERROR: unable to open inputs.auto")
 
 
-    f.write('# automagically generated parameter file\n')
+        f.write('# automagically generated parameter file\n')
     
-    currentSection = " "
+        currentSection = " "
 
-    for key in keys:
-        parts = string.split(key, '.')
-        section = parts[0]
-        option = parts[1]
+        for key in keys:
+            parts = string.split(key, '.')
+            section = parts[0]
+            option = parts[1]
 
-        if (section != currentSection):
-            currentSection = section
-            f.write('\n')
-            f.write('[' + section + ']\n')
+            if (section != currentSection):
+                currentSection = section
+                f.write('\n')
+                f.write('[' + section + ']\n')
 
-        if (isinstance(globalParams[key], int)):
-            value = '%d' % globalParams[key]
-        elif (isinstance(globalParams[key], float)):
-            value = '%f' % globalParams[key]
-        else:
-            value = globalParams[key]
+            if (isinstance(self.params[key], int)):
+                value = '%d' % self.params[key]
+            elif (isinstance(self.params[key], float)):
+                value = '%f' % self.params[key]
+            else:
+                value = self.params[key]
 
         
-        if (globalParamComments[key] != ''):
-            f.write(option + ' = ' + value + '       ; ' + globalParamComments[key] + '\n')
-        else:
-            f.write(option + ' = ' + value + '\n')
+            if (self.param_comments[key] != ''):
+                f.write(option + ' = ' + value + '       ; ' + self.param_comments[key] + '\n')
+            else:
+                f.write(option + ' = ' + value + '\n')
 
-    f.close()
+        f.close()
      
     
 if __name__== "__main__":
-    LoadParams("inputs.test")
-    PrintParamFile()
+    rp = RuntimeParameters()
+    rp.load_params("inputs.test")
+    rp.print_paramfile()
 
 
 

@@ -33,6 +33,7 @@ fill the ghost cells
 
 """
 
+import copy
 import numpy
 import pickle
 
@@ -293,7 +294,7 @@ class CellCenterData2d:
     
     """
 
-    def __init__ (self, grid, dtype=numpy.float64):
+    def __init__ (self, grid, dtype=numpy.float64, runtime_parameters=None):
 
         """
         The class constructor function.
@@ -316,6 +317,7 @@ class CellCenterData2d:
 
         self.initialized = 0
 
+        self.rp = runtime_parameters
 
     def registerVar(self, name, bc_object):
         """ 
@@ -813,7 +815,7 @@ def ccDataClone(old):
 
     new.aux = old.aux.copy()
     new.data = old.data.copy()
-    
+    new.rp = copy.deepcopy(old.rp)
 
     return new
         

@@ -1,7 +1,6 @@
 import numpy
 
 import eos
-from util import runparams
 
 """
 The timestep module computes the advective timestep (CFL) constraint.
@@ -19,7 +18,7 @@ def timestep(my_data):
     compute the CFL timestep for the current patch.
     """
 
-    cfl = runparams.getParam("driver.cfl")
+    cfl = my_data.rp.get_param("driver.cfl")
 
 
     # get the variables we need                                                 
@@ -38,7 +37,7 @@ def timestep(my_data):
     p = eos.pres(dens, e)
 
     # compute the sounds speed
-    gamma = runparams.getParam("eos.gamma")
+    gamma = my_data.rp.get_param("eos.gamma")
 
     cs = numpy.sqrt(gamma*p/dens)
 

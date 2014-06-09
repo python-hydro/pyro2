@@ -1,21 +1,20 @@
 import numpy
 
 import mesh.patch as patch
-from util import runparams
 
-def initialize():
+def initialize(rp):
     """ 
     initialize the grid and variables for advection 
     """
 
     # setup the grid
-    nx = runparams.getParam("mesh.nx")
-    ny = runparams.getParam("mesh.ny")
+    nx = rp.get_param("mesh.nx")
+    ny = rp.get_param("mesh.ny")
 
-    xmin = runparams.getParam("mesh.xmin")
-    xmax = runparams.getParam("mesh.xmax")
-    ymin = runparams.getParam("mesh.ymin")
-    ymax = runparams.getParam("mesh.ymax")
+    xmin = rp.get_param("mesh.xmin")
+    xmax = rp.get_param("mesh.xmax")
+    ymin = rp.get_param("mesh.ymin")
+    ymax = rp.get_param("mesh.ymax")
     
     myGrid = patch.Grid2d(nx, ny, 
                           xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax, ng=4)
@@ -28,15 +27,15 @@ def initialize():
     # user and the action that will be performed by the fillBC routine.
     # Usually the actions can vary depending on the variable, but we
     # only have one variable.
-    xlb_type = runparams.getParam("mesh.xlboundary")
-    xrb_type = runparams.getParam("mesh.xrboundary")
-    ylb_type = runparams.getParam("mesh.ylboundary")
-    yrb_type = runparams.getParam("mesh.yrboundary")
+    xlb_type = rp.get_param("mesh.xlboundary")
+    xrb_type = rp.get_param("mesh.xrboundary")
+    ylb_type = rp.get_param("mesh.ylboundary")
+    yrb_type = rp.get_param("mesh.yrboundary")
 
     bcObj = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
                            ylb=ylb_type, yrb=yrb_type)
 
-    my_data = patch.CellCenterData2d(myGrid)
+    my_data = patch.CellCenterData2d(myGrid, runtime_parameters=rp)
 
     my_data.registerVar("density", bcObj)
 

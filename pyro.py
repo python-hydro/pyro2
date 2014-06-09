@@ -122,11 +122,12 @@ exec 'import ' + solverName + ' as solver'
 #-----------------------------------------------------------------------------
 
 # parameter defaults
-runparams.LoadParams("_defaults")
-runparams.LoadParams(solverName + "/_defaults")
+rp = runparams.RuntimeParameters()
+rp.load_params("_defaults")
+rp.load_params(solverName + "/_defaults")
 
 # problem-specific runtime parameters
-runparams.LoadParams(solverName + "/problems/_" + problemName + ".defaults")
+rp.load_params(solverName + "/problems/_" + problemName + ".defaults")
 
 # now read in the inputs file
 if (not os.path.isfile(paramFile)):
@@ -135,21 +136,21 @@ if (not os.path.isfile(paramFile)):
     if (not os.path.isfile(paramFile)):
         msg.fail("ERROR: inputs file does not exist")
 
-runparams.LoadParams(paramFile, noNew=1)
+rp.load_params(paramFile, no_new=1)
 
 # and any commandline overrides
-runparams.CommandLineParams(other_commands)
+rp.command_line_params(other_commands)
 
 # write out the inputs.auto
-runparams.PrintParamFile()
+rp.print_paramfile()
 
 
 #-----------------------------------------------------------------------------
 # initialization
 #-----------------------------------------------------------------------------
 
-# initialize the grid structure
-my_grid, my_data = solver.initialize()
+# initialize the grid structure -- we will store the rp in the data object
+my_grid, my_data = solver.initialize(rp)
     
 
 # initialize the data
@@ -167,12 +168,12 @@ solver.preevolve(my_data)
 #-----------------------------------------------------------------------------
 # evolve
 #-----------------------------------------------------------------------------
-tmax = runparams.getParam("driver.tmax")
-max_steps = runparams.getParam("driver.max_steps")
+tmax = rp.get_param("driver.tmax")
+max_steps = rp.get_param("driver.max_steps")
 
-init_tstep_factor = runparams.getParam("driver.init_tstep_factor")
-max_dt_change = runparams.getParam("driver.max_dt_change")
-fix_dt = runparams.getParam("driver.fix_dt")
+init_tstep_factor = rp.get_param("driver.init_tstep_factor")
+max_dt_change = rp.get_param("driver.max_dt_change")
+fix_dt = rp.get_param("driver.fix_dt")
 
 pylab.ion()
 
@@ -180,10 +181,10 @@ n = 0
 my_data.t = 0.0
 
 # output the 0th data
-basename = runparams.getParam("io.basename")
+basename = rp.get_param("io.basename")
 my_data.write(basename + "%4.4d" % (n))
 
-dovis = runparams.getParam("vis.dovis")
+dovis = rp.get_param("vis.dovis")
 if (dovis): 
     pylab.figure(num=1, figsize=(8,6), dpi=100, facecolor='w')
     solver.dovis(my_data, 0)
@@ -225,8 +226,8 @@ while (my_data.t < tmax and n < max_steps):
 
 
     # output
-    dt_out = runparams.getParam("io.dt_out")
-    n_out = runparams.getParam("io.n_out")
+    dt_out = rp.get_param("io.dt_out")
+    n_out = rp.get_param("io.n_out")
 
     if (my_data.t >= (nout + 1)*dt_out or n%n_out == 0):
 
@@ -234,7 +235,7 @@ while (my_data.t < tmax and n < max_steps):
         pfc.begin()
 
         msg.warning("outputting...")
-        basename = runparams.getParam("io.basename")
+        basename = rp.get_param("io.basename")
         my_data.write(basename + "%4.4d" % (n))
         nout += 1
 
@@ -247,10 +248,10 @@ while (my_data.t < tmax and n < max_steps):
         pfd.begin()
 
         solver.dovis(my_data, n)
-        store = runparams.getParam("vis.store_images")
+        store = rp.get_param("vis.store_images")
 
         if (store == 1):
-            basename = runparams.getParam("io.basename")
+            basename = rp.get_param("io.basename")
             pylab.savefig(basename + "%4.4d" % (n) + ".png")
 
         pfd.end()
@@ -285,7 +286,7 @@ if makeBench:
 #-----------------------------------------------------------------------------
 # final reports
 #-----------------------------------------------------------------------------
-runparams.printUnusedParams()
+rp.print_unused_params()
 profile.timeReport()
 
 exec problemName + '.finalize()'

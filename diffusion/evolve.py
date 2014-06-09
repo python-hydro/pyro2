@@ -1,7 +1,6 @@
 import numpy
 
 import multigrid.multigrid as multigrid
-from util import runparams
 
 def evolve(myd, dt):
     """ diffusion through dt using C-N implicit solve with multigrid """
@@ -11,7 +10,7 @@ def evolve(myd, dt):
     myg = myd.grid
 
     # diffusion coefficient
-    k = runparams.getParam("diffusion.k")
+    k = myd.rp.get_param("diffusion.k")
     
 
     # setup the MG object -- we want to solve a Helmholtz equation

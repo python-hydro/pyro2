@@ -1,7 +1,7 @@
 import numpy
 
 from unsplitFluxes import *
-from util import profile, runparams
+from util import profile
 import vars    
 
 def evolve(my_data, dt):
@@ -14,7 +14,7 @@ def evolve(my_data, dt):
     ymom = my_data.getVarPtr("y-momentum")
     ener = my_data.getVarPtr("energy")
 
-    grav = runparams.getParam("compressible.grav")
+    grav = my_data.rp.get_param("compressible.grav")
 
     myg = my_data.grid
     

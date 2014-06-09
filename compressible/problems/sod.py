@@ -1,55 +1,56 @@
 import sys
-from util import runparams
 import mesh.patch as patch
 import numpy
 from util import msg
 
-def initData(myPatch):
+def initData(my_data):
     """ initialize the sod problem """
 
     msg.bold("initializing the sod problem...")
 
+    rp = my_data.rp
+
     # make sure that we are passed a valid patch object
-    if not isinstance(myPatch, patch.CellCenterData2d):
+    if not isinstance(my_data, patch.CellCenterData2d):
         print "ERROR: patch invalid in sod.py"
-        print myPatch.__class__
+        print my_data.__class__
         sys.exit()
 
 
     # get the sod parameters
-    dens_left = runparams.getParam("sod.dens_left")
-    dens_right = runparams.getParam("sod.dens_right")
+    dens_left = rp.get_param("sod.dens_left")
+    dens_right = rp.get_param("sod.dens_right")
 
-    u_left = runparams.getParam("sod.u_left")
-    u_right = runparams.getParam("sod.u_right")
+    u_left = rp.get_param("sod.u_left")
+    u_right = rp.get_param("sod.u_right")
 
-    p_left = runparams.getParam("sod.p_left")
-    p_right = runparams.getParam("sod.p_right")
+    p_left = rp.get_param("sod.p_left")
+    p_right = rp.get_param("sod.p_right")
     
 
     # get the density, momenta, and energy as separate variables
-    dens = myPatch.getVarPtr("density")
-    xmom = myPatch.getVarPtr("x-momentum")
-    ymom = myPatch.getVarPtr("y-momentum")
-    ener = myPatch.getVarPtr("energy")
+    dens = my_data.getVarPtr("density")
+    xmom = my_data.getVarPtr("x-momentum")
+    ymom = my_data.getVarPtr("y-momentum")
+    ener = my_data.getVarPtr("energy")
 
     # initialize the components, remember, that ener here is rho*eint
     # + 0.5*rho*v**2, where eint is the specific internal energy
     # (erg/g)
-    xmin = runparams.getParam("mesh.xmin")
-    xmax = runparams.getParam("mesh.xmax")
+    xmin = rp.get_param("mesh.xmin")
+    xmax = rp.get_param("mesh.xmax")
 
-    ymin = runparams.getParam("mesh.ymin")
-    ymax = runparams.getParam("mesh.ymax")
+    ymin = rp.get_param("mesh.ymin")
+    ymax = rp.get_param("mesh.ymax")
 
-    gamma = runparams.getParam("eos.gamma")
+    gamma = rp.get_param("eos.gamma")
 
-    direction = runparams.getParam("sod.direction")
+    direction = rp.get_param("sod.direction")
     
     xctr = 0.5*(xmin + xmax)
     yctr = 0.5*(ymin + ymax)
 
-    myg = myPatch.grid
+    myg = my_data.grid
     
     # there is probably an easier way to do this, but for now, we
     # will just do an explicit loop.  Also, we really want to set

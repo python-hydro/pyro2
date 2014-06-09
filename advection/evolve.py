@@ -1,5 +1,4 @@
 from advectiveFluxes import *
-from util import runparams
 
 def evolve(my_data, dt):
     """ evolve the advection equations through one timestep """
@@ -10,7 +9,7 @@ def evolve(my_data, dt):
     dtdx = dt/my_data.grid.dx
     dtdy = dt/my_data.grid.dy
 
-    [flux_x, flux_y] =  unsplitFluxes(my_data.grid, dt, dens)
+    [flux_x, flux_y] =  unsplitFluxes(my_data, dt, dens)
 
     """
     do the differencing for the fluxes now.  Here, we use slices so we
