@@ -3,7 +3,7 @@ import sys
 # inspiration from                                                                          
 # http://stackoverflow.com/questions/287871/print-in-terminal-with-colors-using-python      
 # which in-turn cites the blender build scripts                                             
-class termColors:
+class _TermColors:
     WARNING = '\033[33m'
     SUCCESS = '\033[32m'
     FAIL = '\033[31m'
@@ -12,8 +12,12 @@ class termColors:
 
 
 def fail(str):
-    new_str = termColors.FAIL + str + termColors.ENDC
-    print new_str
+    """
+    Output a string to the terminal and abort if we are running
+    non-interactively.  The string is colored red to indicate a 
+    failure
+    """
+    print _TermColors.FAIL + str + _TermColors.ENDC
 
     # only exit if we are not running in interactive mode.  sys.ps1 is
     # only defined in interactive mode.
@@ -23,14 +27,22 @@ def fail(str):
         sys.exit()
 
 def warning(str):
-    new_str = termColors.WARNING + str + termColors.ENDC
-    print new_str
+    """
+    Output a string to the terminal colored orange to indicate a 
+    warning
+    """
+    print _TermColors.WARNING + str + _TermColors.ENDC
 
 def success(str):
-    new_str = termColors.SUCCESS + str + termColors.ENDC
-    print new_str
+    """
+    Output a string to the terminal colored green to indicate 
+    success
+    """
+    print _TermColors.SUCCESS + str + _TermColors.ENDC
 
 def bold(str):
-    new_str = termColors.BOLD + str + termColors.ENDC
-    print new_str
+    """ Output a string in a bold weight"""
+    print _TermColors.BOLD + str + _TermColors.ENDC
+
+
 
