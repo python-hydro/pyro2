@@ -1,7 +1,7 @@
 nvar = 4
 
 # conserved variables -- we set these when we initialize for they match
-# the ccData2d object
+# the CellCenterData2d object
 idens = -1
 ixmom = -1
 iymom = -1

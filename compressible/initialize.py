@@ -20,8 +20,8 @@ def initialize(rp):
     ymax = rp.get_param("mesh.ymax")
     
     my_grid = patch.Grid2d(nx, ny, 
-                          xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax, 
-                          ng=4)
+                           xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax, 
+                           ng=4)
 
 
     # create the variables

@@ -17,18 +17,15 @@ def evolve(my_data, dt):
     grav = my_data.rp.get_param("compressible.grav")
 
     myg = my_data.grid
-    
-    
-    (Flux_x, Flux_y) = unsplitFluxes(my_data, dt)
+        
+    Flux_x, Flux_y = unsplitFluxes(my_data, dt)
 
     old_dens = dens.copy()
     old_ymom = ymom.copy()
 
     # conservative update
-
     dtdx = dt/myg.dx
     dtdy = dt/myg.dy
-
 
     dens[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] += \
         dtdx*(Flux_x[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,vars.idens] - \
