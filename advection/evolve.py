@@ -1,7 +1,19 @@
 from advectiveFluxes import *
 
 def evolve(my_data, dt):
-    """ evolve the advection equations through one timestep """
+    """ 
+    Evolve the linear advection equation through one timestep.  We only
+    consider the "density" variable in the CellCenterData2d object input
+    here.
+
+    Parameters
+    ----------
+    my_data : CellCenterData2d object
+        The data object containing the scalar quantity we are advecting
+    dt : float
+        The timestep to evolve through
+
+    """
 
     dtdx = dt/my_data.grid.dx
     dtdy = dt/my_data.grid.dy

@@ -1,17 +1,10 @@
-"""
-The timestep module computes the advective timestep (CFL) constraint.
-The CFL constraint says that information cannot propagate further than
-one zone per timestep.
-
-We use the driver.cfl parameter to control what fraction of the CFL
-step we actually take.
-"""
-
 SMALL = 1.e-12
 
 def timestep(my_data):
-    """ 
-    compute the CFL timestep for the current patch.
+    """
+    Computes the advective timestep (CFL) constraint.  We use the 
+    driver.cfl parameter to control what fraction of the CFL
+    step we actually take.
     """
     
     rp = my_data.rp
