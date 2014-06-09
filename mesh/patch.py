@@ -202,23 +202,23 @@ class Grid2d:
         # zone coordinates
         self.dx = (xmax - xmin)/nx
 
-        self.xl = (numpy.arange(nx+2*ng) - ng)*self.dx + xmin
-        self.xr = (numpy.arange(nx+2*ng) + 1.0 - ng)*self.dx + xmin
+        self.xl = (numpy.arange(self.qx) - ng)*self.dx + xmin
+        self.xr = (numpy.arange(self.qx) + 1.0 - ng)*self.dx + xmin
         self.x = 0.5*(self.xl + self.xr)
 
         self.dy = (ymax - ymin)/ny
 
-        self.yl = (numpy.arange(ny+2*ng) - ng)*self.dy + ymin
-        self.yr = (numpy.arange(ny+2*ng) + 1.0 - ng)*self.dy + ymin
+        self.yl = (numpy.arange(self.qy) - ng)*self.dy + ymin
+        self.yr = (numpy.arange(self.qy) + 1.0 - ng)*self.dy + ymin
         self.y = 0.5*(self.yl + self.yr)
 
         # 2-d versions of the zone coordinates (replace with meshgrid?)
-        x2d = numpy.repeat(self.x, 2*self.ng+self.ny)
-        x2d.shape = (2*self.ng+self.nx, 2*self.ng+self.ny)
+        x2d = numpy.repeat(self.x, self.qy)
+        x2d.shape = (self.qx, self.qy)
         self.x2d = x2d
 
-        y2d = numpy.repeat(self.y, 2*self.ng+self.nx)
-        y2d.shape = (2*self.ng+self.ny, 2*self.ng+self.nx)
+        y2d = numpy.repeat(self.y, self.qx)
+        y2d.shape = (self.qy, self.qx)
         y2d = numpy.transpose(y2d)
         self.y2d = y2d
 
@@ -229,10 +229,7 @@ class Grid2d:
         and number of ghostcells as the parent grid
         """
 
-        array = numpy.zeros((2*self.ng+self.nx, 2*self.ng+self.ny),
-                            dtype=dtype)
-
-        return array
+        return numpy.zeros((self.qx, self.qy), dtype=dtype)
 
 
     def __str__(self):
@@ -326,7 +323,7 @@ class CellCenterData2d:
         variable.
         """
 
-        if (self.initialized == 1):
+        if self.initialized == 1:
             msg.fail("ERROR: grid already initialized")
 
         self.vars.append(name)
@@ -348,7 +345,7 @@ class CellCenterData2d:
         the storage for the state data
         """
 
-        if (self.initialized) == 1:
+        if self.initialized == 1:
             msg.fail("ERROR: grid already initialized")
 
         self.data = numpy.zeros((self.nvar,
@@ -362,7 +359,7 @@ class CellCenterData2d:
         """ print out some basic information about the CellCenterData2d 
             object """
 
-        if (self.initialized == 0):
+        if self.initialized == 0:
             myStr = "CellCenterData2d object not yet initialized"
             return myStr
 
@@ -378,7 +375,7 @@ class CellCenterData2d:
         jhi = self.grid.jhi
 
         n = 0
-        while (n < self.nvar):
+        while n < self.nvar:
             myStr += "%16s: min: %15.10f    max: %15.10f\n" % \
                 (self.vars[n],
                  numpy.min(self.data[n,ilo:ihi+1,jlo:jhi+1]), 
@@ -450,15 +447,14 @@ class CellCenterData2d:
         n = self.vars.index(name)
 
         # -x boundary
-        if (self.BCs[name].xlb == "outflow" or 
-            self.BCs[name].xlb == "neumann"):
+        if self.BCs[name].xlb == "outflow" or self.BCs[name].xlb == "neumann":
 
             i = 0
             while i < self.grid.ilo:
                 self.data[n,i,:] = self.data[n,self.grid.ilo,:]
                 i += 1                
 
-        elif (self.BCs[name].xlb == "reflect-even"):
+        elif self.BCs[name].xlb == "reflect-even":
         
             i = 0
             while i < self.grid.ilo:
@@ -473,7 +469,7 @@ class CellCenterData2d:
                 self.data[n,i,:] = -self.data[n,2*self.grid.ng-i-1,:]
                 i += 1
 
-        elif (self.BCs[name].xlb == "periodic"):
+        elif self.BCs[name].xlb == "periodic":
 
             i = 0
             while i < self.grid.ilo:
@@ -482,15 +478,14 @@ class CellCenterData2d:
             
 
         # +x boundary
-        if (self.BCs[name].xrb == "outflow" or
-            self.BCs[name].xrb == "neumann"):
+        if self.BCs[name].xrb == "outflow" or self.BCs[name].xrb == "neumann":
 
             i = self.grid.ihi+1
             while i < self.grid.nx+2*self.grid.ng:
                 self.data[n,i,:] = self.data[n,self.grid.ihi,:]
                 i += 1
                 
-        elif (self.BCs[name].xrb == "reflect-even"):
+        elif self.BCs[name].xrb == "reflect-even":
 
             i = 0
             while i < self.grid.ng:
@@ -511,7 +506,7 @@ class CellCenterData2d:
                 self.data[n,i_bnd,:] = -self.data[n,i_src,:]
                 i += 1
 
-        elif (self.BCs[name].xrb == "periodic"):
+        elif self.BCs[name].xrb == "periodic":
 
             i = self.grid.ihi+1
             while i < 2*self.grid.ng + self.grid.nx:
@@ -520,15 +515,14 @@ class CellCenterData2d:
 
 
         # -y boundary
-        if (self.BCs[name].ylb == "outflow" or
-            self.BCs[name].ylb == "neumann"):
+        if self.BCs[name].ylb == "outflow" or self.BCs[name].ylb == "neumann":
 
             j = 0
             while j < self.grid.jlo:
                 self.data[n,:,j] = self.data[n,:,self.grid.jlo]
                 j += 1
                 
-        elif (self.BCs[name].ylb == "reflect-even"):
+        elif self.BCs[name].ylb == "reflect-even":
 
             j = 0
             while j < self.grid.jlo:
@@ -543,7 +537,7 @@ class CellCenterData2d:
                 self.data[n,:,j] = -self.data[n,:,2*self.grid.ng-j-1]
                 j += 1
 
-        elif (self.BCs[name].ylb == "periodic"):
+        elif self.BCs[name].ylb == "periodic":
 
             j = 0
             while j < self.grid.jlo:
@@ -557,15 +551,14 @@ class CellCenterData2d:
 
 
         # +y boundary
-        if (self.BCs[name].yrb == "outflow" or
-            self.BCs[name].yrb == "neumann"):
+        if self.BCs[name].yrb == "outflow" or self.BCs[name].yrb == "neumann":
 
             j = self.grid.jhi+1
             while j < self.grid.ny+2*self.grid.ng:
                 self.data[n,:,j] = self.data[n,:,self.grid.jhi]
                 j += 1
 
-        elif (self.BCs[name].yrb == "reflect-even"):
+        elif self.BCs[name].yrb == "reflect-even":
 
             j = 0
             while j < self.grid.ng:
@@ -586,7 +579,7 @@ class CellCenterData2d:
                 self.data[n,:,j_bnd] = -self.data[n,:,j_src]
                 j += 1
         
-        elif (self.BCs[name].yrb == "periodic"):
+        elif self.BCs[name].yrb == "periodic":
 
             j = self.grid.jhi+1
             while j < 2*self.grid.ng + self.grid.ny:
@@ -753,9 +746,9 @@ class CellCenterData2d:
 
         a = self.getVarPtr(varname)
 
-        if (self.dtype == numpy.int):
+        if self.dtype == numpy.int:
             fmt = "%4d"
-        elif (self.dtype == numpy.float64):
+        elif self.dtype == numpy.float64:
             fmt = "%10.5g"
         else:
             msg.fail("ERROR: dtype not supported")
@@ -771,7 +764,7 @@ class CellCenterData2d:
                 else:
                     gc = 0
 
-                if (gc):
+                if gc:
                     print "\033[31m" + fmt % (a[i,j]) + "\033[0m" ,
                 else:
                     print fmt % (a[i,j]) ,
@@ -788,7 +781,7 @@ def read(filename):
     """
 
     # if we come in with .pyro, we don't need to add it again
-    if (filename.find(".pyro") < 0):
+    if filename.find(".pyro") < 0:
         filename += ".pyro"
 
     pF = open(filename, "rb")
@@ -799,15 +792,16 @@ def read(filename):
 
 
 def ccDataClone(old):
-    """ create a new CellCenterData2d object that is a copy of an existing one """
+    """ create a new CellCenterData2d object that is a copy of an existing 
+        one """
 
-    if (not isinstance(old, CellCenterData2d)):
+    if not isinstance(old, CellCenterData2d):
         msg.fail("Can't clone object")
 
     new = CellCenterData2d(old.grid, dtype=old.dtype)
 
     n = 0
-    while (n < old.nvar):
+    while n < old.nvar:
         new.registerVar(old.vars[n], old.BCs[old.vars[n]])
         n += 1
 

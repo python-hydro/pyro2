@@ -71,8 +71,8 @@ if len(sys.argv) == 1:
 
 
 # commandline argument defaults
-makeBench = 0
-compBench = 0
+make_bench = 0
+comp_bench = 0
 
 try: opts, next = getopt.getopt(sys.argv[1:], "", 
                                 ["make_benchmark", "compare_benchmark"])
@@ -84,12 +84,12 @@ except getopt.GetoptError:
 for o, a in opts:
 
     if o == "--make_benchmark":
-        makeBench = 1
+        make_bench = 1
 
     if o == "--compare_benchmark":
-        compBench = 1
+        comp_bench = 1
 
-if makeBench and compBench:
+if make_bench and comp_bench:
     msg.fail("ERROR: cannot have both --make_benchmark and --compare_benchmark")
 
 
@@ -185,14 +185,14 @@ basename = rp.get_param("io.basename")
 my_data.write(basename + "%4.4d" % (n))
 
 dovis = rp.get_param("vis.dovis")
-if (dovis): 
+if dovis: 
     pylab.figure(num=1, figsize=(8,6), dpi=100, facecolor='w')
     solver.dovis(my_data, 0)
     
 
 nout = 0
 
-while (my_data.t < tmax and n < max_steps):
+while my_data.t < tmax and n < max_steps:
 
     # fill boundary conditions
     pfb = profile.timer("fillBC")
@@ -207,10 +207,10 @@ while (my_data.t < tmax and n < max_steps):
     else:
         if (n == 0):
             dt = init_tstep_factor*dt
-            dtOld = dt
+            dt_old = dt
         else:
-            dt = min(max_dt_change*dtOld, dt)
-            dtOld = dt
+            dt = min(max_dt_change*dt_old, dt)
+            dt_old = dt
             
     if (my_data.t + dt > tmax):
         dt = tmax - my_data.t
@@ -229,7 +229,7 @@ while (my_data.t < tmax and n < max_steps):
     dt_out = rp.get_param("io.dt_out")
     n_out = rp.get_param("io.n_out")
 
-    if (my_data.t >= (nout + 1)*dt_out or n%n_out == 0):
+    if my_data.t >= (nout + 1)*dt_out or n%n_out == 0:
 
         pfc = profile.timer("output")
         pfc.begin()
@@ -243,14 +243,14 @@ while (my_data.t < tmax and n < max_steps):
 
 
     # visualization
-    if (dovis): 
+    if dovis: 
         pfd = profile.timer("vis")
         pfd.begin()
 
         solver.dovis(my_data, n)
         store = rp.get_param("vis.store_images")
 
-        if (store == 1):
+        if store == 1:
             basename = rp.get_param("io.basename")
             pylab.savefig(basename + "%4.4d" % (n) + ".png")
 
@@ -263,12 +263,12 @@ pf.end()
 # benchmarks (for regression testing)
 #-----------------------------------------------------------------------------
 # are we comparing to a benchmark?
-if compBench:
-    compFile = solverName + "/tests/" + basename + "%4.4d" % (n)
-    msg.warning("comparing to: %s " % (compFile) )
-    benchGrid, benchData = patch.read(compFile)
+if comp_bench:
+    compare_file = solverName + "/tests/" + basename + "%4.4d" % (n)
+    msg.warning("comparing to: %s " % (compare_file) )
+    bench_grid, bench_data = patch.read(compare_file)
 
-    result = compare.compare(my_grid, my_data, benchGrid, benchData)
+    result = compare.compare(my_grid, my_data, bench_grid, bench_data)
     
     if result == 0:
         msg.success("results match benchmark\n")
@@ -277,10 +277,10 @@ if compBench:
 
 
 # are we storing a benchmark?
-if makeBench:
-    benchFile = solverName + "/tests/" + basename + "%4.4d" % (n)
-    msg.warning("storing new benchmark: %s\n " % (benchFile) )
-    my_data.write(benchFile)
+if make_bench:
+    bench_file = solverName + "/tests/" + basename + "%4.4d" % (n)
+    msg.warning("storing new benchmark: %s\n " % (bench_file) )
+    my_data.write(bench_file)
     
 
 #-----------------------------------------------------------------------------

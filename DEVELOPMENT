@@ -15,8 +15,24 @@ coding:
   -- is there a way to define a range like ii = [myg.ilo:myg.ihi+1]
      and then do something like ii+1 to get [myg.ilo+1:myg.ihi+2]?
 
+  -- make the solvers a class, with the data and grid as members of the 
+     class.  This would allow for the timers to be refactored into an
+     object that lives in the simulation object.
 
-solvers:
+     Then we could do:
+
+     sim = solver.Simulation(problem)
+
+     ...
+
+     sim.initialize()
+     sim.evolve()
+     ...
+
+     This would make it more inline with how Castro is written.
+
+
+new solvers:
 
   -- Burgers equation (viscous and inviscid)
 

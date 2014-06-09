@@ -16,7 +16,7 @@ def initialize(rp):
     ymin = rp.get_param("mesh.ymin")
     ymax = rp.get_param("mesh.ymax")
     
-    myGrid = patch.Grid2d(nx, ny, 
+    my_grid = patch.Grid2d(nx, ny, 
                           xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax, ng=4)
 
 
@@ -35,10 +35,10 @@ def initialize(rp):
     bcObj = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
                            ylb=ylb_type, yrb=yrb_type)
 
-    my_data = patch.CellCenterData2d(myGrid, runtime_parameters=rp)
+    my_data = patch.CellCenterData2d(my_grid, runtime_parameters=rp)
 
     my_data.registerVar("density", bcObj)
 
     my_data.create()
 
-    return myGrid, my_data
+    return my_grid, my_data

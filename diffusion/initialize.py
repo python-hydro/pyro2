@@ -17,7 +17,7 @@ def initialize(rp):
     ymin = rp.get_param("mesh.ymin")
     ymax = rp.get_param("mesh.ymax")
     
-    myGrid = patch.Grid2d(nx, ny, xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax, ng=1)
+    my_grid = patch.Grid2d(nx, ny, xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax, ng=1)
 
 
     # create the variables
@@ -43,10 +43,10 @@ def initialize(rp):
                            ylb=bcparam[2], yrb=bcparam[3])    
 
 
-    my_data = patch.CellCenterData2d(myGrid, runtime_parameters=rp)
+    my_data = patch.CellCenterData2d(my_grid, runtime_parameters=rp)
 
     my_data.registerVar("phi", bcObj)
 
     my_data.create()
 
-    return myGrid, my_data
+    return my_grid, my_data
