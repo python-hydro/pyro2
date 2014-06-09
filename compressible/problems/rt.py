@@ -1,37 +1,39 @@
-import sys
-from util import runparams
-import mesh.patch as patch
-import numpy
 import math
+import numpy
+
+import sys
+import mesh.patch as patch
 from util import msg
 
-def initData(myPatch):
+def initData(my_data):
     """ initialize the rt problem """
 
     msg.bold("initializing the rt problem...")
 
+    rp = my_data.rp
+
     # make sure that we are passed a valid patch object
-    if not isinstance(myPatch, patch.CellCenterData2d):
+    if not isinstance(my_data, patch.CellCenterData2d):
         print "ERROR: patch invalid in rt.py"
-        print myPatch.__class__
+        print my_data.__class__
         sys.exit()
 
     # get the density, momenta, and energy as separate variables
-    dens = myPatch.getVarPtr("density")
-    xmom = myPatch.getVarPtr("x-momentum")
-    ymom = myPatch.getVarPtr("y-momentum")
-    ener = myPatch.getVarPtr("energy")
+    dens = my_data.getVarPtr("density")
+    xmom = my_data.getVarPtr("x-momentum")
+    ymom = my_data.getVarPtr("y-momentum")
+    ener = my_data.getVarPtr("energy")
 
-    gamma = runparams.getParam("eos.gamma")
+    gamma = rp.get_param("eos.gamma")
 
-    grav = runparams.getParam("compressible.grav")
+    grav = rp.get_param("compressible.grav")
 
 
-    dens1 = runparams.getParam("rt.dens1")
-    dens2 = runparams.getParam("rt.dens2")
-    p0 = runparams.getParam("rt.p0")
-    amp = runparams.getParam("rt.amp")
-    sigma = runparams.getParam("rt.sigma")
+    dens1 = rp.get_param("rt.dens1")
+    dens2 = rp.get_param("rt.dens2")
+    p0 = rp.get_param("rt.p0")
+    amp = rp.get_param("rt.amp")
+    sigma = rp.get_param("rt.sigma")
 
 
     # initialize the components, remember, that ener here is
@@ -42,7 +44,7 @@ def initData(myPatch):
     dens[:,:] = 0.0
 
     # set the density to be stratified in the y-direction
-    myg = myPatch.grid
+    myg = my_data.grid
 
     ycenter = 0.5*(myg.ymin + myg.ymax)
 
