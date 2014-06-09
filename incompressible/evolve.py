@@ -104,16 +104,16 @@ def evolve(my_data, dt):
         (v_MAC[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
          v_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1])/myg.dy
     
-    MG.initRHS(divU)
+    MG.init_RHS(divU)
         
     # solve the Poisson problem
-    MG.initZeros()
+    MG.init_zeros()
     MG.solve(rtol=1.e-12)
 
     # update the normal velocities with the pressure gradient -- these
     # constitute our advective velocities
     phi_MAC = my_data.get_var("phi-MAC")
-    solution = MG.getSolution()
+    solution = MG.get_solution()
 
     phi_MAC[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2] = \
         solution[MG.ilo-1:MG.ihi+2,MG.jlo-1:MG.jhi+2]
@@ -215,19 +215,19 @@ def evolve(my_data, dt):
         0.5*(v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
              v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
     
-    MG.initRHS(divU/dt)
+    MG.init_RHS(divU/dt)
 
     # use the old phi as our initial guess
     phiGuess = MG.solnGrid.scratch_array()
     phiGuess[MG.ilo-1:MG.ihi+2,MG.jlo-1:MG.jhi+2] = \
         phi[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]
-    MG.initSolution(phiGuess)
+    MG.init_solution(phiGuess)
 
     # solve
     MG.solve(rtol=1.e-12)
 
     # store the solution
-    solution = MG.getSolution()
+    solution = MG.get_solution()
 
     phi[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2] = \
         solution[MG.ilo-1:MG.ihi+2,MG.jlo-1:MG.jhi+2]

@@ -143,12 +143,12 @@ MG = multigrid.CellCenterMG2d(nx, ny,
 iproj = 1
 while (iproj <= nproj):
 
-    MG.initZeros()
-    MG.initRHS(divU)
+    MG.init_zeros()
+    MG.init_RHS(divU)
     MG.solve(rtol=1.e-12)
 
     phi = U.get_var('phi')
-    solution = MG.getSolution()
+    solution = MG.get_solution()
 
     phi[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2] = \
         solution[MG.ilo-1:MG.ihi+2,MG.jlo-1:MG.jhi+2]

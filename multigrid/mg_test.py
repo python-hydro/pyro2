@@ -51,11 +51,11 @@ a = multigrid.CellCenterMG2d(nx, ny,
 # initialize the solution to 0
 init = a.solnGrid.scratch_array()
 
-a.initSolution(init)
+a.init_solution(init)
 
 # initialize the RHS using the function f
 rhs = f(a.x2d, a.y2d)
-a.initRHS(rhs)
+a.init_RHS(rhs)
 
 # solve to a relative tolerance of 1.e-11
 a.solve(rtol=1.e-11)
@@ -64,7 +64,7 @@ a.solve(rtol=1.e-11)
 #a.smooth(a.nlevels-1,50000)
 
 # get the solution 
-v = a.getSolution()
+v = a.get_solution()
 
 # compute the error from the analytic solution
 b = true(a.x2d,a.y2d)
@@ -89,7 +89,7 @@ pylab.savefig("mg_test.png")
 
 
 # store the output for later comparison
-my_data = a.getSolutionObjPtr()
+my_data = a.get_solution_object()
 my_data.write("mg_test")
 
 

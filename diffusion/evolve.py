@@ -46,11 +46,11 @@ def evolve(myd, dt):
           2.0*phi[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dy**2)
 
 
-    mg.initRHS(f)
+    mg.init_RHS(f)
 
 
     # initial guess is the current solution
-    mg.initZeros()
+    mg.init_zeros()
 
 
     # solve the MG problem for the updated phi
@@ -59,4 +59,4 @@ def evolve(myd, dt):
 
 
     # update the solution
-    phi[:,:] = mg.getSolution()
+    phi[:,:] = mg.get_solution()

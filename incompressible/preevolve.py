@@ -48,10 +48,10 @@ def preevolve(my_data):
     # solve L phi = DU
 
     # initialize our guess to the solution
-    MG.initZeros()
+    MG.init_zeros()
 
     # setup the RHS of our Poisson equation
-    MG.initRHS(divU)
+    MG.init_RHS(divU)
 
     # solve
     MG.solve(rtol=1.e-10)
@@ -59,7 +59,7 @@ def preevolve(my_data):
     # store the solution in our my_data object -- include a single
     # ghostcell
     phi = my_data.get_var("phi")
-    solution = MG.getSolution()
+    solution = MG.get_solution()
 
     phi[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2] = \
         solution[MG.ilo-1:MG.ihi+2,MG.jlo-1:MG.jhi+2]
