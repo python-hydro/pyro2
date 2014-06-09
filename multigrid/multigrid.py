@@ -17,7 +17,7 @@ We support homogeneous Dirichlet or Neumann BCs, or on periodic domain.
 
 The general usage is as follows:
 
-> a = multigrid.ccMG2d(nx, ny, verbose=1, alpha=alpha, beta=beta)
+> a = multigrid.CellCenterMG2d(nx, ny, verbose=1, alpha=alpha, beta=beta)
 
 this creates the multigrid object a, with a finest grid of nx by ny
 zones and the default boundary condition types.  alpha and beta are
@@ -67,9 +67,9 @@ def error(myg, r):
     # normalize
     return numpy.sqrt(myg.dx*myg.dy*
                       numpy.sum((r[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]**2).flat))
-    #return max(r[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1].flat)
 
-class ccMG2d:
+
+class CellCenterMG2d:
     """ 
     The main multigrid class for cell-centered data.
 

@@ -87,12 +87,12 @@ def evolve(my_data, dt):
     print "  MAC projection"
 
     # create the multigrid object
-    MG = multigrid.ccMG2d(myg.nx, myg.ny,
-                          xlBCtype="periodic", xrBCtype="periodic",
-                          ylBCtype="periodic", yrBCtype="periodic",
-                          xmin=myg.xmin, xmax=myg.xmax,
-                          ymin=myg.ymin, ymax=myg.ymax,
-                          verbose=0)
+    MG = multigrid.CellCenterMG2d(myg.nx, myg.ny,
+                                  xlBCtype="periodic", xrBCtype="periodic",
+                                  ylBCtype="periodic", yrBCtype="periodic",
+                                  xmin=myg.xmin, xmax=myg.xmax,
+                                  ymin=myg.ymin, ymax=myg.ymax,
+                                  verbose=0)
 
     # first compute divU
     divU = MG.solnGrid.scratch_array()
@@ -199,12 +199,12 @@ def evolve(my_data, dt):
     print "  final projection"
     
     # create the multigrid object
-    MG = multigrid.ccMG2d(myg.nx, myg.ny,
-                          xlBCtype="periodic", xrBCtype="periodic",
-                          ylBCtype="periodic", yrBCtype="periodic",
-                          xmin=myg.xmin, xmax=myg.xmax,
-                          ymin=myg.ymin, ymax=myg.ymax,
-                          verbose=0)
+    MG = multigrid.CellCenterMG2d(myg.nx, myg.ny,
+                                  xlBCtype="periodic", xrBCtype="periodic",
+                                  ylBCtype="periodic", yrBCtype="periodic",
+                                  xmin=myg.xmin, xmax=myg.xmax,
+                                  ymin=myg.ymin, ymax=myg.ymax,
+                                  verbose=0)
 
     # first compute divU
 

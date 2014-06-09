@@ -28,12 +28,12 @@ def preevolve(my_data):
 
     # next create the multigrid object.  We want Neumann BCs on phi
     # at solid walls and periodic on phi for periodic BCs
-    MG = multigrid.ccMG2d(myg.nx, myg.ny,
-                          xlBCtype="periodic", xrBCtype="periodic",
-                          ylBCtype="periodic", yrBCtype="periodic",
-                          xmin=myg.xmin, xmax=myg.xmax,
-                          ymin=myg.ymin, ymax=myg.ymax,
-                          verbose=0)
+    MG = multigrid.CellCenterMG2d(myg.nx, myg.ny,
+                                  xlBCtype="periodic", xrBCtype="periodic",
+                                  ylBCtype="periodic", yrBCtype="periodic",
+                                  xmin=myg.xmin, xmax=myg.xmax,
+                                  ymin=myg.ymin, ymax=myg.ymax,
+                                  verbose=0)
 
     # first compute divU
     divU = MG.solnGrid.scratch_array()

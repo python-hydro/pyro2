@@ -43,10 +43,10 @@ ny = nx
 
 
 # create the multigrid object
-a = multigrid.ccMG2d(nx, ny,
-                     xlBCtype="dirichlet", ylBCtype="dirichlet",
-                     xrBCtype="dirichlet", yrBCtype="dirichlet",
-                     verbose=1)
+a = multigrid.CellCenterMG2d(nx, ny,
+                             xlBCtype="dirichlet", ylBCtype="dirichlet",
+                             xrBCtype="dirichlet", yrBCtype="dirichlet",
+                             verbose=1)
 
 # initialize the solution to 0
 init = a.solnGrid.scratch_array()

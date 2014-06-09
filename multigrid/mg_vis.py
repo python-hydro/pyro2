@@ -43,10 +43,10 @@ ny = 64
 
 
 # create the multigrid object
-a = multigrid_vis.ccMG2d(nx, ny,
-                     xlBCtype="dirichlet", ylBCtype="dirichlet",
-                     xrBCtype="dirichlet", yrBCtype="dirichlet",
-                     verbose=0, trueFunc=true)
+a = multigrid_vis.CellCenterMG2d(nx, ny,
+                                 xlBCtype="dirichlet", ylBCtype="dirichlet",
+                                 xrBCtype="dirichlet", yrBCtype="dirichlet",
+                                 verbose=0, trueFunc=true)
 
 pylab.ion()
 

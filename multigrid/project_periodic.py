@@ -131,10 +131,10 @@ divU[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
 
 
 # create the multigrid object with Neumann BCs
-MG = multigrid.ccMG2d(nx, ny,
-                      xlBCtype="periodic", xrBCtype="periodic",
-                      ylBCtype="periodic", yrBCtype="periodic",
-                      verbose=1)
+MG = multigrid.CellCenterMG2d(nx, ny,
+                              xlBCtype="periodic", xrBCtype="periodic",
+                              ylBCtype="periodic", yrBCtype="periodic",
+                              verbose=1)
 
 
 #----------------------------------------------------------------------------

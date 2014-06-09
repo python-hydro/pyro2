@@ -23,15 +23,15 @@ def evolve(myd, dt):
     #
     # this is the form that arises with a Crank-Nicolson discretization
     # of the diffusion equation.
-    mg = multigrid.ccMG2d(myg.nx, myg.ny,
-                          xmin=myg.xmin, xmax=myg.xmax, 
-                          ymin=myg.ymin, ymax=myg.ymax,
-                          xlBCtype=myd.BCs['phi'].xlb, 
-                          xrBCtype=myd.BCs['phi'].xrb, 
-                          ylBCtype=myd.BCs['phi'].ylb, 
-                          yrBCtype=myd.BCs['phi'].yrb, 
-                          alpha=1.0, beta=0.5*dt*k, 
-                          verbose=0)
+    mg = multigrid.CellCenterMG2d(myg.nx, myg.ny,
+                                  xmin=myg.xmin, xmax=myg.xmax, 
+                                  ymin=myg.ymin, ymax=myg.ymax,
+                                  xlBCtype=myd.BCs['phi'].xlb, 
+                                  xrBCtype=myd.BCs['phi'].xrb, 
+                                  ylBCtype=myd.BCs['phi'].ylb, 
+                                  yrBCtype=myd.BCs['phi'].yrb, 
+                                  alpha=1.0, beta=0.5*dt*k, 
+                                  verbose=0)
 
 
     # form the RHS: f = phi + (dt/2) k L phi  (where L is the Laplacian)
