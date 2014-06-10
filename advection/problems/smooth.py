@@ -3,12 +3,10 @@ import mesh.patch as patch
 import numpy
 from util import msg
 
-def initData(my_data):
+def init_data(my_data, rp):
     """ initialize the smooth advection problem """
 
     msg.bold("initializing the smooth advection problem...")
-
-    rp = my_data.rp
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):

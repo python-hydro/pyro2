@@ -52,7 +52,7 @@ class Simulation:
         bc = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
                             ylb=ylb_type, yrb=yrb_type)
 
-        my_data = patch.CellCenterData2d(my_grid, runtime_parameters=self.rp)
+        my_data = patch.CellCenterData2d(my_grid)
 
         my_data.register_var("density", bc)
 
@@ -61,7 +61,7 @@ class Simulation:
         self.cc_data = my_data
 
         # now set the initial conditions for the problem
-        exec self.problem_name + '.initData(self.cc_data)'
+        exec self.problem_name + '.init_data(self.cc_data, self.rp)'
 
 
     def timestep(self):
@@ -109,7 +109,7 @@ class Simulation:
         dtdx = dt/self.cc_data.grid.dx
         dtdy = dt/self.cc_data.grid.dy
 
-        flux_x, flux_y =  unsplitFluxes(self.cc_data, dt, "density")
+        flux_x, flux_y =  unsplitFluxes(self.cc_data, self.rp, dt, "density")
 
         """
         do the differencing for the fluxes now.  Here, we use slices so we

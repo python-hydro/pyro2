@@ -132,7 +132,7 @@ import mesh.reconstruction_f as reconstruction_f
 from util import profile
 import vars
 
-def unsplitFluxes(my_data, dt):
+def unsplitFluxes(my_data, rp, dt):
     """
     unsplitFluxes returns the fluxes through the x and y interfaces by
     doing an unsplit reconstruction of the interface values and then
@@ -147,7 +147,6 @@ def unsplitFluxes(my_data, dt):
     pf.begin()
     
     myg = my_data.grid
-    rp = my_data.rp
 
     #=========================================================================
     # compute the primitive variables

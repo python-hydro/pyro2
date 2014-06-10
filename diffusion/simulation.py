@@ -58,7 +58,7 @@ class Simulation:
                             ylb=bcparam[2], yrb=bcparam[3])    
 
 
-        my_data = patch.CellCenterData2d(my_grid, runtime_parameters=self.rp)
+        my_data = patch.CellCenterData2d(my_grid)
 
         my_data.register_var("phi", bc)
 
@@ -67,7 +67,7 @@ class Simulation:
         self.cc_data = my_data
 
         # now set the initial conditions for the problem           
-        exec self.problem_name + '.initData(self.cc_data)'
+        exec self.problem_name + '.init_data(self.cc_data, self.rp)'
 
 
     def timestep(self):

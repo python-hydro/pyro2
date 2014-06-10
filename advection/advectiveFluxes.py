@@ -2,7 +2,7 @@ import numpy
 
 import mesh.reconstruction_f as reconstruction_f
 
-def unsplitFluxes(my_data, dt, scalar_name):
+def unsplitFluxes(my_data, rp, dt, scalar_name):
     """
     Construct the fluxes through the interfaces for the linear advection 
     equation:
@@ -52,7 +52,6 @@ def unsplitFluxes(my_data, dt, scalar_name):
     """
 
     my_grid = my_data.grid
-    rp = my_data.rp
 
     a = my_data.get_var(scalar_name)
 

@@ -20,12 +20,10 @@ import numpy
 from util import msg
 import math
 
-def initData(my_data):
+def init_data(my_data, rp):
     """ initialize the incompressible shear problem """
 
     msg.bold("initializing the incompressible shear problem...")
-
-    rp = my_data.rp
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):

@@ -344,7 +344,7 @@ class CellCenterData2d:
     
     """
 
-    def __init__ (self, grid, dtype=numpy.float64, runtime_parameters=None):
+    def __init__ (self, grid, dtype=numpy.float64):
 
         """
         Initialize the CellCenterData2d object.  
@@ -374,8 +374,6 @@ class CellCenterData2d:
         self.BCs = {}
 
         self.initialized = 0
-
-        self.rp = runtime_parameters
 
     def register_var(self, name, bc_object):
         """ 
@@ -940,7 +938,6 @@ def cell_center_data_clone(old):
 
     new.aux = old.aux.copy()
     new.data = old.data.copy()
-    new.rp = copy.deepcopy(old.rp)
 
     return new
         

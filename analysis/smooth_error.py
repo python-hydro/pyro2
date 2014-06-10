@@ -39,7 +39,7 @@ analytic.register_var("density", bco)
 analytic.create()
 
 # use the original initialization routine to set the analytic solution
-smooth.initData(analytic)
+smooth.init_data(analytic, None)
 
 # compare the error
 dens_numerical = myd.get_var("density")

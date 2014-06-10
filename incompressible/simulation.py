@@ -57,7 +57,7 @@ class Simulation:
                                  ylb=ylb_type, yrb=yrb_type,
                                  odd_reflect_dir="y")
         
-        my_data = patch.CellCenterData2d(my_grid, runtime_parameters=self.rp)
+        my_data = patch.CellCenterData2d(my_grid)
 
         # velocities
         my_data.register_var("x-velocity", bc_xodd)
@@ -74,7 +74,7 @@ class Simulation:
         self.cc_data = my_data
 
         # now set the initial conditions for the problem 
-        exec self.problem_name + '.initData(self.cc_data)'
+        exec self.problem_name + '.init_data(self.cc_data, self.rp)'
 
 
     def timestep(self):

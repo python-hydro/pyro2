@@ -40,7 +40,7 @@ class Simulation:
 
 
         # create the variables
-        my_data = patch.CellCenterData2d(my_grid, runtime_parameters=self.rp)
+        my_data = patch.CellCenterData2d(my_grid)
 
 
         # define solver specific boundary condition routines
@@ -100,7 +100,7 @@ class Simulation:
         vars.iener = my_data.vars.index("energy")
 
         # initial conditions for the problem
-        exec self.problem_name + '.initData(self.cc_data)'
+        exec self.problem_name + '.init_data(self.cc_data, self.rp)'
 
         print my_data
 
@@ -166,7 +166,7 @@ class Simulation:
 
         myg = self.cc_data.grid
         
-        Flux_x, Flux_y = unsplitFluxes(self.cc_data, dt)
+        Flux_x, Flux_y = unsplitFluxes(self.cc_data, self.rp, dt)
 
         old_dens = dens.copy()
         old_ymom = ymom.copy()
