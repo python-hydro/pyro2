@@ -16,7 +16,8 @@ def user(bcName, bcEdge, variable, my_data):
     ymom = my_data.get_var("y-momentum")
     ener = my_data.get_var("energy")
 
-    grav = my_data.rp.get_param("compressible.grav")
+    grav = my_data.get_aux("grav")
+    gamma = my_data.get_aux("gamma")
 
     myg = my_data.grid
 
@@ -52,7 +53,7 @@ def user(bcName, bcEdge, variable, my_data):
                     dens[:,myg.jlo]
 
                 eint_base = (ener[:,myg.jlo] - ke_base)/dens[:,myg.jlo]
-                pres_base = eos.pres(dens_base, eint_base)
+                pres_base = eos.pres(gamma, dens_base, eint_base)
                 
                 # we are assuming that the density is constant in this
                 # formulation of HSE, so the pressure comes simply from
@@ -60,7 +61,7 @@ def user(bcName, bcEdge, variable, my_data):
                 j = myg.jlo-1
                 while (j >= 0):
                     pres_below = pres_base - grav*dens_base*myg.dy
-                    rhoe = eos.rhoe(pres_below)
+                    rhoe = eos.rhoe(gamma, pres_below)
 
                     ener[:,j] = rhoe + ke_base
 
@@ -102,7 +103,7 @@ def user(bcName, bcEdge, variable, my_data):
                     dens[:,myg.jhi]
 
                 eint_base = (ener[:,myg.jhi] - ke_base)/dens[:,myg.jhi]
-                pres_base = eos.pres(dens_base, eint_base)
+                pres_base = eos.pres(gamma, dens_base, eint_base)
                 
                 # we are assuming that the density is constant in this
                 # formulation of HSE, so the pressure comes simply from
@@ -110,7 +111,7 @@ def user(bcName, bcEdge, variable, my_data):
                 j = myg.jhi+1
                 while (j <= myg.jhi+myg.ng):
                     pres_above = pres_base + grav*dens_base*myg.dy
-                    rhoe = eos.rhoe(pres_above)
+                    rhoe = eos.rhoe(gamma, pres_above)
 
                     ener[:,j] = rhoe + ke_base
 
