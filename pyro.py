@@ -110,7 +110,7 @@ except IndexError:
 
 
 other_commands = []
-if (len(next) > 3):
+if len(next) > 3:
     other_commands = next[3:]
 
 # actually import the solver-specific stuff under the 'solver' namespace
@@ -130,10 +130,10 @@ rp.load_params(solverName + "/_defaults")
 rp.load_params(solverName + "/problems/_" + problemName + ".defaults")
 
 # now read in the inputs file
-if (not os.path.isfile(paramFile)):
+if not os.path.isfile(paramFile):
     # check if the param file lives in the solver's problems directory
     paramFile = solverName + "/problems/" + paramFile
-    if (not os.path.isfile(paramFile)):
+    if not os.path.isfile(paramFile):
         msg.fail("ERROR: inputs file does not exist")
 
 rp.load_params(paramFile, no_new=1)
@@ -202,17 +202,17 @@ while my_data.t < tmax and n < max_steps:
 
     # get the timestep
     dt = solver.timestep(my_data)
-    if (fix_dt > 0.0):
+    if fix_dt > 0.0:
         dt = fix_dt
     else:
-        if (n == 0):
+        if n == 0:
             dt = init_tstep_factor*dt
             dt_old = dt
         else:
             dt = min(max_dt_change*dt_old, dt)
             dt_old = dt
             
-    if (my_data.t + dt > tmax):
+    if my_data.t + dt > tmax:
         dt = tmax - my_data.t
 
     # evolve for a single timestep
