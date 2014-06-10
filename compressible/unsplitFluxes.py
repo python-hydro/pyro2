@@ -130,9 +130,8 @@ import eos
 import interface_f
 import mesh.reconstruction_f as reconstruction_f
 from util import profile
-import vars
 
-def unsplitFluxes(my_data, rp, dt):
+def unsplitFluxes(my_data, rp, vars, dt):
     """
     unsplitFluxes returns the fluxes through the x and y interfaces by
     doing an unsplit reconstruction of the interface values and then

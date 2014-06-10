@@ -9,6 +9,29 @@ import mesh.patch as patch
 from unsplitFluxes import *
 from util import profile
 
+
+class Variables:
+    """
+    a container class for easy access to the different compressible
+    variable by an integer key
+    """
+    def __init__(self, idens=-1, ixmom=-1, iymom=-1, iener=-1):
+        self.nvar = 4
+
+        # conserved variables -- we set these when we initialize for
+        # they match the CellCenterData2d object
+        self.idens = idens
+        self.ixmom = ixmom
+        self.iymom = iymom
+        self.iener = iener
+
+        # primitive variables
+        self.irho = 0
+        self.iu = 1
+        self.iv = 2
+        self.ip = 3
+
+
 class Simulation:
 
     def __init__(self, problem_name, rp):
@@ -17,13 +40,15 @@ class Simulation:
         self.cc_data = None
         self.problem_name = problem_name
 
+        self.vars = None
+
         self.SMALL = 1.e-12
+
 
     def initialize(self):
         """ 
         initialize the grid and variables for compressible flow
         """
-        import vars
 
         # setup the grid
         nx = self.rp.get_param("mesh.nx")
@@ -94,10 +119,11 @@ class Simulation:
 
         self.cc_data = my_data
 
-        vars.idens = my_data.vars.index("density")
-        vars.ixmom = my_data.vars.index("x-momentum")
-        vars.iymom = my_data.vars.index("y-momentum")
-        vars.iener = my_data.vars.index("energy")
+        self.vars = Variables(idens = my_data.vars.index("density"),
+                              ixmom = my_data.vars.index("x-momentum"),
+                              iymom = my_data.vars.index("y-momentum"),
+                              iener = my_data.vars.index("energy"))
+
 
         # initial conditions for the problem
         exec self.problem_name + '.init_data(self.cc_data, self.rp)'
@@ -166,7 +192,7 @@ class Simulation:
 
         myg = self.cc_data.grid
         
-        Flux_x, Flux_y = unsplitFluxes(self.cc_data, self.rp, dt)
+        Flux_x, Flux_y = unsplitFluxes(self.cc_data, self.rp, self.vars, dt)
 
         old_dens = dens.copy()
         old_ymom = ymom.copy()
@@ -177,43 +203,43 @@ class Simulation:
 
         dens[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] += \
            dtdx*(Flux_x[myg.ilo  :myg.ihi+1,
-                        myg.jlo  :myg.jhi+1,vars.idens] - \
+                        myg.jlo  :myg.jhi+1,self.vars.idens] - \
                  Flux_x[myg.ilo+1:myg.ihi+2,
-                        myg.jlo  :myg.jhi+1,vars.idens]) + \
+                        myg.jlo  :myg.jhi+1,self.vars.idens]) + \
            dtdy*(Flux_y[myg.ilo  :myg.ihi+1,
-                        myg.jlo  :myg.jhi+1,vars.idens] - \
+                        myg.jlo  :myg.jhi+1,self.vars.idens] - \
                  Flux_y[myg.ilo  :myg.ihi+1,
-                        myg.jlo+1:myg.jhi+2,vars.idens])    
+                        myg.jlo+1:myg.jhi+2,self.vars.idens])    
 
         xmom[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] += \
            dtdx*(Flux_x[myg.ilo  :myg.ihi+1,
-                        myg.jlo  :myg.jhi+1,vars.ixmom] - \
+                        myg.jlo  :myg.jhi+1,self.vars.ixmom] - \
                  Flux_x[myg.ilo+1:myg.ihi+2,
-                        myg.jlo  :myg.jhi+1,vars.ixmom]) + \
+                        myg.jlo  :myg.jhi+1,self.vars.ixmom]) + \
            dtdy*(Flux_y[myg.ilo  :myg.ihi+1,
-                        myg.jlo  :myg.jhi+1,vars.ixmom] - \
+                        myg.jlo  :myg.jhi+1,self.vars.ixmom] - \
                  Flux_y[myg.ilo  :myg.ihi+1,
-                        myg.jlo+1:myg.jhi+2,vars.ixmom])    
+                        myg.jlo+1:myg.jhi+2,self.vars.ixmom])    
 
         ymom[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] += \
            dtdx*(Flux_x[myg.ilo  :myg.ihi+1,
-                        myg.jlo  :myg.jhi+1,vars.iymom] - \
+                        myg.jlo  :myg.jhi+1,self.vars.iymom] - \
                  Flux_x[myg.ilo+1:myg.ihi+2,
-                        myg.jlo  :myg.jhi+1,vars.iymom]) + \
+                        myg.jlo  :myg.jhi+1,self.vars.iymom]) + \
            dtdy*(Flux_y[myg.ilo  :myg.ihi+1,
-                        myg.jlo  :myg.jhi+1,vars.iymom] - \
+                        myg.jlo  :myg.jhi+1,self.vars.iymom] - \
                  Flux_y[myg.ilo  :myg.ihi+1,
-                        myg.jlo+1:myg.jhi+2,vars.iymom])    
+                        myg.jlo+1:myg.jhi+2,self.vars.iymom])    
 
         ener[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] += \
            dtdx*(Flux_x[myg.ilo  :myg.ihi+1,
-                        myg.jlo  :myg.jhi+1,vars.iener] - \
+                        myg.jlo  :myg.jhi+1,self.vars.iener] - \
                  Flux_x[myg.ilo+1:myg.ihi+2,
-                        myg.jlo  :myg.jhi+1,vars.iener]) + \
+                        myg.jlo  :myg.jhi+1,self.vars.iener]) + \
            dtdy*(Flux_y[myg.ilo  :myg.ihi+1,
-                        myg.jlo  :myg.jhi+1,vars.iener] - \
+                        myg.jlo  :myg.jhi+1,self.vars.iener] - \
                  Flux_y[myg.ilo  :myg.ihi+1,
-                        myg.jlo+1:myg.jhi+2,vars.iener])    
+                        myg.jlo+1:myg.jhi+2,self.vars.iener])    
 
 
         # gravitational source terms
@@ -234,8 +260,6 @@ class Simulation:
         ymom = self.cc_data.get_var("y-momentum")
         ener = self.cc_data.get_var("energy")
 
-        nvar = 4
-    
         # get the velocities
         u = xmom/dens
         v = ymom/dens
@@ -278,7 +302,7 @@ class Simulation:
             if (L_x > 4*L_y):
                 shrink = 0.75
 
-            onLeft = list(range(nvar))
+            onLeft = list(range(self.vars.nvar))
 
 
         elif (L_y > 2*L_x):
