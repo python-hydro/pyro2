@@ -34,7 +34,7 @@ class Variables:
 
 class Simulation:
 
-    def __init__(self, problem_name, rp):
+    def __init__(self, problem_name, rp, timers=None):
 
         self.rp = rp
         self.cc_data = None
@@ -43,6 +43,11 @@ class Simulation:
         self.vars = None
 
         self.SMALL = 1.e-12
+
+        if timers == None:
+            self.tc = profile.TimerCollection()
+        else:
+            self.tc = timers
 
 
     def initialize(self):
@@ -183,8 +188,8 @@ class Simulation:
         Evolve the equations of compressible hydrodynamics through a timestep dt
         """
 
-        pf = profile.timer("evolve")
-        pf.begin()
+        tm_evolve = self.tc.timer("evolve")
+        tm_evolve.begin()
 
         dens = self.cc_data.get_var("density")
         xmom = self.cc_data.get_var("x-momentum")
@@ -195,7 +200,7 @@ class Simulation:
 
         myg = self.cc_data.grid
         
-        Flux_x, Flux_y = unsplitFluxes(self.cc_data, self.rp, self.vars, dt)
+        Flux_x, Flux_y = unsplitFluxes(self.cc_data, self.rp, self.vars, self.tc, dt)
 
         old_dens = dens.copy()
         old_ymom = ymom.copy()
@@ -217,7 +222,7 @@ class Simulation:
         ymom += 0.5*dt*(dens + old_dens)*grav
         ener += 0.5*dt*(ymom + old_ymom)*grav
 
-        pf.end()
+        tm_evolve.end()
 
 
     def dovis(self, n):

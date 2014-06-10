@@ -4,16 +4,21 @@ import pylab
 from diffusion.problems import *
 import mesh.patch as patch
 import multigrid.multigrid as multigrid
-from util import msg, runparams
+from util import msg, profile, runparams
 
 class Simulation:
 
-    def __init__(self, problem_name, rp):
+    def __init__(self, problem_name, rp, timers=None):
 
         self.rp = rp
         self.cc_data = None
 
         self.problem_name = problem_name
+
+        if timers == None:
+            self.tc = profile.TimerCollection()
+        else:
+            self.tc = timers
 
 
     def initialize(self):

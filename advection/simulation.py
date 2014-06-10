@@ -4,10 +4,11 @@ import pylab
 from advection.problems import *
 from advectiveFluxes import *
 import mesh.patch as patch
+from util import profile
 
 class Simulation:
 
-    def __init__(self, problem_name, rp):
+    def __init__(self, problem_name, rp, timers=None):
 
         self.rp = rp
         self.cc_data = None
@@ -15,6 +16,12 @@ class Simulation:
         self.SMALL = 1.e-12
 
         self.problem_name = problem_name
+
+        if timers == None:
+            self.tc = profile.TimerCollection()
+        else:
+            self.tc = timers
+        
 
 
     def initialize(self):

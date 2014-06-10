@@ -129,9 +129,8 @@ import numpy
 import eos
 import interface_f
 import mesh.reconstruction_f as reconstruction_f
-from util import profile
 
-def unsplitFluxes(my_data, rp, vars, dt):
+def unsplitFluxes(my_data, rp, vars, tc, dt):
     """
     unsplitFluxes returns the fluxes through the x and y interfaces by
     doing an unsplit reconstruction of the interface values and then
@@ -142,8 +141,8 @@ def unsplitFluxes(my_data, rp, vars, dt):
     grav is the gravitational acceleration in the y-direction            
     """
 
-    pf = profile.timer("unsplitFluxes")
-    pf.begin()
+    tm_flux = tc.timer("unsplitFluxes")
+    tm_flux.begin()
     
     myg = my_data.grid
 
@@ -197,8 +196,8 @@ def unsplitFluxes(my_data, rp, vars, dt):
     #=========================================================================
 
     # monotonized central differences in x-direction
-    pfa = profile.timer("limiting")
-    pfa.begin()
+    tm_limit = tc.timer("limiting")
+    tm_limit.begin()
 
     limiter = rp.get_param("compressible.limiter")
     if limiter == 0:
@@ -213,11 +212,11 @@ def unsplitFluxes(my_data, rp, vars, dt):
     ldelta_v = xi*limitFunc(1, v, myg.qx, myg.qy, myg.ng)
     ldelta_p = xi*limitFunc(1, p, myg.qx, myg.qy, myg.ng)
     
-    pfa.end()
+    tm_limit.end()
     
     # left and right primitive variable states
-    pfb = profile.timer("interfaceStates")
-    pfb.begin()
+    tm_states = tc.timer("interfaceStates")
+    tm_states.begin()
 
     gamma = rp.get_param("eos.gamma")
 
@@ -230,7 +229,7 @@ def unsplitFluxes(my_data, rp, vars, dt):
                                   r, u, v, p,
                                   ldelta_r, ldelta_u, ldelta_v, ldelta_p) 
     
-    pfb.end()
+    tm_states.end()
                     
 
     # transform interface states back into conserved variables
@@ -256,17 +255,17 @@ def unsplitFluxes(my_data, rp, vars, dt):
     #=========================================================================
 
     # monotonized central differences in y-direction
-    pfa.begin()
+    tm_limit.begin()
 
     ldelta_r = xi*limitFunc(2, r, myg.qx, myg.qy, myg.ng)
     ldelta_u = xi*limitFunc(2, u, myg.qx, myg.qy, myg.ng)
     ldelta_v = xi*limitFunc(2, v, myg.qx, myg.qy, myg.ng)
     ldelta_p = xi*limitFunc(2, p, myg.qx, myg.qy, myg.ng)
 
-    pfa.end()
+    tm_limit.end()
     
     # left and right primitive variable states
-    pfb.begin()
+    tm_states.begin()
 
     V_l, V_r = interface_f.states(2, myg.qx, myg.qy, myg.ng, myg.dy, dt,
                                   vars.nvar,
@@ -274,7 +273,7 @@ def unsplitFluxes(my_data, rp, vars, dt):
                                   r, u, v, p,
                                   ldelta_r, ldelta_u, ldelta_v, ldelta_p)                                    
 
-    pfb.end()
+    tm_states.end()
 
 
     # transform interface states back into conserved variables
@@ -331,8 +330,8 @@ def unsplitFluxes(my_data, rp, vars, dt):
     #=========================================================================
     # compute transverse fluxes
     #=========================================================================
-    pfc = profile.timer("riemann")
-    pfc.begin()
+    tm_riem = tc.timer("riemann")
+    tm_riem.begin()
 
     riemann = rp.get_param("compressible.riemann")
 
@@ -352,7 +351,7 @@ def unsplitFluxes(my_data, rp, vars, dt):
                       vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener, 
                       gamma, U_yl, U_yr)
 
-    pfc.end()
+    tm_riem.end()
 
     #=========================================================================
     # construct the interface values of U now
@@ -401,8 +400,8 @@ def unsplitFluxes(my_data, rp, vars, dt):
                                        
     """
 
-    pfd = profile.timer("transverse flux addition")
-    pfd.begin()
+    tm_transverse = tc.timer("transverse flux addition")
+    tm_transverse.begin()
 
     # U_xl[i,j,:] = U_xl[i,j,:] - 0.5*dt/dy * (F_y[i-1,j+1,:] - F_y[i-1,j,:])
     U_xl[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,:] += \
@@ -424,7 +423,7 @@ def unsplitFluxes(my_data, rp, vars, dt):
         - 0.5*dt/myg.dx * (F_x[myg.ilo-1:myg.ihi+3,myg.jlo-2:myg.jhi+2,:] - \
                            F_x[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,:])
 
-    pfd.end()
+    tm_transverse.end()
 
 
     #=========================================================================
@@ -434,7 +433,7 @@ def unsplitFluxes(my_data, rp, vars, dt):
     # up until now, F_x and F_y stored the transverse fluxes, now we
     # overwrite with the fluxes normal to the interfaces
 
-    pfc.begin()
+    tm_riem.begin()
         
     F_x = riemannFunc(1, myg.qx, myg.qy, myg.ng, 
                       vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener, 
@@ -444,7 +443,7 @@ def unsplitFluxes(my_data, rp, vars, dt):
                       vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener, 
                       gamma, U_yl, U_yr)
 
-    pfc.end()
+    tm_riem.end()
 
     #=========================================================================
     # apply artificial viscosity
@@ -500,7 +499,7 @@ def unsplitFluxes(my_data, rp, vars, dt):
 
     
 
-    pf.end()
+    tm_flux.end()
 
     return F_x, F_y
 

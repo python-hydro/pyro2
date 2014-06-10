@@ -1,109 +1,120 @@
 """
-  A very simple profiling class.  Define some timers and methods
-  to start and stop them.  Nesting of timers is tracked so we can
-  pretty print the profiling information.
+A very simple profiling class.  Define some timers and methods
+to start and stop them.  A TimerCollection holds a group of 
+timers.  Nesting of timers is tracked so we can pretty print 
+the profiling information.
 
-  # define a timer object, labeled 'my timer'
-  a = timer('my timer')
+tc = TimerCollection()
 
-  This will add 'my timer' to the list of keys in the 'my timer'
-  dictionary.  Subsequent calls to the timer class constructor
-  will have no effect.
+a = tc.timer('my timer')
 
-  # start timing the 'my timer' block of code
-  a.begin()
+This will add 'my timer' to the list of Timers managed by
+the TimerCollection.  Subsequent calls to timer() will
+return the same Timer object.
+
+To start the timer:
+
+a.begin()
   
-  ... do stuff here ...
+... and to end it, 
 
-  # end the timing of the 'my timer' block of code
-  a.end()
+a.end()
 
-  for best results, the block of code timed should be large
-  enough to offset the overhead of the timer class method
-  calls.
+For best results, the block of code timed should be large
+enough to offset the overhead of the timer class method
+calls.
 
-  Multiple timers can be instanciated and nested.  The stackCount
-  global parameter keeps count of the level of nesting, and the
-  timerNesting data structure stores the nesting level for each
-  defined timer.
+tc.report() prints out a summary of the timing.
 
-  timeReport() is called at the end to print out a summary of the
-  timing.
-
-  At present, no enforcement is done to ensure proper nesting.
+Warning: At present, no enforcement is done to ensure proper 
+nesting.
 
 """
   
-
 import time 
 
-timers = {}
+class TimerCollection:
 
-# keep basic count of how nested we are in the timers, so we can do some
-# pretty printing.
-stackCount = 0
+    def __init__(self):
+        self.timers = []
 
-timerNesting = {}
-timerOrder = []
 
-class timer:
+    def timer(self, name):
 
-    def __init__ (self, name):
-        global timers, stackCount, timerNesting, timerOrder
+        # check if any existing timer has this name, if so, return that
+        # object
+        for t in self.timers:
+            if t.name == name:
+                return t
+                break
+
+        # if we're here, we didn't find one, so create a new one
+
+        # find out how nested we are (the stack count), for pretty printing
+        stack_count = 0
+        for t in self.timers:
+            if t.is_running: stack_count += 1
+
+        t_new = Timer(name, stack_count=stack_count)
+
+        self.timers.append(t_new)
+
+        return t_new
+
+
+    def report(self):
+
+        spacing = '   '
+        for t in self.timers:
+            print t.stack_count*spacing + t.name + ': ', t.elapsed_time
+
+
+class Timer:
+
+    def __init__ (self, name, stack_count=0):
         
         self.name = name
+        self.stack_count = stack_count
+        self.is_running = False
 
-        keys = timers.keys()
-
-        if name not in keys:
-            timers[name] = 0.0
-            self.startTime = 0.0
-            timerOrder.append(name)
-            timerNesting[name] = stackCount
+        self.start_time = 0
+        self.elapsed_time = 0
             
 
     def begin(self):
-        global stackCount
-        
-        self.startTime = time.time()
-        stackCount += 1
+        self.start_time = time.time()
+        self.is_running = True
 
         
     def end(self):
-        global timers, stackCount
-
-        elapsedTime = time.time() - self.startTime
-        timers[self.name] += elapsedTime
+        elapsed_time = time.time() - self.start_time
+        self.elapsed_time += elapsed_time
+        self.is_running = False
         
-        stackCount -= 1
         
-
-def timeReport():
-    global timers, timerOrder, timerNesting
-
-    spacing = '   '
-    for key in timerOrder:
-        print timerNesting[key]*spacing + key + ': ', timers[key]
-
-
 
 if __name__ == "__main__":    
-    a = timer('1')
+    tc = TimerCollection()
+
+    a = tc.timer('a')
     a.begin()
     time.sleep(10.)
     a.end()
     
-    b = timer('2')
+    b = tc.timer('b')
     b.begin()
     time.sleep(5.)
     
-    c = timer('3')
+    c = tc.timer('c')
     c.begin()
-    
-    time.sleep(20.)
-    
-    b.end()
+    time.sleep(10.)
+    c.end()
+
+    c = tc.timer('c')
+    c.begin()
+    time.sleep(10.)
     c.end()
     
-    timeReport()
-
+    b.end()
+    
+    tc.report()

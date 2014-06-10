@@ -3,7 +3,6 @@
 import getopt
 import os
 import sys
-import time
 
 import numpy
 import pylab
@@ -54,8 +53,10 @@ usage = """
 
 msg.bold('pyro ...')
 
-pf = profile.timer("main")
-pf.begin()
+tc = profile.TimerCollection()
+
+tm_main = tc.timer("main")
+tm_main.begin()
 
 #-----------------------------------------------------------------------------
 # command line arguments / solver setup
@@ -151,7 +152,7 @@ rp.print_paramfile()
 
 # initialize the Simulation object -- this will hold the grid and data and
 # know about the runtime parameters and which problem we are running
-sim = solver.Simulation(problem_name, rp)
+sim = solver.Simulation(problem_name, rp, timers=tc)
 
 sim.initialize()
 sim.preevolve()
@@ -186,10 +187,10 @@ nout = 0
 while sim.cc_data.t < tmax and n < max_steps:
 
     # fill boundary conditions
-    pfb = profile.timer("fill_bc")
-    pfb.begin()
+    tm_bc = tc.timer("fill_bc")
+    tm_bc.begin()
     sim.cc_data.fill_BC_all()
-    pfb.end()
+    tm_bc.end()
 
     # get the timestep
     dt = sim.timestep()
@@ -222,21 +223,21 @@ while sim.cc_data.t < tmax and n < max_steps:
 
     if sim.cc_data.t >= (nout + 1)*dt_out or n%n_out == 0:
 
-        pfc = profile.timer("output")
-        pfc.begin()
+        tm_io = tc.timer("output")
+        tm_io.begin()
 
         msg.warning("outputting...")
         basename = rp.get_param("io.basename")
         sim.cc_data.write(basename + "%4.4d" % (n))
         nout += 1
 
-        pfc.end()
+        tm_io.end()
 
 
     # visualization
     if dovis: 
-        pfd = profile.timer("vis")
-        pfd.begin()
+        tm_vis = tc.timer("vis")
+        tm_vis.begin()
 
         sim.dovis(n)
         store = rp.get_param("vis.store_images")
@@ -245,9 +246,9 @@ while sim.cc_data.t < tmax and n < max_steps:
             basename = rp.get_param("io.basename")
             pylab.savefig(basename + "%4.4d" % (n) + ".png")
 
-        pfd.end()
+        tm_vis.end()
 
-pf.end()
+tm_main.end()
 
 
 #-----------------------------------------------------------------------------
@@ -278,7 +279,7 @@ if make_bench:
 # final reports
 #-----------------------------------------------------------------------------
 rp.print_unused_params()
-profile.timeReport()
+tc.report()
 
 sim.finalize()
 
