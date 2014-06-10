@@ -13,9 +13,12 @@ def makeplot(myd, solverName, outfile):
 
     exec 'import ' + solverName + ' as solver'
 
+    sim = solver.Simulation(None, None)
+    sim.cc_data = myd
+
     pylab.figure(num=1, figsize=(8,4.5), dpi=100, facecolor='w')
 
-    solver.dovis(myd, 0)
+    sim.dovis(0)
     pylab.savefig(outfile)
     pylab.show()
 
