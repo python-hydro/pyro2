@@ -486,6 +486,26 @@ class CellCenterData2d:
         n = self.vars.index(name)
         return self.data[n,:,:]
 
+
+    def get_var_by_index(self, n):
+        """
+        Return a data array for the variable with index n in the 
+        data array.  Any changes made to this are automatically 
+        reflected in the CellCenterData2d object.
+
+        Parameters
+        ----------
+        n : int
+            The index of the variable to access
+
+        Returns
+        -------
+        out : ndarray
+            The array of data corresponding to the index
+
+        """
+        return self.data[n,:,:]
+
     
     def get_aux(self, keyword):
         """ 

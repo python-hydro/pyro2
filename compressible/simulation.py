@@ -179,6 +179,9 @@ class Simulation:
 
 
     def evolve(self, dt):
+        """
+        Evolve the equations of compressible hydrodynamics through a timestep dt
+        """
 
         pf = profile.timer("evolve")
         pf.begin()
@@ -201,46 +204,14 @@ class Simulation:
         dtdx = dt/myg.dx
         dtdy = dt/myg.dy
 
-        dens[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] += \
-           dtdx*(Flux_x[myg.ilo  :myg.ihi+1,
-                        myg.jlo  :myg.jhi+1,self.vars.idens] - \
-                 Flux_x[myg.ilo+1:myg.ihi+2,
-                        myg.jlo  :myg.jhi+1,self.vars.idens]) + \
-           dtdy*(Flux_y[myg.ilo  :myg.ihi+1,
-                        myg.jlo  :myg.jhi+1,self.vars.idens] - \
-                 Flux_y[myg.ilo  :myg.ihi+1,
-                        myg.jlo+1:myg.jhi+2,self.vars.idens])    
+        for n in range(self.vars.nvar):
+            var = self.cc_data.get_var_by_index(n)
 
-        xmom[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] += \
-           dtdx*(Flux_x[myg.ilo  :myg.ihi+1,
-                        myg.jlo  :myg.jhi+1,self.vars.ixmom] - \
-                 Flux_x[myg.ilo+1:myg.ihi+2,
-                        myg.jlo  :myg.jhi+1,self.vars.ixmom]) + \
-           dtdy*(Flux_y[myg.ilo  :myg.ihi+1,
-                        myg.jlo  :myg.jhi+1,self.vars.ixmom] - \
-                 Flux_y[myg.ilo  :myg.ihi+1,
-                        myg.jlo+1:myg.jhi+2,self.vars.ixmom])    
-
-        ymom[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] += \
-           dtdx*(Flux_x[myg.ilo  :myg.ihi+1,
-                        myg.jlo  :myg.jhi+1,self.vars.iymom] - \
-                 Flux_x[myg.ilo+1:myg.ihi+2,
-                        myg.jlo  :myg.jhi+1,self.vars.iymom]) + \
-           dtdy*(Flux_y[myg.ilo  :myg.ihi+1,
-                        myg.jlo  :myg.jhi+1,self.vars.iymom] - \
-                 Flux_y[myg.ilo  :myg.ihi+1,
-                        myg.jlo+1:myg.jhi+2,self.vars.iymom])    
-
-        ener[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] += \
-           dtdx*(Flux_x[myg.ilo  :myg.ihi+1,
-                        myg.jlo  :myg.jhi+1,self.vars.iener] - \
-                 Flux_x[myg.ilo+1:myg.ihi+2,
-                        myg.jlo  :myg.jhi+1,self.vars.iener]) + \
-           dtdy*(Flux_y[myg.ilo  :myg.ihi+1,
-                        myg.jlo  :myg.jhi+1,self.vars.iener] - \
-                 Flux_y[myg.ilo  :myg.ihi+1,
-                        myg.jlo+1:myg.jhi+2,self.vars.iener])    
-
+            var[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] += \
+                dtdx*(Flux_x[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,n] - \
+                      Flux_x[myg.ilo+1:myg.ihi+2,myg.jlo  :myg.jhi+1,n]) + \
+                dtdy*(Flux_y[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,n] - \
+                      Flux_y[myg.ilo  :myg.ihi+1,myg.jlo+1:myg.jhi+2,n])    
 
         # gravitational source terms
         ymom += 0.5*dt*(dens + old_dens)*grav
