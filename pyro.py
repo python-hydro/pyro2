@@ -98,7 +98,7 @@ except IndexError:
     print usage
     msg.fail("ERROR: solver name not specified on command line")
 
-try: problemName = next[1]
+try: problem_name = next[1]
 except IndexError:
     print usage
     msg.fail("ERROR: problem name not specified on command line")
@@ -127,7 +127,7 @@ rp.load_params("_defaults")
 rp.load_params(solverName + "/_defaults")
 
 # problem-specific runtime parameters
-rp.load_params(solverName + "/problems/_" + problemName + ".defaults")
+rp.load_params(solverName + "/problems/_" + problem_name + ".defaults")
 
 # now read in the inputs file
 if not os.path.isfile(paramFile):
@@ -149,15 +149,11 @@ rp.print_paramfile()
 # initialization
 #-----------------------------------------------------------------------------
 
-# initialize the grid structure -- we will store the rp in the data object
-sim = solver.Simulation(problemName, rp)
+# initialize the Simulation object -- this will hold the grid and data and
+# know about the runtime parameters and which problem we are running
+sim = solver.Simulation(problem_name, rp)
 
 sim.initialize()
-
-
-#-----------------------------------------------------------------------------
-# pre-evolve
-#-----------------------------------------------------------------------------
 sim.preevolve()
 
 
@@ -185,7 +181,6 @@ if dovis:
     pylab.figure(num=1, figsize=(8,6), dpi=100, facecolor='w')
     sim.dovis(0)
     
-
 nout = 0
 
 while sim.cc_data.t < tmax and n < max_steps:
