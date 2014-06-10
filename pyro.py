@@ -150,19 +150,15 @@ rp.print_paramfile()
 #-----------------------------------------------------------------------------
 
 # initialize the grid structure -- we will store the rp in the data object
-my_grid, my_data = solver.initialize(rp)
-    
+sim = solver.Simulation(problemName, rp)
 
-# initialize the data
-exec 'from ' + solverName + '.problems import *'
-
-exec problemName + '.initData(my_data)'
+sim.initialize()
 
 
 #-----------------------------------------------------------------------------
 # pre-evolve
 #-----------------------------------------------------------------------------
-solver.preevolve(my_data)
+sim.preevolve()
 
 
 #-----------------------------------------------------------------------------
@@ -178,30 +174,30 @@ fix_dt = rp.get_param("driver.fix_dt")
 pylab.ion()
 
 n = 0
-my_data.t = 0.0
+sim.cc_data.t = 0.0
 
 # output the 0th data
 basename = rp.get_param("io.basename")
-my_data.write(basename + "%4.4d" % (n))
+sim.cc_data.write(basename + "%4.4d" % (n))
 
 dovis = rp.get_param("vis.dovis")
 if dovis: 
     pylab.figure(num=1, figsize=(8,6), dpi=100, facecolor='w')
-    solver.dovis(my_data, 0)
+    sim.dovis(0)
     
 
 nout = 0
 
-while my_data.t < tmax and n < max_steps:
+while sim.cc_data.t < tmax and n < max_steps:
 
     # fill boundary conditions
     pfb = profile.timer("fill_bc")
     pfb.begin()
-    my_data.fill_BC_all()
+    sim.cc_data.fill_BC_all()
     pfb.end()
 
     # get the timestep
-    dt = solver.timestep(my_data)
+    dt = sim.timestep()
     if fix_dt > 0.0:
         dt = fix_dt
     else:
@@ -212,31 +208,31 @@ while my_data.t < tmax and n < max_steps:
             dt = min(max_dt_change*dt_old, dt)
             dt_old = dt
             
-    if my_data.t + dt > tmax:
-        dt = tmax - my_data.t
+    if sim.cc_data.t + dt > tmax:
+        dt = tmax - sim.cc_data.t
 
     # evolve for a single timestep
-    solver.evolve(my_data, dt)
+    sim.evolve(dt)
 
 
     # increment the time
-    my_data.t += dt
+    sim.cc_data.t += dt
     n += 1
-    print "%5d %10.5f %10.5f" % (n, my_data.t, dt)
+    print "%5d %10.5f %10.5f" % (n, sim.cc_data.t, dt)
 
 
     # output
     dt_out = rp.get_param("io.dt_out")
     n_out = rp.get_param("io.n_out")
 
-    if my_data.t >= (nout + 1)*dt_out or n%n_out == 0:
+    if sim.cc_data.t >= (nout + 1)*dt_out or n%n_out == 0:
 
         pfc = profile.timer("output")
         pfc.begin()
 
         msg.warning("outputting...")
         basename = rp.get_param("io.basename")
-        my_data.write(basename + "%4.4d" % (n))
+        sim.cc_data.write(basename + "%4.4d" % (n))
         nout += 1
 
         pfc.end()
@@ -247,7 +243,7 @@ while my_data.t < tmax and n < max_steps:
         pfd = profile.timer("vis")
         pfd.begin()
 
-        solver.dovis(my_data, n)
+        sim.dovis(n)
         store = rp.get_param("vis.store_images")
 
         if store == 1:
@@ -268,7 +264,7 @@ if comp_bench:
     msg.warning("comparing to: %s " % (compare_file) )
     bench_grid, bench_data = patch.read(compare_file)
 
-    result = compare.compare(my_grid, my_data, bench_grid, bench_data)
+    result = compare.compare(sim.cc_data.grid, sim.cc_data, bench_grid, bench_data)
     
     if result == 0:
         msg.success("results match benchmark\n")
@@ -280,7 +276,7 @@ if comp_bench:
 if make_bench:
     bench_file = solverName + "/tests/" + basename + "%4.4d" % (n)
     msg.warning("storing new benchmark: %s\n " % (bench_file) )
-    my_data.write(bench_file)
+    sim.cc_data.write(bench_file)
     
 
 #-----------------------------------------------------------------------------
@@ -289,4 +285,5 @@ if make_bench:
 rp.print_unused_params()
 profile.timeReport()
 
-exec problemName + '.finalize()'
+sim.finalize()
+
