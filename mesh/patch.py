@@ -225,9 +225,6 @@ class Grid2d:
             Physical coordinate at the upper y boundary
         """
 
-        # time 
-        self.t = -1.0
-
         # size of grid
         self.nx = nx
         self.ny = ny
@@ -373,7 +370,11 @@ class CellCenterData2d:
 
         self.BCs = {}
 
+        # time 
+        self.t = -1.0
+
         self.initialized = 0
+
 
     def register_var(self, name, bc_object):
         """ 
