@@ -3,6 +3,8 @@ This is a simple list of the improvements we wish to make to pyro.
 
 coding:
 
+  -- make compatible with python 3.x
+
   -- rewrite to adhere to python style guidelines
 
   -- docstrings should be added everywhere possible

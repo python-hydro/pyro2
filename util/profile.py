@@ -48,8 +48,6 @@ timerOrder = []
 
 class timer:
 
-
-
     def __init__ (self, name):
         global timers, stackCount, timerNesting, timerOrder
         

@@ -888,6 +888,11 @@ class CellCenterData2d:
             print " "
             j += 1
 
+# backwards compatibility
+ccData2d = CellCenterData2d
+grid2d = Grid2d
+bcObject = BCObject
+
 def read(filename):
     """
     Read a CellCenterData object from a file and return it and the grid 

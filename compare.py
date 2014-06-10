@@ -17,11 +17,11 @@ errors = {"gridbad": "grids don't agree",
 def compare(myg1, myd1, myg2, myd2):
 
     # compare the grids
-    if (not myg1 == myg2): 
+    if not myg1 == myg2: 
         return "gridbad"
 
     # compare the data
-    if (not myd1.vars == myd2.vars):
+    if not myd1.vars == myd2.vars:
         return "namesbad"
 
 
@@ -31,7 +31,7 @@ def compare(myg1, myd1, myg2, myd2):
     result = 0
 
     n = 0
-    while (n < myd1.nvar):
+    while n < myd1.nvar:
 
         d1 = myd1.get_var(myd1.vars[n])
         d2 = myd2.get_var(myd2.vars[n])
@@ -63,7 +63,7 @@ if __name__== "__main__":
 
     result = compare(myg1, myd1, myg2, myd2)
 
-    if (result == 0):
+    if result == 0:
         print "SUCCESS: files agree"
     else:
         print "ERROR: ", errors[result]
