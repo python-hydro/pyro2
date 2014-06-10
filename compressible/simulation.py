@@ -278,9 +278,7 @@ class Simulation:
 
         elif (L_y > 2*L_x):
 
-            # we want 4 columns:
-            # 
-            #  rho  |U|  p  e
+            # we want 4 columns:  rho  |U|  p  e
             fig, axes = pylab.subplots(nrows=1, ncols=4, num=1)        
             if (L_y >= 3*L_x):
                 shrink = 0.5
@@ -299,84 +297,36 @@ class Simulation:
 
             onLeft = [0,2]
 
-        ax = axes.flat[0]
 
-        img = ax.imshow(numpy.transpose(dens[myg.ilo:myg.ihi+1,
-                                             myg.jlo:myg.jhi+1]), 
+        fields = [dens, magvel, p, e]
+        field_names = [r"$\rho$", r"U", "p", "e"]
+
+        for n in range(4):
+            ax = axes.flat[n]
+
+            v = fields[n]
+            img = ax.imshow(numpy.transpose(v[myg.ilo:myg.ihi+1, 
+                                              myg.jlo:myg.jhi+1]), 
                         interpolation="nearest", origin="lower",
                         extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
-        ax.set_xlabel("x")
-        ax.set_ylabel("y")
-        ax.set_title(r"$\rho$")
+            ax.set_xlabel("x")
+            if n == 0:
+                ax.set_ylabel("y")
+            elif allYlabel:
+                ax.set_ylabel("y")
 
-        if not 0 in onLeft:
-            ax.yaxis.offsetText.set_visible(False)
+            ax.set_title(field_names[n])
+
+            if not n in onLeft:
+                ax.yaxis.offsetText.set_visible(False)
+                if n > 0: ax.get_yaxis().set_visible(False)
         
-        if sparseX:
-            ax.xaxis.set_major_locator(pylab.MaxNLocator(3))
+            if sparseX:
+                ax.xaxis.set_major_locator(pylab.MaxNLocator(3))
 
-        pylab.colorbar(img, ax=ax, orientation=orientation, shrink=shrink)
+            pylab.colorbar(img, ax=ax, orientation=orientation, shrink=shrink)
 
-        ax = axes.flat[1]
-
-        img = ax.imshow(numpy.transpose(magvel[myg.ilo:myg.ihi+1,
-                                               myg.jlo:myg.jhi+1]), 
-                        interpolation="nearest", origin="lower",
-                        extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
-
-        ax.set_xlabel("x")
-        if (allYlabel): ax.set_ylabel("y")
-        ax.set_title("U")
-
-        if not 1 in onLeft:
-            ax.get_yaxis().set_visible(False)
-            ax.yaxis.offsetText.set_visible(False)
-
-        if sparseX:
-            ax.xaxis.set_major_locator(pylab.MaxNLocator(3))
-
-        pylab.colorbar(img, ax=ax, orientation=orientation, shrink=shrink)
-
-        ax = axes.flat[2]
-
-        img = ax.imshow(numpy.transpose(p[myg.ilo:myg.ihi+1,
-                                          myg.jlo:myg.jhi+1]), 
-                        interpolation="nearest", origin="lower",
-                        extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
-
-        ax.set_xlabel("x")
-        if (allYlabel): ax.set_ylabel("y")
-        ax.set_title("p")
-
-        if not 2 in onLeft:
-            ax.get_yaxis().set_visible(False)
-            ax.yaxis.offsetText.set_visible(False)
-
-        if sparseX:
-            ax.xaxis.set_major_locator(pylab.MaxNLocator(3))
-
-        pylab.colorbar(img, ax=ax, orientation=orientation, shrink=shrink)
-
-        ax = axes.flat[3]
-
-        img = ax.imshow(numpy.transpose(e[myg.ilo:myg.ihi+1,
-                                          myg.jlo:myg.jhi+1]), 
-                        interpolation="nearest", origin="lower",
-                        extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
-
-        ax.set_xlabel("x")
-        if (allYlabel): ax.set_ylabel("y")
-        ax.set_title("e")
-
-        if not 3 in onLeft:
-            ax.get_yaxis().set_visible(False)
-            ax.yaxis.offsetText.set_visible(False)
-
-        if sparseX:
-            ax.xaxis.set_major_locator(pylab.MaxNLocator(3))
-
-        pylab.colorbar(img, ax=ax, orientation=orientation, shrink=shrink)
 
         pylab.figtext(0.05,0.0125, "t = %10.5f" % self.cc_data.t)
 
@@ -384,6 +334,4 @@ class Simulation:
 
 
     def finalize(self):
-
         exec self.problem_name + '.finalize()'
-
