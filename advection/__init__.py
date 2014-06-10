@@ -22,9 +22,6 @@ The general flow of the solver when invoked through pyro.py is:
 
 """
 
-__all__ = ['initialize','evolve','preevolve']
-from initialize import *
-from preevolve import *
-from evolve import *
-from timestep import *
-from dovis import *
+__all__ = ['simulation']
+from simulation import *
+
