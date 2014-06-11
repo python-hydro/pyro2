@@ -138,7 +138,29 @@ def unsplitFluxes(my_data, rp, vars, tc, dt):
                                                                                
     currently we assume a gamma-law EOS 
 
-    grav is the gravitational acceleration in the y-direction            
+    The runtime parameter grav is assumed to be the gravitational 
+    acceleration in the y-direction            
+
+    Parameters
+    ----------
+    my_data : CellCenterData2d object
+        The data object containing the grid and advective scalar that
+        we are advecting.
+    rp : RuntimeParameters object
+        The runtime parameters for the simulation                              
+    vars : Variables object
+        The Variables object that tells us which indices refer to which
+        variables
+    tc : TimerCollection object
+        The timers we are using to profile
+    dt : float
+        The timestep we are advancing through. 
+
+    Returns
+    -------
+    out : ndarray, ndarray 
+        The fluxes on the x- and y-interfaces
+
     """
 
     tm_flux = tc.timer("unsplitFluxes")
