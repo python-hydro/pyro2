@@ -1,11 +1,7 @@
-# convergence results from mg_test.py
-# 2012-10-19
-#
-#  nx             L2 norm wrt true solution
+# nx  L2 norm wrt true solution (2014-06-11)
 
-  16                   4.06955e-4
-  32                   1.02427e-4
-  64                   2.56513e-5
- 128                   6.41563e-6
- 256                   1.60408e-6
-
+16  0.000406955
+32  0.000102427
+64  2.56513e-05
+128 6.41563e-06
+256 1.60408e-06
