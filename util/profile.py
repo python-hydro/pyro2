@@ -36,10 +36,28 @@ import time
 class TimerCollection:
 
     def __init__(self):
+        """
+        Initialize the collection of timers
+        """
         self.timers = []
 
 
     def timer(self, name):
+        """
+        Create a timer with the given name.  If one with that name already
+        exists, then we return that timer.
+
+        Parameters
+        ----------
+        name : str
+            Name of the timer
+
+        Returns
+        -------
+        out : Timer object
+            A timer object corresponding to the name.
+
+        """
 
         # check if any existing timer has this name, if so, return that
         # object
@@ -63,6 +81,9 @@ class TimerCollection:
 
 
     def report(self):
+        """
+        Generate a timing summary report
+        """
 
         spacing = '   '
         for t in self.timers:
@@ -72,7 +93,18 @@ class TimerCollection:
 class Timer:
 
     def __init__ (self, name, stack_count=0):
-        
+        """
+        Initialize a timer with the given name.
+
+        Parameters
+        ----------
+        name : str
+            The name of the timer
+        stack_count : int, optional
+            The depth of the timer (i.e. how many timers is this nested
+            in).  This is used for printing purposes.
+
+        """
         self.name = name
         self.stack_count = stack_count
         self.is_running = False
@@ -82,11 +114,18 @@ class Timer:
             
 
     def begin(self):
+        """
+        Start timing
+        """
         self.start_time = time.time()
         self.is_running = True
 
         
     def end(self):
+        """
+        Stop timing.  This does not destroy the timer, it simply 
+        stops it from counting time.
+        """
         elapsed_time = time.time() - self.start_time
         self.elapsed_time += elapsed_time
         self.is_running = False
