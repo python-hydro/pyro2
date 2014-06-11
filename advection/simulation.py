@@ -176,5 +176,8 @@ class Simulation:
 
     
     def finalize(self):
-
+        """
+        Do any final clean-ups for the simulation and call the problem's
+        finalize() method.
+        """
         exec self.problem_name + '.finalize()'        

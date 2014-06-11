@@ -9,6 +9,22 @@ from util import msg, profile, runparams
 class Simulation:
 
     def __init__(self, problem_name, rp, timers=None):
+        """
+        Initialize the Simulation object for diffusion:
+
+           a  = k a
+            t      xx
+
+        Parameters
+        ----------
+        problem_name : str
+            The name of the problem we wish to run.  This should
+            correspond to one of the modules in diffusion/problems/
+        rp : RuntimeParameters object
+            The runtime parameters for the simulation
+        timers : TimerCollection object, optional
+            The timers used for profiling this simulation
+        """
 
         self.rp = rp
         self.cc_data = None
@@ -23,7 +39,8 @@ class Simulation:
 
     def initialize(self):
         """ 
-        initialize the grid and variables for diffusion
+        Initialize the grid and variables for diffusion and set the initial
+        conditions for the chosen problem.
         """
 
         # setup the grid
@@ -97,8 +114,10 @@ class Simulation:
 
 
     def preevolve(myd):
-    
-        # do nothing
+        """
+        Do any necessary evolution before the main evolve loop.  This
+        is not needed for diffusion.
+        """    
         pass
 
 
@@ -160,6 +179,9 @@ class Simulation:
 
         
     def dovis(self):
+        """
+        Do runtime visualization. 
+        """
 
         pylab.clf()
 
@@ -184,6 +206,10 @@ class Simulation:
 
 
     def finalize(self):
+        """
+        Do any final clean-ups for the simulation and call the problem's
+        finalize() method.
+        """
         exec self.problem_name + '.finalize()'
 
 
