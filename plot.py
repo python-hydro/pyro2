@@ -18,7 +18,7 @@ def makeplot(myd, solverName, outfile):
 
     pylab.figure(num=1, figsize=(8,4.5), dpi=100, facecolor='w')
 
-    sim.dovis(0)
+    sim.dovis()
     pylab.savefig(outfile)
     pylab.show()
 

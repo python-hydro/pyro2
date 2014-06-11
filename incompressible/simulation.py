@@ -471,7 +471,7 @@ class Simulation:
         self.cc_data.fill_BC("y-velocity")
 
 
-    def dovis(self, n):
+    def dovis(self):
 
         pylab.clf()
 

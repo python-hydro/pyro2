@@ -159,7 +159,7 @@ class Simulation:
         phi[:,:] = mg.get_solution()
 
         
-    def dovis(self, n):
+    def dovis(self):
 
         pylab.clf()
 

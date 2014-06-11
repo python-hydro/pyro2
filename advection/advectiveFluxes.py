@@ -38,6 +38,8 @@ def unsplitFluxes(my_data, rp, dt, scalar_name):
     my_data : CellCenterData2d object
         The data object containing the grid and advective scalar that
         we are advecting.
+    rp : RuntimeParameters object
+        The runtime parameters for the simulation
     dt : float
         The timestep we are advancing through.
     scalar_name : str

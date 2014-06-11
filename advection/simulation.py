@@ -9,6 +9,19 @@ from util import profile
 class Simulation:
 
     def __init__(self, problem_name, rp, timers=None):
+        """
+        Initialize the Simulation object for linear advection.
+
+        Parameters
+        ----------
+        problem_name : str
+            The name of the problem we wish to run.  This should
+            correspond to one of the modules in advection/problems/
+        rp : RuntimeParameters object
+            The runtime parameters for the simulation
+        timers : TimerCollection object, optional
+            The timers used for profiling this simulation
+        """
 
         self.rp = rp
         self.cc_data = None
@@ -73,7 +86,7 @@ class Simulation:
 
     def timestep(self):
         """
-        Computes the advective timestep (CFL) constraint.  We use the 
+        Compute the advective timestep (CFL) constraint.  We use the 
         driver.cfl parameter to control what fraction of the CFL
         step we actually take.
         """
@@ -93,21 +106,21 @@ class Simulation:
 
 
     def preevolve(self):
-    
-        # do nothing
+        """
+        Do any necessary evolution before the main evolve loop.  This
+        is not needed for advection
+        """
         pass
 
 
     def evolve(self, dt):
         """ 
         Evolve the linear advection equation through one timestep.  We only
-        consider the "density" variable in the CellCenterData2d object input
-        here.
+        consider the "density" variable in the CellCenterData2d object that
+        is part of the Simulation.
 
         Parameters
         ----------
-        self.cc_data : CellCenterData2d object
-            The data object containing the scalar quantity we are advecting
         dt : float
             The timestep to evolve through
         
@@ -137,8 +150,10 @@ class Simulation:
                    dtdy*(flux_y[0:qx-1,0:qy-1] - flux_y[0:qx-1,1:qy])  
 
 
-    def dovis(self, n):
-
+    def dovis(self):
+        """
+        Do runtime visualization. 
+        """
         pylab.clf()
 
         dens = self.cc_data.get_var("density")
