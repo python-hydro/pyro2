@@ -113,12 +113,10 @@ class Simulation:
 
 
         # store the EOS gamma as an auxillary quantity so we can have a
-        # self-contained object stored in output files to make plots
-        gamma = self.rp.get_param("eos.gamma")
-        my_data.set_aux("gamma", gamma)
-
-        # initialize the EOS gamma
-        eos.init(gamma)
+        # self-contained object stored in output files to make plots.
+        # store grav because we'll need that in some BCs
+        my_data.set_aux("gamma", self.rp.get_param("eos.gamma"))
+        my_data.set_aux("grav", self.rp.get_param("compressible.grav"))
 
         my_data.create()
 
@@ -160,11 +158,11 @@ class Simulation:
 
         e = (ener - 0.5*dens*(u*u + v*v))/dens
 
-        p = eos.pres(dens, e)
-
-        # compute the sounds speed
         gamma = self.rp.get_param("eos.gamma")
 
+        p = eos.pres(gamma, dens, e)
+
+        # compute the sounds speed
         cs = numpy.sqrt(gamma*p/dens)
 
 
@@ -246,12 +244,13 @@ class Simulation:
 
         magvel = numpy.sqrt(magvel)
 
-        # access gamma from the object instead of using the EOS so we can
-        # use dovis outside of a running simulation.
-        gamma = self.cc_data.get_aux("gamma")
-        p = rhoe*(gamma - 1.0)
-
         e = rhoe/dens
+
+        # access gamma from the cc_data object so we can use dovis 
+        # outside of a running simulation.
+        gamma = self.cc_data.get_aux("gamma")
+
+        p = eos.pres(gamma, dens, e)
 
         myg = self.cc_data.grid
 

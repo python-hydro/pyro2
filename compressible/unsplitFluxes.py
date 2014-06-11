@@ -146,6 +146,8 @@ def unsplitFluxes(my_data, rp, vars, tc, dt):
     
     myg = my_data.grid
 
+    gamma = rp.get_param("eos.gamma")
+
     #=========================================================================
     # compute the primitive variables
     #=========================================================================
@@ -165,7 +167,7 @@ def unsplitFluxes(my_data, rp, vars, tc, dt):
     # get the pressure
     e = (ener - 0.5*(xmom**2 + ymom**2)/dens)/dens
 
-    p = eos.pres(dens, e)
+    p = eos.pres(gamma, dens, e)
 
     smallp = 1.e-10
     p = p.clip(smallp)   # apply a floor to the pressure
@@ -218,8 +220,6 @@ def unsplitFluxes(my_data, rp, vars, tc, dt):
     tm_states = tc.timer("interfaceStates")
     tm_states.begin()
 
-    gamma = rp.get_param("eos.gamma")
-
     V_l = myg.scratch_array(vars.nvar)
     V_r = myg.scratch_array(vars.nvar)
 
@@ -239,13 +239,13 @@ def unsplitFluxes(my_data, rp, vars, tc, dt):
     U_xl[:,:,vars.idens] = V_l[:,:,vars.irho]
     U_xl[:,:,vars.ixmom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iu]
     U_xl[:,:,vars.iymom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iv]
-    U_xl[:,:,vars.iener] = eos.rhoe(V_l[:,:,vars.ip]) + \
+    U_xl[:,:,vars.iener] = eos.rhoe(gamma, V_l[:,:,vars.ip]) + \
         0.5*V_l[:,:,vars.irho]*(V_l[:,:,vars.iu]**2 + V_l[:,:,vars.iv]**2)
 
     U_xr[:,:,vars.idens] = V_r[:,:,vars.irho]
     U_xr[:,:,vars.ixmom] = V_r[:,:,vars.irho]*V_r[:,:,vars.iu]
     U_xr[:,:,vars.iymom] = V_r[:,:,vars.irho]*V_r[:,:,vars.iv]
-    U_xr[:,:,vars.iener] = eos.rhoe(V_r[:,:,vars.ip]) + \
+    U_xr[:,:,vars.iener] = eos.rhoe(gamma, V_r[:,:,vars.ip]) + \
         0.5*V_r[:,:,vars.irho]*(V_r[:,:,vars.iu]**2 + V_r[:,:,vars.iv]**2)
 
 
@@ -271,7 +271,7 @@ def unsplitFluxes(my_data, rp, vars, tc, dt):
                                   vars.nvar,
                                   gamma,
                                   r, u, v, p,
-                                  ldelta_r, ldelta_u, ldelta_v, ldelta_p)                                    
+                                  ldelta_r, ldelta_u, ldelta_v, ldelta_p)  
 
     tm_states.end()
 
@@ -283,13 +283,13 @@ def unsplitFluxes(my_data, rp, vars, tc, dt):
     U_yl[:,:,vars.idens] = V_l[:,:,vars.irho]
     U_yl[:,:,vars.ixmom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iu]
     U_yl[:,:,vars.iymom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iv]
-    U_yl[:,:,vars.iener] = eos.rhoe(V_l[:,:,vars.ip]) + \
+    U_yl[:,:,vars.iener] = eos.rhoe(gamma, V_l[:,:,vars.ip]) + \
         0.5*V_l[:,:,vars.irho]*(V_l[:,:,vars.iu]**2 + V_l[:,:,vars.iv]**2)
 
     U_yr[:,:,vars.idens] = V_r[:,:,vars.irho]
     U_yr[:,:,vars.ixmom] = V_r[:,:,vars.irho]*V_r[:,:,vars.iu]
     U_yr[:,:,vars.iymom] = V_r[:,:,vars.irho]*V_r[:,:,vars.iv]
-    U_yr[:,:,vars.iener] = eos.rhoe(V_r[:,:,vars.ip]) + \
+    U_yr[:,:,vars.iener] = eos.rhoe(gamma, V_r[:,:,vars.ip]) + \
         0.5*V_r[:,:,vars.irho]*(V_r[:,:,vars.iu]**2 + V_r[:,:,vars.iv]**2)
 
 
