@@ -225,7 +225,7 @@ class Simulation:
         tm_evolve.end()
 
 
-    def dovis(self, n):
+    def dovis(self):
 
         pylab.clf()
 
