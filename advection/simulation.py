@@ -23,7 +23,6 @@ class Simulation:
             self.tc = timers
         
 
-
     def initialize(self):
         """ 
         Initialize the grid and variables for advection and set the initial
@@ -161,5 +160,4 @@ class Simulation:
 
     
     def finalize(self):
-
         exec self.problem_name + '.finalize()'        

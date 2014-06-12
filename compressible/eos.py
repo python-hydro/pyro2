@@ -20,5 +20,3 @@ def rhoe(gamma, pres):
     """ given the pressure, return (rho * e) """
     rhoe = pres/(gamma - 1.0)
     return rhoe
-
-
