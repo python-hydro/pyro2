@@ -7,11 +7,24 @@ coding:
 
      * use __future__ to get the new print() to continue to work with python 2.6+
 
-     * on Fedora, we need to install python3-numpy, python3-matplotlib
+     * on Fedora, we need to install python3-numpy, python3-matplotlib, python3-f2py
+
+     * we need to use f2py3
 
      * print -> print()
 
      * exec -> exec()
+
+     * it seems in __init__ and for other imports we need to explicitly put a .
+
+       we may need something like:
+
+       try:
+           from . import mymodule     # "myapp" case
+       except:
+           import mymodule            # "__main__" case
+
+       (see http://stackoverflow.com/questions/1112618/import-python-package-from-local-directory-into-interpreter)
 
   -- rewrite to adhere to python style guidelines
 
