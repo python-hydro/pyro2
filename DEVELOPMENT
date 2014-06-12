@@ -5,33 +5,20 @@ coding:
 
   -- make compatible with python 3.x
 
+     * use __future__ to get the new print() to continue to work with python 2.6+
+
+     * on Fedora, we need to install python3-numpy, python3-matplotlib
+
+     * print -> print()
+
+     * exec -> exec()
+
   -- rewrite to adhere to python style guidelines
 
   -- docstrings should be added everywhere possible
 
-  -- output library w/ colors
- 
-     WARNING()
-     ERROR()
-
   -- is there a way to define a range like ii = [myg.ilo:myg.ihi+1]
      and then do something like ii+1 to get [myg.ilo+1:myg.ihi+2]?
-
-  -- make the solvers a class, with the data and grid as members of the 
-     class.  This would allow for the timers to be refactored into an
-     object that lives in the simulation object.
-
-     Then we could do:
-
-     sim = solver.Simulation(problem)
-
-     ...
-
-     sim.initialize()
-     sim.evolve()
-     ...
-
-     This would make it more inline with how Castro is written.
 
 
 new solvers:

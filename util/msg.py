@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys
 
 # inspiration from                                                                          
@@ -17,7 +18,7 @@ def fail(str):
     non-interactively.  The string is colored red to indicate a 
     failure
     """
-    print _TermColors.FAIL + str + _TermColors.ENDC
+    print(_TermColors.FAIL + str + _TermColors.ENDC)
 
     # only exit if we are not running in interactive mode.  sys.ps1 is
     # only defined in interactive mode.
@@ -31,18 +32,18 @@ def warning(str):
     Output a string to the terminal colored orange to indicate a 
     warning
     """
-    print _TermColors.WARNING + str + _TermColors.ENDC
+    print(_TermColors.WARNING + str + _TermColors.ENDC)
 
 def success(str):
     """
     Output a string to the terminal colored green to indicate 
     success
     """
-    print _TermColors.SUCCESS + str + _TermColors.ENDC
+    print(_TermColors.SUCCESS + str + _TermColors.ENDC)
 
 def bold(str):
     """ Output a string in a bold weight"""
-    print _TermColors.BOLD + str + _TermColors.ENDC
+    print(_TermColors.BOLD + str + _TermColors.ENDC)
 
 
 

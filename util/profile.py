@@ -30,6 +30,8 @@ Warning: At present, no enforcement is done to ensure proper
 nesting.
 
 """
+
+from __future__ import print_function
   
 import time 
 
@@ -87,7 +89,7 @@ class TimerCollection:
 
         spacing = '   '
         for t in self.timers:
-            print t.stack_count*spacing + t.name + ': ', t.elapsed_time
+            print(t.stack_count*spacing + t.name + ': ', t.elapsed_time)
 
 
 class Timer:

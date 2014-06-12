@@ -80,7 +80,7 @@ class Simulation:
         self.cc_data = my_data
 
         # now set the initial conditions for the problem
-        exec self.problem_name + '.init_data(self.cc_data, self.rp)'
+        exec(self.problem_name + '.init_data(self.cc_data, self.rp)')
 
 
     def timestep(self):
@@ -179,4 +179,4 @@ class Simulation:
         Do any final clean-ups for the simulation and call the problem's
         finalize() method.
         """
-        exec self.problem_name + '.finalize()'        
+        exec(self.problem_name + '.finalize()')    

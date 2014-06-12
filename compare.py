@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
+
 import numpy
 import mesh.patch
 import getopt
@@ -25,8 +27,8 @@ def compare(myg1, myd1, myg2, myd2):
         return "namesbad"
 
 
-    print " "
-    print "variable comparisons:"
+    print(" ")
+    print("variable comparisons:")
 
     result = 0
 
@@ -39,7 +41,7 @@ def compare(myg1, myd1, myg2, myd2):
         err = numpy.max(numpy.abs(d1[myg1.ilo:myg1.ihi+1,myg1.jlo:myg1.jhi+1] -
                                   d2[myg2.ilo:myg2.ihi+1,myg2.jlo:myg2.jhi+1]))
 
-        print "%20s error = %20.10g" % (myd1.vars[n], err)
+        print("%20s error = %20.10g" % (myd1.vars[n], err))
 
         if not err == 0:
             result = "varerr"
@@ -52,7 +54,7 @@ def compare(myg1, myd1, myg2, myd2):
 if __name__== "__main__":
 
     if not len(sys.argv) == 3:
-        print usage
+        print(usage)
         sys.exit(2)
 
     file1 = sys.argv[1]
@@ -64,9 +66,9 @@ if __name__== "__main__":
     result = compare(myg1, myd1, myg2, myd2)
 
     if result == 0:
-        print "SUCCESS: files agree"
+        print("SUCCESS: files agree")
     else:
-        print "ERROR: ", errors[result]
+        print("ERROR: ", errors[result])
 
 
     

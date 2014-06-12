@@ -32,6 +32,7 @@ Typical usage:
      data.fill_BC("density")
 
 """
+from __future__ import print_function
 
 import copy
 import numpy
@@ -287,9 +288,9 @@ class Grid2d:
     def __str__(self):
         """ print out some basic information about the grid object """
 
-        string = "2-d grid: nx = " + `self.nx` + \
-                         ", ny = " + `self.ny` + \
-                         ", ng = " + `self.ng`
+        string = "2-d grid: nx = " + repr(self.nx) + \
+                         ", ny = " + repr(self.ny) + \
+                         ", ng = " + repr(self.ng)
 
         return string
 
@@ -439,10 +440,10 @@ class CellCenterData2d:
             myStr = "CellCenterData2d object not yet initialized"
             return myStr
 
-        myStr = "cc data: nx = " + `self.grid.nx` + \
-                       ", ny = " + `self.grid.ny` + \
-                       ", ng = " + `self.grid.ng` + "\n" + \
-                 "   nvars = " + `self.nvar` + "\n" + \
+        myStr = "cc data: nx = " + repr(self.grid.nx) + \
+                       ", ny = " + repr(self.grid.ny) + \
+                       ", ng = " + repr(self.grid.ng) + "\n" + \
+                 "   nvars = " + repr(self.nvar) + "\n" + \
                  "   variables: \n" 
                  
         ilo = self.grid.ilo
@@ -898,13 +899,13 @@ class CellCenterData2d:
                     gc = 0
 
                 if gc:
-                    print "\033[31m" + fmt % (a[i,j]) + "\033[0m" ,
+                    print("\033[31m" + fmt % (a[i,j]) + "\033[0m", end="")
                 else:
-                    print fmt % (a[i,j]) ,
+                    print (fmt % (a[i,j]), end="")
 
                 i += 1
 
-            print " "
+            print(" ")
             j += 1
 
 # backwards compatibility
@@ -980,12 +981,15 @@ if __name__== "__main__":
     a = mydata.get_var("a")
     a[:,:] = numpy.exp(-(myg.x2d - 0.5)**2 - (myg.y2d - 1.0)**2)
 
-    print mydata
+    print(mydata)
 
     # output
-    print "writing\n"
+    print("writing\n")
     mydata.write("mesh_test")
 
-    print "reading\n"
+    print("reading\n")
     myg2, myd2 = read("mesh_test")
-    print myd2
+    print(myd2)
+
+
+    mydata.pretty_print("a")

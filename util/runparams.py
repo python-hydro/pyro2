@@ -43,6 +43,8 @@ read default values.
 
 """
 
+from __future__ import print_function
+
 import string
 import re
 from util import msg
@@ -221,9 +223,9 @@ class RuntimeParameters:
         keys.sort()
 
         for key in keys:
-            print key, "=", self.params[key]
+            print(key, "=", self.params[key])
 
-        print " "
+        print(" ")
     
 
     def print_paramfile(self):

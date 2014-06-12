@@ -1,4 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
+from __future__ import print_function
 
 import getopt
 import os
@@ -67,7 +69,7 @@ tm_main.begin()
 # input file name
 
 if len(sys.argv) == 1:
-    print usage
+    print(usage)
     sys.exit(2)
 
 
@@ -96,17 +98,17 @@ if make_bench and comp_bench:
 
 try: solverName = next[0]
 except IndexError:
-    print usage
+    print(usage)
     msg.fail("ERROR: solver name not specified on command line")
 
 try: problem_name = next[1]
 except IndexError:
-    print usage
+    print(usage)
     msg.fail("ERROR: problem name not specified on command line")
 
 try: paramFile = next[2]
 except IndexError:
-    print usage
+    print(usage)
     msg.fail("ERROR: parameter file not specified on command line")
 
 
@@ -115,7 +117,7 @@ if len(next) > 3:
     other_commands = next[3:]
 
 # actually import the solver-specific stuff under the 'solver' namespace
-exec 'import ' + solverName + ' as solver'
+exec('import ' + solverName + ' as solver')
 
 
 #-----------------------------------------------------------------------------
@@ -214,7 +216,7 @@ while sim.cc_data.t < tmax and n < max_steps:
     # increment the time
     sim.cc_data.t += dt
     n += 1
-    print "%5d %10.5f %10.5f" % (n, sim.cc_data.t, dt)
+    print("%5d %10.5f %10.5f" % (n, sim.cc_data.t, dt))
 
 
     # output
