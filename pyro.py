@@ -180,7 +180,7 @@ sim.cc_data.write(basename + "%4.4d" % (n))
 dovis = rp.get_param("vis.dovis")
 if dovis: 
     pylab.figure(num=1, figsize=(8,6), dpi=100, facecolor='w')
-    sim.dovis(0)
+    sim.dovis()
     
 nout = 0
 
@@ -239,7 +239,7 @@ while sim.cc_data.t < tmax and n < max_steps:
         tm_vis = tc.timer("vis")
         tm_vis.begin()
 
-        sim.dovis(n)
+        sim.dovis()
         store = rp.get_param("vis.store_images")
 
         if store == 1:

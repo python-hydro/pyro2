@@ -23,7 +23,7 @@ import sys
 import mesh.patch as patch
 from util import msg
 
-def init_ata(my_data, rp):
+def init_data(my_data, rp):
     """ initialize the incompressible converge problem """
 
     msg.bold("initializing the incompressible converge problem...")

@@ -9,8 +9,29 @@ some work will necessarily be repeated.
 import eos
 from util import msg
 
-def user(bcName, bcEdge, variable, my_data):
+def user(bc_name, bc_edge, variable, my_data):
+    """
+    A hydrostatic boundary.  This integrates the equation of HSE into
+    the ghost cells to get the pressure and density under the assumption
+    that the specific internal energy is constant.
 
+    Upon exit, the ghost cells for the input variable will be set
+
+    Parameters
+    ----------
+    bc_name : {'hse'}
+        The descriptive name for the boundary condition -- this allows
+        for pyro to have multiple types of user-supplied boundary 
+        conditions.  For this module, it needs to be 'hse'.
+    bc_edge : {'ylb', 'yrb'}
+        The boundary to update: ylb = lower y boundary; yrb = upper y
+        boundary.
+    variable : {'density', 'x-momentum', 'y-momentum', 'energy'}
+        The variable whose ghost cells we are filling
+    my_data : CellCenterData2d object
+        The data object
+
+    """
     dens = my_data.get_var("density")
     xmom = my_data.get_var("x-momentum")
     ymom = my_data.get_var("y-momentum")
@@ -21,9 +42,9 @@ def user(bcName, bcEdge, variable, my_data):
 
     myg = my_data.grid
 
-    if (bcName == "hse"):
+    if (bc_name == "hse"):
         
-        if (bcEdge == "ylb"):
+        if (bc_edge == "ylb"):
 
             # lower y boundary
             
@@ -73,7 +94,7 @@ def user(bcName, bcEdge, variable, my_data):
                 msg.fail("error: variable not defined")
 
 
-        elif (bcEdge == "yrb"):
+        elif (bc_edge == "yrb"):
 
             # upper y boundary
             
@@ -128,4 +149,4 @@ def user(bcName, bcEdge, variable, my_data):
 
 
     else:
-        msg.fail("error: bc type %s not supported" % (bcName) )
+        msg.fail("error: bc type %s not supported" % (bc_name) )

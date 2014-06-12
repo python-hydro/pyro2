@@ -11,6 +11,19 @@ from util import profile
 class Simulation:
 
     def __init__(self, problem_name, rp, timers=None):
+        """
+        Initialize the Simulation object for incompressible flow.
+
+        Parameters
+        ----------
+        problem_name : str
+            The name of the problem we wish to run.  This should
+            correspond to one of the modules in incompressible/problems/
+        rp : RuntimeParameters object
+            The runtime parameters for the simulation
+        timers : TimerCollection object, optional
+            The timers used for profiling this simulation
+        """
 
         self.rp = rp
         self.cc_data = None
@@ -25,7 +38,8 @@ class Simulation:
 
     def initialize(self):
         """ 
-        initialize the grid and variables for incompressible flow
+        Initialize the grid and variables for incompressible flow and
+        set the initial conditions for the chosen problem.
         """
 
         # setup the grid
@@ -214,7 +228,7 @@ class Simulation:
 
     def evolve(self, dt):
         """ 
-        Evolve the incompressible equations through one timestep 
+        Evolve the incompressible equations through one timestep. 
         """
     
         u = self.cc_data.get_var("x-velocity")
@@ -471,8 +485,10 @@ class Simulation:
         self.cc_data.fill_BC("y-velocity")
 
 
-    def dovis(self, n):
-
+    def dovis(self):
+        """ 
+        Do runtime visualization
+        """
         pylab.clf()
 
         pylab.rc("font", size=10)
@@ -525,4 +541,8 @@ class Simulation:
 
 
     def finalize(self):
+        """
+        Do any final clean-ups for the simulation and call the problem's
+        finalize() method.
+        """
         exec self.problem_name + '.finalize()'

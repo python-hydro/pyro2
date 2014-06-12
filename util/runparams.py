@@ -66,6 +66,11 @@ def is_float(string):
 class RuntimeParameters:
 
     def __init__ (self):
+        """
+        Initialize a collection of runtime parameters.  This class
+        holds a dictionary of the parameters, their comments, and keeps
+        track of which parameters were actually used.
+        """
 
         # keep track of the parameters and their comments 
         self.params = {}
@@ -77,8 +82,18 @@ class RuntimeParameters:
 
     def load_params(self, file, no_new=0):
         """
-        reads lines from file and makes dictionary pairs from the data
-        to store in self.params
+        Reads line from file and makes dictionary pairs from the data
+        to store.
+
+        Parameters
+        ----------
+        file : str
+            The name of the file to parse
+        no_new : int, optional
+            If no_new = 1, then we don't add any new paramters to the
+            dictionary of runtime parameters, but instead just override
+            the values of existing ones.
+
         """
 
         # check to see whether the file exists
@@ -142,6 +157,12 @@ class RuntimeParameters:
         we expect things in the string in the form:
          ["sec.opt=value",  "sec.opt=value"]
         with each opt an element in the list
+
+        Parameters
+        ----------
+        cmd_strings : list
+            The list of strings containing runtime parameter pairs            
+
         """
 
         for item in cmd_strings:
@@ -185,7 +206,7 @@ class RuntimeParameters:
 
     def print_unused_params(self):
         """
-        print out the list of parameters that were defined by never used
+        Print out the list of parameters that were defined by never used
         """
         for key in self.params.keys():
             if not key in self.used_params:
@@ -193,6 +214,9 @@ class RuntimeParameters:
     
 
     def print_all_params(self):
+        """
+        Print out all runtime parameters and their values
+        """
         keys = self.params.keys()
         keys.sort()
 
@@ -203,6 +227,11 @@ class RuntimeParameters:
     
 
     def print_paramfile(self):
+        """
+        Create a file, inputs.auto, that has the structure of a pyro
+        inputs file, with all known parameters and values
+        """
+
         keys = self.params.keys()
         keys.sort()
 
