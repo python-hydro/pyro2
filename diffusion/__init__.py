@@ -17,6 +17,5 @@ The timestep is computed as:
 
 """
 
-__all__ = ['simulation']
-from simulation import *
+from .simulation import *
 

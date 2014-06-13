@@ -55,6 +55,8 @@ a.dx and a.dy are the grid spacings
 
 """
 
+from __future__ import print_function
+
 import math
 
 import numpy
@@ -141,7 +143,7 @@ class CellCenterMG2d:
         """
 
         if nx != ny:
-            print "ERROR: multigrid currently requires nx = ny"
+            print("ERROR: multigrid currently requires nx = ny")
             return -1
         
         self.nx = nx
@@ -156,7 +158,7 @@ class CellCenterMG2d:
         self.ymax = ymax        
 
         if (xmax-xmin) != (ymax-ymin):
-            print "ERROR: multigrid currently requires a square domain"
+            print("ERROR: multigrid currently requires a square domain")
             return -1
         
         self.alpha = alpha
@@ -195,8 +197,8 @@ class CellCenterMG2d:
         nx_t = ny_t = 2
 
         if self.verbose:
-            print "alpha = ", self.alpha
-            print "beta  = ", self.beta
+            print("alpha = ", self.alpha)
+            print("beta  = ", self.beta)
 
         while i < self.nlevels:
             
@@ -219,7 +221,7 @@ class CellCenterMG2d:
             self.grids[i].create()
 
             if self.verbose:
-                print self.grids[i]        
+                print(self.grids[i])
 
             nx_t = nx_t*2
             ny_t = ny_t*2
@@ -453,7 +455,7 @@ class CellCenterMG2d:
         self.source_norm = _error(self.grids[self.nlevels-1].grid, f)
 
         if self.verbose:
-            print "Source norm = ", self.source_norm
+            print("Source norm = ", self.source_norm)
 
         # note: if we wanted to do inhomogeneous Dirichlet BCs, we 
         # would modify the source term, f, here to include a boundary
@@ -605,7 +607,7 @@ class CellCenterMG2d:
         # achieve the L2 norm of the relative solution difference is <
         # rtol
         if self.verbose:
-            print "source norm = ", self.source_norm
+            print("source norm = ", self.source_norm)
             
         oldSolution = self.grids[self.nlevels-1].get_var("v").copy()
         
@@ -624,7 +626,7 @@ class CellCenterMG2d:
 
             # descending part
             if self.verbose:
-                print "<<< beginning V-cycle (cycle %d) >>>\n" % cycle
+                print("<<< beginning V-cycle (cycle %d) >>>\n" % cycle)
 
             level = self.nlevels-1
             while level > 0:
@@ -641,11 +643,11 @@ class CellCenterMG2d:
                 if self.verbose:
                     self._compute_residual(level)
 
-                    print "  level = %d, nx = %d, ny = %d" %  \
-                        (level, fP.grid.nx, fP.grid.ny)
+                    print("  level = %d, nx = %d, ny = %d" %  \
+                        (level, fP.grid.nx, fP.grid.ny))
 
-                    print "  before G-S, residual L2 norm = %g" % \
-                          (_error(fP.grid, r) )
+                    print("  before G-S, residual L2 norm = %g" % \
+                          (_error(fP.grid, r) ))
             
                 # smooth on the current level
                 self.smooth(level, self.nsmooth)
@@ -655,8 +657,8 @@ class CellCenterMG2d:
                 self._compute_residual(level)
 
                 if self.verbose:
-                    print "  after G-S, residual L2 norm = %g\n" % \
-                          (_error(fP.grid, r) )
+                    print("  after G-S, residual L2 norm = %g\n" % \
+                          (_error(fP.grid, r) ))
 
 
                 # restrict the residual down to the RHS of the coarser level
@@ -671,15 +673,15 @@ class CellCenterMG2d:
             # since we are 2x2 by design at this point, we will just
             # smooth
             if self.verbose:
-                print "  bottom solve:"
+                print("  bottom solve:")
 
             self.current_level = 0
 
             bP = self.grids[0]
 
             if self.verbose:
-                print "  level = %d, nx = %d, ny = %d\n" %  \
-                    (level, bP.grid.nx, bP.grid.ny)
+                print("  level = %d, nx = %d, ny = %d\n" %  \
+                    (level, bP.grid.nx, bP.grid.ny))
 
             self.smooth(0, self.nbottomSmooth)
 
@@ -707,11 +709,11 @@ class CellCenterMG2d:
                     self._compute_residual(level)
                     r = fP.get_var("r")
 
-                    print "  level = %d, nx = %d, ny = %d" % \
-                        (level, fP.grid.nx, fP.grid.ny)
+                    print("  level = %d, nx = %d, ny = %d" % \
+                        (level, fP.grid.nx, fP.grid.ny))
 
-                    print "  before G-S, residual L2 norm = %g" % \
-                          (_error(fP.grid, r) )
+                    print("  before G-S, residual L2 norm = %g" % \
+                          (_error(fP.grid, r) ))
             
                 # smooth
                 self.smooth(level, self.nsmooth)
@@ -719,8 +721,8 @@ class CellCenterMG2d:
                 if self.verbose:
                     self._compute_residual(level)
 
-                    print "  after G-S, residual L2 norm = %g\n" % \
-                          (_error(fP.grid, r) )
+                    print("  after G-S, residual L2 norm = %g\n" % \
+                          (_error(fP.grid, r) ))
             
                 level += 1
 
@@ -754,8 +756,8 @@ class CellCenterMG2d:
                 fP.fill_BC("v")
                 
             if self.verbose:
-                print "cycle %d: relative err = %g, residual err = %g\n" % \
-                      (cycle, relative_error, residual_error)
+                print("cycle %d: relative err = %g, residual err = %g\n" % \
+                      (cycle, relative_error, residual_error))
             
             cycle += 1
 
