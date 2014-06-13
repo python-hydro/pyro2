@@ -165,7 +165,7 @@ class CellCenterMG2d:
         self.beta = beta
 
         self.nsmooth = nsmooth
-        self.nbottomSmooth = nsmooth_bottom
+        self.nsmooth_bottom = nsmooth_bottom
 
         self.max_cycles = 100
         
@@ -518,6 +518,23 @@ class CellCenterMG2d:
             ycoeff = self.beta/myg.dy**2
 
             # do the red black updating in four decoupled groups
+            #
+            #
+            #        |       |       |
+            #      --+-------+-------+--
+            #        |       |       |
+            #        |   4   |   3   |
+            #        |       |       |
+            #      --+-------+-------+--
+            #        |       |       |
+            #   jlo  |   1   |   2   |
+            #        |       |       |
+            #      --+-------+-------+--
+            #        |  ilo  |       |
+            #
+            # groups 1 and 3 are done together, then we need to 
+            # fill ghost cells, and then groups 2 and 4
+
             v[myg.ilo:myg.ihi+1:2,myg.jlo:myg.jhi+1:2] = \
                 (f[myg.ilo:myg.ihi+1:2,myg.jlo:myg.jhi+1:2] +
                  xcoeff*(v[myg.ilo+1:myg.ihi+2:2,myg.jlo  :myg.jhi+1:2] +
@@ -683,7 +700,7 @@ class CellCenterMG2d:
                 print("  level = %d, nx = %d, ny = %d\n" %  \
                     (level, bP.grid.nx, bP.grid.ny))
 
-            self.smooth(0, self.nbottomSmooth)
+            self.smooth(0, self.nsmooth_bottom)
 
             bP.fill_BC("v")
 
