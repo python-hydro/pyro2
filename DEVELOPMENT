@@ -5,6 +5,11 @@ coding:
 
   -- make compatible with python 3.x
 
+     doing this in a new branch:
+ 
+        git branch -f python3 origin/python3
+        git checkout python3
+
      * use __future__ to get the new print() to continue to work with python 2.6+
 
      * on Fedora, we need to install python3-numpy, python3-matplotlib, python3-f2py
