@@ -6,7 +6,7 @@ Note: the pyro BC routines operate on a single variable at a time, so
 some work will necessarily be repeated.
 """
 
-import eos
+import compressible.eos as eos
 from util import msg
 
 def user(bc_name, bc_edge, variable, my_data):

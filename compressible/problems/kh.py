@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import sys
 import mesh.patch as patch
 import numpy
@@ -11,7 +13,7 @@ def init_data(my_data, rp):
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):
-        print my_data.__class__
+        print(my_data.__class__)
         msg.fail("ERROR: patch invalid in sedov.py")
 
 
