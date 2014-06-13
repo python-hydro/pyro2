@@ -1,8 +1,10 @@
+from __future__ import print_function
+
 import numpy
 import pylab
 
 from incompressible.problems import *
-import incomp_interface_f
+import incompressible.incomp_interface_f as incomp_interface_f
 import mesh.reconstruction_f as reconstruction_f
 import mesh.patch as patch
 import multigrid.multigrid as multigrid
@@ -94,7 +96,7 @@ class Simulation:
         self.cc_data = my_data
 
         # now set the initial conditions for the problem 
-        exec self.problem_name + '.init_data(self.cc_data, self.rp)'
+        exec(self.problem_name + '.init_data(self.cc_data, self.rp)')
 
 
     def timestep(self):
@@ -223,7 +225,7 @@ class Simulation:
 
         self.cc_data = orig_data
 
-        print "done with the pre-evolution"
+        print("done with the pre-evolution")
 
 
     def evolve(self, dt):
@@ -285,7 +287,7 @@ class Simulation:
 
         # this returns u on x-interfaces and v on y-interfaces.  These
         # constitute the MAC grid
-        print "  making MAC velocities"
+        print("  making MAC velocities")
 
         u_MAC, v_MAC = incomp_interface_f.mac_vels(myg.qx, myg.qy, myg.ng, 
                                                    myg.dx, myg.dy, dt,
@@ -304,7 +306,7 @@ class Simulation:
         # U^MAC is the MAC-type staggered grid of the advective
         # velocities.
 
-        print "  MAC projection"
+        print("  MAC projection")
 
         # create the multigrid object
         MG = multigrid.CellCenterMG2d(myg.nx, myg.ny,
@@ -353,7 +355,7 @@ class Simulation:
         # recompute the interface states, using the advective velocity
         # from above
         #---------------------------------------------------------------------
-        print "  making u, v edge states"
+        print("  making u, v edge states")
 
         u_xint, v_xint, u_yint, v_yint = \
                incomp_interface_f.states(myg.qx, myg.qy, myg.ng, 
@@ -369,7 +371,7 @@ class Simulation:
         # update U to get the provisional velocity field
         #---------------------------------------------------------------------
 
-        print "  doing provisional update of u, v"
+        print("  doing provisional update of u, v")
 
         # compute (U.grad)U
 
@@ -417,7 +419,7 @@ class Simulation:
         #---------------------------------------------------------------------
 
         # now we solve L phi = D (U* /dt)
-        print "  final projection"
+        print("  final projection")
     
         # create the multigrid object
         MG = multigrid.CellCenterMG2d(myg.nx, myg.ny,
@@ -545,4 +547,4 @@ class Simulation:
         Do any final clean-ups for the simulation and call the problem's
         finalize() method.
         """
-        exec self.problem_name + '.finalize()'
+        exec(self.problem_name + '.finalize()')
