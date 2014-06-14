@@ -51,9 +51,7 @@ a = multigrid.CellCenterMG2d(nx, ny,
                              verbose=1)
 
 # initialize the solution to 0
-init = a.soln_grid.scratch_array()
-
-a.init_solution(init)
+a.init_zeros()
 
 # initialize the RHS using the function f
 rhs = f(a.x2d, a.y2d)
