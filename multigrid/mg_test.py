@@ -18,7 +18,7 @@ from __future__ import print_function
 
 import numpy
 import mesh.patch as patch
-import multigrid
+import MG
 import pylab
 
 # the analytic solution
@@ -45,10 +45,10 @@ ny = nx
 
 
 # create the multigrid object
-a = multigrid.CellCenterMG2d(nx, ny,
-                             xl_BC_type="dirichlet", yl_BC_type="dirichlet",
-                             xr_BC_type="dirichlet", yr_BC_type="dirichlet",
-                             verbose=1)
+a = MG.CellCenterMG2d(nx, ny,
+                      xl_BC_type="dirichlet", yl_BC_type="dirichlet",
+                      xr_BC_type="dirichlet", yr_BC_type="dirichlet",
+                      verbose=1)
 
 # initialize the solution to 0
 a.init_zeros()
