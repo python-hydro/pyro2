@@ -887,8 +887,9 @@ class CellCenterData2d:
         else:
             msg.fail("ERROR: dtype not supported")
         
-        j = 0
-        while j < self.grid.qy:
+        # print j descending, so it looks like a grid (y increasing with height)
+        j = self.grid.qy-1
+        while j >= 0:
             i = 0
             while i < self.grid.qx:
 
@@ -906,7 +907,15 @@ class CellCenterData2d:
                 i += 1
 
             print(" ")
-            j += 1
+            j -= 1
+
+        leg = """
+         ^ y
+         |
+         +---> x
+        """
+        print(leg)
+
 
 # backwards compatibility
 ccData2d = CellCenterData2d
