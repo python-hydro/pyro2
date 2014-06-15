@@ -330,11 +330,11 @@ class CellCenterData2d:
        needed to interpret the data outside of the simulation (for
        example, the gamma for the equation of state).
 
-       mydata.set_aux(keyword, value)
+       my_data.set_aux(keyword, value)
 
     -- Finish the initialization of the patch
 
-       myPatch.create()
+       my_data.create()
 
     This last step actually allocates the storage for the state
     variables.  Once this is done, the patch is considered to be
