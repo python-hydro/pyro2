@@ -425,9 +425,7 @@ class CellCenterData2d:
         if self.initialized == 1:
             msg.fail("ERROR: grid already initialized")
 
-        self.data = numpy.zeros((self.nvar,
-                                 2*self.grid.ng+self.grid.nx, 
-                                 2*self.grid.ng+self.grid.ny),
+        self.data = numpy.zeros((self.nvar, self.grid.qx, self.grid.qy), 
                                 dtype=self.dtype)
         self.initialized = 1
 
