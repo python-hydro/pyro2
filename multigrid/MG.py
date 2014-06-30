@@ -31,7 +31,7 @@ this initializes the solution vector with zeros
 > a.init_RHS(zeros((nx, ny), numpy.float64))
 
 this initializes the RHS on the finest grid to 0 (Laplace's equation).
-Any RHS can be set by passing through an array of nx values here.
+Any RHS can be set by passing through an array of (nx, ny) values here.
 
 Then to solve, you just do:
 
