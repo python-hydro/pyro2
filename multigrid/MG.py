@@ -37,8 +37,7 @@ Then to solve, you just do:
 
 > a.solve(rtol = 1.e-10)
 
-where rtol is the desired tolerance (relative difference in solution from
-one cycle to the next).
+where rtol is the desired tolerance (residual norm / source norm)
 
 to access the final solution, use the getSolution method
 
