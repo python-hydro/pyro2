@@ -625,7 +625,7 @@ class CellCenterMG2d:
         if self.verbose:
             print("source norm = ", self.source_norm)
             
-        oldSolution = self.grids[self.nlevels-1].get_var("v").copy()
+        old_solution = self.grids[self.nlevels-1].get_var("v").copy()
         
         converged = 0
         cycle = 1
@@ -747,12 +747,12 @@ class CellCenterMG2d:
             # determine convergence
             solnP = self.grids[self.nlevels-1]
 
-            diff = (solnP.get_var("v") - oldSolution)/ \
+            diff = (solnP.get_var("v") - old_solution)/ \
                 (solnP.get_var("v") + self.small)
 
             relative_error = _error(solnP.grid, diff)
 
-            oldSolution = solnP.get_var("v").copy()
+            old_solution = solnP.get_var("v").copy()
 
             # compute the residual error, relative to the source norm
             self._compute_residual(self.nlevels-1)
