@@ -7,8 +7,9 @@ to start with the incompressible solver and:
 
     o advect rho
 
-
  -- add support for boundary conditions other than periodic
+
+ -- need to modify the MG solver to support coefficients
 
  -- add a reaction term
 
