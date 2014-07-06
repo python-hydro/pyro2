@@ -1,0 +1,24 @@
+This solver will implement a basic low Mach number solver.  We needed
+to start with the incompressible solver and:
+
+ -- add density evolution
+
+    o switch constraint to div (beta/rho) grad phi = RHS
+
+    o advect rho
+
+
+ -- add support for boundary conditions other than periodic
+
+ -- add a reaction term
+
+
+Support 2 modes: combustion and atmospheric flows
+
+
+Problems:
+
+ -- bubble rise (which can be compared to the compressible solver)
+
+ -- flame
+
