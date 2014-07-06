@@ -2,26 +2,19 @@
 
 # this script builds each of the shared-object libraries that
 # interface Fortran with python for some lower-level pyro routines.
-# f2py is used.  In each case, we simply 'cd' into the appropriate
-# directory and do 'make'.  In case of a failure, you can try manually
-# building the routine yourself with the 1-line f2py command in the
-# makefile.
+# f2py is used.  
 
-function build_lib  # args: directory libname
-{
-  echo "making $2"
-  cd $1
-  make >> /dev/null
-  err=$?
-  if [ $err -ne 0 ]; then
-    echo "Error making $2"
-    exit $err
-  fi
-  cd ..
-}
+PYTHON=python3
 
-build_lib mesh reconstruction_f.so
-build_lib compressible interface_f.so
-build_lib incompressible incomp_interface_f.so
+cd mesh
+${PYTHON} setup.py build_ext --inplace
+cd ..
 
-echo "done"
+cd incompressible
+${PYTHON} setup.py build_ext --inplace
+cd ..
+
+cd compressible
+${PYTHON} setup.py build_ext --inplace
+cd ..
+

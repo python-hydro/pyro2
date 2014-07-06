@@ -3,7 +3,7 @@ import pylab
 
 from diffusion.problems import *
 import mesh.patch as patch
-import multigrid.multigrid as multigrid
+import multigrid.MG as MG
 from util import msg, profile, runparams
 
 class Simulation:
@@ -89,7 +89,7 @@ class Simulation:
         self.cc_data = my_data
 
         # now set the initial conditions for the problem           
-        exec self.problem_name + '.init_data(self.cc_data, self.rp)'
+        exec(self.problem_name + '.init_data(self.cc_data, self.rp)')
 
 
     def timestep(self):
@@ -144,15 +144,15 @@ class Simulation:
         #
         # this is the form that arises with a Crank-Nicolson discretization
         # of the diffusion equation.
-        mg = multigrid.CellCenterMG2d(myg.nx, myg.ny,
-                                      xmin=myg.xmin, xmax=myg.xmax, 
-                                      ymin=myg.ymin, ymax=myg.ymax,
-                                      xl_BC_type=self.cc_data.BCs['phi'].xlb, 
-                                      xr_BC_type=self.cc_data.BCs['phi'].xrb, 
-                                      yl_BC_type=self.cc_data.BCs['phi'].ylb, 
-                                      yr_BC_type=self.cc_data.BCs['phi'].yrb, 
-                                      alpha=1.0, beta=0.5*dt*k, 
-                                      verbose=0)
+        mg = MG.CellCenterMG2d(myg.nx, myg.ny,
+                               xmin=myg.xmin, xmax=myg.xmax, 
+                               ymin=myg.ymin, ymax=myg.ymax,
+                               xl_BC_type=self.cc_data.BCs['phi'].xlb, 
+                               xr_BC_type=self.cc_data.BCs['phi'].xrb, 
+                               yl_BC_type=self.cc_data.BCs['phi'].ylb, 
+                               yr_BC_type=self.cc_data.BCs['phi'].yrb, 
+                               alpha=1.0, beta=0.5*dt*k, 
+                               verbose=0)
 
         # form the RHS: f = phi + (dt/2) k L phi  (where L is the Laplacian)
         f = mg.soln_grid.scratch_array()
@@ -210,6 +210,6 @@ class Simulation:
         Do any final clean-ups for the simulation and call the problem's
         finalize() method.
         """
-        exec self.problem_name + '.finalize()'
+        exec(self.problem_name + '.finalize()')
 
 

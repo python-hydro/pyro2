@@ -330,11 +330,11 @@ class CellCenterData2d:
        needed to interpret the data outside of the simulation (for
        example, the gamma for the equation of state).
 
-       mydata.set_aux(keyword, value)
+       my_data.set_aux(keyword, value)
 
     -- Finish the initialization of the patch
 
-       myPatch.create()
+       my_data.create()
 
     This last step actually allocates the storage for the state
     variables.  Once this is done, the patch is considered to be
@@ -425,9 +425,7 @@ class CellCenterData2d:
         if self.initialized == 1:
             msg.fail("ERROR: grid already initialized")
 
-        self.data = numpy.zeros((self.nvar,
-                                 2*self.grid.ng+self.grid.nx, 
-                                 2*self.grid.ng+self.grid.ny),
+        self.data = numpy.zeros((self.nvar, self.grid.qx, self.grid.qy), 
                                 dtype=self.dtype)
         self.initialized = 1
 
@@ -887,8 +885,9 @@ class CellCenterData2d:
         else:
             msg.fail("ERROR: dtype not supported")
         
-        j = 0
-        while j < self.grid.qy:
+        # print j descending, so it looks like a grid (y increasing with height)
+        j = self.grid.qy-1
+        while j >= 0:
             i = 0
             while i < self.grid.qx:
 
@@ -906,7 +905,15 @@ class CellCenterData2d:
                 i += 1
 
             print(" ")
-            j += 1
+            j -= 1
+
+        leg = """
+         ^ y
+         |
+         +---> x
+        """
+        print(leg)
+
 
 # backwards compatibility
 ccData2d = CellCenterData2d

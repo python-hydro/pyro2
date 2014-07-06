@@ -2,7 +2,7 @@ import numpy
 import pylab
 
 from advection.problems import *
-from advectiveFluxes import *
+from advection.advectiveFluxes import *
 import mesh.patch as patch
 from util import profile
 

@@ -13,10 +13,12 @@ this is the example from page 64 of the book `A Multigrid Tutorial, 2nd Ed.'
 The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)
 
 """
-#from io import *
+
+from __future__ import print_function
+
 import numpy
 import mesh.patch as patch
-import multigrid
+import MG
 import pylab
 
 # the analytic solution
@@ -43,15 +45,13 @@ ny = nx
 
 
 # create the multigrid object
-a = multigrid.CellCenterMG2d(nx, ny,
-                             xl_BC_type="dirichlet", yl_BC_type="dirichlet",
-                             xr_BC_type="dirichlet", yr_BC_type="dirichlet",
-                             verbose=1)
+a = MG.CellCenterMG2d(nx, ny,
+                      xl_BC_type="dirichlet", yl_BC_type="dirichlet",
+                      xr_BC_type="dirichlet", yr_BC_type="dirichlet",
+                      verbose=1)
 
 # initialize the solution to 0
-init = a.soln_grid.scratch_array()
-
-a.init_solution(init)
+a.init_zeros()
 
 # initialize the RHS using the function f
 rhs = f(a.x2d, a.y2d)
@@ -70,8 +70,8 @@ v = a.get_solution()
 b = true(a.x2d,a.y2d)
 e = v - b
 
-print " L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
-      (error(a.soln_grid, e), a.relative_error, a.num_cycles)
+print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
+      (error(a.soln_grid, e), a.relative_error, a.num_cycles))
 
 
 # plot it

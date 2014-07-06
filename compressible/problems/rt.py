@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import math
 import numpy
 
@@ -12,8 +14,8 @@ def init_data(my_data, rp):
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):
-        print "ERROR: patch invalid in rt.py"
-        print my_data.__class__
+        print("ERROR: patch invalid in rt.py")
+        print(my_data.__class__)
         sys.exit()
 
     # get the density, momenta, and energy as separate variables
