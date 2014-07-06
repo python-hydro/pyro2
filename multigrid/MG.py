@@ -86,6 +86,7 @@ class CellCenterMG2d:
                  alpha=0.0, beta=-1.0,
                  nsmooth=10, nsmooth_bottom=50,
                  verbose=0, 
+                 aux_field=None, aux_bc=None,
                  true_function=None, vis=0, vis_title=""):
         """
         Create the CellCenterMG2d object.  Note that this requires a
@@ -125,6 +126,11 @@ class CellCenterMG2d:
             solve
         verbose : int, optional
             increase verbosity during the solve (for verbose=1)
+        aux_field : str, optional
+            an extra fields to define and carry at each level.
+            Useful for subclassing.
+        aux_bc : BCObject, optional
+            the boundary conditions corresponding to the aux field
         true_function : function, optional
             a function (of x,y) that provides the exact solution to 
             the elliptic problem we are solving.  This is used only
@@ -216,6 +222,10 @@ class CellCenterMG2d:
             self.grids[i].register_var("v", bc)
             self.grids[i].register_var("f", bc)
             self.grids[i].register_var("r", bc)
+
+            if not aux_field == None:
+                self.grids[i].register_var(aux_field, bc_aux)
+
 
             self.grids[i].create()
 
