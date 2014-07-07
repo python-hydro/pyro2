@@ -15,7 +15,7 @@ import multigrid.MG as MG
 class VarCoeffCCMG2d(MG.CellCenterMG2d):
     """
     this is a multigrid solver that supports variable coefficients
-
+    
     we need to accept a coefficient array, coeffs, defined at each
     level.  We can do this at the fine level and restrict it
     down the MG grids once.
@@ -34,36 +34,37 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
                  true_function=None):
 
        
-       # initialize the MG object with the auxillary "coeffs" field
-       MG.__init__(self, nx, ny, xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax,
-                   xl_BC_type=xl_BC_type, xr_BC_type=xr_BC_type,
-                   yl_BC_type=yl_BC_type, yr_BC_type=yr_BC_type,
-                   alpha=0.0, beta=0.0,
-                   nsmooth=nsmooth, nsmooth_bottom=nsmooth_bottom,
-                   verbose=verbose,
-                   aux_field="coeffs", aux_bc=coeffs_bc,
-                   true_function=true_function)
+        # initialize the MG object with the auxillary "coeffs" field
+        MG.__init__(self, nx, ny, ng=1,
+                    xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax,
+                    xl_BC_type=xl_BC_type, xr_BC_type=xr_BC_type,
+                    yl_BC_type=yl_BC_type, yr_BC_type=yr_BC_type,
+                    alpha=0.0, beta=0.0,
+                    nsmooth=nsmooth, nsmooth_bottom=nsmooth_bottom,
+                    verbose=verbose,
+                    aux_field="coeffs", aux_bc=coeffs_bc,
+                    true_function=true_function)
 
 
-       # set the coefficients and restrict them down the hierarchy
-       # we only need to do this once.
-       c = self.grids[self.nlevels].get_var("coeffs")
-       c[:,:] = coeffs.copy()
+        # set the coefficients and restrict them down the hierarchy
+        # we only need to do this once.
+        c = self.grids[self.nlevels].get_var("coeffs")
+        c[:,:] = coeffs.copy()
 
-       self.grids[nlevels].fill_BC("coeffs")
+        self.grids[nlevels].fill_BC("coeffs")
 
-       n = self.nlevels-1
-       while n >= 1:
+        n = self.nlevels-1
+        while n >= 1:
 
-          f_patch = self.grids[n+1]
-          c_patch = self.grids[n]
+            f_patch = self.grids[n+1]
+            c_patch = self.grids[n]
 
-          coeffs_c = c_patch.get_var("coeffs")
-          coeffs_c[:,:] = f_patch.restrict("coeffs")
+            coeffs_c = c_patch.get_var("coeffs")
+            coeffs_c[:,:] = f_patch.restrict("coeffs")
 
-          self.grids[n].fill_BC("coeffs")
+            self.grids[n].fill_BC("coeffs")
 
-          n -= 1
+            n -= 1
 
 
     def smooth(self, level, nsmooth):
@@ -90,12 +91,25 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
 
         self.grids[level].fill_BC("v")
 
+
+        eta_x = myg.scratch_array()
+        eta_y = myg.scratch_array()
+
+        eta_x[myg.ilo:myg.ihi+2,myg.jlo:myg.jhi+1] = \
+            0.5*(c[myg:ilo-1:myg.ihi+1,myg.jlo:myg.jhi+1] +
+                 c[myg:ilo  :myg.ihi+2,myg.jlo:myg.jhi+1])
+
+        eta_y[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+2] = \
+            0.5*(c[myg:ilo:myg.ihi+1,myg.jlo-1:myg.jhi+1] +
+                 c[myg:ilo:myg.ihi+1,myg.jlo  :myg.jhi+2])
+
+        eta_x /= myg.dx**2
+        eta_y /= myg.dy**2
+
         # do red-black G-S
         i = 0
         while i < nsmooth:
 
-            xcoeff = self.beta/myg.dx**2
-            ycoeff = self.beta/myg.dy**2
 
             # do the red black updating in four decoupled groups
             #
