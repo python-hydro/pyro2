@@ -80,7 +80,8 @@ class CellCenterMG2d:
     simplicity
     """
     
-    def __init__(self, nx, ny, xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0,
+    def __init__(self, nx, ny, ng=1,
+                 xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0,
                  xl_BC_type="dirichlet", xr_BC_type="dirichlet",
                  yl_BC_type="dirichlet", yr_BC_type="dirichlet",
                  alpha=0.0, beta=-1.0,
@@ -154,7 +155,7 @@ class CellCenterMG2d:
         self.nx = nx
         self.ny = ny        
         
-        self.ng = 1
+        self.ng = ng
 
         self.xmin = xmin
         self.xmax = xmax
@@ -224,7 +225,7 @@ class CellCenterMG2d:
             self.grids[i].register_var("r", bc)
 
             if not aux_field == None:
-                self.grids[i].register_var(aux_field, bc_aux)
+                self.grids[i].register_var(aux_field, aux_bc)
 
 
             self.grids[i].create()
