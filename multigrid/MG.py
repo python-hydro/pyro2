@@ -562,8 +562,6 @@ class CellCenterMG2d:
                     self.grids[level].fill_BC("v")
 
 
-            self.grids[level].fill_BC("v")
-
             if self.vis == 1:
                 pylab.clf()
 
