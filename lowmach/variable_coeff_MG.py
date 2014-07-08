@@ -133,7 +133,7 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
             # groups 1 and 3 are done together, then we need to 
             # fill ghost cells, and then groups 2 and 4
 
-            for ix, iy in [(0,0), (1,1), (1,0), (0,1)]:
+            for n, (ix, iy) in enumerate([(0,0), (1,1), (1,0), (0,1)]):
 
                 v[myg.ilo+ix:myg.ihi+1:2,myg.jlo+iy:myg.jhi+1:2] = \
                     (f[myg.ilo+ix:myg.ihi+1:2,myg.jlo+iy:myg.jhi+1:2] +
@@ -166,7 +166,56 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
                  eta_y[myg.ilo+ix  :myg.ihi+1:2,
                        myg.jlo+iy  :myg.jhi+1:2])
             
-                if (ix == 1 and iy == 1) or (ix == 0 and iy == 1):
+                if n == 1 or n == 3:
                     self.grids[level].fill_BC("v")
 
             i += 1
+
+
+
+    def _compute_residual(self, level):
+        """ compute the residual and store it in the r variable"""
+
+        v = self.grids[level].get_var("v")
+        f = self.grids[level].get_var("f")
+        r = self.grids[level].get_var("r")
+        c = self.grids[level].get_var("c")
+
+        myg = self.grids[level].grid
+
+        eta_x = myg.scratch_array()
+        eta_y = myg.scratch_array()
+
+        # the eta's are defined on the interfaces, so 
+        # eta_x[i,j] will be eta_{i-1/2,j} and 
+        # eta_y[i,j] will be eta_{i,j-1/2}
+
+        eta_x[myg.ilo:myg.ihi+2,myg.jlo:myg.jhi+1] = \
+            0.5*(c[myg:ilo-1:myg.ihi+1,myg.jlo:myg.jhi+1] +
+                 c[myg:ilo  :myg.ihi+2,myg.jlo:myg.jhi+1])
+
+        eta_y[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+2] = \
+            0.5*(c[myg:ilo:myg.ihi+1,myg.jlo-1:myg.jhi+1] +
+                 c[myg:ilo:myg.ihi+1,myg.jlo  :myg.jhi+2])
+
+        eta_x /= myg.dx**2
+        eta_y /= myg.dy**2
+
+        # compute the residual 
+        # r = f - L_eta phi
+        r[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
+            f[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] - \
+            eta_x[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1]* \
+            (v[myg.ilo+1:myg.ihi+2,myg.jlo  :myg.jhi+1] -  # x-diff
+             v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]) - \
+            eta_x[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1]* \
+            (v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] -
+             v[myg.ilo-1:myg.ihi  ,myg.jlo  :myg.jhi+1]) + \
+            eta_y[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2]* \
+            (v[myg.ilo  :myg.ihi+1,myg.jlo+1:myg.jhi+2] -  # y-diff
+             v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]) - \
+            eta_y[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1]* \
+            (v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] -
+             v[myg.ilo  :myg.ihi+1,myg.jlo-1:myg.jhi  ])
+
+
