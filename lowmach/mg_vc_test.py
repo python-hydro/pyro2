@@ -34,20 +34,24 @@ def true(x,y):
 
 # the coefficients
 def alpha(x,y):
-    return x*(1+x) + y*(1-y)
-
+    #return x*(1+x) + y*(1-y)
+    return numpy.ones_like(x)
 
 # the L2 error norm
 def error(myg, r):
 
     # L2 norm of elements in r, multiplied by dx to
     # normalize
-    return numpy.sqrt(myg.dx*myg.dy*numpy.sum((r[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]**2).flat))
+    return numpy.sqrt(myg.dx*myg.dy*numpy.sum((r[myg.ilo:myg.ihi+1,
+                                                 myg.jlo:myg.jhi+1]**2).flat))
 
 
 # the righthand side
 def f(x,y):
-    return pi*(2*x + 1)*sin(pi*y)*cos(pi*x) + pi*(2*y + 1)*sin(pi*x)*cos(pi*y) - 2*pi**2*(x*(x + 1) + y*(y + 1))*sin(pi*x)*sin(pi*y)
+    #return pi*(2*x + 1)*sin(pi*y)*cos(pi*x) + \
+    #    pi*(2*y + 1)*sin(pi*x)*cos(pi*y) - \
+    #    2*pi**2*(x*(x + 1) + y*(y + 1))*sin(pi*x)*sin(pi*y)
+    return -2.0*pi**2*sin(pi*x)*sin(pi*y)
 
 
                 
@@ -66,6 +70,13 @@ d.create()
 
 c = d.get_var("c")
 c[:,:] = alpha(g.x2d, g.y2d)
+
+
+# check whether the RHS sums to zero (necessary for periodic)
+rhs = f(g.x2d, g.y2d)
+print(numpy.sum(rhs[g.ilo:g.ihi+1,g.jlo:g.jhi+1]))
+
+
 
 
 # create the multigrid object
