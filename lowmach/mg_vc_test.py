@@ -29,7 +29,8 @@ cos = numpy.cos
 
 # the analytic solution
 def true(x,y):
-    return sin(pi*x)*sin(pi*y)
+    #return sin(pi*x)*sin(pi*y)
+    return (x**2 - x**4)*(y**4 - y**2)
 
 
 # the coefficients
@@ -51,20 +52,21 @@ def f(x,y):
     #return pi*(2*x + 1)*sin(pi*y)*cos(pi*x) + \
     #    pi*(2*y + 1)*sin(pi*x)*cos(pi*y) - \
     #    2*pi**2*(x*(x + 1) + y*(y + 1))*sin(pi*x)*sin(pi*y)
+    
     return -2.0*pi**2*sin(pi*x)*sin(pi*y)
 
 
                 
 # test the multigrid solver
-nx = 8
+nx = 16
 ny = nx
 
 
 # create the coefficient variable
 g = patch.Grid2d(nx, ny, ng=1)
 d = patch.CellCenterData2d(g)
-bc_c = patch.BCObject(xlb="periodic", xrb="periodic",
-                      ylb="periodic", yrb="periodic")
+bc_c = patch.BCObject(xlb="neumann", xrb="neumann",
+                      ylb="neumann", yrb="neumann")
 d.register_var("c", bc_c)
 d.create()
 
@@ -72,7 +74,7 @@ c = d.get_var("c")
 c[:,:] = alpha(g.x2d, g.y2d)
 
 
-# check whether the RHS sums to zero (necessary for periodic)
+# check whether the RHS sums to zero (necessary for dirichlet)
 rhs = f(g.x2d, g.y2d)
 print(numpy.sum(rhs[g.ilo:g.ihi+1,g.jlo:g.jhi+1]))
 
@@ -81,8 +83,8 @@ print(numpy.sum(rhs[g.ilo:g.ihi+1,g.jlo:g.jhi+1]))
 
 # create the multigrid object
 a = MG.VarCoeffCCMG2d(nx, ny,
-                      xl_BC_type="periodic", yl_BC_type="periodic",
-                      xr_BC_type="periodic", yr_BC_type="periodic",
+                      xl_BC_type="dirichlet", yl_BC_type="dirichlet",
+                      xr_BC_type="dirichlet", yr_BC_type="dirichlet",
                       coeffs=c, coeffs_bc=bc_c,
                       verbose=1)
 
