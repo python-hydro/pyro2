@@ -520,12 +520,11 @@ class CellCenterMG2d:
 
         self.grids[level].fill_BC("v")
 
-        # do red-black G-S
-        i = 0
-        while i < nsmooth:
+        xcoeff = self.beta/myg.dx**2
+        ycoeff = self.beta/myg.dy**2
 
-            xcoeff = self.beta/myg.dx**2
-            ycoeff = self.beta/myg.dy**2
+        # do red-black G-S
+        for i in range(nsmooth):
 
             # do the red black updating in four decoupled groups
             #
@@ -545,39 +544,22 @@ class CellCenterMG2d:
             # groups 1 and 3 are done together, then we need to 
             # fill ghost cells, and then groups 2 and 4
 
-            v[myg.ilo:myg.ihi+1:2,myg.jlo:myg.jhi+1:2] = \
-                (f[myg.ilo:myg.ihi+1:2,myg.jlo:myg.jhi+1:2] +
-                 xcoeff*(v[myg.ilo+1:myg.ihi+2:2,myg.jlo  :myg.jhi+1:2] +
-                         v[myg.ilo-1:myg.ihi  :2,myg.jlo  :myg.jhi+1:2]) +
-                 ycoeff*(v[myg.ilo  :myg.ihi+1:2,myg.jlo+1:myg.jhi+2:2] +
-                         v[myg.ilo  :myg.ihi+1:2,myg.jlo-1:myg.jhi  :2])) / \
-                (self.alpha + 2.0*xcoeff + 2.0*ycoeff)
+            for n, (ix, iy) in enumerate([(0,0), (1,1), (1,0), (0,1)]):
 
-            v[myg.ilo+1:myg.ihi+1:2,myg.jlo+1:myg.jhi+1:2] = \
-                (f[myg.ilo+1:myg.ihi+1:2,myg.jlo+1:myg.jhi+1:2] +
-                 xcoeff*(v[myg.ilo+2:myg.ihi+2:2,myg.jlo+1:myg.jhi+1:2] +
-                         v[myg.ilo  :myg.ihi  :2,myg.jlo+1:myg.jhi+1:2]) +
-                 ycoeff*(v[myg.ilo+1:myg.ihi+1:2,myg.jlo+2:myg.jhi+2:2] +
-                         v[myg.ilo+1:myg.ihi+1:2,myg.jlo  :myg.jhi  :2])) / \
-                (self.alpha + 2.0*xcoeff + 2.0*ycoeff)
-            
-            self.grids[level].fill_BC("v")
-                                                     
-            v[myg.ilo+1:myg.ihi+1:2,myg.jlo:myg.jhi+1:2] = \
-                (f[myg.ilo+1:myg.ihi+1:2,myg.jlo:myg.jhi+1:2] +
-                 xcoeff*(v[myg.ilo+2:myg.ihi+2:2,myg.jlo  :myg.jhi+1:2] +
-                         v[myg.ilo  :myg.ihi  :2,myg.jlo  :myg.jhi+1:2]) +
-                 ycoeff*(v[myg.ilo+1:myg.ihi+1:2,myg.jlo+1:myg.jhi+2:2] +
-                         v[myg.ilo+1:myg.ihi+1:2,myg.jlo-1:myg.jhi  :2])) / \
-                (self.alpha + 2.0*xcoeff + 2.0*ycoeff)
-
-            v[myg.ilo:myg.ihi+1:2,myg.jlo+1:myg.jhi+1:2] = \
-                (f[myg.ilo:myg.ihi+1:2,myg.jlo+1:myg.jhi+1:2] +
-                 xcoeff*(v[myg.ilo+1:myg.ihi+2:2,myg.jlo+1:myg.jhi+1:2] +
-                         v[myg.ilo-1:myg.ihi  :2,myg.jlo+1:myg.jhi+1:2]) +
-                 ycoeff*(v[myg.ilo  :myg.ihi+1:2,myg.jlo+2:myg.jhi+2:2] +
-                         v[myg.ilo  :myg.ihi+1:2,myg.jlo  :myg.jhi  :2])) / \
-                (self.alpha + 2.0*xcoeff + 2.0*ycoeff)
+                v[myg.ilo+ix:myg.ihi+1:2,myg.jlo+iy:myg.jhi+1:2] = \
+                   (f[myg.ilo+ix:myg.ihi+1:2,myg.jlo+iy:myg.jhi+1:2] +
+                    xcoeff*(v[myg.ilo+1+ix:myg.ihi+2:2,
+                              myg.jlo+iy  :myg.jhi+1:2] +
+                            v[myg.ilo-1+ix:myg.ihi  :2,
+                              myg.jlo+iy  :myg.jhi+1:2]) +
+                    ycoeff*(v[myg.ilo+ix  :myg.ihi+1:2,
+                              myg.jlo+1+iy:myg.jhi+2:2] +
+                            v[myg.ilo+ix  :myg.ihi+1:2,
+                              myg.jlo-1+iy:myg.jhi  :2]))/ \
+                   (self.alpha + 2.0*xcoeff + 2.0*ycoeff)
+                
+                if n == 1 or n == 3:
+                    self.grids[level].fill_BC("v")
 
 
             self.grids[level].fill_BC("v")
