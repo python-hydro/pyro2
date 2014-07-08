@@ -27,7 +27,6 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
     def __init__(self, nx, ny, xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0,
                  xl_BC_type="dirichlet", xr_BC_type="dirichlet",
                  yl_BC_type="dirichlet", yr_BC_type="dirichlet",
-                 alpha=0.0, 
                  nsmooth=10, nsmooth_bottom=50,
                  verbose=0, 
                  coeffs=None, coeffs_bc=None,
@@ -35,25 +34,25 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
 
        
         # initialize the MG object with the auxillary "coeffs" field
-        MG.__init__(self, nx, ny, ng=1,
-                    xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax,
-                    xl_BC_type=xl_BC_type, xr_BC_type=xr_BC_type,
-                    yl_BC_type=yl_BC_type, yr_BC_type=yr_BC_type,
-                    alpha=0.0, beta=0.0,
-                    nsmooth=nsmooth, nsmooth_bottom=nsmooth_bottom,
-                    verbose=verbose,
-                    aux_field="coeffs", aux_bc=coeffs_bc,
-                    true_function=true_function)
+        MG.CellCenterMG2d.__init__(self, nx, ny, ng=1,
+                                   xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax,
+                                   xl_BC_type=xl_BC_type, xr_BC_type=xr_BC_type,
+                                   yl_BC_type=yl_BC_type, yr_BC_type=yr_BC_type,
+                                   alpha=0.0, beta=0.0,
+                                   nsmooth=nsmooth, nsmooth_bottom=nsmooth_bottom,
+                                   verbose=verbose,
+                                   aux_field="coeffs", aux_bc=coeffs_bc,
+                                   true_function=true_function)
 
 
         # set the coefficients and restrict them down the hierarchy
         # we only need to do this once.
-        c = self.grids[self.nlevels].get_var("coeffs")
+        c = self.grids[self.nlevels-1].get_var("coeffs")
         c[:,:] = coeffs.copy()
 
-        self.grids[nlevels].fill_BC("coeffs")
+        self.grids[self.nlevels-1].fill_BC("coeffs")
 
-        n = self.nlevels-1
+        n = self.nlevels-2
         while n >= 1:
 
             f_patch = self.grids[n+1]
@@ -100,12 +99,12 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
         # eta_y[i,j] will be eta_{i,j-1/2}
 
         eta_x[myg.ilo:myg.ihi+2,myg.jlo:myg.jhi+1] = \
-            0.5*(c[myg:ilo-1:myg.ihi+1,myg.jlo:myg.jhi+1] +
-                 c[myg:ilo  :myg.ihi+2,myg.jlo:myg.jhi+1])
+            0.5*(c[myg.ilo-1:myg.ihi+1,myg.jlo:myg.jhi+1] +
+                 c[myg.ilo  :myg.ihi+2,myg.jlo:myg.jhi+1])
 
         eta_y[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+2] = \
-            0.5*(c[myg:ilo:myg.ihi+1,myg.jlo-1:myg.jhi+1] +
-                 c[myg:ilo:myg.ihi+1,myg.jlo  :myg.jhi+2])
+            0.5*(c[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi+1] +
+                 c[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+2])
 
         eta_x /= myg.dx**2
         eta_y /= myg.dy**2
@@ -179,7 +178,7 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
         v = self.grids[level].get_var("v")
         f = self.grids[level].get_var("f")
         r = self.grids[level].get_var("r")
-        c = self.grids[level].get_var("c")
+        c = self.grids[level].get_var("coeffs")
 
         myg = self.grids[level].grid
 
@@ -191,12 +190,12 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
         # eta_y[i,j] will be eta_{i,j-1/2}
 
         eta_x[myg.ilo:myg.ihi+2,myg.jlo:myg.jhi+1] = \
-            0.5*(c[myg:ilo-1:myg.ihi+1,myg.jlo:myg.jhi+1] +
-                 c[myg:ilo  :myg.ihi+2,myg.jlo:myg.jhi+1])
+            0.5*(c[myg.ilo-1:myg.ihi+1,myg.jlo:myg.jhi+1] +
+                 c[myg.ilo  :myg.ihi+2,myg.jlo:myg.jhi+1])
 
         eta_y[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+2] = \
-            0.5*(c[myg:ilo:myg.ihi+1,myg.jlo-1:myg.jhi+1] +
-                 c[myg:ilo:myg.ihi+1,myg.jlo  :myg.jhi+2])
+            0.5*(c[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi+1] +
+                 c[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+2])
 
         eta_x /= myg.dx**2
         eta_y /= myg.dy**2
