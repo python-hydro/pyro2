@@ -2,15 +2,8 @@
 
 """
 
-an example of using the multigrid class to solve Laplace's equation.  Here, we
-solve
+Test the variable-coefficient MG solver with periodic data.
 
-u_xx + u_yy = -2[(1-6x**2)y**2(1-y**2) + (1-6y**2)x**2(1-x**2)]
-u = 0 on the boundary
-
-this is the example from page 64 of the book `A Multigrid Tutorial, 2nd Ed.'
-
-The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)
 
 """
 
@@ -29,14 +22,13 @@ cos = numpy.cos
 
 # the analytic solution
 def true(x,y):
-    #return sin(pi*x)*sin(pi*y)
-    return (x**2 - x**4)*(y**4 - y**2)
+    return sin(2*pi*x)*sin(2*pi*y)
 
 
 # the coefficients
 def alpha(x,y):
-    #return x*(1+x) + y*(1-y)
-    return numpy.ones_like(x)
+    return 1.0 + cos(2*pi*x)*cos(2*pi*y)
+
 
 # the L2 error norm
 def error(myg, r):
@@ -49,24 +41,21 @@ def error(myg, r):
 
 # the righthand side
 def f(x,y):
-    #return pi*(2*x + 1)*sin(pi*y)*cos(pi*x) + \
-    #    pi*(2*y + 1)*sin(pi*x)*cos(pi*y) - \
-    #    2*pi**2*(x*(x + 1) + y*(y + 1))*sin(pi*x)*sin(pi*y)
-    
-    return -2.0*pi**2*sin(pi*x)*sin(pi*y)
+    return -8*pi**2*(cos(2*pi*x)*cos(2*pi*y) + 1.0)*sin(2*pi*x)*sin(2*pi*y) - \
+        8*pi**2*sin(2*pi*x)*sin(2*pi*y)*cos(2*pi*x)*cos(2*pi*y)
 
 
                 
 # test the multigrid solver
-nx = 16
+nx = 32
 ny = nx
 
 
 # create the coefficient variable
 g = patch.Grid2d(nx, ny, ng=1)
 d = patch.CellCenterData2d(g)
-bc_c = patch.BCObject(xlb="neumann", xrb="neumann",
-                      ylb="neumann", yrb="neumann")
+bc_c = patch.BCObject(xlb="periodic", xrb="periodic",
+                      ylb="periodic", yrb="periodic")
 d.register_var("c", bc_c)
 d.create()
 
@@ -74,25 +63,26 @@ c = d.get_var("c")
 c[:,:] = alpha(g.x2d, g.y2d)
 
 
-# check whether the RHS sums to zero (necessary for dirichlet)
+# check whether the RHS sums to zero (necessary for periodic data)
 rhs = f(g.x2d, g.y2d)
-print(numpy.sum(rhs[g.ilo:g.ihi+1,g.jlo:g.jhi+1]))
+print("rhs sum: {}".format(numpy.sum(rhs[g.ilo:g.ihi+1,g.jlo:g.jhi+1])))
 
 
 
 
 # create the multigrid object
 a = MG.VarCoeffCCMG2d(nx, ny,
-                      xl_BC_type="dirichlet", yl_BC_type="dirichlet",
-                      xr_BC_type="dirichlet", yr_BC_type="dirichlet",
+                      xl_BC_type="periodic", yl_BC_type="periodic",
+                      xr_BC_type="periodic", yr_BC_type="periodic",
                       coeffs=c, coeffs_bc=bc_c,
                       verbose=1)
 
 
 # debugging
-#for i in range(a.nlevels):
-#    print(i)
-#    print(a.grids[i].get_var("coeffs"))
+# for i in range(a.nlevels):
+#     print(i)
+#     print(a.grids[i].get_var("coeffs"))
+    
 
 
 # initialize the solution to 0
