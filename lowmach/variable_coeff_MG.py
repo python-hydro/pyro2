@@ -53,7 +53,7 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
         self.grids[self.nlevels-1].fill_BC("coeffs")
 
         n = self.nlevels-2
-        while n >= 1:
+        while n >= 0:
 
             f_patch = self.grids[n+1]
             c_patch = self.grids[n]

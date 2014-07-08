@@ -16,6 +16,8 @@ The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)
 
 from __future__ import print_function
 
+import sys
+
 import numpy
 import mesh.patch as patch
 import variable_coeff_MG as MG
@@ -50,7 +52,7 @@ def f(x,y):
 
                 
 # test the multigrid solver
-nx = 128
+nx = 8
 ny = nx
 
 
@@ -72,6 +74,13 @@ a = MG.VarCoeffCCMG2d(nx, ny,
                       xr_BC_type="periodic", yr_BC_type="periodic",
                       coeffs=c, coeffs_bc=bc_c,
                       verbose=1)
+
+
+# debugging
+#for i in range(a.nlevels):
+#    print(i)
+#    print(a.grids[i].get_var("coeffs"))
+
 
 # initialize the solution to 0
 a.init_zeros()
