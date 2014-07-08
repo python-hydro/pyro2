@@ -110,9 +110,7 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
         eta_y /= myg.dy**2
 
         # do red-black G-S
-        i = 0
-        while i < nsmooth:
-
+        for i in range(nsmooth):
 
             # do the red black updating in four decoupled groups
             #
@@ -135,7 +133,7 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
             for n, (ix, iy) in enumerate([(0,0), (1,1), (1,0), (0,1)]):
 
                 v[myg.ilo+ix:myg.ihi+1:2,myg.jlo+iy:myg.jhi+1:2] = \
-                    (f[myg.ilo+ix:myg.ihi+1:2,myg.jlo+iy:myg.jhi+1:2] +
+                    (-f[myg.ilo+ix:myg.ihi+1:2,myg.jlo+iy:myg.jhi+1:2] +
                      # eta_{i+1/2,j} phi_{i+1,j}
                      eta_x[myg.ilo+1+ix:myg.ihi+2:2,
                            myg.jlo+iy  :myg.jhi+1:2] *
@@ -153,9 +151,9 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
                        myg.jlo+1+iy:myg.jhi+2:2] +
                      # eta_{i,j-1/2} phi_{i,j-1}
                      eta_y[myg.ilo+ix:myg.ihi+1:2,
-                        myg.jlo+iy:myg.jhi+1:2]*
+                           myg.jlo+iy:myg.jhi+1:2]*
                      v[myg.ilo+ix  :myg.ihi+1:2,
-                           myg.jlo-1+iy:myg.jhi  :2]) / \
+                       myg.jlo-1+iy:myg.jhi  :2]) / \
                 (eta_x[myg.ilo+1+ix:myg.ihi+2:2,
                        myg.jlo+iy  :myg.jhi+1:2] +
                  eta_x[myg.ilo+ix  :myg.ihi+1:2,
@@ -167,8 +165,6 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
             
                 if n == 1 or n == 3:
                     self.grids[level].fill_BC("v")
-
-            i += 1
 
 
 
