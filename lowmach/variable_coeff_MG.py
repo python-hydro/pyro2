@@ -95,6 +95,10 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
         eta_x = myg.scratch_array()
         eta_y = myg.scratch_array()
 
+        # the eta's are defined on the interfaces, so 
+        # eta_x[i,j] will be eta_{i-1/2,j} and 
+        # eta_y[i,j] will be eta_{i,j-1/2}
+
         eta_x[myg.ilo:myg.ihi+2,myg.jlo:myg.jhi+1] = \
             0.5*(c[myg:ilo-1:myg.ihi+1,myg.jlo:myg.jhi+1] +
                  c[myg:ilo  :myg.ihi+2,myg.jlo:myg.jhi+1])
@@ -129,41 +133,40 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
             # groups 1 and 3 are done together, then we need to 
             # fill ghost cells, and then groups 2 and 4
 
-            v[myg.ilo:myg.ihi+1:2,myg.jlo:myg.jhi+1:2] = \
-                (f[myg.ilo:myg.ihi+1:2,myg.jlo:myg.jhi+1:2] +
-                 xcoeff*(v[myg.ilo+1:myg.ihi+2:2,myg.jlo  :myg.jhi+1:2] +
-                         v[myg.ilo-1:myg.ihi  :2,myg.jlo  :myg.jhi+1:2]) +
-                 ycoeff*(v[myg.ilo  :myg.ihi+1:2,myg.jlo+1:myg.jhi+2:2] +
-                         v[myg.ilo  :myg.ihi+1:2,myg.jlo-1:myg.jhi  :2])) / \
-                (self.alpha + 2.0*xcoeff + 2.0*ycoeff)
+            for ix, iy in [(0,0), (1,1), (1,0), (0,1)]:
 
-            v[myg.ilo+1:myg.ihi+1:2,myg.jlo+1:myg.jhi+1:2] = \
-                (f[myg.ilo+1:myg.ihi+1:2,myg.jlo+1:myg.jhi+1:2] +
-                 xcoeff*(v[myg.ilo+2:myg.ihi+2:2,myg.jlo+1:myg.jhi+1:2] +
-                         v[myg.ilo  :myg.ihi  :2,myg.jlo+1:myg.jhi+1:2]) +
-                 ycoeff*(v[myg.ilo+1:myg.ihi+1:2,myg.jlo+2:myg.jhi+2:2] +
-                         v[myg.ilo+1:myg.ihi+1:2,myg.jlo  :myg.jhi  :2])) / \
-                (self.alpha + 2.0*xcoeff + 2.0*ycoeff)
+                v[myg.ilo+ix:myg.ihi+1:2,myg.jlo+iy:myg.jhi+1:2] = \
+                    (f[myg.ilo+ix:myg.ihi+1:2,myg.jlo+iy:myg.jhi+1:2] +
+                     # eta_{i+1/2,j} phi_{i+1,j}
+                     eta_x[myg.ilo+1+ix:myg.ihi+2:2,
+                           myg.jlo+iy  :myg.jhi+1:2] *
+                     v[myg.ilo+1+ix:myg.ihi+2:2,
+                       myg.jlo+iy  :myg.jhi+1:2] +
+                     # eta_{i-1/2,j} phi_{i-1,j}                 
+                     eta_x[myg.ilo+ix:myg.ihi+1:2,
+                           myg.jlo+iy:myg.jhi+1:2]*
+                     v[myg.ilo-1+ix:myg.ihi  :2,
+                       myg.jlo+iy  :myg.jhi+1:2] +
+                     # eta_{i,j+1/2} phi_{i,j+1}
+                     eta_y[myg.ilo+ix:myg.ihi+1:2,
+                           myg.jlo+1+iy:myg.jhi+2:2]*
+                     v[myg.ilo+ix  :myg.ihi+1:2,
+                       myg.jlo+1+iy:myg.jhi+2:2] +
+                     # eta_{i,j-1/2} phi_{i,j-1}
+                     eta_y[myg.ilo+ix:myg.ihi+1:2,
+                        myg.jlo+iy:myg.jhi+1:2]*
+                     v[myg.ilo+ix  :myg.ihi+1:2,
+                           myg.jlo-1+iy:myg.jhi  :2]) / \
+                (eta_x[myg.ilo+1+ix:myg.ihi+2:2,
+                       myg.jlo+iy  :myg.jhi+1:2] +
+                 eta_x[myg.ilo+ix  :myg.ihi+1:2,
+                       myg.jlo+iy  :myg.jhi+1:2] +
+                 eta_y[myg.ilo+ix  :myg.ihi+1:2,
+                       myg.jlo+1+iy:myg.jhi+2:2] +
+                 eta_y[myg.ilo+ix  :myg.ihi+1:2,
+                       myg.jlo+iy  :myg.jhi+1:2])
             
-            self.grids[level].fill_BC("v")
-                                                     
-            v[myg.ilo+1:myg.ihi+1:2,myg.jlo:myg.jhi+1:2] = \
-                (f[myg.ilo+1:myg.ihi+1:2,myg.jlo:myg.jhi+1:2] +
-                 xcoeff*(v[myg.ilo+2:myg.ihi+2:2,myg.jlo  :myg.jhi+1:2] +
-                         v[myg.ilo  :myg.ihi  :2,myg.jlo  :myg.jhi+1:2]) +
-                 ycoeff*(v[myg.ilo+1:myg.ihi+1:2,myg.jlo+1:myg.jhi+2:2] +
-                         v[myg.ilo+1:myg.ihi+1:2,myg.jlo-1:myg.jhi  :2])) / \
-                (self.alpha + 2.0*xcoeff + 2.0*ycoeff)
-
-            v[myg.ilo:myg.ihi+1:2,myg.jlo+1:myg.jhi+1:2] = \
-                (f[myg.ilo:myg.ihi+1:2,myg.jlo+1:myg.jhi+1:2] +
-                 xcoeff*(v[myg.ilo+1:myg.ihi+2:2,myg.jlo+1:myg.jhi+1:2] +
-                         v[myg.ilo-1:myg.ihi  :2,myg.jlo+1:myg.jhi+1:2]) +
-                 ycoeff*(v[myg.ilo  :myg.ihi+1:2,myg.jlo+2:myg.jhi+2:2] +
-                         v[myg.ilo  :myg.ihi+1:2,myg.jlo  :myg.jhi  :2])) / \
-                (self.alpha + 2.0*xcoeff + 2.0*ycoeff)
-
-
-            self.grids[level].fill_BC("v")
+                if (ix == 1 and iy == 1) or (ix == 0 and iy == 1):
+                    self.grids[level].fill_BC("v")
 
             i += 1
