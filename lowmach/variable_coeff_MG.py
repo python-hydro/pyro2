@@ -198,19 +198,22 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
 
         # compute the residual 
         # r = f - L_eta phi
-        r[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
-            f[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] - \
+        L_eta_phi = \
             eta_x[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1]* \
             (v[myg.ilo+1:myg.ihi+2,myg.jlo  :myg.jhi+1] -  # x-diff
-             v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]) - \
+             v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]) + \
             eta_x[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1]* \
             (v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] -
              v[myg.ilo-1:myg.ihi  ,myg.jlo  :myg.jhi+1]) + \
             eta_y[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2]* \
             (v[myg.ilo  :myg.ihi+1,myg.jlo+1:myg.jhi+2] -  # y-diff
-             v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]) - \
+             v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]) + \
             eta_y[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1]* \
             (v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] -
              v[myg.ilo  :myg.ihi+1,myg.jlo-1:myg.jhi  ])
+
+        r[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
+            f[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] - L_eta_phi
+
 
 
