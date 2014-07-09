@@ -583,10 +583,7 @@ class CellCenterMG2d:
                 pylab.draw()
                 pylab.savefig("mg_%4.4d.png" % (self.frame))
                 self.frame += 1
-
-                                                     
-            i += 1
-
+            
 
     def solve(self, rtol = 1.e-11):
         """
