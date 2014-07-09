@@ -13,34 +13,76 @@ import multigrid.MG as MG
 import numpy
 import sys
 
+numpy.set_printoptions(precision=3, linewidth=128)
+
 
 class _EdgeCoeffs:
+    """
+    a simple container class to hold the edge-centered coefficients
+    """
+    def __init__(self, g, eta, empty=False):
 
-    def __init__(self, g, eta):
+        self.grid = g
 
-        eta_x = g.scratch_array()
-        eta_y = g.scratch_array()
+        if not empty:
+            eta_x = g.scratch_array()
+            eta_y = g.scratch_array()
 
-        # the eta's are defined on the interfaces, so 
-        # eta_x[i,j] will be eta_{i-1/2,j} and 
-        # eta_y[i,j] will be eta_{i,j-1/2}
+            # the eta's are defined on the interfaces, so 
+            # eta_x[i,j] will be eta_{i-1/2,j} and 
+            # eta_y[i,j] will be eta_{i,j-1/2}
 
-        eta_x[g.ilo:g.ihi+2,g.jlo:g.jhi+1] = \
-            0.5*(eta[g.ilo-1:g.ihi+1,g.jlo:g.jhi+1] +
-                 eta[g.ilo  :g.ihi+2,g.jlo:g.jhi+1])
+            eta_x[g.ilo:g.ihi+2,g.jlo:g.jhi+1] = \
+                0.5*(eta[g.ilo-1:g.ihi+1,g.jlo:g.jhi+1] +
+                     eta[g.ilo  :g.ihi+2,g.jlo:g.jhi+1])
 
-        eta_y[g.ilo:g.ihi+1,g.jlo:g.jhi+2] = \
-            0.5*(eta[g.ilo:g.ihi+1,g.jlo-1:g.jhi+1] +
-                 eta[g.ilo:g.ihi+1,g.jlo  :g.jhi+2])
+            eta_y[g.ilo:g.ihi+1,g.jlo:g.jhi+2] = \
+                0.5*(eta[g.ilo:g.ihi+1,g.jlo-1:g.jhi+1] +
+                     eta[g.ilo:g.ihi+1,g.jlo  :g.jhi+2])
 
-        eta_x /= g.dx**2
-        eta_y /= g.dy**2
+            eta_x /= g.dx**2
+            eta_y /= g.dy**2
 
-        self.x = eta_x
-        self.y = eta_y
+            self.x = eta_x
+            self.y = eta_y
 
 
+    def restrict(self):
+        """
+        restrict the edge values to a coarser grid.  Return a new
+        _EdgeCoeffs object
+        """
 
+        cg = self.grid.coarse_like(2)
+
+        c_edge_coeffs = _EdgeCoeffs(cg, None, empty=True)
+
+        c_eta_x = cg.scratch_array()
+        c_eta_y = cg.scratch_array()
+
+        fg = self.grid
+        
+        c_eta_x[cg.ilo:cg.ihi+2,cg.jlo:cg.jhi+1] = \
+            0.5*(self.x[fg.ilo:fg.ihi+2:2,fg.jlo  :fg.jhi+1:2] +
+                 self.x[fg.ilo:fg.ihi+2:2,fg.jlo+1:fg.jhi+1:2]) 
+        
+        c_edge_coeffs.x = c_eta_x
+
+        c_eta_y[cg.ilo:cg.ihi+1,cg.jlo:cg.jhi+2] = \
+            0.5*(self.y[fg.ilo  :fg.ihi+1:2,fg.jlo:fg.jhi+2:2] +
+                 self.y[fg.ilo+1:fg.ihi+1:2,fg.jlo:fg.jhi+2:2]) 
+        
+        c_edge_coeffs.y = c_eta_y
+
+
+        print "restrict: ", cg.nx
+        print c_eta_x
+        print c_eta_y
+        print " "
+        
+        return c_edge_coeffs
+
+        
 class VarCoeffCCMG2d(MG.CellCenterMG2d):
     """
     this is a multigrid solver that supports variable coefficients
@@ -82,10 +124,18 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
         c = self.grids[self.nlevels-1].get_var("coeffs")
         c[:,:] = coeffs.copy()
         
+        print "original: "
+        print c
+        print " "
+
         self.grids[self.nlevels-1].fill_BC("coeffs")
 
         # put the coefficients on edges
         self.edge_coeffs.insert(0, _EdgeCoeffs(self.grids[self.nlevels-1].grid, c))
+
+        print self.edge_coeffs[0].x
+        print self.edge_coeffs[0].y
+        print " "
 
         n = self.nlevels-2
         while n >= 0:
@@ -99,9 +149,11 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
             self.grids[n].fill_BC("coeffs")
 
             # put the coefficients on edges
-            self.edge_coeffs.insert(0, _EdgeCoeffs(self.grids[n].grid, coeffs_c))
+            print type(self.edge_coeffs[0])
+            self.edge_coeffs.insert(0, self.edge_coeffs[0].restrict())  #_EdgeCoeffs(self.grids[n].grid, coeffs_c))
 
             n -= 1
+
 
 
     def smooth(self, level, nsmooth):
@@ -207,7 +259,6 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
         v = self.grids[level].get_var("v")
         f = self.grids[level].get_var("f")
         r = self.grids[level].get_var("r")
-        c = self.grids[level].get_var("coeffs")
 
         myg = self.grids[level].grid
 
@@ -218,19 +269,19 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
         # compute the residual 
         # r = f - L_eta phi
         L_eta_phi = ( 
-            # x terms
+            # eta_{i+1/2,j} (phi_{i+1,j} - phi_{i,j})
             eta_x[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1]* \
             (v[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
              v[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1]) - \
-            #
+            # eta_{i-1/2,j} (phi_{i,j} - phi_{i-1,j})
             eta_x[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1]* \
-            (v[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1] -
-             v[myg.ilo-1:myg.ihi  ,myg.jlo  :myg.jhi+1]) + \
-            # y terms
+            (v[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1] -
+             v[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1]) + \
+            # eta_{i,j+1/2} (phi_{i,j+1} - phi_{i,j})
             eta_y[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2]* \
             (v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -  # y-diff
              v[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1]) - \
-            #
+            # eta_{i,j-1/2} (phi_{i,j} - phi_{i,j-1})
             eta_y[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1]* \
             (v[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1] -
              v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ]) )
