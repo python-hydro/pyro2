@@ -19,15 +19,16 @@ import pylab
 pi = numpy.pi
 sin = numpy.sin
 cos = numpy.cos
+exp = numpy.exp
 
 # the analytic solution
 def true(x,y):
-    return sin(2*pi*x)*sin(2*pi*y)
+    return sin(2.0*pi*x)*sin(2.0*pi*y)
 
 
 # the coefficients
 def alpha(x,y):
-    return 1.0 + cos(2*pi*x)*cos(2*pi*y)
+    return 2.0 + cos(2.0*pi*x)*cos(2.0*pi*y)
 
 
 # the L2 error norm
@@ -41,13 +42,11 @@ def error(myg, r):
 
 # the righthand side
 def f(x,y):
-    return -8*pi**2*(cos(2*pi*x)*cos(2*pi*y) + 1.0)*sin(2*pi*x)*sin(2*pi*y) - \
-        8*pi**2*sin(2*pi*x)*sin(2*pi*y)*cos(2*pi*x)*cos(2*pi*y)
+    return -16.0*pi**2*(cos(2*pi*x)*cos(2*pi*y) + 1)*sin(2*pi*x)*sin(2*pi*y)
 
-
-                
+    
 # test the multigrid solver
-nx = 32
+nx = 64
 ny = nx
 
 
@@ -63,11 +62,27 @@ c = d.get_var("c")
 c[:,:] = alpha(g.x2d, g.y2d)
 
 
+pylab.clf()
+
+pylab.figure(num=1, figsize=(5.0,5.0), dpi=100, facecolor='w')
+
+pylab.imshow(numpy.transpose(c[g.ilo:g.ihi+1,g.jlo:g.jhi+1]), 
+          interpolation="nearest", origin="lower",
+          extent=[g.xmin, g.xmax, g.ymin, g.ymax])
+
+pylab.xlabel("x")
+pylab.ylabel("y")
+
+pylab.title("nx = {}".format(nx))
+
+pylab.colorbar()
+
+pylab.savefig("mg_alpha.png")
+
+
 # check whether the RHS sums to zero (necessary for periodic data)
 rhs = f(g.x2d, g.y2d)
 print("rhs sum: {}".format(numpy.sum(rhs[g.ilo:g.ihi+1,g.jlo:g.jhi+1])))
-
-
 
 
 # create the multigrid object
@@ -110,15 +125,39 @@ print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n n
 
 
 # plot it
-pylab.figure(num=1, figsize=(5.0,5.0), dpi=100, facecolor='w')
+pylab.clf()
+
+pylab.figure(num=1, figsize=(10.0,5.0), dpi=100, facecolor='w')
+
+
+pylab.subplot(121)
 
 pylab.imshow(numpy.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]), 
           interpolation="nearest", origin="lower",
           extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
+pylab.xlabel("x")
+pylab.ylabel("y")
+
+pylab.title("nx = {}".format(nx))
+
+pylab.colorbar()
+
+
+pylab.subplot(122)
+
+pylab.imshow(numpy.transpose(e[a.ilo:a.ihi+1,a.jlo:a.jhi+1]), 
+          interpolation="nearest", origin="lower",
+          extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
 pylab.xlabel("x")
 pylab.ylabel("y")
+
+pylab.title("error")
+
+pylab.colorbar()
+
+pylab.tight_layout()
 
 pylab.savefig("mg_test.png")
 
