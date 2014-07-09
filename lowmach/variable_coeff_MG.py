@@ -13,6 +13,34 @@ import multigrid.MG as MG
 import numpy
 import sys
 
+
+class _EdgeCoeffs:
+
+    def __init__(self, g, eta):
+
+        eta_x = g.scratch_array()
+        eta_y = g.scratch_array()
+
+        # the eta's are defined on the interfaces, so 
+        # eta_x[i,j] will be eta_{i-1/2,j} and 
+        # eta_y[i,j] will be eta_{i,j-1/2}
+
+        eta_x[g.ilo:g.ihi+2,g.jlo:g.jhi+1] = \
+            0.5*(eta[g.ilo-1:g.ihi+1,g.jlo:g.jhi+1] +
+                 eta[g.ilo  :g.ihi+2,g.jlo:g.jhi+1])
+
+        eta_y[g.ilo:g.ihi+1,g.jlo:g.jhi+2] = \
+            0.5*(eta[g.ilo:g.ihi+1,g.jlo-1:g.jhi+1] +
+                 eta[g.ilo:g.ihi+1,g.jlo  :g.jhi+2])
+
+        eta_x /= g.dx**2
+        eta_y /= g.dy**2
+
+        self.x = eta_x
+        self.y = eta_y
+
+
+
 class VarCoeffCCMG2d(MG.CellCenterMG2d):
     """
     this is a multigrid solver that supports variable coefficients
@@ -33,6 +61,9 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
                  coeffs=None, coeffs_bc=None,
                  true_function=None):
 
+        # we'll keep a list of the coefficients averaged to the interfaces
+        # on each level
+        self.edge_coeffs = []
        
         # initialize the MG object with the auxillary "coeffs" field
         MG.CellCenterMG2d.__init__(self, nx, ny, ng=1,
@@ -50,8 +81,11 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
         # we only need to do this once.
         c = self.grids[self.nlevels-1].get_var("coeffs")
         c[:,:] = coeffs.copy()
-
+        
         self.grids[self.nlevels-1].fill_BC("coeffs")
+
+        # put the coefficients on edges
+        self.edge_coeffs.insert(0, _EdgeCoeffs(self.grids[self.nlevels-1].grid, c))
 
         n = self.nlevels-2
         while n >= 0:
@@ -63,6 +97,9 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
             coeffs_c[:,:] = f_patch.restrict("coeffs")
 
             self.grids[n].fill_BC("coeffs")
+
+            # put the coefficients on edges
+            self.edge_coeffs.insert(0, _EdgeCoeffs(self.grids[n].grid, coeffs_c))
 
             n -= 1
 
@@ -91,35 +128,13 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
 
         self.grids[level].fill_BC("v")
 
+        eta_x = self.edge_coeffs[level].x
+        eta_y = self.edge_coeffs[level].y
 
-        eta_x = myg.scratch_array()
-        eta_y = myg.scratch_array()
+        print( "min/max c: {}, {}".format(numpy.min(c), numpy.max(c)))
+        print( "min/max eta_x: {}, {}".format(numpy.min(eta_x), numpy.max(eta_x)))
+        print( "min/max eta_y: {}, {}".format(numpy.min(eta_y), numpy.max(eta_y)))
 
-        # the eta's are defined on the interfaces, so 
-        # eta_x[i,j] will be eta_{i-1/2,j} and 
-        # eta_y[i,j] will be eta_{i,j-1/2}
-
-        eta_x[myg.ilo:myg.ihi+2,myg.jlo:myg.jhi+1] = \
-            0.5*(c[myg.ilo-1:myg.ihi+1,myg.jlo:myg.jhi+1] +
-                 c[myg.ilo  :myg.ihi+2,myg.jlo:myg.jhi+1])
-
-        eta_y[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+2] = \
-            0.5*(c[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi+1] +
-                 c[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+2])
-
-        # print(c)
-        # print(eta_x)
-        # print(eta_y)
-        # sys.exit()
-
-        # eta_x[:,:] = 1.0
-        # eta_y[:,:] = 1.0
-
-        print( "min/max eta_x: ", numpy.min(eta_x), numpy.max(eta_x))
-        print( "min/max eta_y: ", numpy.min(eta_y), numpy.max(eta_y))
-
-        eta_x /= myg.dx**2
-        eta_y /= myg.dy**2
 
         # do red-black G-S
         for i in range(nsmooth):
@@ -196,23 +211,9 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
 
         myg = self.grids[level].grid
 
-        eta_x = myg.scratch_array()
-        eta_y = myg.scratch_array()
+        eta_x = self.edge_coeffs[level].x
+        eta_y = self.edge_coeffs[level].y
 
-        # the eta's are defined on the interfaces, so 
-        # eta_x[i,j] will be eta_{i-1/2,j} and 
-        # eta_y[i,j] will be eta_{i,j-1/2}
-
-        eta_x[myg.ilo:myg.ihi+2,myg.jlo:myg.jhi+1] = \
-            0.5*(c[myg.ilo-1:myg.ihi+1,myg.jlo:myg.jhi+1] +
-                 c[myg.ilo  :myg.ihi+2,myg.jlo:myg.jhi+1])
-
-        eta_y[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+2] = \
-            0.5*(c[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi+1] +
-                 c[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+2])
-
-        eta_x /= myg.dx**2
-        eta_y /= myg.dy**2
 
         # compute the residual 
         # r = f - L_eta phi
