@@ -285,6 +285,16 @@ class Grid2d:
             return numpy.zeros((self.qx, self.qy, nvar), dtype=numpy.float64)
 
 
+    def coarse_like(self, N):
+        """
+        return a new grid object coarsened by a factor n, but with
+        all the other properties the same
+        """
+        return Grid2d(self.nx/N, self.ny/N, ng=self.ng, 
+                      xmin=self.xmin, xmax=self.xmax, 
+                      ymin=self.ymin, ymax=self.ymax)
+        
+
     def __str__(self):
         """ print out some basic information about the grid object """
 
