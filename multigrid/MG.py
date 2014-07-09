@@ -709,6 +709,8 @@ class CellCenterMG2d:
                 v = fP.get_var("v")
                 v += e
 
+                fP.fill_BC("v")
+
                 if self.verbose:
                     self._compute_residual(level)
                     r = fP.get_var("r")
