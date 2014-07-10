@@ -13,10 +13,12 @@ this is the example from page 64 of the book `A Multigrid Tutorial, 2nd Ed.'
 The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)
 
 """
-#from io import *
+
+from __future__ import print_function
+
 import numpy
 import mesh.patch as patch
-import multigrid
+import MG
 import pylab
 
 # the analytic solution
@@ -43,13 +45,13 @@ ny = 64
 
 
 # create the multigrid object
-a = multigrid.CellCenterMG2d(nx, ny,
-                             xl_BC_type="dirichlet", yl_BC_type="dirichlet",
-                             xr_BC_type="dirichlet", yr_BC_type="dirichlet",
-                             verbose=0,
-                             nsmooth=5, nsmooth_bottom=10,
-                             vis=1, true_function=true, 
-                             vis_title=r"$u_{xx} + u_{yy} = -2[(1-6x^2)y^2(1-y^2) + (1-6y^2)x^2(1-x^2)]$")
+a = MG.CellCenterMG2d(nx, ny,
+                      xl_BC_type="dirichlet", yl_BC_type="dirichlet",
+                      xr_BC_type="dirichlet", yr_BC_type="dirichlet",
+                      verbose=0,
+                      nsmooth=5, nsmooth_bottom=10,
+                      vis=1, true_function=true, 
+                      vis_title=r"$u_{xx} + u_{yy} = -2[(1-6x^2)y^2(1-y^2) + (1-6y^2)x^2(1-x^2)]$")
 
 pylab.ion()
 
@@ -79,8 +81,8 @@ v = a.get_solution()
 b = true(a.x2d,a.y2d)
 e = v - b
 
-print " L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
-      (error(a.soln_grid, e), a.relative_error, a.num_cycles)
+print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
+      (error(a.soln_grid, e), a.relative_error, a.num_cycles))
 
 
 # plot it

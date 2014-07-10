@@ -126,8 +126,8 @@ Updating U_{i,j}:
 
 import numpy
 
-import eos
-import interface_f
+import compressible.eos as eos
+import compressible.interface_f as interface_f
 import mesh.reconstruction_f as reconstruction_f
 
 def unsplitFluxes(my_data, rp, vars, tc, dt):

@@ -7,5 +7,5 @@ of a constant-coefficient Helmholtz equation:
 and pure V-cycles to solve elliptic problems
 """
 
-__all__ = ['multigrid']
+__all__ = ['MG']
 

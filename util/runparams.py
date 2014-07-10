@@ -113,11 +113,11 @@ class RuntimeParameters:
 
             if sec.search(line): 
                 lbracket, section, rbracket = sec.split(line)
-                section = string.lower(section.strip())
+                section = (section.strip()).lower()
             
             elif eq.search(line):
                 left, item, value, comment, right = eq.split(line) 
-                item = string.lower(item.strip())
+                item = (item.strip()).lower()
 
                 # define the key
                 key = section + "." + item
@@ -219,7 +219,7 @@ class RuntimeParameters:
         """
         Print out all runtime parameters and their values
         """
-        keys = self.params.keys()
+        keys = list(self.params.keys())
         keys.sort()
 
         for key in keys:
@@ -234,7 +234,7 @@ class RuntimeParameters:
         inputs file, with all known parameters and values
         """
 
-        keys = self.params.keys()
+        keys = list(self.params.keys())
         keys.sort()
 
         try: f = open('inputs.auto', 'w')
@@ -247,7 +247,7 @@ class RuntimeParameters:
         currentSection = " "
 
         for key in keys:
-            parts = string.split(key, '.')
+            parts = key.split('.')
             section = parts[0]
             option = parts[1]
 

@@ -14,6 +14,8 @@ v(x,y,t=0) = delta_s sin(2 pi x)
 
 """
 
+from __future__ import print_function
+
 import sys
 import mesh.patch as patch
 import numpy
@@ -27,7 +29,7 @@ def init_data(my_data, rp):
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):
-        print my_data.__class__
+        print(my_data.__class__)
         msg.fail("ERROR: patch invalid in shear.py")
 
 
@@ -48,9 +50,9 @@ def init_data(my_data, rp):
         
     y_half = 0.5*(myg.ymin + myg.ymax)
 
-    print 'y_half = ', y_half
-    print 'delta_s = ', delta_s
-    print 'rho_s = ', rho_s
+    print('y_half = ', y_half)
+    print('delta_s = ', delta_s)
+    print('rho_s = ', rho_s)
     
     # there is probably an easier way to do this without loops, but
     # for now, we will just do an explicit loop.
@@ -71,7 +73,7 @@ def init_data(my_data, rp):
         i += 1
         
     
-    print "extrema: ", numpy.min(u.flat), numpy.max(u.flat)
+    print("extrema: ", numpy.min(u.flat), numpy.max(u.flat))
     
     
                              

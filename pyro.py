@@ -96,7 +96,7 @@ if make_bench and comp_bench:
     msg.fail("ERROR: cannot have both --make_benchmark and --compare_benchmark")
 
 
-try: solverName = next[0]
+try: solver_name = next[0]
 except IndexError:
     print(usage)
     msg.fail("ERROR: solver name not specified on command line")
@@ -106,7 +106,7 @@ except IndexError:
     print(usage)
     msg.fail("ERROR: problem name not specified on command line")
 
-try: paramFile = next[2]
+try: param_file = next[2]
 except IndexError:
     print(usage)
     msg.fail("ERROR: parameter file not specified on command line")
@@ -117,7 +117,7 @@ if len(next) > 3:
     other_commands = next[3:]
 
 # actually import the solver-specific stuff under the 'solver' namespace
-exec('import ' + solverName + ' as solver')
+exec('import ' + solver_name + ' as solver')
 
 
 #-----------------------------------------------------------------------------
@@ -127,19 +127,19 @@ exec('import ' + solverName + ' as solver')
 # parameter defaults
 rp = runparams.RuntimeParameters()
 rp.load_params("_defaults")
-rp.load_params(solverName + "/_defaults")
+rp.load_params(solver_name + "/_defaults")
 
 # problem-specific runtime parameters
-rp.load_params(solverName + "/problems/_" + problem_name + ".defaults")
+rp.load_params(solver_name + "/problems/_" + problem_name + ".defaults")
 
 # now read in the inputs file
-if not os.path.isfile(paramFile):
+if not os.path.isfile(param_file):
     # check if the param file lives in the solver's problems directory
-    paramFile = solverName + "/problems/" + paramFile
-    if not os.path.isfile(paramFile):
+    param_file = solver_name + "/problems/" + param_file
+    if not os.path.isfile(param_file):
         msg.fail("ERROR: inputs file does not exist")
 
-rp.load_params(paramFile, no_new=1)
+rp.load_params(param_file, no_new=1)
 
 # and any commandline overrides
 rp.command_line_params(other_commands)
@@ -258,7 +258,7 @@ tm_main.end()
 #-----------------------------------------------------------------------------
 # are we comparing to a benchmark?
 if comp_bench:
-    compare_file = solverName + "/tests/" + basename + "%4.4d" % (n)
+    compare_file = solver_name + "/tests/" + basename + "%4.4d" % (n)
     msg.warning("comparing to: %s " % (compare_file) )
     bench_grid, bench_data = patch.read(compare_file)
 
@@ -272,7 +272,7 @@ if comp_bench:
 
 # are we storing a benchmark?
 if make_bench:
-    bench_file = solverName + "/tests/" + basename + "%4.4d" % (n)
+    bench_file = solver_name + "/tests/" + basename + "%4.4d" % (n)
     msg.warning("storing new benchmark: %s\n " % (bench_file) )
     sim.cc_data.write(bench_file)
     

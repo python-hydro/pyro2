@@ -19,6 +19,6 @@ approximate projection method.  The general flow is:
 The projections are done using multigrid
 """
 
-from simulation import *
+from .simulation import *
 
 

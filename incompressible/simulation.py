@@ -1,11 +1,13 @@
+from __future__ import print_function
+
 import numpy
 import pylab
 
 from incompressible.problems import *
-import incomp_interface_f
+import incompressible.incomp_interface_f as incomp_interface_f
 import mesh.reconstruction_f as reconstruction_f
 import mesh.patch as patch
-import multigrid.multigrid as multigrid
+import multigrid.MG as MG
 from util import profile
 
 class Simulation:
@@ -94,7 +96,7 @@ class Simulation:
         self.cc_data = my_data
 
         # now set the initial conditions for the problem 
-        exec self.problem_name + '.init_data(self.cc_data, self.rp)'
+        exec(self.problem_name + '.init_data(self.cc_data, self.rp)')
 
 
     def timestep(self):
@@ -144,19 +146,19 @@ class Simulation:
 
         # next create the multigrid object.  We want Neumann BCs on phi
         # at solid walls and periodic on phi for periodic BCs
-        MG = multigrid.CellCenterMG2d(myg.nx, myg.ny,
-                                      xl_BC_type="periodic", 
-                                      xr_BC_type="periodic",
-                                      yl_BC_type="periodic", 
-                                      yr_BC_type="periodic",
-                                      xmin=myg.xmin, xmax=myg.xmax,
-                                      ymin=myg.ymin, ymax=myg.ymax,
-                                      verbose=0)
+        mg = MG.CellCenterMG2d(myg.nx, myg.ny,
+                               xl_BC_type="periodic", 
+                               xr_BC_type="periodic",
+                               yl_BC_type="periodic", 
+                               yr_BC_type="periodic",
+                               xmin=myg.xmin, xmax=myg.xmax,
+                               ymin=myg.ymin, ymax=myg.ymax,
+                               verbose=0)
 
         # first compute divU
-        divU = MG.soln_grid.scratch_array()
+        divU = mg.soln_grid.scratch_array()
 
-        divU[MG.ilo:MG.ihi+1,MG.jlo:MG.jhi+1] = \
+        divU[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
             0.5*(u[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
                  u[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1])/myg.dx + \
             0.5*(v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
@@ -166,17 +168,17 @@ class Simulation:
 
         # initialize our guess to the solution, set the RHS to divU and
         # solve
-        MG.init_zeros()
-        MG.init_RHS(divU)
-        MG.solve(rtol=1.e-10)
+        mg.init_zeros()
+        mg.init_RHS(divU)
+        mg.solve(rtol=1.e-10)
 
         # store the solution in our self.cc_data object -- include a single
         # ghostcell
         phi = self.cc_data.get_var("phi")
-        solution = MG.get_solution()
+        solution = mg.get_solution()
 
         phi[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2] = \
-            solution[MG.ilo-1:MG.ihi+2,MG.jlo-1:MG.jhi+2]
+            solution[mg.ilo-1:mg.ihi+2,mg.jlo-1:mg.jhi+2]
 
         # compute the cell-centered gradient of phi and update the 
         # velocities
@@ -223,7 +225,7 @@ class Simulation:
 
         self.cc_data = orig_data
 
-        print "done with the pre-evolution"
+        print("done with the pre-evolution")
 
 
     def evolve(self, dt):
@@ -285,7 +287,7 @@ class Simulation:
 
         # this returns u on x-interfaces and v on y-interfaces.  These
         # constitute the MAC grid
-        print "  making MAC velocities"
+        print("  making MAC velocities")
 
         u_MAC, v_MAC = incomp_interface_f.mac_vels(myg.qx, myg.qy, myg.ng, 
                                                    myg.dx, myg.dy, dt,
@@ -304,40 +306,40 @@ class Simulation:
         # U^MAC is the MAC-type staggered grid of the advective
         # velocities.
 
-        print "  MAC projection"
+        print("  MAC projection")
 
         # create the multigrid object
-        MG = multigrid.CellCenterMG2d(myg.nx, myg.ny,
-                                      xl_BC_type="periodic", 
-                                      xr_BC_type="periodic",
-                                      yl_BC_type="periodic", 
-                                      yr_BC_type="periodic",
-                                      xmin=myg.xmin, xmax=myg.xmax,
-                                      ymin=myg.ymin, ymax=myg.ymax,
-                                      verbose=0)
+        mg = MG.CellCenterMG2d(myg.nx, myg.ny,
+                               xl_BC_type="periodic", 
+                               xr_BC_type="periodic",
+                               yl_BC_type="periodic", 
+                               yr_BC_type="periodic",
+                               xmin=myg.xmin, xmax=myg.xmax,
+                               ymin=myg.ymin, ymax=myg.ymax,
+                               verbose=0)
 
         # first compute divU
-        divU = MG.soln_grid.scratch_array()
+        divU = mg.soln_grid.scratch_array()
 
         # MAC velocities are edge-centered.  divU is cell-centered.
-        divU[MG.ilo:MG.ihi+1,MG.jlo:MG.jhi+1] = \
+        divU[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
             (u_MAC[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
              u_MAC[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx + \
             (v_MAC[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
              v_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1])/myg.dy
     
         # solve the Poisson problem
-        MG.init_zeros()
-        MG.init_RHS(divU)
-        MG.solve(rtol=1.e-12)
+        mg.init_zeros()
+        mg.init_RHS(divU)
+        mg.solve(rtol=1.e-12)
 
         # update the normal velocities with the pressure gradient -- these
         # constitute our advective velocities
         phi_MAC = self.cc_data.get_var("phi-MAC")
-        solution = MG.get_solution()
+        solution = mg.get_solution()
 
         phi_MAC[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2] = \
-            solution[MG.ilo-1:MG.ihi+2,MG.jlo-1:MG.jhi+2]
+            solution[mg.ilo-1:mg.ihi+2,mg.jlo-1:mg.jhi+2]
 
         # we need the MAC velocities on all edges of the computational domain
         u_MAC[myg.ilo:myg.ihi+2,myg.jlo:myg.jhi+1] -= \
@@ -353,7 +355,7 @@ class Simulation:
         # recompute the interface states, using the advective velocity
         # from above
         #---------------------------------------------------------------------
-        print "  making u, v edge states"
+        print("  making u, v edge states")
 
         u_xint, v_xint, u_yint, v_yint = \
                incomp_interface_f.states(myg.qx, myg.qy, myg.ng, 
@@ -369,7 +371,7 @@ class Simulation:
         # update U to get the provisional velocity field
         #---------------------------------------------------------------------
 
-        print "  doing provisional update of u, v"
+        print("  doing provisional update of u, v")
 
         # compute (U.grad)U
 
@@ -417,43 +419,43 @@ class Simulation:
         #---------------------------------------------------------------------
 
         # now we solve L phi = D (U* /dt)
-        print "  final projection"
+        print("  final projection")
     
         # create the multigrid object
-        MG = multigrid.CellCenterMG2d(myg.nx, myg.ny,
-                                      xl_BC_type="periodic", 
-                                      xr_BC_type="periodic",
-                                      yl_BC_type="periodic", 
-                                      yr_BC_type="periodic",
-                                      xmin=myg.xmin, xmax=myg.xmax,
-                                      ymin=myg.ymin, ymax=myg.ymax,
-                                      verbose=0)
+        mg = MG.CellCenterMG2d(myg.nx, myg.ny,
+                               xl_BC_type="periodic", 
+                               xr_BC_type="periodic",
+                               yl_BC_type="periodic", 
+                               yr_BC_type="periodic",
+                               xmin=myg.xmin, xmax=myg.xmax,
+                               ymin=myg.ymin, ymax=myg.ymax,
+                               verbose=0)
 
         # first compute divU
 
         # u/v are cell-centered, divU is cell-centered    
-        divU[MG.ilo:MG.ihi+1,MG.jlo:MG.jhi+1] = \
+        divU[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
             0.5*(u[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
                  u[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1])/myg.dx + \
             0.5*(v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
                  v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
     
-        MG.init_RHS(divU/dt)
+        mg.init_RHS(divU/dt)
 
         # use the old phi as our initial guess
-        phiGuess = MG.soln_grid.scratch_array()
-        phiGuess[MG.ilo-1:MG.ihi+2,MG.jlo-1:MG.jhi+2] = \
+        phiGuess = mg.soln_grid.scratch_array()
+        phiGuess[mg.ilo-1:mg.ihi+2,mg.jlo-1:mg.jhi+2] = \
            phi[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]
-        MG.init_solution(phiGuess)
+        mg.init_solution(phiGuess)
 
         # solve
-        MG.solve(rtol=1.e-12)
+        mg.solve(rtol=1.e-12)
 
         # store the solution
-        solution = MG.get_solution()
+        solution = mg.get_solution()
 
         phi[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2] = \
-            solution[MG.ilo-1:MG.ihi+2,MG.jlo-1:MG.jhi+2]
+            solution[mg.ilo-1:mg.ihi+2,mg.jlo-1:mg.jhi+2]
 
         # compute the cell-centered gradient of p and update the velocities
         # this differs depending on what we projected.
@@ -545,4 +547,4 @@ class Simulation:
         Do any final clean-ups for the simulation and call the problem's
         finalize() method.
         """
-        exec self.problem_name + '.finalize()'
+        exec(self.problem_name + '.finalize()')
