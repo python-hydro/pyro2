@@ -184,9 +184,9 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
         eta_x = self.edge_coeffs[level].x
         eta_y = self.edge_coeffs[level].y
 
-        print( "min/max c: {}, {}".format(numpy.min(c), numpy.max(c)))
-        print( "min/max eta_x: {}, {}".format(numpy.min(eta_x), numpy.max(eta_x)))
-        print( "min/max eta_y: {}, {}".format(numpy.min(eta_y), numpy.max(eta_y)))
+        # print( "min/max c: {}, {}".format(numpy.min(c), numpy.max(c)))
+        # print( "min/max eta_x: {}, {}".format(numpy.min(eta_x), numpy.max(eta_x)))
+        # print( "min/max eta_y: {}, {}".format(numpy.min(eta_y), numpy.max(eta_y)))
 
 
         # do red-black G-S
@@ -253,9 +253,9 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
                     self.grids[level].fill_BC("v")
 
 
-
     def _compute_residual(self, level):
         """ compute the residual and store it in the r variable"""
+
 
         v = self.grids[level].get_var("v")
         f = self.grids[level].get_var("f")

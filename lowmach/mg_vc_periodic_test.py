@@ -90,6 +90,7 @@ a = MG.VarCoeffCCMG2d(nx, ny,
                       xl_BC_type="periodic", yl_BC_type="periodic",
                       xr_BC_type="periodic", yr_BC_type="periodic",
                       nsmooth=10,
+                      nsmooth_bottom=50,
                       coeffs=c, coeffs_bc=bc_c,
                       verbose=1)
 
@@ -109,7 +110,7 @@ rhs = f(a.x2d, a.y2d)
 a.init_RHS(rhs)
 
 # solve to a relative tolerance of 1.e-11
-a.solve(rtol=1.e-10)
+a.solve(rtol=1.e-11)
 #a.smooth(a.nlevels-1, 50000)
 
 # alternately, we can just use smoothing by uncommenting the following
