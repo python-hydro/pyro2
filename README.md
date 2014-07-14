@@ -114,6 +114,17 @@ with their data.
           usage: ./sod_compare.py file
 
 
+## Understanding the algorithms
+
+  There is a set of notes that describe the background and details of the
+  algorithms that pyro implements:
+
+  http://bender.astro.sunysb.edu/hydro_by_example/CompHydroTutorial.pdf
+
+  The source for these notes is also available on github:
+
+  https://github.com/zingale/numerical_exercises
+
 
 ## Getting Help
 
