@@ -12,6 +12,7 @@ A cell-centered discretization is used throughout.
 import multigrid.MG as MG
 import numpy
 import sys
+import pylab
 
 numpy.set_printoptions(precision=3, linewidth=128)
 
@@ -102,7 +103,7 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
                  nsmooth=10, nsmooth_bottom=50,
                  verbose=0, 
                  coeffs=None, coeffs_bc=None,
-                 true_function=None):
+                 true_function=None, vis=0, vis_title=""):
 
         # we'll keep a list of the coefficients averaged to the interfaces
         # on each level
@@ -117,7 +118,8 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
                                    nsmooth=nsmooth, nsmooth_bottom=nsmooth_bottom,
                                    verbose=verbose,
                                    aux_field="coeffs", aux_bc=coeffs_bc,
-                                   true_function=true_function)
+                                   true_function=true_function, vis=vis, 
+                                   vis_title=vis_title)
 
 
         # set the coefficients and restrict them down the hierarchy
@@ -251,6 +253,29 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
             
                 if n == 1 or n == 3:
                     self.grids[level].fill_BC("v")
+
+
+            if self.vis == 1:
+                pylab.clf()
+
+                pylab.subplot(221)
+                self._draw_solution()
+
+                pylab.subplot(222)        
+                self._draw_V()
+
+                pylab.subplot(223)        
+                self._draw_main_solution()
+
+                pylab.subplot(224)        
+                self._draw_main_error()
+
+
+                pylab.suptitle(self.vis_title, fontsize=18)
+
+                pylab.draw()
+                pylab.savefig("mg_%4.4d.png" % (self.frame))
+                self.frame += 1
 
 
     def _compute_residual(self, level):
