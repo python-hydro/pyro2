@@ -67,7 +67,7 @@ def f(x,y):
 
 
 
-N = [16, 32, 64, 128, 256]
+N = [16, 32, 64, 128, 256, 512]
 err = []
 
 for nx in N:
@@ -138,7 +138,7 @@ for nx in N:
 # plot the solution
 pylab.clf()
 
-pylab.figure(num=1, figsize=(10.0,5.0), dpi=100, facecolor='w')
+pylab.figure(figsize=(10.0,4.0), dpi=100, facecolor='w')
 
 
 pylab.subplot(121)
@@ -170,7 +170,8 @@ pylab.colorbar()
 
 pylab.tight_layout()
 
-pylab.savefig("mg_test.png")
+pylab.savefig("mg_vc_periodic_test.png")
+pylab.savefig("mg_vc_periodic_test.eps", bbox_inches="tight")
 
 
 #---------------------------------------------------------------------------
@@ -190,9 +191,13 @@ pylab.loglog(N, err[0]*(N[0]/N)**2, "--", color="k")
 pylab.xlabel("N")
 pylab.ylabel("error")
 
+f = pylab.gcf()
+f.set_size_inches(7.0,6.0)
+
 pylab.tight_layout()
 
 pylab.savefig("mg_vc_converge.png")
+pylab.savefig("mg_vc_converge.eps", bbox_inches="tight")
 
 
 
