@@ -4,7 +4,7 @@
 # interface Fortran with python for some lower-level pyro routines.
 # f2py is used.  
 
-PYTHON=python3
+PYTHON=python
 
 cd mesh
 ${PYTHON} setup.py build_ext --inplace
