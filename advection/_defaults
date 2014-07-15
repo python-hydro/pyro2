@@ -1,6 +1,5 @@
 [driver]
 cfl       = 0.8           ; advective CFL number
-splitting = unsplit       ; split or unsplit timestepping?
 
 
 [advection]
