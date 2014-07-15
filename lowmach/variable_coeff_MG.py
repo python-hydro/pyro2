@@ -143,6 +143,8 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
         n = self.nlevels-2
         while n >= 0:
 
+            # create the edge coefficients on level n by restricting from the
+            # finer grid
             f_patch = self.grids[n+1]
             c_patch = self.grids[n]
 
@@ -154,6 +156,16 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
             # put the coefficients on edges
             print type(self.edge_coeffs[0])
             self.edge_coeffs.insert(0, self.edge_coeffs[0].restrict())  #_EdgeCoeffs(self.grids[n].grid, coeffs_c))
+
+            # if we are periodic, then we should force the edge coefficents
+            # to be periodic
+            # if self.grids[n].BCs["coeffs"].xlb == "periodic":
+            #     self.edge_coeffs[0].x[self.grids[n].grid.ihi+1,:] = \
+            #         self.edge_coeffs[0].x[self.grids[n].grid.ilo,:]
+
+            # if self.grids[n].BCs["coeffs"].ylb == "periodic":
+            #     self.edge_coeffs[0].y[:,self.grids[n].grid.jhi+1] = \
+            #         self.edge_coeffs[0].y[:,self.grids[n].grid.jlo]
 
             n -= 1
 

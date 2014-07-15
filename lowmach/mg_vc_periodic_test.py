@@ -44,90 +44,77 @@ def error(myg, r):
 def f(x,y):
     return -16.0*pi**2*(cos(2*pi*x)*cos(2*pi*y) + 1)*sin(2*pi*x)*sin(2*pi*y)
 
-    
-# test the multigrid solver
-nx = 128
-ny = nx
 
 
-# create the coefficient variable
-g = patch.Grid2d(nx, ny, ng=1)
-d = patch.CellCenterData2d(g)
-bc_c = patch.BCObject(xlb="periodic", xrb="periodic",
-                      ylb="periodic", yrb="periodic")
-d.register_var("c", bc_c)
-d.create()
 
-c = d.get_var("c")
-c[:,:] = alpha(g.x2d, g.y2d)
+N = [16, 32, 64, 128, 256]
+err = []
+
+for nx in N:
+
+    # test the multigrid solver
+    ny = nx
 
 
-pylab.clf()
+    # create the coefficient variable
+    g = patch.Grid2d(nx, ny, ng=1)
+    d = patch.CellCenterData2d(g)
+    bc_c = patch.BCObject(xlb="periodic", xrb="periodic",
+                          ylb="periodic", yrb="periodic")
+    d.register_var("c", bc_c)
+    d.create()
 
-pylab.figure(num=1, figsize=(5.0,5.0), dpi=100, facecolor='w')
+    c = d.get_var("c")
+    c[:,:] = alpha(g.x2d, g.y2d)
 
-pylab.imshow(numpy.transpose(c[g.ilo:g.ihi+1,g.jlo:g.jhi+1]), 
-          interpolation="nearest", origin="lower",
-          extent=[g.xmin, g.xmax, g.ymin, g.ymax])
-
-pylab.xlabel("x")
-pylab.ylabel("y")
-
-pylab.title("nx = {}".format(nx))
-
-pylab.colorbar()
-
-pylab.savefig("mg_alpha.png")
+    # check whether the RHS sums to zero (necessary for periodic data)
+    rhs = f(g.x2d, g.y2d)
+    print("rhs sum: {}".format(numpy.sum(rhs[g.ilo:g.ihi+1,g.jlo:g.jhi+1])))
 
 
-# check whether the RHS sums to zero (necessary for periodic data)
-rhs = f(g.x2d, g.y2d)
-print("rhs sum: {}".format(numpy.sum(rhs[g.ilo:g.ihi+1,g.jlo:g.jhi+1])))
+    # create the multigrid object
+    a = MG.VarCoeffCCMG2d(nx, ny,
+                          xl_BC_type="periodic", yl_BC_type="periodic",
+                          xr_BC_type="periodic", yr_BC_type="periodic",
+                          nsmooth=10,
+                          nsmooth_bottom=50,
+                          coeffs=c, coeffs_bc=bc_c,
+                          verbose=1, vis=0, true_function=true)
+
+    # initialize the solution to 0
+    a.init_zeros()
+
+    # initialize the RHS using the function f
+    rhs = f(a.x2d, a.y2d)
+    a.init_RHS(rhs)
+
+    # solve to a relative tolerance of 1.e-11
+    a.solve(rtol=1.e-11)
+
+    # alternately, we can just use smoothing by uncommenting the following
+    #a.smooth(a.nlevels-1,50000)
+
+    # get the solution 
+    v = a.get_solution()
+
+    # get the true solution
+    b = true(a.x2d,a.y2d)  
+  
+    # compute the error from the analytic solution -- note that with periodic
+    # BCs all around, there is nothing to normalize the solution.  We subtract
+    # off the average of phi from the MG solution (if necessary, we'd also
+    # subtract off the average of the true solution)
+    e = v - numpy.sum(v)/(nx*ny) - b
+
+    enorm = error(a.soln_grid, e)
+    print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
+          (enorm, a.relative_error, a.num_cycles))
+
+    err.append(enorm)
 
 
-# create the multigrid object
-a = MG.VarCoeffCCMG2d(nx, ny,
-                      xl_BC_type="periodic", yl_BC_type="periodic",
-                      xr_BC_type="periodic", yr_BC_type="periodic",
-                      nsmooth=10,
-                      nsmooth_bottom=50,
-                      coeffs=c, coeffs_bc=bc_c,
-                      verbose=1)
-
-
-# debugging
-# for i in range(a.nlevels):
-#     print(i)
-#     print(a.grids[i].get_var("coeffs"))
-    
-
-
-# initialize the solution to 0
-a.init_zeros()
-
-# initialize the RHS using the function f
-rhs = f(a.x2d, a.y2d)
-a.init_RHS(rhs)
-
-# solve to a relative tolerance of 1.e-11
-a.solve(rtol=1.e-11)
-#a.smooth(a.nlevels-1, 50000)
-
-# alternately, we can just use smoothing by uncommenting the following
-#a.smooth(a.nlevels-1,50000)
-
-# get the solution 
-v = a.get_solution()
-
-# compute the error from the analytic solution
-b = true(a.x2d,a.y2d)
-e = v - b
-
-print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
-      (error(a.soln_grid, e), a.relative_error, a.num_cycles))
-
-
-# plot it
+#---------------------------------------------------------------------------
+# plot the solution
 pylab.clf()
 
 pylab.figure(num=1, figsize=(10.0,5.0), dpi=100, facecolor='w')
@@ -165,8 +152,27 @@ pylab.tight_layout()
 pylab.savefig("mg_test.png")
 
 
-# store the output for later comparison
-my_data = a.get_solution_object()
-my_data.write("mg_test")
+#---------------------------------------------------------------------------
+# plot the convergence
+
+N = numpy.array(N, dtype=numpy.float64)
+err = numpy.array(err)
+
+print(N)
+print(err)
+
+pylab.clf()
+pylab.loglog(N, err, "x", color="r")
+pylab.loglog(N, err[0]*(N[0]/N)**2, "--", color="k")
+
+
+pylab.xlabel("N")
+pylab.ylabel("error")
+
+pylab.tight_layout()
+
+pylab.savefig("mg_vc_converge.png")
+
+
 
 
