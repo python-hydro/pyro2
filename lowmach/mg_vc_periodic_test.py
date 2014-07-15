@@ -100,11 +100,12 @@ for nx in N:
     # get the true solution
     b = true(a.x2d,a.y2d)  
   
-    # compute the error from the analytic solution -- note that with periodic
-    # BCs all around, there is nothing to normalize the solution.  We subtract
-    # off the average of phi from the MG solution (if necessary, we'd also
-    # subtract off the average of the true solution)
-    e = v - numpy.sum(v)/(nx*ny) - b
+    # compute the error from the analytic solution -- note that with
+    # periodic BCs all around, there is nothing to normalize the
+    # solution.  We subtract off the average of phi from the MG
+    # solution (we do the same for the true solution to put them on
+    # the same footing)
+    e = v - numpy.sum(v)/(nx*ny) - (b - numpy.sum(b)/(nx*ny))
 
     enorm = error(a.soln_grid, e)
     print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
