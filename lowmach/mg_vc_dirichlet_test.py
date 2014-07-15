@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-"""Test the variable-coefficient MG solver with Dirichlet boundary conditions.
+"""
+Test the variable-coefficient MG solver with Dirichlet boundary conditions.
 
 Here we solve:
 

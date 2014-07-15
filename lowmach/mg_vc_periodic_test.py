@@ -4,6 +4,26 @@
 
 Test the variable-coefficient MG solver with periodic data.
 
+Here we solve:
+
+   div . ( alpha grad phi ) = f
+
+with
+
+   alpha = 2.0 + cos(2.0*pi*x)*cos(2.0*pi*y)
+
+   f = -16.0*pi**2*(cos(2*pi*x)*cos(2*pi*y) + 1)*sin(2*pi*x)*sin(2*pi*y)
+
+This has the exact solution:
+
+   phi = sin(2.0*pi*x)*sin(2.0*pi*y)
+
+on [0,1] x [0,1]
+
+We use Dirichlet BCs on phi.  For alpha, we do not have to impose the
+same BCs, since that may represent a different physical quantity.
+Here we take alpha to have Neumann BCs.  (Dirichlet BCs for alpha will
+force it to 0 on the boundary, which is not correct here)
 
 """
 
