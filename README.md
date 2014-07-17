@@ -2,6 +2,14 @@
 *A simple python-based tutorial on computational methods for hydrodynamics*
 
 
+pyro is a computational hydrodynamics code that presents
+two-dimensional solvers for advection, compressible hydrodynamics,
+diffusion, incompressible hydrodynamics, and multigrid, all in a
+finite-volume framework.  The code is mainly written in python and is
+designed with simplicity in mind.  The algorithms are written to
+encourage experimentation and allow for self-learning of these code
+methods.
+
 The latest version of pyro is always available at:
 
 https://github.com/zingale/pyro2
@@ -10,7 +18,6 @@ The project webpage, where you'll find documentation, plots, notes,
 etc. is here:
 
 http://bender.astro.sunysb.edu/hydro_by_example/
-
 
 
 ## Getting Started
@@ -40,7 +47,8 @@ http://bender.astro.sunysb.edu/hydro_by_example/
 
   - The remaining steps are: 
 
-      * Set the PYTHONPATH environment variable to point to the pyro2/ directory.
+      * Set the PYTHONPATH environment variable to point to the pyro2/
+        directory.
 
       * Build the Fortran source. In pyro2/ type 
 
@@ -52,6 +60,30 @@ http://bender.astro.sunysb.edu/hydro_by_example/
 
         you should see a graphing window pop up with a smooth pulse
         advecting diagonally through the periodic domain.
+
+
+## Solvers
+
+pyro provides the following solvers (all in 2-d):
+
+  - advection: a second-order unsplit linear advection solver.  This is
+    the basic method to understand hydrodynamics.
+
+  - compressible: a second-order unsplit solver for the Euler equations
+    of compressible hydrodynamics.  This uses a 2-shock approximate
+    Riemann solver.
+
+  - incompressible: a second-order cell-centered approximate projection
+    method for the incompressible equations of hydrodynamics.
+
+  - diffusion: a Crank-Nicolson time-discretized solver for the
+    constant-coefficient diffusion equation.
+
+  - multigrid: a cell-centered multigrid solver for a
+    constant-coefficient Helmholtz equation.
+
+  - lowmach: (experimental) a solver for the low Mach combustion
+    and atmospheric flow equations.
 
 
 ## Working With Data
@@ -103,7 +135,7 @@ with their data.
 
       * smooth_error.py: this takes an output file from the advection
         solver's smooth problem and compares to the analytic solution,
-        outputing the L2 norm of the error.
+        outputting the L2 norm of the error.
 
           usage: ./smooth_error.py file
 
