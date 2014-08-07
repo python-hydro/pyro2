@@ -7,5 +7,5 @@ of a constant-coefficient Helmholtz equation:
 and pure V-cycles to solve elliptic problems
 """
 
-__all__ = ['MG']
+__all__ = ['MG', 'variable_coeff_MG']
 

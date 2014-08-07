@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 """
-
 Test the variable-coefficient MG solver with periodic data.
 
 Here we solve:
@@ -63,7 +62,6 @@ def error(myg, r):
 # the righthand side
 def f(x,y):
     return -16.0*pi**2*(cos(2*pi*x)*cos(2*pi*y) + 1)*sin(2*pi*x)*sin(2*pi*y)
-
 
 
 
