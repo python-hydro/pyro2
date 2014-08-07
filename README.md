@@ -80,10 +80,15 @@ pyro provides the following solvers (all in 2-d):
     constant-coefficient diffusion equation.
 
   - multigrid: a cell-centered multigrid solver for a
-    constant-coefficient Helmholtz equation.
+    constant-coefficient Helmholtz equation, as well as a
+    variable-coefficient Poisson equation (which inherits
+    from the constant-coefficient solver).
 
-  - lowmach: (experimental) a solver for the low Mach combustion
-    and atmospheric flow equations.
+  - LM-atmosphere: (in development) a solver for the equations of 
+    low Mach number hydrodynamics for atmospheric flows.
+
+  - LM-combustion: (in development) a solver for the equations of
+    low Mach number hydrodynamics for smallscale combustion.
 
 
 ## Working With Data
