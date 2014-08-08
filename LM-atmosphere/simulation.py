@@ -103,6 +103,12 @@ class Simulation:
 
         self.cc_data = my_data
 
+
+        # we also need storage for the 1-d base state -- we'll store this
+        # in the main class directly
+        self.rho0 = numpy.zeros((my_grid.qy), dtype=numpy.float64)
+        self.p0 = numpy.zeros((my_grid.qy), dtype=numpy.float64)
+
         # now set the initial conditions for the problem 
         exec(self.problem_name + '.init_data(self.cc_data, self.rp)')
 
