@@ -79,6 +79,18 @@ def init_data(my_data, base, rp):
         
     
 
+    # do the base state
+    base["rho0"] = numpy.mean(dens, axis=0)
+    base["p0"] = numpy.mean(pres, axis=0)
+
+    # redo the pressure via HSE
+    j = myg.jlo+1
+    while j <= myg.jhi:
+        base["p0"][j] = base["p0"][j-1] + 0.5*myg.dy*(base["rho0"][j] + base["rho0"][j-1])*grav
+        j += 1
+
+
+
 def finalize():
     """ print out any information to the user at the end of the run """
     pass
