@@ -29,6 +29,7 @@ class Simulation:
 
         self.rp = rp
         self.cc_data = None
+        self.base = {}
 
         self.problem_name = problem_name
 
@@ -88,6 +89,9 @@ class Simulation:
         # density
         my_data.register_var("density", bc)
 
+        # we'll keep the internal energy around just as a diagnostic
+        my_data.register_var("eint", bc)
+
         # phi -- used for the projections
         my_data.register_var("phi-MAC", bc)
         my_data.register_var("phi", bc)
@@ -106,11 +110,11 @@ class Simulation:
 
         # we also need storage for the 1-d base state -- we'll store this
         # in the main class directly
-        self.rho0 = numpy.zeros((my_grid.qy), dtype=numpy.float64)
-        self.p0 = numpy.zeros((my_grid.qy), dtype=numpy.float64)
+        self.base["rho0"] = numpy.zeros((my_grid.qy), dtype=numpy.float64)
+        self.base["p0"] = numpy.zeros((my_grid.qy), dtype=numpy.float64)
 
         # now set the initial conditions for the problem 
-        exec(self.problem_name + '.init_data(self.cc_data, self.rp)')
+        exec(self.problem_name + '.init_data(self.cc_data, self.base, self.rp)')
 
 
     def timestep(self):
