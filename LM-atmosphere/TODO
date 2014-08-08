@@ -1,5 +1,5 @@
-This solver will implement a basic low Mach number solver.  We needed
-to start with the incompressible solver and:
+This solver will implement a basic low Mach number solver for atmospheric flows.  
+We need to start with the incompressible solver and:
 
  -- add density evolution
 
@@ -9,17 +9,15 @@ to start with the incompressible solver and:
 
  -- add support for boundary conditions other than periodic
 
- -- need to modify the MG solver to support coefficients
+ -- add a base state functionality
 
- -- add a reaction term
+    o define this from the initial state by taking rho_0 = < rho > and
+      then p_0 by differencing HSE.  We will do FIXED in time.
 
-
-Support 2 modes: combustion and atmospheric flows
 
 
 Problems:
 
  -- bubble rise (which can be compared to the compressible solver)
 
- -- flame
 
