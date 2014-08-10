@@ -4,7 +4,7 @@ import numpy
 import pylab
 
 from incompressible.problems import *
-import incompressible.incomp_interface_f as incomp_interface_f
+import incompressible.lm_interface_f as lm_interface_f
 import mesh.reconstruction_f as reconstruction_f
 import mesh.patch as patch
 import multigrid.MG as MG
@@ -273,9 +273,12 @@ class Simulation:
         elif (limiter == 1): limitFunc = reconstruction_f.limit2
         else: limitFunc = reconstruction_f.limit4
     
+
+        ldelta_rx = limitFunc(1, rho, myg.qx, myg.qy, myg.ng)
         ldelta_ux = limitFunc(1, u, myg.qx, myg.qy, myg.ng)
         ldelta_vx = limitFunc(1, v, myg.qx, myg.qy, myg.ng)
 
+        ldelta_ry = limitFunc(2, rho, myg.qx, myg.qy, myg.ng)
         ldelta_uy = limitFunc(2, u, myg.qx, myg.qy, myg.ng)
         ldelta_vy = limitFunc(2, v, myg.qx, myg.qy, myg.ng)
     
@@ -308,16 +311,16 @@ class Simulation:
         # constitute the MAC grid
         print("  making MAC velocities")
 
-        u_MAC, v_MAC = incomp_interface_f.mac_vels(myg.qx, myg.qy, myg.ng, 
-                                                   myg.dx, myg.dy, dt,
-                                                   u, v,
-                                                   ldelta_ux, ldelta_vx,
-                                                   ldelta_uy, ldelta_vy,
-                                                   gradp_x, gradp_y)
+        u_MAC, v_MAC = lm_interface_f.mac_vels(myg.qx, myg.qy, myg.ng, 
+                                               myg.dx, myg.dy, dt,
+                                               u, v,
+                                               ldelta_ux, ldelta_vx,
+                                               ldelta_uy, ldelta_vy,
+                                               gradp_x, gradp_y)
 
 
         #---------------------------------------------------------------------
-        # do a MAC projection ot make the advective velocities divergence
+        # do a MAC projection to make the advective velocities divergence
         # free
         #---------------------------------------------------------------------
 
@@ -373,8 +376,11 @@ class Simulation:
         #---------------------------------------------------------------------
         # predict rho to the edges
         #---------------------------------------------------------------------
-
-
+        rho_xint, rho_yint = lm_interface_f.rho_states(myg.qx, myg.qy, myg.ng, 
+                                                       myg.dx, myg.dy, dt,
+                                                       rho, u_MAC, v_MAC,
+                                                       ldelta_rx, ldelta_ry)
+        
 
         #---------------------------------------------------------------------
         # do the conservative update of rho
@@ -389,13 +395,13 @@ class Simulation:
         print("  making u, v edge states")
 
         u_xint, v_xint, u_yint, v_yint = \
-               incomp_interface_f.states(myg.qx, myg.qy, myg.ng, 
-                                         myg.dx, myg.dy, dt,
-                                         u, v,
-                                         ldelta_ux, ldelta_vx,
-                                         ldelta_uy, ldelta_vy,
-                                         gradp_x, gradp_y,
-                                         u_MAC, v_MAC)
+               lm_interface_f.states(myg.qx, myg.qy, myg.ng, 
+                                     myg.dx, myg.dy, dt,
+                                     u, v,
+                                     ldelta_ux, ldelta_vx,
+                                     ldelta_uy, ldelta_vy,
+                                     gradp_x, gradp_y,
+                                     u_MAC, v_MAC)
 
 
         #---------------------------------------------------------------------

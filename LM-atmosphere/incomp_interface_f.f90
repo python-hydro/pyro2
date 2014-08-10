@@ -29,7 +29,6 @@ subroutine mac_vels(qx, qy, ng, dx, dy, dt, &
 !f2py depend(qx, qy) :: u, v
 !f2py depend(qx, qy) :: ldelta_ux, ldelta_vx, ldelta_uy, ldelta_vy
 !f2py depend(qx, qy) :: gradp_x, gradp_y
-!f2py depend(qx, qy) :: utrans, vtrans
 !f2py depend(qx, qy) :: u_MAC, v_MAC
 !f2py intent(in) :: u, v, gradp_x, gradp_y
 !f2py intent(in) :: ldelta_ux, ldelta_vx, ldelta_uy, ldelta_vy
@@ -102,7 +101,6 @@ subroutine states(qx, qy, ng, dx, dy, dt, &
 !f2py depend(qx, qy) :: u, v
 !f2py depend(qx, qy) :: ldelta_ux, ldelta_vx, ldelta_uy, ldelta_vy
 !f2py depend(qx, qy) :: gradp_x, gradp_y
-!f2py depend(qx, qy) :: utrans, vtrans
 !f2py depend(qx, qy) :: u_MAC, v_MAC
 !f2py intent(in) :: u, v, gradp_x, gradp_y
 !f2py intent(in) :: ldelta_ux, ldelta_vx, ldelta_uy, ldelta_vy
@@ -133,6 +131,43 @@ subroutine states(qx, qy, ng, dx, dy, dt, &
   call upwind(qx, qy, ng, u_yl, u_yr, v_MAC, u_yint)
   call upwind(qx, qy, ng, v_yl, v_yr, v_MAC, v_yint)
     
+end subroutine states
+
+
+!xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+subroutine rho_states(qx, qy, ng, dx, dy, dt, &
+                      rho, u_MAC, v_MAC, &
+                      ldelta_rx, ldelta_ry, &
+                      rho_xint, rho_yint)
+
+  ! this predicts rho to the interfaces.  We use the MAC velocities to do
+  ! the upwinding
+
+  implicit none
+
+  integer, intent(in) :: qx, qy, ng
+  double precision, intent(in) :: dx, dy, dt
+
+  ! 0-based indexing to match python
+  double precision, intent(inout) :: rho(0:qx-1, 0:qy-1)
+  double precision, intent(inout) :: u_MAC(0:qx-1, 0:qy-1)
+  double precision, intent(inout) :: v_MAC(0:qx-1, 0:qy-1)
+
+  double precision, intent(inout) :: ldelta_rx(0:qx-1, 0:qy-1)
+  double precision, intent(inout) :: ldelta_ry(0:qx-1, 0:qy-1)
+
+  double precision, intent(out) :: rho_xint(0:qx-1, 0:qy-1), rho_yint(0:qx-1, 0:qy-1)  
+
+!f2py depend(qx, qy) :: rho, u_MAC, v_MAC
+!f2py depend(qx, qy) :: ldelta_rx, ldelta_ry
+!f2py intent(in) :: rho, u_MAC, v_MAC
+!f2py intent(in) :: ldelta_rx, ldelta_ry
+!f2py intent(out) :: rho_xint, rho_yint
+
+  double precision :: rho_xl(0:qx-1, 0:qy-1), rho_xr(0:qx-1, 0:qy-1)
+  double precision :: rho_yl(0:qx-1, 0:qy-1), rho_yr(0:qx-1, 0:qy-1)
+
+
 end subroutine states
 
 

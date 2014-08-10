@@ -60,9 +60,6 @@ def density_fluxes(my_data, u_adv, v_adv, rp, dt, scalar_name):
     a = my_data.get_var(scalar_name)
 
 
-    cx = u_adv*dt/my_grid.dx
-    cy = v_adv*dt/my_grid.dy
-
     qx = my_grid.qx
     qy = my_grid.qy    
 
