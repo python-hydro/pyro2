@@ -20,7 +20,7 @@ class Simulation:
         ----------
         problem_name : str
             The name of the problem we wish to run.  This should
-            correspond to one of the modules in incompressible/problems/
+            correspond to one of the modules in LM-atmosphere/problems/
         rp : RuntimeParameters object
             The runtime parameters for the simulation
         timers : TimerCollection object, optional
@@ -41,8 +41,8 @@ class Simulation:
 
     def initialize(self):
         """ 
-        Initialize the grid and variables for incompressible flow and
-        set the initial conditions for the chosen problem.
+        Initialize the grid and variables for low Mach atmospheric flow 
+        and set the initial conditions for the chosen problem.
         """
 
         # setup the grid
@@ -144,9 +144,9 @@ class Simulation:
     def preevolve(self):
         """ 
         preevolve is called before we being the timestepping loop.  For
-        the incompressible solver, this does an initial projection on the
+        the low Mach solver, this does an initial projection on the
         velocity field and then goes through the full evolution to get the
-        value of phi.  The fluid state (u, v) is then reset to values
+        value of phi.  The fluid state (rho, u, v) is then reset to values
         before this evolve.
         """
         
@@ -248,9 +248,10 @@ class Simulation:
 
     def evolve(self, dt):
         """ 
-        Evolve the incompressible equations through one timestep. 
+        Evolve the low Mach system through one timestep. 
         """
     
+        rho = self.cc_data.get_var("density")
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
 
@@ -267,7 +268,7 @@ class Simulation:
         #---------------------------------------------------------------------
         # create the limited slopes of u and v (in both directions)
         #---------------------------------------------------------------------
-        limiter = self.rp.get_param("incompressible.limiter")
+        limiter = self.rp.get_param("lowmach.limiter")
         if (limiter == 0): limitFunc = reconstruction_f.nolimit
         elif (limiter == 1): limitFunc = reconstruction_f.limit2
         else: limitFunc = reconstruction_f.limit4
@@ -370,6 +371,18 @@ class Simulation:
 
 
         #---------------------------------------------------------------------
+        # predict rho to the edges
+        #---------------------------------------------------------------------
+
+
+
+        #---------------------------------------------------------------------
+        # do the conservative update of rho
+        #---------------------------------------------------------------------
+
+
+
+        #---------------------------------------------------------------------
         # recompute the interface states, using the advective velocity
         # from above
         #---------------------------------------------------------------------
@@ -418,7 +431,7 @@ class Simulation:
              v_yint[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1])/myg.dy 
 
              
-        proj_type = self.rp.get_param("incompressible.proj_type")
+        proj_type = self.rp.get_param("lowmach.proj_type")
 
         if (proj_type == 1):
             u[:,:] -= (dt*advect_x[:,:] + dt*gradp_x[:,:])
