@@ -29,7 +29,6 @@ subroutine mac_vels(qx, qy, ng, dx, dy, dt, &
 !f2py depend(qx, qy) :: u, v
 !f2py depend(qx, qy) :: ldelta_ux, ldelta_vx, ldelta_uy, ldelta_vy
 !f2py depend(qx, qy) :: gradp_x, gradp_y
-!f2py depend(qx, qy) :: utrans, vtrans
 !f2py depend(qx, qy) :: u_MAC, v_MAC
 !f2py intent(in) :: u, v, gradp_x, gradp_y
 !f2py intent(in) :: ldelta_ux, ldelta_vx, ldelta_uy, ldelta_vy
@@ -102,7 +101,6 @@ subroutine states(qx, qy, ng, dx, dy, dt, &
 !f2py depend(qx, qy) :: u, v
 !f2py depend(qx, qy) :: ldelta_ux, ldelta_vx, ldelta_uy, ldelta_vy
 !f2py depend(qx, qy) :: gradp_x, gradp_y
-!f2py depend(qx, qy) :: utrans, vtrans
 !f2py depend(qx, qy) :: u_MAC, v_MAC
 !f2py intent(in) :: u, v, gradp_x, gradp_y
 !f2py intent(in) :: ldelta_ux, ldelta_vx, ldelta_uy, ldelta_vy
