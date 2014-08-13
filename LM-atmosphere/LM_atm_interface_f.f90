@@ -167,6 +167,13 @@ subroutine rho_states(qx, qy, ng, dx, dy, dt, &
   double precision :: rho_xl(0:qx-1, 0:qy-1), rho_xr(0:qx-1, 0:qy-1)
   double precision :: rho_yl(0:qx-1, 0:qy-1), rho_yr(0:qx-1, 0:qy-1)
 
+  integer :: ilo, ihi, jlo, jhi
+  integer :: nx, ny
+  integer :: i, j
+
+  double precision :: dtdx, dtdy
+  double precision :: u_x, v_y, rhov_y, rhou_x
+
   nx = qx - 2*ng; ny = qy - 2*ng
   ilo = ng; ihi = ng+nx-1; jlo = ng; jhi = ng+ny-1
 
@@ -212,8 +219,8 @@ subroutine rho_states(qx, qy, ng, dx, dy, dt, &
         ! rho v_y is the non-advective piece for the y-interfaces
         rhou_x = (rho_xint(i+1,j)*u_MAC(i+1,j) - rho_xint(i,j)*u_MAC(i,j))/dx
 
-        rho_yl(i,j+1) = rho_yl(i,j+1) - 0.5*dt*(rhou_y + rho(i,j)*v_y)
-        rho_yr(i,j  ) = rho_yr(i,j  ) - 0.5*dt*(rhou_y + rho(i,j)*v_y)
+        rho_yl(i,j+1) = rho_yl(i,j+1) - 0.5*dt*(rhou_x + rho(i,j)*v_y)
+        rho_yr(i,j  ) = rho_yr(i,j  ) - 0.5*dt*(rhou_x + rho(i,j)*v_y)
 
      enddo
   enddo
