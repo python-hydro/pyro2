@@ -87,10 +87,10 @@ pyro provides the following solvers (all in 2-d):
     variable-coefficient Poisson equation (which inherits from the
     constant-coefficient solver).
 
-  - `LM-atmosphere`: (in development) a solver for the equations of 
+  - `LM_atmosphere`: (in development) a solver for the equations of 
     low Mach number hydrodynamics for atmospheric flows.
 
-  - `LM-combustion`: (in development) a solver for the equations of
+  - `LM_combustion`: (in development) a solver for the equations of
     low Mach number hydrodynamics for smallscale combustion.
 
 
