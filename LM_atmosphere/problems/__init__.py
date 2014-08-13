@@ -1,2 +1,2 @@
-__all__ = ['bubblerise']
+__all__ = ['bubble']
 
