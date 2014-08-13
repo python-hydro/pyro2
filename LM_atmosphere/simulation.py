@@ -385,7 +385,19 @@ class Simulation:
         #---------------------------------------------------------------------
         # do the conservative update of rho
         #---------------------------------------------------------------------
-
+        rho[myg.ilo:myg.ihi+1,myg.jlo:myg:jhi+1] -= dt*(
+            # 
+            (rho_xint[myg.ilo+1:myg.ihi+2,myg.jlo:myg:jhi+1]*
+             u_MAC[myg.ilo+1:myg.ihi+2,myg.jlo:myg:jhi+1] -
+             rho_xint[myg.ilo:myg.ihi+1,myg.jlo:myg:jhi+1]*
+             u_MAC[myg.ilo:myg.ihi+1,myg.jlo:myg:jhi+1])/myg.dx +
+            #
+            (rho_yint[myg.ilo:myg.ihi+1,myg.jlo+1:myg:jhi+2]*
+             v_MAC[myg.ilo:myg.ihi+1,myg.jlo+1:myg:jhi+2] -
+             rho_yint[myg.ilo:myg.ihi+1,myg.jlo:myg:jhi+1]*
+             v_MAC[myg.ilo:myg.ihi+1,myg.jlo:myg:jhi+1])/myg.dy )
+            
+        
 
 
         #---------------------------------------------------------------------
