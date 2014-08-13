@@ -7,7 +7,7 @@ from LM_atmosphere.problems import *
 import LM_atmosphere.LM_atm_interface_f as lm_interface_f
 import mesh.reconstruction_f as reconstruction_f
 import mesh.patch as patch
-import multigrid.MG as MG
+import multigrid.variable_coeff_MG as vcMG
 from util import profile
 
 class Simulation:
@@ -173,14 +173,14 @@ class Simulation:
 
         # next create the multigrid object.  We defined phi with
         # the right BCs previously
-        mg = MG.CellCenterMG2d(myg.nx, myg.ny,
-                               xl_BC_type=self.cc_data.BCs["phi"].xlb, 
-                               xr_BC_type=self.cc_data.BCs["phi"].xrb,
-                               yl_BC_type=self.cc_data.BCs["phi"].ylb, 
-                               yr_BC_type=self.cc_data.BCs["phi"].yrb,
-                               xmin=myg.xmin, xmax=myg.xmax,
-                               ymin=myg.ymin, ymax=myg.ymax,
-                               verbose=0)
+        mg = vcMG.VarCoeffCCMG2d(myg.nx, myg.ny,
+                                 xl_BC_type=self.cc_data.BCs["phi"].xlb, 
+                                 xr_BC_type=self.cc_data.BCs["phi"].xrb,
+                                 yl_BC_type=self.cc_data.BCs["phi"].ylb, 
+                                 yr_BC_type=self.cc_data.BCs["phi"].yrb,
+                                 xmin=myg.xmin, xmax=myg.xmax,
+                                 ymin=myg.ymin, ymax=myg.ymax,
+                                 verbose=0)
 
         # first compute divU
         divU = mg.soln_grid.scratch_array()
@@ -336,29 +336,31 @@ class Simulation:
         # we will solve D (beta_0^2/rho) G phi = D (beta_0 U^MAC), where
         # phi is cell centered, and U^MAC is the MAC-type staggered
         # grid of the advective velocities.  
+        beta0 = self.base["beta0"]
+        beta0_edge = self.base["beta0-edge"]
 
         print("  MAC projection")
 
-        # NEED TO INITIALIZE THE COEFFICIENTS
-
+        # create the coefficient array: beta0**2/rho
+        coeff = 1.0/rho[:,:]
+        coeff = coeff*beta0[:,np.newaxis]**2
+        
         # create the multigrid object
-        mg = MG.CellCenterMG2d(myg.nx, myg.ny,
-                               xl_BC_type=self.cc_data.BCs["phi-MAC"].xlb, 
-                               xr_BC_type=self.cc_data.BCs["phi-MAC"].xrb,
-                               yl_BC_type=self.cc_data.BCs["phi-MAC"].ylb, 
-                               yr_BC_type=self.cc_data.BCs["phi-MAC"].yrb,
-                               xmin=myg.xmin, xmax=myg.xmax,
-                               ymin=myg.ymin, ymax=myg.ymax,
-                               verbose=0)
+        mg = vcMG.VarCoeffCCMG2d(myg.nx, myg.ny,
+                                 xl_BC_type=self.cc_data.BCs["phi-MAC"].xlb, 
+                                 xr_BC_type=self.cc_data.BCs["phi-MAC"].xrb,
+                                 yl_BC_type=self.cc_data.BCs["phi-MAC"].ylb, 
+                                 yr_BC_type=self.cc_data.BCs["phi-MAC"].yrb,
+                                 xmin=myg.xmin, xmax=myg.xmax,
+                                 ymin=myg.ymin, ymax=myg.ymax,
+                                 coeffs=coeff, 
+                                 coeffs_bc=self.cc_data.BCs["density"],
+                                 verbose=0)
 
         # first compute div(beta U)
         div_beta_U = mg.soln_grid.scratch_array()
 
-
-        beta0 = self.base["beta0"]
-        beta0_edge = self.base["beta0-edge"]
-
-        # MAC velocities are edge-centered.  divU is cell-centered.
+        # MAC velocities are edge-centered.  div(beta U) is cell-centered.
         div_beta_U[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
             beta0[myg.jlo:myg.jhi+1]*(
                 u_MAC[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
@@ -373,52 +375,51 @@ class Simulation:
         mg.init_RHS(divU)
         mg.solve(rtol=1.e-12)
 
-        # NEED TO ADD THE beta0 to gradp
 
         # update the normal velocities with the pressure gradient -- these
-        # constitute our advective velocities
+        # constitute our advective velocities.  Note that what we actually
+        # solved for here is phi/beta_0
         phi_MAC = self.cc_data.get_var("phi-MAC")
         solution = mg.get_solution()
 
         phi_MAC[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2] = \
             solution[mg.ilo-1:mg.ihi+2,mg.jlo-1:mg.jhi+2]
 
+        coeff = 1.0/rho[:,:]
+        coeff = coeff*beta0[:,np.newaxis]
+
         # we need the MAC velocities on all edges of the computational domain
         u_MAC[myg.ilo:myg.ihi+2,myg.jlo:myg.jhi+1] -= \
-            (phi_MAC[myg.ilo  :myg.ihi+2,myg.jlo:myg.jhi+1] -
-             phi_MAC[myg.ilo-1:myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx
+                coeff[myg.ilo  :myg.ihi+2,myg.jlo:myg.jhi+1]* \
+                (phi_MAC[myg.ilo  :myg.ihi+2,myg.jlo:myg.jhi+1] -
+                 phi_MAC[myg.ilo-1:myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx
 
         v_MAC[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+2] -= \
-            (phi_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+2] -
-             phi_MAC[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi+1])/myg.dy
+                coeff[myg.ilo  :myg.ihi+2,myg.jlo:myg.jhi+1]* \
+                (phi_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+2] -
+                 phi_MAC[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi+1])/myg.dy
 
 
         #---------------------------------------------------------------------
-        # predict rho to the edges
+        # predict rho to the edges and do its conservative update
         #---------------------------------------------------------------------
         rho_xint, rho_yint = lm_interface_f.rho_states(myg.qx, myg.qy, myg.ng, 
                                                        myg.dx, myg.dy, dt,
                                                        rho, u_MAC, v_MAC,
                                                        ldelta_rx, ldelta_ry)
         
-
-        #---------------------------------------------------------------------
-        # do the conservative update of rho
-        #---------------------------------------------------------------------
         rho[myg.ilo:myg.ihi+1,myg.jlo:myg:jhi+1] -= dt*(
-            # 
+            #  (rho u)_x
             (rho_xint[myg.ilo+1:myg.ihi+2,myg.jlo:myg:jhi+1]*
              u_MAC[myg.ilo+1:myg.ihi+2,myg.jlo:myg:jhi+1] -
              rho_xint[myg.ilo:myg.ihi+1,myg.jlo:myg:jhi+1]*
              u_MAC[myg.ilo:myg.ihi+1,myg.jlo:myg:jhi+1])/myg.dx +
-            #
+            #  (rho v)_y
             (rho_yint[myg.ilo:myg.ihi+1,myg.jlo+1:myg:jhi+2]*
              v_MAC[myg.ilo:myg.ihi+1,myg.jlo+1:myg:jhi+2] -
              rho_yint[myg.ilo:myg.ihi+1,myg.jlo:myg:jhi+1]*
              v_MAC[myg.ilo:myg.ihi+1,myg.jlo:myg:jhi+1])/myg.dy )
-            
-        
-
+                        
 
         #---------------------------------------------------------------------
         # recompute the interface states, using the advective velocity
@@ -439,7 +440,6 @@ class Simulation:
         #---------------------------------------------------------------------
         # update U to get the provisional velocity field
         #---------------------------------------------------------------------
-
         print("  doing provisional update of u, v")
 
         # compute (U.grad)U
