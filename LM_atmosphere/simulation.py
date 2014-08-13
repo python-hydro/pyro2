@@ -116,6 +116,15 @@ class Simulation:
         # now set the initial conditions for the problem 
         exec(self.problem_name + '.init_data(self.cc_data, self.base, self.rp)')
 
+        # Construct beta_0
+        self.base["beta0"] = self.base["p0"]**(1.0/gamma)
+
+        # we'll also need beta_0 on edges
+        self.base["beta0-edges"] = numpy.zeros((my_grid.qy), dtype=numpy.float64)        
+        self.base["beta0-edges"][myg.ilo:myg.ihi+2] = \
+            0.5*(self.base["beta0"][myg.ilo-1:myg.ihi+1] +
+                 self.base["beta0"][myg.ilo  :myg.ihi+2])
+
 
     def timestep(self):
         """
@@ -324,11 +333,13 @@ class Simulation:
         # free
         #---------------------------------------------------------------------
 
-        # we will solve L phi = D U^MAC, where phi is cell centered, and
-        # U^MAC is the MAC-type staggered grid of the advective
-        # velocities.
+        # we will solve D (beta_0^2/rho) G phi = D (beta_0 U^MAC), where
+        # phi is cell centered, and U^MAC is the MAC-type staggered
+        # grid of the advective velocities.  
 
         print("  MAC projection")
+
+        # NEED TO INITIALIZE THE COEFFICIENTS
 
         # create the multigrid object
         mg = MG.CellCenterMG2d(myg.nx, myg.ny,
@@ -340,20 +351,29 @@ class Simulation:
                                ymin=myg.ymin, ymax=myg.ymax,
                                verbose=0)
 
-        # first compute divU
-        divU = mg.soln_grid.scratch_array()
+        # first compute div(beta U)
+        div_beta_U = mg.soln_grid.scratch_array()
+
+
+        beta0 = self.base["beta0"]
+        beta0_edge = self.base["beta0-edge"]
 
         # MAC velocities are edge-centered.  divU is cell-centered.
-        divU[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
-            (u_MAC[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
-             u_MAC[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx + \
-            (v_MAC[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
+        div_beta_U[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
+            beta0[myg.jlo:myg.jhi+1]*(
+                u_MAC[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
+                u_MAC[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx + \
+            (beta0_edge[myg.jlo+1:myg.jhi+2]*
+             v_MAC[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
+             beta0_edge[myg.jlo  :myg.jhi+1]*
              v_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1])/myg.dy
     
         # solve the Poisson problem
         mg.init_zeros()
         mg.init_RHS(divU)
         mg.solve(rtol=1.e-12)
+
+        # NEED TO ADD THE beta0 to gradp
 
         # update the normal velocities with the pressure gradient -- these
         # constitute our advective velocities
