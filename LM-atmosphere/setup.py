@@ -6,8 +6,8 @@ from numpy.distutils.core import setup, Extension
 
 extra_link_args=[]
 
-ext = Extension("incomp_interface_f", 
-                ["incomp_interface_f.f90"])
+ext = Extension("LM_atm_interface_f", 
+                ["LM_atm_interface_f.f90"])
 
 setup(ext_modules=[ext])
 
