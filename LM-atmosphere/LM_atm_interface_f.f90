@@ -167,8 +167,62 @@ subroutine rho_states(qx, qy, ng, dx, dy, dt, &
   double precision :: rho_xl(0:qx-1, 0:qy-1), rho_xr(0:qx-1, 0:qy-1)
   double precision :: rho_yl(0:qx-1, 0:qy-1), rho_yr(0:qx-1, 0:qy-1)
 
+  nx = qx - 2*ng; ny = qy - 2*ng
+  ilo = ng; ihi = ng+nx-1; jlo = ng; jhi = ng+ny-1
 
-end subroutine states
+  dtdx = dt/dx
+  dtdy = dt/dy
+
+  do j = jlo-2, jhi+2
+     do i = ilo-2, ihi+2        
+
+        ! u on x-edges
+        rho_xl(i+1,j) = rho(i,j) + 0.5d0*(1.0d0 - dtdx*u_MAC(i+1,j))*ldelta_rx(i,j)
+        rho_xr(i  ,j) = rho(i,j) - 0.5d0*(1.0d0 + dtdx*u_MAC(i,j))*ldelta_rx(i,j)
+
+        ! u on y-edges 
+        rho_yl(i,j+1) = rho(i,j) + 0.5d0*(1.0d0 - dtdy*v_MAC(i,j+1))*ldelta_ry(i,j)
+        rho_yr(i,j  ) = rho(i,j) - 0.5d0*(1.0d0 + dtdy*v_MAC(i,j))*ldelta_ry(i,j)
+
+     enddo
+  enddo
+
+
+  ! we upwind based on the MAC velocities
+  call upwind(qx, qy, ng, rho_xl, rho_xr, u_MAC, rho_xint)
+  call upwind(qx, qy, ng, rho_yl, rho_yr, v_MAC, rho_yint)
+
+
+  ! now add the transverse term and the non-advective part of the normal
+  ! divergence
+  do j = jlo-2, jhi+2
+     do i = ilo-2, ihi+2        
+
+        u_x = (u_MAC(i+1,j) - u_MAC(i,j))/dx
+        v_y = (v_MAC(i,j+1) - v_MAC(i,j))/dy
+
+        ! (rho v)_y is the transverse term for the x-interfaces
+        ! rho u_x is the non-advective piece for the x-interfaces
+        rhov_y = (rho_yint(i,j+1)*v_MAC(i,j+1) - rho_yint(i,j)*v_MAC(i,j))/dy
+
+        rho_xl(i+1,j) = rho_xl(i+1,j) - 0.5*dt*(rhov_y + rho(i,j)*u_x)
+        rho_xr(i  ,j) = rho_xr(i  ,j) - 0.5*dt*(rhov_y + rho(i,j)*u_x)
+
+        ! (rho u)_x is the transverse term for the y-interfaces
+        ! rho v_y is the non-advective piece for the y-interfaces
+        rhou_x = (rho_xint(i+1,j)*u_MAC(i+1,j) - rho_xint(i,j)*u_MAC(i,j))/dx
+
+        rho_yl(i,j+1) = rho_yl(i,j+1) - 0.5*dt*(rhou_y + rho(i,j)*v_y)
+        rho_yr(i,j  ) = rho_yr(i,j  ) - 0.5*dt*(rhou_y + rho(i,j)*v_y)
+
+     enddo
+  enddo
+
+  ! finally upwind the full states
+  call upwind(qx, qy, ng, rho_xl, rho_xr, u_MAC, rho_xint)
+  call upwind(qx, qy, ng, rho_yl, rho_yr, v_MAC, rho_yint)  
+
+end subroutine rho_states
 
 
 !xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
