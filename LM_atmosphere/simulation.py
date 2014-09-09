@@ -362,12 +362,12 @@ class Simulation:
 
         # MAC velocities are edge-centered.  div(beta U) is cell-centered.
         div_beta_U[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
-            beta0[myg.jlo:myg.jhi+1]*(
+            beta0[myg.jlo:myg.jhi+1,np.newaxis]*(
                 u_MAC[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
                 u_MAC[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx + \
-            (beta0_edge[myg.jlo+1:myg.jhi+2]*
+            (beta0_edge[myg.jlo+1:myg.jhi+2,np.newaxis]*
              v_MAC[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
-             beta0_edge[myg.jlo  :myg.jhi+1]*
+             beta0_edge[myg.jlo  :myg.jhi+1,np.newaxis]*
              v_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1])/myg.dy
     
         # solve the Poisson problem
@@ -489,27 +489,36 @@ class Simulation:
 
         # now we solve L phi = D (U* /dt)
         print("  final projection")
+
+        # create the coefficient array: beta0**2/rho
+        coeff = 1.0/rho[:,:]
+        coeff = coeff*beta0[:,np.newaxis]**2
     
         # create the multigrid object
-        mg = MG.CellCenterMG2d(myg.nx, myg.ny,
-                               xl_BC_type=self.cc_data.BCs["phi"].xlb, 
-                               xr_BC_type=self.cc_data.BCs["phi"].xrb,
-                               yl_BC_type=self.cc_data.BCs["phi"].ylb, 
-                               yr_BC_type=self.cc_data.BCs["phi"].yrb,
-                               xmin=myg.xmin, xmax=myg.xmax,
-                               ymin=myg.ymin, ymax=myg.ymax,
-                               verbose=0)
+        mg = vcMG.VarCoeffCCMG2d(myg.nx, myg.ny,
+                                 xl_BC_type=self.cc_data.BCs["phi"].xlb, 
+                                 xr_BC_type=self.cc_data.BCs["phi"].xrb,
+                                 yl_BC_type=self.cc_data.BCs["phi"].ylb, 
+                                 yr_BC_type=self.cc_data.BCs["phi"].yrb,
+                                 xmin=myg.xmin, xmax=myg.xmax,
+                                 ymin=myg.ymin, ymax=myg.ymax,
+                                 coeffs=coeff, 
+                                 coeffs_bc=self.cc_data.BCs["density"],
+                                 verbose=0)
 
         # first compute divU
 
         # u/v are cell-centered, divU is cell-centered    
-        divU[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
-            0.5*(u[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
+        div_beta_U[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
+            0.5*beta0[mg.jlo:mg.jhi+1,np.newaxis]*
+                (u[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
                  u[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1])/myg.dx + \
-            0.5*(v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
+            0.5*(beta0[myg.jlo+1:myg.jhi+2,np.newaxis]*
+                 v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
+                 beta0[myg.jlo-1:myg.jhi  ,np.newaxis]*
                  v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
     
-        mg.init_RHS(divU/dt)
+        mg.init_RHS(div_beta_U/dt)
 
         # use the old phi as our initial guess
         phiGuess = mg.soln_grid.scratch_array()
