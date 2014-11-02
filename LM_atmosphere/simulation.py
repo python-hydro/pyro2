@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-import numpy
+import numpy as np
 import pylab
 
 from LM_atmosphere.problems import *
@@ -113,8 +113,8 @@ class Simulation:
 
         # we also need storage for the 1-d base state -- we'll store this
         # in the main class directly
-        self.base["rho0"] = numpy.zeros((myg.qy), dtype=numpy.float64)
-        self.base["p0"] = numpy.zeros((myg.qy), dtype=numpy.float64)
+        self.base["rho0"] = np.zeros((myg.qy), dtype=np.float64)
+        self.base["p0"] = np.zeros((myg.qy), dtype=np.float64)
 
         # now set the initial conditions for the problem 
         exec(self.problem_name + '.init_data(self.cc_data, self.base, self.rp)')
@@ -124,7 +124,7 @@ class Simulation:
         self.base["beta0"] = self.base["p0"]**(1.0/gamma)
 
         # we'll also need beta_0 on edges
-        self.base["beta0-edges"] = numpy.zeros((myg.qy), dtype=numpy.float64)        
+        self.base["beta0-edges"] = np.zeros((myg.qy), dtype=np.float64)        
         self.base["beta0-edges"][myg.ilo:myg.ihi+2] = \
             0.5*(self.base["beta0"][myg.ilo-1:myg.ihi+1] +
                  self.base["beta0"][myg.ilo  :myg.ihi+2])
@@ -165,6 +165,7 @@ class Simulation:
         
         myg = self.cc_data.grid
 
+        rho = self.cc_data.get_var("density")
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
 
@@ -177,6 +178,10 @@ class Simulation:
 
         # next create the multigrid object.  We defined phi with
         # the right BCs previously
+        coeff = 1.0/rho[:,:]
+        beta0 = self.base["beta0"]
+        coeff = coeff*beta0[:,np.newaxis]**2
+
         mg = vcMG.VarCoeffCCMG2d(myg.nx, myg.ny,
                                  xl_BC_type=self.cc_data.BCs["phi"].xlb, 
                                  xr_BC_type=self.cc_data.BCs["phi"].xrb,
@@ -184,6 +189,8 @@ class Simulation:
                                  yr_BC_type=self.cc_data.BCs["phi"].yrb,
                                  xmin=myg.xmin, xmax=myg.xmax,
                                  ymin=myg.ymin, ymax=myg.ymax,
+                                 coeffs=coeff, 
+                                 coeffs_bc=self.cc_data.BCs["density"],
                                  verbose=0)
 
         # first compute divU
@@ -607,8 +614,8 @@ class Simulation:
             ax = axes.flat[n]
     
             f = fields[n]
-            img = ax.imshow(numpy.transpose(f[myg.ilo:myg.ihi+1,
-                                              myg.jlo:myg.jhi+1]), 
+            img = ax.imshow(np.transpose(f[myg.ilo:myg.ihi+1,
+                                           myg.jlo:myg.jhi+1]), 
                             interpolation="nearest", origin="lower",
                             extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
