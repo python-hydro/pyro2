@@ -57,9 +57,9 @@ class Simulation:
         ymin = self.rp.get_param("mesh.ymin")
         ymax = self.rp.get_param("mesh.ymax")
     
-        my_grid = patch.Grid2d(nx, ny, 
-                               xmin=xmin, xmax=xmax, 
-                               ymin=ymin, ymax=ymax, ng=4)
+        myg = patch.Grid2d(nx, ny, 
+                           xmin=xmin, xmax=xmax, 
+                           ymin=ymin, ymax=ymax, ng=4)
 
 
         # create the variables
@@ -83,7 +83,7 @@ class Simulation:
                                  ylb=ylb_type, yrb=yrb_type,
                                  odd_reflect_dir="y")
         
-        my_data = patch.CellCenterData2d(my_grid)
+        my_data = patch.CellCenterData2d(myg)
 
         # velocities
         my_data.register_var("x-velocity", bc_xodd)
@@ -113,17 +113,18 @@ class Simulation:
 
         # we also need storage for the 1-d base state -- we'll store this
         # in the main class directly
-        self.base["rho0"] = numpy.zeros((my_grid.qy), dtype=numpy.float64)
-        self.base["p0"] = numpy.zeros((my_grid.qy), dtype=numpy.float64)
+        self.base["rho0"] = numpy.zeros((myg.qy), dtype=numpy.float64)
+        self.base["p0"] = numpy.zeros((myg.qy), dtype=numpy.float64)
 
         # now set the initial conditions for the problem 
         exec(self.problem_name + '.init_data(self.cc_data, self.base, self.rp)')
 
         # Construct beta_0
+        gamma = self.rp.get_param("eos.gamma")
         self.base["beta0"] = self.base["p0"]**(1.0/gamma)
 
         # we'll also need beta_0 on edges
-        self.base["beta0-edges"] = numpy.zeros((my_grid.qy), dtype=numpy.float64)        
+        self.base["beta0-edges"] = numpy.zeros((myg.qy), dtype=numpy.float64)        
         self.base["beta0-edges"][myg.ilo:myg.ihi+2] = \
             0.5*(self.base["beta0"][myg.ilo-1:myg.ihi+1] +
                  self.base["beta0"][myg.ilo  :myg.ihi+2])

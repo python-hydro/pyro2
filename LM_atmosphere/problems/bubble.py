@@ -41,10 +41,9 @@ def init_data(my_data, base, rp):
     yvel[:,:] = 0.0
     dens[:,:] = dens_cutoff
 
-    pres = myg.scratch_array()
-
     # set the density to be stratified in the y-direction
     myg = my_data.grid
+    pres = myg.scratch_array()
 
     j = myg.jlo
     while j <= myg.jhi:
