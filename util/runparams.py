@@ -228,6 +228,17 @@ class RuntimeParameters:
         print(" ")
     
 
+    def __str__(self):
+        ostr = ""
+        keys = list(self.params.keys())
+        keys.sort()
+
+        for key in keys:
+            ostr += "{} = {}\n".format(key, self.params[key])
+
+        return ostr
+
+
     def print_paramfile(self):
         """
         Create a file, inputs.auto, that has the structure of a pyro
