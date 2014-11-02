@@ -28,6 +28,9 @@ class Simulation:
         """
 
         self.rp = rp
+
+        print(rp)
+
         self.cc_data = None
         self.base = {}
 
@@ -510,10 +513,10 @@ class Simulation:
 
         # u/v are cell-centered, divU is cell-centered    
         div_beta_U[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
-            0.5*beta0[mg.jlo:mg.jhi+1,np.newaxis]*
+            0.5*beta0[mg.jlo:mg.jhi+1,np.newaxis]* \
                 (u[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
                  u[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1])/myg.dx + \
-            0.5*(beta0[myg.jlo+1:myg.jhi+2,np.newaxis]*
+            0.5*(beta0[myg.jlo+1:myg.jhi+2,np.newaxis]* \
                  v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
                  beta0[myg.jlo-1:myg.jhi  ,np.newaxis]*
                  v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
