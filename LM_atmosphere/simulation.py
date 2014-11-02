@@ -146,6 +146,9 @@ class Simulation:
         v = self.cc_data.get_var("y-velocity")
     
         # the timestep is min(dx/|u|, dy|v|)
+        # TODO: we need an alternate timestep that accounts for
+        # buoyancy, to handle the case where the velocity is
+        # initially zero.
         xtmp = self.cc_data.grid.dx/(abs(u))
         ytmp = self.cc_data.grid.dy/(abs(v))
 
@@ -178,9 +181,9 @@ class Simulation:
 
         # next create the multigrid object.  We defined phi with
         # the right BCs previously
-        coeff = 1.0/rho[:,:]
+        coeff = 1.0/rho[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]
         beta0 = self.base["beta0"]
-        coeff = coeff*beta0[:,np.newaxis]**2
+        coeff = coeff*beta0[myg.jlo-1:myg.jhi+2,np.newaxis]**2
 
         mg = vcMG.VarCoeffCCMG2d(myg.nx, myg.ny,
                                  xl_BC_type=self.cc_data.BCs["phi"].xlb, 
