@@ -22,7 +22,7 @@ def init_data(my_data, base, rp):
     yvel = my_data.get_var("y-velocity")
     eint = my_data.get_var("eint")
 
-    grav = rp.get_param("LM-atmosphere.grav")
+    grav = rp.get_param("lm-atmosphere.grav")
 
     gamma = rp.get_param("eos.gamma")
 
