@@ -140,19 +140,39 @@ class Simulation:
         step we actually take.
         """
 
+        myg = self.cc_data.grid
+
         cfl = self.rp.get_param("driver.cfl")
     
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
     
         # the timestep is min(dx/|u|, dy|v|)
-        # TODO: we need an alternate timestep that accounts for
+        if not (u.max() == 0 or v.max() == 0):
+            xtmp = myg.dx/(abs(u))
+            ytmp = myg.dy/(abs(v))
+
+            dt = cfl*min(xtmp.min(), ytmp.min())
+        else:
+            # a large number we'll reset below
+            dt = 1.e33
+
+        # We need an alternate timestep that accounts for
         # buoyancy, to handle the case where the velocity is
         # initially zero.
-        xtmp = self.cc_data.grid.dx/(abs(u))
-        ytmp = self.cc_data.grid.dy/(abs(v))
+        rho = self.cc_data.get_var("density")    
+        rho0 = self.base["rho0"]
+        rhoprime = rho - rho0[:,np.newaxis]
 
-        dt = cfl*min(xtmp.min(), ytmp.min())
+        g = self.rp.get_param("lm-atmosphere.grav")
+
+        F_buoy = np.max(np.abs(rhoprime[myg.ilo:myg.ihi+2,myg.jlo:myg.jhi+2]*g)/
+                        rho[myg.ilo:myg.ihi+2,myg.jlo:myg.jhi+2])
+
+        dt_buoy = np.sqrt(2.0*myg.dx/F_buoy)
+
+        dt = min(dt, dt_buoy)
+        print("timestep is {}".format(dt))
 
         return dt
 
@@ -291,7 +311,7 @@ class Simulation:
         #---------------------------------------------------------------------
         # create the limited slopes of u and v (in both directions)
         #---------------------------------------------------------------------
-        limiter = self.rp.get_param("lowmach.limiter")
+        limiter = self.rp.get_param("lm-atmosphere.limiter")
         if (limiter == 0): limitFunc = reconstruction_f.nolimit
         elif (limiter == 1): limitFunc = reconstruction_f.limit2
         else: limitFunc = reconstruction_f.limit4
