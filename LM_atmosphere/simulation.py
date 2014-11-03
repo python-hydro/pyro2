@@ -503,7 +503,7 @@ class Simulation:
              v_yint[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1])/myg.dy 
 
              
-        proj_type = self.rp.get_param("lowmach.proj_type")
+        proj_type = self.rp.get_param("lm-atmosphere.proj_type")
 
         if (proj_type == 1):
             u[:,:] -= (dt*advect_x[:,:] + dt*gradp_x[:,:])
