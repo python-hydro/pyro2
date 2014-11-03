@@ -312,8 +312,8 @@ class Simulation:
         # create the limited slopes of u and v (in both directions)
         #---------------------------------------------------------------------
         limiter = self.rp.get_param("lm-atmosphere.limiter")
-        if (limiter == 0): limitFunc = reconstruction_f.nolimit
-        elif (limiter == 1): limitFunc = reconstruction_f.limit2
+        if limiter == 0: limitFunc = reconstruction_f.nolimit
+        elif limiter == 1: limitFunc = reconstruction_f.limit2
         else: limitFunc = reconstruction_f.limit4
     
 

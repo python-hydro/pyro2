@@ -1,0 +1,5 @@
+-- we are not correcting the velocity field after the projections
+   correctly -- the beta/rho weighting is not there
+
+-- we are solving for (phi/beta) when we do the energy fix -- make
+   sure we are consistent there.
