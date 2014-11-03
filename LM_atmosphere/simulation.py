@@ -371,13 +371,13 @@ class Simulation:
         # phi is cell centered, and U^MAC is the MAC-type staggered
         # grid of the advective velocities.  
         beta0 = self.base["beta0"]
-        beta0_edge = self.base["beta0-edge"]
+        beta0_edges = self.base["beta0-edges"]
 
         print("  MAC projection")
 
         # create the coefficient array: beta0**2/rho
-        coeff = 1.0/rho[:,:]
-        coeff = coeff*beta0[:,np.newaxis]**2
+        coeff = 1.0/rho[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]
+        coeff = coeff*beta0[myg.jlo-1:myg.jhi+2,np.newaxis]**2
         
         # create the multigrid object
         mg = vcMG.VarCoeffCCMG2d(myg.nx, myg.ny,
@@ -399,9 +399,9 @@ class Simulation:
             beta0[myg.jlo:myg.jhi+1,np.newaxis]*(
                 u_MAC[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
                 u_MAC[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx + \
-            (beta0_edge[myg.jlo+1:myg.jhi+2,np.newaxis]*
+            (beta0_edges[myg.jlo+1:myg.jhi+2,np.newaxis]*
              v_MAC[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
-             beta0_edge[myg.jlo  :myg.jhi+1,np.newaxis]*
+             beta0_edges[myg.jlo  :myg.jhi+1,np.newaxis]*
              v_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1])/myg.dy
     
         # solve the Poisson problem
@@ -525,8 +525,8 @@ class Simulation:
         print("  final projection")
 
         # create the coefficient array: beta0**2/rho
-        coeff = 1.0/rho[:,:]
-        coeff = coeff*beta0[:,np.newaxis]**2
+        coeff = 1.0/rho[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]
+        coeff = coeff*beta0[myg.jlo-1:myg.jhi+2,np.newaxis]**2
     
         # create the multigrid object
         mg = vcMG.VarCoeffCCMG2d(myg.nx, myg.ny,
