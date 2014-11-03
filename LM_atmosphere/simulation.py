@@ -429,7 +429,7 @@ class Simulation:
                  phi_MAC[myg.ilo-1:myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx
 
         v_MAC[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+2] -= \
-                coeff[myg.ilo  :myg.ihi+2,myg.jlo:myg.jhi+1]* \
+                coeff[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+2]* \
                 (phi_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+2] -
                  phi_MAC[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi+1])/myg.dy
 
@@ -442,17 +442,17 @@ class Simulation:
                                                        rho, u_MAC, v_MAC,
                                                        ldelta_rx, ldelta_ry)
         
-        rho[myg.ilo:myg.ihi+1,myg.jlo:myg:jhi+1] -= dt*(
+        rho[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] -= dt*(
             #  (rho u)_x
-            (rho_xint[myg.ilo+1:myg.ihi+2,myg.jlo:myg:jhi+1]*
-             u_MAC[myg.ilo+1:myg.ihi+2,myg.jlo:myg:jhi+1] -
-             rho_xint[myg.ilo:myg.ihi+1,myg.jlo:myg:jhi+1]*
-             u_MAC[myg.ilo:myg.ihi+1,myg.jlo:myg:jhi+1])/myg.dx +
+            (rho_xint[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1]*
+             u_MAC[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
+             rho_xint[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]*
+             u_MAC[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx +
             #  (rho v)_y
-            (rho_yint[myg.ilo:myg.ihi+1,myg.jlo+1:myg:jhi+2]*
-             v_MAC[myg.ilo:myg.ihi+1,myg.jlo+1:myg:jhi+2] -
-             rho_yint[myg.ilo:myg.ihi+1,myg.jlo:myg:jhi+1]*
-             v_MAC[myg.ilo:myg.ihi+1,myg.jlo:myg:jhi+1])/myg.dy )
+            (rho_yint[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2]*
+             v_MAC[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
+             rho_yint[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]*
+             v_MAC[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dy )
                         
 
         #---------------------------------------------------------------------
