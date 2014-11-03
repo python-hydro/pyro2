@@ -225,7 +225,7 @@ class Simulation:
             0.5*(v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
                  v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
 
-        # solve L phi = DU
+        # solve D (beta^2/rho) G (phi/beta) = D( beta U )
 
         # initialize our guess to the solution, set the RHS to divU and
         # solve
