@@ -406,7 +406,7 @@ class Simulation:
     
         # solve the Poisson problem
         mg.init_zeros()
-        mg.init_RHS(divU)
+        mg.init_RHS(div_beta_U)
         mg.solve(rtol=1.e-12)
 
 
