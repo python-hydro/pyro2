@@ -31,3 +31,4 @@ Known issues:
 -- we are solving for (phi/beta) when we do the energy fix -- make
    sure we are consistent there.
 
+-- if proj_type == 1, we need to use the correct coefficient for gradp

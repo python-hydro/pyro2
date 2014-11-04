@@ -402,7 +402,7 @@ class Simulation:
         # first compute div{beta_0 U}
         div_beta_U = mg.soln_grid.scratch_array()
 
-        # MAC velocities are edge-centered.  div(beta U) is cell-centered.
+        # MAC velocities are edge-centered.  div{beta_0 U} is cell-centered.
         div_beta_U[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
             beta0[myg.jlo:myg.jhi+1,np.newaxis]*(
                 u_MAC[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
