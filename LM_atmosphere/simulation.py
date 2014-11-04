@@ -199,12 +199,13 @@ class Simulation:
         # 1. do the initial projection.  This makes sure that our original
         # velocity field satisties div U = 0
 
-        # next create the multigrid object.  We defined phi with
-        # the right BCs previously
+        # the coefficent for the elliptic equation is beta_0^2/rho
         coeff = 1.0/rho[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]
         beta0 = self.base["beta0"]
         coeff = coeff*beta0[myg.jlo-1:myg.jhi+2,np.newaxis]**2
 
+        # next create the multigrid object.  We defined phi with
+        # the right BCs previously
         mg = vcMG.VarCoeffCCMG2d(myg.nx, myg.ny,
                                  xl_BC_type=self.cc_data.BCs["phi"].xlb, 
                                  xr_BC_type=self.cc_data.BCs["phi"].xrb,
@@ -216,21 +217,25 @@ class Simulation:
                                  coeffs_bc=self.cc_data.BCs["density"],
                                  verbose=0)
 
-        # first compute divU
-        divU = mg.soln_grid.scratch_array()
+        # first compute div{beta_0 U}
+        div_beta_U = mg.soln_grid.scratch_array()
 
-        divU[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
-            0.5*(u[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
+        # u/v are cell-centered, divU is cell-centered    
+        div_beta_U[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
+            0.5*beta0[mg.jlo:mg.jhi+1,np.newaxis]* \
+                (u[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
                  u[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1])/myg.dx + \
-            0.5*(v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
+            0.5*(beta0[myg.jlo+1:myg.jhi+2,np.newaxis]* \
+                 v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
+                 beta0[myg.jlo-1:myg.jhi  ,np.newaxis]*
                  v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
 
-        # solve D (beta^2/rho) G (phi/beta) = D( beta U )
+        # solve D (beta_0^2/rho) G (phi/beta_0) = D( beta_0 U )
 
         # initialize our guess to the solution, set the RHS to divU and
         # solve
         mg.init_zeros()
-        mg.init_RHS(divU)
+        mg.init_RHS(div_beta_U)
         mg.solve(rtol=1.e-10)
 
         # store the solution in our self.cc_data object -- include a single
@@ -254,8 +259,11 @@ class Simulation:
             0.5*(phi[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
                  phi[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
 
-        u[:,:] -= gradp_x
-        v[:,:] -= gradp_y
+        coeff = 1.0/rho[:,:]
+        coeff = coeff*beta0[:,np.newaxis]
+
+        u[:,:] -= coeff*gradp_x
+        v[:,:] -= coeff*gradp_y
 
         # fill the ghostcells
         self.cc_data.fill_BC("x-velocity")
@@ -391,7 +399,7 @@ class Simulation:
                                  coeffs_bc=self.cc_data.BCs["density"],
                                  verbose=0)
 
-        # first compute div(beta U)
+        # first compute div{beta_0 U}
         div_beta_U = mg.soln_grid.scratch_array()
 
         # MAC velocities are edge-centered.  div(beta U) is cell-centered.
@@ -540,7 +548,7 @@ class Simulation:
                                  coeffs_bc=self.cc_data.BCs["density"],
                                  verbose=0)
 
-        # first compute divU
+        # first compute div{beta_0 U}
 
         # u/v are cell-centered, divU is cell-centered    
         div_beta_U[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
