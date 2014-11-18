@@ -3,5 +3,6 @@
 *.png
 *.eps
 *~
+\#*
 
 inputs.auto
