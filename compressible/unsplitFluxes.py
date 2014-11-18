@@ -215,9 +215,6 @@ def unsplitFluxes(my_data, rp, vars, tc, dt):
         xi = 1.0
 
 
-    #=========================================================================
-    # x-direction
-    #=========================================================================
 
     # monotonized central differences in x-direction
     tm_limit = tc.timer("limiting")
@@ -231,12 +228,25 @@ def unsplitFluxes(my_data, rp, vars, tc, dt):
     else:
         limitFunc = reconstruction_f.limit4
     
-    ldelta_r = xi*limitFunc(1, r, myg.qx, myg.qy, myg.ng)
-    ldelta_u = xi*limitFunc(1, u, myg.qx, myg.qy, myg.ng)
-    ldelta_v = xi*limitFunc(1, v, myg.qx, myg.qy, myg.ng)
-    ldelta_p = xi*limitFunc(1, p, myg.qx, myg.qy, myg.ng)
-    
+    ldelta_rx = xi*limitFunc(1, r, myg.qx, myg.qy, myg.ng)
+    ldelta_ux = xi*limitFunc(1, u, myg.qx, myg.qy, myg.ng)
+    ldelta_vx = xi*limitFunc(1, v, myg.qx, myg.qy, myg.ng)
+    ldelta_px = xi*limitFunc(1, p, myg.qx, myg.qy, myg.ng)
+
+    # monotonized central differences in y-direction
+    ldelta_ry = xi*limitFunc(2, r, myg.qx, myg.qy, myg.ng)
+    ldelta_uy = xi*limitFunc(2, u, myg.qx, myg.qy, myg.ng)
+    ldelta_vy = xi*limitFunc(2, v, myg.qx, myg.qy, myg.ng)
+    ldelta_py = xi*limitFunc(2, p, myg.qx, myg.qy, myg.ng)
+
     tm_limit.end()
+
+
+
+    #=========================================================================
+    # x-direction
+    #=========================================================================
+
     
     # left and right primitive variable states
     tm_states = tc.timer("interfaceStates")
@@ -249,7 +259,7 @@ def unsplitFluxes(my_data, rp, vars, tc, dt):
                                   vars.nvar,
                                   gamma,
                                   r, u, v, p,
-                                  ldelta_r, ldelta_u, ldelta_v, ldelta_p) 
+                                  ldelta_rx, ldelta_ux, ldelta_vx, ldelta_px) 
     
     tm_states.end()
                     
@@ -276,15 +286,6 @@ def unsplitFluxes(my_data, rp, vars, tc, dt):
     # y-direction
     #=========================================================================
 
-    # monotonized central differences in y-direction
-    tm_limit.begin()
-
-    ldelta_r = xi*limitFunc(2, r, myg.qx, myg.qy, myg.ng)
-    ldelta_u = xi*limitFunc(2, u, myg.qx, myg.qy, myg.ng)
-    ldelta_v = xi*limitFunc(2, v, myg.qx, myg.qy, myg.ng)
-    ldelta_p = xi*limitFunc(2, p, myg.qx, myg.qy, myg.ng)
-
-    tm_limit.end()
     
     # left and right primitive variable states
     tm_states.begin()
@@ -293,7 +294,7 @@ def unsplitFluxes(my_data, rp, vars, tc, dt):
                                   vars.nvar,
                                   gamma,
                                   r, u, v, p,
-                                  ldelta_r, ldelta_u, ldelta_v, ldelta_p)  
+                                  ldelta_ry, ldelta_uy, ldelta_vy, ldelta_py)  
 
     tm_states.end()
 
