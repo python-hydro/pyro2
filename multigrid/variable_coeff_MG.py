@@ -9,6 +9,8 @@ where eta is defined on the same grid as phi.
 A cell-centered discretization is used throughout.
 """
 
+from __future__ import print_function
+
 import multigrid.MG as MG
 import numpy
 import sys
