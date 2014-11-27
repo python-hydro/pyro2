@@ -77,12 +77,6 @@ class _EdgeCoeffs:
                  self.y[fg.ilo+1:fg.ihi+1:2,fg.jlo:fg.jhi+2:2]) 
         
         c_edge_coeffs.y = c_eta_y*fg.dy**2/cg.dy**2
-
-
-        print("restrict: ", cg.nx)
-        print(c_eta_x)
-        print(c_eta_y)
-        print(" ")
         
         return c_edge_coeffs
 
@@ -129,18 +123,10 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
         c = self.grids[self.nlevels-1].get_var("coeffs")
         c[:,:] = coeffs.copy()
         
-        print("original: ")
-        print(c)
-        print(" ")
-
         self.grids[self.nlevels-1].fill_BC("coeffs")
 
         # put the coefficients on edges
         self.edge_coeffs.insert(0, _EdgeCoeffs(self.grids[self.nlevels-1].grid, c))
-
-        print(self.edge_coeffs[0].x)
-        print(self.edge_coeffs[0].y)
-        print(" ")
 
         n = self.nlevels-2
         while n >= 0:
@@ -156,7 +142,6 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
             self.grids[n].fill_BC("coeffs")
 
             # put the coefficients on edges
-            print(type(self.edge_coeffs[0]))
             self.edge_coeffs.insert(0, self.edge_coeffs[0].restrict())  #_EdgeCoeffs(self.grids[n].grid, coeffs_c))
 
             # if we are periodic, then we should force the edge coefficents
