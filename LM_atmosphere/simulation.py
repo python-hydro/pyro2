@@ -148,26 +148,24 @@ class Simulation:
         v = self.cc_data.get_var("y-velocity")
     
         # the timestep is min(dx/|u|, dy|v|)
-        if not (u.max() == 0 or v.max() == 0):
-            xtmp = myg.dx/(abs(u))
-            ytmp = myg.dy/(abs(v))
+        xtmp = ytmp = 1.e33
+        if not u.max() == 0:
+            xtmp = np.min(myg.dx/(np.abs(u[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])))
+        if not v.max() == 0:
+            ytmp = np.min(myg.dy/(np.abs(v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])))
 
-            dt = cfl*min(xtmp.min(), ytmp.min())
-        else:
-            # a large number we'll reset below
-            dt = 1.e33
-
-        # We need an alternate timestep that accounts for
-        # buoyancy, to handle the case where the velocity is
-        # initially zero.
+        dt = cfl*min(xtmp, ytmp)
+                    
+        # We need an alternate timestep that accounts for buoyancy, to
+        # handle the case where the velocity is initially zero.
         rho = self.cc_data.get_var("density")    
         rho0 = self.base["rho0"]
         rhoprime = rho - rho0[:,np.newaxis]
 
         g = self.rp.get_param("lm-atmosphere.grav")
 
-        F_buoy = np.max(np.abs(rhoprime[myg.ilo:myg.ihi+2,myg.jlo:myg.jhi+2]*g)/
-                        rho[myg.ilo:myg.ihi+2,myg.jlo:myg.jhi+2])
+        F_buoy = np.max(np.abs(rhoprime[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]*g)/
+                        rho[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])
 
         dt_buoy = np.sqrt(2.0*myg.dx/F_buoy)
 
