@@ -307,6 +307,9 @@ class Simulation:
         gradp_x = self.cc_data.get_var("gradp_x")
         gradp_y = self.cc_data.get_var("gradp_y")
 
+        beta0 = self.base["beta0"]
+        beta0_edges = self.base["beta0-edges"]
+
         phi = self.cc_data.get_var("phi")
 
         myg = self.cc_data.grid
@@ -360,12 +363,15 @@ class Simulation:
         # constitute the MAC grid
         print("  making MAC velocities")
 
+        coeff = 1.0/rho[:,:]
+        coeff = coeff*beta0[:,np.newaxis]
+
         u_MAC, v_MAC = lm_interface_f.mac_vels(myg.qx, myg.qy, myg.ng, 
                                                myg.dx, myg.dy, dt,
                                                u, v,
                                                ldelta_ux, ldelta_vx,
                                                ldelta_uy, ldelta_vy,
-                                               gradp_x, gradp_y)
+                                               coeff*gradp_x, coeff*gradp_y)
 
 
         #---------------------------------------------------------------------
@@ -376,8 +382,6 @@ class Simulation:
         # we will solve D (beta_0^2/rho) G phi = D (beta_0 U^MAC), where
         # phi is cell centered, and U^MAC is the MAC-type staggered
         # grid of the advective velocities.  
-        beta0 = self.base["beta0"]
-        beta0_edges = self.base["beta0-edges"]
 
         print("  MAC projection")
 
@@ -469,13 +473,16 @@ class Simulation:
         #---------------------------------------------------------------------
         print("  making u, v edge states")
 
+        coeff = 1.0/rho[:,:]
+        coeff = coeff*beta0[:,np.newaxis]
+
         u_xint, v_xint, u_yint, v_yint = \
                lm_interface_f.states(myg.qx, myg.qy, myg.ng, 
                                      myg.dx, myg.dy, dt,
                                      u, v,
                                      ldelta_ux, ldelta_vx,
                                      ldelta_uy, ldelta_vy,
-                                     gradp_x, gradp_y,
+                                     coeff*gradp_x, coeff*gradp_y,
                                      u_MAC, v_MAC)
 
 
@@ -513,16 +520,20 @@ class Simulation:
              
         proj_type = self.rp.get_param("lm-atmosphere.proj_type")
 
-        if (proj_type == 1):
+
+        if proj_type == 1:
             u[:,:] -= (dt*advect_x[:,:] + dt*gradp_x[:,:])
             v[:,:] -= (dt*advect_y[:,:] + dt*gradp_y[:,:])
 
-        elif (proj_type == 2):
+        elif proj_type == 2:
             u[:,:] -= dt*advect_x[:,:]
             v[:,:] -= dt*advect_y[:,:]
 
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")
+
+        print("min/max u = ", np.min(u), np.max(u))
+        print("min/max v = ", np.min(v), np.max(v))
 
 
         #---------------------------------------------------------------------
