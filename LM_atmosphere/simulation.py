@@ -317,7 +317,7 @@ class Simulation:
         dtdy = dt/myg.dy
 
         #---------------------------------------------------------------------
-        # create the limited slopes of u and v (in both directions)
+        # create the limited slopes of rho, u and v (in both directions)
         #---------------------------------------------------------------------
         limiter = self.rp.get_param("lm-atmosphere.limiter")
         if limiter == 0: limitFunc = reconstruction_f.nolimit
@@ -431,6 +431,7 @@ class Simulation:
         coeff = coeff*beta0[:,np.newaxis]
 
         # we need the MAC velocities on all edges of the computational domain
+        # here we do U = U - (beta_0/rho) grad (phi/beta_0)
         u_MAC[myg.ilo:myg.ihi+2,myg.jlo:myg.jhi+1] -= \
                 coeff[myg.ilo  :myg.ihi+2,myg.jlo:myg.jhi+1]* \
                 (phi_MAC[myg.ilo  :myg.ihi+2,myg.jlo:myg.jhi+1] -
@@ -590,9 +591,12 @@ class Simulation:
             0.5*(phi[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
                  phi[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
 
-        # u = u - grad_x phi dt
-        u[:,:] -= dt*gradphi_x
-        v[:,:] -= dt*gradphi_y
+        # U = U - (beta_0/rho) grad (phi/beta_0)
+        coeff = 1.0/rho[:,:]
+        coeff = coeff*beta0[:,np.newaxis]
+
+        u[:,:] -= dt*coeff*gradphi_x
+        v[:,:] -= dt*coeff*gradphi_y
         
         # store gradp for the next step
         if (proj_type == 1):
