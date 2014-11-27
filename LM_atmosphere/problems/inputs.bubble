@@ -6,11 +6,11 @@ tmax = 1.0
 cfl = 0.8
 
 
-[incompressible]
+[LM-atmosphere]
 
 
 [io]
-basename = shear_128_
+basename = lm_bubble_128_
 n_out = 1
 
 
@@ -27,8 +27,10 @@ ylboundary = periodic
 yrboundary = periodic
 
 
-[shear]
-rho_s = 42.0
-delta_s = 0.05
+[bubble]
+x_pert = 0.5
+y_pert = 0.5
+r_pert = 0.05
+
 
 
