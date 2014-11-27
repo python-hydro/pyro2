@@ -149,9 +149,9 @@ class Simulation:
     
         # the timestep is min(dx/|u|, dy|v|)
         xtmp = ytmp = 1.e33
-        if not u.max() == 0:
+        if not np.max(np.abs(u)) == 0:
             xtmp = np.min(myg.dx/(np.abs(u[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])))
-        if not v.max() == 0:
+        if not np.max(np.abs(v)) == 0:
             ytmp = np.min(myg.dy/(np.abs(v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])))
 
         dt = cfl*min(xtmp, ytmp)
