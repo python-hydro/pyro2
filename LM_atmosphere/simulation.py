@@ -463,6 +463,7 @@ class Simulation:
              rho_yint[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]*
              v_MAC[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dy )
                         
+        self.cc_data.fill_BC("density")
 
         #---------------------------------------------------------------------
         # recompute the interface states, using the advective velocity

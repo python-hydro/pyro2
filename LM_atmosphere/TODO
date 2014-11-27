@@ -29,3 +29,5 @@ xx the initial projection is not putting beta into the divergence
    correctly -- the beta/rho weighting is not there
 
 -- if proj_type == 1, we need to use the correct coefficient for gradp
+
+-- in the final projection, do we want the coefficient to use 1/rho^{n+1/2}?
