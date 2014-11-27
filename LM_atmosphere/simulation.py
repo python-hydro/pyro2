@@ -619,13 +619,18 @@ class Simulation:
 
         pylab.rc("font", size=10)
 
+        rho = self.cc_data.get_var("density")
+
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
 
         myg = self.cc_data.grid
 
+        magvel = myg.scratch_array()
         vort = myg.scratch_array()
         divU = myg.scratch_array()
+
+        magvel = np.sqrt(u**2 + v**2)
 
         vort[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
              0.5*(v[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
@@ -642,8 +647,8 @@ class Simulation:
         fig, axes = pylab.subplots(nrows=2, ncols=2, num=1)
         pylab.subplots_adjust(hspace=0.25)
 
-        fields = [u, v, vort, divU]
-        field_names = ["u", "v", r"$\nabla \times U$", r"$\nabla \cdot U$"]
+        fields = [rho, magvel, vort, divU]
+        field_names = [r"$\rho$", r"|U|", r"$\nabla \times U$", r"$\nabla \cdot U$"]
     
         for n in range(4):
             ax = axes.flat[n]
