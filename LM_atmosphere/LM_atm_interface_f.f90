@@ -3,6 +3,7 @@ subroutine mac_vels(qx, qy, ng, dx, dy, dt, &
                     ldelta_ux, ldelta_vx, &
                     ldelta_uy, ldelta_vy, &
                     gradp_x, gradp_y, &
+                    source, &
                     u_MAC, v_MAC)
 
   implicit none
@@ -23,15 +24,19 @@ subroutine mac_vels(qx, qy, ng, dx, dy, dt, &
   double precision, intent(inout) :: gradp_x(0:qx-1, 0:qy-1)
   double precision, intent(inout) :: gradp_y(0:qx-1, 0:qy-1)
 
+  double precision, intent(inout) :: source(0:qx-1, 0:qy-1)
+
   double precision, intent(  out) :: u_MAC(0:qx-1, 0:qy-1)
   double precision, intent(  out) :: v_MAC(0:qx-1, 0:qy-1)
 
 !f2py depend(qx, qy) :: u, v
 !f2py depend(qx, qy) :: ldelta_ux, ldelta_vx, ldelta_uy, ldelta_vy
 !f2py depend(qx, qy) :: gradp_x, gradp_y
+!f2py depend(qx, qy) :: source
 !f2py depend(qx, qy) :: u_MAC, v_MAC
 !f2py intent(in) :: u, v, gradp_x, gradp_y
 !f2py intent(in) :: ldelta_ux, ldelta_vx, ldelta_uy, ldelta_vy
+!f2py intent(in) :: source
 !f2py intent(out) :: u_MAC, v_MAC
 
 
@@ -48,6 +53,7 @@ subroutine mac_vels(qx, qy, ng, dx, dy, dt, &
                             ldelta_ux, ldelta_vx, &
                             ldelta_uy, ldelta_vy, &
                             gradp_x, gradp_y, &
+                            source, &
                             u_xl, u_xr, u_yl, u_yr, &
                             v_xl, v_xr, v_yl, v_yr)
   
@@ -67,6 +73,7 @@ subroutine states(qx, qy, ng, dx, dy, dt, &
                   ldelta_ux, ldelta_vx, &
                   ldelta_uy, ldelta_vy, &
                   gradp_x, gradp_y, &
+                  source, &
                   u_MAC, v_MAC, &
                   u_xint, v_xint, u_yint, v_yint)
 
@@ -92,6 +99,8 @@ subroutine states(qx, qy, ng, dx, dy, dt, &
   double precision, intent(inout) :: gradp_x(0:qx-1, 0:qy-1)
   double precision, intent(inout) :: gradp_y(0:qx-1, 0:qy-1)
 
+  double precision, intent(inout) :: source(0:qx-1, 0:qy-1)
+
   double precision, intent(inout) :: u_MAC(0:qx-1, 0:qy-1)
   double precision, intent(inout) :: v_MAC(0:qx-1, 0:qy-1)
 
@@ -101,9 +110,11 @@ subroutine states(qx, qy, ng, dx, dy, dt, &
 !f2py depend(qx, qy) :: u, v
 !f2py depend(qx, qy) :: ldelta_ux, ldelta_vx, ldelta_uy, ldelta_vy
 !f2py depend(qx, qy) :: gradp_x, gradp_y
+!f2py depend(qx, qy) :: source
 !f2py depend(qx, qy) :: u_MAC, v_MAC
 !f2py intent(in) :: u, v, gradp_x, gradp_y
 !f2py intent(in) :: ldelta_ux, ldelta_vx, ldelta_uy, ldelta_vy
+!f2py intent(in) :: source
 !f2py intent(in) :: u_MAC, v_MAC
 !f2py intent(out) :: u_xint, v_xint, u_yint, v_yint
 
@@ -120,6 +131,7 @@ subroutine states(qx, qy, ng, dx, dy, dt, &
                             ldelta_ux, ldelta_vx, &
                             ldelta_uy, ldelta_vy, &
                             gradp_x, gradp_y, &
+                            source, &
                             u_xl, u_xr, u_yl, u_yr, &
                             v_xl, v_xr, v_yl, v_yr)
 
@@ -238,6 +250,7 @@ subroutine get_interface_states(qx, qy, ng, dx, dy, dt, &
                                 ldelta_ux, ldelta_vx, &
                                 ldelta_uy, ldelta_vy, &
                                 gradp_x, gradp_y, &
+                                source, &
                                 u_xl, u_xr, u_yl, u_yr, &
                                 v_xl, v_xr, v_yl, v_yr)
 
@@ -261,6 +274,8 @@ subroutine get_interface_states(qx, qy, ng, dx, dy, dt, &
 
   double precision, intent(inout) :: gradp_x(0:qx-1, 0:qy-1)
   double precision, intent(inout) :: gradp_y(0:qx-1, 0:qy-1)
+
+  double precision, intent(inout) :: source(0:qx-1, 0:qy-1)
 
   double precision, intent(out) :: u_xl(0:qx-1, 0:qy-1), u_xr(0:qx-1, 0:qy-1)
   double precision, intent(out) :: u_yl(0:qx-1, 0:qy-1), u_yr(0:qx-1, 0:qy-1)
@@ -294,20 +309,20 @@ subroutine get_interface_states(qx, qy, ng, dx, dy, dt, &
      do i = ilo-2, ihi+2        
 
         ! u on x-edges
-        u_xl(i+1,j) = u(i,j) + 0.5d0*(1.0d0 - dtdx*u(i,j))*ldelta_ux(i,j)
-        u_xr(i  ,j) = u(i,j) - 0.5d0*(1.0d0 + dtdx*u(i,j))*ldelta_ux(i,j)
+        u_xl(i+1,j) = u(i,j) + 0.5d0*(1.0d0 - dtdx*u(i,j))*ldelta_ux(i,j) 
+        u_xr(i  ,j) = u(i,j) - 0.5d0*(1.0d0 + dtdx*u(i,j))*ldelta_ux(i,j) 
 
         ! v on x-edges 
-        v_xl(i+1,j) = v(i,j) + 0.5d0*(1.0d0 - dtdx*u(i,j))*ldelta_vx(i,j)
-        v_xr(i  ,j) = v(i,j) - 0.5d0*(1.0d0 + dtdx*u(i,j))*ldelta_vx(i,j)
+        v_xl(i+1,j) = v(i,j) + 0.5d0*(1.0d0 - dtdx*u(i,j))*ldelta_vx(i,j) 
+        v_xr(i  ,j) = v(i,j) - 0.5d0*(1.0d0 + dtdx*u(i,j))*ldelta_vx(i,j) 
 
         ! u on y-edges 
-        u_yl(i,j+1) = u(i,j) + 0.5d0*(1.0d0 - dtdy*v(i,j))*ldelta_uy(i,j)
-        u_yr(i,j  ) = u(i,j) - 0.5d0*(1.0d0 + dtdy*v(i,j))*ldelta_uy(i,j)
+        u_yl(i,j+1) = u(i,j) + 0.5d0*(1.0d0 - dtdy*v(i,j))*ldelta_uy(i,j) 
+        u_yr(i,j  ) = u(i,j) - 0.5d0*(1.0d0 + dtdy*v(i,j))*ldelta_uy(i,j) 
 
         ! v on y-edges
-        v_yl(i,j+1) = v(i,j) + 0.5d0*(1.0d0 - dtdy*v(i,j))*ldelta_vy(i,j)
-        v_yr(i,j  ) = v(i,j) - 0.5d0*(1.0d0 + dtdy*v(i,j))*ldelta_vy(i,j)
+        v_yl(i,j+1) = v(i,j) + 0.5d0*(1.0d0 - dtdy*v(i,j))*ldelta_vy(i,j) 
+        v_yr(i,j  ) = v(i,j) - 0.5d0*(1.0d0 + dtdy*v(i,j))*ldelta_vy(i,j) 
 
      enddo
   enddo
@@ -344,26 +359,26 @@ subroutine get_interface_states(qx, qy, ng, dx, dy, dt, &
         ! v du/dy is the transerse term for the u states on x-interfaces
         vu_y = vbar*(u_yint(i,j+1) - u_yint(i,j))
         
-        u_xl(i+1,j) = u_xl(i+1,j) - 0.5*dtdy*vu_y - 0.5*dt*gradp_x(i,j)
-        u_xr(i  ,j) = u_xr(i  ,j) - 0.5*dtdy*vu_y - 0.5*dt*gradp_x(i,j)
+        u_xl(i+1,j) = u_xl(i+1,j) - 0.5*dtdy*vu_y - 0.5*dt*gradp_x(i,j) 
+        u_xr(i  ,j) = u_xr(i  ,j) - 0.5*dtdy*vu_y - 0.5*dt*gradp_x(i,j) 
 
         ! v dv/dy is the transverse term for the v states on x-interfaces
         vv_y = vbar*(v_yint(i,j+1) - v_yint(i,j))
 
-        v_xl(i+1,j) = v_xl(i+1,j) - 0.5*dtdy*vv_y - 0.5*dt*gradp_y(i,j)
-        v_xr(i  ,j) = v_xr(i  ,j) - 0.5*dtdy*vv_y - 0.5*dt*gradp_y(i,j)
+        v_xl(i+1,j) = v_xl(i+1,j) - 0.5*dtdy*vv_y - 0.5*dt*gradp_y(i,j) + 0.5d0*dt*source(i,j)
+        v_xr(i  ,j) = v_xr(i  ,j) - 0.5*dtdy*vv_y - 0.5*dt*gradp_y(i,j) + 0.5d0*dt*source(i,j)
 
         ! u dv/dx is the transverse term for the v states on y-interfaces
         uv_x = ubar*(v_xint(i+1,j) - v_xint(i,j))
 
-        v_yl(i,j+1) = v_yl(i,j+1) - 0.5*dtdx*uv_x - 0.5*dt*gradp_y(i,j)
-        v_yr(i,j  ) = v_yr(i,j  ) - 0.5*dtdx*uv_x - 0.5*dt*gradp_y(i,j)
+        v_yl(i,j+1) = v_yl(i,j+1) - 0.5*dtdx*uv_x - 0.5*dt*gradp_y(i,j) + 0.5d0*dt*source(i,j)
+        v_yr(i,j  ) = v_yr(i,j  ) - 0.5*dtdx*uv_x - 0.5*dt*gradp_y(i,j) + 0.5d0*dt*source(i,j)
 
         ! u du/dx is the transverse term for the u states on y-interfaces
         uu_x = ubar*(u_xint(i+1,j) - u_xint(i,j))
 
-        u_yl(i,j+1) = u_yl(i,j+1) - 0.5*dtdx*uu_x - 0.5*dt*gradp_x(i,j)
-        u_yr(i,j  ) = u_yr(i,j  ) - 0.5*dtdx*uu_x - 0.5*dt*gradp_x(i,j)
+        u_yl(i,j+1) = u_yl(i,j+1) - 0.5*dtdx*uu_x - 0.5*dt*gradp_x(i,j) 
+        u_yr(i,j  ) = u_yr(i,j  ) - 0.5*dtdx*uu_x - 0.5*dt*gradp_x(i,j) 
 
      enddo
   enddo

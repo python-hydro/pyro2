@@ -310,6 +310,8 @@ class Simulation:
         beta0 = self.base["beta0"]
         beta0_edges = self.base["beta0-edges"]
 
+        rho0 = self.base["rho0"]
+
         phi = self.cc_data.get_var("phi")
 
         myg = self.cc_data.grid
@@ -363,15 +365,27 @@ class Simulation:
         # constitute the MAC grid
         print("  making MAC velocities")
 
+        # create the coefficient to the grad (pi/beta) term
         coeff = 1.0/rho[:,:]
         coeff = coeff*beta0[:,np.newaxis]
+
+        # create the source term
+        source = myg.scratch_array()
+
+        g = self.rp.get_param("lm-atmosphere.grav")        
+        rhoprime = rho - rho0[:,np.newaxis]
+        source = rhoprime*g/rho
+        print("here's the source: ", np.min(source), np.max(source))
+        print(g)
+        print(np.min(rhoprime), np.max(rhoprime))
 
         u_MAC, v_MAC = lm_interface_f.mac_vels(myg.qx, myg.qy, myg.ng, 
                                                myg.dx, myg.dy, dt,
                                                u, v,
                                                ldelta_ux, ldelta_vx,
                                                ldelta_uy, ldelta_vy,
-                                               coeff*gradp_x, coeff*gradp_y)
+                                               coeff*gradp_x, coeff*gradp_y, 
+                                               source)
 
 
         #---------------------------------------------------------------------
@@ -452,7 +466,9 @@ class Simulation:
                                                        myg.dx, myg.dy, dt,
                                                        rho, u_MAC, v_MAC,
                                                        ldelta_rx, ldelta_ry)
-        
+
+        rho_old = rho.copy()
+
         rho[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] -= dt*(
             #  (rho u)_x
             (rho_xint[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1]*
@@ -483,6 +499,7 @@ class Simulation:
                                      ldelta_ux, ldelta_vx,
                                      ldelta_uy, ldelta_vy,
                                      coeff*gradp_x, coeff*gradp_y,
+                                     source, 
                                      u_MAC, v_MAC)
 
 
@@ -529,6 +546,15 @@ class Simulation:
             u[:,:] -= dt*advect_x[:,:]
             v[:,:] -= dt*advect_y[:,:]
 
+
+        # add the gravitational source
+        rho_half = 0.5*(rho + rho_old)
+        rhoprime = rho_half - rho0[:,np.newaxis]
+        source = rhoprime*g/rho_half
+
+        print("min/max source = ", np.min(source), np.max(source))
+        v[:,:] += dt*source
+        
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")
 
