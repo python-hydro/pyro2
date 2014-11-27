@@ -28,9 +28,11 @@ xx the initial projection is not putting beta into the divergence
 xx we are not correcting the velocity field after the final projection
    correctly -- the beta/rho weighting is not there
 
--- in the prediction of the interface states, we pass in gradp_x, gradp_y
+xx in the prediction of the interface states, we pass in gradp_x, gradp_y
    -- but we should have the proper weighting on this, including the 1/rho!
 
 -- if proj_type == 1, we need to use the correct coefficient for gradp
 
 -- in the final projection, do we want the coefficient to use 1/rho^{n+1/2}?
+
+-- we need add the gravitational acceleration source term in the momentum
