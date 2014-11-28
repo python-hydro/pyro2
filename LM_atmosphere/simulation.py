@@ -160,7 +160,7 @@ class Simulation:
         # handle the case where the velocity is initially zero.
         rho = self.cc_data.get_var("density")    
         rho0 = self.base["rho0"]
-        rhoprime = rho - rho0[:,np.newaxis]
+        rhoprime = rho - rho0[np.newaxis,:]
 
         g = self.rp.get_param("lm-atmosphere.grav")
 
@@ -200,7 +200,7 @@ class Simulation:
         # the coefficent for the elliptic equation is beta_0^2/rho
         coeff = 1.0/rho[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]
         beta0 = self.base["beta0"]
-        coeff = coeff*beta0[myg.jlo-1:myg.jhi+2,np.newaxis]**2
+        coeff = coeff*beta0[np.newaxis,myg.jlo-1:myg.jhi+2]**2
 
         # next create the multigrid object.  We defined phi with
         # the right BCs previously
@@ -220,12 +220,12 @@ class Simulation:
 
         # u/v are cell-centered, divU is cell-centered    
         div_beta_U[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
-            0.5*beta0[mg.jlo:mg.jhi+1,np.newaxis]* \
+            0.5*beta0[np.newaxis,mg.jlo:mg.jhi+1]* \
                 (u[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
                  u[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1])/myg.dx + \
-            0.5*(beta0[myg.jlo+1:myg.jhi+2,np.newaxis]* \
+            0.5*(beta0[np.newaxis,myg.jlo+1:myg.jhi+2]* \
                  v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
-                 beta0[myg.jlo-1:myg.jhi  ,np.newaxis]*
+                 beta0[np.newaxis,myg.jlo-1:myg.jhi  ]*
                  v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
 
         # solve D (beta_0^2/rho) G (phi/beta_0) = D( beta_0 U )
@@ -258,7 +258,7 @@ class Simulation:
                  phi[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
 
         coeff = 1.0/rho[:,:]
-        coeff = coeff*beta0[:,np.newaxis]
+        coeff = coeff*beta0[np.newaxis,:]
 
         u[:,:] -= coeff*gradp_x
         v[:,:] -= coeff*gradp_y
@@ -367,13 +367,13 @@ class Simulation:
 
         # create the coefficient to the grad (pi/beta) term
         coeff = 1.0/rho[:,:]
-        coeff = coeff*beta0[:,np.newaxis]
+        coeff = coeff*beta0[np.newaxis,:]
 
         # create the source term
         source = myg.scratch_array()
 
         g = self.rp.get_param("lm-atmosphere.grav")        
-        rhoprime = rho - rho0[:,np.newaxis]
+        rhoprime = rho - rho0[np.newaxis,:]
         source = rhoprime*g/rho
         print("here's the source: ", np.min(source), np.max(source))
         print(g)
@@ -401,7 +401,7 @@ class Simulation:
 
         # create the coefficient array: beta0**2/rho
         coeff = 1.0/rho[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]
-        coeff = coeff*beta0[myg.jlo-1:myg.jhi+2,np.newaxis]**2
+        coeff = coeff*beta0[np.newaxis,myg.jlo-1:myg.jhi+2]**2
         
         # create the multigrid object
         mg = vcMG.VarCoeffCCMG2d(myg.nx, myg.ny,
@@ -420,12 +420,12 @@ class Simulation:
 
         # MAC velocities are edge-centered.  div{beta_0 U} is cell-centered.
         div_beta_U[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
-            beta0[myg.jlo:myg.jhi+1,np.newaxis]*(
+            beta0[np.newaxis,myg.jlo:myg.jhi+1]*(
                 u_MAC[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
                 u_MAC[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx + \
-            (beta0_edges[myg.jlo+1:myg.jhi+2,np.newaxis]*
+            (beta0_edges[np.newaxis,myg.jlo+1:myg.jhi+2]*
              v_MAC[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
-             beta0_edges[myg.jlo  :myg.jhi+1,np.newaxis]*
+             beta0_edges[np.newaxis,myg.jlo  :myg.jhi+1]*
              v_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1])/myg.dy
     
         # solve the Poisson problem
@@ -444,7 +444,7 @@ class Simulation:
             solution[mg.ilo-1:mg.ihi+2,mg.jlo-1:mg.jhi+2]
 
         coeff = 1.0/rho[:,:]
-        coeff = coeff*beta0[:,np.newaxis]
+        coeff = coeff*beta0[np.newaxis,:]
 
         # we need the MAC velocities on all edges of the computational domain
         # here we do U = U - (beta_0/rho) grad (phi/beta_0)
@@ -490,7 +490,7 @@ class Simulation:
         print("  making u, v edge states")
 
         coeff = 1.0/rho[:,:]
-        coeff = coeff*beta0[:,np.newaxis]
+        coeff = coeff*beta0[np.newaxis,:]
 
         u_xint, v_xint, u_yint, v_yint = \
                lm_interface_f.states(myg.qx, myg.qy, myg.ng, 
@@ -549,7 +549,7 @@ class Simulation:
 
         # add the gravitational source
         rho_half = 0.5*(rho + rho_old)
-        rhoprime = rho_half - rho0[:,np.newaxis]
+        rhoprime = rho_half - rho0[np.newaxis,:]
         source = rhoprime*g/rho_half
 
         print("min/max source = ", np.min(source), np.max(source))
@@ -571,7 +571,7 @@ class Simulation:
 
         # create the coefficient array: beta0**2/rho
         coeff = 1.0/rho[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]
-        coeff = coeff*beta0[myg.jlo-1:myg.jhi+2,np.newaxis]**2
+        coeff = coeff*beta0[np.newaxis,myg.jlo-1:myg.jhi+2]**2
     
         # create the multigrid object
         mg = vcMG.VarCoeffCCMG2d(myg.nx, myg.ny,
@@ -589,12 +589,12 @@ class Simulation:
 
         # u/v are cell-centered, divU is cell-centered    
         div_beta_U[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
-            0.5*beta0[mg.jlo:mg.jhi+1,np.newaxis]* \
+            0.5*beta0[np.newaxis,mg.jlo:mg.jhi+1]* \
                 (u[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
                  u[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1])/myg.dx + \
-            0.5*(beta0[myg.jlo+1:myg.jhi+2,np.newaxis]* \
+            0.5*(beta0[np.newaxis,myg.jlo+1:myg.jhi+2]* \
                  v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
-                 beta0[myg.jlo-1:myg.jhi  ,np.newaxis]*
+                 beta0[np.newaxis,myg.jlo-1:myg.jhi  ]*
                  v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
     
         mg.init_RHS(div_beta_U/dt)
@@ -629,7 +629,7 @@ class Simulation:
 
         # U = U - (beta_0/rho) grad (phi/beta_0)
         coeff = 1.0/rho[:,:]
-        coeff = coeff*beta0[:,np.newaxis]
+        coeff = coeff*beta0[np.newaxis,:]
 
         u[:,:] -= dt*coeff*gradphi_x
         v[:,:] -= dt*coeff*gradphi_y
@@ -660,13 +660,16 @@ class Simulation:
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
 
+        rho0 = self.base["rho0"]
+
         myg = self.cc_data.grid
 
         magvel = myg.scratch_array()
         vort = myg.scratch_array()
-        divU = myg.scratch_array()
 
         magvel = np.sqrt(u**2 + v**2)
+
+        rhoprime = rho - rho0[np.newaxis,:]
 
         vort[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
              0.5*(v[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
@@ -674,17 +677,11 @@ class Simulation:
              0.5*(u[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
                   u[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi])/myg.dy
 
-        divU[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
-            0.5*(u[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
-                 u[myg.ilo-1:myg.ihi,myg.jlo:myg.jhi+1])/myg.dx + \
-            0.5*(v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
-                 v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi])/myg.dy
-
         fig, axes = pylab.subplots(nrows=2, ncols=2, num=1)
         pylab.subplots_adjust(hspace=0.25)
 
-        fields = [rho, magvel, vort, divU]
-        field_names = [r"$\rho$", r"|U|", r"$\nabla \times U$", r"$\nabla \cdot U$"]
+        fields = [rho, magvel, vort, rhoprime]
+        field_names = [r"$\rho$", r"|U|", r"$\nabla \times U$", r"$\rho - \rho^\prime$"]
     
         for n in range(4):
             ax = axes.flat[n]
