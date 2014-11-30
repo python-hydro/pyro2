@@ -22,7 +22,7 @@ cd compressible
 ${PYTHON} setup.py build_ext --inplace
 cd ..
 
-cd LM_atmosphere
+cd lm_atm
 ${PYTHON} setup.py build_ext --inplace
 cd ..
 
