@@ -3,8 +3,8 @@ from __future__ import print_function
 import numpy as np
 import pylab
 
-from LM_atmosphere.problems import *
-import LM_atmosphere.LM_atm_interface_f as lm_interface_f
+from lm_atm.problems import *
+import lm_atm.LM_atm_interface_f as lm_interface_f
 import mesh.reconstruction_f as reconstruction_f
 import mesh.patch as patch
 import multigrid.variable_coeff_MG as vcMG
