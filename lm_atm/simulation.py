@@ -123,11 +123,11 @@ class Simulation:
         gamma = self.rp.get_param("eos.gamma")
         self.base["beta0"] = self.base["p0"]**(1.0/gamma)
 
-        # we'll also need beta_0 on edges
+        # we'll also need beta_0 on vertical edges
         self.base["beta0-edges"] = np.zeros((myg.qy), dtype=np.float64)        
-        self.base["beta0-edges"][myg.ilo:myg.ihi+2] = \
-            0.5*(self.base["beta0"][myg.ilo-1:myg.ihi+1] +
-                 self.base["beta0"][myg.ilo  :myg.ihi+2])
+        self.base["beta0-edges"][myg.jlo:myg.jhi+2] = \
+            0.5*(self.base["beta0"][myg.jlo-1:myg.jhi+1] +
+                 self.base["beta0"][myg.jlo  :myg.jhi+2])
 
 
     def timestep(self):
@@ -443,6 +443,7 @@ class Simulation:
         phi_MAC[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2] = \
             solution[mg.ilo-1:mg.ihi+2,mg.jlo-1:mg.jhi+2]
 
+        # FIXME: we need the coefficients on the edges here
         coeff = 1.0/rho[:,:]
         coeff = coeff*beta0[np.newaxis,:]
 
