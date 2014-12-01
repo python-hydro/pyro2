@@ -175,23 +175,12 @@ class Simulation:
         # store the solution in our self.cc_data object -- include a single
         # ghostcell
         phi = self.cc_data.get_var("phi")
-        solution = mg.get_solution()
+        phi[:,:] = mg.get_solution(grid=myg)
 
-        phi[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2] = \
-            solution[mg.ilo-1:mg.ihi+2,mg.jlo-1:mg.jhi+2]
 
         # compute the cell-centered gradient of phi and update the 
         # velocities
-        gradp_x = myg.scratch_array()
-        gradp_y = myg.scratch_array()
-
-        gradp_x[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
-            0.5*(phi[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
-                 phi[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1])/myg.dx
-
-        gradp_y[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
-            0.5*(phi[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
-                 phi[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
+        gradp_x, gradp_y = mg.get_solution_gradient(grid=myg)
 
         u[:,:] -= gradp_x
         v[:,:] -= gradp_y
@@ -452,23 +441,11 @@ class Simulation:
         mg.solve(rtol=1.e-12)
 
         # store the solution
-        solution = mg.get_solution()
-
-        phi[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2] = \
-            solution[mg.ilo-1:mg.ihi+2,mg.jlo-1:mg.jhi+2]
+        phi[:,:] = mg.get_solution(grid=myg)
 
         # compute the cell-centered gradient of p and update the velocities
         # this differs depending on what we projected.
-        gradphi_x = myg.scratch_array()
-        gradphi_y = myg.scratch_array()
-
-        gradphi_x[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
-            0.5*(phi[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
-                 phi[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1])/myg.dx
-
-        gradphi_y[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
-            0.5*(phi[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
-                 phi[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
+        gradphi_x, gradphi_y = mg.get_solution_gradient(grid=myg)
 
         # u = u - grad_x phi dt
         u[:,:] -= dt*gradphi_x
