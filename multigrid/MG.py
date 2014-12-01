@@ -391,18 +391,72 @@ class CellCenterMG2d:
         pylab.setp(cl, fontsize="small")
     
 
-    def get_solution(self):
+    def get_solution(self, grid=None):
         """
         Return the solution after doing the MG solve
+
+        If a grid object is passed in, then the gradient is computed on that
+        grid.
 
         Returns
         -------
         out : ndarray
 
         """
+
+        if grid is None:
+            og = self.soln_grid
+        else:
+            og = grid
+
         v = self.grids[self.nlevels-1].get_var("v")
-        return v.copy()
+
+        myg = self.soln_grid
         
+        if grid is None:
+            return v.copy()
+        else:
+            sol = og.scratch_array()
+            sol[og.ilo-1:og.ihi+2,og.jlo-1:og.jhi+2] = \
+                v[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]
+            return sol
+
+    def get_solution_gradient(self, grid=None):
+        """
+        Return the gradient of the solution after doing the MG solve.  The 
+        x- and y-components are returned in separate arrays.
+
+        If a grid object is passed in, then the gradient is computed on that 
+        grid.
+
+        Returns
+        -------
+        out : ndarray, ndarray
+
+        """
+
+        if grid is None:
+            og = self.soln_grid
+        else:
+            og = grid
+
+        v = self.grids[self.nlevels-1].get_var("v")
+
+        gx = og.scratch_array()
+        gy = og.scratch_array()
+
+        myg = self.soln_grid
+
+        gx[og.ilo:og.ihi+1,og.jlo:og.jhi+1] = \
+            0.5*(v[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
+                 v[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1])/myg.dx
+
+        gy[og.ilo:og.ihi+1,og.jlo:og.jhi+1] = \
+            0.5*(v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
+                 v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
+
+        return gx, gy
+
 
     def get_solution_object(self):
         """
