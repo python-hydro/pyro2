@@ -26,7 +26,9 @@ residual errors in each of the V-cycles.
 
 > a.init_zeros()
 
-this initializes the solution vector with zeros
+this initializes the solution vector with zeros (this is not necessary
+if you just created the multigrid object, but it can be used to reset
+the solution between runs on the same object).
 
 > a.init_RHS(zeros((nx, ny), numpy.float64))
 

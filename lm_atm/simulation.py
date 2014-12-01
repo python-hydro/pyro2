@@ -130,6 +130,10 @@ class Simulation:
                  self.base["beta0"][myg.jlo  :myg.jhi+2])
 
 
+    def make_prime(self, a, a0):
+        return a - a0[np.newaxis,:]
+
+
     def timestep(self):
         """
         The timestep() function computes the advective timestep 
@@ -160,7 +164,7 @@ class Simulation:
         # handle the case where the velocity is initially zero.
         rho = self.cc_data.get_var("density")    
         rho0 = self.base["rho0"]
-        rhoprime = rho - rho0[np.newaxis,:]
+        rhoprime = self.make_prime(rho, rho0)
 
         g = self.rp.get_param("lm-atmosphere.grav")
 
@@ -230,9 +234,7 @@ class Simulation:
 
         # solve D (beta_0^2/rho) G (phi/beta_0) = D( beta_0 U )
 
-        # initialize our guess to the solution, set the RHS to divU and
-        # solve
-        mg.init_zeros()
+        # set the RHS to divU and solve
         mg.init_RHS(div_beta_U)
         mg.solve(rtol=1.e-10)
 
@@ -361,7 +363,7 @@ class Simulation:
         source = myg.scratch_array()
 
         g = self.rp.get_param("lm-atmosphere.grav")        
-        rhoprime = rho - rho0[np.newaxis,:]
+        rhoprime = self.make_prime(rho, rho0)
         source = rhoprime*g/rho
         print("here's the source: ", np.min(source), np.max(source))
         print(g)
@@ -417,7 +419,6 @@ class Simulation:
              v_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1])/myg.dy
     
         # solve the Poisson problem
-        mg.init_zeros()
         mg.init_RHS(div_beta_U)
         mg.solve(rtol=1.e-12)
 
@@ -538,7 +539,7 @@ class Simulation:
 
         # add the gravitational source
         rho_half = 0.5*(rho + rho_old)
-        rhoprime = rho_half - rho0[np.newaxis,:]
+        rhoprime = self.make_prime(rho_half, rho0)
         source = rhoprime*g/rho_half
 
         print("min/max source = ", np.min(source), np.max(source))
@@ -648,7 +649,7 @@ class Simulation:
 
         magvel = np.sqrt(u**2 + v**2)
 
-        rhoprime = rho - rho0[np.newaxis,:]
+        rhoprime = self.make_prime(rho, rho0)
 
         vort[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
              0.5*(v[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
