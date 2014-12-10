@@ -10,19 +10,28 @@
 # PYTHON=python3 ./mk.sh
 : ${PYTHON:=python}
 
-cd mesh
-${PYTHON} setup.py build_ext --inplace
-cd ..
+if [ "$1" == "clean" ]; then
 
-cd incompressible
-${PYTHON} setup.py build_ext --inplace
-cd ..
+    rm -rf mesh/*.so
+    rm -rf incompressible/*.so
+    rm -rf compressible/*.so
+    rm -rf lm_atm/*.so
+    
+else
+    cd mesh
+    ${PYTHON} setup.py build_ext --inplace
+    cd ..
 
-cd compressible
-${PYTHON} setup.py build_ext --inplace
-cd ..
+    cd incompressible
+    ${PYTHON} setup.py build_ext --inplace
+    cd ..
 
-cd lm_atm
-${PYTHON} setup.py build_ext --inplace
-cd ..
+    cd compressible
+    ${PYTHON} setup.py build_ext --inplace
+    cd ..
+
+    cd lm_atm
+    ${PYTHON} setup.py build_ext --inplace
+    cd ..
+fi
 
