@@ -18,20 +18,11 @@ if [ "$1" == "clean" ]; then
     rm -rf lm_atm/*.so
     
 else
-    cd mesh
-    ${PYTHON} setup.py build_ext --inplace
-    cd ..
-
-    cd incompressible
-    ${PYTHON} setup.py build_ext --inplace
-    cd ..
-
-    cd compressible
-    ${PYTHON} setup.py build_ext --inplace
-    cd ..
-
-    cd lm_atm
-    ${PYTHON} setup.py build_ext --inplace
-    cd ..
+    for d in mesh incompressible compressible lm_atm
+    do
+	cd ${d}
+	${PYTHON} setup.py build_ext --inplace
+	cd ..
+    done
 fi
 
