@@ -257,6 +257,9 @@ subroutine get_interface_states(qx, qy, ng, dx, dy, dt, &
   ! Compute the unsplit predictions of u and v on both the x- and
   ! y-interfaces.  This includes the transverse terms.
 
+  ! note that the gradp_x, gradp_y should have any coefficients
+  ! already included (e.g. beta_0/rho)
+  
   implicit none
 
   integer, intent(in) :: qx, qy, ng

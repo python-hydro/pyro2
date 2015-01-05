@@ -427,24 +427,31 @@ class Simulation:
         # constitute our advective velocities.  Note that what we actually
         # solved for here is phi/beta_0
         phi_MAC = self.cc_data.get_var("phi-MAC")
-        solution = mg.get_solution()
-
-        phi_MAC[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2] = \
-            solution[mg.ilo-1:mg.ihi+2,mg.jlo-1:mg.jhi+2]
+        phi_MAC[:,:] = mg.get_solution(grid=myg)
 
         # FIXME: we need the coefficients on the edges here
         coeff = 1.0/rho[:,:]
         coeff = coeff*beta0[np.newaxis,:]
 
+        coeff_x = myg.scratch_array()
+        coeff_x[myg.ilo-3:myg.ihi+2,myg.jlo:myg.jhi+1] = \
+                0.5*(coeff[myg.ilo-2:myg.ihi+3,myg.jlo:myg.jhi+1] +
+                     coeff[myg.ilo-3:myg.ihi+2,myg.jlo:myg.jhi+1])
+                       
+        coeff_y = myg.scratch_array()
+        coeff_y[myg.ilo:myg.ihi+1,myg.jlo-3:myg.jhi+2] = \
+                0.5*(coeff[myg.ilo:myg.ihi+1,myg.jlo-2:myg.jhi+3] +
+                     coeff[myg.ilo:myg.ihi+1,myg.jlo-3:myg.jhi+2])
+                       
         # we need the MAC velocities on all edges of the computational domain
         # here we do U = U - (beta_0/rho) grad (phi/beta_0)
         u_MAC[myg.ilo:myg.ihi+2,myg.jlo:myg.jhi+1] -= \
-                coeff[myg.ilo  :myg.ihi+2,myg.jlo:myg.jhi+1]* \
+                coeff_x[myg.ilo  :myg.ihi+2,myg.jlo:myg.jhi+1]* \
                 (phi_MAC[myg.ilo  :myg.ihi+2,myg.jlo:myg.jhi+1] -
                  phi_MAC[myg.ilo-1:myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx
 
         v_MAC[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+2] -= \
-                coeff[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+2]* \
+                coeff_y[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+2]* \
                 (phi_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+2] -
                  phi_MAC[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi+1])/myg.dy
 
