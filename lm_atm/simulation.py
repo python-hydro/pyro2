@@ -95,16 +95,49 @@ class Simulation:
         # we'll keep the internal energy around just as a diagnostic
         my_data.register_var("eint", bc)
 
-        # phi -- used for the projections
-        my_data.register_var("phi-MAC", bc)
-        my_data.register_var("phi", bc)
+        # phi -- used for the projections.  The boundary conditions
+        # here depend on velocity.  At a wall or inflow, we already
+        # have the velocity we want on the boundary, so we want
+        # Neumann (dphi/dn = 0).  For outflow, we want Dirichlet (phi
+        # = 0) -- this ensures that we do not introduce any tangental
+        # acceleration.
+        bcs = []
+        for bc in [xlb_type, xrb_type, ylb_type, yrb_type]:
+            if bc == "periodic":
+                bctype = "periodic"
+            elif bc in ["reflect", "slipwall"]:
+                bctype = "neumann"
+            elif bc in ["outflow"]:
+                bctype = "dirichlet"
+            bcs.append(bctype)
+
+        bc_phi = patch.BCObject(xlb=bcs[0],
+                                xrb=bcs[1],
+                                ylb=bcs[2],
+                                yrb=bcs[3])
+
+        my_data.register_var("phi-MAC", bc_phi)
+        my_data.register_var("phi", bc_phi)
 
 
         # gradp -- used in the projection and interface states.  The BCs here
         # are tricky.  If we are periodic, then it is periodic.  Otherwise,
         # we just want to do first-order extrapolation (homogeneous Neumann)
-        my_data.register_var("gradp_x", bc)
-        my_data.register_var("gradp_y", bc)
+        bcs = []
+        for bc in [xlb_type, xrb_type, ylb_type, yrb_type]:
+            if bc == "periodic":
+                bctype = "periodic"
+            else:
+                bctype = "outflow"
+            bcs.append(bctype)
+
+        bc_gp = patch.BCObject(xlb=bcs[0],
+                               xrb=bcs[1],
+                               ylb=bcs[2],
+                               yrb=bcs[3])
+
+        my_data.register_var("gradp_x", bc_gp)
+        my_data.register_var("gradp_y", bc_gp)
 
         my_data.create()
 

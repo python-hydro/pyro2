@@ -23,8 +23,8 @@ ymax = 1.0
 xlboundary = periodic
 xrboundary = periodic
 
-ylboundary = periodic
-yrboundary = periodic
+ylboundary = reflect
+yrboundary = outflow
 
 
 [bubble]
