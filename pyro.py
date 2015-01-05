@@ -6,7 +6,6 @@ import getopt
 import os
 import sys
 
-import numpy
 import pylab
 
 import compare
