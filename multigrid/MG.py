@@ -65,6 +65,7 @@ import pylab
 import matplotlib
 
 import mesh.patch as patch
+from util import msg
 
 def _error(myg, r):
 
@@ -187,8 +188,7 @@ class CellCenterMG2d:
         # a small number used in computing the error, so we don't divide by 0
         self.small = 1.e-16
         
-        # keep track of whether we've initialized the solution
-        self.initialized_solution = 0
+        # keep track of whether we've initialized the RHS
         self.initialized_RHS = 0
         
         # assume that self.nx = 2^(nlevels-1) and that nx = ny
@@ -488,8 +488,6 @@ class CellCenterMG2d:
         v = self.grids[self.nlevels-1].get_var("v")
         v[:,:] = data.copy()
 
-        self.initialized_solution = 1
-
 
     def init_zeros(self):
         """
@@ -497,8 +495,6 @@ class CellCenterMG2d:
         """
         v = self.grids[self.nlevels-1].get_var("v")
         v[:,:] = 0.0
-
-        self.initialized_solution = 1
 
 
     def init_RHS(self, data):
@@ -658,10 +654,9 @@ class CellCenterMG2d:
 
         """
 
-        # start by making sure that we've initialized the solution
-        # and the RHS
-        if not self.initialized_solution or not self.initialized_RHS:
-            msg.fail("ERROR: solution and RHS are not initialized")
+        # start by making sure that we've initialized the RHS
+        if not self.initialized_RHS:
+            msg.fail("ERROR: RHS not initialized")
 
         # for now, we will just do V-cycles, continuing until we
         # achieve the L2 norm of the relative solution difference is <
