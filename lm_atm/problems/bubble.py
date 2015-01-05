@@ -46,36 +46,27 @@ def init_data(my_data, base, rp):
     pres = myg.scratch_array()
 
     j = myg.jlo
-    while j <= myg.jhi:
+    for j in range(myg.jlo, myg.jhi+1):
         dens[:,j] = max(dens_base*numpy.exp(-myg.y[j]/scale_height),
                         dens_cutoff)
-        j += 1
 
     cs2 = scale_height*abs(grav)
 
     # set the pressure (P = cs2*dens)
     pres = cs2*dens[:,:]
-
     
-    i = myg.ilo
-    while i <= myg.ihi:
-
-        j = myg.jlo
-        while j <= myg.jhi:
+    for i in range(myg.ilo, myg.ihi+1):
+        for j in range(myg.jlo, myg.jhi+1):
 
             r = numpy.sqrt((myg.x[i] - x_pert)**2  + (myg.y[j] - y_pert)**2)
 
-            if (r <= r_pert):
+            if r <= r_pert:
                 # boost the specific internal energy, keeping the pressure
                 # constant, by dropping the density
                 eint[i,j] = pres[i,j]/(gamma - 1.0)/dens[i,j]
                 eint[i,j] = eint[i,j]*pert_amplitude_factor
 
                 dens[i,j] = pres[i,j]/(eint[i,j]*(gamma - 1.0))
-
-            j += 1
-        i += 1
-        
     
 
     # do the base state
@@ -83,11 +74,8 @@ def init_data(my_data, base, rp):
     base["p0"] = numpy.mean(pres, axis=0)
 
     # redo the pressure via HSE
-    j = myg.jlo+1
-    while j <= myg.jhi:
+    for j in range(myg.jlo+1, myg.jhi):
         base["p0"][j] = base["p0"][j-1] + 0.5*myg.dy*(base["rho0"][j] + base["rho0"][j-1])*grav
-        j += 1
-
 
 
 def finalize():
