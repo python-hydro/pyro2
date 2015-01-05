@@ -61,17 +61,14 @@ class Simulation:
                            xmin=xmin, xmax=xmax, 
                            ymin=ymin, ymax=ymax, ng=4)
 
-
-        # create the variables
-
         # first figure out the BCs
         xlb_type = self.rp.get_param("mesh.xlboundary")
         xrb_type = self.rp.get_param("mesh.xrboundary")
         ylb_type = self.rp.get_param("mesh.ylboundary")
         yrb_type = self.rp.get_param("mesh.yrboundary")
 
-        bc = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
-                            ylb=ylb_type, yrb=yrb_type)
+        bc_dens = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
+                                 ylb=ylb_type, yrb=yrb_type)
 
         # if we are reflecting, we need odd reflection in the normal
         # directions for the velocity
@@ -85,15 +82,12 @@ class Simulation:
         
         my_data = patch.CellCenterData2d(myg)
 
-        # velocities
+        my_data.register_var("density", bc_dens)
         my_data.register_var("x-velocity", bc_xodd)
         my_data.register_var("y-velocity", bc_yodd)
 
-        # density
-        my_data.register_var("density", bc)
-
         # we'll keep the internal energy around just as a diagnostic
-        my_data.register_var("eint", bc)
+        my_data.register_var("eint", bc_dens)
 
         # phi -- used for the projections.  The boundary conditions
         # here depend on velocity.  At a wall or inflow, we already
@@ -111,41 +105,36 @@ class Simulation:
                 bctype = "dirichlet"
             bcs.append(bctype)
 
-        bc_phi = patch.BCObject(xlb=bcs[0],
-                                xrb=bcs[1],
-                                ylb=bcs[2],
-                                yrb=bcs[3])
+        bc_phi = patch.BCObject(xlb=bcs[0], xrb=bcs[1], ylb=bcs[2], yrb=bcs[3])
 
         my_data.register_var("phi-MAC", bc_phi)
         my_data.register_var("phi", bc_phi)
 
 
-        # gradp -- used in the projection and interface states.  The BCs here
-        # are tricky.  If we are periodic, then it is periodic.  Otherwise,
-        # we just want to do first-order extrapolation (homogeneous Neumann)
-        bcs = []
-        for bc in [xlb_type, xrb_type, ylb_type, yrb_type]:
-            if bc == "periodic":
-                bctype = "periodic"
-            else:
-                bctype = "outflow"
-            bcs.append(bctype)
-
-        bc_gp = patch.BCObject(xlb=bcs[0],
-                               xrb=bcs[1],
-                               ylb=bcs[2],
-                               yrb=bcs[3])
-
-        my_data.register_var("gradp_x", bc_gp)
-        my_data.register_var("gradp_y", bc_gp)
+        # gradp -- used in the projection and interface states.  We'll do the
+        # same BCs as density
+        my_data.register_var("gradp_x", bc_dens)
+        my_data.register_var("gradp_y", bc_dens)
 
         my_data.create()
 
         self.cc_data = my_data
 
 
+        # some auxillary data that we'll need to fill GC in, but isn't
+        # really part of the main solution
+        aux_data = patch.CellCenterData2d(myg)
+
+        aux_data.register_var("coeff", bc_dens)
+        aux_data.register_var("source_x", bc_xodd)
+        aux_data.register_var("source_y", bc_yodd)
+        
+        aux_data.create()
+        self.aux_data = aux_data
+        
+        
         # we also need storage for the 1-d base state -- we'll store this
-        # in the main class directly
+        # in the main class directly.  
         self.base["rho0"] = np.zeros((myg.qy), dtype=np.float64)
         self.base["p0"] = np.zeros((myg.qy), dtype=np.float64)
 
@@ -157,6 +146,8 @@ class Simulation:
         self.base["beta0"] = self.base["p0"]**(1.0/gamma)
 
         # we'll also need beta_0 on vertical edges
+        # FIXME: beta0 doesn't have ghost cells, so the domain boundary
+        # cases here are wrong
         self.base["beta0-edges"] = np.zeros((myg.qy), dtype=np.float64)        
         self.base["beta0-edges"][myg.jlo:myg.jhi+2] = \
             0.5*(self.base["beta0"][myg.jlo-1:myg.jhi+1] +
@@ -278,6 +269,8 @@ class Simulation:
 
         # get the cell-centered gradient of phi and update the 
         # velocities
+        # FIXME: this update only needs to be done on the interior
+        # cells -- not ghost cells
         gradp_x, gradp_y = mg.get_solution_gradient(grid=myg)
 
         coeff = 1.0/rho[:,:]
@@ -330,6 +323,8 @@ class Simulation:
         gradp_x = self.cc_data.get_var("gradp_x")
         gradp_y = self.cc_data.get_var("gradp_y")
 
+
+        # note: the base state quantities do not have valid ghost cells
         beta0 = self.base["beta0"]
         beta0_edges = self.base["beta0-edges"]
 
@@ -389,18 +384,17 @@ class Simulation:
         print("  making MAC velocities")
 
         # create the coefficient to the grad (pi/beta) term
+        # FIXME -- this needs ghost cells
         coeff = 1.0/rho[:,:]
         coeff = coeff*beta0[np.newaxis,:]
 
         # create the source term
+        # FIXME -- this needs ghost cells
         source = myg.scratch_array()
 
         g = self.rp.get_param("lm-atmosphere.grav")        
         rhoprime = self.make_prime(rho, rho0)
         source = rhoprime*g/rho
-        print("here's the source: ", np.min(source), np.max(source))
-        print(g)
-        print(np.min(rhoprime), np.max(rhoprime))
 
         u_MAC, v_MAC = lm_interface_f.mac_vels(myg.qx, myg.qy, myg.ng, 
                                                myg.dx, myg.dy, dt,
@@ -462,6 +456,7 @@ class Simulation:
         phi_MAC = self.cc_data.get_var("phi-MAC")
         phi_MAC[:,:] = mg.get_solution(grid=myg)
 
+        # FIXME -- this needs ghost cells
         coeff = 1.0/rho[:,:]
         coeff = coeff*beta0[np.newaxis,:]
 
@@ -519,6 +514,7 @@ class Simulation:
         print("  making u, v edge states")
 
         # FIXME: this should be time-centered
+        # FIXME: this needs ghost cells
         coeff = 1.0/rho[:,:]
         coeff = coeff*beta0[np.newaxis,:]
 
@@ -582,14 +578,14 @@ class Simulation:
         rhoprime = self.make_prime(rho_half, rho0)
         source = rhoprime*g/rho_half
 
-        print("min/max source = ", np.min(source), np.max(source))
         v[:,:] += dt*source
         
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")
 
-        print("min/max u = ", np.min(u), np.max(u))
-        print("min/max v = ", np.min(v), np.max(v))
+        print("min/max rho = {}, {}".format(np.min(rho), np.max(rho)))
+        print("min/max u   = {}, {}".format(np.min(u), np.max(u)))
+        print("min/max v   = {}, {}".format(np.min(v), np.max(v)))
 
 
         #---------------------------------------------------------------------
@@ -647,6 +643,7 @@ class Simulation:
         # this differs depending on what we projected.
         gradphi_x, gradphi_y = mg.get_solution_gradient(grid=myg)
 
+        
         # U = U - (beta_0/rho) grad (phi/beta_0)
         coeff = 1.0/rho[:,:]
         coeff = coeff*beta0[np.newaxis,:]
@@ -655,6 +652,8 @@ class Simulation:
         v[:,:] -= dt*coeff*gradphi_y
         
         # store gradp for the next step
+        # FIXME: need to ghost cell fill these
+
         if proj_type == 1:
             gradp_x[:,:] += gradphi_x[:,:]
             gradp_y[:,:] += gradphi_y[:,:]
