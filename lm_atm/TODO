@@ -23,24 +23,8 @@ Problems:
 
 Known issues:
 
-xx the initial projection is not putting beta into the divergence
-
-xx we are not correcting the velocity field after the final projection
-   correctly -- the beta/rho weighting is not there
-
-xx in the prediction of the interface states, we pass in gradp_x, gradp_y
-   -- but we should have the proper weighting on this, including the 1/rho!
-
 -- if proj_type == 1, we need to use the correct coefficient for gradp
 
--- in the final projection, do we want the coefficient to use 1/rho^{n+1/2}?
+-- there seems to be a break in the symmetry
 
--- we need add the gravitational acceleration source term in the momentum
 
-xx we are doing periodic in the VERTICAL DIRECTION!!!!  This is ultimately
-   the cause of the crash for the bubble.  We need a more general way
-   to support boundary conditions for the projection + we should add a
-   slipwall BC.
-
--- none of the base state quantities have ghost cells, so we need to
-   do a GC fill on source and the various coeffs
