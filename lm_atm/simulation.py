@@ -32,6 +32,7 @@ class Simulation:
         print(rp)
 
         self.cc_data = None
+        self.aux_data = None
         self.base = {}
 
         self.problem_name = problem_name
@@ -126,7 +127,6 @@ class Simulation:
         aux_data = patch.CellCenterData2d(myg)
 
         aux_data.register_var("coeff", bc_dens)
-        aux_data.register_var("source_x", bc_xodd)
         aux_data.register_var("source_y", bc_yodd)
         
         aux_data.create()
@@ -145,14 +145,15 @@ class Simulation:
         gamma = self.rp.get_param("eos.gamma")
         self.base["beta0"] = self.base["p0"]**(1.0/gamma)
 
-        # we'll also need beta_0 on vertical edges
-        # FIXME: beta0 doesn't have ghost cells, so the domain boundary
-        # cases here are wrong
+        # we'll also need beta_0 on vertical edges -- on the domain edges,
+        # just do piecewise constant
         self.base["beta0-edges"] = np.zeros((myg.qy), dtype=np.float64)        
-        self.base["beta0-edges"][myg.jlo:myg.jhi+2] = \
-            0.5*(self.base["beta0"][myg.jlo-1:myg.jhi+1] +
-                 self.base["beta0"][myg.jlo  :myg.jhi+2])
-
+        self.base["beta0-edges"][myg.jlo+1:myg.jhi+1] = \
+            0.5*(self.base["beta0"][myg.jlo  :myg.jhi] +
+                 self.base["beta0"][myg.jlo+1:myg.jhi+1])
+        self.base["beta0-edges"][myg.jlo] = self.base["beta0"][myg.jlo]
+        self.base["beta0-edges"][myg.jhi+1] = self.base["beta0"][myg.jhi]
+        
 
     def make_prime(self, a, a0):
         return a - a0[np.newaxis,:]
@@ -384,18 +385,19 @@ class Simulation:
         print("  making MAC velocities")
 
         # create the coefficient to the grad (pi/beta) term
-        # FIXME -- this needs ghost cells
-        coeff = 1.0/rho[:,:]
-        coeff = coeff*beta0[np.newaxis,:]
-
+        coeff = self.aux_data.get_var("coeff")
+        coeff[:,:] = 1.0/rho[:,:]
+        coeff[:,:] = coeff*beta0[np.newaxis,:]
+        self.aux_data.fill_BC("coeff")
+        
         # create the source term
-        # FIXME -- this needs ghost cells
-        source = myg.scratch_array()
+        source = self.aux_data.get_var("source_y")
 
         g = self.rp.get_param("lm-atmosphere.grav")        
         rhoprime = self.make_prime(rho, rho0)
-        source = rhoprime*g/rho
-
+        source[:,:] = rhoprime*g/rho
+        self.aux_data.fill_BC("source_y")
+        
         u_MAC, v_MAC = lm_interface_f.mac_vels(myg.qx, myg.qy, myg.ng, 
                                                myg.dx, myg.dy, dt,
                                                u, v,
@@ -456,10 +458,11 @@ class Simulation:
         phi_MAC = self.cc_data.get_var("phi-MAC")
         phi_MAC[:,:] = mg.get_solution(grid=myg)
 
-        # FIXME -- this needs ghost cells
-        coeff = 1.0/rho[:,:]
-        coeff = coeff*beta0[np.newaxis,:]
-
+        coeff = self.aux_data.get_var("coeff")        
+        coeff[:,:] = 1.0/rho[:,:]
+        coeff[:,:] = coeff*beta0[np.newaxis,:]
+        self.aux_data.fill_BC("coeff")
+        
         coeff_x = myg.scratch_array()
         coeff_x[myg.ilo-3:myg.ihi+2,myg.jlo:myg.jhi+1] = \
                 0.5*(coeff[myg.ilo-2:myg.ihi+3,myg.jlo:myg.jhi+1] +
@@ -513,11 +516,11 @@ class Simulation:
         #---------------------------------------------------------------------
         print("  making u, v edge states")
 
-        # FIXME: this should be time-centered
-        # FIXME: this needs ghost cells
-        coeff = 1.0/rho[:,:]
-        coeff = coeff*beta0[np.newaxis,:]
-
+        coeff = self.aux_data.get_var("coeff")
+        coeff[:,:] = 2.0/(rho[:,:] + rho_old[:,:])
+        coeff[:,:] = coeff*beta0[np.newaxis,:]
+        self.aux_data.fill_BC("coeff")
+        
         u_xint, v_xint, u_yint, v_yint = \
                lm_interface_f.states(myg.qx, myg.qy, myg.ng, 
                                      myg.dx, myg.dy, dt,
@@ -652,7 +655,6 @@ class Simulation:
         v[:,:] -= dt*coeff*gradphi_y
         
         # store gradp for the next step
-        # FIXME: need to ghost cell fill these
 
         if proj_type == 1:
             gradp_x[:,:] += gradphi_x[:,:]
@@ -664,6 +666,9 @@ class Simulation:
             
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")
+
+        self.cc_data.fill_BC("gradp_x")
+        self.cc_data.fill_BC("gradp_y")        
 
 
     def dovis(self):
