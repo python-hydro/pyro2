@@ -429,7 +429,6 @@ class Simulation:
         phi_MAC = self.cc_data.get_var("phi-MAC")
         phi_MAC[:,:] = mg.get_solution(grid=myg)
 
-        # FIXME: we need the coefficients on the edges here
         coeff = 1.0/rho[:,:]
         coeff = coeff*beta0[np.newaxis,:]
 
@@ -486,6 +485,7 @@ class Simulation:
         #---------------------------------------------------------------------
         print("  making u, v edge states")
 
+        # FIXME: this should be time-centered
         coeff = 1.0/rho[:,:]
         coeff = coeff*beta0[np.newaxis,:]
 
@@ -647,7 +647,7 @@ class Simulation:
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
 
-        rho0 = self.base["rho0"]
+        #rho0 = self.base["rho0"]
 
         myg = self.cc_data.grid
 
@@ -656,7 +656,7 @@ class Simulation:
 
         magvel = np.sqrt(u**2 + v**2)
 
-        rhoprime = self.make_prime(rho, rho0)
+        #rhoprime = self.make_prime(rho, rho0)
 
         vort[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
              0.5*(v[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
@@ -667,8 +667,8 @@ class Simulation:
         fig, axes = pylab.subplots(nrows=2, ncols=2, num=1)
         pylab.subplots_adjust(hspace=0.25)
 
-        fields = [rho, magvel, vort, rhoprime]
-        field_names = [r"$\rho$", r"|U|", r"$\nabla \times U$", r"$\rho - \rho^\prime$"]
+        fields = [rho, magvel, vort, rho]
+        field_names = [r"$\rho$", r"|U|", r"$\nabla \times U$", r"$\rho$"]
     
         for n in range(4):
             ax = axes.flat[n]
