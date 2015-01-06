@@ -60,8 +60,8 @@ from __future__ import print_function
 
 import math
 
-import numpy
-import pylab
+import numpy as np
+import matplotlib.pyplot as plt
 import matplotlib
 
 import mesh.patch as patch
@@ -71,25 +71,25 @@ def _error(myg, r):
 
     # L2 norm of elements in r, multiplied by dx*dy to
     # normalize
-    return numpy.sqrt(myg.dx*myg.dy*
-                      numpy.sum((r[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]**2).flat))
+    return np.sqrt(myg.dx*myg.dy*
+                      np.sum((r[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]**2).flat))
 
 
 class CellCenterMG2d:
-    """ 
+    """
     The main multigrid class for cell-centered data.
 
     We require that nx = ny be a power of 2 and dx = dy, for
     simplicity
     """
-    
+
     def __init__(self, nx, ny, ng=1,
                  xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0,
                  xl_BC_type="dirichlet", xr_BC_type="dirichlet",
                  yl_BC_type="dirichlet", yr_BC_type="dirichlet",
                  alpha=0.0, beta=-1.0,
                  nsmooth=10, nsmooth_bottom=50,
-                 verbose=0, 
+                 verbose=0,
                  aux_field=None, aux_bc=None,
                  true_function=None, vis=0, vis_title=""):
         """
@@ -136,7 +136,7 @@ class CellCenterMG2d:
         aux_bc : BCObject, optional
             the boundary conditions corresponding to the aux field
         true_function : function, optional
-            a function (of x,y) that provides the exact solution to 
+            a function (of x,y) that provides the exact solution to
             the elliptic problem we are solving.  This is used only
             for visualization purposes
         vis : int, optional
@@ -154,22 +154,22 @@ class CellCenterMG2d:
         if nx != ny:
             print("ERROR: multigrid currently requires nx = ny")
             return -1
-        
+
         self.nx = nx
-        self.ny = ny        
-        
+        self.ny = ny
+
         self.ng = ng
 
         self.xmin = xmin
         self.xmax = xmax
 
         self.ymin = ymin
-        self.ymax = ymax        
+        self.ymax = ymax
 
         if (xmax-xmin) != (ymax-ymin):
             print("ERROR: multigrid currently requires a square domain")
             return -1
-        
+
         self.alpha = alpha
         self.beta = beta
 
@@ -177,7 +177,7 @@ class CellCenterMG2d:
         self.nsmooth_bottom = nsmooth_bottom
 
         self.max_cycles = 100
-        
+
         self.verbose = verbose
 
         # for visualization purposes, we can set a function name that
@@ -187,13 +187,13 @@ class CellCenterMG2d:
 
         # a small number used in computing the error, so we don't divide by 0
         self.small = 1.e-16
-        
+
         # keep track of whether we've initialized the RHS
         self.initialized_RHS = 0
-        
+
         # assume that self.nx = 2^(nlevels-1) and that nx = ny
         # this defines nlevels such that we end exactly on a 2x2 grid
-        self.nlevels = int(math.log(self.nx)/math.log(2.0)) 
+        self.nlevels = int(math.log(self.nx)/math.log(2.0))
 
         # a multigrid object will be a list of grids
         self.grids = []
@@ -209,14 +209,14 @@ class CellCenterMG2d:
             print("beta  = ", self.beta)
 
         while i < self.nlevels:
-            
+
             # create the grid
             my_grid = patch.Grid2d(nx_t, ny_t, ng=self.ng,
                                    xmin=xmin, xmax=xmax,
                                    ymin=ymin, ymax=ymax)
 
             # add a CellCenterData2d object for this level to our list
-            self.grids.append(patch.CellCenterData2d(my_grid, dtype=numpy.float64))
+            self.grids.append(patch.CellCenterData2d(my_grid, dtype=np.float64))
 
             # create the boundary condition object
             bc = patch.BCObject(xlb=xl_BC_type, xrb=xr_BC_type,
@@ -248,14 +248,14 @@ class CellCenterMG2d:
         self.ihi = soln_grid.ihi
         self.jlo = soln_grid.jlo
         self.jhi = soln_grid.jhi
-        
+
         self.x  = soln_grid.x
         self.dx = soln_grid.dx
 
         self.x2d = soln_grid.x2d
 
         self.y  = soln_grid.y
-        self.dy = soln_grid.dy   # note, dy = dx is assumed 
+        self.dy = soln_grid.dy   # note, dy = dx is assumed
 
         self.y2d = soln_grid.y2d
 
@@ -286,28 +286,28 @@ class CellCenterMG2d:
     # solution within the V
     def _draw_V(self):
         """ draw the V-cycle on our optional visualization """
-        xdown = numpy.linspace(0.0, 0.5, self.nlevels)
-        xup = numpy.linspace(0.5, 1.0, self.nlevels)
+        xdown = np.linspace(0.0, 0.5, self.nlevels)
+        xup = np.linspace(0.5, 1.0, self.nlevels)
 
-        ydown = numpy.linspace(1.0, 0.0, self.nlevels)
-        yup = numpy.linspace(0.0, 1.0, self.nlevels)
+        ydown = np.linspace(1.0, 0.0, self.nlevels)
+        yup = np.linspace(0.0, 1.0, self.nlevels)
 
-        pylab.plot(xdown, ydown, lw=2, color="k")
-        pylab.plot(xup, yup, lw=2, color="k")
+        plt.plot(xdown, ydown, lw=2, color="k")
+        plt.plot(xup, yup, lw=2, color="k")
 
-        pylab.scatter(xdown, ydown, marker="o", color="k", s=40)
-        pylab.scatter(xup, yup, marker="o", color="k", s=40)
+        plt.scatter(xdown, ydown, marker="o", color="k", s=40)
+        plt.scatter(xup, yup, marker="o", color="k", s=40)
 
         if self.up_or_down == "down":
-            pylab.scatter(xdown[self.nlevels-self.current_level-1], ydown[self.nlevels-self.current_level-1], 
+            plt.scatter(xdown[self.nlevels-self.current_level-1], ydown[self.nlevels-self.current_level-1],
                           marker="o", color="r", zorder=100, s=38)
 
         else:
-            pylab.scatter(xup[self.current_level], yup[self.current_level], 
+            plt.scatter(xup[self.current_level], yup[self.current_level],
                           marker="o", color="r", zorder=100, s=38)
 
-        pylab.text(0.7, 0.1, "V-cycle %d" % (self.current_cycle))
-        pylab.axis("off")
+        plt.text(0.7, 0.1, "V-cycle %d" % (self.current_cycle))
+        plt.axis("off")
 
 
     def _draw_solution(self):
@@ -316,52 +316,52 @@ class CellCenterMG2d:
 
         v = self.grids[self.current_level].get_var("v")
 
-        pylab.imshow(numpy.transpose(v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
+        plt.imshow(np.transpose(v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
                      interpolation="nearest", origin="lower",
                      extent=[self.xmin, self.xmax, self.ymin, self.ymax])
 
-        #pylab.xlabel("x")
-        pylab.ylabel("y")
-        
+        #plt.xlabel("x")
+        plt.ylabel("y")
+
 
         if self.current_level == self.nlevels-1:
-            pylab.title(r"solving $L\phi = f$")
+            plt.title(r"solving $L\phi = f$")
         else:
-            pylab.title(r"solving $Le = r$")
+            plt.title(r"solving $Le = r$")
 
         formatter = matplotlib.ticker.ScalarFormatter(useMathText=True)
-        cb = pylab.colorbar(format=formatter, shrink=0.5)
-    
+        cb = plt.colorbar(format=formatter, shrink=0.5)
+
         cb.ax.yaxis.offsetText.set_fontsize("small")
-        cl = pylab.getp(cb.ax, 'ymajorticklabels')
-        pylab.setp(cl, fontsize="small")
+        cl = plt.getp(cb.ax, 'ymajorticklabels')
+        plt.setp(cl, fontsize="small")
 
 
     def _draw_main_solution(self):
-        """ 
-        plot the solution at the finest level on our optional 
-        visualization 
+        """
+        plot the solution at the finest level on our optional
+        visualization
         """
         myg = self.grids[self.nlevels-1].grid
 
         v = self.grids[self.nlevels-1].get_var("v")
 
-        pylab.imshow(numpy.transpose(v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
+        plt.imshow(np.transpose(v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
                      interpolation="nearest", origin="lower",
                      extent=[self.xmin, self.xmax, self.ymin, self.ymax])
 
-        pylab.xlabel("x")
-        pylab.ylabel("y")
-        
+        plt.xlabel("x")
+        plt.ylabel("y")
 
-        pylab.title(r"current fine grid solution")
+
+        plt.title(r"current fine grid solution")
 
         formatter = matplotlib.ticker.ScalarFormatter(useMathText=True)
-        cb = pylab.colorbar(format=formatter, shrink=0.5)
-    
+        cb = plt.colorbar(format=formatter, shrink=0.5)
+
         cb.ax.yaxis.offsetText.set_fontsize("small")
-        cl = pylab.getp(cb.ax, 'ymajorticklabels')
-        pylab.setp(cl, fontsize="small")
+        cl = plt.getp(cb.ax, 'ymajorticklabels')
+        plt.setp(cl, fontsize="small")
 
 
     def _draw_main_error(self):
@@ -375,23 +375,23 @@ class CellCenterMG2d:
 
         e = v - self.true_function(myg.x2d, myg.y2d)
 
-        pylab.imshow(numpy.transpose(e[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
+        plt.imshow(np.transpose(e[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
                      interpolation="nearest", origin="lower",
                      extent=[self.xmin, self.xmax, self.ymin, self.ymax])
 
-        pylab.xlabel("x")
-        pylab.ylabel("y")
-        
+        plt.xlabel("x")
+        plt.ylabel("y")
 
-        pylab.title(r"current fine grid error")
+
+        plt.title(r"current fine grid error")
 
         formatter = matplotlib.ticker.ScalarFormatter(useMathText=True)
-        cb = pylab.colorbar(format=formatter, shrink=0.5)
-    
+        cb = plt.colorbar(format=formatter, shrink=0.5)
+
         cb.ax.yaxis.offsetText.set_fontsize("small")
-        cl = pylab.getp(cb.ax, 'ymajorticklabels')
-        pylab.setp(cl, fontsize="small")
-    
+        cl = plt.getp(cb.ax, 'ymajorticklabels')
+        plt.setp(cl, fontsize="small")
+
 
     def get_solution(self, grid=None):
         """
@@ -414,7 +414,7 @@ class CellCenterMG2d:
         v = self.grids[self.nlevels-1].get_var("v")
 
         myg = self.soln_grid
-        
+
         if grid is None:
             return v.copy()
         else:
@@ -425,10 +425,10 @@ class CellCenterMG2d:
 
     def get_solution_gradient(self, grid=None):
         """
-        Return the gradient of the solution after doing the MG solve.  The 
+        Return the gradient of the solution after doing the MG solve.  The
         x- and y-components are returned in separate arrays.
 
-        If a grid object is passed in, then the gradient is computed on that 
+        If a grid object is passed in, then the gradient is computed on that
         grid.
 
         Returns
@@ -509,7 +509,7 @@ class CellCenterMG2d:
             values to initialize the solution to the elliptic problem.
 
         """
-        
+
         f = self.grids[self.nlevels-1].get_var("f")
         f[:,:] = data.copy()
 
@@ -519,12 +519,12 @@ class CellCenterMG2d:
         if self.verbose:
             print("Source norm = ", self.source_norm)
 
-        # note: if we wanted to do inhomogeneous Dirichlet BCs, we 
+        # note: if we wanted to do inhomogeneous Dirichlet BCs, we
         # would modify the source term, f, here to include a boundary
         # charge
 
         self.initialized_RHS = 1
-        
+
 
     def _compute_residual(self, level):
         """ compute the residual and store it in the r variable"""
@@ -535,25 +535,25 @@ class CellCenterMG2d:
 
         myg = self.grids[level].grid
 
-        # compute the residual 
+        # compute the residual
         # r = f - alpha phi + beta L phi
         r[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
             f[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] - \
             self.alpha*v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] + \
-            self.beta*( 
-            (v[myg.ilo-1:myg.ihi  ,myg.jlo  :myg.jhi+1] + 
-             v[myg.ilo+1:myg.ihi+2,myg.jlo  :myg.jhi+1] - 
-             2.0*v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])/(myg.dx*myg.dx) + 
+            self.beta*(
+            (v[myg.ilo-1:myg.ihi  ,myg.jlo  :myg.jhi+1] +
+             v[myg.ilo+1:myg.ihi+2,myg.jlo  :myg.jhi+1] -
+             2.0*v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])/(myg.dx*myg.dx) +
             (v[myg.ilo  :myg.ihi+1,myg.jlo-1:myg.jhi  ] +
              v[myg.ilo  :myg.ihi+1,myg.jlo+1:myg.jhi+2] -
              2.0*v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])/(myg.dy*myg.dy) )
 
-        
+
     def smooth(self, level, nsmooth):
-        """ 
+        """
         Use red-black Gauss-Seidel iterations to smooth the solution
         at a given level.  This is used at each stage of the V-cycle
-        (up and down) in the MG solution, but it can also be called 
+        (up and down) in the MG solution, but it can also be called
         directly to solve the elliptic problem (although it will take
         many more iterations).
 
@@ -593,7 +593,7 @@ class CellCenterMG2d:
             #      --+-------+-------+--
             #        |  ilo  |       |
             #
-            # groups 1 and 3 are done together, then we need to 
+            # groups 1 and 3 are done together, then we need to
             # fill ghost cells, and then groups 2 and 4
 
             for n, (ix, iy) in enumerate([(0,0), (1,1), (1,0), (0,1)]):
@@ -609,33 +609,33 @@ class CellCenterMG2d:
                             v[myg.ilo+ix  :myg.ihi+1:2,
                               myg.jlo-1+iy:myg.jhi  :2]))/ \
                    (self.alpha + 2.0*xcoeff + 2.0*ycoeff)
-                
+
                 if n == 1 or n == 3:
                     self.grids[level].fill_BC("v")
 
 
             if self.vis == 1:
-                pylab.clf()
+                plt.clf()
 
-                pylab.subplot(221)
+                plt.subplot(221)
                 self._draw_solution()
 
-                pylab.subplot(222)        
+                plt.subplot(222)
                 self._draw_V()
 
-                pylab.subplot(223)        
+                plt.subplot(223)
                 self._draw_main_solution()
 
-                pylab.subplot(224)        
+                plt.subplot(224)
                 self._draw_main_error()
 
 
-                pylab.suptitle(self.vis_title, fontsize=18)
+                plt.suptitle(self.vis_title, fontsize=18)
 
-                pylab.draw()
-                pylab.savefig("mg_%4.4d.png" % (self.frame))
+                plt.draw()
+                plt.savefig("mg_%4.4d.png" % (self.frame))
                 self.frame += 1
-            
+
 
     def solve(self, rtol = 1.e-11):
         """
@@ -663,9 +663,9 @@ class CellCenterMG2d:
         # rtol
         if self.verbose:
             print("source norm = ", self.source_norm)
-            
+
         old_solution = self.grids[self.nlevels-1].get_var("v").copy()
-        
+
         converged = 0
         cycle = 1
 
@@ -677,7 +677,7 @@ class CellCenterMG2d:
             level = 0
             while level < self.nlevels-1:
                 v = self.grids[level].zero("v")
-                level += 1            
+                level += 1
 
             # descending part
             if self.verbose:
@@ -703,11 +703,11 @@ class CellCenterMG2d:
 
                     print("  before G-S, residual L2 norm = %g" % \
                           (_error(fP.grid, r) ))
-            
+
                 # smooth on the current level
                 self.smooth(level, self.nsmooth)
 
-            
+
                 # compute the residual
                 self._compute_residual(level)
 
@@ -723,7 +723,7 @@ class CellCenterMG2d:
                 level -= 1
 
 
-            # solve the discrete coarse problem.  We could use any 
+            # solve the discrete coarse problem.  We could use any
             # number of different matrix solvers here (like CG), but
             # since we are 2x2 by design at this point, we will just
             # smooth
@@ -742,7 +742,7 @@ class CellCenterMG2d:
 
             bP.fill_BC("v")
 
-            
+
             # ascending part
             level = 1
             while level < self.nlevels:
@@ -771,7 +771,7 @@ class CellCenterMG2d:
 
                     print("  before G-S, residual L2 norm = %g" % \
                           (_error(fP.grid, r) ))
-            
+
                 # smooth
                 self.smooth(level, self.nsmooth)
 
@@ -780,7 +780,7 @@ class CellCenterMG2d:
 
                     print("  after G-S, residual L2 norm = %g\n" % \
                           (_error(fP.grid, r) ))
-            
+
                 level += 1
 
             # compute the error with respect to the previous solution
@@ -804,21 +804,16 @@ class CellCenterMG2d:
             else:
                 residual_error = _error(fP.grid, r)
 
-                
+
             if residual_error < rtol:
                 converged = 1
                 self.num_cycles = cycle
                 self.relative_error = relative_error
                 self.residual_error = residual_error
                 fP.fill_BC("v")
-                
+
             if self.verbose:
                 print("cycle %d: relative err = %g, residual err = %g\n" % \
                       (cycle, relative_error, residual_error))
-            
+
             cycle += 1
-
-
-
-        
-        
