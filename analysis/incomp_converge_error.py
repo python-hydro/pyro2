@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 
-import numpy
+import numpy as np
 import mesh.patch as patch
-import getopt
 import sys
-import advection.problems.smooth as smooth
 import math
 
 usage = """
@@ -16,9 +14,9 @@ usage = """
 
 def error(imin, imax, dx, jmin, jmax, dy, r):
 
-    # L2 norm of elements in r, multiplied by dx*dy to                          
-    # normalize                                                                 
-    return numpy.sqrt(dx*dy*numpy.sum((r[imin:imax+1,jmin:jmax+1]**2).flat))
+    # L2 norm of elements in r, multiplied by dx*dy to
+    # normalize
+    return np.sqrt(dx*dy*np.sum((r[imin:imax+1,jmin:jmax+1]**2).flat))
 
 
 
@@ -47,8 +45,8 @@ v = myd.get_var("y-velocity")
 t = myd.t
 
 # analytic solution
-u_exact = 1.0 - 2.0*numpy.cos(2.0*math.pi*(myg.x2d-t))*numpy.sin(2.0*math.pi*(myg.y2d-t))
-v_exact = 1.0 + 2.0*numpy.sin(2.0*math.pi*(myg.x2d-t))*numpy.cos(2.0*math.pi*(myg.y2d-t))
+u_exact = 1.0 - 2.0*np.cos(2.0*math.pi*(myg.x2d-t))*np.sin(2.0*math.pi*(myg.y2d-t))
+v_exact = 1.0 + 2.0*np.sin(2.0*math.pi*(myg.x2d-t))*np.cos(2.0*math.pi*(myg.y2d-t))
 
 # error
 udiff = u_exact - u
@@ -57,12 +55,3 @@ vdiff = v_exact - v
 print "errors: ", \
     error(myg.ilo, myg.ihi, myg.dx, myg.jlo, myg.jhi, myg.dy, udiff), \
     error(myg.ilo, myg.ihi, myg.dx, myg.jlo, myg.jhi, myg.dy, vdiff),
-
-
-
-
-
-
-
-
-

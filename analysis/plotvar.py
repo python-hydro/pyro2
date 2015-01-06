@@ -1,34 +1,34 @@
 #!/usr/bin/env python
 
-import numpy
-import pylab
+import numpy as np
+import matplotlib.pyplot as plt
 import sys
 import getopt
 
 import mesh.patch as patch
 
-# plot a single variable from an output file 
+# plot a single variable from an output file
 #
 # Usage: ./plotvar.py filename variable
 
 def makeplot(myd, variable, outfile):
 
-    pylab.figure(num=1, figsize=(6.5,5.25), dpi=100, facecolor='w')
+    plt.figure(num=1, figsize=(6.5,5.25), dpi=100, facecolor='w')
 
     var = myd.get_var(variable)
     myg = myd.grid
 
-    img = pylab.imshow(numpy.transpose(var[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
+    img = plt.imshow(np.transpose(var[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
                        interpolation="nearest", origin="lower",
                        extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
-    pylab.colorbar()
+    plt.colorbar()
 
-    pylab.xlabel("x")
-    pylab.ylabel("y")
+    plt.xlabel("x")
+    plt.ylabel("y")
 
-    pylab.savefig(outfile, bbox_inches="tight")
-    pylab.show()
+    plt.savefig(outfile, bbox_inches="tight")
+    plt.show()
 
 
 def usage():
@@ -59,17 +59,13 @@ if __name__== "__main__":
     for o, a in opts:
         if o == "-h": usage()
         if o == "-o": outfile = a
-                                    
+
     try: file = next[0]
     except: usage()
-        
+
     try: variable = next[1]
     except: usage()
 
     myg, myd = patch.read(file)
 
     makeplot(myd, variable, outfile)
-
-
-
-

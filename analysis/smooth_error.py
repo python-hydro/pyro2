@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
-import numpy
+import numpy as np
 import mesh.patch as patch
-import getopt
 import sys
 import advection.problems.smooth as smooth
 
@@ -32,7 +31,7 @@ myg, myd = patch.read(file1)
 
 
 # create a new data object on the same grid
-analytic = patch.CellCenterData2d(myg, dtype=numpy.float64)
+analytic = patch.CellCenterData2d(myg, dtype=np.float64)
 
 bco = myd.BCs[myd.vars[0]]
 analytic.register_var("density", bco)
@@ -53,16 +52,8 @@ aerr = abs(dens_numerical[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] -
 
 rerr = aerr/dens_analytic[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]
 
-# note that the numpy norm does not normalize by the number of elements, 
+# note that the numpy norm does not normalize by the number of elements,
 # so we explicitly do so here
-l2a = numpy.sqrt(numpy.sum(aerr**2)/(myg.nx*myg.ny))
-l2r = numpy.sqrt(numpy.sum(rerr**2)/(myg.nx*myg.ny))
+l2a = np.sqrt(np.sum(aerr**2)/(myg.nx*myg.ny))
+l2r = np.sqrt(np.sum(rerr**2)/(myg.nx*myg.ny))
 print "error norms (absolute, relative): ", l2a, l2r
-
-
-
-
-
-
-
-

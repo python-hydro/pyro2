@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-import numpy
-import pylab
+import numpy as np
+import matplotlib.pyplot as plt
 import sys
 import getopt
 
@@ -30,15 +30,15 @@ def makeplot(myd, var, outfile):
 
 
 
-    pylab.figure(num=1, figsize=(6.0,6.0), dpi=100, facecolor='w')
+    plt.figure(num=1, figsize=(6.0,6.0), dpi=100, facecolor='w')
 
-    pylab.imshow(numpy.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
+    plt.imshow(np.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
                  interpolation="nearest", origin="lower",
                  extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
-    pylab.axis("off")
-    pylab.subplots_adjust(bottom=0.0, top=1.0, left=0.0, right=1.0)
-    pylab.savefig(outfile)
+    plt.axis("off")
+    plt.subplots_adjust(bottom=0.0, top=1.0, left=0.0, right=1.0)
+    plt.savefig(outfile)
 
 
 

@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-import numpy
+import numpy as np
 import mesh.patch as patch
 import sys
-import pylab
+import matplotlib.pyplot as plt
 
 usage = """
       compare the output for a Sod problem with the exact solution contained
@@ -35,7 +35,7 @@ ymom = myd.get_var("y-momentum")
 ener = myd.get_var("energy")
 
 # get the exact solution
-exact = numpy.loadtxt("sod-exact.out")
+exact = np.loadtxt("sod-exact.out")
 
 x_exact   = exact[:,0]
 rho_exact = exact[:,1]
@@ -50,7 +50,7 @@ if (myg.nx > myg.ny):
     # x-problem
     x = myg.x[myg.ilo:myg.ihi+1]
     jj = myg.ny/2
-    
+
     rho = dens[myg.ilo:myg.ihi+1,jj]
 
     u = xmom[myg.ilo:myg.ihi+1,jj]/rho
@@ -66,7 +66,7 @@ else:
     # y-problem
     x = myg.y[myg.jlo:myg.jhi+1]
     ii = myg.nx/2
-    
+
     rho = dens[ii,myg.jlo:myg.jhi+1]
 
     u = ymom[ii,myg.jlo:myg.jhi+1]/rho
@@ -81,9 +81,9 @@ else:
 print myg
 
 # plot
-fig, axes = pylab.subplots(nrows=4, ncols=1, num=1)        
+fig, axes = plt.subplots(nrows=4, ncols=1, num=1)
 
-pylab.rc("font", size=10)
+plt.rc("font", size=10)
 
 
 ax = axes.flat[0]
@@ -124,19 +124,9 @@ else:
 ax.set_ylabel(r"$e$")
 ax.set_xlim(0,1.0)
 
-pylab.subplots_adjust(hspace=0.25)
+plt.subplots_adjust(hspace=0.25)
 
 
 fig.set_size_inches(4.5,9.0)
 
-pylab.savefig("sod_compare.png", bbox_inches="tight")
-
-
-
-
-
-
-
-
-
-
+plt.savefig("sod_compare.png", bbox_inches="tight")
