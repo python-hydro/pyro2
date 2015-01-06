@@ -1,7 +1,7 @@
 from __future__ import print_function
 
-import numpy
-import pylab
+import numpy as np
+import matplotlib.pyplot as plt
 
 import compressible.BC as BC
 from compressible.problems import *
@@ -65,7 +65,7 @@ class Simulation:
 
 
     def initialize(self):
-        """ 
+        """
         Initialize the grid and variables for compressible flow and set
         the initial conditions for the chosen problem.
         """
@@ -78,9 +78,9 @@ class Simulation:
         xmax = self.rp.get_param("mesh.xmax")
         ymin = self.rp.get_param("mesh.ymin")
         ymax = self.rp.get_param("mesh.ymax")
-    
-        my_grid = patch.Grid2d(nx, ny, 
-                               xmin=xmin, xmax=xmax, 
+
+        my_grid = patch.Grid2d(nx, ny,
+                               xmin=xmin, xmax=xmax,
                                ymin=ymin, ymax=ymax, ng=4)
 
 
@@ -97,8 +97,8 @@ class Simulation:
         xlb_type = self.rp.get_param("mesh.xlboundary")
         xrb_type = self.rp.get_param("mesh.xrboundary")
         ylb_type = self.rp.get_param("mesh.ylboundary")
-        yrb_type = self.rp.get_param("mesh.yrboundary")    
-    
+        yrb_type = self.rp.get_param("mesh.yrboundary")
+
         bc = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
                             ylb=ylb_type, yrb=yrb_type)
 
@@ -115,7 +115,7 @@ class Simulation:
                                  ylb=ylb_type, yrb=yrb_type,
                                  odd_reflect_dir="x")
 
-        my_data.register_var("x-momentum", bc_xodd)    
+        my_data.register_var("x-momentum", bc_xodd)
 
 
         # y-momentum -- if we are reflecting in y, then we need to
@@ -124,7 +124,7 @@ class Simulation:
                                  ylb=ylb_type, yrb=yrb_type,
                                  odd_reflect_dir="y")
 
-        my_data.register_var("y-momentum", bc_yodd)    
+        my_data.register_var("y-momentum", bc_yodd)
 
 
         # store the EOS gamma as an auxillary quantity so we can have a
@@ -151,11 +151,11 @@ class Simulation:
 
     def timestep(self):
         """
-        The timestep function computes the advective timestep (CFL) 
-        constraint.  The CFL constraint says that information cannot 
+        The timestep function computes the advective timestep (CFL)
+        constraint.  The CFL constraint says that information cannot
         propagate further than one zone per timestep.
 
-        We use the driver.cfl parameter to control what fraction of the 
+        We use the driver.cfl parameter to control what fraction of the
         CFL step we actually take.
         """
 
@@ -178,7 +178,7 @@ class Simulation:
         p = eos.pres(gamma, dens, e)
 
         # compute the sounds speed
-        cs = numpy.sqrt(gamma*p/dens)
+        cs = np.sqrt(gamma*p/dens)
 
 
         # the timestep is min(dx/(|u| + cs), dy/(|v| + cs))
@@ -200,7 +200,7 @@ class Simulation:
 
     def evolve(self, dt):
         """
-        Evolve the equations of compressible hydrodynamics through a 
+        Evolve the equations of compressible hydrodynamics through a
         timestep dt.
         """
 
@@ -215,7 +215,7 @@ class Simulation:
         grav = self.rp.get_param("compressible.grav")
 
         myg = self.cc_data.grid
-        
+
         Flux_x, Flux_y = unsplitFluxes(self.cc_data, self.rp, self.vars, self.tc, dt)
 
         old_dens = dens.copy()
@@ -232,7 +232,7 @@ class Simulation:
                 dtdx*(Flux_x[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,n] - \
                       Flux_x[myg.ilo+1:myg.ihi+2,myg.jlo  :myg.jhi+1,n]) + \
                 dtdy*(Flux_y[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,n] - \
-                      Flux_y[myg.ilo  :myg.ihi+1,myg.jlo+1:myg.jhi+2,n])    
+                      Flux_y[myg.ilo  :myg.ihi+1,myg.jlo+1:myg.jhi+2,n])
 
         # gravitational source terms
         ymom += 0.5*dt*(dens + old_dens)*grav
@@ -242,13 +242,13 @@ class Simulation:
 
 
     def dovis(self):
-        """ 
+        """
         Do runtime visualization.
         """
 
-        pylab.clf()
+        plt.clf()
 
-        pylab.rc("font", size=10)
+        plt.rc("font", size=10)
 
         dens = self.cc_data.get_var("density")
         xmom = self.cc_data.get_var("x-momentum")
@@ -263,11 +263,11 @@ class Simulation:
         magvel = u**2 + v**2   # temporarily |U|^2
         rhoe = (ener - 0.5*dens*magvel)
 
-        magvel = numpy.sqrt(magvel)
+        magvel = np.sqrt(magvel)
 
         e = rhoe/dens
 
-        # access gamma from the cc_data object so we can use dovis 
+        # access gamma from the cc_data object so we can use dovis
         # outside of a running simulation.
         gamma = self.cc_data.get_aux("gamma")
 
@@ -293,7 +293,7 @@ class Simulation:
             #  |U|
             #   p
             #   e
-            fig, axes = pylab.subplots(nrows=4, ncols=1, num=1)
+            fig, axes = plt.subplots(nrows=4, ncols=1, num=1)
             orientation = "horizontal"
             if (L_x > 4*L_y):
                 shrink = 0.75
@@ -304,7 +304,7 @@ class Simulation:
         elif (L_y > 2*L_x):
 
             # we want 4 columns:  rho  |U|  p  e
-            fig, axes = pylab.subplots(nrows=1, ncols=4, num=1)        
+            fig, axes = plt.subplots(nrows=1, ncols=4, num=1)
             if (L_y >= 3*L_x):
                 shrink = 0.5
                 sparseX = 1
@@ -313,12 +313,12 @@ class Simulation:
             onLeft = [0]
 
         else:
-            # 2x2 grid of plots with 
+            # 2x2 grid of plots with
             #
             #   rho   |u|
             #    p     e
-            fig, axes = pylab.subplots(nrows=2, ncols=2, num=1)
-            pylab.subplots_adjust(hspace=0.25)
+            fig, axes = plt.subplots(nrows=2, ncols=2, num=1)
+            plt.subplots_adjust(hspace=0.25)
 
             onLeft = [0,2]
 
@@ -330,8 +330,8 @@ class Simulation:
             ax = axes.flat[n]
 
             v = fields[n]
-            img = ax.imshow(numpy.transpose(v[myg.ilo:myg.ihi+1, 
-                                              myg.jlo:myg.jhi+1]), 
+            img = ax.imshow(np.transpose(v[myg.ilo:myg.ihi+1,
+                                           myg.jlo:myg.jhi+1]),
                         interpolation="nearest", origin="lower",
                         extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
@@ -346,16 +346,16 @@ class Simulation:
             if not n in onLeft:
                 ax.yaxis.offsetText.set_visible(False)
                 if n > 0: ax.get_yaxis().set_visible(False)
-        
+
             if sparseX:
-                ax.xaxis.set_major_locator(pylab.MaxNLocator(3))
+                ax.xaxis.set_major_locator(plt.MaxNLocator(3))
 
-            pylab.colorbar(img, ax=ax, orientation=orientation, shrink=shrink)
+            plt.colorbar(img, ax=ax, orientation=orientation, shrink=shrink)
 
 
-        pylab.figtext(0.05,0.0125, "t = %10.5f" % self.cc_data.t)
+        plt.figtext(0.05,0.0125, "t = %10.5f" % self.cc_data.t)
 
-        pylab.draw()
+        plt.draw()
 
 
     def finalize(self):
