@@ -1,5 +1,5 @@
-import numpy
-import pylab
+import numpy as np
+import matplotlib.pyplot as plt
 
 from diffusion.problems import *
 import mesh.patch as patch
@@ -38,7 +38,7 @@ class Simulation:
 
 
     def initialize(self):
-        """ 
+        """
         Initialize the grid and variables for diffusion and set the initial
         conditions for the chosen problem.
         """
@@ -46,14 +46,14 @@ class Simulation:
         # setup the grid
         nx = self.rp.get_param("mesh.nx")
         ny = self.rp.get_param("mesh.ny")
-        
+
         xmin = self.rp.get_param("mesh.xmin")
         xmax = self.rp.get_param("mesh.xmax")
         ymin = self.rp.get_param("mesh.ymin")
         ymax = self.rp.get_param("mesh.ymax")
-    
-        my_grid = patch.Grid2d(nx, ny, 
-                               xmin=xmin, xmax=xmax, 
+
+        my_grid = patch.Grid2d(nx, ny,
+                               xmin=xmin, xmax=xmax,
                                ymin=ymin, ymax=ymax, ng=1)
 
 
@@ -76,8 +76,8 @@ class Simulation:
                 msg.fail("invalid BC")
 
 
-        bc = patch.BCObject(xlb=bcparam[0], xrb=bcparam[1], 
-                            ylb=bcparam[2], yrb=bcparam[3])    
+        bc = patch.BCObject(xlb=bcparam[0], xrb=bcparam[1],
+                            ylb=bcparam[2], yrb=bcparam[3])
 
 
         my_data = patch.CellCenterData2d(my_grid)
@@ -88,22 +88,22 @@ class Simulation:
 
         self.cc_data = my_data
 
-        # now set the initial conditions for the problem           
+        # now set the initial conditions for the problem
         exec(self.problem_name + '.init_data(self.cc_data, self.rp)')
 
 
     def timestep(self):
         """
-        The diffusion timestep() function computes the timestep 
-        using the explicit timestep constraint as the starting point.  
-        We then multiply by the CFL number to get the timestep.  
-        Since we are doing an implicit discretization, we do not 
+        The diffusion timestep() function computes the timestep
+        using the explicit timestep constraint as the starting point.
+        We then multiply by the CFL number to get the timestep.
+        Since we are doing an implicit discretization, we do not
         require CFL < 1.
         """
-        
+
         cfl = self.rp.get_param("driver.cfl")
         k = self.rp.get_param("diffusion.k")
-    
+
         # the timestep is min(dx**2/k, dy**2/k)
         xtmp = self.cc_data.grid.dx**2/k
         ytmp = self.cc_data.grid.dy**2/k
@@ -117,13 +117,13 @@ class Simulation:
         """
         Do any necessary evolution before the main evolve loop.  This
         is not needed for diffusion.
-        """    
+        """
         pass
 
 
     def evolve(self, dt):
-        """ 
-        Diffusion through dt using C-N implicit solve with multigrid 
+        """
+        Diffusion through dt using C-N implicit solve with multigrid
         """
 
         self.cc_data.fill_BC_all()
@@ -132,7 +132,7 @@ class Simulation:
 
         # diffusion coefficient
         k = self.rp.get_param("diffusion.k")
-    
+
 
         # setup the MG object -- we want to solve a Helmholtz equation
         # equation of the form:
@@ -145,13 +145,13 @@ class Simulation:
         # this is the form that arises with a Crank-Nicolson discretization
         # of the diffusion equation.
         mg = MG.CellCenterMG2d(myg.nx, myg.ny,
-                               xmin=myg.xmin, xmax=myg.xmax, 
+                               xmin=myg.xmin, xmax=myg.xmax,
                                ymin=myg.ymin, ymax=myg.ymax,
-                               xl_BC_type=self.cc_data.BCs['phi'].xlb, 
-                               xr_BC_type=self.cc_data.BCs['phi'].xrb, 
-                               yl_BC_type=self.cc_data.BCs['phi'].ylb, 
-                               yr_BC_type=self.cc_data.BCs['phi'].yrb, 
-                               alpha=1.0, beta=0.5*dt*k, 
+                               xl_BC_type=self.cc_data.BCs['phi'].xlb,
+                               xr_BC_type=self.cc_data.BCs['phi'].xrb,
+                               yl_BC_type=self.cc_data.BCs['phi'].ylb,
+                               yr_BC_type=self.cc_data.BCs['phi'].yrb,
+                               alpha=1.0, beta=0.5*dt*k,
                                verbose=0)
 
         # form the RHS: f = phi + (dt/2) k L phi  (where L is the Laplacian)
@@ -177,32 +177,32 @@ class Simulation:
         # update the solution
         phi[:,:] = mg.get_solution()
 
-        
+
     def dovis(self):
         """
-        Do runtime visualization. 
+        Do runtime visualization.
         """
 
-        pylab.clf()
+        plt.clf()
 
         phi = self.cc_data.get_var("phi")
 
         myg = self.cc_data.grid
 
-        pylab.imshow(numpy.transpose(phi[myg.ilo:myg.ihi+1,
-                                         myg.jlo:myg.jhi+1]), 
+        plt.imshow(np.transpose(phi[myg.ilo:myg.ihi+1,
+                                         myg.jlo:myg.jhi+1]),
                      interpolation="nearest", origin="lower",
                      extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
-        pylab.xlabel("x")
-        pylab.ylabel("y")
-        pylab.title("phi")
+        plt.xlabel("x")
+        plt.ylabel("y")
+        plt.title("phi")
 
-        pylab.colorbar()
-        
-        pylab.figtext(0.05,0.0125, "t = %10.5f" % self.cc_data.t)
+        plt.colorbar()
 
-        pylab.draw()
+        plt.figtext(0.05,0.0125, "t = %10.5f" % self.cc_data.t)
+
+        plt.draw()
 
 
     def finalize(self):
@@ -211,5 +211,3 @@ class Simulation:
         finalize() method.
         """
         exec(self.problem_name + '.finalize()')
-
-
