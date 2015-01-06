@@ -4,7 +4,7 @@ import pylab
 from diffusion.problems import *
 import mesh.patch as patch
 import multigrid.MG as MG
-from util import msg, profile, runparams
+from util import msg, profile
 
 class Simulation:
 
