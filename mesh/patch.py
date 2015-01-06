@@ -13,7 +13,7 @@ Typical usage:
 
      data = CellCenterData2d(grid)
 
-     bc = BCObject(xlb="reflect", xrb="reflect", 
+     bc = BCObject(xlb="reflect", xrb="reflect",
                    ylb="outflow", yrb="outflow")
      data.register_var("density", bc)
      ...
@@ -34,25 +34,23 @@ Typical usage:
 """
 from __future__ import print_function
 
-import copy
 import numpy
 import pickle
-import traceback
 
 from util import msg
 
-valid = ["outflow", "periodic", 
+valid = ["outflow", "periodic",
          "reflect", "reflect-even", "reflect-odd",
          "dirichlet", "neumann"]
 
 extBCs = {}
 
 def define_bc(type, function):
-    """ 
+    """
     use this to extend the types of boundary conditions supported
     on a solver-by-solver basis.  Here we pass in the reference to
     a function that can be called with the data that needs to be
-    filled. 
+    filled.
     """
 
     valid.append(type)
@@ -65,46 +63,46 @@ class BCObject:
     for a single variable
     """
 
-    def __init__ (self, 
-                  xlb="outflow", xrb="outflow", 
+    def __init__ (self,
+                  xlb="outflow", xrb="outflow",
                   ylb="outflow", yrb="outflow",
                   odd_reflect_dir=""):
-        """ 
-        Create the BCObject. 
+        """
+        Create the BCObject.
 
         Parameters
         ----------
         xlb : {'outflow', 'periodic', 'reflect', 'reflect-even',
-               'reflect-odd', 'dirichlet', 'neumann', 
+               'reflect-odd', 'dirichlet', 'neumann',
                user-defined}, optional
             The type of boundary condition to enforce on the lower
             x boundary.  user-defined requires one to have defined
             a new boundary condition type using define_bc()
         xrb : {'outflow', 'periodic', 'reflect', 'reflect-even',
-               'reflect-odd', 'dirichlet', 'neumann', 
+               'reflect-odd', 'dirichlet', 'neumann',
                user-defined}, optional
             The type of boundary condition to enforce on the upper
             x boundary.  user-defined requires one to have defined
             a new boundary condition type using define_bc()
         ylb : {'outflow', 'periodic', 'reflect', 'reflect-even',
-               'reflect-odd', 'dirichlet', 'neumann', 
+               'reflect-odd', 'dirichlet', 'neumann',
                user-defined}, optional
             The type of boundary condition to enforce on the lower
             y boundary.  user-defined requires one to have defined
             a new boundary condition type using define_bc()
         yrb : {'outflow', 'periodic', 'reflect', 'reflect-even',
-               'reflect-odd', 'dirichlet', 'neumann', 
+               'reflect-odd', 'dirichlet', 'neumann',
                user-defined}, optional
             The type of boundary condition to enforce on the upper
             y boundary.  user-defined requires one to have defined
             a new boundary condition type using define_bc()
         odd_reflect_dir : {'x', 'y'}, optional
-            The direction along which reflection should be odd 
+            The direction along which reflection should be odd
             (sign changes).  If not specified, a boundary condition
             of 'reflect' will always be set to 'reflect-even'
 
         """
-       
+
         # note: "reflect" is ambiguous and will be converted into
         # either reflect-even (the default) or reflect-odd if
         # odd_reflect_dir specifies the corresponding direction ("x",
@@ -118,7 +116,7 @@ class BCObject:
                     self.xlb = "reflect-odd"
                 else:
                     self.xlb = "reflect-even"
-            
+
         else:
             msg.fail("ERROR: xlb = %s invalid BC" % (xlb))
 
@@ -176,7 +174,7 @@ class BCObject:
 
         return string
 
-    
+
 class Grid2d:
     """
     the 2-d grid class.  The grid object will contain the coordinate
@@ -189,7 +187,7 @@ class Grid2d:
        0          ng-1    ng   ng+1         ... ng+nx-1 ng+nx      2ng+nx-1
 
                          ilo                      ihi
-    
+
     |<- ng guardcells->|<---- nx interior zones ----->|<- ng guardcells->|
 
     The '*' marks the data locations.
@@ -201,13 +199,13 @@ class Grid2d:
         Create a Grid2d object.
 
         The only data that we require is the number of points that
-        make up the mesh in each direction.  Optionally we take the 
-        extrema of the domain (default is [0,1]x[0,1]) and number of 
+        make up the mesh in each direction.  Optionally we take the
+        extrema of the domain (default is [0,1]x[0,1]) and number of
         ghost cells (default is 1).
 
         Note that the Grid2d object only defines the discretization,
         it does not know about the boundary conditions, as these can
-        vary depending on the variable.  
+        vary depending on the variable.
 
         Parameters
         ----------
@@ -235,7 +233,6 @@ class Grid2d:
         self.qx = 2*ng+nx
         self.qy = 2*ng+ny
 
-        
         # domain extrema
         self.xmin = xmin
         self.xmax = xmax
@@ -276,7 +273,7 @@ class Grid2d:
 
 
     def scratch_array(self, nvar=1):
-        """ 
+        """
         return a standard numpy array dimensioned to have the size
         and number of ghostcells as the parent grid
         """
@@ -291,10 +288,10 @@ class Grid2d:
         return a new grid object coarsened by a factor n, but with
         all the other properties the same
         """
-        return Grid2d(self.nx/N, self.ny/N, ng=self.ng, 
-                      xmin=self.xmin, xmax=self.xmax, 
+        return Grid2d(self.nx/N, self.ny/N, ng=self.ng,
+                      xmin=self.xmin, xmax=self.xmax,
                       ymin=self.ymin, ymax=self.ymax)
-        
+
 
     def __str__(self):
         """ print out some basic information about the grid object """
@@ -321,16 +318,16 @@ class Grid2d:
 
 class CellCenterData2d:
     """
-    A class to define cell-centered data that lives on a grid.  A 
-    CellCenterData2d object is built in a multi-step process before 
+    A class to define cell-centered data that lives on a grid.  A
+    CellCenterData2d object is built in a multi-step process before
     it can be used.
 
-    -- Create the object.  We pass in a grid object to describe where 
+    -- Create the object.  We pass in a grid object to describe where
        the data lives:
 
        my_data = patch.CellCenterData2d(myGrid)
 
-    -- Register any variables that we expect to live on this patch.  
+    -- Register any variables that we expect to live on this patch.
        Here BCObject describes the boundary conditions for that variable.
 
        my_data.register_var('density', BCObject)
@@ -350,13 +347,12 @@ class CellCenterData2d:
     This last step actually allocates the storage for the state
     variables.  Once this is done, the patch is considered to be
     locked.  New variables cannot be added.
-    
     """
 
     def __init__ (self, grid, dtype=numpy.float64):
 
         """
-        Initialize the CellCenterData2d object.  
+        Initialize the CellCenterData2d object.
 
         Parameters
         ----------
@@ -369,7 +365,7 @@ class CellCenterData2d:
             The runtime parameters that go along with this data
 
         """
-        
+
         self.grid = grid
 
         self.dtype = dtype
@@ -382,15 +378,15 @@ class CellCenterData2d:
 
         self.BCs = {}
 
-        # time 
+        # time
         self.t = -1.0
 
         self.initialized = 0
 
 
     def register_var(self, name, bc_object):
-        """ 
-        Register a variable with CellCenterData2d object.  
+        """
+        Register a variable with CellCenterData2d object.
 
         Parameters
         ----------
@@ -399,7 +395,6 @@ class CellCenterData2d:
         bc_object : BCObject object
             The boundary conditions that describe the actions to take
             for this variable at the physical domain boundaries.
-        
         """
 
         if self.initialized == 1:
@@ -412,7 +407,7 @@ class CellCenterData2d:
 
 
     def set_aux(self, keyword, value):
-        """ 
+        """
         Set any auxillary (scalar) data.  This data is simply carried
         along with the CellCenterData2d object
 
@@ -422,7 +417,6 @@ class CellCenterData2d:
             The name of the datum
         value : any time
             The value to associate with the keyword
-        
         """
         self.aux[keyword] = value
 
@@ -436,13 +430,13 @@ class CellCenterData2d:
         if self.initialized == 1:
             msg.fail("ERROR: grid already initialized")
 
-        self.data = numpy.zeros((self.nvar, self.grid.qx, self.grid.qy), 
+        self.data = numpy.zeros((self.nvar, self.grid.qx, self.grid.qy),
                                 dtype=self.dtype)
         self.initialized = 1
 
-        
+
     def __str__(self):
-        """ print out some basic information about the CellCenterData2d 
+        """ print out some basic information about the CellCenterData2d
             object """
 
         if self.initialized == 0:
@@ -453,8 +447,8 @@ class CellCenterData2d:
                        ", ny = " + repr(self.grid.ny) + \
                        ", ng = " + repr(self.grid.ng) + "\n" + \
                  "   nvars = " + repr(self.nvar) + "\n" + \
-                 "   variables: \n" 
-                 
+                 "   variables: \n"
+
         ilo = self.grid.ilo
         ihi = self.grid.ihi
         jlo = self.grid.jlo
@@ -464,22 +458,22 @@ class CellCenterData2d:
         while n < self.nvar:
             myStr += "%16s: min: %15.10f    max: %15.10f\n" % \
                 (self.vars[n],
-                 numpy.min(self.data[n,ilo:ihi+1,jlo:jhi+1]), 
+                 numpy.min(self.data[n,ilo:ihi+1,jlo:jhi+1]),
                  numpy.max(self.data[n,ilo:ihi+1,jlo:jhi+1]) )
             myStr += "%16s  BCs: -x: %-12s +x: %-12s -y: %-12s +y: %-12s\n" %\
-                (" " , self.BCs[self.vars[n]].xlb, 
-                       self.BCs[self.vars[n]].xrb, 
-                       self.BCs[self.vars[n]].ylb, 
+                (" " , self.BCs[self.vars[n]].xlb,
+                       self.BCs[self.vars[n]].xrb,
+                       self.BCs[self.vars[n]].ylb,
                        self.BCs[self.vars[n]].yrb)
             n += 1
- 
+
         return myStr
-    
+
 
     def get_var(self, name):
         """
-        Return a data array for the variable described by name.  
-        Any changes made to this are automatically reflected in the 
+        Return a data array for the variable described by name.
+        Any changes made to this are automatically reflected in the
         CellCenterData2d object.
 
         Parameters
@@ -499,8 +493,8 @@ class CellCenterData2d:
 
     def get_var_by_index(self, n):
         """
-        Return a data array for the variable with index n in the 
-        data array.  Any changes made to this are automatically 
+        Return a data array for the variable with index n in the
+        data array.  Any changes made to this are automatically
         reflected in the CellCenterData2d object.
 
         Parameters
@@ -516,9 +510,9 @@ class CellCenterData2d:
         """
         return self.data[n,:,:]
 
-    
+
     def get_aux(self, keyword):
-        """ 
+        """
         Get the auxillary data associated with keyword
 
         Parameters
@@ -536,10 +530,10 @@ class CellCenterData2d:
             return self.aux[keyword]
         else:
             return None
-        
+
 
     def zero(self, name):
-        """ 
+        """
         Zero out the data array associated with variable name.
 
         Parameters
@@ -550,7 +544,7 @@ class CellCenterData2d:
         """
         n = self.vars.index(name)
         self.data[n,:,:] = 0.0
-        
+
 
     def fill_BC_all(self):
         """
@@ -559,25 +553,25 @@ class CellCenterData2d:
         for name in self.vars:
             self.fill_BC(name)
 
-                
+
     def fill_BC(self, name):
-        """ 
+        """
         Fill the boundary conditions.  This operates on a single state
         variable at a time, to allow for maximum flexibility.
 
         We do periodic, reflect-even, reflect-odd, and outflow
 
         Each variable name has a corresponding BCObject stored in the
-        CellCenterData2d object -- we refer to this to figure out the 
+        CellCenterData2d object -- we refer to this to figure out the
         action to take at each boundary.
 
         Parameters
         ----------
         name : str
-            The name of the variable for which to fill the BCs.  
+            The name of the variable for which to fill the BCs.
 
         """
-    
+
         # there is only a single grid, so every boundary is on
         # a physical boundary (except if we are periodic)
 
@@ -585,7 +579,6 @@ class CellCenterData2d:
         # Neumann and Dirichlet homogeneous BCs respectively, but
         # this only works for a single ghost cell
 
-    
         n = self.vars.index(name)
 
         # -x boundary
@@ -594,10 +587,10 @@ class CellCenterData2d:
             i = 0
             while i < self.grid.ilo:
                 self.data[n,i,:] = self.data[n,self.grid.ilo,:]
-                i += 1                
+                i += 1
 
         elif self.BCs[name].xlb == "reflect-even":
-        
+
             i = 0
             while i < self.grid.ilo:
                 self.data[n,i,:] = self.data[n,2*self.grid.ng-i-1,:]
@@ -605,7 +598,7 @@ class CellCenterData2d:
 
         elif (self.BCs[name].xlb == "reflect-odd" or
               self.BCs[name].xlb == "dirichlet"):
-        
+
             i = 0
             while i < self.grid.ilo:
                 self.data[n,i,:] = -self.data[n,2*self.grid.ng-i-1,:]
@@ -617,7 +610,7 @@ class CellCenterData2d:
             while i < self.grid.ilo:
                 self.data[n,i,:] = self.data[n,self.grid.ihi-self.grid.ng+i+1,:]
                 i += 1
-            
+
 
         # +x boundary
         if self.BCs[name].xrb == "outflow" or self.BCs[name].xrb == "neumann":
@@ -626,7 +619,7 @@ class CellCenterData2d:
             while i < self.grid.nx+2*self.grid.ng:
                 self.data[n,i,:] = self.data[n,self.grid.ihi,:]
                 i += 1
-                
+
         elif self.BCs[name].xrb == "reflect-even":
 
             i = 0
@@ -644,7 +637,7 @@ class CellCenterData2d:
             while i < self.grid.ng:
                 i_bnd = self.grid.ihi+1+i
                 i_src = self.grid.ihi-i
-                
+
                 self.data[n,i_bnd,:] = -self.data[n,i_src,:]
                 i += 1
 
@@ -663,7 +656,7 @@ class CellCenterData2d:
             while j < self.grid.jlo:
                 self.data[n,:,j] = self.data[n,:,self.grid.jlo]
                 j += 1
-                
+
         elif self.BCs[name].ylb == "reflect-even":
 
             j = 0
@@ -720,7 +713,7 @@ class CellCenterData2d:
 
                 self.data[n,:,j_bnd] = -self.data[n,:,j_src]
                 j += 1
-        
+
         elif self.BCs[name].yrb == "periodic":
 
             j = self.grid.jhi+1
@@ -738,7 +731,7 @@ class CellCenterData2d:
         """
         Restrict the variable varname to a coarser grid (factor of 2
         coarser) and return an array with the resulting data (and same
-        number of ghostcells)            
+        number of ghostcells)
         """
 
         fG = self.grid
@@ -764,11 +757,11 @@ class CellCenterData2d:
         # This is done by shifting our view into the fData array and
         # using a stride of 2 in the indexing.
         cData[ilo_c:ihi_c+1,jlo_c:jhi_c+1] = \
-            0.25*(fData[fG.ilo  :fG.ihi+1:2,fG.jlo  :fG.jhi+1:2] + 
+            0.25*(fData[fG.ilo  :fG.ihi+1:2,fG.jlo  :fG.jhi+1:2] +
                   fData[fG.ilo+1:fG.ihi+1:2,fG.jlo  :fG.jhi+1:2] +
                   fData[fG.ilo  :fG.ihi+1:2,fG.jlo+1:fG.jhi+1:2] +
                   fData[fG.ilo+1:fG.ihi+1:2,fG.jlo+1:fG.jhi+1:2])
-                  
+
         return cData
 
 
@@ -787,20 +780,20 @@ class CellCenterData2d:
         independently monotonic:
 
                   (x)         (y)
-        f(x,y) = m    x/dx + m    y/dy + <f> 
+        f(x,y) = m    x/dx + m    y/dy + <f>
 
         where the m's are the limited differences in each direction.
         When averaged over the parent cell, this reproduces <f>.
 
-        Each zone's reconstrution will be averaged over 4 children.  
+        Each zone's reconstrution will be averaged over 4 children.
 
-        +-----------+     +-----+-----+ 
+        +-----------+     +-----+-----+
         |           |     |     |     |
         |           |     |  3  |  4  |
-        |    <f>    | --> +-----+-----+ 
-        |           |     |     |     |     
-        |           |     |  1  |  2  |  
-        +-----------+     +-----+-----+ 
+        |    <f>    | --> +-----+-----+
+        |           |     |     |     |
+        |           |     |  1  |  2  |
+        +-----------+     +-----+-----+
 
         We will fill each of the finer resolution zones by filling all
         the 1's together, using a stride 2 into the fine array.  Then
@@ -866,14 +859,13 @@ class CellCenterData2d:
             + 0.25*m_x[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
             + 0.25*m_y[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1]
 
-                  
         return fData
 
 
     def write(self, filename):
         """
-        write out the CellCenterData2d object to disk, stored in the 
-        file filename.  We use a python binary format (via pickle).  
+        write out the CellCenterData2d object to disk, stored in the
+        file filename.  We use a python binary format (via pickle).
         This stores a representation of the entire object.
         """
         pF = open(filename + ".pyro", "wb")
@@ -895,8 +887,9 @@ class CellCenterData2d:
             fmt = "%10.5g"
         else:
             msg.fail("ERROR: dtype not supported")
-        
-        # print j descending, so it looks like a grid (y increasing with height)
+
+        # print j descending, so it looks like a grid (y increasing
+        # with height)
         j = self.grid.qy-1
         while j >= 0:
             i = 0
@@ -933,7 +926,7 @@ bcObject = BCObject
 
 def read(filename):
     """
-    Read a CellCenterData object from a file and return it and the grid 
+    Read a CellCenterData object from a file and return it and the grid
     info and data.
     """
 
@@ -949,9 +942,9 @@ def read(filename):
 
 
 def cell_center_data_clone(old):
-    """ 
-    Create a new CellCenterData2d object that is a copy of an existing 
-    one 
+    """
+    Create a new CellCenterData2d object that is a copy of an existing
+    one
 
     Parameters
     ----------
@@ -980,7 +973,7 @@ def cell_center_data_clone(old):
     new.data = old.data.copy()
 
     return new
-        
+
 
 if __name__== "__main__":
 

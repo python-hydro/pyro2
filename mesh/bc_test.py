@@ -1,13 +1,11 @@
 # test the boundary fill routine
 
-import numpy
+import numpy as np
 import mesh.patch
-import pylab
-import time
 
 myg = mesh.patch.Grid2d(4,4, ng = 2, xmax=1.0, ymax=1.0)
 
-mydata = mesh.patch.CellCenterData2d(myg, dtype=numpy.int)
+mydata = mesh.patch.CellCenterData2d(myg, dtype=np.int)
 
 bco = mesh.patch.BCObject(xlb="outflow", xrb="outflow",
                           ylb="outflow", yrb="outflow")
