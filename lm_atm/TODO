@@ -27,4 +27,6 @@ Known issues:
 
 -- there seems to be a break in the symmetry
 
-
+-- at the moment, this does not work with runtime visualization -- no idea why,
+   but rho goes NaN if we run with runtime visualization.
+   
