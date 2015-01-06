@@ -28,17 +28,15 @@ force it to 0 on the boundary, which is not correct here)
 
 from __future__ import print_function
 
-import sys
-
-import numpy
+import numpy as np
 import mesh.patch as patch
 import variable_coeff_MG as MG
-import pylab
+import matplotlib.pyplot as plt
 
-pi = numpy.pi
-sin = numpy.sin
-cos = numpy.cos
-exp = numpy.exp
+pi = np.pi
+sin = np.sin
+cos = np.cos
+exp = np.exp
 
 # the analytic solution
 def true(x,y):
@@ -55,7 +53,7 @@ def error(myg, r):
 
     # L2 norm of elements in r, multiplied by dx to
     # normalize
-    return numpy.sqrt(myg.dx*myg.dy*numpy.sum((r[myg.ilo:myg.ihi+1,
+    return np.sqrt(myg.dx*myg.dy*np.sum((r[myg.ilo:myg.ihi+1,
                                                  myg.jlo:myg.jhi+1]**2).flat))
 
 
@@ -87,7 +85,7 @@ for nx in N:
 
     # check whether the RHS sums to zero (necessary for periodic data)
     rhs = f(g.x2d, g.y2d)
-    print("rhs sum: {}".format(numpy.sum(rhs[g.ilo:g.ihi+1,g.jlo:g.jhi+1])))
+    print("rhs sum: {}".format(np.sum(rhs[g.ilo:g.ihi+1,g.jlo:g.jhi+1])))
 
 
     # create the multigrid object
@@ -112,18 +110,18 @@ for nx in N:
     # alternately, we can just use smoothing by uncommenting the following
     #a.smooth(a.nlevels-1,10000)
 
-    # get the solution 
+    # get the solution
     v = a.get_solution()
 
     # get the true solution
-    b = true(a.x2d,a.y2d)  
-  
+    b = true(a.x2d,a.y2d)
+
     # compute the error from the analytic solution -- note that with
     # periodic BCs all around, there is nothing to normalize the
     # solution.  We subtract off the average of phi from the MG
     # solution (we do the same for the true solution to put them on
     # the same footing)
-    e = v - numpy.sum(v)/(nx*ny) - (b - numpy.sum(b)/(nx*ny))
+    e = v - np.sum(v)/(nx*ny) - (b - np.sum(b)/(nx*ny))
 
     enorm = error(a.soln_grid, e)
     print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
@@ -134,69 +132,65 @@ for nx in N:
 
 #---------------------------------------------------------------------------
 # plot the solution
-pylab.clf()
+plt.clf()
 
-pylab.figure(figsize=(10.0,4.0), dpi=100, facecolor='w')
+plt.figure(figsize=(10.0,4.0), dpi=100, facecolor='w')
 
 
-pylab.subplot(121)
+plt.subplot(121)
 
-pylab.imshow(numpy.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]), 
+plt.imshow(np.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
           interpolation="nearest", origin="lower",
           extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
-pylab.xlabel("x")
-pylab.ylabel("y")
+plt.xlabel("x")
+plt.ylabel("y")
 
-pylab.title("nx = {}".format(nx))
+plt.title("nx = {}".format(nx))
 
-pylab.colorbar()
+plt.colorbar()
 
 
-pylab.subplot(122)
+plt.subplot(122)
 
-pylab.imshow(numpy.transpose(e[a.ilo:a.ihi+1,a.jlo:a.jhi+1]), 
+plt.imshow(np.transpose(e[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
           interpolation="nearest", origin="lower",
           extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
-pylab.xlabel("x")
-pylab.ylabel("y")
+plt.xlabel("x")
+plt.ylabel("y")
 
-pylab.title("error")
+plt.title("error")
 
-pylab.colorbar()
+plt.colorbar()
 
-pylab.tight_layout()
+plt.tight_layout()
 
-pylab.savefig("mg_vc_periodic_test.png")
-pylab.savefig("mg_vc_periodic_test.eps", bbox_inches="tight")
+plt.savefig("mg_vc_periodic_test.png")
+plt.savefig("mg_vc_periodic_test.eps", bbox_inches="tight")
 
 
 #---------------------------------------------------------------------------
 # plot the convergence
 
-N = numpy.array(N, dtype=numpy.float64)
-err = numpy.array(err)
+N = np.array(N, dtype=np.float64)
+err = np.array(err)
 
 print(N)
 print(err)
 
-pylab.clf()
-pylab.loglog(N, err, "x", color="r")
-pylab.loglog(N, err[0]*(N[0]/N)**2, "--", color="k")
+plt.clf()
+plt.loglog(N, err, "x", color="r")
+plt.loglog(N, err[0]*(N[0]/N)**2, "--", color="k")
 
 
-pylab.xlabel("N")
-pylab.ylabel("error")
+plt.xlabel("N")
+plt.ylabel("error")
 
-f = pylab.gcf()
+f = plt.gcf()
 f.set_size_inches(7.0,6.0)
 
-pylab.tight_layout()
+plt.tight_layout()
 
-pylab.savefig("mg_vc_converge.png")
-pylab.savefig("mg_vc_converge.eps", bbox_inches="tight")
-
-
-
-
+plt.savefig("mg_vc_converge.png")
+plt.savefig("mg_vc_converge.eps", bbox_inches="tight")

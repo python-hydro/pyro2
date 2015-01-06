@@ -16,10 +16,9 @@ The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)
 
 from __future__ import print_function
 
-import numpy
-import mesh.patch as patch
+import numpy as np
 import MG
-import pylab
+import matplotlib.pyplot as plt
 
 # the analytic solution
 def true(x,y):
@@ -31,14 +30,14 @@ def error(myg, r):
 
     # L2 norm of elements in r, multiplied by dx to
     # normalize
-    return numpy.sqrt(myg.dx*myg.dy*numpy.sum((r[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]**2).flat))
+    return np.sqrt(myg.dx*myg.dy*np.sum((r[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]**2).flat))
 
 
 # the righthand side
 def f(x,y):
     return -2.0*((1.0-6.0*x**2)*y**2*(1.0-y**2) + (1.0-6.0*y**2)*x**2*(1.0-x**2))
 
-                
+
 # test the multigrid solver
 nx = 64
 ny = 64
@@ -50,12 +49,12 @@ a = MG.CellCenterMG2d(nx, ny,
                       xr_BC_type="dirichlet", yr_BC_type="dirichlet",
                       verbose=0,
                       nsmooth=5, nsmooth_bottom=10,
-                      vis=1, true_function=true, 
+                      vis=1, true_function=true,
                       vis_title=r"$u_{xx} + u_{yy} = -2[(1-6x^2)y^2(1-y^2) + (1-6y^2)x^2(1-x^2)]$")
 
-pylab.ion()
+plt.ion()
 
-pylab.figure(num=1, figsize=(12.8,7.2), dpi=100, facecolor='w')
+plt.figure(num=1, figsize=(12.8,7.2), dpi=100, facecolor='w')
 
 
 
@@ -74,7 +73,7 @@ a.solve(rtol=1.e-11)
 # alternately, we can just use smoothing by uncommenting the following
 #a.smooth(a.nlevels-1,50000)
 
-# get the solution 
+# get the solution
 v = a.get_solution()
 
 # compute the error from the analytic solution
@@ -86,24 +85,22 @@ print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n n
 
 
 # plot it
-#pylab.figure(num=1, figsize=(2.10,2.10), dpi=100, facecolor='w')
-pylab.figure(num=1, figsize=(5.0,5.0), dpi=100, facecolor='w')
+#plt.figure(num=1, figsize=(2.10,2.10), dpi=100, facecolor='w')
+plt.figure(num=1, figsize=(5.0,5.0), dpi=100, facecolor='w')
 
-pylab.imshow(numpy.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]), 
+plt.imshow(np.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
           interpolation="nearest", origin="lower",
           extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
-#pylab.axis("off")
-#pylab.subplots_adjust(bottom=0.0, top=1.0, left=0.0, right=1.0)
+#plt.axis("off")
+#plt.subplots_adjust(bottom=0.0, top=1.0, left=0.0, right=1.0)
 
-pylab.xlabel("x")
-pylab.ylabel("y")
+plt.xlabel("x")
+plt.ylabel("y")
 
-pylab.savefig("mg_test.png")
+plt.savefig("mg_test.png")
 
 
 # store the output for later comparison
 my_data = a.get_solution_object()
 my_data.write("mg_test")
-
-
