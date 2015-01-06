@@ -1,0 +1,10 @@
+-- compressible hydro + gray flux-limited diffusion
+
+   - we'll follow the method in the Castro II paper
+
+   - couple radiation into the hydro as source to Riemann problem
+
+-- use MG solver to solve radiation system
+
+
+
