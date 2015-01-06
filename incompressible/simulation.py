@@ -1,7 +1,7 @@
 from __future__ import print_function
 
 import numpy as np
-import pylab
+import matplotlib.pyplot as plt
 
 from incompressible.problems import *
 import incompressible.incomp_interface_f as incomp_interface_f
@@ -466,9 +466,9 @@ class Simulation:
         """
         Do runtime visualization
         """
-        pylab.clf()
+        plt.clf()
 
-        pylab.rc("font", size=10)
+        plt.rc("font", size=10)
 
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
@@ -490,8 +490,8 @@ class Simulation:
             0.5*(v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
                  v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi])/myg.dy
 
-        fig, axes = pylab.subplots(nrows=2, ncols=2, num=1)
-        pylab.subplots_adjust(hspace=0.25)
+        fig, axes = plt.subplots(nrows=2, ncols=2, num=1)
+        plt.subplots_adjust(hspace=0.25)
 
         fields = [u, v, vort, divU]
         field_names = ["u", "v", r"$\nabla \times U$", r"$\nabla \cdot U$"]
@@ -509,12 +509,12 @@ class Simulation:
             ax.set_ylabel("y")
             ax.set_title(field_names[n])
 
-            pylab.colorbar(img, ax=ax)
+            plt.colorbar(img, ax=ax)
 
 
-        pylab.figtext(0.05,0.0125, "t = %10.5f" % self.cc_data.t)
+        plt.figtext(0.05,0.0125, "t = %10.5f" % self.cc_data.t)
 
-        pylab.draw()
+        plt.draw()
 
 
     def finalize(self):
