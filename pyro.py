@@ -76,7 +76,7 @@ if len(sys.argv) == 1:
 make_bench = 0
 comp_bench = 0
 
-try: opts, next = getopt.getopt(sys.argv[1:], "", 
+try: opts, next = getopt.getopt(sys.argv[1:], "",
                                 ["make_benchmark", "compare_benchmark"])
 
 except getopt.GetoptError:
@@ -179,10 +179,10 @@ basename = rp.get_param("io.basename")
 sim.cc_data.write(basename + "%4.4d" % (n))
 
 dovis = rp.get_param("vis.dovis")
-if dovis: 
+if dovis:
     pylab.figure(num=1, figsize=(8,6), dpi=100, facecolor='w')
     sim.dovis()
-    
+
 nout = 0
 
 while sim.cc_data.t < tmax and n < max_steps:
@@ -204,7 +204,7 @@ while sim.cc_data.t < tmax and n < max_steps:
         else:
             dt = min(max_dt_change*dt_old, dt)
             dt_old = dt
-            
+
     if sim.cc_data.t + dt > tmax:
         dt = tmax - sim.cc_data.t
 
@@ -236,7 +236,7 @@ while sim.cc_data.t < tmax and n < max_steps:
 
 
     # visualization
-    if dovis: 
+    if dovis:
         tm_vis = tc.timer("vis")
         tm_vis.begin()
 
@@ -262,7 +262,7 @@ if comp_bench:
     bench_grid, bench_data = patch.read(compare_file)
 
     result = compare.compare(sim.cc_data.grid, sim.cc_data, bench_grid, bench_data)
-    
+
     if result == 0:
         msg.success("results match benchmark\n")
     else:
@@ -274,7 +274,7 @@ if make_bench:
     bench_file = solver_name + "/tests/" + basename + "%4.4d" % (n)
     msg.warning("storing new benchmark: %s\n " % (bench_file) )
     sim.cc_data.write(bench_file)
-    
+
 
 #-----------------------------------------------------------------------------
 # final reports
@@ -283,4 +283,3 @@ rp.print_unused_params()
 tc.report()
 
 sim.finalize()
-
