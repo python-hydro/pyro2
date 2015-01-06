@@ -124,11 +124,10 @@ Updating U_{i,j}:
           the input to the transverse Riemann problem.
 """
 
-import numpy
-
 import compressible.eos as eos
 import compressible.interface_f as interface_f
 import mesh.reconstruction_f as reconstruction_f
+from util import msg
 
 def unsplitFluxes(my_data, rp, vars, tc, dt):
     """

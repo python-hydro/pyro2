@@ -2,7 +2,6 @@ from __future__ import print_function
 
 import numpy
 import pylab
-from matplotlib.font_manager import FontProperties
 
 import compressible.BC as BC
 from compressible.problems import *

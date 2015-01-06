@@ -1,8 +1,8 @@
 from __future__ import print_function
 
 import sys
+
 import mesh.patch as patch
-import numpy
 from util import msg
 
 def init_data(my_data, rp):

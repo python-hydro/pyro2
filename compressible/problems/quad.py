@@ -1,8 +1,8 @@
 from __future__ import print_function
 
 import sys
+
 import mesh.patch as patch
-import numpy
 from util import msg
 
 def init_data(my_data, rp):
@@ -50,13 +50,6 @@ def init_data(my_data, rp):
     
     gamma = rp.get_param("eos.gamma")
     
-    xmin = rp.get_param("mesh.xmin")
-    xmax = rp.get_param("mesh.xmax")
-
-    ymin = rp.get_param("mesh.ymin")
-    ymax = rp.get_param("mesh.ymax")
-
-
     # there is probably an easier way to do this, but for now, we
     # will just do an explicit loop.  Also, we really want to set
     # the pressue and get the internal energy from that, and then
@@ -65,13 +58,10 @@ def init_data(my_data, rp):
     
     myg = my_data.grid
 
-    i = myg.ilo
-    while i <= myg.ihi:
+    for i in range(myg.ilo, myg.ihi+1):
+        for j in range(myg.jlo, myg.jhi+1):
 
-        j = myg.jlo
-        while j <= myg.jhi:
-
-            if (myg.x[i] >= cx and myg.y[j] >= cy):
+            if myg.x[i] >= cx and myg.y[j] >= cy:
 
                 # quadrant 1
                 dens[i,j] = r1
@@ -79,7 +69,7 @@ def init_data(my_data, rp):
                 ymom[i,j] = r1*v1
                 ener[i,j] = p1/(gamma - 1.0) + 0.5*r1*(u1*u1 + v1*v1)
                 
-            elif (myg.x[i] < cx and myg.y[j] >= cy):
+            elif myg.x[i] < cx and myg.y[j] >= cy:
 
                 # quadrant 2
                 dens[i,j] = r2
@@ -87,7 +77,7 @@ def init_data(my_data, rp):
                 ymom[i,j] = r2*v2
                 ener[i,j] = p2/(gamma - 1.0) + 0.5*r2*(u2*u2 + v2*v2)
 
-            elif (myg.x[i] < cx and myg.y[j] < cy):
+            elif myg.x[i] < cx and myg.y[j] < cy:
 
                 # quadrant 3
                 dens[i,j] = r3
@@ -95,7 +85,7 @@ def init_data(my_data, rp):
                 ymom[i,j] = r3*v3
                 ener[i,j] = p3/(gamma - 1.0) + 0.5*r3*(u3*u3 + v3*v3)
 
-            elif (myg.x[i] >= cx and myg.y[j] < cy):
+            elif myg.x[i] >= cx and myg.y[j] < cy:
 
                 # quadrant 4
                 dens[i,j] = r4
@@ -103,9 +93,6 @@ def init_data(my_data, rp):
                 ymom[i,j] = r4*v4
                 ener[i,j] = p4/(gamma - 1.0) + 0.5*r4*(u4*u4 + v4*v4)
 
-            j += 1
-        i += 1
-        
     
 def finalize():
     """ print out any information to the user at the end of the run """

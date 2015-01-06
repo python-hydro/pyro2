@@ -1,10 +1,9 @@
 from __future__ import print_function
 
-import sys
-import mesh.patch as patch
-import numpy
-from util import msg
 import math
+
+import mesh.patch as patch
+from util import msg
 
 def init_data(my_data, rp):
     """ initialize the Kelvin-Helmholtz problem """
@@ -30,8 +29,6 @@ def init_data(my_data, rp):
     xmom[:,:] = 0.0
     ymom[:,:] = 0.0
 
-    E_sedov = 1.0
-
     rho_1 = rp.get_param("kh.rho_1")
     v_1   = rp.get_param("kh.v_1")
     rho_2 = rp.get_param("kh.rho_2")
@@ -45,23 +42,16 @@ def init_data(my_data, rp):
     ymin = rp.get_param("mesh.ymin")
     ymax = rp.get_param("mesh.ymax")
 
-    xctr = 0.5*(xmin + xmax)
     yctr = 0.5*(ymin + ymax)
 
     L_x = xmax - xmin
 
-    # initialize the pressure by putting the explosion energy into a
-    # volume of constant pressure.  Then compute the energy in a zone
-    # from this.
-    nsub = 4
+    myg = my_data.grid
+    
+    for i in range(myg.ilo, myg.ihi+1):
+        for j in range(myg.jlo, myg.jhi+1):
 
-    i = my_data.grid.ilo
-    while i <= my_data.grid.ihi:
-
-        j = my_data.grid.jlo
-        while j <= my_data.grid.jhi:
-
-            if my_data.grid.y[j] < yctr + 0.01*math.sin(10.0*math.pi*my_data.grid.x[i]/L_x):
+            if myg.y[j] < yctr + 0.01*math.sin(10.0*math.pi*myg.x[i]/L_x):
 
                 # lower half
                 dens[i,j] = rho_1
@@ -76,10 +66,8 @@ def init_data(my_data, rp):
                 ymom[i,j] = 0.0
 
             p = 1.0
-            ener[i,j] = p/(gamma - 1.0) + 0.5*(xmom[i,j]**2 + ymom[i,j]**2)/dens[i,j]
-
-            j += 1
-        i += 1
+            ener[i,j] = p/(gamma - 1.0) + \
+                        0.5*(xmom[i,j]**2 + ymom[i,j]**2)/dens[i,j]
 
 
 def finalize():
