@@ -20,12 +20,10 @@ The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)
 
 from __future__ import print_function
 
-import sys
-
-import numpy
+import numpy as np
 import mesh.patch as patch
 import variable_coeff_MG as MG
-import pylab
+import matplotlib.pyplot as plt
 
 
 # the analytic solution
@@ -35,7 +33,7 @@ def true(x,y):
 
 # the coefficients
 def alpha(x,y):
-    return numpy.ones_like(x)
+    return np.ones_like(x)
 
 
 # the L2 error norm
@@ -43,7 +41,7 @@ def error(myg, r):
 
     # L2 norm of elements in r, multiplied by dx to
     # normalize
-    return numpy.sqrt(myg.dx*myg.dy*numpy.sum((r[myg.ilo:myg.ihi+1,
+    return np.sqrt(myg.dx*myg.dy*np.sum((r[myg.ilo:myg.ihi+1,
                                                  myg.jlo:myg.jhi+1]**2).flat))
 
 
@@ -51,7 +49,7 @@ def error(myg, r):
 def f(x,y):
     return -2.0*((1.0-6.0*x**2)*y**2*(1.0-y**2) + (1.0-6.0*y**2)*x**2*(1.0-x**2))
 
-    
+
 # test the multigrid solver
 nx = 256
 ny = nx
@@ -71,27 +69,27 @@ c = d.get_var("c")
 c[:,:] = alpha(g.x2d, g.y2d)
 
 
-pylab.clf()
+plt.clf()
 
-pylab.figure(num=1, figsize=(5.0,5.0), dpi=100, facecolor='w')
+plt.figure(num=1, figsize=(5.0,5.0), dpi=100, facecolor='w')
 
-pylab.imshow(numpy.transpose(c[g.ilo:g.ihi+1,g.jlo:g.jhi+1]), 
+plt.imshow(np.transpose(c[g.ilo:g.ihi+1,g.jlo:g.jhi+1]),
           interpolation="nearest", origin="lower",
           extent=[g.xmin, g.xmax, g.ymin, g.ymax])
 
-pylab.xlabel("x")
-pylab.ylabel("y")
+plt.xlabel("x")
+plt.ylabel("y")
 
-pylab.title("nx = {}".format(nx))
+plt.title("nx = {}".format(nx))
 
-pylab.colorbar()
+plt.colorbar()
 
-pylab.savefig("mg_alpha.png")
+plt.savefig("mg_alpha.png")
 
 
 # check whether the RHS sums to zero (necessary for periodic data)
 rhs = f(g.x2d, g.y2d)
-print("rhs sum: {}".format(numpy.sum(rhs[g.ilo:g.ihi+1,g.jlo:g.jhi+1])))
+print("rhs sum: {}".format(np.sum(rhs[g.ilo:g.ihi+1,g.jlo:g.jhi+1])))
 
 
 # create the multigrid object
@@ -108,7 +106,7 @@ a = MG.VarCoeffCCMG2d(nx, ny,
 # for i in range(a.nlevels):
 #     print(i)
 #     print(a.grids[i].get_var("coeffs"))
-    
+
 
 
 # initialize the solution to 0
@@ -125,7 +123,7 @@ a.solve(rtol=1.e-11)
 # alternately, we can just use smoothing by uncommenting the following
 #a.smooth(a.nlevels-1,50000)
 
-# get the solution 
+# get the solution
 v = a.get_solution()
 
 # compute the error from the analytic solution
@@ -137,45 +135,43 @@ print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n n
 
 
 # plot it
-pylab.clf()
+plt.clf()
 
-pylab.figure(num=1, figsize=(10.0,5.0), dpi=100, facecolor='w')
+plt.figure(num=1, figsize=(10.0,5.0), dpi=100, facecolor='w')
 
 
-pylab.subplot(121)
+plt.subplot(121)
 
-pylab.imshow(numpy.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]), 
+plt.imshow(np.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
           interpolation="nearest", origin="lower",
           extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
-pylab.xlabel("x")
-pylab.ylabel("y")
+plt.xlabel("x")
+plt.ylabel("y")
 
-pylab.title("nx = {}".format(nx))
+plt.title("nx = {}".format(nx))
 
-pylab.colorbar()
+plt.colorbar()
 
 
-pylab.subplot(122)
+plt.subplot(122)
 
-pylab.imshow(numpy.transpose(e[a.ilo:a.ihi+1,a.jlo:a.jhi+1]), 
+plt.imshow(np.transpose(e[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
           interpolation="nearest", origin="lower",
           extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
-pylab.xlabel("x")
-pylab.ylabel("y")
+plt.xlabel("x")
+plt.ylabel("y")
 
-pylab.title("error")
+plt.title("error")
 
-pylab.colorbar()
+plt.colorbar()
 
-pylab.tight_layout()
+plt.tight_layout()
 
-pylab.savefig("mg_test.png")
+plt.savefig("mg_test.png")
 
 
 # store the output for later comparison
 my_data = a.get_solution_object()
 my_data.write("mg_test")
-
-
