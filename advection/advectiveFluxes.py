@@ -1,5 +1,3 @@
-import numpy
-
 import mesh.reconstruction_f as reconstruction_f
 
 def unsplitFluxes(my_data, rp, dt, scalar_name):
