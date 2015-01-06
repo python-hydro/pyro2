@@ -6,7 +6,7 @@ import getopt
 import os
 import sys
 
-import pylab
+import matplotlib.pyplot as plt
 
 import compare
 import mesh.patch as patch
@@ -169,7 +169,7 @@ init_tstep_factor = rp.get_param("driver.init_tstep_factor")
 max_dt_change = rp.get_param("driver.max_dt_change")
 fix_dt = rp.get_param("driver.fix_dt")
 
-pylab.ion()
+plt.ion()
 
 n = 0
 sim.cc_data.t = 0.0
@@ -180,7 +180,7 @@ sim.cc_data.write(basename + "%4.4d" % (n))
 
 dovis = rp.get_param("vis.dovis")
 if dovis:
-    pylab.figure(num=1, figsize=(8,6), dpi=100, facecolor='w')
+    plt.figure(num=1, figsize=(8,6), dpi=100, facecolor='w')
     sim.dovis()
 
 nout = 0
@@ -245,7 +245,7 @@ while sim.cc_data.t < tmax and n < max_steps:
 
         if store == 1:
             basename = rp.get_param("io.basename")
-            pylab.savefig(basename + "%4.4d" % (n) + ".png")
+            plt.savefig(basename + "%4.4d" % (n) + ".png")
 
         tm_vis.end()
 
