@@ -34,7 +34,7 @@ Typical usage:
 """
 from __future__ import print_function
 
-import numpy
+import numpy as np
 import pickle
 
 from util import msg
@@ -251,24 +251,24 @@ class Grid2d:
         # zone coordinates
         self.dx = (xmax - xmin)/nx
 
-        self.xl = (numpy.arange(self.qx) - ng)*self.dx + xmin
-        self.xr = (numpy.arange(self.qx) + 1.0 - ng)*self.dx + xmin
+        self.xl = (np.arange(self.qx) - ng)*self.dx + xmin
+        self.xr = (np.arange(self.qx) + 1.0 - ng)*self.dx + xmin
         self.x = 0.5*(self.xl + self.xr)
 
         self.dy = (ymax - ymin)/ny
 
-        self.yl = (numpy.arange(self.qy) - ng)*self.dy + ymin
-        self.yr = (numpy.arange(self.qy) + 1.0 - ng)*self.dy + ymin
+        self.yl = (np.arange(self.qy) - ng)*self.dy + ymin
+        self.yr = (np.arange(self.qy) + 1.0 - ng)*self.dy + ymin
         self.y = 0.5*(self.yl + self.yr)
 
         # 2-d versions of the zone coordinates (replace with meshgrid?)
-        x2d = numpy.repeat(self.x, self.qy)
+        x2d = np.repeat(self.x, self.qy)
         x2d.shape = (self.qx, self.qy)
         self.x2d = x2d
 
-        y2d = numpy.repeat(self.y, self.qx)
+        y2d = np.repeat(self.y, self.qx)
         y2d.shape = (self.qy, self.qx)
-        y2d = numpy.transpose(y2d)
+        y2d = np.transpose(y2d)
         self.y2d = y2d
 
 
@@ -278,9 +278,9 @@ class Grid2d:
         and number of ghostcells as the parent grid
         """
         if nvar == 1:
-            return numpy.zeros((self.qx, self.qy), dtype=numpy.float64)
+            return np.zeros((self.qx, self.qy), dtype=np.float64)
         else:
-            return numpy.zeros((self.qx, self.qy, nvar), dtype=numpy.float64)
+            return np.zeros((self.qx, self.qy, nvar), dtype=np.float64)
 
 
     def coarse_like(self, N):
@@ -349,7 +349,7 @@ class CellCenterData2d:
     locked.  New variables cannot be added.
     """
 
-    def __init__ (self, grid, dtype=numpy.float64):
+    def __init__ (self, grid, dtype=np.float64):
 
         """
         Initialize the CellCenterData2d object.
@@ -360,7 +360,7 @@ class CellCenterData2d:
             The grid upon which the data will live
         dtype : NumPy data type, optional
             The datatype of the data we wish to create (defaults to
-            numpy.float64
+            np.float64
         runtime_parameters : RuntimeParameters object, optional
             The runtime parameters that go along with this data
 
@@ -430,7 +430,7 @@ class CellCenterData2d:
         if self.initialized == 1:
             msg.fail("ERROR: grid already initialized")
 
-        self.data = numpy.zeros((self.nvar, self.grid.qx, self.grid.qy),
+        self.data = np.zeros((self.nvar, self.grid.qx, self.grid.qy),
                                 dtype=self.dtype)
         self.initialized = 1
 
@@ -458,8 +458,8 @@ class CellCenterData2d:
         while n < self.nvar:
             myStr += "%16s: min: %15.10f    max: %15.10f\n" % \
                 (self.vars[n],
-                 numpy.min(self.data[n,ilo:ihi+1,jlo:jhi+1]),
-                 numpy.max(self.data[n,ilo:ihi+1,jlo:jhi+1]) )
+                 np.min(self.data[n,ilo:ihi+1,jlo:jhi+1]),
+                 np.max(self.data[n,ilo:ihi+1,jlo:jhi+1]) )
             myStr += "%16s  BCs: -x: %-12s +x: %-12s -y: %-12s +y: %-12s\n" %\
                 (" " , self.BCs[self.vars[n]].xlb,
                        self.BCs[self.vars[n]].xrb,
@@ -742,7 +742,7 @@ class CellCenterData2d:
         nx_c = fG.nx/2
         ny_c = fG.ny/2
 
-        cData = numpy.zeros((2*ng_c+nx_c, 2*ng_c+ny_c), dtype=self.dtype)
+        cData = np.zeros((2*ng_c+nx_c, 2*ng_c+ny_c), dtype=self.dtype)
 
         ilo_c = ng_c
         ihi_c = ng_c+nx_c-1
@@ -811,7 +811,7 @@ class CellCenterData2d:
         nx_f = cG.nx*2
         ny_f = cG.ny*2
 
-        fData = numpy.zeros((2*ng_f+nx_f, 2*ng_f+ny_f), dtype=self.dtype)
+        fData = np.zeros((2*ng_f+nx_f, 2*ng_f+ny_f), dtype=self.dtype)
 
         ilo_f = ng_f
         ihi_f = ng_f+nx_f-1
@@ -881,9 +881,9 @@ class CellCenterData2d:
 
         a = self.get_var(varname)
 
-        if self.dtype == numpy.int:
+        if self.dtype == np.int:
             fmt = "%4d"
-        elif self.dtype == numpy.float64:
+        elif self.dtype == np.float64:
             fmt = "%10.5g"
         else:
             msg.fail("ERROR: dtype not supported")
@@ -937,7 +937,7 @@ def read(filename):
     pF = open(filename, "rb")
     data = pickle.load(pF)
     pF.close()
-    
+
     return data.grid, data
 
 
@@ -990,7 +990,7 @@ if __name__== "__main__":
 
 
     a = mydata.get_var("a")
-    a[:,:] = numpy.exp(-(myg.x2d - 0.5)**2 - (myg.y2d - 1.0)**2)
+    a[:,:] = np.exp(-(myg.x2d - 0.5)**2 - (myg.y2d - 1.0)**2)
 
     print(mydata)
 
