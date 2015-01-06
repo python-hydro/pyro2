@@ -13,7 +13,6 @@ from __future__ import print_function
 
 import multigrid.MG as MG
 import numpy
-import sys
 import pylab
 
 numpy.set_printoptions(precision=3, linewidth=128)
@@ -176,7 +175,6 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
         """
         v = self.grids[level].get_var("v")
         f = self.grids[level].get_var("f")
-        c = self.grids[level].get_var("coeffs")
 
         myg = self.grids[level].grid
 
