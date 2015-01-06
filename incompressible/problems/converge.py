@@ -1,11 +1,11 @@
 """
 Initialize a smooth incompressible convergence test.  Here, the
 velocities are initialized as
-                                                                               
-u(x,y) = 1 - 2 cos(2 pi x) sin(2 pi y) 
+
+u(x,y) = 1 - 2 cos(2 pi x) sin(2 pi y)
 v(x,y) = 1 + 2 sin(2 pi x) cos(2 pi y)
 
-and the exact solution at some later time t is then 
+and the exact solution at some later time t is then
 
 u(x,y,t) = 1 - 2 cos(2 pi (x - t)) sin(2 pi (y - t))
 v(x,y,t) = 1 + 2 sin(2 pi (x - t)) cos(2 pi (y - t))
@@ -19,9 +19,8 @@ measure the convergence rate of the algorithm.
 from __future__ import print_function
 
 import math
-import numpy
+import numpy as np
 
-import sys
 import mesh.patch as patch
 from util import msg
 
@@ -35,7 +34,7 @@ def init_data(my_data, rp):
         print(my_data.__class__)
         msg.fail("ERROR: patch invalid in converge.py")
 
-    
+
     # get the velocities
     u = my_data.get_var("x-velocity")
     v = my_data.get_var("y-velocity")
@@ -45,14 +44,11 @@ def init_data(my_data, rp):
     if (myg.xmin != 0 or myg.xmax != 1 or
         myg.ymin != 0 or myg.ymax != 1):
         msg.fail("ERROR: domain should be a unit square")
-        
 
-    u[:,:] = 1.0 - 2.0*numpy.cos(2.0*math.pi*myg.x2d)*numpy.sin(2.0*math.pi*myg.y2d)
-    v[:,:] = 1.0 + 2.0*numpy.sin(2.0*math.pi*myg.x2d)*numpy.cos(2.0*math.pi*myg.y2d)
+    u[:,:] = 1.0 - 2.0*np.cos(2.0*math.pi*myg.x2d)*np.sin(2.0*math.pi*myg.y2d)
+    v[:,:] = 1.0 + 2.0*np.sin(2.0*math.pi*myg.x2d)*np.cos(2.0*math.pi*myg.y2d)
 
-    
-    
-                             
+
 def finalize():
     """ print out any information to the user at the end of the run """
 

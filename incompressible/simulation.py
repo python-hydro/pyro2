@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-import numpy
+import numpy as np
 import pylab
 
 from incompressible.problems import *
@@ -39,7 +39,7 @@ class Simulation:
 
 
     def initialize(self):
-        """ 
+        """
         Initialize the grid and variables for incompressible flow and
         set the initial conditions for the chosen problem.
         """
@@ -52,9 +52,9 @@ class Simulation:
         xmax = self.rp.get_param("mesh.xmax")
         ymin = self.rp.get_param("mesh.ymin")
         ymax = self.rp.get_param("mesh.ymax")
-    
-        my_grid = patch.Grid2d(nx, ny, 
-                               xmin=xmin, xmax=xmax, 
+
+        my_grid = patch.Grid2d(nx, ny,
+                               xmin=xmin, xmax=xmax,
                                ymin=ymin, ymax=ymax, ng=4)
 
 
@@ -66,19 +66,19 @@ class Simulation:
         ylb_type = self.rp.get_param("mesh.ylboundary")
         yrb_type = self.rp.get_param("mesh.yrboundary")
 
-        bc = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
+        bc = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
                             ylb=ylb_type, yrb=yrb_type)
 
         # if we are reflecting, we need odd reflection in the normal
         # directions for the velocity
-        bc_xodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
+        bc_xodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
                                  ylb=ylb_type, yrb=yrb_type,
                                  odd_reflect_dir="x")
 
-        bc_yodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
+        bc_yodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
                                  ylb=ylb_type, yrb=yrb_type,
                                  odd_reflect_dir="y")
-        
+
         my_data = patch.CellCenterData2d(my_grid)
 
         # velocities
@@ -95,14 +95,14 @@ class Simulation:
 
         self.cc_data = my_data
 
-        # now set the initial conditions for the problem 
+        # now set the initial conditions for the problem
         exec(self.problem_name + '.init_data(self.cc_data, self.rp)')
 
 
     def timestep(self):
         """
-        The timestep() function computes the advective timestep 
-        (CFL) constraint.  The CFL constraint says that information 
+        The timestep() function computes the advective timestep
+        (CFL) constraint.  The CFL constraint says that information
         cannot propagate further than one zone per timestep.
 
         We use the driver.cfl parameter to control what fraction of the CFL
@@ -110,10 +110,10 @@ class Simulation:
         """
 
         cfl = self.rp.get_param("driver.cfl")
-    
+
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
-    
+
         # the timestep is min(dx/|u|, dy|v|)
         xtmp = self.cc_data.grid.dx/(abs(u))
         ytmp = self.cc_data.grid.dy/(abs(v))
@@ -124,14 +124,14 @@ class Simulation:
 
 
     def preevolve(self):
-        """ 
+        """
         preevolve is called before we being the timestepping loop.  For
         the incompressible solver, this does an initial projection on the
         velocity field and then goes through the full evolution to get the
         value of phi.  The fluid state (u, v) is then reset to values
         before this evolve.
         """
-        
+
         myg = self.cc_data.grid
 
         u = self.cc_data.get_var("x-velocity")
@@ -147,9 +147,9 @@ class Simulation:
         # next create the multigrid object.  We want Neumann BCs on phi
         # at solid walls and periodic on phi for periodic BCs
         mg = MG.CellCenterMG2d(myg.nx, myg.ny,
-                               xl_BC_type="periodic", 
+                               xl_BC_type="periodic",
                                xr_BC_type="periodic",
-                               yl_BC_type="periodic", 
+                               yl_BC_type="periodic",
                                yr_BC_type="periodic",
                                xmin=myg.xmin, xmax=myg.xmax,
                                ymin=myg.ymin, ymax=myg.ymax,
@@ -159,9 +159,9 @@ class Simulation:
         divU = mg.soln_grid.scratch_array()
 
         divU[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
-            0.5*(u[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
+            0.5*(u[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
                  u[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1])/myg.dx + \
-            0.5*(v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
+            0.5*(v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
                  v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
 
         # solve L phi = DU
@@ -178,7 +178,7 @@ class Simulation:
         phi[:,:] = mg.get_solution(grid=myg)
 
 
-        # compute the cell-centered gradient of phi and update the 
+        # compute the cell-centered gradient of phi and update the
         # velocities
         gradp_x, gradp_y = mg.get_solution_gradient(grid=myg)
 
@@ -218,10 +218,10 @@ class Simulation:
 
 
     def evolve(self, dt):
-        """ 
-        Evolve the incompressible equations through one timestep. 
         """
-    
+        Evolve the incompressible equations through one timestep.
+        """
+
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
 
@@ -240,35 +240,35 @@ class Simulation:
         if (limiter == 0): limitFunc = reconstruction_f.nolimit
         elif (limiter == 1): limitFunc = reconstruction_f.limit2
         else: limitFunc = reconstruction_f.limit4
-    
+
         ldelta_ux = limitFunc(1, u, myg.qx, myg.qy, myg.ng)
         ldelta_vx = limitFunc(1, v, myg.qx, myg.qy, myg.ng)
 
         ldelta_uy = limitFunc(2, u, myg.qx, myg.qy, myg.ng)
         ldelta_vy = limitFunc(2, v, myg.qx, myg.qy, myg.ng)
-    
+
         #---------------------------------------------------------------------
         # get the advective velocities
         #---------------------------------------------------------------------
-    
+
         """
         the advective velocities are the normal velocity through each cell
         interface, and are defined on the cell edges, in a MAC type
         staggered form
 
-                         n+1/2 
-                        v 
-                         i,j+1/2 
+                         n+1/2
+                        v
+                         i,j+1/2
                     +------+------+
-                    |             | 
-            n+1/2   |             |   n+1/2  
-           u        +     U       +  u  
-            i-1/2,j |      i,j    |   i+1/2,j 
-                    |             |      
-                    +------+------+  
-                         n+1/2 
-                        v 
-                         i,j-1/2   
+                    |             |
+            n+1/2   |             |   n+1/2
+           u        +     U       +  u
+            i-1/2,j |      i,j    |   i+1/2,j
+                    |             |
+                    +------+------+
+                         n+1/2
+                        v
+                         i,j-1/2
 
         """
 
@@ -276,7 +276,7 @@ class Simulation:
         # constitute the MAC grid
         print("  making MAC velocities")
 
-        u_MAC, v_MAC = incomp_interface_f.mac_vels(myg.qx, myg.qy, myg.ng, 
+        u_MAC, v_MAC = incomp_interface_f.mac_vels(myg.qx, myg.qy, myg.ng,
                                                    myg.dx, myg.dy, dt,
                                                    u, v,
                                                    ldelta_ux, ldelta_vx,
@@ -297,9 +297,9 @@ class Simulation:
 
         # create the multigrid object
         mg = MG.CellCenterMG2d(myg.nx, myg.ny,
-                               xl_BC_type="periodic", 
+                               xl_BC_type="periodic",
                                xr_BC_type="periodic",
-                               yl_BC_type="periodic", 
+                               yl_BC_type="periodic",
                                yr_BC_type="periodic",
                                xmin=myg.xmin, xmax=myg.xmax,
                                ymin=myg.ymin, ymax=myg.ymax,
@@ -310,11 +310,11 @@ class Simulation:
 
         # MAC velocities are edge-centered.  divU is cell-centered.
         divU[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
-            (u_MAC[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
+            (u_MAC[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
              u_MAC[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx + \
-            (v_MAC[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
+            (v_MAC[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
              v_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1])/myg.dy
-    
+
         # solve the Poisson problem
         mg.init_zeros()
         mg.init_RHS(divU)
@@ -345,7 +345,7 @@ class Simulation:
         print("  making u, v edge states")
 
         u_xint, v_xint, u_yint, v_yint = \
-               incomp_interface_f.states(myg.qx, myg.qy, myg.ng, 
+               incomp_interface_f.states(myg.qx, myg.qy, myg.ng,
                                          myg.dx, myg.dy, dt,
                                          u, v,
                                          ldelta_ux, ldelta_vx,
@@ -367,26 +367,26 @@ class Simulation:
         advect_y = myg.scratch_array()
 
         advect_x[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
-            0.5*(u_MAC[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1] + 
+            0.5*(u_MAC[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1] +
                  u_MAC[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1]) * \
-            (u_xint[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
+            (u_xint[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
              u_xint[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx + \
-            0.5*(v_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1] + 
+            0.5*(v_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1] +
                  v_MAC[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2]) * \
-            (u_yint[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
-             u_yint[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1])/myg.dy 
+            (u_yint[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
+             u_yint[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1])/myg.dy
 
         advect_y[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
-            0.5*(u_MAC[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1] + 
+            0.5*(u_MAC[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1] +
                  u_MAC[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1]) * \
-            (v_xint[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
+            (v_xint[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
              v_xint[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx + \
-            0.5*(v_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1] + 
+            0.5*(v_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1] +
                  v_MAC[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2]) * \
-            (v_yint[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
-             v_yint[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1])/myg.dy 
+            (v_yint[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
+             v_yint[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1])/myg.dy
 
-             
+
         proj_type = self.rp.get_param("incompressible.proj_type")
 
         if (proj_type == 1):
@@ -407,12 +407,12 @@ class Simulation:
 
         # now we solve L phi = D (U* /dt)
         print("  final projection")
-    
+
         # create the multigrid object
         mg = MG.CellCenterMG2d(myg.nx, myg.ny,
-                               xl_BC_type="periodic", 
+                               xl_BC_type="periodic",
                                xr_BC_type="periodic",
-                               yl_BC_type="periodic", 
+                               yl_BC_type="periodic",
                                yr_BC_type="periodic",
                                xmin=myg.xmin, xmax=myg.xmax,
                                ymin=myg.ymin, ymax=myg.ymax,
@@ -420,13 +420,13 @@ class Simulation:
 
         # first compute divU
 
-        # u/v are cell-centered, divU is cell-centered    
+        # u/v are cell-centered, divU is cell-centered
         divU[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
-            0.5*(u[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - 
+            0.5*(u[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
                  u[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1])/myg.dx + \
-            0.5*(v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] - 
+            0.5*(v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
                  v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
-    
+
         mg.init_RHS(divU/dt)
 
         # use the old phi as our initial guess
@@ -448,7 +448,7 @@ class Simulation:
         # u = u - grad_x phi dt
         u[:,:] -= dt*gradphi_x
         v[:,:] -= dt*gradphi_y
-        
+
         # store gradp for the next step
         if (proj_type == 1):
             gradp_x[:,:] += gradphi_x[:,:]
@@ -457,13 +457,13 @@ class Simulation:
         elif (proj_type == 2):
             gradp_x[:,:] = gradphi_x[:,:]
             gradp_y[:,:] = gradphi_y[:,:]
-            
+
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")
 
 
     def dovis(self):
-        """ 
+        """
         Do runtime visualization
         """
         pylab.clf()
@@ -495,13 +495,13 @@ class Simulation:
 
         fields = [u, v, vort, divU]
         field_names = ["u", "v", r"$\nabla \times U$", r"$\nabla \cdot U$"]
-    
+
         for n in range(4):
             ax = axes.flat[n]
-    
+
             f = fields[n]
-            img = ax.imshow(numpy.transpose(f[myg.ilo:myg.ihi+1,
-                                              myg.jlo:myg.jhi+1]), 
+            img = ax.imshow(np.transpose(f[myg.ilo:myg.ihi+1,
+                                              myg.jlo:myg.jhi+1]),
                             interpolation="nearest", origin="lower",
                             extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
