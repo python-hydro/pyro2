@@ -335,8 +335,6 @@ class Simulation:
 
         myg = self.cc_data.grid
 
-        dtdx = dt/myg.dx
-        dtdy = dt/myg.dy
 
         #---------------------------------------------------------------------
         # create the limited slopes of rho, u and v (in both directions)
