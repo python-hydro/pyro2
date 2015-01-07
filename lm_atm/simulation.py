@@ -675,40 +675,40 @@ class Simulation:
         """
         plt.clf()
 
-        plt.rc("font", size=10)
+        #plt.rc("font", size=10)
 
         rho = self.cc_data.get_var("density")
 
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
 
-        #rho0 = self.base["rho0"]
-
         myg = self.cc_data.grid
-
-        magvel = myg.scratch_array()
-        vort = myg.scratch_array()
 
         magvel = np.sqrt(u**2 + v**2)
 
-        #rhoprime = self.make_prime(rho, rho0)
+        vort = myg.scratch_array()
 
-        vort[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
-             0.5*(v[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
-                  v[myg.ilo-1:myg.ihi,myg.jlo:myg.jhi+1])/myg.dx - \
-             0.5*(u[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
-                  u[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi])/myg.dy
+        dv = 0.5*(v[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
+                  v[myg.ilo-1:myg.ihi,  myg.jlo:myg.jhi+1])/myg.dx
 
-        fig, axes = plt.subplots(nrows=2, ncols=2, num=1)
+        du = 0.5*(u[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
+                  u[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
+
+        # for some reason, setting vort here causes the density in the
+        # simulation to NaN.  Seems like a bug (in python?)
+        #vort[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = dv - du
+
+        fig, axes = plt.subplots(nrows=1, ncols=2, num=1)
         plt.subplots_adjust(hspace=0.25)
 
-        fields = [rho, magvel, vort, rho]
-        field_names = [r"$\rho$", r"|U|", r"$\nabla \times U$", r"$\rho$"]
+        fields = [rho, magvel]
+        field_names = [r"$\rho$", r"|U|"] #, r"$\nabla \times U$", r"$\rho$"]
 
-        for n in range(4):
+        for n in range(len(fields)):
             ax = axes.flat[n]
 
             f = fields[n]
+
             img = ax.imshow(np.transpose(f[myg.ilo:myg.ihi+1,
                                            myg.jlo:myg.jhi+1]),
                             interpolation="nearest", origin="lower",
@@ -718,7 +718,7 @@ class Simulation:
             ax.set_ylabel("y")
             ax.set_title(field_names[n])
 
-            plt.colorbar(img, ax=ax)
+            #plt.colorbar(img, ax=ax)
 
 
         plt.figtext(0.05,0.0125, "t = %10.5f" % self.cc_data.t)
