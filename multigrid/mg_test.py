@@ -20,6 +20,8 @@ import numpy as np
 import MG
 import matplotlib.pyplot as plt
 
+import compare
+
 # the analytic solution
 def true(x,y):
     return (x**2 - x**4)*(y**4 - y**2)
@@ -38,55 +40,84 @@ def f(x,y):
     return -2.0*((1.0-6.0*x**2)*y**2*(1.0-y**2) + (1.0-6.0*y**2)*x**2*(1.0-x**2))
 
 
-# test the multigrid solver
-nx = 256
-ny = nx
+def test_poisson_dirichlet(N, store_bench=False, comp_bench=False,
+                           make_plot=False):
+    
+    # test the multigrid solver
+    nx = N
+    ny = nx
 
 
-# create the multigrid object
-a = MG.CellCenterMG2d(nx, ny,
-                      xl_BC_type="dirichlet", yl_BC_type="dirichlet",
-                      xr_BC_type="dirichlet", yr_BC_type="dirichlet",
-                      verbose=1)
+    # create the multigrid object
+    a = MG.CellCenterMG2d(nx, ny,
+                          xl_BC_type="dirichlet", yl_BC_type="dirichlet",
+                          xr_BC_type="dirichlet", yr_BC_type="dirichlet",
+                          verbose=1)
 
-# initialize the solution to 0
-a.init_zeros()
+    # initialize the solution to 0
+    a.init_zeros()
 
-# initialize the RHS using the function f
-rhs = f(a.x2d, a.y2d)
-a.init_RHS(rhs)
+    # initialize the RHS using the function f
+    rhs = f(a.x2d, a.y2d)
+    a.init_RHS(rhs)
 
-# solve to a relative tolerance of 1.e-11
-a.solve(rtol=1.e-11)
+    # solve to a relative tolerance of 1.e-11
+    a.solve(rtol=1.e-11)
 
-# alternately, we can just use smoothing by uncommenting the following
-#a.smooth(a.nlevels-1,50000)
+    # alternately, we can just use smoothing by uncommenting the following
+    #a.smooth(a.nlevels-1,50000)
 
-# get the solution
-v = a.get_solution()
+    # get the solution
+    v = a.get_solution()
 
-# compute the error from the analytic solution
-b = true(a.x2d,a.y2d)
-e = v - b
+    # compute the error from the analytic solution
+    b = true(a.x2d,a.y2d)
+    e = v - b
 
-print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
-      (error(a.soln_grid, e), a.relative_error, a.num_cycles))
-
-
-# plot it
-plt.figure(num=1, figsize=(5.0,5.0), dpi=100, facecolor='w')
-
-plt.imshow(np.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
-          interpolation="nearest", origin="lower",
-          extent=[a.xmin, a.xmax, a.ymin, a.ymax])
+    print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
+          (error(a.soln_grid, e), a.relative_error, a.num_cycles))
 
 
-plt.xlabel("x")
-plt.ylabel("y")
+    # plot it
+    if make_plot:
+        plt.figure(num=1, figsize=(5.0,5.0), dpi=100, facecolor='w')
 
-plt.savefig("mg_test.png")
+        plt.imshow(np.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
+                   interpolation="nearest", origin="lower",
+                   extent=[a.xmin, a.xmax, a.ymin, a.ymax])
+
+        plt.xlabel("x")
+        plt.ylabel("y")
+
+        plt.savefig("mg_test.png")
+
+        
+    # store the output for later comparison
+    bench = "mg_poisson_dirichlet"
+    if store_bench:
+        my_data = a.get_solution_object()
+        my_data.write("tests/{}".format(bench))
+
+    # do we do a comparison?
+    if comp_bench:
+        compare_file = "tests/{}".format(bench)
+        msg.warning("comparing to: %s " % (compare_file) )
+        bench_grid, bench_data = patch.read(compare_file)
+
+        result = compare.compare(sim.cc_data.grid, sim.cc_data, bench_grid, bench_data)
+
+        if result == 0:
+            msg.success("results match benchmark\n")
+        else:
+            msg.warning("ERROR: " + compare.errors[result] + "\n")
+
+        return result
+
+    return None
 
 
-# store the output for later comparison
-my_data = a.get_solution_object()
-my_data.write("mg_test")
+if __name__ == "__main__":
+    test_poisson_dirichlet(256)
+
+
+
