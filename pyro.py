@@ -287,6 +287,6 @@ if make_bench:
 # final reports
 #-----------------------------------------------------------------------------
 if verbose > 0: rp.print_unused_params()
-tc.report()
+if verbose > 0: tc.report()
 
 sim.finalize()

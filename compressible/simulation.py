@@ -79,6 +79,8 @@ class Simulation:
         ymin = self.rp.get_param("mesh.ymin")
         ymax = self.rp.get_param("mesh.ymax")
 
+        verbose = self.rp.get_param("driver.verbose")
+        
         my_grid = patch.Grid2d(nx, ny,
                                xmin=xmin, xmax=xmax,
                                ymin=ymin, ymax=ymax, ng=4)
@@ -146,7 +148,7 @@ class Simulation:
         # initial conditions for the problem
         exec(self.problem_name + '.init_data(self.cc_data, self.rp)')
 
-        print(my_data)
+        if verbose > 0: print(my_data)
 
 
     def timestep(self):

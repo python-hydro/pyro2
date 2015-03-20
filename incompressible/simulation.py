@@ -38,6 +38,8 @@ class Simulation:
             self.tc = timers
 
 
+        self.verbose = self.rp.get_param("driver.verbose")
+            
     def initialize(self):
         """
         Initialize the grid and variables for incompressible flow and
@@ -214,7 +216,7 @@ class Simulation:
 
         self.cc_data = orig_data
 
-        print("done with the pre-evolution")
+        if self.verbose > 0: print("done with the pre-evolution")
 
 
     def evolve(self, dt):
@@ -274,7 +276,7 @@ class Simulation:
 
         # this returns u on x-interfaces and v on y-interfaces.  These
         # constitute the MAC grid
-        print("  making MAC velocities")
+        if self.verbose > 0: print("  making MAC velocities")
 
         u_MAC, v_MAC = incomp_interface_f.mac_vels(myg.qx, myg.qy, myg.ng,
                                                    myg.dx, myg.dy, dt,
@@ -293,7 +295,7 @@ class Simulation:
         # U^MAC is the MAC-type staggered grid of the advective
         # velocities.
 
-        print("  MAC projection")
+        if self.verbose > 0: print("  MAC projection")
 
         # create the multigrid object
         mg = MG.CellCenterMG2d(myg.nx, myg.ny,
@@ -342,7 +344,7 @@ class Simulation:
         # recompute the interface states, using the advective velocity
         # from above
         #---------------------------------------------------------------------
-        print("  making u, v edge states")
+        if self.verbose > 0: print("  making u, v edge states")
 
         u_xint, v_xint, u_yint, v_yint = \
                incomp_interface_f.states(myg.qx, myg.qy, myg.ng,
@@ -358,7 +360,7 @@ class Simulation:
         # update U to get the provisional velocity field
         #---------------------------------------------------------------------
 
-        print("  doing provisional update of u, v")
+        if self.verbose > 0: print("  doing provisional update of u, v")
 
         # compute (U.grad)U
 
@@ -406,7 +408,7 @@ class Simulation:
         #---------------------------------------------------------------------
 
         # now we solve L phi = D (U* /dt)
-        print("  final projection")
+        if self.verbose > 0: print("  final projection")
 
         # create the multigrid object
         mg = MG.CellCenterMG2d(myg.nx, myg.ny,

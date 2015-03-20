@@ -51,6 +51,8 @@ class Simulation:
         ymin = self.rp.get_param("mesh.ymin")
         ymax = self.rp.get_param("mesh.ymax")
 
+        verbose = self.rp.get_param("driver.verbose")
+        
         my_grid = patch.Grid2d(nx, ny,
                                xmin=xmin, xmax=xmax,
                                ymin=ymin, ymax=ymax, ng=4)

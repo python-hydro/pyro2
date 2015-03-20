@@ -29,8 +29,6 @@ class Simulation:
 
         self.rp = rp
 
-        print(rp)
-
         self.cc_data = None
         self.aux_data = None
         self.base = {}
@@ -42,6 +40,8 @@ class Simulation:
         else:
             self.tc = timers
 
+        self.verbose = rp.get_param("driver.verbose")
+        
 
     def initialize(self):
         """
@@ -199,7 +199,7 @@ class Simulation:
         dt_buoy = np.sqrt(2.0*myg.dx/F_buoy)
 
         dt = min(dt, dt_buoy)
-        print("timestep is {}".format(dt))
+        if self.verbose > 0: print("timestep is {}".format(dt))
 
         return dt
 
@@ -309,7 +309,7 @@ class Simulation:
 
         self.cc_data = orig_data
 
-        print("done with the pre-evolution")
+        if self.verbose > 0: print("done with the pre-evolution")
 
 
     def evolve(self, dt):
@@ -380,7 +380,7 @@ class Simulation:
 
         # this returns u on x-interfaces and v on y-interfaces.  These
         # constitute the MAC grid
-        print("  making MAC velocities")
+        if self.verbose > 0: print("  making MAC velocities")
 
         # create the coefficient to the grad (pi/beta) term
         coeff = self.aux_data.get_var("coeff")
@@ -414,7 +414,7 @@ class Simulation:
         # phi is cell centered, and U^MAC is the MAC-type staggered
         # grid of the advective velocities.
 
-        print("  MAC projection")
+        if self.verbose > 0: print("  MAC projection")
 
         # create the coefficient array: beta0**2/rho
         coeff = 1.0/rho[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]
@@ -512,7 +512,7 @@ class Simulation:
         # recompute the interface states, using the advective velocity
         # from above
         #---------------------------------------------------------------------
-        print("  making u, v edge states")
+        if self.verbose > 0: print("  making u, v edge states")
 
         coeff = self.aux_data.get_var("coeff")
         coeff[:,:] = 2.0/(rho[:,:] + rho_old[:,:])
@@ -533,7 +533,7 @@ class Simulation:
         #---------------------------------------------------------------------
         # update U to get the provisional velocity field
         #---------------------------------------------------------------------
-        print("  doing provisional update of u, v")
+        if self.verbose > 0: print("  doing provisional update of u, v")
 
         # compute (U.grad)U
 
@@ -584,9 +584,10 @@ class Simulation:
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")
 
-        print("min/max rho = {}, {}".format(np.min(rho), np.max(rho)))
-        print("min/max u   = {}, {}".format(np.min(u), np.max(u)))
-        print("min/max v   = {}, {}".format(np.min(v), np.max(v)))
+        if self.verbose > 0:
+            print("min/max rho = {}, {}".format(np.min(rho), np.max(rho)))
+            print("min/max u   = {}, {}".format(np.min(u), np.max(u)))
+            print("min/max v   = {}, {}".format(np.min(v), np.max(v)))
 
 
         #---------------------------------------------------------------------
@@ -594,7 +595,7 @@ class Simulation:
         #---------------------------------------------------------------------
 
         # now we solve L phi = D (U* /dt)
-        print("  final projection")
+        if self.verbose > 0: print("  final projection")
 
         # create the coefficient array: beta0**2/rho
         coeff = 1.0/rho[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]
