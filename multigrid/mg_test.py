@@ -99,9 +99,10 @@ def test_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     # store the output for later comparison
     bench = "mg_poisson_dirichlet"
     bench_dir = os.environ["PYRO_HOME"] + "/multigrid/tests/"
+
+    my_data = a.get_solution_object()
     
     if store_bench:
-        my_data = a.get_solution_object()
         my_data.write("{}/{}".format(bench_dir, bench))
 
     # do we do a comparison?
@@ -110,7 +111,7 @@ def test_poisson_dirichlet(N, store_bench=False, comp_bench=False,
         msg.warning("comparing to: %s " % (compare_file) )
         bench_grid, bench_data = patch.read(compare_file)
 
-        result = compare.compare(sim.cc_data.grid, sim.cc_data, bench_grid, bench_data)
+        result = compare.compare(my_data.grid, my_data, bench_grid, bench_data)
 
         if result == 0:
             msg.success("results match benchmark\n")
@@ -123,7 +124,7 @@ def test_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
 
 if __name__ == "__main__":
-    test_poisson_dirichlet(256)
+    test_poisson_dirichlet(256, comp_bench=True)
 
 
 

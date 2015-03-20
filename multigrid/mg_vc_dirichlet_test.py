@@ -165,9 +165,10 @@ def test_vc_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     # store the output for later comparison
     bench = "mg_vc_poisson_dirichlet"
     bench_dir = os.environ["PYRO_HOME"] + "/multigrid/tests/"
+
+    my_data = a.get_solution_object()
     
     if store_bench:
-        my_data = a.get_solution_object()
         my_data.write("{}/{}".format(bench_dir, bench))
 
     # do we do a comparison?
@@ -176,7 +177,7 @@ def test_vc_poisson_dirichlet(N, store_bench=False, comp_bench=False,
         msg.warning("comparing to: %s " % (compare_file) )
         bench_grid, bench_data = patch.read(compare_file)
 
-        result = compare.compare(sim.cc_data.grid, sim.cc_data,
+        result = compare.compare(my_data.grid, my_data,
                                  bench_grid, bench_data)
 
         if result == 0:
@@ -184,7 +185,9 @@ def test_vc_poisson_dirichlet(N, store_bench=False, comp_bench=False,
         else:
             msg.warning("ERROR: " + compare.errors[result] + "\n")
 
+        return result
 
+    
     # normal return -- error wrt true solution
     return enorm
 
@@ -196,12 +199,17 @@ if __name__ == "__main__":
 
     plot = False
     store = False
+    do_compare = False
+    
     for nx in N:
         if nx == max(N):
             plot = True
             #store = True
+            do_compare = True
             
-        enorm = test_vc_poisson_dirichlet(nx, make_plot=plot, store_bench=store)
+        enorm = test_vc_poisson_dirichlet(nx, make_plot=plot,
+                                          store_bench=store, comp_bench=do_compare)
+        
         err.append(enorm)
 
 

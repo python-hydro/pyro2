@@ -69,10 +69,10 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
     """
     test the variable-coefficient MG solver.  The return value
     here is the error compared to the exact solution, UNLESS
-    comp_bench=True, in which case the return value is the 
+    comp_bench=True, in which case the return value is the
     error compared to the stored benchmark
     """
-    
+
     # test the multigrid solver
     nx = N
     ny = nx
@@ -103,7 +103,7 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
                           coeffs=c, coeffs_bc=bc_c,
                           verbose=1, vis=0, true_function=true)
 
-    
+
     # initialize the solution to 0
     a.init_zeros()
 
@@ -134,7 +134,7 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
     print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
           (enorm, a.relative_error, a.num_cycles))
 
-    
+
     # plot the solution
     if make_plot:
         plt.clf()
@@ -176,9 +176,10 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
     # store the output for later comparison
     bench = "mg_vc_poisson_periodic"
     bench_dir = os.environ["PYRO_HOME"] + "/multigrid/tests/"
-    
+
+    my_data = a.get_solution_object()
+
     if store_bench:
-        my_data = a.get_solution_object()
         my_data.write("{}/{}".format(bench_dir, bench))
 
     # do we do a comparison?
@@ -187,34 +188,39 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
         msg.warning("comparing to {}".format(compare_file))
         bench_grid, bench_data = patch.read(compare_file)
 
-        result = compare.compare(sim.cc_data.grid, sim.cc_data,
+        result = compare.compare(my_data.grid, my_data,
                                  bench_grid, bench_data)
 
         if result == 0:
             msg.success("results match benchmark\n")
         else:
-            msg.warning("ERROR: {}\n".format(compare_errors[result]))
+            msg.warning("ERROR: {}\n".format(compare.errors[result]))
 
-            
+        return result
+
+
     # normal return -- error wrt true solution
     return enorm
 
 
 if __name__ == "__main__":
-    
+
     N = [16, 32, 64, 128, 256, 512]
     err = []
 
     plot = False
     store = False
+    do_compare = False
+
     for nx in N:
         if nx == max(N):
             plot = True
             #store = True
-
-        enorm = test_vc_poisson_periodic(nx, make_plot=plot, store_bench=store)
+            do_compare = True
+        enorm = test_vc_poisson_periodic(nx, make_plot=plot,
+                                         store_bench=store, comp_bench=do_compare)
         err.append(enorm)
-        
+
 
     # plot the convergence
     N = np.array(N, dtype=np.float64)
