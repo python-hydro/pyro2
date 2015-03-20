@@ -183,7 +183,7 @@ def doit(solver_name, problem_name, param_file,
         if result == 0:
             msg.success("results match benchmark\n")
         else:
-            msg.fail("ERROR: " + compare.errors[result] + "\n")
+            msg.warning("ERROR: " + compare.errors[result] + "\n")
 
 
     # are we storing a benchmark?
