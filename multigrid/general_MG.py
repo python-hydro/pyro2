@@ -1,5 +1,5 @@
 """
-This multigrid solver is build from multigrid/MG.py 
+This multigrid solver is build from multigrid/MG.py
 and implements a more general solver for an equation of the form:
 
 alpha phi + div { beta grad phi } + gamma . grad phi = f
@@ -25,14 +25,18 @@ np.set_printoptions(precision=3, linewidth=128)
 
 class GeneralMG2d(MG.CellCenterMG2d):
     """
-    this is a multigrid solver that supports variable coefficients
+    this is a multigrid solver that supports our general elliptic
+    equation.
 
-    we need to accept a coefficient array, coeffs, defined at each
-    level.  We can do this at the fine level and restrict it
-    down the MG grids once.
+    we need to accept a coefficient CellCenterData2d object with
+    fields defined for alpha, beta, gamma_x, and gamma_y on the
+    fine level.
+
+    We then restrict this data through the MG hierarchy (and
+    average beta to the edges).
 
     we need a new compute_residual() and smooth() function, that
-    understands coeffs.
+    understands these coeffs.
     """
 
     def __init__(self, nx, ny, xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0,
@@ -40,14 +44,15 @@ class GeneralMG2d(MG.CellCenterMG2d):
                  yl_BC_type="dirichlet", yr_BC_type="dirichlet",
                  nsmooth=10, nsmooth_bottom=50,
                  verbose=0,
-                 coeffs=None, 
+                 coeffs=None,
                  true_function=None, vis=0, vis_title=""):
         """
         here, coeffs is a CCData2d object
         """
-        
+
         # we'll keep a list of the beta coefficients averaged to the
-        # interfaces on each level
+        # interfaces on each level -- note: these will already be
+        # scaled by 1/dx**2
         self.beta_edge = []
 
         # initialize the MG object with the auxillary fields
@@ -85,7 +90,7 @@ class GeneralMG2d(MG.CellCenterMG2d):
 
                 self.grids[n].fill_BC(c)
                 n -= 1
-                
+
 
         # put the beta coefficients on edges
         beta = self.grids[self.nlevels-1].get_var("beta")
@@ -119,14 +124,19 @@ class GeneralMG2d(MG.CellCenterMG2d):
 
         myg = self.grids[level].grid
 
+        dx = myg.dx
+        dy = myg.dy
+
         self.grids[level].fill_BC("v")
 
-        eta_x = self.edge_coeffs[level].x
-        eta_y = self.edge_coeffs[level].y
+        alpha = self.grids[level].get_var("alpha")
+        gamma_x = self.grids[level].get_var("gamma_x")/dx
+        gamma_y = self.grids[level].get_var("gamma_y")/dy
 
-        # print( "min/max c: {}, {}".format(np.min(c), np.max(c)))
-        # print( "min/max eta_x: {}, {}".format(np.min(eta_x), np.max(eta_x)))
-        # print( "min/max eta_y: {}, {}".format(np.min(eta_y), np.max(eta_y)))
+        # these are already scaled by 1/dx**2 in the EdgeCoeffs
+        # construction
+        beta_x = self.beta_edge[level].x
+        beta_y = self.beta_edge[level].y
 
 
         # do red-black G-S
@@ -153,38 +163,49 @@ class GeneralMG2d(MG.CellCenterMG2d):
             for n, (ix, iy) in enumerate([(0,0), (1,1), (1,0), (0,1)]):
 
                 denom = (
-                    eta_x[myg.ilo+1+ix:myg.ihi+2:2,
-                          myg.jlo+iy  :myg.jhi+1:2] +
+                    alpha[myg.ilo+ix  :myg.ihi+1:2,
+                          myg.jlo+iy  :myg.jhi+1:2] -
                     #
-                    eta_x[myg.ilo+ix  :myg.ihi+1:2,
-                          myg.jlo+iy  :myg.jhi+1:2] +
+                    beta_x[myg.ilo+1+ix:myg.ihi+2:2,
+                           myg.jlo+iy  :myg.jhi+1:2] -
                     #
-                    eta_y[myg.ilo+ix  :myg.ihi+1:2,
-                          myg.jlo+1+iy:myg.jhi+2:2] +
+                    beta_x[myg.ilo+ix  :myg.ihi+1:2,
+                           myg.jlo+iy  :myg.jhi+1:2] -
                     #
-                    eta_y[myg.ilo+ix  :myg.ihi+1:2,
-                          myg.jlo+iy  :myg.jhi+1:2])
+                    beta_y[myg.ilo+ix  :myg.ihi+1:2,
+                           myg.jlo+1+iy:myg.jhi+2:2] -
+                    #
+                    beta_y[myg.ilo+ix  :myg.ihi+1:2,
+                           myg.jlo+iy  :myg.jhi+1:2])
 
                 v[myg.ilo+ix:myg.ihi+1:2,myg.jlo+iy:myg.jhi+1:2] = (
-                    -f[myg.ilo+ix:myg.ihi+1:2,myg.jlo+iy:myg.jhi+1:2] +
-                    # eta_{i+1/2,j} phi_{i+1,j}
-                    eta_x[myg.ilo+1+ix:myg.ihi+2:2,
-                          myg.jlo+iy  :myg.jhi+1:2] *
+                    f[myg.ilo+ix:myg.ihi+1:2,myg.jlo+iy:myg.jhi+1:2] -
+                    # (beta_{i+1/2,j} + gamma^x_{i,j}) phi_{i+1,j}
+                    (beta_x[myg.ilo+1+ix:myg.ihi+2:2,
+                            myg.jlo+iy  :myg.jhi+1:2] +
+                     gamma_x[myg.ilo+ix:myg.ihi+1:2,
+                             myg.jlo+iy:myg.jhi+1:2])*
                     v[myg.ilo+1+ix:myg.ihi+2:2,
                       myg.jlo+iy  :myg.jhi+1:2] +
-                    # eta_{i-1/2,j} phi_{i-1,j}
-                    eta_x[myg.ilo+ix:myg.ihi+1:2,
-                          myg.jlo+iy:myg.jhi+1:2]*
+                    # (beta_{i-1/2,j} - gamma^x_{i,j}) phi_{i-1,j}
+                    (beta_x[myg.ilo+ix:myg.ihi+1:2,
+                            myg.jlo+iy:myg.jhi+1:2] -
+                     gamma_x[myg.ilo+ix:myg.ihi+1:2,
+                             myg.jlo+iy:myg.jhi+1:2])*
                     v[myg.ilo-1+ix:myg.ihi  :2,
                       myg.jlo+iy  :myg.jhi+1:2] +
-                    # eta_{i,j+1/2} phi_{i,j+1}
-                    eta_y[myg.ilo+ix:myg.ihi+1:2,
-                          myg.jlo+1+iy:myg.jhi+2:2]*
+                    # (beta_{i,j+1/2} + gamma^y_{i,j}) phi_{i,j+1}
+                    (beta_y[myg.ilo+ix:myg.ihi+1:2,
+                            myg.jlo+1+iy:myg.jhi+2:2] +
+                     gamma_y[myg.ilo+ix:myg.ihi+1:2,
+                             myg.jlo+iy:myg.jhi+1:2])*
                     v[myg.ilo+ix  :myg.ihi+1:2,
                       myg.jlo+1+iy:myg.jhi+2:2] +
-                    # eta_{i,j-1/2} phi_{i,j-1}
-                    eta_y[myg.ilo+ix:myg.ihi+1:2,
-                          myg.jlo+iy:myg.jhi+1:2]*
+                    # (beta_{i,j-1/2} - gamma^y_{i,j}) phi_{i,j-1}
+                    (beta_y[myg.ilo+ix:myg.ihi+1:2,
+                           myg.jlo+iy:myg.jhi+1:2] -
+                     gamma_y[myg.ilo+ix:myg.ihi+1:2,
+                             myg.jlo+iy:myg.jhi+1:2])*
                     v[myg.ilo+ix  :myg.ihi+1:2,
                       myg.jlo-1+iy:myg.jhi  :2]) / denom
 
@@ -226,29 +247,49 @@ class GeneralMG2d(MG.CellCenterMG2d):
 
         myg = self.grids[level].grid
 
-        eta_x = self.edge_coeffs[level].x
-        eta_y = self.edge_coeffs[level].y
+        dx = myg.dx
+        dy = myg.dy
+
+        alpha = self.grids[level].get_var("alpha")
+        gamma_x = self.grids[level].get_var("gamma_x")/dx
+        gamma_y = self.grids[level].get_var("gamma_y")/dy
+        
+        # these already have a 1/dx**2 scaling in them
+        beta_x = self.beta_edge[level].x
+        beta_y = self.beta_edge[level].y
 
 
         # compute the residual
         # r = f - L_eta phi
         L_eta_phi = (
-            # eta_{i+1/2,j} (phi_{i+1,j} - phi_{i,j})
-            eta_x[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1]* \
+            # alpha_{i,j} phi_{i,j}
+            alpha[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]*
+            v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] +
+            # beta_{i+1/2,j} (phi_{i+1,j} - phi_{i,j})
+            beta_x[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1]* \
             (v[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
              v[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1]) - \
-            # eta_{i-1/2,j} (phi_{i,j} - phi_{i-1,j})
-            eta_x[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1]* \
+            # beta_{i-1/2,j} (phi_{i,j} - phi_{i-1,j})
+            beta_x[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1]* \
             (v[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1] -
              v[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1]) + \
-            # eta_{i,j+1/2} (phi_{i,j+1} - phi_{i,j})
-            eta_y[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2]* \
-            (v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -  # y-diff
+            # beta_{i,j+1/2} (phi_{i,j+1} - phi_{i,j})
+            beta_y[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2]* \
+            (v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -  
              v[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1]) - \
-            # eta_{i,j-1/2} (phi_{i,j} - phi_{i,j-1})
-            eta_y[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1]* \
+            # beta_{i,j-1/2} (phi_{i,j} - phi_{i,j-1})
+            beta_y[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1]* \
             (v[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1] -
-             v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ]) )
+             v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ]) + \
+            # gamma^x_{i,j} (phi_{i+1,j} - phi_{i-1,j})
+            gamma_x[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]* \
+            (v[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
+             v[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1]) + \
+            # gamma^x_{i,j} (phi_{i+1,j} - phi_{i-1,j})
+            gamma_y[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]* \
+            (v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
+             v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ]) 
+          )
 
         r[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
             f[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] - L_eta_phi
