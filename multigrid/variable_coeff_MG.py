@@ -41,7 +41,7 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
                  true_function=None, vis=0, vis_title=""):
 
         # we'll keep a list of the coefficients averaged to the interfaces
-        # on each level
+        # on each level -- note: this will already be scaled by 1/dx**2
         self.edge_coeffs = []
 
         # initialize the MG object with the auxillary "coeffs" field
