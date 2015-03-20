@@ -168,6 +168,13 @@ with their data.
   https://github.com/zingale/numerical_exercises
 
 
+## Regression testing
+
+  The `test.py` script will run several of the problems (as well as some
+  stand-alone multigrid tests) and compare the solution to stored
+  benchmarks (in each solver's `tests/` subdirectory).
+  
+
 ## Getting Help
 
   Join the mailing list to say up-to-date:
