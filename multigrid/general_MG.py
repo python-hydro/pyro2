@@ -186,21 +186,21 @@ class GeneralMG2d(MG.CellCenterMG2d):
                      gamma_x[myg.ilo+ix:myg.ihi+1:2,
                              myg.jlo+iy:myg.jhi+1:2])*
                     v[myg.ilo+1+ix:myg.ihi+2:2,
-                      myg.jlo+iy  :myg.jhi+1:2] +
+                      myg.jlo+iy  :myg.jhi+1:2] -
                     # (beta_{i-1/2,j} - gamma^x_{i,j}) phi_{i-1,j}
                     (beta_x[myg.ilo+ix:myg.ihi+1:2,
                             myg.jlo+iy:myg.jhi+1:2] -
                      gamma_x[myg.ilo+ix:myg.ihi+1:2,
                              myg.jlo+iy:myg.jhi+1:2])*
                     v[myg.ilo-1+ix:myg.ihi  :2,
-                      myg.jlo+iy  :myg.jhi+1:2] +
+                      myg.jlo+iy  :myg.jhi+1:2] -
                     # (beta_{i,j+1/2} + gamma^y_{i,j}) phi_{i,j+1}
                     (beta_y[myg.ilo+ix:myg.ihi+1:2,
                             myg.jlo+1+iy:myg.jhi+2:2] +
                      gamma_y[myg.ilo+ix:myg.ihi+1:2,
                              myg.jlo+iy:myg.jhi+1:2])*
                     v[myg.ilo+ix  :myg.ihi+1:2,
-                      myg.jlo+1+iy:myg.jhi+2:2] +
+                      myg.jlo+1+iy:myg.jhi+2:2] -
                     # (beta_{i,j-1/2} - gamma^y_{i,j}) phi_{i,j-1}
                     (beta_y[myg.ilo+ix:myg.ihi+1:2,
                            myg.jlo+iy:myg.jhi+1:2] -
