@@ -22,7 +22,7 @@ else
     for d in mesh incompressible compressible lm_atm
     do
 	cd ${d}
-	${PYTHON} setup.py build_ext --inplace
+	${PYTHON} setup.py config_fc --f90flags -C build_ext --inplace
 	cd ..
     done
 fi
