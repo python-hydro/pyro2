@@ -5,6 +5,7 @@ from __future__ import print_function
 import pyro
 import multigrid.mg_test as mg_test
 import multigrid.mg_vc_dirichlet_test as mg_vc_dirichlet_test
+import multigrid.mg_vc_periodic_test as mg_vc_periodic_test
 
 class test:
     def __init__(self, solver, problem, inputs, options):
@@ -39,6 +40,9 @@ results["mg_poisson_dirichlet"] = err
 
 err = mg_vc_dirichlet_test.test_vc_poisson_dirichlet(512)
 results["mg_vc_poisson_dirichlet"] = err
+
+err = mg_vc_periodic_test.test_vc_poisson_periodic(512)
+results["mg_vc_poisson_periodic"] = err
 
 
 failed = 0
