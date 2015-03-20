@@ -35,5 +35,4 @@ infrastructure:
 
   -- make pyro.py importable so we can use it as a test driver
 
-  -- verbosity flag
-  
+    
