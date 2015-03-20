@@ -206,6 +206,11 @@ def doit(solver_name, problem_name, param_file,
 
     sim.finalize()
 
+    if comp_bench:
+        return result
+    else:
+        return None
+    
 
 if __name__ == "__main__":
 
