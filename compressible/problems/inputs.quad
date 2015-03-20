@@ -11,7 +11,7 @@ cvisc = 0.1
 
 [io]
 basename = quad_unsplit_
-tplot = 0.1
+dt_out = 0.1
 
 
 [mesh]
