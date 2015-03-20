@@ -138,8 +138,9 @@ def doit(solver_name, problem_name, param_file,
         # output
         dt_out = rp.get_param("io.dt_out")
         n_out = rp.get_param("io.n_out")
-
-        if sim.cc_data.t >= (nout + 1)*dt_out or n%n_out == 0:
+        do_io = rp.get_param("io.do_io")
+        
+        if (sim.cc_data.t >= (nout + 1)*dt_out or n%n_out == 0) and do_io == 1:
 
             tm_io = tc.timer("output")
             tm_io.begin()
