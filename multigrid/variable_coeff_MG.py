@@ -118,7 +118,8 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
 
 
         # set the coefficients and restrict them down the hierarchy
-        # we only need to do this once.
+        # we only need to do this once.  We need to hold the original
+        # coeffs in our grid so we can do a ghost cell fill.
         c = self.grids[self.nlevels-1].get_var("coeffs")
         c[:,:] = coeffs.copy()
 
