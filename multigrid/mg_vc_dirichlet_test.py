@@ -29,12 +29,12 @@ force it to 0 on the boundary, which is not correct here)
 from __future__ import print_function
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 import compare
 import mesh.patch as patch
 import variable_coeff_MG as MG
-import matplotlib.pyplot as plt
-
+from util import msg
 
 # the analytic solution
 def true(x,y):
@@ -162,13 +162,15 @@ def test_vc_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
     # store the output for later comparison
     bench = "mg_vc_poisson_dirichlet"
+    bench_dir = os.environ["PYRO_HOME"] + "/multigrid/tests/"
+    
     if store_bench:
         my_data = a.get_solution_object()
-        my_data.write("tests/{}".format(bench))
+        my_data.write("{}/{}".format(bench_dir, bench))
 
     # do we do a comparison?
     if comp_bench:
-        compare_file = "tests/{}".format(bench)
+        compare_file = "{}/{}".format(bench_dir, bench)
         msg.warning("comparing to: %s " % (compare_file) )
         bench_grid, bench_data = patch.read(compare_file)
 

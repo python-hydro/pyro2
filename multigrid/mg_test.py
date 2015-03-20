@@ -17,10 +17,12 @@ The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)
 from __future__ import print_function
 
 import numpy as np
-import MG
 import matplotlib.pyplot as plt
 
 import compare
+import MG
+import mesh.patch as patch
+from util import msg
 
 # the analytic solution
 def true(x,y):
@@ -94,13 +96,15 @@ def test_poisson_dirichlet(N, store_bench=False, comp_bench=False,
         
     # store the output for later comparison
     bench = "mg_poisson_dirichlet"
+    bench_dir = os.environ["PYRO_HOME"] + "/multigrid/tests/"
+    
     if store_bench:
         my_data = a.get_solution_object()
-        my_data.write("tests/{}".format(bench))
+        my_data.write("{}/{}".format(bench_dir, bench))
 
     # do we do a comparison?
     if comp_bench:
-        compare_file = "tests/{}".format(bench)
+        compare_file = "{}/{}".format(bench_dir, bench)
         msg.warning("comparing to: %s " % (compare_file) )
         bench_grid, bench_data = patch.read(compare_file)
 
