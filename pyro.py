@@ -273,6 +273,11 @@ if comp_bench:
 
 # are we storing a benchmark?
 if make_bench:
+    if not os.path.isdir(solver_name + "/tests/"):
+        try: os.mkdir(solver_name + "/tests/")
+        except:
+            msg.fail("ERROR: unable to create the solver's tests/ directory")
+            
     bench_file = solver_name + "/tests/" + basename + "%4.4d" % (n)
     msg.warning("storing new benchmark: %s\n " % (bench_file) )
     sim.cc_data.write(bench_file)
