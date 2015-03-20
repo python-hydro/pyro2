@@ -7,6 +7,8 @@ fix_dt = -1.0
 init_tstep_factor = 0.01   ; first timestep = init_tstep_factor * CFL timestep
 max_dt_change = 2.0        ; max amount the timestep can change between steps
 
+verbose = 1.0              ; verbosity
+
 
 [io]
 

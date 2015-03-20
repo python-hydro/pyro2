@@ -169,6 +169,8 @@ init_tstep_factor = rp.get_param("driver.init_tstep_factor")
 max_dt_change = rp.get_param("driver.max_dt_change")
 fix_dt = rp.get_param("driver.fix_dt")
 
+verbose = rp.get_param("driver.verbose")
+
 plt.ion()
 
 n = 0
@@ -215,7 +217,7 @@ while sim.cc_data.t < tmax and n < max_steps:
     # increment the time
     sim.cc_data.t += dt
     n += 1
-    print("%5d %10.5f %10.5f" % (n, sim.cc_data.t, dt))
+    if verbose > 0: print("%5d %10.5f %10.5f" % (n, sim.cc_data.t, dt))
 
 
     # output
@@ -227,7 +229,7 @@ while sim.cc_data.t < tmax and n < max_steps:
         tm_io = tc.timer("output")
         tm_io.begin()
 
-        msg.warning("outputting...")
+        if verbose > 0: msg.warning("outputting...")
         basename = rp.get_param("io.basename")
         sim.cc_data.write(basename + "%4.4d" % (n))
         nout += 1
@@ -279,7 +281,7 @@ if make_bench:
 #-----------------------------------------------------------------------------
 # final reports
 #-----------------------------------------------------------------------------
-rp.print_unused_params()
+if verbose > 0: rp.print_unused_params()
 tc.report()
 
 sim.finalize()

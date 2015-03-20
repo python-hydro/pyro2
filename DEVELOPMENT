@@ -19,6 +19,8 @@ coding:
   -- is there a way to define a range like ii = [myg.ilo:myg.ihi+1]
      and then do something like ii+1 to get [myg.ilo+1:myg.ihi+2]?
 
+  -- use argparse module
+  
 
 new solvers:
 
@@ -30,3 +32,8 @@ new solvers:
 infrastructure:
 
   -- well-defined unit tests
+
+  -- make pyro.py importable so we can use it as a test driver
+
+  -- verbosity flag
+  
