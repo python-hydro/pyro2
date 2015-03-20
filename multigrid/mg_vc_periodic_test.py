@@ -29,23 +29,21 @@ force it to 0 on the boundary, which is not correct here)
 from __future__ import print_function
 
 import numpy as np
+
+import compare
 import mesh.patch as patch
 import variable_coeff_MG as MG
 import matplotlib.pyplot as plt
 
-pi = np.pi
-sin = np.sin
-cos = np.cos
-exp = np.exp
 
 # the analytic solution
 def true(x,y):
-    return sin(2.0*pi*x)*sin(2.0*pi*y)
+    return np.sin(2.0*np.pi*x)*np.sin(2.0*np.pi*y)
 
 
 # the coefficients
 def alpha(x,y):
-    return 2.0 + cos(2.0*pi*x)*cos(2.0*pi*y)
+    return 2.0 + np.cos(2.0*np.pi*x)*np.cos(2.0*np.pi*y)
 
 
 # the L2 error norm
@@ -54,21 +52,27 @@ def error(myg, r):
     # L2 norm of elements in r, multiplied by dx to
     # normalize
     return np.sqrt(myg.dx*myg.dy*np.sum((r[myg.ilo:myg.ihi+1,
-                                                 myg.jlo:myg.jhi+1]**2).flat))
+                                           myg.jlo:myg.jhi+1]**2).flat))
 
 
 # the righthand side
 def f(x,y):
-    return -16.0*pi**2*(cos(2*pi*x)*cos(2*pi*y) + 1)*sin(2*pi*x)*sin(2*pi*y)
+    return -16.0*np.pi**2*(np.cos(2*np.pi*x)*np.cos(2*np.pi*y) + 1)* \
+        np.sin(2*np.pi*x)*np.sin(2*np.pi*y)
 
 
 
-N = [16, 32, 64, 128, 256, 512]
-err = []
-
-for nx in N:
-
+def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
+                             make_plot=False):
+    """
+    test the variable-coefficient MG solver.  The return value
+    here is the error compared to the exact solution, UNLESS
+    comp_bench=True, in which case the return value is the 
+    error compared to the stored benchmark
+    """
+    
     # test the multigrid solver
+    nx = N
     ny = nx
 
 
@@ -97,6 +101,7 @@ for nx in N:
                           coeffs=c, coeffs_bc=bc_c,
                           verbose=1, vis=0, true_function=true)
 
+    
     # initialize the solution to 0
     a.init_zeros()
 
@@ -127,70 +132,100 @@ for nx in N:
     print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
           (enorm, a.relative_error, a.num_cycles))
 
-    err.append(enorm)
+    
+    # plot the solution
+    if make_plot:
+        plt.clf()
+
+        plt.figure(figsize=(10.0,4.0), dpi=100, facecolor='w')
+
+        plt.subplot(121)
+
+        plt.imshow(np.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
+                   interpolation="nearest", origin="lower",
+                   extent=[a.xmin, a.xmax, a.ymin, a.ymax])
+
+        plt.xlabel("x")
+        plt.ylabel("y")
+
+        plt.title("nx = {}".format(nx))
+
+        plt.colorbar()
 
 
-#---------------------------------------------------------------------------
-# plot the solution
-plt.clf()
+        plt.subplot(122)
 
-plt.figure(figsize=(10.0,4.0), dpi=100, facecolor='w')
+        plt.imshow(np.transpose(e[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
+                   interpolation="nearest", origin="lower",
+                   extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
+        plt.xlabel("x")
+        plt.ylabel("y")
 
-plt.subplot(121)
+        plt.title("error")
 
-plt.imshow(np.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
-          interpolation="nearest", origin="lower",
-          extent=[a.xmin, a.xmax, a.ymin, a.ymax])
+        plt.colorbar()
 
-plt.xlabel("x")
-plt.ylabel("y")
+        plt.tight_layout()
 
-plt.title("nx = {}".format(nx))
-
-plt.colorbar()
+        plt.savefig("mg_vc_periodic_test.png")
 
 
-plt.subplot(122)
+    # store the output for later comparison
+    bench = "mg_vc_poisson_periodic"
+    if store_bench:
+        my_data = a.get_solution_object()
+        my_data.write("tests/{}".format(bench))
 
-plt.imshow(np.transpose(e[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
-          interpolation="nearest", origin="lower",
-          extent=[a.xmin, a.xmax, a.ymin, a.ymax])
+    # do we do a comparison?
+    if comp_bench:
+        compare_file = "tests/{}".format(bench)
+        msg.warning("comparing to {}".format(compare_file))
+        bench_grid, bench_data = patch.read(compare_file)
 
-plt.xlabel("x")
-plt.ylabel("y")
+        result = compare.compare(sim.cc_data.grid, sim.cc_data,
+                                 bench_grid, bench_data)
 
-plt.title("error")
+        if result == 0:
+            msg.success("results match benchmark\n")
+        else:
+            msg.warning("ERROR: {}\n".format(compare_errors[result]))
 
-plt.colorbar()
-
-plt.tight_layout()
-
-plt.savefig("mg_vc_periodic_test.png")
-plt.savefig("mg_vc_periodic_test.eps", bbox_inches="tight")
-
-
-#---------------------------------------------------------------------------
-# plot the convergence
-
-N = np.array(N, dtype=np.float64)
-err = np.array(err)
-
-print(N)
-print(err)
-
-plt.clf()
-plt.loglog(N, err, "x", color="r")
-plt.loglog(N, err[0]*(N[0]/N)**2, "--", color="k")
+            
+    # normal return -- error wrt true solution
+    return enorm
 
 
-plt.xlabel("N")
-plt.ylabel("error")
+if __name__ == "__main__":
+    
+    N = [16, 32, 64, 128, 256, 512]
+    err = []
 
-f = plt.gcf()
-f.set_size_inches(7.0,6.0)
+    plot = False
+    store = False
+    for nx in N:
+        if nx == max(N):
+            plot = True
+            #store = True
 
-plt.tight_layout()
+        enorm = test_vc_poisson_periodic(nx, make_plot=plot, store_bench=store)
+        err.append(enorm)
+        
 
-plt.savefig("mg_vc_converge.png")
-plt.savefig("mg_vc_converge.eps", bbox_inches="tight")
+    # plot the convergence
+    N = np.array(N, dtype=np.float64)
+    err = np.array(err)
+
+    plt.clf()
+    plt.loglog(N, err, "x", color="r")
+    plt.loglog(N, err[0]*(N[0]/N)**2, "--", color="k")
+
+    plt.xlabel("N")
+    plt.ylabel("error")
+
+    f = plt.gcf()
+    f.set_size_inches(7.0,6.0)
+
+    plt.tight_layout()
+
+    plt.savefig("mg_vc_periodic_converge.png")

@@ -29,6 +29,8 @@ force it to 0 on the boundary, which is not correct here)
 from __future__ import print_function
 
 import numpy as np
+
+import compare
 import mesh.patch as patch
 import variable_coeff_MG as MG
 import matplotlib.pyplot as plt
@@ -170,7 +172,8 @@ def test_vc_poisson_dirichlet(N, store_bench=False, comp_bench=False,
         msg.warning("comparing to: %s " % (compare_file) )
         bench_grid, bench_data = patch.read(compare_file)
 
-        result = compare.compare(sim.cc_data.grid, sim.cc_data, bench_grid, bench_data)
+        result = compare.compare(sim.cc_data.grid, sim.cc_data,
+                                 bench_grid, bench_data)
 
         if result == 0:
             msg.success("results match benchmark\n")
