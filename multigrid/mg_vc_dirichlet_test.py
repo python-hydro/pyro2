@@ -33,19 +33,15 @@ import mesh.patch as patch
 import variable_coeff_MG as MG
 import matplotlib.pyplot as plt
 
-pi = np.pi
-sin = np.sin
-cos = np.cos
-exp = np.exp
 
 # the analytic solution
 def true(x,y):
-    return sin(2.0*pi*x)*sin(2.0*pi*y)
+    return np.sin(2.0*np.pi*x)*np.sin(2.0*np.pi*y)
 
 
 # the coefficients
 def alpha(x,y):
-    return 2.0 + cos(2.0*pi*x)*cos(2.0*pi*y)
+    return 2.0 + np.cos(2.0*np.pi*x)*np.cos(2.0*np.pi*y)
 
 
 # the L2 error norm
@@ -59,16 +55,22 @@ def error(myg, r):
 
 # the righthand side
 def f(x,y):
-    return -16.0*pi**2*(cos(2*pi*x)*cos(2*pi*y) + 1)*sin(2*pi*x)*sin(2*pi*y)
+    return -16.0*np.pi**2*(np.cos(2*np.pi*x)*np.cos(2*np.pi*y) + 1)* \
+        np.sin(2*np.pi*x)*np.sin(2*np.pi*y)
 
 
 
-N = [16, 32, 64, 128, 256, 512]
-err = []
-
-for nx in N:
+def test_vc_poisson_dirichlet(N, store_bench=False, comp_bench=False,
+                              make_plot=False):
+    """
+    test the variable-coefficient MG solver.  The return value
+    here is the error compared to the exact solution, UNLESS
+    comp_bench=True, in which case the return value is the
+    error compared to the stored benchmark
+    """
 
     # test the multigrid solver
+    nx = N
     ny = nx
 
 
@@ -82,7 +84,6 @@ for nx in N:
 
     c = d.get_var("c")
     c[:,:] = alpha(g.x2d, g.y2d)
-
 
 
     # create the multigrid object
@@ -119,71 +120,98 @@ for nx in N:
     print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
           (enorm, a.relative_error, a.num_cycles))
 
-    err.append(enorm)
+
+    # plot the solution
+    if make_plot:
+        plt.clf()
+
+        plt.figure(figsize=(10.0,4.0), dpi=100, facecolor='w')
+
+        plt.subplot(121)
+
+        plt.imshow(np.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
+                   interpolation="nearest", origin="lower",
+                   extent=[a.xmin, a.xmax, a.ymin, a.ymax])
+
+        plt.xlabel("x")
+        plt.ylabel("y")
+
+        plt.title("nx = {}".format(nx))
+
+        plt.colorbar()
 
 
-#---------------------------------------------------------------------------
-# plot the solution
+        plt.subplot(122)
 
-plt.clf()
+        plt.imshow(np.transpose(e[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
+                   interpolation="nearest", origin="lower",
+                   extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
-plt.figure(figsize=(10.0,4.0), dpi=100, facecolor='w')
+        plt.xlabel("x")
+        plt.ylabel("y")
 
+        plt.title("error")
 
-plt.subplot(121)
+        plt.colorbar()
 
-plt.imshow(np.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
-          interpolation="nearest", origin="lower",
-          extent=[a.xmin, a.xmax, a.ymin, a.ymax])
+        plt.tight_layout()
 
-plt.xlabel("x")
-plt.ylabel("y")
+        plt.savefig("mg_vc_dirichlet_test.png")
 
-plt.title("nx = {}".format(nx))
+    # store the output for later comparison
+    bench = "mg_vc_poisson_dirichlet"
+    if store_bench:
+        my_data = a.get_solution_object()
+        my_data.write("tests/{}".format(bench))
 
-plt.colorbar()
+    # do we do a comparison?
+    if comp_bench:
+        compare_file = "tests/{}".format(bench)
+        msg.warning("comparing to: %s " % (compare_file) )
+        bench_grid, bench_data = patch.read(compare_file)
 
+        result = compare.compare(sim.cc_data.grid, sim.cc_data, bench_grid, bench_data)
 
-plt.subplot(122)
-
-plt.imshow(np.transpose(e[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
-          interpolation="nearest", origin="lower",
-          extent=[a.xmin, a.xmax, a.ymin, a.ymax])
-
-plt.xlabel("x")
-plt.ylabel("y")
-
-plt.title("error")
-
-plt.colorbar()
-
-plt.tight_layout()
-
-plt.savefig("mg_vc_dirichlet_test.png")
-plt.savefig("mg_vc_dirichlet_test.eps", bbox_inches="tight")
+        if result == 0:
+            msg.success("results match benchmark\n")
+        else:
+            msg.warning("ERROR: " + compare.errors[result] + "\n")
 
 
-#---------------------------------------------------------------------------
-# plot the convergence
-
-N = np.array(N, dtype=np.float64)
-err = np.array(err)
-
-print(N)
-print(err)
-
-plt.clf()
-plt.loglog(N, err, "x", color="r")
-plt.loglog(N, err[0]*(N[0]/N)**2, "--", color="k")
+    # normal return -- error wrt true solution
+    return enorm
 
 
-plt.xlabel("N")
-plt.ylabel("error")
+if __name__ == "__main__":
 
-f = plt.gcf()
-f.set_size_inches(7.0,6.0)
+    N = [16, 32, 64, 128, 256, 512]
+    err = []
 
-plt.tight_layout()
+    plot = False
+    store = False
+    for nx in N:
+        if nx == max(N):
+            plot = True
+            #store = True
+            
+        enorm = test_vc_poisson_dirichlet(nx, make_plot=plot, store_bench=store)
+        err.append(enorm)
 
-plt.savefig("mg_vc_dirichlet_converge.png")
-plt.savefig("mg_vc_dirichlet_converge.eps", bbox_inches="tight")
+
+    # plot the convergence
+    N = np.array(N, dtype=np.float64)
+    err = np.array(err)
+
+    plt.clf()
+    plt.loglog(N, err, "x", color="r")
+    plt.loglog(N, err[0]*(N[0]/N)**2, "--", color="k")
+
+    plt.xlabel("N")
+    plt.ylabel("error")
+
+    f = plt.gcf()
+    f.set_size_inches(7.0,6.0)
+
+    plt.tight_layout()
+
+    plt.savefig("mg_vc_dirichlet_converge.png")
