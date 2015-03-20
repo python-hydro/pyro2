@@ -17,13 +17,13 @@ from __future__ import print_function
 import numpy as np
 import matplotlib.pyplot as plt
 
+import multigrid.edge_coeffs as ec
 import multigrid.MG as MG
-import multigrid.variable_coeff_MG as vcMG
 
 np.set_printoptions(precision=3, linewidth=128)
 
 
-class GeneralMG2d(MG.CellCenteredG2d):
+class GeneralMG2d(MG.CellCenterMG2d):
     """
     this is a multigrid solver that supports variable coefficients
 
@@ -40,10 +40,10 @@ class GeneralMG2d(MG.CellCenteredG2d):
                  yl_BC_type="dirichlet", yr_BC_type="dirichlet",
                  nsmooth=10, nsmooth_bottom=50,
                  verbose=0,
-                 coeffs=None, coeffs_bc=None,
+                 coeffs=None, 
                  true_function=None, vis=0, vis_title=""):
         """
-        here, coeffs is a dictionary
+        here, coeffs is a CCData2d object
         """
         
         # we'll keep a list of the beta coefficients averaged to the
@@ -58,9 +58,9 @@ class GeneralMG2d(MG.CellCenteredG2d):
                                    alpha=0.0, beta=0.0,
                                    nsmooth=nsmooth, nsmooth_bottom=nsmooth_bottom,
                                    verbose=verbose,
-                                   aux_field=["alpha", "beta", "gamma_x", "gamma_y"]
-                                   aux_bc=[coeffs_bc["alpha"], coeffs_bc["beta"],
-                                           coeffs_bc["gamma_x"], coeffs_bc["gamma_y"]],
+                                   aux_field=["alpha", "beta", "gamma_x", "gamma_y"],
+                                   aux_bc=[coeffs.BCs["alpha"], coeffs.BCs["beta"],
+                                           coeffs.BCs["gamma_x"], coeffs.BCs["gamma_y"]],
                                    true_function=true_function, vis=vis,
                                    vis_title=vis_title)
 
@@ -71,7 +71,7 @@ class GeneralMG2d(MG.CellCenteredG2d):
         # can do a ghost cell fill.
         for c in ["alpha", "beta", "gamma_x", "gamma_y"]:
             v = self.grids[self.nlevels-1].get_var(c)
-            v[:,:] = coeffs[c].copy()
+            v[:,:] = coeffs.get_var(c)
 
             self.grids[self.nlevels-1].fill_BC(c)
 
@@ -84,15 +84,16 @@ class GeneralMG2d(MG.CellCenteredG2d):
                 coeffs_c[:,:] = f_patch.restrict(c)
 
                 self.grids[n].fill_BC(c)
-
+                n -= 1
+                
 
         # put the beta coefficients on edges
         beta = self.grids[self.nlevels-1].get_var("beta")
-        self.edge_coeffs.insert(0, ec.EdgeCoeffs(self.grids[self.nlevels-1].grid, beta))
+        self.beta_edge.insert(0, ec.EdgeCoeffs(self.grids[self.nlevels-1].grid, beta))
 
         n = self.nlevels-2
         while n >= 0:
-            self.beta_edge.insert(0, self.edge_coeffs[0].restrict())
+            self.beta_edge.insert(0, self.beta_edge[0].restrict())
             n -= 1
 
 
