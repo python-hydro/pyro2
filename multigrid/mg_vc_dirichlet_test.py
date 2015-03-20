@@ -28,6 +28,8 @@ force it to 0 on the boundary, which is not correct here)
 
 from __future__ import print_function
 
+import os
+
 import numpy as np
 import matplotlib.pyplot as plt
 
