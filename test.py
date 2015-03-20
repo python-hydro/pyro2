@@ -35,13 +35,13 @@ for t in tests:
 
 
 # standalone tests
-err = mg_test.test_poisson_dirichlet(256)
+err = mg_test.test_poisson_dirichlet(256, comp_bench=True)
 results["mg_poisson_dirichlet"] = err
 
-err = mg_vc_dirichlet_test.test_vc_poisson_dirichlet(512)
+err = mg_vc_dirichlet_test.test_vc_poisson_dirichlet(512, comp_bench=True)
 results["mg_vc_poisson_dirichlet"] = err
 
-err = mg_vc_periodic_test.test_vc_poisson_periodic(512)
+err = mg_vc_periodic_test.test_vc_poisson_periodic(512, comp_bench=True)
 results["mg_vc_poisson_periodic"] = err
 
 
