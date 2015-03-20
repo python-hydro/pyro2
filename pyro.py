@@ -177,7 +177,11 @@ def doit(solver_name, problem_name, param_file,
     if comp_bench:
         compare_file = solver_name + "/tests/" + basename + "%4.4d" % (n)
         msg.warning("comparing to: %s " % (compare_file) )
-        bench_grid, bench_data = patch.read(compare_file)
+        try: bench_grid, bench_data = patch.read(compare_file)
+        except:
+            msg.warning("ERROR openning compare file")
+            return "ERROR openning compare file"
+        
 
         result = compare.compare(sim.cc_data.grid, sim.cc_data, bench_grid, bench_data)
 
