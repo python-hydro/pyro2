@@ -1,57 +1,53 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
+
 import pyro
+import multigrid.mg_test as mg_test
+import multigrid.mg_vc_dirichlet_test as mg_vc_dirichlet_test
+
+class test:
+    def __init__(self, solver, problem, inputs, options):
+        self.solver = solver
+        self.problem = problem
+        self.inputs = inputs
+        self.options = options
+
+
+opts = "driver.verbose=0 vis.dovis=0 io.do_io=0".split()
+
+tests = []
+tests.append(test("advection", "smooth", "inputs.smooth", opts))
+tests.append(test("compressible", "quad", "inputs.quad", opts))
+tests.append(test("diffusion", "gaussian", "inputs.gaussian", opts))
+tests.append(test("incompressible", "shear", "inputs.shear", opts))
+tests.append(test("lm_atm", "bubble", "inputs.bubble", opts))
+
 
 results = {}
 
-
-opts = "driver.verbose=0 vis.dovis=0".split()
-
-# advection
-add_err = pyro.doit("advection", "smooth", "inputs.smooth",
-  		    other_commands=opts, comp_bench=True)
-
-results["advection"] = add_err
-
-
-# compressible
-comp_err = pyro.doit("compressible", "quad", "inputs.quad",
-  		     other_commands=opts, comp_bench=True)
-
-results["compressible"] = comp_err
+for t in tests:
+    err = pyro.doit(t.solver, t.problem, t.inputs,
+                    other_commands=t.options, comp_bench=True)
+    results[t.solver] = err
 
 
 
-# diffusion
-diff_err = pyro.doit("diffusion", "gaussian", "inputs.gaussian",
-  		     other_commands=opts, comp_bench=True)
+# standalone tests
+err = mg_test.test_poisson_dirichlet(256)
+results["mg_poisson_dirichlet"] = err
 
-results["diffusion"] = diff_err
-
-
-# incompressible
-incomp_err = pyro.doit("incompressible", "shear", "inputs.shear",
-  		     other_commands=opts, comp_bench=True)
-
-results["incompressible"] = incomp_err
+err = mg_vc_dirichlet_test.test_vc_poisson_dirichlet(512)
+results["mg_vc_poisson_dirichlet"] = err
 
 
-# LM_atm
-lm_err = pyro.doit("lm_atm", "bubble", "inputs.bubble",
-  		   other_commands=opts, comp_bench=True)
-
-results["lm_atm"] = lm_err
-
-
+failed = 0
 for s, r in results.iteritems():
     if not r == 0:
-        print "{:32} failed".format(s)
+        print("{:32} failed".format(s))
+        failed += 1
     else:
-        print "{:32} passed".format(s)
+        print("{:32} passed".format(s))
 
 
-
-
-
-
-
+print("\n{} tests failed".format(failed))
