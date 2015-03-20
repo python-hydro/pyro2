@@ -188,10 +188,10 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
         plt.tight_layout()
 
-        plt.savefig("mg_vc_dirichlet_test.png")
+        plt.savefig("mg_general_dirichlet_test.png")
 
     # store the output for later comparison
-    bench = "mg_vc_poisson_dirichlet"
+    bench = "mg_general_poisson_dirichlet"
     bench_dir = os.environ["PYRO_HOME"] + "/multigrid/tests/"
 
     my_data = a.get_solution_object()
@@ -233,7 +233,7 @@ if __name__ == "__main__":
         if nx == max(N):
             plot = True
             #store = True
-            do_compare = True
+            #do_compare = True
             
         enorm = test_general_poisson_dirichlet(nx, make_plot=plot,
                                                store_bench=store, comp_bench=do_compare)
@@ -257,4 +257,4 @@ if __name__ == "__main__":
 
     plt.tight_layout()
 
-    plt.savefig("mg_vc_dirichlet_converge.png")
+    plt.savefig("mg_general_dirichlet_converge.png")
