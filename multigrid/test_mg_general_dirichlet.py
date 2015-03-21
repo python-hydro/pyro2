@@ -136,10 +136,10 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     a.init_RHS(rhs)
 
     # solve to a relative tolerance of 1.e-11
-    a.solve(rtol=1.e-11)
+    #a.solve(rtol=1.e-11)
 
     # alternately, we can just use smoothing by uncommenting the following
-    #a.smooth(a.nlevels-1,50000)
+    a.smooth(a.nlevels-1,50000)
 
     # get the solution
     v = a.get_solution()
@@ -222,7 +222,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
 if __name__ == "__main__":
 
-    N = [16, 32, 64, 128, 256, 512]
+    N = [16, 32, 64] #, 128, 256, 512]
     err = []
 
     plot = False
