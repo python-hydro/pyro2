@@ -130,8 +130,8 @@ class GeneralMG2d(MG.CellCenterMG2d):
         self.grids[level].fill_BC("v")
 
         alpha = self.grids[level].get_var("alpha")
-        gamma_x = self.grids[level].get_var("gamma_x")/dx
-        gamma_y = self.grids[level].get_var("gamma_y")/dy
+        gamma_x = 0.5*self.grids[level].get_var("gamma_x")/dx
+        gamma_y = 0.5*self.grids[level].get_var("gamma_y")/dy
 
         # these are already scaled by 1/dx**2 in the EdgeCoeffs
         # construction
@@ -251,8 +251,8 @@ class GeneralMG2d(MG.CellCenterMG2d):
         dy = myg.dy
 
         alpha = self.grids[level].get_var("alpha")
-        gamma_x = self.grids[level].get_var("gamma_x")/dx
-        gamma_y = self.grids[level].get_var("gamma_y")/dy
+        gamma_x = 0.5*self.grids[level].get_var("gamma_x")/dx
+        gamma_y = 0.5*self.grids[level].get_var("gamma_y")/dy
         
         # these already have a 1/dx**2 scaling in them
         beta_x = self.beta_edge[level].x
