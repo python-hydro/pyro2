@@ -128,7 +128,7 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
     # solution.  We subtract off the average of phi from the MG
     # solution (we do the same for the true solution to put them on
     # the same footing)
-    e = v - np.sum(v)/(nx*ny) - (b - np.sum(b)/(nx*ny))
+    e = v - np.sum(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1])/(nx*ny) - (b - np.sum(b[a.ilo:a.ihi+1,a.jlo:a.jhi+1])/(nx*ny))
 
     enorm = error(a.soln_grid, e)
     print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
@@ -216,7 +216,7 @@ if __name__ == "__main__":
         if nx == max(N):
             plot = True
             #store = True
-            do_compare = True
+            #do_compare = True
         enorm = test_vc_poisson_periodic(nx, make_plot=plot,
                                          store_bench=store, comp_bench=do_compare)
         err.append(enorm)
