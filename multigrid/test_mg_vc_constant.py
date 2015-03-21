@@ -3,7 +3,7 @@
 """
 
 Test the variable coefficient MG solver with a CONSTANT coefficient
-problem -- the same on from the multigrid class test.  This ensures
+problem -- the same one from the multigrid class test.  This ensures
 we didn't screw up the base functionality here.
 
 We solve:
@@ -14,7 +14,6 @@ u = 0 on the boundary
 this is the example from page 64 of the book `A Multigrid Tutorial, 2nd Ed.'
 
 The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)
-
 
 """
 
