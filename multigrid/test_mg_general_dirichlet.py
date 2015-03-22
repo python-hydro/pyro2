@@ -222,7 +222,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
 if __name__ == "__main__":
 
-    N = [16, 32, 64] #, 128, 256, 512]
+    N = [16, 32, 64, 128, 256, 512]
     err = []
 
     plot = False
