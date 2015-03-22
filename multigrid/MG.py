@@ -87,6 +87,8 @@ class CellCenterMG2d:
                  xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0,
                  xl_BC_type="dirichlet", xr_BC_type="dirichlet",
                  yl_BC_type="dirichlet", yr_BC_type="dirichlet",
+                 xl_BC=None, xr_BC=None,
+                 yl_BC=None, yr_BC=None,
                  alpha=0.0, beta=-1.0,
                  nsmooth=10, nsmooth_bottom=50,
                  verbose=0,
@@ -118,6 +120,18 @@ class CellCenterMG2d:
             boundary condition to enforce on lower y face
         yr_BC_type : {'neumann', 'dirichlet'}, optional
             boundary condition to enforce on upper y face
+        xl_BC : function, optional
+            function to call to get -x boundary values
+            (homogeneous assumed otherwise)
+        xr_BC : function, optional
+            function to call to get +x boundary values
+            (homogeneous assumed otherwise)
+        yl_BC : function, optional
+            function to call to get -y boundary values
+            (homogeneous assumed otherwise)
+        yr_BC : function, optional
+            function to call to get +y boundary values
+            (homogeneous assumed otherwise)
         alpha : float, optional
             coefficient in Helmholtz equation (alpha - beta L) phi = f
         beta : float, optional
@@ -222,7 +236,13 @@ class CellCenterMG2d:
             bc = patch.BCObject(xlb=xl_BC_type, xrb=xr_BC_type,
                                 ylb=yl_BC_type, yrb=yr_BC_type)
 
-            self.grids[i].register_var("v", bc)
+            # create the phi BC object
+            bc_p = patch.BCObject(xlb=xl_BC_type, xrb=xr_BC_type,
+                                  ylb=yl_BC_type, yrb=yr_BC_type,
+                                  xl_func=xl_BC, xr_func=xr_BC,
+                                  yl_func=yl_BC, yr_func=yr_BC)
+            
+            self.grids[i].register_var("v", bc_p)
             self.grids[i].register_var("f", bc)
             self.grids[i].register_var("r", bc)
 
