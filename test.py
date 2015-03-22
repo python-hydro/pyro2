@@ -3,9 +3,9 @@
 from __future__ import print_function
 
 import pyro
-import multigrid.mg_test as mg_test
-import multigrid.mg_vc_dirichlet_test as mg_vc_dirichlet_test
-import multigrid.mg_vc_periodic_test as mg_vc_periodic_test
+import multigrid.test_mg as test_mg_test
+import multigrid.test_mg_vc_dirichlet as test_mg_vc_dirichlet
+import multigrid.test_mg_vc_periodic as test_mg_vc_periodic
 
 class test:
     def __init__(self, solver, problem, inputs, options):
@@ -35,13 +35,13 @@ for t in tests:
 
 
 # standalone tests
-err = mg_test.test_poisson_dirichlet(256, comp_bench=True)
+err = test_mg.test_poisson_dirichlet(256, comp_bench=True)
 results["mg_poisson_dirichlet"] = err
 
-err = mg_vc_dirichlet_test.test_vc_poisson_dirichlet(512, comp_bench=True)
+err = test_mg_vc_dirichlet.test_vc_poisson_dirichlet(512, comp_bench=True)
 results["mg_vc_poisson_dirichlet"] = err
 
-err = mg_vc_periodic_test.test_vc_poisson_periodic(512, comp_bench=True)
+err = test_mg_vc_periodic.test_vc_poisson_periodic(512, comp_bench=True)
 results["mg_vc_poisson_periodic"] = err
 
 
