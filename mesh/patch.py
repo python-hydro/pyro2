@@ -58,14 +58,22 @@ def define_bc(type, function):
 
 
 class BCObject:
-    """
-    Boundary condition container -- hold the BCs on each boundary
-    for a single variable
+    """Boundary condition container -- hold the BCs on each boundary
+    for a single variable.  
+
+    For Neumann and Dirichlet BCs, a function callback can be stored
+    for inhomogeous BCs.  This function should provide the value on
+    the physical boundary (not cell center).  Note: this only
+    ensures that the first ghost cells is consistent with the BC
+    value.
+
     """
 
     def __init__ (self,
                   xlb="outflow", xrb="outflow",
                   ylb="outflow", yrb="outflow",
+                  xl_func=None, xr_func=None,
+                  yl_func=None, yr_func=None,
                   odd_reflect_dir=""):
         """
         Create the BCObject.
@@ -78,28 +86,48 @@ class BCObject:
             The type of boundary condition to enforce on the lower
             x boundary.  user-defined requires one to have defined
             a new boundary condition type using define_bc()
+
         xrb : {'outflow', 'periodic', 'reflect', 'reflect-even',
                'reflect-odd', 'dirichlet', 'neumann',
                user-defined}, optional
             The type of boundary condition to enforce on the upper
             x boundary.  user-defined requires one to have defined
             a new boundary condition type using define_bc()
+
         ylb : {'outflow', 'periodic', 'reflect', 'reflect-even',
                'reflect-odd', 'dirichlet', 'neumann',
                user-defined}, optional
             The type of boundary condition to enforce on the lower
             y boundary.  user-defined requires one to have defined
             a new boundary condition type using define_bc()
+
         yrb : {'outflow', 'periodic', 'reflect', 'reflect-even',
                'reflect-odd', 'dirichlet', 'neumann',
                user-defined}, optional
             The type of boundary condition to enforce on the upper
             y boundary.  user-defined requires one to have defined
             a new boundary condition type using define_bc()
+
         odd_reflect_dir : {'x', 'y'}, optional
             The direction along which reflection should be odd
             (sign changes).  If not specified, a boundary condition
             of 'reflect' will always be set to 'reflect-even'
+
+        xl_func : function, optional
+            A function, f(y), that provides the value of the 
+            Dirichlet or Neumann BC on the -x physical boundary.
+
+        xr_func : function, optional
+            A function, f(y), that provides the value of the 
+            Dirichlet or Neumann BC on the +x physical boundary.
+
+        yl_func : function, optional
+            A function, f(x), that provides the value of the 
+            Dirichlet or Neumann BC on the -y physical boundary.
+
+        yr_func : function, optional
+            A function, f(x), that provides the value of the 
+            Dirichlet or Neumann BC on the +y physical boundary.
 
         """
 
@@ -166,6 +194,14 @@ class BCObject:
             (yrb == "periodic" and not ylb == "periodic")):
             msg.fail("ERROR: both ylb and yrb must be periodic")
 
+
+        # inhomogeneous functions for Dirichlet or Neumann
+        self.xl_func = xl_func
+        self.xr_func = xr_func
+        self.yl_func = yl_func
+        self.yr_func = yr_func        
+        
+            
     def __str__(self):
         """ print out some basic information about the BC object """
 
@@ -582,102 +618,99 @@ class CellCenterData2d:
         n = self.vars.index(name)
 
         # -x boundary
-        if self.BCs[name].xlb == "outflow" or self.BCs[name].xlb == "neumann":
+        if self.BCs[name].xlb in ["outflow", "neumann"]:
 
-            i = 0
-            while i < self.grid.ilo:
-                self.data[n,i,:] = self.data[n,self.grid.ilo,:]
-                i += 1
-
+            if self.BCs[name].xl_func == None:            
+                for i in range(self.grid.ilo):
+                    self.data[n,i,:] = self.data[n,self.grid.ilo,:]
+            else:
+                self.data[n,self.grid.ilo-1,:] = \
+                    self.data[n,self.grid.ilo,:] - self.grid.dx*self.BCs[name].xl_func(self.grid.y)
+                
         elif self.BCs[name].xlb == "reflect-even":
 
-            i = 0
-            while i < self.grid.ilo:
+            for i in range(self.grid.ilo):
                 self.data[n,i,:] = self.data[n,2*self.grid.ng-i-1,:]
-                i += 1
 
-        elif (self.BCs[name].xlb == "reflect-odd" or
-              self.BCs[name].xlb == "dirichlet"):
+        elif self.BCs[name].xlb in ["reflect-odd", "dirichlet"]:
 
-            i = 0
-            while i < self.grid.ilo:
-                self.data[n,i,:] = -self.data[n,2*self.grid.ng-i-1,:]
-                i += 1
+            if self.BCs[name].xl_func == None:
+                for i in range(self.grid.ilo):
+                    self.data[n,i,:] = -self.data[n,2*self.grid.ng-i-1,:]
+            else:
+                self.data[n,self.grid.ilo-1,:] = \
+                    2*self.BCs[name].xl_func(self.grid.y) - self.data[n,self.grid.ilo,:]
 
         elif self.BCs[name].xlb == "periodic":
 
-            i = 0
-            while i < self.grid.ilo:
+            for i in range(self.grid.ilo):
                 self.data[n,i,:] = self.data[n,self.grid.ihi-self.grid.ng+i+1,:]
-                i += 1
 
 
         # +x boundary
-        if self.BCs[name].xrb == "outflow" or self.BCs[name].xrb == "neumann":
+        if self.BCs[name].xrb in ["outflow", "neumann"]:
 
-            i = self.grid.ihi+1
-            while i < self.grid.nx+2*self.grid.ng:
-                self.data[n,i,:] = self.data[n,self.grid.ihi,:]
-                i += 1
+            if self.BCs[name].xr_func == None:
+                for i in range(self.grid.ihi+1, self.grid.nx+2*self.grid.ng):
+                    self.data[n,i,:] = self.data[n,self.grid.ihi,:]
+            else:
+                self.data[n,self.grid.ihi+1,:] = \
+                    self.data[n,self.grid.ihi,:] + self.grid.dx*self.BCs[name].xr_func(self.grid.y)
 
         elif self.BCs[name].xrb == "reflect-even":
 
-            i = 0
-            while i < self.grid.ng:
+            for i in range(self.grid.ng):
                 i_bnd = self.grid.ihi+1+i
                 i_src = self.grid.ihi-i
 
                 self.data[n,i_bnd,:] = self.data[n,i_src,:]
-                i += 1
 
-        elif (self.BCs[name].xrb == "reflect-odd" or
-              self.BCs[name].xrb == "dirichlet"):
+        elif self.BCs[name].xrb in ["reflect-odd", "dirichlet"]:
 
-            i = 0
-            while i < self.grid.ng:
-                i_bnd = self.grid.ihi+1+i
-                i_src = self.grid.ihi-i
+            if self.BCs[name].xr_func == None:
+                for i in range(self.grid.ng):
+                    i_bnd = self.grid.ihi+1+i
+                    i_src = self.grid.ihi-i
 
-                self.data[n,i_bnd,:] = -self.data[n,i_src,:]
-                i += 1
+                    self.data[n,i_bnd,:] = -self.data[n,i_src,:]
+            else:
+                self.data[n,self.grid.ihi+1,:] = \
+                    2*self.BCs[name].xr_func(self.grid.y) - self.data[n,self.grid.ihi,:]
 
         elif self.BCs[name].xrb == "periodic":
 
-            i = self.grid.ihi+1
-            while i < 2*self.grid.ng + self.grid.nx:
+            for i in range(self.grid.ihi+1, 2*self.grid.ng + self.grid.nx):
                 self.data[n,i,:] = self.data[n,i-self.grid.ihi-1+self.grid.ng,:]
-                i += 1
 
 
         # -y boundary
-        if self.BCs[name].ylb == "outflow" or self.BCs[name].ylb == "neumann":
+        if self.BCs[name].ylb in ["outflow", "neumann"]:
 
-            j = 0
-            while j < self.grid.jlo:
-                self.data[n,:,j] = self.data[n,:,self.grid.jlo]
-                j += 1
+            if self.BCs[name].yl_func == None:
+                for j in range(self.grid.jlo):
+                    self.data[n,:,j] = self.data[n,:,self.grid.jlo]
+            else:
+                self.data[n,:,self.grid.jlo-1] = \
+                    self.data[n,:,self.grid.jlo] - self.grid.dx*self.BCs[name].yl_func(self.grid.x)                    
 
         elif self.BCs[name].ylb == "reflect-even":
 
-            j = 0
-            while j < self.grid.jlo:
+            for j in range(self.grid.jlo):
                 self.data[n,:,j] = self.data[n,:,2*self.grid.ng-j-1]
-                j += 1
 
-        elif (self.BCs[name].ylb == "reflect-odd" or
-              self.BCs[name].ylb == "dirichlet"):
+        elif self.BCs[name].ylb in ["reflect-odd", "dirichlet"]:
 
-            j = 0
-            while j < self.grid.jlo:
-                self.data[n,:,j] = -self.data[n,:,2*self.grid.ng-j-1]
-                j += 1
-
+            if self.BCs[name].yl_func == None:
+                for j in range(self.grid.jlo):
+                    self.data[n,:,j] = -self.data[n,:,2*self.grid.ng-j-1]
+            else:
+                self.data[n,:,self.grid.jlo-1] = \
+                    2*self.BCs[name].yl_func(self.grid.x) - self.data[n,:,self.grid.jlo]
+                
         elif self.BCs[name].ylb == "periodic":
 
-            j = 0
-            while j < self.grid.jlo:
+            for j in range(self.grid.jlo):
                 self.data[n,:,j] = self.data[n,:,self.grid.jhi-self.grid.ng+j+1]
-                j += 1
 
         else:
             if self.BCs[name].ylb in extBCs.keys():
@@ -686,40 +719,39 @@ class CellCenterData2d:
 
 
         # +y boundary
-        if self.BCs[name].yrb == "outflow" or self.BCs[name].yrb == "neumann":
+        if self.BCs[name].yrb in ["outflow", "neumann"]:
 
-            j = self.grid.jhi+1
-            while j < self.grid.ny+2*self.grid.ng:
-                self.data[n,:,j] = self.data[n,:,self.grid.jhi]
-                j += 1
+            if self.BCs[name].yr_func == None:
+                for j in range(self.grid.jhi+1, self.grid.ny+2*self.grid.ng):
+                    self.data[n,:,j] = self.data[n,:,self.grid.jhi]
+            else:
+                self.data[n,:,self.grid.jhi+1] = \
+                    self.data[n,:,self.grid.jhi] + self.grid.dx*self.BCs[name].yr_func(self.grid.x)                
 
         elif self.BCs[name].yrb == "reflect-even":
 
-            j = 0
-            while j < self.grid.ng:
+            for j in range(self.grid.ng):
                 j_bnd = self.grid.jhi+1+j
                 j_src = self.grid.jhi-j
 
                 self.data[n,:,j_bnd] = self.data[n,:,j_src]
-                j += 1
 
-        elif (self.BCs[name].yrb == "reflect-odd" or
-              self.BCs[name].yrb == "dirichlet"):
+        elif self.BCs[name].yrb in ["reflect-odd", "dirichlet"]:
 
-            j = 0
-            while j < self.grid.ng:
-                j_bnd = self.grid.jhi+1+j
-                j_src = self.grid.jhi-j
+            if self.BCs[name].yr_func == None:
+                for j in range(self.grid.ng):
+                    j_bnd = self.grid.jhi+1+j
+                    j_src = self.grid.jhi-j
 
-                self.data[n,:,j_bnd] = -self.data[n,:,j_src]
-                j += 1
-
+                    self.data[n,:,j_bnd] = -self.data[n,:,j_src]
+            else:
+                self.data[n,:,self.grid.jhi+1] = \
+                    2*self.BCs[name].yr_func(self.grid.x) - self.data[n,:,self.grid.jhi]
+                
         elif self.BCs[name].yrb == "periodic":
 
-            j = self.grid.jhi+1
-            while j < 2*self.grid.ng + self.grid.ny:
+            for j in range(self.grid.jhi+1, 2*self.grid.ng + self.grid.ny):
                 self.data[n,:,j] = self.data[n,:,j-self.grid.jhi-1+self.grid.ng]
-                j += 1
 
         else:
             if self.BCs[name].yrb in extBCs.keys():
