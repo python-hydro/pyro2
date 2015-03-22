@@ -3,7 +3,7 @@
 from __future__ import print_function
 
 import pyro
-import multigrid.test_mg as test_mg_test
+import multigrid.test_mg as test_mg
 import multigrid.test_mg_vc_dirichlet as test_mg_vc_dirichlet
 import multigrid.test_mg_vc_periodic as test_mg_vc_periodic
 
