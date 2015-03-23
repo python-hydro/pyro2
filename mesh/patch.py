@@ -759,6 +759,24 @@ class CellCenterData2d:
                 extBCs[self.BCs[name].yrb](self.BCs[name].yrb, "yrb", name, self)
 
 
+    def min(self, name):
+        """
+        return the minimum of the variable name in the domain's valid region
+        """
+        n = self.vars.index(name)
+        g = self.grid
+        return np.min(self.data[n,g.ilo:g.ihi+1,g.jlo:g.jhi+1])
+
+    
+    def max(self, name):
+        """
+        return the maximum of the variable name in the domain's valid region
+        """
+        n = self.vars.index(name)
+        g = self.grid
+        return np.max(self.data[n,g.ilo:g.ihi+1,g.jlo:g.jhi+1])
+    
+    
     def restrict(self, varname):
         """
         Restrict the variable varname to a coarser grid (factor of 2
