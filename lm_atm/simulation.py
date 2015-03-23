@@ -578,7 +578,8 @@ class Simulation:
         rho_half = 0.5*(rho + rho_old)
         rhoprime = self.make_prime(rho_half, rho0)
         source = rhoprime*g/rho_half
-
+        self.aux_data.fill_BC("source_y")
+        
         v[:,:] += dt*source
 
         self.cc_data.fill_BC("x-velocity")
