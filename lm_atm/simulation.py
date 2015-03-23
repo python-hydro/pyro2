@@ -40,7 +40,9 @@ class Simulation:
         else:
             self.tc = timers
 
-        self.verbose = rp.get_param("driver.verbose")
+        try: self.verbose = rp.get_param("driver.verbose")
+        except:
+            self.verbose = 1
         
 
     def initialize(self):
@@ -219,6 +221,7 @@ class Simulation:
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
 
+        self.cc_data.fill_BC("density")        
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")
 
@@ -321,10 +324,15 @@ class Simulation:
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
 
+        print ("start: ", self.cc_data.min("density"), self.cc_data.max("density"))
+        
         gradp_x = self.cc_data.get_var("gradp_x")
         gradp_y = self.cc_data.get_var("gradp_y")
 
 
+        print("gradp", self.cc_data.min("gradp_x",1), self.cc_data.max("gradp_x",1))
+        print("gradp", self.cc_data.min("gradp_y",1), self.cc_data.max("gradp_y",1))        
+        
         # note: the base state quantities do not have valid ghost cells
         beta0 = self.base["beta0"]
         beta0_edges = self.base["beta0-edges"]
@@ -353,6 +361,10 @@ class Simulation:
         ldelta_uy = limitFunc(2, u, myg.qx, myg.qy, myg.ng)
         ldelta_vy = limitFunc(2, v, myg.qx, myg.qy, myg.ng)
 
+        print("limited slopes", np.min(ldelta_rx), np.max(ldelta_ry))
+        print("limited slopes", np.min(ldelta_ux), np.max(ldelta_uy))
+        print("limited slopes", np.min(ldelta_vx), np.max(ldelta_vy))
+        
         #---------------------------------------------------------------------
         # get the advective velocities
         #---------------------------------------------------------------------
@@ -396,6 +408,9 @@ class Simulation:
         source[:,:] = rhoprime*g/rho
         self.aux_data.fill_BC("source_y")
 
+        print("coeff: ", self.aux_data.min("coeff",1), self.aux_data.max("coeff",1))
+        print("source: ", self.aux_data.min("source_y",1), self.aux_data.max("source_y",1))
+        
         u_MAC, v_MAC = lm_interface_f.mac_vels(myg.qx, myg.qy, myg.ng,
                                                myg.dx, myg.dy, dt,
                                                u, v,
@@ -404,6 +419,9 @@ class Simulation:
                                                coeff*gradp_x, coeff*gradp_y,
                                                source)
 
+        print("initial adv velocity: ", np.min(u_MAC[myg.ilo:myg.ihi+2,myg.jlo:myg.jhi+2]),
+              np.min(v_MAC[myg.ilo:myg.ihi+2,myg.jlo:myg.jhi+2]))
+        
 
         #---------------------------------------------------------------------
         # do a MAC projection to make the advective velocities divergence
@@ -508,6 +526,8 @@ class Simulation:
 
         self.cc_data.fill_BC("density")
 
+        print ("after rho: ", self.cc_data.min("density"), self.cc_data.max("density"))
+        
         #---------------------------------------------------------------------
         # recompute the interface states, using the advective velocity
         # from above
@@ -586,9 +606,9 @@ class Simulation:
         self.cc_data.fill_BC("y-velocity")
 
         if self.verbose > 0:
-            print("min/max rho = {}, {}".format(np.min(rho), np.max(rho)))
-            print("min/max u   = {}, {}".format(np.min(u), np.max(u)))
-            print("min/max v   = {}, {}".format(np.min(v), np.max(v)))
+            print("min/max rho = {}, {}".format(self.cc_data.min("density"), self.cc_data.max("density")))
+            print("min/max u   = {}, {}".format(self.cc_data.min("x-velocity"), self.cc_data.max("x-velocity")))
+            print("min/max v   = {}, {}".format(self.cc_data.min("y-velocity"), self.cc_data.max("y-velocity")))
 
 
         #---------------------------------------------------------------------

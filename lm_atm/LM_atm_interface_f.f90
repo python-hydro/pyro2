@@ -45,6 +45,11 @@ subroutine mac_vels(qx, qy, ng, dx, dy, dt, &
   double precision :: v_xl(0:qx-1, 0:qy-1), v_xr(0:qx-1, 0:qy-1)
   double precision :: v_yl(0:qx-1, 0:qy-1), v_yr(0:qx-1, 0:qy-1)
 
+  integer :: i, j
+  integer :: nx, ny, ilo, ihi, jlo, jhi
+  nx = qx - 2*ng; ny = qy - 2*ng
+  ilo = ng; ihi = ng+nx-1; jlo = ng; jhi = ng+ny-1
+  
   
   ! get the full u and v left and right states (including transverse
   ! terms) on both the x- and y-interfaces
@@ -56,7 +61,6 @@ subroutine mac_vels(qx, qy, ng, dx, dy, dt, &
                             source, &
                             u_xl, u_xr, u_yl, u_yr, &
                             v_xl, v_xr, v_yl, v_yr)
-  
 
   ! Riemann problem -- this follows Burger's equation.  We don't use
   ! any input velocity for the upwinding.  Also, we only care about
@@ -353,8 +357,8 @@ subroutine get_interface_states(qx, qy, ng, dx, dy, dt, &
 
 
   ! add the transverse flux differences to the preliminary interface states
-  do j = jlo-2, jhi+2
-     do i = ilo-2, ihi+2        
+  do j = jlo-1, jhi+1
+     do i = ilo-1, ihi+1       
 
         ubar = 0.5d0*(uhat_adv(i,j) + uhat_adv(i+1,j))
         vbar = 0.5d0*(vhat_adv(i,j) + vhat_adv(i,j+1))
@@ -364,7 +368,7 @@ subroutine get_interface_states(qx, qy, ng, dx, dy, dt, &
         
         u_xl(i+1,j) = u_xl(i+1,j) - 0.5*dtdy*vu_y - 0.5*dt*gradp_x(i,j) 
         u_xr(i  ,j) = u_xr(i  ,j) - 0.5*dtdy*vu_y - 0.5*dt*gradp_x(i,j) 
-
+        
         ! v dv/dy is the transverse term for the v states on x-interfaces
         vv_y = vbar*(v_yint(i,j+1) - v_yint(i,j))
 
@@ -409,8 +413,8 @@ subroutine upwind(qx, qy, ng, q_l, q_r, s, q_int)
   nx = qx - 2*ng; ny = qy - 2*ng
   ilo = ng; ihi = ng+nx-1; jlo = ng; jhi = ng+ny-1
 
-  do j = jlo-1, jhi+1
-     do i = ilo-1, ihi+1
+  do j = jlo-1, jhi+2
+     do i = ilo-1, ihi+2
 
         if (s(i,j) > 0.0d0) then
            q_int(i,j) = q_l(i,j)
@@ -447,8 +451,8 @@ subroutine riemann(qx, qy, ng, q_l, q_r, s)
   nx = qx - 2*ng; ny = qy - 2*ng
   ilo = ng; ihi = ng+nx-1; jlo = ng; jhi = ng+ny-1
 
-  do j = jlo-1, jhi+1
-     do i = ilo-1, ihi+1
+  do j = jlo-1, jhi+2
+     do i = ilo-1, ihi+2
 
         if (q_l(i,j) > 0.0d0 .and. q_l(i,j) + q_r(i,j) > 0.0d0) then
            s(i,j) = q_l(i,j)
