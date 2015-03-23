@@ -31,4 +31,10 @@ infrastructure:
 
   -- well-defined unit tests
 
+  -- the MG solvers should check that the incoming coefficient arrays
+     have the same # of ghost cells -- perhaps the coefficients should
+     come in as their own ccdata2d object? or pass in a grid object
+     like we do got mg.get_solution()
+
+     
     
