@@ -684,7 +684,9 @@ class Simulation:
         #plt.rc("font", size=10)
 
         rho = self.cc_data.get_var("density")
-
+        rho0 = self.base["rho0"]
+        rhoprime = self.make_prime(rho, rho0)
+        
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
 
@@ -700,15 +702,16 @@ class Simulation:
         du = 0.5*(u[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
                   u[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
 
+        
         # for some reason, setting vort here causes the density in the
         # simulation to NaN.  Seems like a bug (in python?)
-        #vort[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = dv - du
+        vort[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = dv - du
 
-        fig, axes = plt.subplots(nrows=1, ncols=2, num=1)
+        fig, axes = plt.subplots(nrows=2, ncols=2, num=1)
         plt.subplots_adjust(hspace=0.25)
 
-        fields = [rho, magvel]
-        field_names = [r"$\rho$", r"|U|"] #, r"$\nabla \times U$", r"$\rho$"]
+        fields = [rho, magvel, vort, rhoprime]
+        field_names = [r"$\rho$", r"|U|", r"$\nabla \times U$", r"$rho'$"]
 
         for n in range(len(fields)):
             ax = axes.flat[n]
