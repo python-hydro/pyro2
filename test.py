@@ -4,6 +4,7 @@ from __future__ import print_function
 
 import argparse
 import datetime
+import os
 import sys
 
 import pyro
@@ -20,6 +21,9 @@ class test:
 
 
 def do_tests(out_file):
+
+    # make sure we've built stuff
+    os.system("./mk.sh")
     
     opts = "driver.verbose=0 vis.dovis=0 io.do_io=0".split()
 
@@ -79,7 +83,10 @@ if __name__ == "__main__":
 
     args = p.parse_args()
 
-    do_tests(args.o[0])
+    try: outfile = args.o[0]
+    except: outfile = None
+
+    do_tests(outfile)
 
 
         
