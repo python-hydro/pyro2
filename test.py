@@ -20,10 +20,12 @@ class test:
         self.options = options
 
 
-def do_tests(out_file):
+def do_tests(build, out_file):
 
     # make sure we've built stuff
-    os.system("./mk.sh")
+    print("build = ", build)
+
+    if build: os.system("./mk.sh")
     
     opts = "driver.verbose=0 vis.dovis=0 io.do_io=0".split()
 
@@ -81,12 +83,18 @@ if __name__ == "__main__":
                    help="name of file to output the report to (otherwise output to the screen",
                    type=str, nargs=1)
 
+    p.add_argument("--build",
+                   help="execute the mk.sh script first before any tests",
+                   action="store_true")
+    
     args = p.parse_args()
 
     try: outfile = args.o[0]
     except: outfile = None
 
-    do_tests(outfile)
+    build = args.build
+    
+    do_tests(build, outfile)
 
 
         
