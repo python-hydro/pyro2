@@ -87,16 +87,16 @@ pyro provides the following solvers (all in 2-d):
   - `diffusion`: a Crank-Nicolson time-discretized solver for the
     constant-coefficient diffusion equation.
 
+  - `lm_atm`: a solver for the equations of low Mach number
+    hydrodynamics for atmospheric flows.
+
+  - `lm_combustion`: (in development) a solver for the equations of
+    low Mach number hydrodynamics for smallscale combustion.
+
   - `multigrid`: a cell-centered multigrid solver for a
     constant-coefficient Helmholtz equation, as well as a
     variable-coefficient Poisson equation (which inherits from the
     constant-coefficient solver).
-
-  - `lm_atm`: (mostly complete) a solver for the equations of 
-    low Mach number hydrodynamics for atmospheric flows.
-
-  - `lm_combustion`: (in development) a solver for the equations of
-    low Mach number hydrodynamics for smallscale combustion.
 
 
 ## Working With Data
@@ -168,7 +168,7 @@ with their data.
 
   The source for these notes is also available on github:
 
-  https://github.com/zingale/numerical_exercises
+  https://github.com/Open-Astrophysics-Bookshelf/numerical_exercises
 
 
 ## Regression testing
@@ -177,6 +177,10 @@ with their data.
   stand-alone multigrid tests) and compare the solution to stored
   benchmarks (in each solver's `tests/` subdirectory).
   
+  Tests are run nightly and reported here:
+
+  http://bender.astro.sunysb.edu/hydro_by_example/download/_stage/pyro2/tests.out
+
 
 ## Getting Help
 
