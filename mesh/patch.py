@@ -482,8 +482,7 @@ class CellCenterData2d:
         jlo = self.grid.jlo
         jhi = self.grid.jhi
 
-        n = 0
-        while n < self.nvar:
+        for n in range(self.nvar):
             myStr += "%16s: min: %15.10f    max: %15.10f\n" % \
                 (self.vars[n],
                  np.min(self.data[n,ilo:ihi+1,jlo:jhi+1]),
@@ -493,7 +492,6 @@ class CellCenterData2d:
                        self.BCs[self.vars[n]].xrb,
                        self.BCs[self.vars[n]].ylb,
                        self.BCs[self.vars[n]].yrb)
-            n += 1
 
         return myStr
 
@@ -932,10 +930,8 @@ class CellCenterData2d:
 
         # print j descending, so it looks like a grid (y increasing
         # with height)
-        j = self.grid.qy-1
-        while j >= 0:
-            i = 0
-            while i < self.grid.qx:
+        for j in reversed(range(self.grid.qy)):
+            for i in range(self.grid.qx):
 
                 if (j < self.grid.jlo or j > self.grid.jhi or
                     i < self.grid.ilo or i > self.grid.ihi):
@@ -948,10 +944,7 @@ class CellCenterData2d:
                 else:
                     print (fmt % (a[i,j]), end="")
 
-                i += 1
-
             print(" ")
-            j -= 1
 
         leg = """
          ^ y
