@@ -56,8 +56,8 @@ def do_tests(build, out_file):
     err = test_mg_vc_periodic.test_vc_poisson_periodic(512, comp_bench=True)
     results["mg_vc_poisson_periodic"] = err
 
-    #err = test_mg_general_inhomogeneous.test_general_poisson_inhomogeneous(512, comp_bench=True)
-    #results["mg_general_poisson_inhomogeneous"] = err    
+    err = test_mg_general_inhomogeneous.test_general_poisson_inhomogeneous(512, comp_bench=True)
+    results["mg_general_poisson_inhomogeneous"] = err    
 
 
     failed = 0

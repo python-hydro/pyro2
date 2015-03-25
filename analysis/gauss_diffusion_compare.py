@@ -77,8 +77,7 @@ def process(file):
     # now bin the associated data
     phi_bin = np.zeros(len(ncount)-1, dtype=np.float64)
 
-    n = 1
-    while (n < len(ncount)):
+    for n in range(ncount):
 
         # remember that there are no whichbin == 0, since that
         # corresponds to the left edge.  So we want whichbin == 1 to
@@ -86,15 +85,11 @@ def process(file):
         # (bin_centers[0])
         phi_bin[n-1] = np.sum(phi.flat[whichbin==n])/np.sum(ncount[n])
 
-        n += 1
-
 
     bin_centers = bin_centers[0:len(ncount)-1]
 
-
     # get the analytic solution
     phi_exact = gaussian.phi_analytic(bin_centers, t, t_0, k, phi_0, phi_max)
-
 
     return bin_centers, phi_exact, phi_bin
 
@@ -111,8 +106,7 @@ fig, ax = plt.subplots(nrows=1, ncols=1, num=1)
 plt.rc("font", size=10)
 
 
-n = 1
-while (n < len(sys.argv)):
+for n in range(len(sys.argv)):
 
     try: file = sys.argv[n]
     except:
@@ -125,8 +119,7 @@ while (n < len(sys.argv)):
     ax.plot(bins, phi_exact, color="0.5")
     ax.scatter(bins, phi_bin, marker="x", s=7, color="r")
 
-    n += 1
-
+    
 ax.set_xlim(0,0.4)
 ax.set_xlabel(r"$r$")
 

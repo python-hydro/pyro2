@@ -140,8 +140,7 @@ MG = multigrid.CellCenterMG2d(nx, ny,
 #----------------------------------------------------------------------------
 # projections
 #----------------------------------------------------------------------------
-iproj = 1
-while (iproj <= nproj):
+for iproj in range(nproj):
 
     MG.init_zeros()
     MG.init_RHS(divU)
@@ -186,8 +185,6 @@ while (iproj <= nproj):
 
 
     U.write("proj-periodic.after"+("%d" % iproj))
-
-    iproj += 1
 
 
 

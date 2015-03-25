@@ -242,7 +242,8 @@ class CellCenterMG2d:
             bc_p = patch.BCObject(xlb=xl_BC_type, xrb=xr_BC_type,
                                   ylb=yl_BC_type, yrb=yr_BC_type,
                                   xl_func=xl_BC, xr_func=xr_BC,
-                                  yl_func=yl_BC, yr_func=yr_BC)
+                                  yl_func=yl_BC, yr_func=yr_BC,
+                                  grid=my_grid)
             
             if i == self.nlevels-1:
                 self.grids[i].register_var("v", bc_p)
