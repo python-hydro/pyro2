@@ -29,7 +29,7 @@ This provides two multigrid solvers for cell-centered data.
   extends the basic solver to solve problems with variable
   coefficients:
 
-  D (eta G phi) = f
+  `D (eta G phi) = f`
 
   where D is the divergence and G is the gradient.
 
@@ -42,7 +42,7 @@ This provides two multigrid solvers for cell-centered data.
 
   - `test_mg_vc_dirichlet.py`: this solves
 
-    div . ( alpha grad phi ) = f
+    `div . ( alpha grad phi ) = f`
 
     with
 
@@ -57,11 +57,31 @@ This provides two multigrid solvers for cell-centered data.
     `test_mg_vc_dirichlet.py`, but with periodic boundary conditions.
 
 
+## `general_MG.py`
+
+  This is the general multigrid solver, designed to solve elliptic problems
+  of the form:
+
+  `alpha phi + div . (beta grad phi) + gamma . grad phi = f`
+
+  The following drivers test it:
+
+  - `test_mg_general_alphabeta_only.py`
+
+  - `test_mg_general_beta_only.py`
+
+  - `test_mg_general_constant.py`
+
+  - `test_mg_general_dirichlet.py`
+
+  - `test_mg_general_inhomogeneous.py`
+
 
 ## `prolong_restrict_test.py`
 
   This tests that the restriction and prolongation operations work as
   expected.
+
 
 
 
