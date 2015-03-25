@@ -236,13 +236,19 @@ class CellCenterMG2d:
             bc = patch.BCObject(xlb=xl_BC_type, xrb=xr_BC_type,
                                 ylb=yl_BC_type, yrb=yr_BC_type)
 
-            # create the phi BC object
+            # create the phi BC object -- this only applies for the
+            # finest level.  On the coarser levels, phi represents
+            # the residual, which has homogeneous BCs
             bc_p = patch.BCObject(xlb=xl_BC_type, xrb=xr_BC_type,
                                   ylb=yl_BC_type, yrb=yr_BC_type,
                                   xl_func=xl_BC, xr_func=xr_BC,
                                   yl_func=yl_BC, yr_func=yr_BC)
             
-            self.grids[i].register_var("v", bc_p)
+            if i == self.nlevels-1:
+                self.grids[i].register_var("v", bc_p)
+            else:
+                self.grids[i].register_var("v", bc)
+                
             self.grids[i].register_var("f", bc)
             self.grids[i].register_var("r", bc)
 
