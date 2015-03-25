@@ -93,8 +93,8 @@ def yl_func(x):
     return np.cos(np.pi*x/2.0)
 
 
-def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
-                                   make_plot=False):
+def test_general_poisson_inhomogeneous(N, store_bench=False, comp_bench=False,
+                                       make_plot=False):
     """
     test the general MG solver.  The return value
     here is the error compared to the exact solution, UNLESS
@@ -205,10 +205,10 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
         plt.tight_layout()
 
-        plt.savefig("mg_general_dirichlet_test.png")
+        plt.savefig("mg_general_inhomogeneous_test.png")
 
     # store the output for later comparison
-    bench = "mg_general_poisson_dirichlet"
+    bench = "mg_general_poisson_inhomogeneous"
     bench_dir = os.environ["PYRO_HOME"] + "/multigrid/tests/"
 
     my_data = a.get_solution_object()
@@ -252,8 +252,8 @@ if __name__ == "__main__":
             #store = True
             #do_compare = True
             
-        enorm = test_general_poisson_dirichlet(nx, make_plot=plot,
-                                               store_bench=store, comp_bench=do_compare)
+        enorm = test_general_poisson_inhomogeneous(nx, make_plot=plot,
+                                                   store_bench=store, comp_bench=do_compare)
         
         err.append(enorm)
 
@@ -269,9 +269,11 @@ if __name__ == "__main__":
     plt.xlabel("N")
     plt.ylabel("error")
 
+    plt.ylim(1.e-7,1.e-2)
+    
     f = plt.gcf()
     f.set_size_inches(7.0,6.0)
 
     plt.tight_layout()
 
-    plt.savefig("mg_general_dirichlet_converge.png")
+    plt.savefig("mg_general_inhomogeneous_converge.png")
