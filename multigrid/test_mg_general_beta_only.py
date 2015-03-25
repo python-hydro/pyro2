@@ -58,16 +58,6 @@ def gamma_x(x,y):
 def gamma_y(x,y):
     return np.zeros_like(x)
 
-
-# the L2 error norm
-def error(myg, r):
-
-    # L2 norm of elements in r, multiplied by dx to
-    # normalize
-    return np.sqrt(myg.dx*myg.dy*np.sum((r[myg.ilo:myg.ihi+1,
-                                           myg.jlo:myg.jhi+1]**2).flat))
-
-
 # the righthand side
 def f(x,y):
     return -16.0*np.pi**2*(np.cos(2*np.pi*x)*np.cos(2*np.pi*y) + 1)* \
@@ -142,7 +132,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     b = true(a.x2d,a.y2d)
     e = v - b
 
-    enorm = error(a.soln_grid, e)
+    enorm = a.soln_grid.norm(e)
     print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
           (enorm, a.relative_error, a.num_cycles))
 

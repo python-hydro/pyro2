@@ -333,6 +333,18 @@ class Grid2d:
             return np.zeros((self.qx, self.qy, nvar), dtype=np.float64)
 
 
+
+    
+    def norm(self, d):
+        """
+        find the norm of the quantity d defined on the same grid, in the 
+        domain's valid region
+        """
+        return np.sqrt(self.dx*self.dy*
+                       np.sum((d[self.ilo:self.ihi+1,self.jlo:self.jhi+1]**2).flat))
+    
+
+    
     def coarse_like(self, N):
         """
         return a new grid object coarsened by a factor n, but with
@@ -779,7 +791,8 @@ class CellCenterData2d:
         n = self.vars.index(name)
         g = self.grid
         return np.max(self.data[n,g.ilo-ng:g.ihi+1+ng,g.jlo-ng:g.jhi+1+ng])
-    
+
+
     
     def restrict(self, varname):
         """
