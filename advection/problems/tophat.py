@@ -29,17 +29,12 @@ def init_data(my_data, rp):
 
     dens[:,:] = 0.0
 
-    i = my_data.grid.ilo
-    while i <= my_data.grid.ihi:
-
-        j = my_data.grid.jlo
-        while j <= my_data.grid.jhi:
+    for i in range(my_data.grid.ilo, my_data.grid.ihi+1):
+        for j in range(my_data.grid.jlo, my_data.grid.jhi+1):
 
             if (numpy.sqrt((my_data.grid.x[i]-xctr)**2 +
                            (my_data.grid.y[j]-yctr)**2) < 0.1):
                 dens[i,j] = 1.0
-            j += 1
-        i += 1
 
 
 def finalize():

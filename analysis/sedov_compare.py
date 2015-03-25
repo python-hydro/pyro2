@@ -103,8 +103,7 @@ rho_bin = np.zeros(len(ncount)-1, dtype=np.float64)
 u_bin   = np.zeros(len(ncount)-1, dtype=np.float64)
 p_bin   = np.zeros(len(ncount)-1, dtype=np.float64)
 
-n = 1
-while (n < len(ncount)):
+for n in range(len(ncount)):
 
     # remember that there are no whichbin == 0, since that corresponds
     # to the left edge.  So we want whichbin == 1 to correspond to the
@@ -112,8 +111,6 @@ while (n < len(ncount)):
     rho_bin[n-1] = np.sum(rho.flat[whichbin==n])/np.sum(ncount[n])
     u_bin[n-1]   = np.sum(  u.flat[whichbin==n])/np.sum(ncount[n])
     p_bin[n-1]   = np.sum(  p.flat[whichbin==n])/np.sum(ncount[n])
-
-    n += 1
 
 
 bin_centers = bin_centers[0:len(ncount)-1]
