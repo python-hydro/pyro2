@@ -331,23 +331,15 @@ class Grid2d:
 
     def __str__(self):
         """ print out some basic information about the grid object """
-
-        string = "2-d grid: nx = " + repr(self.nx) + \
-                         ", ny = " + repr(self.ny) + \
-                         ", ng = " + repr(self.ng)
-
-        return string
+        return "2-d grid: nx = {}, ny = {}, ng = {}".format(self.nx, self.ny,self.ng)
 
 
     def __eq__(self, other):
         """ are two grids equivalent? """
-        result = (self.nx == other.nx) and \
-                 (self.ny == other.ny) and \
-                 (self.ng == other.ng) and \
-                 (self.xmin == other.xmin) and \
-                 (self.xmax == other.xmax) and \
-                 (self.ymin == other.ymin) and \
-                 (self.ymax == other.ymax)
+        result = (self.nx == other.nx and self.ny == other.ny and 
+                  self.ng == other.ng and 
+                  self.xmin == other.xmin and self.xmax == other.xmax and 
+                  self.ymin == other.ymin and self.ymax == other.ymax)
 
         return result
 
@@ -759,6 +751,24 @@ class CellCenterData2d:
                 extBCs[self.BCs[name].yrb](self.BCs[name].yrb, "yrb", name, self)
 
 
+    def min(self, name, ng=0):
+        """
+        return the minimum of the variable name in the domain's valid region
+        """
+        n = self.vars.index(name)
+        g = self.grid
+        return np.min(self.data[n,g.ilo-ng:g.ihi+1+ng,g.jlo-ng:g.jhi+1+ng])
+
+    
+    def max(self, name, ng=0):
+        """
+        return the maximum of the variable name in the domain's valid region
+        """
+        n = self.vars.index(name)
+        g = self.grid
+        return np.max(self.data[n,g.ilo-ng:g.ihi+1+ng,g.jlo-ng:g.jhi+1+ng])
+    
+    
     def restrict(self, varname):
         """
         Restrict the variable varname to a coarser grid (factor of 2

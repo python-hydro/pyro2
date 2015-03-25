@@ -222,21 +222,21 @@ if __name__ == "__main__":
     p = argparse.ArgumentParser()
 
     p.add_argument("--make_benchmark",
-                                  help="create a new benchmark file for regression testing",
-                                  action="store_true")
+                   help="create a new benchmark file for regression testing",
+                   action="store_true")
     p.add_argument("--compare_benchmark",
-                                  help="compare the end result to the stored benchmark",
-                                  action="store_true")
+                   help="compare the end result to the stored benchmark",
+                   action="store_true")
 
     p.add_argument("solver", metavar="solver-name", type=str, nargs=1,
-                                  help="name of the solver to use")
+                   help="name of the solver to use")
     p.add_argument("problem", metavar="problem-name", type=str, nargs=1,
-                                  help="name of the problem to run")
+                   help="name of the problem to run")
     p.add_argument("param", metavar="inputs-file", type=str, nargs=1,
-                                  help="name of the inputs file")
+                   help="name of the inputs file")
 
     p.add_argument("other", metavar="runtime-parameters", type=str, nargs="*",
-                                  help="additional runtime parameters that override the inputs file")
+                   help="additional runtime parameters that override the inputs file")
 
     args = p.parse_args()
 

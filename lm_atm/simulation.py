@@ -40,7 +40,9 @@ class Simulation:
         else:
             self.tc = timers
 
-        self.verbose = rp.get_param("driver.verbose")
+        try: self.verbose = rp.get_param("driver.verbose")
+        except:
+            self.verbose = 1
         
 
     def initialize(self):
@@ -219,6 +221,7 @@ class Simulation:
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
 
+        self.cc_data.fill_BC("density")        
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")
 
@@ -323,8 +326,7 @@ class Simulation:
 
         gradp_x = self.cc_data.get_var("gradp_x")
         gradp_y = self.cc_data.get_var("gradp_y")
-
-
+        
         # note: the base state quantities do not have valid ghost cells
         beta0 = self.base["beta0"]
         beta0_edges = self.base["beta0-edges"]
@@ -353,6 +355,7 @@ class Simulation:
         ldelta_uy = limitFunc(2, u, myg.qx, myg.qy, myg.ng)
         ldelta_vy = limitFunc(2, v, myg.qx, myg.qy, myg.ng)
 
+        
         #---------------------------------------------------------------------
         # get the advective velocities
         #---------------------------------------------------------------------
@@ -508,6 +511,7 @@ class Simulation:
 
         self.cc_data.fill_BC("density")
 
+        
         #---------------------------------------------------------------------
         # recompute the interface states, using the advective velocity
         # from above
@@ -578,16 +582,17 @@ class Simulation:
         rho_half = 0.5*(rho + rho_old)
         rhoprime = self.make_prime(rho_half, rho0)
         source = rhoprime*g/rho_half
-
+        self.aux_data.fill_BC("source_y")
+        
         v[:,:] += dt*source
 
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")
 
         if self.verbose > 0:
-            print("min/max rho = {}, {}".format(np.min(rho), np.max(rho)))
-            print("min/max u   = {}, {}".format(np.min(u), np.max(u)))
-            print("min/max v   = {}, {}".format(np.min(v), np.max(v)))
+            print("min/max rho = {}, {}".format(self.cc_data.min("density"), self.cc_data.max("density")))
+            print("min/max u   = {}, {}".format(self.cc_data.min("x-velocity"), self.cc_data.max("x-velocity")))
+            print("min/max v   = {}, {}".format(self.cc_data.min("y-velocity"), self.cc_data.max("y-velocity")))
 
 
         #---------------------------------------------------------------------
@@ -679,7 +684,9 @@ class Simulation:
         #plt.rc("font", size=10)
 
         rho = self.cc_data.get_var("density")
-
+        rho0 = self.base["rho0"]
+        rhoprime = self.make_prime(rho, rho0)
+        
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
 
@@ -695,15 +702,16 @@ class Simulation:
         du = 0.5*(u[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
                   u[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
 
+        
         # for some reason, setting vort here causes the density in the
         # simulation to NaN.  Seems like a bug (in python?)
-        #vort[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = dv - du
+        vort[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = dv - du
 
-        fig, axes = plt.subplots(nrows=1, ncols=2, num=1)
+        fig, axes = plt.subplots(nrows=2, ncols=2, num=1)
         plt.subplots_adjust(hspace=0.25)
 
-        fields = [rho, magvel]
-        field_names = [r"$\rho$", r"|U|"] #, r"$\nabla \times U$", r"$\rho$"]
+        fields = [rho, magvel, vort, rhoprime]
+        field_names = [r"$\rho$", r"|U|", r"$\nabla \times U$", r"$rho'$"]
 
         for n in range(len(fields)):
             ax = axes.flat[n]
