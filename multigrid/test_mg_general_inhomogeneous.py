@@ -10,13 +10,13 @@ Here we solve:
 with
 
    alpha = 10.0
-   beta = x*y
+   beta = x*y + 1  (note: x*y alone doesn't work)
    gamma_x = 1
    gamma_y = 1
 
    f =  -(pi/2)*(x + 1)*sin(pi*y/2)*cos(pi*x/2) 
        - (pi/2)*(y + 1)*sin(pi*x/2)*cos(pi*y/2) + 
-       (-pi**2*x*y/2 + 10)*cos(pi*x/2)*cos(pi*y/2)
+       (-pi**2*(x*y+1)/2 + 10)*cos(pi*x/2)*cos(pi*y/2)
 
 This has the exact solution:
 
@@ -60,7 +60,7 @@ def alpha(x,y):
     return 10.0*np.ones_like(x)
 
 def beta(x,y):
-    return x*y
+    return x*y + 1.0
 
 def gamma_x(x,y):
     return np.ones_like(x)
@@ -82,7 +82,7 @@ def error(myg, r):
 def f(x,y):
     return -0.5*np.pi*(x + 1.0)*np.sin(np.pi*y/2.0)*np.cos(np.pi*x/2.0) - \
             0.5*np.pi*(y + 1.0)*np.sin(np.pi*x/2.0)*np.cos(np.pi*y/2.0) + \
-            (-np.pi**2*x*y/2.0 + 10.0)*np.cos(np.pi*x/2.0)*np.cos(np.pi*y/2.0)
+            (-np.pi**2*(x*y+1.0)/2.0 + 10.0)*np.cos(np.pi*x/2.0)*np.cos(np.pi*y/2.0)
 
 
 # boundary conditions
@@ -135,7 +135,8 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     a = MG.GeneralMG2d(nx, ny,
                        xl_BC_type="dirichlet", yl_BC_type="dirichlet",
                        xr_BC_type="dirichlet", yr_BC_type="dirichlet",
-                       xl_BC=xl_func, yl_BC=yl_func,
+                       xl_BC=xl_func,
+                       yl_BC=yl_func,
                        nsmooth=10,
                        nsmooth_bottom=50,
                        coeffs=d,
@@ -151,8 +152,8 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
     a.init_RHS(rhs)
 
-    # solve to a relative tolerance of 1.e-11
-    a.solve(rtol=1.e-11)
+    # solve to a relative tolerance of 1.e-10
+    a.solve(rtol=1.e-10)
 
     # alternately, we can just use smoothing by uncommenting the following
     #a.smooth(a.nlevels-1,50000)
