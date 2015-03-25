@@ -19,6 +19,10 @@ coding:
   -- is there a way to define a range like ii = [myg.ilo:myg.ihi+1]
      and then do something like ii+1 to get [myg.ilo+1:myg.ihi+2]?
 
+  -- our pickling to store our data doesn't work with inhomogeneous boundary
+     conditions at the moment, because we implement them by passing in an
+     external function.
+     
 
 new solvers:
 
