@@ -683,7 +683,7 @@ class CellCenterData2d:
                     self.data[n,:,j] = self.data[n,:,self.grid.jlo]
             else:
                 self.data[n,:,self.grid.jlo-1] = \
-                    self.data[n,:,self.grid.jlo] - self.grid.dx*self.BCs[name].yl_func(self.grid.x)                    
+                    self.data[n,:,self.grid.jlo] - self.grid.dy*self.BCs[name].yl_func(self.grid.x)
 
         elif self.BCs[name].ylb == "reflect-even":
 
@@ -718,7 +718,7 @@ class CellCenterData2d:
                     self.data[n,:,j] = self.data[n,:,self.grid.jhi]
             else:
                 self.data[n,:,self.grid.jhi+1] = \
-                    self.data[n,:,self.grid.jhi] + self.grid.dx*self.BCs[name].yr_func(self.grid.x)                
+                    self.data[n,:,self.grid.jhi] + self.grid.dy*self.BCs[name].yr_func(self.grid.x)
 
         elif self.BCs[name].yrb == "reflect-even":
 
