@@ -205,7 +205,7 @@ def test_general_poisson_inhomogeneous(N, store_bench=False, comp_bench=False,
 
         plt.tight_layout()
 
-        plt.savefig("mg_general_inhomogeneous_test.eps")
+        plt.savefig("mg_general_inhomogeneous_test.png")
 
     # store the output for later comparison
     bench = "mg_general_poisson_inhomogeneous"
@@ -276,4 +276,4 @@ if __name__ == "__main__":
 
     plt.tight_layout()
 
-    plt.savefig("mg_general_inhomogeneous_converge.eps")
+    plt.savefig("mg_general_inhomogeneous_converge.png")
