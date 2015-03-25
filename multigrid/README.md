@@ -11,16 +11,16 @@ This provides two multigrid solvers for cell-centered data.
 
   The following drivers test it:
 
-    - `test_mg.py`: this solves:
+  - `test_mg.py`: this solves:
 
-      u_xx + u_yy = -2[(1-6x**2)y**2(1-y**2) + (1-6y**2)x**2(1-x**2)]
+    u_xx + u_yy = -2[(1-6x**2)y**2(1-y**2) + (1-6y**2)x**2(1-x**2)]
 
-      at a single resolution on [0,1]x[0,1], with u = 0 on the boundary
-      (Dirichlet BCs).
+    at a single resolution on [0,1]x[0,1], with u = 0 on the boundary
+    (Dirichlet BCs).
 
-    - `mg_vis.py`: this solves the same problem as `test_mg.py`, but it
-      outputs a detailed set of plots at each smoothing iteration showing
-      the progression of the solve through the V-cycles
+  - `mg_vis.py`: this solves the same problem as `test_mg.py`, but it
+    outputs a detailed set of plots at each smoothing iteration showing
+    the progression of the solve through the V-cycles
 
 
 ## `variable_coeff_MG.py`:
