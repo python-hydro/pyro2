@@ -83,8 +83,6 @@ def test_vc_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     a = MG.VarCoeffCCMG2d(nx, ny,
                           xl_BC_type="dirichlet", yl_BC_type="dirichlet",
                           xr_BC_type="dirichlet", yr_BC_type="dirichlet",
-                          nsmooth=10,
-                          nsmooth_bottom=50,
                           coeffs=c, coeffs_bc=bc_c,
                           verbose=1, vis=0, true_function=true)
 
@@ -128,7 +126,6 @@ def test_vc_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
         plt.xlabel("x")
         plt.ylabel("y")
-
         plt.title("nx = {}".format(nx))
 
         plt.colorbar()
@@ -142,7 +139,6 @@ def test_vc_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
         plt.xlabel("x")
         plt.ylabel("y")
-
         plt.title("error")
 
         plt.colorbar()

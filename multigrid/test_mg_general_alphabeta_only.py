@@ -108,8 +108,6 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     a = MG.GeneralMG2d(nx, ny,
                        xl_BC_type="dirichlet", yl_BC_type="dirichlet",
                        xr_BC_type="dirichlet", yr_BC_type="dirichlet",
-                       nsmooth=10,
-                       nsmooth_bottom=50,
                        coeffs=d,
                        verbose=1, vis=0, true_function=true)
 
@@ -153,7 +151,6 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
         plt.xlabel("x")
         plt.ylabel("y")
-
         plt.title("nx = {}".format(nx))
 
         plt.colorbar()
@@ -167,7 +164,6 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
         plt.xlabel("x")
         plt.ylabel("y")
-
         plt.title("error")
 
         plt.colorbar()

@@ -68,7 +68,6 @@ plt.imshow(np.transpose(c[g.ilo:g.ihi+1,g.jlo:g.jhi+1]),
 
 plt.xlabel("x")
 plt.ylabel("y")
-
 plt.title("nx = {}".format(nx))
 
 plt.colorbar()
@@ -85,17 +84,8 @@ print("rhs sum: {}".format(np.sum(rhs[g.ilo:g.ihi+1,g.jlo:g.jhi+1])))
 a = MG.VarCoeffCCMG2d(nx, ny,
                       xl_BC_type="dirichlet", yl_BC_type="dirichlet",
                       xr_BC_type="dirichlet", yr_BC_type="dirichlet",
-                      nsmooth=10,
-                      nsmooth_bottom=50,
                       coeffs=c, coeffs_bc=bc_c,
                       verbose=1)
-
-
-# debugging
-# for i in range(a.nlevels):
-#     print(i)
-#     print(a.grids[i].get_var("coeffs"))
-
 
 
 # initialize the solution to 0
@@ -107,7 +97,6 @@ a.init_RHS(rhs)
 
 # solve to a relative tolerance of 1.e-11
 a.solve(rtol=1.e-11)
-#a.smooth(a.nlevels-1, 50000)
 
 # alternately, we can just use smoothing by uncommenting the following
 #a.smooth(a.nlevels-1,50000)
@@ -137,7 +126,6 @@ plt.imshow(np.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
 
 plt.xlabel("x")
 plt.ylabel("y")
-
 plt.title("nx = {}".format(nx))
 
 plt.colorbar()
@@ -151,7 +139,6 @@ plt.imshow(np.transpose(e[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
 
 plt.xlabel("x")
 plt.ylabel("y")
-
 plt.title("error")
 
 plt.colorbar()
