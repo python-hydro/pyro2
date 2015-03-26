@@ -45,16 +45,6 @@ def gamma_x(x,y):
 def gamma_y(x,y):
     return np.zeros_like(x)
 
-
-# the L2 error norm
-def error(myg, r):
-
-    # L2 norm of elements in r, multiplied by dx to
-    # normalize
-    return np.sqrt(myg.dx*myg.dy*np.sum((r[myg.ilo:myg.ihi+1,
-                                           myg.jlo:myg.jhi+1]**2).flat))
-
-
 # the righthand side
 def f(x,y):
     return -2.0*((1.0-6.0*x**2)*y**2*(1.0-y**2) + (1.0-6.0*y**2)*x**2*(1.0-x**2))
@@ -102,8 +92,6 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     a = MG.GeneralMG2d(nx, ny,
                        xl_BC_type="dirichlet", yl_BC_type="dirichlet",
                        xr_BC_type="dirichlet", yr_BC_type="dirichlet",
-                       nsmooth=10,
-                       nsmooth_bottom=50,
                        coeffs=d,
                        verbose=1, vis=0, true_function=true)
 
@@ -128,7 +116,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     b = true(a.x2d,a.y2d)
     e = v - b
 
-    enorm = error(a.soln_grid, e)
+    enorm = a.soln_grid.norm(e)
     print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
           (enorm, a.relative_error, a.num_cycles))
 
@@ -147,7 +135,6 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
         plt.xlabel("x")
         plt.ylabel("y")
-
         plt.title("nx = {}".format(nx))
 
         plt.colorbar()
@@ -161,7 +148,6 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
         plt.xlabel("x")
         plt.ylabel("y")
-
         plt.title("error")
 
         plt.colorbar()

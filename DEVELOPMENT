@@ -32,7 +32,6 @@ coding:
      which would point to the data
 
 
-
 new solvers:
 
   -- Burgers equation (viscous and inviscid)

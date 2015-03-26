@@ -47,16 +47,6 @@ def true(x,y):
 def alpha(x,y):
     return 2.0 + np.cos(2.0*np.pi*x)*np.cos(2.0*np.pi*y)
 
-
-# the L2 error norm
-def error(myg, r):
-
-    # L2 norm of elements in r, multiplied by dx to
-    # normalize
-    return np.sqrt(myg.dx*myg.dy*np.sum((r[myg.ilo:myg.ihi+1,
-                                           myg.jlo:myg.jhi+1]**2).flat))
-
-
 # the righthand side
 def f(x,y):
     return -16.0*np.pi**2*(np.cos(2*np.pi*x)*np.cos(2*np.pi*y) + 1)* \
@@ -98,8 +88,6 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
     a = MG.VarCoeffCCMG2d(nx, ny,
                           xl_BC_type="periodic", yl_BC_type="periodic",
                           xr_BC_type="periodic", yr_BC_type="periodic",
-                          nsmooth=10,
-                          nsmooth_bottom=50,
                           coeffs=c, coeffs_bc=bc_c,
                           verbose=1, vis=0, true_function=true)
 
@@ -130,7 +118,7 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
     # the same footing)
     e = v - np.sum(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1])/(nx*ny) - (b - np.sum(b[a.ilo:a.ihi+1,a.jlo:a.jhi+1])/(nx*ny))
 
-    enorm = error(a.soln_grid, e)
+    enorm = a.soln_grid.norm(e)
     print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
           (enorm, a.relative_error, a.num_cycles))
 
@@ -149,7 +137,6 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
 
         plt.xlabel("x")
         plt.ylabel("y")
-
         plt.title("nx = {}".format(nx))
 
         plt.colorbar()
@@ -163,7 +150,6 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
 
         plt.xlabel("x")
         plt.ylabel("y")
-
         plt.title("error")
 
         plt.colorbar()

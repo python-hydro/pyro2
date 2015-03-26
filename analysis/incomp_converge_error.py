@@ -12,14 +12,6 @@ usage = """
       usage: ./incomp_converge_error.py file
 """
 
-def error(imin, imax, dx, jmin, jmax, dy, r):
-
-    # L2 norm of elements in r, multiplied by dx*dy to
-    # normalize
-    return np.sqrt(dx*dy*np.sum((r[imin:imax+1,jmin:jmax+1]**2).flat))
-
-
-
 def abort(string):
     print string
     sys.exit(2)
@@ -52,6 +44,5 @@ v_exact = 1.0 + 2.0*np.sin(2.0*math.pi*(myg.x2d-t))*np.cos(2.0*math.pi*(myg.y2d-
 udiff = u_exact - u
 vdiff = v_exact - v
 
-print "errors: ", \
-    error(myg.ilo, myg.ihi, myg.dx, myg.jlo, myg.jhi, myg.dy, udiff), \
-    error(myg.ilo, myg.ihi, myg.dx, myg.jlo, myg.jhi, myg.dy, vdiff),
+print "errors: ", myg.norm(udiff), myg.norm(vdiff)
+

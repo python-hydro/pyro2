@@ -21,18 +21,9 @@
 # iteration as its source term.
 
 import numpy
-import multigrid
+import MG
 import mesh.patch as patch
 import math
-
-
-# the L2 error norm
-def error(myg, r):
-
-    # L2 norm of elements in r, multiplied by dx to
-    # normalize
-    return numpy.sqrt(myg.dx*myg.dy*numpy.sum((r[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]**2).flat))
-
 
         
 nx = 128
@@ -131,27 +122,26 @@ divU[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
 
 
 # create the multigrid object with Neumann BCs
-MG = multigrid.CellCenterMG2d(nx, ny,
-                              xl_BC_type="periodic", xr_BC_type="periodic",
-                              yl_BC_type="periodic", yr_BC_type="periodic",
-                              verbose=1)
+a = MG.CellCenterMG2d(nx, ny,
+                      xl_BC_type="periodic", xr_BC_type="periodic",
+                      yl_BC_type="periodic", yr_BC_type="periodic",
+                      verbose=1)
 
 
 #----------------------------------------------------------------------------
 # projections
 #----------------------------------------------------------------------------
-iproj = 1
-while (iproj <= nproj):
+for iproj in range(nproj):
 
-    MG.init_zeros()
-    MG.init_RHS(divU)
-    MG.solve(rtol=1.e-12)
+    a.init_zeros()
+    a.init_RHS(divU)
+    a.solve(rtol=1.e-12)
 
     phi = U.get_var('phi')
-    solution = MG.get_solution()
+    solution = a.get_solution()
 
     phi[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2] = \
-        solution[MG.ilo-1:MG.ihi+2,MG.jlo-1:MG.jhi+2]
+        solution[a.ilo-1:a.ihi+2,a.jlo-1:a.jhi+2]
 
     dphi = U.get_var('dphi')
     dphi[:,:] = phi - U.get_var('phi-old')
@@ -186,8 +176,6 @@ while (iproj <= nproj):
 
 
     U.write("proj-periodic.after"+("%d" % iproj))
-
-    iproj += 1
 
 
 

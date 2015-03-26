@@ -67,13 +67,6 @@ import matplotlib
 import mesh.patch as patch
 from util import msg
 
-def _error(myg, r):
-
-    # L2 norm of elements in r, multiplied by dx*dy to
-    # normalize
-    return np.sqrt(myg.dx*myg.dy*
-                      np.sum((r[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]**2).flat))
-
 
 class CellCenterMG2d:
     """
@@ -236,13 +229,20 @@ class CellCenterMG2d:
             bc = patch.BCObject(xlb=xl_BC_type, xrb=xr_BC_type,
                                 ylb=yl_BC_type, yrb=yr_BC_type)
 
-            # create the phi BC object
+            # create the phi BC object -- this only applies for the
+            # finest level.  On the coarser levels, phi represents
+            # the residual, which has homogeneous BCs
             bc_p = patch.BCObject(xlb=xl_BC_type, xrb=xr_BC_type,
                                   ylb=yl_BC_type, yrb=yr_BC_type,
                                   xl_func=xl_BC, xr_func=xr_BC,
-                                  yl_func=yl_BC, yr_func=yr_BC)
+                                  yl_func=yl_BC, yr_func=yr_BC,
+                                  grid=my_grid)
             
-            self.grids[i].register_var("v", bc_p)
+            if i == self.nlevels-1:
+                self.grids[i].register_var("v", bc_p)
+            else:
+                self.grids[i].register_var("v", bc)
+                
             self.grids[i].register_var("f", bc)
             self.grids[i].register_var("r", bc)
 
@@ -261,7 +261,7 @@ class CellCenterMG2d:
 
         # provide coordinate and indexing information for the solution mesh
         soln_grid = self.grids[self.nlevels-1].grid
-
+        
         self.ilo = soln_grid.ilo
         self.ihi = soln_grid.ihi
         self.jlo = soln_grid.jlo
@@ -532,7 +532,7 @@ class CellCenterMG2d:
         f[:,:] = data.copy()
 
         # store the source norm
-        self.source_norm = _error(self.grids[self.nlevels-1].grid, f)
+        self.source_norm = self.grids[self.nlevels-1].grid.norm(f)
 
         if self.verbose:
             print("Source norm = ", self.source_norm)
@@ -708,9 +708,6 @@ class CellCenterMG2d:
                 fP = self.grids[level]
                 cP = self.grids[level-1]
 
-                # access to the residual
-                r = fP.get_var("r")
-
                 if self.verbose:
                     self._compute_residual(level)
 
@@ -718,7 +715,7 @@ class CellCenterMG2d:
                         (level, fP.grid.nx, fP.grid.ny))
 
                     print("  before G-S, residual L2 norm = %g" % \
-                          (_error(fP.grid, r) ))
+                          (fP.grid.norm(fP.get_var("r")) ))
 
                 # smooth on the current level
                 self.smooth(level, self.nsmooth)
@@ -729,7 +726,7 @@ class CellCenterMG2d:
 
                 if self.verbose:
                     print("  after G-S, residual L2 norm = %g\n" % \
-                          (_error(fP.grid, r) ))
+                          (fP.grid.norm(fP.get_var("r")) ))
 
 
                 # restrict the residual down to the RHS of the coarser level
@@ -779,13 +776,12 @@ class CellCenterMG2d:
 
                 if self.verbose:
                     self._compute_residual(level)
-                    r = fP.get_var("r")
 
                     print("  level = %d, nx = %d, ny = %d" % \
                         (level, fP.grid.nx, fP.grid.ny))
 
                     print("  before G-S, residual L2 norm = %g" % \
-                          (_error(fP.grid, r) ))
+                          (fP.grid.norm(fP.get_var("r")) ))
 
                 # smooth
                 self.smooth(level, self.nsmooth)
@@ -794,7 +790,7 @@ class CellCenterMG2d:
                     self._compute_residual(level)
 
                     print("  after G-S, residual L2 norm = %g\n" % \
-                          (_error(fP.grid, r) ))
+                          (fP.grid.norm(fP.get_var("r")) ))
 
 
             # compute the error with respect to the previous solution
@@ -805,7 +801,7 @@ class CellCenterMG2d:
             diff = (solnP.get_var("v") - old_solution)/ \
                 (solnP.get_var("v") + self.small)
 
-            relative_error = _error(solnP.grid, diff)
+            relative_error = solnP.grid.norm(diff)
 
             old_solution = solnP.get_var("v").copy()
 
@@ -814,9 +810,9 @@ class CellCenterMG2d:
             r = fP.get_var("r")
 
             if self.source_norm != 0.0:
-                residual_error = _error(fP.grid, r)/self.source_norm
+                residual_error = fP.grid.norm(r)/self.source_norm
             else:
-                residual_error = _error(fP.grid, r)
+                residual_error = fP.grid.norm(r)
 
 
             if residual_error < rtol:

@@ -32,8 +32,7 @@ def compare(myg1, myd1, myg2, myd2):
 
     result = 0
 
-    n = 0
-    while n < myd1.nvar:
+    for n in range(myd1.nvar):
 
         d1 = myd1.get_var(myd1.vars[n])
         d2 = myd2.get_var(myd2.vars[n])
@@ -45,8 +44,6 @@ def compare(myg1, myd1, myg2, myd2):
 
         if not err == 0:
             result = "varerr"
-
-        n += 1
 
     return result
 

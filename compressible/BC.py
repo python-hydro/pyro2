@@ -21,7 +21,7 @@ def user(bc_name, bc_edge, variable, my_data):
     ----------
     bc_name : {'hse'}
         The descriptive name for the boundary condition -- this allows
-        for pyro to have multiple types of user-supplied boundary 
+        for pyro to have multiple types of user-supplied boundary
         conditions.  For this module, it needs to be 'hse'.
     bc_edge : {'ylb', 'yrb'}
         The boundary to update: ylb = lower y boundary; yrb = upper y
@@ -43,11 +43,11 @@ def user(bc_name, bc_edge, variable, my_data):
     myg = my_data.grid
 
     if (bc_name == "hse"):
-        
+
         if (bc_edge == "ylb"):
 
             # lower y boundary
-            
+
             # we will take the density to be constant, the velocity to
             # be outflow, and the pressure to be in HSE
             if variable == "density":
@@ -59,13 +59,13 @@ def user(bc_name, bc_edge, variable, my_data):
             elif variable == "x-momentum":
                 j = myg.jlo-1
                 while (j >= 0):
-                    xmom[:,j] = xmom[:,myg.jlo]                
+                    xmom[:,j] = xmom[:,myg.jlo]
                     j -= 1
 
             elif variable == "y-momentum":
                 j = myg.jlo-1
                 while (j >= 0):
-                    ymom[:,j] = ymom[:,myg.jlo]                
+                    ymom[:,j] = ymom[:,myg.jlo]
                     j -= 1
 
             elif variable == "energy":
@@ -75,7 +75,7 @@ def user(bc_name, bc_edge, variable, my_data):
 
                 eint_base = (ener[:,myg.jlo] - ke_base)/dens[:,myg.jlo]
                 pres_base = eos.pres(gamma, dens_base, eint_base)
-                
+
                 # we are assuming that the density is constant in this
                 # formulation of HSE, so the pressure comes simply from
                 # differencing the HSE equation
@@ -97,26 +97,20 @@ def user(bc_name, bc_edge, variable, my_data):
         elif (bc_edge == "yrb"):
 
             # upper y boundary
-            
+
             # we will take the density to be constant, the velocity to
             # be outflow, and the pressure to be in HSE
             if variable == "density":
-                j = myg.jhi+1
-                while (j <= myg.jhi+myg.ng):
+                for j in range(myg.jhi+1, myg.jhi+myg.ng+1):
                     dens[:,j] = dens[:,myg.jhi]
-                    j += 1
 
             elif variable == "x-momentum":
-                j = myg.jhi+1
-                while (j <= myg.jhi+myg.ng):
-                    xmom[:,j] = xmom[:,myg.jhi]                
-                    j += 1
+                for i in range(myg.jhi+1, myg.jhi+myg.ng+1):
+                    xmom[:,j] = xmom[:,myg.jhi]
 
             elif variable == "y-momentum":
-                j = myg.jhi+1
-                while (j <= myg.jhi+myg.ng):
-                    ymom[:,j] = ymom[:,myg.jhi]                
-                    j += 1
+                for j in range(myg.jhi+1, myg.jhi+myg.ng+1):
+                    ymom[:,j] = ymom[:,myg.jhi]
 
             elif variable == "energy":
                 dens_base = dens[:,myg.jhi]
@@ -125,20 +119,17 @@ def user(bc_name, bc_edge, variable, my_data):
 
                 eint_base = (ener[:,myg.jhi] - ke_base)/dens[:,myg.jhi]
                 pres_base = eos.pres(gamma, dens_base, eint_base)
-                
+
                 # we are assuming that the density is constant in this
                 # formulation of HSE, so the pressure comes simply from
                 # differencing the HSE equation
-                j = myg.jhi+1
-                while (j <= myg.jhi+myg.ng):
+                for j in range(myg.jhi+1, myg.jhi+myg.ng+1):
                     pres_above = pres_base + grav*dens_base*myg.dy
                     rhoe = eos.rhoe(gamma, pres_above)
 
                     ener[:,j] = rhoe + ke_base
 
                     pres_base = pres_above.copy()
-
-                    j += 1
 
             else:
                 msg.fail("error: variable not defined")

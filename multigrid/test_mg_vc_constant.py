@@ -34,16 +34,6 @@ def true(x,y):
 def alpha(x,y):
     return np.ones_like(x)
 
-
-# the L2 error norm
-def error(myg, r):
-
-    # L2 norm of elements in r, multiplied by dx to
-    # normalize
-    return np.sqrt(myg.dx*myg.dy*np.sum((r[myg.ilo:myg.ihi+1,
-                                                 myg.jlo:myg.jhi+1]**2).flat))
-
-
 # the righthand side
 def f(x,y):
     return -2.0*((1.0-6.0*x**2)*y**2*(1.0-y**2) + (1.0-6.0*y**2)*x**2*(1.0-x**2))
@@ -78,7 +68,6 @@ plt.imshow(np.transpose(c[g.ilo:g.ihi+1,g.jlo:g.jhi+1]),
 
 plt.xlabel("x")
 plt.ylabel("y")
-
 plt.title("nx = {}".format(nx))
 
 plt.colorbar()
@@ -95,17 +84,8 @@ print("rhs sum: {}".format(np.sum(rhs[g.ilo:g.ihi+1,g.jlo:g.jhi+1])))
 a = MG.VarCoeffCCMG2d(nx, ny,
                       xl_BC_type="dirichlet", yl_BC_type="dirichlet",
                       xr_BC_type="dirichlet", yr_BC_type="dirichlet",
-                      nsmooth=10,
-                      nsmooth_bottom=50,
                       coeffs=c, coeffs_bc=bc_c,
                       verbose=1)
-
-
-# debugging
-# for i in range(a.nlevels):
-#     print(i)
-#     print(a.grids[i].get_var("coeffs"))
-
 
 
 # initialize the solution to 0
@@ -117,7 +97,6 @@ a.init_RHS(rhs)
 
 # solve to a relative tolerance of 1.e-11
 a.solve(rtol=1.e-11)
-#a.smooth(a.nlevels-1, 50000)
 
 # alternately, we can just use smoothing by uncommenting the following
 #a.smooth(a.nlevels-1,50000)
@@ -130,7 +109,7 @@ b = true(a.x2d,a.y2d)
 e = v - b
 
 print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
-      (error(a.soln_grid, e), a.relative_error, a.num_cycles))
+      (a.soln_grid.norm(e), a.relative_error, a.num_cycles))
 
 
 # plot it
@@ -147,7 +126,6 @@ plt.imshow(np.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
 
 plt.xlabel("x")
 plt.ylabel("y")
-
 plt.title("nx = {}".format(nx))
 
 plt.colorbar()
@@ -161,7 +139,6 @@ plt.imshow(np.transpose(e[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
 
 plt.xlabel("x")
 plt.ylabel("y")
-
 plt.title("error")
 
 plt.colorbar()

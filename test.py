@@ -11,6 +11,7 @@ import pyro
 import multigrid.test_mg as test_mg
 import multigrid.test_mg_vc_dirichlet as test_mg_vc_dirichlet
 import multigrid.test_mg_vc_periodic as test_mg_vc_periodic
+import multigrid.test_mg_general_inhomogeneous as test_mg_general_inhomogeneous
 
 class test:
     def __init__(self, solver, problem, inputs, options):
@@ -54,6 +55,9 @@ def do_tests(build, out_file):
 
     err = test_mg_vc_periodic.test_vc_poisson_periodic(512, comp_bench=True)
     results["mg_vc_poisson_periodic"] = err
+
+    err = test_mg_general_inhomogeneous.test_general_poisson_inhomogeneous(512, comp_bench=True)
+    results["mg_general_poisson_inhomogeneous"] = err    
 
 
     failed = 0
