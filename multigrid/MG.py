@@ -370,8 +370,6 @@ class CellCenterMG2d:
 
         plt.xlabel("x")
         plt.ylabel("y")
-
-
         plt.title(r"current fine grid solution")
 
         formatter = matplotlib.ticker.ScalarFormatter(useMathText=True)
@@ -399,8 +397,6 @@ class CellCenterMG2d:
 
         plt.xlabel("x")
         plt.ylabel("y")
-
-
         plt.title(r"current fine grid error")
 
         formatter = matplotlib.ticker.ScalarFormatter(useMathText=True)
@@ -536,10 +532,6 @@ class CellCenterMG2d:
 
         if self.verbose:
             print("Source norm = ", self.source_norm)
-
-        # note: if we wanted to do inhomogeneous Dirichlet BCs, we
-        # would modify the source term, f, here to include a boundary
-        # charge
 
         self.initialized_RHS = 1
 
@@ -711,8 +703,7 @@ class CellCenterMG2d:
                 if self.verbose:
                     self._compute_residual(level)
 
-                    print("  level = %d, nx = %d, ny = %d" %  \
-                        (level, fP.grid.nx, fP.grid.ny))
+                    print("  level: {}, grid: {} x {}".format(level, fP.grid.nx, fP.grid.ny))
 
                     print("  before G-S, residual L2 norm = %g" % \
                           (fP.grid.norm(fP.get_var("r")) ))
