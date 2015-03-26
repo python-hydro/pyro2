@@ -19,6 +19,19 @@ coding:
   -- is there a way to define a range like ii = [myg.ilo:myg.ihi+1]
      and then do something like ii+1 to get [myg.ilo+1:myg.ihi+2]?
 
+     or perhaps have a shift method, and do something like
+
+     a = mydata.get_var("density")
+     
+     a.s("i+1","j")
+
+     and retain the original behavor of normal indexing via:
+
+     a.d
+
+     which would point to the data
+
+
 
 new solvers:
 
