@@ -12,7 +12,7 @@ Helmholtz equation:
 where L is the Laplacian and alpha and beta are constants.  If alpha =
 0 and beta = -1, then this is the Poisson equation.
 
-We support homogeneous Dirichlet or Neumann BCs, or on periodic domain.
+We support Dirichlet or Neumann BCs, or a periodic domain.
 
 The general usage is as follows:
 
@@ -105,25 +105,25 @@ class CellCenterMG2d:
             minimum physical coordinate in y-direction
         ymax : float, optional
             maximum physical coordinate in y-direction
-        xl_BC_type : {'neumann', 'dirichlet'}, optional
+        xl_BC_type : {'neumann', 'dirichlet', 'periodic'}, optional
             boundary condition to enforce on lower x face
-        xr_BC_type : {'neumann', 'dirichlet'}, optional
+        xr_BC_type : {'neumann', 'dirichlet', 'periodic'}, optional
             boundary condition to enforce on upper x face
-        yl_BC_type : {'neumann', 'dirichlet'}, optional
+        yl_BC_type : {'neumann', 'dirichlet', 'periodic'}, optional
             boundary condition to enforce on lower y face
-        yr_BC_type : {'neumann', 'dirichlet'}, optional
+        yr_BC_type : {'neumann', 'dirichlet', 'periodic'}, optional
             boundary condition to enforce on upper y face
         xl_BC : function, optional
-            function to call to get -x boundary values
+            function (of y) to call to get -x boundary values
             (homogeneous assumed otherwise)
         xr_BC : function, optional
-            function to call to get +x boundary values
+            function (of y) to call to get +x boundary values
             (homogeneous assumed otherwise)
         yl_BC : function, optional
-            function to call to get -y boundary values
+            function (of x) to call to get -y boundary values
             (homogeneous assumed otherwise)
         yr_BC : function, optional
-            function to call to get +y boundary values
+            function (of x) to call to get +y boundary values
             (homogeneous assumed otherwise)
         alpha : float, optional
             coefficient in Helmholtz equation (alpha - beta L) phi = f
