@@ -209,10 +209,6 @@ class CellCenterMG2d:
         # grid and self.grids[nlevel-1] will be the finest grid
         # we store the solution, v, the rhs, f.
 
-        if self.verbose:
-            print("alpha = ", self.alpha)
-            print("beta  = ", self.beta)
-
         nx_t = ny_t = 2
             
         for i in range(self.nlevels):
@@ -252,8 +248,7 @@ class CellCenterMG2d:
 
             self.grids[i].create()
 
-            if self.verbose:
-                print(self.grids[i])
+            if self.verbose: print(self.grids[i])
 
             nx_t = nx_t*2
             ny_t = ny_t*2
@@ -269,12 +264,10 @@ class CellCenterMG2d:
 
         self.x  = soln_grid.x
         self.dx = soln_grid.dx
-
         self.x2d = soln_grid.x2d
 
         self.y  = soln_grid.y
         self.dy = soln_grid.dy   # note, dy = dx is assumed
-
         self.y2d = soln_grid.y2d
 
         self.soln_grid = soln_grid
@@ -317,12 +310,13 @@ class CellCenterMG2d:
         plt.scatter(xup, yup, marker="o", color="k", s=40)
 
         if self.up_or_down == "down":
-            plt.scatter(xdown[self.nlevels-self.current_level-1], ydown[self.nlevels-self.current_level-1],
-                          marker="o", color="r", zorder=100, s=38)
+            plt.scatter(xdown[self.nlevels-self.current_level-1],
+                        ydown[self.nlevels-self.current_level-1],
+                        marker="o", color="r", zorder=100, s=38)
 
         else:
             plt.scatter(xup[self.current_level], yup[self.current_level],
-                          marker="o", color="r", zorder=100, s=38)
+                        marker="o", color="r", zorder=100, s=38)
 
         plt.text(0.7, 0.1, "V-cycle %d" % (self.current_cycle))
         plt.axis("off")
@@ -335,8 +329,8 @@ class CellCenterMG2d:
         v = self.grids[self.current_level].get_var("v")
 
         plt.imshow(np.transpose(v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
-                     interpolation="nearest", origin="lower",
-                     extent=[self.xmin, self.xmax, self.ymin, self.ymax])
+                   interpolation="nearest", origin="lower",
+                   extent=[self.xmin, self.xmax, self.ymin, self.ymax])
 
         #plt.xlabel("x")
         plt.ylabel("y")
@@ -365,13 +359,11 @@ class CellCenterMG2d:
         v = self.grids[self.nlevels-1].get_var("v")
 
         plt.imshow(np.transpose(v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
-                     interpolation="nearest", origin="lower",
-                     extent=[self.xmin, self.xmax, self.ymin, self.ymax])
+                   interpolation="nearest", origin="lower",
+                   extent=[self.xmin, self.xmax, self.ymin, self.ymax])
 
         plt.xlabel("x")
         plt.ylabel("y")
-
-
         plt.title(r"current fine grid solution")
 
         formatter = matplotlib.ticker.ScalarFormatter(useMathText=True)
@@ -394,13 +386,11 @@ class CellCenterMG2d:
         e = v - self.true_function(myg.x2d, myg.y2d)
 
         plt.imshow(np.transpose(e[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
-                     interpolation="nearest", origin="lower",
-                     extent=[self.xmin, self.xmax, self.ymin, self.ymax])
+                   interpolation="nearest", origin="lower",
+                   extent=[self.xmin, self.xmax, self.ymin, self.ymax])
 
         plt.xlabel("x")
         plt.ylabel("y")
-
-
         plt.title(r"current fine grid error")
 
         formatter = matplotlib.ticker.ScalarFormatter(useMathText=True)
@@ -707,8 +697,7 @@ class CellCenterMG2d:
                 if self.verbose:
                     self._compute_residual(level)
 
-                    print("  level = %d, nx = %d, ny = %d" %  \
-                        (level, fP.grid.nx, fP.grid.ny))
+                    print("  level: {}, grid: {} x {}".format(level, fP.grid.nx, fP.grid.ny))
 
                     print("  before G-S, residual L2 norm = %g" % \
                           (fP.grid.norm(fP.get_var("r")) ))
@@ -736,11 +725,9 @@ class CellCenterMG2d:
             # number of different matrix solvers here (like CG), but
             # since we are 2x2 by design at this point, we will just
             # smooth
-            if self.verbose:
-                print("  bottom solve:")
+            if self.verbose: print("  bottom solve:")
 
             self.current_level = 0
-
             bP = self.grids[0]
 
             if self.verbose:

@@ -47,16 +47,16 @@ def do_tests(build, out_file):
 
 
     # standalone tests
-    err = test_mg.test_poisson_dirichlet(256, comp_bench=True)
+    err = test_mg.test_poisson_dirichlet(256, comp_bench=True, verbose=0)
     results["mg_poisson_dirichlet"] = err
 
-    err = test_mg_vc_dirichlet.test_vc_poisson_dirichlet(512, comp_bench=True)
+    err = test_mg_vc_dirichlet.test_vc_poisson_dirichlet(512, comp_bench=True, verbose=0)
     results["mg_vc_poisson_dirichlet"] = err
 
-    err = test_mg_vc_periodic.test_vc_poisson_periodic(512, comp_bench=True)
+    err = test_mg_vc_periodic.test_vc_poisson_periodic(512, comp_bench=True, verbose=0)
     results["mg_vc_poisson_periodic"] = err
 
-    err = test_mg_general_inhomogeneous.test_general_poisson_inhomogeneous(512, comp_bench=True)
+    err = test_mg_general_inhomogeneous.test_general_poisson_inhomogeneous(512, comp_bench=True, verbose=0)
     results["mg_general_poisson_inhomogeneous"] = err    
 
 
