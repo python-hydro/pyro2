@@ -51,7 +51,7 @@ def f(x,y):
 
 
 def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
-                                   make_plot=False):
+                                   make_plot=False, verbose=1):
     """
     test the general MG solver.  The return value
     here is the error compared to the exact solution, UNLESS
@@ -93,7 +93,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
                        xl_BC_type="dirichlet", yl_BC_type="dirichlet",
                        xr_BC_type="dirichlet", yr_BC_type="dirichlet",
                        coeffs=d,
-                       verbose=1, vis=0, true_function=true)
+                       verbose=verbose, vis=0, true_function=true)
 
 
     # initialize the solution to 0

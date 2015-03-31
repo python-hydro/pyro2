@@ -36,7 +36,7 @@ def f(x,y):
 
 
 def test_poisson_dirichlet(N, store_bench=False, comp_bench=False,
-                           make_plot=False):
+                           make_plot=False, verbose=1):
     
     # test the multigrid solver
     nx = N
@@ -47,7 +47,7 @@ def test_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     a = MG.CellCenterMG2d(nx, ny,
                           xl_BC_type="dirichlet", yl_BC_type="dirichlet",
                           xr_BC_type="dirichlet", yr_BC_type="dirichlet",
-                          verbose=1)
+                          verbose=verbose)
 
     # initialize the solution to 0
     a.init_zeros()

@@ -332,8 +332,6 @@ class Grid2d:
         else:
             return np.zeros((self.qx, self.qy, nvar), dtype=np.float64)
 
-
-
     
     def norm(self, d):
         """
@@ -343,7 +341,6 @@ class Grid2d:
         return np.sqrt(self.dx*self.dy*
                        np.sum((d[self.ilo:self.ihi+1,self.jlo:self.jhi+1]**2).flat))
     
-
     
     def coarse_like(self, N):
         """
@@ -792,7 +789,6 @@ class CellCenterData2d:
         g = self.grid
         return np.max(self.data[n,g.ilo-ng:g.ihi+1+ng,g.jlo-ng:g.jhi+1+ng])
 
-
     
     def restrict(self, varname):
         """
@@ -896,7 +892,6 @@ class CellCenterData2d:
         m_y[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] = \
             0.5*(cData[cG.ilo:cG.ihi+1,cG.jlo+1:cG.jhi+2] -
                  cData[cG.ilo:cG.ihi+1,cG.jlo-1:cG.jhi  ])
-
 
 
         # fill the '1' children

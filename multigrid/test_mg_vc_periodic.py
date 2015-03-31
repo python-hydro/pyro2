@@ -55,7 +55,7 @@ def f(x,y):
 
 
 def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
-                             make_plot=False):
+                             make_plot=False, verbose=1):
     """
     test the variable-coefficient MG solver.  The return value
     here is the error compared to the exact solution, UNLESS
@@ -89,7 +89,7 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
                           xl_BC_type="periodic", yl_BC_type="periodic",
                           xr_BC_type="periodic", yr_BC_type="periodic",
                           coeffs=c, coeffs_bc=bc_c,
-                          verbose=1, vis=0, true_function=true)
+                          verbose=verbose, vis=0, true_function=true)
 
 
     # initialize the solution to 0

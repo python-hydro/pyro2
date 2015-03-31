@@ -168,25 +168,17 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
                 v[myg.ilo+ix:myg.ihi+1:2,myg.jlo+iy:myg.jhi+1:2] = (
                     -f[myg.ilo+ix:myg.ihi+1:2,myg.jlo+iy:myg.jhi+1:2] +
                     # eta_{i+1/2,j} phi_{i+1,j}
-                    eta_x[myg.ilo+1+ix:myg.ihi+2:2,
-                          myg.jlo+iy  :myg.jhi+1:2] *
-                    v[myg.ilo+1+ix:myg.ihi+2:2,
-                      myg.jlo+iy  :myg.jhi+1:2] +
+                    eta_x[myg.ilo+1+ix:myg.ihi+2:2,myg.jlo+iy  :myg.jhi+1:2] *
+                    v[myg.ilo+1+ix:myg.ihi+2:2,myg.jlo+iy  :myg.jhi+1:2] +
                     # eta_{i-1/2,j} phi_{i-1,j}
-                    eta_x[myg.ilo+ix:myg.ihi+1:2,
-                          myg.jlo+iy:myg.jhi+1:2]*
-                    v[myg.ilo-1+ix:myg.ihi  :2,
-                      myg.jlo+iy  :myg.jhi+1:2] +
+                    eta_x[myg.ilo+ix:myg.ihi+1:2,myg.jlo+iy:myg.jhi+1:2]*
+                    v[myg.ilo-1+ix:myg.ihi  :2,myg.jlo+iy  :myg.jhi+1:2] +
                     # eta_{i,j+1/2} phi_{i,j+1}
-                    eta_y[myg.ilo+ix:myg.ihi+1:2,
-                          myg.jlo+1+iy:myg.jhi+2:2]*
-                    v[myg.ilo+ix  :myg.ihi+1:2,
-                      myg.jlo+1+iy:myg.jhi+2:2] +
+                    eta_y[myg.ilo+ix:myg.ihi+1:2,myg.jlo+1+iy:myg.jhi+2:2]*
+                    v[myg.ilo+ix  :myg.ihi+1:2,myg.jlo+1+iy:myg.jhi+2:2] +
                     # eta_{i,j-1/2} phi_{i,j-1}
-                    eta_y[myg.ilo+ix:myg.ihi+1:2,
-                          myg.jlo+iy:myg.jhi+1:2]*
-                    v[myg.ilo+ix  :myg.ihi+1:2,
-                      myg.jlo-1+iy:myg.jhi  :2]) / denom
+                    eta_y[myg.ilo+ix:myg.ihi+1:2,myg.jlo+iy:myg.jhi+1:2]*
+                    v[myg.ilo+ix  :myg.ihi+1:2,myg.jlo-1+iy:myg.jhi  :2]) / denom
 
 
                 if n == 1 or n == 3:
@@ -208,7 +200,6 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
                 plt.subplot(224)
                 self._draw_main_error()
 
-
                 plt.suptitle(self.vis_title, fontsize=18)
 
                 plt.draw()
@@ -218,7 +209,6 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
 
     def _compute_residual(self, level):
         """ compute the residual and store it in the r variable"""
-
 
         v = self.grids[level].get_var("v")
         f = self.grids[level].get_var("f")
