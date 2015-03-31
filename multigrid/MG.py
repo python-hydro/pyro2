@@ -49,7 +49,7 @@ For convenience, the grid information on the solution level is available as
 attributes to the class,
 
 a.ilo, a.ihi, a.jlo, a.jhi are the indices bounding the interior
-of the solution array (i.e. excluding the guardcells).
+of the solution array (i.e. excluding the ghost cells).
 
 a.x and a.y are the coordinate arrays
 a.dx and a.dy are the grid spacings

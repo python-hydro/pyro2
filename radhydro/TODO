@@ -6,5 +6,8 @@
 
 -- use MG solver to solve radiation system
 
+   - the general_MG solver can now handle the form of the
+     elliptic equation + do inhomogeneous BCs
+ 
 
 
