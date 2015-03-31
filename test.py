@@ -62,21 +62,24 @@ def do_tests(build, out_file):
 
     failed = 0
 
-    f = open(out_file, "w") if out_file else sys.stdout
+    out = [sys.stdout]
+    if not out_file == None:
+        out.append(open(out_file, "w"))
 
-    f.write("pyro tests run: {}\n\n".format(str(datetime.datetime.now().replace(microsecond=0))))
+    for f in out:
+        f.write("pyro tests run: {}\n\n".format(str(datetime.datetime.now().replace(microsecond=0))))
     
-    for s, r in sorted(results.items()):
-        if not r == 0:
-            f.write("{:32} failed\n".format(s))
-            failed += 1
-        else:
-            f.write("{:32} passed\n".format(s))
+        for s, r in sorted(results.items()):
+            if not r == 0:
+                f.write("{:32} failed\n".format(s))
+                failed += 1
+            else:
+                f.write("{:32} passed\n".format(s))
 
 
-    f.write("\n{} test(s) failed\n".format(failed))
+        f.write("\n{} test(s) failed\n".format(failed))
 
-    if out_file: f.close()
+        if not f == sys.stdout: f.close()
     
 
 if __name__ == "__main__":
