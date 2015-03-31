@@ -4,37 +4,10 @@ import matplotlib.pyplot as plt
 from advection.problems import *
 from advection.advectiveFluxes import *
 import mesh.patch as patch
+from simulation_null import NullSimulation, grid_setup
 from util import profile
 
-class Simulation:
-
-    def __init__(self, problem_name, rp, timers=None):
-        """
-        Initialize the Simulation object for linear advection.
-
-        Parameters
-        ----------
-        problem_name : str
-            The name of the problem we wish to run.  This should
-            correspond to one of the modules in advection/problems/
-        rp : RuntimeParameters object
-            The runtime parameters for the simulation
-        timers : TimerCollection object, optional
-            The timers used for profiling this simulation
-        """
-
-        self.rp = rp
-        self.cc_data = None
-
-        self.SMALL = 1.e-12
-
-        self.problem_name = problem_name
-
-        if timers == None:
-            self.tc = profile.TimerCollection()
-        else:
-            self.tc = timers
-
+class Simulation(NullSimulation):
 
     def initialize(self):
         """
@@ -42,29 +15,14 @@ class Simulation:
         conditions for the chosen problem.
         """
 
-        # setup the grid
-        nx = self.rp.get_param("mesh.nx")
-        ny = self.rp.get_param("mesh.ny")
-
-        xmin = self.rp.get_param("mesh.xmin")
-        xmax = self.rp.get_param("mesh.xmax")
-        ymin = self.rp.get_param("mesh.ymin")
-        ymax = self.rp.get_param("mesh.ymax")
-
-        verbose = self.rp.get_param("driver.verbose")
-        
-        my_grid = patch.Grid2d(nx, ny,
-                               xmin=xmin, xmax=xmax,
-                               ymin=ymin, ymax=ymax, ng=4)
+        my_grid = grid_setup(self.rp, ng=4)
 
 
         # create the variables
 
-        # first figure out the boundary conditions -- we need to translate
-        # between the descriptive type of the boundary specified by the
-        # user and the action that will be performed by the fill_BC routine.
-        # Usually the actions can vary depending on the variable, but we
-        # only have one variable.
+        # translate the descriptive type of boundary specified by the
+        # user to the action to performed in fill_BC().  Actions can
+        # vary depending on the variable.
         xlb_type = self.rp.get_param("mesh.xlboundary")
         xrb_type = self.rp.get_param("mesh.xrboundary")
         ylb_type = self.rp.get_param("mesh.ylboundary")
@@ -74,9 +32,7 @@ class Simulation:
                             ylb=ylb_type, yrb=yrb_type)
 
         my_data = patch.CellCenterData2d(my_grid)
-
         my_data.register_var("density", bc)
-
         my_data.create()
 
         self.cc_data = my_data
@@ -104,14 +60,6 @@ class Simulation:
         dt = cfl*min(xtmp, ytmp)
 
         return dt
-
-
-    def preevolve(self):
-        """
-        Do any necessary evolution before the main evolve loop.  This
-        is not needed for advection
-        """
-        pass
 
 
     def evolve(self, dt):
@@ -176,9 +124,3 @@ class Simulation:
         plt.draw()
 
 
-    def finalize(self):
-        """
-        Do any final clean-ups for the simulation and call the problem's
-        finalize() method.
-        """
-        exec(self.problem_name + '.finalize()')
