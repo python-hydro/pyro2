@@ -17,9 +17,9 @@ def grid_setup(rp, ng=1):
 
 class NullSimulation:
 
-    def __init__(self, problem_name, rp, timers=None):
+    def __init__(self, solver_name, problem_name, rp, timers=None):
         """
-        Initialize the Simulation object for linear advection.
+        Initialize the Simulation object
 
         Parameters
         ----------
@@ -32,11 +32,17 @@ class NullSimulation:
             The timers used for profiling this simulation
         """
 
+        self.n = 0
+
+        self.tmax = rp.get_param("driver.tmax")
+        self.max_steps = rp.get_param("driver.max_steps")            
+        
         self.rp = rp
         self.cc_data = None
 
         self.SMALL = 1.e-12
 
+        self.solver_name = solver_name        
         self.problem_name = problem_name
 
         if timers == None:
@@ -44,15 +50,24 @@ class NullSimulation:
         else:
             self.tc = timers
 
+        self.verbose = self.rp.get_param("driver.verbose")
+            
+            
     def finished(self):
-        pass
+        """
+        is the simulation finished based on time or the number of steps
+        """
+        return self.cc_data.t >= self.tmax or self.n >= self.max_steps
+
     
     def initialize(self):
         pass
 
+    
     def timestep(self):
         pass
 
+    
     def preevolve(self):
         """
         Do any necessary evolution before the main evolve loop.  This
@@ -60,15 +75,20 @@ class NullSimulation:
         """
         pass
 
+    
     def evolve(self, dt):
         pass
 
+    
     def dovis(self):
         pass
 
+    
     def finalize(self):
         """
         Do any final clean-ups for the simulation and call the problem's
         finalize() method.
         """
-        exec(self.problem_name + '.finalize()')
+        # there should be a cleaner way of doing this
+        exec("import {}".format(self.solver_name))
+        exec("{}.{}.finalize()".format(self.solver_name, self.problem_name))

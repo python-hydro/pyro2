@@ -7,6 +7,7 @@ import compressible.BC as BC
 from compressible.problems import *
 import compressible.eos as eos
 import mesh.patch as patch
+from simulation_null import NullSimulation, grid_setup
 from compressible.unsplitFluxes import *
 from util import profile
 
@@ -33,60 +34,15 @@ class Variables:
         self.ip = 3
 
 
-class Simulation:
-
-    def __init__(self, problem_name, rp, timers=None):
-        """
-        Initialize the Simulation object for compressible hydrodynamics.
-
-        Parameters
-        ----------
-        problem_name : str
-            The name of the problem we wish to run.  This should
-            correspond to one of the modules in compressible/problems/
-        rp : RuntimeParameters object
-            The runtime parameters for the simulation
-        timers : TimerCollection object, optional
-            The timers used for profiling this simulation
-        """
-
-        self.rp = rp
-        self.cc_data = None
-        self.problem_name = problem_name
-
-        self.vars = None
-
-        self.SMALL = 1.e-12
-
-        if timers == None:
-            self.tc = profile.TimerCollection()
-        else:
-            self.tc = timers
-
+class Simulation(NullSimulation):
 
     def initialize(self):
         """
         Initialize the grid and variables for compressible flow and set
         the initial conditions for the chosen problem.
         """
-
-        # setup the grid
-        nx = self.rp.get_param("mesh.nx")
-        ny = self.rp.get_param("mesh.ny")
-
-        xmin = self.rp.get_param("mesh.xmin")
-        xmax = self.rp.get_param("mesh.xmax")
-        ymin = self.rp.get_param("mesh.ymin")
-        ymax = self.rp.get_param("mesh.ymax")
-
-        verbose = self.rp.get_param("driver.verbose")
         
-        my_grid = patch.Grid2d(nx, ny,
-                               xmin=xmin, xmax=xmax,
-                               ymin=ymin, ymax=ymax, ng=4)
-
-
-        # create the variables
+        my_grid = grid_setup(self.rp, ng=4)
         my_data = patch.CellCenterData2d(my_grid)
 
 
@@ -148,7 +104,7 @@ class Simulation:
         # initial conditions for the problem
         exec(self.problem_name + '.init_data(self.cc_data, self.rp)')
 
-        if verbose > 0: print(my_data)
+        if self.verbose > 0: print(my_data)
 
 
     def timestep(self):
@@ -190,14 +146,6 @@ class Simulation:
         dt = cfl*min(xtmp.min(), ytmp.min())
 
         return dt
-
-
-    def preevolve(self):
-        """
-        Do any necessary evolution before the main evolve loop.  This
-        is not needed for compressible flow.
-        """
-        pass
 
 
     def evolve(self, dt):
@@ -288,7 +236,7 @@ class Simulation:
         sparseX = 0
         allYlabel = 1
 
-        if (L_x > 2*L_y):
+        if L_x > 2*L_y:
 
             # we want 4 rows:
             #  rho
@@ -303,7 +251,7 @@ class Simulation:
             onLeft = list(range(self.vars.nvar))
 
 
-        elif (L_y > 2*L_x):
+        elif L_y > 2*L_x:
 
             # we want 4 columns:  rho  |U|  p  e
             fig, axes = plt.subplots(nrows=1, ncols=4, num=1)
@@ -358,11 +306,3 @@ class Simulation:
         plt.figtext(0.05,0.0125, "t = %10.5f" % self.cc_data.t)
 
         plt.draw()
-
-
-    def finalize(self):
-        """
-        Do any final clean-ups for the simulation and call the problem's
-        finalize() method.
-        """
-        exec(self.problem_name + '.finalize()')

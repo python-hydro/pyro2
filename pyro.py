@@ -68,7 +68,7 @@ def doit(solver_name, problem_name, param_file,
     # initialize the Simulation object -- this will hold the grid and
     # data and know about the runtime parameters and which problem we
     # are running
-    sim = solver.Simulation(problem_name, rp, timers=tc)
+    sim = solver.Simulation(solver_name, problem_name, rp, timers=tc)
 
     sim.initialize()
     sim.preevolve()
@@ -77,9 +77,6 @@ def doit(solver_name, problem_name, param_file,
     #-------------------------------------------------------------------------
     # evolve
     #-------------------------------------------------------------------------
-    tmax = rp.get_param("driver.tmax")
-    max_steps = rp.get_param("driver.max_steps")
-
     init_tstep_factor = rp.get_param("driver.init_tstep_factor")
     max_dt_change = rp.get_param("driver.max_dt_change")
     fix_dt = rp.get_param("driver.fix_dt")
@@ -88,21 +85,20 @@ def doit(solver_name, problem_name, param_file,
 
     plt.ion()
 
-    n = 0
     sim.cc_data.t = 0.0
 
     # output the 0th data
     basename = rp.get_param("io.basename")
-    sim.cc_data.write(basename + "%4.4d" % (n))
-
+    sim.cc_data.write("{}{:04d}".format(basename, sim.n))
+    
     dovis = rp.get_param("vis.dovis")
     if dovis:
         plt.figure(num=1, figsize=(8,6), dpi=100, facecolor='w')
         sim.dovis()
 
     nout = 0
-
-    while sim.cc_data.t < tmax and n < max_steps:
+    
+    while not sim.finished():
 
         # fill boundary conditions
         tm_bc = tc.timer("fill_bc")
@@ -115,15 +111,15 @@ def doit(solver_name, problem_name, param_file,
         if fix_dt > 0.0:
             dt = fix_dt
         else:
-            if n == 0:
+            if sim.n == 0:
                 dt = init_tstep_factor*dt
                 dt_old = dt
             else:
                 dt = min(max_dt_change*dt_old, dt)
                 dt_old = dt
 
-        if sim.cc_data.t + dt > tmax:
-            dt = tmax - sim.cc_data.t
+        if sim.cc_data.t + dt > sim.tmax:
+            dt = sim.tmax - sim.cc_data.t
 
         # evolve for a single timestep
         sim.evolve(dt)
@@ -131,8 +127,8 @@ def doit(solver_name, problem_name, param_file,
 
         # increment the time
         sim.cc_data.t += dt
-        n += 1
-        if verbose > 0: print("%5d %10.5f %10.5f" % (n, sim.cc_data.t, dt))
+        sim.n += 1
+        if verbose > 0: print("%5d %10.5f %10.5f" % (sim.n, sim.cc_data.t, dt))
 
 
         # output
@@ -140,14 +136,14 @@ def doit(solver_name, problem_name, param_file,
         n_out = rp.get_param("io.n_out")
         do_io = rp.get_param("io.do_io")
         
-        if (sim.cc_data.t >= (nout + 1)*dt_out or n%n_out == 0) and do_io == 1:
+        if (sim.cc_data.t >= (nout + 1)*dt_out or sim.n%n_out == 0) and do_io == 1:
 
             tm_io = tc.timer("output")
             tm_io.begin()
 
             if verbose > 0: msg.warning("outputting...")
             basename = rp.get_param("io.basename")
-            sim.cc_data.write(basename + "%4.4d" % (n))
+            sim.cc_data.write(basename + "%4.4d" % (sim.n))
             nout += 1
 
             tm_io.end()
@@ -163,7 +159,7 @@ def doit(solver_name, problem_name, param_file,
 
             if store == 1:
                 basename = rp.get_param("io.basename")
-                plt.savefig(basename + "%4.4d" % (n) + ".png")
+                plt.savefig("{}{:04d}.png".format(basename, sim.n))
 
             tm_vis.end()
 
@@ -175,7 +171,7 @@ def doit(solver_name, problem_name, param_file,
     #-------------------------------------------------------------------------
     # are we comparing to a benchmark?
     if comp_bench:
-        compare_file = solver_name + "/tests/" + basename + "%4.4d" % (n)
+        compare_file = solver_name + "/tests/" + basename + "%4.4d" % (sim.n)
         msg.warning("comparing to: %s " % (compare_file) )
         try: bench_grid, bench_data = patch.read(compare_file)
         except:
@@ -198,8 +194,8 @@ def doit(solver_name, problem_name, param_file,
             except:
                 msg.fail("ERROR: unable to create the solver's tests/ directory")
             
-        bench_file = solver_name + "/tests/" + basename + "%4.4d" % (n)
-        msg.warning("storing new benchmark: %s\n " % (bench_file) )
+        bench_file = solver_name + "/tests/" + basename + "%4.4d" % (sim.n)
+        msg.warning("storing new benchmark: {}\n".format(bench_file))
         sim.cc_data.write(bench_file)
 
 
