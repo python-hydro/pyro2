@@ -7,7 +7,7 @@ import compressible.BC as BC
 from compressible.problems import *
 import compressible.eos as eos
 import mesh.patch as patch
-from simulation_null import NullSimulation, grid_setup
+from simulation_null import NullSimulation, grid_setup, bc_setup
 from compressible.unsplitFluxes import *
 from util import profile
 
@@ -49,39 +49,12 @@ class Simulation(NullSimulation):
         # define solver specific boundary condition routines
         patch.define_bc("hse", BC.user)
 
-
-        # first figure out the boundary conditions.  Note: the action
-        # can depend on the variable (for reflecting BCs)
-        xlb_type = self.rp.get_param("mesh.xlboundary")
-        xrb_type = self.rp.get_param("mesh.xrboundary")
-        ylb_type = self.rp.get_param("mesh.ylboundary")
-        yrb_type = self.rp.get_param("mesh.yrboundary")
-
-        bc = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
-                            ylb=ylb_type, yrb=yrb_type)
+        bc, bc_xodd, bc_yodd = bc_setup(self.rp)
 
         # density and energy
         my_data.register_var("density", bc)
         my_data.register_var("energy", bc)
-
-        # for velocity, if we are reflecting, we need odd reflection
-        # in the normal direction.
-
-        # x-momentum -- if we are reflecting in x, then we need to
-        # reflect odd
-        bc_xodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
-                                 ylb=ylb_type, yrb=yrb_type,
-                                 odd_reflect_dir="x")
-
         my_data.register_var("x-momentum", bc_xodd)
-
-
-        # y-momentum -- if we are reflecting in y, then we need to
-        # reflect odd
-        bc_yodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
-                                 ylb=ylb_type, yrb=yrb_type,
-                                 odd_reflect_dir="y")
-
         my_data.register_var("y-momentum", bc_yodd)
 
 

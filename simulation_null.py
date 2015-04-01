@@ -15,6 +15,30 @@ def grid_setup(rp, ng=1):
     return my_grid
     
 
+def bc_setup(rp):
+
+    # first figure out the BCs
+    xlb_type = rp.get_param("mesh.xlboundary")
+    xrb_type = rp.get_param("mesh.xrboundary")
+    ylb_type = rp.get_param("mesh.ylboundary")
+    yrb_type = rp.get_param("mesh.yrboundary")
+        
+    bc = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
+                        ylb=ylb_type, yrb=yrb_type)
+
+    # if we are reflecting, we need odd reflection in the normal
+    # directions for the velocity
+    bc_xodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
+                             ylb=ylb_type, yrb=yrb_type,
+                             odd_reflect_dir="x")
+
+    bc_yodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
+                             ylb=ylb_type, yrb=yrb_type,
+                             odd_reflect_dir="y")
+
+    return bc, bc_xodd, bc_yodd
+    
+
 class NullSimulation:
 
     def __init__(self, solver_name, problem_name, rp, timers=None):

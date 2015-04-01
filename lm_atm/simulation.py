@@ -7,81 +7,29 @@ from lm_atm.problems import *
 import lm_atm.LM_atm_interface_f as lm_interface_f
 import mesh.reconstruction_f as reconstruction_f
 import mesh.patch as patch
+from simulation_null import NullSimulation, grid_setup, bc_setup
 import multigrid.variable_coeff_MG as vcMG
 from util import profile
 
-class Simulation:
+class Simulation(NullSimulation):
 
-    def __init__(self, problem_name, rp, timers=None):
-        """
-        Initialize the Simulation object for incompressible flow.
+    def __init__(self, solver_name, problem_name, rp, timers=None):
 
-        Parameters
-        ----------
-        problem_name : str
-            The name of the problem we wish to run.  This should
-            correspond to one of the modules in LM-atmosphere/problems/
-        rp : RuntimeParameters object
-            The runtime parameters for the simulation
-        timers : TimerCollection object, optional
-            The timers used for profiling this simulation
-        """
+        NullSimulation.__init__(self, solver_name, problem_name, rp, timers=timers)
 
-        self.rp = rp
-
-        self.cc_data = None
-        self.aux_data = None
         self.base = {}
+        self.aux_data = None
 
-        self.problem_name = problem_name
-
-        if timers == None:
-            self.tc = profile.TimerCollection()
-        else:
-            self.tc = timers
-
-        try: self.verbose = rp.get_param("driver.verbose")
-        except:
-            self.verbose = 1
-        
-
+    
     def initialize(self):
         """
         Initialize the grid and variables for low Mach atmospheric flow
         and set the initial conditions for the chosen problem.
         """
 
-        # setup the grid
-        nx = self.rp.get_param("mesh.nx")
-        ny = self.rp.get_param("mesh.ny")
+        myg = grid_setup(self.rp, ng=4)
 
-        xmin = self.rp.get_param("mesh.xmin")
-        xmax = self.rp.get_param("mesh.xmax")
-        ymin = self.rp.get_param("mesh.ymin")
-        ymax = self.rp.get_param("mesh.ymax")
-
-        myg = patch.Grid2d(nx, ny,
-                           xmin=xmin, xmax=xmax,
-                           ymin=ymin, ymax=ymax, ng=4)
-
-        # first figure out the BCs
-        xlb_type = self.rp.get_param("mesh.xlboundary")
-        xrb_type = self.rp.get_param("mesh.xrboundary")
-        ylb_type = self.rp.get_param("mesh.ylboundary")
-        yrb_type = self.rp.get_param("mesh.yrboundary")
-
-        bc_dens = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
-                                 ylb=ylb_type, yrb=yrb_type)
-
-        # if we are reflecting, we need odd reflection in the normal
-        # directions for the velocity
-        bc_xodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
-                                 ylb=ylb_type, yrb=yrb_type,
-                                 odd_reflect_dir="x")
-
-        bc_yodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
-                                 ylb=ylb_type, yrb=yrb_type,
-                                 odd_reflect_dir="y")
+        bc_dens, bc_xodd, bc_yodd = bc_setup(self.rp)
 
         my_data = patch.CellCenterData2d(myg)
 
@@ -99,7 +47,10 @@ class Simulation:
         # = 0) -- this ensures that we do not introduce any tangental
         # acceleration.
         bcs = []
-        for bc in [xlb_type, xrb_type, ylb_type, yrb_type]:
+        for bc in [self.rp.get_param("mesh.xlboundary"),
+                   self.rp.get_param("mesh.xrboundary"),
+                   self.rp.get_param("mesh.ylboundary"),
+                   self.rp.get_param("mesh.yrboundary")]:
             if bc == "periodic":
                 bctype = "periodic"
             elif bc in ["reflect", "slipwall"]:
@@ -733,11 +684,3 @@ class Simulation:
         plt.figtext(0.05,0.0125, "t = %10.5f" % self.cc_data.t)
 
         plt.draw()
-
-
-    def finalize(self):
-        """
-        Do any final clean-ups for the simulation and call the problem's
-        finalize() method.
-        """
-        exec(self.problem_name + '.finalize()')

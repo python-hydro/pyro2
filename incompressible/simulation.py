@@ -7,7 +7,7 @@ from incompressible.problems import *
 import incompressible.incomp_interface_f as incomp_interface_f
 import mesh.reconstruction_f as reconstruction_f
 import mesh.patch as patch
-from simulation_null import NullSimulation, grid_setup
+from simulation_null import NullSimulation, grid_setup, bc_setup
 import multigrid.MG as MG
 from util import profile
 
@@ -22,26 +22,8 @@ class Simulation(NullSimulation):
         my_grid = grid_setup(self.rp, ng=4)
 
         # create the variables
-
-        # first figure out the BCs
-        xlb_type = self.rp.get_param("mesh.xlboundary")
-        xrb_type = self.rp.get_param("mesh.xrboundary")
-        ylb_type = self.rp.get_param("mesh.ylboundary")
-        yrb_type = self.rp.get_param("mesh.yrboundary")
-
-        bc = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
-                            ylb=ylb_type, yrb=yrb_type)
-
-        # if we are reflecting, we need odd reflection in the normal
-        # directions for the velocity
-        bc_xodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
-                                 ylb=ylb_type, yrb=yrb_type,
-                                 odd_reflect_dir="x")
-
-        bc_yodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
-                                 ylb=ylb_type, yrb=yrb_type,
-                                 odd_reflect_dir="y")
-
+        bc, bc_xodd, bc_yodd = bc_setup(self.rp)
+        
         my_data = patch.CellCenterData2d(my_grid)
 
         # velocities
