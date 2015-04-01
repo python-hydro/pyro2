@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from advection.problems import *
 from advection.advectiveFluxes import *
 import mesh.patch as patch
-from simulation_null import NullSimulation, grid_setup
+from simulation_null import NullSimulation, grid_setup, bc_setup
 from util import profile
 
 class Simulation(NullSimulation):
@@ -17,21 +17,9 @@ class Simulation(NullSimulation):
 
         my_grid = grid_setup(self.rp, ng=4)
 
-
         # create the variables
-
-        # translate the descriptive type of boundary specified by the
-        # user to the action to performed in fill_BC().  Actions can
-        # vary depending on the variable.
-        xlb_type = self.rp.get_param("mesh.xlboundary")
-        xrb_type = self.rp.get_param("mesh.xrboundary")
-        ylb_type = self.rp.get_param("mesh.ylboundary")
-        yrb_type = self.rp.get_param("mesh.yrboundary")
-
-        bc = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
-                            ylb=ylb_type, yrb=yrb_type)
-
         my_data = patch.CellCenterData2d(my_grid)
+        bc = bc_setup(self.rp)[0]
         my_data.register_var("density", bc)
         my_data.create()
 
@@ -110,8 +98,8 @@ class Simulation(NullSimulation):
         myg = self.cc_data.grid
 
         plt.imshow(np.transpose(dens[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
-                     interpolation="nearest", origin="lower",
-                     extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
+                   interpolation="nearest", origin="lower",
+                   extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
         plt.xlabel("x")
         plt.ylabel("y")

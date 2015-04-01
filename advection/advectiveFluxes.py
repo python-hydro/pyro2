@@ -78,9 +78,7 @@ def unsplitFluxes(my_data, rp, dt, scalar_name):
         limitFunc = reconstruction_f.limit4
 
     ldelta_a = limitFunc(1, a, qx, qy, my_grid.ng)
-
     a_x = my_grid.scratch_array()
-
 
     # upwind
     if u < 0:
@@ -93,9 +91,7 @@ def unsplitFluxes(my_data, rp, dt, scalar_name):
 
     # y-direction
     ldelta_a = limitFunc(2, a, qx, qy, my_grid.ng)
-
     a_y = my_grid.scratch_array()
-
 
     # upwind
     if v < 0:
