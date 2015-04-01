@@ -7,58 +7,19 @@ from incompressible.problems import *
 import incompressible.incomp_interface_f as incomp_interface_f
 import mesh.reconstruction_f as reconstruction_f
 import mesh.patch as patch
+from simulation_null import NullSimulation, grid_setup
 import multigrid.MG as MG
 from util import profile
 
-class Simulation:
+class Simulation(NullSimulation):
 
-    def __init__(self, problem_name, rp, timers=None):
-        """
-        Initialize the Simulation object for incompressible flow.
-
-        Parameters
-        ----------
-        problem_name : str
-            The name of the problem we wish to run.  This should
-            correspond to one of the modules in incompressible/problems/
-        rp : RuntimeParameters object
-            The runtime parameters for the simulation
-        timers : TimerCollection object, optional
-            The timers used for profiling this simulation
-        """
-
-        self.rp = rp
-        self.cc_data = None
-
-        self.problem_name = problem_name
-
-        if timers == None:
-            self.tc = profile.TimerCollection()
-        else:
-            self.tc = timers
-
-
-        self.verbose = self.rp.get_param("driver.verbose")
-            
     def initialize(self):
         """
         Initialize the grid and variables for incompressible flow and
         set the initial conditions for the chosen problem.
         """
 
-        # setup the grid
-        nx = self.rp.get_param("mesh.nx")
-        ny = self.rp.get_param("mesh.ny")
-
-        xmin = self.rp.get_param("mesh.xmin")
-        xmax = self.rp.get_param("mesh.xmax")
-        ymin = self.rp.get_param("mesh.ymin")
-        ymax = self.rp.get_param("mesh.ymax")
-
-        my_grid = patch.Grid2d(nx, ny,
-                               xmin=xmin, xmax=xmax,
-                               ymin=ymin, ymax=ymax, ng=4)
-
+        my_grid = grid_setup(self.rp, ng=4)
 
         # create the variables
 
@@ -517,11 +478,3 @@ class Simulation:
         plt.figtext(0.05,0.0125, "t = %10.5f" % self.cc_data.t)
 
         plt.draw()
-
-
-    def finalize(self):
-        """
-        Do any final clean-ups for the simulation and call the problem's
-        finalize() method.
-        """
-        exec(self.problem_name + '.finalize()')
