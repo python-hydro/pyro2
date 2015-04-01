@@ -24,11 +24,7 @@ def doit(solver_name, problem_name, param_file,
     tm_main = tc.timer("main")
     tm_main.begin()
 
-    #-------------------------------------------------------------------------
-    # solver setup
-    #-------------------------------------------------------------------------
-
-    # actually import the solver-specific stuff under the 'solver' namespace
+    # import desired solver under "solver" namespace
     exec('import ' + solver_name + ' as solver')
 
 
@@ -101,10 +97,7 @@ def doit(solver_name, problem_name, param_file,
     while not sim.finished():
 
         # fill boundary conditions
-        tm_bc = tc.timer("fill_bc")
-        tm_bc.begin()
         sim.cc_data.fill_BC_all()
-        tm_bc.end()
 
         # get the timestep
         dt = sim.timestep()
@@ -138,17 +131,12 @@ def doit(solver_name, problem_name, param_file,
         
         if (sim.cc_data.t >= (nout + 1)*dt_out or sim.n%n_out == 0) and do_io == 1:
 
-            tm_io = tc.timer("output")
-            tm_io.begin()
-
             if verbose > 0: msg.warning("outputting...")
             basename = rp.get_param("io.basename")
-            sim.cc_data.write(basename + "%4.4d" % (sim.n))
+            sim.cc_data.write("{}{:04d}".format(basename, sim.n))
             nout += 1
 
-            tm_io.end()
-
-
+            
         # visualization
         if dovis:
             tm_vis = tc.timer("vis")
