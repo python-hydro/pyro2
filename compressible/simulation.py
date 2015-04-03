@@ -131,7 +131,6 @@ class Simulation(NullSimulation):
         tm_evolve.begin()
 
         dens = self.cc_data.get_var("density")
-        xmom = self.cc_data.get_var("x-momentum")
         ymom = self.cc_data.get_var("y-momentum")
         ener = self.cc_data.get_var("energy")
 
