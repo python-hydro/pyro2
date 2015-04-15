@@ -35,7 +35,7 @@ from __future__ import print_function
   
 import time 
 
-class TimerCollection:
+class TimerCollection(object):
 
     def __init__(self):
         """
@@ -92,7 +92,7 @@ class TimerCollection:
             print(t.stack_count*spacing + t.name + ': ', t.elapsed_time)
 
 
-class Timer:
+class Timer(object):
 
     def __init__ (self, name, stack_count=0):
         """

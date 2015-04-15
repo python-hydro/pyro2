@@ -12,7 +12,7 @@ from compressible.unsplitFluxes import *
 from util import profile
 
 
-class Variables:
+class Variables(object):
     """
     a container class for easy access to the different compressible
     variable by an integer key

@@ -4,7 +4,7 @@ import sys
 # inspiration from                                                                          
 # http://stackoverflow.com/questions/287871/print-in-terminal-with-colors-using-python      
 # which in-turn cites the blender build scripts                                             
-class _TermColors:
+class _TermColors(object):
     WARNING = '\033[33m'
     SUCCESS = '\033[32m'
     FAIL = '\033[31m'

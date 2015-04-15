@@ -57,7 +57,7 @@ def define_bc(type, function):
     extBCs[type] = function
 
 
-class BCObject:
+class BCObject(object):
     """Boundary condition container -- hold the BCs on each boundary
     for a single variable.  
 
@@ -225,7 +225,7 @@ class BCObject:
         return string
 
 
-class Grid2d:
+class Grid2d():
     """
     the 2-d grid class.  The grid object will contain the coordinate
     information (at various centerings).
@@ -367,7 +367,7 @@ class Grid2d:
         return result
 
 
-class CellCenterData2d:
+class CellCenterData2d():
     """
     A class to define cell-centered data that lives on a grid.  A
     CellCenterData2d object is built in a multi-step process before

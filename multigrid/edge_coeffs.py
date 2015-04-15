@@ -1,4 +1,4 @@
-class EdgeCoeffs:
+class EdgeCoeffs(object):
     """
     a simple container class to hold edge-centered coefficients
     and restrict them to coarse levels

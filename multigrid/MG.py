@@ -68,7 +68,7 @@ import mesh.patch as patch
 from util import msg
 
 
-class CellCenterMG2d:
+class CellCenterMG2d(object):
     """
     The main multigrid class for cell-centered data.
 
