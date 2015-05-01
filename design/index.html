@@ -1,0 +1,466 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+<HEAD>
+  <TITLE>pyro: design</TITLE> 
+
+  <link rel="stylesheet" type="text/css" href="../hydro.css">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+
+</HEAD> 
+
+<body id="design">
+
+<!-- HEADER .............................................................. -->
+<!--#include virtual="../header.html" -->
+
+
+<!-- MAIN ................................................................ -->
+<div id="main">
+
+
+<P><h2>&lowast; pyro's design</h2>
+
+<p>pyro is written primarily in python, with a few low-level routines written
+in Fortran for performance.  The <a href="http://numpy.scipy.org/">numpy</a>
+package is used for representing arrays throughout the python code and the
+<a href="http://matplotlib.org/">matplotlib</a> library is used for visualization.
+
+<p>All solvers are written for a 2-d grid.
+
+<p>A paper describing the design philosophy of pyro was accepted to 
+Astronomy &amp; Computing.
+
+<div class="pdf"><a href="http://adsabs.harvard.edu/abs/2013arXiv1306.6883Z">pyro paper download</a></div>
+
+<p><h3>Directory structure</h3>
+
+<p>The files for each solver are in their own sub-directory, with
+additional sub-directories for the mesh and utilities.  Each solver
+has two sub-directories: <tt>problems</tt> and <tt>tests</tt>.
+These store the different problem setups for the solver and reference
+output for testing.
+
+<p>Your <tt>PYTHONPATH</tt> environment variable should be set to 
+include the top-level <tt>pyro2/</tt> directory.
+
+<p>The overall structure is:
+
+<div class="directory">
+
+<ul>
+<li><tt>pyro2/</tt> &mdash; 
+    This is the top-level directory.  The main driver, <tt>pyro.py</tt>, is here, and all
+    pyro simulations should be run from this directory.
+
+  <ul>
+  <li><tt>advection/</tt> &mdash; 
+      The linear advection equation solver.  All advection-specific routines live here.
+     
+     <ul>
+     <li><tt>problems/</tt> &mdash; 
+         The problem setups for the advection solver.
+     </li>
+     <li><tt>tests/</tt> &mdash; 
+         Reference advection output files for comparison and regression testing.
+     </li>
+     </ul>
+
+  </li>
+
+  <li><tt>analysis/</tt> &mdash; 
+       Various analysis scripts for processing pyro output files
+  </li>
+
+  <li><tt>compressible/</tt> &mdash; 
+      The compressible hydrodynamics solver.  All source files specific to this solver 
+      live here.
+
+     <ul>
+     <li><tt>problems/</tt> &mdash; 
+         The problem setups for the compressible hydrodynamics solver.
+     </li>
+     <li><tt>tests/</tt> &mdash;
+         Reference compressible hydro output for regression testing.
+     </li>
+     </ul>
+
+  </li>
+
+  <li><tt>diffusion/</tt> &mdash;
+      The implicit (thermal) diffusion solver.  All diffusion-specific routines live here.
+
+     <ul>
+     <li><tt>problems/</tt> &mdash;
+         The problem setups for the diffusion solver.
+     </li>
+     <li><tt>tests/</tt> &mdash;
+         Reference diffusion output for regression testing.
+     </li>
+     </ul>
+
+  </li>
+
+  <li><tt>incompressible/</tt> &mdash;
+      The incompressible hydrodynamics solver.  All incompressible-specific routines live here.
+
+     <ul>
+     <li><tt>problems/</tt> &mdash;
+         The problem setups for the incompressible solver.
+     </li>
+     <li><tt>tests/</tt> &mdash;
+         Reference incompressible hydro output for regression testing.
+     </li>
+         
+     </ul>
+  </li>
+
+  <li><tt>mesh/</tt> &mdash;
+      The main classes that deal with 2-d cell-centered grids and the data that lives on them.
+      This is discussed extensively on the <a href="../grids/">grids</a> page.  All the solvers
+      use these classes to represent their discretized data.
+  </li>
+
+  <li><tt>multigrid/</tt> &mdash;
+      The multigrid solver for cell-centered data.  This solver is used on its own to illustrate
+      how multigrid works, and directly by the diffusion and incompressible solvers.
+
+     <ul>
+     <li><tt>problems/</tt> &mdash;
+         The problem setups for when the multigrid solver is used in a stand-alone fashion.
+     </li>
+     <li><tt>tests/</tt> &mdash;
+         Reference multigrid solver solutions (from when the multigrid solver is used stand-alone)
+         for regression testing.
+     </li>
+     </ul>
+
+  </li>
+
+  <li><tt>util/</tt> &mdash;
+      Various service modules used by the pyro routines, including runtime parameters, profiling,
+      and pretty output modes.
+  </li>
+  </ul>
+</li>
+
+</ul>
+
+</div>
+
+<!--
+<p><h3>Unit tests</h3>
+
+<p>Most python routines that define classes can be run directly
+(e.g., <tt>python patch.py</tt> for the <tt>mesh/patch.py</tt>
+routine).  This will perform some simple tests of the module and help
+demonstrate its use.  The test bits are contained at the very end of
+the file.
+-->
+
+<p><h3>Fortran</h3>
+
+<p>Fortran is used to speed up some critical portions of the code, and in often
+cases, provides more clarity than trying to write optimized python code using
+array operations in numpy.  The Fortran code seemlessly integrates into python
+using <a href="http://www.scipy.org/F2py">f2py</a>.
+
+<p>Wherever Fortran is used, we enforce the following design rule: the
+Fortran functions must be completely self-contained, with all
+information coming through the interface.  Now external dependencies
+are allowed.  Each pyro module will have (at most) a single Fortran
+file and can be compiled into a library via a single f2py command line
+invocation.
+
+<p>A single script, <tt>mk.sh</tt>, in the top-level directory will compile all
+the Fortran source.
+
+
+<p><h2>&lowast; Main driver</h2>
+
+<p>All the solvers use the same driver, the main <tt>pyro.py</tt> script.
+The flowchart for the driver is:
+
+<ul>
+  <li>parse runtime parameters</li>
+  <li>setup the grid (<tt>initialize()</tt> function from the solver)
+    <ul>
+      <li>initialize the data for the desired problem (<tt>init_data()</tt> function from the problem)</li>
+    </ul>
+  </li>
+  <li>do any necessary pre-evolution initialization (<tt>preevolve()</tt> function from the solver)
+  <li>evolve while t < tmax and n < max_steps
+    <ul>
+      <li>fill boundary conditions (<tt>fill_BC_all()</tt> method of the <tt>CellCenterData2d</tt> class)</li>
+      <li>get the timestep (<tt>timestep()</tt> function from the solver)</li>
+      <li>evolve for a single timestep (<tt>evolve()</tt> function from the solver)</li>
+      <li>t = t + dt</li>
+      <li>output (<tt>write</tt> method of the <tt>CellCenterData2d</tt> class)</li>
+      <li>visualization (<tt>dovis()</tt> function from the solver)</li>
+    </ul>
+  </li>
+  <li>call the solver's <tt>finalize()</tt> function to output any
+      useful information at the end</li>
+</ul>
+
+<p>This format is flexible enough for the advection, compressible,
+diffusion, and incompressible evolution solver.  Each solver provides
+a <tt>Simulation</tt> class with the following methods:
+<ul>
+  <li><tt>initialize</tt>: sets up the grid and solution variables</li>
+
+  <li><tt>timestep</tt>: returns the timestep for evolving the system</li>
+
+  <li><tt>preevolve</tt>: does any initialization to the fluid state
+    that is necessary before the main evolution.  Not every solver will
+    need something here.
+
+  <li><tt>evolve</tt>: advances the system of equations through a single timestep</li>
+
+  <li><tt>dovis</tt>: performs visualization of the current solution</li>
+
+  <li><tt>finalize</tt>: any final clean-ups, printing of analysis hints.</tt>
+</ul>
+
+
+<p>Each problem setup needs only provide an <tt>init_data()</tt> function
+that fills the data in the patch object.
+
+<p><h3>Running</h3>
+
+<p>All the solvers are run through the <tt>pyro.py</tt> script.  This
+takes 3 arguments: the solver name, the problem setup to run with that
+solver (this is defined in the solver's <tt>problems/</tt>
+sub-directory), and the inputs file (again, usually from the
+solver's <tt>problems/</tt> directory).
+
+<p>For example, to run the Sedov problem with the compressible solver we would do:
+<pre class="code">
+./pyro.py compressible sedov inputs.sedov
+</pre>
+This knows to look for <tt>inputs.sedov</tt>
+in <tt>compressible/problems/</tt> (alternately, you can specify the
+full path for the inputs file).
+
+<p>To run the smooth Gaussin advection problem with the advection solver, we would do:
+<pre class="code">
+./pyro.py advection smooth inputs.smooth
+</pre>
+
+<p>Any runtime parameter can also be specified on the command line,
+after the inputs file.  For example, to disable runtime visualization
+for the above run, we could do:
+<pre class="code">
+./pyro.py advection smooth inputs.smooth vis.dovis=0
+</pre>
+
+
+
+<p><h2>&lowast; Runtime options</h2>
+
+<p>The behavior of the main driver, the solver, and the problem setup
+can be controlled by runtime parameters specified in the inputs file
+(or via the command line).  Runtime parameters are grouped into
+sections, with the heading of that section enclosed in "[ .. ]".  The
+list of parameters are stored in the <tt>pyro/_defaults</tt> file,
+the <tt>_defaults</tt> files in the solver directory, and
+the <tt>_<em>problem-name</em>.defaults</tt> file in the
+solver's <tt>problem/</tt> sub-directory.  These three files are
+parsed at runtime to define the list of valid parameters.  The inputs
+file is read next and used to override the default value of any of
+these previously defined parameters.  Additionally, any parameter can
+be specified at the end of the commandline, and these will be used to
+override the defaults.  The collection of runtime parameters is stored
+in a <tt>RuntimeParameters</tt> object.  
+
+<p>The <tt>runparams.py</tt> module in <tt>util/</tt> controls access
+to the runtime parameters.  You can setup the runtime parameters,
+parse an inputs file, and access the value of a parameter
+(</tt>hydro.cfl</tt> in this example) as:
+<pre class="code">
+rp = RuntimeParameters()
+rp.load_params("inputs.test")
+...
+cfl = rp.get_param("hydro.cfl")
+</pre>
+
+
+<p>When pyro is run, the file <tt>inputs.auto</tt> is output
+containing the full list of runtime parameters, their value for the
+simulation, and the comment that was associated with them from
+the <tt>_defaults</tt> files.  This is a useful way to see what
+parameters are in play for a given simulation.
+
+<p>All solvers use the following parameters:
+
+<p><table>
+<tr><td colspan=2 class="gray"><tt>[driver]</tt></td>
+
+<tr><td><tt>max_steps</tt></td>
+    <td>the maximum number of steps in the simulation</td>
+</tr>
+
+<tr><td><tt>tmax</tt></td>
+    <td>the simulation time to evolve to</td>
+</tr>
+
+<tr><td><tt>init_tstep_factor</tt></td>
+    <td>the amount by which to shrink the first timestep.  This lets the
+        code ramp up to the CFL timestep slowly</td>
+</tr>
+
+<tr><td><tt>max_dt_change</tt></td>
+    <td>the maximum factor by which the timestep can increase from one step
+        to the next</td>
+</tr>
+
+
+<tr><td colspan=2 class="gray"><tt>[io]</tt></td>
+
+<tr><td><tt>basename</tt></td>
+    <td>the descriptive prefix to use for output files</td>
+</tr>
+
+<tr><td><tt>dt_out</tt></td>
+    <td>the interval in simulation time between writing output files</td>
+</tr>
+
+<tr><td><tt>n_out</tt></td>
+    <td>the number of timesteps between writing output files</td>
+</tr>
+
+
+<tr><td colspan=2 class="gray"><tt>[vis]</tt></td>
+
+<tr><td><tt>dovis</tt></td>
+    <td>enable (1) or disable (0) runtime visualization</td>
+</tr>
+
+<tr><td><tt>store_images</tt></td>
+    <td>if 1, write out PNG files as we do the runtime visualization</td>
+</tr>
+
+<tr><td><tt>n_out</tt></td>
+    <td>the number of timesteps between writing output files</td>
+</tr>
+
+
+<tr><td colspan=2 class="gray"><tt>[mesh]</tt></td>
+
+<tr><td><tt>xmin</tt></td>
+    <td>the physical coordinate of the lower x face of the domain</td>
+</tr>
+
+<tr><td><tt>xmax</tt></td>
+    <td>the physical coordinate of the upper x face of the domain</td>
+</tr>
+
+<tr><td><tt>ymin</tt></td>
+    <td>the physical coordinate of the lower y face of the domain</td>
+</tr>
+
+<tr><td><tt>ymax</tt></td>
+    <td>the physical coordinate of the upper y face of the domain</td>
+</tr>
+
+<tr><td><tt>xlboundary</tt></td>
+    <td>the physical description for the type of boundary at the lower x face
+        of the domain</td>
+</tr>
+
+<tr><td><tt>xrboundary</tt></td>
+    <td>the physical description for the type of boundary at the upper x face
+        of the domain</td>
+</tr>
+
+<tr><td><tt>ylboundary</tt></td>
+    <td>the physical description for the type of boundary at the lower y face
+        of the domain</td>
+</tr>
+
+<tr><td><tt>yrboundary</tt></td>
+    <td>the physical description for the type of boundary at the upper y face
+        of the domain</td>
+</tr>
+
+<tr><td><tt>nx</tt></td>
+    <td>the number zones in the x-direction</td>
+</tr>
+
+<tr><td><tt>ny</tt></td>
+    <td>the number zones in the y-direction</td>
+</tr>
+
+</table>
+
+
+<p><h2>&lowast; Utilities</h2>
+
+<p>Several simply utilities exist to operate on output files
+
+<ul>
+<li><tt>compare.py</tt>: this script takes two plot files and compares them
+    zone-by-zone and reports the differences.  This is useful for testing,
+    to see if code changes affect the solution.  Many problems have
+    stored benchmarks in their solver's <tt>tests</tt> directory.  For
+    example, to compare the current results for the incompressible
+    shear problem to the stored benchmark, we would do:
+
+    <pre class="code">./compare.py shear_128_0216.pyro incompressible/tests/shear_128_0216.pyro</pre>
+
+    <p>Differences on the order of machine precision are may arise
+    because of optimizations and compiler differences across
+    platforms.  Students should familiarize themselves with the
+    details of how computers store numbers (floating point).  An
+    excellent read
+    is <a href="http://dl.acm.org/citation.cfm?id=103163">What every
+    computer scientist should know about floating-point arithmetic</a>
+    by D. Goldberg.
+
+
+
+    </li>
+
+<li><tt>plot.py</tt>: this script uses the solver's <tt>dovis()</tt> routine
+    to plot an output file.  For example, to plot the data in the
+    file <tt>shear_128_0216.pyro</tt> from the incompressible shear problem,
+    you would do:
+
+    <pre class="code">
+    ./plot.py -o image.png incompressible shear_128_0216.pyro</pre>
+
+    where the "<tt>-o</tt>" option allows you to specify the output file name.
+
+    </li>
+
+</ul>
+
+<p><h2>&lowast; Working with output</h2>
+
+<p>pyro data can be read using the <tt>patch.read</tt> method.  The
+following sequence (done in a python session) reads in stored data
+(from the compressible Sod problem) and plots data falling on a line
+in the x direction through the y-center of the domain.
+
+<pre class="code">
+import numpy
+import pylab
+import mesh.patch as patch
+myg, myd = patch.read("sod_x_0076.pyro")
+dens = myd.get_var("density")
+pylab.plot(myg.x, dens[:,myg.ny/2])
+pylab.show()
+</pre>
+
+</div>  <!-- main -->
+
+
+
+<!-- FOOTER .............................................................. -->
+<!--#include virtual="../footer.html" -->
+
+</BODY>
+</HTML>
+
+
+

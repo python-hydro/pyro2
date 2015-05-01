@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+<HEAD>
+  <TITLE>pyro: advection examples</TITLE> 
+
+  <link rel="stylesheet" type="text/css" href="../hydro.css">
+  <link rel="stylesheet" type="text/css" href="./adv.css">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+
+</HEAD> 
+
+<body id="advection">
+
+<!-- HEADER ----------------------------------------------------------------->
+<!--#include virtual="../header2a.html" -->
+<div id="examples">
+<!--#include virtual="./header2b-adv.html" -->
+</div>
+
+<!-- MAIN -------------------------------------------------------------------->
+<div id="main">
+
+
+<P><H2>Advection examples</H2>
+
+<p><h3>smooth</h3>
+
+<p>The smooth problem initializes a Gaussian profile and advects it with
+<tt>u = v = 1</tt> through periodic boundaries for a period.  The result
+is that the final state should be identical to the initial state---any
+disagreement is our numerical error.  This is run as:
+
+<p><tt>./pyro.py advection smooth inputs.smooth</tt>
+
+<p class="center"><img src="examples/smooth.png">
+
+<p>By varying the resolution and comparing to the analytic solution, we
+can measure the convergence rate of the method.  The <tt>smooth_error.py</tt>
+script in <tt>analysis/</tt> will compare an output file to the analytic 
+solution for this problem.
+
+<p class="center"><img src="examples/smooth_converge.png">
+
+<p>The points above are the L2-norm of the absolute error for the
+smooth advection problem after 1 period with CFL=0.8.  The dashed line
+is perfect 2<sup>nd</sup> order convergence.  We see that we achieve
+nearly 2<sup>nd</sup> order convergence.  Departures from perfect
+2<sup>nd</sup> order convergence are likely due to the use of
+limiters.
+
+
+</div>  <!-- main -->
+
+
+
+<!-- FOOTER ----------------------------------------------------------------->
+<!--#include virtual="../footer.html" -->
+
+</BODY>
+</HTML>
+
+
+

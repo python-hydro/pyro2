@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+<HEAD>
+  <TITLE>pyro: download</TITLE> 
+
+  <link rel="stylesheet" type="text/css" href="../hydro.css">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+
+</HEAD> 
+
+<body id="download">
+
+<!-- HEADER .............................................................. -->
+<!--#include virtual="../header.html" -->
+
+
+<!-- MAIN ................................................................ -->
+<div id="main">
+
+<div class="warning">
+UPDATE: pyro's git repository has migrated to github.  
+</div>
+
+<p><h2>&lowast; Download</h2>
+
+<p>pyro can be obtained on the <a href="https://github.com/zingale/pyro2">pyro2 github page</a>.  The best thing to do is to fork the project there and then you can interact with
+your own git repo.  
+
+<p>If you prefer to work via the commandline, you can clone it as<a href="#foot"><sup>1</sup></a>:
+
+<br><tt>git clone https://github.com/zingale/pyro2</tt>
+
+<p>Alternately, if you setup a github account and <a href="https://help.github.com/articles/generating-ssh-keys">store your ssh key in your
+account</a>, you can clone it through ssh as:
+
+<br><tt>git clone ssh://git@github.com:/zingale/pyro2.git</tt>
+
+
+
+
+<p>When you clone the git repository, you will have a full working directory
+along with all of the development history (hidden away in the files in the
+<tt>.git/</tt> directory).  You can use this repo to keep track of
+your own changes:
+<ul>
+  <li>To commit any local changes you've made to your local repo, you
+      simply do:<br>
+      <tt>git commit filename</tt><br></li>
+
+  <li>To see the history of changes to a file, you can do:<br>
+      <tt>git log filename</tt></li>
+  <li>pyro is under active development and changing rapidly.  To get the
+changes made by the developers, you need to "pull" from the original
+repository, by doing <tt>git pull</tt> in your <tt>pyro2/</tt> directory.
+Most times this will go smoothly, but if you have made changes that conflict
+with those upstream, git may not be able to merge things on its own.  In
+this case, you will need to <a href="https://help.github.com/articles/resolving-a-merge-conflict-from-the-command-line">resolve the differences</a> by editting the 
+affected files and recommit.</li>
+</ul>
+
+<p>Note that all of the above only affects your copy of pyro.  If you 
+want to contribute changes back to the main pyro repository, you can
+use github to issue a "pull request".  This will alert the developers
+who can evaluate your changes and then pull them from your repo into
+the main git repo for pyro.
+
+<p>There is extensive documentation on git online&mdash;here's some to
+get you started:
+  <ul>
+    <li><a href="http://git-scm.com/book/en/Getting-Started-About-Version-Control">
+     git project book</a>: in-depth background on git's design and use</li>
+
+    <li><a href="http://gitref.org/">git reference</a>: a quick reference</li>
+  </ul>
+
+
+
+<p><h3>License</h3>
+
+<p>pyro is released under the BSD-3 license (<a href="_stage/pyro2/LICENSE">LICENSE</a>).
+
+<p><h3>Getting Started</h3>
+
+<p>There are a few steps to take to get things running.  You need to
+make sure you have numpy, f2py, and matplotlib installed.  On a Fedora
+system, this can be accomplished by doing:
+<p><tt>yum install numpy numpy-f2py python-matplotlib python-matplotlib-tk</tt>
+
+<p>You also need to make sure <tt>gfortran</tt> is present on you system.
+On a Fedora system, it can be installed as:
+<p><tt>yum install gcc-gfortran</tt>
+
+<p>Not
+all <a href="http://matplotlib.org/faq/usage_faq.html#what-is-a-backend">matplotlib
+backends</a> allow for the interactive plotting as pyro is run.  One
+that does is the <tt>TkAgg</tt> backend.  On recent Fedora systems,
+this appears to be the default.  Otherwise, you can make this the default
+by creating a file <tt>~/.matplotlib/matplotlibrc</tt> with the
+content:
+<pre>
+  backend: TkAgg
+</pre>
+You can check what backend is your current default in python via:
+<pre>
+  import matplotlib.pyplot
+  print matplotlib.pyplot.get_backend()
+</pre>
+
+
+<p>The remaining steps are:
+
+<ul>
+<li>Set the <tt>PYTHONPATH</tt> environment variable to point to
+the <tt>pyro2/</tt> directory.</li>
+
+<li>Build the Fortran source.  In <tt>pyro2/</tt> type
+ 
+    <p><tt>./mk.sh</tt>
+</li>
+
+<li>Run a quick test of the advection solver:
+
+   <p><tt>./pyro.py advection smooth inputs.smooth</tt>
+
+   <p>you should see a graphing window pop up with a smooth pulse
+      advecting diagonally through the periodic domain.
+</li>
+
+</ul>
+
+
+<p><h3>ChangeLog (updated automatically)</h3>
+
+<p><iframe name="iframe1" src="./ChangeLog" style="width:100%">
+ChangeLog appears here in browsers that support iframes...
+</iframe>
+
+
+<p><h3>Regression testing</h3>
+
+<p><iframe name="iframe2" src="./_stage/pyro2/tests.out" style="width:100%">
+The regression test report appears here in browsers that support iframes...
+</iframe>
+
+  
+<p><h3>Getting help</h3>
+
+<p>Information about the mailing list and a FAQ can be found on the 
+<a href="/hydro_by_example/help/">pyro help page</a>.
+
+<p>&nbsp;
+<p><hr>
+<a name="foot"><sup>1</sup></a>git is available on most linux
+ distributions through the package manager.  On fedora, do <tt>yum
+ install git</tt>
+
+
+</div>  <!-- main -->
+
+
+<!-- FOOTER .............................................................. -->
+<!--#include virtual="../footer.html" -->
+
+
+</BODY>
+</HTML>
+
+
+

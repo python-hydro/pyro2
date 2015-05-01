@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+<HEAD>
+  <TITLE>pyro: incompressible</TITLE> 
+
+  <link rel="stylesheet" type="text/css" href="../hydro.css">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+
+</HEAD> 
+
+<body id="incompressible">
+
+<!-- HEADER .............................................................. -->
+<!--#include virtual="../header.html" -->
+
+
+<!-- MAIN ................................................................ -->
+<div id="main">
+
+
+<P><H2>&lowast; Incompressible</H2>
+
+<p>pyro's incompressible solver combines the Godunov/advection features
+used in the advection and compressible solver together with multigrid
+to enforce the divergence constraint on the velocities.  Chapter 9 of the
+notes describe the basic algorithm:
+
+<div class="pdf"><a href="../CompHydroTutorial.pdf">notes on computational hydro</a></div>
+
+<p>Here we implement a cell-centered approximate projection method for
+solving the incompressible equations.  At the moment, only periodic
+BCs are supported.
+
+<p><h2>&lowast; Examples</h2>
+
+<p><h3>shear</h3>
+
+<p>The shear problem initializes a shear layer in a domain with
+doubly-periodic boundaries and looks at the development of two
+vortices as the shear layer rolls up.  This problem was explored in a
+number of papers, for example, Bell, Colella, &amp; Glaz (1989) and
+Martin &amp; Colella (2000).  This is run as:
+
+<pre class="code">./pyro incompressible shear inputs.shear</pre>
+
+<p class="center"><img src="examples/shear.png">
+
+<p>The vorticity panel (lower left) is what is usually shown in
+papers.  Note that the velocity divergence is not zero&mdash;this is
+because we are using an <em>approximate</em> projection.
+
+
+<p><h3>convergence</h3>
+
+<p>The convergence test initialize a simple velocity field on a periodic
+unit square with known analytic solution.  By evolving at a variety of
+resolutions and comparing to the analytic solution, we can measure the
+convergence rate of the algorithm.  The particular set of initial
+conditions is from Minion (1996).  Limiting can be disabled by
+adding <tt>incompressible.limiter=0</tt> to the run command.  The
+basic set of tests shown below are run as:
+
+<pre class="code">
+./pyro.py incompressible converge inputs.converge.32 vis.dovis=0
+./pyro.py incompressible converge inputs.converge.64 vis.dovis=0
+./pyro.py incompressible converge inputs.converge.128 vis.dovis=0</pre>
+
+<p>The error is measured by comparing with the analytic solution using the routine <tt>incomp_converge_error.py</tt> in <tt>analysis/</tt>.
+
+<p class="center"><img src="examples/incomp_converge.png">
+
+<p>The dashed line is second order convergence.  We see almost second
+order behavior with the limiters enabled and slightly better than
+second order with no limiting.
+
+
+<p><h2>&lowast; Exercises</h2>
+
+<p><h3>Explorations</h3>
+
+<ul>
+<li>Disable the MAC projection and run the converge problem&mdash;is
+  the method still 2nd order?</li>
+
+<li>Disable all projections&mdash;does the solution still even try to
+  preserve &nabla; &middot; U = 0?</li>
+
+<li>Experiment with what is projected.  Try projecting U<sub>t</sub>
+     to see if that makes a difference.</li>
+
+</ul>
+
+<p><h3>Extensions</h3>
+
+<ul>
+<li>Switch the final projection from a cell-centered approximate projection
+    to a nodal projection.  This will require writing a new multigrid solver
+    that operates on nodal data.</li>
+
+<li>Add viscosity to the system.  This will require doing 2 parabolic solves
+    (one for each velocity component).  These solves will look like the
+    diffusion operation, and will update the provisional velocity field.</li>
+
+<li>Switch to a variable density system.  This will require adding a 
+    mass continuity equation that is advected and switching the projections
+    to a variable-coeffient form (since &rho; now enters).</li>
+
+</ul>
+
+
+<p><h2>&lowast; Going further</h2>
+
+<p>The incompressible algorithm presented here is a simplified version
+of the projection methods used in
+the <a href="http://bender.astro.sunysb.edu/Maestro">Maestro low Mach
+number hydrodynamics code</a>.  Maestro can do variable-density
+incompressible, anelastic, and low Mach number stratified flows in
+stellar (and terrestrial) environments in close hydrostatic
+equilibrium.  You can get a copy of Maestro on
+the <a href="http://bender.astro.sunysb.edu/Maestro/download/">Maestro
+download page</a>.
+
+
+
+</div>  <!-- main -->
+
+
+
+<!-- FOOTER .............................................................. -->
+<!--#include virtual="../footer.html" -->
+
+</BODY>
+</HTML>
+
+
+

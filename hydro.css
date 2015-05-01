@@ -1,0 +1,500 @@
+H1, H2, H3, H4, H5  {font-family: "Tahoma", "Bitstream Vera Sans",
+                                        "Arial",
+                                        "Helvetica",
+                                        sans-serif;
+                           font-size: 12pt;}
+
+BODY {font-family: "Bitstream Vera Sans",
+                   "Arial",
+                   "Helvetica",
+                   sans-serif;
+                   font-size: 12pt;}
+
+/* http://static2.grsites.com/archive/textures/lgrey/lgrey091.gif */
+BODY {      background-image:url("./lgrey091.gif");}
+
+
+H1   {font: normal 32px "Tahoma", Arial, Helvetica, sans-serif;
+      text-align: center;
+      color: blue;
+      font-weight: normal;
+}
+
+H1.title {display:inline;}
+
+H2   {font: normal 22px "Tahoma", Arial, Helvetica, sans-serif;
+      color: darkmagenta;
+      font-weight: normal;
+      display: inline; 	
+      padding: 0;
+      margin: 0;}
+
+H3   {font: normal 18px "Tahoma", Arial, Helvetica, sans-serif;
+      color: blue;
+      line-height: 1.5;
+      display: inline; 	
+      padding-bottom: 0em;
+      font-weight: normal;}
+
+h2 tt {color: darkmagenta}
+
+
+/*--------------------------------------------------------------------------*/
+BODY 
+{
+   /* font-family: "Palatino Linotype", Palatino, "Book Antiqua", serif; */
+   background-color: #cccccc;
+   color: black;
+   padding: 1em;
+   text-align: center; /* IE hack -- margin-auto in container doesn't work */
+}
+
+
+/*--------------------------------------------------------------------------*/
+#header
+{
+   background-color: #ffff66;
+   color: #000000;
+   border-radius: 25px 25px 25px 25px; 
+   -moz-border-radius: 25px 25px 25px 25px; /* Mozilla */
+   -moz-box-shadow: 10px 10px 6px #888;
+   -webkit-box-shadow: 10px 10px 6px #888;
+   box-shadow: 10px 10px 6px #888;
+   padding: 1em;
+   border: 3px solid black; 
+   font-family: "Tahoma", Arial, Helvetica, sans-serif;
+   width: 900px;
+   margin-bottom: 1em;
+   margin-left: auto;
+   margin-right: auto;
+   text-align: left; /* undo IE hack to body */
+}
+
+#header2
+{
+   background-image:url('pyro_sm.png');
+   background-repeat: no-repeat;
+   background-position: 20px;
+   background-color: #000000;
+   color: #aaaaa;
+   border-radius: 25px 25px 25px 25px; 
+   -moz-border-radius: 25px 25px 25px 25px; /* Mozilla */
+   -moz-box-shadow: 10px 10px 6px #888;
+   -webkit-box-shadow: 10px 10px 6px #888;
+   box-shadow: 10px 10px 6px #888;
+   padding: 1em;
+   border: 3px solid black; 
+   font-family: "Tahoma", Arial, Helvetica, sans-serif;
+   width: 900px;
+   margin-bottom: 1em;
+   margin-left: auto;
+   margin-right: auto;
+   text-align: left; /* undo IE hack to body */
+}
+
+#header2 H1 {
+  display: inline; 
+  line-height: 95%; 
+  position: relative; 
+  left: 160px;
+  color: ffffbb;
+}
+
+#header2 h3
+{
+  font-family: "Palatino Linotype", Palatino, "Book Antiqua", serif;
+  font-style: italic;
+  font-size: medium;
+  color: white;
+  line-height: 100%;
+  position: relative;
+  left: 160px;
+}
+
+
+
+#header H1 {display: inline; line-height: 95%;}
+
+#header h2
+{
+position: relative;
+left: -0.1em;
+top: -0.6em;
+}
+
+#header p {margin: 0; 
+           padding: 0;
+           margin-top: 1em;}
+
+#header h3
+{
+   font-family: "Palatino Linotype", Palatino, "Book Antiqua", serif;
+  font-style: italic;
+  font-size: medium;
+  color: black;
+  line-height: 100%;
+}
+
+
+/*--------------------------------------------------------------------------*/
+#subhead
+{
+   background-color: #666666;
+   color: #ffffff;
+   padding-top: 0.25em;
+   padding-bottom: 0.25em;
+   padding-left: 1em;
+   padding-right: 1em;
+   width: 900px;
+   margin-bottom: 1em;
+   margin-left: auto;
+   margin-right: auto;
+   border: 3px solid black;
+   border-radius: 9px;
+   -moz-border-radius: 9px; /* Mozilla */
+   -moz-box-shadow: 10px 10px 6px #888;
+   -webkit-box-shadow: 10px 10px 6px #888;
+   box-shadow: 10px 10px 6px #888;
+   text-align: left;
+   font-family: "Tahoma", Arial, Helvetica, sans-serif;
+}
+
+#subhead2a
+{
+   background-color: #666666;
+   color: #ffffff;
+   padding-top: 0.25em;
+   padding-bottom: 0.25em;
+   padding-left: 1em;
+   padding-right: 1em;
+   width: 900px;
+   margin-bottom: 0;
+   margin-left: auto;
+   margin-right: auto;
+   border: 3px solid black;
+   border-bottom: none;
+   border-radius: 9px 9px 0 0;
+   -moz-border-radius: 9px 9px 0 0; /* Mozilla */
+   -moz-box-shadow: 10px 10px 6px #888;
+   -webkit-box-shadow: 10px 10px 6px #888;
+   box-shadow: 10px 10px 6px #888;
+   text-align: left;
+   font-family: "Tahoma", Arial, Helvetica, sans-serif;
+}
+
+#subhead2b
+{
+   background-color: #cc0000;
+   color: #ffffff;
+   padding-top: 0.25em;
+   padding-bottom: 0.25em;
+   padding-left: 1em;
+   padding-right: 1em;
+   width: 900px;
+   margin-top: 0;
+   margin-bottom: 1em;
+   margin-left: auto;
+   margin-right: auto;
+   border: 3px solid black;
+   border-top: none;
+   border-radius: 0 0 9px 9px;
+   -moz-border-radius: 9px; /* Mozilla */
+   -moz-box-shadow: 10px 10px 6px #888;
+   -webkit-box-shadow: 10px 10px 6px #888;
+   box-shadow: 10px 10px 6px #888;
+   text-align: left;
+   font-family: "Tahoma", Arial, Helvetica, sans-serif;
+}
+
+#subhead3a
+{
+   background-color: #666666;
+   color: #ffffff;
+   padding: 0;
+   width: 900px;
+   margin: 0;
+   border-radius: 9px 9px 0 0;
+   -moz-border-radius: 9px 9px 0 0; /* Mozilla */
+   text-align: left;
+   font-family: "Tahoma", Arial, Helvetica, sans-serif;
+}
+
+#subhead3b
+{
+   background-color: #cc0000;
+   color: #ffffff;
+   padding: 0;
+   width: 900px;
+   margin: 0;
+   border-radius: 0 0 9px 9px;
+   -moz-border-radius: 9px; /* Mozilla */
+   text-align: left;
+   font-family: "Tahoma", Arial, Helvetica, sans-serif;
+}
+
+#subhead h2
+{
+   color: #ffffff;
+   font-size: 11pt;
+   padding: 0;
+   margin: 0;
+}
+
+#subhead2a h2
+{
+   color: #ffffff;
+   font-size: 12pt;
+   padding: 0;
+   margin: 0;
+}
+
+#subhead2b h2
+{
+   color: #ffffff;
+   font-size: 12pt;
+   padding: 0;
+   margin: 0;
+}
+
+
+#subhead A:LINK {text-decoration: none;
+                 color: cyan;}
+#subhead A:VISITED {text-decoration: none;
+                    color: cyan;}
+#subhead A:HOVER {text-decoration: underline;
+                  color: cyan;}
+
+
+#subhead2a A:LINK {text-decoration: none;
+                   color: cyan;}
+#subhead2a A:VISITED {text-decoration: none;
+                      color: cyan;}
+#subhead2a A:HOVER {text-decoration: underline;
+                    color: cyan;}
+
+#subhead2b A:LINK {text-decoration: none;
+                   color: cyan;}
+#subhead2b A:VISITED {text-decoration: none;
+                      color: cyan;}
+#subhead2b A:HOVER {text-decoration: underline;
+                    color: cyan;}
+
+
+
+body#intro a#intronav,
+body#design a#designnav,
+body#grids a#gridnav,
+body#advection a#advectnav,
+body#compressible a#compnav,
+body#multigrid a#mgnav,
+body#diffusion a#diffnav,
+body#incompressible a#incompnav,
+body#lmatm a#lmatmnav,
+body#download a#dlnav,
+body#analysis a#annav
+{
+    color: #ffff66;
+    text-shadow: 1px 1px 2px black, 0 0 1em gray, 0 0 0.2em gray;
+}
+
+
+/*--------------------------------------------------------------------------*/
+#main {
+   background-color: #ffffff;
+   color: #000000;
+   border-radius: 25px 25px 25px 25px; 
+   -moz-border-radius: 25px 25px 25px 25px; /* Mozilla */
+   -moz-box-shadow: 10px 10px 6px #888;
+   -webkit-box-shadow: 10px 10px 6px #888;
+   box-shadow: 10px 10px 6px #888;
+   line-height: 130%;
+   padding: 1em;
+   padding-top: 0.25em;
+   width: 900px;
+   margin-left: auto;
+   margin-right: auto;
+   margin-bottom: 1em;
+   border: 3px solid black;
+   text-align: left;
+}
+
+#main p {
+   padding-top: 0.5em; 
+   padding-bottom: 0.5em;
+   margin:0
+}
+
+#main li {
+   margin-top: 0.5em;
+}
+
+
+/*--------------------------------------------------------------------------*/
+#footer
+{
+   background-color: #ffff66;
+   color: #666666;
+   border-radius: 9px 9px 9px 9px; 
+   -moz-border-radius: 9px 9px 9px 9px; /* Mozilla */
+   -moz-box-shadow: 10px 10px 6px #888;
+   -webkit-box-shadow: 10px 10px 6px #888;
+   box-shadow: 10px 10px 6px #888;
+   padding: 0.5em;
+   padding-left: 2em;
+   width: 900px;
+   margin-left: auto;
+   margin-right: auto;
+   border: 3px solid black;
+   text-align: left;
+   font-size: 10pt;
+   font-family: "Tahoma", Arial, Helvetica, sans-serif;
+}
+    
+
+
+em {color: red}
+
+
+/*--------------------------------------------------------------------------*/
+A:LINK {text-decoration: none;
+        color: darkcyan;}
+A:VISITED {text-decoration: none;
+           color: darkcyan;}
+A:HOVER {text-decoration: underline;
+         color: darkcyan;}
+
+
+/*--------------------------------------------------------------------------*/
+div.warning
+{
+  margin: 2em;
+  padding: 1em;
+  border: 1px solid orange;
+  background-color: yellow;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 10pt;
+}  
+
+/*--------------------------------------------------------------------------*/
+pre.code
+{
+  margin: 2em;
+  padding: 1em;
+  border: 1px solid blue;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 10pt;
+}
+
+
+pre.output
+{
+  margin: 2em;
+  padding: 1em;
+  border: 1px solid red;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 10pt;
+}
+
+
+/* see http://webdesignerwall.com/tutorials/css3-gradient-buttons */
+div.pdf
+{
+  display: inline-block;
+  margin: 0.5em;
+  padding: 0.5em;
+  border: 1px solid darkred;
+  background-color: #ff0000;
+  color: white
+  -webkit-border-radius: .5em; 
+  -moz-border-radius: .5em;
+  border-radius: .5em;
+  -webkit-box-shadow: 0 2px 4px rgba(0,0,0,.2);
+  -moz-box-shadow: 0 2px 4px rgba(0,0,0,.2);
+  box-shadow: 0 2px 4px rgba(0,0,0,.2);
+  text-shadow: 0 1px 1px rgba(0,0,0,.3);
+}
+
+div.pdf:hover {
+  background-color: #ee1100;
+}
+
+div.pdf A:LINK {text-decoration: none;
+                   color: white;}
+div.pdf A:VISITED {text-decoration: none;
+                      color: white;}
+div.pdf A:HOVER {text-decoration: underline;
+                    color: white;}
+
+
+div.banner 
+{
+  text-align: center;
+  margin: 2em;
+  padding: 2px;
+  border-top: 1px solid gray;
+  border-bottom: 1px solid gray;
+}
+
+div.banner img 
+{
+  padding: 0;
+  margin: 0;
+}
+
+
+div.directory
+{
+  margin-left: 0em;
+  margin-right: 2em;
+  color: gray;
+}
+
+div.directory tt
+{
+  color: green;
+}
+
+div.directory ul
+{
+  padding-left: 4em;
+}
+
+tt
+{
+  color: gray;
+}
+
+pre
+{
+  padding-left: 1em;
+  color: gray;
+}
+
+
+/*--------------------------------------------------------------------------*/
+p.center
+{
+  text-align: center;
+}
+
+
+/*--------------------------------------------------------------------------*/
+table
+{
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+td
+{
+  padding: 5px;
+  padding-left: 10px;
+}
+
+td.gray
+{
+  background-color: #dddddd;
+}

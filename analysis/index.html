@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+<HEAD>
+  <TITLE>pyro: analysis</TITLE> 
+
+  <link rel="stylesheet" type="text/css" href="../hydro.css">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+
+</HEAD> 
+
+<body id="analysis">
+
+
+<!-- HEADER .............................................................. -->
+<!--#include virtual="../header.html" -->
+
+
+<!-- MAIN ................................................................ -->
+<div id="main">
+
+
+<p><h2>&lowast; Analysis</h2>
+
+<p>In addition to the main pyro program, there are many analysis tools
+that we describe here.  Note: some problems write a report at the end
+of the simulation specifying the analysis routines that can be used
+with their data.
+
+
+<ul>
+  <li><tt>compare.py</tt>: this takes two simulation output files as 
+      input and compares zone-by-zone for exact agreement.  This is 
+      used as part of the regression testing.
+
+      <p>usage: <tt>./compare.py file1 file2</tt></li>
+
+  <li><tt>plot.py</tt>: this takes the solver name and an output file
+      as input and plots the data using the solver's <tt>dovis</tt> 
+      method.
+
+      <p>usage: <tt>./plot.py solvername file</tt></li>
+
+  <li><tt>analysis/</tt>
+    <ul>
+      <li><tt>gauss_diffusion_compare.py</tt>: this is for the 
+          diffusion solver's Gaussian diffusion problem.  It takes
+          a sequence of output files as arguments, computes the angle-average,
+          and the plots the resulting points over the analytic solution
+          for comparison with the exact result.
+
+          <p>usage: <tt>./gauss_diffusion_compare.py file*</tt></li>
+
+
+      <li><tt>incomp_converge_error.py</tt>: this is for the incompressible
+	  solver's converge problem.  This takes a single output file 
+          as input and compares the velocity field to the analytic solution,
+          reporting the L2 norm of the error.
+
+          <p>usage: <tt>./incomp_converge_error.py file</tt></li>
+
+      <li><tt>plotvar.py</tt>: this takes a single output file and a variable
+          name and plots the data for that variable.
+
+          <p>usage: <tt>./plotvar.py file variable</tt></li>
+
+      <li><tt>sedov_compare.py</tt>: this takes an output file from the 
+          compressible Sedov problem, computes the angle-average profile
+          of the solution and plots it together with the analytic data
+          (read in from <tt>cylindrical-sedov.out</tt>).
+
+          <p>usage: <tt>./sedov_compare.py file</tt></li>
+
+
+      <li><tt>smooth_error.py</tt>: this takes an output file from the
+          advection solver's smooth problem and compares to the 
+          analytic solution, outputing the L2 norm of the error.
+
+          <p>usage: <tt>./smooth_error.py file</tt></li>
+
+      <li><tt>sod_compare.py</tt>: this takes an output file from the
+          compressible Sod problem and plots a slice through the domain
+          over the analytic solution (read in from <tt>sod-exact.out</tt>).
+
+          <p>usage: <tt>./sod_compare.py file</tt></li>
+    </ul>
+
+  </li>
+
+</div>  <!-- main -->
+
+
+<!-- FOOTER .............................................................. -->
+<!--#include virtual="../footer.html" -->
+
+
+</BODY>
+</HTML>
+
+
+

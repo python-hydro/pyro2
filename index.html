@@ -1,1 +1,97 @@
-My Page
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+<HEAD>
+  <TITLE>hydro</TITLE> 
+
+  <link rel="stylesheet" type="text/css" href="./hydro.css">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+
+</HEAD> 
+
+<body id="intro">
+
+<!-- HEADER .............................................................. -->
+<!--#include virtual="./header.html" -->
+
+
+<!-- MAIN ................................................................ -->
+<div id="main">
+
+<div class="banner"> <!-- images have 1px white border -->
+<img src="images/b_advection.png" alt="advection: smooth Gaussian problem">
+<img src="images/b_compressible.png" alt="compressible: quadrant problem">
+<img src="images/b_multigrid.png" alt="multigrid test problem">
+<img src="images/b_diffusion.png" alt="diffusion: Gaussian problem">
+<img src="images/b_incompressible.png" alt="incompressible: shear problem">
+</div>
+
+<div class="warning">
+UPDATE: pyro's git repository has migrated to github.  See the <a href="./download">download page</a> for details.
+</div>
+
+<p><h2>&lowast; Introduction</h2>
+
+<p>This website is designed to provide a tutorial for students in
+computational astrophysics (and hydrodynamics in general).  We
+introduce simple implementations of some popular methods used in the
+field through the python-based code pyro (PYthon hydRO).  pyro is a teaching code,
+written to be easily understandable.  It is not parallel, and not
+meant for demanding scientific simulations&mdash;given the choice between
+performance and clarity, clarity is taken.
+
+<p>Pyro builds off of a finite-volume framework for solving PDEs.
+There are a number of solvers in pyro, allowing for the solution of
+hyperbolic (wave), parabolic (diffusion), and elliptic (Poisson)
+equations.  In particular, the following solvers are
+developed:
+<ul>
+<li>linear advection</li>
+<li>compressible hydrodynamics</li>
+<li>multigrid</li>
+<li>implicit thermal diffusion</li>
+<li>incompressible hydrodymamics</li>
+<li>low Mach number atmospheric hydrodynamics</li>
+</ul>
+Runtime visualization shows the evolution as the equations are
+solved.
+
+<p>In the pages that follow, the following format is adopted:
+<ul>
+<li>PDF notes provide the basic theory behind the methods.  References
+are cited to provide more detail.  Exercises interspersed fill in some
+of the detail. 
+
+<p><div class="pdf"><a href="./CompHydroTutorial.pdf">notes on computational hydro</a></div>
+
+
+</li>
+<li>An overview of the use of the applicable modules from pyro provided.</li>
+<li>Exercises are suggested to help students learn more about the method.</li>
+</ul>
+
+<p><h2>&lowast; Getting Started</h2>
+
+<p>pyro is under active development.  To download the current version,
+visit the <a href="download/">download page</a>.  For help, visit
+the <a href="help/">help</a> page.  
+
+<p>The best way to proceed is to follow the topics in the order they
+appear in the menu bar above, starting with the description of
+pyro's <a href="design/">design</a> and then the
+main <a href="grids/">grid</a> class, etc.
+
+
+
+</div>  <!-- main -->
+
+
+<!-- FOOTER .............................................................. -->
+<!--#include virtual="./footer.html" -->
+
+
+</BODY>
+</HTML>
+
+
+

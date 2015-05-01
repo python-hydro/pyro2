@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+<HEAD>
+  <TITLE>pyro: multigrid</TITLE> 
+
+  <link rel="stylesheet" type="text/css" href="../hydro.css">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+
+</HEAD> 
+
+<body id="multigrid">
+
+<!-- HEADER .............................................................. -->
+<!--#include virtual="../header.html" -->
+
+
+<!-- MAIN ................................................................ -->
+<div id="main">
+
+
+<P><H2>&lowast; Multigrid</H2>
+
+<p>pyro solves elliptic problems (like Laplace's equation or Poisson's
+equation) through multigrid.  This accelerates the convergence of simple
+relaxation by moving the solution down and up through a series of grids.
+Chapter 6 of the notes describe the basics of multigrid:
+
+<div class="pdf"><a href="../CompHydroTutorial.pdf">notes on computational hydro</a></div>
+
+<p>There are two solvers:
+<ul>
+<li>
+The core solver, provided in the class <tt>MG.CellCenterMG2d</tt>
+solves constant-coefficient Helmholtz problems of the form:<br>
+&nbsp;&nbsp;(&alpha; - &beta; L) &phi; = f<br>
+where L is the Laplacian operator.
+</li>
+
+<li>
+The class <tt>variable_coeff_MG.VarCoeffCCMG2d</tt> solves variable
+coefficient Poisson problems of the form:<br>
+&nbsp;&nbsp;D (&eta; G &phi;) = f<br>
+where D is the divergence and G is the gradient operator.  This class inherits
+the core functionality from <tt>MG.CellCenterMG2d</tt>.
+</li>
+</ul>
+
+<p>We simply use V-cycles in our implementation, and restrict ourselves
+to square grids with zoning a power of 2.
+
+<p>The multigrid solver is not controlled through <tt>pyro.py</tt> since
+there is no time-dependence in pure elliptic problems.  Instead, there
+are a few scripts in the <tt>multigrid/</tt> subdirectory that demonstrate
+its use.
+
+<p><h2>&lowast; Examples</h2>
+
+<p><h3>multigrid test</h3>
+
+<p>A basic multigrid test is run as:
+
+<pre class="code">./mg_test.py</pre>
+
+<p>The <tt>mg_test.py</tt> script solves a Poisson equation with a known
+analytic solution.  This particular example comes from the text "A
+Multigrid Tutorial, 2nd Ed.".  The example is:
+
+<p>u<sub>xx</sub> + u<sub>yy</sub> = 
+  -2 [(1-6x<sup>2</sup>)y<sup>2</sup>(1-y<sup>2</sup>) + 
+      (1-6y<sup>2</sup>)x<sup>2</sup>(1-x<sup>2</sup>)]
+<br>on [0,1] &times; [0,1] with u = 0 on the boundary.
+
+<p>The solution to this is shown below.
+
+<p class="center"><img src="examples/mg_test.png">
+
+<p>Since this has a known analytic solution:
+
+<p>u(x,y) = (x<sup>2</sup> - x<sup>4</sup>)(y<sup>4</sup> - y<sup>2</sup>)
+
+<p>We can assess the convergence of our solver by running at a variety
+of resolutions and computing the norm of the error with respect to the
+analytic solution.  This is shown below:
+
+<p class="center"><img src="examples/mg_converge.png">
+
+<p>The dotted line is 2<sup>nd</sup> order convergence, which we match
+perfectly.
+
+<p>The movie below shows the smoothing at each level to realize this solution:
+<p class="center"><iframe width="640" height="360" src="http://www.youtube.com/embed/h9MUgwJvr-g?rel=0" frameborder="0" allowfullscreen></iframe>
+
+
+<p><h3>projection</h3>
+
+<p>Another example that uses multigrid to extract the divergence free part
+of a velocity field is run as:
+
+<pre class="code">./project-periodic.py</pre>
+
+<p>Given a vector field, U, we can decompose it into a divergence free
+part, U<sup>d</sup>, and the gradient of a scalar, &phi;:
+
+<p>U = U<sup>d</sup> + &nabla; &phi;
+
+<p>We can project out the divergence free part by taking the divergence,
+leading to an elliptic equation:
+
+<p>&nabla;<sup>2</sup> &phi; = &nabla; &middot; U
+
+<p>The <tt>project-periodic.py</tt> script starts with a divergence
+free velocity field, adds to it the gradient of a scalar, and then
+projects it to recover the divergence free part.  The error can found
+by comparing the original velocity field to the recovered field.  The 
+results are shown below:
+
+<p class="center"><img src="examples/proj_sm.png">
+
+<p>Left is the original u velocity, middle is the modified field after
+adding the gradient of the scalar, and right is the recovered field.
+
+<p><h2>&lowast; Exercises</h2>
+
+<p><h3>Explorations</h3>
+
+<ul>
+  <li>Try doing just smoothing, no multigrid.  Show that it still
+      converges second order if you use enough iterations, but that
+      the amount of time needed to get a solution is much greater.</li>
+</ul>
+
+
+<p><h3>Extensions</h3>
+
+<ul>
+  <li>Implement inhomogeneous dirichlet boundary conditions</li>
+
+  <li>Add a different bottom solver to the multigrid algorithm</li>
+
+  <li>Make the multigrid solver work for non-square domains</li>
+</ul>
+
+
+
+
+</div>  <!-- main -->
+
+
+
+<!-- FOOTER .............................................................. -->
+<!--#include virtual="../footer.html" -->
+
+</BODY>
+</HTML>
+
+
+

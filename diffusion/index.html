@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+<HEAD>
+  <TITLE>pyro: diffusion</TITLE> 
+
+  <link rel="stylesheet" type="text/css" href="../hydro.css">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+
+</HEAD> 
+
+<body id="diffusion">
+
+<!-- HEADER .............................................................. -->
+<!--#include virtual="../header.html" -->
+
+
+<!-- MAIN ................................................................ -->
+<div id="main">
+
+
+<P><H2>&lowast; Diffusion</H2>
+
+<p>pyro solves the constant-conductivity diffusion equation implicitly
+using multigrid.  Chapter 7 of the notes below summarize the methodology:
+
+<div class="pdf"><a href="../CompHydroTutorial.pdf">notes on computational hydro</a></div>
+
+
+<p>The diffusion equation is discretized using
+Crank-Nicolson differencing (this makes the diffusion operator
+time-centered) and the implicit discretization forms a Helmholtz
+equation solved by the pyro multigrid class.
+
+The main parameters that affect this solver are:
+
+<p><table>
+<tr><td colspan=2 class="gray"><tt>[driver]</tt></td>
+<tr><td><tt>cfl</tt></td>
+    <td>the "CFL" number for the diffusion equation.  Since we are 
+        doing an implicit discretization, this is the multiple of the
+        explicit timestep to take.)</td>
+</tr>
+<tr><td colspan=2 class="gray"><tt>[diffusion]</tt></td>
+<tr><td><tt>k</tt></td>
+    <td>the conductivity (constant)</td>
+</tr>
+</table>
+
+
+
+<p><h2>&lowast; Examples</h2>
+
+<p><h3>gaussian</h3>
+
+<p>The gaussian problem initializes a strongly peaked Gaussian centered
+in the domain.  The analytic solution for this shows that the profile
+remains a Gaussian, with a changing width and peak.  This allows us
+to compare our solver to the analytic solution.  This is run as:
+
+<pre class="code">./pyro.py diffusion gaussian inputs.gaussian</pre>
+
+<p class="center"><img src="examples/gauss_diffusion.png">
+
+<p>The above figure shows the scalar field after diffusing
+significantly from its initial strongly peaked state.  We can compare
+to the analytic solution by making radial profiles of the scalar.  The
+plot below shows the numerical solution (red points) overplotted on
+the analytic solution (solid curves) for several different times.  The
+y-axis is restricted in range to bring out the detail at later times.
+
+<p class="center"><img src="examples/gauss_diffusion_compare.png">
+
+<p><h2>&lowast; Exercises</h2>
+
+<p>The best way to learn these methods is to play with them yourself.
+The exercises below are suggestions for explorations and features
+to add to the advection solver.
+
+<p><h3>Explorations</h3>
+
+<ul>
+<li>Test the convergence of the solver by varying the resolution
+and comparing to the analytic solution.
+</li>
+
+<li>How does the solution error change as the CFL number is increased
+well above 1?
+</li>
+
+<li>Setup some other profiles and experiment with different boundary
+conditions.</li>
+
+</ul>
+
+
+<p><h3>Extensions</h3>
+
+<ul>
+
+<li>Switch from Crank-Nicolson (2<sup>nd</sup> order in time) to backward's
+Euler (1<sup>st</sup> order in time) and compare the solution and 
+convergence.  This should only require changing the source term and
+coefficents used in setting up the multigrid solve.  It does not
+require changes to the multigrid solver itself.</li>
+
+
+<li>Implement a non-constant coefficient diffusion solver&mdash;note: this will
+require improving the multigrid solver.</li>
+
+</ul>
+
+
+</div>  <!-- main -->
+
+
+
+<!-- FOOTER .............................................................. -->
+<!--#include virtual="../footer.html" -->
+
+</BODY>
+</HTML>
+
+
+
