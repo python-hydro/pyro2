@@ -39,7 +39,7 @@ def bc_setup(rp):
     return bc, bc_xodd, bc_yodd
     
 
-class NullSimulation:
+class NullSimulation(object):
 
     def __init__(self, solver_name, problem_name, rp, timers=None):
         """

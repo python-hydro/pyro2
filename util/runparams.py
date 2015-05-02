@@ -65,7 +65,7 @@ def is_float(string):
     else: return 1
 
 
-class RuntimeParameters:
+class RuntimeParameters(object):
 
     def __init__ (self):
         """

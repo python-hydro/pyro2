@@ -186,5 +186,4 @@ with their data.
 
   Join the mailing list to say up-to-date:
 
-  http://bender.astro.sunysb.edu/mailman/listinfo/pyro-help
-
+  https://groups.google.com/forum/#!forum/pyro-code

@@ -13,7 +13,7 @@ import multigrid.test_mg_vc_dirichlet as test_mg_vc_dirichlet
 import multigrid.test_mg_vc_periodic as test_mg_vc_periodic
 import multigrid.test_mg_general_inhomogeneous as test_mg_general_inhomogeneous
 
-class test:
+class test(object):
     def __init__(self, solver, problem, inputs, options):
         self.solver = solver
         self.problem = problem
