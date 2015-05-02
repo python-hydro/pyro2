@@ -341,7 +341,7 @@ class Grid2d:
         return np.sqrt(self.dx*self.dy*
                        np.sum((d[self.ilo:self.ihi+1,self.jlo:self.jhi+1]**2).flat))
     
-    
+
     def coarse_like(self, N):
         """
         return a new grid object coarsened by a factor n, but with
