@@ -229,11 +229,15 @@ class Mask(object):
 
     def __init__(self, nx, ny, ng):
 
-        self.ilo = ng
-        self.ihi = ng+nx-1
+        self.nx = nx
+        self.ny = ny
+        self.ng = ng
+        
+        ilo = ng
+        ihi = ng+nx-1
 
-        self.jlo = ng
-        self.jhi = ng+ny-1
+        jlo = ng
+        jhi = ng+ny-1
         
         # just the interior cells
         self.valid = self._mask_array(nx, ny, ng)
