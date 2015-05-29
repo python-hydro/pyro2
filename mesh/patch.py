@@ -225,6 +225,21 @@ class BCObject(object):
         return string
 
 
+class ArrayIndex(object):
+
+    def __init__(self, d=None, grid=None):
+        self.d = d
+        self.g = grid
+
+    def ip(self, shift, buf=0):
+        return self.d[self.g.ilo-buf+shift:self.g.ihi+1+buf+shift,
+                      self.g.jlo-buf:self.g.jhi+1+buf]
+
+    def jp(self, shift, buf=0):
+        return self.d[self.g.ilo-buf:self.g.ihi+1+buf,
+                      self.g.jlo-buf+shift:self.g.jhi+1+buf+shift]
+    
+
 class Mask(object):
 
     def __init__(self, nx, ny, ng):

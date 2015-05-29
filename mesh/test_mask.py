@@ -50,3 +50,12 @@ print "roll method: ", time.time() - start
 print np.max(np.abs(da3[m.valid] - da[m.valid]))
 
 
+# ArrayIndex
+start = time.time()
+ai = patch.ArrayIndex(d=a, grid=myg)
+da4 = myg.scratch_array()
+da4[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = ai.ip(1) - ai.ip(-1)
+
+print "ArrayIndex method: ", time.time() - start
+
+print np.max(np.abs(da4[m.valid] - da[m.valid]))
