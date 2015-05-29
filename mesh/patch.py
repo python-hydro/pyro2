@@ -226,11 +226,18 @@ class BCObject(object):
 
 
 class ArrayIndex(object):
-
+    """ a class that wraps the data region of a single array (d)
+        and allows us to easily do array operations like d[i+1,j]
+        using the ip() method. """
+    
     def __init__(self, d=None, grid=None):
         self.d = d
         self.g = grid
 
+    def v(self, buf=0):
+        return self.d[self.g.ilo-buf:self.g.ihi+1+buf,
+                      self.g.jlo-buf:self.g.jhi+1+buf]
+        
     def ip(self, shift, buf=0):
         return self.d[self.g.ilo-buf+shift:self.g.ihi+1+buf+shift,
                       self.g.jlo-buf:self.g.jhi+1+buf]

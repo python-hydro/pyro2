@@ -3,7 +3,7 @@ import patch
 import numpy as np
 import time
 
-n = 512
+n = 1024
 
 myg = patch.Grid2d(n,2*n, xmax=1.0, ymax=2.0)
 
@@ -39,7 +39,6 @@ print "mask method: ", time.time() - start
 
 print np.max(np.abs(da2 - da))
 
-
 # roll -- note, we roll in the opposite direction of the shift
 start = time.time()
 da3 = myg.scratch_array()
@@ -54,7 +53,9 @@ print np.max(np.abs(da3[m.valid] - da[m.valid]))
 start = time.time()
 ai = patch.ArrayIndex(d=a, grid=myg)
 da4 = myg.scratch_array()
-da4[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = ai.ip(1) - ai.ip(-1)
+da4i = patch.ArrayIndex(d=da4, grid=myg)
+
+da4i.v()[:,:] = ai.ip(1) - ai.ip(-1)
 
 print "ArrayIndex method: ", time.time() - start
 
