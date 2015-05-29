@@ -33,7 +33,7 @@ coding:
 
      ---
 
-     ok... do a.ip1(ng) to get the array at i+1, with ng ghost cells
+     ok... do a.ip(1, ng=ng) to get the array at i+1, with ng ghost cells
      and a.valid() is just the interior region
      
 
