@@ -234,6 +234,42 @@ class ArrayIndexer(object):
         self.d = d
         self.g = grid
 
+    def __add__(self, other):
+        return ArrayIndexer(d=self.d + other.d, grid=self.g)
+
+    def __sub__(self, other):
+        return ArrayIndexer(d=self.d - other.d, grid=self.g)
+
+    def __mul__(self, other):
+        if isinstance(other, ArrayIndexer):
+            return ArrayIndexer(d=self.d * other.d, grid=self.g)
+        else:
+            return ArrayIndexer(d=self.d * other, grid=self.g)            
+
+    def __rmul__(self, other):
+        return self.__mul__(other)
+        
+    def __truediv__(self, other):
+        return ArrayIndexer(d=self.d / other.d, grid=self.g)
+
+    def __div__(self, other):
+        if isinstance(other, ArrayIndexer):        
+            return ArrayIndexer(d=self.d / other.d, grid=self.g)
+        else:
+            return ArrayIndexer(d=self.d / other, grid=self.g)            
+
+    def __rdiv__(self, other):
+        if isinstance(other, ArrayIndexer):        
+            return ArrayIndexer(d=other.d / self.d, grid=self.g)
+        else:
+            return ArrayIndexer(d=other / self.d, grid=self.g)            
+        
+    def __pow__(self, other):
+        return ArrayIndexer(d=self.d**2, grid=self.g)
+
+    def __abs__(self):
+        return ArrayIndexer(d=np.abs(self.d), grid=self.g)    
+    
     def v(self, buf=0):
         return self.d[self.g.ilo-buf:self.g.ihi+1+buf,
                       self.g.jlo-buf:self.g.jhi+1+buf]
@@ -246,7 +282,16 @@ class ArrayIndexer(object):
         return self.d[self.g.ilo-buf:self.g.ihi+1+buf,
                       self.g.jlo-buf+shift:self.g.jhi+1+buf+shift]
     
+    def sqrt(self):
+        return ArrayIndexer(d=np.sqrt(self.d), grid=self.g)
 
+    def min(self):
+        return self.d.min()
+
+    def copy(self):
+        return ArrayIndexer(d=self.d.copy(), grid=self.g)
+    
+    
 class Mask(object):
 
     def __init__(self, nx, ny, ng):
