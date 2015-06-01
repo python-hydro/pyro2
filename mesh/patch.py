@@ -225,6 +225,14 @@ class BCObject(object):
         return string
 
 
+def _buf_split(b):
+    try: blo, bhi = b
+    except:
+        blo = b
+        bhi = b
+    return blo, bhi
+
+
 class ArrayIndexer(object):
     """ a class that wraps the data region of a single array (d)
         and allows us to easily do array operations like d[i+1,j]
@@ -233,7 +241,9 @@ class ArrayIndexer(object):
     def __init__(self, d=None, grid=None):
         self.d = d
         self.g = grid
-
+        s = d.shape
+        self.c = len(s)
+        
     def __add__(self, other):
         return ArrayIndexer(d=self.d + other.d, grid=self.g)
 
@@ -270,18 +280,38 @@ class ArrayIndexer(object):
     def __abs__(self):
         return ArrayIndexer(d=np.abs(self.d), grid=self.g)    
     
-    def v(self, buf=0):
-        return self.d[self.g.ilo-buf:self.g.ihi+1+buf,
-                      self.g.jlo-buf:self.g.jhi+1+buf]
-        
-    def ip(self, shift, buf=0):
-        return self.d[self.g.ilo-buf+shift:self.g.ihi+1+buf+shift,
-                      self.g.jlo-buf:self.g.jhi+1+buf]
+    def v(self, buf=0, n=0):
+        blo, bhi = _buf_split(buf)
 
-    def jp(self, shift, buf=0):
-        return self.d[self.g.ilo-buf:self.g.ihi+1+buf,
-                      self.g.jlo-buf+shift:self.g.jhi+1+buf+shift]
-    
+        if self.c == 2:
+            return self.d[self.g.ilo-blo:self.g.ihi+1+bhi,
+                          self.g.jlo-blo:self.g.jhi+1+bhi]
+        else:
+            return self.d[self.g.ilo-blo:self.g.ihi+1+bhi,
+                          self.g.jlo-blo:self.g.jhi+1+bhi,n]                    
+            
+        
+    def ip(self, shift, buf=0, n=0):
+        blo, bhi = _buf_split(buf)
+        
+        if self.c == 2:
+            return self.d[self.g.ilo-blo+shift:self.g.ihi+1+bhi+shift,
+                          self.g.jlo-blo:self.g.jhi+1+bhi]
+        else:
+            return self.d[self.g.ilo-blo+shift:self.g.ihi+1+bhi+shift,
+                          self.g.jlo-blo:self.g.jhi+1+bhi,n]
+
+        
+    def jp(self, shift, buf=0, n=0):
+        blo, bhi = _buf_split(buf)
+
+        if self.c == 2:
+            return self.d[self.g.ilo-blo:self.g.ihi+1+bhi,
+                          self.g.jlo-blo+shift:self.g.jhi+1+bhi+shift]
+        else:
+            return self.d[self.g.ilo-blo:self.g.ihi+1+bhi,
+                          self.g.jlo-blo+shift:self.g.jhi+1+bhi+shift,n]
+        
     def sqrt(self):
         return ArrayIndexer(d=np.sqrt(self.d), grid=self.g)
 

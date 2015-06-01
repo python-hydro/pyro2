@@ -127,6 +127,8 @@ Updating U_{i,j}:
 import compressible.eos as eos
 import compressible.interface_f as interface_f
 import mesh.reconstruction_f as reconstruction_f
+import mesh.patch as patch
+
 from util import msg
 
 def unsplitFluxes(my_data, rp, vars, tc, dt):
@@ -250,9 +252,6 @@ def unsplitFluxes(my_data, rp, vars, tc, dt):
     # left and right primitive variable states
     tm_states = tc.timer("interfaceStates")
     tm_states.begin()
-
-    V_l = myg.scratch_array(vars.nvar)
-    V_r = myg.scratch_array(vars.nvar)
 
     V_l, V_r = interface_f.states(1, myg.qx, myg.qy, myg.ng, myg.dx, dt,
                                   vars.nvar,
@@ -457,14 +456,17 @@ def unsplitFluxes(my_data, rp, vars, tc, dt):
 
     tm_riem.begin()
 
-    F_x = riemannFunc(1, myg.qx, myg.qy, myg.ng,
+    _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
                       vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener,
                       gamma, U_xl, U_xr)
 
-    F_y = riemannFunc(2, myg.qx, myg.qy, myg.ng,
+    _fy = riemannFunc(2, myg.qx, myg.qy, myg.ng,
                       vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener,
                       gamma, U_yl, U_yr)
 
+    F_x = patch.ArrayIndexer(d=_fx, grid=myg)
+    F_y = patch.ArrayIndexer(d=_fy, grid=myg)
+    
     tm_riem.end()
 
     #=========================================================================
@@ -472,54 +474,41 @@ def unsplitFluxes(my_data, rp, vars, tc, dt):
     #=========================================================================
     cvisc = rp.get_param("compressible.cvisc")
 
-    (avisco_x, avisco_y) = interface_f.artificial_viscosity( 
+    _ax, _ay = interface_f.artificial_viscosity( 
         myg.qx, myg.qy, myg.ng, myg.dx, myg.dy, 
         cvisc, u.d, v.d)
 
+    avisco_x = patch.ArrayIndexer(d=_ax, grid=myg)
+    avisco_y = patch.ArrayIndexer(d=_ay, grid=myg)    
+    
+    
+    b = (2,1)
+    
     # F_x = F_x + avisco_x * (U(i-1,j) - U(i,j))
-    F_x[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,vars.idens] += \
-        avisco_x[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2]* \
-          (dens.d[myg.ilo-3:myg.ihi+1,myg.jlo-2:myg.jhi+2] - \
-           dens.d[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2])
+    F_x.v(buf=b, n=vars.idens)[:,:] += \
+        avisco_x.v(buf=b)*(dens.ip(-1, buf=b) - dens.v(buf=b))
 
-    F_x[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,vars.ixmom] += \
-        avisco_x[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2]* \
-          (xmom.d[myg.ilo-3:myg.ihi+1,myg.jlo-2:myg.jhi+2] - \
-           xmom.d[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2])
+    F_x.v(buf=b, n=vars.ixmom)[:,:] += \
+        avisco_x.v(buf=b)*(xmom.ip(-1, buf=b) - xmom.v(buf=b))
 
-    F_x[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,vars.iymom] += \
-        avisco_x[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2]* \
-          (ymom.d[myg.ilo-3:myg.ihi+1,myg.jlo-2:myg.jhi+2] - \
-           ymom.d[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2])
+    F_x.v(buf=b, n=vars.iymom)[:,:] += \
+        avisco_x.v(buf=b)*(ymom.ip(-1, buf=b) - ymom.v(buf=b))
 
-    F_x[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,vars.iener] += \
-        avisco_x[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2]* \
-          (ener.d[myg.ilo-3:myg.ihi+1,myg.jlo-2:myg.jhi+2] - \
-           ener.d[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2])
-
+    F_x.v(buf=b, n=vars.iener)[:,:] += \
+        avisco_x.v(buf=b)*(ener.ip(-1, buf=b) - ener.v(buf=b))
 
     # F_y = F_y + avisco_y * (U(i,j-1) - U(i,j))
-    F_y[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,vars.idens] += \
-        avisco_y[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2]* \
-          (dens.d[myg.ilo-2:myg.ihi+2,myg.jlo-3:myg.jhi+1] - \
-           dens.d[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2])
+    F_y.v(buf=b, n=vars.idens)[:,:] += \
+        avisco_y.v(buf=b)*(dens.jp(-1, buf=b) - dens.v(buf=b))
 
-    F_y[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,vars.ixmom] += \
-        avisco_y[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2]* \
-          (xmom.d[myg.ilo-2:myg.ihi+2,myg.jlo-3:myg.jhi+1] - \
-           xmom.d[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2])
+    F_y.v(buf=b, n=vars.ixmom)[:,:] += \
+        avisco_y.v(buf=b)*(xmom.jp(-1, buf=b) - xmom.v(buf=b))
 
-    F_y[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,vars.iymom] += \
-        avisco_y[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2]* \
-          (ymom.d[myg.ilo-2:myg.ihi+2,myg.jlo-3:myg.jhi+1] - \
-           ymom.d[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2])
+    F_y.v(buf=b, n=vars.iymom)[:,:] += \
+        avisco_y.v(buf=b)*(ymom.jp(-1, buf=b) - ymom.v(buf=b))
 
-    F_y[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,vars.iener] += \
-        avisco_y[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2]* \
-          (ener.d[myg.ilo-2:myg.ihi+2,myg.jlo-3:myg.jhi+1] - \
-           ener.d[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2])
-
-
+    F_y.v(buf=b, n=vars.iener)[:,:] += \
+        avisco_y.v(buf=b)*(ener.jp(-1, buf=b) - ener.v(buf=b))
 
     tm_flux.end()
 

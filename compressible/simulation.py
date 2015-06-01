@@ -150,11 +150,9 @@ class Simulation(NullSimulation):
         for n in range(self.vars.nvar):
             var = self.cc_data.get_var_by_index(n)
 
-            var.d[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] += \
-                dtdx*(Flux_x[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,n] - \
-                      Flux_x[myg.ilo+1:myg.ihi+2,myg.jlo  :myg.jhi+1,n]) + \
-                dtdy*(Flux_y[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,n] - \
-                      Flux_y[myg.ilo  :myg.ihi+1,myg.jlo+1:myg.jhi+2,n])
+            var.v()[:,:] += \
+                dtdx*(Flux_x.v(n=n) - Flux_x.ip(1, n=n)) + \
+                dtdy*(Flux_y.v(n=n) - Flux_y.jp(1, n=n))
 
         # gravitational source terms
         ymom += 0.5*dt*(dens + old_dens)*grav
