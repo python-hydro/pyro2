@@ -37,8 +37,7 @@ def compare(myg1, myd1, myg2, myd2):
         d1 = myd1.get_var(myd1.vars[n])
         d2 = myd2.get_var(myd2.vars[n])
 
-        err = numpy.max(numpy.abs(d1[myg1.ilo:myg1.ihi+1,myg1.jlo:myg1.jhi+1] -
-                                  d2[myg2.ilo:myg2.ihi+1,myg2.jlo:myg2.jhi+1]))
+        err = numpy.max(numpy.abs(d1.v() - d2.v()))
 
         print("%20s error = %20.10g" % (myd1.vars[n], err))
 
