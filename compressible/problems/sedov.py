@@ -2,7 +2,7 @@ from __future__ import print_function
 
 import sys
 import mesh.patch as patch
-import numpy
+import numpy as np
 from util import msg
 import math
 
@@ -52,49 +52,36 @@ def init_data(my_data, rp):
     # from this.
     nsub = 4
 
-    i = my_data.grid.ilo
-    while i <= my_data.grid.ihi:
+    dist = np.sqrt((my_data.grid.x2d - xctr)**2 +
+                   (my_data.grid.y2d - yctr)**2)
 
-        j = my_data.grid.jlo
-        while j <= my_data.grid.jhi:
 
-            dist = numpy.sqrt((my_data.grid.x[i] - xctr)**2 +
-                              (my_data.grid.y[j] - yctr)**2)
+    p = 1.e-5
+    ener.d[:,:] = p/(gamma - 1.0)
+    
+    for i, j in np.transpose(np.nonzero(dist < 2.0*r_init)):
 
-            if (dist < 2.0*r_init):
-                pzone = 0.0
+        pzone = 0.0
 
-                ii = 0
-                while ii < nsub:
+        for ii in range(nsub):
+            for jj in range(nsub):
 
-                    jj = 0
-                    while jj < nsub:
+                xsub = my_data.grid.xl[i] + (my_data.grid.dx/nsub)*(ii + 0.5)
+                ysub = my_data.grid.yl[j] + (my_data.grid.dy/nsub)*(jj + 0.5)
 
-                        xsub = my_data.grid.xl[i] + (my_data.grid.dx/nsub)*(ii + 0.5)
-                        ysub = my_data.grid.yl[j] + (my_data.grid.dy/nsub)*(jj + 0.5)
+                dist = np.sqrt((xsub - xctr)**2 + 
+                                  (ysub - yctr)**2)
+                
+                if dist <= r_init:
+                    p = (gamma - 1.0)*E_sedov/(pi*r_init*r_init)
+                else:
+                    p = 1.e-5
 
-                        dist = numpy.sqrt((xsub - xctr)**2 + \
-                                          (ysub - yctr)**2)
+                pzone += p
 
-                        if dist <= r_init:
-                            p = (gamma - 1.0)*E_sedov/(pi*r_init*r_init)
-                        else:
-                            p = 1.e-5
-
-                        pzone += p
-
-                        jj += 1
-                    ii += 1
-
-                p = pzone/(nsub*nsub)
-            else:
-                p = 1.e-5
-
-            ener.d[i,j] = p/(gamma - 1.0)
-
-            j += 1
-        i += 1
-
+        p = pzone/(nsub*nsub)
+            
+        ener.d[i,j] = p/(gamma - 1.0)
 
 
 def finalize():
