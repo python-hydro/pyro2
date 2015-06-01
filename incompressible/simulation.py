@@ -334,11 +334,11 @@ class Simulation(NullSimulation):
 
         proj_type = self.rp.get_param("incompressible.proj_type")
 
-        if (proj_type == 1):
+        if proj_type == 1:
             u[:,:] -= (dt*advect_x[:,:] + dt*gradp_x[:,:])
             v[:,:] -= (dt*advect_y[:,:] + dt*gradp_y[:,:])
 
-        elif (proj_type == 2):
+        elif proj_type == 2:
             u[:,:] -= dt*advect_x[:,:]
             v[:,:] -= dt*advect_y[:,:]
 
@@ -395,11 +395,11 @@ class Simulation(NullSimulation):
         v[:,:] -= dt*gradphi_y
 
         # store gradp for the next step
-        if (proj_type == 1):
+        if proj_type == 1:
             gradp_x[:,:] += gradphi_x[:,:]
             gradp_y[:,:] += gradphi_y[:,:]
 
-        elif (proj_type == 2):
+        elif proj_type == 2:
             gradp_x[:,:] = gradphi_x[:,:]
             gradp_y[:,:] = gradphi_y[:,:]
 
