@@ -290,53 +290,7 @@ class ArrayIndexer(object):
 
     def copy(self):
         return ArrayIndexer(d=self.d.copy(), grid=self.g)
-    
-    
-class Mask(object):
-
-    def __init__(self, nx, ny, ng):
-
-        self.nx = nx
-        self.ny = ny
-        self.ng = ng
         
-        ilo = ng
-        ihi = ng+nx-1
-
-        jlo = ng
-        jhi = ng+ny-1
-        
-        # just the interior cells
-        self.valid = self._mask_array(nx, ny, ng)
-
-        # shifts in x
-        self.ip1 = self._mask_array(nx, ny, ng)
-        self.im1 = self._mask_array(nx, ny, ng)
-        self.ip2 = self._mask_array(nx, ny, ng)
-        self.im2 = self._mask_array(nx, ny, ng)
-
-        arrays = [self.valid, self.ip1, self.im1, self.ip2, self.im2]
-        shifts = [0, 1, -1, 2, -2]
-
-        for a, s in zip(arrays, shifts):
-            a[ilo+s:ihi+1+s,jlo:jhi+1] = True
-        
-        # shifts in y
-        self.jp1 = self._mask_array(nx, ny, ng)
-        self.jm1 = self._mask_array(nx, ny, ng)
-        self.jp2 = self._mask_array(nx, ny, ng)
-        self.jm2 = self._mask_array(nx, ny, ng)        
-        
-        arrays = [self.jp1, self.jm1, self.jp2, self.jm2]
-        shifts = [1, -1, 2, -2]
-
-        for a, s in zip(arrays, shifts):
-            a[ilo:ihi+1,jlo+s:jhi+1+s] = True
-
-            
-    def _mask_array(self, nx, ny, ng):
-        return np.zeros((nx+2*ng, ny+2*ng), dtype=bool)
-    
     
 class Grid2d():
     """
