@@ -21,7 +21,7 @@ class test(object):
         self.options = options
 
 
-def do_tests(build, out_file):
+def do_tests(build, out_file, do_standalone=True):
 
     # make sure we've built stuff
     print("build = ", build)
@@ -33,9 +33,9 @@ def do_tests(build, out_file):
     tests = []
     tests.append(test("advection", "smooth", "inputs.smooth", opts))
     tests.append(test("compressible", "quad", "inputs.quad", opts))
-    tests.append(test("diffusion", "gaussian", "inputs.gaussian", opts))
-    tests.append(test("incompressible", "shear", "inputs.shear", opts))
-    tests.append(test("lm_atm", "bubble", "inputs.bubble", opts))
+    #tests.append(test("diffusion", "gaussian", "inputs.gaussian", opts))
+    #tests.append(test("incompressible", "shear", "inputs.shear", opts))
+    #tests.append(test("lm_atm", "bubble", "inputs.bubble", opts))
 
 
     results = {}
@@ -47,17 +47,18 @@ def do_tests(build, out_file):
 
 
     # standalone tests
-    err = test_mg.test_poisson_dirichlet(256, comp_bench=True, verbose=0)
-    results["mg_poisson_dirichlet"] = err
+    if do_standalone:
+        err = test_mg.test_poisson_dirichlet(256, comp_bench=True, verbose=0)
+        results["mg_poisson_dirichlet"] = err
 
-    err = test_mg_vc_dirichlet.test_vc_poisson_dirichlet(512, comp_bench=True, verbose=0)
-    results["mg_vc_poisson_dirichlet"] = err
+        err = test_mg_vc_dirichlet.test_vc_poisson_dirichlet(512, comp_bench=True, verbose=0)
+        results["mg_vc_poisson_dirichlet"] = err
 
-    err = test_mg_vc_periodic.test_vc_poisson_periodic(512, comp_bench=True, verbose=0)
-    results["mg_vc_poisson_periodic"] = err
+        err = test_mg_vc_periodic.test_vc_poisson_periodic(512, comp_bench=True, verbose=0)
+        results["mg_vc_poisson_periodic"] = err
 
-    err = test_mg_general_inhomogeneous.test_general_poisson_inhomogeneous(512, comp_bench=True, verbose=0)
-    results["mg_general_poisson_inhomogeneous"] = err    
+        err = test_mg_general_inhomogeneous.test_general_poisson_inhomogeneous(512, comp_bench=True, verbose=0)
+        results["mg_general_poisson_inhomogeneous"] = err    
 
 
     failed = 0

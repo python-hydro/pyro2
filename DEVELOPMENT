@@ -1,5 +1,12 @@
 This is a simple list of the improvements we wish to make to pyro.
 
+ArrayIndexer:
+
+  -- have get_var return an ArrayIndexer object
+  -- overload +,-,/,* in ArrayIndexer to work on the data region only
+     (checking the grid is the same), return ArryaIndexer
+  -- have scratch_array return an ArrayIndexer object
+
 
 coding:
 

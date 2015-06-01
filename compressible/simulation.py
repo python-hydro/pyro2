@@ -252,8 +252,7 @@ class Simulation(NullSimulation):
             ax = axes.flat[n]
 
             v = fields[n]
-            img = ax.imshow(np.transpose(v[myg.ilo:myg.ihi+1,
-                                           myg.jlo:myg.jhi+1]),
+            img = ax.imshow(np.transpose(v.v()),
                         interpolation="nearest", origin="lower",
                         extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 

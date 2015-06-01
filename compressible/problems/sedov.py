@@ -26,9 +26,9 @@ def init_data(my_data, rp):
     # initialize the components, remember, that ener here is rho*eint
     # + 0.5*rho*v**2, where eint is the specific internal energy
     # (erg/g)
-    dens[:,:] = 1.0
-    xmom[:,:] = 0.0
-    ymom[:,:] = 0.0
+    dens.d[:,:] = 1.0
+    xmom.d[:,:] = 0.0
+    ymom.d[:,:] = 0.0
 
     E_sedov = 1.0
 
@@ -90,7 +90,7 @@ def init_data(my_data, rp):
             else:
                 p = 1.e-5
 
-            ener[i,j] = p/(gamma - 1.0)
+            ener.d[i,j] = p/(gamma - 1.0)
 
             j += 1
         i += 1

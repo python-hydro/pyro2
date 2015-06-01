@@ -2,6 +2,8 @@ from __future__ import print_function
 
 import sys
 
+import numpy as np
+
 import mesh.patch as patch
 from util import msg
 
@@ -58,40 +60,34 @@ def init_data(my_data, rp):
     
     myg = my_data.grid
 
-    for i in range(myg.ilo, myg.ihi+1):
-        for j in range(myg.jlo, myg.jhi+1):
-
-            if myg.x[i] >= cx and myg.y[j] >= cy:
-
-                # quadrant 1
-                dens[i,j] = r1
-                xmom[i,j] = r1*u1
-                ymom[i,j] = r1*v1
-                ener[i,j] = p1/(gamma - 1.0) + 0.5*r1*(u1*u1 + v1*v1)
+    iq1 = np.logical_and(myg.x2d >= cx, myg.y2d >= cy)
+    iq2 = np.logical_and(myg.x2d < cx,  myg.y2d >= cy)
+    iq3 = np.logical_and(myg.x2d < cx,  myg.y2d < cy)
+    iq4 = np.logical_and(myg.x2d >= cx, myg.y2d < cy)    
+    
+    # quadrant 1
+    dens.d[iq1] = r1
+    xmom.d[iq1] = r1*u1
+    ymom.d[iq1] = r1*v1
+    ener.d[iq1] = p1/(gamma - 1.0) + 0.5*r1*(u1*u1 + v1*v1)
                 
-            elif myg.x[i] < cx and myg.y[j] >= cy:
+    # quadrant 2
+    dens.d[iq2] = r2
+    xmom.d[iq2] = r2*u2
+    ymom.d[iq2] = r2*v2
+    ener.d[iq2] = p2/(gamma - 1.0) + 0.5*r2*(u2*u2 + v2*v2)
 
-                # quadrant 2
-                dens[i,j] = r2
-                xmom[i,j] = r2*u2
-                ymom[i,j] = r2*v2
-                ener[i,j] = p2/(gamma - 1.0) + 0.5*r2*(u2*u2 + v2*v2)
+    # quadrant 3
+    dens.d[iq3] = r3
+    xmom.d[iq3] = r3*u3
+    ymom.d[iq3] = r3*v3
+    ener.d[iq3] = p3/(gamma - 1.0) + 0.5*r3*(u3*u3 + v3*v3)
 
-            elif myg.x[i] < cx and myg.y[j] < cy:
-
-                # quadrant 3
-                dens[i,j] = r3
-                xmom[i,j] = r3*u3
-                ymom[i,j] = r3*v3
-                ener[i,j] = p3/(gamma - 1.0) + 0.5*r3*(u3*u3 + v3*v3)
-
-            elif myg.x[i] >= cx and myg.y[j] < cy:
-
-                # quadrant 4
-                dens[i,j] = r4
-                xmom[i,j] = r4*u4
-                ymom[i,j] = r4*v4
-                ener[i,j] = p4/(gamma - 1.0) + 0.5*r4*(u4*u4 + v4*v4)
+    # quadrant 4
+    dens.d[iq4] = r4
+    xmom.d[iq4] = r4*u4
+    ymom.d[iq4] = r4*v4
+    ener.d[iq4] = p4/(gamma - 1.0) + 0.5*r4*(u4*u4 + v4*v4)
 
     
 def finalize():
