@@ -150,7 +150,7 @@ class Simulation(NullSimulation):
         for n in range(self.vars.nvar):
             var = self.cc_data.get_var_by_index(n)
 
-            var[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] += \
+            var.d[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] += \
                 dtdx*(Flux_x[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,n] - \
                       Flux_x[myg.ilo+1:myg.ihi+2,myg.jlo  :myg.jhi+1,n]) + \
                 dtdy*(Flux_y[myg.ilo  :myg.ihi+1,myg.jlo  :myg.jhi+1,n] - \

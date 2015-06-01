@@ -624,7 +624,7 @@ class CellCenterData2d():
             The array of data corresponding to the index
 
         """
-        return self.data[n,:,:]
+        return ArrayIndexer(d=self.data[n,:,:], grid=self.grid)
 
 
     def get_aux(self, keyword):
