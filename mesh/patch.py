@@ -225,7 +225,7 @@ class BCObject(object):
         return string
 
 
-class ArrayIndex(object):
+class ArrayIndexer(object):
     """ a class that wraps the data region of a single array (d)
         and allows us to easily do array operations like d[i+1,j]
         using the ip() method. """
@@ -605,7 +605,7 @@ class CellCenterData2d():
 
         """
         n = self.vars.index(name)
-        return self.data[n,:,:]
+        return ArrayIndexer(d=self.data[n,:,:], grid=self.grid)
 
 
     def get_var_by_index(self, n):

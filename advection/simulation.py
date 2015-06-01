@@ -82,7 +82,7 @@ class Simulation(NullSimulation):
 
         dens = self.cc_data.get_var("density")
 
-        dens[0:qx-1,0:qy-1] = dens[0:qx-1,0:qy-1] + \
+        dens.d[0:qx-1,0:qy-1] = dens.d[0:qx-1,0:qy-1] + \
                    dtdx*(flux_x[0:qx-1,0:qy-1] - flux_x[1:qx,0:qy-1]) + \
                    dtdy*(flux_y[0:qx-1,0:qy-1] - flux_y[0:qx-1,1:qy])
 
@@ -97,7 +97,7 @@ class Simulation(NullSimulation):
 
         myg = self.cc_data.grid
 
-        plt.imshow(np.transpose(dens[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
+        plt.imshow(np.transpose(dens.v()),
                    interpolation="nearest", origin="lower",
                    extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 

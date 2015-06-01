@@ -27,11 +27,8 @@ def init_data(my_data, rp):
     xctr = 0.5*(xmin + xmax)
     yctr = 0.5*(ymin + ymax)
 
-    for i in range(my_data.grid.ilo, my_data.grid.ihi+1):
-        for j in range(my_data.grid.jlo, my_data.grid.jhi+1):
-
-            dens[i,j] = 1.0 + numpy.exp(-60.0*((my_data.grid.x[i]-xctr)**2 + \
-                                               (my_data.grid.y[j]-yctr)**2))
+    dens.d[:,:] = 1.0 + numpy.exp(-60.0*((my_data.grid.x2d-xctr)**2 + 
+                                         (my_data.grid.y2d-yctr)**2))
 
 
 def finalize():

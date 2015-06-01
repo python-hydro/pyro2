@@ -77,29 +77,29 @@ def unsplitFluxes(my_data, rp, dt, scalar_name):
     else:
         limitFunc = reconstruction_f.limit4
 
-    ldelta_a = limitFunc(1, a, qx, qy, my_grid.ng)
+    ldelta_a = limitFunc(1, a.d, qx, qy, my_grid.ng)
     a_x = my_grid.scratch_array()
 
     # upwind
     if u < 0:
         # a_x[i,j] = a[i,j] - 0.5*(1.0 + cx)*ldelta_a[i,j]
-        a_x[:,:] = a[:,:] - 0.5*(1.0 + cx)*ldelta_a[:,:]
+        a_x[:,:] = a.d[:,:] - 0.5*(1.0 + cx)*ldelta_a[:,:]
     else:
         # a_x[i,j] = a[i-1,j] + 0.5*(1.0 - cx)*ldelta_a[i-1,j]
-        a_x[1:,:] = a[0:qx-1,:] + 0.5*(1.0 - cx)*ldelta_a[0:qx-1,:]
+        a_x[1:,:] = a.d[0:qx-1,:] + 0.5*(1.0 - cx)*ldelta_a[0:qx-1,:]
 
 
     # y-direction
-    ldelta_a = limitFunc(2, a, qx, qy, my_grid.ng)
+    ldelta_a = limitFunc(2, a.d, qx, qy, my_grid.ng)
     a_y = my_grid.scratch_array()
 
     # upwind
     if v < 0:
         # a_y[i,j] = a[i,j] - 0.5*(1.0 + cy)*ldelta_a[i,j]
-        a_y[:,:] = a[:,:] - 0.5*(1.0 + cy)*ldelta_a[:,:]
+        a_y[:,:] = a.d[:,:] - 0.5*(1.0 + cy)*ldelta_a[:,:]
     else:
         # a_y[i,j] = a[i,j-1] + 0.5*(1.0 - cy)*ldelta_a[i,j-1]
-        a_y[:,1:] = a[:,0:qy-1] + 0.5*(1.0 - cy)*ldelta_a[:,0:qy-1]
+        a_y[:,1:] = a.d[:,0:qy-1] + 0.5*(1.0 - cy)*ldelta_a[:,0:qy-1]
 
 
     # compute the transverse flux differences.  The flux is just (u a)
