@@ -311,6 +311,16 @@ class ArrayIndexer(object):
         else:
             return self.d[self.g.ilo-blo:self.g.ihi+1+bhi,
                           self.g.jlo-blo+shift:self.g.jhi+1+bhi+shift,n]
+
+    def ip_jp(self, ishift, jshift, buf=0, n=0):
+        blo, bhi = _buf_split(buf)
+
+        if self.c == 2:
+            return self.d[self.g.ilo-blo+ishift:self.g.ihi+1+bhi+ishift,
+                          self.g.jlo-blo+jshift:self.g.jhi+1+bhi+jshift]
+        else:
+            return self.d[self.g.ilo-blo+ishift:self.g.ihi+1+bhi+ishift,
+                          self.g.jlo-blo+jshift:self.g.jhi+1+bhi+jshift,n]
         
     def sqrt(self):
         return ArrayIndexer(d=np.sqrt(self.d), grid=self.g)
@@ -425,11 +435,13 @@ class Grid2d():
         and number of ghostcells as the parent grid
         """
         if nvar == 1:
-            return np.zeros((self.qx, self.qy), dtype=np.float64)
+            _tmp = np.zeros((self.qx, self.qy), dtype=np.float64)
+            return ArrayIndexer(d=_tmp, grid=self)
         else:
-            return np.zeros((self.qx, self.qy, nvar), dtype=np.float64)
+            _tmp = np.zeros((self.qx, self.qy, nvar), dtype=np.float64)
+            return ArrayIndexer(d=_tmp, grid=self)
 
-    
+        
     def norm(self, d):
         """
         find the norm of the quantity d defined on the same grid, in the 

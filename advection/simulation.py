@@ -82,9 +82,8 @@ class Simulation(NullSimulation):
 
         dens = self.cc_data.get_var("density")
 
-        dens.d[0:qx-1,0:qy-1] = dens.d[0:qx-1,0:qy-1] + \
-                   dtdx*(flux_x[0:qx-1,0:qy-1] - flux_x[1:qx,0:qy-1]) + \
-                   dtdy*(flux_y[0:qx-1,0:qy-1] - flux_y[0:qx-1,1:qy])
+        dens.v()[:,:] = dens.v() + dtdx*(flux_x.v() - flux_x.ip(1)) + \
+                                   dtdy*(flux_y.v() - flux_y.jp(1))
 
 
     def dovis(self):
