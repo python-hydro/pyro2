@@ -226,11 +226,15 @@ class BCObject(object):
 
 
 def _buf_split(b):
-    try: blo, bhi = b
+    try: bxlo, bxhi, bylo, byhi = b
     except:
-        blo = b
-        bhi = b
-    return blo, bhi
+        try: blo, bhi = b
+        except:
+            blo = b
+            bhi = b
+        bxlo = bylo = blo
+        bxhi = byhi = bhi
+    return bxlo, bxhi, bylo, byhi
 
 
 class ArrayIndexer(object):
@@ -293,14 +297,14 @@ class ArrayIndexer(object):
         return self.ip_jp(0, shift, buf=buf, n=n, s=s)
 
     def ip_jp(self, ishift, jshift, buf=0, n=0, s=1):
-        blo, bhi = _buf_split(buf)
+        bxlo, bxhi, bylo, byhi = _buf_split(buf)
 
         if self.c == 2:
-            return self.d[self.g.ilo-blo+ishift:self.g.ihi+1+bhi+ishift:s,
-                          self.g.jlo-blo+jshift:self.g.jhi+1+bhi+jshift:s]
+            return self.d[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
+                          self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s]
         else:
-            return self.d[self.g.ilo-blo+ishift:self.g.ihi+1+bhi+ishift:s,
-                          self.g.jlo-blo+jshift:self.g.jhi+1+bhi+jshift:s,n]
+            return self.d[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
+                          self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s,n]
 
     def norm(self, n=0):
         """
@@ -452,6 +456,16 @@ class Grid2d():
                       xmin=self.xmin, xmax=self.xmax,
                       ymin=self.ymin, ymax=self.ymax)
 
+    
+    def fine_like(self, N):
+        """
+        return a new grid object finer by a factor n, but with
+        all the other properties the same
+        """
+        return Grid2d(self.nx*N, self.ny*N, ng=self.ng,
+                      xmin=self.xmin, xmax=self.xmax,
+                      ymin=self.ymin, ymax=self.ymax)
+    
 
     def __str__(self):
         """ print out some basic information about the grid object """
@@ -902,7 +916,7 @@ class CellCenterData2d():
         fData = self.get_var(varname)
 
         # allocate an array for the coarsely gridded data
-        cG = Grid2d(fG.nx/2, fG.ny/2, ng=fG.ng)
+        cG = fG.coarse_like(2)
         cData = cG.scratch_array()
 
         # fill the coarse array with the restricted data -- just
@@ -957,7 +971,7 @@ class CellCenterData2d():
         cData = self.get_var(varname)
 
         # allocate an array for the finely gridded data
-        fG = Grid2d(cG.nx*2, cG.ny*2, ng=cG.ng)
+        fG = cG.fine_like(2)
         fData = fG.scratch_array()
 
         # slopes for the coarse data

@@ -61,7 +61,7 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
         # we only need to do this once.  We need to hold the original
         # coeffs in our grid so we can do a ghost cell fill.
         c = self.grids[self.nlevels-1].get_var("coeffs")
-        c[:,:] = coeffs.copy()
+        c.d[:,:] = coeffs.d.copy()
 
         self.grids[self.nlevels-1].fill_BC("coeffs")
 
@@ -77,7 +77,7 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
             c_patch = self.grids[n]
 
             coeffs_c = c_patch.get_var("coeffs")
-            coeffs_c[:,:] = f_patch.restrict("coeffs")
+            coeffs_c.v()[:,:] = f_patch.restrict("coeffs").v()
 
             self.grids[n].fill_BC("coeffs")
 
@@ -152,34 +152,18 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
 
             for n, (ix, iy) in enumerate([(0,0), (1,1), (1,0), (0,1)]):
 
-                denom = (
-                    eta_x[myg.ilo+1+ix:myg.ihi+2:2,
-                          myg.jlo+iy  :myg.jhi+1:2] +
-                    #
-                    eta_x[myg.ilo+ix  :myg.ihi+1:2,
-                          myg.jlo+iy  :myg.jhi+1:2] +
-                    #
-                    eta_y[myg.ilo+ix  :myg.ihi+1:2,
-                          myg.jlo+1+iy:myg.jhi+2:2] +
-                    #
-                    eta_y[myg.ilo+ix  :myg.ihi+1:2,
-                          myg.jlo+iy  :myg.jhi+1:2])
+                denom = (eta_x.ip_jp(1+ix, iy, s=2) + eta_x.ip_jp(ix, iy, s=2) +
+                         eta_y.ip_jp(ix, 1+iy, s=2) + eta_y.ip_jp(ix, iy, s=2) )
 
-                v[myg.ilo+ix:myg.ihi+1:2,myg.jlo+iy:myg.jhi+1:2] = (
-                    -f[myg.ilo+ix:myg.ihi+1:2,myg.jlo+iy:myg.jhi+1:2] +
+                v.ip_jp(ix, iy, s=2)[:,:] = ( -f.ip_jp(ix, iy, s=2) +
                     # eta_{i+1/2,j} phi_{i+1,j}
-                    eta_x[myg.ilo+1+ix:myg.ihi+2:2,myg.jlo+iy  :myg.jhi+1:2] *
-                    v[myg.ilo+1+ix:myg.ihi+2:2,myg.jlo+iy  :myg.jhi+1:2] +
+                    eta_x.ip_jp(1+ix, iy, s=2) * v.ip_jp(1+ix, iy, s=2) +
                     # eta_{i-1/2,j} phi_{i-1,j}
-                    eta_x[myg.ilo+ix:myg.ihi+1:2,myg.jlo+iy:myg.jhi+1:2]*
-                    v[myg.ilo-1+ix:myg.ihi  :2,myg.jlo+iy  :myg.jhi+1:2] +
+                    eta_x.ip_jp(ix, iy, s=2) * v.ip_jp(-1+ix, iy, s=2) +
                     # eta_{i,j+1/2} phi_{i,j+1}
-                    eta_y[myg.ilo+ix:myg.ihi+1:2,myg.jlo+1+iy:myg.jhi+2:2]*
-                    v[myg.ilo+ix  :myg.ihi+1:2,myg.jlo+1+iy:myg.jhi+2:2] +
+                    eta_y.ip_jp(ix, 1+iy, s=2) * v.ip_jp(ix, 1+iy, s=2) +
                     # eta_{i,j-1/2} phi_{i,j-1}
-                    eta_y[myg.ilo+ix:myg.ihi+1:2,myg.jlo+iy:myg.jhi+1:2]*
-                    v[myg.ilo+ix  :myg.ihi+1:2,myg.jlo-1+iy:myg.jhi  :2]) / denom
-
+                    eta_y.ip_jp(ix, iy, s=2) * v.ip_jp(ix, -1+iy, s=2) ) / denom
 
                 if n == 1 or n == 3:
                     self.grids[level].fill_BC("v")
@@ -224,21 +208,12 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
         # r = f - L_eta phi
         L_eta_phi = (
             # eta_{i+1/2,j} (phi_{i+1,j} - phi_{i,j})
-            eta_x[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1]* \
-            (v[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
-             v[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1]) - \
+            eta_x.ip(1)*(v.ip(1) - v.v()) - \
             # eta_{i-1/2,j} (phi_{i,j} - phi_{i-1,j})
-            eta_x[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1]* \
-            (v[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1] -
-             v[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1]) + \
+            eta_x.v()*(v.v() - v.ip(-1)) + \
             # eta_{i,j+1/2} (phi_{i,j+1} - phi_{i,j})
-            eta_y[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2]* \
-            (v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -  # y-diff
-             v[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1]) - \
+            eta_y.jp(1)*(v.jp(1) - v.v()) - \
             # eta_{i,j-1/2} (phi_{i,j} - phi_{i,j-1})
-            eta_y[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1]* \
-            (v[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1] -
-             v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ]) )
+            eta_y.v()*(v.v() - v.jp(-1)) )
 
-        r[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
-            f[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] - L_eta_phi
+        r.v()[:,:] = f.v() - L_eta_phi

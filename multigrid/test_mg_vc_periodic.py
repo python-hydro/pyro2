@@ -42,7 +42,6 @@ from util import msg
 def true(x,y):
     return np.sin(2.0*np.pi*x)*np.sin(2.0*np.pi*y)
 
-
 # the coefficients
 def alpha(x,y):
     return 2.0 + np.cos(2.0*np.pi*x)*np.cos(2.0*np.pi*y)
@@ -77,7 +76,7 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
     d.create()
 
     c = d.get_var("c")
-    c[:,:] = alpha(g.x2d, g.y2d)
+    c.d[:,:] = alpha(g.x2d, g.y2d)
 
     # check whether the RHS sums to zero (necessary for periodic data)
     rhs = f(g.x2d, g.y2d)
@@ -116,9 +115,9 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
     # solution.  We subtract off the average of phi from the MG
     # solution (we do the same for the true solution to put them on
     # the same footing)
-    e = v - np.sum(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1])/(nx*ny) - (b - np.sum(b[a.ilo:a.ihi+1,a.jlo:a.jhi+1])/(nx*ny))
+    e = v - np.sum(v.v())/(nx*ny) - (b - np.sum(b[a.ilo:a.ihi+1,a.jlo:a.jhi+1])/(nx*ny))
 
-    enorm = a.soln_grid.norm(e)
+    enorm = e.norm()
     print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
           (enorm, a.relative_error, a.num_cycles))
 
@@ -131,7 +130,7 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
 
         plt.subplot(121)
 
-        plt.imshow(np.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
+        plt.imshow(np.transpose(v.v()),
                    interpolation="nearest", origin="lower",
                    extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
@@ -144,7 +143,7 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
 
         plt.subplot(122)
 
-        plt.imshow(np.transpose(e[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
+        plt.imshow(np.transpose(e.v()), 
                    interpolation="nearest", origin="lower",
                    extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
