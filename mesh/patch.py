@@ -284,36 +284,13 @@ class ArrayIndexer(object):
         return ArrayIndexer(d=np.abs(self.d), grid=self.g)    
     
     def v(self, buf=0, n=0, s=1):
-        blo, bhi = _buf_split(buf)
-
-        if self.c == 2:
-            return self.d[self.g.ilo-blo:self.g.ihi+1+bhi:s,
-                          self.g.jlo-blo:self.g.jhi+1+bhi:s]
-        else:
-            return self.d[self.g.ilo-blo:self.g.ihi+1+bhi:s,
-                          self.g.jlo-blo:self.g.jhi+1+bhi:s,n]                    
-            
+        return self.ip_jp(0, 0, buf=buf, n=n, s=s)
         
     def ip(self, shift, buf=0, n=0, s=1):
-        blo, bhi = _buf_split(buf)
-        
-        if self.c == 2:
-            return self.d[self.g.ilo-blo+shift:self.g.ihi+1+bhi+shift:s,
-                          self.g.jlo-blo:self.g.jhi+1+bhi:s]
-        else:
-            return self.d[self.g.ilo-blo+shift:self.g.ihi+1+bhi+shift:s,
-                          self.g.jlo-blo:self.g.jhi+1+bhi:s,n]
-
+        return self.ip_jp(shift, 0, buf=buf, n=n, s=s)
         
     def jp(self, shift, buf=0, n=0, s=1):
-        blo, bhi = _buf_split(buf)
-
-        if self.c == 2:
-            return self.d[self.g.ilo-blo:self.g.ihi+1+bhi:s,
-                          self.g.jlo-blo+shift:self.g.jhi+1+bhi+shift:s]
-        else:
-            return self.d[self.g.ilo-blo:self.g.ihi+1+bhi:s,
-                          self.g.jlo-blo+shift:self.g.jhi+1+bhi+shift:s,n]
+        return self.ip_jp(0, shift, buf=buf, n=n, s=s)
 
     def ip_jp(self, ishift, jshift, buf=0, n=0, s=1):
         blo, bhi = _buf_split(buf)
