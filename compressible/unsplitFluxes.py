@@ -438,7 +438,7 @@ def unsplitFluxes(my_data, rp, vars, tc, dt):
         U_yr.v(buf=b, n=n)[:,:] += \
             - 0.5*dtdx*(F_x.ip(1, buf=b, n=n) - F_x.v(buf=b, n=n))
         
-        tm_transverse.end()
+    tm_transverse.end()
 
 
     #=========================================================================
