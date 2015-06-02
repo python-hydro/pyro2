@@ -280,47 +280,59 @@ class ArrayIndexer(object):
     def __abs__(self):
         return ArrayIndexer(d=np.abs(self.d), grid=self.g)    
     
-    def v(self, buf=0, n=0):
+    def v(self, buf=0, n=0, s=1):
         blo, bhi = _buf_split(buf)
 
         if self.c == 2:
-            return self.d[self.g.ilo-blo:self.g.ihi+1+bhi,
-                          self.g.jlo-blo:self.g.jhi+1+bhi]
+            return self.d[self.g.ilo-blo:self.g.ihi+1+bhi:s,
+                          self.g.jlo-blo:self.g.jhi+1+bhi:s]
         else:
-            return self.d[self.g.ilo-blo:self.g.ihi+1+bhi,
-                          self.g.jlo-blo:self.g.jhi+1+bhi,n]                    
+            return self.d[self.g.ilo-blo:self.g.ihi+1+bhi:s,
+                          self.g.jlo-blo:self.g.jhi+1+bhi:s,n]                    
             
         
-    def ip(self, shift, buf=0, n=0):
+    def ip(self, shift, buf=0, n=0, s=1):
         blo, bhi = _buf_split(buf)
         
         if self.c == 2:
-            return self.d[self.g.ilo-blo+shift:self.g.ihi+1+bhi+shift,
-                          self.g.jlo-blo:self.g.jhi+1+bhi]
+            return self.d[self.g.ilo-blo+shift:self.g.ihi+1+bhi+shift:s,
+                          self.g.jlo-blo:self.g.jhi+1+bhi:s]
         else:
-            return self.d[self.g.ilo-blo+shift:self.g.ihi+1+bhi+shift,
-                          self.g.jlo-blo:self.g.jhi+1+bhi,n]
+            return self.d[self.g.ilo-blo+shift:self.g.ihi+1+bhi+shift:s,
+                          self.g.jlo-blo:self.g.jhi+1+bhi:s,n]
 
         
-    def jp(self, shift, buf=0, n=0):
+    def jp(self, shift, buf=0, n=0, s=1):
         blo, bhi = _buf_split(buf)
 
         if self.c == 2:
-            return self.d[self.g.ilo-blo:self.g.ihi+1+bhi,
-                          self.g.jlo-blo+shift:self.g.jhi+1+bhi+shift]
+            return self.d[self.g.ilo-blo:self.g.ihi+1+bhi:s,
+                          self.g.jlo-blo+shift:self.g.jhi+1+bhi+shift:s]
         else:
-            return self.d[self.g.ilo-blo:self.g.ihi+1+bhi,
-                          self.g.jlo-blo+shift:self.g.jhi+1+bhi+shift,n]
+            return self.d[self.g.ilo-blo:self.g.ihi+1+bhi:s,
+                          self.g.jlo-blo+shift:self.g.jhi+1+bhi+shift:s,n]
 
-    def ip_jp(self, ishift, jshift, buf=0, n=0):
+    def ip_jp(self, ishift, jshift, buf=0, n=0, s=1):
         blo, bhi = _buf_split(buf)
 
         if self.c == 2:
-            return self.d[self.g.ilo-blo+ishift:self.g.ihi+1+bhi+ishift,
-                          self.g.jlo-blo+jshift:self.g.jhi+1+bhi+jshift]
+            return self.d[self.g.ilo-blo+ishift:self.g.ihi+1+bhi+ishift:s,
+                          self.g.jlo-blo+jshift:self.g.jhi+1+bhi+jshift:s]
         else:
-            return self.d[self.g.ilo-blo+ishift:self.g.ihi+1+bhi+ishift,
-                          self.g.jlo-blo+jshift:self.g.jhi+1+bhi+jshift,n]
+            return self.d[self.g.ilo-blo+ishift:self.g.ihi+1+bhi+ishift:s,
+                          self.g.jlo-blo+jshift:self.g.jhi+1+bhi+jshift:s,n]
+
+    def norm(self, n=0):
+        """
+        find the norm of the quantity (index n) defined on the same grid,
+        in the domain's valid region
+
+        """
+        if self.c == 2:
+            return self.g.norm(self.d)
+        else:
+            return self.g.norm(self.d[:,:,n])
+        
         
     def sqrt(self):
         return ArrayIndexer(d=np.sqrt(self.d), grid=self.g)
