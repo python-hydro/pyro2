@@ -107,16 +107,11 @@ class Simulation(NullSimulation):
 
         # form the RHS: f = phi + (dt/2) k L phi  (where L is the Laplacian)
         f = mg.soln_grid.scratch_array()
-        f[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
-           phi[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] + 0.5*dt*k * \
-           ((phi[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] +
-             phi[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1] -
-             2.0*phi[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx**2 +
-            (phi[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] +
-             phi[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ] -
-             2.0*phi[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dy**2)
+        f.v()[:,:] = phi.v() + 0.5*dt*k * (
+            (phi.ip(1) + phi.ip(-1) - 2.0*phi.v())/myg.dx**2 +
+            (phi.jp(1) + phi.jp(-1) - 2.0*phi.v())/myg.dy**2)
 
-        mg.init_RHS(f)
+        mg.init_RHS(f.d)
 
         # initial guess is zeros
         mg.init_zeros()
@@ -126,7 +121,7 @@ class Simulation(NullSimulation):
         #mg.smooth(mg.nlevels-1,100)
 
         # update the solution
-        phi[:,:] = mg.get_solution()
+        phi.v()[:,:] = mg.get_solution().v()
 
 
     def dovis(self):
