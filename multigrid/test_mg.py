@@ -70,7 +70,7 @@ def test_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     e = v - b
 
     print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
-          (a.soln_grid.norm(e), a.relative_error, a.num_cycles))
+          (e.norm(), a.relative_error, a.num_cycles))
 
 
     # plot it

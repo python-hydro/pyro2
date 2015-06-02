@@ -248,7 +248,10 @@ class ArrayIndexer(object):
         return ArrayIndexer(d=self.d + other.d, grid=self.g)
 
     def __sub__(self, other):
-        return ArrayIndexer(d=self.d - other.d, grid=self.g)
+        if isinstance(other, ArrayIndexer):        
+            return ArrayIndexer(d=self.d - other.d, grid=self.g)
+        else:
+            return ArrayIndexer(d=self.d - other, grid=self.g)            
 
     def __mul__(self, other):
         if isinstance(other, ArrayIndexer):
@@ -518,7 +521,7 @@ class CellCenterData2d():
 
     This last step actually allocates the storage for the state
     variables.  Once this is done, the patch is considered to be
-    locked.  New variables cannot be added.
+   locked.  New variables cannot be added.
     """
 
     def __init__ (self, grid, dtype=np.float64):
@@ -922,29 +925,15 @@ class CellCenterData2d():
         fData = self.get_var(varname)
 
         # allocate an array for the coarsely gridded data
-        ng_c = fG.ng
-        nx_c = fG.nx/2
-        ny_c = fG.ny/2
-
-        cData = np.zeros((2*ng_c+nx_c, 2*ng_c+ny_c), dtype=self.dtype)
-
-        ilo_c = ng_c
-        ihi_c = ng_c+nx_c-1
-
-        jlo_c = ng_c
-        jhi_c = ng_c+ny_c-1
+        cG = Grid2d(fG.nx/2, fG.ny/2, ng=fG.ng)
+        cData = cG.scratch_array()
 
         # fill the coarse array with the restricted data -- just
         # average the 4 fine cells into the corresponding coarse cell
         # that encompasses them.
-
-        # This is done by shifting our view into the fData array and
-        # using a stride of 2 in the indexing.
-        cData[ilo_c:ihi_c+1,jlo_c:jhi_c+1] = \
-            0.25*(fData[fG.ilo  :fG.ihi+1:2,fG.jlo  :fG.jhi+1:2] +
-                  fData[fG.ilo+1:fG.ihi+1:2,fG.jlo  :fG.jhi+1:2] +
-                  fData[fG.ilo  :fG.ihi+1:2,fG.jlo+1:fG.jhi+1:2] +
-                  fData[fG.ilo+1:fG.ihi+1:2,fG.jlo+1:fG.jhi+1:2])
+        cData.v()[:,:] = \
+            0.25*(fData.v(s=2) + fData.ip(1, s=2) +
+                  fData.jp(1, s=2) + fData.ip_jp(1, 1, s=2))
 
         return cData
 
@@ -990,57 +979,22 @@ class CellCenterData2d():
         cG = self.grid
         cData = self.get_var(varname)
 
-        # allocate an array for the coarsely gridded data
-        ng_f = cG.ng
-        nx_f = cG.nx*2
-        ny_f = cG.ny*2
-
-        fData = np.zeros((2*ng_f+nx_f, 2*ng_f+ny_f), dtype=self.dtype)
-
-        ilo_f = ng_f
-        ihi_f = ng_f+nx_f-1
-
-        jlo_f = ng_f
-        jhi_f = ng_f+ny_f-1
+        # allocate an array for the finely gridded data
+        fG = Grid2d(cG.nx*2, cG.ny*2, ng=cG.ng)
+        fData = fG.scratch_array()
 
         # slopes for the coarse data
         m_x = cG.scratch_array()
-        m_x[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] = \
-            0.5*(cData[cG.ilo+1:cG.ihi+2,cG.jlo:cG.jhi+1] -
-                 cData[cG.ilo-1:cG.ihi  ,cG.jlo:cG.jhi+1])
+        m_x.v()[:,:] = 0.5*(cData.ip(1) - cData.ip(-1))
 
         m_y = cG.scratch_array()
-        m_y[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] = \
-            0.5*(cData[cG.ilo:cG.ihi+1,cG.jlo+1:cG.jhi+2] -
-                 cData[cG.ilo:cG.ihi+1,cG.jlo-1:cG.jhi  ])
+        m_y.v()[:,:] = 0.5*(cData.jp(1) - cData.jp(-1))
 
-
-        # fill the '1' children
-        fData[ilo_f:ihi_f+1:2,jlo_f:jhi_f+1:2] = \
-            cData[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
-            - 0.25*m_x[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
-            - 0.25*m_y[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1]
-
-
-        # fill the '2' children
-        fData[ilo_f+1:ihi_f+1:2,jlo_f:jhi_f+1:2] = \
-            cData[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
-            + 0.25*m_x[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
-            - 0.25*m_y[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1]
-
-
-        # fill the '3' children
-        fData[ilo_f:ihi_f+1:2,jlo_f+1:jhi_f+1:2] = \
-            cData[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
-            - 0.25*m_x[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
-            + 0.25*m_y[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1]
-
-
-        # fill the '4' children
-        fData[ilo_f+1:ihi_f+1:2,jlo_f+1:jhi_f+1:2] = \
-            cData[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
-            + 0.25*m_x[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1] \
-            + 0.25*m_y[cG.ilo:cG.ihi+1,cG.jlo:cG.jhi+1]
+        # fill the children
+        fData.v(s=2)[:,:] = cData.v() - 0.25*m_x.v() - 0.25*m_y.v()     # 1 child
+        fData.ip(1, s=2)[:,:] = cData.v() + 0.25*m_x.v() - 0.25*m_y.v() # 2 
+        fData.jp(1, s=2)[:,:] = cData.v() - 0.25*m_x.v() + 0.25*m_y.v() # 3
+        fData.ip_jp(1, 1, s=2)[:,:] = cData.v() + 0.25*m_x.v() + 0.25*m_y.v() # 4
 
         return fData
 

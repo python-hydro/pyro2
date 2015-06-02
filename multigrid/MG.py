@@ -502,7 +502,7 @@ class CellCenterMG2d(object):
         Set the initial solution to zero
         """
         v = self.grids[self.nlevels-1].get_var("v")
-        v[:,:] = 0.0
+        v.d[:,:] = 0.0
 
 
     def init_RHS(self, data):
@@ -519,10 +519,10 @@ class CellCenterMG2d(object):
         """
 
         f = self.grids[self.nlevels-1].get_var("f")
-        f[:,:] = data.copy()
+        f.d[:,:] = data.copy()
 
         # store the source norm
-        self.source_norm = self.grids[self.nlevels-1].grid.norm(f)
+        self.source_norm = f.norm()
 
         if self.verbose:
             print("Source norm = ", self.source_norm)
@@ -541,16 +541,9 @@ class CellCenterMG2d(object):
 
         # compute the residual
         # r = f - alpha phi + beta L phi
-        r[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
-            f[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] - \
-            self.alpha*v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] + \
-            self.beta*(
-            (v[myg.ilo-1:myg.ihi  ,myg.jlo  :myg.jhi+1] +
-             v[myg.ilo+1:myg.ihi+2,myg.jlo  :myg.jhi+1] -
-             2.0*v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])/(myg.dx*myg.dx) +
-            (v[myg.ilo  :myg.ihi+1,myg.jlo-1:myg.jhi  ] +
-             v[myg.ilo  :myg.ihi+1,myg.jlo+1:myg.jhi+2] -
-             2.0*v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])/(myg.dy*myg.dy) )
+        r.v()[:,:] = f.v()[:,:] - self.alpha*v.v()[:,:] + \
+            self.beta*( (v.ip(-1) + v.ip(1) - 2*v.v())/myg.dx**2 +
+                        (v.jp(-1) + v.jp(1) - 2*v.v())/myg.dy**2)
 
 
     def smooth(self, level, nsmooth):
@@ -602,17 +595,10 @@ class CellCenterMG2d(object):
 
             for n, (ix, iy) in enumerate([(0,0), (1,1), (1,0), (0,1)]):
 
-                v[myg.ilo+ix:myg.ihi+1:2,myg.jlo+iy:myg.jhi+1:2] = \
-                   (f[myg.ilo+ix:myg.ihi+1:2,myg.jlo+iy:myg.jhi+1:2] +
-                    xcoeff*(v[myg.ilo+1+ix:myg.ihi+2:2,
-                              myg.jlo+iy  :myg.jhi+1:2] +
-                            v[myg.ilo-1+ix:myg.ihi  :2,
-                              myg.jlo+iy  :myg.jhi+1:2]) +
-                    ycoeff*(v[myg.ilo+ix  :myg.ihi+1:2,
-                              myg.jlo+1+iy:myg.jhi+2:2] +
-                            v[myg.ilo+ix  :myg.ihi+1:2,
-                              myg.jlo-1+iy:myg.jhi  :2]))/ \
-                   (self.alpha + 2.0*xcoeff + 2.0*ycoeff)
+                v.ip_jp(ix, iy, s=2)[:,:] = (f.ip_jp(ix, iy, s=2) + 
+                      xcoeff*(v.ip_jp(1+ix, iy, s=2) + v.ip_jp(-1+ix, iy, s=2)) +
+                      ycoeff*(v.ip_jp(ix, 1+iy, s=2) + v.ip_jp(ix, -1+iy, s=2)) )/ \
+                    (self.alpha + 2.0*xcoeff + 2.0*ycoeff)
 
                 if n == 1 or n == 3:
                     self.grids[level].fill_BC("v")
@@ -698,9 +684,7 @@ class CellCenterMG2d(object):
                     self._compute_residual(level)
 
                     print("  level: {}, grid: {} x {}".format(level, fP.grid.nx, fP.grid.ny))
-
-                    print("  before G-S, residual L2 norm = %g" % \
-                          (fP.grid.norm(fP.get_var("r")) ))
+                    print("  before G-S, residual L2: {}".format(fP.get_var("r").norm() ))
 
                 # smooth on the current level
                 self.smooth(level, self.nsmooth)
@@ -710,13 +694,12 @@ class CellCenterMG2d(object):
                 self._compute_residual(level)
 
                 if self.verbose:
-                    print("  after G-S, residual L2 norm = %g\n" % \
-                          (fP.grid.norm(fP.get_var("r")) ))
+                    print("  after G-S, residual L2: {}".format(fP.get_var("r").norm() ))
 
 
                 # restrict the residual down to the RHS of the coarser level
                 f_coarse = cP.get_var("f")
-                f_coarse[:,:] = fP.restrict("r")
+                f_coarse.v()[:,:] = fP.restrict("r").v()
 
                 level -= 1
 
@@ -753,7 +736,7 @@ class CellCenterMG2d(object):
 
                 # correct the solution on the current grid
                 v = fP.get_var("v")
-                v += e
+                v.v()[:,:] += e.v()
 
                 fP.fill_BC("v")
 
@@ -763,8 +746,7 @@ class CellCenterMG2d(object):
                     print("  level = %d, nx = %d, ny = %d" % \
                         (level, fP.grid.nx, fP.grid.ny))
 
-                    print("  before G-S, residual L2 norm = %g" % \
-                          (fP.grid.norm(fP.get_var("r")) ))
+                    print("  before G-S, residual L2: {}".format(fP.get_var("r").norm() ))
 
                 # smooth
                 self.smooth(level, self.nsmooth)
@@ -772,8 +754,7 @@ class CellCenterMG2d(object):
                 if self.verbose:
                     self._compute_residual(level)
 
-                    print("  after G-S, residual L2 norm = %g\n" % \
-                          (fP.grid.norm(fP.get_var("r")) ))
+                    print("  after G-S, residual L2: {}".format(fP.get_var("r").norm() ))
 
 
             # compute the error with respect to the previous solution
@@ -781,8 +762,8 @@ class CellCenterMG2d(object):
             # determine convergence
             solnP = self.grids[self.nlevels-1]
 
-            diff = (solnP.get_var("v") - old_solution)/ \
-                (solnP.get_var("v") + self.small)
+            diff = (solnP.get_var("v").v() - old_solution.v())/ \
+                (solnP.get_var("v").v() + self.small)
 
             relative_error = solnP.grid.norm(diff)
 
@@ -793,9 +774,9 @@ class CellCenterMG2d(object):
             r = fP.get_var("r")
 
             if self.source_norm != 0.0:
-                residual_error = fP.grid.norm(r)/self.source_norm
+                residual_error = r.norm()/self.source_norm
             else:
-                residual_error = fP.grid.norm(r)
+                residual_error = r.norm()
 
 
             if residual_error < rtol:
