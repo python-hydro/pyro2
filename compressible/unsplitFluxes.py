@@ -266,16 +266,16 @@ def unsplitFluxes(my_data, rp, vars, tc, dt):
     U_xl = myg.scratch_array(vars.nvar)
     U_xr = myg.scratch_array(vars.nvar)
 
-    U_xl[:,:,vars.idens] = V_l[:,:,vars.irho]
-    U_xl[:,:,vars.ixmom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iu]
-    U_xl[:,:,vars.iymom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iv]
-    U_xl[:,:,vars.iener] = eos.rhoe(gamma, V_l[:,:,vars.ip]) + \
+    U_xl.d[:,:,vars.idens] = V_l[:,:,vars.irho]
+    U_xl.d[:,:,vars.ixmom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iu]
+    U_xl.d[:,:,vars.iymom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iv]
+    U_xl.d[:,:,vars.iener] = eos.rhoe(gamma, V_l[:,:,vars.ip]) + \
         0.5*V_l[:,:,vars.irho]*(V_l[:,:,vars.iu]**2 + V_l[:,:,vars.iv]**2)
 
-    U_xr[:,:,vars.idens] = V_r[:,:,vars.irho]
-    U_xr[:,:,vars.ixmom] = V_r[:,:,vars.irho]*V_r[:,:,vars.iu]
-    U_xr[:,:,vars.iymom] = V_r[:,:,vars.irho]*V_r[:,:,vars.iv]
-    U_xr[:,:,vars.iener] = eos.rhoe(gamma, V_r[:,:,vars.ip]) + \
+    U_xr.d[:,:,vars.idens] = V_r[:,:,vars.irho]
+    U_xr.d[:,:,vars.ixmom] = V_r[:,:,vars.irho]*V_r[:,:,vars.iu]
+    U_xr.d[:,:,vars.iymom] = V_r[:,:,vars.irho]*V_r[:,:,vars.iv]
+    U_xr.d[:,:,vars.iener] = eos.rhoe(gamma, V_r[:,:,vars.ip]) + \
         0.5*V_r[:,:,vars.irho]*(V_r[:,:,vars.iu]**2 + V_r[:,:,vars.iv]**2)
 
 
@@ -301,16 +301,16 @@ def unsplitFluxes(my_data, rp, vars, tc, dt):
     U_yl = myg.scratch_array(vars.nvar)
     U_yr = myg.scratch_array(vars.nvar)
 
-    U_yl[:,:,vars.idens] = V_l[:,:,vars.irho]
-    U_yl[:,:,vars.ixmom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iu]
-    U_yl[:,:,vars.iymom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iv]
-    U_yl[:,:,vars.iener] = eos.rhoe(gamma, V_l[:,:,vars.ip]) + \
+    U_yl.d[:,:,vars.idens] = V_l[:,:,vars.irho]
+    U_yl.d[:,:,vars.ixmom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iu]
+    U_yl.d[:,:,vars.iymom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iv]
+    U_yl.d[:,:,vars.iener] = eos.rhoe(gamma, V_l[:,:,vars.ip]) + \
         0.5*V_l[:,:,vars.irho]*(V_l[:,:,vars.iu]**2 + V_l[:,:,vars.iv]**2)
 
-    U_yr[:,:,vars.idens] = V_r[:,:,vars.irho]
-    U_yr[:,:,vars.ixmom] = V_r[:,:,vars.irho]*V_r[:,:,vars.iu]
-    U_yr[:,:,vars.iymom] = V_r[:,:,vars.irho]*V_r[:,:,vars.iv]
-    U_yr[:,:,vars.iener] = eos.rhoe(gamma, V_r[:,:,vars.ip]) + \
+    U_yr.d[:,:,vars.idens] = V_r[:,:,vars.irho]
+    U_yr.d[:,:,vars.ixmom] = V_r[:,:,vars.irho]*V_r[:,:,vars.iu]
+    U_yr.d[:,:,vars.iymom] = V_r[:,:,vars.irho]*V_r[:,:,vars.iv]
+    U_yr.d[:,:,vars.iener] = eos.rhoe(gamma, V_r[:,:,vars.ip]) + \
         0.5*V_r[:,:,vars.irho]*(V_r[:,:,vars.iu]**2 + V_r[:,:,vars.iv]**2)
 
 
@@ -320,32 +320,20 @@ def unsplitFluxes(my_data, rp, vars, tc, dt):
     grav = rp.get_param("compressible.grav")
 
     # ymom_xl[i,j] += 0.5*dt*dens[i-1,j]*grav
-    U_xl[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2,vars.iymom] += \
-        0.5*dt*dens.ip(-1, buf=1)*grav
-
-    U_xl[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2,vars.iener] += \
-        0.5*dt*ymom.ip(-1, buf=1)*grav
+    U_xl.v(buf=1, n=vars.iymom)[:,:] += 0.5*dt*dens.ip(-1, buf=1)*grav
+    U_xl.v(buf=1, n=vars.iener)[:,:] += 0.5*dt*ymom.ip(-1, buf=1)*grav
 
     # ymom_xr[i,j] += 0.5*dt*dens[i,j]*grav
-    U_xr[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2,vars.iymom] += \
-        0.5*dt*dens.v(buf=1)*grav
-
-    U_xr[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2,vars.iener] += \
-        0.5*dt*ymom.v(buf=1)*grav
+    U_xr.v(buf=1, n=vars.iymom)[:,:] += 0.5*dt*dens.v(buf=1)*grav
+    U_xr.v(buf=1, n=vars.iener)[:,:] += 0.5*dt*ymom.v(buf=1)*grav
 
     # ymom_yl[i,j] += 0.5*dt*dens[i,j-1]*grav
-    U_yl[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2,vars.iymom] += \
-        0.5*dt*dens.jp(-1, buf=1)*grav
-
-    U_yl[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2,vars.iener] += \
-        0.5*dt*ymom.jp(-1, buf=1)*grav
+    U_yl.v(buf=1, n=vars.iymom)[:,:] += 0.5*dt*dens.jp(-1, buf=1)*grav
+    U_yl.v(buf=1, n=vars.iener)[:,:] += 0.5*dt*ymom.jp(-1, buf=1)*grav
 
     # ymom_yr[i,j] += 0.5*dt*dens[i,j]*grav
-    U_yr[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2,vars.iymom] += \
-        0.5*dt*dens.v(buf=1)*grav
-
-    U_yr[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2,vars.iener] += \
-        0.5*dt*ymom.v(buf=1)*grav
+    U_yr.v(buf=1, n=vars.iymom)[:,:] += 0.5*dt*dens.v(buf=1)*grav
+    U_yr.v(buf=1, n=vars.iener)[:,:] += 0.5*dt*ymom.v(buf=1)*grav
 
 
     #=========================================================================
@@ -364,14 +352,17 @@ def unsplitFluxes(my_data, rp, vars, tc, dt):
         msg.fail("ERROR: Riemann solver undefined")
 
 
-    F_x = riemannFunc(1, myg.qx, myg.qy, myg.ng,
+    _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
                       vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener,
-                      gamma, U_xl, U_xr)
+                      gamma, U_xl.d, U_xr.d)
 
-    F_y = riemannFunc(2, myg.qx, myg.qy, myg.ng,
+    _fy = riemannFunc(2, myg.qx, myg.qy, myg.ng,
                       vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener,
-                      gamma, U_yl, U_yr)
+                      gamma, U_yl.d, U_yr.d)
 
+    F_x = patch.ArrayIndexer(d=_fx, grid=myg)
+    F_y = patch.ArrayIndexer(d=_fy, grid=myg)    
+    
     tm_riem.end()
 
     #=========================================================================
@@ -424,27 +415,30 @@ def unsplitFluxes(my_data, rp, vars, tc, dt):
     tm_transverse = tc.timer("transverse flux addition")
     tm_transverse.begin()
 
-    # U_xl[i,j,:] = U_xl[i,j,:] - 0.5*dt/dy * (F_y[i-1,j+1,:] - F_y[i-1,j,:])
-    U_xl[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,:] += \
-        - 0.5*dt/myg.dy * (F_y[myg.ilo-3:myg.ihi+1,myg.jlo-1:myg.jhi+3,:] - \
-                           F_y[myg.ilo-3:myg.ihi+1,myg.jlo-2:myg.jhi+2,:])
+    dtdx = dt/myg.dx
+    dtdy = dt/myg.dy
+    
+    b = (2,1)
 
-    # U_xr[i,j,:] = U_xr[i,j,:] - 0.5*dt/dy * (F_y[i,j+1,:] - F_y[i,j,:])
-    U_xr[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,:] += \
-        - 0.5*dt/myg.dy * (F_y[myg.ilo-2:myg.ihi+2,myg.jlo-1:myg.jhi+3,:] - \
-                           F_y[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,:])
+    for n in range(vars.nvar):
+            
+        # U_xl[i,j,:] = U_xl[i,j,:] - 0.5*dt/dy * (F_y[i-1,j+1,:] - F_y[i-1,j,:])
+        U_xl.v(buf=b, n=n)[:,:] += \
+            - 0.5*dtdy*(F_y.ip_jp(-1, 1, buf=b, n=n) - F_y.ip(-1, buf=b, n=n))
 
-    # U_yl[i,j,:] = U_yl[i,j,:] - 0.5*dt/dx * (F_x[i+1,j-1,:] - F_x[i,j-1,:])
-    U_yl[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,:] += \
-        - 0.5*dt/myg.dx * (F_x[myg.ilo-1:myg.ihi+3,myg.jlo-3:myg.jhi+1,:] - \
-                           F_x[myg.ilo-2:myg.ihi+2,myg.jlo-3:myg.jhi+1,:])
+        # U_xr[i,j,:] = U_xr[i,j,:] - 0.5*dt/dy * (F_y[i,j+1,:] - F_y[i,j,:])
+        U_xr.v(buf=b, n=n)[:,:] += \
+            - 0.5*dtdy*(F_y.jp(1, buf=b, n=n) - F_y.v(buf=b, n=n))
 
-    # U_yr[i,j,:] = U_yr[i,j,:] - 0.5*dt/dx * (F_x[i+1,j,:] - F_x[i,j,:])
-    U_yr[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,:] += \
-        - 0.5*dt/myg.dx * (F_x[myg.ilo-1:myg.ihi+3,myg.jlo-2:myg.jhi+2,:] - \
-                           F_x[myg.ilo-2:myg.ihi+2,myg.jlo-2:myg.jhi+2,:])
+        # U_yl[i,j,:] = U_yl[i,j,:] - 0.5*dt/dx * (F_x[i+1,j-1,:] - F_x[i,j-1,:])
+        U_yl.v(buf=b, n=n)[:,:] += \
+            - 0.5*dtdx*(F_x.ip_jp(1, -1, buf=b, n=n) - F_x.jp(-1, buf=b, n=n))
 
-    tm_transverse.end()
+        # U_yr[i,j,:] = U_yr[i,j,:] - 0.5*dt/dx * (F_x[i+1,j,:] - F_x[i,j,:])
+        U_yr.v(buf=b, n=n)[:,:] += \
+            - 0.5*dtdx*(F_x.ip(1, buf=b, n=n) - F_x.v(buf=b, n=n))
+        
+        tm_transverse.end()
 
 
     #=========================================================================
@@ -458,11 +452,11 @@ def unsplitFluxes(my_data, rp, vars, tc, dt):
 
     _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
                       vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener,
-                      gamma, U_xl, U_xr)
+                      gamma, U_xl.d, U_xr.d)
 
     _fy = riemannFunc(2, myg.qx, myg.qy, myg.ng,
                       vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener,
-                      gamma, U_yl, U_yr)
+                      gamma, U_yl.d, U_yr.d)
 
     F_x = patch.ArrayIndexer(d=_fx, grid=myg)
     F_y = patch.ArrayIndexer(d=_fy, grid=myg)
