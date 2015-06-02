@@ -324,6 +324,9 @@ class ArrayIndexer(object):
     def min(self):
         return self.d.min()
 
+    def max(self):
+        return self.d.max()    
+
     def copy(self):
         return ArrayIndexer(d=self.d.copy(), grid=self.g)
         

@@ -427,8 +427,7 @@ class CellCenterMG2d(object):
             return v.copy()
         else:
             sol = og.scratch_array()
-            sol[og.ilo-1:og.ihi+2,og.jlo-1:og.jhi+2] = \
-                v[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]
+            sol.v(buf=1)[:,:] = v.v(buf=1)
             return sol
 
     def get_solution_gradient(self, grid=None):
@@ -457,13 +456,8 @@ class CellCenterMG2d(object):
 
         myg = self.soln_grid
 
-        gx[og.ilo:og.ihi+1,og.jlo:og.jhi+1] = \
-            0.5*(v[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
-                 v[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1])/myg.dx
-
-        gy[og.ilo:og.ihi+1,og.jlo:og.jhi+1] = \
-            0.5*(v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
-                 v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
+        gx.v()[:,:] = 0.5*(v.ip(1) - v.ip(-1))/myg.dx
+        gy.v()[:,:] = 0.5*(v.jp(1) - v.jp(-1))/myg.dy
 
         return gx, gy
 
@@ -494,7 +488,7 @@ class CellCenterMG2d(object):
 
         """
         v = self.grids[self.nlevels-1].get_var("v")
-        v[:,:] = data.copy()
+        v.d[:,:] = data.copy()
 
 
     def init_zeros(self):

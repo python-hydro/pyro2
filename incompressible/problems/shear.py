@@ -17,7 +17,7 @@ v(x,y,t=0) = delta_s sin(2 pi x)
 from __future__ import print_function
 
 import math
-import numpy
+import numpy as np
 
 import mesh.patch as patch
 from util import msg
@@ -54,19 +54,15 @@ def init_data(my_data, rp):
     print('delta_s = ', delta_s)
     print('rho_s = ', rho_s)
 
-    # there is probably an easier way to do this without loops, but
-    # for now, we will just do an explicit loop.
-    for i in range(myg.ilo, myg.ihi+1):
-        for j in range(myg.jlo, myg.jhi+1):
+    idx = myg.y2d <= y_half
+    u.d[idx] = np.tanh(rho_s*(myg.y2d[idx] - 0.25))
 
-            if (myg.y[j] <= y_half):
-                u[i,j] = numpy.tanh(rho_s*(myg.y[j] - 0.25))
-            else:
-                u[i,j] = numpy.tanh(rho_s*(0.75 - myg.y[j]))
+    idx = myg.y2d > y_half
+    u.d[idx] = np.tanh(rho_s*(0.75 - myg.y2d[idx]))
 
-            v[i,j] = delta_s*numpy.sin(2.0*math.pi*myg.x[i])
+    v.d[:,:] = delta_s*np.sin(2.0*math.pi*myg.x2d)
 
-    print("extrema: ", numpy.min(u.flat), numpy.max(u.flat))
+    print("extrema: ", u.min(), u.max())
 
 
 def finalize():
