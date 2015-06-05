@@ -357,8 +357,8 @@ class Simulation(NullSimulation):
 
         # create the coefficient to the grad (pi/beta) term
         coeff = self.aux_data.get_var("coeff")
-        coeff[:,:] = 1.0/rho[:,:]
-        coeff[:,:] = coeff*beta0[np.newaxis,:]
+        coeff = 1.0/rho
+        coeff.v()[:,:] = coeff.v()*beta0.v2d()
         self.aux_data.fill_BC("coeff")
 
         # create the source term
@@ -366,18 +366,21 @@ class Simulation(NullSimulation):
 
         g = self.rp.get_param("lm-atmosphere.grav")
         rhoprime = self.make_prime(rho, rho0)
-        source[:,:] = rhoprime*g/rho
+        source.v()[:,:] = rhoprime.v()*g/rho.v()
         self.aux_data.fill_BC("source_y")
 
-        u_MAC, v_MAC = lm_interface_f.mac_vels(myg.qx, myg.qy, myg.ng,
-                                               myg.dx, myg.dy, dt,
-                                               u, v,
-                                               ldelta_ux, ldelta_vx,
-                                               ldelta_uy, ldelta_vy,
-                                               coeff*gradp_x, coeff*gradp_y,
-                                               source)
+        _um, _vm = lm_interface_f.mac_vels(myg.qx, myg.qy, myg.ng,
+                                           myg.dx, myg.dy, dt,
+                                           u.d, v.d,
+                                           ldelta_ux, ldelta_vx,
+                                           ldelta_uy, ldelta_vy,
+                                           coeff.d*gradp_x.d, coeff.d*gradp_y.d,
+                                           source.d)
 
 
+        u_MAC = patch.ArrayIndexer(d=_um, grid=myg)
+        v_MAC = patch.ArrayIndexer(d=_vm, grid=myg)        
+        
         #---------------------------------------------------------------------
         # do a MAC projection to make the advective velocities divergence
         # free
@@ -390,8 +393,8 @@ class Simulation(NullSimulation):
         if self.verbose > 0: print("  MAC projection")
 
         # create the coefficient array: beta0**2/rho
-        coeff = 1.0/rho[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]
-        coeff = coeff*beta0[np.newaxis,myg.jlo-1:myg.jhi+2]**2
+        coeff.v(buf=1)[:,:] = 1.0/rho.v(buf=1)
+        coeff.v(buf=1)[:,:] = coeff.v(buf=1)*beta0.v2d(buf=1)**2
 
         # create the multigrid object
         mg = vcMG.VarCoeffCCMG2d(myg.nx, myg.ny,
@@ -409,17 +412,13 @@ class Simulation(NullSimulation):
         div_beta_U = mg.soln_grid.scratch_array()
 
         # MAC velocities are edge-centered.  div{beta_0 U} is cell-centered.
-        div_beta_U[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
-            beta0[np.newaxis,myg.jlo:myg.jhi+1]*(
-                u_MAC[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
-                u_MAC[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx + \
-            (beta0_edges[np.newaxis,myg.jlo+1:myg.jhi+2]*
-             v_MAC[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
-             beta0_edges[np.newaxis,myg.jlo  :myg.jhi+1]*
-             v_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1])/myg.dy
+        div_beta_U.v()[:,:] = \
+            beta0.v2d()*(u_MAC.ip(1) - u_MAC.v())/myg.dx + \
+            (beta0_edges.v2dp(1)*v_MAC.jp(1) -
+             beta0_edges.v2d()*v_MAC.v())/myg.dy
 
         # solve the Poisson problem
-        mg.init_RHS(div_beta_U)
+        mg.init_RHS(div_beta_U.d)
         mg.solve(rtol=1.e-12)
 
 
