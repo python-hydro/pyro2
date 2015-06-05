@@ -11,6 +11,31 @@ from simulation_null import NullSimulation, grid_setup, bc_setup
 import multigrid.variable_coeff_MG as vcMG
 from util import profile
 
+
+class BaseContainer(object):
+    def __init__(self, ny, ng=0):
+        self.ny = ny
+        self.ng = ng
+        self.qy = ny + 2*ng
+
+        self.d = np.zeros((self.qy), dtype=np.float64)
+
+        self.jlo = ng
+        self.jhi = ng+ny-1
+                        
+    def v(self, buf=0):
+        return self.d[self.jlo-buf:self.jhi+1+buf]
+
+    def v2d(self, buf=0):
+        return self.d[np.newaxis,self.jlo-buf:self.jhi+1+buf]
+
+    def v2dp(self, shift, buf=0):
+        return self.d[np.newaxis,self.jlo+shift-buf:self.jhi+1+shift+buf]
+    
+    def jp(self, shift, buf=0):
+        return self.d[self.jlo-buf+shift:self.jhi+1+buf+shift]    
+    
+
 class Simulation(NullSimulation):
 
     def __init__(self, solver_name, problem_name, rp, timers=None):
@@ -88,28 +113,28 @@ class Simulation(NullSimulation):
 
         # we also need storage for the 1-d base state -- we'll store this
         # in the main class directly.
-        self.base["rho0"] = np.zeros((myg.qy), dtype=np.float64)
-        self.base["p0"] = np.zeros((myg.qy), dtype=np.float64)
+        self.base["rho0"] = BaseContainer(myg.ny, ng=myg.ng)
+        self.base["p0"] = BaseContainer(myg.ny, ng=myg.ng)
 
         # now set the initial conditions for the problem
         exec(self.problem_name + '.init_data(self.cc_data, self.base, self.rp)')
 
         # Construct beta_0
         gamma = self.rp.get_param("eos.gamma")
-        self.base["beta0"] = self.base["p0"]**(1.0/gamma)
+        self.base["beta0"] = BaseContainer(myg.ny, ng=myg.ng)
+        self.base["beta0"].d[:] = self.base["p0"].d**(1.0/gamma)
 
         # we'll also need beta_0 on vertical edges -- on the domain edges,
         # just do piecewise constant
-        self.base["beta0-edges"] = np.zeros((myg.qy), dtype=np.float64)
-        self.base["beta0-edges"][myg.jlo+1:myg.jhi+1] = \
-            0.5*(self.base["beta0"][myg.jlo  :myg.jhi] +
-                 self.base["beta0"][myg.jlo+1:myg.jhi+1])
-        self.base["beta0-edges"][myg.jlo] = self.base["beta0"][myg.jlo]
-        self.base["beta0-edges"][myg.jhi+1] = self.base["beta0"][myg.jhi]
+        self.base["beta0-edges"] = BaseContainer(myg.ny, ng=myg.ng)
+        self.base["beta0-edges"].v()[:] = \
+            0.5*(self.base["beta0"].v() + self.base["beta0"].jp(1))
+        self.base["beta0-edges"].d[myg.jlo] = self.base["beta0"].d[myg.jlo]
+        self.base["beta0-edges"].d[myg.jhi+1] = self.base["beta0"].d[myg.jhi]
 
 
     def make_prime(self, a, a0):
-        return a - a0[np.newaxis,:]
+        return a - a0.v2d(buf=a0.ng)
 
 
     def timestep(self):
@@ -131,10 +156,10 @@ class Simulation(NullSimulation):
 
         # the timestep is min(dx/|u|, dy|v|)
         xtmp = ytmp = 1.e33
-        if not np.max(np.abs(u)) == 0:
-            xtmp = np.min(myg.dx/(np.abs(u[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])))
-        if not np.max(np.abs(v)) == 0:
-            ytmp = np.min(myg.dy/(np.abs(v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])))
+        if not abs(u).max() == 0:
+            xtmp = myg.dx/abs(u).max()
+        if not abs(v).max() == 0:
+            ytmp = myg.dy/abs(v).max()
 
         dt = cfl*min(xtmp, ytmp)
 
@@ -146,8 +171,7 @@ class Simulation(NullSimulation):
 
         g = self.rp.get_param("lm-atmosphere.grav")
 
-        F_buoy = np.max(np.abs(rhoprime[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]*g)/
-                        rho[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])
+        F_buoy = (abs(rhoprime).v()*g/rho.v()).max()
 
         dt_buoy = np.sqrt(2.0*myg.dx/F_buoy)
 
@@ -181,9 +205,9 @@ class Simulation(NullSimulation):
         # velocity field satisties div U = 0
 
         # the coefficent for the elliptic equation is beta_0^2/rho
-        coeff = 1.0/rho[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]
+        coeff = 1.0/rho
         beta0 = self.base["beta0"]
-        coeff = coeff*beta0[np.newaxis,myg.jlo-1:myg.jhi+2]**2
+        coeff.v()[:,:] = coeff.v()*beta0.v2d()**2
 
         # next create the multigrid object.  We defined phi with
         # the right BCs previously
@@ -202,25 +226,20 @@ class Simulation(NullSimulation):
         div_beta_U = mg.soln_grid.scratch_array()
 
         # u/v are cell-centered, divU is cell-centered
-        div_beta_U[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
-            0.5*beta0[np.newaxis,mg.jlo:mg.jhi+1]* \
-                (u[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
-                 u[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1])/myg.dx + \
-            0.5*(beta0[np.newaxis,myg.jlo+1:myg.jhi+2]* \
-                 v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
-                 beta0[np.newaxis,myg.jlo-1:myg.jhi  ]*
-                 v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
+        div_beta_U.v()[:,:] = \
+            0.5*beta0.v2d()*(u.ip(1) - u.ip(-1))/myg.dx + \
+            0.5*(beta0.v2dp(1)*v.jp(1) - beta0.v2dp(-1)*v.jp(-1))/myg.dy
 
         # solve D (beta_0^2/rho) G (phi/beta_0) = D( beta_0 U )
 
         # set the RHS to divU and solve
-        mg.init_RHS(div_beta_U)
+        mg.init_RHS(div_beta_U.d)
         mg.solve(rtol=1.e-10)
 
         # store the solution in our self.cc_data object -- include a single
         # ghostcell
         phi = self.cc_data.get_var("phi")
-        phi[:,:] = mg.get_solution(grid=myg)
+        phi.d[:,:] = mg.get_solution(grid=myg).d
 
         # get the cell-centered gradient of phi and update the
         # velocities
@@ -228,11 +247,11 @@ class Simulation(NullSimulation):
         # cells -- not ghost cells
         gradp_x, gradp_y = mg.get_solution_gradient(grid=myg)
 
-        coeff = 1.0/rho[:,:]
-        coeff = coeff*beta0[np.newaxis,:]
+        coeff = 1.0/rho
+        coeff.v()[:,:] = coeff.v()*beta0.v2d()
 
-        u[:,:] -= coeff*gradp_x
-        v[:,:] -= coeff*gradp_y
+        u.v()[:,:] -= coeff.v()*gradp_x.v()
+        v.v()[:,:] -= coeff.v()*gradp_y.v()
 
         # fill the ghostcells
         self.cc_data.fill_BC("x-velocity")
@@ -298,13 +317,13 @@ class Simulation(NullSimulation):
         else: limitFunc = reconstruction_f.limit4
 
 
-        ldelta_rx = limitFunc(1, rho, myg.qx, myg.qy, myg.ng)
-        ldelta_ux = limitFunc(1, u, myg.qx, myg.qy, myg.ng)
-        ldelta_vx = limitFunc(1, v, myg.qx, myg.qy, myg.ng)
+        ldelta_rx = limitFunc(1, rho.d, myg.qx, myg.qy, myg.ng)
+        ldelta_ux = limitFunc(1, u.d, myg.qx, myg.qy, myg.ng)
+        ldelta_vx = limitFunc(1, v.d, myg.qx, myg.qy, myg.ng)
 
-        ldelta_ry = limitFunc(2, rho, myg.qx, myg.qy, myg.ng)
-        ldelta_uy = limitFunc(2, u, myg.qx, myg.qy, myg.ng)
-        ldelta_vy = limitFunc(2, v, myg.qx, myg.qy, myg.ng)
+        ldelta_ry = limitFunc(2, rho.d, myg.qx, myg.qy, myg.ng)
+        ldelta_uy = limitFunc(2, u.d, myg.qx, myg.qy, myg.ng)
+        ldelta_vy = limitFunc(2, v.d, myg.qx, myg.qy, myg.ng)
 
         
         #---------------------------------------------------------------------
