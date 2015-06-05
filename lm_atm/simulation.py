@@ -205,10 +205,12 @@ class Simulation(NullSimulation):
         # velocity field satisties div U = 0
 
         # the coefficent for the elliptic equation is beta_0^2/rho
-        coeff = self.aux_data.get_var("coeff")
-        coeff.v()[:,:] = 1.0/rho.v()
+        # NOTE: this needs to be on the same grid as the MG solver
+        # !!!!!!!!!!! maybe we should get the coefficients via a
+        # method?
+        coeff = patch.ArrayIndexer(d=1.0/rho.v(buf=1),
         beta0 = self.base["beta0"]
-        coeff.v()[:,:] = coeff.v()*beta0.v2d()**2
+        coeff.v(buf=1)[:,:] = coeff.v(buf=1)*beta0.v2d()**2
 
         # next create the multigrid object.  We defined phi with
         # the right BCs previously
@@ -483,20 +485,24 @@ class Simulation(NullSimulation):
         if self.verbose > 0: print("  making u, v edge states")
 
         coeff = self.aux_data.get_var("coeff")
-        coeff[:,:] = 2.0/(rho[:,:] + rho_old[:,:])
-        coeff[:,:] = coeff*beta0[np.newaxis,:]
+        coeff.v()[:,:] = 2.0/(rho.v() + rho_old.v())
+        coeff.v()[:,:] = coeff.v()*beta0.v2d()
         self.aux_data.fill_BC("coeff")
 
-        u_xint, v_xint, u_yint, v_yint = \
+        _ux, _vx, _uy, _vy = \
                lm_interface_f.states(myg.qx, myg.qy, myg.ng,
                                      myg.dx, myg.dy, dt,
-                                     u, v,
+                                     u.d, v.d,
                                      ldelta_ux, ldelta_vx,
                                      ldelta_uy, ldelta_vy,
-                                     coeff*gradp_x, coeff*gradp_y,
-                                     source,
-                                     u_MAC, v_MAC)
+                                     coeff.d*gradp_x.d, coeff.d*gradp_y.d,
+                                     source.d,
+                                     u_MAC.d, v_MAC.d)
 
+        u_xint = patch.ArrayIndexer(d=_ux, grid=myg)
+        v_xint = patch.ArrayIndexer(d=_vx, grid=myg)
+        u_yint = patch.ArrayIndexer(d=_uy, grid=myg)
+        v_yint = patch.ArrayIndexer(d=_vy, grid=myg)
 
         #---------------------------------------------------------------------
         # update U to get the provisional velocity field
@@ -509,46 +515,34 @@ class Simulation(NullSimulation):
         advect_x = myg.scratch_array()
         advect_y = myg.scratch_array()
 
-        advect_x[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
-            0.5*(u_MAC[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1] +
-                 u_MAC[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1]) * \
-            (u_xint[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
-             u_xint[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx + \
-            0.5*(v_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1] +
-                 v_MAC[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2]) * \
-            (u_yint[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
-             u_yint[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1])/myg.dy
+        advect_x.v()[:,:] = \
+            0.5*(u_MAC.v() + u_MAC.ip(1))*(u_xint.ip(1) - u_xint.v())/myg.dx +\
+            0.5*(v_MAC.v() + v_MAC.jp(1))*(u_yint.jp(1) - u_yint.v())/myg.dy
 
-        advect_y[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
-            0.5*(u_MAC[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1] +
-                 u_MAC[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1]) * \
-            (v_xint[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
-             v_xint[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx + \
-            0.5*(v_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1] +
-                 v_MAC[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2]) * \
-            (v_yint[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
-             v_yint[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1])/myg.dy
+        advect_y.v()[:,:] = \
+            0.5*(u_MAC.v() + u_MAC.ip(1))*(v_xint.ip(1) - v_xint.v())/myg.dx +\
+            0.5*(v_MAC.v() + v_MAC.jp(1))*(v_yint.jp(1) - v_yint.v())/myg.dy
 
 
         proj_type = self.rp.get_param("lm-atmosphere.proj_type")
 
 
         if proj_type == 1:
-            u[:,:] -= (dt*advect_x[:,:] + dt*gradp_x[:,:])
-            v[:,:] -= (dt*advect_y[:,:] + dt*gradp_y[:,:])
+            u.v()[:,:] -= (dt*advect_x.v() + dt*gradp_x.v())
+            v.v()[:,:] -= (dt*advect_y.v() + dt*gradp_y.v())
 
         elif proj_type == 2:
-            u[:,:] -= dt*advect_x[:,:]
-            v[:,:] -= dt*advect_y[:,:]
+            u.v()[:,:] -= dt*advect_x.v()
+            v.v()[:,:] -= dt*advect_y.v()
 
 
         # add the gravitational source
         rho_half = 0.5*(rho + rho_old)
         rhoprime = self.make_prime(rho_half, rho0)
-        source = rhoprime*g/rho_half
+        source.d[:,:] = (rhoprime*g/rho_half).d
         self.aux_data.fill_BC("source_y")
         
-        v[:,:] += dt*source
+        v.d[:,:] += dt*source.d
 
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")
