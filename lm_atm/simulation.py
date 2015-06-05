@@ -157,9 +157,9 @@ class Simulation(NullSimulation):
         # the timestep is min(dx/|u|, dy|v|)
         xtmp = ytmp = 1.e33
         if not abs(u).max() == 0:
-            xtmp = myg.dx/abs(u).max()
+            xtmp = myg.dx/abs(u.v()).max()
         if not abs(v).max() == 0:
-            ytmp = myg.dy/abs(v).max()
+            ytmp = myg.dy/abs(v.v()).max()
 
         dt = cfl*min(xtmp, ytmp)
 
@@ -247,8 +247,7 @@ class Simulation(NullSimulation):
         # cells -- not ghost cells
         gradp_x, gradp_y = mg.get_solution_gradient(grid=myg)
 
-        coeff = self.aux_data.get_var("coeff")        
-        coeff.v()[:,:] = 1.0/rho.v()
+        coeff = 1.0/rho
         coeff.v()[:,:] = coeff.v()*beta0.v2d()
 
         u.v()[:,:] -= coeff.v()*gradp_x.v()
@@ -394,6 +393,7 @@ class Simulation(NullSimulation):
         if self.verbose > 0: print("  MAC projection")
 
         # create the coefficient array: beta0**2/rho
+        # MZ!!!! probably don't need the buf here
         coeff.v(buf=1)[:,:] = 1.0/rho.v(buf=1)
         coeff.v(buf=1)[:,:] = coeff.v(buf=1)*beta0.v2d(buf=1)**2
 
@@ -559,7 +559,7 @@ class Simulation(NullSimulation):
 
         # create the coefficient array: beta0**2/rho
         coeff = 1.0/rho
-        coeff.v()[:,:] = coeff.v()*beta0.v2d()
+        coeff.v()[:,:] = coeff.v()*beta0.v2d()**2
 
         # create the multigrid object
         mg = vcMG.VarCoeffCCMG2d(myg.nx, myg.ny,
