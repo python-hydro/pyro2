@@ -241,6 +241,10 @@ class ArrayIndexer(object):
     """ a class that wraps the data region of a single array (d)
         and allows us to easily do array operations like d[i+1,j]
         using the ip() method. """
+
+
+    # ?? Can we accomplish this a lot easier by subclassing
+    # the ndarray?
     
     def __init__(self, d=None, grid=None):
         self.d = d
