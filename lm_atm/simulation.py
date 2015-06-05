@@ -171,7 +171,7 @@ class Simulation(NullSimulation):
 
         g = self.rp.get_param("lm-atmosphere.grav")
 
-        F_buoy = (abs(rhoprime).v()*g/rho.v()).max()
+        F_buoy = (abs(rhoprime*g).v()/rho.v()).max()
 
         dt_buoy = np.sqrt(2.0*myg.dx/F_buoy)
 
@@ -205,7 +205,8 @@ class Simulation(NullSimulation):
         # velocity field satisties div U = 0
 
         # the coefficent for the elliptic equation is beta_0^2/rho
-        coeff = 1.0/rho
+        coeff = self.aux_data.get_var("coeff")
+        coeff.v()[:,:] = 1.0/rho.v()
         beta0 = self.base["beta0"]
         coeff.v()[:,:] = coeff.v()*beta0.v2d()**2
 
@@ -247,7 +248,8 @@ class Simulation(NullSimulation):
         # cells -- not ghost cells
         gradp_x, gradp_y = mg.get_solution_gradient(grid=myg)
 
-        coeff = 1.0/rho
+        coeff = self.aux_data.get_var("coeff")        
+        coeff.v()[:,:] = 1.0/rho.v()
         coeff.v()[:,:] = coeff.v()*beta0.v2d()
 
         u.v()[:,:] -= coeff.v()*gradp_x.v()
@@ -357,7 +359,7 @@ class Simulation(NullSimulation):
 
         # create the coefficient to the grad (pi/beta) term
         coeff = self.aux_data.get_var("coeff")
-        coeff = 1.0/rho
+        coeff.v()[:,:] = 1.0/rho.v()
         coeff.v()[:,:] = coeff.v()*beta0.v2d()
         self.aux_data.fill_BC("coeff")
 
@@ -426,57 +428,50 @@ class Simulation(NullSimulation):
         # constitute our advective velocities.  Note that what we actually
         # solved for here is phi/beta_0
         phi_MAC = self.cc_data.get_var("phi-MAC")
-        phi_MAC[:,:] = mg.get_solution(grid=myg)
+        phi_MAC.d[:,:] = mg.get_solution(grid=myg).d
 
         coeff = self.aux_data.get_var("coeff")
-        coeff[:,:] = 1.0/rho[:,:]
-        coeff[:,:] = coeff*beta0[np.newaxis,:]
+        coeff.v()[:,:] = 1.0/rho.v()
+        coeff.v()[:,:] = coeff.v()*beta0.v2d()
         self.aux_data.fill_BC("coeff")
 
         coeff_x = myg.scratch_array()
-        coeff_x[myg.ilo-3:myg.ihi+2,myg.jlo:myg.jhi+1] = \
-                0.5*(coeff[myg.ilo-2:myg.ihi+3,myg.jlo:myg.jhi+1] +
-                     coeff[myg.ilo-3:myg.ihi+2,myg.jlo:myg.jhi+1])
+        b = [-3, 1, 0, 0]  # this seems more than we need
+        coeff_x.v(buf=b)[:,:] = 0.5*(coeff.ip(1, buf=b) + coeff.v(buf=b))
 
         coeff_y = myg.scratch_array()
-        coeff_y[myg.ilo:myg.ihi+1,myg.jlo-3:myg.jhi+2] = \
-                0.5*(coeff[myg.ilo:myg.ihi+1,myg.jlo-2:myg.jhi+3] +
-                     coeff[myg.ilo:myg.ihi+1,myg.jlo-3:myg.jhi+2])
+        b = [0, 0, -3, 1]
+        coeff_y.v(buf=b)[:,:] = 0.5*(coeff.jp(1, buf=b) + coeff.v(buf=b))
 
         # we need the MAC velocities on all edges of the computational domain
         # here we do U = U - (beta_0/rho) grad (phi/beta_0)
-        u_MAC[myg.ilo:myg.ihi+2,myg.jlo:myg.jhi+1] -= \
-                coeff_x[myg.ilo  :myg.ihi+2,myg.jlo:myg.jhi+1]* \
-                (phi_MAC[myg.ilo  :myg.ihi+2,myg.jlo:myg.jhi+1] -
-                 phi_MAC[myg.ilo-1:myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx
+        b = (0, 1, 0, 0)
+        u_MAC.v(buf=b)[:,:] -= \
+                coeff_x.v(buf=b)*(phi_MAC.v(buf=b) - phi_MAC.ip(-1, buf=b))/myg.dx
 
-        v_MAC[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+2] -= \
-                coeff_y[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+2]* \
-                (phi_MAC[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+2] -
-                 phi_MAC[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi+1])/myg.dy
+        b = (0, 0, 0, 1)
+        v_MAC.v(buf=b)[:,:] -= \
+                coeff_y.v(buf=b)*(phi_MAC.v(buf=b) - phi_MAC.jp(-1, buf=b))/myg.dy
 
 
         #---------------------------------------------------------------------
         # predict rho to the edges and do its conservative update
         #---------------------------------------------------------------------
-        rho_xint, rho_yint = lm_interface_f.rho_states(myg.qx, myg.qy, myg.ng,
-                                                       myg.dx, myg.dy, dt,
-                                                       rho, u_MAC, v_MAC,
-                                                       ldelta_rx, ldelta_ry)
+        _rx, _ry = lm_interface_f.rho_states(myg.qx, myg.qy, myg.ng,
+                                             myg.dx, myg.dy, dt,
+                                             rho.d, u_MAC.d, v_MAC.d,
+                                             ldelta_rx, ldelta_ry)
+
+        rho_xint = patch.ArrayIndexer(d=_rx, grid=myg)
+        rho_yint = patch.ArrayIndexer(d=_ry, grid=myg)
 
         rho_old = rho.copy()
 
-        rho[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] -= dt*(
+        rho.v()[:,:] -= dt*(
             #  (rho u)_x
-            (rho_xint[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1]*
-             u_MAC[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
-             rho_xint[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]*
-             u_MAC[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dx +
+            (rho_xint.ip(1)*u_MAC.ip(1) - rho_xint.v()*u_MAC.v())/myg.dx +
             #  (rho v)_y
-            (rho_yint[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2]*
-             v_MAC[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
-             rho_yint[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]*
-             v_MAC[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])/myg.dy )
+            (rho_yint.jp(1)*v_MAC.jp(1) - rho_yint.v()*v_MAC.v())/myg.dy )
 
         self.cc_data.fill_BC("density")
 
