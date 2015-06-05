@@ -205,12 +205,9 @@ class Simulation(NullSimulation):
         # velocity field satisties div U = 0
 
         # the coefficent for the elliptic equation is beta_0^2/rho
-        # NOTE: this needs to be on the same grid as the MG solver
-        # !!!!!!!!!!! maybe we should get the coefficients via a
-        # method?
-        coeff = patch.ArrayIndexer(d=1.0/rho.v(buf=1),
+        coeff = 1/rho
         beta0 = self.base["beta0"]
-        coeff.v(buf=1)[:,:] = coeff.v(buf=1)*beta0.v2d()**2
+        coeff.v()[:,:] = coeff.v()*beta0.v2d()**2
 
         # next create the multigrid object.  We defined phi with
         # the right BCs previously
@@ -281,8 +278,8 @@ class Simulation(NullSimulation):
         orig_gp_x = orig_data.get_var("gradp_x")
         orig_gp_y = orig_data.get_var("gradp_y")
 
-        orig_gp_x[:,:] = new_gp_x[:,:]
-        orig_gp_y[:,:] = new_gp_y[:,:]
+        orig_gp_x.d[:,:] = new_gp_x.d[:,:]
+        orig_gp_y.d[:,:] = new_gp_y.d[:,:]
 
         self.cc_data = orig_data
 
@@ -561,8 +558,8 @@ class Simulation(NullSimulation):
         if self.verbose > 0: print("  final projection")
 
         # create the coefficient array: beta0**2/rho
-        coeff = 1.0/rho[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]
-        coeff = coeff*beta0[np.newaxis,myg.jlo-1:myg.jhi+2]**2
+        coeff = 1.0/rho
+        coeff.v()[:,:] = coeff.v()*beta0.v2d()
 
         # create the multigrid object
         mg = vcMG.VarCoeffCCMG2d(myg.nx, myg.ny,
@@ -579,22 +576,16 @@ class Simulation(NullSimulation):
         # first compute div{beta_0 U}
 
         # u/v are cell-centered, divU is cell-centered
-        div_beta_U[mg.ilo:mg.ihi+1,mg.jlo:mg.jhi+1] = \
-            0.5*beta0[np.newaxis,mg.jlo:mg.jhi+1]* \
-                (u[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
-                 u[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1])/myg.dx + \
-            0.5*(beta0[np.newaxis,myg.jlo+1:myg.jhi+2]* \
-                 v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
-                 beta0[np.newaxis,myg.jlo-1:myg.jhi  ]*
-                 v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
+        div_beta_U.v()[:,:] = \
+            0.5*beta0.v2d()*(u.ip(1) - u.ip(-1))/myg.dx + \
+            0.5*(beta0.v2dp(1)*v.jp(1) - beta0.v2dp(-1)*v.jp(-1))/myg.dy
 
-        mg.init_RHS(div_beta_U/dt)
+        mg.init_RHS(div_beta_U.d/dt)
 
         # use the old phi as our initial guess
         phiGuess = mg.soln_grid.scratch_array()
-        phiGuess[mg.ilo-1:mg.ihi+2,mg.jlo-1:mg.jhi+2] = \
-           phi[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2]
-        mg.init_solution(phiGuess)
+        phiGuess.v(buf=1)[:,:] = phi.v(buf=1)
+        mg.init_solution(phiGuess.d)
 
         # solve
         mg.solve(rtol=1.e-12)
@@ -602,7 +593,7 @@ class Simulation(NullSimulation):
 
         # store the solution in our self.cc_data object -- include a single
         # ghostcell
-        phi[:,:] = mg.get_solution(grid=myg)
+        phi.d[:,:] = mg.get_solution(grid=myg).d
 
         # get the cell-centered gradient of p and update the velocities
         # this differs depending on what we projected.
@@ -610,21 +601,21 @@ class Simulation(NullSimulation):
 
 
         # U = U - (beta_0/rho) grad (phi/beta_0)
-        coeff = 1.0/rho[:,:]
-        coeff = coeff*beta0[np.newaxis,:]
+        coeff = 1.0/rho
+        coeff.v()[:,:] = coeff.v()*beta0.v2d()
 
-        u[:,:] -= dt*coeff*gradphi_x
-        v[:,:] -= dt*coeff*gradphi_y
+        u.v()[:,:] -= dt*coeff.v()*gradphi_x.v()
+        v.v()[:,:] -= dt*coeff.v()*gradphi_y.v()
 
         # store gradp for the next step
 
         if proj_type == 1:
-            gradp_x[:,:] += gradphi_x[:,:]
-            gradp_y[:,:] += gradphi_y[:,:]
+            gradp_x.v()[:,:] += gradphi_x.v()
+            gradp_y.v()[:,:] += gradphi_y.v()
 
         elif proj_type == 2:
-            gradp_x[:,:] = gradphi_x[:,:]
-            gradp_y[:,:] = gradphi_y[:,:]
+            gradp_x.v()[:,:] = gradphi_x.v()
+            gradp_y.v()[:,:] = gradphi_y.v()
 
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")
@@ -654,16 +645,10 @@ class Simulation(NullSimulation):
 
         vort = myg.scratch_array()
 
-        dv = 0.5*(v[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
-                  v[myg.ilo-1:myg.ihi,  myg.jlo:myg.jhi+1])/myg.dx
-
-        du = 0.5*(u[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
-                  u[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
-
+        dv = 0.5*(v.ip(1) - v.ip(-1))/myg.dx
+        du = 0.5*(u.jp(1) - u.jp(-1))/myg.dy
         
-        # for some reason, setting vort here causes the density in the
-        # simulation to NaN.  Seems like a bug (in python?)
-        vort[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = dv - du
+        vort.v()[:,:] = dv - du
 
         fig, axes = plt.subplots(nrows=2, ncols=2, num=1)
         plt.subplots_adjust(hspace=0.25)
@@ -676,8 +661,7 @@ class Simulation(NullSimulation):
 
             f = fields[n]
 
-            img = ax.imshow(np.transpose(f[myg.ilo:myg.ihi+1,
-                                           myg.jlo:myg.jhi+1]),
+            img = ax.imshow(np.transpose(f.v()),
                             interpolation="nearest", origin="lower",
                             extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
