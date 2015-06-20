@@ -80,7 +80,7 @@ class GeneralMG2d(MG.CellCenterMG2d):
         # can do a ghost cell fill.
         for c in ["alpha", "beta", "gamma_x", "gamma_y"]:
             v = self.grids[self.nlevels-1].get_var(c)
-            v[:,:] = coeffs.get_var(c)
+            v.v()[:,:] = coeffs.get_var(c).v()
 
             self.grids[self.nlevels-1].fill_BC(c)
 
@@ -90,7 +90,7 @@ class GeneralMG2d(MG.CellCenterMG2d):
                 c_patch = self.grids[n]
 
                 coeffs_c = c_patch.get_var(c)
-                coeffs_c[:,:] = f_patch.restrict(c)
+                coeffs_c.v()[:,:] = f_patch.restrict(c).v()
 
                 self.grids[n].fill_BC(c)
                 n -= 1
@@ -167,52 +167,23 @@ class GeneralMG2d(MG.CellCenterMG2d):
             for n, (ix, iy) in enumerate([(0,0), (1,1), (1,0), (0,1)]):
 
                 denom = (
-                    alpha[myg.ilo+ix  :myg.ihi+1:2,
-                          myg.jlo+iy  :myg.jhi+1:2] -
-                    #
-                    beta_x[myg.ilo+1+ix:myg.ihi+2:2,
-                           myg.jlo+iy  :myg.jhi+1:2] -
-                    #
-                    beta_x[myg.ilo+ix  :myg.ihi+1:2,
-                           myg.jlo+iy  :myg.jhi+1:2] -
-                    #
-                    beta_y[myg.ilo+ix  :myg.ihi+1:2,
-                           myg.jlo+1+iy:myg.jhi+2:2] -
-                    #
-                    beta_y[myg.ilo+ix  :myg.ihi+1:2,
-                           myg.jlo+iy  :myg.jhi+1:2])
+                    alpha.ip_jp(ix, iy, s=2) -
+                    beta_x.ip_jp(1+ix, iy, s=2) - beta_x.ip_jp(ix, iy, s=2) -
+                    beta_y.ip_jp(ix, 1+iy, s=2) - beta_y.ip_jp(ix, iy, s=2) )
 
-                v[myg.ilo+ix:myg.ihi+1:2,myg.jlo+iy:myg.jhi+1:2] = (
-                    f[myg.ilo+ix:myg.ihi+1:2,myg.jlo+iy:myg.jhi+1:2] -
+                v.ip_jp(ix, iy, s=2)[:,:] = (f.ip_jp(ix, iy, s=2) -
                     # (beta_{i+1/2,j} + gamma^x_{i,j}) phi_{i+1,j}
-                    (beta_x[myg.ilo+1+ix:myg.ihi+2:2,
-                            myg.jlo+iy  :myg.jhi+1:2] +
-                     gamma_x[myg.ilo+ix:myg.ihi+1:2,
-                             myg.jlo+iy:myg.jhi+1:2])*
-                    v[myg.ilo+1+ix:myg.ihi+2:2,
-                      myg.jlo+iy  :myg.jhi+1:2] -
+                    (beta_x.ip_jp(1+ix, iy, s=2) + gamma_x.ip_jp(ix, iy, s=2))*
+                     v.ip_jp(1+ix, iy, s=2) - 
                     # (beta_{i-1/2,j} - gamma^x_{i,j}) phi_{i-1,j}
-                    (beta_x[myg.ilo+ix:myg.ihi+1:2,
-                            myg.jlo+iy:myg.jhi+1:2] -
-                     gamma_x[myg.ilo+ix:myg.ihi+1:2,
-                             myg.jlo+iy:myg.jhi+1:2])*
-                    v[myg.ilo-1+ix:myg.ihi  :2,
-                      myg.jlo+iy  :myg.jhi+1:2] -
+                    (beta_x.ip_jp(ix, iy, s=2) - gamma_x.ip_jp(ix, iy, s=2))*
+                     v.ip_jp(-1+ix, iy, s=2) - 
                     # (beta_{i,j+1/2} + gamma^y_{i,j}) phi_{i,j+1}
-                    (beta_y[myg.ilo+ix:myg.ihi+1:2,
-                            myg.jlo+1+iy:myg.jhi+2:2] +
-                     gamma_y[myg.ilo+ix:myg.ihi+1:2,
-                             myg.jlo+iy:myg.jhi+1:2])*
-                    v[myg.ilo+ix  :myg.ihi+1:2,
-                      myg.jlo+1+iy:myg.jhi+2:2] -
+                    (beta_y.ip_jp(ix, 1+iy, s=2) + gamma_y.ip_jp(ix, iy, s=2))*
+                     v.ip_jp(ix, 1+iy, s=2) -
                     # (beta_{i,j-1/2} - gamma^y_{i,j}) phi_{i,j-1}
-                    (beta_y[myg.ilo+ix:myg.ihi+1:2,
-                           myg.jlo+iy:myg.jhi+1:2] -
-                     gamma_y[myg.ilo+ix:myg.ihi+1:2,
-                             myg.jlo+iy:myg.jhi+1:2])*
-                    v[myg.ilo+ix  :myg.ihi+1:2,
-                      myg.jlo-1+iy:myg.jhi  :2]) / denom
-
+                    (beta_y.ip_jp(ix, iy, s=2) - gamma_y.ip_jp(ix, iy, s=2))*
+                     v.ip_jp(ix, -1+iy, s=2)) / denom
 
                 if n == 1 or n == 3:
                     self.grids[level].fill_BC("v")
@@ -267,33 +238,19 @@ class GeneralMG2d(MG.CellCenterMG2d):
         # r = f - L_eta phi
         L_eta_phi = (
             # alpha_{i,j} phi_{i,j}
-            alpha[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]*
-            v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] +
+            alpha.v()*v.v() + 
             # beta_{i+1/2,j} (phi_{i+1,j} - phi_{i,j})
-            beta_x[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1]* \
-            (v[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
-             v[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1]) - \
+            beta_x.ip(1)*(v.ip(1) - v.v()) - \
             # beta_{i-1/2,j} (phi_{i,j} - phi_{i-1,j})
-            beta_x[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1]* \
-            (v[myg.ilo  :myg.ihi+1,myg.jlo:myg.jhi+1] -
-             v[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1]) + \
+            beta_x.v()*(v.v() - v.ip(-1)) + \
             # beta_{i,j+1/2} (phi_{i,j+1} - phi_{i,j})
-            beta_y[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2]* \
-            (v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -  
-             v[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1]) - \
+            beta_y.jp(1)*(v.jp(1) - v.v()) - \
             # beta_{i,j-1/2} (phi_{i,j} - phi_{i,j-1})
-            beta_y[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1]* \
-            (v[myg.ilo:myg.ihi+1,myg.jlo  :myg.jhi+1] -
-             v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ]) + \
+            beta_y.v()*(v.v() - v.jp(-1)) + \
             # gamma^x_{i,j} (phi_{i+1,j} - phi_{i-1,j})
-            gamma_x[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]* \
-            (v[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
-             v[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1]) + \
-            # gamma^x_{i,j} (phi_{i+1,j} - phi_{i-1,j})
-            gamma_y[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]* \
-            (v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
-             v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi  ]) 
+            gamma_x.v()*(v.ip(1) - v.ip(-1)) + \
+            # gamma^y_{i,j} (phi_{i,j+1} - phi_{i,j-1})
+            gamma_y.v()*(v.jp(1) - v.jp(-1))
           )
 
-        r[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
-            f[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] - L_eta_phi
+        r.v()[:,:] = f.v() - L_eta_phi
