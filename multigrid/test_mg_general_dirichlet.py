@@ -96,16 +96,16 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     d.create()
 
     a = d.get_var("alpha")
-    a[:,:] = alpha(g.x2d, g.y2d)
+    a.d[:,:] = alpha(g.x2d, g.y2d)
 
     b = d.get_var("beta")
-    b[:,:] = beta(g.x2d, g.y2d)
+    b.d[:,:] = beta(g.x2d, g.y2d)
 
     gx = d.get_var("gamma_x")
-    gx[:,:] = gamma_x(g.x2d, g.y2d)
+    gx.d[:,:] = gamma_x(g.x2d, g.y2d)
 
     gy = d.get_var("gamma_y")
-    gy[:,:] = gamma_y(g.x2d, g.y2d)
+    gy.d[:,:] = gamma_y(g.x2d, g.y2d)
 
     
     # create the multigrid object
@@ -136,7 +136,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     b = true(a.x2d,a.y2d)
     e = v - b
 
-    enorm = a.soln_grid,norm(e)
+    enorm = e.norm()
     print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
           (enorm, a.relative_error, a.num_cycles))
 
@@ -149,7 +149,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
         plt.subplot(121)
 
-        plt.imshow(np.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
+        plt.imshow(np.transpose(v.v()),
                    interpolation="nearest", origin="lower",
                    extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
@@ -162,7 +162,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
         plt.subplot(122)
 
-        plt.imshow(np.transpose(e[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
+        plt.imshow(np.transpose(e.v()), 
                    interpolation="nearest", origin="lower",
                    extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
