@@ -31,7 +31,7 @@ def do_tests(build, out_file, do_standalone=True):
     opts = "driver.verbose=0 vis.dovis=0 io.do_io=0".split()
 
     tests = []
-    tests.append(test("advection", "smooth", "inputs.smooth", opts))
+    #tests.append(test("advection", "smooth", "inputs.smooth", opts))
     #tests.append(test("compressible", "quad", "inputs.quad", opts))
     #tests.append(test("diffusion", "gaussian", "inputs.gaussian", opts))
     #tests.append(test("incompressible", "shear", "inputs.shear", opts))

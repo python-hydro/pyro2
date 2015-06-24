@@ -12,7 +12,7 @@ import multigrid.variable_coeff_MG as vcMG
 from util import profile
 
 
-class BaseContainer(object):
+class Basestate(object):
     def __init__(self, ny, ng=0):
         self.ny = ny
         self.ng = ng
@@ -113,21 +113,21 @@ class Simulation(NullSimulation):
 
         # we also need storage for the 1-d base state -- we'll store this
         # in the main class directly.
-        self.base["rho0"] = BaseContainer(myg.ny, ng=myg.ng)
-        self.base["p0"] = BaseContainer(myg.ny, ng=myg.ng)
+        self.base["rho0"] = Basestate(myg.ny, ng=myg.ng)
+        self.base["p0"] = Basestate(myg.ny, ng=myg.ng)
 
         # now set the initial conditions for the problem
         exec(self.problem_name + '.init_data(self.cc_data, self.base, self.rp)')
 
         # Construct beta_0
         gamma = self.rp.get_param("eos.gamma")
-        self.base["beta0"] = BaseContainer(myg.ny, ng=myg.ng)
+        self.base["beta0"] = Basestate(myg.ny, ng=myg.ng)
         self.base["beta0"].d[:] = self.base["p0"].d**(1.0/gamma)
 
         # we'll also need beta_0 on vertical edges -- on the domain edges,
         # just do piecewise constant
-        self.base["beta0-edges"] = BaseContainer(myg.ny, ng=myg.ng)
-        self.base["beta0-edges"].v()[:] = \
+        self.base["beta0-edges"] = Basestate(myg.ny, ng=myg.ng)
+        self.base["beta0-edges"].jp(1)[:] = \
             0.5*(self.base["beta0"].v() + self.base["beta0"].jp(1))
         self.base["beta0-edges"].d[myg.jlo] = self.base["beta0"].d[myg.jlo]
         self.base["beta0-edges"].d[myg.jhi+1] = self.base["beta0"].d[myg.jhi]
