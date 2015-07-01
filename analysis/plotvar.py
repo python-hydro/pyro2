@@ -18,7 +18,7 @@ def makeplot(myd, variable, outfile):
     var = myd.get_var(variable)
     myg = myd.grid
 
-    img = plt.imshow(np.transpose(var[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
+    img = plt.imshow(np.transpose(var.v()),
                        interpolation="nearest", origin="lower",
                        extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
