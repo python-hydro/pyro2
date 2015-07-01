@@ -1,4 +1,5 @@
 import mesh.patch as patch
+from util import profile
 
 def grid_setup(rp, ng=1):
     nx = rp.get_param("mesh.nx")
@@ -58,9 +59,14 @@ class NullSimulation(object):
 
         self.n = 0
 
-        self.tmax = rp.get_param("driver.tmax")
-        self.max_steps = rp.get_param("driver.max_steps")            
-        
+        try: self.tmax = rp.get_param("driver.tmax")
+        except:
+            self.tmax = None
+            
+        try: self.max_steps = rp.get_param("driver.max_steps")            
+        except:
+            self.max_steps = None
+            
         self.rp = rp
         self.cc_data = None
 
@@ -74,7 +80,9 @@ class NullSimulation(object):
         else:
             self.tc = timers
 
-        self.verbose = self.rp.get_param("driver.verbose")
+        try: self.verbose = self.rp.get_param("driver.verbose")
+        except:
+            self.verbose = None
             
             
     def finished(self):

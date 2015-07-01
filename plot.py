@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-import numpy
-import pylab
+import numpy as np
+import matplotlib.pyplot as plt
 import sys
 import getopt
 
@@ -9,18 +9,18 @@ import mesh.patch as patch
 
 # plot an output file using the solver's dovis script
 
-def makeplot(myd, solverName, outfile, W, H):
+def makeplot(myd, solver_name, outfile, W, H):
 
-    exec 'import ' + solverName + ' as solver'
+    exec 'import ' + solver_name + ' as solver'
 
-    sim = solver.Simulation(None, None)
+    sim = solver.Simulation(solver_name, None, None)
     sim.cc_data = myd
 
-    pylab.figure(num=1, figsize=(W,H), dpi=100, facecolor='w')
+    plt.figure(num=1, figsize=(W,H), dpi=100, facecolor='w')
 
     sim.dovis()
-    pylab.savefig(outfile)
-    pylab.show()
+    plt.savefig(outfile)
+    plt.show()
 
 
 def usage():
