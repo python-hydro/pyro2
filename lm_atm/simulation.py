@@ -1,5 +1,7 @@
 from __future__ import print_function
 
+import sys
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -131,8 +133,8 @@ class Simulation(NullSimulation):
             0.5*(self.base["beta0"].v() + self.base["beta0"].jp(1))
         self.base["beta0-edges"].d[myg.jlo] = self.base["beta0"].d[myg.jlo]
         self.base["beta0-edges"].d[myg.jhi+1] = self.base["beta0"].d[myg.jhi]
-
-
+        
+        
     def make_prime(self, a, a0):
         return a - a0.v2d(buf=a0.ng)
 
@@ -235,7 +237,8 @@ class Simulation(NullSimulation):
         # set the RHS to divU and solve
         mg.init_RHS(div_beta_U.d)
         mg.solve(rtol=1.e-10)
-
+        
+        
         # store the solution in our self.cc_data object -- include a single
         # ghostcell
         phi = self.cc_data.get_var("phi")
@@ -368,7 +371,7 @@ class Simulation(NullSimulation):
         rhoprime = self.make_prime(rho, rho0)
         source.v()[:,:] = rhoprime.v()*g/rho.v()
         self.aux_data.fill_BC("source_y")
-
+        
         _um, _vm = lm_interface_f.mac_vels(myg.qx, myg.qy, myg.ng,
                                            myg.dx, myg.dy, dt,
                                            u.d, v.d,
@@ -435,13 +438,13 @@ class Simulation(NullSimulation):
         self.aux_data.fill_BC("coeff")
 
         coeff_x = myg.scratch_array()
-        b = [-3, 1, 0, 0]  # this seems more than we need
+        b = (3, 1, 0, 0)  # this seems more than we need
         coeff_x.v(buf=b)[:,:] = 0.5*(coeff.ip(1, buf=b) + coeff.v(buf=b))
 
         coeff_y = myg.scratch_array()
-        b = [0, 0, -3, 1]
+        b = (0, 0, 3, 1)
         coeff_y.v(buf=b)[:,:] = 0.5*(coeff.jp(1, buf=b) + coeff.v(buf=b))
-
+        
         # we need the MAC velocities on all edges of the computational domain
         # here we do U = U - (beta_0/rho) grad (phi/beta_0)
         b = (0, 1, 0, 0)
@@ -452,7 +455,7 @@ class Simulation(NullSimulation):
         v_MAC.v(buf=b)[:,:] -= \
                 coeff_y.v(buf=b)*(phi_MAC.v(buf=b) - phi_MAC.jp(-1, buf=b))/myg.dy
 
-
+        
         #---------------------------------------------------------------------
         # predict rho to the edges and do its conservative update
         #---------------------------------------------------------------------
