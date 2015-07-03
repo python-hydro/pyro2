@@ -334,20 +334,42 @@ class ArrayIndexer(object):
     def copy(self):
         return ArrayIndexer(d=self.d.copy(), grid=self.g)
 
-    def is_symmetric(self, nodal=False):
+    def is_symmetric(self, nodal=False, tol=1.e-14):
         if not nodal:
             L = self.d[self.g.ilo:self.g.ilo+self.g.nx/2,
                        self.g.jlo:self.g.jhi+1]
             R = self.d[self.g.ilo+self.g.nx/2:self.g.ihi+1,
                        self.g.jlo:self.g.jhi+1]
         else:
+            print(self.g.ilo,self.g.ilo+self.g.nx/2+1)
+            L = self.d[self.g.ilo:self.g.ilo+self.g.nx/2+1,
+                       self.g.jlo:self.g.jhi+1]
+            print(self.g.ilo+self.g.nx/2,self.g.ihi+2)
+            R = self.d[self.g.ilo+self.g.nx/2:self.g.ihi+2,
+                       self.g.jlo:self.g.jhi+1]
+
+
+        e = abs(L - np.flipud(R)).max()
+        return e < tol
+
+
+    def is_asymmetric(self, nodal=False, tol=1.e-14):
+        if not nodal:
             L = self.d[self.g.ilo:self.g.ilo+self.g.nx/2,
                        self.g.jlo:self.g.jhi+1]
-            R = self.d[self.g.ilo+self.g.nx/2+1:self.g.ihi+2,
+            R = self.d[self.g.ilo+self.g.nx/2:self.g.ihi+1,
                        self.g.jlo:self.g.jhi+1]
-            
-        e = abs(L - np.flipud(R)).max()
-        return e == 0.0
+        else:
+            print(self.g.ilo,self.g.ilo+self.g.nx/2+1)
+            L = self.d[self.g.ilo:self.g.ilo+self.g.nx/2+1,
+                       self.g.jlo:self.g.jhi+1]
+            print(self.g.ilo+self.g.nx/2,self.g.ihi+2)
+            R = self.d[self.g.ilo+self.g.nx/2:self.g.ihi+2,
+                       self.g.jlo:self.g.jhi+1]
+
+
+        e = abs(L + np.flipud(R)).max()
+        return e < tol
     
     
 class Grid2d():
