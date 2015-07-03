@@ -333,7 +333,22 @@ class ArrayIndexer(object):
 
     def copy(self):
         return ArrayIndexer(d=self.d.copy(), grid=self.g)
-        
+
+    def is_symmetric(self, nodal=False):
+        if not nodal:
+            L = self.d[self.g.ilo:self.g.ilo+self.g.nx/2,
+                       self.g.jlo:self.g.jhi+1]
+            R = self.d[self.g.ilo+self.g.nx/2:self.g.ihi+1,
+                       self.g.jlo:self.g.jhi+1]
+        else:
+            L = self.d[self.g.ilo:self.g.ilo+self.g.nx/2,
+                       self.g.jlo:self.g.jhi+1]
+            R = self.d[self.g.ilo+self.g.nx/2+1:self.g.ihi+2,
+                       self.g.jlo:self.g.jhi+1]
+            
+        e = abs(L - np.flipud(R)).max()
+        return e == 0.0
+    
     
 class Grid2d():
     """
