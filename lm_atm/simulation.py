@@ -654,7 +654,7 @@ class Simulation(NullSimulation):
         plt.subplots_adjust(hspace=0.25)
 
         fields = [rho, magvel, vort, rhoprime]
-        field_names = [r"$\rho$", r"|U|", r"$\nabla \times U$", r"$rho'$"]
+        field_names = [r"$\rho$", r"|U|", r"$\nabla \times U$", r"$\rho'$"]
 
         for n in range(len(fields)):
             ax = axes.flat[n]
