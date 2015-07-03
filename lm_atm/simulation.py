@@ -477,6 +477,11 @@ class Simulation(NullSimulation):
 
         self.cc_data.fill_BC("density")
 
+        # update eint as a diagnostic
+        eint = self.cc_data.get_var("eint")
+        gamma = self.rp.get_param("eos.gamma")        
+        eint[:,:] = self.base["p0"][np.newaxis,:]/(gamma - 1.0)/rho[:,:]
+        
         
         #---------------------------------------------------------------------
         # recompute the interface states, using the advective velocity
