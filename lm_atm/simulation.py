@@ -480,7 +480,7 @@ class Simulation(NullSimulation):
         # update eint as a diagnostic
         eint = self.cc_data.get_var("eint")
         gamma = self.rp.get_param("eos.gamma")        
-        eint[:,:] = self.base["p0"][np.newaxis,:]/(gamma - 1.0)/rho[:,:]
+        eint.v()[:,:] = self.base["p0"].v2d()/(gamma - 1.0)/rho.v()
         
         
         #---------------------------------------------------------------------
