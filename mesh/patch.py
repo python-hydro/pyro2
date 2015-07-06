@@ -253,7 +253,13 @@ class ArrayIndexer(object):
         self.c = len(s)
         
     def __add__(self, other):
-        return ArrayIndexer(d=self.d + other.d, grid=self.g)
+        if isinstance(other, ArrayIndexer):        
+            return ArrayIndexer(d=self.d + other.d, grid=self.g)
+        else:
+            return ArrayIndexer(d=self.d + other, grid=self.g)
+
+    def __radd__(self, other):
+        return self.__add__(other)
 
     def __sub__(self, other):
         if isinstance(other, ArrayIndexer):        
@@ -350,6 +356,7 @@ class ArrayIndexer(object):
 
 
         e = abs(L - np.flipud(R)).max()
+        print(e, tol, e < tol)
         return e < tol
 
 
@@ -369,6 +376,7 @@ class ArrayIndexer(object):
 
 
         e = abs(L + np.flipud(R)).max()
+        print(e, tol, e < tol)
         return e < tol
     
     
@@ -443,6 +451,10 @@ class Grid2d():
 
         self.jlo = ng
         self.jhi = ng+ny-1
+
+        # center of the grid (for convenience)
+        self.ic = self.ilo + nx/2 - 1
+        self.jc = self.jlo + ny/2 - 1
 
         # define the coordinate information at the left, center, and right
         # zone coordinates
