@@ -134,7 +134,21 @@ class Simulation(NullSimulation):
         self.base["beta0-edges"].d[myg.jlo] = self.base["beta0"].d[myg.jlo]
         self.base["beta0-edges"].d[myg.jhi+1] = self.base["beta0"].d[myg.jhi]
         
-        
+        print("in initialize")
+        dens = my_data.get_var("density")
+        assert dens.is_symmetric()
+
+        velx = my_data.get_var("x-velocity")
+        assert velx.is_symmetric()
+
+        vely = my_data.get_var("y-velocity")
+        assert vely.is_symmetric()
+
+        print (type(self.base["beta0"].v2d()))
+        beta2d = myg.scratch_array() + self.base["beta0"].v2d(buf=myg.ng)
+        assert beta2d.is_symmetric()
+
+
     def make_prime(self, a, a0):
         return a - a0.v2d(buf=a0.ng)
 
@@ -201,7 +215,7 @@ class Simulation(NullSimulation):
         self.cc_data.fill_BC("density")        
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")
-
+        return
 
         # 1. do the initial projection.  This makes sure that our original
         # velocity field satisties div U = 0
@@ -224,6 +238,8 @@ class Simulation(NullSimulation):
                                  coeffs_bc=self.cc_data.BCs["density"],
                                  verbose=0)
 
+        print("pre-evolve projection")
+
         # first compute div{beta_0 U}
         div_beta_U = mg.soln_grid.scratch_array()
 
@@ -231,6 +247,8 @@ class Simulation(NullSimulation):
         div_beta_U.v()[:,:] = \
             0.5*beta0.v2d()*(u.ip(1) - u.ip(-1))/myg.dx + \
             0.5*(beta0.v2dp(1)*v.jp(1) - beta0.v2dp(-1)*v.jp(-1))/myg.dy
+
+        assert div_beta_U.is_symmetric()
 
         # solve D (beta_0^2/rho) G (phi/beta_0) = D( beta_0 U )
 
@@ -244,17 +262,25 @@ class Simulation(NullSimulation):
         phi = self.cc_data.get_var("phi")
         phi.d[:,:] = mg.get_solution(grid=myg).d
 
+        assert phi.is_symmetric()
+
         # get the cell-centered gradient of phi and update the
         # velocities
         # FIXME: this update only needs to be done on the interior
         # cells -- not ghost cells
         gradp_x, gradp_y = mg.get_solution_gradient(grid=myg)
 
+
+        assert gradp_x.is_asymmetric()
+
         coeff = 1.0/rho
         coeff.v()[:,:] = coeff.v()*beta0.v2d()
 
         u.v()[:,:] -= coeff.v()*gradp_x.v()
         v.v()[:,:] -= coeff.v()*gradp_y.v()
+
+        assert u.is_asymmetric()
+        assert v.is_symmetric()
 
         # fill the ghostcells
         self.cc_data.fill_BC("x-velocity")
@@ -371,7 +397,14 @@ class Simulation(NullSimulation):
         rhoprime = self.make_prime(rho, rho0)
         source.v()[:,:] = rhoprime.v()*g/rho.v()
         self.aux_data.fill_BC("source_y")
-        
+
+        assert source.is_symmetric()
+
+        for i in range(myg.qx):
+            print(i, gradp_x.d[i,myg.jc])
+
+        assert gradp_x.is_asymmetric()
+
         _um, _vm = lm_interface_f.mac_vels(myg.qx, myg.qy, myg.ng,
                                            myg.dx, myg.dy, dt,
                                            u.d, v.d,
@@ -383,7 +416,13 @@ class Simulation(NullSimulation):
 
         u_MAC = patch.ArrayIndexer(d=_um, grid=myg)
         v_MAC = patch.ArrayIndexer(d=_vm, grid=myg)        
-        
+
+        for i in range(myg.qx):
+            print(i, u_MAC.d[i,myg.jc])
+
+        assert u_MAC.is_asymmetric(nodal=True)
+        assert v_MAC.is_symmetric()
+
         #---------------------------------------------------------------------
         # do a MAC projection to make the advective velocities divergence
         # free
@@ -437,16 +476,23 @@ class Simulation(NullSimulation):
         coeff.v()[:,:] = coeff.v()*beta0.v2d()
         self.aux_data.fill_BC("coeff")
 
+        assert coeff.is_symmetric()
+
         coeff_x = myg.scratch_array()
         b = (3, 1, 0, 0)  # this seems more than we need
-        coeff_x.v(buf=b)[:,:] = 0.5*(coeff.ip(1, buf=b) + coeff.v(buf=b))
+        coeff_x.v(buf=b)[:,:] = 0.5*(coeff.ip(-1, buf=b) + coeff.v(buf=b))
 
         coeff_y = myg.scratch_array()
         b = (0, 0, 3, 1)
-        coeff_y.v(buf=b)[:,:] = 0.5*(coeff.jp(1, buf=b) + coeff.v(buf=b))
+        coeff_y.v(buf=b)[:,:] = 0.5*(coeff.jp(-1, buf=b) + coeff.v(buf=b))
         
         # we need the MAC velocities on all edges of the computational domain
         # here we do U = U - (beta_0/rho) grad (phi/beta_0)
+        assert u_MAC.is_asymmetric(nodal=True)
+        assert v_MAC.is_symmetric()
+
+        assert coeff_x.is_symmetric(nodal=True)
+
         b = (0, 1, 0, 0)
         u_MAC.v(buf=b)[:,:] -= \
                 coeff_x.v(buf=b)*(phi_MAC.v(buf=b) - phi_MAC.ip(-1, buf=b))/myg.dx
@@ -455,7 +501,10 @@ class Simulation(NullSimulation):
         v_MAC.v(buf=b)[:,:] -= \
                 coeff_y.v(buf=b)*(phi_MAC.v(buf=b) - phi_MAC.jp(-1, buf=b))/myg.dy
 
-        
+        assert u_MAC.is_asymmetric(nodal=True)
+        assert v_MAC.is_symmetric()
+
+
         #---------------------------------------------------------------------
         # predict rho to the edges and do its conservative update
         #---------------------------------------------------------------------
@@ -509,6 +558,8 @@ class Simulation(NullSimulation):
         u_yint = patch.ArrayIndexer(d=_uy, grid=myg)
         v_yint = patch.ArrayIndexer(d=_vy, grid=myg)
 
+        assert u_xint.is_asymmetric(nodal=True)
+
         #---------------------------------------------------------------------
         # update U to get the provisional velocity field
         #---------------------------------------------------------------------
@@ -531,6 +582,11 @@ class Simulation(NullSimulation):
 
         proj_type = self.rp.get_param("lm-atmosphere.proj_type")
 
+        print("before advection")
+        assert u.is_asymmetric()
+        assert v.is_symmetric()
+        assert gradp_x.is_asymmetric()
+        assert gradp_y.is_symmetric()
 
         if proj_type == 1:
             u.v()[:,:] -= (dt*advect_x.v() + dt*gradp_x.v())
@@ -541,13 +597,21 @@ class Simulation(NullSimulation):
             v.v()[:,:] -= dt*advect_y.v()
 
 
+        print("before projection")
+        assert u.is_asymmetric()
+        assert v.is_symmetric()
+
         # add the gravitational source
         rho_half = 0.5*(rho + rho_old)
         rhoprime = self.make_prime(rho_half, rho0)
         source.d[:,:] = (rhoprime*g/rho_half).d
         self.aux_data.fill_BC("source_y")
-        
+
+        print("doing gravity")
+        assert v.is_symmetric()
         v.d[:,:] += dt*source.d
+        print("done")
+        assert v.is_symmetric()
 
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")
@@ -587,6 +651,10 @@ class Simulation(NullSimulation):
         div_beta_U.v()[:,:] = \
             0.5*beta0.v2d()*(u.ip(1) - u.ip(-1))/myg.dx + \
             0.5*(beta0.v2dp(1)*v.jp(1) - beta0.v2dp(-1)*v.jp(-1))/myg.dy
+
+        assert u.is_asymmetric()
+        assert v.is_symmetric()
+        assert div_beta_U.is_symmetric()
 
         mg.init_RHS(div_beta_U.d/dt)
 
@@ -630,6 +698,9 @@ class Simulation(NullSimulation):
 
         self.cc_data.fill_BC("gradp_x")
         self.cc_data.fill_BC("gradp_y")
+
+
+        assert u.is_asymmetric()
 
 
     def dovis(self):

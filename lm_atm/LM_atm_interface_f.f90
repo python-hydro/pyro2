@@ -1,3 +1,133 @@
+function is_symmetric_pair(qx, qy, ng, nodal, sl, sr) result (sym)
+
+  implicit none
+
+  integer :: sym
+  integer :: qx, qy, ng
+  double precision :: sl(0:qx-1, 0:qy-1)
+  double precision :: sr(0:qx-1, 0:qy-1)
+  logical :: nodal
+
+  integer :: i, j
+  integer :: nx, ny, ilo, ihi, jlo, jhi
+  integer :: il, ir
+
+  nx = qx - 2*ng; ny = qy - 2*ng
+  ilo = ng; ihi = ng+nx-1; jlo = ng; jhi = ng+ny-1
+
+  sym = 1
+  
+  if (.not. nodal) then
+     loop_outer: do j = jlo, jhi
+        do i = 1, nx/2
+           il = ilo + i - 1
+           ir = ihi - i + 1
+           
+           if (.not. sl(il,j) == sr(ir,j)) then
+              sym = 0
+              exit loop_outer
+           endif
+        enddo
+     enddo loop_outer
+
+  else
+
+     loop_nodal_outer: do j = jlo, jhi
+        do i = 1, nx/2
+           il = ilo + i - 1
+           ir = ihi - i + 2
+           
+           if (.not. sl(il,j) == sr(ir,j)) then
+              sym = 0
+              exit loop_nodal_outer
+           endif
+        enddo
+     enddo loop_nodal_outer
+  endif
+
+end function is_symmetric_pair
+
+function is_symmetric(qx, qy, ng, nodal, s) result (sym)
+
+  implicit none
+
+  integer :: sym
+  integer :: qx, qy, ng
+  double precision :: s(0:qx-1, 0:qy-1)
+  logical :: nodal
+
+  integer :: is_symmetric_pair
+
+  sym = is_symmetric_pair(qx, qy, ng, nodal, s, s)
+
+end function is_symmetric
+
+
+function is_asymmetric_pair(qx, qy, ng, nodal, sl, sr) result (asym)
+
+  implicit none
+
+  integer :: asym
+  integer :: qx, qy, ng
+  double precision :: sl(0:qx-1, 0:qy-1)
+  double precision :: sr(0:qx-1, 0:qy-1)
+  logical :: nodal
+
+  integer :: i, j
+  integer :: nx, ny, ilo, ihi, jlo, jhi
+  integer :: il, ir
+
+  nx = qx - 2*ng; ny = qy - 2*ng
+  ilo = ng; ihi = ng+nx-1; jlo = ng; jhi = ng+ny-1
+
+  asym = 1
+  
+  if (.not. nodal) then
+     loop_aouter: do j = jlo, jhi
+        do i = 1, nx/2
+           il = ilo + i - 1
+           ir = ihi - i + 1
+           
+           print *, il, ir, sl(il,j), -sr(ir,j)
+           if (.not. sl(il,j) == -sr(ir,j)) then
+              asym = 0
+              exit loop_aouter
+           endif
+        enddo
+     enddo loop_aouter
+
+  else
+
+     loop_nodal_aouter: do j = jlo, jhi
+        do i = 1, nx/2
+           il = ilo + i - 1
+           ir = ihi - i + 2
+
+           !print *, il, ir, sl(il,j), -sr(ir,j)
+           if (.not. sl(il,j) == -sr(ir,j)) then
+              asym = 0
+              exit loop_nodal_aouter
+           endif
+        enddo
+     enddo loop_nodal_aouter
+  endif
+end function is_asymmetric_pair
+
+function is_asymmetric(qx, qy, ng, nodal, s) result (asym)
+
+  implicit none
+
+  integer :: asym
+  integer :: qx, qy, ng
+  double precision :: s(0:qx-1, 0:qy-1)
+  logical :: nodal
+
+  integer :: is_asymmetric_pair
+
+  asym = is_asymmetric_pair(qx, qy, ng, nodal, s, s)
+
+end function is_asymmetric
+
 subroutine mac_vels(qx, qy, ng, dx, dy, dt, &
                     u, v, &
                     ldelta_ux, ldelta_vx, &
@@ -29,6 +159,8 @@ subroutine mac_vels(qx, qy, ng, dx, dy, dt, &
   double precision, intent(  out) :: u_MAC(0:qx-1, 0:qy-1)
   double precision, intent(  out) :: v_MAC(0:qx-1, 0:qy-1)
 
+  integer :: is_symmetric, is_asymmetric, is_asymmetric_pair
+
 !f2py depend(qx, qy) :: u, v
 !f2py depend(qx, qy) :: ldelta_ux, ldelta_vx, ldelta_uy, ldelta_vy
 !f2py depend(qx, qy) :: gradp_x, gradp_y
@@ -50,6 +182,33 @@ subroutine mac_vels(qx, qy, ng, dx, dy, dt, &
   nx = qx - 2*ng; ny = qy - 2*ng
   ilo = ng; ihi = ng+nx-1; jlo = ng; jhi = ng+ny-1
   
+
+  ! assertions
+  ! print *, "checking ldelta_ux"
+  ! if (.not. is_asymmetric(qx, qy, ng, .false., ldelta_ux) == 1) then
+  !    stop 'ldelta_ux not asymmetric'
+  ! endif
+
+  ! print *, "checking ldelta_uy"
+  ! if (.not. is_symmetric(qx, qy, ng, .false., ldelta_uy) == 1) then
+  !    stop 'ldelta_uy not symmetric'
+  ! endif
+
+  ! print *, "checking ldelta_vx"
+  ! if (.not. is_symmetric(qx, qy, ng, .false., ldelta_vx) == 1) then
+  !    stop 'ldelta_vx not symmetric'
+  ! endif
+
+  ! print *, "checking ldelta_vy"
+  ! if (.not. is_symmetric(qx, qy, ng, .false., ldelta_vy) == 1) then
+  !    stop 'ldelta_vy not symmetric'
+  ! endif
+
+  ! print *, "checking gradp_x"
+  ! if (.not. is_asymmetric(qx, qy, ng, .false., gradp_x) == 1) then
+  !    stop 'gradp_x not asymmetric'
+  ! endif
+
   
   ! get the full u and v left and right states (including transverse
   ! terms) on both the x- and y-interfaces
@@ -62,12 +221,23 @@ subroutine mac_vels(qx, qy, ng, dx, dy, dt, &
                             u_xl, u_xr, u_yl, u_yr, &
                             v_xl, v_xr, v_yl, v_yr)
 
+  ! print *, 'checking u_xl'
+  ! if (.not. is_asymmetric_pair(qx, qy, ng, .true., u_xl, u_xr) == 1) then
+  !    stop 'u_xl/r not asymmetric'
+  ! endif
+
+
   ! Riemann problem -- this follows Burger's equation.  We don't use
   ! any input velocity for the upwinding.  Also, we only care about
   ! the normal states here (u on x and v on y)
   call riemann_and_upwind(qx, qy, ng, u_xl, u_xr, u_MAC)
   call riemann_and_upwind(qx, qy, ng, v_yl, v_yr, v_MAC)
-    
+
+  ! print *, 'checking U_MAC'
+  ! if (.not. is_asymmetric(qx, qy, ng, .true., u_MAC) == 1) then
+  !    stop 'u_MAC not asymmetric'
+  ! endif
+  
 end subroutine mac_vels
 
 
@@ -301,6 +471,8 @@ subroutine get_interface_states(qx, qy, ng, dx, dy, dt, &
   double precision :: dtdx, dtdy
   double precision :: ubar, vbar, uv_x, vu_y, uu_x, vv_y
 
+  integer :: is_asymmetric_pair
+
   nx = qx - 2*ng; ny = qy - 2*ng
   ilo = ng; ihi = ng+nx-1; jlo = ng; jhi = ng+ny-1
 
@@ -334,12 +506,18 @@ subroutine get_interface_states(qx, qy, ng, dx, dy, dt, &
      enddo
   enddo
 
+  ! print *, 'checking u_xl in states'
+  ! if (.not. is_asymmetric_pair(qx, qy, ng, .true., u_xl, u_xr) == 1) then
+  !    stop 'u_xl/r not asymmetric'
+  ! endif
+
 
   ! now get the normal advective velocities on the interfaces by solving
   ! the Riemann problem.  
   call riemann(qx, qy, ng, u_xl, u_xr, uhat_adv)
   call riemann(qx, qy, ng, v_yl, v_yr, vhat_adv)
 
+  
 
   ! now that we have the advective velocities, upwind the left and right
   ! states using the appropriate advective velocity.
