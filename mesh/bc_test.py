@@ -28,23 +28,18 @@ mydata.create()
 
 a = mydata.get_var("outflow")
 
-i = myg.ilo
-while (i <= myg.ihi):
-
-    j = myg.jlo
-    while (j <= myg.jhi):
-        a[i,j] = (i-myg.ilo) + 10*(j-myg.jlo) + 1
-        j += 1
-    i += 1
+for i in range(myg.ilo, myg.ihi+1):
+    for j in range(myg.jlo, myg.jhi+1):
+        a.d[i,j] = (i-myg.ilo) + 10*(j-myg.jlo) + 1
 
 
 b = mydata.get_var("periodic")
 c = mydata.get_var("reflect-even")
 d = mydata.get_var("reflect-odd")
 
-b[:,:] = a[:,:]
-c[:,:] = a[:,:]
-d[:,:] = a[:,:]
+b.d[:,:] = a.d[:,:]
+c.d[:,:] = a.d[:,:]
+d.d[:,:] = a.d[:,:]
 
 mydata.fill_BC("outflow")
 mydata.fill_BC("periodic")
