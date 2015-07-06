@@ -378,6 +378,46 @@ class ArrayIndexer(object):
         e = abs(L + np.flipud(R)).max()
         print(e, tol, e < tol)
         return e < tol
+
+
+    def pretty_print(self):
+        """
+        Print out a small dataset to the screen with the ghost cells
+        a different color, to make things stand out
+        """
+
+        if self.d.dtype == np.int:
+            fmt = "%4d"
+        elif self.d.dtype == np.float64:
+            fmt = "%10.5g"
+        else:
+            msg.fail("ERROR: dtype not supported")
+
+        # print j descending, so it looks like a grid (y increasing
+        # with height)
+        for j in reversed(range(self.g.qy)):
+            for i in range(self.g.qx):
+
+                if (j < self.g.jlo or j > self.g.jhi or
+                    i < self.g.ilo or i > self.g.ihi):
+                    gc = 1
+                else:
+                    gc = 0
+
+                if gc:
+                    print("\033[31m" + fmt % (self.d[i,j]) + "\033[0m", end="")
+                else:
+                    print (fmt % (self.d[i,j]), end="")
+
+            print(" ")
+
+        leg = """
+         ^ y
+         |
+         +---> x
+        """
+        print(leg)
+
     
     
 class Grid2d():
@@ -1057,45 +1097,10 @@ class CellCenterData2d():
         pF.close()
 
 
-    def pretty_print(self, varname):
-        """
-        Print out a small dataset to the screen with the ghost cells
-        a different color, to make things stand out
-        """
-
-        a = self.get_var(varname)
-
-        if self.dtype == np.int:
-            fmt = "%4d"
-        elif self.dtype == np.float64:
-            fmt = "%10.5g"
-        else:
-            msg.fail("ERROR: dtype not supported")
-
-        # print j descending, so it looks like a grid (y increasing
-        # with height)
-        for j in reversed(range(self.grid.qy)):
-            for i in range(self.grid.qx):
-
-                if (j < self.grid.jlo or j > self.grid.jhi or
-                    i < self.grid.ilo or i > self.grid.ihi):
-                    gc = 1
-                else:
-                    gc = 0
-
-                if gc:
-                    print("\033[31m" + fmt % (a[i,j]) + "\033[0m", end="")
-                else:
-                    print (fmt % (a[i,j]), end="")
-
-            print(" ")
-
-        leg = """
-         ^ y
-         |
-         +---> x
-        """
-        print(leg)
+    def pretty_print(self, var):
+        
+        a = self.get_var(var)
+        a.pretty_print()
 
 
 # backwards compatibility
