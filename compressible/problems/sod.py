@@ -52,58 +52,43 @@ def init_data(my_data, rp):
 
     myg = my_data.grid
     
-    # there is probably an easier way to do this, but for now, we
-    # will just do an explicit loop.  Also, we really want to set
-    # the pressue and get the internal energy from that, and then
-    # compute the total energy (which is what we store).  For now
-    # we will just fake this.
     if direction == "x":
 
-        i = myg.ilo
-        while i <= myg.ihi:
+        # left
+        idxl = myg.x2d <= xctr
 
-            j = myg.jlo
-            while j <= myg.jhi:
+        dens.d[idxl] = dens_left
+        xmom.d[idxl] = dens_left*u_left
+        ymom.d[idxl] = 0.0
+        ener.d[idxl] = p_left/(gamma - 1.0) + 0.5*xmom.d[idxl]*u_left
 
-                if myg.x[i] <= xctr:
-                    dens[i,j] = dens_left
-                    xmom[i,j] = dens_left*u_left
-                    ymom[i,j] = 0.0
-                    ener[i,j] = p_left/(gamma - 1.0) + 0.5*xmom[i,j]*u_left
+        # right
+        idxr = myg.x2d > xctr
                 
-                else:
-                    dens[i,j] = dens_right
-                    xmom[i,j] = dens_right*u_right
-                    ymom[i,j] = 0.0
-                    ener[i,j] = p_right/(gamma - 1.0) + 0.5*xmom[i,j]*u_right
-                    
-                j += 1
-            i += 1
+        dens.d[idxr] = dens_right
+        xmom.d[idxr] = dens_right*u_right
+        ymom.d[idxr] = 0.0
+        ener.d[idxr] = p_right/(gamma - 1.0) + 0.5*xmom.d[idxr]*u_right
 
     else:
-        i = myg.ilo
-        while i <= myg.ihi:
 
-            j = myg.jlo
-            while j <= myg.jhi:
+        # bottom
+        idxb = myg.y2d <= yctr
 
-                if myg.y[j] <= yctr:
-                    dens[i,j] = dens_left
-                    xmom[i,j] = 0.0
-                    ymom[i,j] = dens_left*u_left
-                    ener[i,j] = p_left/(gamma - 1.0) + 0.5*ymom[i,j]*u_left
+        dens.d[idxb] = dens_left
+        xmom.d[idxb] = 0.0
+        ymom.d[idxb] = dens_left*u_left
+        ener.d[idxb] = p_left/(gamma - 1.0) + 0.5*ymom.d[idxb]*u_left
                 
-                else:
-                    dens[i,j] = dens_right
-                    xmom[i,j] = 0.0
-                    ymom[i,j] = dens_right*u_right
-                    ener[i,j] = p_right/(gamma - 1.0) + 0.5*ymom[i,j]*u_right
-                    
-                j += 1
-            i += 1
+        # top
+        idxt = myg.y2d > yctr
+        
+        dens.d[idxt] = dens_right
+        xmom.d[idxt] = 0.0
+        ymom.d[idxt] = dens_right*u_right
+        ener.d[idxt] = p_right/(gamma - 1.0) + 0.5*ymom.d[idxt]*u_right
         
     
-
 def finalize():
     """ print out any information to the user at the end of the run """
 
