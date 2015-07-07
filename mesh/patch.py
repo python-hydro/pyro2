@@ -1146,10 +1146,8 @@ def cell_center_data_clone(old):
 
     new = CellCenterData2d(old.grid, dtype=old.dtype)
 
-    n = 0
-    while n < old.nvar:
+    for n in range(old.nvar):
         new.register_var(old.vars[n], old.BCs[old.vars[n]])
-        n += 1
 
     new.create()
 
@@ -1163,7 +1161,7 @@ if __name__== "__main__":
 
     # illustrate basic mesh operations
 
-    myg = Grid2d(16,32, xmax=1.0, ymax=2.0)
+    myg = Grid2d(8,16, xmax=1.0, ymax=2.0)
 
     mydata = CellCenterData2d(myg)
 
@@ -1174,7 +1172,7 @@ if __name__== "__main__":
 
 
     a = mydata.get_var("a")
-    a[:,:] = np.exp(-(myg.x2d - 0.5)**2 - (myg.y2d - 1.0)**2)
+    a.d[:,:] = np.exp(-(myg.x2d - 0.5)**2 - (myg.y2d - 1.0)**2)
 
     print(mydata)
 
