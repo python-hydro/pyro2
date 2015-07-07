@@ -39,9 +39,9 @@ def init_data(my_data, rp):
     # initialize the components, remember, that ener here is
     # rho*eint + 0.5*rho*v**2, where eint is the specific
     # internal energy (erg/g)
-    xmom[:,:] = 0.0
-    ymom[:,:] = 0.0
-    dens[:,:] = 0.0
+    xmom.d[:,:] = 0.0
+    ymom.d[:,:] = 0.0
+    dens.d[:,:] = 0.0
 
     # set the density to be stratified in the y-direction
     myg = my_data.grid
@@ -53,24 +53,24 @@ def init_data(my_data, rp):
     j = myg.jlo
     while j <= myg.jhi:
         if (myg.y[j] < ycenter):
-            dens[:,j] = dens1
-            p[:,j] = p0 + dens1*grav*myg.y[j]
+            dens.d[:,j] = dens1
+            p.d[:,j] = p0 + dens1*grav*myg.y[j]
 
         else:
-            dens[:,j] = dens2
-            p[:,j] = p0 + dens1*grav*ycenter + dens2*grav*(myg.y[j] - ycenter)
+            dens.d[:,j] = dens2
+            p.d[:,j] = p0 + dens1*grav*ycenter + dens2*grav*(myg.y[j] - ycenter)
 
 
         j += 1
 
 
-    ymom[:,:] = amp*numpy.cos(2.0*math.pi*myg.x2d/(myg.xmax-myg.xmin))*numpy.exp(-(myg.y2d-ycenter)**2/sigma**2)
+    ymom.d[:,:] = amp*numpy.cos(2.0*math.pi*myg.x2d/(myg.xmax-myg.xmin))*numpy.exp(-(myg.y2d-ycenter)**2/sigma**2)
 
     ymom *= dens
 
     # set the energy (P = cs2*dens)
-    ener[:,:] = p[:,:]/(gamma - 1.0) + \
-        0.5*(xmom[:,:]**2 + ymom[:,:]**2)/dens[:,:]
+    ener.d[:,:] = p.d[:,:]/(gamma - 1.0) + \
+        0.5*(xmom.d[:,:]**2 + ymom.d[:,:]**2)/dens.d[:,:]
 
 
 def finalize():

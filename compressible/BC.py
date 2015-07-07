@@ -42,9 +42,9 @@ def user(bc_name, bc_edge, variable, my_data):
 
     myg = my_data.grid
 
-    if (bc_name == "hse"):
+    if bc_name == "hse":
 
-        if (bc_edge == "ylb"):
+        if bc_edge == "ylb":
 
             # lower y boundary
 
@@ -52,28 +52,28 @@ def user(bc_name, bc_edge, variable, my_data):
             # be outflow, and the pressure to be in HSE
             if variable == "density":
                 j = myg.jlo-1
-                while (j >= 0):
-                    dens[:,j] = dens[:,myg.jlo]
+                while j >= 0:
+                    dens.d[:,j] = dens.d[:,myg.jlo]
                     j -= 1
 
             elif variable == "x-momentum":
                 j = myg.jlo-1
-                while (j >= 0):
-                    xmom[:,j] = xmom[:,myg.jlo]
+                while j >= 0:
+                    xmom.d[:,j] = xmom.d[:,myg.jlo]
                     j -= 1
 
             elif variable == "y-momentum":
                 j = myg.jlo-1
-                while (j >= 0):
-                    ymom[:,j] = ymom[:,myg.jlo]
+                while j >= 0:
+                    ymom.d[:,j] = ymom.d[:,myg.jlo]
                     j -= 1
 
             elif variable == "energy":
-                dens_base = dens[:,myg.jlo]
-                ke_base = 0.5*(xmom[:,myg.jlo]**2 + ymom[:,myg.jlo]**2) / \
-                    dens[:,myg.jlo]
+                dens_base = dens.d[:,myg.jlo]
+                ke_base = 0.5*(xmom.d[:,myg.jlo]**2 + ymom.d[:,myg.jlo]**2) / \
+                    dens.d[:,myg.jlo]
 
-                eint_base = (ener[:,myg.jlo] - ke_base)/dens[:,myg.jlo]
+                eint_base = (ener.d[:,myg.jlo] - ke_base)/dens.d[:,myg.jlo]
                 pres_base = eos.pres(gamma, dens_base, eint_base)
 
                 # we are assuming that the density is constant in this
@@ -84,7 +84,7 @@ def user(bc_name, bc_edge, variable, my_data):
                     pres_below = pres_base - grav*dens_base*myg.dy
                     rhoe = eos.rhoe(gamma, pres_below)
 
-                    ener[:,j] = rhoe + ke_base
+                    ener.d[:,j] = rhoe + ke_base
 
                     pres_base = pres_below.copy()
 
@@ -94,7 +94,7 @@ def user(bc_name, bc_edge, variable, my_data):
                 msg.fail("error: variable not defined")
 
 
-        elif (bc_edge == "yrb"):
+        elif bc_edge == "yrb":
 
             # upper y boundary
 
@@ -102,22 +102,22 @@ def user(bc_name, bc_edge, variable, my_data):
             # be outflow, and the pressure to be in HSE
             if variable == "density":
                 for j in range(myg.jhi+1, myg.jhi+myg.ng+1):
-                    dens[:,j] = dens[:,myg.jhi]
+                    dens.d[:,j] = dens.d[:,myg.jhi]
 
             elif variable == "x-momentum":
-                for i in range(myg.jhi+1, myg.jhi+myg.ng+1):
-                    xmom[:,j] = xmom[:,myg.jhi]
+                for j in range(myg.jhi+1, myg.jhi+myg.ng+1):
+                    xmom.d[:,j] = xmom.d[:,myg.jhi]
 
             elif variable == "y-momentum":
                 for j in range(myg.jhi+1, myg.jhi+myg.ng+1):
-                    ymom[:,j] = ymom[:,myg.jhi]
+                    ymom.d[:,j] = ymom.d[:,myg.jhi]
 
             elif variable == "energy":
-                dens_base = dens[:,myg.jhi]
-                ke_base = 0.5*(xmom[:,myg.jhi]**2 + ymom[:,myg.jhi]**2) / \
-                    dens[:,myg.jhi]
+                dens_base = dens.d[:,myg.jhi]
+                ke_base = 0.5*(xmom.d[:,myg.jhi]**2 + ymom.d[:,myg.jhi]**2) / \
+                    dens.d[:,myg.jhi]
 
-                eint_base = (ener[:,myg.jhi] - ke_base)/dens[:,myg.jhi]
+                eint_base = (ener.d[:,myg.jhi] - ke_base)/dens.d[:,myg.jhi]
                 pres_base = eos.pres(gamma, dens_base, eint_base)
 
                 # we are assuming that the density is constant in this
@@ -127,7 +127,7 @@ def user(bc_name, bc_edge, variable, my_data):
                     pres_above = pres_base + grav*dens_base*myg.dy
                     rhoe = eos.rhoe(gamma, pres_above)
 
-                    ener[:,j] = rhoe + ke_base
+                    ener.d[:,j] = rhoe + ke_base
 
                     pres_base = pres_above.copy()
 
