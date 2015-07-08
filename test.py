@@ -34,6 +34,7 @@ def do_tests(build, out_file, do_standalone=True):
     tests.append(test("advection", "smooth", "inputs.smooth", opts))
     tests.append(test("compressible", "quad", "inputs.quad", opts))
     tests.append(test("compressible", "sod", "inputs.sod.x", opts))
+    tests.append(test("compressible", "rt", "inputs.rt", opts))
     tests.append(test("diffusion", "gaussian", "inputs.gaussian", opts))
     tests.append(test("incompressible", "shear", "inputs.shear", opts))
     tests.append(test("lm_atm", "bubble", "inputs.bubble", opts))
