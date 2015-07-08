@@ -45,7 +45,7 @@ def do_tests(build, out_file, do_standalone=True):
     for t in tests:
         err = pyro.doit(t.solver, t.problem, t.inputs,
                         other_commands=t.options, comp_bench=True)
-        results[t.solver] = err
+        results["{}-{}".format(t.solver, t.problem)] = err
 
 
     # standalone tests
@@ -74,10 +74,10 @@ def do_tests(build, out_file, do_standalone=True):
     
         for s, r in sorted(results.items()):
             if not r == 0:
-                f.write("{:32} failed\n".format(s))
+                f.write("{:42} failed\n".format(s))
                 failed += 1
             else:
-                f.write("{:32} passed\n".format(s))
+                f.write("{:42} passed\n".format(s))
 
 
         f.write("\n{} test(s) failed\n".format(failed))
