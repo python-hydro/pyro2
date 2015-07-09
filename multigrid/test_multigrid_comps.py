@@ -5,6 +5,10 @@ import mesh.patch as patch
 import numpy as np
 from numpy.testing import assert_array_equal
 
+import util.testing_help as th
+
+# utilities
+@th.with_named_setup(th.setup_func, th.teardown_func)
 def test_edge_coeffs():
     # make dx = dy = 1 so the normalization is trivial
     g = patch.Grid2d(4, 6, ng=2, xmax=4, ymax=6)
