@@ -14,6 +14,12 @@ def teardown_func():
     pass
 
 
+# utilities
+def test_buf_split():
+    assert_array_equal(patch._buf_split(2), [2, 2, 2, 2])
+    assert_array_equal(patch._buf_split((2, 3)), [2, 3, 2, 3])
+
+
 # Grid2d tests
 
 @with_setup(setup_func, teardown_func)
