@@ -8,10 +8,10 @@ import os
 import sys
 
 import pyro
-import multigrid.test_mg as test_mg
-import multigrid.test_mg_vc_dirichlet as test_mg_vc_dirichlet
-import multigrid.test_mg_vc_periodic as test_mg_vc_periodic
-import multigrid.test_mg_general_inhomogeneous as test_mg_general_inhomogeneous
+import multigrid.mg_test as mg_test
+import multigrid.mg_test_vc_dirichlet as mg_test_vc_dirichlet
+import multigrid.mg_test_vc_periodic as mg_test_vc_periodic
+import multigrid.mg_test_general_inhomogeneous as mg_test_general_inhomogeneous
 
 class test(object):
     def __init__(self, solver, problem, inputs, options):
@@ -21,7 +21,7 @@ class test(object):
         self.options = options
 
 
-def do_tests(build, out_file, do_standalone=True):
+def do_tests(build, out_file, do_standalone=True, do_main=True):
 
     # make sure we've built stuff
     print("build = ", build)
@@ -30,36 +30,36 @@ def do_tests(build, out_file, do_standalone=True):
     
     opts = "driver.verbose=0 vis.dovis=0 io.do_io=0".split()
 
-    tests = []
-    tests.append(test("advection", "smooth", "inputs.smooth", opts))
-    tests.append(test("compressible", "quad", "inputs.quad", opts))
-    tests.append(test("compressible", "sod", "inputs.sod.x", opts))
-    tests.append(test("compressible", "rt", "inputs.rt", opts))
-    tests.append(test("diffusion", "gaussian", "inputs.gaussian", opts))
-    tests.append(test("incompressible", "shear", "inputs.shear", opts))
-    tests.append(test("lm_atm", "bubble", "inputs.bubble", opts))
-
-
     results = {}
 
-    for t in tests:
-        err = pyro.doit(t.solver, t.problem, t.inputs,
-                        other_commands=t.options, comp_bench=True)
-        results["{}-{}".format(t.solver, t.problem)] = err
+    if do_main:
+        tests = []
+        tests.append(test("advection", "smooth", "inputs.smooth", opts))
+        tests.append(test("compressible", "quad", "inputs.quad", opts))
+        tests.append(test("compressible", "sod", "inputs.sod.x", opts))
+        tests.append(test("compressible", "rt", "inputs.rt", opts))
+        tests.append(test("diffusion", "gaussian", "inputs.gaussian", opts))
+        tests.append(test("incompressible", "shear", "inputs.shear", opts))
+        tests.append(test("lm_atm", "bubble", "inputs.bubble", opts))
+
+        for t in tests:
+            err = pyro.doit(t.solver, t.problem, t.inputs,
+                            other_commands=t.options, comp_bench=True)
+            results["{}-{}".format(t.solver, t.problem)] = err
 
 
     # standalone tests
     if do_standalone:
-        err = test_mg.test_poisson_dirichlet(256, comp_bench=True, verbose=0)
+        err = mg_test.test_poisson_dirichlet(256, comp_bench=True, verbose=0)
         results["mg_poisson_dirichlet"] = err
 
-        err = test_mg_vc_dirichlet.test_vc_poisson_dirichlet(512, comp_bench=True, verbose=0)
+        err = mg_test_vc_dirichlet.test_vc_poisson_dirichlet(512, comp_bench=True, verbose=0)
         results["mg_vc_poisson_dirichlet"] = err
 
-        err = test_mg_vc_periodic.test_vc_poisson_periodic(512, comp_bench=True, verbose=0)
+        err = mg_test_vc_periodic.test_vc_poisson_periodic(512, comp_bench=True, verbose=0)
         results["mg_vc_poisson_periodic"] = err
 
-        err = test_mg_general_inhomogeneous.test_general_poisson_inhomogeneous(512, comp_bench=True, verbose=0)
+        err = mg_test_general_inhomogeneous.test_general_poisson_inhomogeneous(512, comp_bench=True, verbose=0)
         results["mg_general_poisson_inhomogeneous"] = err    
 
 
@@ -96,6 +96,14 @@ if __name__ == "__main__":
     p.add_argument("--build",
                    help="execute the mk.sh script first before any tests",
                    action="store_true")
+
+    p.add_argument("--skip_standalone",
+                   help="skip the tests that don't go through pyro.py",
+                   action="store_true")
+
+    p.add_argument("--skip_main",
+                   help="skip the tests that go through pyro.py, and only run standalone tests",
+                   action="store_true")
     
     args = p.parse_args()
 
@@ -104,7 +112,13 @@ if __name__ == "__main__":
 
     build = args.build
     
-    do_tests(build, outfile)
+    do_main = True
+    if args.skip_main: do_main = False
+
+    do_standalone = True
+    if args.skip_standalone: do_standalone = False
+
+    do_tests(build, outfile, do_standalone=do_standalone, do_main=do_main)
 
 
         
