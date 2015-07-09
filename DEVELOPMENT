@@ -1,12 +1,5 @@
 This is a simple list of the improvements we wish to make to pyro.
 
-ArrayIndexer:
-
-  -- have get_var return an ArrayIndexer object
-  -- overload +,-,/,* in ArrayIndexer to work on the data region only
-     (checking the grid is the same), return ArryaIndexer
-  -- have scratch_array return an ArrayIndexer object
-
 
 coding:
 
@@ -23,25 +16,6 @@ coding:
 
   -- rewrite to adhere to python style guidelines
 
-  -- is there a way to define a range like ii = [myg.ilo:myg.ihi+1]
-     and then do something like ii+1 to get [myg.ilo+1:myg.ihi+2]?
-
-     or perhaps have a shift method, and do something like
-
-     a = mydata.get_var("density")
-     
-     a.s("i+1","j")
-
-     and retain the original behavor of normal indexing via:
-
-     a.d
-
-     which would point to the data
-
-     ---
-
-     ok... do a.ip(1, ng=ng) to get the array at i+1, with ng ghost cells
-     and a.valid() is just the interior region
      
 
 new solvers:
@@ -52,8 +26,6 @@ new solvers:
 
 
 infrastructure:
-
-  -- well-defined unit tests
 
   -- the MG solvers should check that the incoming coefficient arrays
      have the same # of ghost cells -- perhaps the coefficients should
