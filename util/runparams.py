@@ -64,6 +64,14 @@ def is_float(string):
     except ValueError: return 0
     else: return 1
 
+def _get_val(value):
+    if is_int(value):
+        return int(value)
+    elif is_float(value):
+        return float(value)
+    else:
+        return value.strip()
+
 
 class RuntimeParameters(object):
 
@@ -113,29 +121,23 @@ class RuntimeParameters(object):
 
             if sec.search(line): 
                 lbracket, section, rbracket = sec.split(line)
-                section = (section.strip()).lower()
+                section = section.strip().lower()
             
             elif eq.search(line):
                 left, item, value, comment, right = eq.split(line) 
-                item = (item.strip()).lower()
+                item = item.strip().lower()
 
                 # define the key
                 key = section + "." + item
             
                 # if we have no_new = 1, then we only want to override existing
                 # key/values
-                if (no_new):
-                    if (not key in self.params.keys()):
+                if no_new:
+                    if not key in self.params.keys():
                         msg.warning("warning, key: %s not defined" % (key))
                         continue
 
-                # check in turn whether this is an interger, float, or string
-                if (is_int(value)):
-                    self.params[key] = int(value)
-                elif (is_float(value)):
-                    self.params[key] = float(value)
-                else:
-                    self.params[key] = value.strip()
+                self.params[key] = _get_val(value)
 
                 # if the comment already exists (i.e. from reading in
                 # _defaults) and we are just resetting the value of
@@ -173,17 +175,12 @@ class RuntimeParameters(object):
             key, value = item.split("=")
             
             # we only want to override existing keys/values
-            if (not key in self.params.keys()):
+            if not key in self.params.keys():
                 msg.warning("warning, key: %s not defined" % (key))
                 continue
 
             # check in turn whether this is an interger, float, or string
-            if (is_int(value)):
-                self.params[key] = int(value)
-            elif (is_dloat(value)):
-                self.params[key] = float(value)
-            else:
-                self.params[key] = value.strip()
+            self.params[key] = _get_val(value)
 
     
     def get_param(self, key):
@@ -267,15 +264,14 @@ class RuntimeParameters(object):
                 f.write('\n')
                 f.write('[' + section + ']\n')
 
-            if (isinstance(self.params[key], int)):
+            if isinstance(self.params[key], int):
                 value = '%d' % self.params[key]
-            elif (isinstance(self.params[key], float)):
+            elif isinstance(self.params[key], float):
                 value = '%f' % self.params[key]
             else:
                 value = self.params[key]
-
         
-            if (self.param_comments[key] != ''):
+            if self.param_comments[key] != '':
                 f.write(option + ' = ' + value + '       ; ' + self.param_comments[key] + '\n')
             else:
                 f.write(option + ' = ' + value + '\n')
