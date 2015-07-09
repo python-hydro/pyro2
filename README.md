@@ -25,8 +25,8 @@ http://bender.astro.sunysb.edu/hydro_by_example/
 ## Getting Started
 
   - There are a few steps to take to get things running. You need to
-     make sure you have numpy, f2py, and matplotlib installed. On a
-     Fedora system, this can be accomplished by doing:
+     make sure you have `numpy`, `f2py`, and `matplotlib`
+     installed. On a Fedora system, this can be accomplished by doing:
 
        `yum install numpy numpy-f2py python-matplotlib python-matplotlib-tk`
 
@@ -48,7 +48,9 @@ http://bender.astro.sunysb.edu/hydro_by_example/
        import matplotlib.pyplot 
        print matplotlib.pyplot.get_backend() 
        ```
-
+	   
+  - If you want to run the unit tests, you need to have `nose` installed.
+  
   - The remaining steps are: 
 
       * Set the `PYTHONPATH` environment variable to point to the `pyro2/`
