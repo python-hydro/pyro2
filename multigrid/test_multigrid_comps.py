@@ -4,6 +4,7 @@ import multigrid.edge_coeffs as edge_coeffs
 import mesh.patch as patch
 import numpy as np
 from numpy.testing import assert_array_equal
+import multigrid.MG as MG
 
 import util.testing_help as th
 
@@ -35,3 +36,27 @@ def test_edge_coeffs():
                        np.array([ 0., 0., 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 0.]))
 
     
+
+# test the gradient stuff -- we don't actually need to do a solve, just
+# initialize a phi and get the gradient
+@th.with_named_setup(th.setup_func, th.teardown_func)
+def test_mg_gradient():
+    a = MG.CellCenterMG2d(8, 8, ng=1, xmax=8, ymax=8)
+
+    s = a.soln_grid.scratch_array()
+
+    s.v()[:,:] = np.fromfunction(lambda i, j: i*(s.g.nx-i-1)*j*(s.g.ny-j-1), 
+                                 (s.g.nx, s.g.ny))
+
+    a.init_solution(s.d)
+
+    a.grids[a.nlevels-1].fill_BC("v")
+
+    gx, gy = a.get_solution_gradient()
+
+    assert_array_equal(gx.d[:,gx.g.jc],
+                       np.array([0., 36., 60., 36., 12., -12., -36., -60., -36., 0.]))
+
+    assert_array_equal(gy.d[gx.g.ic,:],
+                       np.array([0., 36., 60., 36., 12., -12., -36., -60., -36., 0.]))
+
