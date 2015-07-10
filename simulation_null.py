@@ -83,13 +83,31 @@ class NullSimulation(object):
         try: self.verbose = self.rp.get_param("driver.verbose")
         except:
             self.verbose = None
-            
+
+        self.n_num_out = 0
+
             
     def finished(self):
         """
         is the simulation finished based on time or the number of steps
         """
         return self.cc_data.t >= self.tmax or self.n >= self.max_steps
+
+
+    def do_output(self):
+        """
+        is it time to output?
+        """
+        dt_out = self.rp.get_param("io.dt_out")
+        n_out = self.rp.get_param("io.n_out")
+        do_io = self.rp.get_param("io.do_io")
+        
+        is_time = self.cc_data.t >= (self.n_num_out + 1)*dt_out or self.n%n_out == 0
+        if is_time and do_io == 1:
+            self.n_num_out += 1
+            return True
+        else:
+            return False
 
     
     def initialize(self):

@@ -92,8 +92,6 @@ def doit(solver_name, problem_name, param_file,
         plt.figure(num=1, figsize=(8,6), dpi=100, facecolor='w')
         sim.dovis()
 
-    nout = 0
-    
     while not sim.finished():
 
         # fill boundary conditions
@@ -125,16 +123,11 @@ def doit(solver_name, problem_name, param_file,
 
 
         # output
-        dt_out = rp.get_param("io.dt_out")
-        n_out = rp.get_param("io.n_out")
-        do_io = rp.get_param("io.do_io")
-        
-        if (sim.cc_data.t >= (nout + 1)*dt_out or sim.n%n_out == 0) and do_io == 1:
+        if sim.do_output():
 
             if verbose > 0: msg.warning("outputting...")
             basename = rp.get_param("io.basename")
             sim.cc_data.write("{}{:04d}".format(basename, sim.n))
-            nout += 1
 
             
         # visualization
