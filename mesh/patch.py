@@ -245,7 +245,8 @@ class ArrayIndexer(object):
 
     # ?? Can we accomplish this a lot easier by subclassing
     # the ndarray?
-    
+    # e.g, the InfoArray example here:
+    # http://docs.scipy.org/doc/numpy/user/basics.subclassing.html    
     def __init__(self, d=None, grid=None):
         self.d = d
         self.g = grid
@@ -277,7 +278,10 @@ class ArrayIndexer(object):
         return self.__mul__(other)
         
     def __truediv__(self, other):
-        return ArrayIndexer(d=self.d / other.d, grid=self.g)
+        if isinstance(other, ArrayIndexer):        
+            return ArrayIndexer(d=self.d / other.d, grid=self.g)
+        else:
+            return ArrayIndexer(d=self.d / other, grid=self.g)
 
     def __div__(self, other):
         if isinstance(other, ArrayIndexer):        
@@ -286,6 +290,12 @@ class ArrayIndexer(object):
             return ArrayIndexer(d=self.d / other, grid=self.g)            
 
     def __rdiv__(self, other):
+        if isinstance(other, ArrayIndexer):        
+            return ArrayIndexer(d=other.d / self.d, grid=self.g)
+        else:
+            return ArrayIndexer(d=other / self.d, grid=self.g)            
+
+    def __rtruediv__(self, other):
         if isinstance(other, ArrayIndexer):        
             return ArrayIndexer(d=other.d / self.d, grid=self.g)
         else:
