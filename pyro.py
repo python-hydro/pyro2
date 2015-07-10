@@ -3,6 +3,7 @@
 from __future__ import print_function
 
 import argparse
+import importlib
 import os
 import sys
 
@@ -25,8 +26,7 @@ def doit(solver_name, problem_name, param_file,
     tm_main.begin()
 
     # import desired solver under "solver" namespace
-    exec('import ' + solver_name + ' as solver')
-
+    solver = importlib.import_module(solver_name)
 
     #-------------------------------------------------------------------------
     # runtime parameters
