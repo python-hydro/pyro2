@@ -141,5 +141,23 @@ def test_bcs():
 
 
 
+# ArrayInderex tests
+@th.with_named_setup(th.setup_func, th.teardown_func)
+def test_indexer():
+    g = patch.Grid2d(2,3, ng=2)
+    a = g.scratch_array()
+
+    a.d[:,:] = np.arange(g.qx*g.qy).reshape(g.qx, g.qy)
+    
+    assert_array_equal(a.v(), np.array([[16., 17., 18.], [23., 24., 25.]]))
+
+    assert_array_equal(a.ip(1), np.array([[23., 24., 25.], [30., 31., 32.]]))
+    assert_array_equal(a.ip(-1), np.array([[9., 10., 11.], [16., 17., 18.]]))
+
+    assert_array_equal(a.jp(1), np.array([[17., 18., 19.], [24., 25., 26.]]))
+    assert_array_equal(a.jp(-1), np.array([[15., 16., 17.], [ 22., 23., 24.]]))
+
+    assert_array_equal(a.ip_jp(1, 1), np.array([[24., 25., 26.], [ 31., 32., 33.]]))
+
 
 
