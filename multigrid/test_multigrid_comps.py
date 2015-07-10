@@ -1,6 +1,6 @@
 # unit tests
 
-import edge_coeffs
+import multigrid.edge_coeffs as edge_coeffs
 import mesh.patch as patch
 import numpy as np
 from numpy.testing import assert_array_equal

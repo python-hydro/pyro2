@@ -336,8 +336,7 @@ class ArrayIndexer(object):
             return self.g.norm(self.d)
         else:
             return self.g.norm(self.d[:,:,n])
-        
-        
+                
     def sqrt(self):
         return ArrayIndexer(d=np.sqrt(self.d), grid=self.g)
 
