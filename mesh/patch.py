@@ -57,6 +57,13 @@ def define_bc(type, function):
     extBCs[type] = function
 
 
+def _set_reflect(odd_reflect_dir, dir_string):
+    if odd_reflect_dir == dir_string:
+        return "reflect-odd"
+    else:
+        return "reflect-even"
+
+
 class BCObject(object):
     """Boundary condition container -- hold the BCs on each boundary
     for a single variable.  
@@ -143,16 +150,12 @@ class BCObject(object):
         # either reflect-even (the default) or reflect-odd if
         # odd_reflect_dir specifies the corresponding direction ("x",
         # "y")
-
+        
         # -x boundary
         if xlb in valid:
             self.xlb = xlb
             if self.xlb == "reflect":
-                if odd_reflect_dir == "x":
-                    self.xlb = "reflect-odd"
-                else:
-                    self.xlb = "reflect-even"
-
+                self.xlb = _set_reflect(odd_reflect_dir, "x")
         else:
             msg.fail("ERROR: xlb = %s invalid BC" % (xlb))
 
@@ -160,11 +163,7 @@ class BCObject(object):
         if xrb in valid:
             self.xrb = xrb
             if self.xrb == "reflect":
-                if odd_reflect_dir == "x":
-                    self.xrb = "reflect-odd"
-                else:
-                    self.xrb = "reflect-even"
-
+                self.xrb = _set_reflect(odd_reflect_dir, "x")
         else:
             msg.fail("ERROR: xrb = %s invalid BC" % (xrb))
 
@@ -172,11 +171,7 @@ class BCObject(object):
         if ylb in valid:
             self.ylb = ylb
             if self.ylb == "reflect":
-                if odd_reflect_dir == "y":
-                    self.ylb = "reflect-odd"
-                else:
-                    self.ylb = "reflect-even"
-
+                self.ylb = _set_reflect(odd_reflect_dir, "y")
         else:
             msg.fail("ERROR: ylb = %s invalid BC" % (ylb))
 
@@ -184,11 +179,7 @@ class BCObject(object):
         if yrb in valid:
             self.yrb = yrb
             if self.yrb == "reflect":
-                if odd_reflect_dir == "y":
-                    self.yrb = "reflect-odd"
-                else:
-                    self.yrb = "reflect-even"
-
+                self.yrb = _set_reflect(odd_reflect_dir, "y")
         else:
             msg.fail("ERROR: yrb = %s invalid BC" % (yrb))
 
@@ -537,10 +528,9 @@ class Grid2d():
         """
         if nvar == 1:
             _tmp = np.zeros((self.qx, self.qy), dtype=np.float64)
-            return ArrayIndexer(d=_tmp, grid=self)
         else:
             _tmp = np.zeros((self.qx, self.qy, nvar), dtype=np.float64)
-            return ArrayIndexer(d=_tmp, grid=self)
+        return ArrayIndexer(d=_tmp, grid=self)
 
         
     def norm(self, d):
