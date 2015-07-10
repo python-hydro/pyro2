@@ -35,7 +35,7 @@ import matplotlib.pyplot as plt
 
 import compare
 import mesh.patch as patch
-import variable_coeff_MG as MG
+import multigrid.variable_coeff_MG as MG
 from util import msg
 
 # the analytic solution

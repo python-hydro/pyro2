@@ -37,7 +37,7 @@ import matplotlib.pyplot as plt
 
 import compare
 import mesh.patch as patch
-import general_MG as MG
+import multigrid.general_MG as MG
 from util import msg
 
 # the analytic solution

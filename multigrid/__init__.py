@@ -19,4 +19,4 @@ All use pure V-cycles to solve elliptic problems
 
 """
 
-__all__ = ['MG', 'variable_coeff_MG']
+__all__ = ['MG', 'variable_coeff_MG', 'general_MG', 'edge_coeffs.py']

@@ -21,7 +21,7 @@ from __future__ import print_function
 
 import numpy as np
 import mesh.patch as patch
-import variable_coeff_MG as MG
+import multigrid.variable_coeff_MG as MG
 import matplotlib.pyplot as plt
 
 
