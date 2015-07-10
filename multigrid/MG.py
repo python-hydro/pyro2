@@ -405,8 +405,8 @@ class CellCenterMG2d(object):
         """
         Return the solution after doing the MG solve
 
-        If a grid object is passed in, then the gradient is computed on that
-        grid.
+        If a grid object is passed in, then the solution is put on that 
+        grid -- not the passed in grid must have the same dx and dy
 
         Returns
         -------
@@ -414,14 +414,15 @@ class CellCenterMG2d(object):
 
         """
 
+        myg = self.soln_grid
+
         if grid is None:
             og = self.soln_grid
         else:
             og = grid
+            assert og.dx == myg.dx and og.dy == myg.dy
 
         v = self.grids[self.nlevels-1].get_var("v")
-
-        myg = self.soln_grid
 
         if grid is None:
             return v.copy()
@@ -436,7 +437,7 @@ class CellCenterMG2d(object):
         x- and y-components are returned in separate arrays.
 
         If a grid object is passed in, then the gradient is computed on that
-        grid.
+        grid.  Note: the passed-in grid must have the same dx, dy
 
         Returns
         -------
@@ -444,17 +445,18 @@ class CellCenterMG2d(object):
 
         """
 
+        myg = self.soln_grid
+
         if grid is None:
             og = self.soln_grid
         else:
             og = grid
+            assert og.dx == myg.dx and og.dy == myg.dy
 
         v = self.grids[self.nlevels-1].get_var("v")
 
         gx = og.scratch_array()
         gy = og.scratch_array()
-
-        myg = self.soln_grid
 
         gx.v()[:,:] = 0.5*(v.ip(1) - v.ip(-1))/myg.dx
         gy.v()[:,:] = 0.5*(v.jp(1) - v.jp(-1))/myg.dy
