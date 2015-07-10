@@ -28,12 +28,14 @@ http://bender.astro.sunysb.edu/hydro_by_example/
      make sure you have `numpy`, `f2py`, and `matplotlib`
      installed. On a Fedora system, this can be accomplished by doing:
 
-       `yum install numpy numpy-f2py python-matplotlib python-matplotlib-tk`
+       `dnf install numpy numpy-f2py python-matplotlib python-matplotlib-tk`
 
+    (note, for older Fedora releases, replace `dnf` with `yum`)
+	
   - You also need to make sure gfortran is present on you system. On
      a Fedora system, it can be installed as: 
 
-       `yum install gcc-gfortran` 
+       `dnf install gcc-gfortran` 
 
   - Not all matplotlib backends allow for the interactive plotting as
      pyro is run. One that does is the TkAgg backend. This can be made
