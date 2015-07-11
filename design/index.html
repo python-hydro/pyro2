@@ -474,13 +474,12 @@ following sequence (done in a python session) reads in stored data
 in the x direction through the y-center of the domain.
 
 <pre class="code">
-import numpy
-import pylab
+import matplotlib.pyplot as plt
 import mesh.patch as patch
 myg, myd = patch.read("sod_x_0076.pyro")
 dens = myd.get_var("density")
-pylab.plot(myg.x, dens[:,myg.ny/2])
-pylab.show()
+plt.plot(myg.x, dens.d[:,myg.ny/2])
+plt.show()
 </pre>
 
 </div>  <!-- main -->
