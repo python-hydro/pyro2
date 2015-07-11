@@ -24,6 +24,10 @@ new solvers:
 
   -- low Mach number hydro (both combustion and atmospheric)
 
+  -- nodal MG solver?
+
+  -- radiation hydro (gray FLD)
+
 
 infrastructure:
 
