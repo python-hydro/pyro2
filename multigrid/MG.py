@@ -209,30 +209,28 @@ class CellCenterMG2d(object):
         # grid and self.grids[nlevel-1] will be the finest grid
         # we store the solution, v, the rhs, f.
 
+        # create the boundary condition object
+        bc = patch.BCObject(xlb=xl_BC_type, xrb=xr_BC_type,
+                            ylb=yl_BC_type, yrb=yr_BC_type)
+
         nx_t = ny_t = 2
             
         for i in range(self.nlevels):
 
             # create the grid
             my_grid = patch.Grid2d(nx_t, ny_t, ng=self.ng,
-                                   xmin=xmin, xmax=xmax,
-                                   ymin=ymin, ymax=ymax)
+                                   xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
 
             # add a CellCenterData2d object for this level to our list
             self.grids.append(patch.CellCenterData2d(my_grid, dtype=np.float64))
 
-            # create the boundary condition object
-            bc = patch.BCObject(xlb=xl_BC_type, xrb=xr_BC_type,
-                                ylb=yl_BC_type, yrb=yr_BC_type)
-
-            # create the phi BC object -- this only applies for the
-            # finest level.  On the coarser levels, phi represents
-            # the residual, which has homogeneous BCs
+            # create the phi BC object -- this only applies for the finest
+            # level.  On the coarser levels, phi represents the residual,
+            # which has homogeneous BCs
             bc_p = patch.BCObject(xlb=xl_BC_type, xrb=xr_BC_type,
                                   ylb=yl_BC_type, yrb=yr_BC_type,
                                   xl_func=xl_BC, xr_func=xr_BC,
-                                  yl_func=yl_BC, yr_func=yr_BC,
-                                  grid=my_grid)
+                                  yl_func=yl_BC, yr_func=yr_BC, grid=my_grid)
             
             if i == self.nlevels-1:
                 self.grids[i].register_var("v", bc_p)
@@ -706,8 +704,8 @@ class CellCenterMG2d(object):
             bP = self.grids[0]
 
             if self.verbose:
-                print("  level = %d, nx = %d, ny = %d\n" %  \
-                    (level, bP.grid.nx, bP.grid.ny))
+                print("  level = {}, nx = {}, ny = {}\n".format(
+                    level, bP.grid.nx, bP.grid.ny))
 
             self.smooth(0, self.nsmooth_bottom)
 
@@ -735,8 +733,8 @@ class CellCenterMG2d(object):
                 if self.verbose:
                     self._compute_residual(level)
 
-                    print("  level = %d, nx = %d, ny = %d" % \
-                        (level, fP.grid.nx, fP.grid.ny))
+                    print("  level = {}, nx = {}, ny = {}".format(
+                        level, fP.grid.nx, fP.grid.ny))
 
                     print("  before G-S, residual L2: {}".format(fP.get_var("r").norm() ))
 
@@ -770,7 +768,6 @@ class CellCenterMG2d(object):
             else:
                 residual_error = r.norm()
 
-
             if residual_error < rtol:
                 converged = 1
                 self.num_cycles = cycle
@@ -779,7 +776,7 @@ class CellCenterMG2d(object):
                 fP.fill_BC("v")
 
             if self.verbose:
-                print("cycle %d: relative err = %g, residual err = %g\n" % \
-                      (cycle, relative_error, residual_error))
+                print("cycle {}: relative err = {}, residual err = {}\n".format(
+                      cycle, relative_error, residual_error))
 
             cycle += 1
