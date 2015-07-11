@@ -4,6 +4,7 @@ from __future__ import print_function
 
 import argparse
 import datetime
+import nose
 import os
 import sys
 
@@ -119,6 +120,10 @@ if __name__ == "__main__":
     if args.skip_standalone: do_standalone = False
 
     do_tests(build, outfile, do_standalone=do_standalone, do_main=do_main)
+
+    
+    # unit tests
+    nose.run(argv=["", "-s"])
 
 
         
