@@ -77,7 +77,7 @@ This provides two multigrid solvers for cell-centered data.
   - `test_mg_general_inhomogeneous.py`
 
 
-## `prolong_restrict_test.py`
+## `prolong_restrict_demo.py`
 
   This tests that the restriction and prolongation operations work as
   expected.
