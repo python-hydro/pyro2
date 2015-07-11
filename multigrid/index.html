@@ -59,22 +59,31 @@ Chapter 6 of the notes describe the basics of multigrid:
 
 <div class="pdf"><a href="http://bender.astro.sunysb.edu/hydro_by_example/CompHydroTutorial.pdf">notes on computational hydro</a></div>
 
-<p>There are two solvers:
+<p>There are three solvers:
 <ul>
 <li>
 The core solver, provided in the class <tt>MG.CellCenterMG2d</tt>
 solves constant-coefficient Helmholtz problems of the form:<br>
-&nbsp;&nbsp;(&alpha; - &beta; L) &phi; = f<br>
-where L is the Laplacian operator.
+&nbsp;&nbsp;(&alpha; - &beta; &nabla;<sup>2</sup>) &phi; = f<br>
 </li>
 
 <li>
 The class <tt>variable_coeff_MG.VarCoeffCCMG2d</tt> solves variable
 coefficient Poisson problems of the form:<br>
-&nbsp;&nbsp;D (&eta; G &phi;) = f<br>
-where D is the divergence and G is the gradient operator.  This class inherits
+&nbsp;&nbsp;&nabla;&middot; (&eta; &nabla; &phi;) = f<br>
+This class inherits
 the core functionality from <tt>MG.CellCenterMG2d</tt>.
 </li>
+
+<li>
+The class <tt>general_MG.GeneralMG2d</tt> solves a general elliptic
+equation of the form:<br>
+&nbsp;&nbsp;&alpha;&phi; + &nabla;&middot; (&beta; &nabla; &phi;)  + &gamma; \middot; &nabla; &phi; = f<br>
+This class inherits
+the core functionality from <tt>MG.CellCenterMG2d</tt>.
+</li>
+
+
 </ul>
 
 <p>We simply use V-cycles in our implementation, and restrict ourselves
