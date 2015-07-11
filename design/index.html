@@ -52,10 +52,16 @@ http://www.richnetapps.com/automatically_highlight_current_page_in/
 
 <P><h2>&lowast; pyro's design</h2>
 
-<p>pyro is written primarily in python, with a few low-level routines written
-in Fortran for performance.  The <a href="http://numpy.scipy.org/">numpy</a>
-package is used for representing arrays throughout the python code and the
-<a href="http://matplotlib.org/">matplotlib</a> library is used for visualization.
+<p>pyro is written primarily in python, with a few low-level routines
+written in Fortran for performance.
+The <a href="http://numpy.scipy.org/">numpy</a> package
+is used for representing arrays throughout
+the python code and the
+<a href="http://matplotlib.org/">matplotlib</a> library is used for
+visualization.  We use <tt>f2py</tt> (part of NumPy) to interface with
+some Fortran code.
+Finally, <a href="http://nose.readthedocs.org/en/latest/">nose</a> is
+used for unit testing of some components.
 
 <p>All solvers are written for a 2-d grid.
 
@@ -141,6 +147,21 @@ include the top-level <tt>pyro2/</tt> directory.
      </li>
      <li><tt>tests/</tt> &mdash;
          Reference incompressible hydro output for regression testing.
+     </li>
+         
+     </ul>
+  </li>
+
+  <li><tt>lm_atm/</tt> &mdash;
+      The low Mach number hydrodynamics solver for atmospherical flows.  All
+      low-Mach-specific files live here.
+
+     <ul>
+     <li><tt>problems/</tt> &mdash;
+         The problem setups for the low Mach number solver.
+     </li>
+     <li><tt>tests/</tt> &mdash;
+         Reference low Mach hydro output for regression testing.
      </li>
          
      </ul>
