@@ -46,9 +46,10 @@ This provides two multigrid solvers for cell-centered data.
 
     with
 
-    `alpha = 2.0 + cos(2.0*pi*x)*cos(2.0*pi*y)`
-
-    `f = -16.0*pi**2*(cos(2*pi*x)*cos(2*pi*y) + 1)*sin(2*pi*x)*sin(2*pi*y)`
+    ```
+    alpha = 2.0 + cos(2.0*pi*x)*cos(2.0*pi*y)
+    f = -16.0*pi**2*(cos(2*pi*x)*cos(2*pi*y) + 1)*sin(2*pi*x)*sin(2*pi*y)
+	```
        
     on [0,1] x [0,1] with homogeneous Dirichlet BCs.  The solution
     is compared to the exact solution and the convergence is measured.
@@ -66,7 +67,21 @@ This provides two multigrid solvers for cell-centered data.
 
   The following drivers test it:
 
-  - `test_mg_general_alphabeta_only.py`
+  - `test_mg_general_alphabeta_only.py`: this neglects the `gamma` term
+     and solves:
+
+     `alpha phi + div . ( beta grad phi ) = f`
+
+     with
+
+     ```
+	 alpha = 1.0
+     beta = 2.0 + cos(2.0*pi*x)*cos(2.0*pi*y)
+     f = (-16.0*pi**2*cos(2*pi*x)*cos(2*pi*y) - 16.0*pi**2 + 1.0)*sin(2*pi*x)*sin(2*pi*y)
+	 ```
+
+    on [0,1] x [0,1] with homogeneous Dirichlet BCs.  The solution is
+	compared to the exact solution and the convergence is measured.
 
   - `test_mg_general_beta_only.py`
 
