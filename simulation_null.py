@@ -127,8 +127,11 @@ class NullSimulation(object):
         pass
 
     
-    def evolve(self, dt):
-        pass
+    def evolve(self):
+
+        # increment the time
+        self.cc_data.t += sim.dt
+        self.n += 1
 
     
     def dovis(self):

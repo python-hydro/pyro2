@@ -121,6 +121,10 @@ class Simulation(NullSimulation):
         # update the solution
         phi.v()[:,:] = mg.get_solution().v()
 
+        # increment the time
+        self.cc_data.t += self.dt
+        self.n += 1
+
 
     def dovis(self):
         """

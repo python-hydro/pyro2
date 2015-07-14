@@ -77,6 +77,10 @@ class Simulation(NullSimulation):
         dens.v()[:,:] = dens.v() + dtdx*(flux_x.v() - flux_x.ip(1)) + \
                                    dtdy*(flux_y.v() - flux_y.jp(1))
 
+        # increment the time
+        self.cc_data.t += self.dt
+        self.n += 1
+
 
     def dovis(self):
         """

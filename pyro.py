@@ -98,16 +98,15 @@ def doit(solver_name, problem_name, param_file,
         sim.cc_data.fill_BC_all()
 
         # get the timestep
-        sim.compute_timestep()
         if fix_dt > 0.0:
             sim.dt = fix_dt
         else:
+            sim.compute_timestep()
             if sim.n == 0:
                 sim.dt = init_tstep_factor*sim.dt
-                dt_old = sim.dt
             else:
                 sim.dt = min(max_dt_change*dt_old, sim.dt)
-                dt_old = sim.dt
+            dt_old = sim.dt
 
         if sim.cc_data.t + sim.dt > sim.tmax:
             sim.dt = sim.tmax - sim.cc_data.t
@@ -115,21 +114,14 @@ def doit(solver_name, problem_name, param_file,
         # evolve for a single timestep
         sim.evolve()
 
-
-        # increment the time
-        sim.cc_data.t += sim.dt
-        sim.n += 1
         if verbose > 0: print("%5d %10.5f %10.5f" % (sim.n, sim.cc_data.t, sim.dt))
-
 
         # output
         if sim.do_output():
-
             if verbose > 0: msg.warning("outputting...")
             basename = rp.get_param("io.basename")
             sim.cc_data.write("{}{:04d}".format(basename, sim.n))
 
-            
         # visualization
         if dovis:
             tm_vis = tc.timer("vis")

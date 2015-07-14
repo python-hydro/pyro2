@@ -190,6 +190,8 @@ class Simulation(NullSimulation):
         before this evolve.
         """
 
+        self.in_preevolve = True
+
         myg = self.cc_data.grid
 
         rho = self.cc_data.get_var("density")
@@ -284,6 +286,8 @@ class Simulation(NullSimulation):
         self.cc_data = orig_data
 
         if self.verbose > 0: print("done with the pre-evolution")
+
+        self.in_preevolve = False
 
 
     def evolve(self):
@@ -629,6 +633,11 @@ class Simulation(NullSimulation):
 
         self.cc_data.fill_BC("gradp_x")
         self.cc_data.fill_BC("gradp_y")
+
+        # increment the time
+        if not self.in_preevolve:
+            self.cc_data.t += self.dt
+            self.n += 1
 
 
     def dovis(self):

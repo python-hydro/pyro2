@@ -156,6 +156,10 @@ class Simulation(NullSimulation):
         ymom.d[:,:] += 0.5*self.dt*(dens.d[:,:] + old_dens.d[:,:])*grav
         ener.d[:,:] += 0.5*self.dt*(ymom.d[:,:] + old_ymom.d[:,:])*grav
 
+        # increment the time
+        self.cc_data.t += self.dt
+        self.n += 1
+
         tm_evolve.end()
 
 
