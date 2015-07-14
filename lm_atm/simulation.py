@@ -139,7 +139,7 @@ class Simulation(NullSimulation):
         return a - a0.v2d(buf=a0.ng)
 
 
-    def timestep(self):
+    def compute_timestep(self):
         """
         The timestep() function computes the advective timestep
         (CFL) constraint.  The CFL constraint says that information
@@ -177,10 +177,8 @@ class Simulation(NullSimulation):
 
         dt_buoy = np.sqrt(2.0*myg.dx/F_buoy)
 
-        dt = min(dt, dt_buoy)
+        self.dt = min(dt, dt_buoy)
         if self.verbose > 0: print("timestep is {}".format(dt))
-
-        return dt
 
 
     def preevolve(self):
@@ -268,10 +266,10 @@ class Simulation(NullSimulation):
         orig_data = patch.cell_center_data_clone(self.cc_data)
 
         # get the timestep
-        dt = self.timestep()
+        self.compute_timestep()
 
         # evolve
-        self.evolve(dt)
+        self.evolve()
 
         # update gradp_x and gradp_y in our main data object
         new_gp_x = self.cc_data.get_var("gradp_x")
@@ -288,7 +286,7 @@ class Simulation(NullSimulation):
         if self.verbose > 0: print("done with the pre-evolution")
 
 
-    def evolve(self, dt):
+    def evolve(self):
         """
         Evolve the low Mach system through one timestep.
         """
@@ -373,7 +371,7 @@ class Simulation(NullSimulation):
         self.aux_data.fill_BC("source_y")
 
         _um, _vm = lm_interface_f.mac_vels(myg.qx, myg.qy, myg.ng,
-                                           myg.dx, myg.dy, dt,
+                                           myg.dx, myg.dy, self.dt,
                                            u.d, v.d,
                                            ldelta_ux, ldelta_vx,
                                            ldelta_uy, ldelta_vy,
@@ -461,7 +459,7 @@ class Simulation(NullSimulation):
         # predict rho to the edges and do its conservative update
         #---------------------------------------------------------------------
         _rx, _ry = lm_interface_f.rho_states(myg.qx, myg.qy, myg.ng,
-                                             myg.dx, myg.dy, dt,
+                                             myg.dx, myg.dy, self.dt,
                                              rho.d, u_MAC.d, v_MAC.d,
                                              ldelta_rx, ldelta_ry)
 
@@ -470,7 +468,7 @@ class Simulation(NullSimulation):
 
         rho_old = rho.copy()
 
-        rho.v()[:,:] -= dt*(
+        rho.v()[:,:] -= self.dt*(
             #  (rho u)_x
             (rho_xint.ip(1)*u_MAC.ip(1) - rho_xint.v()*u_MAC.v())/myg.dx +
             #  (rho v)_y
@@ -497,7 +495,7 @@ class Simulation(NullSimulation):
 
         _ux, _vx, _uy, _vy = \
                lm_interface_f.states(myg.qx, myg.qy, myg.ng,
-                                     myg.dx, myg.dy, dt,
+                                     myg.dx, myg.dy, self.dt,
                                      u.d, v.d,
                                      ldelta_ux, ldelta_vx,
                                      ldelta_uy, ldelta_vy,
@@ -534,12 +532,12 @@ class Simulation(NullSimulation):
         proj_type = self.rp.get_param("lm-atmosphere.proj_type")
 
         if proj_type == 1:
-            u.v()[:,:] -= (dt*advect_x.v() + dt*gradp_x.v())
-            v.v()[:,:] -= (dt*advect_y.v() + dt*gradp_y.v())
+            u.v()[:,:] -= (self.dt*advect_x.v() + self.dt*gradp_x.v())
+            v.v()[:,:] -= (self.dt*advect_y.v() + self.dt*gradp_y.v())
 
         elif proj_type == 2:
-            u.v()[:,:] -= dt*advect_x.v()
-            v.v()[:,:] -= dt*advect_y.v()
+            u.v()[:,:] -= self.dt*advect_x.v()
+            v.v()[:,:] -= self.dt*advect_y.v()
 
 
         # add the gravitational source
@@ -548,7 +546,7 @@ class Simulation(NullSimulation):
         source.d[:,:] = (rhoprime*g/rho_half).d
         self.aux_data.fill_BC("source_y")
 
-        v.d[:,:] += dt*source.d
+        v.d[:,:] += self.dt*source.d
 
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")
@@ -589,7 +587,7 @@ class Simulation(NullSimulation):
             0.5*beta0.v2d()*(u.ip(1) - u.ip(-1))/myg.dx + \
             0.5*(beta0.v2dp(1)*v.jp(1) - beta0.v2dp(-1)*v.jp(-1))/myg.dy
 
-        mg.init_RHS(div_beta_U.d/dt)
+        mg.init_RHS(div_beta_U.d/self.dt)
 
         # use the old phi as our initial guess
         phiGuess = mg.soln_grid.scratch_array()
@@ -613,8 +611,8 @@ class Simulation(NullSimulation):
         coeff = 1.0/rho
         coeff.v()[:,:] = coeff.v()*beta0.v2d()
 
-        u.v()[:,:] -= dt*coeff.v()*gradphi_x.v()
-        v.v()[:,:] -= dt*coeff.v()*gradphi_y.v()
+        u.v()[:,:] -= self.dt*coeff.v()*gradphi_x.v()
+        v.v()[:,:] -= self.dt*coeff.v()*gradphi_y.v()
 
         # store gradp for the next step
 

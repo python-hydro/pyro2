@@ -98,28 +98,28 @@ def doit(solver_name, problem_name, param_file,
         sim.cc_data.fill_BC_all()
 
         # get the timestep
-        dt = sim.timestep()
+        sim.compute_timestep()
         if fix_dt > 0.0:
-            dt = fix_dt
+            sim.dt = fix_dt
         else:
             if sim.n == 0:
-                dt = init_tstep_factor*dt
-                dt_old = dt
+                sim.dt = init_tstep_factor*sim.dt
+                dt_old = sim.dt
             else:
-                dt = min(max_dt_change*dt_old, dt)
-                dt_old = dt
+                sim.dt = min(max_dt_change*dt_old, sim.dt)
+                dt_old = sim.dt
 
-        if sim.cc_data.t + dt > sim.tmax:
-            dt = sim.tmax - sim.cc_data.t
+        if sim.cc_data.t + sim.dt > sim.tmax:
+            sim.dt = sim.tmax - sim.cc_data.t
 
         # evolve for a single timestep
-        sim.evolve(dt)
+        sim.evolve()
 
 
         # increment the time
-        sim.cc_data.t += dt
+        sim.cc_data.t += sim.dt
         sim.n += 1
-        if verbose > 0: print("%5d %10.5f %10.5f" % (sim.n, sim.cc_data.t, dt))
+        if verbose > 0: print("%5d %10.5f %10.5f" % (sim.n, sim.cc_data.t, sim.dt))
 
 
         # output

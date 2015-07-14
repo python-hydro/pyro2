@@ -58,6 +58,7 @@ class NullSimulation(object):
         """
 
         self.n = 0
+        self.dt = -1.e33
 
         try: self.tmax = rp.get_param("driver.tmax")
         except:
@@ -114,7 +115,7 @@ class NullSimulation(object):
         pass
 
     
-    def timestep(self):
+    def compute_timestep(self):
         pass
 
     

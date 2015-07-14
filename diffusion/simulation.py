@@ -51,7 +51,7 @@ class Simulation(NullSimulation):
         exec(self.problem_name + '.init_data(self.cc_data, self.rp)')
 
 
-    def timestep(self):
+    def compute_timestep(self):
         """
         The diffusion timestep() function computes the timestep
         using the explicit timestep constraint as the starting point.
@@ -67,12 +67,10 @@ class Simulation(NullSimulation):
         xtmp = self.cc_data.grid.dx**2/k
         ytmp = self.cc_data.grid.dy**2/k
 
-        dt = cfl*min(xtmp, ytmp)
-
-        return dt
+        self.dt = cfl*min(xtmp, ytmp)
 
 
-    def evolve(self, dt):
+    def evolve(self):
         """
         Diffusion through dt using C-N implicit solve with multigrid
         """
@@ -102,12 +100,12 @@ class Simulation(NullSimulation):
                                xr_BC_type=self.cc_data.BCs['phi'].xrb,
                                yl_BC_type=self.cc_data.BCs['phi'].ylb,
                                yr_BC_type=self.cc_data.BCs['phi'].yrb,
-                               alpha=1.0, beta=0.5*dt*k,
+                               alpha=1.0, beta=0.5*self.dt*k,
                                verbose=0)
 
         # form the RHS: f = phi + (dt/2) k L phi  (where L is the Laplacian)
         f = mg.soln_grid.scratch_array()
-        f.v()[:,:] = phi.v() + 0.5*dt*k * (
+        f.v()[:,:] = phi.v() + 0.5*self.dt*k * (
             (phi.ip(1) + phi.ip(-1) - 2.0*phi.v())/myg.dx**2 +
             (phi.jp(1) + phi.jp(-1) - 2.0*phi.v())/myg.dy**2)
 

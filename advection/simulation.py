@@ -29,7 +29,7 @@ class Simulation(NullSimulation):
         exec(self.problem_name + '.init_data(self.cc_data, self.rp)')
 
 
-    def timestep(self):
+    def compute_timestep(self):
         """
         Compute the advective timestep (CFL) constraint.  We use the
         driver.cfl parameter to control what fraction of the CFL
@@ -45,28 +45,20 @@ class Simulation(NullSimulation):
         xtmp = self.cc_data.grid.dx/max(abs(u),self.SMALL)
         ytmp = self.cc_data.grid.dy/max(abs(v),self.SMALL)
 
-        dt = cfl*min(xtmp, ytmp)
-
-        return dt
+        self.dt = cfl*min(xtmp, ytmp)
 
 
-    def evolve(self, dt):
+    def evolve(self):
         """
         Evolve the linear advection equation through one timestep.  We only
         consider the "density" variable in the CellCenterData2d object that
         is part of the Simulation.
-
-        Parameters
-        ----------
-        dt : float
-            The timestep to evolve through
-
         """
 
-        dtdx = dt/self.cc_data.grid.dx
-        dtdy = dt/self.cc_data.grid.dy
+        dtdx = self.dt/self.cc_data.grid.dx
+        dtdy = self.dt/self.cc_data.grid.dy
 
-        flux_x, flux_y =  unsplitFluxes(self.cc_data, self.rp, dt, "density")
+        flux_x, flux_y =  unsplitFluxes(self.cc_data, self.rp, self.dt, "density")
 
         """
         do the differencing for the fluxes now.  Here, we use slices so we

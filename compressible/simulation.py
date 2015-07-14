@@ -80,7 +80,7 @@ class Simulation(NullSimulation):
         if self.verbose > 0: print(my_data)
 
 
-    def timestep(self):
+    def compute_timestep(self):
         """
         The timestep function computes the advective timestep (CFL)
         constraint.  The CFL constraint says that information cannot
@@ -116,12 +116,10 @@ class Simulation(NullSimulation):
         xtmp = self.cc_data.grid.dx/(abs(u) + cs)
         ytmp = self.cc_data.grid.dy/(abs(v) + cs)
 
-        dt = cfl*min(xtmp.min(), ytmp.min())
-
-        return dt
+        self.dt = cfl*min(xtmp.min(), ytmp.min())
 
 
-    def evolve(self, dt):
+    def evolve(self):
         """
         Evolve the equations of compressible hydrodynamics through a
         timestep dt.
@@ -138,14 +136,14 @@ class Simulation(NullSimulation):
 
         myg = self.cc_data.grid
 
-        Flux_x, Flux_y = unsplitFluxes(self.cc_data, self.rp, self.vars, self.tc, dt)
+        Flux_x, Flux_y = unsplitFluxes(self.cc_data, self.rp, self.vars, self.tc, self.dt)
 
         old_dens = dens.copy()
         old_ymom = ymom.copy()
 
         # conservative update
-        dtdx = dt/myg.dx
-        dtdy = dt/myg.dy
+        dtdx = self.dt/myg.dx
+        dtdy = self.dt/myg.dy
 
         for n in range(self.vars.nvar):
             var = self.cc_data.get_var_by_index(n)
@@ -155,8 +153,8 @@ class Simulation(NullSimulation):
                 dtdy*(Flux_y.v(n=n) - Flux_y.jp(1, n=n))
 
         # gravitational source terms
-        ymom.d[:,:] += 0.5*dt*(dens.d[:,:] + old_dens.d[:,:])*grav
-        ener.d[:,:] += 0.5*dt*(ymom.d[:,:] + old_ymom.d[:,:])*grav
+        ymom.d[:,:] += 0.5*self.dt*(dens.d[:,:] + old_dens.d[:,:])*grav
+        ener.d[:,:] += 0.5*self.dt*(ymom.d[:,:] + old_ymom.d[:,:])*grav
 
         tm_evolve.end()
 
