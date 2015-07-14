@@ -14,7 +14,7 @@ import multigrid.mg_test_vc_dirichlet as mg_test_vc_dirichlet
 import multigrid.mg_test_vc_periodic as mg_test_vc_periodic
 import multigrid.mg_test_general_inhomogeneous as mg_test_general_inhomogeneous
 
-class test(object):
+class PyroTest(object):
     def __init__(self, solver, problem, inputs, options):
         self.solver = solver
         self.problem = problem
@@ -35,13 +35,13 @@ def do_tests(build, out_file, do_standalone=True, do_main=True):
 
     if do_main:
         tests = []
-        tests.append(test("advection", "smooth", "inputs.smooth", opts))
-        tests.append(test("compressible", "quad", "inputs.quad", opts))
-        tests.append(test("compressible", "sod", "inputs.sod.x", opts))
-        tests.append(test("compressible", "rt", "inputs.rt", opts))
-        tests.append(test("diffusion", "gaussian", "inputs.gaussian", opts))
-        tests.append(test("incompressible", "shear", "inputs.shear", opts))
-        tests.append(test("lm_atm", "bubble", "inputs.bubble", opts))
+        tests.append(PyroTest("advection", "smooth", "inputs.smooth", opts))
+        tests.append(PyroTest("compressible", "quad", "inputs.quad", opts))
+        tests.append(PyroTest("compressible", "sod", "inputs.sod.x", opts))
+        tests.append(PyroTest("compressible", "rt", "inputs.rt", opts))
+        tests.append(PyroTest("diffusion", "gaussian", "inputs.gaussian", opts))
+        tests.append(PyroTest("incompressible", "shear", "inputs.shear", opts))
+        tests.append(PyroTest("lm_atm", "bubble", "inputs.bubble", opts))
 
         for t in tests:
             err = pyro.doit(t.solver, t.problem, t.inputs,
