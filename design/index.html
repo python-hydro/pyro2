@@ -246,7 +246,7 @@ The flowchart for the driver is:
   <li>evolve while t < tmax and n < max_steps
     <ul>
       <li>fill boundary conditions (<tt>fill_BC_all()</tt> method of the <tt>CellCenterData2d</tt> class)</li>
-      <li>get the timestep (<tt>timestep()</tt> function from the solver)</li>
+      <li>get the timestep (<tt>compute_timestep()</tt> function from the solver)</li>
       <li>evolve for a single timestep (<tt>evolve()</tt> function from the solver)</li>
       <li>t = t + dt</li>
       <li>output (<tt>write</tt> method of the <tt>CellCenterData2d</tt> class)</li>
@@ -263,7 +263,7 @@ a <tt>Simulation</tt> class with the following methods:
 <ul>
   <li><tt>initialize</tt>: sets up the grid and solution variables</li>
 
-  <li><tt>timestep</tt>: returns the timestep for evolving the system</li>
+  <li><tt>compute_timestep</tt>: returns the timestep for evolving the system</li>
 
   <li><tt>preevolve</tt>: does any initialization to the fluid state
     that is necessary before the main evolution.  Not every solver will
