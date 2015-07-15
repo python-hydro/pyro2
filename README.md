@@ -22,7 +22,7 @@ etc. is here:
 http://bender.astro.sunysb.edu/hydro_by_example/
 
 
-## Getting Started
+## Getting started
 
   - There are a few steps to take to get things running. You need to
      make sure you have `numpy`, `f2py`, and `matplotlib`
@@ -103,7 +103,7 @@ pyro provides the following solvers (all in 2-d):
     constant-coefficient solver).
 
 
-## Working With Data
+## Working with data
 
 In addition to the main pyro program, there are many analysis tools
 that we describe here. Note: some problems write a report at the end
@@ -175,18 +175,21 @@ with their data.
   https://github.com/Open-Astrophysics-Bookshelf/numerical_exercises
 
 
-## Regression testing
+## Regression and unit testing
 
   The `test.py` script will run several of the problems (as well as some
   stand-alone multigrid tests) and compare the solution to stored
   benchmarks (in each solver's `tests/` subdirectory).
+
+  It will also invoke the python `nose` module to run the unit tests
+  for the different modules in pyro.
   
   Tests are run nightly and reported here:
 
   http://bender.astro.sunysb.edu/hydro_by_example/download/_stage/pyro2/tests.out
 
 
-## Getting Help
+## Getting help
 
   Join the mailing list to say up-to-date:
 
