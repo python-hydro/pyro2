@@ -505,6 +505,43 @@ plt.plot(myg.x, dens.d[:,myg.ny/2])
 plt.show()
 </pre>
 
+
+<p><h2>&lowast; Adding a problem</h2>
+
+<p>The easiest way to add a problem is to copy an existing problem
+setup in the solver you wish to use (in its <tt>problems/</tt>
+sub-directory.  Three different files will need to be copied
+(created):
+<ul>
+  <li><tt>problem.py</tt>: this is the main initialization routine.
+    The function <tt>init_data()</tt> is called at runtime by
+    the <tt>Simulation</tt> object's <tt>initialize()</tt> method.
+    Two arguments are passed in, the
+    simulation's <tt>CellCenterData2d</tt> object and
+    the <tt>RuntimeParameters</tt> object.
+
+    The job of <tt>init_data()</tt> is to fill all of the variables
+    defined in the <tt>CellCenterData2d</tt> object.
+  </li>
+
+  <li><tt>_problem.defaults</tt>: this contains the runtime parameters
+    and their defaults for your problem.  They should be placed in 
+    a block with the heading <tt>[problem]</tt> (where <em>problem</em>
+    is your problem's name.  Anything listed here will be available through
+    the <tt>RuntimeParameters</tt> object at runtime.</li>
+
+  <li><tt>inputs.problem</tt>: this is the inputs file that is used
+    at runtime to set the parameters for your problem.  Any of the
+    general parameters (like the grid size, boundary conditions, etc.)
+    as well as the problem-specific parameters can be set here.</li>
+</ul>
+    
+Once the problem is defined, you need to add the problem name to the 
+<tt>__all__</tt> list in the <tt>__init__.py</tt> file in
+the <tt>problems/</tt> sub-directory.  This lets python know about the
+problem.
+   
+
 </div>  <!-- main -->
 
 
