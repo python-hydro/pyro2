@@ -12,11 +12,6 @@ usage = """
       usage: ./smooth_error.py file
 """
 
-def abort(string):
-    print string
-    sys.exit(2)
-
-
 if not len(sys.argv) == 2:
     print usage
     sys.exit(2)
@@ -47,13 +42,6 @@ dens_analytic = analytic.get_var("density")
 print "mesh details"
 print myg
 
-aerr = abs(dens_numerical[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] -
-            dens_analytic[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1])
+e = dens_numerical - dens_analytic
 
-rerr = aerr/dens_analytic[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]
-
-# note that the numpy norm does not normalize by the number of elements,
-# so we explicitly do so here
-l2a = np.sqrt(np.sum(aerr**2)/(myg.nx*myg.ny))
-l2r = np.sqrt(np.sum(rerr**2)/(myg.nx*myg.ny))
-print "error norms (absolute, relative): ", l2a, l2r
+print "error norms (absolute, relative): ", e.norm(), e.norm()/dens_analytic.norm()
