@@ -4,12 +4,16 @@ implement an HSE BC in the vertical direction.
 
 Note: the pyro BC routines operate on a single variable at a time, so
 some work will necessarily be repeated.
+
+Also note: we may come in here with the aux_data (source terms), so
+we'll do a special case for them
+
 """
 
 import compressible.eos as eos
 from util import msg
 
-def user(bc_name, bc_edge, variable, my_data):
+def user(bc_name, bc_edge, variable, ccdata):
     """
     A hydrostatic boundary.  This integrates the equation of HSE into
     the ghost cells to get the pressure and density under the assumption
@@ -28,19 +32,12 @@ def user(bc_name, bc_edge, variable, my_data):
         boundary.
     variable : {'density', 'x-momentum', 'y-momentum', 'energy'}
         The variable whose ghost cells we are filling
-    my_data : CellCenterData2d object
+    ccdata : CellCenterData2d object
         The data object
 
     """
-    dens = my_data.get_var("density")
-    xmom = my_data.get_var("x-momentum")
-    ymom = my_data.get_var("y-momentum")
-    ener = my_data.get_var("energy")
 
-    grav = my_data.get_aux("grav")
-    gamma = my_data.get_aux("gamma")
-
-    myg = my_data.grid
+    myg = ccdata.grid
 
     if bc_name == "hse":
 
@@ -50,25 +47,22 @@ def user(bc_name, bc_edge, variable, my_data):
 
             # we will take the density to be constant, the velocity to
             # be outflow, and the pressure to be in HSE
-            if variable == "density":
+            if variable in ["density", "x-momentum", "y-momentum", "ymom_src", "E_src"]:
+                v = ccdata.get_var(variable)
                 j = myg.jlo-1
                 while j >= 0:
-                    dens.d[:,j] = dens.d[:,myg.jlo]
-                    j -= 1
-
-            elif variable == "x-momentum":
-                j = myg.jlo-1
-                while j >= 0:
-                    xmom.d[:,j] = xmom.d[:,myg.jlo]
-                    j -= 1
-
-            elif variable == "y-momentum":
-                j = myg.jlo-1
-                while j >= 0:
-                    ymom.d[:,j] = ymom.d[:,myg.jlo]
+                    v.d[:,j] = v.d[:,myg.jlo]
                     j -= 1
 
             elif variable == "energy":
+                dens = ccdata.get_var("density")
+                xmom = ccdata.get_var("x-momentum")
+                ymom = ccdata.get_var("y-momentum")
+                ener = ccdata.get_var("energy")
+                
+                grav = ccdata.get_aux("grav")
+                gamma = ccdata.get_aux("gamma")
+
                 dens_base = dens.d[:,myg.jlo]
                 ke_base = 0.5*(xmom.d[:,myg.jlo]**2 + ymom.d[:,myg.jlo]**2) / \
                     dens.d[:,myg.jlo]
@@ -100,19 +94,20 @@ def user(bc_name, bc_edge, variable, my_data):
 
             # we will take the density to be constant, the velocity to
             # be outflow, and the pressure to be in HSE
-            if variable == "density":
+            if variable in ["density", "x-momentum", "y-momentum", "ymom_src", "E_src"]:
+                v = ccdata.get_var(variable)
                 for j in range(myg.jhi+1, myg.jhi+myg.ng+1):
-                    dens.d[:,j] = dens.d[:,myg.jhi]
-
-            elif variable == "x-momentum":
-                for j in range(myg.jhi+1, myg.jhi+myg.ng+1):
-                    xmom.d[:,j] = xmom.d[:,myg.jhi]
-
-            elif variable == "y-momentum":
-                for j in range(myg.jhi+1, myg.jhi+myg.ng+1):
-                    ymom.d[:,j] = ymom.d[:,myg.jhi]
+                    v.d[:,j] = v.d[:,myg.jhi]
 
             elif variable == "energy":
+                dens = ccdata.get_var("density")
+                xmom = ccdata.get_var("x-momentum")
+                ymom = ccdata.get_var("y-momentum")
+                ener = ccdata.get_var("energy")
+                
+                grav = ccdata.get_aux("grav")
+                gamma = ccdata.get_aux("gamma")
+
                 dens_base = dens.d[:,myg.jhi]
                 ke_base = 0.5*(xmom.d[:,myg.jhi]**2 + ymom.d[:,myg.jhi]**2) / \
                     dens.d[:,myg.jhi]

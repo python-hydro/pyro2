@@ -131,7 +131,7 @@ import mesh.patch as patch
 
 from util import msg
 
-def unsplitFluxes(my_data, rp, vars, tc, dt):
+def unsplitFluxes(my_data, my_aux, rp, vars, tc, dt):
     """
     unsplitFluxes returns the fluxes through the x and y interfaces by
     doing an unsplit reconstruction of the interface values and then
@@ -319,21 +319,29 @@ def unsplitFluxes(my_data, rp, vars, tc, dt):
     #=========================================================================
     grav = rp.get_param("compressible.grav")
 
+    ymom_src = my_aux.get_var("ymom_src")
+    ymom_src.v()[:,:] = dens.v()*grav
+    my_aux.fill_BC("ymom_src")
+
+    E_src = my_aux.get_var("E_src")
+    E_src.v()[:,:] = ymom.v()*grav
+    my_aux.fill_BC("E_src")
+
     # ymom_xl[i,j] += 0.5*dt*dens[i-1,j]*grav
-    U_xl.v(buf=1, n=vars.iymom)[:,:] += 0.5*dt*dens.ip(-1, buf=1)*grav
-    U_xl.v(buf=1, n=vars.iener)[:,:] += 0.5*dt*ymom.ip(-1, buf=1)*grav
+    U_xl.v(buf=1, n=vars.iymom)[:,:] += 0.5*dt*ymom_src.ip(-1, buf=1)
+    U_xl.v(buf=1, n=vars.iener)[:,:] += 0.5*dt*E_src.ip(-1, buf=1)
 
     # ymom_xr[i,j] += 0.5*dt*dens[i,j]*grav
-    U_xr.v(buf=1, n=vars.iymom)[:,:] += 0.5*dt*dens.v(buf=1)*grav
-    U_xr.v(buf=1, n=vars.iener)[:,:] += 0.5*dt*ymom.v(buf=1)*grav
+    U_xr.v(buf=1, n=vars.iymom)[:,:] += 0.5*dt*ymom_src.v(buf=1)
+    U_xr.v(buf=1, n=vars.iener)[:,:] += 0.5*dt*E_src.v(buf=1)
 
     # ymom_yl[i,j] += 0.5*dt*dens[i,j-1]*grav
-    U_yl.v(buf=1, n=vars.iymom)[:,:] += 0.5*dt*dens.jp(-1, buf=1)*grav
-    U_yl.v(buf=1, n=vars.iener)[:,:] += 0.5*dt*ymom.jp(-1, buf=1)*grav
+    U_yl.v(buf=1, n=vars.iymom)[:,:] += 0.5*dt*ymom_src.jp(-1, buf=1)
+    U_yl.v(buf=1, n=vars.iener)[:,:] += 0.5*dt*E_src.jp(-1, buf=1)
 
     # ymom_yr[i,j] += 0.5*dt*dens[i,j]*grav
-    U_yr.v(buf=1, n=vars.iymom)[:,:] += 0.5*dt*dens.v(buf=1)*grav
-    U_yr.v(buf=1, n=vars.iener)[:,:] += 0.5*dt*ymom.v(buf=1)*grav
+    U_yr.v(buf=1, n=vars.iymom)[:,:] += 0.5*dt*ymom_src.v(buf=1)
+    U_yr.v(buf=1, n=vars.iener)[:,:] += 0.5*dt*E_src.v(buf=1)
 
 
     #=========================================================================

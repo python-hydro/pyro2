@@ -68,6 +68,14 @@ class Simulation(NullSimulation):
 
         self.cc_data = my_data
 
+        # some auxillary data that we'll need to fill GC in, but isn't
+        # really part of the main solution
+        aux_data = patch.CellCenterData2d(my_grid)
+        aux_data.register_var("ymom_src", bc_yodd)
+        aux_data.register_var("E_src", bc)
+        aux_data.create()
+        self.aux_data = aux_data
+
         self.vars = Variables(idens = my_data.vars.index("density"),
                               ixmom = my_data.vars.index("x-momentum"),
                               iymom = my_data.vars.index("y-momentum"),
@@ -136,7 +144,8 @@ class Simulation(NullSimulation):
 
         myg = self.cc_data.grid
 
-        Flux_x, Flux_y = unsplitFluxes(self.cc_data, self.rp, self.vars, self.tc, self.dt)
+        Flux_x, Flux_y = unsplitFluxes(self.cc_data, self.aux_data, self.rp, 
+                                       self.vars, self.tc, self.dt)
 
         old_dens = dens.copy()
         old_ymom = ymom.copy()
