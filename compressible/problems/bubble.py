@@ -38,52 +38,44 @@ def init_data(my_data, rp):
     # initialize the components, remember, that ener here is
     # rho*eint + 0.5*rho*v**2, where eint is the specific
     # internal energy (erg/g)
-    xmom[:,:] = 0.0
-    ymom[:,:] = 0.0
-    dens[:,:] = dens_cutoff
+    xmom.d[:,:] = 0.0
+    ymom.d[:,:] = 0.0
+    dens.d[:,:] = dens_cutoff
 
     # set the density to be stratified in the y-direction
     myg = my_data.grid
 
-    j = myg.jlo
-    while j <= myg.jhi:
-        dens[:,j] = max(dens_base*numpy.exp(-myg.y[j]/scale_height),
-                        dens_cutoff)
-        j += 1
+    for j in range(myg.jlo, myg.jhi+1):
+        dens.d[:,j] = max(dens_base*numpy.exp(-myg.y[j]/scale_height),
+                          dens_cutoff)
 
     cs2 = scale_height*abs(grav)
 
     # set the energy (P = cs2*dens)
-    ener[:,:] = cs2*dens[:,:]/(gamma - 1.0) + \
-                0.5*(xmom[:,:]**2 + ymom[:,:]**2)/dens[:,:]
+    ener.d[:,:] = cs2*dens.d[:,:]/(gamma - 1.0) + \
+                0.5*(xmom.d[:,:]**2 + ymom.d[:,:]**2)/dens.d[:,:]
 
 
     
-    i = myg.ilo
-    while i <= myg.ihi:
-
-        j = myg.jlo
-        while j <= myg.jhi:
+    for i in range(myg.ilo, myg.ihi+1):
+        for j in range(myg.jlo, myg.jhi+1):
 
             r = numpy.sqrt((myg.x[i] - x_pert)**2  + (myg.y[j] - y_pert)**2)
 
             if (r <= r_pert):
                 # boost the specific internal energy, keeping the pressure
                 # constant, by dropping the density
-                eint = (ener[i,j] - 
-                        0.5*(xmom[i,j]**2 - ymom[i,j]**2)/dens[i,j])/dens[i,j]
+                eint = (ener.d[i,j] - 
+                        0.5*(xmom.d[i,j]**2 - ymom.d[i,j]**2)/dens.d[i,j])/dens.d[i,j]
 
-                pres = dens[i,j]*eint*(gamma - 1.0)
+                pres = dens.d[i,j]*eint*(gamma - 1.0)
 
                 eint = eint*pert_amplitude_factor
-                dens[i,j] = pres/(eint*(gamma - 1.0))
+                dens.d[i,j] = pres/(eint*(gamma - 1.0))
 
-                ener[i,j] = dens[i,j]*eint + \
-                    0.5*(xmom[i,j]**2 + ymom[i,j]**2)/dens[i,j]
+                ener.d[i,j] = dens.d[i,j]*eint + \
+                    0.5*(xmom.d[i,j]**2 + ymom.d[i,j]**2)/dens.d[i,j]
 
-            j += 1
-        i += 1
-        
     
 
 def finalize():
