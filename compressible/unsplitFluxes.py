@@ -131,7 +131,7 @@ import mesh.patch as patch
 
 from util import msg
 
-def unsplitFluxes(my_data, my_aux, rp, vars, tc, dt):
+def unsplitFluxes(my_data, my_aux, rp, vars, solid, tc, dt):
     """
     unsplitFluxes returns the fluxes through the x and y interfaces by
     doing an unsplit reconstruction of the interface values and then
@@ -216,7 +216,6 @@ def unsplitFluxes(my_data, my_aux, rp, vars, tc, dt):
         xi = 1.0
 
 
-
     # monotonized central differences in x-direction
     tm_limit = tc.timer("limiting")
     tm_limit.begin()
@@ -243,11 +242,9 @@ def unsplitFluxes(my_data, my_aux, rp, vars, tc, dt):
     tm_limit.end()
 
 
-
     #=========================================================================
     # x-direction
     #=========================================================================
-
 
     # left and right primitive variable states
     tm_states = tc.timer("interfaceStates")
@@ -362,10 +359,12 @@ def unsplitFluxes(my_data, my_aux, rp, vars, tc, dt):
 
     _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
                       vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener,
+                      solid.xl, solid.xr,
                       gamma, U_xl.d, U_xr.d)
 
     _fy = riemannFunc(2, myg.qx, myg.qy, myg.ng,
                       vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener,
+                      solid.yl, solid.yr,
                       gamma, U_yl.d, U_yr.d)
 
     F_x = patch.ArrayIndexer(d=_fx, grid=myg)
@@ -460,10 +459,12 @@ def unsplitFluxes(my_data, my_aux, rp, vars, tc, dt):
 
     _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
                       vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener,
+                      solid.xl, solid.xr,
                       gamma, U_xl.d, U_xr.d)
 
     _fy = riemannFunc(2, myg.qx, myg.qy, myg.ng,
                       vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener,
+                      solid.yl, solid.yr,
                       gamma, U_yl.d, U_yr.d)
 
     F_x = patch.ArrayIndexer(d=_fx, grid=myg)

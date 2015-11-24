@@ -39,21 +39,29 @@ import pickle
 
 from util import msg
 
-valid = ["outflow", "periodic",
-         "reflect", "reflect-even", "reflect-odd",
-         "dirichlet", "neumann"]
+# keep track of whether the BCs are solid walls (passed into the
+# Riemann solver).  
+bc_props = {}
+bc_props["outflow"] = False
+bc_props["periodic"] = False
+bc_props["reflect"] = True
+bc_props["reflect-even"] = True
+bc_props["reflect-odd"] = True
+bc_props["dirichlet"] = True
+bc_props["neumann"] = False
 
 extBCs = {}
 
-def define_bc(type, function):
+def define_bc(type, function, is_solid=False):
     """
     use this to extend the types of boundary conditions supported
     on a solver-by-solver basis.  Here we pass in the reference to
     a function that can be called with the data that needs to be
-    filled.
+    filled.  is_solid indicates whether it should be interpreted as
+    a solid wall (no flux through the BC)"
     """
 
-    valid.append(type)
+    bc_props[type] = is_solid
     extBCs[type] = function
 
 
@@ -151,6 +159,8 @@ class BCObject(object):
         # odd_reflect_dir specifies the corresponding direction ("x",
         # "y")
         
+        valid = list(bc_props.keys())
+
         # -x boundary
         if xlb in valid:
             self.xlb = xlb
@@ -206,7 +216,6 @@ class BCObject(object):
         if not yr_func == None:
             self.yr_value = yr_func(grid.x)
 
-            
     def __str__(self):
         """ print out some basic information about the BC object """
 

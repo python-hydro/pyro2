@@ -206,6 +206,7 @@ end subroutine states
 
 subroutine riemann_cgf(idir, qx, qy, ng, &
                        nvar, idens, ixmom, iymom, iener, &
+                       lower_solid, upper_solid, &
                        gamma, U_l, U_r, F)
 
   implicit none
@@ -213,6 +214,7 @@ subroutine riemann_cgf(idir, qx, qy, ng, &
   integer, intent(in) :: idir
   integer, intent(in) :: qx, qy, ng
   integer, intent(in) :: nvar, idens, ixmom, iymom, iener
+  integer, intent(in) :: lower_solid, upper_solid
   double precision, intent(in) :: gamma
 
   ! 0-based indexing to match python 
@@ -471,6 +473,27 @@ subroutine riemann_cgf(idir, qx, qy, ng, &
 
         endif
 
+        ! are we on a solid boundary?
+        if (idir == 1) then
+           if (i == ilo .and. lower_solid == 1) then
+              un_state = 0.0
+           endif
+
+           if (i == ihi+1 .and. upper_solid == 1) then
+              un_state = 0.0
+           endif
+
+        else if (idir == 2) then
+           if (j == jlo .and. lower_solid == 1) then
+              un_state = 0.0
+           endif
+
+           if (j == jhi+1 .and. upper_solid == 1) then
+              un_state = 0.0
+           endif
+
+        endif
+
         ! compute the fluxes
         F(i,j,idens) = rho_state*un_state
 
@@ -494,6 +517,7 @@ end subroutine riemann_cgf
 
 subroutine riemann_HLLC(idir, qx, qy, ng, &
                         nvar, idens, ixmom, iymom, iener, &
+                        lower_solid, upper_solid, &
                         gamma, U_l, U_r, F)
 
 
@@ -502,6 +526,7 @@ subroutine riemann_HLLC(idir, qx, qy, ng, &
   integer, intent(in) :: idir
   integer, intent(in) :: qx, qy, ng
   integer, intent(in) :: nvar, idens, ixmom, iymom, iener
+  integer, intent(in) :: lower_solid, upper_solid
   double precision, intent(in) :: gamma
 
   ! 0-based indexing to match python 
@@ -753,6 +778,8 @@ subroutine riemann_HLLC(idir, qx, qy, ng, &
                          U_state, F(i,j,:))
 
         endif
+
+        ! we should deal with solid boundaries somehow here
            
      enddo
   enddo

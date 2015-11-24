@@ -34,6 +34,17 @@ class Variables(object):
         self.ip = 3
 
 
+class BCProp(object):
+    """
+    a simple container to hold properties of the boundary conditions
+    """
+    def __init__(self, xl_prop, xr_prop, yl_prop, yr_prop):
+        self.xl = xl_prop
+        self.xr = xr_prop
+        self.yl = yl_prop
+        self.yr = yr_prop
+
+
 class Simulation(NullSimulation):
 
     def initialize(self):
@@ -47,9 +58,16 @@ class Simulation(NullSimulation):
 
 
         # define solver specific boundary condition routines
-        patch.define_bc("hse", BC.user)
+        patch.define_bc("hse", BC.user, is_solid=False)
 
         bc, bc_xodd, bc_yodd = bc_setup(self.rp)
+
+        # are we dealing with solid boundaries? we'll use these for
+        # the Riemann solver
+        self.solid = BCProp(int(patch.bc_props[self.rp.get_param("mesh.xlboundary")]),
+                            int(patch.bc_props[self.rp.get_param("mesh.xrboundary")]),
+                            int(patch.bc_props[self.rp.get_param("mesh.ylboundary")]),
+                            int(patch.bc_props[self.rp.get_param("mesh.yrboundary")]))
 
         # density and energy
         my_data.register_var("density", bc)
@@ -145,7 +163,7 @@ class Simulation(NullSimulation):
         myg = self.cc_data.grid
 
         Flux_x, Flux_y = unsplitFluxes(self.cc_data, self.aux_data, self.rp, 
-                                       self.vars, self.tc, self.dt)
+                                       self.vars, self.solid, self.tc, self.dt)
 
         old_dens = dens.copy()
         old_ymom = ymom.copy()
