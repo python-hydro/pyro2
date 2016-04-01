@@ -252,7 +252,7 @@ def fluxes(my_data, my_aux, rp, vars, solid, tc, dt):
     #=========================================================================
     # construct the fluxes normal to the interfaces
     #=========================================================================
-
+    tm_riem = tc.timer("Riemann")
     tm_riem.begin()
 
     _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,

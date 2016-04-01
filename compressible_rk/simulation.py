@@ -30,8 +30,8 @@ class Simulation(compressible.Simulation):
 
         myg = self.cc_data.grid
 
-        Flux_x, Flux_y = unsplitFluxes(self.cc_data, self.aux_data, self.rp, 
-                                       self.vars, self.solid, self.tc, self.dt)
+        Flux_x, Flux_y = fluxes(self.cc_data, self.aux_data, self.rp, 
+                                self.vars, self.solid, self.tc, self.dt)
 
         old_dens = dens.copy()
         old_ymom = ymom.copy()
