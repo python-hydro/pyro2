@@ -8,7 +8,7 @@ from compressible.problems import *
 import compressible.eos as eos
 import mesh.patch as patch
 from simulation_null import NullSimulation, grid_setup, bc_setup
-from compressible.unsplitFluxes import *
+from compressible_rk.fluxes import *
 from util import profile
 
 
