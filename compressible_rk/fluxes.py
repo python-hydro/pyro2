@@ -255,6 +255,15 @@ def fluxes(my_data, my_aux, rp, vars, solid, tc, dt):
     tm_riem = tc.timer("Riemann")
     tm_riem.begin()
 
+    riemann = rp.get_param("compressible.riemann")
+
+    if riemann == "HLLC":
+        riemannFunc = interface_f.riemann_hllc
+    elif riemann == "CGF":
+        riemannFunc = interface_f.riemann_cgf
+    else:
+        msg.fail("ERROR: Riemann solver undefined")
+
     _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
                       vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener,
                       solid.xl, solid.xr,
