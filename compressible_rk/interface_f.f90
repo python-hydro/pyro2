@@ -43,9 +43,6 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
   integer :: i, j, m
 
   double precision :: dq(0:nvar-1), q(0:nvar-1)
-  double precision :: lvec(0:nvar-1,0:nvar-1), rvec(0:nvar-1,0:nvar-1)
-  double precision :: eval(0:nvar-1)
-  double precision :: betal(0:nvar-1), betar(0:nvar-1)
 
   double precision :: dtdx, dtdx4
   double precision :: cs
@@ -68,16 +65,14 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
         q(:) = [r(i,j), u(i,j), v(i,j), p(i,j)]
 
         ! construct the states
-        do m = 0, 3
-           if (idir == 1) then
-              q_l(i+1,j,m) = q(:) + 0.5d0*dx*dq
-              q_r(i,  j,m) = q(:) - 0.5d0*dx*dq
-           else
-              q_l(i,j+1,m) = q(:) + 0.5d0*dx*dq
-              q_r(i,j,  m) = q(:) - 0.5d0*dx*dq
-           endif
+        if (idir == 1) then
+           q_l(i+1,j,:) = q(:) + 0.5d0*dx*dq(:)
+           q_r(i,  j,:) = q(:) - 0.5d0*dx*dq(:)
+        else
+           q_l(i,j+1,:) = q(:) + 0.5d0*dx*dq(:)
+           q_r(i,j,  :) = q(:) - 0.5d0*dx*dq(:)
 
-        enddo
+        endif
 
      enddo
   enddo
