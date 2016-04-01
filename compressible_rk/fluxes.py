@@ -69,7 +69,7 @@ import mesh.patch as patch
 
 from util import msg
 
-def fluxes(my_data, my_aux, rp, vars, solid, tc, dt):
+def fluxes(my_data, rp, vars, solid, tc, dt):
     """
     unsplitFluxes returns the fluxes through the x and y interfaces by
     doing an unsplit reconstruction of the interface values and then
