@@ -62,25 +62,65 @@ class Simulation(compressible.Simulation):
         myg = self.cc_data.grid
 
         myd = self.cc_data
-        myd_nhalf = patch.cell_center_data_clone(myd)
 
-        # time-integration -- RK2
+        order = 4
 
-        # initial slopes and n+1/2 state
-        k1 = self.substep(myd)
-        for n in range(self.vars.nvar):
-            var = myd_nhalf.get_var_by_index(n)
-            var.v()[:,:] += 0.5*self.dt*k1.v(n=n)[:,:]
+        if order == 2:
+            # time-integration -- RK2
+            myd_nhalf = patch.cell_center_data_clone(myd)
 
-        myd_nhalf.fill_BC_all()
+            # initial slopes and n+1/2 state
+            k1 = self.substep(myd)
+            for n in range(self.vars.nvar):
+                var = myd_nhalf.get_var_by_index(n)
+                var.v()[:,:] += 0.5*self.dt*k1.v(n=n)[:,:]
 
-        # updated slopes, starting with the n+1/2 state
-        k2 = self.substep(myd_nhalf)
+            myd_nhalf.fill_BC_all()
 
-        # final update
-        for n in range(self.vars.nvar):
-            var = myd.get_var_by_index(n)
-            var.v()[:,:] += self.dt*k2.v(n=n)[:,:]
+            # updated slopes, starting with the n+1/2 state
+            k2 = self.substep(myd_nhalf)
+
+            # final update
+            for n in range(self.vars.nvar):
+                var = myd.get_var_by_index(n)
+                var.v()[:,:] += self.dt*k2.v(n=n)[:,:]
+
+        elif order == 4:
+
+            # time-integration -- RK4
+            myd1 = patch.cell_center_data_clone(myd)
+            myd2 = patch.cell_center_data_clone(myd)
+            myd3 = patch.cell_center_data_clone(myd)
+
+            k1 = self.substep(myd)
+            for n in range(self.vars.nvar):
+                var = myd1.get_var_by_index(n)
+                var.v()[:,:] += 0.5*self.dt*k1.v(n=n)[:,:]
+
+            myd1.fill_BC_all()
+
+            k2 = self.substep(myd1)
+            for n in range(self.vars.nvar):
+                var = myd2.get_var_by_index(n)
+                var.v()[:,:] += 0.5*self.dt*k2.v(n=n)[:,:]
+
+            myd2.fill_BC_all()
+
+            k3 = self.substep(myd2)
+            for n in range(self.vars.nvar):
+                var = myd3.get_var_by_index(n)
+                var.v()[:,:] += self.dt*k3.v(n=n)[:,:]
+
+            myd3.fill_BC_all()
+
+            # updated slopes, starting with the n+1/2 state
+            k4 = self.substep(myd3)
+
+            # final update
+            for n in range(self.vars.nvar):
+                var = myd.get_var_by_index(n)
+                var.v()[:,:] += (self.dt/6.0)*(k1.v(n=n)[:,:] + 2.0*k2.v(n=n)[:,:] + 2.0*k3.v(n=n)[:,:] + k4.v(n=n)[:,:])
+
 
         # increment the time
         myd.t += self.dt
