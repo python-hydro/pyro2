@@ -66,11 +66,11 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
 
         ! construct the states
         if (idir == 1) then
-           q_l(i+1,j,:) = q(:) + 0.5d0*dx*dq(:)
-           q_r(i,  j,:) = q(:) - 0.5d0*dx*dq(:)
+           q_l(i+1,j,:) = q(:) + 0.5d0*dq(:)
+           q_r(i,  j,:) = q(:) - 0.5d0*dq(:)
         else
-           q_l(i,j+1,:) = q(:) + 0.5d0*dx*dq(:)
-           q_r(i,j,  :) = q(:) - 0.5d0*dx*dq(:)
+           q_l(i,j+1,:) = q(:) + 0.5d0*dq(:)
+           q_r(i,j,  :) = q(:) - 0.5d0*dq(:)
 
         endif
 
