@@ -1,4 +1,4 @@
-subroutine states(idir, qx, qy, ng, dx, dt, &
+subroutine states(idir, qx, qy, ng, dx, &
                   nvar, &
                   gamma, &
                   r, u, v, p, &
@@ -9,7 +9,7 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
 
   integer, intent(in) :: idir
   integer, intent(in) :: qx, qy, ng
-  double precision, intent(in) :: dx, dt
+  double precision, intent(in) :: dx
   integer, intent(in) :: nvar
   double precision, intent(in) :: gamma
 
@@ -44,7 +44,6 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
 
   double precision :: dq(0:nvar-1), q(0:nvar-1)
 
-  double precision :: dtdx, dtdx4
   double precision :: cs
 
   double precision :: sum, sum_l, sum_r, factor

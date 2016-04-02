@@ -69,7 +69,7 @@ import mesh.patch as patch
 
 from util import msg
 
-def fluxes(my_data, rp, vars, solid, tc, dt):
+def fluxes(my_data, rp, vars, solid, tc):
     """
     unsplitFluxes returns the fluxes through the x and y interfaces by
     doing an unsplit reconstruction of the interface values and then
@@ -92,8 +92,6 @@ def fluxes(my_data, rp, vars, solid, tc, dt):
         variables
     tc : TimerCollection object
         The timers we are using to profile
-    dt : float
-        The timestep we are advancing through.
 
     Returns
     -------
@@ -188,7 +186,7 @@ def fluxes(my_data, rp, vars, solid, tc, dt):
     tm_states = tc.timer("interfaceStates")
     tm_states.begin()
 
-    V_l, V_r = interface_f.states(1, myg.qx, myg.qy, myg.ng, myg.dx, dt,
+    V_l, V_r = interface_f.states(1, myg.qx, myg.qy, myg.ng, myg.dx,
                                   vars.nvar,
                                   gamma,
                                   r.d, u.d, v.d, p.d,
@@ -223,7 +221,7 @@ def fluxes(my_data, rp, vars, solid, tc, dt):
     # left and right primitive variable states
     tm_states.begin()
 
-    V_l, V_r = interface_f.states(2, myg.qx, myg.qy, myg.ng, myg.dy, dt,
+    V_l, V_r = interface_f.states(2, myg.qx, myg.qy, myg.ng, myg.dy,
                                   vars.nvar,
                                   gamma,
                                   r.d, u.d, v.d, p.d,

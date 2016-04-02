@@ -36,7 +36,7 @@ class Simulation(compressible.Simulation):
         k = myg.scratch_array(nvar=self.vars.nvar)
 
         flux_x, flux_y = fluxes(myd, self.rp,
-                                self.vars, self.solid, self.tc, self.dt)
+                                self.vars, self.solid, self.tc)
 
         for n in range(self.vars.nvar):
             k.v(n=n)[:,:] = \
