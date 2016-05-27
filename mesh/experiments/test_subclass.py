@@ -168,6 +168,11 @@ if __name__ == "__main__":
     c.pretty_print()
     print(c.shape)
 
-    d = c.ip_jp(1,1, buf=(1,1,1,1))
+    d = np.asarray(c.ip_jp(1,1))
     print(d.shape)
+
+    print(d)
+    c[:,:] = 0.0
+    print(d)
+
 
