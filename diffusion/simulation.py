@@ -5,7 +5,7 @@ from diffusion.problems import *
 import mesh.patch as patch
 from simulation_null import NullSimulation, grid_setup
 import multigrid.MG as MG
-from util import msg, profile
+from util import msg
 
 class Simulation(NullSimulation):
 
@@ -31,8 +31,8 @@ class Simulation(NullSimulation):
         bcparam = []
         for bc in [xlb_type, xrb_type, ylb_type, yrb_type]:
             if bc == "periodic": bcparam.append("periodic")
-            elif bc == "neumann":  bcparam.append("neumann")
-            elif bc == "dirichlet":  bcparam.append("dirichlet")
+            elif bc == "neumann": bcparam.append("neumann")
+            elif bc == "dirichlet": bcparam.append("dirichlet")
             else:
                 msg.fail("invalid BC")
 
@@ -148,6 +148,6 @@ class Simulation(NullSimulation):
 
         plt.colorbar()
 
-        plt.figtext(0.05,0.0125, "t = %10.5f" % self.cc_data.t)
+        plt.figtext(0.05, 0.0125, "t = %10.5f" % self.cc_data.t)
 
         plt.draw()
