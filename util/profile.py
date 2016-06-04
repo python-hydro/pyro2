@@ -1,7 +1,7 @@
 """
 A very simple profiling class.  Define some timers and methods
-to start and stop them.  A TimerCollection holds a group of 
-timers.  Nesting of timers is tracked so we can pretty print 
+to start and stop them.  A TimerCollection holds a group of
+timers.  Nesting of timers is tracked so we can pretty print
 the profiling information.
 
 tc = TimerCollection()
@@ -15,8 +15,8 @@ return the same Timer object.
 To start the timer:
 
 a.begin()
-  
-... and to end it, 
+
+... and to end it,
 
 a.end()
 
@@ -26,14 +26,14 @@ calls.
 
 tc.report() prints out a summary of the timing.
 
-Warning: At present, no enforcement is done to ensure proper 
+Warning: At present, no enforcement is done to ensure proper
 nesting.
 
 """
 
 from __future__ import print_function
-  
-import time 
+
+import time
 
 class TimerCollection(object):
 
@@ -66,7 +66,6 @@ class TimerCollection(object):
         for t in self.timers:
             if t.name == name:
                 return t
-                break
 
         # if we're here, we didn't find one, so create a new one
 
@@ -94,7 +93,7 @@ class TimerCollection(object):
 
 class Timer(object):
 
-    def __init__ (self, name, stack_count=0):
+    def __init__(self, name, stack_count=0):
         """
         Initialize a timer with the given name.
 
@@ -113,7 +112,7 @@ class Timer(object):
 
         self.start_time = 0
         self.elapsed_time = 0
-            
+
 
     def begin(self):
         """
@@ -122,30 +121,30 @@ class Timer(object):
         self.start_time = time.time()
         self.is_running = True
 
-        
+
     def end(self):
         """
-        Stop timing.  This does not destroy the timer, it simply 
+        Stop timing.  This does not destroy the timer, it simply
         stops it from counting time.
         """
         elapsed_time = time.time() - self.start_time
         self.elapsed_time += elapsed_time
         self.is_running = False
-        
-        
 
-if __name__ == "__main__":    
+
+
+if __name__ == "__main__":
     tc = TimerCollection()
 
     a = tc.timer('a')
     a.begin()
     time.sleep(10.)
     a.end()
-    
+
     b = tc.timer('b')
     b.begin()
     time.sleep(5.)
-    
+
     c = tc.timer('c')
     c.begin()
     time.sleep(10.)
@@ -155,7 +154,7 @@ if __name__ == "__main__":
     c.begin()
     time.sleep(10.)
     c.end()
-    
+
     b.end()
-    
+
     tc.report()
