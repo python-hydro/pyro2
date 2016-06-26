@@ -690,4 +690,5 @@ class Simulation(NullSimulation):
 
         plt.figtext(0.05,0.0125, "t = %10.5f" % self.cc_data.t)
 
+        plt.pause(0.001)
         plt.draw()
