@@ -19,7 +19,7 @@ https://github.com/zingale/pyro2
 The project webpage, where you'll find documentation, plots, notes,
 etc. is here:
 
-http://bender.astro.sunysb.edu/hydro_by_example/
+http://zingale.github.io/pyro2/
 
 
 ## Getting started
