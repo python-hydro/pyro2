@@ -45,7 +45,6 @@ read default values.
 
 from __future__ import print_function
 
-import string
 import re
 from util import msg
 
@@ -82,7 +81,7 @@ class RuntimeParameters(object):
         track of which parameters were actually used.
         """
 
-        # keep track of the parameters and their comments 
+        # keep track of the parameters and their comments
         self.params = {}
         self.param_comments = {}
 
@@ -90,7 +89,7 @@ class RuntimeParameters(object):
         # actually looked- up
         self.used_params = []
 
-    def load_params(self, file, no_new=0):
+    def load_params(self, pfile, no_new=0):
         """
         Reads line from file and makes dictionary pairs from the data
         to store.
@@ -107,9 +106,9 @@ class RuntimeParameters(object):
         """
 
         # check to see whether the file exists
-        try: f = open(file, 'r')
+        try: f = open(pfile, 'r')
         except IOError:
-            msg.fail("ERROR: parameter file does not exist: %s" % (file))
+            msg.fail("ERROR: parameter file does not exist: {}".format(pfile))
 
         # we could use the ConfigParser, but we actually want to
         # have our configuration files be self-documenting, of the
@@ -119,17 +118,17 @@ class RuntimeParameters(object):
 
         for line in f.readlines():
 
-            if sec.search(line): 
+            if sec.search(line):
                 lbracket, section, rbracket = sec.split(line)
                 section = section.strip().lower()
-            
+
             elif eq.search(line):
-                left, item, value, comment, right = eq.split(line) 
+                left, item, value, comment, right = eq.split(line)
                 item = item.strip().lower()
 
                 # define the key
                 key = section + "." + item
-            
+
                 # if we have no_new = 1, then we only want to override existing
                 # key/values
                 if no_new:
@@ -148,16 +147,16 @@ class RuntimeParameters(object):
                         comment = self.param_comments[key]
                     except KeyError:
                         comment = ""
-                    
+
                 self.param_comments[key] = comment.strip()
 
 
     def command_line_params(self, cmd_strings):
         """
         finds dictionary pairs from a string that came from the
-        commandline.  Stores the parameters in globalParams only if they 
+        commandline.  Stores the parameters in globalParams only if they
         already exist.
-        
+
         we expect things in the string in the form:
          ["sec.opt=value",  "sec.opt=value"]
         with each opt an element in the list
@@ -165,7 +164,7 @@ class RuntimeParameters(object):
         Parameters
         ----------
         cmd_strings : list
-            The list of strings containing runtime parameter pairs            
+            The list of strings containing runtime parameter pairs
 
         """
 
@@ -173,7 +172,7 @@ class RuntimeParameters(object):
 
             # break it apart
             key, value = item.split("=")
-            
+
             # we only want to override existing keys/values
             if not key in self.params.keys():
                 msg.warning("warning, key: %s not defined" % (key))
@@ -182,7 +181,7 @@ class RuntimeParameters(object):
             # check in turn whether this is an interger, float, or string
             self.params[key] = _get_val(value)
 
-    
+
     def get_param(self, key):
         """
         returns the value of the runtime parameter corresponding to the
@@ -196,12 +195,12 @@ class RuntimeParameters(object):
         # debugging
         if not key in self.used_params:
             self.used_params.append(key)
-        
+
         if key in self.params.keys():
             return self.params[key]
         else:
             msg.fail("ERROR: runtime parameter %s not found" % (key))
-        
+
 
     def print_unused_params(self):
         """
@@ -210,7 +209,7 @@ class RuntimeParameters(object):
         for key in self.params.keys():
             if not key in self.used_params:
                 msg.warning("parameter %s never used" % (key))
-    
+
 
     def print_all_params(self):
         """
@@ -223,7 +222,7 @@ class RuntimeParameters(object):
             print(key, "=", self.params[key])
 
         print(" ")
-    
+
 
     def __str__(self):
         ostr = ""
@@ -251,16 +250,16 @@ class RuntimeParameters(object):
 
 
         f.write('# automagically generated parameter file\n')
-    
-        currentSection = " "
+
+        current_section = " "
 
         for key in keys:
             parts = key.split('.')
             section = parts[0]
             option = parts[1]
 
-            if (section != currentSection):
-                currentSection = section
+            if (section != current_section):
+                current_section = section
                 f.write('\n')
                 f.write('[' + section + ']\n')
 
@@ -270,23 +269,16 @@ class RuntimeParameters(object):
                 value = '%f' % self.params[key]
             else:
                 value = self.params[key]
-        
+
             if self.param_comments[key] != '':
                 f.write(option + ' = ' + value + '       ; ' + self.param_comments[key] + '\n')
             else:
                 f.write(option + ' = ' + value + '\n')
 
         f.close()
-     
-    
+
+
 if __name__== "__main__":
     rp = RuntimeParameters()
     rp.load_params("inputs.test")
     rp.print_paramfile()
-
-
-
-    
-
-
-

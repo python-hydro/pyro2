@@ -5,7 +5,6 @@ from __future__ import print_function
 import argparse
 import importlib
 import os
-import sys
 
 import matplotlib.pyplot as plt
 
@@ -86,7 +85,7 @@ def doit(solver_name, problem_name, param_file,
     # output the 0th data
     basename = rp.get_param("io.basename")
     sim.cc_data.write("{}{:04d}".format(basename, sim.n))
-    
+
     dovis = rp.get_param("vis.dovis")
     if dovis:
         plt.figure(num=1, figsize=(8,6), dpi=100, facecolor='w')
@@ -150,7 +149,7 @@ def doit(solver_name, problem_name, param_file,
         except:
             msg.warning("ERROR openning compare file")
             return "ERROR openning compare file"
-        
+
 
         result = compare.compare(sim.cc_data.grid, sim.cc_data, bench_grid, bench_data)
 
@@ -166,7 +165,7 @@ def doit(solver_name, problem_name, param_file,
             try: os.mkdir(solver_name + "/tests/")
             except:
                 msg.fail("ERROR: unable to create the solver's tests/ directory")
-            
+
         bench_file = solver_name + "/tests/" + basename + "%4.4d" % (sim.n)
         msg.warning("storing new benchmark: {}\n".format(bench_file))
         sim.cc_data.write(bench_file)
@@ -184,7 +183,7 @@ def doit(solver_name, problem_name, param_file,
         return result
     else:
         return None
-    
+
 
 if __name__ == "__main__":
 
@@ -214,4 +213,3 @@ if __name__ == "__main__":
          other_commands=args.other,
          comp_bench=args.compare_benchmark,
          make_bench=args.make_benchmark)
-

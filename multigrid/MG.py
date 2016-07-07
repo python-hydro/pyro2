@@ -612,6 +612,7 @@ class CellCenterMG2d(object):
 
                 plt.suptitle(self.vis_title, fontsize=18)
 
+                plt.pause(0.001)
                 plt.draw()
                 plt.savefig("mg_%4.4d.png" % (self.frame))
                 self.frame += 1
