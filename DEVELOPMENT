@@ -1,22 +1,10 @@
 This is a simple list of the improvements we wish to make to pyro.
 
+ArrayIndexer:
 
-coding:
+  -- rewrite the ArrayIndexer class to simply subclass ndarray.  This is
+     already speced out in mesh/experiments/test_subclass.py
 
-     * it seems in __init__ and for other imports we need to explicitly put a .
-
-       we may need something like:
-
-       try:
-           from . import mymodule     # "myapp" case
-       except:
-           import mymodule            # "__main__" case
-
-       (see http://stackoverflow.com/questions/1112618/import-python-package-from-local-directory-into-interpreter)
-
-  -- rewrite to adhere to python style guidelines
-
-     
 
 new solvers:
 
