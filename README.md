@@ -84,6 +84,10 @@ pyro provides the following solvers (all in 2-d):
     equations of compressible hydrodynamics.  This uses a 2-shock
     approximate Riemann solver.
 
+  - `compressible_rk`: a second-order unsplit solver for Euler
+     equations that uses Runge-Kutta integration instead of
+	 characteristic tracing.
+	 
   - `incompressible`: a second-order cell-centered approximate
     projection method for the incompressible equations of
     hydrodynamics.
