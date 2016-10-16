@@ -38,12 +38,11 @@ xmom = myd.get_var("x-momentum")
 ymom = myd.get_var("y-momentum")
 ener = myd.get_var("energy")
 
-rho = dens[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]
+rho = dens.v()
 
-u = np.sqrt(xmom[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]**2 +
-               ymom[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]**2)/rho
+u = np.sqrt(xmom.v()**2 + ymom.v()**2)/rho
 
-e = (ener[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] - 0.5*rho*u*u)/rho
+e = (ener.v() - 0.5*rho*u*u)/rho
 gamma = myd.get_aux("gamma")
 p = rho*e*(gamma - 1.0)
 

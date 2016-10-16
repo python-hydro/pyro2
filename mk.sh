@@ -15,6 +15,7 @@ if [ "$1" == "clean" ]; then
     rm -rf mesh/*.so 
     rm -rf incompressible/*.so
     rm -rf compressible/*.so
+    rm -rf compressible_rk/*.so
     rm -rf lm_atm/*.so
     find . -name "*.pyc" -exec rm -f {} \;
     
@@ -25,7 +26,7 @@ else
 	FFLAGS="-C"
     fi
     
-    for d in mesh incompressible compressible lm_atm
+    for d in mesh incompressible compressible compressible_rk lm_atm
     do
 	cd ${d}
 	${PYTHON} setup.py config_fc --f90flags "${FFLAGS}" build_ext --inplace
