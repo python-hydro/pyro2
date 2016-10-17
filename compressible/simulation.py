@@ -6,7 +6,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import compressible.BC as BC
-from compressible.problems import *
 import compressible.eos as eos
 import mesh.patch as patch
 from simulation_null import NullSimulation, grid_setup, bc_setup

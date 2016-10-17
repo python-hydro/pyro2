@@ -2,7 +2,6 @@ import importlib
 import numpy as np
 import matplotlib.pyplot as plt
 
-from diffusion.problems import *
 import mesh.patch as patch
 from simulation_null import NullSimulation, grid_setup
 import multigrid.MG as MG

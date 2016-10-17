@@ -5,7 +5,6 @@ import importlib
 import numpy as np
 import matplotlib.pyplot as plt
 
-from incompressible.problems import *
 import incompressible.incomp_interface_f as incomp_interface_f
 import mesh.reconstruction_f as reconstruction_f
 import mesh.patch as patch
