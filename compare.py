@@ -4,7 +4,6 @@ from __future__ import print_function
 
 import numpy
 import mesh.patch
-import getopt
 import sys
 
 usage = """
