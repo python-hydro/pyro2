@@ -11,6 +11,10 @@
 # maybe we use np.asarray() here? but this may make a copy and do away
 # with the fact that we are just a view into the same memory...
 # perhaps instead set the grid to None?
+#
+# alternately, perhaps we can use .view(self)? or something like that
+# to ensure that it is just a view and no copy is done.  Some experiment
+# on this is in mesh-exmaples.ipynb
 
 from __future__ import print_function
 
