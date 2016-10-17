@@ -977,7 +977,8 @@ def cell_center_data_clone(old):
     return new
 
 
-if __name__ == "__main__":
+def do_demo():
+
 
     # illustrate basic mesh operations
 
@@ -1001,8 +1002,13 @@ if __name__ == "__main__":
     mydata.write("mesh_test")
 
     print("reading\n")
-    myg2, myd2 = read("mesh_test")
+    _, myd2 = read("mesh_test")
     print(myd2)
 
 
     mydata.pretty_print("a")
+
+
+if __name__ == "__main__":
+
+    do_demo()
