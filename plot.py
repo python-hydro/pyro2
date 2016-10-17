@@ -1,52 +1,34 @@
 #!/usr/bin/env python
 
-import numpy as np
 import matplotlib.pyplot as plt
-import sys
 import argparse
-
+import importlib
 import mesh.patch as patch
 
 # plot an output file using the solver's dovis script
 
-def makeplot(myd, solver_name, outfile, W, H):
+def makeplot(plotfile_name, solver_name, outfile, width, height):
+    """ plot the data in a plotfile using the solver's vis() method """
 
-    exec 'import ' + solver_name + ' as solver'
+    _, myd = patch.read(plotfile_name)
+
+    solver = importlib.import_module(solver_name)
 
     sim = solver.Simulation(solver_name, None, None)
     sim.cc_data = myd
 
-    plt.figure(num=1, figsize=(W,H), dpi=100, facecolor='w')
+    plt.figure(num=1, figsize=(width, height), dpi=100, facecolor='w')
 
     sim.dovis()
     plt.savefig(outfile)
     plt.show()
 
 
-def usage():
-    usage="""
-usage: plot.py [-h] [-o image.png] solver filename
-
-positional arguments:
-  solver        required inputs: solver name
-  filename      required inputs: filename to read from
-
-optional arguments:
-  -h, --help    show this help message and exit
-  -o image.png  output image name. The extension .png will generate a PNG
-                file, .eps will generate an EPS file (default: plot.png).
-  -W width      width in inches
-  -H height     height in inches
-"""
-    print usage
-    sys.exit()
-
-
-if __name__== "__main__":
+def get_args():
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("-o", type=str, default="plot.png", 
+    parser.add_argument("-o", type=str, default="plot.png",
                         metavar="plot.png", help="output file name")
     parser.add_argument("-W", type=float, default=8.0,
                         metavar="width", help="width (in inches) of the plot (100 dpi)")
@@ -59,10 +41,11 @@ if __name__== "__main__":
 
     args = parser.parse_args()
 
-    myg, myd = patch.read(args.plotfile[0])
-
-    makeplot(myd, args.solver[0], args.o, args.W, args.H)
+    return args
 
 
+if __name__ == "__main__":
 
+    args = get_args()
 
+    makeplot(args.plotfile[0], args.solver[0], args.o, args.W, args.H)
