@@ -122,7 +122,7 @@ class Simulation(NullSimulation):
 
         # now set the initial conditions for the problem
         problem = importlib.import_module("lm_atm.problems.{}".format(self.problem_name))
-        problem.init_data(self.cc_data, self.rp)
+        problem.init_data(self.cc_data, self.base, self.rp)
 
         # Construct beta_0
         gamma = self.rp.get_param("eos.gamma")
