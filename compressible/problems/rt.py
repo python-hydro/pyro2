@@ -1,7 +1,6 @@
 from __future__ import print_function
 
-import math
-import numpy
+import numpy as np
 
 import sys
 import mesh.patch as patch
@@ -64,7 +63,7 @@ def init_data(my_data, rp):
         j += 1
 
 
-    ymom[:,:] = amp*numpy.cos(2.0*math.pi*myg.x2d/(myg.xmax-myg.xmin))*numpy.exp(-(myg.y2d-ycenter)**2/sigma**2)
+    ymom[:,:] = amp*np.cos(2.0*np.pi*myg.x2d/(myg.xmax-myg.xmin))*np.exp(-(myg.y2d-ycenter)**2/sigma**2)
 
     ymom *= dens
 
