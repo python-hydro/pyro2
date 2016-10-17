@@ -50,9 +50,9 @@ bc_props["reflect-odd"] = True
 bc_props["dirichlet"] = True
 bc_props["neumann"] = False
 
-extBCs = {}
+ext_bcs = {}
 
-def define_bc(type, function, is_solid=False):
+def define_bc(bc_type, function, is_solid=False):
     """
     use this to extend the types of boundary conditions supported
     on a solver-by-solver basis.  Here we pass in the reference to
@@ -61,8 +61,8 @@ def define_bc(type, function, is_solid=False):
     a solid wall (no flux through the BC)"
     """
 
-    bc_props[type] = is_solid
-    extBCs[type] = function
+    bc_props[bc_type] = is_solid
+    ext_bcs[bc_type] = function
 
 
 def _set_reflect(odd_reflect_dir, dir_string):
@@ -86,13 +86,13 @@ class BCObject(object):
 
     """
 
-    def __init__ (self,
-                  xlb="outflow", xrb="outflow",
-                  ylb="outflow", yrb="outflow",
-                  xl_func=None, xr_func=None,
-                  yl_func=None, yr_func=None,
-                  grid=None,
-                  odd_reflect_dir=""):
+    def __init__(self,
+                 xlb="outflow", xrb="outflow",
+                 ylb="outflow", yrb="outflow",
+                 xl_func=None, xr_func=None,
+                 yl_func=None, yr_func=None,
+                 grid=None,
+                 odd_reflect_dir=""):
         """
         Create the BCObject.
 
@@ -195,25 +195,25 @@ class BCObject(object):
 
 
         # periodic checks
-        if ((xlb == "periodic" and not xrb == "periodic") or
-            (xrb == "periodic" and not xlb == "periodic")):
+        if ((xlb == "periodic" and xrb != "periodic") or
+            (xrb == "periodic" and xlb != "periodic")):
             msg.fail("ERROR: both xlb and xrb must be periodic")
 
-        if ((ylb == "periodic" and not yrb == "periodic") or
-            (yrb == "periodic" and not ylb == "periodic")):
+        if ((ylb == "periodic" and yrb != "periodic") or
+            (yrb == "periodic" and ylb != "periodic")):
             msg.fail("ERROR: both ylb and yrb must be periodic")
 
 
         # inhomogeneous functions for Dirichlet or Neumann
         self.xl_value = self.xr_value = self.yl_value = self.yr_value = None
 
-        if not xl_func == None:
+        if xl_func is not None:
             self.xl_value = xl_func(grid.y)
-        if not xr_func == None:
+        if xr_func is not None:
             self.xr_value = xr_func(grid.y)
-        if not yl_func == None:
+        if yl_func is not None:
             self.yl_value = yl_func(grid.x)
-        if not yr_func == None:
+        if yr_func is not None:
             self.yr_value = yr_func(grid.x)
 
     def __str__(self):
@@ -449,8 +449,8 @@ class Grid2d():
     The '*' marks the data locations.
     """
 
-    def __init__ (self, nx, ny, ng=1, \
-                  xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0):
+    def __init__(self, nx, ny, ng=1, \
+                 xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0):
         """
         Create a Grid2d object.
 
@@ -621,7 +621,7 @@ class CellCenterData2d():
    locked.  New variables cannot be added.
     """
 
-    def __init__ (self, grid, dtype=np.float64):
+    def __init__(self, grid, dtype=np.float64):
 
         """
         Initialize the CellCenterData2d object.
@@ -712,14 +712,13 @@ class CellCenterData2d():
             object """
 
         if self.initialized == 0:
-            myStr = "CellCenterData2d object not yet initialized"
-            return myStr
+            my_str = "CellCenterData2d object not yet initialized"
+            return my_str
 
-        myStr = "cc data: nx = " + repr(self.grid.nx) + \
-                       ", ny = " + repr(self.grid.ny) + \
-                       ", ng = " + repr(self.grid.ng) + "\n" + \
-                 "   nvars = " + repr(self.nvar) + "\n" + \
-                 "   variables: \n"
+        my_str = "cc data: nx = {}, ny = {}, ng = {}\n".format(
+            self.grid.nx, self.grid.ny, self.grid.ng)
+        my_str += "         nvars = {}\n".format(self.nvar)
+        my_str += "         variables:\n"
 
         ilo = self.grid.ilo
         ihi = self.grid.ihi
@@ -727,17 +726,17 @@ class CellCenterData2d():
         jhi = self.grid.jhi
 
         for n in range(self.nvar):
-            myStr += "%16s: min: %15.10f    max: %15.10f\n" % \
+            my_str += "%16s: min: %15.10f    max: %15.10f\n" % \
                 (self.vars[n],
                  np.min(self.data[n,ilo:ihi+1,jlo:jhi+1]),
                  np.max(self.data[n,ilo:ihi+1,jlo:jhi+1]) )
-            myStr += "%16s  BCs: -x: %-12s +x: %-12s -y: %-12s +y: %-12s\n" %\
+            my_str += "%16s  BCs: -x: %-12s +x: %-12s -y: %-12s +y: %-12s\n" %\
                 (" " , self.BCs[self.vars[n]].xlb,
                        self.BCs[self.vars[n]].xrb,
                        self.BCs[self.vars[n]].ylb,
                        self.BCs[self.vars[n]].yrb)
 
-        return myStr
+        return my_str
 
 
     def get_var(self, name):
@@ -868,7 +867,7 @@ class CellCenterData2d():
         # -x boundary
         if self.BCs[name].xlb in ["outflow", "neumann"]:
 
-            if self.BCs[name].xl_value == None:
+            if self.BCs[name].xl_value is None:
                 for i in range(self.grid.ilo):
                     self.data[n,i,:] = self.data[n,self.grid.ilo,:]
             else:
@@ -882,7 +881,7 @@ class CellCenterData2d():
 
         elif self.BCs[name].xlb in ["reflect-odd", "dirichlet"]:
 
-            if self.BCs[name].xl_value == None:
+            if self.BCs[name].xl_value is None:
                 for i in range(self.grid.ilo):
                     self.data[n,i,:] = -self.data[n,2*self.grid.ng-i-1,:]
             else:
@@ -898,7 +897,7 @@ class CellCenterData2d():
         # +x boundary
         if self.BCs[name].xrb in ["outflow", "neumann"]:
 
-            if self.BCs[name].xr_value == None:
+            if self.BCs[name].xr_value is None:
                 for i in range(self.grid.ihi+1, self.grid.nx+2*self.grid.ng):
                     self.data[n,i,:] = self.data[n,self.grid.ihi,:]
             else:
@@ -915,7 +914,7 @@ class CellCenterData2d():
 
         elif self.BCs[name].xrb in ["reflect-odd", "dirichlet"]:
 
-            if self.BCs[name].xr_value == None:
+            if self.BCs[name].xr_value is None:
                 for i in range(self.grid.ng):
                     i_bnd = self.grid.ihi+1+i
                     i_src = self.grid.ihi-i
@@ -934,7 +933,7 @@ class CellCenterData2d():
         # -y boundary
         if self.BCs[name].ylb in ["outflow", "neumann"]:
 
-            if self.BCs[name].yl_value == None:
+            if self.BCs[name].yl_value is None:
                 for j in range(self.grid.jlo):
                     self.data[n,:,j] = self.data[n,:,self.grid.jlo]
             else:
@@ -948,7 +947,7 @@ class CellCenterData2d():
 
         elif self.BCs[name].ylb in ["reflect-odd", "dirichlet"]:
 
-            if self.BCs[name].yl_value == None:
+            if self.BCs[name].yl_value is None:
                 for j in range(self.grid.jlo):
                     self.data[n,:,j] = -self.data[n,:,2*self.grid.ng-j-1]
             else:
@@ -961,15 +960,15 @@ class CellCenterData2d():
                 self.data[n,:,j] = self.data[n,:,self.grid.jhi-self.grid.ng+j+1]
 
         else:
-            if self.BCs[name].ylb in extBCs.keys():
+            if self.BCs[name].ylb in ext_bcs.keys():
 
-                extBCs[self.BCs[name].ylb](self.BCs[name].ylb, "ylb", name, self)
+                ext_bcs[self.BCs[name].ylb](self.BCs[name].ylb, "ylb", name, self)
 
 
         # +y boundary
         if self.BCs[name].yrb in ["outflow", "neumann"]:
 
-            if self.BCs[name].yr_value == None:
+            if self.BCs[name].yr_value is None:
                 for j in range(self.grid.jhi+1, self.grid.ny+2*self.grid.ng):
                     self.data[n,:,j] = self.data[n,:,self.grid.jhi]
             else:
@@ -986,7 +985,7 @@ class CellCenterData2d():
 
         elif self.BCs[name].yrb in ["reflect-odd", "dirichlet"]:
 
-            if self.BCs[name].yr_value == None:
+            if self.BCs[name].yr_value is None:
                 for j in range(self.grid.ng):
                     j_bnd = self.grid.jhi+1+j
                     j_src = self.grid.jhi-j
@@ -1002,9 +1001,9 @@ class CellCenterData2d():
                 self.data[n,:,j] = self.data[n,:,j-self.grid.jhi-1+self.grid.ng]
 
         else:
-            if self.BCs[name].yrb in extBCs.keys():
+            if self.BCs[name].yrb in ext_bcs.keys():
 
-                extBCs[self.BCs[name].yrb](self.BCs[name].yrb, "yrb", name, self)
+                ext_bcs[self.BCs[name].yrb](self.BCs[name].yrb, "yrb", name, self)
 
 
     def min(self, name, ng=0):
@@ -1032,21 +1031,21 @@ class CellCenterData2d():
         number of ghostcells)
         """
 
-        fG = self.grid
-        fData = self.get_var(varname)
+        fine_grid = self.grid
+        fdata = self.get_var(varname)
 
         # allocate an array for the coarsely gridded data
-        cG = fG.coarse_like(2)
-        cData = cG.scratch_array()
+        coarse_grid = fine_grid.coarse_like(2)
+        cdata = coarse_grid.scratch_array()
 
         # fill the coarse array with the restricted data -- just
         # average the 4 fine cells into the corresponding coarse cell
         # that encompasses them.
-        cData.v()[:,:] = \
-            0.25*(fData.v(s=2) + fData.ip(1, s=2) +
-                  fData.jp(1, s=2) + fData.ip_jp(1, 1, s=2))
+        cdata.v()[:,:] = \
+            0.25*(fdata.v(s=2) + fdata.ip(1, s=2) +
+                  fdata.jp(1, s=2) + fdata.ip_jp(1, 1, s=2))
 
-        return cData
+        return cdata
 
 
     def prolong(self, varname):
@@ -1087,27 +1086,27 @@ class CellCenterData2d():
 
         """
 
-        cG = self.grid
-        cData = self.get_var(varname)
+        coarse_grid = self.grid
+        cdata = self.get_var(varname)
 
         # allocate an array for the finely gridded data
-        fG = cG.fine_like(2)
-        fData = fG.scratch_array()
+        fine_grid = coarse_grid.fine_like(2)
+        fdata = fine_grid.scratch_array()
 
         # slopes for the coarse data
-        m_x = cG.scratch_array()
-        m_x.v()[:,:] = 0.5*(cData.ip(1) - cData.ip(-1))
+        m_x = coarse_grid.scratch_array()
+        m_x.v()[:,:] = 0.5*(cdata.ip(1) - cdata.ip(-1))
 
-        m_y = cG.scratch_array()
-        m_y.v()[:,:] = 0.5*(cData.jp(1) - cData.jp(-1))
+        m_y = coarse_grid.scratch_array()
+        m_y.v()[:,:] = 0.5*(cdata.jp(1) - cdata.jp(-1))
 
         # fill the children
-        fData.v(s=2)[:,:] = cData.v() - 0.25*m_x.v() - 0.25*m_y.v()     # 1 child
-        fData.ip(1, s=2)[:,:] = cData.v() + 0.25*m_x.v() - 0.25*m_y.v() # 2
-        fData.jp(1, s=2)[:,:] = cData.v() - 0.25*m_x.v() + 0.25*m_y.v() # 3
-        fData.ip_jp(1, 1, s=2)[:,:] = cData.v() + 0.25*m_x.v() + 0.25*m_y.v() # 4
+        fdata.v(s=2)[:,:] = cdata.v() - 0.25*m_x.v() - 0.25*m_y.v()     # 1 child
+        fdata.ip(1, s=2)[:,:] = cdata.v() + 0.25*m_x.v() - 0.25*m_y.v() # 2
+        fdata.jp(1, s=2)[:,:] = cdata.v() - 0.25*m_x.v() + 0.25*m_y.v() # 3
+        fdata.ip_jp(1, 1, s=2)[:,:] = cdata.v() + 0.25*m_x.v() + 0.25*m_y.v() # 4
 
-        return fData
+        return fdata
 
 
     def write(self, filename):
@@ -1181,11 +1180,11 @@ def cell_center_data_clone(old):
     return new
 
 
-if __name__== "__main__":
+if __name__ == "__main__":
 
     # illustrate basic mesh operations
 
-    myg = Grid2d(8,16, xmax=1.0, ymax=2.0)
+    myg = Grid2d(8, 16, xmax=1.0, ymax=2.0)
 
     mydata = CellCenterData2d(myg)
 
