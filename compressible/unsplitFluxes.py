@@ -126,8 +126,10 @@ Updating U_{i,j}:
 
 import compressible.eos as eos
 import compressible.interface_f as interface_f
+
 import mesh.reconstruction_f as reconstruction_f
 import mesh.patch as patch
+import mesh.array_indexer as ai
 
 from util import msg
 
@@ -367,8 +369,8 @@ def unsplitFluxes(my_data, my_aux, rp, vars, solid, tc, dt):
                       solid.yl, solid.yr,
                       gamma, U_yl.d, U_yr.d)
 
-    F_x = patch.ArrayIndexer(d=_fx, grid=myg)
-    F_y = patch.ArrayIndexer(d=_fy, grid=myg)    
+    F_x = ai.ArrayIndexer(d=_fx, grid=myg)
+    F_y = ai.ArrayIndexer(d=_fy, grid=myg)    
     
     tm_riem.end()
 
@@ -467,8 +469,8 @@ def unsplitFluxes(my_data, my_aux, rp, vars, solid, tc, dt):
                       solid.yl, solid.yr,
                       gamma, U_yl.d, U_yr.d)
 
-    F_x = patch.ArrayIndexer(d=_fx, grid=myg)
-    F_y = patch.ArrayIndexer(d=_fy, grid=myg)
+    F_x = ai.ArrayIndexer(d=_fx, grid=myg)
+    F_y = ai.ArrayIndexer(d=_fy, grid=myg)
     
     tm_riem.end()
 
@@ -481,8 +483,8 @@ def unsplitFluxes(my_data, my_aux, rp, vars, solid, tc, dt):
         myg.qx, myg.qy, myg.ng, myg.dx, myg.dy, 
         cvisc, u.d, v.d)
 
-    avisco_x = patch.ArrayIndexer(d=_ax, grid=myg)
-    avisco_y = patch.ArrayIndexer(d=_ay, grid=myg)    
+    avisco_x = ai.ArrayIndexer(d=_ax, grid=myg)
+    avisco_y = ai.ArrayIndexer(d=_ay, grid=myg)    
     
     
     b = (2,1)

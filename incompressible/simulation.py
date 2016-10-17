@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 import incompressible.incomp_interface_f as incomp_interface_f
 import mesh.reconstruction_f as reconstruction_f
 import mesh.patch as patch
+import mesh.array_indexer as ai
+
 from simulation_null import NullSimulation, grid_setup, bc_setup
 import multigrid.MG as MG
 from util import profile
@@ -229,8 +231,8 @@ class Simulation(NullSimulation):
                                                ldelta_uy, ldelta_vy,
                                                gradp_x.d, gradp_y.d)
 
-        u_MAC = patch.ArrayIndexer(d=_um, grid=myg)
-        v_MAC = patch.ArrayIndexer(d=_vm, grid=myg)
+        u_MAC = ai.ArrayIndexer(d=_um, grid=myg)
+        v_MAC = ai.ArrayIndexer(d=_vm, grid=myg)
         
 
         #---------------------------------------------------------------------
@@ -296,10 +298,10 @@ class Simulation(NullSimulation):
                                          gradp_x.d, gradp_y.d,
                                          u_MAC.d, v_MAC.d)
 
-        u_xint = patch.ArrayIndexer(d=_ux, grid=myg)
-        v_xint = patch.ArrayIndexer(d=_vx, grid=myg)
-        u_yint = patch.ArrayIndexer(d=_uy, grid=myg)
-        v_yint = patch.ArrayIndexer(d=_vy, grid=myg)
+        u_xint = ai.ArrayIndexer(d=_ux, grid=myg)
+        v_xint = ai.ArrayIndexer(d=_vx, grid=myg)
+        u_yint = ai.ArrayIndexer(d=_uy, grid=myg)
+        v_yint = ai.ArrayIndexer(d=_vy, grid=myg)
 
         #---------------------------------------------------------------------
         # update U to get the provisional velocity field

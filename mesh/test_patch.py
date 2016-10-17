@@ -1,5 +1,6 @@
 # unit tests for the patch
 import mesh.patch as patch
+import mesh.array_indexer as ai
 import numpy as np
 
 from numpy.testing import assert_array_equal
@@ -10,8 +11,8 @@ import util.testing_help as th
 # utilities
 @th.with_named_setup(th.setup_func, th.teardown_func)
 def test_buf_split():
-    assert_array_equal(patch._buf_split(2), [2, 2, 2, 2])
-    assert_array_equal(patch._buf_split((2, 3)), [2, 3, 2, 3])
+    assert_array_equal(ai._buf_split(2), [2, 2, 2, 2])
+    assert_array_equal(ai._buf_split((2, 3)), [2, 3, 2, 3])
 
 
 # Grid2d tests
