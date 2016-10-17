@@ -2,9 +2,11 @@
 
 from __future__ import print_function
 
-import numpy
-import mesh.patch
+import numpy as np
 import sys
+
+import mesh.patch
+
 
 usage = """
       usage: ./compare.py file1 file2
@@ -15,14 +17,14 @@ errors = {"gridbad": "grids don't agree",
           "varerr": "one or more variables don't agree"}
 
 
-def compare(myg1, myd1, myg2, myd2):
+def compare(grid1, data1, grid2, data2):
 
     # compare the grids
-    if not myg1 == myg2: 
+    if not grid1 == grid2:
         return "gridbad"
 
     # compare the data
-    if not myd1.vars == myd2.vars:
+    if not data1.vars == data2.vars:
         return "namesbad"
 
 
@@ -31,14 +33,14 @@ def compare(myg1, myd1, myg2, myd2):
 
     result = 0
 
-    for n in range(myd1.nvar):
+    for n in range(data1.nvar):
 
-        d1 = myd1.get_var(myd1.vars[n])
-        d2 = myd2.get_var(myd2.vars[n])
+        d1 = data1.get_var(data1.vars[n])
+        d2 = data2.get_var(data2.vars[n])
 
-        err = numpy.max(numpy.abs(d1.v() - d2.v()))
+        err = np.max(np.abs(d1.v() - d2.v()))
 
-        print("%20s error = %20.10g" % (myd1.vars[n], err))
+        print("%20s error = %20.10g" % (data1.vars[n], err))
 
         if not err == 0:
             result = "varerr"
@@ -46,7 +48,7 @@ def compare(myg1, myd1, myg2, myd2):
     return result
 
 
-if __name__== "__main__":
+if __name__ == "__main__":
 
     if not len(sys.argv) == 3:
         print(usage)
@@ -64,6 +66,3 @@ if __name__== "__main__":
         print("SUCCESS: files agree")
     else:
         print("ERROR: ", errors[result])
-
-
-    
