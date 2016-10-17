@@ -1,3 +1,4 @@
+import importlib
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -48,7 +49,8 @@ class Simulation(NullSimulation):
         self.cc_data = my_data
 
         # now set the initial conditions for the problem
-        exec(self.problem_name + '.init_data(self.cc_data, self.rp)')
+        problem = importlib.import_module("diffusion.problems.{}".format(self.problem_name))
+        problem.init_data(self.cc_data, self.rp)
 
 
     def compute_timestep(self):
@@ -137,10 +139,9 @@ class Simulation(NullSimulation):
 
         myg = self.cc_data.grid
 
-        plt.imshow(np.transpose(phi[myg.ilo:myg.ihi+1,
-                                         myg.jlo:myg.jhi+1]),
-                     interpolation="nearest", origin="lower",
-                     extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
+        plt.imshow(np.transpose(phi.v()),
+                   interpolation="nearest", origin="lower",
+                   extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
         plt.xlabel("x")
         plt.ylabel("y")
