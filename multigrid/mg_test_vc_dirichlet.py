@@ -76,7 +76,7 @@ def test_vc_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     d.create()
 
     c = d.get_var("c")
-    c.d[:,:] = alpha(g.x2d, g.y2d)
+    c[:,:] = alpha(g.x2d, g.y2d)
 
 
     # create the multigrid object

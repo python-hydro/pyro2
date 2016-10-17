@@ -76,7 +76,7 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
     d.create()
 
     c = d.get_var("c")
-    c.d[:,:] = alpha(g.x2d, g.y2d)
+    c[:,:] = alpha(g.x2d, g.y2d)
 
     # check whether the RHS sums to zero (necessary for periodic data)
     rhs = f(g.x2d, g.y2d)

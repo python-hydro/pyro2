@@ -37,9 +37,9 @@ def init_data(my_data, base, rp):
 
     # initialize the components -- we'll get a pressure too
     # but that is used only to initialize the base state
-    xvel.d[:,:] = 0.0
-    yvel.d[:,:] = 0.0
-    dens.d[:,:] = dens_cutoff
+    xvel[:,:] = 0.0
+    yvel[:,:] = 0.0
+    dens[:,:] = dens_cutoff
 
     # set the density to be stratified in the y-direction
     myg = my_data.grid
@@ -47,26 +47,26 @@ def init_data(my_data, base, rp):
 
     j = myg.jlo
     for j in range(myg.jlo, myg.jhi+1):
-        dens.d[:,j] = max(dens_base*numpy.exp(-myg.y[j]/scale_height),
-                          dens_cutoff)
+        dens[:,j] = max(dens_base*numpy.exp(-myg.y[j]/scale_height),
+                        dens_cutoff)
 
     cs2 = scale_height*abs(grav)
 
     # set the pressure (P = cs2*dens)
     pres = cs2*dens
-    eint.d[:,:] = pres.d/(gamma - 1.0)/dens.d
+    eint[:,:] = pres/(gamma - 1.0)/dens
     
     # boost the specific internal energy, keeping the pressure
     # constant, by dropping the density
     r = numpy.sqrt((myg.x2d - x_pert)**2  + (myg.y2d - y_pert)**2)
 
     idx = r <= r_pert
-    eint.d[idx] = eint.d[idx]*pert_amplitude_factor
-    dens.d[idx] = pres.d[idx]/(eint.d[idx]*(gamma - 1.0))
+    eint[idx] = eint[idx]*pert_amplitude_factor
+    dens[idx] = pres[idx]/(eint[idx]*(gamma - 1.0))
 
     # do the base state
-    base["rho0"].d[:] = numpy.mean(dens.d, axis=0)
-    base["p0"].d[:] = numpy.mean(pres.d, axis=0)
+    base["rho0"].d[:] = numpy.mean(dens, axis=0)
+    base["p0"].d[:] = numpy.mean(pres, axis=0)
 
     # redo the pressure via HSE
     for j in range(myg.jlo+1, myg.jhi):

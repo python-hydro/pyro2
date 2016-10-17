@@ -51,7 +51,7 @@ def user(bc_name, bc_edge, variable, ccdata):
                 v = ccdata.get_var(variable)
                 j = myg.jlo-1
                 while j >= 0:
-                    v.d[:,j] = v.d[:,myg.jlo]
+                    v[:,j] = v[:,myg.jlo]
                     j -= 1
 
             elif variable == "energy":
@@ -63,11 +63,11 @@ def user(bc_name, bc_edge, variable, ccdata):
                 grav = ccdata.get_aux("grav")
                 gamma = ccdata.get_aux("gamma")
 
-                dens_base = dens.d[:,myg.jlo]
-                ke_base = 0.5*(xmom.d[:,myg.jlo]**2 + ymom.d[:,myg.jlo]**2) / \
-                    dens.d[:,myg.jlo]
+                dens_base = dens[:,myg.jlo]
+                ke_base = 0.5*(xmom[:,myg.jlo]**2 + ymom[:,myg.jlo]**2) / \
+                    dens[:,myg.jlo]
 
-                eint_base = (ener.d[:,myg.jlo] - ke_base)/dens.d[:,myg.jlo]
+                eint_base = (ener[:,myg.jlo] - ke_base)/dens[:,myg.jlo]
                 pres_base = eos.pres(gamma, dens_base, eint_base)
 
                 # we are assuming that the density is constant in this
@@ -78,7 +78,7 @@ def user(bc_name, bc_edge, variable, ccdata):
                     pres_below = pres_base - grav*dens_base*myg.dy
                     rhoe = eos.rhoe(gamma, pres_below)
 
-                    ener.d[:,j] = rhoe + ke_base
+                    ener[:,j] = rhoe + ke_base
 
                     pres_base = pres_below.copy()
 
@@ -97,7 +97,7 @@ def user(bc_name, bc_edge, variable, ccdata):
             if variable in ["density", "x-momentum", "y-momentum", "ymom_src", "E_src"]:
                 v = ccdata.get_var(variable)
                 for j in range(myg.jhi+1, myg.jhi+myg.ng+1):
-                    v.d[:,j] = v.d[:,myg.jhi]
+                    v[:,j] = v[:,myg.jhi]
 
             elif variable == "energy":
                 dens = ccdata.get_var("density")
@@ -108,11 +108,11 @@ def user(bc_name, bc_edge, variable, ccdata):
                 grav = ccdata.get_aux("grav")
                 gamma = ccdata.get_aux("gamma")
 
-                dens_base = dens.d[:,myg.jhi]
-                ke_base = 0.5*(xmom.d[:,myg.jhi]**2 + ymom.d[:,myg.jhi]**2) / \
-                    dens.d[:,myg.jhi]
+                dens_base = dens[:,myg.jhi]
+                ke_base = 0.5*(xmom[:,myg.jhi]**2 + ymom[:,myg.jhi]**2) / \
+                    dens[:,myg.jhi]
 
-                eint_base = (ener.d[:,myg.jhi] - ke_base)/dens.d[:,myg.jhi]
+                eint_base = (ener[:,myg.jhi] - ke_base)/dens[:,myg.jhi]
                 pres_base = eos.pres(gamma, dens_base, eint_base)
 
                 # we are assuming that the density is constant in this
@@ -122,7 +122,7 @@ def user(bc_name, bc_edge, variable, ccdata):
                     pres_above = pres_base + grav*dens_base*myg.dy
                     rhoe = eos.rhoe(gamma, pres_above)
 
-                    ener.d[:,j] = rhoe + ke_base
+                    ener[:,j] = rhoe + ke_base
 
                     pres_base = pres_above.copy()
 

@@ -26,9 +26,9 @@ def init_data(my_data, rp):
     # initialize the components, remember, that ener here is rho*eint
     # + 0.5*rho*v**2, where eint is the specific internal energy
     # (erg/g)
-    dens.d[:,:] = 1.0
-    xmom.d[:,:] = 0.0
-    ymom.d[:,:] = 0.0
+    dens[:,:] = 1.0
+    xmom[:,:] = 0.0
+    ymom[:,:] = 0.0
 
     E_sedov = 1.0
 
@@ -57,7 +57,7 @@ def init_data(my_data, rp):
 
 
     p = 1.e-5
-    ener.d[:,:] = p/(gamma - 1.0)
+    ener[:,:] = p/(gamma - 1.0)
     
     for i, j in np.transpose(np.nonzero(dist < 2.0*r_init)):
 
@@ -81,7 +81,7 @@ def init_data(my_data, rp):
 
         p = pzone/(nsub*nsub)
             
-        ener.d[i,j] = p/(gamma - 1.0)
+        ener[i,j] = p/(gamma - 1.0)
 
 
 def finalize():

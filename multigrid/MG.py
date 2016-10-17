@@ -483,7 +483,7 @@ class CellCenterMG2d(object):
 
         """
         v = self.grids[self.nlevels-1].get_var("v")
-        v.d[:,:] = data.copy()
+        v[:,:] = data.copy()
 
 
     def init_zeros(self):
@@ -491,7 +491,7 @@ class CellCenterMG2d(object):
         Set the initial solution to zero
         """
         v = self.grids[self.nlevels-1].get_var("v")
-        v.d[:,:] = 0.0
+        v[:,:] = 0.0
 
 
     def init_RHS(self, data):
@@ -508,7 +508,7 @@ class CellCenterMG2d(object):
         """
 
         f = self.grids[self.nlevels-1].get_var("f")
-        f.d[:,:] = data.copy()
+        f[:,:] = data.copy()
 
         # store the source norm
         self.source_norm = f.norm()

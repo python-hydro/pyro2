@@ -110,7 +110,7 @@ class Simulation(NullSimulation):
             (phi.ip(1) + phi.ip(-1) - 2.0*phi.v())/myg.dx**2 +
             (phi.jp(1) + phi.jp(-1) - 2.0*phi.v())/myg.dy**2)
 
-        mg.init_RHS(f.d)
+        mg.init_RHS(f)
 
         # initial guess is zeros
         mg.init_zeros()

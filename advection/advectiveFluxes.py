@@ -79,7 +79,7 @@ def unsplitFluxes(my_data, rp, dt, scalar_name):
     else:
         limitFunc = reconstruction_f.limit4
 
-    _lda = limitFunc(1, a.d, qx, qy, myg.ng)
+    _lda = limitFunc(1, a, qx, qy, myg.ng)
     ldelta_a = ai.ArrayIndexer(d=_lda, grid=myg)
     a_x = myg.scratch_array()
 
@@ -93,7 +93,7 @@ def unsplitFluxes(my_data, rp, dt, scalar_name):
 
 
     # y-direction
-    _lda = limitFunc(2, a.d, qx, qy, myg.ng)
+    _lda = limitFunc(2, a, qx, qy, myg.ng)
     ldelta_a = ai.ArrayIndexer(d=_lda, grid=myg)
     a_y = myg.scratch_array()
 

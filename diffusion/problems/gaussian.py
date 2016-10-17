@@ -42,7 +42,7 @@ def init_data(my_data, rp):
     dist = numpy.sqrt((my_data.grid.x2d - xctr)**2 +
                       (my_data.grid.y2d - yctr)**2)
     
-    phi.d[:,:] = phi_analytic(dist, 0.0, t_0, k, phi_0, phi_max)
+    phi[:,:] = phi_analytic(dist, 0.0, t_0, k, phi_0, phi_max)
 
     # for later interpretation / analysis, store some auxillary data
     my_data.set_aux("k", k)

@@ -38,22 +38,22 @@ def init_data(my_data, rp):
     # initialize the components, remember, that ener here is
     # rho*eint + 0.5*rho*v**2, where eint is the specific
     # internal energy (erg/g)
-    xmom.d[:,:] = 0.0
-    ymom.d[:,:] = 0.0
-    dens.d[:,:] = dens_cutoff
+    xmom[:,:] = 0.0
+    ymom[:,:] = 0.0
+    dens[:,:] = dens_cutoff
 
     # set the density to be stratified in the y-direction
     myg = my_data.grid
 
     for j in range(myg.jlo, myg.jhi+1):
-        dens.d[:,j] = max(dens_base*numpy.exp(-myg.y[j]/scale_height),
-                          dens_cutoff)
+        dens[:,j] = max(dens_base*numpy.exp(-myg.y[j]/scale_height),
+                        dens_cutoff)
 
     cs2 = scale_height*abs(grav)
 
     # set the energy (P = cs2*dens)
-    ener.d[:,:] = cs2*dens.d[:,:]/(gamma - 1.0) + \
-                0.5*(xmom.d[:,:]**2 + ymom.d[:,:]**2)/dens.d[:,:]
+    ener[:,:] = cs2*dens[:,:]/(gamma - 1.0) + \
+                0.5*(xmom[:,:]**2 + ymom[:,:]**2)/dens[:,:]
 
 
     
@@ -65,16 +65,16 @@ def init_data(my_data, rp):
             if (r <= r_pert):
                 # boost the specific internal energy, keeping the pressure
                 # constant, by dropping the density
-                eint = (ener.d[i,j] - 
-                        0.5*(xmom.d[i,j]**2 - ymom.d[i,j]**2)/dens.d[i,j])/dens.d[i,j]
+                eint = (ener[i,j] - 
+                        0.5*(xmom[i,j]**2 - ymom[i,j]**2)/dens[i,j])/dens[i,j]
 
-                pres = dens.d[i,j]*eint*(gamma - 1.0)
+                pres = dens[i,j]*eint*(gamma - 1.0)
 
                 eint = eint*pert_amplitude_factor
-                dens.d[i,j] = pres/(eint*(gamma - 1.0))
+                dens[i,j] = pres/(eint*(gamma - 1.0))
 
-                ener.d[i,j] = dens.d[i,j]*eint + \
-                    0.5*(xmom.d[i,j]**2 + ymom.d[i,j]**2)/dens.d[i,j]
+                ener[i,j] = dens[i,j]*eint + \
+                    0.5*(xmom[i,j]**2 + ymom[i,j]**2)/dens[i,j]
 
     
 

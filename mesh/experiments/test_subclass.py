@@ -24,7 +24,8 @@ import pickle
 
 from util import msg
 
-_buf_split = patch._buf_split 
+import mesh.array_indexer as ai
+_buf_split = ai._buf_split 
 
 class ArrayIndexer(np.ndarray):
     """ a class that wraps the data region of a single array (d)
@@ -35,6 +36,7 @@ class ArrayIndexer(np.ndarray):
         obj = np.asarray(d).view(self)
         obj.g = grid
         obj.c = len(d.shape)
+        obj.d = d
         return obj
 
     def __array_finalize__(self, obj):
@@ -178,5 +180,8 @@ if __name__ == "__main__":
     print(d)
     c[:,:] = 0.0
     print(d)
+
+    print(type(b))
+    print(type(b.d))
 
 

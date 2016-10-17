@@ -66,28 +66,28 @@ def init_data(my_data, rp):
     iq4 = np.logical_and(myg.x2d >= cx, myg.y2d < cy)    
     
     # quadrant 1
-    dens.d[iq1] = r1
-    xmom.d[iq1] = r1*u1
-    ymom.d[iq1] = r1*v1
-    ener.d[iq1] = p1/(gamma - 1.0) + 0.5*r1*(u1*u1 + v1*v1)
+    dens[iq1] = r1
+    xmom[iq1] = r1*u1
+    ymom[iq1] = r1*v1
+    ener[iq1] = p1/(gamma - 1.0) + 0.5*r1*(u1*u1 + v1*v1)
                 
     # quadrant 2
-    dens.d[iq2] = r2
-    xmom.d[iq2] = r2*u2
-    ymom.d[iq2] = r2*v2
-    ener.d[iq2] = p2/(gamma - 1.0) + 0.5*r2*(u2*u2 + v2*v2)
+    dens[iq2] = r2
+    xmom[iq2] = r2*u2
+    ymom[iq2] = r2*v2
+    ener[iq2] = p2/(gamma - 1.0) + 0.5*r2*(u2*u2 + v2*v2)
 
     # quadrant 3
-    dens.d[iq3] = r3
-    xmom.d[iq3] = r3*u3
-    ymom.d[iq3] = r3*v3
-    ener.d[iq3] = p3/(gamma - 1.0) + 0.5*r3*(u3*u3 + v3*v3)
+    dens[iq3] = r3
+    xmom[iq3] = r3*u3
+    ymom[iq3] = r3*v3
+    ener[iq3] = p3/(gamma - 1.0) + 0.5*r3*(u3*u3 + v3*v3)
 
     # quadrant 4
-    dens.d[iq4] = r4
-    xmom.d[iq4] = r4*u4
-    ymom.d[iq4] = r4*v4
-    ener.d[iq4] = p4/(gamma - 1.0) + 0.5*r4*(u4*u4 + v4*v4)
+    dens[iq4] = r4
+    xmom[iq4] = r4*u4
+    ymom[iq4] = r4*v4
+    ener[iq4] = p4/(gamma - 1.0) + 0.5*r4*(u4*u4 + v4*v4)
 
     
 def finalize():

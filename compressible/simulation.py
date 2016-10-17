@@ -182,8 +182,8 @@ class Simulation(NullSimulation):
                 dtdy*(Flux_y.v(n=n) - Flux_y.jp(1, n=n))
 
         # gravitational source terms
-        ymom.d[:,:] += 0.5*self.dt*(dens.d[:,:] + old_dens.d[:,:])*grav
-        ener.d[:,:] += 0.5*self.dt*(ymom.d[:,:] + old_ymom.d[:,:])*grav
+        ymom[:,:] += 0.5*self.dt*(dens[:,:] + old_dens[:,:])*grav
+        ener[:,:] += 0.5*self.dt*(ymom[:,:] + old_ymom[:,:])*grav
 
         # increment the time
         self.cc_data.t += self.dt

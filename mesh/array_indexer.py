@@ -14,75 +14,25 @@ def _buf_split(b):
     return bxlo, bxhi, bylo, byhi
 
 
-class ArrayIndexer(object):
+class ArrayIndexer(np.ndarray):
     """ a class that wraps the data region of a single array (d)
         and allows us to easily do array operations like d[i+1,j]
         using the ip() method. """
 
+    def __new__(self, d, grid=None):
+        obj = np.asarray(d).view(self)
+        obj.g = grid
+        obj.c = len(d.shape)
 
-    # ?? Can we accomplish this a lot easier by subclassing
-    # the ndarray?
-    # e.g, the InfoArray example here:
-    # http://docs.scipy.org/doc/numpy/user/basics.subclassing.html
-    def __init__(self, d=None, grid=None):
-        self.d = d
-        self.g = grid
-        s = d.shape
-        self.c = len(s)
+        return obj
 
-    def __add__(self, other):
-        if isinstance(other, ArrayIndexer):
-            return ArrayIndexer(d=self.d + other.d, grid=self.g)
-        else:
-            return ArrayIndexer(d=self.d + other, grid=self.g)
+    def __array_finalize__(self, obj):
+        if obj is None: return
+        self.g = getattr(obj, "g", None)
+        self.c = getattr(obj, "c", None)
 
-    def __radd__(self, other):
-        return self.__add__(other)
-
-    def __sub__(self, other):
-        if isinstance(other, ArrayIndexer):
-            return ArrayIndexer(d=self.d - other.d, grid=self.g)
-        else:
-            return ArrayIndexer(d=self.d - other, grid=self.g)
-
-    def __mul__(self, other):
-        if isinstance(other, ArrayIndexer):
-            return ArrayIndexer(d=self.d * other.d, grid=self.g)
-        else:
-            return ArrayIndexer(d=self.d * other, grid=self.g)
-
-    def __rmul__(self, other):
-        return self.__mul__(other)
-
-    def __truediv__(self, other):
-        if isinstance(other, ArrayIndexer):
-            return ArrayIndexer(d=self.d / other.d, grid=self.g)
-        else:
-            return ArrayIndexer(d=self.d / other, grid=self.g)
-
-    def __div__(self, other):
-        if isinstance(other, ArrayIndexer):
-            return ArrayIndexer(d=self.d / other.d, grid=self.g)
-        else:
-            return ArrayIndexer(d=self.d / other, grid=self.g)
-
-    def __rdiv__(self, other):
-        if isinstance(other, ArrayIndexer):
-            return ArrayIndexer(d=other.d / self.d, grid=self.g)
-        else:
-            return ArrayIndexer(d=other / self.d, grid=self.g)
-
-    def __rtruediv__(self, other):
-        if isinstance(other, ArrayIndexer):
-            return ArrayIndexer(d=other.d / self.d, grid=self.g)
-        else:
-            return ArrayIndexer(d=other / self.d, grid=self.g)
-
-    def __pow__(self, other):
-        return ArrayIndexer(d=self.d**2, grid=self.g)
-
-    def __abs__(self):
-        return ArrayIndexer(d=np.abs(self.d), grid=self.g)
+    def __array_wrap__(self, out_arr, context=None):
+        return np.ndarray.__array_wrap__(self, out_arr, context)
 
     def v(self, buf=0, n=0, s=1):
         return self.ip_jp(0, 0, buf=buf, n=n, s=s)
@@ -97,11 +47,11 @@ class ArrayIndexer(object):
         bxlo, bxhi, bylo, byhi = _buf_split(buf)
 
         if self.c == 2:
-            return self.d[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
-                          self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s]
+            return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
+                                   self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s])
         else:
-            return self.d[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
-                          self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s,n]
+            return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
+                                   self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s,n])
 
     def norm(self, n=0):
         """
@@ -110,36 +60,27 @@ class ArrayIndexer(object):
 
         """
         if self.c == 2:
-            return self.g.norm(self.d)
+            return self.g.norm(self)
         else:
-            return self.g.norm(self.d[:,:,n])
+            return self.g.norm(self[:,:,n])
 
-    def sqrt(self):
-        return ArrayIndexer(d=np.sqrt(self.d), grid=self.g)
-
-    def min(self):
-        return self.d.min()
-
-    def max(self):
-        return self.d.max()
 
     def copy(self):
-        return ArrayIndexer(d=self.d.copy(), grid=self.g)
+        return ArrayIndexer(np.asarray(self).copy(), grid=self.g)
 
     def is_symmetric(self, nodal=False, tol=1.e-14):
         if not nodal:
-            L = self.d[self.g.ilo:self.g.ilo+self.g.nx/2,
-                       self.g.jlo:self.g.jhi+1]
-            R = self.d[self.g.ilo+self.g.nx/2:self.g.ihi+1,
-                       self.g.jlo:self.g.jhi+1]
+            L = self[self.g.ilo:self.g.ilo+self.g.nx/2,
+                     self.g.jlo:self.g.jhi+1]
+            R = self[self.g.ilo+self.g.nx/2:self.g.ihi+1,
+                     self.g.jlo:self.g.jhi+1]
         else:
             print(self.g.ilo,self.g.ilo+self.g.nx/2+1)
-            L = self.d[self.g.ilo:self.g.ilo+self.g.nx/2+1,
-                       self.g.jlo:self.g.jhi+1]
+            L = self[self.g.ilo:self.g.ilo+self.g.nx/2+1,
+                     self.g.jlo:self.g.jhi+1]
             print(self.g.ilo+self.g.nx/2,self.g.ihi+2)
-            R = self.d[self.g.ilo+self.g.nx/2:self.g.ihi+2,
-                       self.g.jlo:self.g.jhi+1]
-
+            R = self[self.g.ilo+self.g.nx/2:self.g.ihi+2,
+                     self.g.jlo:self.g.jhi+1]
 
         e = abs(L - np.flipud(R)).max()
         print(e, tol, e < tol)
@@ -148,38 +89,35 @@ class ArrayIndexer(object):
 
     def is_asymmetric(self, nodal=False, tol=1.e-14):
         if not nodal:
-            L = self.d[self.g.ilo:self.g.ilo+self.g.nx/2,
-                       self.g.jlo:self.g.jhi+1]
-            R = self.d[self.g.ilo+self.g.nx/2:self.g.ihi+1,
-                       self.g.jlo:self.g.jhi+1]
+            L = self[self.g.ilo:self.g.ilo+self.g.nx/2,
+                     self.g.jlo:self.g.jhi+1]
+            R = self[self.g.ilo+self.g.nx/2:self.g.ihi+1,
+                     self.g.jlo:self.g.jhi+1]
         else:
             print(self.g.ilo,self.g.ilo+self.g.nx/2+1)
-            L = self.d[self.g.ilo:self.g.ilo+self.g.nx/2+1,
-                       self.g.jlo:self.g.jhi+1]
+            L = self[self.g.ilo:self.g.ilo+self.g.nx/2+1,
+                     self.g.jlo:self.g.jhi+1]
             print(self.g.ilo+self.g.nx/2,self.g.ihi+2)
-            R = self.d[self.g.ilo+self.g.nx/2:self.g.ihi+2,
-                       self.g.jlo:self.g.jhi+1]
-
+            R = self[self.g.ilo+self.g.nx/2:self.g.ihi+2,
+                     self.g.jlo:self.g.jhi+1]
 
         e = abs(L + np.flipud(R)).max()
         print(e, tol, e < tol)
         return e < tol
 
 
-    def pretty_print(self, fmt=None):
+    def pretty_print(self):
         """
         Print out a small dataset to the screen with the ghost cells
         a different color, to make things stand out
         """
 
-        if fmt is None:
-            if self.d.dtype == np.int:
-                fmt = "%4d"
-            elif self.d.dtype == np.float64:
-                fmt = "%10.5g"
-            else:
-                msg.fail("ERROR: dtype not supported")
-
+        if self.dtype == np.int:
+            fmt = "%4d"
+        elif self.dtype == np.float64:
+            fmt = "%10.5g"
+        else:
+            msg.fail("ERROR: dtype not supported")
 
         # print j descending, so it looks like a grid (y increasing
         # with height)
@@ -193,9 +131,9 @@ class ArrayIndexer(object):
                     gc = 0
 
                 if gc:
-                    print("\033[31m" + fmt % (self.d[i,j]) + "\033[0m", end="")
+                    print("\033[31m" + fmt % (self[i,j]) + "\033[0m", end="")
                 else:
-                    print (fmt % (self.d[i,j]), end="")
+                    print (fmt % (self[i,j]), end="")
 
             print(" ")
 
@@ -205,6 +143,3 @@ class ArrayIndexer(object):
          +---> x
         """
         print(leg)
-
-
-

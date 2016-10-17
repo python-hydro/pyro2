@@ -115,21 +115,21 @@ class Simulation(NullSimulation):
         # initialize our guess to the solution, set the RHS to divU and
         # solve
         mg.init_zeros()
-        mg.init_RHS(divU.d)
+        mg.init_RHS(divU)
         mg.solve(rtol=1.e-10)
 
         # store the solution in our self.cc_data object -- include a single
         # ghostcell
         phi = self.cc_data.get_var("phi")
-        phi.d[:,:] = mg.get_solution(grid=myg).d
+        phi[:,:] = mg.get_solution(grid=myg)
 
 
         # compute the cell-centered gradient of phi and update the
         # velocities
         gradp_x, gradp_y = mg.get_solution_gradient(grid=myg)
 
-        u.d[:,:] -= gradp_x.d
-        v.d[:,:] -= gradp_y.d
+        u[:,:] -= gradp_x
+        v[:,:] -= gradp_y
 
         # fill the ghostcells
         self.cc_data.fill_BC("x-velocity")
@@ -155,8 +155,8 @@ class Simulation(NullSimulation):
         orig_gp_x = orig_data.get_var("gradp_x")
         orig_gp_y = orig_data.get_var("gradp_y")
 
-        orig_gp_x.d[:,:] = new_gp_x.d[:,:]
-        orig_gp_y.d[:,:] = new_gp_y.d[:,:]
+        orig_gp_x[:,:] = new_gp_x[:,:]
+        orig_gp_y[:,:] = new_gp_y[:,:]
 
         self.cc_data = orig_data
 
@@ -189,11 +189,11 @@ class Simulation(NullSimulation):
         elif (limiter == 1): limitFunc = reconstruction_f.limit2
         else: limitFunc = reconstruction_f.limit4
 
-        ldelta_ux = limitFunc(1, u.d, myg.qx, myg.qy, myg.ng)
-        ldelta_vx = limitFunc(1, v.d, myg.qx, myg.qy, myg.ng)
+        ldelta_ux = limitFunc(1, u, myg.qx, myg.qy, myg.ng)
+        ldelta_vx = limitFunc(1, v, myg.qx, myg.qy, myg.ng)
 
-        ldelta_uy = limitFunc(2, u.d, myg.qx, myg.qy, myg.ng)
-        ldelta_vy = limitFunc(2, v.d, myg.qx, myg.qy, myg.ng)
+        ldelta_uy = limitFunc(2, u, myg.qx, myg.qy, myg.ng)
+        ldelta_vy = limitFunc(2, v, myg.qx, myg.qy, myg.ng)
 
         #---------------------------------------------------------------------
         # get the advective velocities
@@ -226,10 +226,10 @@ class Simulation(NullSimulation):
 
         _um, _vm = incomp_interface_f.mac_vels(myg.qx, myg.qy, myg.ng,
                                                myg.dx, myg.dy, self.dt,
-                                               u.d, v.d,
+                                               u, v,
                                                ldelta_ux, ldelta_vx,
                                                ldelta_uy, ldelta_vy,
-                                               gradp_x.d, gradp_y.d)
+                                               gradp_x, gradp_y)
 
         u_MAC = ai.ArrayIndexer(d=_um, grid=myg)
         v_MAC = ai.ArrayIndexer(d=_vm, grid=myg)
@@ -265,7 +265,7 @@ class Simulation(NullSimulation):
 
         # solve the Poisson problem
         mg.init_zeros()
-        mg.init_RHS(divU.d)
+        mg.init_RHS(divU)
         mg.solve(rtol=1.e-12)
 
         # update the normal velocities with the pressure gradient -- these
@@ -292,11 +292,11 @@ class Simulation(NullSimulation):
         _ux, _vx, _uy, _vy = \
                incomp_interface_f.states(myg.qx, myg.qy, myg.ng,
                                          myg.dx, myg.dy, self.dt,
-                                         u.d, v.d,
+                                         u, v,
                                          ldelta_ux, ldelta_vx,
                                          ldelta_uy, ldelta_vy,
-                                         gradp_x.d, gradp_y.d,
-                                         u_MAC.d, v_MAC.d)
+                                         gradp_x, gradp_y,
+                                         u_MAC, v_MAC)
 
         u_xint = ai.ArrayIndexer(d=_ux, grid=myg)
         v_xint = ai.ArrayIndexer(d=_vx, grid=myg)
@@ -328,12 +328,12 @@ class Simulation(NullSimulation):
         proj_type = self.rp.get_param("incompressible.proj_type")
 
         if proj_type == 1:
-            u.d[:,:] -= (self.dt*advect_x.d[:,:] + self.dt*gradp_x.d[:,:])
-            v.d[:,:] -= (self.dt*advect_y.d[:,:] + self.dt*gradp_y.d[:,:])
+            u[:,:] -= (self.dt*advect_x[:,:] + self.dt*gradp_x[:,:])
+            v[:,:] -= (self.dt*advect_y[:,:] + self.dt*gradp_y[:,:])
 
         elif proj_type == 2:
-            u.d[:,:] -= self.dt*advect_x.d[:,:]
-            v.d[:,:] -= self.dt*advect_y.d[:,:]
+            u[:,:] -= self.dt*advect_x[:,:]
+            v[:,:] -= self.dt*advect_y[:,:]
 
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")
@@ -362,35 +362,35 @@ class Simulation(NullSimulation):
         divU.v()[:,:] = \
             0.5*(u.ip(1) - u.ip(-1))/myg.dx + 0.5*(v.jp(1) - v.jp(-1))/myg.dy
 
-        mg.init_RHS(divU.d/self.dt)
+        mg.init_RHS(divU/self.dt)
 
         # use the old phi as our initial guess
         phiGuess = mg.soln_grid.scratch_array()
         phiGuess.v(buf=1)[:,:] = phi.v(buf=1)
-        mg.init_solution(phiGuess.d)
+        mg.init_solution(phiGuess)
 
         # solve
         mg.solve(rtol=1.e-12)
 
         # store the solution
-        phi.d[:,:] = mg.get_solution(grid=myg).d
+        phi[:,:] = mg.get_solution(grid=myg)
 
         # compute the cell-centered gradient of p and update the velocities
         # this differs depending on what we projected.
         gradphi_x, gradphi_y = mg.get_solution_gradient(grid=myg)
 
         # u = u - grad_x phi dt
-        u.d[:,:] -= self.dt*gradphi_x.d
-        v.d[:,:] -= self.dt*gradphi_y.d
+        u[:,:] -= self.dt*gradphi_x
+        v[:,:] -= self.dt*gradphi_y
 
         # store gradp for the next step
         if proj_type == 1:
-            gradp_x.d[:,:] += gradphi_x.d[:,:]
-            gradp_y.d[:,:] += gradphi_y.d[:,:]
+            gradp_x[:,:] += gradphi_x[:,:]
+            gradp_y[:,:] += gradphi_y[:,:]
 
         elif proj_type == 2:
-            gradp_x.d[:,:] = gradphi_x.d[:,:]
-            gradp_y.d[:,:] = gradphi_y.d[:,:]
+            gradp_x[:,:] = gradphi_x[:,:]
+            gradp_y[:,:] = gradphi_y[:,:]
 
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")

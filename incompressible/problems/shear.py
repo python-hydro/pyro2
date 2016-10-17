@@ -55,12 +55,12 @@ def init_data(my_data, rp):
     print('rho_s = ', rho_s)
 
     idx = myg.y2d <= y_half
-    u.d[idx] = np.tanh(rho_s*(myg.y2d[idx] - 0.25))
+    u[idx] = np.tanh(rho_s*(myg.y2d[idx] - 0.25))
 
     idx = myg.y2d > y_half
-    u.d[idx] = np.tanh(rho_s*(0.75 - myg.y2d[idx]))
+    u[idx] = np.tanh(rho_s*(0.75 - myg.y2d[idx]))
 
-    v.d[:,:] = delta_s*np.sin(2.0*math.pi*myg.x2d)
+    v[:,:] = delta_s*np.sin(2.0*math.pi*myg.x2d)
 
     print("extrema: ", u.min(), u.max())
 

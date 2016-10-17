@@ -80,65 +80,65 @@ def test_bcs():
     c = myd.get_var("reflect-even")
     d = myd.get_var("reflect-odd")
 
-    b.d[:,:] = a.d[:,:]
-    c.d[:,:] = a.d[:,:]
-    d.d[:,:] = a.d[:,:]
+    b[:,:] = a[:,:]
+    c[:,:] = a[:,:]
+    d[:,:] = a[:,:]
 
     myd.fill_BC("outflow")
     # left ghost
-    assert_array_equal(a.d[myg.ilo-1,myg.jlo:myg.jhi+1], np.array([ 1, 11, 21, 31]))
+    assert_array_equal(a[myg.ilo-1,myg.jlo:myg.jhi+1], np.array([ 1, 11, 21, 31]))
     # right ghost
-    assert_array_equal(a.d[myg.ihi+1,myg.jlo:myg.jhi+1], np.array([ 4, 14, 24, 34]))
+    assert_array_equal(a[myg.ihi+1,myg.jlo:myg.jhi+1], np.array([ 4, 14, 24, 34]))
     # bottom ghost
-    assert_array_equal(a.d[myg.ilo:myg.ihi+1,myg.jlo-1], np.array([ 1, 2, 3, 4]))
+    assert_array_equal(a[myg.ilo:myg.ihi+1,myg.jlo-1], np.array([ 1, 2, 3, 4]))
     # top ghost
-    assert_array_equal(a.d[myg.ilo:myg.ihi+1,myg.jhi+1], np.array([31, 32, 33, 34]))
+    assert_array_equal(a[myg.ilo:myg.ihi+1,myg.jhi+1], np.array([31, 32, 33, 34]))
 
     myd.fill_BC("periodic")
     # x-boundaries
-    assert_array_equal(b.d[myg.ilo-1,myg.jlo:myg.jhi+1], 
-                       b.d[myg.ihi,myg.jlo:myg.jhi+1])
-    assert_array_equal(b.d[myg.ilo,myg.jlo:myg.jhi+1], 
-                       b.d[myg.ihi+1,myg.jlo:myg.jhi+1])
+    assert_array_equal(b[myg.ilo-1,myg.jlo:myg.jhi+1], 
+                       b[myg.ihi,myg.jlo:myg.jhi+1])
+    assert_array_equal(b[myg.ilo,myg.jlo:myg.jhi+1], 
+                       b[myg.ihi+1,myg.jlo:myg.jhi+1])
     # y-boundaries
-    assert_array_equal(b.d[myg.ilo:myg.ihi+1,myg.jlo-1],
-                       b.d[myg.ilo:myg.ihi+1,myg.jhi])
-    assert_array_equal(b.d[myg.ilo:myg.ihi+1,myg.jlo],
-                       b.d[myg.ilo:myg.ihi+1,myg.jhi+1])
+    assert_array_equal(b[myg.ilo:myg.ihi+1,myg.jlo-1],
+                       b[myg.ilo:myg.ihi+1,myg.jhi])
+    assert_array_equal(b[myg.ilo:myg.ihi+1,myg.jlo],
+                       b[myg.ilo:myg.ihi+1,myg.jhi+1])
 
     myd.fill_BC("reflect-even")
     # left -- we'll check 2 ghost cells here -- now we use flipud here
     # because our 'x' is the row index
     # left
-    assert_array_equal(c.d[myg.ilo:myg.ilo+2,myg.jlo:myg.ihi+1],
-                       np.flipud(c.d[myg.ilo-2:myg.ilo,myg.jlo:myg.jhi+1]))
+    assert_array_equal(c[myg.ilo:myg.ilo+2,myg.jlo:myg.ihi+1],
+                       np.flipud(c[myg.ilo-2:myg.ilo,myg.jlo:myg.jhi+1]))
     # right
-    assert_array_equal(c.d[myg.ihi-1:myg.ihi+1,myg.jlo:myg.jhi+1],
-                       np.flipud(c.d[myg.ihi+1:myg.ihi+3,myg.jlo:myg.jhi+1]))
+    assert_array_equal(c[myg.ihi-1:myg.ihi+1,myg.jlo:myg.jhi+1],
+                       np.flipud(c[myg.ihi+1:myg.ihi+3,myg.jlo:myg.jhi+1]))
     
     # bottom
-    assert_array_equal(c.d[myg.ilo:myg.ihi+1,myg.jlo:myg.jlo+2],
-                       np.fliplr(c.d[myg.ilo:myg.ihi+1,myg.jlo-2:myg.jlo]))
+    assert_array_equal(c[myg.ilo:myg.ihi+1,myg.jlo:myg.jlo+2],
+                       np.fliplr(c[myg.ilo:myg.ihi+1,myg.jlo-2:myg.jlo]))
     # top
-    assert_array_equal(c.d[myg.ilo:myg.ihi+1,myg.jhi-1:myg.jhi+1],
-                       np.fliplr(c.d[myg.ilo:myg.ihi+1,myg.jhi+1:myg.jhi+3]))
+    assert_array_equal(c[myg.ilo:myg.ihi+1,myg.jhi-1:myg.jhi+1],
+                       np.fliplr(c[myg.ilo:myg.ihi+1,myg.jhi+1:myg.jhi+3]))
     
     myd.fill_BC("reflect-odd")
     # left -- we'll check 2 ghost cells here -- now we use flipud here
     # because our 'x' is the row index
     # left
-    assert_array_equal(d.d[myg.ilo:myg.ilo+2,myg.jlo:myg.ihi+1],
-                       -np.flipud(d.d[myg.ilo-2:myg.ilo,myg.jlo:myg.jhi+1]))
+    assert_array_equal(d[myg.ilo:myg.ilo+2,myg.jlo:myg.ihi+1],
+                       -np.flipud(d[myg.ilo-2:myg.ilo,myg.jlo:myg.jhi+1]))
     # right
-    assert_array_equal(d.d[myg.ihi-1:myg.ihi+1,myg.jlo:myg.jhi+1],
-                       -np.flipud(d.d[myg.ihi+1:myg.ihi+3,myg.jlo:myg.jhi+1]))
+    assert_array_equal(d[myg.ihi-1:myg.ihi+1,myg.jlo:myg.jhi+1],
+                       -np.flipud(d[myg.ihi+1:myg.ihi+3,myg.jlo:myg.jhi+1]))
     
     # bottom
-    assert_array_equal(d.d[myg.ilo:myg.ihi+1,myg.jlo:myg.jlo+2],
-                       -np.fliplr(d.d[myg.ilo:myg.ihi+1,myg.jlo-2:myg.jlo]))
+    assert_array_equal(d[myg.ilo:myg.ihi+1,myg.jlo:myg.jlo+2],
+                       -np.fliplr(d[myg.ilo:myg.ihi+1,myg.jlo-2:myg.jlo]))
     # top
-    assert_array_equal(d.d[myg.ilo:myg.ihi+1,myg.jhi-1:myg.jhi+1],
-                       -np.fliplr(d.d[myg.ilo:myg.ihi+1,myg.jhi+1:myg.jhi+3]))
+    assert_array_equal(d[myg.ilo:myg.ihi+1,myg.jhi-1:myg.jhi+1],
+                       -np.fliplr(d[myg.ilo:myg.ihi+1,myg.jhi+1:myg.jhi+3]))
 
 
 
@@ -148,7 +148,7 @@ def test_indexer():
     g = patch.Grid2d(2,3, ng=2)
     a = g.scratch_array()
 
-    a.d[:,:] = np.arange(g.qx*g.qy).reshape(g.qx, g.qy)
+    a[:,:] = np.arange(g.qx*g.qy).reshape(g.qx, g.qy)
     
     assert_array_equal(a.v(), np.array([[16., 17., 18.], [23., 24., 25.]]))
 

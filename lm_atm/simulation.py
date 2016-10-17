@@ -238,14 +238,14 @@ class Simulation(NullSimulation):
         # solve D (beta_0^2/rho) G (phi/beta_0) = D( beta_0 U )
 
         # set the RHS to divU and solve
-        mg.init_RHS(div_beta_U.d)
+        mg.init_RHS(div_beta_U)
         mg.solve(rtol=1.e-10)
         
         
         # store the solution in our self.cc_data object -- include a single
         # ghostcell
         phi = self.cc_data.get_var("phi")
-        phi.d[:,:] = mg.get_solution(grid=myg).d
+        phi[:,:] = mg.get_solution(grid=myg)
 
         # get the cell-centered gradient of phi and update the
         # velocities
@@ -284,8 +284,8 @@ class Simulation(NullSimulation):
         orig_gp_x = orig_data.get_var("gradp_x")
         orig_gp_y = orig_data.get_var("gradp_y")
 
-        orig_gp_x.d[:,:] = new_gp_x.d[:,:]
-        orig_gp_y.d[:,:] = new_gp_y.d[:,:]
+        orig_gp_x[:,:] = new_gp_x[:,:]
+        orig_gp_y[:,:] = new_gp_y[:,:]
 
         self.cc_data = orig_data
 
@@ -326,13 +326,13 @@ class Simulation(NullSimulation):
         else: limitFunc = reconstruction_f.limit4
 
 
-        ldelta_rx = limitFunc(1, rho.d, myg.qx, myg.qy, myg.ng)
-        ldelta_ux = limitFunc(1, u.d, myg.qx, myg.qy, myg.ng)
-        ldelta_vx = limitFunc(1, v.d, myg.qx, myg.qy, myg.ng)
+        ldelta_rx = limitFunc(1, rho, myg.qx, myg.qy, myg.ng)
+        ldelta_ux = limitFunc(1, u, myg.qx, myg.qy, myg.ng)
+        ldelta_vx = limitFunc(1, v, myg.qx, myg.qy, myg.ng)
 
-        ldelta_ry = limitFunc(2, rho.d, myg.qx, myg.qy, myg.ng)
-        ldelta_uy = limitFunc(2, u.d, myg.qx, myg.qy, myg.ng)
-        ldelta_vy = limitFunc(2, v.d, myg.qx, myg.qy, myg.ng)
+        ldelta_ry = limitFunc(2, rho, myg.qx, myg.qy, myg.ng)
+        ldelta_uy = limitFunc(2, u, myg.qx, myg.qy, myg.ng)
+        ldelta_vy = limitFunc(2, v, myg.qx, myg.qy, myg.ng)
 
         
         #---------------------------------------------------------------------
@@ -380,11 +380,11 @@ class Simulation(NullSimulation):
 
         _um, _vm = lm_interface_f.mac_vels(myg.qx, myg.qy, myg.ng,
                                            myg.dx, myg.dy, self.dt,
-                                           u.d, v.d,
+                                           u, v,
                                            ldelta_ux, ldelta_vx,
                                            ldelta_uy, ldelta_vy,
-                                           coeff.d*gradp_x.d, coeff.d*gradp_y.d,
-                                           source.d)
+                                           coeff*gradp_x, coeff*gradp_y,
+                                           source)
 
 
         u_MAC = ai.ArrayIndexer(d=_um, grid=myg)
@@ -429,7 +429,7 @@ class Simulation(NullSimulation):
              beta0_edges.v2d()*v_MAC.v())/myg.dy
 
         # solve the Poisson problem
-        mg.init_RHS(div_beta_U.d)
+        mg.init_RHS(div_beta_U)
         mg.solve(rtol=1.e-12)
 
 
@@ -437,7 +437,7 @@ class Simulation(NullSimulation):
         # constitute our advective velocities.  Note that what we actually
         # solved for here is phi/beta_0
         phi_MAC = self.cc_data.get_var("phi-MAC")
-        phi_MAC.d[:,:] = mg.get_solution(grid=myg).d
+        phi_MAC[:,:] = mg.get_solution(grid=myg)
 
         coeff = self.aux_data.get_var("coeff")
         coeff.v()[:,:] = 1.0/rho.v()
@@ -468,7 +468,7 @@ class Simulation(NullSimulation):
         #---------------------------------------------------------------------
         _rx, _ry = lm_interface_f.rho_states(myg.qx, myg.qy, myg.ng,
                                              myg.dx, myg.dy, self.dt,
-                                             rho.d, u_MAC.d, v_MAC.d,
+                                             rho, u_MAC, v_MAC,
                                              ldelta_rx, ldelta_ry)
 
         rho_xint = ai.ArrayIndexer(d=_rx, grid=myg)
@@ -504,12 +504,12 @@ class Simulation(NullSimulation):
         _ux, _vx, _uy, _vy = \
                lm_interface_f.states(myg.qx, myg.qy, myg.ng,
                                      myg.dx, myg.dy, self.dt,
-                                     u.d, v.d,
+                                     u, v,
                                      ldelta_ux, ldelta_vx,
                                      ldelta_uy, ldelta_vy,
-                                     coeff.d*gradp_x.d, coeff.d*gradp_y.d,
-                                     source.d,
-                                     u_MAC.d, v_MAC.d)
+                                     coeff*gradp_x, coeff*gradp_y,
+                                     source,
+                                     u_MAC, v_MAC)
 
         u_xint = ai.ArrayIndexer(d=_ux, grid=myg)
         v_xint = ai.ArrayIndexer(d=_vx, grid=myg)
@@ -551,10 +551,10 @@ class Simulation(NullSimulation):
         # add the gravitational source
         rho_half = 0.5*(rho + rho_old)
         rhoprime = self.make_prime(rho_half, rho0)
-        source.d[:,:] = (rhoprime*g/rho_half).d
+        source[:,:] = (rhoprime*g/rho_half)
         self.aux_data.fill_BC("source_y")
 
-        v.d[:,:] += self.dt*source.d
+        v[:,:] += self.dt*source
 
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")
@@ -595,12 +595,12 @@ class Simulation(NullSimulation):
             0.5*beta0.v2d()*(u.ip(1) - u.ip(-1))/myg.dx + \
             0.5*(beta0.v2dp(1)*v.jp(1) - beta0.v2dp(-1)*v.jp(-1))/myg.dy
 
-        mg.init_RHS(div_beta_U.d/self.dt)
+        mg.init_RHS(div_beta_U/self.dt)
 
         # use the old phi as our initial guess
         phiGuess = mg.soln_grid.scratch_array()
         phiGuess.v(buf=1)[:,:] = phi.v(buf=1)
-        mg.init_solution(phiGuess.d)
+        mg.init_solution(phiGuess)
 
         # solve
         mg.solve(rtol=1.e-12)
@@ -608,7 +608,7 @@ class Simulation(NullSimulation):
 
         # store the solution in our self.cc_data object -- include a single
         # ghostcell
-        phi.d[:,:] = mg.get_solution(grid=myg).d
+        phi[:,:] = mg.get_solution(grid=myg)
 
         # get the cell-centered gradient of p and update the velocities
         # this differs depending on what we projected.

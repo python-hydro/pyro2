@@ -57,36 +57,36 @@ def init_data(my_data, rp):
         # left
         idxl = myg.x2d <= xctr
 
-        dens.d[idxl] = dens_left
-        xmom.d[idxl] = dens_left*u_left
-        ymom.d[idxl] = 0.0
-        ener.d[idxl] = p_left/(gamma - 1.0) + 0.5*xmom.d[idxl]*u_left
+        dens[idxl] = dens_left
+        xmom[idxl] = dens_left*u_left
+        ymom[idxl] = 0.0
+        ener[idxl] = p_left/(gamma - 1.0) + 0.5*xmom[idxl]*u_left
 
         # right
         idxr = myg.x2d > xctr
                 
-        dens.d[idxr] = dens_right
-        xmom.d[idxr] = dens_right*u_right
-        ymom.d[idxr] = 0.0
-        ener.d[idxr] = p_right/(gamma - 1.0) + 0.5*xmom.d[idxr]*u_right
+        dens[idxr] = dens_right
+        xmom[idxr] = dens_right*u_right
+        ymom[idxr] = 0.0
+        ener[idxr] = p_right/(gamma - 1.0) + 0.5*xmom[idxr]*u_right
 
     else:
 
         # bottom
         idxb = myg.y2d <= yctr
 
-        dens.d[idxb] = dens_left
-        xmom.d[idxb] = 0.0
-        ymom.d[idxb] = dens_left*u_left
-        ener.d[idxb] = p_left/(gamma - 1.0) + 0.5*ymom.d[idxb]*u_left
+        dens[idxb] = dens_left
+        xmom[idxb] = 0.0
+        ymom[idxb] = dens_left*u_left
+        ener[idxb] = p_left/(gamma - 1.0) + 0.5*ymom[idxb]*u_left
                 
         # top
         idxt = myg.y2d > yctr
         
-        dens.d[idxt] = dens_right
-        xmom.d[idxt] = 0.0
-        ymom.d[idxt] = dens_right*u_right
-        ener.d[idxt] = p_right/(gamma - 1.0) + 0.5*ymom.d[idxt]*u_right
+        dens[idxt] = dens_right
+        xmom[idxt] = 0.0
+        ymom[idxt] = dens_right*u_right
+        ener[idxt] = p_right/(gamma - 1.0) + 0.5*ymom[idxt]*u_right
         
     
 def finalize():
