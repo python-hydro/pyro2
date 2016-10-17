@@ -1,3 +1,4 @@
+import importlib
 import mesh.patch as patch
 from util import profile
 
@@ -144,5 +145,8 @@ class NullSimulation(object):
         finalize() method.
         """
         # there should be a cleaner way of doing this
-        exec("import {}".format(self.solver_name))
-        exec("{}.{}.finalize()".format(self.solver_name, self.problem_name))
+        solver = importlib.import_module(self.solver_name)
+        problem = importlib.import_module("{}.problems.{}".format(self.solver_name, self.problem_name))
+
+        problem.finalize()
+

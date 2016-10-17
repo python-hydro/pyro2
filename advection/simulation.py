@@ -1,3 +1,4 @@
+import importlib
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -26,7 +27,8 @@ class Simulation(NullSimulation):
         self.cc_data = my_data
 
         # now set the initial conditions for the problem
-        exec(self.problem_name + '.init_data(self.cc_data, self.rp)')
+        problem = importlib.import_module("advection.problems.{}".format(self.problem_name))
+        problem.init_data(self.cc_data, self.rp)
 
 
     def compute_timestep(self):
