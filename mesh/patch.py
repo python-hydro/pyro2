@@ -917,10 +917,10 @@ class CellCenterData2d():
         pF.close()
 
 
-    def pretty_print(self, var):
+    def pretty_print(self, var, fmt=None):
 
         a = self.get_var(var)
-        a.pretty_print()
+        a.pretty_print(fmt=fmt)
 
 
 # backwards compatibility
