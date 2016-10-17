@@ -1,5 +1,7 @@
 from __future__ import print_function
 
+import importlib
+
 import sys
 
 import numpy as np
@@ -119,7 +121,8 @@ class Simulation(NullSimulation):
         self.base["p0"] = Basestate(myg.ny, ng=myg.ng)
 
         # now set the initial conditions for the problem
-        exec(self.problem_name + '.init_data(self.cc_data, self.base, self.rp)')
+        problem = importlib.import_module("lm_atm.problems.{}".format(self.problem_name))
+        problem.init_data(self.cc_data, self.rp)
 
         # Construct beta_0
         gamma = self.rp.get_param("eos.gamma")

@@ -1,5 +1,7 @@
 from __future__ import print_function
 
+import importlib
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -101,7 +103,8 @@ class Simulation(NullSimulation):
 
 
         # initial conditions for the problem
-        exec(self.problem_name + '.init_data(self.cc_data, self.rp)')
+        problem = importlib.import_module("compressible.problems.{}".format(self.problem_name))
+        problem.init_data(self.cc_data, self.rp)
 
         if self.verbose > 0: print(my_data)
 
@@ -280,8 +283,8 @@ class Simulation(NullSimulation):
 
             v = fields[n]
             img = ax.imshow(np.transpose(v.v()),
-                        interpolation="nearest", origin="lower",
-                        extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
+                            interpolation="nearest", origin="lower",
+                            extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
             ax.set_xlabel("x")
             if n == 0:
