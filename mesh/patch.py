@@ -389,18 +389,20 @@ class ArrayIndexer(object):
         return e < tol
 
 
-    def pretty_print(self):
+    def pretty_print(self, fmt=None):
         """
         Print out a small dataset to the screen with the ghost cells
         a different color, to make things stand out
         """
 
-        if self.d.dtype == np.int:
-            fmt = "%4d"
-        elif self.d.dtype == np.float64:
-            fmt = "%10.5g"
-        else:
-            msg.fail("ERROR: dtype not supported")
+        if fmt is None:
+            if self.d.dtype == np.int:
+                fmt = "%4d"
+            elif self.d.dtype == np.float64:
+                fmt = "%10.5g"
+            else:
+                msg.fail("ERROR: dtype not supported")
+
 
         # print j descending, so it looks like a grid (y increasing
         # with height)
