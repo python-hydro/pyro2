@@ -159,8 +159,7 @@ class CellCenterMG2d(object):
         """
 
         if nx != ny:
-            print("ERROR: multigrid currently requires nx = ny")
-            return -1
+            raise ValueError("ERROR: multigrid currently requires nx = ny")
 
         self.nx = nx
         self.ny = ny
@@ -174,8 +173,8 @@ class CellCenterMG2d(object):
         self.ymax = ymax
 
         if (xmax-xmin) != (ymax-ymin):
-            print("ERROR: multigrid currently requires a square domain")
-            return -1
+            raise ValueError("ERROR: multigrid currently requires a square domain")
+
 
         self.alpha = alpha
         self.beta = beta
@@ -189,7 +188,7 @@ class CellCenterMG2d(object):
 
         # for visualization purposes, we can set a function name that
         # provides the true solution to our elliptic problem.
-        if not true_function == None:
+        if true_function is not None:
             self.true_function = true_function
 
         # a small number used in computing the error, so we don't divide by 0
@@ -214,7 +213,7 @@ class CellCenterMG2d(object):
                             ylb=yl_BC_type, yrb=yr_BC_type)
 
         nx_t = ny_t = 2
-            
+
         for i in range(self.nlevels):
 
             # create the grid
@@ -231,16 +230,16 @@ class CellCenterMG2d(object):
                                   ylb=yl_BC_type, yrb=yr_BC_type,
                                   xl_func=xl_BC, xr_func=xr_BC,
                                   yl_func=yl_BC, yr_func=yr_BC, grid=my_grid)
-            
+
             if i == self.nlevels-1:
                 self.grids[i].register_var("v", bc_p)
             else:
                 self.grids[i].register_var("v", bc)
-                
+
             self.grids[i].register_var("f", bc)
             self.grids[i].register_var("r", bc)
 
-            if not aux_field == None:
+            if aux_field is not None:
                 for f, b in zip(aux_field, aux_bc):
                     self.grids[i].register_var(f, b)
 
@@ -254,17 +253,17 @@ class CellCenterMG2d(object):
 
         # provide coordinate and indexing information for the solution mesh
         soln_grid = self.grids[self.nlevels-1].grid
-        
+
         self.ilo = soln_grid.ilo
         self.ihi = soln_grid.ihi
         self.jlo = soln_grid.jlo
         self.jhi = soln_grid.jhi
 
-        self.x  = soln_grid.x
+        self.x = soln_grid.x
         self.dx = soln_grid.dx
         self.x2d = soln_grid.x2d
 
-        self.y  = soln_grid.y
+        self.y = soln_grid.y
         self.dy = soln_grid.dy   # note, dy = dx is assumed
         self.y2d = soln_grid.y2d
 
@@ -403,7 +402,7 @@ class CellCenterMG2d(object):
         """
         Return the solution after doing the MG solve
 
-        If a grid object is passed in, then the solution is put on that 
+        If a grid object is passed in, then the solution is put on that
         grid -- not the passed in grid must have the same dx and dy
 
         Returns
@@ -583,9 +582,9 @@ class CellCenterMG2d(object):
             # groups 1 and 3 are done together, then we need to
             # fill ghost cells, and then groups 2 and 4
 
-            for n, (ix, iy) in enumerate([(0,0), (1,1), (1,0), (0,1)]):
+            for n, (ix, iy) in enumerate([(0, 0), (1, 1), (1, 0), (0, 1)]):
 
-                v.ip_jp(ix, iy, s=2)[:,:] = (f.ip_jp(ix, iy, s=2) + 
+                v.ip_jp(ix, iy, s=2)[:,:] = (f.ip_jp(ix, iy, s=2) +
                       xcoeff*(v.ip_jp(1+ix, iy, s=2) + v.ip_jp(-1+ix, iy, s=2)) +
                       ycoeff*(v.ip_jp(ix, 1+iy, s=2) + v.ip_jp(ix, -1+iy, s=2)) )/ \
                     (self.alpha + 2.0*xcoeff + 2.0*ycoeff)
@@ -618,7 +617,7 @@ class CellCenterMG2d(object):
                 self.frame += 1
 
 
-    def solve(self, rtol = 1.e-11):
+    def solve(self, rtol=1.e-11):
         """
         The main driver for the multigrid solution of the Helmholtz
         equation.  This controls the V-cycles, smoothing at each
@@ -714,7 +713,7 @@ class CellCenterMG2d(object):
 
 
             # ascending part
-            for level in range(1,self.nlevels):
+            for level in range(1, self.nlevels):
 
                 self.current_level = level
                 self.up_or_down = "up"
