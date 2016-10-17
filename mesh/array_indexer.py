@@ -2,6 +2,8 @@ from __future__ import print_function
 
 import numpy as np
 
+from util import msg
+
 def _buf_split(b):
     try: bxlo, bxhi, bylo, byhi = b
     except:
