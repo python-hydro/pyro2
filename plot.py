@@ -3,7 +3,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
-import getopt
+import argparse
 
 import mesh.patch as patch
 
@@ -44,30 +44,24 @@ optional arguments:
 
 if __name__== "__main__":
 
-    try: opts, next = getopt.getopt(sys.argv[1:], "o:h:W:H:")
-    except getopt.GetoptError:
-        sys.exit("invalid calling sequence")
+    parser = argparse.ArgumentParser()
 
-    outfile = "plot.png"
+    parser.add_argument("-o", type=str, default="plot.png", 
+                        metavar="plot.png", help="output file name")
+    parser.add_argument("-W", type=float, default=8.0,
+                        metavar="width", help="width (in inches) of the plot (100 dpi)")
+    parser.add_argument("-H", type=float, default=4.5,
+                        metavar="height", help="height (in inches) of the plot (100 dpi)")
+    parser.add_argument("solver", type=str, nargs=1,
+                        help="the name of the solver used to run the simulation")
+    parser.add_argument("plotfile", type=str, nargs=1,
+                        help="the plotfile you wish to plot")
 
-    W = 8.0
-    H = 4.5
+    args = parser.parse_args()
 
-    for o, a in opts:
-        if o == "-h": usage()
-        if o == "-o": outfile = a
-        if o == "-W": W = float(a)
-        if o == "-H": H = float(a)
+    myg, myd = patch.read(args.plotfile[0])
 
-    try: solver = next[0]
-    except: usage()
-        
-    try: file = next[1]
-    except: usage()
-
-    myg, myd = patch.read(file)
-
-    makeplot(myd, solver, outfile, W, H)
+    makeplot(myd, args.solver[0], args.o, args.W, args.H)
 
 
 
