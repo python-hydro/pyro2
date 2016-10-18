@@ -289,6 +289,7 @@ class CellCenterMG2d(object):
         self.vis_title = vis_title
         self.frame = 0
 
+
     # these draw functions are for visualization purposes and are
     # not ordinarily used, except for plotting the progression of the
     # solution within the V
@@ -396,6 +397,14 @@ class CellCenterMG2d(object):
         cb.ax.yaxis.offsetText.set_fontsize("small")
         cl = plt.getp(cb.ax, 'ymajorticklabels')
         plt.setp(cl, fontsize="small")
+
+
+    def grid_info(self, level, indent=0):
+        """
+        Report simple grid information
+        """
+        print("{}level: {}, grid: {} x {}".format(
+            indent*" ", level, self.grids[level].grid.nx, self.grids[level].grid.ny))
 
 
     def get_solution(self, grid=None):
@@ -657,95 +666,12 @@ class CellCenterMG2d(object):
             for level in range(self.nlevels-1):
                 v = self.grids[level].zero("v")
 
-            # descending part
             if self.verbose:
                 print("<<< beginning V-cycle (cycle %d) >>>\n" % cycle)
 
+            # do V-cycles through the entire hierarchy
             level = self.nlevels-1
-            while level > 0:
-
-                self.current_level = level
-                self.up_or_down = "down"
-
-                fP = self.grids[level]
-                cP = self.grids[level-1]
-
-                if self.verbose:
-                    self._compute_residual(level)
-
-                    print("  level: {}, grid: {} x {}".format(level, fP.grid.nx, fP.grid.ny))
-                    print("  before G-S, residual L2: {}".format(fP.get_var("r").norm() ))
-
-                # smooth on the current level
-                self.smooth(level, self.nsmooth)
-
-
-                # compute the residual
-                self._compute_residual(level)
-
-                if self.verbose:
-                    print("  after G-S, residual L2: {}".format(fP.get_var("r").norm() ))
-
-
-                # restrict the residual down to the RHS of the coarser level
-                f_coarse = cP.get_var("f")
-                f_coarse.v()[:,:] = fP.restrict("r").v()
-
-                level -= 1
-
-
-            # solve the discrete coarse problem.  We could use any
-            # number of different matrix solvers here (like CG), but
-            # since we are 2x2 by design at this point, we will just
-            # smooth
-            if self.verbose: print("  bottom solve:")
-
-            self.current_level = 0
-            bP = self.grids[0]
-
-            if self.verbose:
-                print("  level = {}, nx = {}, ny = {}\n".format(
-                    level, bP.grid.nx, bP.grid.ny))
-
-            self.smooth(0, self.nsmooth_bottom)
-
-            bP.fill_BC("v")
-
-
-            # ascending part
-            for level in range(1, self.nlevels):
-
-                self.current_level = level
-                self.up_or_down = "up"
-
-                fP = self.grids[level]
-                cP = self.grids[level-1]
-
-                # prolong the error up from the coarse grid
-                e = cP.prolong("v")
-
-                # correct the solution on the current grid
-                v = fP.get_var("v")
-                v.v()[:,:] += e.v()
-
-                fP.fill_BC("v")
-
-                if self.verbose:
-                    self._compute_residual(level)
-
-                    print("  level = {}, nx = {}, ny = {}".format(
-                        level, fP.grid.nx, fP.grid.ny))
-
-                    print("  before G-S, residual L2: {}".format(fP.get_var("r").norm() ))
-
-                # smooth
-                self.smooth(level, self.nsmooth)
-
-                if self.verbose:
-                    self._compute_residual(level)
-
-                    print("  after G-S, residual L2: {}".format(fP.get_var("r").norm() ))
-
+            self.v_cycle(level)
 
             # compute the error with respect to the previous solution
             # this is for diagnostic purposes only -- it is not used to
@@ -761,6 +687,7 @@ class CellCenterMG2d(object):
 
             # compute the residual error, relative to the source norm
             self._compute_residual(self.nlevels-1)
+            fP = self.grids[level]
             r = fP.get_var("r")
 
             if self.source_norm != 0.0:
@@ -780,3 +707,87 @@ class CellCenterMG2d(object):
                       cycle, relative_error, residual_error))
 
             cycle += 1
+
+
+
+    def v_cycle(self, level):
+        """
+        Perform a V-cycle for a single 2-level solve.  This is applied
+        recursively do V-cycle through the entire hierarchy.
+
+        """
+
+        if level > 0:
+
+            self.current_level = level
+            self.up_or_down = "down"
+
+            fP = self.grids[level]
+            cP = self.grids[level-1]
+
+            if self.verbose:
+                self._compute_residual(level)
+                self.grid_info(level, indent=2)
+                print("  before G-S, residual L2: {}".format(fP.get_var("r").norm() ))
+
+            # smooth on the current level
+            self.smooth(level, self.nsmooth)
+
+            # compute the residual
+            self._compute_residual(level)
+
+            if self.verbose:
+                print("  after G-S, residual L2: {}\n".format(fP.get_var("r").norm() ))
+
+            # restrict the residual down to the RHS of the coarser level
+            f_coarse = cP.get_var("f")
+            f_coarse.v()[:,:] = fP.restrict("r").v()
+
+            # solve the coarse problem
+            self.v_cycle(level-1)
+
+            # ascending part
+            self.current_level = level
+            self.up_or_down = "up"
+
+            fP = self.grids[level]
+            cP = self.grids[level-1]
+
+            # prolong the error up from the coarse grid
+            e = cP.prolong("v")
+
+            # correct the solution on the current grid
+            v = fP.get_var("v")
+            v.v()[:,:] += e.v()
+
+            fP.fill_BC("v")
+
+            if self.verbose:
+                self._compute_residual(level)
+                self.grid_info(level, indent=2)
+                print("  before G-S, residual L2: {}".format(fP.get_var("r").norm() ))
+
+            # smooth
+            self.smooth(level, self.nsmooth)
+
+            if self.verbose:
+                self._compute_residual(level)
+                print("  after G-S, residual L2: {}\n".format(fP.get_var("r").norm() ))
+
+        else:
+            # bottom solve: solve the discrete coarse problem.  We
+            # could use any number of different matrix solvers here
+            # (like CG), but since we are 2x2 by design at this point,
+            # we will just smooth
+            if self.verbose: print("  bottom solve:")
+
+            self.current_level = level
+            bP = self.grids[level]
+
+            if self.verbose:
+                self.grid_info(level, indent=2)
+                print("")
+
+            self.smooth(level, self.nsmooth_bottom)
+
+            bP.fill_BC("v")
