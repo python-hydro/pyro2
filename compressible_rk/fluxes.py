@@ -130,7 +130,7 @@ def fluxes(my_data, rp, vars, solid, tc):
     p = eos.pres(gamma, dens, e)
 
     smallp = 1.e-10
-    p.d = p.d.clip(smallp)   # apply a floor to the pressure
+    p = p.clip(smallp)   # apply a floor to the pressure
 
 
     #=========================================================================
@@ -145,10 +145,10 @@ def fluxes(my_data, rp, vars, solid, tc):
         z0 = rp.get_param("compressible.z0")
         z1 = rp.get_param("compressible.z1")
 
-        xi_x = reconstruction_f.flatten(1, p.d, u.d, myg.qx, myg.qy, myg.ng, smallp, delta, z0, z1)
-        xi_y = reconstruction_f.flatten(2, p.d, v.d, myg.qx, myg.qy, myg.ng, smallp, delta, z0, z1)
+        xi_x = reconstruction_f.flatten(1, p, u, myg.qx, myg.qy, myg.ng, smallp, delta, z0, z1)
+        xi_y = reconstruction_f.flatten(2, p, v, myg.qx, myg.qy, myg.ng, smallp, delta, z0, z1)
 
-        xi = reconstruction_f.flatten_multid(xi_x, xi_y, p.d, myg.qx, myg.qy, myg.ng)
+        xi = reconstruction_f.flatten_multid(xi_x, xi_y, p, myg.qx, myg.qy, myg.ng)
     else:
         xi = 1.0
 
@@ -165,16 +165,16 @@ def fluxes(my_data, rp, vars, solid, tc):
     else:
         limitFunc = reconstruction_f.limit4
 
-    ldelta_rx = xi*limitFunc(1, r.d, myg.qx, myg.qy, myg.ng)
-    ldelta_ux = xi*limitFunc(1, u.d, myg.qx, myg.qy, myg.ng)
-    ldelta_vx = xi*limitFunc(1, v.d, myg.qx, myg.qy, myg.ng)
-    ldelta_px = xi*limitFunc(1, p.d, myg.qx, myg.qy, myg.ng)
+    ldelta_rx = xi*limitFunc(1, r, myg.qx, myg.qy, myg.ng)
+    ldelta_ux = xi*limitFunc(1, u, myg.qx, myg.qy, myg.ng)
+    ldelta_vx = xi*limitFunc(1, v, myg.qx, myg.qy, myg.ng)
+    ldelta_px = xi*limitFunc(1, p, myg.qx, myg.qy, myg.ng)
 
     # monotonized central differences in y-direction
-    ldelta_ry = xi*limitFunc(2, r.d, myg.qx, myg.qy, myg.ng)
-    ldelta_uy = xi*limitFunc(2, u.d, myg.qx, myg.qy, myg.ng)
-    ldelta_vy = xi*limitFunc(2, v.d, myg.qx, myg.qy, myg.ng)
-    ldelta_py = xi*limitFunc(2, p.d, myg.qx, myg.qy, myg.ng)
+    ldelta_ry = xi*limitFunc(2, r, myg.qx, myg.qy, myg.ng)
+    ldelta_uy = xi*limitFunc(2, u, myg.qx, myg.qy, myg.ng)
+    ldelta_vy = xi*limitFunc(2, v, myg.qx, myg.qy, myg.ng)
+    ldelta_py = xi*limitFunc(2, p, myg.qx, myg.qy, myg.ng)
 
     tm_limit.end()
 
@@ -190,7 +190,7 @@ def fluxes(my_data, rp, vars, solid, tc):
     V_l, V_r = interface_f.states(1, myg.qx, myg.qy, myg.ng, myg.dx,
                                   vars.nvar,
                                   gamma,
-                                  r.d, u.d, v.d, p.d,
+                                  r, u, v, p,
                                   ldelta_rx, ldelta_ux, ldelta_vx, ldelta_px)
 
     tm_states.end()
@@ -200,16 +200,16 @@ def fluxes(my_data, rp, vars, solid, tc):
     U_xl = myg.scratch_array(vars.nvar)
     U_xr = myg.scratch_array(vars.nvar)
 
-    U_xl.d[:,:,vars.idens] = V_l[:,:,vars.irho]
-    U_xl.d[:,:,vars.ixmom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iu]
-    U_xl.d[:,:,vars.iymom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iv]
-    U_xl.d[:,:,vars.iener] = eos.rhoe(gamma, V_l[:,:,vars.ip]) + \
+    U_xl[:,:,vars.idens] = V_l[:,:,vars.irho]
+    U_xl[:,:,vars.ixmom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iu]
+    U_xl[:,:,vars.iymom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iv]
+    U_xl[:,:,vars.iener] = eos.rhoe(gamma, V_l[:,:,vars.ip]) + \
         0.5*V_l[:,:,vars.irho]*(V_l[:,:,vars.iu]**2 + V_l[:,:,vars.iv]**2)
 
-    U_xr.d[:,:,vars.idens] = V_r[:,:,vars.irho]
-    U_xr.d[:,:,vars.ixmom] = V_r[:,:,vars.irho]*V_r[:,:,vars.iu]
-    U_xr.d[:,:,vars.iymom] = V_r[:,:,vars.irho]*V_r[:,:,vars.iv]
-    U_xr.d[:,:,vars.iener] = eos.rhoe(gamma, V_r[:,:,vars.ip]) + \
+    U_xr[:,:,vars.idens] = V_r[:,:,vars.irho]
+    U_xr[:,:,vars.ixmom] = V_r[:,:,vars.irho]*V_r[:,:,vars.iu]
+    U_xr[:,:,vars.iymom] = V_r[:,:,vars.irho]*V_r[:,:,vars.iv]
+    U_xr[:,:,vars.iener] = eos.rhoe(gamma, V_r[:,:,vars.ip]) + \
         0.5*V_r[:,:,vars.irho]*(V_r[:,:,vars.iu]**2 + V_r[:,:,vars.iv]**2)
 
 
@@ -225,7 +225,7 @@ def fluxes(my_data, rp, vars, solid, tc):
     V_l, V_r = interface_f.states(2, myg.qx, myg.qy, myg.ng, myg.dy,
                                   vars.nvar,
                                   gamma,
-                                  r.d, u.d, v.d, p.d,
+                                  r, u, v, p,
                                   ldelta_ry, ldelta_uy, ldelta_vy, ldelta_py)
 
     tm_states.end()
@@ -235,16 +235,16 @@ def fluxes(my_data, rp, vars, solid, tc):
     U_yl = myg.scratch_array(vars.nvar)
     U_yr = myg.scratch_array(vars.nvar)
 
-    U_yl.d[:,:,vars.idens] = V_l[:,:,vars.irho]
-    U_yl.d[:,:,vars.ixmom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iu]
-    U_yl.d[:,:,vars.iymom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iv]
-    U_yl.d[:,:,vars.iener] = eos.rhoe(gamma, V_l[:,:,vars.ip]) + \
+    U_yl[:,:,vars.idens] = V_l[:,:,vars.irho]
+    U_yl[:,:,vars.ixmom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iu]
+    U_yl[:,:,vars.iymom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iv]
+    U_yl[:,:,vars.iener] = eos.rhoe(gamma, V_l[:,:,vars.ip]) + \
         0.5*V_l[:,:,vars.irho]*(V_l[:,:,vars.iu]**2 + V_l[:,:,vars.iv]**2)
 
-    U_yr.d[:,:,vars.idens] = V_r[:,:,vars.irho]
-    U_yr.d[:,:,vars.ixmom] = V_r[:,:,vars.irho]*V_r[:,:,vars.iu]
-    U_yr.d[:,:,vars.iymom] = V_r[:,:,vars.irho]*V_r[:,:,vars.iv]
-    U_yr.d[:,:,vars.iener] = eos.rhoe(gamma, V_r[:,:,vars.ip]) + \
+    U_yr[:,:,vars.idens] = V_r[:,:,vars.irho]
+    U_yr[:,:,vars.ixmom] = V_r[:,:,vars.irho]*V_r[:,:,vars.iu]
+    U_yr[:,:,vars.iymom] = V_r[:,:,vars.irho]*V_r[:,:,vars.iv]
+    U_yr[:,:,vars.iener] = eos.rhoe(gamma, V_r[:,:,vars.ip]) + \
         0.5*V_r[:,:,vars.irho]*(V_r[:,:,vars.iu]**2 + V_r[:,:,vars.iv]**2)
 
 
@@ -266,12 +266,12 @@ def fluxes(my_data, rp, vars, solid, tc):
     _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
                       vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener,
                       solid.xl, solid.xr,
-                      gamma, U_xl.d, U_xr.d)
+                      gamma, U_xl, U_xr)
 
     _fy = riemannFunc(2, myg.qx, myg.qy, myg.ng,
                       vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener,
                       solid.yl, solid.yr,
-                      gamma, U_yl.d, U_yr.d)
+                      gamma, U_yl, U_yr)
 
     F_x = ai.ArrayIndexer(d=_fx, grid=myg)
     F_y = ai.ArrayIndexer(d=_fy, grid=myg)
@@ -285,7 +285,7 @@ def fluxes(my_data, rp, vars, solid, tc):
 
     _ax, _ay = interface_f.artificial_viscosity(
         myg.qx, myg.qy, myg.ng, myg.dx, myg.dy,
-        cvisc, u.d, v.d)
+        cvisc, u, v)
 
     avisco_x = ai.ArrayIndexer(d=_ax, grid=myg)
     avisco_y = ai.ArrayIndexer(d=_ay, grid=myg)

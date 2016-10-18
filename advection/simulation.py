@@ -2,7 +2,7 @@ import importlib
 import numpy as np
 import matplotlib.pyplot as plt
 
-from advection.advectiveFluxes import *
+import advection.advectiveFluxes as flx
 import mesh.patch as patch
 from simulation_null import NullSimulation, grid_setup, bc_setup
 from util import profile
@@ -59,7 +59,7 @@ class Simulation(NullSimulation):
         dtdx = self.dt/self.cc_data.grid.dx
         dtdy = self.dt/self.cc_data.grid.dy
 
-        flux_x, flux_y =  unsplitFluxes(self.cc_data, self.rp, self.dt, "density")
+        flux_x, flux_y =  flx.unsplitFluxes(self.cc_data, self.rp, self.dt, "density")
 
         """
         do the differencing for the fluxes now.  Here, we use slices so we

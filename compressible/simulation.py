@@ -9,7 +9,7 @@ import compressible.BC as BC
 import compressible.eos as eos
 import mesh.patch as patch
 from simulation_null import NullSimulation, grid_setup, bc_setup
-from compressible.unsplitFluxes import *
+import compressible.unsplitFluxes as flx
 from util import profile
 
 
@@ -164,8 +164,8 @@ class Simulation(NullSimulation):
 
         myg = self.cc_data.grid
 
-        Flux_x, Flux_y = unsplitFluxes(self.cc_data, self.aux_data, self.rp, 
-                                       self.vars, self.solid, self.tc, self.dt)
+        Flux_x, Flux_y = flx.unsplitFluxes(self.cc_data, self.aux_data, self.rp, 
+                                           self.vars, self.solid, self.tc, self.dt)
 
         old_dens = dens.copy()
         old_ymom = ymom.copy()

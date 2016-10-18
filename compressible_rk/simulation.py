@@ -3,11 +3,10 @@ from __future__ import print_function
 import numpy as np
 import matplotlib.pyplot as plt
 
-from compressible.problems import *
 import compressible.eos as eos
 import mesh.patch as patch
 import compressible
-from compressible_rk.fluxes import *
+import compressible_rk.fluxes as flx
 from util import profile
 
 
@@ -35,8 +34,8 @@ class Simulation(compressible.Simulation):
 
         k = myg.scratch_array(nvar=self.vars.nvar)
 
-        flux_x, flux_y = fluxes(myd, self.rp,
-                                self.vars, self.solid, self.tc)
+        flux_x, flux_y = flx.fluxes(myd, self.rp,
+                                    self.vars, self.solid, self.tc)
 
         for n in range(self.vars.nvar):
             k.v(n=n)[:,:] = \

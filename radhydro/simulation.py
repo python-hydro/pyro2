@@ -3,10 +3,9 @@ from __future__ import print_function
 import numpy as np
 import matplotlib.pyplot as plt
 
-from radhydro.problems import *
 import radhydro.eos as eos
 import mesh.patch as patch
-from compressible.unsplitFluxes import *
+import compressible.unsplitFluxes as flx
 from util import profile
 
 
@@ -146,7 +145,8 @@ class Simulation:
 
 
         # initial conditions for the problem
-        exec(self.problem_name + '.init_data(self.cc_data, self.rp)')
+        problem = importlib.import_module("radhydro.problems.{}".format(self.problem_name))
+        problem.init_data(self.cc_data, self.rp)
 
         if verbose > 0: print(my_data)
 
@@ -220,7 +220,7 @@ class Simulation:
 
         myg = self.cc_data.grid
 
-        Flux_x, Flux_y = unsplitFluxes(self.cc_data, self.rp, self.vars, self.tc, dt)
+        Flux_x, Flux_y = flx.unsplitFluxes(self.cc_data, self.rp, self.vars, self.tc, dt)
 
         old_dens = dens.copy()
         old_ymom = ymom.copy()
