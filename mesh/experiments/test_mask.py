@@ -1,4 +1,4 @@
-import patch
+from mesh import patch
 
 import numpy as np
 import time
@@ -61,16 +61,16 @@ myd.register_var("a", bc)
 myd.create()
 
 a = myd.get_var("a")
-a.d[:,:] = np.random.rand(myg.qx, myg.qy)
+a[:,:] = np.random.rand(myg.qx, myg.qy)
 #a[:,:] = np.arange(myg.qx*myg.qy).reshape(myg.qx, myg.qy)
 
 # slicing method
 start = time.time()
 
 da = myg.scratch_array()
-da.d[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
-    a.d[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - \
-    a.d[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1]
+da[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
+    a[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - \
+    a[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1]
 
 print "slice method: ", time.time() - start
 
@@ -80,20 +80,20 @@ m = Mask(myg.nx, myg.ny, myg.ng)
 
 start = time.time()
 da2 = myg.scratch_array()
-da2.d[m.valid] = a.d[m.ip1] - a.d[m.im1]
+da2[m.valid] = a[m.ip1] - a[m.im1]
 
 print "mask method: ", time.time() - start
 
-print np.max(np.abs(da2.d - da.d))
+print np.max(np.abs(da2 - da))
 
 # roll -- note, we roll in the opposite direction of the shift
 start = time.time()
 da3 = myg.scratch_array()
-da3.d[:] = np.roll(a.d, -1, axis=0) - np.roll(a.d, 1, axis=0)
+da3[:] = np.roll(a, -1, axis=0) - np.roll(a, 1, axis=0)
 
 print "roll method: ", time.time() - start
 
-print np.max(np.abs(da3.d[m.valid] - da.d[m.valid]))
+print np.max(np.abs(da3[m.valid] - da[m.valid]))
 
 
 # ArrayIndex
@@ -104,4 +104,4 @@ da4.v()[:,:] = a.ip(1) - a.ip(-1)
 
 print "ArrayIndex method: ", time.time() - start
 
-print np.max(np.abs(da4.d[m.valid] - da.d[m.valid]))
+print np.max(np.abs(da4[m.valid] - da[m.valid]))
