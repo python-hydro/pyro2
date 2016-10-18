@@ -20,12 +20,13 @@
 # projection uses the divergence of the velocity field from the previous
 # iteration as its source term.
 
+import math
 import numpy
+
 import MG
 import mesh.patch as patch
-import math
 
-        
+
 nx = 128
 ny = 128
 
@@ -176,6 +177,3 @@ for iproj in range(nproj):
 
 
     U.write("proj-periodic.after"+("%d" % iproj))
-
-
-

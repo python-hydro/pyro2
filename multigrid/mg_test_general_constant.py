@@ -76,16 +76,16 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     d.create()
 
     a = d.get_var("alpha")
-    a.d[:,:] = alpha(g.x2d, g.y2d)
+    a[:,:] = alpha(g.x2d, g.y2d)
 
     b = d.get_var("beta")
-    b.d[:,:] = beta(g.x2d, g.y2d)
+    b[:,:] = beta(g.x2d, g.y2d)
 
     gx = d.get_var("gamma_x")
-    gx.d[:,:] = gamma_x(g.x2d, g.y2d)
+    gx[:,:] = gamma_x(g.x2d, g.y2d)
 
     gy = d.get_var("gamma_y")
-    gy.d[:,:] = gamma_y(g.x2d, g.y2d)
+    gy[:,:] = gamma_y(g.x2d, g.y2d)
 
     
     # create the multigrid object

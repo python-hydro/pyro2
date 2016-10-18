@@ -12,7 +12,7 @@ myd.create()
 
 a = myd.get_var("a")
 
-a.d[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1].flat = numpy.arange(myg.nx*myg.ny)
+a[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1].flat = numpy.arange(myg.nx*myg.ny)
 
 print "restriction test"
 print "original (fine) array"
@@ -29,7 +29,7 @@ cd.register_var("a", bc)
 cd.create()
 
 a_coarse = cd.get_var("a")
-a_coarse.d[:,:] = myd.restrict("a").d[:,:]
+a_coarse[:,:] = myd.restrict("a")[:,:]
 
 cd.pretty_print("a")
 
@@ -37,7 +37,7 @@ cd.pretty_print("a")
 print " "
 print "prolongation test"
 print "original (coarse) array w/ ghost cells"
-a_coarse.d[:,:].flat = numpy.arange(cg.qx*cg.qy)
+a_coarse[:,:].flat = numpy.arange(cg.qx*cg.qy)
 cd.pretty_print("a")
 
 
@@ -52,7 +52,7 @@ fd.register_var("a", bc)
 fd.create()
 
 a_fine = fd.get_var("a")
-a_fine.d[:,:] = cd.prolong("a").d[:,:]
+a_fine[:,:] = cd.prolong("a")[:,:]
 
 fd.pretty_print("a")
 
