@@ -59,7 +59,7 @@ def user(bc_name, bc_edge, variable, ccdata):
                 xmom = ccdata.get_var("x-momentum")
                 ymom = ccdata.get_var("y-momentum")
                 ener = ccdata.get_var("energy")
-                
+
                 grav = ccdata.get_aux("grav")
                 gamma = ccdata.get_aux("gamma")
 
@@ -74,7 +74,7 @@ def user(bc_name, bc_edge, variable, ccdata):
                 # formulation of HSE, so the pressure comes simply from
                 # differencing the HSE equation
                 j = myg.jlo-1
-                while (j >= 0):
+                while j >= 0:
                     pres_below = pres_base - grav*dens_base*myg.dy
                     rhoe = eos.rhoe(gamma, pres_below)
 
@@ -104,7 +104,7 @@ def user(bc_name, bc_edge, variable, ccdata):
                 xmom = ccdata.get_var("x-momentum")
                 ymom = ccdata.get_var("y-momentum")
                 ener = ccdata.get_var("energy")
-                
+
                 grav = ccdata.get_aux("grav")
                 gamma = ccdata.get_aux("gamma")
 

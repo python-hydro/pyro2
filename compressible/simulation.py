@@ -53,7 +53,7 @@ class Simulation(NullSimulation):
         Initialize the grid and variables for compressible flow and set
         the initial conditions for the chosen problem.
         """
-        
+
         my_grid = grid_setup(self.rp, ng=4)
         my_data = patch.CellCenterData2d(my_grid)
 
@@ -164,7 +164,7 @@ class Simulation(NullSimulation):
 
         myg = self.cc_data.grid
 
-        Flux_x, Flux_y = flx.unsplitFluxes(self.cc_data, self.aux_data, self.rp, 
+        Flux_x, Flux_y = flx.unsplitFluxes(self.cc_data, self.aux_data, self.rp,
                                            self.vars, self.solid, self.tc, self.dt)
 
         old_dens = dens.copy()
@@ -246,22 +246,22 @@ class Simulation(NullSimulation):
             #   e
             fig, axes = plt.subplots(nrows=4, ncols=1, num=1)
             orientation = "horizontal"
-            if (L_x > 4*L_y):
+            if L_x > 4*L_y:
                 shrink = 0.75
 
-            onLeft = list(range(self.vars.nvar))
+            on_left = list(range(self.vars.nvar))
 
 
         elif L_y > 2*L_x:
 
             # we want 4 columns:  rho  |U|  p  e
             fig, axes = plt.subplots(nrows=1, ncols=4, num=1)
-            if (L_y >= 3*L_x):
+            if L_y >= 3*L_x:
                 shrink = 0.5
                 sparseX = 1
                 allYlabel = 0
 
-            onLeft = [0]
+            on_left = [0]
 
         else:
             # 2x2 grid of plots with
@@ -271,7 +271,7 @@ class Simulation(NullSimulation):
             fig, axes = plt.subplots(nrows=2, ncols=2, num=1)
             plt.subplots_adjust(hspace=0.25)
 
-            onLeft = [0,2]
+            on_left = [0, 2]
 
 
         fields = [dens, magvel, p, e]
@@ -293,7 +293,7 @@ class Simulation(NullSimulation):
 
             ax.set_title(field_names[n])
 
-            if not n in onLeft:
+            if not n in on_left:
                 ax.yaxis.offsetText.set_visible(False)
                 if n > 0: ax.get_yaxis().set_visible(False)
 
@@ -303,7 +303,7 @@ class Simulation(NullSimulation):
             plt.colorbar(img, ax=ax, orientation=orientation, shrink=shrink)
 
 
-        plt.figtext(0.05,0.0125, "t = %10.5f" % self.cc_data.t)
+        plt.figtext(0.05, 0.0125, "t = %10.5f" % self.cc_data.t)
 
         plt.pause(0.001)
         plt.draw()

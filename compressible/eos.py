@@ -4,9 +4,9 @@ gamma is the constant ratio of specific heats.
 """
 
 def pres(gamma, dens, eint):
-    """ 
+    """
     Given the density and the specific internal energy, return the
-    pressure 
+    pressure
 
     Parameters
     ----------
@@ -28,9 +28,9 @@ def pres(gamma, dens, eint):
 
 
 def dens(gamma, pres, eint):
-    """ 
+    """
     Given the pressure and the specific internal energy, return
-    the density 
+    the density
 
     Parameters
     ----------
@@ -52,8 +52,8 @@ def dens(gamma, pres, eint):
 
 
 def rhoe(gamma, pres):
-    """ 
-    Given the pressure, return (rho * e) 
+    """
+    Given the pressure, return (rho * e)
 
     Parameters
     ----------
@@ -61,7 +61,7 @@ def rhoe(gamma, pres):
         The ratio of specific heats
     pres : float
         The pressure
- 
+
     Returns
     -------
     out : float
