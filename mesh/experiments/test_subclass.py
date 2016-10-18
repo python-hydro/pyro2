@@ -36,7 +36,6 @@ class ArrayIndexer(np.ndarray):
         obj = np.asarray(d).view(self)
         obj.g = grid
         obj.c = len(d.shape)
-        obj.d = d
         return obj
 
     def __array_finalize__(self, obj):
@@ -79,7 +78,7 @@ class ArrayIndexer(np.ndarray):
 
 
     def copy(self):
-        return ArrayIndexer(self.copy(), grid=self.g)
+        return ArrayIndexer(np.asarray(self).copy(), grid=self.g)
 
     def is_symmetric(self, nodal=False, tol=1.e-14):
         if not nodal:
@@ -182,6 +181,5 @@ if __name__ == "__main__":
     print(d)
 
     print(type(b))
-    print(type(b.d))
 
 
