@@ -647,18 +647,16 @@ class CellCenterMG2d(object):
         if not self.initialized_RHS:
             msg.fail("ERROR: RHS not initialized")
 
-        # for now, we will just do V-cycles, continuing until we
-        # achieve the L2 norm of the relative solution difference is <
-        # rtol
         if self.verbose:
             print("source norm = ", self.source_norm)
 
-        old_solution = self.grids[self.nlevels-1].get_var("v").copy()
+        old_phi = self.grids[self.nlevels-1].get_var("v").copy()
 
-        converged = 0
+        residual_error = 1.e33
         cycle = 1
 
-        while not converged and cycle <= self.max_cycles:
+        # V-cycles until we achieve the L2 norm of the residual < rtol
+        while residual_error > rtol and cycle <= self.max_cycles:
 
             self.current_cycle = cycle
 
@@ -667,7 +665,7 @@ class CellCenterMG2d(object):
                 v = self.grids[level].zero("v")
 
             if self.verbose:
-                print("<<< beginning V-cycle (cycle %d) >>>\n" % cycle)
+                print("<<< beginning V-cycle (cycle {}) >>>\n".format(cycle))
 
             # do V-cycles through the entire hierarchy
             level = self.nlevels-1
@@ -676,38 +674,33 @@ class CellCenterMG2d(object):
             # compute the error with respect to the previous solution
             # this is for diagnostic purposes only -- it is not used to
             # determine convergence
-            solnP = self.grids[self.nlevels-1]
+            soln = self.grids[self.nlevels-1]
 
-            diff = (solnP.get_var("v").v() - old_solution.v())/ \
-                (solnP.get_var("v").v() + self.small)
+            diff = (soln.get_var("v") - old_phi)/(soln.get_var("v") + self.small)
+            relative_error = soln.grid.norm(diff)
 
-            relative_error = solnP.grid.norm(diff)
-
-            old_solution = solnP.get_var("v").copy()
+            old_phi = soln.get_var("v").copy()
 
             # compute the residual error, relative to the source norm
             self._compute_residual(self.nlevels-1)
-            fP = self.grids[level]
-            r = fP.get_var("r")
+            fp = self.grids[level]
+            r = fp.get_var("r")
 
             if self.source_norm != 0.0:
                 residual_error = r.norm()/self.source_norm
             else:
                 residual_error = r.norm()
 
-            if residual_error < rtol:
-                converged = 1
-                self.num_cycles = cycle
-                self.relative_error = relative_error
-                self.residual_error = residual_error
-                fP.fill_BC("v")
-
             if self.verbose:
                 print("cycle {}: relative err = {}, residual err = {}\n".format(
-                      cycle, relative_error, residual_error))
+                    cycle, relative_error, residual_error))
 
             cycle += 1
 
+        self.num_cycles = cycle-1
+        self.relative_error = relative_error
+        self.residual_error = residual_error
+        fp.fill_BC("v")
 
 
     def v_cycle(self, level):
@@ -722,13 +715,14 @@ class CellCenterMG2d(object):
             self.current_level = level
             self.up_or_down = "down"
 
-            fP = self.grids[level]
-            cP = self.grids[level-1]
+            # pointers to the fine and coarse data
+            fp = self.grids[level]
+            cp = self.grids[level-1]
 
             if self.verbose:
                 self._compute_residual(level)
                 self.grid_info(level, indent=2)
-                print("  before G-S, residual L2: {}".format(fP.get_var("r").norm() ))
+                print("  before G-S, residual L2: {}".format(fp.get_var("r").norm()))
 
             # smooth on the current level
             self.smooth(level, self.nsmooth)
@@ -737,11 +731,11 @@ class CellCenterMG2d(object):
             self._compute_residual(level)
 
             if self.verbose:
-                print("  after G-S, residual L2: {}\n".format(fP.get_var("r").norm() ))
+                print("  after G-S, residual L2: {}\n".format(fp.get_var("r").norm()))
 
             # restrict the residual down to the RHS of the coarser level
-            f_coarse = cP.get_var("f")
-            f_coarse.v()[:,:] = fP.restrict("r").v()
+            f_coarse = cp.get_var("f")
+            f_coarse.v()[:,:] = fp.restrict("r").v()
 
             # solve the coarse problem
             self.v_cycle(level-1)
@@ -750,29 +744,29 @@ class CellCenterMG2d(object):
             self.current_level = level
             self.up_or_down = "up"
 
-            fP = self.grids[level]
-            cP = self.grids[level-1]
+            fp = self.grids[level]
+            cp = self.grids[level-1]
 
             # prolong the error up from the coarse grid
-            e = cP.prolong("v")
+            e = cp.prolong("v")
 
             # correct the solution on the current grid
-            v = fP.get_var("v")
+            v = fp.get_var("v")
             v.v()[:,:] += e.v()
 
-            fP.fill_BC("v")
+            fp.fill_BC("v")
 
             if self.verbose:
                 self._compute_residual(level)
                 self.grid_info(level, indent=2)
-                print("  before G-S, residual L2: {}".format(fP.get_var("r").norm() ))
+                print("  before G-S, residual L2: {}".format(fp.get_var("r").norm()))
 
             # smooth
             self.smooth(level, self.nsmooth)
 
             if self.verbose:
                 self._compute_residual(level)
-                print("  after G-S, residual L2: {}\n".format(fP.get_var("r").norm() ))
+                print("  after G-S, residual L2: {}\n".format(fp.get_var("r").norm()))
 
         else:
             # bottom solve: solve the discrete coarse problem.  We
@@ -782,7 +776,7 @@ class CellCenterMG2d(object):
             if self.verbose: print("  bottom solve:")
 
             self.current_level = level
-            bP = self.grids[level]
+            bp = self.grids[level]
 
             if self.verbose:
                 self.grid_info(level, indent=2)
@@ -790,4 +784,4 @@ class CellCenterMG2d(object):
 
             self.smooth(level, self.nsmooth_bottom)
 
-            bP.fill_BC("v")
+            bp.fill_BC("v")
