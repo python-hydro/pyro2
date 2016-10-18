@@ -74,7 +74,7 @@ def _get_val(value):
 
 class RuntimeParameters(object):
 
-    def __init__ (self):
+    def __init__(self):
         """
         Initialize a collection of runtime parameters.  This class
         holds a dictionary of the parameters, their comments, and keeps
@@ -258,7 +258,7 @@ class RuntimeParameters(object):
             section = parts[0]
             option = parts[1]
 
-            if (section != current_section):
+            if section != current_section:
                 current_section = section
                 f.write('\n')
                 f.write('[' + section + ']\n')
@@ -278,7 +278,7 @@ class RuntimeParameters(object):
         f.close()
 
 
-if __name__== "__main__":
+if __name__ == "__main__":
     rp = RuntimeParameters()
     rp.load_params("inputs.test")
     rp.print_paramfile()

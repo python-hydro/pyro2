@@ -12,13 +12,13 @@ class _TermColors(object):
     ENDC = '\033[0m'
 
 
-def fail(str):
+def fail(string):
     """
     Output a string to the terminal and abort if we are running
     non-interactively.  The string is colored red to indicate a
     failure
     """
-    print(_TermColors.FAIL + str + _TermColors.ENDC)
+    print(_TermColors.FAIL + string + _TermColors.ENDC)
 
     # only exit if we are not running in interactive mode.  sys.ps1 is
     # only defined in interactive mode.
@@ -27,20 +27,20 @@ def fail(str):
     else:
         sys.exit()
 
-def warning(str):
+def warning(string):
     """
     Output a string to the terminal colored orange to indicate a
     warning
     """
-    print(_TermColors.WARNING + str + _TermColors.ENDC)
+    print(_TermColors.WARNING + string + _TermColors.ENDC)
 
-def success(str):
+def success(string):
     """
     Output a string to the terminal colored green to indicate
     success
     """
-    print(_TermColors.SUCCESS + str + _TermColors.ENDC)
+    print(_TermColors.SUCCESS + string + _TermColors.ENDC)
 
-def bold(str):
+def bold(string):
     """ Output a string in a bold weight"""
-    print(_TermColors.BOLD + str + _TermColors.ENDC)
+    print(_TermColors.BOLD + string + _TermColors.ENDC)
