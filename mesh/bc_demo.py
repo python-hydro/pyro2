@@ -1,9 +1,11 @@
 # test the boundary fill routine
 
+from __future__ import print_function
+
 import numpy as np
 import mesh.patch
 
-myg = mesh.patch.Grid2d(4,4, ng = 2, xmax=1.0, ymax=1.0)
+myg = mesh.patch.Grid2d(4, 4, ng=2, xmax=1.0, ymax=1.0)
 
 mydata = mesh.patch.CellCenterData2d(myg, dtype=np.int)
 
@@ -30,16 +32,16 @@ a = mydata.get_var("outflow")
 
 for i in range(myg.ilo, myg.ihi+1):
     for j in range(myg.jlo, myg.jhi+1):
-        a.d[i,j] = (i-myg.ilo) + 10*(j-myg.jlo) + 1
+        a[i,j] = (i-myg.ilo) + 10*(j-myg.jlo) + 1
 
 
 b = mydata.get_var("periodic")
 c = mydata.get_var("reflect-even")
 d = mydata.get_var("reflect-odd")
 
-b.d[:,:] = a.d[:,:]
-c.d[:,:] = a.d[:,:]
-d.d[:,:] = a.d[:,:]
+b[:,:] = a[:,:]
+c[:,:] = a[:,:]
+d[:,:] = a[:,:]
 
 mydata.fill_BC("outflow")
 mydata.fill_BC("periodic")
@@ -48,18 +50,18 @@ mydata.fill_BC("reflect-odd")
 
 
 
-print "outflow"
+print("outflow")
 mydata.pretty_print("outflow")
 
-print " "
-print "periodic"
+print(" ")
+print("periodic")
 mydata.pretty_print("periodic")
 
-print " "
-print "reflect-even"
+print(" ")
+print("reflect-even")
 mydata.pretty_print("reflect-even")
 
-print " "
-print "reflect-odd"
+print(" ")
+print("reflect-odd")
 mydata.pretty_print("reflect-odd")
 

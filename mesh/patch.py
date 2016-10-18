@@ -993,7 +993,7 @@ def do_demo():
 
 
     a = mydata.get_var("a")
-    a.d[:,:] = np.exp(-(myg.x2d - 0.5)**2 - (myg.y2d - 1.0)**2)
+    a[:,:] = np.exp(-(myg.x2d - 0.5)**2 - (myg.y2d - 1.0)**2)
 
     print(mydata)
 
