@@ -1,8 +1,9 @@
 from __future__ import print_function
 
+import numpy as np
 import sys
+
 import mesh.patch as patch
-import numpy
 from util import msg
 
 def init_data(my_data, rp):
@@ -46,7 +47,7 @@ def init_data(my_data, rp):
     myg = my_data.grid
 
     for j in range(myg.jlo, myg.jhi+1):
-        dens[:,j] = max(dens_base*numpy.exp(-myg.y[j]/scale_height),
+        dens[:,j] = max(dens_base*np.exp(-myg.y[j]/scale_height),
                         dens_cutoff)
 
     cs2 = scale_height*abs(grav)
@@ -56,26 +57,19 @@ def init_data(my_data, rp):
                 0.5*(xmom[:,:]**2 + ymom[:,:]**2)/dens[:,:]
 
 
-    
-    for i in range(myg.ilo, myg.ihi+1):
-        for j in range(myg.jlo, myg.jhi+1):
+    r = np.sqrt((myg.x2d - x_pert)**2  + (myg.y2d - y_pert)**2)
+    idx = r <= r_pert
 
-            r = numpy.sqrt((myg.x[i] - x_pert)**2  + (myg.y[j] - y_pert)**2)
+    # boost the specific internal energy, keeping the pressure
+    # constant, by dropping the density
+    eint = (ener[idx] - 0.5*(xmom[idx]**2 - ymom[idx]**2)/dens[idx])/dens[idx]
 
-            if (r <= r_pert):
-                # boost the specific internal energy, keeping the pressure
-                # constant, by dropping the density
-                eint = (ener[i,j] - 
-                        0.5*(xmom[i,j]**2 - ymom[i,j]**2)/dens[i,j])/dens[i,j]
+    pres = dens[idx]*eint*(gamma - 1.0)
 
-                pres = dens[i,j]*eint*(gamma - 1.0)
+    eint = eint*pert_amplitude_factor
+    dens[idx] = pres/(eint*(gamma - 1.0))
 
-                eint = eint*pert_amplitude_factor
-                dens[i,j] = pres/(eint*(gamma - 1.0))
-
-                ener[i,j] = dens[i,j]*eint + \
-                    0.5*(xmom[i,j]**2 + ymom[i,j]**2)/dens[i,j]
-
+    ener[idx] = dens[idx]*eint + 0.5*(xmom[idx]**2 + ymom[idx]**2)/dens[idx]
     
 
 def finalize():

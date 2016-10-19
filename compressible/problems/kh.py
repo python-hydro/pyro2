@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-import math
+import numpy as np
 
 import mesh.patch as patch
 from util import msg
@@ -47,27 +47,22 @@ def init_data(my_data, rp):
     L_x = xmax - xmin
 
     myg = my_data.grid
-    
-    for i in range(myg.ilo, myg.ihi+1):
-        for j in range(myg.jlo, myg.jhi+1):
 
-            if myg.y[j] < yctr + 0.01*math.sin(10.0*math.pi*myg.x[i]/L_x):
+    idx_l = myg.y2d < yctr + 0.01*np.sin(10.0*np.pi*myg.x2d/L_x)
+    idx_h = myg.y2d >= yctr + 0.01*np.sin(10.0*np.pi*myg.x2d/L_x)
 
-                # lower half
-                dens[i,j] = rho_1
-                xmom[i,j] = rho_1*v_1
-                ymom[i,j] = 0.0
+    # lower half
+    dens[idx_l] = rho_1
+    xmom[idx_l] = rho_1*v_1
+    ymom[idx_l] = 0.0
                 
-            else:
+    # upper half
+    dens[idx_h] = rho_2
+    xmom[idx_h] = rho_2*v_2
+    ymom[idx_h] = 0.0
 
-                # upper half
-                dens[i,j] = rho_2
-                xmom[i,j] = rho_2*v_2
-                ymom[i,j] = 0.0
-
-            p = 1.0
-            ener[i,j] = p/(gamma - 1.0) + \
-                        0.5*(xmom[i,j]**2 + ymom[i,j]**2)/dens[i,j]
+    p = 1.0
+    ener[:,:] = p/(gamma - 1.0) + 0.5*(xmom[:,:]**2 + ymom[:,:]**2)/dens[:,:]
 
 
 def finalize():

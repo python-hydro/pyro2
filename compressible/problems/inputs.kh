@@ -10,7 +10,7 @@ cvisc = 0.1
 
 
 [io]
-basename = sedov_unsplit_
+basename = kh_
 tplot = 0.01
 
 
