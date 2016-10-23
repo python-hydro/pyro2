@@ -1,9 +1,10 @@
 from __future__ import print_function
 
+import importlib
+
 import numpy
 import pylab
 
-from incompressible.problems import *
 import incompressible.incomp_interface_f as incomp_interface_f
 import mesh.reconstruction_f as reconstruction_f
 import mesh.patch as patch
@@ -104,7 +105,8 @@ class Simulation:
         self.cc_data = my_data
 
         # now set the initial conditions for the problem 
-        exec(self.problem_name + '.init_data(self.cc_data, self.rp)')
+        problem = importlib.import_module("lm_combustion.problems.{}".format(self.problem_name))
+        problem.init_data(self.cc_data, self.rp)
 
 
     def timestep(self):
