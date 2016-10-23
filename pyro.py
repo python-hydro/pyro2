@@ -49,7 +49,7 @@ def doit(solver_name, problem_name, param_file,
     rp.load_params(param_file, no_new=1)
 
     # and any commandline overrides
-    if not other_commands == None:
+    if other_commands is not None:
         rp.command_line_params(other_commands)
 
     # write out the inputs.auto
@@ -88,7 +88,7 @@ def doit(solver_name, problem_name, param_file,
 
     dovis = rp.get_param("vis.dovis")
     if dovis:
-        plt.figure(num=1, figsize=(8,6), dpi=100, facecolor='w')
+        plt.figure(num=1, figsize=(8, 6), dpi=100, facecolor='w')
         sim.dovis()
 
     while not sim.finished():
@@ -143,15 +143,17 @@ def doit(solver_name, problem_name, param_file,
     #-------------------------------------------------------------------------
     # are we comparing to a benchmark?
     if comp_bench:
-        compare_file = solver_name + "/tests/" + basename + "%4.4d" % (sim.n)
-        msg.warning("comparing to: %s " % (compare_file) )
+        compare_file = "{}/tests/{}{:04d}".format(
+            solver_name, basename, sim.n)
+        msg.warning("comparing to: {} ".format(compare_file))
         try: bench_grid, bench_data = patch.read(compare_file)
         except:
             msg.warning("ERROR openning compare file")
             return "ERROR openning compare file"
 
 
-        result = compare.compare(sim.cc_data.grid, sim.cc_data, bench_grid, bench_data)
+        result = compare.compare(sim.cc_data.grid, sim.cc_data,
+                                 bench_grid, bench_data)
 
         if result == 0:
             msg.success("results match benchmark\n")

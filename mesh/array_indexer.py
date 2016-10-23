@@ -2,9 +2,10 @@ from __future__ import print_function
 
 import numpy as np
 
-from util import msg
-
 def _buf_split(b):
+    """ take an integer or iterable and break it into a -x, +x, -y, +y
+    value representing a ghost cell buffer
+    """
     try: bxlo, bxhi, bylo, byhi = b
     except:
         try: blo, bhi = b
@@ -37,15 +38,38 @@ class ArrayIndexer(np.ndarray):
         return np.ndarray.__array_wrap__(self, out_arr, context)
 
     def v(self, buf=0, n=0, s=1):
+        """return a view of the valid data region for component n, with stride
+        s, and a buffer of ghost cells given by buf
+
+        """
         return self.ip_jp(0, 0, buf=buf, n=n, s=s)
 
     def ip(self, shift, buf=0, n=0, s=1):
+        """return a view of the data shifted by shift in the x direction.  By
+        default the view is the same size as the valid region, but the
+        buf can specify how many ghost cells on each side to include.
+        The component is n and s is the stride
+
+        """
         return self.ip_jp(shift, 0, buf=buf, n=n, s=s)
 
     def jp(self, shift, buf=0, n=0, s=1):
+        """return a view of the data shifted by shift in the y direction.  By
+        default the view is the same size as the valid region, but the
+        buf can specify how many ghost cells on each side to include.
+        The component is n and s is the stride
+
+        """
         return self.ip_jp(0, shift, buf=buf, n=n, s=s)
 
     def ip_jp(self, ishift, jshift, buf=0, n=0, s=1):
+        """return a view of the data shifted by ishift in the x direction and
+        jshift in the y direction.  By default the view is the same
+        size as the valid region, but the buf can specify how many
+        ghost cells on each side to include.  The component is n and s
+        is the stride
+
+        """
         bxlo, bxhi, bylo, byhi = _buf_split(buf)
 
         if self.c == 2:
@@ -68,9 +92,14 @@ class ArrayIndexer(np.ndarray):
 
 
     def copy(self):
+        """make a copy of the array, defined on the same grid"""
         return ArrayIndexer(np.asarray(self).copy(), grid=self.g)
 
     def is_symmetric(self, nodal=False, tol=1.e-14):
+        """return True is the data is left-right symmetric (to the tolerance
+        tol) For node-centered data, set nodal=True
+
+        """
         if not nodal:
             L = self[self.g.ilo:self.g.ilo+self.g.nx/2,
                      self.g.jlo:self.g.jhi+1]
@@ -90,6 +119,10 @@ class ArrayIndexer(np.ndarray):
 
 
     def is_asymmetric(self, nodal=False, tol=1.e-14):
+        """return True is the data is left-right asymmetric (to the tolerance
+        tol)---e.g, the sign flips. For node-centered data, set nodal=True
+
+        """
         if not nodal:
             L = self[self.g.ilo:self.g.ilo+self.g.nx/2,
                      self.g.jlo:self.g.jhi+1]
