@@ -1,11 +1,5 @@
 This is a simple list of the improvements we wish to make to pyro.
 
-ArrayIndexer:
-
-  -- rewrite the ArrayIndexer class to simply subclass ndarray.  This is
-     already speced out in mesh/experiments/test_subclass.py
-
-
 new solvers:
 
   -- Burgers equation (viscous and inviscid)
@@ -15,6 +9,8 @@ new solvers:
   -- nodal MG solver?
 
   -- radiation hydro (gray FLD)
+
+  -- mapped grids
 
 
 infrastructure:
