@@ -78,11 +78,18 @@ http://zingale.github.io/pyro2/
 pyro provides the following solvers (all in 2-d):
 
   - `advection`: a second-order unsplit linear advection solver.  This
-    is the basic method to understand hydrodynamics.
+    uses characteristic tracing and corner coupling for the prediction
+    of the interface states.  This is the basic method to understand
+    hydrodynamics.
 
+  - `advection_rk`: a second-order unsplit solver for linear advection
+    that uses Runge-Kutta integration instead of characteristic
+    tracing.
+  
   - `compressible`: a second-order unsplit solver for the Euler
-    equations of compressible hydrodynamics.  This uses a 2-shock
-    approximate Riemann solver.
+    equations of compressible hydrodynamics.  This uses characteristic
+	tracing and corner coupling for the prediction of the interface
+	states and a 2-shock or HLLC approximate Riemann solver.
 
   - `compressible_rk`: a second-order unsplit solver for Euler
      equations that uses Runge-Kutta integration instead of
