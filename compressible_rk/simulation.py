@@ -14,8 +14,8 @@ class Simulation(compressible.Simulation):
 
     def substep(self, myd):
         """
-        U is a numpy array, [i,j,n], where n is variable
-        for the conserved quantities
+        take a single substep in the RK timestepping starting with the 
+        conservative state defined as part of myd
         """
 
         myg = myd.grid
