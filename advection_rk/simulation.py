@@ -46,9 +46,7 @@ class Simulation(advection.Simulation):
         tm_evolve = self.tc.timer("evolve")
         tm_evolve.begin()
 
-
         myg = self.cc_data.grid
-
         myd = self.cc_data
 
         order = 4

@@ -10,8 +10,11 @@ def fluxes(my_data, rp, dt):
       a  + u a  + v a  = 0
        t      x      y
 
-    We use a second-order (piecewise linear) unsplit Godunov method
-    (following Colella 1990).
+    We use a second-order (piecewise linear) Godunov method to construct
+    the interface states, using Runge-Kutta integration.  These are
+    one-dimensional predictions to the interface, relying on the
+    coupling in transverse directions through the intermediate stages
+    of the Runge-Kutta integrator.
 
     In the pure advection case, there is no Riemann problem we need to
     solve -- we just simply do upwinding.  So there is only one 'state'
