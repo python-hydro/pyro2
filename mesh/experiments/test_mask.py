@@ -1,4 +1,5 @@
 from mesh import patch
+import mesh.boundary as bnd
 
 import numpy as np
 import time
@@ -56,7 +57,7 @@ myg = patch.Grid2d(n,2*n, xmax=1.0, ymax=2.0)
 
 myd = patch.CellCenterData2d(myg)
 
-bc = patch.BCObject()
+bc = bnd.BC()
 myd.register_var("a", bc)
 myd.create()
 
