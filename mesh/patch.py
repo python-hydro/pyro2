@@ -43,7 +43,7 @@ import boundary as bnd
 import mesh.array_indexer as ai
 
 
-class Grid2d():
+class Grid2d(object):
     """
     the 2-d grid class.  The grid object will contain the coordinate
     information (at various centerings).
@@ -201,7 +201,7 @@ class Grid2d():
         return result
 
 
-class CellCenterData2d():
+class CellCenterData2d(object):
     """
     A class to define cell-centered data that lives on a grid.  A
     CellCenterData2d object is built in a multi-step process before
@@ -738,12 +738,6 @@ class CellCenterData2d():
         a = self.get_var(var)
         a.pretty_print(fmt=fmt)
 
-
-# backwards compatibility
-ccData2d = CellCenterData2d
-grid2d = Grid2d
-bcObject = bnd.BC
-BCObject = bnd.BC
 
 def read(filename):
     """
