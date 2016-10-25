@@ -7,6 +7,7 @@ import pylab
 
 import incompressible.incomp_interface_f as incomp_interface_f
 import mesh.reconstruction_f as reconstruction_f
+import mesh.boundary as bnd
 import mesh.patch as patch
 import multigrid.MG as MG
 from util import profile
@@ -67,18 +68,18 @@ class Simulation:
         ylb_type = self.rp.get_param("mesh.ylboundary")
         yrb_type = self.rp.get_param("mesh.yrboundary")
 
-        bc = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
-                            ylb=ylb_type, yrb=yrb_type)
+        bc = bnd.BC(xlb=xlb_type, xrb=xrb_type, 
+                    ylb=ylb_type, yrb=yrb_type)
 
         # if we are reflecting, we need odd reflection in the normal
         # directions for the velocity
-        bc_xodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
-                                 ylb=ylb_type, yrb=yrb_type,
-                                 odd_reflect_dir="x")
+        bc_xodd = bnd.BC(xlb=xlb_type, xrb=xrb_type, 
+                         ylb=ylb_type, yrb=yrb_type,
+                         odd_reflect_dir="x")
 
-        bc_yodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type, 
-                                 ylb=ylb_type, yrb=yrb_type,
-                                 odd_reflect_dir="y")
+        bc_yodd = bnd.BC(xlb=xlb_type, xrb=xrb_type, 
+                         ylb=ylb_type, yrb=yrb_type,
+                         odd_reflect_dir="y")
         
         my_data = patch.CellCenterData2d(my_grid)
 

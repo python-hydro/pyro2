@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 
 import lm_atm.LM_atm_interface_f as lm_interface_f
 import mesh.reconstruction_f as reconstruction_f
+import mesh.boundary as bnd
 import mesh.patch as patch
 import mesh.array_indexer as ai
 
@@ -89,7 +90,7 @@ class Simulation(NullSimulation):
                 bctype = "dirichlet"
             bcs.append(bctype)
 
-        bc_phi = patch.BCObject(xlb=bcs[0], xrb=bcs[1], ylb=bcs[2], yrb=bcs[3])
+        bc_phi = bnd.BC(xlb=bcs[0], xrb=bcs[1], ylb=bcs[2], yrb=bcs[3])
 
         my_data.register_var("phi-MAC", bc_phi)
         my_data.register_var("phi", bc_phi)

@@ -1,4 +1,5 @@
 import importlib
+import mesh.boundary as bnd
 import mesh.patch as patch
 from util import profile
 
@@ -25,18 +26,18 @@ def bc_setup(rp):
     ylb_type = rp.get_param("mesh.ylboundary")
     yrb_type = rp.get_param("mesh.yrboundary")
 
-    bc = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
-                        ylb=ylb_type, yrb=yrb_type)
+    bc = bnd.BC(xlb=xlb_type, xrb=xrb_type,
+                ylb=ylb_type, yrb=yrb_type)
 
     # if we are reflecting, we need odd reflection in the normal
     # directions for the velocity
-    bc_xodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
-                             ylb=ylb_type, yrb=yrb_type,
-                             odd_reflect_dir="x")
+    bc_xodd = bnd.BC(xlb=xlb_type, xrb=xrb_type,
+                     ylb=ylb_type, yrb=yrb_type,
+                     odd_reflect_dir="x")
 
-    bc_yodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
-                             ylb=ylb_type, yrb=yrb_type,
-                             odd_reflect_dir="y")
+    bc_yodd = bnd.BC(xlb=xlb_type, xrb=xrb_type,
+                     ylb=ylb_type, yrb=yrb_type,
+                     odd_reflect_dir="y")
 
     return bc, bc_xodd, bc_yodd
 

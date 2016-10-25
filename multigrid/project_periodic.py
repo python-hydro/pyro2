@@ -24,6 +24,7 @@ import math
 import numpy
 
 import MG
+import mesh.boundary as bnd
 import mesh.patch as patch
 
 
@@ -36,8 +37,8 @@ nproj = 2
 # conditions
 myg = patch.Grid2d(nx, ny, ng=1)
 
-bc = patch.BCObject(xlb="periodic", xrb="periodic",
-                    ylb="periodic", yrb="periodic")
+bc = bnd.BC(xlb="periodic", xrb="periodic",
+            ylb="periodic", yrb="periodic")
 
 U = patch.CellCenterData2d(myg)
 

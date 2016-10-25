@@ -64,6 +64,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 
+import mesh.boundary as bnd
 import mesh.patch as patch
 from util import msg
 
@@ -140,7 +141,7 @@ class CellCenterMG2d(object):
         aux_field : list of str, optional
             extra fields to define and carry at each level.
             Useful for subclassing.
-        aux_bc : list of BCObject, optional
+        aux_bc : list of BC objects, optional
             the boundary conditions corresponding to the aux fields
         true_function : function, optional
             a function (of x,y) that provides the exact solution to
@@ -209,8 +210,8 @@ class CellCenterMG2d(object):
         # we store the solution, v, the rhs, f.
 
         # create the boundary condition object
-        bc = patch.BCObject(xlb=xl_BC_type, xrb=xr_BC_type,
-                            ylb=yl_BC_type, yrb=yr_BC_type)
+        bc = bnd.BC(xlb=xl_BC_type, xrb=xr_BC_type,
+                    ylb=yl_BC_type, yrb=yr_BC_type)
 
         nx_t = ny_t = 2
 
@@ -226,10 +227,10 @@ class CellCenterMG2d(object):
             # create the phi BC object -- this only applies for the finest
             # level.  On the coarser levels, phi represents the residual,
             # which has homogeneous BCs
-            bc_p = patch.BCObject(xlb=xl_BC_type, xrb=xr_BC_type,
-                                  ylb=yl_BC_type, yrb=yr_BC_type,
-                                  xl_func=xl_BC, xr_func=xr_BC,
-                                  yl_func=yl_BC, yr_func=yr_BC, grid=my_grid)
+            bc_p = bnd.BC(xlb=xl_BC_type, xrb=xr_BC_type,
+                          ylb=yl_BC_type, yrb=yr_BC_type,
+                          xl_func=xl_BC, xr_func=xr_BC,
+                          yl_func=yl_BC, yr_func=yr_BC, grid=my_grid)
 
             if i == self.nlevels-1:
                 self.grids[i].register_var("v", bc_p)

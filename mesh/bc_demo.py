@@ -4,25 +4,26 @@ from __future__ import print_function
 
 import numpy as np
 import mesh.patch
+import boundary as bnd
 
 myg = mesh.patch.Grid2d(4, 4, ng=2, xmax=1.0, ymax=1.0)
 
 mydata = mesh.patch.CellCenterData2d(myg, dtype=np.int)
 
-bco = mesh.patch.BCObject(xlb="outflow", xrb="outflow",
-                          ylb="outflow", yrb="outflow")
+bco = bnd.BC(xlb="outflow", xrb="outflow",
+             ylb="outflow", yrb="outflow")
 mydata.register_var("outflow", bco)
 
-bcp = mesh.patch.BCObject(xlb="periodic", xrb="periodic",
-                          ylb="periodic", yrb="periodic")
+bcp = bnd.BC(xlb="periodic", xrb="periodic",
+             ylb="periodic", yrb="periodic")
 mydata.register_var("periodic", bcp)
 
-bcre = mesh.patch.BCObject(xlb="reflect-even", xrb="reflect-even",
-                           ylb="reflect-even", yrb="reflect-even")
+bcre = bnd.BC(xlb="reflect-even", xrb="reflect-even",
+              ylb="reflect-even", yrb="reflect-even")
 mydata.register_var("reflect-even", bcre)
 
-bcro = mesh.patch.BCObject(xlb="reflect-odd", xrb="reflect-odd",
-                           ylb="reflect-odd", yrb="reflect-odd")
+bcro = bnd.BC(xlb="reflect-odd", xrb="reflect-odd",
+              ylb="reflect-odd", yrb="reflect-odd")
 mydata.register_var("reflect-odd", bcro)
 
 mydata.create()

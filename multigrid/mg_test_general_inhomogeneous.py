@@ -46,6 +46,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import compare
+import mesh.boundary as bnd
 import mesh.patch as patch
 import multigrid.general_MG as MG
 from util import msg
@@ -100,8 +101,8 @@ def test_general_poisson_inhomogeneous(N, store_bench=False, comp_bench=False,
     # create the coefficient variable
     g = patch.Grid2d(nx, ny, ng=1)
     d = patch.CellCenterData2d(g)
-    bc_c = patch.BCObject(xlb="neumann", xrb="neumann",
-                          ylb="neumann", yrb="neumann")
+    bc_c = bnd.BC(xlb="neumann", xrb="neumann",
+                  ylb="neumann", yrb="neumann")
     d.register_var("alpha", bc_c)
     d.register_var("beta", bc_c)
     d.register_var("gamma_x", bc_c)

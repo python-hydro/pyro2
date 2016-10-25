@@ -34,6 +34,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import compare
+import mesh.boundary as bnd
 import mesh.patch as patch
 import multigrid.variable_coeff_MG as MG
 from util import msg
@@ -70,8 +71,8 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
     # create the coefficient variable
     g = patch.Grid2d(nx, ny, ng=1)
     d = patch.CellCenterData2d(g)
-    bc_c = patch.BCObject(xlb="periodic", xrb="periodic",
-                          ylb="periodic", yrb="periodic")
+    bc_c = bnd.BC(xlb="periodic", xrb="periodic",
+                  ylb="periodic", yrb="periodic")
     d.register_var("c", bc_c)
     d.create()
 

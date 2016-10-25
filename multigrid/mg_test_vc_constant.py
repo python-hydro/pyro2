@@ -20,6 +20,7 @@ The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)
 from __future__ import print_function
 
 import numpy as np
+import mesh.boundary as bnd
 import mesh.patch as patch
 import multigrid.variable_coeff_MG as MG
 import matplotlib.pyplot as plt
@@ -49,8 +50,8 @@ ny = nx
 # have different BCs than phi
 g = patch.Grid2d(nx, ny, ng=1)
 d = patch.CellCenterData2d(g)
-bc_c = patch.BCObject(xlb="neumann", xrb="neumann",
-                      ylb="neumann", yrb="neumann")
+bc_c = bnd.BC(xlb="neumann", xrb="neumann",
+              ylb="neumann", yrb="neumann")
 d.register_var("c", bc_c)
 d.create()
 

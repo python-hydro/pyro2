@@ -13,8 +13,8 @@ Typical usage:
 
      data = CellCenterData2d(grid)
 
-     bc = BCObject(xlb="reflect", xrb="reflect",
-                   ylb="outflow", yrb="outflow")
+     bc = BC(xlb="reflect", xrb="reflect",
+             ylb="outflow", yrb="outflow")
      data.register_var("density", bc)
      ...
 
@@ -39,192 +39,8 @@ import pickle
 
 from util import msg
 
+import boundary as bnd
 import mesh.array_indexer as ai
-
-# keep track of whether the BCs are solid walls (passed into the
-# Riemann solver).
-bc_props = {}
-bc_props["outflow"] = False
-bc_props["periodic"] = False
-bc_props["reflect"] = True
-bc_props["reflect-even"] = True
-bc_props["reflect-odd"] = True
-bc_props["dirichlet"] = True
-bc_props["neumann"] = False
-
-ext_bcs = {}
-
-def define_bc(bc_type, function, is_solid=False):
-    """
-    use this to extend the types of boundary conditions supported
-    on a solver-by-solver basis.  Here we pass in the reference to
-    a function that can be called with the data that needs to be
-    filled.  is_solid indicates whether it should be interpreted as
-    a solid wall (no flux through the BC)"
-    """
-
-    bc_props[bc_type] = is_solid
-    ext_bcs[bc_type] = function
-
-
-def _set_reflect(odd_reflect_dir, dir_string):
-    if odd_reflect_dir == dir_string:
-        return "reflect-odd"
-    else:
-        return "reflect-even"
-
-
-class BCObject(object):
-    """Boundary condition container -- hold the BCs on each boundary
-    for a single variable.
-
-    For Neumann and Dirichlet BCs, a function callback can be stored
-    for inhomogeous BCs.  This function should provide the value on
-    the physical boundary (not cell center).  This is evaluated on the
-    relevant edge when the __init__ routine is called.  For this
-    reason, you need to pass in a grid object.  Note: this only
-    ensures that the first ghost cells is consistent with the BC
-    value.
-
-    """
-
-    def __init__(self,
-                 xlb="outflow", xrb="outflow",
-                 ylb="outflow", yrb="outflow",
-                 xl_func=None, xr_func=None,
-                 yl_func=None, yr_func=None,
-                 grid=None,
-                 odd_reflect_dir=""):
-        """
-        Create the BCObject.
-
-        Parameters
-        ----------
-        xlb : {'outflow', 'periodic', 'reflect', 'reflect-even',
-               'reflect-odd', 'dirichlet', 'neumann',
-               user-defined}, optional
-            The type of boundary condition to enforce on the lower
-            x boundary.  user-defined requires one to have defined
-            a new boundary condition type using define_bc()
-
-        xrb : {'outflow', 'periodic', 'reflect', 'reflect-even',
-               'reflect-odd', 'dirichlet', 'neumann',
-               user-defined}, optional
-            The type of boundary condition to enforce on the upper
-            x boundary.  user-defined requires one to have defined
-            a new boundary condition type using define_bc()
-
-        ylb : {'outflow', 'periodic', 'reflect', 'reflect-even',
-               'reflect-odd', 'dirichlet', 'neumann',
-               user-defined}, optional
-            The type of boundary condition to enforce on the lower
-            y boundary.  user-defined requires one to have defined
-            a new boundary condition type using define_bc()
-
-        yrb : {'outflow', 'periodic', 'reflect', 'reflect-even',
-               'reflect-odd', 'dirichlet', 'neumann',
-               user-defined}, optional
-            The type of boundary condition to enforce on the upper
-            y boundary.  user-defined requires one to have defined
-            a new boundary condition type using define_bc()
-
-        odd_reflect_dir : {'x', 'y'}, optional
-            The direction along which reflection should be odd
-            (sign changes).  If not specified, a boundary condition
-            of 'reflect' will always be set to 'reflect-even'
-
-        xl_func : function, optional
-            A function, f(y), that provides the value of the
-            Dirichlet or Neumann BC on the -x physical boundary.
-
-        xr_func : function, optional
-            A function, f(y), that provides the value of the
-            Dirichlet or Neumann BC on the +x physical boundary.
-
-        yl_func : function, optional
-            A function, f(x), that provides the value of the
-            Dirichlet or Neumann BC on the -y physical boundary.
-
-        yr_func : function, optional
-            A function, f(x), that provides the value of the
-            Dirichlet or Neumann BC on the +y physical boundary.
-
-        grid : a Grid2d object, optional
-            The grid object is used for evaluating the function
-            to define the boundary values for inhomogeneous
-            Dirichlet and Neumann BCs.  It is required if
-            any functions are passed in.
-        """
-
-        # note: "reflect" is ambiguous and will be converted into
-        # either reflect-even (the default) or reflect-odd if
-        # odd_reflect_dir specifies the corresponding direction ("x",
-        # "y")
-
-        valid = list(bc_props.keys())
-
-        # -x boundary
-        if xlb in valid:
-            self.xlb = xlb
-            if self.xlb == "reflect":
-                self.xlb = _set_reflect(odd_reflect_dir, "x")
-        else:
-            msg.fail("ERROR: xlb = %s invalid BC" % (xlb))
-
-        # +x boundary
-        if xrb in valid:
-            self.xrb = xrb
-            if self.xrb == "reflect":
-                self.xrb = _set_reflect(odd_reflect_dir, "x")
-        else:
-            msg.fail("ERROR: xrb = %s invalid BC" % (xrb))
-
-        # -y boundary
-        if ylb in valid:
-            self.ylb = ylb
-            if self.ylb == "reflect":
-                self.ylb = _set_reflect(odd_reflect_dir, "y")
-        else:
-            msg.fail("ERROR: ylb = %s invalid BC" % (ylb))
-
-        # +y boundary
-        if yrb in valid:
-            self.yrb = yrb
-            if self.yrb == "reflect":
-                self.yrb = _set_reflect(odd_reflect_dir, "y")
-        else:
-            msg.fail("ERROR: yrb = %s invalid BC" % (yrb))
-
-
-        # periodic checks
-        if ((xlb == "periodic" and xrb != "periodic") or
-            (xrb == "periodic" and xlb != "periodic")):
-            msg.fail("ERROR: both xlb and xrb must be periodic")
-
-        if ((ylb == "periodic" and yrb != "periodic") or
-            (yrb == "periodic" and ylb != "periodic")):
-            msg.fail("ERROR: both ylb and yrb must be periodic")
-
-
-        # inhomogeneous functions for Dirichlet or Neumann
-        self.xl_value = self.xr_value = self.yl_value = self.yr_value = None
-
-        if xl_func is not None:
-            self.xl_value = xl_func(grid.y)
-        if xr_func is not None:
-            self.xr_value = xr_func(grid.y)
-        if yl_func is not None:
-            self.yl_value = yl_func(grid.x)
-        if yr_func is not None:
-            self.yr_value = yr_func(grid.x)
-
-    def __str__(self):
-        """ print out some basic information about the BC object """
-
-        string = "BCs: -x: %s  +x: %s  -y: %s  +y: %s" % \
-            (self.xlb, self.xrb, self.ylb, self.yrb)
-
-        return string
 
 
 class Grid2d():
@@ -397,10 +213,10 @@ class CellCenterData2d():
        my_data = patch.CellCenterData2d(myGrid)
 
     -- Register any variables that we expect to live on this patch.
-       Here BCObject describes the boundary conditions for that variable.
+       Here BC describes the boundary conditions for that variable.
 
-       my_data.register_var('density', BCObject)
-       my_data.register_var('x-momentum', BCObject)
+       my_data.register_var('density', BC)
+       my_data.register_var('x-momentum', BC)
        ...
 
     -- Register any auxillary data -- these are any parameters that are
@@ -453,7 +269,7 @@ class CellCenterData2d():
         self.initialized = 0
 
 
-    def register_var(self, name, bc_object):
+    def register_var(self, name, bc):
         """
         Register a variable with CellCenterData2d object.
 
@@ -461,7 +277,7 @@ class CellCenterData2d():
         ----------
         name : str
             The variable name
-        bc_object : BCObject object
+        bc : BC object
             The boundary conditions that describe the actions to take
             for this variable at the physical domain boundaries.
         """
@@ -472,7 +288,7 @@ class CellCenterData2d():
         self.vars.append(name)
         self.nvar += 1
 
-        self.BCs[name] = bc_object
+        self.BCs[name] = bc
 
 
     def set_aux(self, keyword, value):
@@ -641,7 +457,7 @@ class CellCenterData2d():
 
         We do periodic, reflect-even, reflect-odd, and outflow
 
-        Each variable name has a corresponding BCObject stored in the
+        Each variable name has a corresponding BC stored in the
         CellCenterData2d object -- we refer to this to figure out the
         action to take at each boundary.
 
@@ -757,9 +573,9 @@ class CellCenterData2d():
                 self.data[n,:,j] = self.data[n,:,self.grid.jhi-self.grid.ng+j+1]
 
         else:
-            if self.BCs[name].ylb in ext_bcs.keys():
+            if self.BCs[name].ylb in bnd.ext_bcs.keys():
 
-                ext_bcs[self.BCs[name].ylb](self.BCs[name].ylb, "ylb", name, self)
+                bnd.ext_bcs[self.BCs[name].ylb](self.BCs[name].ylb, "ylb", name, self)
 
 
         # +y boundary
@@ -798,9 +614,9 @@ class CellCenterData2d():
                 self.data[n,:,j] = self.data[n,:,j-self.grid.jhi-1+self.grid.ng]
 
         else:
-            if self.BCs[name].yrb in ext_bcs.keys():
+            if self.BCs[name].yrb in bnd.ext_bcs.keys():
 
-                ext_bcs[self.BCs[name].yrb](self.BCs[name].yrb, "yrb", name, self)
+                bnd.ext_bcs[self.BCs[name].yrb](self.BCs[name].yrb, "yrb", name, self)
 
 
     def min(self, name, ng=0):
@@ -926,7 +742,8 @@ class CellCenterData2d():
 # backwards compatibility
 ccData2d = CellCenterData2d
 grid2d = Grid2d
-bcObject = BCObject
+bcObject = bnd.BC
+BCObject = bnd.BC
 
 def read(filename):
     """
@@ -986,7 +803,7 @@ def do_demo():
 
     mydata = CellCenterData2d(myg)
 
-    bc = BCObject()
+    bc = bnd.BC()
 
     mydata.register_var("a", bc)
     mydata.create()

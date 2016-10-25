@@ -1,4 +1,5 @@
 # unit tests for the patch
+import boundary as bnd
 import mesh.patch as patch
 import mesh.array_indexer as ai
 import numpy as np
@@ -54,20 +55,20 @@ def test_bcs():
     myg = patch.Grid2d(4,4, ng = 2, xmax=1.0, ymax=1.0)
     myd = patch.CellCenterData2d(myg, dtype=np.int)
 
-    bco = patch.BCObject(xlb="outflow", xrb="outflow",
-                         ylb="outflow", yrb="outflow")
+    bco = bnd.BC(xlb="outflow", xrb="outflow",
+                 ylb="outflow", yrb="outflow")
     myd.register_var("outflow", bco)
 
-    bcp = patch.BCObject(xlb="periodic", xrb="periodic",
-                         ylb="periodic", yrb="periodic")
+    bcp = bnd.BC(xlb="periodic", xrb="periodic",
+                 ylb="periodic", yrb="periodic")
     myd.register_var("periodic", bcp)
 
-    bcre = patch.BCObject(xlb="reflect-even", xrb="reflect-even",
-                          ylb="reflect-even", yrb="reflect-even")
+    bcre = bnd.BC(xlb="reflect-even", xrb="reflect-even",
+                  ylb="reflect-even", yrb="reflect-even")
     myd.register_var("reflect-even", bcre)
 
-    bcro = patch.BCObject(xlb="reflect-odd", xrb="reflect-odd",
-                          ylb="reflect-odd", yrb="reflect-odd")
+    bcro = bnd.BC(xlb="reflect-odd", xrb="reflect-odd",
+                  ylb="reflect-odd", yrb="reflect-odd")
     myd.register_var("reflect-odd", bcro)
 
     myd.create()

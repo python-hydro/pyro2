@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 
 import compressible.BC as BC
 import compressible.eos as eos
+import mesh.boundary as bnd
 import mesh.patch as patch
 from simulation_null import NullSimulation, grid_setup, bc_setup
 import compressible.unsplitFluxes as flx
@@ -59,16 +60,16 @@ class Simulation(NullSimulation):
 
 
         # define solver specific boundary condition routines
-        patch.define_bc("hse", BC.user, is_solid=False)
+        bnd.define_bc("hse", BC.user, is_solid=False)
 
         bc, bc_xodd, bc_yodd = bc_setup(self.rp)
 
         # are we dealing with solid boundaries? we'll use these for
         # the Riemann solver
-        self.solid = BCProp(int(patch.bc_props[self.rp.get_param("mesh.xlboundary")]),
-                            int(patch.bc_props[self.rp.get_param("mesh.xrboundary")]),
-                            int(patch.bc_props[self.rp.get_param("mesh.ylboundary")]),
-                            int(patch.bc_props[self.rp.get_param("mesh.yrboundary")]))
+        self.solid = BCProp(int(bnd.bc_props[self.rp.get_param("mesh.xlboundary")]),
+                            int(bnd.bc_props[self.rp.get_param("mesh.xrboundary")]),
+                            int(bnd.bc_props[self.rp.get_param("mesh.ylboundary")]),
+                            int(bnd.bc_props[self.rp.get_param("mesh.yrboundary")]))
 
         # density and energy
         my_data.register_var("density", bc)

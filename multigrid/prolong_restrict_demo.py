@@ -1,18 +1,19 @@
 # test the prolongation and restriction operations from the patch stuff
 
+import mesh.boundary as bnd
 import mesh.patch as patch
-import numpy
+import numpy as np
 
 # create our base grid and initialize it with sequential data
 myg = patch.Grid2d(4,8,ng=1)
 myd = patch.CellCenterData2d(myg)
-bc = patch.BCObject()
+bc = bnd.BC()
 myd.register_var("a", bc)
 myd.create()
 
 a = myd.get_var("a")
 
-a[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1].flat = numpy.arange(myg.nx*myg.ny)
+a[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1].flat = np.arange(myg.nx*myg.ny)
 
 print "restriction test"
 print "original (fine) array"
@@ -37,7 +38,7 @@ cd.pretty_print("a")
 print " "
 print "prolongation test"
 print "original (coarse) array w/ ghost cells"
-a_coarse[:,:].flat = numpy.arange(cg.qx*cg.qy)
+a_coarse[:,:].flat = np.arange(cg.qx*cg.qy)
 cd.pretty_print("a")
 
 

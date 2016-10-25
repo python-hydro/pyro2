@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import radhydro.eos as eos
+import mesh.boundary as bnd
 import mesh.patch as patch
 import compressible.unsplitFluxes as flx
 from util import profile
@@ -101,8 +102,8 @@ class Simulation:
         ylb_type = self.rp.get_param("mesh.ylboundary")
         yrb_type = self.rp.get_param("mesh.yrboundary")
 
-        bc = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
-                            ylb=ylb_type, yrb=yrb_type)
+        bc = bnd.BC(xlb=xlb_type, xrb=xrb_type,
+                    ylb=ylb_type, yrb=yrb_type)
 
         # density and energy
         my_data.register_var("density", bc)
@@ -114,18 +115,18 @@ class Simulation:
 
         # x-momentum -- if we are reflecting in x, then we need to
         # reflect odd
-        bc_xodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
-                                 ylb=ylb_type, yrb=yrb_type,
-                                 odd_reflect_dir="x")
+        bc_xodd = bnd.BC(xlb=xlb_type, xrb=xrb_type,
+                         ylb=ylb_type, yrb=yrb_type,
+                         odd_reflect_dir="x")
 
         my_data.register_var("x-momentum", bc_xodd)
 
 
         # y-momentum -- if we are reflecting in y, then we need to
         # reflect odd
-        bc_yodd = patch.BCObject(xlb=xlb_type, xrb=xrb_type,
-                                 ylb=ylb_type, yrb=yrb_type,
-                                 odd_reflect_dir="y")
+        bc_yodd = bnd.BC(xlb=xlb_type, xrb=xrb_type,
+                         ylb=ylb_type, yrb=yrb_type,
+                         odd_reflect_dir="y")
 
         my_data.register_var("y-momentum", bc_yodd)
 

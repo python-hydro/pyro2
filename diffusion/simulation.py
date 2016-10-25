@@ -2,6 +2,7 @@ import importlib
 import numpy as np
 import matplotlib.pyplot as plt
 
+import mesh.boundary as bnd
 import mesh.patch as patch
 from simulation_null import NullSimulation, grid_setup
 import multigrid.MG as MG
@@ -37,8 +38,8 @@ class Simulation(NullSimulation):
                 msg.fail("invalid BC")
 
 
-        bc = patch.BCObject(xlb=bcparam[0], xrb=bcparam[1],
-                            ylb=bcparam[2], yrb=bcparam[3])
+        bc = bnd.BC(xlb=bcparam[0], xrb=bcparam[1],
+                    ylb=bcparam[2], yrb=bcparam[3])
 
 
         my_data = patch.CellCenterData2d(my_grid)
