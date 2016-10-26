@@ -187,7 +187,14 @@ def doit(solver_name, problem_name, param_file,
         return None
 
 
-if __name__ == "__main__":
+def parse_and_run():
+    valid_solvers = ["advection",
+                     "advection-rk",
+                     "compressible",
+                     "compressible-rk",
+                     "diffusion",
+                     "incompressible",
+                     "lm_atm"]
 
     p = argparse.ArgumentParser()
 
@@ -199,19 +206,24 @@ if __name__ == "__main__":
                    action="store_true")
 
     p.add_argument("solver", metavar="solver-name", type=str, nargs=1,
-                   help="name of the solver to use")
+                   help="name of the solver to use", choices=valid_solvers)
     p.add_argument("problem", metavar="problem-name", type=str, nargs=1,
                    help="name of the problem to run")
     p.add_argument("param", metavar="inputs-file", type=str, nargs=1,
                    help="name of the inputs file")
 
     p.add_argument("other", metavar="runtime-parameters", type=str, nargs="*",
-                   help="additional runtime parameters that override the inputs file")
+                   help="additional runtime parameters that override the inputs file "
+                   "in the format section.option=value")
 
     args = p.parse_args()
-
 
     doit(args.solver[0], args.problem[0], args.param[0],
          other_commands=args.other,
          comp_bench=args.compare_benchmark,
          make_bench=args.make_benchmark)
+
+
+if __name__ == "__main__":
+    parse_and_run()
+
