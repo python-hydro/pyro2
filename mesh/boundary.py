@@ -9,14 +9,14 @@ from util import msg
 
 # keep track of whether the BCs are solid walls (passed into the
 # Riemann solver).
-bc_props = {}
-bc_props["outflow"] = False
-bc_props["periodic"] = False
-bc_props["reflect"] = True
-bc_props["reflect-even"] = True
-bc_props["reflect-odd"] = True
-bc_props["dirichlet"] = True
-bc_props["neumann"] = False
+bc_solid = {}
+bc_solid["outflow"] = False
+bc_solid["periodic"] = False
+bc_solid["reflect"] = True
+bc_solid["reflect-even"] = True
+bc_solid["reflect-odd"] = True
+bc_solid["dirichlet"] = True
+bc_solid["neumann"] = False
 
 ext_bcs = {}
 
@@ -29,7 +29,7 @@ def define_bc(bc_type, function, is_solid=False):
     a solid wall (no flux through the BC)"
     """
 
-    bc_props[bc_type] = is_solid
+    bc_solid[bc_type] = is_solid
     ext_bcs[bc_type] = function
 
 
@@ -38,6 +38,17 @@ def _set_reflect(odd_reflect_dir, dir_string):
         return "reflect-odd"
     else:
         return "reflect-even"
+
+
+class BCProp(object):
+    """
+    a simple container to hold properties of the boundary conditions
+    """
+    def __init__(self, xl_prop, xr_prop, yl_prop, yr_prop):
+        self.xl = xl_prop
+        self.xr = xr_prop
+        self.yl = yl_prop
+        self.yr = yr_prop
 
 
 class BC(object):
@@ -127,7 +138,7 @@ class BC(object):
         # odd_reflect_dir specifies the corresponding direction ("x",
         # "y")
 
-        valid = list(bc_props.keys())
+        valid = list(bc_solid.keys())
 
         # -x boundary
         if xlb in valid:

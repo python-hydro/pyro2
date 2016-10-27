@@ -36,17 +36,6 @@ class Variables(object):
         self.ip = 3
 
 
-class BCProp(object):
-    """
-    a simple container to hold properties of the boundary conditions
-    """
-    def __init__(self, xl_prop, xr_prop, yl_prop, yr_prop):
-        self.xl = xl_prop
-        self.xr = xr_prop
-        self.yl = yl_prop
-        self.yr = yr_prop
-
-
 class Simulation(NullSimulation):
 
     def initialize(self):
@@ -66,10 +55,10 @@ class Simulation(NullSimulation):
 
         # are we dealing with solid boundaries? we'll use these for
         # the Riemann solver
-        self.solid = BCProp(int(bnd.bc_props[self.rp.get_param("mesh.xlboundary")]),
-                            int(bnd.bc_props[self.rp.get_param("mesh.xrboundary")]),
-                            int(bnd.bc_props[self.rp.get_param("mesh.ylboundary")]),
-                            int(bnd.bc_props[self.rp.get_param("mesh.yrboundary")]))
+        self.solid = bnd.BCProp(int(bnd.bc_solid[self.rp.get_param("mesh.xlboundary")]),
+                                int(bnd.bc_solid[self.rp.get_param("mesh.xrboundary")]),
+                                int(bnd.bc_solid[self.rp.get_param("mesh.ylboundary")]),
+                                int(bnd.bc_solid[self.rp.get_param("mesh.yrboundary")]))
 
         # density and energy
         my_data.register_var("density", bc)
