@@ -72,10 +72,6 @@ def doit(solver_name, problem_name, param_file,
     #-------------------------------------------------------------------------
     # evolve
     #-------------------------------------------------------------------------
-    init_tstep_factor = rp.get_param("driver.init_tstep_factor")
-    max_dt_change = rp.get_param("driver.max_dt_change")
-    fix_dt = rp.get_param("driver.fix_dt")
-
     verbose = rp.get_param("driver.verbose")
 
     plt.ion()
@@ -97,18 +93,7 @@ def doit(solver_name, problem_name, param_file,
         sim.cc_data.fill_BC_all()
 
         # get the timestep
-        if fix_dt > 0.0:
-            sim.dt = fix_dt
-        else:
-            sim.compute_timestep()
-            if sim.n == 0:
-                sim.dt = init_tstep_factor*sim.dt
-            else:
-                sim.dt = min(max_dt_change*dt_old, sim.dt)
-            dt_old = sim.dt
-
-        if sim.cc_data.t + sim.dt > sim.tmax:
-            sim.dt = sim.tmax - sim.cc_data.t
+        sim.compute_timestep()
 
         # evolve for a single timestep
         sim.evolve()

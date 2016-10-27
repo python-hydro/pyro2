@@ -30,7 +30,7 @@ class Simulation(NullSimulation):
         problem.init_data(self.cc_data, self.rp)
 
 
-    def compute_timestep(self):
+    def method_compute_timestep(self):
         """
         Compute the advective timestep (CFL) constraint.  We use the
         driver.cfl parameter to control what fraction of the CFL

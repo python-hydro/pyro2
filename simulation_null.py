@@ -61,6 +61,7 @@ class NullSimulation(object):
 
         self.n = 0
         self.dt = -1.e33
+        self.old_dt = -1.e33
 
         try: self.tmax = rp.get_param("driver.tmax")
         except:
@@ -117,8 +118,36 @@ class NullSimulation(object):
         pass
 
 
-    def compute_timestep(self):
+    def method_compute_timestep(self):
+        """
+        the method-specific timestep code
+        """
         pass
+
+
+    def compute_timestep(self):
+        """
+        a generic wrapper for computing the timestep that respects the
+        driver parameters on timestepping
+        """
+
+        init_tstep_factor = self.rp.get_param("driver.init_tstep_factor")
+        max_dt_change = self.rp.get_param("driver.max_dt_change")
+        fix_dt = self.rp.get_param("driver.fix_dt")
+
+        # get the timestep
+        if fix_dt > 0.0:
+            self.dt = fix_dt
+        else:
+            self.method_compute_timestep()
+            if self.n == 0:
+                self.dt = init_tstep_factor*self.dt
+            else:
+                self.dt = min(max_dt_change*self.dt_old, self.dt)
+            self.dt_old = self.dt
+
+        if self.cc_data.t + self.dt > self.tmax:
+            self.dt = self.tmax - self.cc_data.t
 
 
     def preevolve(self):

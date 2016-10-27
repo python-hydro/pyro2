@@ -53,7 +53,7 @@ class Simulation(NullSimulation):
         problem.init_data(self.cc_data, self.rp)
 
 
-    def compute_timestep(self):
+    def method_compute_timestep(self):
         """
         The diffusion timestep() function computes the timestep
         using the explicit timestep constraint as the starting point.

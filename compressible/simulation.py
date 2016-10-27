@@ -98,7 +98,7 @@ class Simulation(NullSimulation):
         if self.verbose > 0: print(my_data)
 
 
-    def compute_timestep(self):
+    def method_compute_timestep(self):
         """
         The timestep function computes the advective timestep (CFL)
         constraint.  The CFL constraint says that information cannot
