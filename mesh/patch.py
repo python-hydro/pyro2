@@ -39,7 +39,7 @@ import pickle
 
 from util import msg
 
-import boundary as bnd
+import mesh.boundary as bnd
 import mesh.array_indexer as ai
 
 
