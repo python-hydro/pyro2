@@ -174,9 +174,9 @@ def doit(solver_name, problem_name, param_file,
 
 def parse_and_run():
     valid_solvers = ["advection",
-                     "advection-rk",
+                     "advection_rk",
                      "compressible",
-                     "compressible-rk",
+                     "compressible_rk",
                      "diffusion",
                      "incompressible",
                      "lm_atm"]
