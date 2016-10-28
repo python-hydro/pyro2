@@ -5,36 +5,35 @@ import mesh.patch as patch
 import numpy
 from util import msg
 
-def init_data(my_data, rp):
+def init_data(myd, rp):
     """ initialize the tophat advection problem """
 
     msg.bold("initializing the tophat advection problem...")
 
     # make sure that we are passed a valid patch object
-    if not isinstance(my_data, patch.CellCenterData2d):
+    if not isinstance(myd, patch.CellCenterData2d):
         print("ERROR: patch invalid in tophat.py")
-        print(my_data.__class__)
+        print(myd.__class__)
         sys.exit()
 
-    dens = my_data.get_var("density")
+    dens = myd.get_var("density")
 
-    xmin = my_data.grid.xmin
-    xmax = my_data.grid.xmax
+    xmin = myd.grid.xmin
+    xmax = myd.grid.xmax
 
-    ymin = my_data.grid.ymin
-    ymax = my_data.grid.ymax
+    ymin = myd.grid.ymin
+    ymax = myd.grid.ymax
 
     xctr = 0.5*(xmin + xmax)
     yctr = 0.5*(ymin + ymax)
 
     dens[:,:] = 0.0
 
-    for i in range(my_data.grid.ilo, my_data.grid.ihi+1):
-        for j in range(my_data.grid.jlo, my_data.grid.jhi+1):
+    R = 0.1
 
-            if (numpy.sqrt((my_data.grid.x[i]-xctr)**2 +
-                           (my_data.grid.y[j]-yctr)**2) < 0.1):
-                dens[i,j] = 1.0
+    inside = (myd.grid.x2d - xctr)**2 + (myd.grid.y2d - yctr)**2 < R**2
+
+    dens[inside] = 1.0
 
 
 def finalize():
