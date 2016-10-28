@@ -273,7 +273,7 @@ class Simulation(NullSimulation):
         orig_data = patch.cell_center_data_clone(self.cc_data)
 
         # get the timestep
-        self.compute_timestep()
+        self.method_compute_timestep()
 
         # evolve
         self.evolve()
