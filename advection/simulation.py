@@ -42,7 +42,7 @@ class Simulation(NullSimulation):
         u = self.rp.get_param("advection.u")
         v = self.rp.get_param("advection.v")
 
-        # the timestep is min(dx/|u|, dy|v|)
+        # the timestep is min(dx/|u|, dy/|v|)
         xtmp = self.cc_data.grid.dx/max(abs(u),self.SMALL)
         ytmp = self.cc_data.grid.dy/max(abs(v),self.SMALL)
 
