@@ -73,6 +73,19 @@ http://zingale.github.io/pyro2/
         advecting diagonally through the periodic domain.
 
 
+## Core Data Structures
+
+The main data structures that describe the grid and the data the lives
+on the grid are described in a jupyter notebook:
+
+https://github.com/zingale/pyro2/blob/master/mesh/mesh-examples.ipynb
+
+Many of the methods here rely on multigrid.  The multigrid solver is
+demonstrated in the juputer notebook:
+
+https://github.com/zingale/pyro2/blob/master/multigrid/multigrid-examples.ipynb
+
+
 ## Solvers
 
 pyro provides the following solvers (all in 2-d):
