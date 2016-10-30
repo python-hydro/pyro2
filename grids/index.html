@@ -69,13 +69,13 @@ import mesh.array_indexer as ai
 
 <p>There are 4 main objects in the patch class that we interact with:
 <ul>
-<li><tt>Grid2d</tt>: this is the main grid object.  It is basically
-  a container that holds the number of zones in each coordinate direction,
-  the domain extrema, and the coordinates of the zones themselves (both
-  at the edges and center).</li>
+<li><tt>patch.Grid2d</tt>: this is the main grid object.  It is
+  basically a container that holds the number of zones in each
+  coordinate direction, the domain extrema, and the coordinates of the
+  zones themselves (both at the edges and center).</li>
 
-<li><tt>CellCenterData2d</tt>: this is the main data object&mdash;it holds cell-centered
-  data on a grid.  
+<li><tt>patch.CellCenterData2d</tt>: this is the main data
+  object&mdash;it holds cell-centered data on a grid.
 
   <p>To build a <tt>CellCenterData2d</tt> object you need to pass in
   the <tt>Grid2d</tt> object that defines the mesh.
@@ -84,10 +84,10 @@ import mesh.array_indexer as ai
   fill boundary conditions, retrieve the data in different fashions,
   and read and write the object from/to disk.</li>
 
-<li><tt>BC</tt>: This is simply a container that holds the
+<li><tt>bnd.BC</tt>: This is simply a container that holds the
   names of the boundary conditions on each edge of the domain.</li>
 
-<li><tt>ArrayIndexer</tt>: This is a class that subclasses the
+<li><tt>ai.ArrayIndexer</tt>: This is a class that subclasses the
 NumPy <tt>ndarray</tt> and makes the data in the array know about
 the details of the grid it is defined on.  In particular, it knows
 which cells are valid and which are the ghost cells, and it has methods
@@ -100,8 +100,6 @@ The procedure for setting up a grid and the data that lives on it is as
 follows:
 
 <pre class="code">
-import mesh.patch as patch
-
 myg = patch.Grid2d(16,32, xmax=1.0, ymax=2.0)
 </pre>
 This creates the 2-d grid object <tt>myg</tt> with 16 zones in the 
