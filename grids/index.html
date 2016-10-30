@@ -80,10 +80,10 @@ we need to describe 2-d data on a cell-centered/finite-volume grid.
   fill boundary conditions, retrieve the data in different fashions,
   and read and write the object from/to disk.</li>
 
-<li><tt>BCObject</tt>: This is simply a container that holds the
+<li><tt>BC</tt>: This is simply a container that holds the
   names of the boundary conditions on each edge of the domain.</li>
 
-<li><tt>ArrayIndexer</tt>: This is a class that wraps the
+<li><tt>ArrayIndexer</tt>: This is a class that subclasses the
 NumPy <tt>ndarray</tt> and makes the data in the array know about
 the details of the grid it is defined on.  In particular, it knows
 which cells are valid and which are the ghost cells, and it has methods
@@ -137,9 +137,9 @@ cc data: nx = 16, ny = 32, ng = 1
                         BCs: -x: periodic     +x: periodic     -y: reflect-even +y: outflow     
 </pre>
 
-<h3>IPython Notebook</h3>
+<h3>Jupyter Notebook</h3>
 
-<p>An IPython notebook that illustrates some of the basics of working
+<p>A jupyter notebook that illustrates some of the basics of working
 with the grid can be found
 here: <a href="https://github.com/zingale/pyro2/blob/master/mesh/mesh-examples.ipynb">mesh-examples.ipynb</a>.  This will demonstrate, for example, how
 to use the <tt>ArrayIndexer</tt> methods to construct differences.
