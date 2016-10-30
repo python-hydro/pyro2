@@ -60,8 +60,12 @@ such methods is discussed in Chapter 2 of the notes:
 
 <p><h2>&lowast; <tt>mesh.patch</tt> implementation and use</h2>
 
-<p>The <tt>mesh.patch</tt> module provides all of the functionality
-we need to describe 2-d data on a cell-centered/finite-volume grid.
+<p>We import the basic mesh functionality as:
+<pre class="code">
+import mesh.patch as patch
+import mesh.boundary as bnd
+import mesh.array_indexer as ai
+</pre>
 
 <p>There are 4 main objects in the patch class that we interact with:
 <ul>
@@ -107,7 +111,7 @@ physical coordinate of the rightmost edge in x and y.
 <pre class="code">
 mydata = patch.CellCenterData2d(myg)
 
-bc = patch.BCObject(xlb="periodic", xrb="periodic", ylb="reflect-even", yrb="outflow")
+bc = bnd.BC(xlb="periodic", xrb="periodic", ylb="reflect-even", yrb="outflow")
 
 mydata.register_var("a", bc)
 mydata.create()
@@ -120,7 +124,7 @@ grid.  Once we call the <tt>create()</tt> method, the storage for the
 variables is allocated and we can no longer add variables to the grid.
 
 <p>Note that each variable needs to specify
-a <tt>BCObject</tt>&mdash;this allows us to do different actions for
+a <tt>BC</tt>&mdash;this allows us to do different actions for
 each variable (for example, some may do even reflection while others
 may do odd reflection).
 
