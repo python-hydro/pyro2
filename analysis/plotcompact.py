@@ -2,84 +2,65 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-import sys
-import getopt
+import argparse
 
 import mesh.patch as patch
 
 # plot an output file using the solver's dovis script
 
-def makeplot(myd, var, outfile):
+def makeplot(plotfile, variable, outfile):
 
-    a = myd.grid
+    myg, myd = patch.read(plotfile)
 
-    if var == "vort":
+    if variable == "vort":
         vx = myd.get_var("x-velocity")
         vy = myd.get_var("y-velocity")
 
         v = myg.scratch_array()
 
-        v[a.ilo:a.ihi+1,a.jlo:a.jhi+1] = \
-             0.5*(vy[a.ilo+1:a.ihi+2,a.jlo:a.jhi+1] -
-                  vy[a.ilo-1:a.ihi,a.jlo:a.jhi+1])/a.dx - \
-             0.5*(vx[a.ilo:a.ihi+1,a.jlo+1:a.jhi+2] -
-                  vx[a.ilo:a.ihi+1,a.jlo-1:a.jhi])/a.dy
+        v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
+             0.5*(vy[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
+                  vy[myg.ilo-1:myg.ihi,myg.jlo:myg.jhi+1])/myg.dx - \
+             0.5*(vx[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
+                  vx[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi])/myg.dy
 
     else:
-        v = myd.get_var(var)
+        v = myd.get_var(variable)
 
 
 
     plt.figure(num=1, figsize=(6.0,6.0), dpi=100, facecolor='w')
 
-    plt.imshow(np.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
-                 interpolation="nearest", origin="lower",
-                 extent=[a.xmin, a.xmax, a.ymin, a.ymax])
+    plt.imshow(np.transpose(v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
+               interpolation="nearest", origin="lower",
+               extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
     plt.axis("off")
     plt.subplots_adjust(bottom=0.0, top=1.0, left=0.0, right=1.0)
     plt.savefig(outfile)
 
 
+def get_args():
 
-def usage():
-    usage="""
-usage: plot.py [-h] [-o image.png] variable filename
+    parser = argparse.ArgumentParser()
 
-positional arguments:
-  variable      required inputs: variable to plot
-  filename      required inputs: filename to read from
+    parser.add_argument("-o", type=str, default="plot.png",
+                        metavar="plot.png", help="output file name")
+    parser.add_argument("plotfile", type=str, nargs=1,
+                        help="the plotfile you wish to plot")
+    parser.add_argument("variable", type=str, nargs=1,
+                        help="the name of the solver used to run the simulation")
 
-optional arguments:
-  -h, --help    show this help message and exit
-  -o image.png  output image name. The extension .png will generate a PNG
-                file, .eps will generate an EPS file (default: plot.png).
-"""
-    print usage
-    sys.exit()
+    args = parser.parse_args()
+
+    return args
 
 
 if __name__== "__main__":
 
-    try: opts, next = getopt.getopt(sys.argv[1:], "o:h:")
-    except getopt.GetoptError:
-        sys.exit("invalid calling sequence")
+    args = get_args()
 
-    outfile = "plot.png"
-
-    for o, a in opts:
-        if o == "-h": usage()
-        if o == "-o": outfile = a
-
-    try: var = next[0]
-    except: usage()
-        
-    try: file = next[1]
-    except: usage()
-
-    myg, myd = patch.read(file)
-
-    makeplot(myd, var, outfile)
+    makeplot(args.plotfile[0], args.variable[0], args.o)
 
 
 
