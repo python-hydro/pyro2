@@ -196,7 +196,7 @@ class CellCenterMG2d(object):
         self.small = 1.e-16
 
         # keep track of whether we've initialized the RHS
-        self.initialized_RHS = 0
+        self.initialized_rhs = 0
 
         # assume that self.nx = 2^(nlevels-1) and that nx = ny
         # this defines nlevels such that we end exactly on a 2x2 grid
@@ -526,7 +526,7 @@ class CellCenterMG2d(object):
         if self.verbose:
             print("Source norm = ", self.source_norm)
 
-        self.initialized_RHS = 1
+        self.initialized_rhs = 1
 
 
     def _compute_residual(self, level):
@@ -645,7 +645,7 @@ class CellCenterMG2d(object):
         """
 
         # start by making sure that we've initialized the RHS
-        if not self.initialized_RHS:
+        if not self.initialized_rhs:
             msg.fail("ERROR: RHS not initialized")
 
         if self.verbose:
@@ -663,7 +663,7 @@ class CellCenterMG2d(object):
 
             # zero out the solution on all but the finest grid
             for level in range(self.nlevels-1):
-                v = self.grids[level].zero("v")
+                self.grids[level].zero("v")
 
             if self.verbose:
                 print("<<< beginning V-cycle (cycle {}) >>>\n".format(cycle))
