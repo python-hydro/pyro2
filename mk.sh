@@ -5,10 +5,10 @@
 # f2py is used.  
 
 # set the python interpreter to use.  If no PYTHON variable is 
-# set, then default to python.  You can use python3, for example,
+# set, then default to python.  You can use python2, for example,
 # by doing:
-# PYTHON=python3 ./mk.sh
-: ${PYTHON:=python}
+# PYTHON=python2 ./mk.sh
+: ${PYTHON:=python3}
 
 if [ "$1" == "clean" ]; then
 

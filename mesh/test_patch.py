@@ -1,5 +1,5 @@
 # unit tests for the patch
-import boundary as bnd
+import mesh.boundary as bnd
 import mesh.patch as patch
 import mesh.array_indexer as ai
 import numpy as np

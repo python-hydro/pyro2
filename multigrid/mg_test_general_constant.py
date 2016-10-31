@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Test the general MG solver with a CONSTANT coefficient problem --
 the same one from the multigrid class test.  This ensures we didn't

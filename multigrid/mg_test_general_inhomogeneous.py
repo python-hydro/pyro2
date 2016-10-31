@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Test the general MG solver with inhomogeneous Dirichlet 
    boundary conditions.
