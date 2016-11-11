@@ -24,23 +24,28 @@ http://zingale.github.io/pyro2/
 
 ## Getting started
 
+  - By default, we assume python 3.4 or later.  Instructions to
+    run with python 2.7 are given below, but it is recommended you
+	switch to python 3.x
+
   - There are a few steps to take to get things running. You need to
-     make sure you have `numpy`, `f2py`, and `matplotlib`
-     installed. On a Fedora system, this can be accomplished by doing:
+    make sure you have `numpy`, `f2py`, and `matplotlib` installed. On
+    a Fedora system, this can be accomplished by doing:
 
-       `dnf install numpy numpy-f2py python-matplotlib python-matplotlib-tk`
+       `dnf install python3-numpy python3-numpy-f2py python3-matplotlib python3-matplotlib-tk`
 
-    (note, for older Fedora releases, replace `dnf` with `yum`)
+    (note, for older Fedora releases, replace `dnf` with `yum`.  For
+	python 2.x, leave off the `2` in the package names.)
 	
-  - You also need to make sure gfortran is present on you system. On
-     a Fedora system, it can be installed as: 
+  - You also need to make sure gfortran is present on you system. On a
+    Fedora system, it can be installed as:
 
        `dnf install gcc-gfortran` 
 
   - Not all matplotlib backends allow for the interactive plotting as
-     pyro is run. One that does is the TkAgg backend. This can be made
-     the default by creating a file `~/.matplotlib/matplotlibrc` with
-     the content:
+    pyro is run. One that does is the TkAgg backend. This can be made
+    the default by creating a file `~/.matplotlib/matplotlibrc` with
+    the content:
 
        `backend: TkAgg`
 
@@ -212,6 +217,22 @@ with their data.
 
   http://bender.astro.sunysb.edu/hydro_by_example/download/_stage/pyro2/tests.out
 
+
+## python 2.7
+
+  To run with python 2.7, you need to build the compiled code as:
+
+  ```
+  PYTHON=python2 ./mk.sh
+  ```
+
+  and then run explicitly giving the name of the python interpreter
+  on the commandline as, for example:
+
+  ```
+  python2 ./pyro.py compressible sedov inputs.sedov
+  ```
+  
 
 ## Getting help
 
