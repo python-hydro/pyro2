@@ -165,16 +165,27 @@ def fluxes(my_data, rp, vars, solid, tc):
     else:
         limitFunc = reconstruction_f.limit4
 
-    ldelta_rx = xi*limitFunc(1, r, myg.qx, myg.qy, myg.ng)
-    ldelta_ux = xi*limitFunc(1, u, myg.qx, myg.qy, myg.ng)
-    ldelta_vx = xi*limitFunc(1, v, myg.qx, myg.qy, myg.ng)
-    ldelta_px = xi*limitFunc(1, p, myg.qx, myg.qy, myg.ng)
+    _ldelta_rx = xi*limitFunc(1, r, myg.qx, myg.qy, myg.ng)
+    _ldelta_ux = xi*limitFunc(1, u, myg.qx, myg.qy, myg.ng)
+    _ldelta_vx = xi*limitFunc(1, v, myg.qx, myg.qy, myg.ng)
+    _ldelta_px = xi*limitFunc(1, p, myg.qx, myg.qy, myg.ng)
+
+    # wrap these in ArrayIndexer objects
+    ldelta_rx = ai.ArrayIndexer(d=_ldelta_rx, grid=myg)
+    ldelta_ux = ai.ArrayIndexer(d=_ldelta_ux, grid=myg)
+    ldelta_vx = ai.ArrayIndexer(d=_ldelta_vx, grid=myg)
+    ldelta_px = ai.ArrayIndexer(d=_ldelta_px, grid=myg)
 
     # monotonized central differences in y-direction
-    ldelta_ry = xi*limitFunc(2, r, myg.qx, myg.qy, myg.ng)
-    ldelta_uy = xi*limitFunc(2, u, myg.qx, myg.qy, myg.ng)
-    ldelta_vy = xi*limitFunc(2, v, myg.qx, myg.qy, myg.ng)
-    ldelta_py = xi*limitFunc(2, p, myg.qx, myg.qy, myg.ng)
+    _ldelta_ry = xi*limitFunc(2, r, myg.qx, myg.qy, myg.ng)
+    _ldelta_uy = xi*limitFunc(2, u, myg.qx, myg.qy, myg.ng)
+    _ldelta_vy = xi*limitFunc(2, v, myg.qx, myg.qy, myg.ng)
+    _ldelta_py = xi*limitFunc(2, p, myg.qx, myg.qy, myg.ng)
+
+    ldelta_ry = ai.ArrayIndexer(d=_ldelta_ry, grid=myg)
+    ldelta_uy = ai.ArrayIndexer(d=_ldelta_uy, grid=myg)
+    ldelta_vy = ai.ArrayIndexer(d=_ldelta_vy, grid=myg)
+    ldelta_py = ai.ArrayIndexer(d=_ldelta_py, grid=myg)
 
     tm_limit.end()
 
@@ -187,11 +198,20 @@ def fluxes(my_data, rp, vars, solid, tc):
     tm_states = tc.timer("interfaceStates")
     tm_states.begin()
 
-    V_l, V_r = interface_f.states(1, myg.qx, myg.qy, myg.ng, myg.dx,
-                                  vars.nvar,
-                                  gamma,
-                                  r, u, v, p,
-                                  ldelta_rx, ldelta_ux, ldelta_vx, ldelta_px)
+    V_l = myg.scratch_array(vars.nvar)
+    V_r = myg.scratch_array(vars.nvar)
+
+    V_l.ip(1, n=vars.irho, buf=2)[:,:] = r.v(buf=2) + 0.5*ldelta_rx.v(buf=2)
+    V_r.v(n=vars.irho, buf=2)[:,:] = r.v(buf=2) - 0.5*ldelta_rx.v(buf=2)
+
+    V_l.ip(1, n=vars.iu, buf=2)[:,:] = u.v(buf=2) + 0.5*ldelta_ux.v(buf=2)
+    V_r.v(n=vars.iu, buf=2)[:,:] = u.v(buf=2) - 0.5*ldelta_ux.v(buf=2)
+
+    V_l.ip(1, n=vars.iv, buf=2)[:,:] = v.v(buf=2) + 0.5*ldelta_vx.v(buf=2)
+    V_r.v(n=vars.iv, buf=2)[:,:] = v.v(buf=2) - 0.5*ldelta_vx.v(buf=2)
+
+    V_l.ip(1, n=vars.ip, buf=2)[:,:] = p.v(buf=2) + 0.5*ldelta_px.v(buf=2)
+    V_r.v(n=vars.ip, buf=2)[:,:] = p.v(buf=2) - 0.5*ldelta_px.v(buf=2)
 
     tm_states.end()
 
@@ -222,11 +242,17 @@ def fluxes(my_data, rp, vars, solid, tc):
     # left and right primitive variable states
     tm_states.begin()
 
-    V_l, V_r = interface_f.states(2, myg.qx, myg.qy, myg.ng, myg.dy,
-                                  vars.nvar,
-                                  gamma,
-                                  r, u, v, p,
-                                  ldelta_ry, ldelta_uy, ldelta_vy, ldelta_py)
+    V_l.jp(1, n=vars.irho, buf=2)[:,:] = r.v(buf=2) + 0.5*ldelta_ry.v(buf=2)
+    V_r.v(n=vars.irho, buf=2)[:,:] = r.v(buf=2) - 0.5*ldelta_ry.v(buf=2)
+
+    V_l.jp(1, n=vars.iu, buf=2)[:,:] = u.v(buf=2) + 0.5*ldelta_uy.v(buf=2)
+    V_r.v(n=vars.iu, buf=2)[:,:] = u.v(buf=2) - 0.5*ldelta_uy.v(buf=2)
+
+    V_l.jp(1, n=vars.iv, buf=2)[:,:] = v.v(buf=2) + 0.5*ldelta_vy.v(buf=2)
+    V_r.v(n=vars.iv, buf=2)[:,:] = v.v(buf=2) - 0.5*ldelta_vy.v(buf=2)
+
+    V_l.jp(1, n=vars.ip, buf=2)[:,:] = p.v(buf=2) + 0.5*ldelta_py.v(buf=2)
+    V_r.v(n=vars.ip, buf=2)[:,:] = p.v(buf=2) - 0.5*ldelta_py.v(buf=2)
 
     tm_states.end()
 
