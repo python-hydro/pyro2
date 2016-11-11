@@ -101,20 +101,19 @@ class ArrayIndexer(np.ndarray):
 
         """
         if not nodal:
-            L = self[self.g.ilo:self.g.ilo+self.g.nx/2,
+            L = self[self.g.ilo:self.g.ilo+self.g.nx//2,
                      self.g.jlo:self.g.jhi+1]
-            R = self[self.g.ilo+self.g.nx/2:self.g.ihi+1,
+            R = self[self.g.ilo+self.g.nx//2:self.g.ihi+1,
                      self.g.jlo:self.g.jhi+1]
         else:
-            print(self.g.ilo,self.g.ilo+self.g.nx/2+1)
-            L = self[self.g.ilo:self.g.ilo+self.g.nx/2+1,
+            print(self.g.ilo,self.g.ilo+self.g.nx//2+1)
+            L = self[self.g.ilo:self.g.ilo+self.g.nx//2+1,
                      self.g.jlo:self.g.jhi+1]
-            print(self.g.ilo+self.g.nx/2,self.g.ihi+2)
-            R = self[self.g.ilo+self.g.nx/2:self.g.ihi+2,
+            print(self.g.ilo+self.g.nx//2,self.g.ihi+2)
+            R = self[self.g.ilo+self.g.nx//2:self.g.ihi+2,
                      self.g.jlo:self.g.jhi+1]
 
         e = abs(L - np.flipud(R)).max()
-        print(e, tol, e < tol)
         return e < tol
 
 
@@ -124,20 +123,19 @@ class ArrayIndexer(np.ndarray):
 
         """
         if not nodal:
-            L = self[self.g.ilo:self.g.ilo+self.g.nx/2,
+            L = self[self.g.ilo:self.g.ilo+self.g.nx//2,
                      self.g.jlo:self.g.jhi+1]
-            R = self[self.g.ilo+self.g.nx/2:self.g.ihi+1,
+            R = self[self.g.ilo+self.g.nx//2:self.g.ihi+1,
                      self.g.jlo:self.g.jhi+1]
         else:
-            print(self.g.ilo,self.g.ilo+self.g.nx/2+1)
-            L = self[self.g.ilo:self.g.ilo+self.g.nx/2+1,
+            print(self.g.ilo,self.g.ilo+self.g.nx//2+1)
+            L = self[self.g.ilo:self.g.ilo+self.g.nx//2+1,
                      self.g.jlo:self.g.jhi+1]
-            print(self.g.ilo+self.g.nx/2,self.g.ihi+2)
-            R = self[self.g.ilo+self.g.nx/2:self.g.ihi+2,
+            print(self.g.ilo+self.g.nx//2,self.g.ihi+2)
+            R = self[self.g.ilo+self.g.nx//2:self.g.ihi+2,
                      self.g.jlo:self.g.jhi+1]
 
         e = abs(L + np.flipud(R)).max()
-        print(e, tol, e < tol)
         return e < tol
 
 
