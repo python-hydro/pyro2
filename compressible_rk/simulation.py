@@ -62,7 +62,7 @@ class Simulation(compressible.Simulation):
 
         myd = self.cc_data
 
-        order = 4
+        order = self.rp.get_param("compressible.temporal_order")
 
         if order == 2:
             # time-integration -- RK2
