@@ -63,7 +63,7 @@ Updating U_{i,j}:
 """
 
 import compressible.eos as eos
-import compressible_rk.interface_f as interface_f
+import compressible.interface_f as interface_f
 import mesh.reconstruction_f as reconstruction_f
 import mesh.patch as patch
 import mesh.array_indexer as ai
