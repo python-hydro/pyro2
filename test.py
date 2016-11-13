@@ -4,9 +4,10 @@ from __future__ import print_function
 
 import argparse
 import datetime
-import nose
 import os
 import sys
+
+import nose
 
 import pyro
 import multigrid.mg_test as mg_test
@@ -28,7 +29,7 @@ def do_tests(build, out_file, do_standalone=True, do_main=True):
     print("build = ", build)
 
     if build: os.system("./mk.sh")
-    
+
     opts = "driver.verbose=0 vis.dovis=0 io.do_io=0".split()
 
     results = {}
@@ -61,7 +62,7 @@ def do_tests(build, out_file, do_standalone=True, do_main=True):
         results["mg_vc_poisson_periodic"] = err
 
         err = mg_test_general_inhomogeneous.test_general_poisson_inhomogeneous(512, comp_bench=True, verbose=0)
-        results["mg_general_poisson_inhomogeneous"] = err    
+        results["mg_general_poisson_inhomogeneous"] = err
 
 
     failed = 0
@@ -72,7 +73,7 @@ def do_tests(build, out_file, do_standalone=True, do_main=True):
 
     for f in out:
         f.write("pyro tests run: {}\n\n".format(str(datetime.datetime.now().replace(microsecond=0))))
-    
+
         for s, r in sorted(results.items()):
             if not r == 0:
                 f.write("{:42} failed\n".format(s))
@@ -84,7 +85,7 @@ def do_tests(build, out_file, do_standalone=True, do_main=True):
         f.write("\n{} test(s) failed\n".format(failed))
 
         if not f == sys.stdout: f.close()
-    
+
 
 if __name__ == "__main__":
 
@@ -105,14 +106,14 @@ if __name__ == "__main__":
     p.add_argument("--skip_main",
                    help="skip the tests that go through pyro.py, and only run standalone tests",
                    action="store_true")
-    
+
     args = p.parse_args()
 
     try: outfile = args.o[0]
     except: outfile = None
 
     build = args.build
-    
+
     do_main = True
     if args.skip_main: do_main = False
 
@@ -121,9 +122,6 @@ if __name__ == "__main__":
 
     do_tests(build, outfile, do_standalone=do_standalone, do_main=do_main)
 
-    
+
     # unit tests
     nose.run(argv=["", "-s"])
-
-
-        
