@@ -94,12 +94,12 @@ class Grid2d(object):
         """
 
         # size of grid
-        self.nx = nx
-        self.ny = ny
-        self.ng = ng
+        self.nx = int(nx)
+        self.ny = int(ny)
+        self.ng = int(ng)
 
-        self.qx = 2*ng+nx
-        self.qy = 2*ng+ny
+        self.qx = int(2*ng + nx)
+        self.qy = int(2*ng + ny)
 
         # domain extrema
         self.xmin = xmin
@@ -109,15 +109,15 @@ class Grid2d(object):
         self.ymax = ymax
 
         # compute the indices of the block interior (excluding guardcells)
-        self.ilo = ng
-        self.ihi = ng+nx-1
+        self.ilo = self.ng
+        self.ihi = self.ng + self.nx-1
 
-        self.jlo = ng
-        self.jhi = ng+ny-1
+        self.jlo = self.ng
+        self.jhi = self.ng + self.ny-1
 
         # center of the grid (for convenience)
-        self.ic = self.ilo + nx/2 - 1
-        self.jc = self.jlo + ny/2 - 1
+        self.ic = self.ilo + self.nx//2 - 1
+        self.jc = self.jlo + self.ny//2 - 1
 
         # define the coordinate information at the left, center, and right
         # zone coordinates
@@ -170,7 +170,7 @@ class Grid2d(object):
         return a new grid object coarsened by a factor n, but with
         all the other properties the same
         """
-        return Grid2d(self.nx/N, self.ny/N, ng=self.ng,
+        return Grid2d(self.nx//N, self.ny//N, ng=self.ng,
                       xmin=self.xmin, xmax=self.xmax,
                       ymin=self.ymin, ymax=self.ymax)
 

@@ -1,9 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import numpy as np
 import matplotlib.pyplot as plt
-import sys
-import getopt
+import argparse
 
 import mesh.patch as patch
 
@@ -11,16 +10,17 @@ import mesh.patch as patch
 #
 # Usage: ./plotvar.py filename variable
 
-def makeplot(myd, variable, outfile):
+def makeplot(plotfile, variable, outfile):
+
+    myg, myd = patch.read(plotfile)
 
     plt.figure(num=1, figsize=(6.5,5.25), dpi=100, facecolor='w')
 
     var = myd.get_var(variable)
-    myg = myd.grid
 
     img = plt.imshow(np.transpose(var.v()),
-                       interpolation="nearest", origin="lower",
-                       extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
+                     interpolation="nearest", origin="lower",
+                     extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
     plt.colorbar()
 
@@ -31,41 +31,24 @@ def makeplot(myd, variable, outfile):
     plt.show()
 
 
-def usage():
-    usage="""
-usage: plotvar.py [-h] [-o image.png] filename variable
+def get_args():
 
-positional arguments:
-  filename      required inputs: filename to read from
-  variable      required inputs: variable to plot from filename
+    parser = argparse.ArgumentParser()
 
-optional arguments:
-  -h, --help    show this help message and exit
-  -o image.png  output image name. The extension .png will generate a PNG
-                file, .eps will generate an EPS file (default: plot.png).
-"""
-    print usage
-    sys.exit()
+    parser.add_argument("-o", type=str, default="plot.png",
+                        metavar="plot.png", help="output file name")
+    parser.add_argument("plotfile", type=str, nargs=1,
+                        help="the plotfile you wish to plot")
+    parser.add_argument("variable", type=str, nargs=1,
+                        help="the name of the solver used to run the simulation")
+
+    args = parser.parse_args()
+
+    return args
 
 
 if __name__== "__main__":
 
-    try: opts, next = getopt.getopt(sys.argv[1:], "o:h")
-    except getopt.GetoptError:
-        sys.exit("invalid calling sequence")
+    args = get_args()
 
-    outfile = "plot.png"
-
-    for o, a in opts:
-        if o == "-h": usage()
-        if o == "-o": outfile = a
-
-    try: file = next[0]
-    except: usage()
-
-    try: variable = next[1]
-    except: usage()
-
-    myg, myd = patch.read(file)
-
-    makeplot(myd, variable, outfile)
+    makeplot(args.plotfile[0], args.variable[0], args.o)

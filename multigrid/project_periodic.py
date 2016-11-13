@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # test of a cell-centered, centered-difference approximate projection.
 #

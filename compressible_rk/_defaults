@@ -17,6 +17,8 @@ cvisc = 0.1               ; artifical viscosity coefficient
 
 limiter = 2               ; limiter (0 = none, 1 = 2nd order, 2 = 4th order)
 
+temporal_order = 4        ; order of the RK integrator (2 or 4)
+
 grav = 0.0                ; gravitational acceleration (in y-direction)
 
 riemann = HLLC            ; HLLC or CGF

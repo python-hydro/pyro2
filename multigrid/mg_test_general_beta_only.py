@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Test the general MG solver with a variable coeffcient Poisson
 problem (in essence, we are making this solver act like the 

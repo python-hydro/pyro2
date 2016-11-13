@@ -95,26 +95,30 @@ class ArrayIndexer(np.ndarray):
         """make a copy of the array, defined on the same grid"""
         return ArrayIndexer(np.asarray(self).copy(), grid=self.g)
 
-    def is_symmetric(self, nodal=False, tol=1.e-14):
+
+    def is_symmetric(self, nodal=False, tol=1.e-14, asymmetric=False):
         """return True is the data is left-right symmetric (to the tolerance
         tol) For node-centered data, set nodal=True
 
         """
+
+        # prefactor to convert from symmetric to asymmetric test
+        s = 1
+        if asymmetric: s = -1
+
         if not nodal:
-            L = self[self.g.ilo:self.g.ilo+self.g.nx/2,
+            L = self[self.g.ilo:self.g.ilo+self.g.nx//2,
                      self.g.jlo:self.g.jhi+1]
-            R = self[self.g.ilo+self.g.nx/2:self.g.ihi+1,
+            R = self[self.g.ilo+self.g.nx//2:self.g.ihi+1,
                      self.g.jlo:self.g.jhi+1]
         else:
-            print(self.g.ilo,self.g.ilo+self.g.nx/2+1)
-            L = self[self.g.ilo:self.g.ilo+self.g.nx/2+1,
+            L = self[self.g.ilo:self.g.ilo+self.g.nx//2+1,
                      self.g.jlo:self.g.jhi+1]
-            print(self.g.ilo+self.g.nx/2,self.g.ihi+2)
-            R = self[self.g.ilo+self.g.nx/2:self.g.ihi+2,
+            print(self.g.ilo+self.g.nx//2,self.g.ihi+2)
+            R = self[self.g.ilo+self.g.nx//2:self.g.ihi+2,
                      self.g.jlo:self.g.jhi+1]
 
-        e = abs(L - np.flipud(R)).max()
-        print(e, tol, e < tol)
+        e = abs(L - s*np.flipud(R)).max()
         return e < tol
 
 
@@ -123,22 +127,7 @@ class ArrayIndexer(np.ndarray):
         tol)---e.g, the sign flips. For node-centered data, set nodal=True
 
         """
-        if not nodal:
-            L = self[self.g.ilo:self.g.ilo+self.g.nx/2,
-                     self.g.jlo:self.g.jhi+1]
-            R = self[self.g.ilo+self.g.nx/2:self.g.ihi+1,
-                     self.g.jlo:self.g.jhi+1]
-        else:
-            print(self.g.ilo,self.g.ilo+self.g.nx/2+1)
-            L = self[self.g.ilo:self.g.ilo+self.g.nx/2+1,
-                     self.g.jlo:self.g.jhi+1]
-            print(self.g.ilo+self.g.nx/2,self.g.ihi+2)
-            R = self[self.g.ilo+self.g.nx/2:self.g.ihi+2,
-                     self.g.jlo:self.g.jhi+1]
-
-        e = abs(L + np.flipud(R)).max()
-        print(e, tol, e < tol)
-        return e < tol
+        return self.is_symmetric(nodal=nodal, tol=tol, asymmetric=True)
 
 
     def pretty_print(self, fmt=None):

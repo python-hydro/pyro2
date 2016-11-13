@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Test the general MG solver with a variable coeffcient Helmholtz
 problem.  This ensures we didn't screw up the base functionality here.

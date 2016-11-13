@@ -5,17 +5,16 @@
 # f2py is used.  
 
 # set the python interpreter to use.  If no PYTHON variable is 
-# set, then default to python.  You can use python3, for example,
+# set, then default to python.  You can use python2, for example,
 # by doing:
-# PYTHON=python3 ./mk.sh
-: ${PYTHON:=python}
+# PYTHON=python2 ./mk.sh
+: ${PYTHON:=python3}
 
 if [ "$1" == "clean" ]; then
 
     rm -rf mesh/*.so 
     rm -rf incompressible/*.so
     rm -rf compressible/*.so
-    rm -rf compressible_rk/*.so
     rm -rf lm_atm/*.so
     find . -name "*.pyc" -exec rm -f {} \;
     
@@ -26,7 +25,7 @@ else
 	FFLAGS="-C"
     fi
     
-    for d in mesh incompressible compressible compressible_rk lm_atm
+    for d in mesh incompressible compressible lm_atm
     do
 	cd ${d}
 	${PYTHON} setup.py config_fc --f90flags "${FFLAGS}" build_ext --inplace

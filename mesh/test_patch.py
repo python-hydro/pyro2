@@ -1,5 +1,5 @@
 # unit tests for the patch
-import boundary as bnd
+import mesh.boundary as bnd
 import mesh.patch as patch
 import mesh.array_indexer as ai
 import numpy as np
@@ -143,7 +143,7 @@ def test_bcs():
 
 
 
-# ArrayInderex tests
+# ArrayIndexer tests
 @th.with_named_setup(th.setup_func, th.teardown_func)
 def test_indexer():
     g = patch.Grid2d(2,3, ng=2)
@@ -160,6 +160,29 @@ def test_indexer():
     assert_array_equal(a.jp(-1), np.array([[15., 16., 17.], [ 22., 23., 24.]]))
 
     assert_array_equal(a.ip_jp(1, 1), np.array([[24., 25., 26.], [ 31., 32., 33.]]))
+
+@th.with_named_setup(th.setup_func, th.teardown_func)
+def test_is_symmetric():
+    g = patch.Grid2d(4, 3, ng=0)
+    a = g.scratch_array()
+
+    a[:,0] = [1, 2, 2, 1]
+    a[:,1] = [2, 4, 4, 2]
+    a[:,2] = [1, 2, 2, 1]
+
+    assert_equal(a.is_symmetric(), True)
+
+
+@th.with_named_setup(th.setup_func, th.teardown_func)
+def test_is_asymmetric():
+    g = patch.Grid2d(4, 3, ng=0)
+    a = g.scratch_array()
+
+    a[:,0] = [-1, -2, 2, 1]
+    a[:,1] = [-2, -4, 4, 2]
+    a[:,2] = [-1, -2, 2, 1]
+
+    assert_equal(a.is_asymmetric(), True)
 
 
 
