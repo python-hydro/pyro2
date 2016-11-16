@@ -113,14 +113,15 @@ get you started:
 
 <p><h3>Getting Started</h3>
 
-<p>There are a few steps to take to get things running.  You need to
+<p>By default, pyro uses python 3.x&mdash;it is recommended that you use python 3 as well.
+There are a few steps to take to get things running.  You need to
 make sure you have numpy, f2py, and matplotlib installed.  On a Fedora
 system, this can be accomplished by doing:
-<p><tt>yum install numpy numpy-f2py python-matplotlib python-matplotlib-tk</tt>
+<p><tt>dnf install python3-numpy python3-numpy-f2py python3-matplotlib python3-matplotlib-tk</tt>
 
 <p>You also need to make sure <tt>gfortran</tt> is present on you system.
 On a Fedora system, it can be installed as:
-<p><tt>yum install gcc-gfortran</tt>
+<p><tt>dnf install gcc-gfortran</tt>
 
 <p>Not
 all <a href="http://matplotlib.org/faq/usage_faq.html#what-is-a-backend">matplotlib
@@ -142,8 +143,22 @@ You can check what backend is your current default in python via:
 <p>The remaining steps are:
 
 <ul>
+<li>Set the <tt>PYRO_HOME</tt> environment variable to point
+to the <tt>pyro2/<tt> directory.  This is used so pyro can find
+the test benchmarks.  You can putting
+<pre>
+export PYRO_HOME="/path/to/pyro2/"
+</pre>
+in your <tt>.bashrc</tt> if you use the bash shell.
+</li>
+
 <li>Set the <tt>PYTHONPATH</tt> environment variable to point to
-the <tt>pyro2/</tt> directory.</li>
+the <tt>pyro2/</tt> directory.  Again, with bash, put the 
+following in your <tt>.bashrc</tt>
+<pre>
+export PYTHONPATH="$PYRO_HOME:$PYTHONPATH"
+</pre>
+</li>
 
 <li>Build the Fortran source.  In <tt>pyro2/</tt> type
  
