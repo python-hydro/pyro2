@@ -20,7 +20,10 @@ def makeplot(plotfile_name, solver_name, outfile, width, height):
     plt.figure(num=1, figsize=(width, height), dpi=100, facecolor='w')
 
     sim.dovis()
-    plt.savefig(outfile)
+    if outfile.endswith(".pdf"):
+        plt.savefig(outfile, bbox_inches="tight")
+    else:
+        plt.savefig(outfile)
     plt.show()
 
 
