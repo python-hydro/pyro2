@@ -431,13 +431,15 @@ class Simulation(NullSimulation):
         fields = [u, v, vort, divU]
         field_names = ["u", "v", r"$\nabla \times U$", r"$\nabla \cdot U$"]
 
+        cm = "viridis"
+
         for n in range(4):
             ax = axes.flat[n]
 
             f = fields[n]
             img = ax.imshow(np.transpose(f.v()),
                             interpolation="nearest", origin="lower",
-                            extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
+                            extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax], cmap=cm)
 
             ax.set_xlabel("x")
             ax.set_ylabel("y")

@@ -267,13 +267,16 @@ class Simulation(NullSimulation):
         fields = [dens, magvel, p, e]
         field_names = [r"$\rho$", r"U", "p", "e"]
 
+        cm = "viridis"
+
         for n in range(4):
             ax = axes.flat[n]
 
             v = fields[n]
             img = ax.imshow(np.transpose(v.v()),
                             interpolation="nearest", origin="lower",
-                            extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
+                            extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax],
+                            cmap=cm)
 
             ax.set_xlabel("x")
             if n == 0:

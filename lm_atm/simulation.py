@@ -677,6 +677,8 @@ class Simulation(NullSimulation):
         fields = [rho, magvel, vort, rhoprime]
         field_names = [r"$\rho$", r"|U|", r"$\nabla \times U$", r"$\rho'$"]
 
+        cm = "viridis"
+
         for n in range(len(fields)):
             ax = axes.flat[n]
 
@@ -684,7 +686,7 @@ class Simulation(NullSimulation):
 
             img = ax.imshow(np.transpose(f.v()),
                             interpolation="nearest", origin="lower",
-                            extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
+                            extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax], cmap="viridis")
 
             ax.set_xlabel("x")
             ax.set_ylabel("y")

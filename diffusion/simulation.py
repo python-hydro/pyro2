@@ -139,9 +139,12 @@ class Simulation(NullSimulation):
 
         myg = self.cc_data.grid
 
+        cm = "viridis"
+
         plt.imshow(np.transpose(phi.v()),
                    interpolation="nearest", origin="lower",
-                   extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
+                   extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax],
+                   cmap=cm)
 
         plt.xlabel("x")
         plt.ylabel("y")
