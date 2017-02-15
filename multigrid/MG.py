@@ -327,9 +327,11 @@ class CellCenterMG2d(object):
 
         v = self.grids[self.current_level].get_var("v")
 
+        cm = "viridis"
+
         plt.imshow(np.transpose(v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
                    interpolation="nearest", origin="lower",
-                   extent=[self.xmin, self.xmax, self.ymin, self.ymax])
+                   extent=[self.xmin, self.xmax, self.ymin, self.ymax], cmap=cm)
 
         #plt.xlabel("x")
         plt.ylabel("y")
@@ -357,9 +359,11 @@ class CellCenterMG2d(object):
 
         v = self.grids[self.nlevels-1].get_var("v")
 
+        cm = "viridis"
+
         plt.imshow(np.transpose(v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
                    interpolation="nearest", origin="lower",
-                   extent=[self.xmin, self.xmax, self.ymin, self.ymax])
+                   extent=[self.xmin, self.xmax, self.ymin, self.ymax], cmap=cm)
 
         plt.xlabel("x")
         plt.ylabel("y")
@@ -384,9 +388,11 @@ class CellCenterMG2d(object):
 
         e = v - self.true_function(myg.x2d, myg.y2d)
 
+        cmap = "viridis"
+
         plt.imshow(np.transpose(e[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
                    interpolation="nearest", origin="lower",
-                   extent=[self.xmin, self.xmax, self.ymin, self.ymax])
+                   extent=[self.xmin, self.xmax, self.ymin, self.ymax], cm=cmap)
 
         plt.xlabel("x")
         plt.ylabel("y")

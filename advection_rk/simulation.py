@@ -49,7 +49,7 @@ class Simulation(advection.Simulation):
         myg = self.cc_data.grid
         myd = self.cc_data
 
-        order = 4
+        order = self.rp.get_param("advection.temporal_order")
 
         if order == 2:
 
