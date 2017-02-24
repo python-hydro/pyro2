@@ -118,7 +118,8 @@ class Simulation(compressible.Simulation):
             # final update
             for n in range(self.vars.nvar):
                 var = myd.get_var_by_index(n)
-                var.v()[:,:] += (self.dt/6.0)*(k1.v(n=n)[:,:] + 2.0*k2.v(n=n)[:,:] + 2.0*k3.v(n=n)[:,:] + k4.v(n=n)[:,:])
+                var.v()[:,:] += (self.dt/6.0)*(k1.v(n=n)[:,:] + 2.0*k2.v(n=n)[:,:] + 
+                                               2.0*k3.v(n=n)[:,:] + k4.v(n=n)[:,:])
 
 
         # increment the time
