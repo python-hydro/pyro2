@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from __future__ import print_function
+
 import numpy as np
 import mesh.patch as patch
 import sys
@@ -13,13 +15,13 @@ usage = """
 """
 
 if not len(sys.argv) == 2:
-    print usage
+    print(usage)
     sys.exit(2)
 
 
 try: file1 = sys.argv[1]
 except:
-    print usage
+    print(usage)
     sys.exit(2)
 
 myg, myd = patch.read(file1)
@@ -42,5 +44,5 @@ v_exact[:,:] = 1.0 + 2.0*np.sin(2.0*math.pi*(myg.x2d-t))*np.cos(2.0*math.pi*(myg
 udiff = u_exact - u
 vdiff = v_exact - v
 
-print "errors: ", udiff.norm(), vdiff.norm()
+print("errors: ", udiff.norm(), vdiff.norm())
 

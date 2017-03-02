@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from __future__ import print_function
+
 import numpy as np
 import mesh.patch as patch
 import sys
@@ -13,13 +15,13 @@ usage = """
 """
 
 if not len(sys.argv) == 2:
-    print usage
+    print(usage)
     sys.exit(2)
 
 
 try: file1 = sys.argv[1]
 except:
-    print usage
+    print(usage)
     sys.exit(2)
 
 myg, myd = patch.read(file1)
@@ -39,9 +41,9 @@ smooth.init_data(analytic, None)
 dens_numerical = myd.get_var("density")
 dens_analytic = analytic.get_var("density")
 
-print "mesh details"
-print myg
+print("mesh details")
+print(myg)
 
 e = dens_numerical - dens_analytic
 
-print "error norms (absolute, relative): ", e.norm(), e.norm()/dens_analytic.norm()
+print("error norms (absolute, relative): ", e.norm(), e.norm()/dens_analytic.norm())
