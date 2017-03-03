@@ -196,6 +196,8 @@ class Simulation(NullSimulation):
         ymom = self.cc_data.get_var("y-momentum")
         ener = self.cc_data.get_var("energy")
 
+        nvar = len(self.cc_data.vars)
+
         # get the velocities
         u = xmom/dens
         v = ymom/dens
@@ -239,7 +241,7 @@ class Simulation(NullSimulation):
             if L_x > 4*L_y:
                 shrink = 0.75
 
-            on_left = list(range(self.vars.nvar))
+            on_left = list(range(nvar))
 
 
         elif L_y > 2*L_x:
