@@ -87,32 +87,35 @@ class Simulation(compressible.Simulation):
         elif order == 4:
 
             # time-integration -- RK4
-            myd1 = patch.cell_center_data_clone(myd)
-            myd2 = patch.cell_center_data_clone(myd)
-            myd3 = patch.cell_center_data_clone(myd)
 
+            # first slope (k1) is f(U^n)
             k1 = self.substep(myd)
+
+            # second slope (k2) is f(U^n + 0.5*dt*k1)
+            myd1 = patch.cell_center_data_clone(myd)
             for n in range(self.vars.nvar):
                 var = myd1.get_var_by_index(n)
                 var.v()[:,:] += 0.5*self.dt*k1.v(n=n)[:,:]
 
             myd1.fill_BC_all()
-
             k2 = self.substep(myd1)
+
+            # third slope (k3) is f(U^n + 0.5*dt*k2)
+            myd2 = patch.cell_center_data_clone(myd)
             for n in range(self.vars.nvar):
                 var = myd2.get_var_by_index(n)
                 var.v()[:,:] += 0.5*self.dt*k2.v(n=n)[:,:]
 
             myd2.fill_BC_all()
-
             k3 = self.substep(myd2)
+
+            # last slope (k4) is f(U^n + dt*k3)
+            myd3 = patch.cell_center_data_clone(myd)
             for n in range(self.vars.nvar):
                 var = myd3.get_var_by_index(n)
                 var.v()[:,:] += self.dt*k3.v(n=n)[:,:]
 
             myd3.fill_BC_all()
-
-            # updated slopes, starting with the n+1/2 state
             k4 = self.substep(myd3)
 
             # final update
