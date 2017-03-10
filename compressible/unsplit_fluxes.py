@@ -133,7 +133,7 @@ import mesh.array_indexer as ai
 
 from util import msg
 
-def unsplitFluxes(my_data, my_aux, rp, vars, solid, tc, dt):
+def unsplit_fluxes(my_data, my_aux, rp, vars, solid, tc, dt):
     """
     unsplitFluxes returns the fluxes through the x and y interfaces by
     doing an unsplit reconstruction of the interface values and then
