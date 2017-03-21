@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 
 import compressible.eos as eos
 import mesh.patch as patch
+import mesh.integration as integration
 import compressible
 import compressible_rk.fluxes as flx
 from util import profile
@@ -57,72 +58,22 @@ class Simulation(compressible.Simulation):
         tm_evolve = self.tc.timer("evolve")
         tm_evolve.begin()
 
-
         myg = self.cc_data.grid
 
         myd = self.cc_data
 
         order = self.rp.get_param("compressible.temporal_order")
 
-        if order == 2:
-            # time-integration -- RK2
-            myd_nhalf = patch.cell_center_data_clone(myd)
+        rk = integration.RKIntegrator(myd.t, self.dt, order=order)
+        rk.set_start(myd)
 
-            # initial slopes and n+1/2 state
-            k1 = self.substep(myd)
-            for n in range(self.vars.nvar):
-                var = myd_nhalf.get_var_by_index(n)
-                var.v()[:,:] += 0.5*self.dt*k1.v(n=n)[:,:]
+        for s in range(order):
+            ytmp = rk.get_stage_start(s)
+            ytmp.fill_BC_all()
+            k = self.substep(ytmp)
+            rk.store_increment(s, k)
 
-            myd_nhalf.fill_BC_all()
-
-            # updated slopes, starting with the n+1/2 state
-            k2 = self.substep(myd_nhalf)
-
-            # final update
-            for n in range(self.vars.nvar):
-                var = myd.get_var_by_index(n)
-                var.v()[:,:] += self.dt*k2.v(n=n)[:,:]
-
-        elif order == 4:
-
-            # time-integration -- RK4
-
-            # first slope (k1) is f(U^n)
-            k1 = self.substep(myd)
-
-            # second slope (k2) is f(U^n + 0.5*dt*k1)
-            myd1 = patch.cell_center_data_clone(myd)
-            for n in range(self.vars.nvar):
-                var = myd1.get_var_by_index(n)
-                var.v()[:,:] += 0.5*self.dt*k1.v(n=n)[:,:]
-
-            myd1.fill_BC_all()
-            k2 = self.substep(myd1)
-
-            # third slope (k3) is f(U^n + 0.5*dt*k2)
-            myd2 = patch.cell_center_data_clone(myd)
-            for n in range(self.vars.nvar):
-                var = myd2.get_var_by_index(n)
-                var.v()[:,:] += 0.5*self.dt*k2.v(n=n)[:,:]
-
-            myd2.fill_BC_all()
-            k3 = self.substep(myd2)
-
-            # last slope (k4) is f(U^n + dt*k3)
-            myd3 = patch.cell_center_data_clone(myd)
-            for n in range(self.vars.nvar):
-                var = myd3.get_var_by_index(n)
-                var.v()[:,:] += self.dt*k3.v(n=n)[:,:]
-
-            myd3.fill_BC_all()
-            k4 = self.substep(myd3)
-
-            # final update
-            for n in range(self.vars.nvar):
-                var = myd.get_var_by_index(n)
-                var.v()[:,:] += (self.dt/6.0)*(k1.v(n=n)[:,:] + 2.0*k2.v(n=n)[:,:] + 
-                                               2.0*k3.v(n=n)[:,:] + k4.v(n=n)[:,:])
+        rk.compute_final_update()
 
 
         # increment the time
