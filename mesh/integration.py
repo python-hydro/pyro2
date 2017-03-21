@@ -52,12 +52,12 @@ c[4] = np.array([0.0, 0.5, 0.5, 1.0])
 class RKIntegrator(object):
 
     def __init__(self, t, dt, order=2):
-        self.s = order
+        self.order = order
 
         self.t = t
         self.dt = dt
 
-        self.k = [None]*len(b[self.s])
+        self.k = [None]*len(b[self.order])
 
         self.start = None
 
@@ -68,23 +68,26 @@ class RKIntegrator(object):
         self.k[n] = k_stage
 
     def get_stage_start(self, istage):
-        ytmp = patch.cell_center_data_clone(self.start)
-        for n in range(ytmp.nvar):
-            var = ytmp.get_var_by_index(n)
-            for s in range(istage-1):
-                var.v()[:,:] += self.dt*a[self.s][istage,s]*self.k[s].v(n=n)[:,:]
-        return ytmp
+        if istage == 0:
+            ytmp = self.start
+        else:
+            ytmp = patch.cell_center_data_clone(self.start)
+            for n in range(ytmp.nvar):
+                var = ytmp.get_var_by_index(n)
+                for s in range(istage):
+                    var.v()[:,:] += self.dt*a[self.order][istage,s]*self.k[s].v(n=n)[:,:]
 
-    def get_stage_t(self, n):
-        return self.t + c[self.s][n]*dt
+            ytmp.t = self.t + c[self.order][istage]*self.dt
+
+        return ytmp
 
     def compute_final_update(self):
         """this constructs the final t + dt update, overwriting the inital data"""
         ytmp = self.start
         for n in range(ytmp.nvar):
             var = ytmp.get_var_by_index(n)
-            for s in range(self.s):
-                var.v()[:,:] += self.dt*b[self.s][s]*self.k[s].v(n=n)[:,:]
+            for s in range(self.order):
+                var.v()[:,:] += self.dt*b[self.order][s]*self.k[s].v(n=n)[:,:]
             
         return ytmp
 
