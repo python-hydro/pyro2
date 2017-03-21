@@ -72,7 +72,7 @@ class RKIntegrator(object):
         for n in range(ytmp.nvar):
             var = ytmp.get_var_by_index(n)
             for s in range(istage-1):
-                var.v()[:,:] += self.dt*a[self.s][n,s]*self.k[s].v(n=n)[:,:]
+                var.v()[:,:] += self.dt*a[self.s][istage,s]*self.k[s].v(n=n)[:,:]
         return ytmp
 
     def get_stage_t(self, n):
