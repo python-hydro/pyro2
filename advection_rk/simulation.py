@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import advection
 import advection_rk.fluxes as flx
 import mesh.patch as patch
+import mesh.integration as integration
 import mesh.array_indexer as ai
 
 from util import profile
@@ -49,91 +50,18 @@ class Simulation(advection.Simulation):
         myg = self.cc_data.grid
         myd = self.cc_data
 
-        order = self.rp.get_param("advection.temporal_order")
+        method = self.rp.get_param("advection.temporal_method")
 
-        if order == 2:
+        rk = integration.RKIntegrator(myd.t, self.dt, method=method)
+        rk.set_start(myd)
 
-            # time-integration -- RK2
-            myd_nhalf = patch.cell_center_data_clone(myd)
+        for s in range(rk.nstages()):
+            ytmp = rk.get_stage_start(s)
+            ytmp.fill_BC_all()
+            k = self.substep(ytmp)
+            rk.store_increment(s, k)
 
-            # initial slopes and n+1/2 state
-            k1 = self.substep(myd)
-            var = myd_nhalf.get_var("density")
-            var.v()[:,:] += 0.5*self.dt*k1.v()[:,:]
-
-            myd_nhalf.fill_BC_all()
-
-            # updated slopes, starting with the n+1/2 state
-            k2 = self.substep(myd_nhalf)
-
-            # final update
-            var = myd.get_var("density")
-            var.v()[:,:] += self.dt*k2.v()[:,:]
-
-        elif order == 4:
-
-            # time-integration -- RK4
-
-            # first slope (k1) is f(U^n)
-            k1 = self.substep(myd)
-
-            # second slope (k2) is f(U^n + 0.5*dt*k1)            
-            myd1 = patch.cell_center_data_clone(myd)
-            var = myd1.get_var("density")
-            var.v()[:,:] += 0.5*self.dt*k1.v()[:,:]
-
-            myd1.fill_BC_all()
-            k2 = self.substep(myd1)
-
-            # third slope (k3) is f(U^n + 0.5*dt*k2)
-            myd2 = patch.cell_center_data_clone(myd)
-            var = myd2.get_var("density")
-            var.v()[:,:] += 0.5*self.dt*k2.v()[:,:]
-
-            myd2.fill_BC_all()
-            k3 = self.substep(myd2)
-
-            # last slope (k4) is f(U^n + dt*k3)
-            myd3 = patch.cell_center_data_clone(myd)
-            var = myd3.get_var("density")
-            var.v()[:,:] += self.dt*k3.v()[:,:]
-
-            myd3.fill_BC_all()
-            k4 = self.substep(myd3)
-
-            # final update
-            var = myd.get_var("density")
-            var.v()[:,:] += (self.dt/6.0)*(k1.v()[:,:] + 2.0*k2.v()[:,:] + 2.0*k3.v()[:,:] + k4.v()[:,:])
-
-        elif order == 103:
-
-            # time-integration -- SSP RK3 (from Shu & Osher 1989)
-
-            # compute u^1 = u^n + dt * L(u^n)
-            k0 = self.substep(myd)
-            u1 = patch.cell_center_data_clone(myd)
-            var1 = u1.get_var("density")
-            var1.v()[:,:] += self.dt*k0.v()[:,:]
-
-            u1.fill_BC_all()
-
-            # compute u^2 = (3/4) u^n + (1/4) u^1 + (1/4) dt * L(u^1)
-            k1 = self.substep(u1)
-            u2 = patch.cell_center_data_clone(myd)
-            varn = myd.get_var("density")
-            var1 = u1.get_var("density")
-            var2 = u2.get_var("density")
-            var2.v()[:,:] = 0.75*varn.v()[:,:] + 0.25*var1.v()[:,:] + 0.25*self.dt*k1.v()[:,:]
-
-            u2.fill_BC_all()
-
-            # compute u^new = (1/3) u^n + (2/3) u^2 + (2/3) dt L(u^2)
-            k2 = self.substep(u2)
-            var = myd.get_var("density")
-            var2 = u2.get_var("density")
-            var.v()[:,:] = (1.0/3.0)*var.v()[:,:] + (2.0/3.0)*var2.v()[:,:] + (2.0/3.0)*self.dt*k2.v()[:,:]
-
-
+        rk.compute_final_update()
 
         # increment the time
         myd.t += self.dt

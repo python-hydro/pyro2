@@ -29,45 +29,82 @@ a = {}
 b = {}
 c = {}
 
-# second-order
-a[2] = np.array([[0.0, 0.0],
-                 [0.5, 0.0]])
+nstages = {}
 
-b[2] = np.array([0.0, 1.0])
+# second-order standard
+a["RK2"] = np.array([[0.0, 0.0],
+                     [0.5, 0.0]])
 
-c[2] = np.array([0.0, 0.5])
+b["RK2"] = np.array([0.0, 1.0])
+
+c["RK2"] = np.array([0.0, 0.5])
+
+
+# second-order TVD (Gottlieb & Shu)
+a["TVD2"] = np.array([[0.0, 0.0],
+                      [1.0, 0.0]])
+
+b["TVD2"] = np.array([0.5, 0.5])
+
+c["TVD2"] = np.array([0.0, 1.0])
+
+
+# third-order TVD (Gottlieb & Shu)
+a["TVD3"] = np.array([[0.0,  0.0,  0.0],
+                      [1.0,  0.0,  0.0],
+                      [0.25, 0.25, 0.0]])
+
+b["TVD3"] = np.array([1./6., 1./6., 2./3.])
+
+c["TVD3"] = np.array([0.0, 1.0, 0.5])
+
 
 # fourth-order
-a[4] = np.array([[0.0, 0.0, 0.0, 0.0],
-                 [0.5, 0.0, 0.0, 0.0],
-                 [0.0, 0.5, 0.0, 0.0],
-                 [0.0, 0.0, 1.0, 0.0]])
+a["RK4"] = np.array([[0.0, 0.0, 0.0, 0.0],
+                     [0.5, 0.0, 0.0, 0.0],
+                     [0.0, 0.5, 0.0, 0.0],
+                     [0.0, 0.0, 1.0, 0.0]])
 
-b[4] = np.array([1./6., 1./3., 1./3., 1./6.])
+b["RK4"] = np.array([1./6., 1./3., 1./3., 1./6.])
 
-c[4] = np.array([0.0, 0.5, 0.5, 1.0])
+c["RK4"] = np.array([0.0, 0.5, 0.5, 1.0])
 
 
 
 class RKIntegrator(object):
+    """the integration class for CellCenterData2d, supporting RK
+    integration"""
 
-    def __init__(self, t, dt, order=2):
-        self.order = order
+    def __init__(self, t, dt, method="RK4"):
+        """t is the starting time, dt is the total timestep to advance, method
+        = {2,4} is the temporal method"""
+        self.method = method
 
         self.t = t
         self.dt = dt
 
-        self.k = [None]*len(b[self.order])
+        # storage for the intermediate stages
+        self.k = [None]*len(b[self.method])
 
         self.start = None
 
+    def nstages(self):
+        """return the number of stages"""
+        return len(b[self.method])
+
     def set_start(self, start):
+        """store the starting conditions (should be a CellCenterData2d
+        object)"""
         self.start = start
 
-    def store_increment(self, n, k_stage):
-        self.k[n] = k_stage
+    def store_increment(self, istage, k_stage):
+        """store the increment for stage istage -- this should not have a dt
+        weighting"""
+        self.k[istage] = k_stage
 
     def get_stage_start(self, istage):
+        """get the starting conditions (a CellCenterData2d object) for stage
+        istage"""
         if istage == 0:
             ytmp = self.start
         else:
@@ -75,9 +112,9 @@ class RKIntegrator(object):
             for n in range(ytmp.nvar):
                 var = ytmp.get_var_by_index(n)
                 for s in range(istage):
-                    var.v()[:,:] += self.dt*a[self.order][istage,s]*self.k[s].v(n=n)[:,:]
+                    var.v()[:,:] += self.dt*a[self.method][istage,s]*self.k[s].v(n=n)[:,:]
 
-            ytmp.t = self.t + c[self.order][istage]*self.dt
+            ytmp.t = self.t + c[self.method][istage]*self.dt
 
         return ytmp
 
@@ -86,8 +123,8 @@ class RKIntegrator(object):
         ytmp = self.start
         for n in range(ytmp.nvar):
             var = ytmp.get_var_by_index(n)
-            for s in range(self.order):
-                var.v()[:,:] += self.dt*b[self.order][s]*self.k[s].v(n=n)[:,:]
+            for s in range(self.nstages()):
+                var.v()[:,:] += self.dt*b[self.method][s]*self.k[s].v(n=n)[:,:]
             
         return ytmp
 

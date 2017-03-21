@@ -62,12 +62,12 @@ class Simulation(compressible.Simulation):
 
         myd = self.cc_data
 
-        order = self.rp.get_param("compressible.temporal_order")
+        method = self.rp.get_param("compressible.temporal_method")
 
-        rk = integration.RKIntegrator(myd.t, self.dt, order=order)
+        rk = integration.RKIntegrator(myd.t, self.dt, method=method)
         rk.set_start(myd)
 
-        for s in range(order):
+        for s in range(rk.nstages()):
             ytmp = rk.get_stage_start(s)
             ytmp.fill_BC_all()
             k = self.substep(ytmp)
