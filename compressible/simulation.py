@@ -14,6 +14,40 @@ import compressible.unsplit_fluxes as flx
 from util import profile
 
 
+def derive_eint(myd):
+    """ 
+    derive the internal energy from the state
+    """
+
+    # get the variables we need
+    dens = myd.get_var("density")
+    xmom = myd.get_var("x-momentum")
+    ymom = myd.get_var("y-momentum")
+    ener = myd.get_var("energy")
+
+    # we need to compute the pressure
+    u = xmom/dens
+    v = ymom/dens
+
+    return (ener - 0.5*dens*(u*u + v*v))/dens
+
+def derive_vels(myd):
+    """ 
+    derive the internal energy from the state
+    """
+
+    # get the variables we need
+    dens = myd.get_var("density")
+    xmom = myd.get_var("x-momentum")
+    ymom = myd.get_var("y-momentum")
+
+    # we need to compute the pressure
+    u = xmom/dens
+    v = ymom/dens
+
+    return u, v
+
+
 class Variables(object):
     """
     a container class for easy access to the different compressible
@@ -90,6 +124,9 @@ class Simulation(NullSimulation):
                               iymom = my_data.vars.index("y-momentum"),
                               iener = my_data.vars.index("energy"))
 
+        # derived variables
+        self.cc_data.add_derived_variable("eint", derive_eint)
+        self.cc_data.add_derived_variable("velocity", derive_vels)
 
         # initial conditions for the problem
         problem = importlib.import_module("compressible.problems.{}".format(self.problem_name))
@@ -112,23 +149,14 @@ class Simulation(NullSimulation):
 
         # get the variables we need
         dens = self.cc_data.get_var("density")
-        xmom = self.cc_data.get_var("x-momentum")
-        ymom = self.cc_data.get_var("y-momentum")
-        ener = self.cc_data.get_var("energy")
+        e = self.cc_data.get_var("eint")
+        u, v = self.cc_data.get_var("velocity")
 
-        # we need to compute the pressure
-        u = xmom/dens
-        v = ymom/dens
-
-        e = (ener - 0.5*dens*(u*u + v*v))/dens
-
+        # compute the sounds speed
         gamma = self.rp.get_param("eos.gamma")
 
         p = eos.pres(gamma, dens, e)
-
-        # compute the sounds speed
         cs = np.sqrt(gamma*p/dens)
-
 
         # the timestep is min(dx/(|u| + cs), dy/(|v| + cs))
         xtmp = self.cc_data.grid.dx/(abs(u) + cs)
@@ -199,16 +227,11 @@ class Simulation(NullSimulation):
         nvar = len(self.cc_data.vars)
 
         # get the velocities
-        u = xmom/dens
-        v = ymom/dens
+        u, v = self.cc_data.get_var("velocity")
+        magvel = np.sqrt(u**2 + v**2)
 
-        # get the pressure
-        magvel = u**2 + v**2   # temporarily |U|^2
-        rhoe = (ener - 0.5*dens*magvel)
-
-        magvel = np.sqrt(magvel)
-
-        e = rhoe/dens
+        # thermodynamic information
+        e = self.cc_data.get_var("eint")
 
         # access gamma from the cc_data object so we can use dovis
         # outside of a running simulation.
@@ -217,7 +240,6 @@ class Simulation(NullSimulation):
         p = eos.pres(gamma, dens, e)
 
         myg = self.cc_data.grid
-
 
         # figure out the geometry
         L_x = self.cc_data.grid.xmax - self.cc_data.grid.xmin
