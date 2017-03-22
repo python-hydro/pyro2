@@ -37,6 +37,25 @@ class Simulation(advection.Simulation):
         return k
 
 
+    def method_compute_timestep(self):
+        """
+        Compute the advective timestep (CFL) constraint.  We use the
+        driver.cfl parameter to control what fraction of the CFL
+        step we actually take.
+        """
+
+        cfl = self.rp.get_param("driver.cfl")
+
+        u = self.rp.get_param("advection.u")
+        v = self.rp.get_param("advection.v")
+
+        # the timestep is 1/sum{|U|/dx}
+        xtmp = max(abs(u),self.SMALL)/self.cc_data.grid.dx
+        ytmp = max(abs(v),self.SMALL)/self.cc_data.grid.dy
+
+        self.dt = cfl/(xtmp + ytmp)
+
+
     def evolve(self):
         """
         Evolve the linear advection equation through one timestep.  We only
