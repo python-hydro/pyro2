@@ -1,16 +1,4 @@
-To create images without borders:
+To create images without borders, use analysis/plot_thumbnail.py
 
-pylab.figure(num=1, figsize=(2.10,2.10), dpi=100, facecolor='w')
-
-pylab.imshow(numpy.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
-          interpolation="nearest", origin="lower",
-          extent=[a.xmin, a.xmax, a.ymin, a.ymax])
-
-pylab.axis("off")
-pylab.subplots_adjust(bottom=0.0, top=1.0, left=0.0, right=1.0)
-pylab.savefig("mg_test.png")
-
-
-
-note: currently we are making them 210x210 and then using convert to
+note: currently we are making them 120x120 and then using convert to
 add a 1-pixel white border on all sides.
