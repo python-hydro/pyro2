@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-import numpy
-import pylab
+import numpy as np
+import matplotlib.pyplot as plt
 import sys
 import mesh.patch as patch
 
@@ -9,26 +9,26 @@ import mesh.patch as patch
 
 def makeplot(myd, variable):
 
-    pylab.figure(num=1, figsize=(1.28,1.28), dpi=100, facecolor='w')
+    plt.figure(num=1, figsize=(1.28,1.28), dpi=100, facecolor='w')
 
-    var = myd.getVarPtr(variable)
+    var = myd.get_var(variable)
     myg = myd.grid
 
-    img = pylab.imshow(numpy.transpose(var[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
-                       interpolation="nearest", origin="lower",
-                       extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
+    img = plt.imshow(np.transpose(var[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
+                     interpolation="nearest", origin="lower",
+                     extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
-    pylab.axis("off")
+    plt.axis("off")
 
-    pylab.subplots_adjust(bottom=0.0, top=1.0, left=0.0, right=1.0)
+    plt.subplots_adjust(bottom=0.0, top=1.0, left=0.0, right=1.0)
 
-    pylab.savefig("plot.png")
-    pylab.show()
+    plt.savefig("plot.png")
+    plt.show()
 
 
 if __name__== "__main__":
 
-    print sys.argv
+    print(sys.argv)
 
     file = sys.argv[1]
     variable = sys.argv[2]
