@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 
 import compressible.eos as eos
 import mesh.patch as patch
+import mesh.integration as integration
 import compressible
 import compressible_rk.fluxes as flx
 from util import profile
@@ -48,6 +49,44 @@ class Simulation(compressible.Simulation):
         return k
 
 
+    def method_compute_timestep(self):
+        """
+        The timestep function computes the advective timestep (CFL)
+        constraint.  The CFL constraint says that information cannot
+        propagate further than one zone per timestep.
+
+        We use the driver.cfl parameter to control what fraction of the
+        CFL step we actually take.
+        """
+
+        cfl = self.rp.get_param("driver.cfl")
+
+        # get the variables we need
+        dens = self.cc_data.get_var("density")
+        xmom = self.cc_data.get_var("x-momentum")
+        ymom = self.cc_data.get_var("y-momentum")
+        ener = self.cc_data.get_var("energy")
+
+        # we need to compute the pressure
+        u = xmom/dens
+        v = ymom/dens
+
+        e = (ener - 0.5*dens*(u*u + v*v))/dens
+
+        gamma = self.rp.get_param("eos.gamma")
+
+        p = eos.pres(gamma, dens, e)
+
+        # compute the sounds speed
+        cs = np.sqrt(gamma*p/dens)
+
+        # the timestep is min(dx/(|u| + cs), dy/(|v| + cs))
+        xtmp = (abs(u) + cs)/self.cc_data.grid.dx
+        ytmp = (abs(v) + cs)/self.cc_data.grid.dy
+
+        self.dt = cfl*np.min(1.0/(xtmp + ytmp))
+
+
     def evolve(self):
         """
         Evolve the equations of compressible hydrodynamics through a
@@ -57,68 +96,22 @@ class Simulation(compressible.Simulation):
         tm_evolve = self.tc.timer("evolve")
         tm_evolve.begin()
 
-
         myg = self.cc_data.grid
 
         myd = self.cc_data
 
-        order = self.rp.get_param("compressible.temporal_order")
+        method = self.rp.get_param("compressible.temporal_method")
 
-        if order == 2:
-            # time-integration -- RK2
-            myd_nhalf = patch.cell_center_data_clone(myd)
+        rk = integration.RKIntegrator(myd.t, self.dt, method=method)
+        rk.set_start(myd)
 
-            # initial slopes and n+1/2 state
-            k1 = self.substep(myd)
-            for n in range(self.vars.nvar):
-                var = myd_nhalf.get_var_by_index(n)
-                var.v()[:,:] += 0.5*self.dt*k1.v(n=n)[:,:]
+        for s in range(rk.nstages()):
+            ytmp = rk.get_stage_start(s)
+            ytmp.fill_BC_all()
+            k = self.substep(ytmp)
+            rk.store_increment(s, k)
 
-            myd_nhalf.fill_BC_all()
-
-            # updated slopes, starting with the n+1/2 state
-            k2 = self.substep(myd_nhalf)
-
-            # final update
-            for n in range(self.vars.nvar):
-                var = myd.get_var_by_index(n)
-                var.v()[:,:] += self.dt*k2.v(n=n)[:,:]
-
-        elif order == 4:
-
-            # time-integration -- RK4
-            myd1 = patch.cell_center_data_clone(myd)
-            myd2 = patch.cell_center_data_clone(myd)
-            myd3 = patch.cell_center_data_clone(myd)
-
-            k1 = self.substep(myd)
-            for n in range(self.vars.nvar):
-                var = myd1.get_var_by_index(n)
-                var.v()[:,:] += 0.5*self.dt*k1.v(n=n)[:,:]
-
-            myd1.fill_BC_all()
-
-            k2 = self.substep(myd1)
-            for n in range(self.vars.nvar):
-                var = myd2.get_var_by_index(n)
-                var.v()[:,:] += 0.5*self.dt*k2.v(n=n)[:,:]
-
-            myd2.fill_BC_all()
-
-            k3 = self.substep(myd2)
-            for n in range(self.vars.nvar):
-                var = myd3.get_var_by_index(n)
-                var.v()[:,:] += self.dt*k3.v(n=n)[:,:]
-
-            myd3.fill_BC_all()
-
-            # updated slopes, starting with the n+1/2 state
-            k4 = self.substep(myd3)
-
-            # final update
-            for n in range(self.vars.nvar):
-                var = myd.get_var_by_index(n)
-                var.v()[:,:] += (self.dt/6.0)*(k1.v(n=n)[:,:] + 2.0*k2.v(n=n)[:,:] + 2.0*k3.v(n=n)[:,:] + k4.v(n=n)[:,:])
+        rk.compute_final_update()
 
 
         # increment the time

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from __future__ import print_function
+
 import numpy as np
 import mesh.patch as patch
 import sys
@@ -14,7 +16,7 @@ usage = """
 """
 
 def abort(string):
-    print string
+    print(string)
     sys.exit(2)
 
 
@@ -98,7 +100,7 @@ def process(file):
 # main
 
 if not len(sys.argv) >= 2:
-    print usage
+    print(usage)
     sys.exit(2)
 
 
@@ -110,7 +112,7 @@ for n in range(len(sys.argv)):
 
     try: file = sys.argv[n]
     except:
-        print usage
+        print(usage)
         sys.exit(2)
 
     bins, phi_exact, phi_bin = process(file)

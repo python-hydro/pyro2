@@ -72,38 +72,47 @@ def fluxes(my_data, rp, dt):
     #--------------------------------------------------------------------------
 
     limiter = rp.get_param("advection.limiter")
-    if limiter == 0:
-        limitFunc = reconstruction_f.nolimit
-    elif limiter == 1:
-        limitFunc = reconstruction_f.limit2
-    else:
-        limitFunc = reconstruction_f.limit4
 
-    _lda = limitFunc(1, a, qx, qy, myg.ng)
-    ldelta_a = ai.ArrayIndexer(d=_lda, grid=myg)
+    if limiter < 10:
+        if limiter == 0:
+            limit_func = reconstruction_f.nolimit
+        elif limiter == 1:
+            limit_func = reconstruction_f.limit2
+        else:
+            limit_func = reconstruction_f.limit4
+
+        _lda = limit_func(1, a, qx, qy, myg.ng)
+        ldelta_ax = ai.ArrayIndexer(d=_lda, grid=myg)
+
+        _lda = limit_func(2, a, qx, qy, myg.ng)
+        ldelta_ay = ai.ArrayIndexer(d=_lda, grid=myg)
+
+    else:
+        _ldax, _lday = reconstruction_f.multid_limit(a, qx, qy, myg.ng)
+        ldelta_ax = ai.ArrayIndexer(d=_ldax, grid=myg)
+        ldelta_ay = ai.ArrayIndexer(d=_lday, grid=myg)
+
     a_x = myg.scratch_array()
 
     # upwind
     if u < 0:
         # a_x[i,j] = a[i,j] - 0.5*(1.0 + cx)*ldelta_a[i,j]
-        a_x.v(buf=1)[:,:] = a.v(buf=1) - 0.5*ldelta_a.v(buf=1)
+        a_x.v(buf=1)[:,:] = a.v(buf=1) - 0.5*ldelta_ax.v(buf=1)
     else:
         # a_x[i,j] = a[i-1,j] + 0.5*(1.0 - cx)*ldelta_a[i-1,j]
-        a_x.v(buf=1)[:,:] = a.ip(-1, buf=1) + 0.5*ldelta_a.ip(-1, buf=1)
+        a_x.v(buf=1)[:,:] = a.ip(-1, buf=1) + 0.5*ldelta_ax.ip(-1, buf=1)
 
 
     # y-direction
-    _lda = limitFunc(2, a, qx, qy, myg.ng)
-    ldelta_a = ai.ArrayIndexer(d=_lda, grid=myg)
     a_y = myg.scratch_array()
 
     # upwind
     if v < 0:
         # a_y[i,j] = a[i,j] - 0.5*(1.0 + cy)*ldelta_a[i,j]
-        a_y.v(buf=1)[:,:] = a.v(buf=1) - 0.5*ldelta_a.v(buf=1)
+        a_y.v(buf=1)[:,:] = a.v(buf=1) - 0.5*ldelta_ay.v(buf=1)
     else:
         # a_y[i,j] = a[i,j-1] + 0.5*(1.0 - cy)*ldelta_a[i,j-1]
-        a_y.v(buf=1)[:,:] = a.jp(-1, buf=1) + 0.5*ldelta_a.jp(-1, buf=1)
+        a_y.v(buf=1)[:,:] = a.jp(-1, buf=1) + 0.5*ldelta_ay.jp(-1, buf=1)
 
 
     F_x = u*a_x

@@ -261,6 +261,9 @@ class CellCenterData2d(object):
 
         self.aux = {}
 
+        # derived variables will have a callback function
+        self.derives = {}
+
         self.BCs = {}
 
         # time
@@ -304,6 +307,22 @@ class CellCenterData2d(object):
             The value to associate with the keyword
         """
         self.aux[keyword] = value
+
+
+    def add_derived_variable(self, name, func):
+        """
+        Register a derived variable with a name and a call back function
+        to compute it
+
+        Parameters
+        ----------
+        name : str
+            The name of the derived variable
+        func : function
+            A function to call to derive the variable.  This function 
+            should take a single argument, a CellCenterData2d object
+        """
+        self.derives[name] = func
 
 
     def create(self):
@@ -354,9 +373,12 @@ class CellCenterData2d(object):
 
     def get_var(self, name):
         """
-        Return a data array for the variable described by name.
-        Any changes made to this are automatically reflected in the
-        CellCenterData2d object.
+        Return a data array for the variable described by name.  Stored
+        variables will be checked first, and then any derived variables
+        will be checked.
+
+        For a stored variable, changes made to this are automatically
+        reflected in the CellCenterData2d object.
 
         Parameters
         ----------
@@ -369,8 +391,12 @@ class CellCenterData2d(object):
             The array of data corresponding to the variable name
 
         """
-        n = self.vars.index(name)
-        return ai.ArrayIndexer(d=self.data[n,:,:], grid=self.grid)
+        try:
+            n = self.vars.index(name)
+        except:
+            return self.derives[name](self)
+        else:
+            return ai.ArrayIndexer(d=self.data[n,:,:], grid=self.grid)
 
 
     def get_var_by_index(self, n):

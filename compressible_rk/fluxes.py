@@ -78,9 +78,6 @@ def fluxes(my_data, rp, vars, solid, tc):
 
     currently we assume a gamma-law EOS
 
-    The runtime parameter grav is assumed to be the gravitational
-    acceleration in the y-direction
-
     Parameters
     ----------
     my_data : CellCenterData2d object

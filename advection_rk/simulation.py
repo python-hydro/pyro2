@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import advection
 import advection_rk.fluxes as flx
 import mesh.patch as patch
+import mesh.integration as integration
 import mesh.array_indexer as ai
 
 from util import profile
@@ -36,6 +37,25 @@ class Simulation(advection.Simulation):
         return k
 
 
+    def method_compute_timestep(self):
+        """
+        Compute the advective timestep (CFL) constraint.  We use the
+        driver.cfl parameter to control what fraction of the CFL
+        step we actually take.
+        """
+
+        cfl = self.rp.get_param("driver.cfl")
+
+        u = self.rp.get_param("advection.u")
+        v = self.rp.get_param("advection.v")
+
+        # the timestep is 1/sum{|U|/dx}
+        xtmp = max(abs(u),self.SMALL)/self.cc_data.grid.dx
+        ytmp = max(abs(v),self.SMALL)/self.cc_data.grid.dy
+
+        self.dt = cfl/(xtmp + ytmp)
+
+
     def evolve(self):
         """
         Evolve the linear advection equation through one timestep.  We only
@@ -49,59 +69,18 @@ class Simulation(advection.Simulation):
         myg = self.cc_data.grid
         myd = self.cc_data
 
-        order = self.rp.get_param("advection.temporal_order")
+        method = self.rp.get_param("advection.temporal_method")
 
-        if order == 2:
+        rk = integration.RKIntegrator(myd.t, self.dt, method=method)
+        rk.set_start(myd)
 
-            # time-integration -- RK2
-            myd_nhalf = patch.cell_center_data_clone(myd)
+        for s in range(rk.nstages()):
+            ytmp = rk.get_stage_start(s)
+            ytmp.fill_BC_all()
+            k = self.substep(ytmp)
+            rk.store_increment(s, k)
 
-            # initial slopes and n+1/2 state
-            k1 = self.substep(myd)
-            var = myd_nhalf.get_var("density")
-            var.v()[:,:] += 0.5*self.dt*k1.v()[:,:]
-
-            myd_nhalf.fill_BC_all()
-
-            # updated slopes, starting with the n+1/2 state
-            k2 = self.substep(myd_nhalf)
-
-            # final update
-            var = myd.get_var("density")
-            var.v()[:,:] += self.dt*k2.v()[:,:]
-
-        elif order == 4:
-
-            # time-integration -- RK4
-            myd1 = patch.cell_center_data_clone(myd)
-            myd2 = patch.cell_center_data_clone(myd)
-            myd3 = patch.cell_center_data_clone(myd)
-
-            k1 = self.substep(myd)
-            var = myd1.get_var("density")
-            var.v()[:,:] += 0.5*self.dt*k1.v()[:,:]
-
-            myd1.fill_BC_all()
-
-            k2 = self.substep(myd1)
-            var = myd2.get_var("density")
-            var.v()[:,:] += 0.5*self.dt*k2.v()[:,:]
-
-            myd2.fill_BC_all()
-
-            k3 = self.substep(myd2)
-            var = myd3.get_var("density")
-            var.v()[:,:] += self.dt*k3.v()[:,:]
-
-            myd3.fill_BC_all()
-
-            # updated slopes, starting with the n+1/2 state
-            k4 = self.substep(myd3)
-
-            # final update
-            var = myd.get_var("density")
-            var.v()[:,:] += (self.dt/6.0)*(k1.v()[:,:] + 2.0*k2.v()[:,:] + 2.0*k3.v()[:,:] + k4.v()[:,:])
-
+        rk.compute_final_update()
 
         # increment the time
         myd.t += self.dt

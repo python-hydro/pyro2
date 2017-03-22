@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from __future__ import print_function
+
 import numpy as np
 import mesh.patch as patch
 import sys
@@ -13,18 +15,18 @@ usage = """
 """
 
 def abort(string):
-    print string
+    print(string)
     sys.exit(2)
 
 
 if not len(sys.argv) == 2:
-    print usage
+    print(usage)
     sys.exit(2)
 
 
 try: file1 = sys.argv[1]
 except:
-    print usage
+    print(usage)
     sys.exit(2)
 
 myg, myd = patch.read(file1)
@@ -78,7 +80,7 @@ else:
     p = rho*e*(gamma - 1.0)
 
 
-print myg
+print(myg)
 
 # plot
 fig, axes = plt.subplots(nrows=4, ncols=1, num=1)
