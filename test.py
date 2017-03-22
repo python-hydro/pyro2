@@ -36,9 +36,11 @@ def do_tests(build, out_file, do_standalone=True, do_main=True):
     if do_main:
         tests = []
         tests.append(PyroTest("advection", "smooth", "inputs.smooth", opts))
+        tests.append(PyroTest("advection_rk", "smooth", "inputs.smooth", opts))
         tests.append(PyroTest("compressible", "quad", "inputs.quad", opts))
         tests.append(PyroTest("compressible", "sod", "inputs.sod.x", opts))
         tests.append(PyroTest("compressible", "rt", "inputs.rt", opts))
+        tests.append(PyroTest("compressible_rk", "rt", "inputs.rt", opts))
         tests.append(PyroTest("diffusion", "gaussian", "inputs.gaussian", opts))
         tests.append(PyroTest("incompressible", "shear", "inputs.shear", opts))
         tests.append(PyroTest("lm_atm", "bubble", "inputs.bubble", opts))

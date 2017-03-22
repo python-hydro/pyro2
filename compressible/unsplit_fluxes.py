@@ -184,14 +184,8 @@ def unsplit_fluxes(my_data, my_aux, rp, vars, solid, tc, dt):
     ener = my_data.get_var("energy")
 
     r = dens
-
-    # get the velocities
-    u = xmom/dens
-    v = ymom/dens
-
-    # get the pressure
-    e = (ener - 0.5*(xmom**2 + ymom**2)/dens)/dens
-
+    u, v = my_data.get_var("velocity")
+    e = my_data.get_var("eint")
     p = eos.pres(gamma, dens, e)
 
     smallp = 1.e-10
