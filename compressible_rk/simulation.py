@@ -49,6 +49,44 @@ class Simulation(compressible.Simulation):
         return k
 
 
+    def method_compute_timestep(self):
+        """
+        The timestep function computes the advective timestep (CFL)
+        constraint.  The CFL constraint says that information cannot
+        propagate further than one zone per timestep.
+
+        We use the driver.cfl parameter to control what fraction of the
+        CFL step we actually take.
+        """
+
+        cfl = self.rp.get_param("driver.cfl")
+
+        # get the variables we need
+        dens = self.cc_data.get_var("density")
+        xmom = self.cc_data.get_var("x-momentum")
+        ymom = self.cc_data.get_var("y-momentum")
+        ener = self.cc_data.get_var("energy")
+
+        # we need to compute the pressure
+        u = xmom/dens
+        v = ymom/dens
+
+        e = (ener - 0.5*dens*(u*u + v*v))/dens
+
+        gamma = self.rp.get_param("eos.gamma")
+
+        p = eos.pres(gamma, dens, e)
+
+        # compute the sounds speed
+        cs = np.sqrt(gamma*p/dens)
+
+        # the timestep is min(dx/(|u| + cs), dy/(|v| + cs))
+        xtmp = (abs(u) + cs)/self.cc_data.grid.dx
+        ytmp = (abs(v) + cs)/self.cc_data.grid.dy
+
+        self.dt = cfl*np.min(1.0/(xtmp + ytmp))
+
+
     def evolve(self):
         """
         Evolve the equations of compressible hydrodynamics through a
