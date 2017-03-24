@@ -51,7 +51,7 @@ e_exact   = exact[:,4]
 if (myg.nx > myg.ny):
     # x-problem
     x = myg.x[myg.ilo:myg.ihi+1]
-    jj = myg.ny/2
+    jj = myg.ny//2
 
     rho = dens[myg.ilo:myg.ihi+1,jj]
 
@@ -67,7 +67,7 @@ else:
 
     # y-problem
     x = myg.y[myg.jlo:myg.jhi+1]
-    ii = myg.nx/2
+    ii = myg.nx//2
 
     rho = dens[ii,myg.jlo:myg.jhi+1]
 
