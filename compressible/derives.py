@@ -49,4 +49,8 @@ def derive_primitives(myd, varnames):
         elif var == "soundspeed":
             derived_vars.append(np.sqrt(gamma*p/dens))
 
-    return derived_vars
+    if len(derived_vars) > 1:
+        return derived_vars
+    else:
+        return derived_vars[0]
+
