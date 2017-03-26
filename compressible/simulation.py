@@ -7,45 +7,12 @@ import matplotlib.pyplot as plt
 
 import compressible.BC as BC
 import compressible.eos as eos
+import compressible.derives as derives
 import mesh.boundary as bnd
 import mesh.patch as patch
 from simulation_null import NullSimulation, grid_setup, bc_setup
 import compressible.unsplit_fluxes as flx
 from util import profile
-
-
-def derive_eint(myd):
-    """ 
-    derive the internal energy from the state
-    """
-
-    # get the variables we need
-    dens = myd.get_var("density")
-    xmom = myd.get_var("x-momentum")
-    ymom = myd.get_var("y-momentum")
-    ener = myd.get_var("energy")
-
-    # we need to compute the pressure
-    u = xmom/dens
-    v = ymom/dens
-
-    return (ener - 0.5*dens*(u*u + v*v))/dens
-
-def derive_vels(myd):
-    """ 
-    derive the internal energy from the state
-    """
-
-    # get the variables we need
-    dens = myd.get_var("density")
-    xmom = myd.get_var("x-momentum")
-    ymom = myd.get_var("y-momentum")
-
-    # we need to compute the pressure
-    u = xmom/dens
-    v = ymom/dens
-
-    return u, v
 
 
 class Variables(object):
@@ -125,8 +92,7 @@ class Simulation(NullSimulation):
                               iener = my_data.vars.index("energy"))
 
         # derived variables
-        self.cc_data.add_derived_variable("eint", derive_eint)
-        self.cc_data.add_derived_variable("velocity", derive_vels)
+        self.cc_data.add_derived(derives.derive_primitives)
 
         # initial conditions for the problem
         problem = importlib.import_module("compressible.problems.{}".format(self.problem_name))
@@ -148,15 +114,7 @@ class Simulation(NullSimulation):
         cfl = self.rp.get_param("driver.cfl")
 
         # get the variables we need
-        dens = self.cc_data.get_var("density")
-        e = self.cc_data.get_var("eint")
-        u, v = self.cc_data.get_var("velocity")
-
-        # compute the sounds speed
-        gamma = self.rp.get_param("eos.gamma")
-
-        p = eos.pres(gamma, dens, e)
-        cs = np.sqrt(gamma*p/dens)
+        u, v, cs = self.cc_data.get_var(["velocity", "soundspeed"])
 
         # the timestep is min(dx/(|u| + cs), dy/(|v| + cs))
         xtmp = self.cc_data.grid.dx/(abs(u) + cs)

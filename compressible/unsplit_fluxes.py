@@ -183,10 +183,7 @@ def unsplit_fluxes(my_data, my_aux, rp, vars, solid, tc, dt):
     ymom = my_data.get_var("y-momentum")
     ener = my_data.get_var("energy")
 
-    r = dens
-    u, v = my_data.get_var("velocity")
-    e = my_data.get_var("eint")
-    p = eos.pres(gamma, dens, e)
+    r, u, v, p = my_data.get_var("primitive")
 
     smallp = 1.e-10
     p = p.clip(smallp)   # apply a floor to the pressure
