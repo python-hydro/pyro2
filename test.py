@@ -22,7 +22,7 @@ class PyroTest(object):
         self.options = options
 
 
-def do_tests(build, out_file, do_standalone=True, do_main=True):
+def do_tests(build, out_file, do_standalone=True, do_main=True, reset_fails=False):
 
     # make sure we've built stuff
     print("build = ", build)
@@ -36,16 +36,19 @@ def do_tests(build, out_file, do_standalone=True, do_main=True):
     if do_main:
         tests = []
         tests.append(PyroTest("advection", "smooth", "inputs.smooth", opts))
+        tests.append(PyroTest("advection_rk", "smooth", "inputs.smooth", opts))
         tests.append(PyroTest("compressible", "quad", "inputs.quad", opts))
         tests.append(PyroTest("compressible", "sod", "inputs.sod.x", opts))
         tests.append(PyroTest("compressible", "rt", "inputs.rt", opts))
+        tests.append(PyroTest("compressible_rk", "rt", "inputs.rt", opts))
         tests.append(PyroTest("diffusion", "gaussian", "inputs.gaussian", opts))
         tests.append(PyroTest("incompressible", "shear", "inputs.shear", opts))
         tests.append(PyroTest("lm_atm", "bubble", "inputs.bubble", opts))
 
         for t in tests:
             err = pyro.doit(t.solver, t.problem, t.inputs,
-                            other_commands=t.options, comp_bench=True)
+                            other_commands=t.options, comp_bench=True,
+                            reset_bench_on_fail=reset_fails)
             results["{}-{}".format(t.solver, t.problem)] = err
 
 
@@ -102,6 +105,10 @@ if __name__ == "__main__":
                    help="skip the tests that don't go through pyro.py",
                    action="store_true")
 
+    p.add_argument("--reset_failures",
+                   help="if a test fails, reset the benchmark",
+                   action="store_true")
+
     p.add_argument("--skip_main",
                    help="skip the tests that go through pyro.py, and only run standalone tests",
                    action="store_true")
@@ -119,7 +126,11 @@ if __name__ == "__main__":
     do_standalone = True
     if args.skip_standalone: do_standalone = False
 
-    do_tests(build, outfile, do_standalone=do_standalone, do_main=do_main)
+    reset_fails = False
+    if args.reset_failures: reset_fails = True
+
+    do_tests(build, outfile, do_standalone=do_standalone, do_main=do_main, 
+             reset_fails=reset_fails)
 
     
     # unit tests

@@ -261,6 +261,9 @@ class CellCenterData2d(object):
 
         self.aux = {}
 
+        # derived variables will have a callback function
+        self.derives = []
+
         self.BCs = {}
 
         # time
@@ -304,6 +307,20 @@ class CellCenterData2d(object):
             The value to associate with the keyword
         """
         self.aux[keyword] = value
+
+
+    def add_derived(self, func):
+        """
+        Register a function to compute derived variable
+
+        Parameters
+        ----------
+        func : function
+            A function to call to derive the variable.  This function 
+            should take two arguments, a CellCenterData2d object and a
+            string variable name (or list of variables)
+        """
+        self.derives.append(func)
 
 
     def create(self):
@@ -354,9 +371,12 @@ class CellCenterData2d(object):
 
     def get_var(self, name):
         """
-        Return a data array for the variable described by name.
-        Any changes made to this are automatically reflected in the
-        CellCenterData2d object.
+        Return a data array for the variable described by name.  Stored
+        variables will be checked first, and then any derived variables
+        will be checked.
+
+        For a stored variable, changes made to this are automatically
+        reflected in the CellCenterData2d object.
 
         Parameters
         ----------
@@ -369,8 +389,16 @@ class CellCenterData2d(object):
             The array of data corresponding to the variable name
 
         """
-        n = self.vars.index(name)
-        return ai.ArrayIndexer(d=self.data[n,:,:], grid=self.grid)
+        try:
+            n = self.vars.index(name)
+        except:
+            for f in self.derives:
+                var = f(self, name)
+                if len(var) > 0:
+                    return var
+            raise KeyError("name {} is not valid".format(name))
+        else:
+            return ai.ArrayIndexer(d=self.data[n,:,:], grid=self.grid)
 
 
     def get_var_by_index(self, n):

@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 
 import compressible.BC as BC
 import compressible.eos as eos
+import compressible.derives as derives
 import mesh.boundary as bnd
 import mesh.patch as patch
 from simulation_null import NullSimulation, grid_setup, bc_setup
@@ -90,6 +91,8 @@ class Simulation(NullSimulation):
                               iymom = my_data.vars.index("y-momentum"),
                               iener = my_data.vars.index("energy"))
 
+        # derived variables
+        self.cc_data.add_derived(derives.derive_primitives)
 
         # initial conditions for the problem
         problem = importlib.import_module("compressible.problems.{}".format(self.problem_name))
@@ -111,24 +114,7 @@ class Simulation(NullSimulation):
         cfl = self.rp.get_param("driver.cfl")
 
         # get the variables we need
-        dens = self.cc_data.get_var("density")
-        xmom = self.cc_data.get_var("x-momentum")
-        ymom = self.cc_data.get_var("y-momentum")
-        ener = self.cc_data.get_var("energy")
-
-        # we need to compute the pressure
-        u = xmom/dens
-        v = ymom/dens
-
-        e = (ener - 0.5*dens*(u*u + v*v))/dens
-
-        gamma = self.rp.get_param("eos.gamma")
-
-        p = eos.pres(gamma, dens, e)
-
-        # compute the sounds speed
-        cs = np.sqrt(gamma*p/dens)
-
+        u, v, cs = self.cc_data.get_var(["velocity", "soundspeed"])
 
         # the timestep is min(dx/(|u| + cs), dy/(|v| + cs))
         xtmp = self.cc_data.grid.dx/(abs(u) + cs)
@@ -199,16 +185,11 @@ class Simulation(NullSimulation):
         nvar = len(self.cc_data.vars)
 
         # get the velocities
-        u = xmom/dens
-        v = ymom/dens
+        u, v = self.cc_data.get_var("velocity")
+        magvel = np.sqrt(u**2 + v**2)
 
-        # get the pressure
-        magvel = u**2 + v**2   # temporarily |U|^2
-        rhoe = (ener - 0.5*dens*magvel)
-
-        magvel = np.sqrt(magvel)
-
-        e = rhoe/dens
+        # thermodynamic information
+        e = self.cc_data.get_var("eint")
 
         # access gamma from the cc_data object so we can use dovis
         # outside of a running simulation.
@@ -217,7 +198,6 @@ class Simulation(NullSimulation):
         p = eos.pres(gamma, dens, e)
 
         myg = self.cc_data.grid
-
 
         # figure out the geometry
         L_x = self.cc_data.grid.xmax - self.cc_data.grid.xmin
