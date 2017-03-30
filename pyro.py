@@ -126,6 +126,7 @@ def doit(solver_name, problem_name, param_file,
     #-------------------------------------------------------------------------
     # benchmarks (for regression testing)
     #-------------------------------------------------------------------------
+    result = 0
     # are we comparing to a benchmark?
     if comp_bench:
         compare_file = "{}/tests/{}{:04d}".format(
