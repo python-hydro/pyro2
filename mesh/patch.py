@@ -812,6 +812,7 @@ def cell_center_data_clone(old):
 
     new.aux = old.aux.copy()
     new.data = old.data.copy()
+    new.derives = old.derives.copy()
 
     return new
 
