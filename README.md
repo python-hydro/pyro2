@@ -1,5 +1,5 @@
 ![pyro logo]
-(https://raw.githubusercontent.com/zingale/pyro2/master/www/pyro.png)
+(https://github.com/zingale/pyro2/blob/master/www/pyro.png)
 
 *A simple python-based tutorial on computational methods for hydrodynamics*
 
