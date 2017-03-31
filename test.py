@@ -63,7 +63,7 @@ def do_tests(build, out_file, do_standalone=True, do_main=True,
 
 
     # standalone tests
-    if do_standalone:
+    if do_standalone and single is None:
         err = mg_test.test_poisson_dirichlet(256, comp_bench=True, verbose=0)
         results["mg_poisson_dirichlet"] = err
 
@@ -148,4 +148,5 @@ if __name__ == "__main__":
 
 
     # unit tests
-    nose.run(argv=["", "-s"])
+    if args.single is None:
+        nose.run(argv=["", "-s"])
