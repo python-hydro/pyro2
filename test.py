@@ -22,8 +22,12 @@ class PyroTest(object):
         self.inputs = inputs
         self.options = options
 
+    def __str__(self):
+        return "{}-{}".format(self.solver, self.problem)
 
-def do_tests(build, out_file, do_standalone=True, do_main=True, reset_fails=False):
+
+def do_tests(build, out_file, do_standalone=True, do_main=True, 
+             reset_fails=False, single=None):
 
     # make sure we've built stuff
     print("build = ", build)
@@ -46,11 +50,16 @@ def do_tests(build, out_file, do_standalone=True, do_main=True, reset_fails=Fals
         tests.append(PyroTest("incompressible", "shear", "inputs.shear", opts))
         tests.append(PyroTest("lm_atm", "bubble", "inputs.bubble", opts))
 
-        for t in tests:
+        if single is not None:
+            tests_to_run = [q for q in tests if str(q) == single]
+        else:
+            tests_to_run = tests
+
+        for t in tests_to_run:
             err = pyro.doit(t.solver, t.problem, t.inputs,
                             other_commands=t.options, comp_bench=True,
                             reset_bench_on_fail=reset_fails)
-            results["{}-{}".format(t.solver, t.problem)] = err
+            results[str(t)] = err
 
 
     # standalone tests
@@ -102,6 +111,10 @@ if __name__ == "__main__":
                    help="execute the mk.sh script first before any tests",
                    action="store_true")
 
+    p.add_argument("--single",
+                   help="name of a single test (solver-problem) to run",
+                   type=str, default=None)
+
     p.add_argument("--skip_standalone",
                    help="skip the tests that don't go through pyro.py",
                    action="store_true")
@@ -131,7 +144,7 @@ if __name__ == "__main__":
     if args.reset_failures: reset_fails = True
 
     do_tests(build, outfile, do_standalone=do_standalone, do_main=do_main, 
-             reset_fails=reset_fails)
+             reset_fails=reset_fails, single=args.single)
 
 
     # unit tests
