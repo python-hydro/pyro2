@@ -262,7 +262,7 @@ class CellCenterData2d(object):
         self.aux = {}
 
         # derived variables will have a callback function
-        self.derives = {}
+        self.derives = []
 
         self.BCs = {}
 
@@ -309,20 +309,18 @@ class CellCenterData2d(object):
         self.aux[keyword] = value
 
 
-    def add_derived_variable(self, name, func):
+    def add_derived(self, func):
         """
-        Register a derived variable with a name and a call back function
-        to compute it
+        Register a function to compute derived variable
 
         Parameters
         ----------
-        name : str
-            The name of the derived variable
         func : function
             A function to call to derive the variable.  This function 
-            should take a single argument, a CellCenterData2d object
+            should take two arguments, a CellCenterData2d object and a
+            string variable name (or list of variables)
         """
-        self.derives[name] = func
+        self.derives.append(func)
 
 
     def create(self):
@@ -394,7 +392,11 @@ class CellCenterData2d(object):
         try:
             n = self.vars.index(name)
         except:
-            return self.derives[name](self)
+            for f in self.derives:
+                var = f(self, name)
+                if len(var) > 0:
+                    return var
+            raise KeyError("name {} is not valid".format(name))
         else:
             return ai.ArrayIndexer(d=self.data[n,:,:], grid=self.grid)
 
@@ -810,6 +812,7 @@ def cell_center_data_clone(old):
 
     new.aux = old.aux.copy()
     new.data = old.data.copy()
+    new.derives = old.derives.copy()
 
     return new
 

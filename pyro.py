@@ -15,7 +15,7 @@ from util import msg, profile, runparams
 
 def doit(solver_name, problem_name, param_file,
          other_commands=None,
-         comp_bench=False, make_bench=False):
+         comp_bench=False, reset_bench_on_fail=False, make_bench=False):
 
     msg.bold('pyro ...')
 
@@ -126,6 +126,7 @@ def doit(solver_name, problem_name, param_file,
     #-------------------------------------------------------------------------
     # benchmarks (for regression testing)
     #-------------------------------------------------------------------------
+    result = 0
     # are we comparing to a benchmark?
     if comp_bench:
         compare_file = "{}/tests/{}{:04d}".format(
@@ -147,7 +148,7 @@ def doit(solver_name, problem_name, param_file,
 
 
     # are we storing a benchmark?
-    if make_bench:
+    if make_bench or (result != 0 and reset_bench_on_fail):
         if not os.path.isdir(solver_name + "/tests/"):
             try: os.mkdir(solver_name + "/tests/")
             except:

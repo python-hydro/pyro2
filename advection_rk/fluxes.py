@@ -1,4 +1,4 @@
-import mesh.reconstruction_f as reconstruction_f
+import mesh.reconstruction as reconstruction
 import mesh.patch as patch
 import mesh.array_indexer as ai
 
@@ -74,23 +74,11 @@ def fluxes(my_data, rp, dt):
     limiter = rp.get_param("advection.limiter")
 
     if limiter < 10:
-        if limiter == 0:
-            limit_func = reconstruction_f.nolimit
-        elif limiter == 1:
-            limit_func = reconstruction_f.limit2
-        else:
-            limit_func = reconstruction_f.limit4
-
-        _lda = limit_func(1, a, qx, qy, myg.ng)
-        ldelta_ax = ai.ArrayIndexer(d=_lda, grid=myg)
-
-        _lda = limit_func(2, a, qx, qy, myg.ng)
-        ldelta_ay = ai.ArrayIndexer(d=_lda, grid=myg)
+        ldelta_ax = reconstruction.limit(a, myg, 1, limiter)
+        ldelta_ay = reconstruction.limit(a, myg, 2, limiter)
 
     else:
-        _ldax, _lday = reconstruction_f.multid_limit(a, qx, qy, myg.ng)
-        ldelta_ax = ai.ArrayIndexer(d=_ldax, grid=myg)
-        ldelta_ay = ai.ArrayIndexer(d=_lday, grid=myg)
+        ldelta_ax, ldelta_ay = reconstruction.limit(a, myg, 0, limiter)
 
     a_x = myg.scratch_array()
 

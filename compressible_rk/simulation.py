@@ -62,23 +62,7 @@ class Simulation(compressible.Simulation):
         cfl = self.rp.get_param("driver.cfl")
 
         # get the variables we need
-        dens = self.cc_data.get_var("density")
-        xmom = self.cc_data.get_var("x-momentum")
-        ymom = self.cc_data.get_var("y-momentum")
-        ener = self.cc_data.get_var("energy")
-
-        # we need to compute the pressure
-        u = xmom/dens
-        v = ymom/dens
-
-        e = (ener - 0.5*dens*(u*u + v*v))/dens
-
-        gamma = self.rp.get_param("eos.gamma")
-
-        p = eos.pres(gamma, dens, e)
-
-        # compute the sounds speed
-        cs = np.sqrt(gamma*p/dens)
+        u, v, cs = self.cc_data.get_var(["velocity", "soundspeed"])
 
         # the timestep is min(dx/(|u| + cs), dy/(|v| + cs))
         xtmp = (abs(u) + cs)/self.cc_data.grid.dx

@@ -82,7 +82,7 @@ xcenter = 0.5*(myg.xmin + myg.xmax)
 ycenter = 0.5*(myg.ymin + myg.ymax)
 
 r = np.sqrt( (myg.x2d[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] - xcenter)**2 +
-                (myg.y2d[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] - ycenter)**2 )
+             (myg.y2d[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] - ycenter)**2 )
 
 
 # bin the radii -- digitize returns an array with the same shape as

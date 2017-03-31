@@ -126,7 +126,7 @@ Updating U_{i,j}:
 
 import compressible.eos as eos
 import compressible.interface_f as interface_f
-
+import mesh.reconstruction as reconstruction
 import mesh.reconstruction_f as reconstruction_f
 import mesh.patch as patch
 import mesh.array_indexer as ai
@@ -183,10 +183,7 @@ def unsplit_fluxes(my_data, my_aux, rp, vars, solid, tc, dt):
     ymom = my_data.get_var("y-momentum")
     ener = my_data.get_var("energy")
 
-    r = dens
-    u, v = my_data.get_var("velocity")
-    e = my_data.get_var("eint")
-    p = eos.pres(gamma, dens, e)
+    r, u, v, p = my_data.get_var("primitive")
 
     smallp = 1.e-10
     p = p.clip(smallp)   # apply a floor to the pressure
@@ -217,23 +214,17 @@ def unsplit_fluxes(my_data, my_aux, rp, vars, solid, tc, dt):
     tm_limit.begin()
 
     limiter = rp.get_param("compressible.limiter")
-    if limiter == 0:
-        limitFunc = reconstruction_f.nolimit
-    elif limiter == 1:
-        limitFunc = reconstruction_f.limit2
-    else:
-        limitFunc = reconstruction_f.limit4
 
-    ldelta_rx = xi*limitFunc(1, r, myg.qx, myg.qy, myg.ng)
-    ldelta_ux = xi*limitFunc(1, u, myg.qx, myg.qy, myg.ng)
-    ldelta_vx = xi*limitFunc(1, v, myg.qx, myg.qy, myg.ng)
-    ldelta_px = xi*limitFunc(1, p, myg.qx, myg.qy, myg.ng)
+    ldelta_rx = xi*reconstruction.limit(r, myg, 1, limiter)
+    ldelta_ux = xi*reconstruction.limit(u, myg, 1, limiter)
+    ldelta_vx = xi*reconstruction.limit(v, myg, 1, limiter)
+    ldelta_px = xi*reconstruction.limit(p, myg, 1, limiter)
 
     # monotonized central differences in y-direction
-    ldelta_ry = xi*limitFunc(2, r, myg.qx, myg.qy, myg.ng)
-    ldelta_uy = xi*limitFunc(2, u, myg.qx, myg.qy, myg.ng)
-    ldelta_vy = xi*limitFunc(2, v, myg.qx, myg.qy, myg.ng)
-    ldelta_py = xi*limitFunc(2, p, myg.qx, myg.qy, myg.ng)
+    ldelta_ry = xi*reconstruction.limit(r, myg, 2, limiter)
+    ldelta_uy = xi*reconstruction.limit(u, myg, 2, limiter)
+    ldelta_vy = xi*reconstruction.limit(v, myg, 2, limiter)
+    ldelta_py = xi*reconstruction.limit(p, myg, 2, limiter)
 
     tm_limit.end()
 

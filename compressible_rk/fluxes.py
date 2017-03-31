@@ -64,6 +64,7 @@ Updating U_{i,j}:
 
 import compressible.eos as eos
 import compressible.interface_f as interface_f
+import mesh.reconstruction as reconstruction
 import mesh.reconstruction_f as reconstruction_f
 import mesh.patch as patch
 import mesh.array_indexer as ai
@@ -115,16 +116,7 @@ def fluxes(my_data, rp, vars, solid, tc):
     ymom = my_data.get_var("y-momentum")
     ener = my_data.get_var("energy")
 
-    r = dens
-
-    # get the velocities
-    u = xmom/dens
-    v = ymom/dens
-
-    # get the pressure
-    e = (ener - 0.5*(xmom**2 + ymom**2)/dens)/dens
-
-    p = eos.pres(gamma, dens, e)
+    r, u, v, p = my_data.get_var("primitive")
 
     smallp = 1.e-10
     p = p.clip(smallp)   # apply a floor to the pressure
@@ -155,34 +147,17 @@ def fluxes(my_data, rp, vars, solid, tc):
     tm_limit.begin()
 
     limiter = rp.get_param("compressible.limiter")
-    if limiter == 0:
-        limitFunc = reconstruction_f.nolimit
-    elif limiter == 1:
-        limitFunc = reconstruction_f.limit2
-    else:
-        limitFunc = reconstruction_f.limit4
 
-    _ldelta_rx = xi*limitFunc(1, r, myg.qx, myg.qy, myg.ng)
-    _ldelta_ux = xi*limitFunc(1, u, myg.qx, myg.qy, myg.ng)
-    _ldelta_vx = xi*limitFunc(1, v, myg.qx, myg.qy, myg.ng)
-    _ldelta_px = xi*limitFunc(1, p, myg.qx, myg.qy, myg.ng)
-
-    # wrap these in ArrayIndexer objects
-    ldelta_rx = ai.ArrayIndexer(d=_ldelta_rx, grid=myg)
-    ldelta_ux = ai.ArrayIndexer(d=_ldelta_ux, grid=myg)
-    ldelta_vx = ai.ArrayIndexer(d=_ldelta_vx, grid=myg)
-    ldelta_px = ai.ArrayIndexer(d=_ldelta_px, grid=myg)
+    ldelta_rx = xi*reconstruction.limit(r, myg, 1, limiter)
+    ldelta_ux = xi*reconstruction.limit(u, myg, 1, limiter)
+    ldelta_vx = xi*reconstruction.limit(v, myg, 1, limiter)
+    ldelta_px = xi*reconstruction.limit(p, myg, 1, limiter)
 
     # monotonized central differences in y-direction
-    _ldelta_ry = xi*limitFunc(2, r, myg.qx, myg.qy, myg.ng)
-    _ldelta_uy = xi*limitFunc(2, u, myg.qx, myg.qy, myg.ng)
-    _ldelta_vy = xi*limitFunc(2, v, myg.qx, myg.qy, myg.ng)
-    _ldelta_py = xi*limitFunc(2, p, myg.qx, myg.qy, myg.ng)
-
-    ldelta_ry = ai.ArrayIndexer(d=_ldelta_ry, grid=myg)
-    ldelta_uy = ai.ArrayIndexer(d=_ldelta_uy, grid=myg)
-    ldelta_vy = ai.ArrayIndexer(d=_ldelta_vy, grid=myg)
-    ldelta_py = ai.ArrayIndexer(d=_ldelta_py, grid=myg)
+    ldelta_ry = xi*reconstruction.limit(r, myg, 2, limiter)
+    ldelta_uy = xi*reconstruction.limit(u, myg, 2, limiter)
+    ldelta_vy = xi*reconstruction.limit(v, myg, 2, limiter)
+    ldelta_py = xi*reconstruction.limit(p, myg, 2, limiter)
 
     tm_limit.end()
 
