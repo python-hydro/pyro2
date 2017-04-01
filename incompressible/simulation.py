@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import incompressible.incomp_interface_f as incomp_interface_f
-import mesh.reconstruction_f as reconstruction_f
+import mesh.reconstruction as reconstruction
 import mesh.patch as patch
 import mesh.array_indexer as ai
 
@@ -185,15 +185,12 @@ class Simulation(NullSimulation):
         # create the limited slopes of u and v (in both directions)
         #---------------------------------------------------------------------
         limiter = self.rp.get_param("incompressible.limiter")
-        if (limiter == 0): limitFunc = reconstruction_f.nolimit
-        elif (limiter == 1): limitFunc = reconstruction_f.limit2
-        else: limitFunc = reconstruction_f.limit4
 
-        ldelta_ux = limitFunc(1, u, myg.qx, myg.qy, myg.ng)
-        ldelta_vx = limitFunc(1, v, myg.qx, myg.qy, myg.ng)
+        ldelta_ux = reconstruction.limit(u, myg, 1, limiter)
+        ldelta_vx = reconstruction.limit(v, myg, 1, limiter)
 
-        ldelta_uy = limitFunc(2, u, myg.qx, myg.qy, myg.ng)
-        ldelta_vy = limitFunc(2, v, myg.qx, myg.qy, myg.ng)
+        ldelta_uy = reconstruction.limit(u, myg, 2, limiter)
+        ldelta_vy = reconstruction.limit(v, myg, 2, limiter)
 
         #---------------------------------------------------------------------
         # get the advective velocities

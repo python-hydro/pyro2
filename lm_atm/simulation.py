@@ -8,7 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import lm_atm.LM_atm_interface_f as lm_interface_f
-import mesh.reconstruction_f as reconstruction_f
+import mesh.reconstruction as reconstruction
 import mesh.boundary as bnd
 import mesh.patch as patch
 import mesh.array_indexer as ai
@@ -322,18 +322,14 @@ class Simulation(NullSimulation):
         # create the limited slopes of rho, u and v (in both directions)
         #---------------------------------------------------------------------
         limiter = self.rp.get_param("lm-atmosphere.limiter")
-        if limiter == 0: limitFunc = reconstruction_f.nolimit
-        elif limiter == 1: limitFunc = reconstruction_f.limit2
-        else: limitFunc = reconstruction_f.limit4
 
+        ldelta_rx = reconstruction.limit(rho, myg, 1, limiter)
+        ldelta_ux = reconstruction.limit(u, myg, 1, limiter)
+        ldelta_vx = reconstruction.limit(v, myg, 1, limiter)
 
-        ldelta_rx = limitFunc(1, rho, myg.qx, myg.qy, myg.ng)
-        ldelta_ux = limitFunc(1, u, myg.qx, myg.qy, myg.ng)
-        ldelta_vx = limitFunc(1, v, myg.qx, myg.qy, myg.ng)
-
-        ldelta_ry = limitFunc(2, rho, myg.qx, myg.qy, myg.ng)
-        ldelta_uy = limitFunc(2, u, myg.qx, myg.qy, myg.ng)
-        ldelta_vy = limitFunc(2, v, myg.qx, myg.qy, myg.ng)
+        ldelta_ry = reconstruction.limit(rho, myg, 2, limiter)
+        ldelta_uy = reconstruction.limit(u, myg, 2, limiter)
+        ldelta_vy = reconstruction.limit(v, myg, 2, limiter)
 
         
         #---------------------------------------------------------------------
