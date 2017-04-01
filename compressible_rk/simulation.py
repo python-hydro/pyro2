@@ -1,15 +1,10 @@
 from __future__ import print_function
 
 import numpy as np
-import matplotlib.pyplot as plt
 
-import compressible.eos as eos
-import mesh.patch as patch
 import mesh.integration as integration
 import compressible
 import compressible_rk.fluxes as flx
-from util import profile
-
 
 class Simulation(compressible.Simulation):
 
@@ -25,7 +20,6 @@ class Simulation(compressible.Simulation):
         # compute the source terms
         dens = myd.get_var("density")
         ymom = myd.get_var("y-momentum")
-        ener = myd.get_var("energy")
 
         ymom_src = myg.scratch_array()
         ymom_src.v()[:,:] = dens.v()[:,:]*grav
@@ -79,8 +73,6 @@ class Simulation(compressible.Simulation):
 
         tm_evolve = self.tc.timer("evolve")
         tm_evolve.begin()
-
-        myg = self.cc_data.grid
 
         myd = self.cc_data
 

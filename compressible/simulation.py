@@ -12,8 +12,6 @@ import mesh.boundary as bnd
 import mesh.patch as patch
 from simulation_null import NullSimulation, grid_setup, bc_setup
 import compressible.unsplit_fluxes as flx
-from util import profile
-
 
 class Variables(object):
     """
@@ -178,9 +176,6 @@ class Simulation(NullSimulation):
         plt.rc("font", size=10)
 
         dens = self.cc_data.get_var("density")
-        xmom = self.cc_data.get_var("x-momentum")
-        ymom = self.cc_data.get_var("y-momentum")
-        ener = self.cc_data.get_var("energy")
 
         nvar = len(self.cc_data.vars)
 

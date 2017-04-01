@@ -66,7 +66,6 @@ import compressible.eos as eos
 import compressible.interface_f as interface_f
 import mesh.reconstruction as reconstruction
 import mesh.reconstruction_f as reconstruction_f
-import mesh.patch as patch
 import mesh.array_indexer as ai
 
 from util import msg

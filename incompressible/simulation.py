@@ -12,7 +12,6 @@ import mesh.array_indexer as ai
 
 from simulation_null import NullSimulation, grid_setup, bc_setup
 import multigrid.MG as MG
-from util import profile
 
 class Simulation(NullSimulation):
 
