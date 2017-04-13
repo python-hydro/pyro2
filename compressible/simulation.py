@@ -4,6 +4,7 @@ import importlib
 
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1 import AxesGrid
 
 import compressible.BC as BC
 import compressible.eos as eos
@@ -198,48 +199,45 @@ class Simulation(NullSimulation):
         L_x = self.cc_data.grid.xmax - self.cc_data.grid.xmin
         L_y = self.cc_data.grid.ymax - self.cc_data.grid.ymin
 
-        orientation = "vertical"
-        shrink = 1.0
+        f = plt.figure(1)
 
-        sparseX = 0
-        allYlabel = 1
+        cbar_title = False
 
         if L_x > 2*L_y:
-
             # we want 4 rows:
-            #  rho
-            #  |U|
-            #   p
-            #   e
-            fig, axes = plt.subplots(nrows=4, ncols=1, num=1)
-            orientation = "horizontal"
-            if L_x > 4*L_y:
-                shrink = 0.75
-
-            on_left = list(range(nvar))
-
+            axes = AxesGrid(f, 111,
+                            nrows_ncols=(4, 1),
+                            share_all=True,
+                            cbar_mode="each",
+                            cbar_location="top",
+                            cbar_pad="10%",
+                            cbar_size="25%",
+                            axes_pad=(0.25, 0.65),
+                            add_all=True, label_mode="L")
+            cbar_title = True
 
         elif L_y > 2*L_x:
-
             # we want 4 columns:  rho  |U|  p  e
-            fig, axes = plt.subplots(nrows=1, ncols=4, num=1)
-            if L_y >= 3*L_x:
-                shrink = 0.5
-                sparseX = 1
-                allYlabel = 0
-
-            on_left = [0]
+            axes = AxesGrid(f, 111,
+                            nrows_ncols=(1, 4),
+                            share_all=True,
+                            cbar_mode="each",
+                            cbar_location="right",
+                            cbar_pad="10%",
+                            cbar_size="25%",
+                            axes_pad=(0.65, 0.25),
+                            add_all=True, label_mode="L")
 
         else:
-            # 2x2 grid of plots with
-            #
-            #   rho   |u|
-            #    p     e
-            fig, axes = plt.subplots(nrows=2, ncols=2, num=1)
-            plt.subplots_adjust(hspace=0.25)
-
-            on_left = [0, 2]
-
+            # 2x2 grid of plots
+            axes = AxesGrid(f, 111,
+                            nrows_ncols=(2, 2),
+                            share_all=True,
+                            cbar_mode="each",
+                            cbar_location="right",
+                            cbar_pad="2%",
+                            axes_pad=(0.65, 0.25),
+                            add_all=True, label_mode="L")
 
         fields = [dens, magvel, p, e]
         field_names = [r"$\rho$", r"U", "p", "e"]
@@ -247,7 +245,7 @@ class Simulation(NullSimulation):
         cm = "viridis"
 
         for n in range(4):
-            ax = axes.flat[n]
+            ax = axes[n]
 
             v = fields[n]
             img = ax.imshow(np.transpose(v.v()),
@@ -256,22 +254,13 @@ class Simulation(NullSimulation):
                             cmap=cm)
 
             ax.set_xlabel("x")
-            if n == 0:
-                ax.set_ylabel("y")
-            elif allYlabel:
-                ax.set_ylabel("y")
+            ax.set_ylabel("y")
 
-            ax.set_title(field_names[n])
-
-            if not n in on_left:
-                ax.yaxis.offsetText.set_visible(False)
-                if n > 0: ax.get_yaxis().set_visible(False)
-
-            if sparseX:
-                ax.xaxis.set_major_locator(plt.MaxNLocator(3))
-
-            plt.colorbar(img, ax=ax, orientation=orientation, shrink=shrink)
-
+            cb = axes.cbar_axes[n].colorbar(img)
+            if cbar_title:
+                cb.ax.set_title(field_names[n])
+            else:
+                ax.set_title(field_names[n])
 
         plt.figtext(0.05, 0.0125, "t = %10.5f" % self.cc_data.t)
 
