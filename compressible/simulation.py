@@ -19,15 +19,15 @@ class Variables(object):
     a container class for easy access to the different compressible
     variable by an integer key
     """
-    def __init__(self, idens=-1, ixmom=-1, iymom=-1, iener=-1):
+    def __init__(self, my_data):
         self.nvar = 4
 
         # conserved variables -- we set these when we initialize for
         # they match the CellCenterData2d object
-        self.idens = idens
-        self.ixmom = ixmom
-        self.iymom = iymom
-        self.iener = iener
+        self.idens = my_data.vars.index("density")
+        self.ixmom = my_data.vars.index("x-momentum")
+        self.iymom = my_data.vars.index("y-momentum")
+        self.iener = my_data.vars.index("energy")
 
         # primitive variables
         self.irho = 0
@@ -85,10 +85,7 @@ class Simulation(NullSimulation):
         aux_data.create()
         self.aux_data = aux_data
 
-        self.vars = Variables(idens = my_data.vars.index("density"),
-                              ixmom = my_data.vars.index("x-momentum"),
-                              iymom = my_data.vars.index("y-momentum"),
-                              iener = my_data.vars.index("energy"))
+        self.ivars = Variables(my_data)
 
         # derived variables
         self.cc_data.add_derived(derives.derive_primitives)
@@ -140,7 +137,7 @@ class Simulation(NullSimulation):
         myg = self.cc_data.grid
 
         Flux_x, Flux_y = flx.unsplit_fluxes(self.cc_data, self.aux_data, self.rp,
-                                            self.vars, self.solid, self.tc, self.dt)
+                                            self.ivars, self.solid, self.tc, self.dt)
 
         old_dens = dens.copy()
         old_ymom = ymom.copy()
@@ -149,7 +146,7 @@ class Simulation(NullSimulation):
         dtdx = self.dt/myg.dx
         dtdy = self.dt/myg.dy
 
-        for n in range(self.vars.nvar):
+        for n in range(self.ivars.nvar):
             var = self.cc_data.get_var_by_index(n)
 
             var.v()[:,:] += \
