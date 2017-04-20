@@ -51,7 +51,7 @@ class Variables(object):
 
 class Simulation(NullSimulation):
 
-    def initialize(self):
+    def initialize(self, extra_vars=None):
         """
         Initialize the grid and variables for compressible flow and set
         the initial conditions for the chosen problem.
@@ -79,6 +79,10 @@ class Simulation(NullSimulation):
         my_data.register_var("x-momentum", bc_xodd)
         my_data.register_var("y-momentum", bc_yodd)
 
+        # any extras?
+        if extra_vars is not None:
+            for v in extra_vars:
+                my_data.register_var(v, bc)
 
         # store the EOS gamma as an auxillary quantity so we can have a
         # self-contained object stored in output files to make plots.
