@@ -256,7 +256,8 @@ class CellCenterData2d(object):
         self.dtype = dtype
         self.data = None
 
-        self.vars = []
+        self.names = []
+        self.vars = self.names # backwards compatibility hack
         self.nvar = 0
 
         self.aux = {}
@@ -288,7 +289,7 @@ class CellCenterData2d(object):
         if self.initialized == 1:
             msg.fail("ERROR: grid already initialized")
 
-        self.vars.append(name)
+        self.names.append(name)
         self.nvar += 1
 
         self.BCs[name] = bc
@@ -357,14 +358,14 @@ class CellCenterData2d(object):
 
         for n in range(self.nvar):
             my_str += "%16s: min: %15.10f    max: %15.10f\n" % \
-                (self.vars[n],
+                (self.names[n],
                  np.min(self.data[n,ilo:ihi+1,jlo:jhi+1]),
                  np.max(self.data[n,ilo:ihi+1,jlo:jhi+1]) )
             my_str += "%16s  BCs: -x: %-12s +x: %-12s -y: %-12s +y: %-12s\n" %\
-                (" " , self.BCs[self.vars[n]].xlb,
-                       self.BCs[self.vars[n]].xrb,
-                       self.BCs[self.vars[n]].ylb,
-                       self.BCs[self.vars[n]].yrb)
+                (" " , self.BCs[self.names[n]].xlb,
+                       self.BCs[self.names[n]].xrb,
+                       self.BCs[self.names[n]].ylb,
+                       self.BCs[self.names[n]].yrb)
 
         return my_str
 
@@ -390,7 +391,7 @@ class CellCenterData2d(object):
 
         """
         try:
-            n = self.vars.index(name)
+            n = self.names.index(name)
         except:
             for f in self.derives:
                 var = f(self, name)
@@ -466,7 +467,7 @@ class CellCenterData2d(object):
             The name of the variable to zero
 
         """
-        n = self.vars.index(name)
+        n = self.names.index(name)
         self.data[n,:,:] = 0.0
 
 
@@ -474,7 +475,7 @@ class CellCenterData2d(object):
         """
         Fill boundary conditions on all variables.
         """
-        for name in self.vars:
+        for name in self.names:
             self.fill_BC(name)
 
 
@@ -503,7 +504,7 @@ class CellCenterData2d(object):
         # Neumann and Dirichlet homogeneous BCs respectively, but
         # this only works for a single ghost cell
 
-        n = self.vars.index(name)
+        n = self.names.index(name)
 
         # -x boundary
         if self.BCs[name].xlb in ["outflow", "neumann"]:
@@ -651,7 +652,7 @@ class CellCenterData2d(object):
         """
         return the minimum of the variable name in the domain's valid region
         """
-        n = self.vars.index(name)
+        n = self.names.index(name)
         g = self.grid
         return np.min(self.data[n,g.ilo-ng:g.ihi+1+ng,g.jlo-ng:g.jhi+1+ng])
 
@@ -660,7 +661,7 @@ class CellCenterData2d(object):
         """
         return the maximum of the variable name in the domain's valid region
         """
-        n = self.vars.index(name)
+        n = self.names.index(name)
         g = self.grid
         return np.max(self.data[n,g.ilo-ng:g.ihi+1+ng,g.jlo-ng:g.jhi+1+ng])
 
@@ -806,7 +807,7 @@ def cell_center_data_clone(old):
     new = CellCenterData2d(old.grid, dtype=old.dtype)
 
     for n in range(old.nvar):
-        new.register_var(old.vars[n], old.BCs[old.vars[n]])
+        new.register_var(old.names[n], old.BCs[old.names[n]])
 
     new.create()
 

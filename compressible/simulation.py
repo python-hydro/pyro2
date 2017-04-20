@@ -19,21 +19,34 @@ class Variables(object):
     a container class for easy access to the different compressible
     variable by an integer key
     """
-    def __init__(self, my_data):
-        self.nvar = 4
+    def __init__(self, myd):
+        self.nvar = len(myd.names)
 
         # conserved variables -- we set these when we initialize for
         # they match the CellCenterData2d object
-        self.idens = my_data.vars.index("density")
-        self.ixmom = my_data.vars.index("x-momentum")
-        self.iymom = my_data.vars.index("y-momentum")
-        self.iener = my_data.vars.index("energy")
+        self.idens = myd.names.index("density")
+        self.ixmom = myd.names.index("x-momentum")
+        self.iymom = myd.names.index("y-momentum")
+        self.iener = myd.names.index("energy")
+
+        # if there are any additional variable, we treat them as
+        # passively advected scalars
+        self.naux = self.nvar - 4
+        if self.naux > 0:
+            self.irhox = 4
+        else:
+            self.irhox = -1
 
         # primitive variables
         self.irho = 0
         self.iu = 1
         self.iv = 2
         self.ip = 3
+
+        if self.naux > 0:
+            self.ix = 4   # advected scalar
+        else:
+            self.ix = -1
 
 
 class Simulation(NullSimulation):
@@ -175,7 +188,7 @@ class Simulation(NullSimulation):
 
         dens = self.cc_data.get_var("density")
 
-        nvar = len(self.cc_data.vars)
+        nvar = len(self.cc_data.names)
 
         # get the velocities
         u, v = self.cc_data.get_var("velocity")

@@ -35,12 +35,12 @@ def compare(grid1, data1, grid2, data2):
 
     for n in range(data1.nvar):
 
-        d1 = data1.get_var(data1.vars[n])
-        d2 = data2.get_var(data2.vars[n])
+        d1 = data1.get_var_by_index(n)
+        d2 = data2.get_var_by_index(n)
 
         err = np.max(np.abs(d1.v() - d2.v()))
 
-        print("%20s error = %20.10g" % (data1.vars[n], err))
+        print("{:20s} error = {:20.10g}".format(data1.names[n], err))
 
         if not err == 0:
             result = "varerr"
