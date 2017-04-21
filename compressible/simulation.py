@@ -38,6 +38,8 @@ class Variables(object):
             self.irhox = -1
 
         # primitive variables
+        self.nq = 4 + self.naux
+
         self.irho = 0
         self.iu = 1
         self.iv = 2
@@ -47,6 +49,45 @@ class Variables(object):
             self.ix = 4   # advected scalar
         else:
             self.ix = -1
+
+
+def cons_to_prim(U, gamma, ivars, myg):
+    """ convert an input vector of conserved variables to primitive variables """
+    
+    q = myg.scratch_array(nvar=self.ivars.nq)
+
+    q[:,:,ivars.irho] = U[:,:,ivars.idens]
+    q[:,:,ivars.iu] = U[:,:,ivars.ixmom]/U[:,:,ivars.idens]
+    q[:,:,ivars.iv] = U[:,:,ivars.iymom]/U[:,:,ivars.idens]
+
+    e = (U[:,:,ivars.iener] - 
+         0.5*q[:,:,ivars.irho]*(q[:,:,ivars.iu]**2 + 
+                                q[:,:,ivars.iv]**2))/q[:,:,ivars.irho]
+
+    q[:,:,ivars.ip] = eos.pres(gamma, q[:,:,ivars.irho], e)
+
+    if ivars.naux > 0:
+        q[:,:,ivars.ix:ivars.ix+ivars.naux] = \
+            U[:,:,ivars.irhox:ivars+naux]/q[:,:,ivars.irho]
+
+    return q
+
+
+def prim_to_cons(q, gamma, ivars, myg):
+    """ convert an input vector of primitive variables to conserved variables """
+    
+    U = myg.scratch_array(nvar=self.ivars.nvar)
+
+    U[:,:,ivars.idens] = q[:,:,ivars.irho] 
+    U[:,:,ivars.ixmom] = q[:,:,ivars.iu]*U[:,:,ivars.idens]
+    U[:,:,ivars.iymom] = q[:,:,ivars.iv]*U[:,:,ivars.idens]
+    U[:,:,ivars.iener] = rhoe + 0.5*q[:,:,ivars.irho]*(q[:,:,ivars.iu]**2 + 
+                                                       q[:,:,ivars.iv]**2)
+
+    if ivars.naux > 0:
+        U[:,:,ivars.irhox] = q[:,:,ivars.ix]*q[:,:,ivars.irho] 
+
+    return U
 
 
 class Simulation(NullSimulation):
@@ -107,6 +148,7 @@ class Simulation(NullSimulation):
         problem.init_data(self.cc_data, self.rp)
 
         if self.verbose > 0: print(my_data)
+
 
     def method_compute_timestep(self):
         """
