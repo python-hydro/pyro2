@@ -56,10 +56,8 @@ class Simulation(NullSimulation):
         Initialize the grid and variables for compressible flow and set
         the initial conditions for the chosen problem.
         """
-
         my_grid = grid_setup(self.rp, ng=4)
         my_data = patch.CellCenterData2d(my_grid)
-
 
         # define solver specific boundary condition routines
         bnd.define_bc("hse", BC.user, is_solid=False)
@@ -68,10 +66,7 @@ class Simulation(NullSimulation):
 
         # are we dealing with solid boundaries? we'll use these for
         # the Riemann solver
-        self.solid = bnd.BCProp(int(bnd.bc_solid[self.rp.get_param("mesh.xlboundary")]),
-                                int(bnd.bc_solid[self.rp.get_param("mesh.xrboundary")]),
-                                int(bnd.bc_solid[self.rp.get_param("mesh.ylboundary")]),
-                                int(bnd.bc_solid[self.rp.get_param("mesh.yrboundary")]))
+        self.solid = bnd.bc_is_solid(self.rp)
 
         # density and energy
         my_data.register_var("density", bc)
@@ -113,7 +108,6 @@ class Simulation(NullSimulation):
 
         if self.verbose > 0: print(my_data)
 
-
     def method_compute_timestep(self):
         """
         The timestep function computes the advective timestep (CFL)
@@ -134,7 +128,6 @@ class Simulation(NullSimulation):
         ytmp = self.cc_data.grid.dy/(abs(v) + cs)
 
         self.dt = cfl*min(xtmp.min(), ytmp.min())
-
 
     def evolve(self):
         """
