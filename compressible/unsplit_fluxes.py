@@ -126,6 +126,7 @@ Updating U_{i,j}:
 
 import compressible.eos as eos
 import compressible.interface_f as interface_f
+import compressible as comp
 import mesh.reconstruction as reconstruction
 import mesh.reconstruction_f as reconstruction_f
 import mesh.array_indexer as ai
@@ -246,21 +247,8 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
 
     # transform interface states back into conserved variables
-    U_xl = myg.scratch_array(ivars.nvar)
-    U_xr = myg.scratch_array(ivars.nvar)
-
-    U_xl[:,:,ivars.idens] = V_l[:,:,ivars.irho]
-    U_xl[:,:,ivars.ixmom] = V_l[:,:,ivars.irho]*V_l[:,:,ivars.iu]
-    U_xl[:,:,ivars.iymom] = V_l[:,:,ivars.irho]*V_l[:,:,ivars.iv]
-    U_xl[:,:,ivars.iener] = eos.rhoe(gamma, V_l[:,:,ivars.ip]) + \
-        0.5*V_l[:,:,ivars.irho]*(V_l[:,:,ivars.iu]**2 + V_l[:,:,ivars.iv]**2)
-
-    U_xr[:,:,ivars.idens] = V_r[:,:,ivars.irho]
-    U_xr[:,:,ivars.ixmom] = V_r[:,:,ivars.irho]*V_r[:,:,ivars.iu]
-    U_xr[:,:,ivars.iymom] = V_r[:,:,ivars.irho]*V_r[:,:,ivars.iv]
-    U_xr[:,:,ivars.iener] = eos.rhoe(gamma, V_r[:,:,ivars.ip]) + \
-        0.5*V_r[:,:,ivars.irho]*(V_r[:,:,ivars.iu]**2 + V_r[:,:,ivars.iv]**2)
-
+    U_xl = comp.prim_to_cons(V_l, gamma, ivars, myg)
+    U_xr = comp.prim_to_cons(V_r, gamma, ivars, myg)
 
 
     #=========================================================================
@@ -281,20 +269,8 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
 
     # transform interface states back into conserved variables
-    U_yl = myg.scratch_array(ivars.nvar)
-    U_yr = myg.scratch_array(ivars.nvar)
-
-    U_yl[:,:,ivars.idens] = V_l[:,:,ivars.irho]
-    U_yl[:,:,ivars.ixmom] = V_l[:,:,ivars.irho]*V_l[:,:,ivars.iu]
-    U_yl[:,:,ivars.iymom] = V_l[:,:,ivars.irho]*V_l[:,:,ivars.iv]
-    U_yl[:,:,ivars.iener] = eos.rhoe(gamma, V_l[:,:,ivars.ip]) + \
-        0.5*V_l[:,:,ivars.irho]*(V_l[:,:,ivars.iu]**2 + V_l[:,:,ivars.iv]**2)
-
-    U_yr[:,:,ivars.idens] = V_r[:,:,ivars.irho]
-    U_yr[:,:,ivars.ixmom] = V_r[:,:,ivars.irho]*V_r[:,:,ivars.iu]
-    U_yr[:,:,ivars.iymom] = V_r[:,:,ivars.irho]*V_r[:,:,ivars.iv]
-    U_yr[:,:,ivars.iener] = eos.rhoe(gamma, V_r[:,:,ivars.ip]) + \
-        0.5*V_r[:,:,ivars.irho]*(V_r[:,:,ivars.iu]**2 + V_r[:,:,ivars.iv]**2)
+    U_yl = comp.prim_to_cons(V_l, gamma, ivars, myg)
+    U_yr = comp.prim_to_cons(V_r, gamma, ivars, myg)
 
 
     #=========================================================================

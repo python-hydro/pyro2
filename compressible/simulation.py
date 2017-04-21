@@ -54,7 +54,7 @@ class Variables(object):
 def cons_to_prim(U, gamma, ivars, myg):
     """ convert an input vector of conserved variables to primitive variables """
     
-    q = myg.scratch_array(nvar=self.ivars.nq)
+    q = myg.scratch_array(nvar=ivars.nq)
 
     q[:,:,ivars.irho] = U[:,:,ivars.idens]
     q[:,:,ivars.iu] = U[:,:,ivars.ixmom]/U[:,:,ivars.idens]
@@ -76,11 +76,14 @@ def cons_to_prim(U, gamma, ivars, myg):
 def prim_to_cons(q, gamma, ivars, myg):
     """ convert an input vector of primitive variables to conserved variables """
     
-    U = myg.scratch_array(nvar=self.ivars.nvar)
+    U = myg.scratch_array(nvar=ivars.nvar)
 
     U[:,:,ivars.idens] = q[:,:,ivars.irho] 
     U[:,:,ivars.ixmom] = q[:,:,ivars.iu]*U[:,:,ivars.idens]
     U[:,:,ivars.iymom] = q[:,:,ivars.iv]*U[:,:,ivars.idens]
+
+    rhoe = eos.rhoe(gamma, q[:,:,ivars.ip])
+
     U[:,:,ivars.iener] = rhoe + 0.5*q[:,:,ivars.irho]*(q[:,:,ivars.iu]**2 + 
                                                        q[:,:,ivars.iv]**2)
 
