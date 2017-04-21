@@ -27,7 +27,7 @@ class PyroTest(object):
 
 
 def do_tests(build, out_file, do_standalone=True, do_main=True, 
-             reset_fails=False, single=None):
+             reset_fails=False, single=None, solver=None):
 
     # make sure we've built stuff
     print("build = ", build)
@@ -52,6 +52,8 @@ def do_tests(build, out_file, do_standalone=True, do_main=True,
 
         if single is not None:
             tests_to_run = [q for q in tests if str(q) == single]
+        elif solver is not None:
+            tests_to_run = [q for q in tests if q.solver == solver]
         else:
             tests_to_run = tests
 
@@ -115,6 +117,10 @@ if __name__ == "__main__":
                    help="name of a single test (solver-problem) to run",
                    type=str, default=None)
 
+    p.add_argument("--solver",
+                   help="only test the solver specified",
+                   type=str, default=None)
+
     p.add_argument("--skip_standalone",
                    help="skip the tests that don't go through pyro.py",
                    action="store_true")
@@ -144,7 +150,7 @@ if __name__ == "__main__":
     if args.reset_failures: reset_fails = True
 
     do_tests(build, outfile, do_standalone=do_standalone, do_main=do_main, 
-             reset_fails=reset_fails, single=args.single)
+             reset_fails=reset_fails, single=args.single, solver=args.solver)
 
 
     # unit tests
