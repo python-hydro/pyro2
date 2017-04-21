@@ -22,13 +22,16 @@ class Simulation(compressible.Simulation):
         timestep dt.
         """
 
+        print(self.cc_data)
+
+        sys.exit()
+
         # we want to do Strang-splitting here
+        self.burn(self.dt/2)
 
-        # call the burner
+        super().evolve()
 
-        # call the super class evolve to advance hydro
-
-        # call the burner
+        self.burn(self.dt/2)
 
 
         # increment the time

@@ -178,6 +178,7 @@ def parse_and_run():
                      "advection_rk",
                      "compressible",
                      "compressible_rk",
+                     "compressible_react",
                      "diffusion",
                      "incompressible",
                      "lm_atm"]
