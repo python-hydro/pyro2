@@ -334,7 +334,7 @@ class CellCenterData2d(object):
             msg.fail("ERROR: grid already initialized")
 
         self.data = np.zeros((self.nvar, self.grid.qx, self.grid.qy),
-                                dtype=self.dtype)
+                             dtype=self.dtype)
         self.initialized = 1
 
 
