@@ -246,6 +246,8 @@ class Simulation(NullSimulation):
         p = q[:,:,ivars.ip]
         e = eos.rhoe(gamma, p)/rho
 
+        magvel = np.sqrt(u**2 + v**2)
+
         myg = self.cc_data.grid
 
         # figure out the geometry
@@ -292,7 +294,7 @@ class Simulation(NullSimulation):
                             axes_pad=(0.65, 0.25),
                             add_all=True, label_mode="L")
 
-        fields = [dens, magvel, p, e]
+        fields = [rho, magvel, p, e]
         field_names = [r"$\rho$", r"U", "p", "e"]
 
         cm = "viridis"
@@ -301,6 +303,7 @@ class Simulation(NullSimulation):
             ax = axes[n]
 
             v = fields[n]
+
             img = ax.imshow(np.transpose(v.v()),
                             interpolation="nearest", origin="lower",
                             extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax],
