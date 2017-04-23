@@ -80,7 +80,7 @@ def doit(solver_name, problem_name, param_file,
 
     # output the 0th data
     basename = rp.get_param("io.basename")
-    sim.cc_data.write("{}{:04d}".format(basename, sim.n))
+    sim.write("{}{:04d}".format(basename, sim.n))
 
     dovis = rp.get_param("vis.dovis")
     if dovis:
@@ -104,7 +104,7 @@ def doit(solver_name, problem_name, param_file,
         if sim.do_output():
             if verbose > 0: msg.warning("outputting...")
             basename = rp.get_param("io.basename")
-            sim.cc_data.write("{}{:04d}".format(basename, sim.n))
+            sim.write("{}{:04d}".format(basename, sim.n))
 
         # visualization
         if dovis:
