@@ -228,22 +228,23 @@ class Simulation(NullSimulation):
 
         plt.rc("font", size=10)
 
-        dens = self.cc_data.get_var("density")
-
-        nvar = len(self.cc_data.names)
-
-        # get the velocities
-        u, v = self.cc_data.get_var("velocity")
-        magvel = np.sqrt(u**2 + v**2)
-
-        # thermodynamic information
-        e = self.cc_data.get_var("eint")
+        # we do this even though ivars is in self, so this works when
+        # we are plotting from a file
+        ivars = Variables(self.cc_data)
 
         # access gamma from the cc_data object so we can use dovis
         # outside of a running simulation.
         gamma = self.cc_data.get_aux("gamma")
 
-        p = eos.pres(gamma, dens, e)
+        print(self.cc_data.data.shape)
+
+        q = cons_to_prim(self.cc_data.data, gamma, ivars, self.cc_data.grid)
+
+        rho = q[:,:,ivars.irho]
+        u = q[:,:,ivars.iu]
+        v = q[:,:,ivars.iv]
+        p = q[:,:,ivars.ip]
+        e = eos.rhoe(gamma, p)/rho
 
         myg = self.cc_data.grid
 
