@@ -71,8 +71,9 @@ class ArrayIndexer(np.ndarray):
 
         """
         bxlo, bxhi, bylo, byhi = _buf_split(buf)
+        c = len(self.shape)
 
-        if self.c == 2:
+        if c == 2:
             return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
                                    self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s])
         else:
@@ -85,7 +86,8 @@ class ArrayIndexer(np.ndarray):
         in the domain's valid region
 
         """
-        if self.c == 2:
+        c = len(self.shape)
+        if c == 2:
             return self.g.norm(self)
         else:
             return self.g.norm(self[:,:,n])
