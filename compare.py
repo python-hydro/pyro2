@@ -6,7 +6,7 @@ import numpy as np
 import sys
 
 import mesh.patch
-
+import mesh.array_indexer as ai
 
 usage = """
       usage: ./compare.py file1 file2
@@ -35,8 +35,22 @@ def compare(grid1, data1, grid2, data2):
 
     for n in range(data1.nvar):
 
-        d1 = data1.get_var(data1.vars[n])
-        d2 = data2.get_var(data2.vars[n])
+        # this is a hack for the changeover of the ordering of the data
+        _d1 = data1.data
+        if _d1.shape[2] < min(_d1.shape[0], _d1.shape[1]):
+            d1 = ai.ArrayIndexer(_d1[:,:,n], grid=data1.grid)
+        else:
+            d1 = ai.ArrayIndexer(_d1[n,:,:], grid=data1.grid)
+
+        _d2 = data2.data
+        if _d2.shape[2] < min(_d2.shape[0], _d2.shape[1]):
+            d2 = ai.ArrayIndexer(_d2[:,:,n], grid=data2.grid)
+        else:
+            d2 = ai.ArrayIndexer(_d2[n,:,:], grid=data2.grid)
+
+
+        #d1 = data1.get_var(data1.vars[n])
+        #d2 = data2.get_var(data2.vars[n])
 
         err = np.max(np.abs(d1.v() - d2.v()))
 
