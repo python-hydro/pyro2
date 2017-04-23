@@ -333,8 +333,8 @@ class CellCenterData2d(object):
         if self.initialized == 1:
             msg.fail("ERROR: grid already initialized")
 
-        self.data = np.zeros((self.nvar, self.grid.qx, self.grid.qy),
-                             dtype=self.dtype)
+        self.data = np.zeros((self.grid.qx, self.grid.qy, self.nvar),
+                                dtype=self.dtype)
         self.initialized = 1
 
 
@@ -358,9 +358,7 @@ class CellCenterData2d(object):
 
         for n in range(self.nvar):
             my_str += "%16s: min: %15.10f    max: %15.10f\n" % \
-                (self.names[n],
-                 np.min(self.data[n,ilo:ihi+1,jlo:jhi+1]),
-                 np.max(self.data[n,ilo:ihi+1,jlo:jhi+1]) )
+                (self.vars[n], self.min(self.names[n]), self.max(self.names[n]))
             my_str += "%16s  BCs: -x: %-12s +x: %-12s -y: %-12s +y: %-12s\n" %\
                 (" " , self.BCs[self.names[n]].xlb,
                        self.BCs[self.names[n]].xrb,
@@ -399,7 +397,7 @@ class CellCenterData2d(object):
                     return var
             raise KeyError("name {} is not valid".format(name))
         else:
-            return ai.ArrayIndexer(d=self.data[n,:,:], grid=self.grid)
+            return ai.ArrayIndexer(d=self.data[:,:,n], grid=self.grid)
 
 
     def get_var_by_index(self, n):
@@ -419,7 +417,7 @@ class CellCenterData2d(object):
             The array of data corresponding to the index
 
         """
-        return ai.ArrayIndexer(d=self.data[n,:,:], grid=self.grid)
+        return ai.ArrayIndexer(d=self.data[:,:,n], grid=self.grid)
 
 
     def get_vars(self):
@@ -468,7 +466,7 @@ class CellCenterData2d(object):
 
         """
         n = self.names.index(name)
-        self.data[n,:,:] = 0.0
+        self.data[:,:,n] = 0.0
 
 
     def fill_BC_all(self):
@@ -511,29 +509,29 @@ class CellCenterData2d(object):
 
             if self.BCs[name].xl_value is None:
                 for i in range(self.grid.ilo):
-                    self.data[n,i,:] = self.data[n,self.grid.ilo,:]
+                    self.data[i,:,n] = self.data[self.grid.ilo,:,n]
             else:
-                self.data[n,self.grid.ilo-1,:] = \
-                    self.data[n,self.grid.ilo,:] - self.grid.dx*self.BCs[name].xl_value[:]
+                self.data[self.grid.ilo-1,:,n] = \
+                    self.data[self.grid.ilo,:,n] - self.grid.dx*self.BCs[name].xl_value[:]
 
         elif self.BCs[name].xlb == "reflect-even":
 
             for i in range(self.grid.ilo):
-                self.data[n,i,:] = self.data[n,2*self.grid.ng-i-1,:]
+                self.data[i,:,n] = self.data[2*self.grid.ng-i-1,:,n]
 
         elif self.BCs[name].xlb in ["reflect-odd", "dirichlet"]:
 
             if self.BCs[name].xl_value is None:
                 for i in range(self.grid.ilo):
-                    self.data[n,i,:] = -self.data[n,2*self.grid.ng-i-1,:]
+                    self.data[i,:,n] = -self.data[2*self.grid.ng-i-1,:,n]
             else:
-                self.data[n,self.grid.ilo-1,:] = \
-                    2*self.BCs[name].xl_value[:] - self.data[n,self.grid.ilo,:]
+                self.data[self.grid.ilo-1,:,n] = \
+                    2*self.BCs[name].xl_value[:] - self.data[self.grid.ilo,:,n]
 
         elif self.BCs[name].xlb == "periodic":
 
             for i in range(self.grid.ilo):
-                self.data[n,i,:] = self.data[n,self.grid.ihi-self.grid.ng+i+1,:]
+                self.data[i,:,n] = self.data[self.grid.ihi-self.grid.ng+i+1,:,n]
 
 
         # +x boundary
@@ -541,10 +539,10 @@ class CellCenterData2d(object):
 
             if self.BCs[name].xr_value is None:
                 for i in range(self.grid.ihi+1, self.grid.nx+2*self.grid.ng):
-                    self.data[n,i,:] = self.data[n,self.grid.ihi,:]
+                    self.data[i,:,n] = self.data[self.grid.ihi,:,n]
             else:
-                self.data[n,self.grid.ihi+1,:] = \
-                    self.data[n,self.grid.ihi,:] + self.grid.dx*self.BCs[name].xr_value[:]
+                self.data[self.grid.ihi+1,:,n] = \
+                    self.data[self.grid.ihi,:,n] + self.grid.dx*self.BCs[name].xr_value[:]
 
         elif self.BCs[name].xrb == "reflect-even":
 
@@ -552,7 +550,7 @@ class CellCenterData2d(object):
                 i_bnd = self.grid.ihi+1+i
                 i_src = self.grid.ihi-i
 
-                self.data[n,i_bnd,:] = self.data[n,i_src,:]
+                self.data[i_bnd,:,n] = self.data[i_src,:,n]
 
         elif self.BCs[name].xrb in ["reflect-odd", "dirichlet"]:
 
@@ -561,15 +559,15 @@ class CellCenterData2d(object):
                     i_bnd = self.grid.ihi+1+i
                     i_src = self.grid.ihi-i
 
-                    self.data[n,i_bnd,:] = -self.data[n,i_src,:]
+                    self.data[i_bnd,:,n] = -self.data[i_src,:,n]
             else:
-                self.data[n,self.grid.ihi+1,:] = \
-                    2*self.BCs[name].xr_value[:] - self.data[n,self.grid.ihi,:]
+                self.data[self.grid.ihi+1,:,n] = \
+                    2*self.BCs[name].xr_value[:] - self.data[self.grid.ihi,:,n]
 
         elif self.BCs[name].xrb == "periodic":
 
             for i in range(self.grid.ihi+1, 2*self.grid.ng + self.grid.nx):
-                self.data[n,i,:] = self.data[n,i-self.grid.ihi-1+self.grid.ng,:]
+                self.data[i,:,n] = self.data[i-self.grid.ihi-1+self.grid.ng,:,n]
 
 
         # -y boundary
@@ -577,29 +575,29 @@ class CellCenterData2d(object):
 
             if self.BCs[name].yl_value is None:
                 for j in range(self.grid.jlo):
-                    self.data[n,:,j] = self.data[n,:,self.grid.jlo]
+                    self.data[:,j,n] = self.data[:,self.grid.jlo,n]
             else:
-                self.data[n,:,self.grid.jlo-1] = \
-                    self.data[n,:,self.grid.jlo] - self.grid.dy*self.BCs[name].yl_value[:]
+                self.data[:,self.grid.jlo-1,n] = \
+                    self.data[:,self.grid.jlo,n] - self.grid.dy*self.BCs[name].yl_value[:]
 
         elif self.BCs[name].ylb == "reflect-even":
 
             for j in range(self.grid.jlo):
-                self.data[n,:,j] = self.data[n,:,2*self.grid.ng-j-1]
+                self.data[:,j,n] = self.data[:,2*self.grid.ng-j-1,n]
 
         elif self.BCs[name].ylb in ["reflect-odd", "dirichlet"]:
 
             if self.BCs[name].yl_value is None:
                 for j in range(self.grid.jlo):
-                    self.data[n,:,j] = -self.data[n,:,2*self.grid.ng-j-1]
+                    self.data[:,j,n] = -self.data[:,2*self.grid.ng-j-1,n]
             else:
-                self.data[n,:,self.grid.jlo-1] = \
-                    2*self.BCs[name].yl_value[:] - self.data[n,:,self.grid.jlo]
+                self.data[:,self.grid.jlo-1,n] = \
+                    2*self.BCs[name].yl_value[:] - self.data[:,self.grid.jlo,n]
 
         elif self.BCs[name].ylb == "periodic":
 
             for j in range(self.grid.jlo):
-                self.data[n,:,j] = self.data[n,:,self.grid.jhi-self.grid.ng+j+1]
+                self.data[:,j,n] = self.data[:,self.grid.jhi-self.grid.ng+j+1,n]
 
         else:
             if self.BCs[name].ylb in bnd.ext_bcs.keys():
@@ -612,10 +610,10 @@ class CellCenterData2d(object):
 
             if self.BCs[name].yr_value is None:
                 for j in range(self.grid.jhi+1, self.grid.ny+2*self.grid.ng):
-                    self.data[n,:,j] = self.data[n,:,self.grid.jhi]
+                    self.data[:,j,n] = self.data[:,self.grid.jhi,n]
             else:
-                self.data[n,:,self.grid.jhi+1] = \
-                    self.data[n,:,self.grid.jhi] + self.grid.dy*self.BCs[name].yr_value[:]
+                self.data[:,self.grid.jhi+1,n] = \
+                    self.data[:,self.grid.jhi,n] + self.grid.dy*self.BCs[name].yr_value[:]
 
         elif self.BCs[name].yrb == "reflect-even":
 
@@ -623,7 +621,7 @@ class CellCenterData2d(object):
                 j_bnd = self.grid.jhi+1+j
                 j_src = self.grid.jhi-j
 
-                self.data[n,:,j_bnd] = self.data[n,:,j_src]
+                self.data[:,j_bnd,n] = self.data[:,j_src,n]
 
         elif self.BCs[name].yrb in ["reflect-odd", "dirichlet"]:
 
@@ -632,15 +630,15 @@ class CellCenterData2d(object):
                     j_bnd = self.grid.jhi+1+j
                     j_src = self.grid.jhi-j
 
-                    self.data[n,:,j_bnd] = -self.data[n,:,j_src]
+                    self.data[:,j_bnd,n] = -self.data[:,j_src,n]
             else:
-                self.data[n,:,self.grid.jhi+1] = \
-                    2*self.BCs[name].yr_value[:] - self.data[n,:,self.grid.jhi]
+                self.data[:,self.grid.jhi+1,n] = \
+                    2*self.BCs[name].yr_value[:] - self.data[:,self.grid.jhi,n]
 
         elif self.BCs[name].yrb == "periodic":
 
             for j in range(self.grid.jhi+1, 2*self.grid.ng + self.grid.ny):
-                self.data[n,:,j] = self.data[n,:,j-self.grid.jhi-1+self.grid.ng]
+                self.data[:,j,n] = self.data[:,j-self.grid.jhi-1+self.grid.ng,n]
 
         else:
             if self.BCs[name].yrb in bnd.ext_bcs.keys():
@@ -654,7 +652,7 @@ class CellCenterData2d(object):
         """
         n = self.names.index(name)
         g = self.grid
-        return np.min(self.data[n,g.ilo-ng:g.ihi+1+ng,g.jlo-ng:g.jhi+1+ng])
+        return np.min(self.data[g.ilo-ng:g.ihi+1+ng,g.jlo-ng:g.jhi+1+ng,n])
 
 
     def max(self, name, ng=0):
@@ -663,7 +661,7 @@ class CellCenterData2d(object):
         """
         n = self.names.index(name)
         g = self.grid
-        return np.max(self.data[n,g.ilo-ng:g.ihi+1+ng,g.jlo-ng:g.jhi+1+ng])
+        return np.max(self.data[g.ilo-ng:g.ihi+1+ng,g.jlo-ng:g.jhi+1+ng,n])
 
 
     def restrict(self, varname):
