@@ -358,7 +358,7 @@ class CellCenterData2d(object):
 
         for n in range(self.nvar):
             my_str += "%16s: min: %15.10f    max: %15.10f\n" % \
-                (self.vars[n], self.min(self.names[n]), self.max(self.names[n]))
+                (self.names[n], self.min(self.names[n]), self.max(self.names[n]))
             my_str += "%16s  BCs: -x: %-12s +x: %-12s -y: %-12s +y: %-12s\n" %\
                 (" " , self.BCs[self.names[n]].xlb,
                        self.BCs[self.names[n]].xrb,
