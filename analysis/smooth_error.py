@@ -6,6 +6,7 @@ import numpy as np
 import mesh.patch as patch
 import sys
 import advection.problems.smooth as smooth
+from util import io
 
 usage = """
       compare the output in file from the smooth advection problem to
@@ -24,13 +25,14 @@ except:
     print(usage)
     sys.exit(2)
 
-myg, myd = patch.read(file1)
-
+sim = io.read(file1)
+myd = sim.cc_data
+myg = myd.grid
 
 # create a new data object on the same grid
 analytic = patch.CellCenterData2d(myg, dtype=np.float64)
 
-bco = myd.BCs[myd.vars[0]]
+bco = myd.BCs[myd.names[0]]
 analytic.register_var("density", bco)
 analytic.create()
 

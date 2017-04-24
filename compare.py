@@ -5,8 +5,8 @@ from __future__ import print_function
 import numpy as np
 import sys
 
-import mesh.patch
-
+import mesh.array_indexer as ai
+from util import io
 
 usage = """
       usage: ./compare.py file1 file2
@@ -24,7 +24,7 @@ def compare(grid1, data1, grid2, data2):
         return "gridbad"
 
     # compare the data
-    if not data1.vars == data2.vars:
+    if not sorted(data1.names) == sorted(data2.names):
         return "namesbad"
 
 
@@ -33,14 +33,14 @@ def compare(grid1, data1, grid2, data2):
 
     result = 0
 
-    for n in range(data1.nvar):
+    for name in data1.names:
 
-        d1 = data1.get_var(data1.vars[n])
-        d2 = data2.get_var(data2.vars[n])
+        d1 = data1.get_var(name)
+        d2 = data2.get_var(name)
 
         err = np.max(np.abs(d1.v() - d2.v()))
 
-        print("%20s error = %20.10g" % (data1.vars[n], err))
+        print("{:20s} error = {:20.10g}".format(name, err))
 
         if not err == 0:
             result = "varerr"
@@ -57,10 +57,11 @@ if __name__ == "__main__":
     file1 = sys.argv[1]
     file2 = sys.argv[2]
 
-    myg1, myd1 = mesh.patch.read(file1)
-    myg2, myd2 = mesh.patch.read(file2)
+    s1 = io.read(file1)
+    s2 = io.read(file2)
 
-    result = compare(myg1, myd1, myg2, myd2)
+    result = compare(s1.cc_data.grid, s1.cc_data, 
+                     s2.cc_data.grid, s2.cc_data)
 
     if result == 0:
         print("SUCCESS: files agree")

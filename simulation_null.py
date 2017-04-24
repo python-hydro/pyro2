@@ -1,3 +1,4 @@
+import h5py
 import importlib
 import mesh.boundary as bnd
 import mesh.patch as patch
@@ -179,3 +180,24 @@ class NullSimulation(object):
         problem = importlib.import_module("{}.problems.{}".format(self.solver_name, self.problem_name))
 
         problem.finalize()
+
+
+    def write(self, filename):
+        """
+        Output the state of the simulation to an HDF5 file for plotting
+        """
+
+        if not filename.endswith(".h5"):
+            filename += ".h5"
+
+        with h5py.File(filename, "w") as f:
+
+            # main attributes
+            f.attrs["solver"] = self.solver_name
+            f.attrs["problem"] = self.problem_name
+            f.attrs["time"] = self.cc_data.t
+            f.attrs["nsteps"] = self.n
+
+            self.cc_data.write_data(f)
+
+            self.rp.write_params(f)

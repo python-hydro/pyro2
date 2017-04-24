@@ -3,7 +3,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
-import mesh.patch as patch
+from util import io
 
 # plot an output file using the solver's dovis script
 
@@ -37,9 +37,9 @@ if __name__== "__main__":
     file = sys.argv[1]
     variable = sys.argv[2]
 
-    myg, myd = patch.read(file)
+    sim = io.read(file)
 
-    makeplot(myd, variable)
+    makeplot(sim.cc_data, variable)
 
 
 

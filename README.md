@@ -28,10 +28,10 @@ http://zingale.github.io/pyro2/
 	switch to python 3.x
 
   - There are a few steps to take to get things running. You need to
-    make sure you have `numpy`, `f2py`, and `matplotlib` installed. On
-    a Fedora system, this can be accomplished by doing:
+    make sure you have `numpy`, `f2py`, `matplotlib`, and `h5py`
+    installed. On a Fedora system, this can be accomplished by doing:
 
-       `dnf install python3-numpy python3-numpy-f2py python3-matplotlib python3-matplotlib-tk`
+       `dnf install python3-numpy python3-numpy-f2py python3-matplotlib python3-matplotlib-tk python3-h5py`
 
     (note, for older Fedora releases, replace `dnf` with `yum`.  For
 	python 2.x, leave off the `2` in the package names.)

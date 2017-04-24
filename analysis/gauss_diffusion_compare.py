@@ -3,10 +3,10 @@
 from __future__ import print_function
 
 import numpy as np
-import mesh.patch as patch
 import sys
 import matplotlib.pyplot as plt
 import diffusion.problems.gaussian as gaussian
+from util import io
 
 usage = """
       Average the Gaussian diffusion profile and compare the radial profile
@@ -22,9 +22,11 @@ def abort(string):
 
 def process(file):
 
-    # read the data and convert to the primitive variables (and velocity
-    # magnitude)
-    myg, myd = patch.read(file)
+    # read the data and convert to the primitive variables (and
+    # velocity magnitude)
+    sim = io.read(file)
+    myd = sim.cc_data
+    myg = myd.grid
 
     phi_t = myd.get_var("phi")
     phi = phi_t[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]

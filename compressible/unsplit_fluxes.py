@@ -126,13 +126,14 @@ Updating U_{i,j}:
 
 import compressible.eos as eos
 import compressible.interface_f as interface_f
+import compressible as comp
 import mesh.reconstruction as reconstruction
 import mesh.reconstruction_f as reconstruction_f
 import mesh.array_indexer as ai
 
 from util import msg
 
-def unsplit_fluxes(my_data, my_aux, rp, vars, solid, tc, dt):
+def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     """
     unsplitFluxes returns the fluxes through the x and y interfaces by
     doing an unsplit reconstruction of the interface values and then
@@ -237,7 +238,7 @@ def unsplit_fluxes(my_data, my_aux, rp, vars, solid, tc, dt):
     tm_states.begin()
 
     V_l, V_r = interface_f.states(1, myg.qx, myg.qy, myg.ng, myg.dx, dt,
-                                  vars.nvar,
+                                  ivars.nvar,
                                   gamma,
                                   r, u, v, p,
                                   ldelta_rx, ldelta_ux, ldelta_vx, ldelta_px)
@@ -246,21 +247,8 @@ def unsplit_fluxes(my_data, my_aux, rp, vars, solid, tc, dt):
 
 
     # transform interface states back into conserved variables
-    U_xl = myg.scratch_array(vars.nvar)
-    U_xr = myg.scratch_array(vars.nvar)
-
-    U_xl[:,:,vars.idens] = V_l[:,:,vars.irho]
-    U_xl[:,:,vars.ixmom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iu]
-    U_xl[:,:,vars.iymom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iv]
-    U_xl[:,:,vars.iener] = eos.rhoe(gamma, V_l[:,:,vars.ip]) + \
-        0.5*V_l[:,:,vars.irho]*(V_l[:,:,vars.iu]**2 + V_l[:,:,vars.iv]**2)
-
-    U_xr[:,:,vars.idens] = V_r[:,:,vars.irho]
-    U_xr[:,:,vars.ixmom] = V_r[:,:,vars.irho]*V_r[:,:,vars.iu]
-    U_xr[:,:,vars.iymom] = V_r[:,:,vars.irho]*V_r[:,:,vars.iv]
-    U_xr[:,:,vars.iener] = eos.rhoe(gamma, V_r[:,:,vars.ip]) + \
-        0.5*V_r[:,:,vars.irho]*(V_r[:,:,vars.iu]**2 + V_r[:,:,vars.iv]**2)
-
+    U_xl = comp.prim_to_cons(V_l, gamma, ivars, myg)
+    U_xr = comp.prim_to_cons(V_r, gamma, ivars, myg)
 
 
     #=========================================================================
@@ -272,7 +260,7 @@ def unsplit_fluxes(my_data, my_aux, rp, vars, solid, tc, dt):
     tm_states.begin()
 
     V_l, V_r = interface_f.states(2, myg.qx, myg.qy, myg.ng, myg.dy, dt,
-                                  vars.nvar,
+                                  ivars.nvar,
                                   gamma,
                                   r, u, v, p,
                                   ldelta_ry, ldelta_uy, ldelta_vy, ldelta_py)
@@ -281,20 +269,8 @@ def unsplit_fluxes(my_data, my_aux, rp, vars, solid, tc, dt):
 
 
     # transform interface states back into conserved variables
-    U_yl = myg.scratch_array(vars.nvar)
-    U_yr = myg.scratch_array(vars.nvar)
-
-    U_yl[:,:,vars.idens] = V_l[:,:,vars.irho]
-    U_yl[:,:,vars.ixmom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iu]
-    U_yl[:,:,vars.iymom] = V_l[:,:,vars.irho]*V_l[:,:,vars.iv]
-    U_yl[:,:,vars.iener] = eos.rhoe(gamma, V_l[:,:,vars.ip]) + \
-        0.5*V_l[:,:,vars.irho]*(V_l[:,:,vars.iu]**2 + V_l[:,:,vars.iv]**2)
-
-    U_yr[:,:,vars.idens] = V_r[:,:,vars.irho]
-    U_yr[:,:,vars.ixmom] = V_r[:,:,vars.irho]*V_r[:,:,vars.iu]
-    U_yr[:,:,vars.iymom] = V_r[:,:,vars.irho]*V_r[:,:,vars.iv]
-    U_yr[:,:,vars.iener] = eos.rhoe(gamma, V_r[:,:,vars.ip]) + \
-        0.5*V_r[:,:,vars.irho]*(V_r[:,:,vars.iu]**2 + V_r[:,:,vars.iv]**2)
+    U_yl = comp.prim_to_cons(V_l, gamma, ivars, myg)
+    U_yr = comp.prim_to_cons(V_r, gamma, ivars, myg)
 
 
     #=========================================================================
@@ -311,20 +287,20 @@ def unsplit_fluxes(my_data, my_aux, rp, vars, solid, tc, dt):
     my_aux.fill_BC("E_src")
 
     # ymom_xl[i,j] += 0.5*dt*dens[i-1,j]*grav
-    U_xl.v(buf=1, n=vars.iymom)[:,:] += 0.5*dt*ymom_src.ip(-1, buf=1)
-    U_xl.v(buf=1, n=vars.iener)[:,:] += 0.5*dt*E_src.ip(-1, buf=1)
+    U_xl.v(buf=1, n=ivars.iymom)[:,:] += 0.5*dt*ymom_src.ip(-1, buf=1)
+    U_xl.v(buf=1, n=ivars.iener)[:,:] += 0.5*dt*E_src.ip(-1, buf=1)
 
     # ymom_xr[i,j] += 0.5*dt*dens[i,j]*grav
-    U_xr.v(buf=1, n=vars.iymom)[:,:] += 0.5*dt*ymom_src.v(buf=1)
-    U_xr.v(buf=1, n=vars.iener)[:,:] += 0.5*dt*E_src.v(buf=1)
+    U_xr.v(buf=1, n=ivars.iymom)[:,:] += 0.5*dt*ymom_src.v(buf=1)
+    U_xr.v(buf=1, n=ivars.iener)[:,:] += 0.5*dt*E_src.v(buf=1)
 
     # ymom_yl[i,j] += 0.5*dt*dens[i,j-1]*grav
-    U_yl.v(buf=1, n=vars.iymom)[:,:] += 0.5*dt*ymom_src.jp(-1, buf=1)
-    U_yl.v(buf=1, n=vars.iener)[:,:] += 0.5*dt*E_src.jp(-1, buf=1)
+    U_yl.v(buf=1, n=ivars.iymom)[:,:] += 0.5*dt*ymom_src.jp(-1, buf=1)
+    U_yl.v(buf=1, n=ivars.iener)[:,:] += 0.5*dt*E_src.jp(-1, buf=1)
 
     # ymom_yr[i,j] += 0.5*dt*dens[i,j]*grav
-    U_yr.v(buf=1, n=vars.iymom)[:,:] += 0.5*dt*ymom_src.v(buf=1)
-    U_yr.v(buf=1, n=vars.iener)[:,:] += 0.5*dt*E_src.v(buf=1)
+    U_yr.v(buf=1, n=ivars.iymom)[:,:] += 0.5*dt*ymom_src.v(buf=1)
+    U_yr.v(buf=1, n=ivars.iener)[:,:] += 0.5*dt*E_src.v(buf=1)
 
 
     #=========================================================================
@@ -344,12 +320,12 @@ def unsplit_fluxes(my_data, my_aux, rp, vars, solid, tc, dt):
 
 
     _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
-                      vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener,
+                      ivars.nvar, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
                       solid.xl, solid.xr,
                       gamma, U_xl, U_xr)
 
     _fy = riemannFunc(2, myg.qx, myg.qy, myg.ng,
-                      vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener,
+                      ivars.nvar, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
                       solid.yl, solid.yr,
                       gamma, U_yl, U_yr)
 
@@ -413,7 +389,7 @@ def unsplit_fluxes(my_data, my_aux, rp, vars, solid, tc, dt):
     
     b = (2,1)
 
-    for n in range(vars.nvar):
+    for n in range(ivars.nvar):
             
         # U_xl[i,j,:] = U_xl[i,j,:] - 0.5*dt/dy * (F_y[i-1,j+1,:] - F_y[i-1,j,:])
         U_xl.v(buf=b, n=n)[:,:] += \
@@ -444,12 +420,12 @@ def unsplit_fluxes(my_data, my_aux, rp, vars, solid, tc, dt):
     tm_riem.begin()
 
     _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
-                      vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener,
+                      ivars.nvar, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
                       solid.xl, solid.xr,
                       gamma, U_xl, U_xr)
 
     _fy = riemannFunc(2, myg.qx, myg.qy, myg.ng,
-                      vars.nvar, vars.idens, vars.ixmom, vars.iymom, vars.iener,
+                      ivars.nvar, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
                       solid.yl, solid.yr,
                       gamma, U_yl, U_yr)
 
@@ -473,31 +449,16 @@ def unsplit_fluxes(my_data, my_aux, rp, vars, solid, tc, dt):
     
     b = (2,1)
     
-    # F_x = F_x + avisco_x * (U(i-1,j) - U(i,j))
-    F_x.v(buf=b, n=vars.idens)[:,:] += \
-        avisco_x.v(buf=b)*(dens.ip(-1, buf=b) - dens.v(buf=b))
+    for n in range(ivars.nvar):
+        # F_x = F_x + avisco_x * (U(i-1,j) - U(i,j))
+        var = my_data.get_var_by_index(n)
 
-    F_x.v(buf=b, n=vars.ixmom)[:,:] += \
-        avisco_x.v(buf=b)*(xmom.ip(-1, buf=b) - xmom.v(buf=b))
+        F_x.v(buf=b, n=n)[:,:] += \
+            avisco_x.v(buf=b)*(var.ip(-1, buf=b) - var.v(buf=b))
 
-    F_x.v(buf=b, n=vars.iymom)[:,:] += \
-        avisco_x.v(buf=b)*(ymom.ip(-1, buf=b) - ymom.v(buf=b))
-
-    F_x.v(buf=b, n=vars.iener)[:,:] += \
-        avisco_x.v(buf=b)*(ener.ip(-1, buf=b) - ener.v(buf=b))
-
-    # F_y = F_y + avisco_y * (U(i,j-1) - U(i,j))
-    F_y.v(buf=b, n=vars.idens)[:,:] += \
-        avisco_y.v(buf=b)*(dens.jp(-1, buf=b) - dens.v(buf=b))
-
-    F_y.v(buf=b, n=vars.ixmom)[:,:] += \
-        avisco_y.v(buf=b)*(xmom.jp(-1, buf=b) - xmom.v(buf=b))
-
-    F_y.v(buf=b, n=vars.iymom)[:,:] += \
-        avisco_y.v(buf=b)*(ymom.jp(-1, buf=b) - ymom.v(buf=b))
-
-    F_y.v(buf=b, n=vars.iener)[:,:] += \
-        avisco_y.v(buf=b)*(ener.jp(-1, buf=b) - ener.v(buf=b))
+        # F_y = F_y + avisco_y * (U(i,j-1) - U(i,j))
+        F_y.v(buf=b, n=n)[:,:] += \
+            avisco_y.v(buf=b)*(var.jp(-1, buf=b) - var.v(buf=b))
 
     tm_flux.end()
 

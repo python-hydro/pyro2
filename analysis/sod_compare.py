@@ -3,7 +3,7 @@
 from __future__ import print_function
 
 import numpy as np
-import mesh.patch as patch
+from util import io
 import sys
 import matplotlib.pyplot as plt
 
@@ -29,7 +29,9 @@ except:
     print(usage)
     sys.exit(2)
 
-myg, myd = patch.read(file1)
+sim = io.read(file1)
+myd = sim.cc_data
+myg = myd.grid
 
 dens = myd.get_var("density")
 xmom = myd.get_var("x-momentum")

@@ -27,7 +27,8 @@ class PyroTest(object):
 
 
 def do_tests(build, out_file, do_standalone=True, do_main=True, 
-             reset_fails=False, single=None):
+             reset_fails=False, store_all_benchmarks=False, 
+             single=None, solver=None):
 
     # make sure we've built stuff
     print("build = ", build)
@@ -52,28 +53,38 @@ def do_tests(build, out_file, do_standalone=True, do_main=True,
 
         if single is not None:
             tests_to_run = [q for q in tests if str(q) == single]
+        elif solver is not None:
+            tests_to_run = [q for q in tests if q.solver == solver]
         else:
             tests_to_run = tests
 
         for t in tests_to_run:
             err = pyro.doit(t.solver, t.problem, t.inputs,
                             other_commands=t.options, comp_bench=True,
-                            reset_bench_on_fail=reset_fails)
+                            reset_bench_on_fail=reset_fails, make_bench=store_all_benchmarks)
             results[str(t)] = err
 
 
     # standalone tests
     if do_standalone and single is None:
-        err = mg_test.test_poisson_dirichlet(256, comp_bench=True, verbose=0)
+        err = mg_test.test_poisson_dirichlet(256, comp_bench=True,
+                                             store_bench=store_all_benchmarks, verbose=0)
         results["mg_poisson_dirichlet"] = err
 
-        err = mg_test_vc_dirichlet.test_vc_poisson_dirichlet(512, comp_bench=True, verbose=0)
+        err = mg_test_vc_dirichlet.test_vc_poisson_dirichlet(512,
+                                                             comp_bench=True, 
+                                                             store_bench=store_all_benchmarks, verbose=0)
         results["mg_vc_poisson_dirichlet"] = err
 
-        err = mg_test_vc_periodic.test_vc_poisson_periodic(512, comp_bench=True, verbose=0)
+        err = mg_test_vc_periodic.test_vc_poisson_periodic(512, comp_bench=True, 
+                                                           store_bench=store_all_benchmarks, 
+                                                           verbose=0)
         results["mg_vc_poisson_periodic"] = err
 
-        err = mg_test_general_inhomogeneous.test_general_poisson_inhomogeneous(512, comp_bench=True, verbose=0)
+        err = mg_test_general_inhomogeneous.test_general_poisson_inhomogeneous(512, 
+                                                                               comp_bench=True, 
+                                                                               store_bench=store_all_benchmarks, 
+                                                                               verbose=0)
         results["mg_general_poisson_inhomogeneous"] = err
 
 
@@ -115,12 +126,20 @@ if __name__ == "__main__":
                    help="name of a single test (solver-problem) to run",
                    type=str, default=None)
 
+    p.add_argument("--solver",
+                   help="only test the solver specified",
+                   type=str, default=None)
+
     p.add_argument("--skip_standalone",
                    help="skip the tests that don't go through pyro.py",
                    action="store_true")
 
     p.add_argument("--reset_failures",
                    help="if a test fails, reset the benchmark",
+                   action="store_true")
+
+    p.add_argument("--store_all_benchmarks",
+                   help="rewrite all the benchmarks, regardless of pass / fail",
                    action="store_true")
 
     p.add_argument("--skip_main",
@@ -140,11 +159,10 @@ if __name__ == "__main__":
     do_standalone = True
     if args.skip_standalone: do_standalone = False
 
-    reset_fails = False
-    if args.reset_failures: reset_fails = True
-
     do_tests(build, outfile, do_standalone=do_standalone, do_main=do_main, 
-             reset_fails=reset_fails, single=args.single)
+             reset_fails=args.reset_failures, 
+             store_all_benchmarks=args.store_all_benchmarks,
+             single=args.single, solver=args.solver)
 
 
     # unit tests

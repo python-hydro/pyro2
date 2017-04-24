@@ -9,8 +9,7 @@ import os
 import matplotlib.pyplot as plt
 
 import compare
-import mesh.patch as patch
-from util import msg, profile, runparams
+from util import msg, profile, runparams, io
 
 
 def doit(solver_name, problem_name, param_file,
@@ -80,7 +79,7 @@ def doit(solver_name, problem_name, param_file,
 
     # output the 0th data
     basename = rp.get_param("io.basename")
-    sim.cc_data.write("{}{:04d}".format(basename, sim.n))
+    sim.write("{}{:04d}".format(basename, sim.n))
 
     dovis = rp.get_param("vis.dovis")
     if dovis:
@@ -104,7 +103,7 @@ def doit(solver_name, problem_name, param_file,
         if sim.do_output():
             if verbose > 0: msg.warning("outputting...")
             basename = rp.get_param("io.basename")
-            sim.cc_data.write("{}{:04d}".format(basename, sim.n))
+            sim.write("{}{:04d}".format(basename, sim.n))
 
         # visualization
         if dovis:
@@ -132,14 +131,14 @@ def doit(solver_name, problem_name, param_file,
         compare_file = "{}/tests/{}{:04d}".format(
             solver_name, basename, sim.n)
         msg.warning("comparing to: {} ".format(compare_file))
-        try: bench_grid, bench_data = patch.read(compare_file)
+        try: sim_bench = io.read(compare_file)
         except:
             msg.warning("ERROR openning compare file")
             return "ERROR openning compare file"
 
 
         result = compare.compare(sim.cc_data.grid, sim.cc_data,
-                                 bench_grid, bench_data)
+                                 sim_bench.cc_data.grid, sim_bench.cc_data)
 
         if result == 0:
             msg.success("results match benchmark\n")
@@ -156,7 +155,7 @@ def doit(solver_name, problem_name, param_file,
 
         bench_file = solver_name + "/tests/" + basename + "%4.4d" % (sim.n)
         msg.warning("storing new benchmark: {}\n".format(bench_file))
-        sim.cc_data.write(bench_file)
+        sim.write(bench_file)
 
 
     #-------------------------------------------------------------------------
@@ -178,6 +177,7 @@ def parse_and_run():
                      "advection_rk",
                      "compressible",
                      "compressible_rk",
+                     "compressible_react",
                      "diffusion",
                      "incompressible",
                      "lm_atm"]

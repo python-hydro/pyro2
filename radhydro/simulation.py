@@ -55,7 +55,7 @@ class Simulation:
         self.cc_data = None
         self.problem_name = problem_name
 
-        self.vars = None
+        self.ivars = None
 
         self.SMALL = 1.e-12
 
@@ -138,11 +138,11 @@ class Simulation:
 
         self.cc_data = my_data
 
-        self.vars = Variables(idens = my_data.vars.index("density"),
-                              ixmom = my_data.vars.index("x-momentum"),
-                              iymom = my_data.vars.index("y-momentum"),
-                              iener = my_data.vars.index("energy"),
-                              ierad = my_data.vars.index("erad"))        
+        self.ivars = Variables(idens = my_data.names.index("density"),
+                               ixmom = my_data.names.index("x-momentum"),
+                               iymom = my_data.names.index("y-momentum"),
+                               iener = my_data.names.index("energy"),
+                               ierad = my_data.names.index("erad"))        
 
 
         # initial conditions for the problem
@@ -221,7 +221,7 @@ class Simulation:
 
         myg = self.cc_data.grid
 
-        Flux_x, Flux_y = flx.unsplitFluxes(self.cc_data, self.rp, self.vars, self.tc, dt)
+        Flux_x, Flux_y = flx.unsplitFluxes(self.cc_data, self.rp, self.ivars, self.tc, dt)
 
         old_dens = dens.copy()
         old_ymom = ymom.copy()
@@ -230,7 +230,7 @@ class Simulation:
         dtdx = dt/myg.dx
         dtdy = dt/myg.dy
 
-        for n in range(self.vars.nvar):
+        for n in range(self.ivars.nvar):
             var = self.cc_data.get_var_by_index(n)
 
             var[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] += \
@@ -313,7 +313,7 @@ class Simulation:
             if (L_x > 4*L_y):
                 shrink = 0.75
 
-            onLeft = list(range(self.vars.nvar))
+            onLeft = list(range(self.ivars.nvar))
 
 
         elif (L_y > 2*L_x):

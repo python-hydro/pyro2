@@ -50,6 +50,16 @@ class BCProp(object):
         self.yl = yl_prop
         self.yr = yr_prop
 
+def bc_is_solid(rp):
+    """
+    return a container class indicated which boundaries are solid walls
+    """
+    solid = BCProp(int(bc_solid[rp.get_param("mesh.xlboundary")]),
+                   int(bc_solid[rp.get_param("mesh.xrboundary")]),
+                   int(bc_solid[rp.get_param("mesh.ylboundary")]),
+                   int(bc_solid[rp.get_param("mesh.yrboundary")]))
+    return solid
+
 
 class BC(object):
     """Boundary condition container -- hold the BCs on each boundary

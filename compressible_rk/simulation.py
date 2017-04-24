@@ -27,18 +27,18 @@ class Simulation(compressible.Simulation):
         E_src = myg.scratch_array()
         E_src.v()[:,:] = ymom.v()[:,:]*grav
 
-        k = myg.scratch_array(nvar=self.vars.nvar)
+        k = myg.scratch_array(nvar=self.ivars.nvar)
 
         flux_x, flux_y = flx.fluxes(myd, self.rp,
-                                    self.vars, self.solid, self.tc)
+                                    self.ivars, self.solid, self.tc)
 
-        for n in range(self.vars.nvar):
+        for n in range(self.ivars.nvar):
             k.v(n=n)[:,:] = \
                (flux_x.v(n=n) - flux_x.ip(1, n=n))/myg.dx + \
                (flux_y.v(n=n) - flux_y.jp(1, n=n))/myg.dy
 
-        k.v(n=self.vars.iymom)[:,:] += ymom_src.v()[:,:]
-        k.v(n=self.vars.iener)[:,:] += E_src.v()[:,:]
+        k.v(n=self.ivars.iymom)[:,:] += ymom_src.v()[:,:]
+        k.v(n=self.ivars.iener)[:,:] += E_src.v()[:,:]
 
         return k
 

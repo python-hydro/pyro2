@@ -4,6 +4,7 @@ import importlib
 
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1 import AxesGrid
 
 import compressible.BC as BC
 import compressible.eos as eos
@@ -18,34 +19,89 @@ class Variables(object):
     a container class for easy access to the different compressible
     variable by an integer key
     """
-    def __init__(self, idens=-1, ixmom=-1, iymom=-1, iener=-1):
-        self.nvar = 4
+    def __init__(self, myd):
+        self.nvar = len(myd.names)
 
         # conserved variables -- we set these when we initialize for
         # they match the CellCenterData2d object
-        self.idens = idens
-        self.ixmom = ixmom
-        self.iymom = iymom
-        self.iener = iener
+        self.idens = myd.names.index("density")
+        self.ixmom = myd.names.index("x-momentum")
+        self.iymom = myd.names.index("y-momentum")
+        self.iener = myd.names.index("energy")
+
+        # if there are any additional variable, we treat them as
+        # passively advected scalars
+        self.naux = self.nvar - 4
+        if self.naux > 0:
+            self.irhox = 4
+        else:
+            self.irhox = -1
 
         # primitive variables
+        self.nq = 4 + self.naux
+
         self.irho = 0
         self.iu = 1
         self.iv = 2
         self.ip = 3
 
+        if self.naux > 0:
+            self.ix = 4   # advected scalar
+        else:
+            self.ix = -1
+
+
+def cons_to_prim(U, gamma, ivars, myg):
+    """ convert an input vector of conserved variables to primitive variables """
+    
+    q = myg.scratch_array(nvar=ivars.nq)
+
+    q[:,:,ivars.irho] = U[:,:,ivars.idens]
+    q[:,:,ivars.iu] = U[:,:,ivars.ixmom]/U[:,:,ivars.idens]
+    q[:,:,ivars.iv] = U[:,:,ivars.iymom]/U[:,:,ivars.idens]
+
+    e = (U[:,:,ivars.iener] - 
+         0.5*q[:,:,ivars.irho]*(q[:,:,ivars.iu]**2 + 
+                                q[:,:,ivars.iv]**2))/q[:,:,ivars.irho]
+
+    q[:,:,ivars.ip] = eos.pres(gamma, q[:,:,ivars.irho], e)
+
+    if ivars.naux > 0:
+        q[:,:,ivars.ix:ivars.ix+ivars.naux] = \
+            U[:,:,ivars.irhox:ivars+naux]/q[:,:,ivars.irho]
+
+    return q
+
+
+def prim_to_cons(q, gamma, ivars, myg):
+    """ convert an input vector of primitive variables to conserved variables """
+    
+    U = myg.scratch_array(nvar=ivars.nvar)
+
+    U[:,:,ivars.idens] = q[:,:,ivars.irho] 
+    U[:,:,ivars.ixmom] = q[:,:,ivars.iu]*U[:,:,ivars.idens]
+    U[:,:,ivars.iymom] = q[:,:,ivars.iv]*U[:,:,ivars.idens]
+
+    rhoe = eos.rhoe(gamma, q[:,:,ivars.ip])
+
+    U[:,:,ivars.iener] = rhoe + 0.5*q[:,:,ivars.irho]*(q[:,:,ivars.iu]**2 + 
+                                                       q[:,:,ivars.iv]**2)
+
+    if ivars.naux > 0:
+        U[:,:,ivars.irhox] = q[:,:,ivars.ix]*q[:,:,ivars.irho] 
+
+    return U
+
 
 class Simulation(NullSimulation):
 
-    def initialize(self):
+    def initialize(self, extra_vars=None):
         """
         Initialize the grid and variables for compressible flow and set
         the initial conditions for the chosen problem.
         """
-
         my_grid = grid_setup(self.rp, ng=4)
         my_data = patch.CellCenterData2d(my_grid)
-
 
         # define solver specific boundary condition routines
         bnd.define_bc("hse", BC.user, is_solid=False)
@@ -54,10 +110,7 @@ class Simulation(NullSimulation):
 
         # are we dealing with solid boundaries? we'll use these for
         # the Riemann solver
-        self.solid = bnd.BCProp(int(bnd.bc_solid[self.rp.get_param("mesh.xlboundary")]),
-                                int(bnd.bc_solid[self.rp.get_param("mesh.xrboundary")]),
-                                int(bnd.bc_solid[self.rp.get_param("mesh.ylboundary")]),
-                                int(bnd.bc_solid[self.rp.get_param("mesh.yrboundary")]))
+        self.solid = bnd.bc_is_solid(self.rp)
 
         # density and energy
         my_data.register_var("density", bc)
@@ -65,6 +118,10 @@ class Simulation(NullSimulation):
         my_data.register_var("x-momentum", bc_xodd)
         my_data.register_var("y-momentum", bc_yodd)
 
+        # any extras?
+        if extra_vars is not None:
+            for v in extra_vars:
+                my_data.register_var(v, bc)
 
         # store the EOS gamma as an auxillary quantity so we can have a
         # self-contained object stored in output files to make plots.
@@ -84,10 +141,7 @@ class Simulation(NullSimulation):
         aux_data.create()
         self.aux_data = aux_data
 
-        self.vars = Variables(idens = my_data.vars.index("density"),
-                              ixmom = my_data.vars.index("x-momentum"),
-                              iymom = my_data.vars.index("y-momentum"),
-                              iener = my_data.vars.index("energy"))
+        self.ivars = Variables(my_data)
 
         # derived variables
         self.cc_data.add_derived(derives.derive_primitives)
@@ -120,7 +174,6 @@ class Simulation(NullSimulation):
 
         self.dt = cfl*min(xtmp.min(), ytmp.min())
 
-
     def evolve(self):
         """
         Evolve the equations of compressible hydrodynamics through a
@@ -139,7 +192,7 @@ class Simulation(NullSimulation):
         myg = self.cc_data.grid
 
         Flux_x, Flux_y = flx.unsplit_fluxes(self.cc_data, self.aux_data, self.rp,
-                                            self.vars, self.solid, self.tc, self.dt)
+                                            self.ivars, self.solid, self.tc, self.dt)
 
         old_dens = dens.copy()
         old_ymom = ymom.copy()
@@ -148,7 +201,7 @@ class Simulation(NullSimulation):
         dtdx = self.dt/myg.dx
         dtdy = self.dt/myg.dy
 
-        for n in range(self.vars.nvar):
+        for n in range(self.ivars.nvar):
             var = self.cc_data.get_var_by_index(n)
 
             var.v()[:,:] += \
@@ -175,22 +228,25 @@ class Simulation(NullSimulation):
 
         plt.rc("font", size=10)
 
-        dens = self.cc_data.get_var("density")
-
-        nvar = len(self.cc_data.vars)
-
-        # get the velocities
-        u, v = self.cc_data.get_var("velocity")
-        magvel = np.sqrt(u**2 + v**2)
-
-        # thermodynamic information
-        e = self.cc_data.get_var("eint")
+        # we do this even though ivars is in self, so this works when
+        # we are plotting from a file
+        ivars = Variables(self.cc_data)
 
         # access gamma from the cc_data object so we can use dovis
         # outside of a running simulation.
         gamma = self.cc_data.get_aux("gamma")
 
-        p = eos.pres(gamma, dens, e)
+        print(self.cc_data.data.shape)
+
+        q = cons_to_prim(self.cc_data.data, gamma, ivars, self.cc_data.grid)
+
+        rho = q[:,:,ivars.irho]
+        u = q[:,:,ivars.iu]
+        v = q[:,:,ivars.iv]
+        p = q[:,:,ivars.ip]
+        e = eos.rhoe(gamma, p)/rho
+
+        magvel = np.sqrt(u**2 + v**2)
 
         myg = self.cc_data.grid
 
@@ -198,80 +254,69 @@ class Simulation(NullSimulation):
         L_x = self.cc_data.grid.xmax - self.cc_data.grid.xmin
         L_y = self.cc_data.grid.ymax - self.cc_data.grid.ymin
 
-        orientation = "vertical"
-        shrink = 1.0
+        f = plt.figure(1)
 
-        sparseX = 0
-        allYlabel = 1
+        cbar_title = False
 
         if L_x > 2*L_y:
-
             # we want 4 rows:
-            #  rho
-            #  |U|
-            #   p
-            #   e
-            fig, axes = plt.subplots(nrows=4, ncols=1, num=1)
-            orientation = "horizontal"
-            if L_x > 4*L_y:
-                shrink = 0.75
-
-            on_left = list(range(nvar))
-
+            axes = AxesGrid(f, 111,
+                            nrows_ncols=(4, 1),
+                            share_all=True,
+                            cbar_mode="each",
+                            cbar_location="top",
+                            cbar_pad="10%",
+                            cbar_size="25%",
+                            axes_pad=(0.25, 0.65),
+                            add_all=True, label_mode="L")
+            cbar_title = True
 
         elif L_y > 2*L_x:
-
             # we want 4 columns:  rho  |U|  p  e
-            fig, axes = plt.subplots(nrows=1, ncols=4, num=1)
-            if L_y >= 3*L_x:
-                shrink = 0.5
-                sparseX = 1
-                allYlabel = 0
-
-            on_left = [0]
+            axes = AxesGrid(f, 111,
+                            nrows_ncols=(1, 4),
+                            share_all=True,
+                            cbar_mode="each",
+                            cbar_location="right",
+                            cbar_pad="10%",
+                            cbar_size="25%",
+                            axes_pad=(0.65, 0.25),
+                            add_all=True, label_mode="L")
 
         else:
-            # 2x2 grid of plots with
-            #
-            #   rho   |u|
-            #    p     e
-            fig, axes = plt.subplots(nrows=2, ncols=2, num=1)
-            plt.subplots_adjust(hspace=0.25)
+            # 2x2 grid of plots
+            axes = AxesGrid(f, 111,
+                            nrows_ncols=(2, 2),
+                            share_all=True,
+                            cbar_mode="each",
+                            cbar_location="right",
+                            cbar_pad="2%",
+                            axes_pad=(0.65, 0.25),
+                            add_all=True, label_mode="L")
 
-            on_left = [0, 2]
-
-
-        fields = [dens, magvel, p, e]
+        fields = [rho, magvel, p, e]
         field_names = [r"$\rho$", r"U", "p", "e"]
 
         cm = "viridis"
 
         for n in range(4):
-            ax = axes.flat[n]
+            ax = axes[n]
 
             v = fields[n]
+
             img = ax.imshow(np.transpose(v.v()),
                             interpolation="nearest", origin="lower",
                             extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax],
                             cmap=cm)
 
             ax.set_xlabel("x")
-            if n == 0:
-                ax.set_ylabel("y")
-            elif allYlabel:
-                ax.set_ylabel("y")
+            ax.set_ylabel("y")
 
-            ax.set_title(field_names[n])
-
-            if not n in on_left:
-                ax.yaxis.offsetText.set_visible(False)
-                if n > 0: ax.get_yaxis().set_visible(False)
-
-            if sparseX:
-                ax.xaxis.set_major_locator(plt.MaxNLocator(3))
-
-            plt.colorbar(img, ax=ax, orientation=orientation, shrink=shrink)
-
+            cb = axes.cbar_axes[n].colorbar(img)
+            if cbar_title:
+                cb.ax.set_title(field_names[n])
+            else:
+                ax.set_title(field_names[n])
 
         plt.figtext(0.05, 0.0125, "t = %10.5f" % self.cc_data.t)
 
