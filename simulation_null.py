@@ -199,3 +199,5 @@ class NullSimulation(object):
             f.attrs["nsteps"] = self.n
 
             self.cc_data.write_data(f)
+
+            self.rp.write_params(f)

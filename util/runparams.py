@@ -223,6 +223,17 @@ class RuntimeParameters(object):
 
         print(" ")
 
+    def write_params(self, f):
+        """
+        Write the runtime parameters to an HDF5 file.  Here, f is the
+        h5py file object
+        """
+
+        grp = f.create_group("runtime parameters")
+
+        keys = self.params.keys()
+        for key in sorted(keys):
+            grp.attrs[key] = self.params[key]
 
     def __str__(self):
         ostr = ""
