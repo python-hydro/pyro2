@@ -3,9 +3,9 @@
 from __future__ import print_function
 
 import numpy as np
-import mesh.patch as patch
 import sys
 import math
+from util import io
 
 usage = """
       compare the output in file from the incompressible converge problem to
@@ -24,8 +24,9 @@ except:
     print(usage)
     sys.exit(2)
 
-myg, myd = patch.read(file1)
-
+sim = io.read(file1)
+myd = sim.cc_data
+myg = myd.grid
 
 # numerical solution
 u = myd.get_var("x-velocity")

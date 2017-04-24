@@ -3,9 +3,9 @@
 from __future__ import print_function
 
 import numpy as np
-import mesh.patch as patch
 import sys
 import matplotlib.pyplot as plt
+from util import io
 
 usage = """
       compare the output for a Sedov problem with the exact solution contained
@@ -33,7 +33,9 @@ except:
 
 # read the data and convert to the primitive variables (and velocity
 # magnitude)
-myg, myd = patch.read(file1)
+sim = io.read(file1)
+myd = sim.cc_data
+myg = myd.grid
 
 dens = myd.get_var("density")
 xmom = myd.get_var("x-momentum")

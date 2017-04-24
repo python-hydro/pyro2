@@ -3,14 +3,15 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import argparse
-
-import mesh.patch as patch
+from util import io
 
 # plot an output file using the solver's dovis script
 
 def makeplot(plotfile, variable, outfile):
 
-    myg, myd = patch.read(plotfile)
+    sim = io.read(plotfile)
+    myd = sim.cc_data
+    myg = myd.grid
 
     if variable == "vort":
         vx = myd.get_var("x-velocity")

@@ -3,8 +3,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import argparse
-
-import mesh.patch as patch
+from util import io
 
 # plot a single variable from an output file
 #
@@ -12,7 +11,9 @@ import mesh.patch as patch
 
 def makeplot(plotfile, variable, outfile):
 
-    myg, myd = patch.read(plotfile)
+    sim = io.read(plotfile)
+    myd = sim.cc_data
+    myg = myd.grid
 
     plt.figure(num=1, figsize=(6.5,5.25), dpi=100, facecolor='w')
 
