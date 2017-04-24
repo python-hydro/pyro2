@@ -1,19 +1,26 @@
 import h5py
-
+import importlib
 import mesh.patch as patch
 import mesh.boundary as bnd
 
 
 def read(filename):
 
+    if not filename.endswith(".h5"):
+        filename += ".h5"
+
     with h5py.File(filename, "r") as f:
-
-        # read the simulation information
-        solver = f.attrs["solver"]
-        problem = f.attrs["problem"]
-
-        t = f.attrs["time"]
-        n = f.attrs["nsteps"]
+        
+        # read the simulation information -- this only exists if the 
+        # file was created as a simulation object
+        try:
+            solver_name = f.attrs["solver"]
+            problem_name = f.attrs["problem"]
+            t = f.attrs["time"]
+            n = f.attrs["nsteps"]
+        except KeyError:
+            # this was just a patch written out
+            solver_name = None
 
         # read in the grid info and create our grid
         grid = f["grid"].attrs
@@ -51,7 +58,18 @@ def read(filename):
             
             v = myd.get_var(n)
             v.v()[:,:] = data[:,:]
-        
-    return solver, problem, myd
+
+    if solver_name is not None:
+        solver = importlib.import_module(solver_name)
+
+        sim = solver.Simulation(solver_name, problem_name, None)
+        sim.n = n
+        sim.cc_data = myd
+        sim.cc_data.t = t
+
+        return sim
+
+    else:
+        return myd
 
             

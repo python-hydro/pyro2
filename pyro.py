@@ -9,8 +9,7 @@ import os
 import matplotlib.pyplot as plt
 
 import compare
-import mesh.patch as patch
-from util import msg, profile, runparams
+from util import msg, profile, runparams, io
 
 
 def doit(solver_name, problem_name, param_file,
@@ -132,14 +131,14 @@ def doit(solver_name, problem_name, param_file,
         compare_file = "{}/tests/{}{:04d}".format(
             solver_name, basename, sim.n)
         msg.warning("comparing to: {} ".format(compare_file))
-        try: bench_grid, bench_data = patch.read(compare_file)
+        try: sim_bench = io.read(compare_file)
         except:
             msg.warning("ERROR openning compare file")
             return "ERROR openning compare file"
 
 
         result = compare.compare(sim.cc_data.grid, sim.cc_data,
-                                 bench_grid, bench_data)
+                                 sim_bench.cc_data.grid, sim_bench.cc_data)
 
         if result == 0:
             msg.success("results match benchmark\n")

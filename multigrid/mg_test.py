@@ -25,6 +25,7 @@ import compare
 import multigrid.MG as MG
 import mesh.patch as patch
 from util import msg
+from util import io
 
 # the analytic solution
 def true(x,y):
@@ -100,9 +101,9 @@ def test_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     if comp_bench:
         compare_file = "{}/{}".format(bench_dir, bench)
         msg.warning("comparing to: %s " % (compare_file) )
-        bench_grid, bench_data = patch.read(compare_file)
+        bench_data = io.read(compare_file)
 
-        result = compare.compare(my_data.grid, my_data, bench_grid, bench_data)
+        result = compare.compare(my_data.grid, my_data, bench_data.grid, bench_data)
 
         if result == 0:
             msg.success("results match benchmark\n")
@@ -115,7 +116,7 @@ def test_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
 
 if __name__ == "__main__":
-    test_poisson_dirichlet(256, store_bench=True) #comp_bench=True)
+    test_poisson_dirichlet(256, comp_bench=True)
 
 
 

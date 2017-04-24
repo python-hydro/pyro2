@@ -2,8 +2,6 @@
 
 import matplotlib.pyplot as plt
 import argparse
-import importlib
-import mesh.patch as patch
 import util.io as io
 
 # plot an output file using the solver's dovis script
@@ -11,12 +9,7 @@ import util.io as io
 def makeplot(plotfile_name, outfile, width, height):
     """ plot the data in a plotfile using the solver's vis() method """
 
-    solver_name, problem_name, myd = io.read(plotfile_name)
-
-    solver = importlib.import_module(solver_name)
-
-    sim = solver.Simulation(solver_name, None, None)
-    sim.cc_data = myd
+    sim = io.read(plotfile_name)
 
     plt.figure(num=1, figsize=(width, height), dpi=100, facecolor='w')
 

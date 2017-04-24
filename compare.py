@@ -24,7 +24,7 @@ def compare(grid1, data1, grid2, data2):
         return "gridbad"
 
     # compare the data
-    if not data1.vars == data2.vars:
+    if not sorted(data1.names) == sorted(data2.names):
         return "namesbad"
 
 
@@ -33,28 +33,14 @@ def compare(grid1, data1, grid2, data2):
 
     result = 0
 
-    for n in range(data1.nvar):
+    for name in data1.names:
 
-        # this is a hack for the changeover of the ordering of the data
-        _d1 = data1.data
-        if _d1.shape[2] < min(_d1.shape[0], _d1.shape[1]):
-            d1 = ai.ArrayIndexer(_d1[:,:,n], grid=data1.grid)
-        else:
-            d1 = ai.ArrayIndexer(_d1[n,:,:], grid=data1.grid)
-
-        _d2 = data2.data
-        if _d2.shape[2] < min(_d2.shape[0], _d2.shape[1]):
-            d2 = ai.ArrayIndexer(_d2[:,:,n], grid=data2.grid)
-        else:
-            d2 = ai.ArrayIndexer(_d2[n,:,:], grid=data2.grid)
-
-
-        #d1 = data1.get_var(data1.vars[n])
-        #d2 = data2.get_var(data2.vars[n])
+        d1 = data1.get_var(name)
+        d2 = data2.get_var(name)
 
         err = np.max(np.abs(d1.v() - d2.v()))
 
-        print("{:20s} error = {:20.10g}".format(data1.names[n], err))
+        print("{:20s} error = {:20.10g}".format(name, err))
 
         if not err == 0:
             result = "varerr"
