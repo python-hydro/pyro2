@@ -751,14 +751,52 @@ class CellCenterData2d(object):
 
     def write(self, filename):
         """
-        write out the CellCenterData2d object to disk, stored in the
-        file filename.  We use a python binary format (via pickle).
-        This stores a representation of the entire object.
+        create an output file in HDF5 format and write out our data and
+        grid.
         """
-        pF = open(filename + ".pyro", "wb")
-        pickle.dump(self, pF, pickle.HIGHEST_PROTOCOL)
-        pF.close()
 
+        if not filename.endswith(".h5"):
+            filename += ".h5"
+
+        with h5py.File(filename, "w") as f:
+            self.write_data(f)
+
+
+    def write_data(self, hdf5_file):
+        """
+        write the data out to an hdf5 file -- here, hdf5_file is an h5py
+        File pbject
+
+        """
+
+        # auxillary data
+        gaux = f.create_group("aux")
+        for k, v in self.cc_data.aux.items():
+            gaux.attrs[k] = v
+
+        # grid information
+        ggrid = f.create_group("grid")
+        ggrid.attrs["nx"] = self.cc_data.grid.nx
+        ggrid.attrs["ny"] = self.cc_data.grid.ny
+        ggrid.attrs["ng"] = self.cc_data.grid.ng
+        
+        ggrid.attrs["xmin"] = self.cc_data.grid.xmin
+        ggrid.attrs["xmax"] = self.cc_data.grid.xmax
+        ggrid.attrs["ymin"] = self.cc_data.grid.ymin
+        ggrid.attrs["ymax"] = self.cc_data.grid.ymax
+
+        # data
+        gstate = f.create_group("state")
+
+        for n in range(self.cc_data.nvar):
+            gvar = gstate.create_group(self.cc_data.names[n])
+            gvar.create_dataset("data",
+                                data=self.cc_data.get_var_by_index(n).v())
+            gvar.attrs["xlb"] = self.cc_data.BCs[self.cc_data.names[n]].xlb
+            gvar.attrs["xrb"] = self.cc_data.BCs[self.cc_data.names[n]].xrb
+            gvar.attrs["ylb"] = self.cc_data.BCs[self.cc_data.names[n]].ylb
+            gvar.attrs["yrb"] = self.cc_data.BCs[self.cc_data.names[n]].yrb
+                
 
     def pretty_print(self, var, fmt=None):
 
