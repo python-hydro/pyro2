@@ -37,6 +37,8 @@ from __future__ import print_function
 import numpy as np
 import pickle
 
+import h5py
+
 from util import msg
 
 import mesh.boundary as bnd
@@ -762,40 +764,40 @@ class CellCenterData2d(object):
             self.write_data(f)
 
 
-    def write_data(self, hdf5_file):
+    def write_data(self, f):
         """
-        write the data out to an hdf5 file -- here, hdf5_file is an h5py
+        write the data out to an hdf5 file -- here, f is an h5py
         File pbject
 
         """
 
         # auxillary data
         gaux = f.create_group("aux")
-        for k, v in self.cc_data.aux.items():
+        for k, v in self.aux.items():
             gaux.attrs[k] = v
 
         # grid information
         ggrid = f.create_group("grid")
-        ggrid.attrs["nx"] = self.cc_data.grid.nx
-        ggrid.attrs["ny"] = self.cc_data.grid.ny
-        ggrid.attrs["ng"] = self.cc_data.grid.ng
+        ggrid.attrs["nx"] = self.grid.nx
+        ggrid.attrs["ny"] = self.grid.ny
+        ggrid.attrs["ng"] = self.grid.ng
         
-        ggrid.attrs["xmin"] = self.cc_data.grid.xmin
-        ggrid.attrs["xmax"] = self.cc_data.grid.xmax
-        ggrid.attrs["ymin"] = self.cc_data.grid.ymin
-        ggrid.attrs["ymax"] = self.cc_data.grid.ymax
+        ggrid.attrs["xmin"] = self.grid.xmin
+        ggrid.attrs["xmax"] = self.grid.xmax
+        ggrid.attrs["ymin"] = self.grid.ymin
+        ggrid.attrs["ymax"] = self.grid.ymax
 
         # data
         gstate = f.create_group("state")
 
-        for n in range(self.cc_data.nvar):
-            gvar = gstate.create_group(self.cc_data.names[n])
+        for n in range(self.nvar):
+            gvar = gstate.create_group(self.names[n])
             gvar.create_dataset("data",
-                                data=self.cc_data.get_var_by_index(n).v())
-            gvar.attrs["xlb"] = self.cc_data.BCs[self.cc_data.names[n]].xlb
-            gvar.attrs["xrb"] = self.cc_data.BCs[self.cc_data.names[n]].xrb
-            gvar.attrs["ylb"] = self.cc_data.BCs[self.cc_data.names[n]].ylb
-            gvar.attrs["yrb"] = self.cc_data.BCs[self.cc_data.names[n]].yrb
+                                data=self.get_var_by_index(n).v())
+            gvar.attrs["xlb"] = self.BCs[self.names[n]].xlb
+            gvar.attrs["xrb"] = self.BCs[self.names[n]].xrb
+            gvar.attrs["ylb"] = self.BCs[self.names[n]].ylb
+            gvar.attrs["yrb"] = self.BCs[self.names[n]].yrb
                 
 
     def pretty_print(self, var, fmt=None):

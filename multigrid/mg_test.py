@@ -115,7 +115,7 @@ def test_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
 
 if __name__ == "__main__":
-    test_poisson_dirichlet(256, comp_bench=True)
+    test_poisson_dirichlet(256, store_bench=True) #comp_bench=True)
 
 
 
