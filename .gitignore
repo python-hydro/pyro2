@@ -11,3 +11,6 @@ inputs.auto
 .ipynb_checkpoints/
 
 *.pdf
+
+^tests/*.h5
+*.h5
