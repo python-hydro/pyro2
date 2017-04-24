@@ -156,7 +156,7 @@ def doit(solver_name, problem_name, param_file,
 
         bench_file = solver_name + "/tests/" + basename + "%4.4d" % (sim.n)
         msg.warning("storing new benchmark: {}\n".format(bench_file))
-        sim.cc_data.write(bench_file)
+        sim.write(bench_file)
 
 
     #-------------------------------------------------------------------------
