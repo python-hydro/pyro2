@@ -12,5 +12,5 @@ inputs.auto
 
 *.pdf
 
-^tests/*.h5
 *.h5
+!/*/tests/*.h5

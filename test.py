@@ -67,16 +67,24 @@ def do_tests(build, out_file, do_standalone=True, do_main=True,
 
     # standalone tests
     if do_standalone and single is None:
-        err = mg_test.test_poisson_dirichlet(256, comp_bench=True, verbose=0)
+        err = mg_test.test_poisson_dirichlet(256, comp_bench=True,
+                                             store_bench=store_all_benchmarks, verbose=0)
         results["mg_poisson_dirichlet"] = err
 
-        err = mg_test_vc_dirichlet.test_vc_poisson_dirichlet(512, comp_bench=True, verbose=0)
+        err = mg_test_vc_dirichlet.test_vc_poisson_dirichlet(512,
+                                                             comp_bench=True, 
+                                                             store_bench=store_all_benchmarks, verbose=0)
         results["mg_vc_poisson_dirichlet"] = err
 
-        err = mg_test_vc_periodic.test_vc_poisson_periodic(512, comp_bench=True, verbose=0)
+        err = mg_test_vc_periodic.test_vc_poisson_periodic(512, comp_bench=True, 
+                                                           store_bench=store_all_benchmarks, 
+                                                           verbose=0)
         results["mg_vc_poisson_periodic"] = err
 
-        err = mg_test_general_inhomogeneous.test_general_poisson_inhomogeneous(512, comp_bench=True, verbose=0)
+        err = mg_test_general_inhomogeneous.test_general_poisson_inhomogeneous(512, 
+                                                                               comp_bench=True, 
+                                                                               store_bench=store_all_benchmarks, 
+                                                                               verbose=0)
         results["mg_general_poisson_inhomogeneous"] = err
 
 
