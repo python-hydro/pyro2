@@ -5,8 +5,8 @@ from __future__ import print_function
 import numpy as np
 import sys
 
-import mesh.patch
 import mesh.array_indexer as ai
+from util import io
 
 usage = """
       usage: ./compare.py file1 file2
@@ -57,10 +57,11 @@ if __name__ == "__main__":
     file1 = sys.argv[1]
     file2 = sys.argv[2]
 
-    myg1, myd1 = mesh.patch.read(file1)
-    myg2, myd2 = mesh.patch.read(file2)
+    s1 = io.read(file1)
+    s2 = io.read(file2)
 
-    result = compare(myg1, myd1, myg2, myd2)
+    result = compare(s1.cc_data.grid, s1.cc_data, 
+                     s2.cc_data.grid, s2.cc_data)
 
     if result == 0:
         print("SUCCESS: files agree")
