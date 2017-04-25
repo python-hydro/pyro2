@@ -53,11 +53,18 @@ http://www.richnetapps.com/automatically_highlight_current_page_in/
 
 <P><H2>&lowast; Compressible hydrodynamics solver</H2>
 
-<p>pyro's compressible solver is based on a directionally unsplit
-piecewise linear method for the Euler equations.  The basic theory is
-outlined in Chapter 5 of the notes:
+<p>pyro has two compressible solvers:
+  <ul>
+    <li><tt>compressible</tt> is based on a directionally unsplit (the
+      corner transport upwind algorithm) piecewise linear method for
+      the Euler equations</li>
+    <li><tt>compressible_rk</tt> uses a method of lines time-integration
+      approach with piecewise linear spatial reconstruction for the Euler
+      equations</li>
+  </ul>
 
-<div class="pdf"><a href="http://bender.astro.sunysb.edu/hydro_by_example/CompHydroTutorial.pdf">notes on computational hydro</a></div>
+  The basic theory is outlined in Chapters 6 and 7 of the notes:<br>
+  <div class="pdf"><a href="http://bender.astro.sunysb.edu/hydro_by_example/CompHydroTutorial.pdf">notes on computational hydro</a></div>
 
 <p>The implementation here has flattening at shocks, artificial viscosity,
 a simple gamma-law equation of state, and two different Riemann solvers.
@@ -100,6 +107,10 @@ Optional constant gravity in the vertical direction is allowed.
 
 <tr><td><tt>grav</tt></td>
     <td>the gravitational acceleration (vertical/y direction)</td>
+</tr>
+
+<tr><td><tt>temporal_method</tt></td>
+    <td>the MOL integration method to use (RK2, TVD2, TVD3, RK4) (<tt>compressible_rk</tt> only)</td>
 </tr>
 
 
