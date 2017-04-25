@@ -77,11 +77,10 @@ def process(file):
     # is set by the maximum value in whichbin
     ncount = np.bincount(whichbin)
 
-
     # now bin the associated data
     phi_bin = np.zeros(len(ncount)-1, dtype=np.float64)
 
-    for n in range(ncount):
+    for n in range(len(ncount)):
 
         # remember that there are no whichbin == 0, since that
         # corresponds to the left edge.  So we want whichbin == 1 to
@@ -110,7 +109,7 @@ fig, ax = plt.subplots(nrows=1, ncols=1, num=1)
 plt.rc("font", size=10)
 
 
-for n in range(len(sys.argv)):
+for n in range(1,len(sys.argv)):
 
     try: file = sys.argv[n]
     except:
