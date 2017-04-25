@@ -202,5 +202,20 @@ class NullSimulation(object):
             f.attrs["nsteps"] = self.n
 
             self.cc_data.write_data(f)
-
             self.rp.write_params(f)
+            self.write_extras(f)
+
+
+    def write_extras(self, f):
+        """
+        write out any extra simulation-specific stuff
+        """
+        pass
+
+
+    def read_extras(self, f):
+        """
+        read in any simulation-specific data from an h5py file object f
+        """
+        pass
+

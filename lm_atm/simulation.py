@@ -6,6 +6,7 @@ import sys
 
 import numpy as np
 import matplotlib.pyplot as plt
+import h5py
 
 import lm_atm.LM_atm_interface_f as lm_interface_f
 import mesh.reconstruction as reconstruction
@@ -692,3 +693,29 @@ class Simulation(NullSimulation):
 
         plt.pause(0.001)
         plt.draw()
+
+
+    def write_extras(self, f):
+        """
+        Output simulation-specific data to the h5py file f
+        """
+        
+        # we implement our own version to allow us to store the base
+        # state
+
+        gb = f.create_group("base state")
+
+        for key in self.base:
+            gb.create_dataset(key, data=self.base[key].d)
+
+
+    def read_extras(self, f):
+        """
+        read in any simulation-specific data from an h5py file object f
+        """
+
+        gb = f["base state"]
+        for name in gb:
+            self.base[name] = Basestate(self.cc_data.grid.ny, ng=self.cc_data.grid.ng)
+            self.base[name].d[:] = gb[name]
+

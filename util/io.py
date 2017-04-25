@@ -59,16 +59,18 @@ def read(filename):
             v = myd.get_var(n)
             v.v()[:,:] = data[:,:]
 
+        if solver_name is not None:
+            solver = importlib.import_module(solver_name)
+
+            sim = solver.Simulation(solver_name, problem_name, None)
+            sim.n = n
+            sim.cc_data = myd
+            sim.cc_data.t = t
+
+            sim.read_extras(f)
+
     if solver_name is not None:
-        solver = importlib.import_module(solver_name)
-
-        sim = solver.Simulation(solver_name, problem_name, None)
-        sim.n = n
-        sim.cc_data = myd
-        sim.cc_data.t = t
-
         return sim
-
     else:
         return myd
 
