@@ -17,10 +17,10 @@ errors = {"gridbad": "grids don't agree",
           "varerr": "one or more variables don't agree"}
 
 
-def compare(grid1, data1, grid2, data2):
+def compare(data1, data2):
 
     # compare the grids
-    if not grid1 == grid2:
+    if not data1.grid == data2.grid:
         return "gridbad"
 
     # compare the data
@@ -60,8 +60,7 @@ if __name__ == "__main__":
     s1 = io.read(file1)
     s2 = io.read(file2)
 
-    result = compare(s1.cc_data.grid, s1.cc_data, 
-                     s2.cc_data.grid, s2.cc_data)
+    result = compare(s1.cc_data, s2.cc_data)
 
     if result == 0:
         print("SUCCESS: files agree")

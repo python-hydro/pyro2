@@ -137,8 +137,7 @@ def doit(solver_name, problem_name, param_file,
             return "ERROR openning compare file"
 
 
-        result = compare.compare(sim.cc_data.grid, sim.cc_data,
-                                 sim_bench.cc_data.grid, sim_bench.cc_data)
+        result = compare.compare(sim.cc_data, sim_bench.cc_data)
 
         if result == 0:
             msg.success("results match benchmark\n")

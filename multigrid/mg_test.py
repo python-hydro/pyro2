@@ -103,7 +103,7 @@ def test_poisson_dirichlet(N, store_bench=False, comp_bench=False,
         msg.warning("comparing to: %s " % (compare_file) )
         bench_data = io.read(compare_file)
 
-        result = compare.compare(my_data.grid, my_data, bench_data.grid, bench_data)
+        result = compare.compare(my_data, bench)
 
         if result == 0:
             msg.success("results match benchmark\n")

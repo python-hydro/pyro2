@@ -209,8 +209,7 @@ def test_general_poisson_inhomogeneous(N, store_bench=False, comp_bench=False,
         msg.warning("comparing to: %s " % (compare_file) )
         bench = io.read(compare_file)
 
-        result = compare.compare(my_data.grid, my_data,
-                                 bench.grid, bench)
+        result = compare.compare(my_data, bench)
 
         if result == 0:
             msg.success("results match benchmark\n")
