@@ -91,6 +91,9 @@ class NullSimulation(object):
 
         self.n_num_out = 0
 
+        # plotting 
+        self.cm = "viridis"
+
 
     def finished(self):
         """

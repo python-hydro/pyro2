@@ -93,12 +93,10 @@ class Simulation(NullSimulation):
 
         myg = self.cc_data.grid
 
-        cm = "viridis"
-
         plt.imshow(np.transpose(dens.v()),
                    interpolation="nearest", origin="lower",
                    extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax],
-                   cmap=cm)
+                   cmap=self.cm)
 
         plt.xlabel("x")
         plt.ylabel("y")
@@ -106,7 +104,7 @@ class Simulation(NullSimulation):
 
         plt.colorbar()
 
-        plt.figtext(0.05,0.0125, "t = %10.5f" % self.cc_data.t)
+        plt.figtext(0.05,0.0125, "t = {:10.5f}".format(self.cc_data.t))
 
         plt.pause(0.001)
         plt.draw()

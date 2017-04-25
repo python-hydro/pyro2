@@ -1,4 +1,5 @@
 import importlib
+import math
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -19,6 +20,14 @@ class Simulation(NullSimulation):
         # setup the grid
         my_grid = grid_setup(self.rp, ng=1)
 
+        # for MG, we need to be a power of two
+        if my_grid.nx != my_grid.ny:
+            msg.fail("need nx = ny for diffusion problems")
+            
+        n = int(math.log(my_grid.nx)/math.log(2.0))
+        if 2**n != my_grid.nx:
+            msg.fail("grid needs to be a power of 2")
+
         # create the variables
 
         # first figure out the boundary conditions -- we allow periodic,
@@ -37,10 +46,8 @@ class Simulation(NullSimulation):
             else:
                 msg.fail("invalid BC")
 
-
         bc = bnd.BC(xlb=bcparam[0], xrb=bcparam[1],
                     ylb=bcparam[2], yrb=bcparam[3])
-
 
         my_data = patch.CellCenterData2d(my_grid)
         my_data.register_var("phi", bc)
@@ -139,12 +146,10 @@ class Simulation(NullSimulation):
 
         myg = self.cc_data.grid
 
-        cm = "viridis"
-
         plt.imshow(np.transpose(phi.v()),
                    interpolation="nearest", origin="lower",
                    extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax],
-                   cmap=cm)
+                   cmap=self.cm)
 
         plt.xlabel("x")
         plt.ylabel("y")
@@ -152,7 +157,7 @@ class Simulation(NullSimulation):
 
         plt.colorbar()
 
-        plt.figtext(0.05, 0.0125, "t = %10.5f" % self.cc_data.t)
+        plt.figtext(0.05, 0.0125, "t = {:10.5f}".format(self.cc_data.t))
 
         plt.pause(0.001)
         plt.draw()

@@ -297,8 +297,6 @@ class Simulation(NullSimulation):
         fields = [rho, magvel, p, e]
         field_names = [r"$\rho$", r"U", "p", "e"]
 
-        cm = "viridis"
-
         for n in range(4):
             ax = axes[n]
 
@@ -307,7 +305,7 @@ class Simulation(NullSimulation):
             img = ax.imshow(np.transpose(v.v()),
                             interpolation="nearest", origin="lower",
                             extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax],
-                            cmap=cm)
+                            cmap=self.cm)
 
             ax.set_xlabel("x")
             ax.set_ylabel("y")
@@ -318,7 +316,7 @@ class Simulation(NullSimulation):
             else:
                 ax.set_title(field_names[n])
 
-        plt.figtext(0.05, 0.0125, "t = %10.5f" % self.cc_data.t)
+        plt.figtext(0.05, 0.0125, "t = {:10.5f}".format(self.cc_data.t))
 
         plt.pause(0.001)
         plt.draw()

@@ -427,15 +427,13 @@ class Simulation(NullSimulation):
         fields = [u, v, vort, divU]
         field_names = ["u", "v", r"$\nabla \times U$", r"$\nabla \cdot U$"]
 
-        cm = "viridis"
-
         for n in range(4):
             ax = axes.flat[n]
 
             f = fields[n]
             img = ax.imshow(np.transpose(f.v()),
                             interpolation="nearest", origin="lower",
-                            extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax], cmap=cm)
+                            extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax], cmap=self.cm)
 
             ax.set_xlabel("x")
             ax.set_ylabel("y")
@@ -443,8 +441,7 @@ class Simulation(NullSimulation):
 
             plt.colorbar(img, ax=ax)
 
-
-        plt.figtext(0.05,0.0125, "t = %10.5f" % self.cc_data.t)
+        plt.figtext(0.05,0.0125, "t = {:10.5f}".format(self.cc_data.t))
 
         plt.pause(0.001)
         plt.draw()
