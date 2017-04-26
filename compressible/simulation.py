@@ -236,8 +236,6 @@ class Simulation(NullSimulation):
         # outside of a running simulation.
         gamma = self.cc_data.get_aux("gamma")
 
-        print(self.cc_data.data.shape)
-
         q = cons_to_prim(self.cc_data.data, gamma, ivars, self.cc_data.grid)
 
         rho = q[:,:,ivars.irho]
