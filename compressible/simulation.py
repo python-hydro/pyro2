@@ -172,7 +172,7 @@ class Simulation(NullSimulation):
         xtmp = self.cc_data.grid.dx/(abs(u) + cs)
         ytmp = self.cc_data.grid.dy/(abs(v) + cs)
 
-        self.dt = cfl*min(xtmp.min(), ytmp.min())
+        self.dt = cfl*float(min(xtmp.min(), ytmp.min()))
 
     def evolve(self):
         """
@@ -316,7 +316,7 @@ class Simulation(NullSimulation):
             else:
                 ax.set_title(field_names[n])
 
-        plt.figtext(0.05, 0.0125, "t = {:10.5f}".format(self.cc_data.t))
+        plt.figtext(0.05, 0.0125, "t = {:10.5g}".format(self.cc_data.t))
 
         plt.pause(0.001)
         plt.draw()

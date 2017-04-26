@@ -66,7 +66,7 @@ class Simulation(NullSimulation):
         xtmp = self.cc_data.grid.dx/(abs(u))
         ytmp = self.cc_data.grid.dy/(abs(v))
 
-        self.dt = cfl*min(xtmp.min(), ytmp.min())
+        self.dt = cfl*float(min(xtmp.min(), ytmp.min()))
 
 
     def preevolve(self):
