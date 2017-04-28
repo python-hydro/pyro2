@@ -263,8 +263,20 @@ The flowchart for the driver is:
 
 <p>This format is flexible enough for the advection, compressible,
 diffusion, and incompressible evolution solver.  Each solver provides
-a <tt>Simulation</tt> class with the following methods:
+a <tt>Simulation</tt> class that provides the following methods (note: inheritance is used, so many of these methods come from the base <tt>NullSimulation</tt> class):
 <ul>
+  <li><tt>compute_timestep</tt> return the timestep based on the solver's
+    specific needs (through <tt>method_compute_timestep</tt>) and timestepping
+    parameters in the driver</li>
+
+  <li><tt>dovis</tt>: performs visualization of the current solution</li>
+
+  <li><tt>evolve</tt>: advances the system of equations through a single timestep</li>
+  
+  <li><tt>finalize</tt>: any final clean-ups, printing of analysis hints.</tt>
+
+  <li><tt>finished</tt>: return <tt>True</tt> if we've met the stopping criteria for a simulation</li>
+
   <li><tt>initialize</tt>: sets up the grid and solution variables</li>
 
   <li><tt>method_compute_timestep</tt>: returns the timestep for evolving the system</li>
@@ -273,11 +285,13 @@ a <tt>Simulation</tt> class with the following methods:
     that is necessary before the main evolution.  Not every solver will
     need something here.
 
-  <li><tt>evolve</tt>: advances the system of equations through a single timestep</li>
+  <li><tt>read_extras</tt>: read in any solver-specific data from a stored
+    output file</li>
 
-  <li><tt>dovis</tt>: performs visualization of the current solution</li>
+  <li><tt>write</tt>: write the state of the simulation to an HDF5 file</li>
 
-  <li><tt>finalize</tt>: any final clean-ups, printing of analysis hints.</tt>
+  <li><tt>write_extras</tt>: any solver-specific writing</li>
+
 </ul>
 
 
