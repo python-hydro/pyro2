@@ -70,7 +70,7 @@ Astronomy &amp; Computing.
 
 <div class="pdf"><a href="http://adsabs.harvard.edu/abs/2013arXiv1306.6883Z">pyro paper download</a></div>
 
-<p>Note: pyro works with both python 2 and 3.
+<p>Note: by default, pyro uses python3.
 
 <p><h3>Directory structure</h3>
 
@@ -94,11 +94,26 @@ include the top-level <tt>pyro2/</tt> directory.
 
   <ul>
   <li><tt>advection/</tt> &mdash; 
-      The linear advection equation solver.  All advection-specific routines live here.
+      The linear advection equation solver using the CTU method.  All
+      advection-specific routines live here.
      
      <ul>
      <li><tt>problems/</tt> &mdash; 
          The problem setups for the advection solver.
+     </li>
+     <li><tt>tests/</tt> &mdash; 
+         Reference advection output files for comparison and regression testing.
+     </li>
+     </ul>
+
+  </li>
+
+  <li><tt>advection_rk/</tt> &mdash; 
+      The linear advection equation solver using the method-of-lines approach. 
+     
+     <ul>
+     <li><tt>problems/</tt> &mdash; 
+         This is a symbolic link to the <tt>advection/problems/</tt> directory.
      </li>
      <li><tt>tests/</tt> &mdash; 
          Reference advection output files for comparison and regression testing.
@@ -112,8 +127,8 @@ include the top-level <tt>pyro2/</tt> directory.
   </li>
 
   <li><tt>compressible/</tt> &mdash; 
-      The compressible hydrodynamics solver.  All source files specific to this solver 
-      live here.
+      The compressible hydrodynamics solver using the CTU method.  
+      All source files specific to this solver live here.
 
      <ul>
      <li><tt>problems/</tt> &mdash; 
@@ -126,8 +141,25 @@ include the top-level <tt>pyro2/</tt> directory.
 
   </li>
 
+  <li><tt>compressible_rk/</tt> &mdash; 
+      The compressible hydrodynamics solver using method of lines 
+      integration.
+
+     <ul>
+     <li><tt>problems/</tt> &mdash; 
+         This is a symbolic link to the <tt>compressible/problems/</tt>
+         directory.
+     </li>
+     <li><tt>tests/</tt> &mdash;
+         Reference compressible hydro output for regression testing.
+     </li>
+     </ul>
+
+  </li>
+
   <li><tt>diffusion/</tt> &mdash;
-      The implicit (thermal) diffusion solver.  All diffusion-specific routines live here.
+      The implicit (thermal) diffusion solver.  All diffusion-specific 
+      routines live here.
 
      <ul>
      <li><tt>problems/</tt> &mdash;
@@ -141,7 +173,8 @@ include the top-level <tt>pyro2/</tt> directory.
   </li>
 
   <li><tt>incompressible/</tt> &mdash;
-      The incompressible hydrodynamics solver.  All incompressible-specific routines live here.
+      The incompressible hydrodynamics solver.  All incompressible-specific 
+      routines live here.
 
      <ul>
      <li><tt>problems/</tt> &mdash;
@@ -170,30 +203,33 @@ include the top-level <tt>pyro2/</tt> directory.
   </li>
 
   <li><tt>mesh/</tt> &mdash;
-      The main classes that deal with 2-d cell-centered grids and the data that lives on them.
-      This is discussed extensively on the <a href="../grids/">grids</a> page.  All the solvers
-      use these classes to represent their discretized data.
+      The main classes that deal with 2-d cell-centered grids and the
+      data that lives on them.  This is discussed extensively on
+      the <a href="../grids/">grids</a> page.  All the solvers use
+      these classes to represent their discretized data.
   </li>
 
   <li><tt>multigrid/</tt> &mdash;
-      The multigrid solver for cell-centered data.  This solver is used on its own to illustrate
-      how multigrid works, and directly by the diffusion and incompressible solvers.
+      The multigrid solver for cell-centered data.  This solver is
+      used on its own to illustrate how multigrid works, and directly
+      by the diffusion and incompressible solvers.
 
      <ul>
      <li><tt>problems/</tt> &mdash;
-         The problem setups for when the multigrid solver is used in a stand-alone fashion.
+         The problem setups for when the multigrid solver is used in a 
+         stand-alone fashion.
      </li>
      <li><tt>tests/</tt> &mdash;
-         Reference multigrid solver solutions (from when the multigrid solver is used stand-alone)
-         for regression testing.
+         Reference multigrid solver solutions (from when the multigrid solver 
+         is used stand-alone) for regression testing.
      </li>
      </ul>
 
   </li>
 
   <li><tt>util/</tt> &mdash;
-      Various service modules used by the pyro routines, including runtime parameters, profiling,
-      and pretty output modes.
+      Various service modules used by the pyro routines, including 
+      runtime parameters, I/O, profiling, and pretty output modes.
   </li>
   </ul>
 </li>
