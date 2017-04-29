@@ -5,7 +5,7 @@ import mesh.array_indexer as ai
 import numpy as np
 
 from numpy.testing import assert_array_equal
-from nose.tools import assert_equal
+from nose.tools import assert_equal, with_setup
 
 # utilities
 def test_buf_split():
@@ -14,34 +14,92 @@ def test_buf_split():
 
 
 # Grid2d tests
+class TestGrid2d(object):
+    @classmethod
+    def setup_class(cls):
+        """ this is run once for each class before any tests """
+        pass
 
-def test_dx_dy():
-    g = patch.Grid2d(4, 6, ng=2, ymax=1.5)
+    @classmethod
+    def teardown_class(cls):
+        """ this is run once for each class after all tests """
+        pass
 
-    assert_equal(g.dx, 0.25)
-    assert_equal(g.dy, 0.25)
+    def setup(self):
+        """ this is run before each test """
+        self.g = patch.Grid2d(4, 6, ng=2, ymax=1.5)
 
-def test_grid_coords():
-    g = patch.Grid2d(4, 6, ng=2, ymax=1.5)
+    def teardown(self):
+        """ this is run after each test """
+        self.g = None
 
-    assert_array_equal(g.x[g.ilo:g.ihi+1], np.array([0.125, 0.375, 0.625, 0.875]))
-    assert_array_equal(g.y[g.jlo:g.jhi+1], np.array([0.125, 0.375, 0.625, 0.875, 1.125, 1.375]))
+    def test_dx_dy(self):
+        assert_equal(self.g.dx, 0.25)
+        assert_equal(self.g.dy, 0.25)
 
-def test_grid_2d_coords():
-    g = patch.Grid2d(4, 6, ng=2, ymax=1.5)
+    def test_grid_coords(self):
+        assert_array_equal(self.g.x[self.g.ilo:self.g.ihi+1], 
+                           np.array([0.125, 0.375, 0.625, 0.875]))
+        assert_array_equal(self.g.y[self.g.jlo:self.g.jhi+1], 
+                           np.array([0.125, 0.375, 0.625, 0.875, 1.125, 1.375]))
 
-    assert_array_equal(g.x, g.x2d[:,g.jc])
-    assert_array_equal(g.y, g.y2d[g.ic,:])
+    def test_grid_2d_coords(self):
+        assert_array_equal(self.g.x, self.g.x2d[:,self.g.jc])
+        assert_array_equal(self.g.y, self.g.y2d[self.g.ic,:])
 
-def test_course_like():
-    g = patch.Grid2d(4, 6, ng=2, ymax=1.5)
-    c = g.coarse_like(2)
+    def test_course_like(self):
+        c = self.g.coarse_like(2)
 
-    assert_equal(c.nx, 2)
-    assert_equal(c.ny, 3)
+        assert_equal(c.nx, 2)
+        assert_equal(c.ny, 3)
 
 
 # CellCenterData2d tests
+class TestCellCenterData2d(object):
+    @classmethod
+    def setup_class(cls):
+        """ this is run once for each class before any tests """
+        pass
+
+    @classmethod
+    def teardown_class(cls):
+        """ this is run once for each class after all tests """
+        pass
+
+    def setup(self):
+        """ this is run before each test """
+        nx = 8
+        ny = 8
+        self.g = patch.Grid2d(nx, ny, ng = 2, xmax=1.0, ymax=1.0)
+        self.d = patch.CellCenterData2d(self.g, dtype=np.int)
+
+        bco = bnd.BC(xlb="outflow", xrb="outflow",
+                     ylb="outflow", yrb="outflow")
+        self.d.register_var("a", bco)
+        self.d.register_var("b", bco)
+        self.d.create()
+
+    def teardown(self):
+        """ this is run after each test """
+        self.g = None
+        self.d = None
+
+    def test_zeros(self):
+    
+        a = self.d.get_var("a")
+        a[:,:] = 1.0
+
+        self.d.zero("a")
+        assert_equal(np.all(a.v() == 0.0), True)
+
+    def test_aux(self):
+        self.d.set_aux("ftest", 1.0)
+        self.d.set_aux("stest", "this was a test")
+
+        assert_equal(self.d.get_aux("ftest"), 1.0)
+        assert_equal(self.d.get_aux("stest"), "this was a test")
+    
+
 def test_bcs():
 
     myg = patch.Grid2d(4,4, ng = 2, xmax=1.0, ymax=1.0)
