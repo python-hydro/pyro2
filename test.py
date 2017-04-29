@@ -167,4 +167,4 @@ if __name__ == "__main__":
 
     # unit tests
     if args.single is None:
-        nose.run(argv=["", "-s"])
+        nose.run(argv=["", "-sv"])
