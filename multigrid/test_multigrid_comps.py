@@ -6,10 +6,7 @@ import numpy as np
 from numpy.testing import assert_array_equal
 import multigrid.MG as MG
 
-import util.testing_help as th
-
 # utilities
-@th.with_named_setup(th.setup_func, th.teardown_func)
 def test_edge_coeffs():
     # make dx = dy = 1 so the normalization is trivial
     g = patch.Grid2d(4, 6, ng=2, xmax=4, ymax=6)
@@ -39,7 +36,6 @@ def test_edge_coeffs():
 
 # test the gradient stuff -- we don't actually need to do a solve, just
 # initialize a phi and get the gradient
-@th.with_named_setup(th.setup_func, th.teardown_func)
 def test_mg_gradient():
     a = MG.CellCenterMG2d(8, 8, ng=1, xmax=8, ymax=8)
 

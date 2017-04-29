@@ -7,10 +7,7 @@ import numpy as np
 from numpy.testing import assert_array_equal
 from nose.tools import assert_equal
 
-import util.testing_help as th
-
 # utilities
-@th.with_named_setup(th.setup_func, th.teardown_func)
 def test_buf_split():
     assert_array_equal(ai._buf_split(2), [2, 2, 2, 2])
     assert_array_equal(ai._buf_split((2, 3)), [2, 3, 2, 3])
@@ -18,28 +15,24 @@ def test_buf_split():
 
 # Grid2d tests
 
-@th.with_named_setup(th.setup_func, th.teardown_func)
 def test_dx_dy():
     g = patch.Grid2d(4, 6, ng=2, ymax=1.5)
 
     assert_equal(g.dx, 0.25)
     assert_equal(g.dy, 0.25)
 
-@th.with_named_setup(th.setup_func, th.teardown_func)
 def test_grid_coords():
     g = patch.Grid2d(4, 6, ng=2, ymax=1.5)
 
     assert_array_equal(g.x[g.ilo:g.ihi+1], np.array([0.125, 0.375, 0.625, 0.875]))
     assert_array_equal(g.y[g.jlo:g.jhi+1], np.array([0.125, 0.375, 0.625, 0.875, 1.125, 1.375]))
 
-@th.with_named_setup(th.setup_func, th.teardown_func)
 def test_grid_2d_coords():
     g = patch.Grid2d(4, 6, ng=2, ymax=1.5)
 
     assert_array_equal(g.x, g.x2d[:,g.jc])
     assert_array_equal(g.y, g.y2d[g.ic,:])
 
-@th.with_named_setup(th.setup_func, th.teardown_func)
 def test_course_like():
     g = patch.Grid2d(4, 6, ng=2, ymax=1.5)
     c = g.coarse_like(2)
@@ -49,7 +42,6 @@ def test_course_like():
 
 
 # CellCenterData2d tests
-@th.with_named_setup(th.setup_func, th.teardown_func)
 def test_bcs():
 
     myg = patch.Grid2d(4,4, ng = 2, xmax=1.0, ymax=1.0)
@@ -144,7 +136,6 @@ def test_bcs():
 
 
 # ArrayIndexer tests
-@th.with_named_setup(th.setup_func, th.teardown_func)
 def test_indexer():
     g = patch.Grid2d(2,3, ng=2)
     a = g.scratch_array()
@@ -161,7 +152,6 @@ def test_indexer():
 
     assert_array_equal(a.ip_jp(1, 1), np.array([[24., 25., 26.], [ 31., 32., 33.]]))
 
-@th.with_named_setup(th.setup_func, th.teardown_func)
 def test_is_symmetric():
     g = patch.Grid2d(4, 3, ng=0)
     a = g.scratch_array()
@@ -173,7 +163,6 @@ def test_is_symmetric():
     assert_equal(a.is_symmetric(), True)
 
 
-@th.with_named_setup(th.setup_func, th.teardown_func)
 def test_is_asymmetric():
     g = patch.Grid2d(4, 3, ng=0)
     a = g.scratch_array()
