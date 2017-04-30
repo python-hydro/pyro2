@@ -144,10 +144,10 @@ with their data.
 
       usage: `./compare.py file1 file2`
 
-  - `plot.py`: this takes the solver name and an output file as input
-    and plots the data using the solver's dovis method.
+  - `plot.py`: this takes the an output file as input and plots the
+    data using the solver's dovis method.
 
-      usage: `./plot.py solvername file`
+      usage: `./plot.py file`
 
   - `analysis/`
 
