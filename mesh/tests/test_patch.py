@@ -24,11 +24,11 @@ class TestGrid2d(object):
         """ this is run once for each class after all tests """
         pass
 
-    def setup(self):
+    def setup_method(self):
         """ this is run before each test """
         self.g = patch.Grid2d(4, 6, ng=2, ymax=1.5)
 
-    def teardown(self):
+    def teardown_method(self):
         """ this is run after each test """
         self.g = None
 
@@ -98,7 +98,7 @@ class TestCellCenterData2d(object):
         """ this is run once for each class after all tests """
         pass
 
-    def setup(self):
+    def setup_method(self):
         """ this is run before each test """
         nx = 8
         ny = 8
@@ -111,7 +111,7 @@ class TestCellCenterData2d(object):
         self.d.register_var("b", bco)
         self.d.create()
 
-    def teardown(self):
+    def teardown_method(self):
         """ this is run after each test """
         self.g = None
         self.d = None

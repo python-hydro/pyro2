@@ -32,12 +32,12 @@ class TestRunParams(object):
         """ this is run once for each class after all tests """
         pass
 
-    def setup(self):
+    def setup_method(self):
         """ this is run before each test """
         self.rp = rp.RuntimeParameters()
         self.rp.load_params("util/tests/test.ini")
 
-    def teardown(self):
+    def teardown_method(self):
         """ this is run after each test """
         self.rp = None
 
