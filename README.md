@@ -55,7 +55,7 @@ http://zingale.github.io/pyro2/
        print matplotlib.pyplot.get_backend() 
        ```
 	   
-  - If you want to run the unit tests, you need to have `nose` installed.
+  - If you want to run the unit tests, you need to have `pytest` installed.
   
   - The remaining steps are: 
 
@@ -209,7 +209,7 @@ with their data.
   stand-alone multigrid tests) and compare the solution to stored
   benchmarks (in each solver's `tests/` subdirectory).
 
-  It will also invoke the python `nose` module to run the unit tests
+  It will also invoke the python `pytest` module to run the unit tests
   for the different modules in pyro.
   
   Tests are run nightly and reported here:

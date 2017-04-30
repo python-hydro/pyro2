@@ -1,7 +1,5 @@
 import compressible.eos as eos
 
-from nose.tools import assert_equal
-
 def test_eos_consistency():
 
     dens = 1.0
@@ -12,8 +10,8 @@ def test_eos_consistency():
 
     dens_eos = eos.dens(gamma, p, eint)
 
-    assert_equal(dens, dens_eos)
+    assert dens == dens_eos
 
     rhoe_eos = eos.rhoe(gamma, p)
 
-    assert_equal(dens*eint, rhoe_eos)
+    assert dens*eint == rhoe_eos

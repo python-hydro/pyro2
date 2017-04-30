@@ -5,7 +5,6 @@ import numpy as np
 import util.io as io
 
 from numpy.testing import assert_array_equal
-from nose.tools import assert_equal
 
 def test_write_read():
 

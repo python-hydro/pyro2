@@ -5,7 +5,6 @@ import mesh.array_indexer as ai
 import numpy as np
 
 from numpy.testing import assert_array_equal
-from nose.tools import assert_equal, with_setup
 
 # utilities
 def test_buf_split():
@@ -34,8 +33,8 @@ class TestGrid2d(object):
         self.g = None
 
     def test_dx_dy(self):
-        assert_equal(self.g.dx, 0.25)
-        assert_equal(self.g.dy, 0.25)
+        assert self.g.dx == 0.25
+        assert self.g.dy == 0.25
 
     def test_grid_coords(self):
         assert_array_equal(self.g.x[self.g.ilo:self.g.ihi+1], 
@@ -50,26 +49,26 @@ class TestGrid2d(object):
     def test_course_like(self):
         c = self.g.coarse_like(2)
 
-        assert_equal(c.nx, 2)
-        assert_equal(c.ny, 3)
+        assert c.nx == 2
+        assert c.ny == 3
 
     def test_scratch_array(self):
         q = self.g.scratch_array()
-        assert_equal(q.shape, (self.g.qx, self.g.qy))
+        assert q.shape == (self.g.qx, self.g.qy)
 
     def test_coarse_like(self):
         q = self.g.coarse_like(2)
-        assert_equal(q.qx, 2*self.g.ng + self.g.nx//2)
-        assert_equal(q.qy, 2*self.g.ng + self.g.ny//2)
+        assert q.qx == 2*self.g.ng + self.g.nx//2
+        assert q.qy == 2*self.g.ng + self.g.ny//2
 
     def test_fine_like(self):
         q = self.g.fine_like(2)
-        assert_equal(q.qx, 2*self.g.ng + 2*self.g.nx)
-        assert_equal(q.qy, 2*self.g.ng + 2*self.g.ny)
+        assert q.qx == 2*self.g.ng + 2*self.g.nx
+        assert q.qy == 2*self.g.ng + 2*self.g.ny
 
     def test_scratch_array(self):
         q = self.g.scratch_array()
-        assert_equal(q.shape, (self.g.qx, self.g.qy))
+        assert q.shape == (self.g.qx, self.g.qy)
 
     def test_norm(self):
         q = self.g.scratch_array()
@@ -80,11 +79,11 @@ class TestGrid2d(object):
                                [1, 1, 1, 1, 1, 1],
                                [1, 1, 1, 1, 1, 1]])
 
-        assert_equal(q.norm(), np.sqrt(24*self.g.dx*self.g.dy))
+        assert q.norm() == np.sqrt(24*self.g.dx*self.g.dy)
 
     def test_equality(self):
         g2 = patch.Grid2d(2, 5, ng=1)
-        assert_equal(g2 == self.g, False)
+        assert g2 != self.g
 
 
 # CellCenterData2d tests
@@ -123,14 +122,14 @@ class TestCellCenterData2d(object):
         a[:,:] = 1.0
 
         self.d.zero("a")
-        assert_equal(np.all(a.v() == 0.0), True)
+        assert np.all(a.v() == 0.0)
 
     def test_aux(self):
         self.d.set_aux("ftest", 1.0)
         self.d.set_aux("stest", "this was a test")
 
-        assert_equal(self.d.get_aux("ftest"), 1.0)
-        assert_equal(self.d.get_aux("stest"), "this was a test")
+        assert self.d.get_aux("ftest") == 1.0
+        assert self.d.get_aux("stest") == "this was a test"
         
     def test_gets(self):
         aname = self.d.get_var("a")
@@ -260,7 +259,7 @@ def test_is_symmetric():
     a[:,1] = [2, 4, 4, 2]
     a[:,2] = [1, 2, 2, 1]
 
-    assert_equal(a.is_symmetric(), True)
+    assert a.is_symmetric()
 
 
 def test_is_asymmetric():
@@ -271,7 +270,7 @@ def test_is_asymmetric():
     a[:,1] = [-2, -4, 4, 2]
     a[:,2] = [-1, -2, 2, 1]
 
-    assert_equal(a.is_asymmetric(), True)
+    assert a.is_asymmetric()
 
 
 

@@ -7,7 +7,7 @@ import datetime
 import os
 import sys
 
-import nose
+import pytest
 
 import pyro
 import multigrid.mg_test_simple as mg_test_simple
@@ -146,8 +146,8 @@ if __name__ == "__main__":
                    help="skip the tests that go through pyro.py, and only run standalone tests",
                    action="store_true")
 
-    p.add_argument("--nose_only",
-                   help="only do the nose unit tests",
+    p.add_argument("--unittests_only",
+                   help="only do the unit tests",
                    action="store_true")
 
     args = p.parse_args()
@@ -163,7 +163,7 @@ if __name__ == "__main__":
     do_standalone = True
     if args.skip_standalone: do_standalone = False
 
-    if not args.nose_only:
+    if not args.unittests_only:
         do_tests(build, outfile, do_standalone=do_standalone, do_main=do_main, 
                  reset_fails=args.reset_failures, 
                  store_all_benchmarks=args.store_all_benchmarks,
@@ -171,10 +171,5 @@ if __name__ == "__main__":
 
     # unit tests
     if args.single is None:
-        # see this for coverage issues: 
-        # http://stackoverflow.com/questions/2386975/no-source-for-code-message-in-coverage-py
-        #
-        # run like this manually:
-        #   nosetests-3 -sv --with-coverage --cover-erase --cover-package=mesh
+        pytest.main(["-sv"])
 
-        nose.run(argv=["", "-sv", "--with-coverage", "--cover-erase", "--cover-inclusive", "--cover-package=."])
