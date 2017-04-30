@@ -66,11 +66,12 @@ with their data.
 
       <p>usage: <tt>./compare.py file1 file2</tt></li>
 
-  <li><tt>plot.py</tt>: this takes the solver name and an output file
+  <li><tt>plot.py</tt>: this takes an output file
       as input and plots the data using the solver's <tt>dovis</tt> 
-      method.
+      method.  It deduces the solver from the attributes stored
+      in the HDF5 file.
 
-      <p>usage: <tt>./plot.py solvername file</tt></li>
+      <p>usage: <tt>./plot.py file</tt></li>
 
   <li><tt>analysis/</tt>
     <ul>

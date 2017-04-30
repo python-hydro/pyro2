@@ -70,7 +70,7 @@ Astronomy &amp; Computing.
 
 <div class="pdf"><a href="http://adsabs.harvard.edu/abs/2013arXiv1306.6883Z">pyro paper download</a></div>
 
-<p>Note: pyro works with both python 2 and 3.
+<p>Note: by default, pyro uses python3.
 
 <p><h3>Directory structure</h3>
 
@@ -94,11 +94,26 @@ include the top-level <tt>pyro2/</tt> directory.
 
   <ul>
   <li><tt>advection/</tt> &mdash; 
-      The linear advection equation solver.  All advection-specific routines live here.
+      The linear advection equation solver using the CTU method.  All
+      advection-specific routines live here.
      
      <ul>
      <li><tt>problems/</tt> &mdash; 
          The problem setups for the advection solver.
+     </li>
+     <li><tt>tests/</tt> &mdash; 
+         Reference advection output files for comparison and regression testing.
+     </li>
+     </ul>
+
+  </li>
+
+  <li><tt>advection_rk/</tt> &mdash; 
+      The linear advection equation solver using the method-of-lines approach. 
+     
+     <ul>
+     <li><tt>problems/</tt> &mdash; 
+         This is a symbolic link to the <tt>advection/problems/</tt> directory.
      </li>
      <li><tt>tests/</tt> &mdash; 
          Reference advection output files for comparison and regression testing.
@@ -112,8 +127,8 @@ include the top-level <tt>pyro2/</tt> directory.
   </li>
 
   <li><tt>compressible/</tt> &mdash; 
-      The compressible hydrodynamics solver.  All source files specific to this solver 
-      live here.
+      The compressible hydrodynamics solver using the CTU method.  
+      All source files specific to this solver live here.
 
      <ul>
      <li><tt>problems/</tt> &mdash; 
@@ -126,8 +141,25 @@ include the top-level <tt>pyro2/</tt> directory.
 
   </li>
 
+  <li><tt>compressible_rk/</tt> &mdash; 
+      The compressible hydrodynamics solver using method of lines 
+      integration.
+
+     <ul>
+     <li><tt>problems/</tt> &mdash; 
+         This is a symbolic link to the <tt>compressible/problems/</tt>
+         directory.
+     </li>
+     <li><tt>tests/</tt> &mdash;
+         Reference compressible hydro output for regression testing.
+     </li>
+     </ul>
+
+  </li>
+
   <li><tt>diffusion/</tt> &mdash;
-      The implicit (thermal) diffusion solver.  All diffusion-specific routines live here.
+      The implicit (thermal) diffusion solver.  All diffusion-specific 
+      routines live here.
 
      <ul>
      <li><tt>problems/</tt> &mdash;
@@ -141,7 +173,8 @@ include the top-level <tt>pyro2/</tt> directory.
   </li>
 
   <li><tt>incompressible/</tt> &mdash;
-      The incompressible hydrodynamics solver.  All incompressible-specific routines live here.
+      The incompressible hydrodynamics solver.  All incompressible-specific 
+      routines live here.
 
      <ul>
      <li><tt>problems/</tt> &mdash;
@@ -170,30 +203,33 @@ include the top-level <tt>pyro2/</tt> directory.
   </li>
 
   <li><tt>mesh/</tt> &mdash;
-      The main classes that deal with 2-d cell-centered grids and the data that lives on them.
-      This is discussed extensively on the <a href="../grids/">grids</a> page.  All the solvers
-      use these classes to represent their discretized data.
+      The main classes that deal with 2-d cell-centered grids and the
+      data that lives on them.  This is discussed extensively on
+      the <a href="../grids/">grids</a> page.  All the solvers use
+      these classes to represent their discretized data.
   </li>
 
   <li><tt>multigrid/</tt> &mdash;
-      The multigrid solver for cell-centered data.  This solver is used on its own to illustrate
-      how multigrid works, and directly by the diffusion and incompressible solvers.
+      The multigrid solver for cell-centered data.  This solver is
+      used on its own to illustrate how multigrid works, and directly
+      by the diffusion and incompressible solvers.
 
      <ul>
      <li><tt>problems/</tt> &mdash;
-         The problem setups for when the multigrid solver is used in a stand-alone fashion.
+         The problem setups for when the multigrid solver is used in a 
+         stand-alone fashion.
      </li>
      <li><tt>tests/</tt> &mdash;
-         Reference multigrid solver solutions (from when the multigrid solver is used stand-alone)
-         for regression testing.
+         Reference multigrid solver solutions (from when the multigrid solver 
+         is used stand-alone) for regression testing.
      </li>
      </ul>
 
   </li>
 
   <li><tt>util/</tt> &mdash;
-      Various service modules used by the pyro routines, including runtime parameters, profiling,
-      and pretty output modes.
+      Various service modules used by the pyro routines, including 
+      runtime parameters, I/O, profiling, and pretty output modes.
   </li>
   </ul>
 </li>
@@ -263,8 +299,20 @@ The flowchart for the driver is:
 
 <p>This format is flexible enough for the advection, compressible,
 diffusion, and incompressible evolution solver.  Each solver provides
-a <tt>Simulation</tt> class with the following methods:
+a <tt>Simulation</tt> class that provides the following methods (note: inheritance is used, so many of these methods come from the base <tt>NullSimulation</tt> class):
 <ul>
+  <li><tt>compute_timestep</tt>: return the timestep based on the solver's
+    specific needs (through <tt>method_compute_timestep</tt>) and timestepping
+    parameters in the driver</li>
+
+  <li><tt>dovis</tt>: performs visualization of the current solution</li>
+
+  <li><tt>evolve</tt>: advances the system of equations through a single timestep</li>
+  
+  <li><tt>finalize</tt>: any final clean-ups, printing of analysis hints.</tt>
+
+  <li><tt>finished</tt>: return <tt>True</tt> if we've met the stopping criteria for a simulation</li>
+
   <li><tt>initialize</tt>: sets up the grid and solution variables</li>
 
   <li><tt>method_compute_timestep</tt>: returns the timestep for evolving the system</li>
@@ -273,11 +321,13 @@ a <tt>Simulation</tt> class with the following methods:
     that is necessary before the main evolution.  Not every solver will
     need something here.
 
-  <li><tt>evolve</tt>: advances the system of equations through a single timestep</li>
+  <li><tt>read_extras</tt>: read in any solver-specific data from a stored
+    output file</li>
 
-  <li><tt>dovis</tt>: performs visualization of the current solution</li>
+  <li><tt>write</tt>: write the state of the simulation to an HDF5 file</li>
 
-  <li><tt>finalize</tt>: any final clean-ups, printing of analysis hints.</tt>
+  <li><tt>write_extras</tt>: any solver-specific writing</li>
+
 </ul>
 
 
@@ -485,7 +535,7 @@ parameters are in play for a given simulation.
     you would do:
 
     <pre class="code">
-    ./plot.py -o image.png incompressible shear_128_0216.pyro</pre>
+    ./plot.py -o image.png shear_128_0216.pyro</pre>
 
     where the "<tt>-o</tt>" option allows you to specify the output file name.
 
@@ -497,15 +547,16 @@ parameters are in play for a given simulation.
 
 <p>pyro data can be read using the <tt>patch.read</tt> method.  The
 following sequence (done in a python session) reads in stored data
-(from the compressible Sod problem) and plots data falling on a line
-in the x direction through the y-center of the domain.
+(from the compressible Sedov problem) and plots data falling on a line
+in the x direction through the y-center of the domain (note: this will
+include the ghost cells).
 
 <pre class="code">
 import matplotlib.pyplot as plt
-import mesh.patch as patch
-myg, myd = patch.read("sod_x_0076.pyro")
-dens = myd.get_var("density")
-plt.plot(myg.x, dens.d[:,myg.ny/2])
+import util.io as io
+sim = io.read("sedov_unsplit_0000.h5")
+dens = sim.cc_data.get_var("density")
+plt.plot(dens.g.x, dens[:,dens.g.ny//2])
 plt.show()
 </pre>
 
