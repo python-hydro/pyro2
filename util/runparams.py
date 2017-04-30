@@ -54,14 +54,14 @@ from util import msg
 def is_int(string):
     """ is the given string an interger? """
     try: int(string)
-    except ValueError: return 0
-    else: return 1
+    except ValueError: return False
+    else: return True
 
 def is_float(string):
     """ is the given string a float? """
     try: float(string)
-    except ValueError: return 0
-    else: return 1
+    except ValueError: return False
+    else: return True
 
 def _get_val(value):
     if is_int(value):
