@@ -4,7 +4,7 @@ from __future__ import print_function
 
 import numpy as np
 import mesh.patch
-import boundary as bnd
+import mesh.boundary as bnd
 
 myg = mesh.patch.Grid2d(4, 4, ng=2, xmax=1.0, ymax=1.0)
 

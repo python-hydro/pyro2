@@ -1,5 +1,7 @@
 # test the prolongation and restriction operations from the patch stuff
 
+from __future__ import print_function
+
 import mesh.boundary as bnd
 import mesh.patch as patch
 import numpy as np
@@ -15,14 +17,14 @@ a = myd.get_var("a")
 
 a[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1].flat = np.arange(myg.nx*myg.ny)
 
-print "restriction test"
-print "original (fine) array"
+print("restriction test")
+print("original (fine) array")
 myd.pretty_print("a")
 
 
 # create a coarse grid and fill the variable in it with restricted data
-print " "
-print "restricted array"
+print(" ")
+print("restricted array")
 
 cg = patch.Grid2d(2,4,ng=1)
 cd = patch.CellCenterData2d(cg)
@@ -35,17 +37,17 @@ a_coarse[:,:] = myd.restrict("a")[:,:]
 cd.pretty_print("a")
 
 
-print " "
-print "prolongation test"
-print "original (coarse) array w/ ghost cells"
+print(" ")
+print("prolongation test")
+print("original (coarse) array w/ ghost cells")
 a_coarse[:,:].flat = np.arange(cg.qx*cg.qy)
 cd.pretty_print("a")
 
 
 # create a new fine (base) grid and fill the variable in it prolonged data
 # from the coarsened grid
-print " "
-print "prolonged array"
+print(" ")
+print("prolonged array")
 
 fg = patch.Grid2d(4,8,ng=1)
 fd = patch.CellCenterData2d(fg)

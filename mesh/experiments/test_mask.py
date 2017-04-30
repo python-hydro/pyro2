@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from mesh import patch
 import mesh.boundary as bnd
 
@@ -73,7 +75,7 @@ da[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
     a[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] - \
     a[myg.ilo-1:myg.ihi  ,myg.jlo:myg.jhi+1]
 
-print "slice method: ", time.time() - start
+print("slice method: ", time.time() - start)
 
                             
 # mask method
@@ -83,18 +85,18 @@ start = time.time()
 da2 = myg.scratch_array()
 da2[m.valid] = a[m.ip1] - a[m.im1]
 
-print "mask method: ", time.time() - start
+print("mask method: ", time.time() - start)
 
-print np.max(np.abs(da2 - da))
+print(np.max(np.abs(da2 - da)))
 
 # roll -- note, we roll in the opposite direction of the shift
 start = time.time()
 da3 = myg.scratch_array()
 da3[:] = np.roll(a, -1, axis=0) - np.roll(a, 1, axis=0)
 
-print "roll method: ", time.time() - start
+print("roll method: ", time.time() - start)
 
-print np.max(np.abs(da3[m.valid] - da[m.valid]))
+print(np.max(np.abs(da3[m.valid] - da[m.valid])))
 
 
 # ArrayIndex
@@ -103,6 +105,6 @@ da4 = myg.scratch_array()
 
 da4.v()[:,:] = a.ip(1) - a.ip(-1)
 
-print "ArrayIndex method: ", time.time() - start
+print("ArrayIndex method: ", time.time() - start)
 
-print np.max(np.abs(da4[m.valid] - da[m.valid]))
+print(np.max(np.abs(da4[m.valid] - da[m.valid])))

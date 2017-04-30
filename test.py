@@ -10,7 +10,7 @@ import sys
 import nose
 
 import pyro
-import multigrid.mg_test as mg_test
+import multigrid.mg_test_simple as mg_test_simple
 import multigrid.mg_test_vc_dirichlet as mg_test_vc_dirichlet
 import multigrid.mg_test_vc_periodic as mg_test_vc_periodic
 import multigrid.mg_test_general_inhomogeneous as mg_test_general_inhomogeneous
@@ -67,8 +67,8 @@ def do_tests(build, out_file, do_standalone=True, do_main=True,
 
     # standalone tests
     if do_standalone and single is None:
-        err = mg_test.test_poisson_dirichlet(256, comp_bench=True,
-                                             store_bench=store_all_benchmarks, verbose=0)
+        err = mg_test_simple.test_poisson_dirichlet(256, comp_bench=True,
+                                                    store_bench=store_all_benchmarks, verbose=0)
         results["mg_poisson_dirichlet"] = err
 
         err = mg_test_vc_dirichlet.test_vc_poisson_dirichlet(512,
@@ -177,4 +177,4 @@ if __name__ == "__main__":
         # run like this manually:
         #   nosetests-3 -sv --with-coverage --cover-erase --cover-package=mesh
 
-        nose.run(argv=["", "-sv",]) # "--with-coverage", "--cover-erase"])
+        nose.run(argv=["", "-sv", "--with-coverage", "--cover-erase", "--cover-inclusive", "--cover-package=."])

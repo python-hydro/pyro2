@@ -11,16 +11,16 @@ This provides two multigrid solvers for cell-centered data.
 
   The following drivers test it:
 
-  - `mg_test.py`: this solves:
+  - `mg_test_simple.py`: this solves:
 
     `u_xx + u_yy = -2[(1-6x**2)y**2(1-y**2) + (1-6y**2)x**2(1-x**2)]`
 
     at a single resolution on [0,1]x[0,1], with u = 0 on the boundary
     (Dirichlet BCs).
 
-  - `mg_vis.py`: this solves the same problem as `mg_test.py`, but it
-    outputs a detailed set of plots at each smoothing iteration showing
-    the progression of the solve through the V-cycles
+  - `mg_vis.py`: this solves the same problem as `mg_test_simple.py`,
+    but it outputs a detailed set of plots at each smoothing iteration
+    showing the progression of the solve through the V-cycles
 
 
 ## `variable_coeff_MG.py`
@@ -36,9 +36,9 @@ This provides two multigrid solvers for cell-centered data.
   The following drivers test it:
 
   - `mg_test_vc_constant.py`: this solves the same constant-coefficnet
-    Poisson problem as `mg_test.py`, but using the `variable_coeff_MG.py`
-    framework.  This makes sure that we can fall back to the simpler
-    constant-coefficient case.
+    Poisson problem as `mg_test_simple.py`, but using the
+    `variable_coeff_MG.py` framework.  This makes sure that we can
+    fall back to the simpler constant-coefficient case.
 
   - `mg_test_vc_dirichlet.py`: this solves
 
@@ -90,7 +90,7 @@ This provides two multigrid solvers for cell-centered data.
 	
   - `mg_test_general_constant.py`: this solves a pure Poisson problem
     (`alpha = gamma = 0; beta = 1`), solving the same problem as
-	the base MG solver in `mg_test.py`.
+	the base MG solver in `mg_test_simple.py`.
 
   - `mg_test_general_dirichlet.py`: This solves a general elliptic
     problem of the form:
