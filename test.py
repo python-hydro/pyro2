@@ -171,4 +171,10 @@ if __name__ == "__main__":
 
     # unit tests
     if args.single is None:
-        nose.run(argv=["", "-sv"])
+        # see this for coverage issues: 
+        # http://stackoverflow.com/questions/2386975/no-source-for-code-message-in-coverage-py
+        #
+        # run like this manually:
+        #   nosetests-3 -sv --with-coverage --cover-erase --cover-package=mesh
+
+        nose.run(argv=["", "-sv",]) # "--with-coverage", "--cover-erase"])

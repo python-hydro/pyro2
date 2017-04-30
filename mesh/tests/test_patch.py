@@ -53,6 +53,39 @@ class TestGrid2d(object):
         assert_equal(c.nx, 2)
         assert_equal(c.ny, 3)
 
+    def test_scratch_array(self):
+        q = self.g.scratch_array()
+        assert_equal(q.shape, (self.g.qx, self.g.qy))
+
+    def test_coarse_like(self):
+        q = self.g.coarse_like(2)
+        assert_equal(q.qx, 2*self.g.ng + self.g.nx//2)
+        assert_equal(q.qy, 2*self.g.ng + self.g.ny//2)
+
+    def test_fine_like(self):
+        q = self.g.fine_like(2)
+        assert_equal(q.qx, 2*self.g.ng + 2*self.g.nx)
+        assert_equal(q.qy, 2*self.g.ng + 2*self.g.ny)
+
+    def test_scratch_array(self):
+        q = self.g.scratch_array()
+        assert_equal(q.shape, (self.g.qx, self.g.qy))
+
+    def test_norm(self):
+        q = self.g.scratch_array()
+        # there are 24 elements, the norm L2 norm is 
+        # sqrt(dx*dy*24)
+        q.v()[:,:] = np.array([[1, 1, 1, 1, 1, 1],
+                               [1, 1, 1, 1, 1, 1],
+                               [1, 1, 1, 1, 1, 1],
+                               [1, 1, 1, 1, 1, 1]])
+
+        assert_equal(q.norm(), np.sqrt(24*self.g.dx*self.g.dy))
+
+    def test_equality(self):
+        g2 = patch.Grid2d(2, 5, ng=1)
+        assert_equal(g2 == self.g, False)
+
 
 # CellCenterData2d tests
 class TestCellCenterData2d(object):
@@ -98,6 +131,15 @@ class TestCellCenterData2d(object):
 
         assert_equal(self.d.get_aux("ftest"), 1.0)
         assert_equal(self.d.get_aux("stest"), "this was a test")
+        
+    def test_gets(self):
+        aname = self.d.get_var("a")
+        aname[:,:] = np.random.rand(aname.shape[0], aname.shape[1])
+        
+        aindex = self.d.get_var_by_index(0)
+
+        assert_array_equal(aname, aindex)
+    
     
 
 def test_bcs():
