@@ -806,22 +806,6 @@ class CellCenterData2d(object):
         a.pretty_print(fmt=fmt)
 
 
-def read(filename):
-    """
-    Read a CellCenterData object from a file and return it and the grid
-    info and data.
-    """
-
-    # if we come in with .pyro, we don't need to add it again
-    if filename.find(".pyro") < 0:
-        filename += ".pyro"
-
-    pF = open(filename, "rb")
-    data = pickle.load(pF)
-    pF.close()
-
-    return data.grid, data
-
 
 def cell_center_data_clone(old):
     """
@@ -858,6 +842,7 @@ def cell_center_data_clone(old):
 
 def do_demo():
 
+    import util.io as io
 
     # illustrate basic mesh operations
 
@@ -881,7 +866,7 @@ def do_demo():
     mydata.write("mesh_test")
 
     print("reading\n")
-    _, myd2 = read("mesh_test")
+    myd2 = io.read("mesh_test")
     print(myd2)
 
 
