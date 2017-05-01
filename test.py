@@ -171,5 +171,5 @@ if __name__ == "__main__":
 
     # unit tests
     if args.single is None:
-        pytest.main(["-sv"])
+        pytest.main(["-v"])
 
