@@ -16,15 +16,23 @@ class Simulation(compressible.Simulation):
         super().initialize(extra_vars=["fuel", "ash"])
 
 
+    def burn(self):
+        """ react fuel to ash """
+
+        # compute T
+
+        # compute energy generation rate
+
+        # update energy due to reaction
+
+        pass
+
+
     def evolve(self):
         """
         Evolve the equations of compressible hydrodynamics through a
         timestep dt.
         """
-
-        print(self.cc_data)
-
-        sys.exit()
 
         # we want to do Strang-splitting here
         self.burn(self.dt/2)
