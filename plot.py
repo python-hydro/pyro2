@@ -1,8 +1,19 @@
 #!/usr/bin/env python3
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import argparse
 import util.io as io
+
+mpl.rcParams["text.usetex"] = True
+mpl.rcParams['mathtext.fontset'] = 'cm'
+mpl.rcParams['mathtext.rm'] = 'serif'
+
+# font sizes
+mpl.rcParams['font.size'] = 12
+mpl.rcParams['legend.fontsize'] = 'large'
+mpl.rcParams['figure.titlesize'] = 'medium'
+
 
 # plot an output file using the solver's dovis script
 

@@ -307,8 +307,12 @@ class Simulation(NullSimulation):
 
             ax.set_xlabel("x")
             ax.set_ylabel("y")
-
+            
+            # needed for PDF rendering
             cb = axes.cbar_axes[n].colorbar(img)
+            cb.solids.set_rasterized(True)
+            cb.solids.set_edgecolor("face")
+
             if cbar_title:
                 cb.ax.set_title(field_names[n])
             else:
