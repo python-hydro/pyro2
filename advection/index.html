@@ -53,16 +53,24 @@ http://www.richnetapps.com/automatically_highlight_current_page_in/
 
 <P><H2>&lowast; Advection solver</H2>
 
-<p>The linear advection equation provides a good basis for understanding the
-methods used for compressible hydrodynamics.  Chapter 3 of the notes 
-summarizes the numerical methods for advection that we implement in pyro:
+<p>The linear advection equation provides a good basis for
+understanding the methods used for compressible hydrodynamics.
+Chapter 4 of the notes summarizes the numerical methods for advection
+that we implement in pyro.  
+
+<p>pyro has two solvers for linear advection:
+  <ul>
+    <li><tt>advection</tt> implements the directionally unsplit corner
+      transport upwind algorithm with piecewise linear
+      reconstruction</li>
+    <li><tt>advection_rk</tt> uses a method of lines time-integration
+      approach with piecewise linear spatial reconstruction for 
+      linear advection</li>
+  </ul>
+
 
 <div class="pdf"><a href="http://bender.astro.sunysb.edu/hydro_by_example/CompHydroTutorial.pdf">notes on computational hydro</a></div>
 
-<p>In particular, pyro implements a two-dimensional unsplit piecewise
-linear advection method.  It follows very closely the outline of
-Colella (1990).  The above notes give all the details necessary to follow
-the code.
 
 The main parameters that affect this solver are:
 <p><table>
@@ -82,6 +90,8 @@ The main parameters that affect this solver are:
     <td>what type of limiting to use in reconstructing the slopes.  0 means
         use an unlimited second-order centered difference.  1 is the
         MC limiter, and 2 is the 4th-order MC limiter</td>
+<tr><td><tt>temporal_method</tt></td>
+    <td>the MOL integration method to use (RK2, TVD2, TVD3, RK4) (<tt>advection_rk</tt> only)</td>
 </tr>
 </table>
 
