@@ -115,14 +115,24 @@ get you started:
 
 <p>By default, pyro uses python 3.x&mdash;it is recommended that you use python 3 as well.
 There are a few steps to take to get things running.  You need to
-make sure you have numpy, f2py, matplotlib, and h5py installed.  On a Fedora
-system, this can be accomplished by doing:
-<p><tt>dnf install python3-numpy python3-numpy-f2py python3-matplotlib python3-matplotlib-tk python3-h5py</tt>
+make sure you have numpy, f2py, matplotlib, and h5py installed.  
 
-<p>You also need to make sure <tt>gfortran</tt> is present on you system.
-On a Fedora system, it can be installed as:
-<p><tt>dnf install gcc-gfortran</tt>
+<ul>
+  <li>On a Fedora system, this can be accomplished by doing:
+    <pre>dnf install python3-numpy python3-numpy-f2py python3-matplotlib \
+   python3-matplotlib-tk python3-h5py</pre>
 
+    <p>You also need to make sure <tt>gfortran</tt> is present on you
+      system.  
+     <pre>dnf install gcc-gfortran</pre>
+  </li>
+
+  <li>On a Mac OSX system, you can install the dependencies using
+    macports as<a href="#foot"><sup>2</sup></a>:
+    <pre>sudo port install python36 py36-numpy py36-tkinter py36-h5py</pre>
+    (Note that macports includes <tt>f2py</tt> as part of the <tt>numpy</tt>
+     package.)</li>
+</ul>
 <p>Not
 all <a href="http://matplotlib.org/faq/usage_faq.html#what-is-a-backend">matplotlib
 backends</a> allow for the interactive plotting as pyro is run.  One
@@ -136,7 +146,7 @@ content:
 You can check what backend is your current default in python via:
 <pre>
   import matplotlib.pyplot
-  print matplotlib.pyplot.get_backend()
+  print(matplotlib.pyplot.get_backend())
 </pre>
 
 
@@ -198,8 +208,10 @@ The regression test report appears here in browsers that support iframes...
 <p>&nbsp;
 <p><hr>
 <a name="foot"><sup>1</sup></a>git is available on most linux
- distributions through the package manager.  On fedora, do <tt>yum
- install git</tt>
+ distributions through the package manager.  On fedora, do <tt>dnf
+ install git</tt><br>
+<a name="foot"><sup>2</sup></a>thanks to Selma E. de Mink for the 
+ Mac/OSX package installation instructions.</tt>
 
 
 </div>  <!-- main -->
