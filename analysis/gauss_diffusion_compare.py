@@ -7,6 +7,15 @@ import sys
 import matplotlib.pyplot as plt
 import diffusion.problems.gaussian as gaussian
 from util import io
+import matplotlib as mpl
+
+mpl.rcParams["text.usetex"] = True
+mpl.rcParams['mathtext.fontset'] = 'cm'
+mpl.rcParams['mathtext.rm'] = 'serif'
+mpl.rcParams['font.size'] = 12
+mpl.rcParams['legend.fontsize'] = 'large'
+mpl.rcParams['figure.titlesize'] = 'medium'
+
 
 usage = """
       Average the Gaussian diffusion profile and compare the radial profile
@@ -119,8 +128,8 @@ for n in range(1,len(sys.argv)):
     bins, phi_exact, phi_bin = process(file)
 
     # plot
-    ax.plot(bins, phi_exact, color="0.5")
-    ax.scatter(bins, phi_bin, marker="x", s=7, color="r")
+    ax.plot(bins, phi_exact, color="C0")
+    ax.scatter(bins, phi_bin, marker="x", s=10, color="C1", zorder=100)
 
     
 ax.set_xlim(0,0.4)
@@ -129,6 +138,7 @@ ax.set_xlabel(r"$r$")
 ax.set_ylim(1.,1.05)
 ax.set_ylabel(r"$\phi$")
 
-fig.set_size_inches(5.0,5.0)
+fig.set_size_inches(6.0,6.0)
 
 plt.savefig("gauss_diffusion_compare.png", bbox_inches="tight")
+plt.savefig("gauss_diffusion_compare.pdf", bbox_inches="tight", dpi=100)
