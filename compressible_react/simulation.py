@@ -17,7 +17,7 @@ class Simulation(compressible.Simulation):
 
 
 
-    def burn(self):
+    def burn(self, dt):
         """ react fuel to ash """
         # compute T
 
