@@ -176,17 +176,24 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     #=========================================================================
     # compute the primitive variables
     #=========================================================================
-    # Q = (rho, u, v, p)
+    # Q = (rho, u, v, p, {X})
 
     dens = my_data.get_var("density")
-    xmom = my_data.get_var("x-momentum")
     ymom = my_data.get_var("y-momentum")
     ener = my_data.get_var("energy")
 
-    r, u, v, p = my_data.get_var("primitive")
+    q = comp.cons_to_prim(my_data.data, gamma, ivars, myg)
+
+    r = q[:,:,ivars.irho]
+    u = q[:,:,ivars.iu]
+    v = q[:,:,ivars.iv]
+    p = q[:,:,ivars.ip]
 
     smallp = 1.e-10
     p = p.clip(smallp)   # apply a floor to the pressure
+
+    if ivars.irhox > 0:
+        X = q[:,:,ivars.ix:ivars.ix+ivars.naux]
 
 
     #=========================================================================
@@ -209,22 +216,18 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
         xi = 1.0
 
 
-    # monotonized central differences in x-direction
+    # monotonized central differences
     tm_limit = tc.timer("limiting")
     tm_limit.begin()
 
     limiter = rp.get_param("compressible.limiter")
 
-    ldelta_rx = xi*reconstruction.limit(r, myg, 1, limiter)
-    ldelta_ux = xi*reconstruction.limit(u, myg, 1, limiter)
-    ldelta_vx = xi*reconstruction.limit(v, myg, 1, limiter)
-    ldelta_px = xi*reconstruction.limit(p, myg, 1, limiter)
+    ldx = myg.scratch_array(nvar=ivars.nvar)
+    ldy = myg.scratch_array(nvar=ivars.nvar)
 
-    # monotonized central differences in y-direction
-    ldelta_ry = xi*reconstruction.limit(r, myg, 2, limiter)
-    ldelta_uy = xi*reconstruction.limit(u, myg, 2, limiter)
-    ldelta_vy = xi*reconstruction.limit(v, myg, 2, limiter)
-    ldelta_py = xi*reconstruction.limit(p, myg, 2, limiter)
+    for n in range(ivars.nvar):
+        ldx[:,:,n] = xi*reconstruction.limit(q[:,:,n], myg, 1, limiter)
+        ldy[:,:,n] = xi*reconstruction.limit(q[:,:,n], myg, 2, limiter)        
 
     tm_limit.end()
 
@@ -238,10 +241,9 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     tm_states.begin()
 
     V_l, V_r = interface_f.states(1, myg.qx, myg.qy, myg.ng, myg.dx, dt,
-                                  ivars.nvar,
+                                  ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.nvar,
                                   gamma,
-                                  r, u, v, p,
-                                  ldelta_rx, ldelta_ux, ldelta_vx, ldelta_px)
+                                  q, ldx)
 
     tm_states.end()
 
@@ -260,10 +262,9 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     tm_states.begin()
 
     V_l, V_r = interface_f.states(2, myg.qx, myg.qy, myg.ng, myg.dy, dt,
-                                  ivars.nvar,
+                                  ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.nvar,
                                   gamma,
-                                  r, u, v, p,
-                                  ldelta_ry, ldelta_uy, ldelta_vy, ldelta_py)
+                                  q, ldy)
 
     tm_states.end()
 

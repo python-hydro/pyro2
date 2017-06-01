@@ -1,8 +1,7 @@
 subroutine states(idir, qx, qy, ng, dx, dt, &
-                  nvar, &
+                  irho, iu, iv, ip, nvar, &
                   gamma, &
-                  r, u, v, p, &
-                  ldelta_r, ldelta_u, ldelta_v, ldelta_p, &
+                  qv, dqv, &
                   q_l, q_r)
 
   implicit none
@@ -10,32 +9,21 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
   integer, intent(in) :: idir
   integer, intent(in) :: qx, qy, ng
   double precision, intent(in) :: dx, dt
-  integer, intent(in) :: nvar
+  integer, intent(in) :: irho, iu, iv, ip, nvar
   double precision, intent(in) :: gamma
 
   ! 0-based indexing to match python
-  double precision, intent(inout) :: r(0:qx-1, 0:qy-1)
-  double precision, intent(inout) :: u(0:qx-1, 0:qy-1)
-  double precision, intent(inout) :: v(0:qx-1, 0:qy-1)
-  double precision, intent(inout) :: p(0:qx-1, 0:qy-1)
-
-  double precision, intent(inout) :: ldelta_r(0:qx-1, 0:qy-1)
-  double precision, intent(inout) :: ldelta_u(0:qx-1, 0:qy-1)
-  double precision, intent(inout) :: ldelta_v(0:qx-1, 0:qy-1)
-  double precision, intent(inout) :: ldelta_p(0:qx-1, 0:qy-1)
+  double precision, intent(inout) :: qv(0:qx-1, 0:qy-1, 0:nvar-1)
+  double precision, intent(inout) :: dqv(0:qx-1, 0:qy-1, 0:nvar-1)
 
   double precision, intent(  out) :: q_l(0:qx-1, 0:qy-1, 0:nvar-1)
   double precision, intent(  out) :: q_r(0:qx-1, 0:qy-1, 0:nvar-1)
 
-!f2py depend(qx, qy) :: r, u, v, p
-!f2py depend(qx, qy) :: ldelta_r, ldelta_u, ldelta_v, ldelta_p
+!f2py depend(qx, qy, nvar) :: qv, dqv
 !f2py depend(qx, qy, nvar) :: q_l, q_r
-!f2py intent(in) :: r, u, v, p
-!f2py intent(in) :: ldelta_r, ldelta_u, ldelta_v, ldelta_p
+!f2py intent(in) :: qv, dqv
 !f2py intent(out) :: q_l, q_r
  
-
-
   ! predict the cell-centered state to the edges in one-dimension
   ! using the reconstructed, limited slopes.
   !
@@ -115,41 +103,37 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
   do j = jlo-2, jhi+2
      do i = ilo-2, ihi+2
 
-        dq(:) = [ldelta_r(i,j), &
-                 ldelta_u(i,j), & 
-                 ldelta_v(i,j), &
-                 ldelta_p(i,j)]
-        
-        q(:) = [r(i,j), u(i,j), v(i,j), p(i,j)]
+        dq(:) = dqv(i,j,:)
+        q(:) = qv(i,j,:)
 
-        cs = sqrt(gamma*p(i,j)/r(i,j))
+        cs = sqrt(gamma*q(ip)/q(irho))
 
         ! compute the eigenvalues and eigenvectors
         if (idir == 1) then
-           eval(:) = [u(i,j) - cs, u(i,j), u(i,j), u(i,j) + cs]
+           eval(:) = [q(iu) - cs, q(iu), q(iu), q(iu) + cs]
         
-           lvec(0,:) = [ 0.0d0, -0.5d0*r(i,j)/cs, 0.0d0, 0.5d0/(cs*cs)  ]
-           lvec(1,:) = [ 1.0d0, 0.0d0,            0.0d0, -1.0d0/(cs*cs) ]
-           lvec(2,:) = [ 0.0d0, 0.0d0,            1.0d0, 0.0d0          ]
-           lvec(3,:) = [ 0.0d0, 0.5d0*r(i,j)/cs,  0.0d0, 0.5d0/(cs*cs)  ]
+           lvec(0,:) = [ 0.0d0, -0.5d0*q(irho)/cs, 0.0d0, 0.5d0/(cs*cs)  ]
+           lvec(1,:) = [ 1.0d0, 0.0d0,             0.0d0, -1.0d0/(cs*cs) ]
+           lvec(2,:) = [ 0.0d0, 0.0d0,             1.0d0, 0.0d0          ]
+           lvec(3,:) = [ 0.0d0, 0.5d0*q(irho)/cs,  0.0d0, 0.5d0/(cs*cs)  ]
 
-           rvec(0,:) = [1.0d0, -cs/r(i,j), 0.0d0, cs*cs ]
-           rvec(1,:) = [1.0d0, 0.0d0,      0.0d0, 0.0d0 ]
-           rvec(2,:) = [0.0d0, 0.0d0,      1.0d0, 0.0d0 ]
-           rvec(3,:) = [1.0d0, cs/r(i,j),  0.0d0, cs*cs ]
+           rvec(0,:) = [1.0d0, -cs/q(irho), 0.0d0, cs*cs ]
+           rvec(1,:) = [1.0d0, 0.0d0,       0.0d0, 0.0d0 ]
+           rvec(2,:) = [0.0d0, 0.0d0,       1.0d0, 0.0d0 ]
+           rvec(3,:) = [1.0d0, cs/q(irho),  0.0d0, cs*cs ]
 
         else
-           eval = [v(i,j) - cs, v(i,j), v(i,j), v(i,j) + cs]
+           eval = [q(iv) - cs, q(iv), q(iv), q(iv) + cs]
                             
-           lvec(0,:) = [ 0.0d0, 0.0d0, -0.5d0*r(i,j)/cs, 0.5d0/(cs*cs)  ]
-           lvec(1,:) = [ 1.0d0, 0.0d0, 0.0d0,            -1.0d0/(cs*cs) ]
-           lvec(2,:) = [ 0.0d0, 1.0d0, 0.0d0,            0.0d0          ]
-           lvec(3,:) = [ 0.0d0, 0.0d0, 0.5d0*r(i,j)/cs,  0.5d0/(cs*cs)  ]
+           lvec(0,:) = [ 0.0d0, 0.0d0, -0.5d0*q(irho)/cs, 0.5d0/(cs*cs)  ]
+           lvec(1,:) = [ 1.0d0, 0.0d0, 0.0d0,             -1.0d0/(cs*cs) ]
+           lvec(2,:) = [ 0.0d0, 1.0d0, 0.0d0,             0.0d0          ]
+           lvec(3,:) = [ 0.0d0, 0.0d0, 0.5d0*q(irho)/cs,  0.5d0/(cs*cs)  ]
 
-           rvec(0,:) = [1.0d0, 0.0d0, -cs/r(i,j), cs*cs ]
-           rvec(1,:) = [1.0d0, 0.0d0, 0.0d0,      0.0d0 ]
-           rvec(2,:) = [0.0d0, 1.0d0, 0.0d0,      0.0d0 ]
-           rvec(3,:) = [1.0d0, 0.0d0, cs/r(i,j),  cs*cs ]
+           rvec(0,:) = [1.0d0, 0.0d0, -cs/q(irho), cs*cs ]
+           rvec(1,:) = [1.0d0, 0.0d0, 0.0d0,       0.0d0 ]
+           rvec(2,:) = [0.0d0, 1.0d0, 0.0d0,       0.0d0 ]
+           rvec(3,:) = [1.0d0, 0.0d0, cs/q(irho),  cs*cs ]
 
         endif
 
