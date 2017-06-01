@@ -147,7 +147,8 @@ class Simulation(NullSimulation):
         self.cc_data.add_derived(derives.derive_primitives)
 
         # initial conditions for the problem
-        problem = importlib.import_module("compressible.problems.{}".format(self.problem_name))
+        problem = importlib.import_module("{}.problems.{}".format(
+            self.solver_name, self.problem_name))
         problem.init_data(self.cc_data, self.rp)
 
         if self.verbose > 0: print(my_data)
@@ -307,8 +308,12 @@ class Simulation(NullSimulation):
 
             ax.set_xlabel("x")
             ax.set_ylabel("y")
-
+            
+            # needed for PDF rendering
             cb = axes.cbar_axes[n].colorbar(img)
+            cb.solids.set_rasterized(True)
+            cb.solids.set_edgecolor("face")
+
             if cbar_title:
                 cb.ax.set_title(field_names[n])
             else:

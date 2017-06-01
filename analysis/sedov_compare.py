@@ -3,37 +3,37 @@
 from __future__ import print_function
 
 import numpy as np
-import sys
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 from util import io
+import argparse
+
+mpl.rcParams["text.usetex"] = True
+mpl.rcParams['mathtext.fontset'] = 'cm'
+mpl.rcParams['mathtext.rm'] = 'serif'
+
+# font sizes
+mpl.rcParams['font.size'] = 12
+mpl.rcParams['legend.fontsize'] = 'large'
+mpl.rcParams['figure.titlesize'] = 'medium'
 
 usage = """
       compare the output for a Sedov problem with the exact solution contained
       in cylindrical-sedov.out.  To do this, we need to bin the Sedov data
-      into radial bins.
+      into radial bins."""
 
-      usage: ./sedov_compare.py file
-"""
+parser = argparse.ArgumentParser(description=usage)
+parser.add_argument("-o", type=str, default="sedov_compare.png",
+                    metavar="plot.png", help="output file name")
+parser.add_argument("plotfile", type=str, nargs=1,
+                    help="the plotfile you wish to plot")
 
-def abort(string):
-    print(string)
-    sys.exit(2)
-
-
-if not len(sys.argv) == 2:
-    print(usage)
-    sys.exit(2)
-
-
-try: file1 = sys.argv[1]
-except:
-    print(usage)
-    sys.exit(2)
+args = parser.parse_args()
 
 
 # read the data and convert to the primitive variables (and velocity
 # magnitude)
-sim = io.read(file1)
+sim = io.read(args.plotfile[0])
 myd = sim.cc_data
 myg = myd.grid
 
@@ -127,24 +127,25 @@ plt.rc("font", size=10)
 
 ax = axes.flat[0]
 
-ax.plot(x_exact, rho_exact)
-ax.scatter(bin_centers, rho_bin, marker="x", s=7, color="r")
+ax.plot(x_exact, rho_exact, color="C0", zorder=-100, label="exact")
+ax.scatter(bin_centers, rho_bin, marker="x", s=7, color="C1", label="simulation")
 
 ax.set_ylabel(r"$\rho$")
 ax.set_xlim(0,0.6)
+ax.legend(frameon=False, loc="best", fontsize="small")
 
 ax = axes.flat[1]
 
-ax.plot(x_exact, u_exact)
-ax.scatter(bin_centers, u_bin, marker="x", s=7, color="r")
+ax.plot(x_exact, u_exact, color="C0", zorder=-100)
+ax.scatter(bin_centers, u_bin, marker="x", s=7, color="C1")
 
 ax.set_ylabel(r"$u$")
 ax.set_xlim(0,0.6)
 
 ax = axes.flat[2]
 
-ax.plot(x_exact, p_exact)
-ax.scatter(bin_centers, p_bin, marker="x", s=7, color="r")
+ax.plot(x_exact, p_exact, color="C0", zorder=-100)
+ax.scatter(bin_centers, p_bin, marker="x", s=7, color="C1")
 
 ax.set_ylabel(r"$p$")
 ax.set_xlim(0,0.6)
@@ -156,4 +157,4 @@ plt.subplots_adjust(hspace=0.25)
 
 fig.set_size_inches(4.5,8.0)
 
-plt.savefig("sedov_compare.png", bbox_inches="tight")
+plt.savefig(args.o, bbox_inches="tight")

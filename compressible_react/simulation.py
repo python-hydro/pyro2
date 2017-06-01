@@ -16,15 +16,14 @@ class Simulation(compressible.Simulation):
         super().initialize(extra_vars=["fuel", "ash"])
 
 
+
     def burn(self):
         """ react fuel to ash """
-
         # compute T
 
         # compute energy generation rate
 
         # update energy due to reaction
-
         pass
 
 
@@ -43,7 +42,6 @@ class Simulation(compressible.Simulation):
 
 
         # increment the time
-        myd.t += self.dt
+        self.cc_data.t += self.dt
         self.n += 1
 
-        tm_evolve.end()
