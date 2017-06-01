@@ -16,15 +16,15 @@ class Simulation(compressible.Simulation):
         super().initialize(extra_vars=["fuel", "ash"])
 
 
+    def burn(self, dt):
+        pass
+
+
     def evolve(self):
         """
         Evolve the equations of compressible hydrodynamics through a
         timestep dt.
         """
-
-        print(self.cc_data)
-
-        sys.exit()
 
         # we want to do Strang-splitting here
         self.burn(self.dt/2)
@@ -35,7 +35,6 @@ class Simulation(compressible.Simulation):
 
 
         # increment the time
-        myd.t += self.dt
+        self.cc_data.t += self.dt
         self.n += 1
 
-        tm_evolve.end()
