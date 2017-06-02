@@ -175,6 +175,7 @@ class Simulation(NullSimulation):
 
         self.dt = cfl*float(min(xtmp.min(), ytmp.min()))
 
+
     def evolve(self):
         """
         Evolve the equations of compressible hydrodynamics through a

@@ -208,8 +208,8 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
         z0 = rp.get_param("compressible.z0")
         z1 = rp.get_param("compressible.z1")
 
-        xi_x = reconstruction_f.flatten(1, p, u, myg.qx, myg.qy, myg.ng, smallp, delta, z0, z1)
-        xi_y = reconstruction_f.flatten(2, p, v, myg.qx, myg.qy, myg.ng, smallp, delta, z0, z1)
+        xi_x = reconstruction.flatten(myg, q, 1, ivars, rp)
+        xi_y = reconstruction.flatten(myg, q, 2, ivars, rp)
 
         xi = reconstruction_f.flatten_multid(xi_x, xi_y, p, myg.qx, myg.qy, myg.ng)
     else:
