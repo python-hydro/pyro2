@@ -128,7 +128,6 @@ import compressible.eos as eos
 import compressible.interface_f as interface_f
 import compressible as comp
 import mesh.reconstruction as reconstruction
-import mesh.reconstruction_f as reconstruction_f
 import mesh.array_indexer as ai
 
 from util import msg
@@ -184,17 +183,6 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     q = comp.cons_to_prim(my_data.data, gamma, ivars, myg)
 
-    r = q[:,:,ivars.irho]
-    u = q[:,:,ivars.iu]
-    v = q[:,:,ivars.iv]
-    p = q[:,:,ivars.ip]
-
-    smallp = 1.e-10
-    p = p.clip(smallp)   # apply a floor to the pressure
-
-    if ivars.irhox > 0:
-        X = q[:,:,ivars.ix:ivars.ix+ivars.naux]
-
 
     #=========================================================================
     # compute the flattening coefficients
@@ -204,14 +192,10 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     use_flattening = rp.get_param("compressible.use_flattening")
 
     if use_flattening:
-        delta = rp.get_param("compressible.delta")
-        z0 = rp.get_param("compressible.z0")
-        z1 = rp.get_param("compressible.z1")
-
         xi_x = reconstruction.flatten(myg, q, 1, ivars, rp)
         xi_y = reconstruction.flatten(myg, q, 2, ivars, rp)
 
-        xi = reconstruction_f.flatten_multid(xi_x, xi_y, p, myg.qx, myg.qy, myg.ng)
+        xi = reconstruction.flatten_multid(myg, q, xi_x, xi_y, ivars)
     else:
         xi = 1.0
 
@@ -442,7 +426,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     _ax, _ay = interface_f.artificial_viscosity( 
         myg.qx, myg.qy, myg.ng, myg.dx, myg.dy, 
-        cvisc, u, v)
+        cvisc, q.v(n=ivars.iu, buf=myg.ng), q.v(n=ivars.iv, buf=myg.ng))
 
     avisco_x = ai.ArrayIndexer(d=_ax, grid=myg)
     avisco_y = ai.ArrayIndexer(d=_ay, grid=myg)    

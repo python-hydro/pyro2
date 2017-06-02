@@ -1,5 +1,4 @@
 import mesh.patch as patch
-import mesh.reconstruction_f as reconstruction_f
 import mesh.array_indexer as ai
 import numpy as np
 
@@ -7,15 +6,10 @@ def limit(data, myg, idir, limiter):
 
     if limiter == 0:
         return nolimit(data, myg, idir)
-
-    elif limiter < 10:
-        if limiter == 1:
-            return limit2(data, myg, idir)
-        else:
-            return limit4(data, myg, idir)
+    elif limiter == 1:
+        return limit2(data, myg, idir)
     else:
-        ldax, lday = reconstruction_f.multid_limit(data, qx, qy, myg.ng)
-        return ai.ArrayIndexer(d=ldax, grid=myg), ai.ArrayIndexer(d=lday, grid=myg)
+        return limit4(data, myg, idir)
 
 
 def nolimit(a, myg, idir):
@@ -124,6 +118,26 @@ def flatten(myg, q, idir, ivars, rp):
     xi.v(buf=myg.ng)[:,:] = np.minimum(1.0, np.maximum(0.0, 1.0 - (z - z0)/(z1 - z0)))
 
     xi[:,:] = np.where(np.logical_and(t1 > 0.0, t2 > delta), xi, 1.0)
+
+    return xi
+
+
+
+def flatten_multid(myg, q, xi_x, xi_y, ivars):
+    """ compute the multidimensional flattening coefficient """
+
+    xi = myg.scratch_array()
+
+    px = np.where(q.ip(1, n=ivars.ip, buf=2) -
+                  q.ip(-1, n=ivars.ip, buf=2) > 0, 
+                  xi_x.ip(-1, buf=2), xi_x.ip(1, buf=2))
+
+    py = np.where(q.jp(1, n=ivars.ip, buf=2) -
+                  q.jp(-1, n=ivars.ip, buf=2) > 0, 
+                  xi_y.jp(-1, buf=2), xi_y.jp(1, buf=2))
+
+    xi.v(buf=2)[:,:] = np.minimum(np.minimum(xi_x.v(buf=2), px),
+                                  np.minimum(xi_y.v(buf=2), py))
 
     return xi
 

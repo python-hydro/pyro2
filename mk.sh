@@ -27,7 +27,7 @@ else
 	FFLAGS="-C"
     fi
     
-    for d in mesh incompressible compressible lm_atm
+    for d in incompressible compressible lm_atm
     do
 	cd ${d}
 	${PYTHON} setup.py config_fc --f90flags "${FFLAGS}" build_ext --inplace

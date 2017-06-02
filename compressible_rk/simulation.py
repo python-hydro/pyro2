@@ -62,7 +62,7 @@ class Simulation(compressible.Simulation):
         xtmp = (abs(u) + cs)/self.cc_data.grid.dx
         ytmp = (abs(v) + cs)/self.cc_data.grid.dy
 
-        self.dt = cfl*np.min(1.0/(xtmp + ytmp))
+        self.dt = cfl*float(np.min(1.0/(xtmp + ytmp)))
 
 
     def evolve(self):
