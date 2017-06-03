@@ -59,7 +59,20 @@ notes describe the basic algorithm:
 
 <div class="pdf"><a href="http://bender.astro.sunysb.edu/hydro_by_example/CompHydroTutorial.pdf">notes on computational hydro</a></div>
 
-<p>Note: this solver is under development.  More coming soon...
+<p>As with the incompressible solver, we implement a cell-centered
+approximate projection method.
+
+<p><h2>&lowast; Examples</h2>
+
+<p><h3>bubble</h3>
+
+<p>The bubble problem places a buoyant bubble in a stratified atmosphere
+and watches the development of the roll-up due to shear as it rises. 
+This is run as:
+
+<pre class="code">./pyro.py lm_atm bubble inputs.bubble</pre>
+
+
 </div>  <!-- main -->
 
 
