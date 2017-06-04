@@ -36,12 +36,8 @@ class Simulation(compressible.Simulation):
         # we want to do Strang-splitting here
         self.burn(self.dt/2)
 
+        # note: this will do the time increment and n increment
         super().evolve()
 
         self.burn(self.dt/2)
-
-
-        # increment the time
-        self.cc_data.t += self.dt
-        self.n += 1
 

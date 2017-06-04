@@ -1,5 +1,5 @@
 subroutine states(idir, qx, qy, ng, dx, dt, &
-                  irho, iu, iv, ip, nvar, &
+                  irho, iu, iv, ip, ix, nvar, nspec, &
                   gamma, &
                   qv, dqv, &
                   q_l, q_r)
@@ -9,7 +9,7 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
   integer, intent(in) :: idir
   integer, intent(in) :: qx, qy, ng
   double precision, intent(in) :: dx, dt
-  integer, intent(in) :: irho, iu, iv, ip, nvar
+  integer, intent(in) :: irho, iu, iv, ip, ix, nvar, nspec
   double precision, intent(in) :: gamma
 
   ! 0-based indexing to match python
@@ -81,7 +81,7 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
 
   integer :: ilo, ihi, jlo, jhi
   integer :: nx, ny
-  integer :: i, j, m
+  integer :: i, j, n, m
 
   double precision :: dq(0:nvar-1), q(0:nvar-1)
   double precision :: lvec(0:nvar-1,0:nvar-1), rvec(0:nvar-1,0:nvar-1)
@@ -93,8 +93,12 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
 
   double precision :: sum, sum_l, sum_r, factor
 
+  integer :: ns
+
   nx = qx - 2*ng; ny = qy - 2*ng
   ilo = ng; ihi = ng+nx-1; jlo = ng; jhi = ng+ny-1
+
+  ns = nvar - nspec
 
   dtdx = dt/dx
   dtdx4 = 0.25d0*dtdx
@@ -108,32 +112,49 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
 
         cs = sqrt(gamma*q(ip)/q(irho))
 
+        lvec(:,:) = 0.0d0
+        rvec(:,:) = 0.0d0
+        eval(:) = 0.0d0
+
         ! compute the eigenvalues and eigenvectors
         if (idir == 1) then
            eval(:) = [q(iu) - cs, q(iu), q(iu), q(iu) + cs]
-        
-           lvec(0,:) = [ 0.0d0, -0.5d0*q(irho)/cs, 0.0d0, 0.5d0/(cs*cs)  ]
-           lvec(1,:) = [ 1.0d0, 0.0d0,             0.0d0, -1.0d0/(cs*cs) ]
-           lvec(2,:) = [ 0.0d0, 0.0d0,             1.0d0, 0.0d0          ]
-           lvec(3,:) = [ 0.0d0, 0.5d0*q(irho)/cs,  0.0d0, 0.5d0/(cs*cs)  ]
 
-           rvec(0,:) = [1.0d0, -cs/q(irho), 0.0d0, cs*cs ]
-           rvec(1,:) = [1.0d0, 0.0d0,       0.0d0, 0.0d0 ]
-           rvec(2,:) = [0.0d0, 0.0d0,       1.0d0, 0.0d0 ]
-           rvec(3,:) = [1.0d0, cs/q(irho),  0.0d0, cs*cs ]
+           lvec(0,0:ns-1) = [ 0.0d0, -0.5d0*q(irho)/cs, 0.0d0, 0.5d0/(cs*cs)  ]
+           lvec(1,0:ns-1) = [ 1.0d0, 0.0d0,             0.0d0, -1.0d0/(cs*cs) ]
+           lvec(2,0:ns-1) = [ 0.0d0, 0.0d0,             1.0d0, 0.0d0          ]
+           lvec(3,0:ns-1) = [ 0.0d0, 0.5d0*q(irho)/cs,  0.0d0, 0.5d0/(cs*cs)  ]
 
+           rvec(0,0:ns-1) = [1.0d0, -cs/q(irho), 0.0d0, cs*cs ]
+           rvec(1,0:ns-1) = [1.0d0, 0.0d0,       0.0d0, 0.0d0 ]
+           rvec(2,0:ns-1) = [0.0d0, 0.0d0,       1.0d0, 0.0d0 ]
+           rvec(3,0:ns-1) = [1.0d0, cs/q(irho),  0.0d0, cs*cs ]
+
+           ! now the species -- they only have a 1 in their corresponding slot
+           eval(ns:) = q(iu)
+           do n = ix, ix-1+nspec
+              lvec(n,n) = 1.0
+              rvec(n,n) = 1.0
+           enddo
         else
            eval = [q(iv) - cs, q(iv), q(iv), q(iv) + cs]
                             
-           lvec(0,:) = [ 0.0d0, 0.0d0, -0.5d0*q(irho)/cs, 0.5d0/(cs*cs)  ]
-           lvec(1,:) = [ 1.0d0, 0.0d0, 0.0d0,             -1.0d0/(cs*cs) ]
-           lvec(2,:) = [ 0.0d0, 1.0d0, 0.0d0,             0.0d0          ]
-           lvec(3,:) = [ 0.0d0, 0.0d0, 0.5d0*q(irho)/cs,  0.5d0/(cs*cs)  ]
+           lvec(0,0:ns-1) = [ 0.0d0, 0.0d0, -0.5d0*q(irho)/cs, 0.5d0/(cs*cs)  ]
+           lvec(1,0:ns-1) = [ 1.0d0, 0.0d0, 0.0d0,             -1.0d0/(cs*cs) ]
+           lvec(2,0:ns-1) = [ 0.0d0, 1.0d0, 0.0d0,             0.0d0          ]
+           lvec(3,0:ns-1) = [ 0.0d0, 0.0d0, 0.5d0*q(irho)/cs,  0.5d0/(cs*cs)  ]
 
-           rvec(0,:) = [1.0d0, 0.0d0, -cs/q(irho), cs*cs ]
-           rvec(1,:) = [1.0d0, 0.0d0, 0.0d0,       0.0d0 ]
-           rvec(2,:) = [0.0d0, 1.0d0, 0.0d0,       0.0d0 ]
-           rvec(3,:) = [1.0d0, 0.0d0, cs/q(irho),  cs*cs ]
+           rvec(0,0:ns-1) = [1.0d0, 0.0d0, -cs/q(irho), cs*cs ]
+           rvec(1,0:ns-1) = [1.0d0, 0.0d0, 0.0d0,       0.0d0 ]
+           rvec(2,0:ns-1) = [0.0d0, 1.0d0, 0.0d0,       0.0d0 ]
+           rvec(3,0:ns-1) = [1.0d0, 0.0d0, cs/q(irho),  cs*cs ]
+
+           ! now the species -- they only have a 1 in their corresponding slot
+           eval(ns:) = q(iv)
+           do n = ix, ix-1+nspec
+              lvec(n,n) = 1.0
+              rvec(n,n) = 1.0
+           enddo
 
         endif
 
@@ -160,7 +181,7 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
         endif
 
         ! compute the Vhat functions
-        do m = 0, 3
+        do m = 0, nvar-1
            sum = dot_product(lvec(m,:),dq(:))
 
            betal(m) = dtdx4*(eval(3) - eval(m))*(sign(1.0d0,eval(m)) + 1.0d0)*sum
@@ -168,7 +189,7 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
         enddo
 
         ! construct the states
-        do m = 0, 3
+        do m = 0, nvar-1
            sum_l = dot_product(betal(:),rvec(:,m))
            sum_r = dot_product(betar(:),rvec(:,m))
 

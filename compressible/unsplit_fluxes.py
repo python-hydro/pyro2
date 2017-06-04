@@ -125,7 +125,7 @@ Updating U_{i,j}:
 """
 
 import compressible.eos as eos
-import compressible.interface_f as interface_f
+import compressible.interface_f as ifc
 import compressible as comp
 import mesh.reconstruction as reconstruction
 import mesh.array_indexer as ai
@@ -224,10 +224,11 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     tm_states = tc.timer("interfaceStates")
     tm_states.begin()
 
-    V_l, V_r = interface_f.states(1, myg.qx, myg.qy, myg.ng, myg.dx, dt,
-                                  ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.nvar,
-                                  gamma,
-                                  q, ldx)
+    V_l, V_r = ifc.states(1, myg.qx, myg.qy, myg.ng, myg.dx, dt,
+                          ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix, 
+                          ivars.nvar, ivars.naux,
+                          gamma,
+                          q, ldx)
 
     tm_states.end()
 
@@ -245,10 +246,11 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     # left and right primitive variable states
     tm_states.begin()
 
-    V_l, V_r = interface_f.states(2, myg.qx, myg.qy, myg.ng, myg.dy, dt,
-                                  ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.nvar,
-                                  gamma,
-                                  q, ldy)
+    V_l, V_r = ifc.states(2, myg.qx, myg.qy, myg.ng, myg.dy, dt,
+                          ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix, 
+                          ivars.nvar, ivars.naux,
+                          gamma,
+                          q, ldy)
 
     tm_states.end()
 
@@ -297,9 +299,9 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     riemann = rp.get_param("compressible.riemann")
 
     if riemann == "HLLC":
-        riemannFunc = interface_f.riemann_hllc
+        riemannFunc = ifc.riemann_hllc
     elif riemann == "CGF":
-        riemannFunc = interface_f.riemann_cgf
+        riemannFunc = ifc.riemann_cgf
     else:
         msg.fail("ERROR: Riemann solver undefined")
 
@@ -424,7 +426,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     #=========================================================================
     cvisc = rp.get_param("compressible.cvisc")
 
-    _ax, _ay = interface_f.artificial_viscosity( 
+    _ax, _ay = ifc.artificial_viscosity( 
         myg.qx, myg.qy, myg.ng, myg.dx, myg.dy, 
         cvisc, q.v(n=ivars.iu, buf=myg.ng), q.v(n=ivars.iv, buf=myg.ng))
 

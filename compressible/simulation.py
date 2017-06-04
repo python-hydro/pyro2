@@ -67,8 +67,9 @@ def cons_to_prim(U, gamma, ivars, myg):
     q[:,:,ivars.ip] = eos.pres(gamma, q[:,:,ivars.irho], e)
 
     if ivars.naux > 0:
-        q[:,:,ivars.ix:ivars.ix+ivars.naux] = \
-            U[:,:,ivars.irhox:ivars+naux]/q[:,:,ivars.irho]
+        for nq, nu in zip(range(ivars.ix, ivars.ix+ivars.naux),
+                          range(ivars.irhox, ivars.irhox+ivars.naux)):
+            q[:,:,nq] = U[:,:,nu]/q[:,:,ivars.irho]
 
     return q
 
@@ -88,7 +89,9 @@ def prim_to_cons(q, gamma, ivars, myg):
                                                        q[:,:,ivars.iv]**2)
 
     if ivars.naux > 0:
-        U[:,:,ivars.irhox] = q[:,:,ivars.ix]*q[:,:,ivars.irho] 
+        for nq, nu in zip(range(ivars.ix, ivars.ix+ivars.naux),
+                          range(ivars.irhox, ivars.irhox+ivars.naux)):
+            U[:,:,nu] = q[:,:,nq]*q[:,:,ivars.irho] 
 
     return U
 
