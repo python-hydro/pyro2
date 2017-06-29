@@ -1,15 +1,18 @@
 If you find pyro useful, please cite this paper:
 
-@ARTICLE{2013arXiv1306.6883Z,
+@ARTICLE{pyro:2014,
    author = {{Zingale}, M.},
     title = "{pyro: A teaching code for computational astrophysical hydrodynamics}",
-  journal = {ArXiv e-prints},
+  journal = {Astronomy and Computing},
 archivePrefix = "arXiv",
    eprint = {1306.6883},
  primaryClass = "astro-ph.IM",
- keywords = {Astrophysics - Instrumentation and Methods for Astrophysics, Physics - Physics Education},
-     year = 2013,
-    month = jun,
-   adsurl = {http://adsabs.harvard.edu/abs/2013arXiv1306.6883Z},
+ keywords = {Hydrodynamics, Methods: numerical},
+     year = 2014,
+    month = oct,
+   volume = 6,
+    pages = {52--62},
+      doi = {10.1016/j.ascom.2014.07.003},
+   adsurl = {http://adsabs.harvard.edu/abs/2014A%26C.....6...52Z},
   adsnote = {Provided by the SAO/NASA Astrophysics Data System}
 }
