@@ -254,12 +254,12 @@ class Simulation(NullSimulation):
 
         myg = self.cc_data.grid
 
-        f, axes, cbar_title = plot_tools.setup_axes(myg)
-
         fields = [rho, magvel, p, e]
         field_names = [r"$\rho$", r"U", "p", "e"]
 
-        for n in range(4):
+        f, axes, cbar_title = plot_tools.setup_axes(myg, len(fields))
+
+        for n in range(len(axes)):
             ax = axes[n]
 
             v = fields[n]

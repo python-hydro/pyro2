@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import AxesGrid
 
 
-def setup_axes(myg):
+def setup_axes(myg, num):
     """ create a grid of axes whose layout depends on the aspect ratio of the
     domain """
 
@@ -14,9 +14,9 @@ def setup_axes(myg):
     cbar_title = False
 
     if L_x > 2*L_y:
-        # we want 4 rows:
+        # we want num rows:
         axes = AxesGrid(f, 111,
-                        nrows_ncols=(4, 1),
+                        nrows_ncols=(num, 1),
                         share_all=True,
                         cbar_mode="each",
                         cbar_location="top",
@@ -27,9 +27,9 @@ def setup_axes(myg):
         cbar_title = True
 
     elif L_y > 2*L_x:
-        # we want 4 columns:  rho  |U|  p  e
+        # we want num columns:  rho  |U|  p  e
         axes = AxesGrid(f, 111,
-                        nrows_ncols=(1, 4),
+                        nrows_ncols=(1, num),
                         share_all=True,
                         cbar_mode="each",
                         cbar_location="right",
@@ -39,9 +39,12 @@ def setup_axes(myg):
                         add_all=True, label_mode="L")
 
     else:
-        # 2x2 grid of plots
+        # 2-d grid of plots
+        ny = int(math.sqrt(num))
+        nx = num//ny
+
         axes = AxesGrid(f, 111,
-                        nrows_ncols=(2, 2),
+                        nrows_ncols=(nx, ny),
                         share_all=True,
                         cbar_mode="each",
                         cbar_location="right",
