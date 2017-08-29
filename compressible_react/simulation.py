@@ -2,11 +2,13 @@ from __future__ import print_function
 
 import matplotlib.pyplot as plt
 import numpy as np
-from mpl_toolkits.axes_grid1 import AxesGrid
+
 
 import mesh.integration as integration
 import compressible
 import compressible.eos as eos
+
+import util.plot_tools as plot_tools
 
 class Simulation(compressible.Simulation):
 
@@ -69,56 +71,14 @@ class Simulation(compressible.Simulation):
         v = q[:,:,ivars.iv]
         p = q[:,:,ivars.ip]
         e = eos.rhoe(gamma, p)/rho
+
         X = q[:,:,ivars.ix]
-        print("X: ", X.min(), X.max())
 
         magvel = np.sqrt(u**2 + v**2)
 
         myg = self.cc_data.grid
 
-        # figure out the geometry
-        L_x = self.cc_data.grid.xmax - self.cc_data.grid.xmin
-        L_y = self.cc_data.grid.ymax - self.cc_data.grid.ymin
-
-        f = plt.figure(1)
-
-        cbar_title = False
-
-        if L_x > 2*L_y:
-            # we want 5 rows:
-            axes = AxesGrid(f, 111,
-                            nrows_ncols=(5, 1),
-                            share_all=True,
-                            cbar_mode="each",
-                            cbar_location="top",
-                            cbar_pad="10%",
-                            cbar_size="25%",
-                            axes_pad=(0.25, 0.65),
-                            add_all=True, label_mode="L")
-            cbar_title = True
-
-        elif L_y > 2*L_x:
-            # we want 5 columns:  rho  |U|  p  e
-            axes = AxesGrid(f, 111,
-                            nrows_ncols=(1, 5),
-                            share_all=True,
-                            cbar_mode="each",
-                            cbar_location="right",
-                            cbar_pad="10%",
-                            cbar_size="25%",
-                            axes_pad=(0.65, 0.25),
-                            add_all=True, label_mode="L")
-
-        else:
-            # 3x2 grid of plots
-            axes = AxesGrid(f, 111,
-                            nrows_ncols=(3, 2),
-                            share_all=True,
-                            cbar_mode="each",
-                            cbar_location="right",
-                            cbar_pad="2%",
-                            axes_pad=(0.65, 0.25),
-                            add_all=True, label_mode="L")
+        f, axes, cbar_title = plot_tools.setup_axes(myg)
 
         fields = [rho, magvel, p, e, X]
         field_names = [r"$\rho$", r"U", "p", "e", r"$X_\mathrm{fuel}$"]

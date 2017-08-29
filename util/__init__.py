@@ -1,2 +1,2 @@
-__all__ = ['runparams','profile']
+__all__ = ['runparams', 'profile', 'plot_tools']
 
