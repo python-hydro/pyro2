@@ -53,15 +53,15 @@ class Variables(object):
 
 def cons_to_prim(U, gamma, ivars, myg):
     """ convert an input vector of conserved variables to primitive variables """
-    
+
     q = myg.scratch_array(nvar=ivars.nq)
 
     q[:,:,ivars.irho] = U[:,:,ivars.idens]
     q[:,:,ivars.iu] = U[:,:,ivars.ixmom]/U[:,:,ivars.idens]
     q[:,:,ivars.iv] = U[:,:,ivars.iymom]/U[:,:,ivars.idens]
 
-    e = (U[:,:,ivars.iener] - 
-         0.5*q[:,:,ivars.irho]*(q[:,:,ivars.iu]**2 + 
+    e = (U[:,:,ivars.iener] -
+         0.5*q[:,:,ivars.irho]*(q[:,:,ivars.iu]**2 +
                                 q[:,:,ivars.iv]**2))/q[:,:,ivars.irho]
 
     q[:,:,ivars.ip] = eos.pres(gamma, q[:,:,ivars.irho], e)
@@ -76,22 +76,22 @@ def cons_to_prim(U, gamma, ivars, myg):
 
 def prim_to_cons(q, gamma, ivars, myg):
     """ convert an input vector of primitive variables to conserved variables """
-    
+
     U = myg.scratch_array(nvar=ivars.nvar)
 
-    U[:,:,ivars.idens] = q[:,:,ivars.irho] 
+    U[:,:,ivars.idens] = q[:,:,ivars.irho]
     U[:,:,ivars.ixmom] = q[:,:,ivars.iu]*U[:,:,ivars.idens]
     U[:,:,ivars.iymom] = q[:,:,ivars.iv]*U[:,:,ivars.idens]
 
     rhoe = eos.rhoe(gamma, q[:,:,ivars.ip])
 
-    U[:,:,ivars.iener] = rhoe + 0.5*q[:,:,ivars.irho]*(q[:,:,ivars.iu]**2 + 
+    U[:,:,ivars.iener] = rhoe + 0.5*q[:,:,ivars.irho]*(q[:,:,ivars.iu]**2 +
                                                        q[:,:,ivars.iv]**2)
 
     if ivars.naux > 0:
         for nq, nu in zip(range(ivars.ix, ivars.ix+ivars.naux),
                           range(ivars.irhox, ivars.irhox+ivars.naux)):
-            U[:,:,nu] = q[:,:,nq]*q[:,:,ivars.irho] 
+            U[:,:,nu] = q[:,:,nq]*q[:,:,ivars.irho]
 
     return U
 
@@ -153,6 +153,9 @@ class Simulation(NullSimulation):
         problem = importlib.import_module("{}.problems.{}".format(
             self.solver_name, self.problem_name))
         problem.init_data(self.cc_data, self.rp)
+
+        X = my_data.get_var("fuel")
+        print("in init: ", X.min(), X.max())
 
         if self.verbose > 0: print(my_data)
 
@@ -312,7 +315,7 @@ class Simulation(NullSimulation):
 
             ax.set_xlabel("x")
             ax.set_ylabel("y")
-            
+
             # needed for PDF rendering
             cb = axes.cbar_axes[n].colorbar(img)
             cb.solids.set_rasterized(True)

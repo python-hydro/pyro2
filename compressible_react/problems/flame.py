@@ -58,7 +58,7 @@ def init_data(my_data, rp):
 
     p = 1.e-5
     ener[:,:] = p/(gamma - 1.0)
-    
+
     for i, j in np.transpose(np.nonzero(dist < 2.0*r_init)):
 
         pzone = 0.0
@@ -69,9 +69,9 @@ def init_data(my_data, rp):
                 xsub = my_data.grid.xl[i] + (my_data.grid.dx/nsub)*(ii + 0.5)
                 ysub = my_data.grid.yl[j] + (my_data.grid.dy/nsub)*(jj + 0.5)
 
-                dist = np.sqrt((xsub - xctr)**2 + 
-                                  (ysub - yctr)**2)
-                
+                dist = np.sqrt((xsub - xctr)**2 +
+                               (ysub - yctr)**2)
+
                 if dist <= r_init:
                     p = (gamma - 1.0)*E_sedov/(pi*r_init*r_init)
                 else:
@@ -80,7 +80,7 @@ def init_data(my_data, rp):
                 pzone += p
 
         p = pzone/(nsub*nsub)
-            
+
         ener[i,j] = p/(gamma - 1.0)
 
 
@@ -95,4 +95,3 @@ def finalize():
           """
 
     print(msg)
-
