@@ -58,29 +58,25 @@ def init_data(my_data, rp):
 
     p = 1.e-5
     ener[:,:] = p/(gamma - 1.0)
-    
+
     for i, j in np.transpose(np.nonzero(dist < 2.0*r_init)):
 
         pzone = 0.0
 
-        for ii in range(nsub):
-            for jj in range(nsub):
+        xsub = my_data.grid.xl[i] + (my_data.grid.dx/nsub)*(np.arange(nsub) + 0.5)
+        ysub = my_data.grid.yl[j] + (my_data.grid.dy/nsub)*(np.arange(nsub) + 0.5)
 
-                xsub = my_data.grid.xl[i] + (my_data.grid.dx/nsub)*(ii + 0.5)
-                ysub = my_data.grid.yl[j] + (my_data.grid.dy/nsub)*(jj + 0.5)
+        xx, yy = np.meshgrid(xsub, ysub, indexing="ij")
 
-                dist = np.sqrt((xsub - xctr)**2 + 
-                                  (ysub - yctr)**2)
-                
-                if dist <= r_init:
-                    p = (gamma - 1.0)*E_sedov/(pi*r_init*r_init)
-                else:
-                    p = 1.e-5
+        dist = np.sqrt((xx - xctr)**2 + (yy - yctr)**2)
 
-                pzone += p
+        n_in_pert = np.count_nonzero(dist <= r_init)
 
-        p = pzone/(nsub*nsub)
-            
+        p = n_in_pert*(gamma - 1.0)*E_sedov/(pi*r_init*r_init) + \
+            (nsub*nsub - n_in_pert)*1.e-5
+
+        p = p/(nsub*nsub)
+
         ener[i,j] = p/(gamma - 1.0)
 
 
@@ -95,4 +91,3 @@ def finalize():
           """
 
     print(msg)
-

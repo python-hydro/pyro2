@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import AxesGrid
-
+import math
 
 def setup_axes(myg, num):
     """ create a grid of axes whose layout depends on the aspect ratio of the
