@@ -259,9 +259,7 @@ class Simulation(NullSimulation):
 
         f, axes, cbar_title = plot_tools.setup_axes(myg, len(fields))
 
-        for n in range(len(axes)):
-            ax = axes[n]
-
+        for n, ax in enumerate(axes):
             v = fields[n]
 
             img = ax.imshow(np.transpose(v.v()),
