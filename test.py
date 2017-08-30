@@ -134,7 +134,7 @@ if __name__ == "__main__":
                    help="skip the tests that don't go through pyro.py",
                    action="store_true")
 
-    p.add_argument("--reset_failures",
+    p.add_argument("--reset_failures", "-r",
                    help="if a test fails, reset the benchmark",
                    action="store_true")
 
@@ -146,7 +146,7 @@ if __name__ == "__main__":
                    help="skip the tests that go through pyro.py, and only run standalone tests",
                    action="store_true")
 
-    p.add_argument("--unittests_only",
+    p.add_argument("--unittests_only", "-u",
                    help="only do the unit tests",
                    action="store_true")
 
