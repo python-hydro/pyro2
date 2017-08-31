@@ -25,7 +25,7 @@ class Simulation(NullSimulation):
 
         # create the variables
         bc, bc_xodd, bc_yodd = bc_setup(self.rp)
-        
+
         my_data = patch.CellCenterData2d(my_grid)
 
         # velocities
@@ -229,7 +229,7 @@ class Simulation(NullSimulation):
 
         u_MAC = ai.ArrayIndexer(d=_um, grid=myg)
         v_MAC = ai.ArrayIndexer(d=_vm, grid=myg)
-        
+
 
         #---------------------------------------------------------------------
         # do a MAC projection ot make the advective velocities divergence
@@ -427,9 +427,7 @@ class Simulation(NullSimulation):
         fields = [u, v, vort, divU]
         field_names = ["u", "v", r"$\nabla \times U$", r"$\nabla \cdot U$"]
 
-        for n in range(4):
-            ax = axes.flat[n]
-
+        for n, ax in enumerate(axes.flat):
             f = fields[n]
             img = ax.imshow(np.transpose(f.v()),
                             interpolation="nearest", origin="lower",
