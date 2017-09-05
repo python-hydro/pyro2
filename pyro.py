@@ -174,6 +174,7 @@ def doit(solver_name, problem_name, param_file,
 def parse_and_run():
     valid_solvers = ["advection",
                      "advection_rk",
+                     "advection_weno",
                      "compressible",
                      "compressible_rk",
                      "compressible_react",
@@ -211,4 +212,3 @@ def parse_and_run():
 
 if __name__ == "__main__":
     parse_and_run()
-
