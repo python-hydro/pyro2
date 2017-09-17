@@ -102,7 +102,9 @@ pyro provides the following solvers (all in 2-d):
   - `advection_rk`: a second-order unsplit solver for linear advection
     that uses Runge-Kutta integration instead of characteristic
     tracing.
-  
+
+  - `advection_weno`: a method-of-lines WENO solver for linear advection.
+
   - `compressible`: a second-order unsplit solver for the Euler
     equations of compressible hydrodynamics.  This uses characteristic
 	tracing and corner coupling for the prediction of the interface
