@@ -21,7 +21,6 @@ class Simulation(compressible.Simulation):
         super().initialize(extra_vars=["fuel", "ash"])
 
 
-
     def burn(self, dt):
         """ react fuel to ash """
         # compute T
@@ -29,6 +28,17 @@ class Simulation(compressible.Simulation):
         # compute energy generation rate
 
         # update energy due to reaction
+        pass
+
+
+    def diffuse(self, dt):
+        """ diffuse for dt """
+
+        # compute T
+
+        # compute div kappa grad T
+
+        # update energy due to diffusion
         pass
 
 
@@ -41,8 +51,12 @@ class Simulation(compressible.Simulation):
         # we want to do Strang-splitting here
         self.burn(self.dt/2)
 
+        self.diffuse(self.dt/2)
+
         # note: this will do the time increment and n increment
         super().evolve()
+
+        self.diffuse(self.dt/2)
 
         self.burn(self.dt/2)
 
