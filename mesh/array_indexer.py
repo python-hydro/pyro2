@@ -80,6 +80,13 @@ class ArrayIndexer(np.ndarray):
             return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
                                    self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s,n])
 
+
+    def lap(self):
+        """return the 5-point Laplacian"""
+        l = (self.ip(-1) - 2*self.v() + self.ip(1))/self.grid.dx + \
+            (self.jp(-1) - 2*self.v() + self.jp(1))/self.grid.dy
+        return l
+
     def norm(self, n=0):
         """
         find the norm of the quantity (index n) defined on the same grid,

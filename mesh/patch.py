@@ -319,7 +319,7 @@ class CellCenterData2d(object):
         Parameters
         ----------
         func : function
-            A function to call to derive the variable.  This function 
+            A function to call to derive the variable.  This function
             should take two arguments, a CellCenterData2d object and a
             string variable name (or list of variables)
         """
@@ -781,7 +781,7 @@ class CellCenterData2d(object):
         ggrid.attrs["nx"] = self.grid.nx
         ggrid.attrs["ny"] = self.grid.ny
         ggrid.attrs["ng"] = self.grid.ng
-        
+
         ggrid.attrs["xmin"] = self.grid.xmin
         ggrid.attrs["xmax"] = self.grid.xmax
         ggrid.attrs["ymin"] = self.grid.ymin
@@ -798,7 +798,7 @@ class CellCenterData2d(object):
             gvar.attrs["xrb"] = self.BCs[self.names[n]].xrb
             gvar.attrs["ylb"] = self.BCs[self.names[n]].ylb
             gvar.attrs["yrb"] = self.BCs[self.names[n]].yrb
-                
+
 
     def pretty_print(self, var, fmt=None):
 
