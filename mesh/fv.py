@@ -1,4 +1,4 @@
-import match
+import mesh.patch as patch
 
 class FV(patch.CellCenterData2d):
     """this is a finite-volume grid.  We expect the data to represent

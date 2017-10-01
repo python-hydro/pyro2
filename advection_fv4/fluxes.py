@@ -63,11 +63,36 @@ def fluxes(my_data, rp, dt):
 
     # interpolate cell-average a to face-averaged a on interfaces in each
     # dimension
+    a_x = myg.scratch_array()
+    a_x.v(buf=1)[:,:] = 7./12.*(a.ip(-1, buf=1) + a.v(buf=1)) - \
+                        1./12.*(a.ip(-2, buf=1) + a.ip(1, buf=1))
+
+    a_y = myg.scratch_array()
+    a_y.v(buf=1)[:,:] = 7./12.*(a.jp(-1, buf=1) + a.v(buf=1)) - \
+                        1./12.*(a.jp(-2, buf=1) + a.jp(1, buf=1))
 
 
     # calculate the face-centered a using the transverse Laplacian
+    a_x_cc = myg.scratch_array()
+    bufx = (0, 1, 0, 0)
+    a_x_cc.v(buf=bufx)[:,:] = a_x.v(buf=bufx) - \
+        1./24*(a_x.jp(-1, buf=bufx) - 2*a_x.v(buf=bufx) + a_x.jp(1, buf=bufx))
+
+    a_y_cc = myg.scratch_array()
+    bufy = (0, 0, 0, 1)
+    a_y_cc.v(buf=bufy)[:,:] = a_y.v(buf=bufy) - \
+        1./24*(a_y.ip(-1, buf=bufy) - 2*a_y.v(buf=bufy) + a_y.ip(1, buf=bufy))
 
 
-    # compute the face-averaed fluxes 
+    # compute the face-averaged fluxes
+    F_x = myg.scratch_array()
+    F_x_avg = u*a_x
+    F_x.v(buf=bufx)[:,:] = u*a_x_cc.v(buf=bufx) + \
+        1./24*(F_x.jp(-1, buf=bufx) - 2*F_x.v(buf=bufx) + F_x.jp(1, buf=bufx))
+
+    F_y = myg.scratch_array()
+    F_y_avg = u*a_y
+    F_y.v(buf=bufy)[:,:] = u*a_y_cc.v(buf=bufy) + \
+        1./24*(F_y.ip(-1, buf=bufy) - 2*F_y.v(buf=bufy) + F_y.ip(1, buf=bufy))
 
     return F_x, F_y
