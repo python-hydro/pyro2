@@ -1,6 +1,4 @@
 import mesh.reconstruction as reconstruction
-import mesh.patch as patch
-import mesh.array_indexer as ai
 
 def fluxes(my_data, rp, dt):
     """
@@ -64,8 +62,6 @@ def fluxes(my_data, rp, dt):
     u = rp.get_param("advection.u")
     v = rp.get_param("advection.v")
 
-    qx = myg.qx
-    qy = myg.qy
 
     #--------------------------------------------------------------------------
     # monotonized central differences
