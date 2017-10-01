@@ -19,7 +19,7 @@ class Simulation(advection_rk.Simulation):
         my_grid = grid_setup(self.rp, ng=4)
 
         # create the variables
-        my_data = fv.FV(my_grid)
+        my_data = fv.FV2d(my_grid)
         bc = bc_setup(self.rp)[0]
         my_data.register_var("density", bc)
         my_data.create()
@@ -27,7 +27,7 @@ class Simulation(advection_rk.Simulation):
         self.cc_data = my_data
 
         # now set the initial conditions for the problem
-        problem = importlib.import_module("advection.problems.{}".format(self.problem_name))
+        problem = importlib.import_module("advection_fv4.problems.{}".format(self.problem_name))
         problem.init_data(self.cc_data, self.rp)
 
     def substep(self, myd):
