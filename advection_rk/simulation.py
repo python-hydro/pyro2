@@ -1,16 +1,9 @@
 from __future__ import print_function
 
-import importlib
-import numpy as np
-import matplotlib.pyplot as plt
-
 import advection
 import advection_rk.fluxes as flx
-import mesh.patch as patch
 import mesh.integration as integration
 import mesh.array_indexer as ai
-
-from util import profile
 
 
 class Simulation(advection.Simulation):
@@ -66,7 +59,6 @@ class Simulation(advection.Simulation):
         tm_evolve = self.tc.timer("evolve")
         tm_evolve.begin()
 
-        myg = self.cc_data.grid
         myd = self.cc_data
 
         method = self.rp.get_param("advection.temporal_method")
