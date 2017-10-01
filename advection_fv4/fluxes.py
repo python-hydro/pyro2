@@ -88,11 +88,11 @@ def fluxes(my_data, rp, dt):
     F_x = myg.scratch_array()
     F_x_avg = u*a_x
     F_x.v(buf=bufx)[:,:] = u*a_x_cc.v(buf=bufx) + \
-        1./24*(F_x.jp(-1, buf=bufx) - 2*F_x.v(buf=bufx) + F_x.jp(1, buf=bufx))
+        1./24*(F_x_avg.jp(-1, buf=bufx) - 2*F_x_avg.v(buf=bufx) + F_x_avg.jp(1, buf=bufx))
 
     F_y = myg.scratch_array()
-    F_y_avg = u*a_y
-    F_y.v(buf=bufy)[:,:] = u*a_y_cc.v(buf=bufy) + \
-        1./24*(F_y.ip(-1, buf=bufy) - 2*F_y.v(buf=bufy) + F_y.ip(1, buf=bufy))
+    F_y_avg = v*a_y
+    F_y.v(buf=bufy)[:,:] = v*a_y_cc.v(buf=bufy) + \
+        1./24*(F_y_avg.ip(-1, buf=bufy) - 2*F_y_avg.v(buf=bufy) + F_y_avg.ip(1, buf=bufy))
 
     return F_x, F_y
