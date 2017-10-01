@@ -62,7 +62,6 @@ Updating U_{i,j}:
      interfaces.
 """
 
-import compressible.eos as eos
 import compressible.interface_f as interface_f
 import compressible as comp
 import mesh.reconstruction as reconstruction
@@ -110,11 +109,6 @@ def fluxes(my_data, rp, ivars, solid, tc):
     #=========================================================================
     # Q = (rho, u, v, p)
 
-    dens = my_data.get_var("density")
-    xmom = my_data.get_var("x-momentum")
-    ymom = my_data.get_var("y-momentum")
-    ener = my_data.get_var("energy")
-
     q = comp.cons_to_prim(my_data.data, gamma, ivars, myg)
 
 
@@ -145,7 +139,7 @@ def fluxes(my_data, rp, ivars, solid, tc):
 
     for n in range(ivars.nvar):
         ldx[:,:,n] = xi*reconstruction.limit(q[:,:,n], myg, 1, limiter)
-        ldy[:,:,n] = xi*reconstruction.limit(q[:,:,n], myg, 2, limiter)        
+        ldy[:,:,n] = xi*reconstruction.limit(q[:,:,n], myg, 2, limiter)
 
     tm_limit.end()
 
@@ -208,12 +202,12 @@ def fluxes(my_data, rp, ivars, solid, tc):
         msg.fail("ERROR: Riemann solver undefined")
 
     _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
-                      ivars.nvar, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
+                      ivars.nvar, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
                       solid.xl, solid.xr,
                       gamma, U_xl, U_xr)
 
     _fy = riemannFunc(2, myg.qx, myg.qy, myg.ng,
-                      ivars.nvar, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
+                      ivars.nvar, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
                       solid.yl, solid.yr,
                       gamma, U_yl, U_yr)
 
