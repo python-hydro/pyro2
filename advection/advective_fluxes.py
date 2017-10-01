@@ -1,6 +1,4 @@
 import mesh.reconstruction as reconstruction
-import mesh.patch as patch
-import mesh.array_indexer as ai
 
 def unsplit_fluxes(my_data, rp, dt, scalar_name):
     """
@@ -64,8 +62,6 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
     cx = u*dt/myg.dx
     cy = v*dt/myg.dy
 
-    qx = myg.qx
-    qy = myg.qy
 
     #--------------------------------------------------------------------------
     # monotonized central differences

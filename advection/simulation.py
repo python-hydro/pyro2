@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import advection.advective_fluxes as flx
 import mesh.patch as patch
 from simulation_null import NullSimulation, grid_setup, bc_setup
-from util import profile
 
 class Simulation(NullSimulation):
 
@@ -69,9 +68,6 @@ class Simulation(NullSimulation):
                                dtdx*(flux_x[i,j] - flux_x[i+1,j]) + \
                                dtdy*(flux_y[i,j] - flux_y[i,j+1])
         """
-
-        qx = self.cc_data.grid.qx
-        qy = self.cc_data.grid.qy
 
         dens = self.cc_data.get_var("density")
 
