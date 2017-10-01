@@ -1,6 +1,6 @@
 import mesh.patch as patch
 
-class FV(patch.CellCenterData2d):
+class FV2d(patch.CellCenterData2d):
     """this is a finite-volume grid.  We expect the data to represent
     cell-averages, and do operations to 4th order.  This assumes dx = dy """
 

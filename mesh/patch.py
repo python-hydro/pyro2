@@ -666,7 +666,7 @@ class CellCenterData2d(object):
         return np.max(self.data[g.ilo-ng:g.ihi+1+ng,g.jlo-ng:g.jhi+1+ng,n])
 
 
-    def restrict(self, varname):
+    def restrict(self, varname, N=2):
         """
         Restrict the variable varname to a coarser grid (factor of 2
         coarser) and return an array with the resulting data (and same
@@ -677,15 +677,25 @@ class CellCenterData2d(object):
         fdata = self.get_var(varname)
 
         # allocate an array for the coarsely gridded data
-        coarse_grid = fine_grid.coarse_like(2)
+        coarse_grid = fine_grid.coarse_like(N)
         cdata = coarse_grid.scratch_array()
 
         # fill the coarse array with the restricted data -- just
-        # average the 4 fine cells into the corresponding coarse cell
+        # by averaging the fine cells into the corresponding coarse cell
         # that encompasses them.
-        cdata.v()[:,:] = \
-            0.25*(fdata.v(s=2) + fdata.ip(1, s=2) +
-                  fdata.jp(1, s=2) + fdata.ip_jp(1, 1, s=2))
+        if N == 2:
+            cdata.v()[:,:] = \
+                   0.25*(fdata.v(s=2) + fdata.ip(1, s=2) +
+                         fdata.jp(1, s=2) + fdata.ip_jp(1, 1, s=2))
+        elif N == 4:
+            cdata.v()[:,:] = \
+                 (fdata.v(s=4) + fdata.ip(1, s=4) + fdata.ip(2, s=4) + fdata.ip(3, s=4) +
+                  fdata.jp(1, s=4) + fdata.ip_jp(1, 1, s=4) + fdata.ip_jp(2, 1, s=4) + fdata.ip_jp(3, 1, s=4) +
+                  fdata.jp(2, s=4) + fdata.ip_jp(1, 2, s=4) + fdata.ip_jp(2, 2, s=4) + fdata.ip_jp(3, 2, s=4) +
+                  fdata.jp(3, s=4) + fdata.ip_jp(1, 3, s=4) + fdata.ip_jp(2, 3, s=4) + fdata.ip_jp(3, 3, s=4))/16.0
+
+        else:
+            raise ValueError("restriction is only allowed by 2 or 4")
 
         return cdata
 
