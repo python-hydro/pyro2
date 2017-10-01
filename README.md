@@ -35,11 +35,11 @@ http://zingale.github.io/pyro2/
 
     (note, for older Fedora releases, replace `dnf` with `yum`.  For
 	python 2.x, leave off the `2` in the package names.)
-	
+
   - You also need to make sure gfortran is present on you system. On a
     Fedora system, it can be installed as:
 
-       `dnf install gcc-gfortran` 
+       `dnf install gcc-gfortran`
 
   - Not all matplotlib backends allow for the interactive plotting as
     pyro is run. One that does is the TkAgg backend. This can be made
@@ -48,30 +48,30 @@ http://zingale.github.io/pyro2/
 
        `backend: TkAgg`
 
-     You can check what backend is your current default in python via: 
+     You can check what backend is your current default in python via:
 
        ```python
-       import matplotlib.pyplot 
-       print matplotlib.pyplot.get_backend() 
+       import matplotlib.pyplot
+       print matplotlib.pyplot.get_backend()
        ```
-	   
+
   - If you want to run the unit tests, you need to have `pytest` installed.
-  
-  - The remaining steps are: 
+
+  - The remaining steps are:
 
       * Set the `PYTHONPATH` environment variable to point to the `pyro2/`
         directory.
 
       * Define the environment variable `PYRO_HOME` to point to the
         `pyro2/` directory (only needed to regression testing)
-	  
-      * Build the Fortran source. In `pyro2/` type 
 
-          `./mk.sh` 
+      * Build the Fortran source. In `pyro2/` type
 
-      * Run a quick test of the advection solver: 
+          `./mk.sh`
 
-          `./pyro.py advection smooth inputs.smooth` 
+      * Run a quick test of the advection solver:
+
+          `./pyro.py advection smooth inputs.smooth`
 
         you should see a graphing window pop up with a smooth pulse
         advecting diagonally through the periodic domain.
@@ -99,6 +99,9 @@ pyro provides the following solvers (all in 2-d):
     of the interface states.  This is the basic method to understand
     hydrodynamics.
 
+  - `advection_fv4`: a fourth-order accurate finite-volume advection
+    solver that uses RK4 time integration.
+
   - `advection_rk`: a second-order unsplit solver for linear advection
     that uses Runge-Kutta integration instead of characteristic
     tracing.
@@ -113,7 +116,7 @@ pyro provides the following solvers (all in 2-d):
   - `compressible_rk`: a second-order unsplit solver for Euler
      equations that uses Runge-Kutta integration instead of
 	 characteristic tracing.
-	 
+
   - `incompressible`: a second-order cell-centered approximate
     projection method for the incompressible equations of
     hydrodynamics.
@@ -213,7 +216,7 @@ with their data.
 
   It will also invoke the python `pytest` module to run the unit tests
   for the different modules in pyro.
-  
+
   Tests are run nightly and reported here:
 
   http://bender.astro.sunysb.edu/hydro_by_example/download/_stage/pyro2/tests.out
@@ -233,7 +236,7 @@ with their data.
   ```
   python2 ./pyro.py compressible sedov inputs.sedov
   ```
-  
+
 
 ## Getting help
 
