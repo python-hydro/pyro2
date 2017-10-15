@@ -1,0 +1,6 @@
+# absolute error for the smooth advection problem (2017-10-14)
+# N      err
+ 32      0.00563096614895
+ 64      0.000385497464405
+128      2.45689140938e-05
+
