@@ -36,6 +36,9 @@ class Simulation(advection_rk.Simulation):
         conservative state defined as part of myd
         """
 
+        # this is identical to the RK version, but we need to
+        # dupe it here to pull in the correct fluxes
+
         myg = myd.grid
 
         k = myg.scratch_array()
