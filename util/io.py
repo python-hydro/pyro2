@@ -3,6 +3,16 @@ import importlib
 import mesh.patch as patch
 import mesh.boundary as bnd
 
+def read_bcs(f):
+    try: gb = f["BC"]
+    except:
+        return None
+    else:
+        BCs = {}
+        for name in gb:
+            BCs[name] = gb[name]
+
+        return BCs
 
 def read(filename):
 
@@ -10,8 +20,8 @@ def read(filename):
         filename += ".h5"
 
     with h5py.File(filename, "r") as f:
-        
-        # read the simulation information -- this only exists if the 
+
+        # read the simulation information -- this only exists if the
         # file was created as a simulation object
         try:
             solver_name = f.attrs["solver"]
@@ -25,10 +35,20 @@ def read(filename):
         # read in the grid info and create our grid
         grid = f["grid"].attrs
 
-        myg = patch.Grid2d(grid["nx"], grid["ny"], ng=grid["ng"], 
-                           xmin=grid["xmin"], xmax=grid["xmax"], 
+        myg = patch.Grid2d(grid["nx"], grid["ny"], ng=grid["ng"],
+                           xmin=grid["xmin"], xmax=grid["xmax"],
                            ymin=grid["ymin"], ymax=grid["ymax"])
 
+
+        # sometimes problems define custom BCs -- at the moment, we
+        # are going to assume that these always map to BC.user.  We
+        # need to read these in now, since the variable creation
+        # requires it.
+        custom_bcs = read_bcs(f)
+        if custom_bcs is not None:
+            bcmod =  importlib.import_module("{}.{}".format(solver_name, "BC"))
+            for name in custom_bcs:
+                bnd.define_bc(name, bcmod.user, is_solid=custom_bcs[name])
 
         # read in the variable info -- start by getting the names
         gs = f["state"]
@@ -55,7 +75,7 @@ def read(filename):
         for n in names:
             grp = gs[n]
             data = grp["data"]
-            
+
             v = myd.get_var(n)
             v.v()[:,:] = data[:,:]
 
@@ -73,5 +93,3 @@ def read(filename):
         return sim
     else:
         return myd
-
-            
