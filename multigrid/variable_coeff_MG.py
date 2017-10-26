@@ -61,6 +61,10 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
         # we only need to do this once.  We need to hold the original
         # coeffs in our grid so we can do a ghost cell fill.
         c = self.grids[self.nlevels-1].get_var("coeffs")
+
+        if c.g.nx != nx or c.g.ny != ny:
+            raise IndexError("coefficient array not the same size as multigrid problem")
+
         c.v()[:,:] = coeffs.v().copy()
 
         self.grids[self.nlevels-1].fill_BC("coeffs")
