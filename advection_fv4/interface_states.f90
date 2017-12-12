@@ -24,6 +24,9 @@ subroutine limit(a, qx, qy, ng, idir, &
   nx = qx - 2*ng; ny = qy - 2*ng
   ilo = ng; ihi = ng+nx-1; jlo = ng; jhi = ng+ny-1
 
+  ! our convention here is that:
+  !     al(i,j)   will be al_{i-1/2,j),
+  !     al(i+1,j) will be al_{i+1/2,j)
 
   ! we need interface values on all faces of the domain
   if (idir == 1) then
@@ -42,13 +45,16 @@ subroutine limit(a, qx, qy, ng, idir, &
 
      do j = jlo, jhi
         do i = ilo-1, ihi+2
+           ! these live on cell-centers
            dafm(i,j) = a(i,j) - a_int(i,j)
            dafp(i,j) = a_int(i+1,j) - a(i,j)
 
+           ! these live on cell-centers
            d2af(i,j) = 6.0*(a_int(i,j) - 2.0*a(i,j) + a_int(i+1,j))
            d2ac(i,j) = a(i-1,j) - 2.0*a(i,j) + a(i+1,j)
 
-           d3a(i,j) = d2ac(i,j) - d2af(i-1,j)
+           ! this lives on the interface
+           d3a(i,j) = d2ac(i,j) - d2ac(i-1,j)
 
         enddo
      enddo
@@ -60,6 +66,8 @@ subroutine limit(a, qx, qy, ng, idir, &
            if (dafm(i,j) * dafp(i,j) <= 0.0 .or. &
                 (a(i,j) - a(i-2,j))*(a(i+2,j) - a(i,j)) <= 0.0) then
 
+              ! we are at an extrema
+
               s = sign(1.0, d2ac(i,j))
               if (s == sign(1.0, d2ac(i-1,j)) .and. s == sign(1.0, d2ac(i+1,j)) .and. &
                    s == sign(1.0, d2af(i,j))) then
@@ -70,8 +78,8 @@ subroutine limit(a, qx, qy, ng, idir, &
                  d2a_lim = 0.0d0
               endif
 
-              if (abs(d2af(i,j)) < 1.e-12*max(abs(a(i-2,j)), abs(a(i-1,j)), &
-                                             abs(a(i,j)), abs(a(i+1,j)), abs(a(i+2,j)))) then
+              if (abs(d2af(i,j)) <= 1.e-12*max(abs(a(i-2,j)), abs(a(i-1,j)), &
+                                               abs(a(i,j)), abs(a(i+1,j)), abs(a(i+2,j)))) then
                  rho = 0.0
               else
                  ! MC Eq. 27
@@ -79,9 +87,9 @@ subroutine limit(a, qx, qy, ng, idir, &
               enddo
 
               if (rho < 1.0d0 - 1.d-12) then
-                 ! we may need to limit
-                 d3a_min = min(d3a(i-1,j), d3a(i,j), d3a(i+1,j), d3a(i+1,j))
-                 d3a_max = max(d3a(i-1,j), d3a(i,j), d3a(i+1,j), d3a(i+1,j))
+                 ! we may need to limit -- these quantities are at cell-centers
+                 d3a_min = min(d3a(i-1,j), d3a(i,j), d3a(i+1,j), d3a(i+2,j))
+                 d3a_max = max(d3a(i-1,j), d3a(i,j), d3a(i+1,j), d3a(i+2,j))
 
                  if (C3*max(abs(d3a_min), abs(d3a_max)) <= (d3a_max - d3a_min)) then
                     ! limit
@@ -93,6 +101,7 @@ subroutine limit(a, qx, qy, ng, idir, &
                        ! Eq. 31
                        ar(i,j) = a(i,j) - 2.0d0*(1.0d0 - rho)*dafp(i,j) - rho*dafm(i,j)
                     else if (abs(dafp(i,j)) >= 2.0*abs(dafm(i,j))) then
+                       ! Eq. 32
                        al(i+1,j) = a(i,j) + 2.0d0*(1.0d0 - rho)*dafm(i,j) + rho*dafp(i,j)
                     endif
 
