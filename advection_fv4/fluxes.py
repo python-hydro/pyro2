@@ -62,7 +62,7 @@ def fluxes(my_data, rp, dt):
 
 
     # interpolate cell-average a to face-averaged a on interfaces in each
-    # dimension
+    # dimension -- this is MC Eq. 17
     a_x = myg.scratch_array()
     a_x.v(buf=1)[:,:] = 7./12.*(a.ip(-1, buf=1) + a.v(buf=1)) - \
                         1./12.*(a.ip(-2, buf=1) + a.ip(1, buf=1))
@@ -72,7 +72,8 @@ def fluxes(my_data, rp, dt):
                         1./12.*(a.jp(-2, buf=1) + a.jp(1, buf=1))
 
 
-    # calculate the face-centered a using the transverse Laplacian
+    # calculate the face-centered value a using the transverse Laplacian
+    # this is MC Eq. 18, 19
     a_x_cc = myg.scratch_array()
     bufx = (0, 1, 0, 0)
     a_x_cc.v(buf=bufx)[:,:] = a_x.v(buf=bufx) - \
@@ -84,7 +85,7 @@ def fluxes(my_data, rp, dt):
         1./24*(a_y.ip(-1, buf=bufy) - 2*a_y.v(buf=bufy) + a_y.ip(1, buf=bufy))
 
 
-    # compute the face-averaged fluxes
+    # compute the face-averaged fluxes -- this is MC Eq. 20
     F_x = myg.scratch_array()
     F_x_avg = u*a_x
     F_x.v(buf=bufx)[:,:] = u*a_x_cc.v(buf=bufx) + \
