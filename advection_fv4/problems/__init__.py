@@ -1,2 +1,2 @@
-__all__ = ['smooth']
+__all__ = ['smooth', 'tophat']
 

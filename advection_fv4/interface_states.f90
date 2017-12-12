@@ -1,5 +1,5 @@
-subroutine limit(a, qx, qy, ng, idir, &
-                 al, ar)
+subroutine states(a, qx, qy, ng, idir, &
+                  al, ar)
 
   implicit none
 
@@ -228,4 +228,4 @@ subroutine limit(a, qx, qy, ng, idir, &
 
   endif
 
-end subroutine limit
+end subroutine states

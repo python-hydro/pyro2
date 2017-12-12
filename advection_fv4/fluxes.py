@@ -1,4 +1,6 @@
 import mesh.reconstruction as reconstruction
+import advection_fv4.interface_f as interface_f
+import mesh.array_indexer as ai
 
 def fluxes(my_data, rp, dt):
     """Construct the fluxes through the interfaces for the linear advection
@@ -60,16 +62,32 @@ def fluxes(my_data, rp, dt):
     u = rp.get_param("advection.u")
     v = rp.get_param("advection.v")
 
+    limiter = rp.get_param("advection.limiter")
 
     # interpolate cell-average a to face-averaged a on interfaces in each
     # dimension -- this is MC Eq. 17
-    a_x = myg.scratch_array()
-    a_x.v(buf=1)[:,:] = 7./12.*(a.ip(-1, buf=1) + a.v(buf=1)) - \
-                        1./12.*(a.ip(-2, buf=1) + a.ip(1, buf=1))
+    if limiter == 0:
+        # no limiting
+        a_x = myg.scratch_array()
+        a_x.v(buf=1)[:,:] = 7./12.*(a.ip(-1, buf=1) + a.v(buf=1)) - \
+                            1./12.*(a.ip(-2, buf=1) + a.ip(1, buf=1))
 
-    a_y = myg.scratch_array()
-    a_y.v(buf=1)[:,:] = 7./12.*(a.jp(-1, buf=1) + a.v(buf=1)) - \
-                        1./12.*(a.jp(-2, buf=1) + a.jp(1, buf=1))
+        a_y = myg.scratch_array()
+        a_y.v(buf=1)[:,:] = 7./12.*(a.jp(-1, buf=1) + a.v(buf=1)) - \
+                            1./12.*(a.jp(-2, buf=1) + a.jp(1, buf=1))
+
+    else:
+        a_l, a_r = interface_f.states(a, myg.qx, myg.qy, myg.ng, 1)
+        if u > 0:
+            a_x = ai.ArrayIndexer(d=a_l, grid=myg)
+        else:
+            a_x = ai.ArrayIndexer(d=a_r, grid=myg)
+
+        a_l, a_r = interface_f.states(a, myg.qx, myg.qy, myg.ng, 2)
+        if v > 0:
+            a_y = ai.ArrayIndexer(d=a_l, grid=myg)
+        else:
+            a_y = ai.ArrayIndexer(d=a_r, grid=myg)
 
 
     # calculate the face-centered value a using the transverse Laplacian
