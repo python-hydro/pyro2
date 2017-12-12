@@ -11,7 +11,12 @@ subroutine limit(a, qx, qy, ng, idir, &
   double precision, intent(out) :: al(0:qx-1, 0:qy-1)
   double precision, intent(out) :: ar(0:qx-1, 0:qy-1)
 
-  double precision :: aint(0:qx-1, 0:qy-1)
+!f2py depend(qx, qy) :: a
+!f2py depend(qx, qy) :: al, ar
+!f2py intent(in) :: a
+!f2py intent(out) :: al, ar
+
+  double precision :: a_int(0:qx-1, 0:qy-1)
   double precision :: dafm(0:qx-1, 0:qy-1)
   double precision :: dafp(0:qx-1, 0:qy-1)
   double precision :: d2af(0:qx-1, 0:qy-1)
@@ -20,6 +25,14 @@ subroutine limit(a, qx, qy, ng, idir, &
 
   integer :: ilo, ihi, jlo, jhi
   integer :: nx, ny
+
+  double precision, parameter :: C2 = 1.25d0
+  double precision, parameter :: C3 = 0.1d0
+
+  integer :: i, j
+  double precision :: rho, s
+
+  double precision :: d2a_lim, d3a_min, d3a_max
 
   nx = qx - 2*ng; ny = qy - 2*ng
   ilo = ng; ihi = ng+nx-1; jlo = ng; jhi = ng+ny-1
@@ -68,9 +81,9 @@ subroutine limit(a, qx, qy, ng, idir, &
 
               ! we are at an extrema
 
-              s = sign(1.0, d2ac(i,j))
-              if (s == sign(1.0, d2ac(i-1,j)) .and. s == sign(1.0, d2ac(i+1,j)) .and. &
-                   s == sign(1.0, d2af(i,j))) then
+              s = sign(1.0d0, d2ac(i,j))
+              if (s == sign(1.0d0, d2ac(i-1,j)) .and. s == sign(1.0d0, d2ac(i+1,j)) .and. &
+                   s == sign(1.0d0, d2af(i,j))) then
                  ! MC Eq. 26
                  d2a_lim = s*min(abs(d2af(i,j)), C2*abs(d2ac(i-1,j)), &
                                  C2*abs(d2ac(i,j)), C2*abs(d2ac(i+1,j)))
@@ -84,7 +97,7 @@ subroutine limit(a, qx, qy, ng, idir, &
               else
                  ! MC Eq. 27
                  rho = d2a_lim/d2af(i,j)
-              enddo
+              endif
 
               if (rho < 1.0d0 - 1.d-12) then
                  ! we may need to limit -- these quantities are at cell-centers
@@ -160,9 +173,9 @@ subroutine limit(a, qx, qy, ng, idir, &
 
               ! we are at an extrema
 
-              s = sign(1.0, d2ac(i,j))
-              if (s == sign(1.0, d2ac(i,j-1)) .and. s == sign(1.0, d2ac(i,j+1)) .and. &
-                  s == sign(1.0, d2af(i,j))) then
+              s = sign(1.0d0, d2ac(i,j))
+              if (s == sign(1.0d0, d2ac(i,j-1)) .and. s == sign(1.0d0, d2ac(i,j+1)) .and. &
+                  s == sign(1.0d0, d2af(i,j))) then
                  ! MC Eq. 26
                  d2a_lim = s*min(abs(d2af(i,j)), C2*abs(d2ac(i,j-1)), &
                                  C2*abs(d2ac(i,j)), C2*abs(d2ac(i,j+1)))
@@ -176,7 +189,7 @@ subroutine limit(a, qx, qy, ng, idir, &
               else
                  ! MC Eq. 27
                  rho = d2a_lim/d2af(i,j)
-              enddo
+              endif
 
               if (rho < 1.0d0 - 1.d-12) then
                  ! we may need to limit -- these quantities are at cell-centers
@@ -214,3 +227,5 @@ subroutine limit(a, qx, qy, ng, idir, &
      enddo
 
   endif
+
+end subroutine limit
