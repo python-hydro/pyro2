@@ -1,65 +1,21 @@
 """
-Implementation of the Colella 2nd order unsplit Godunov scheme.  This
-is a 2-dimensional implementation only.  We assume that the grid is
-uniform, but it is relatively straightforward to relax this
-assumption.
-
-There are several different options for this solver (they are all
-discussed in the Colella paper).
-
-  limiter          = 0 to use no limiting
-                   = 1 to use the 2nd order MC limiter
-                   = 2 to use the 4th order MC limiter
-
-  riemann          = HLLC to use the HLLC solver
-                   = CGF to use the Colella, Glaz, and Ferguson solver
-
-  use_flattening   = 1 to use the multidimensional flattening
-                     algorithm at shocks
-
-  delta, z0, z1      these are the flattening parameters.  The default
-                     are the values listed in Colella 1990.
-
-   j+3/2--+---------+---------+---------+
-          |         |         |         |
-     j+1 _|         |         |         |
-          |         |         |         |
-          |         |         |         |
-   j+1/2--+---------XXXXXXXXXXX---------+
-          |         X         X         |
-       j _|         X         X         |
-          |         X         X         |
-          |         X         X         |
-   j-1/2--+---------XXXXXXXXXXX---------+
-          |         |         |         |
-     j-1 _|         |         |         |
-          |         |         |         |
-          |         |         |         |
-   j-3/2--+---------+---------+---------+
-          |    |    |    |    |    |    |
-              i-1        i        i+1
-        i-3/2     i-1/2     i+1/2     i+3/2
+This is a 2nd-order PLM method for a method-of-lines integration
+(i.e., no characteristic tracing).
 
 We wish to solve
 
   U_t + F^x_x + F^y_y = H
 
-we want U_{i+1/2}^{n+1/2} -- the interface values that are input to
+we want U_{i+1/2} -- the interface values that are input to
 the Riemann problem through the faces for each zone.
 
-Taylor expanding yields in space only
+Taylor expanding *in space only* yields
 
                              dU
   U          = U   + 0.5 dx  --
    i+1/2,j,L    i,j          dx
 
 
-Updating U_{i,j}:
-
-  -- We want to find the state to the left and right (or top and
-     bottom) of each interface, ex. U_{i+1/2,j,[lr]}^{n+1/2}, and use
-     them to solve a Riemann problem across each of the four
-     interfaces.
 """
 
 import compressible.interface_f as interface_f
