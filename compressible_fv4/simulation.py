@@ -3,8 +3,8 @@ from __future__ import print_function
 import numpy as np
 
 import mesh.integration as integration
-import compressible
-import compressible_rk.fluxes as flx
+import compressible_rk
+import compressible_fv4.fluxes as flx
 
 class Simulation(compressible_rk.Simulation):
 

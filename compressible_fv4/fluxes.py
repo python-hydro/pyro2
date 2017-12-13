@@ -1,5 +1,7 @@
 # this is the 4th-order McCorquodale and Colella method
 
+import numpy as np
+
 import compressible.interface_f as interface_f
 import compressible as comp
 import mesh.reconstruction as reconstruction
@@ -10,15 +12,15 @@ from util import msg
 def fluxes(myd, rp, ivars, solid, tc):
 
     # get the cell-average data
-    U_avg = myda.data
+    U_avg = myd.data
 
     # convert U from cell-centers to cell averages
     U_cc = np.zeros_like(U_avg)
 
-    U_avg[:,:,ivars.idens] = my.data.to_centers("density")
-    U_avg[:,:,ivars.ixmom] = my.data.to_centers("x-momentum")
-    U_avg[:,:,ivars.iymom] = my.data.to_centers("y-momentum")
-    U_avg[:,:,ivars.iener] = my.data.to_centers("energy")
+    U_avg[:,:,ivars.idens] = myd.data.to_centers("density")
+    U_avg[:,:,ivars.ixmom] = myd.data.to_centers("x-momentum")
+    U_avg[:,:,ivars.iymom] = myd.data.to_centers("y-momentum")
+    U_avg[:,:,ivars.iener] = myd.data.to_centers("energy")
 
     # compute the primitive variables of both the cell-center and averages
     q_avg = cons_to_prim(U_avg, gamma, ivars, myd.grid)
@@ -41,7 +43,7 @@ def fluxes(myd, rp, ivars, solid, tc):
         # solve the Riemann problem using the average face values
         q_int_avg = riemann_prim(idir, myg.qx. myg.qy, myg.ng, 
                                  ivars.nvar, ivars.irho, ivars.iu, ivars.iv, ivars.ip,
-                                 gamma, q_l, q_r))
+                                 gamma, q_l, q_r)
 
         # calculate the face-centered W
         for n in q_int_avg.shape[-1]:
@@ -51,6 +53,6 @@ def fluxes(myd, rp, ivars, solid, tc):
         F_fc = F_cons(q_int_fc)
         F_avg = F_cons(q_int_avg)
 
-        F_x.v() = F_fc.v() + 1.0/24.0 * (F_avg.ip(1) - F_avg.v() + F_avg.ip(-1))
+        F_x.v()[:,:] = F_fc.v() + 1.0/24.0 * (F_avg.ip(1) - F_avg.v() + F_avg.ip(-1))
 
     return F_x, F_y
