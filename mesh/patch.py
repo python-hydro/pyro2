@@ -335,8 +335,10 @@ class CellCenterData2d(object):
         if self.initialized == 1:
             msg.fail("ERROR: grid already initialized")
 
-        self.data = np.zeros((self.grid.qx, self.grid.qy, self.nvar),
-                                dtype=self.dtype)
+        _tmp = np.zeros((self.grid.qx, self.grid.qy, self.nvar),
+                        dtype=self.dtype)
+        self.data = ai.ArrayIndexer(_tmp, grid=self.grid)
+
         self.initialized = 1
 
 
