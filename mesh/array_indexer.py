@@ -87,6 +87,7 @@ class ArrayIndexer(np.ndarray):
             (self.jp(-1, buf=buf) - 2*self.v(buf=buf) + self.jp(1, buf=buf))/self.grid.dy
         return l
 
+
     def norm(self, n=0):
         """
         find the norm of the quantity (index n) defined on the same grid,

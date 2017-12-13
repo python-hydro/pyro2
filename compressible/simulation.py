@@ -104,7 +104,7 @@ class Simulation(NullSimulation):
         the initial conditions for the chosen problem.
         """
         my_grid = grid_setup(self.rp, ng=4)
-        my_data = patch.CellCenterData2d(my_grid)
+        my_data = self.data_class(my_grid)
 
         # define solver specific boundary condition routines
         bnd.define_bc("hse", BC.user, is_solid=False)
@@ -138,7 +138,7 @@ class Simulation(NullSimulation):
 
         # some auxillary data that we'll need to fill GC in, but isn't
         # really part of the main solution
-        aux_data = patch.CellCenterData2d(my_grid)
+        aux_data = self.data_class(my_grid)
         aux_data.register_var("ymom_src", bc_yodd)
         aux_data.register_var("E_src", bc)
         aux_data.create()

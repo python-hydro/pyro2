@@ -3,10 +3,15 @@ from __future__ import print_function
 import numpy as np
 
 import mesh.integration as integration
+import mesh.fv as fv
 import compressible_rk
 import compressible_fv4.fluxes as flx
 
 class Simulation(compressible_rk.Simulation):
+
+    def __init__(self, solver_name, problem_name, rp, timers=None):
+        super().__init__(solver_name, problem_name, rp, timers=timers, data_class=fv.FV2d)
+
 
     def substep(self, myd):
         """

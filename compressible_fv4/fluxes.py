@@ -17,10 +17,10 @@ def fluxes(myd, rp, ivars, solid, tc):
     # convert U from cell-centers to cell averages
     U_cc = np.zeros_like(U_avg)
 
-    U_avg[:,:,ivars.idens] = myd.data.to_centers("density")
-    U_avg[:,:,ivars.ixmom] = myd.data.to_centers("x-momentum")
-    U_avg[:,:,ivars.iymom] = myd.data.to_centers("y-momentum")
-    U_avg[:,:,ivars.iener] = myd.data.to_centers("energy")
+    U_avg[:,:,ivars.idens] = myd.to_centers("density")
+    U_avg[:,:,ivars.ixmom] = myd.to_centers("x-momentum")
+    U_avg[:,:,ivars.iymom] = myd.to_centers("y-momentum")
+    U_avg[:,:,ivars.iener] = myd.to_centers("energy")
 
     # compute the primitive variables of both the cell-center and averages
     q_avg = cons_to_prim(U_avg, gamma, ivars, myd.grid)

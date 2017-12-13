@@ -178,6 +178,7 @@ def parse_and_run():
                      "advection_weno",
                      "compressible",
                      "compressible_rk",
+                     "compressible_fv4",
                      "compressible_react",
                      "diffusion",
                      "incompressible",

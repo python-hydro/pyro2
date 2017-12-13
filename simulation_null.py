@@ -45,7 +45,7 @@ def bc_setup(rp):
 
 class NullSimulation(object):
 
-    def __init__(self, solver_name, problem_name, rp, timers=None):
+    def __init__(self, solver_name, problem_name, rp, timers=None, data_class=patch.CellCenterData2d):
         """
         Initialize the Simulation object
 
@@ -63,6 +63,8 @@ class NullSimulation(object):
         self.n = 0
         self.dt = -1.e33
         self.old_dt = -1.e33
+
+        self.data_class = data_class
 
         try: self.tmax = rp.get_param("driver.tmax")
         except:
