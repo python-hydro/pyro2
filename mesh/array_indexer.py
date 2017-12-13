@@ -81,10 +81,10 @@ class ArrayIndexer(np.ndarray):
                                    self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s,n])
 
 
-    def lap(self):
+    def lap(self, buf=0):
         """return the 5-point Laplacian"""
-        l = (self.ip(-1) - 2*self.v() + self.ip(1))/self.grid.dx + \
-            (self.jp(-1) - 2*self.v() + self.jp(1))/self.grid.dy
+        l = (self.ip(-1, buf=buf) - 2*self.v(buf=buf) + self.ip(1, buf=buf))/self.grid.dx + \
+            (self.jp(-1, buf=buf) - 2*self.v(buf=buf) + self.jp(1, buf=buf))/self.grid.dy
         return l
 
     def norm(self, n=0):
