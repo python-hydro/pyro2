@@ -11,6 +11,10 @@ from util import msg
 
 def fluxes(myd, rp, ivars, solid, tc):
 
+    myg = myd.grid
+
+    gamma = rp.get_param("eos.gamma")
+
     # get the cell-average data
     U_avg = myd.data
 
@@ -23,11 +27,13 @@ def fluxes(myd, rp, ivars, solid, tc):
     U_avg[:,:,ivars.iener] = myd.to_centers("energy")
 
     # compute the primitive variables of both the cell-center and averages
-    q_avg = cons_to_prim(U_avg, gamma, ivars, myd.grid)
-    q_cc = cons_to_prim(U_cc, gamma. ivars, myd.grid)
+    q_avg = comp.cons_to_prim(U_avg, gamma, ivars, myd.grid)
+    q_cc = comp.cons_to_prim(U_cc, gamma, ivars, myd.grid)
 
     # compute the 4th-order approximation to the cell-average primitive state
-    q_fourth = q_cc + myg.dx**2/24.0 * q_avg.lap(buf=3)
+    q_fourth = myg.scratch_array(nvar=ivars.nq)
+    for n in range(ivars.nq):
+        q_fourth.v(n=n, buf=3)[:,:] = q_cc.v(n=n, buf=3) + myg.dx**2/24.0 * q_avg.lap(n=n, buf=3)
 
     fluxes = []
 
@@ -37,7 +43,7 @@ def fluxes(myd, rp, ivars, solid, tc):
         q_l = np.zeros_like(q_avg)
         q_r = np.zeros_like(q_avg)
 
-        for n in q_avg.shape[-1]:
+        for n in range(ivars.nq):
             q_l[:,:,n], q_r[:,:,n] = interface_f.states(q_avg[:,:,n], myg.qx, myg.qy, myg.ng, idir)
 
         # solve the Riemann problem using the average face values
@@ -46,7 +52,7 @@ def fluxes(myd, rp, ivars, solid, tc):
                                  gamma, q_l, q_r)
 
         # calculate the face-centered W
-        for n in q_int_avg.shape[-1]:
+        for n in range(ivars.nq):
             q_int_fc[:,:,n] = q_int_avg[:,:,n] - myg.dx**2/24.0 * q_int_avg.lap(buf=myg.ng-1)
 
         # compute the final fluxes
