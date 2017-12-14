@@ -49,10 +49,10 @@ def fluxes(myd, rp, ivars, solid, tc):
     # convert U from cell-centers to cell averages
     U_cc = np.zeros_like(U_avg)
 
-    U_avg[:,:,ivars.idens] = myd.to_centers("density")
-    U_avg[:,:,ivars.ixmom] = myd.to_centers("x-momentum")
-    U_avg[:,:,ivars.iymom] = myd.to_centers("y-momentum")
-    U_avg[:,:,ivars.iener] = myd.to_centers("energy")
+    U_cc[:,:,ivars.idens] = myd.to_centers("density")
+    U_cc[:,:,ivars.ixmom] = myd.to_centers("x-momentum")
+    U_cc[:,:,ivars.iymom] = myd.to_centers("y-momentum")
+    U_cc[:,:,ivars.iener] = myd.to_centers("energy")
 
     # compute the primitive variables of both the cell-center and averages
     q_avg = comp.cons_to_prim(U_avg, gamma, ivars, myd.grid)
@@ -61,8 +61,6 @@ def fluxes(myd, rp, ivars, solid, tc):
     # compute the 4th-order approximation to the cell-average primitive state
     q_fourth = myg.scratch_array(nvar=ivars.nq)
     for n in range(ivars.nq):
-        print(q_cc[:,:,n].min(), q_cc[:,:,n].max())
-        print(q_avg[:,:,n].min(), q_avg[:,:,n].max())
         q_fourth.v(n=n, buf=3)[:,:] = q_cc.v(n=n, buf=3) + myg.dx**2/24.0 * q_avg.lap(n=n, buf=3) 
 
     fluxes = []
