@@ -2,8 +2,9 @@
 
 import numpy as np
 
-import compressible.interface_f as interface_f
+import advection_fv4.interface_f as interface_f
 import compressible as comp
+import compressible.interface_f as cf
 import mesh.reconstruction as reconstruction
 import mesh.array_indexer as ai
 
@@ -47,18 +48,35 @@ def fluxes(myd, rp, ivars, solid, tc):
             q_l[:,:,n], q_r[:,:,n] = interface_f.states(q_avg[:,:,n], myg.qx, myg.qy, myg.ng, idir)
 
         # solve the Riemann problem using the average face values
-        q_int_avg = riemann_prim(idir, myg.qx. myg.qy, myg.ng, 
-                                 ivars.nvar, ivars.irho, ivars.iu, ivars.iv, ivars.ip,
-                                 gamma, q_l, q_r)
+        if idir == 1:
+            solid_lo = solid.xl
+            solid_hi = solid.xr
+        else:
+            solid_lo = solid.yl
+            solid_hi = solid.yr
+
+        _q = cf.riemann_prim(idir, myg.qx, myg.qy, myg.ng, 
+                             ivars.nvar, ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix, ivars.naux,
+                             solid_lo, solid_hi, 
+                             gamma, q_l, q_r)
+
+        q_int_avg = ai.ArrayIndexer(_q, grid=myg)
 
         # calculate the face-centered W
+        q_int_fc = myg.scratch_array(nvar=ivars.nq)
+
         for n in range(ivars.nq):
-            q_int_fc[:,:,n] = q_int_avg[:,:,n] - myg.dx**2/24.0 * q_int_avg.lap(buf=myg.ng-1)
+            q_int_fc.v(n=n, buf=myg.ng-1)[:,:] = q_int_avg.v(n=n, buf=myg.ng-1) - myg.dx**2/24.0 * q_int_avg.lap(n=n, buf=myg.ng-1)
 
         # compute the final fluxes
         F_fc = F_cons(q_int_fc)
         F_avg = F_cons(q_int_avg)
 
-        F_x.v()[:,:] = F_fc.v() + 1.0/24.0 * (F_avg.ip(1) - F_avg.v() + F_avg.ip(-1))
+        if idir == 1:
+            F_x = myg.scratch_array(nvar=ivars.nvar)
+            F_x.v()[:,:] = F_fc.v() + 1.0/24.0 * (F_avg.jp(1) - F_avg.v() + F_avg.jp(-1))
+        else:
+            F_y = myg.scratch_array(nvar=ivars.nvar)
+            F_y.v()[:,:] = F_fc.v() + 1.0/24.0 * (F_avg.ip(1) - F_avg.v() + F_avg.ip(-1))
 
     return F_x, F_y
