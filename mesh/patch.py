@@ -838,7 +838,10 @@ def cell_center_data_clone(old):
     if not isinstance(old, CellCenterData2d):
         msg.fail("Can't clone object")
 
-    new = CellCenterData2d(old.grid, dtype=old.dtype)
+    # we may be a type derived from CellCenterData2d, so use the same
+    # type
+    myt = type(old)
+    new = myt(old.grid, dtype=old.dtype)
 
     for n in range(old.nvar):
         new.register_var(old.names[n], old.BCs[old.names[n]])
