@@ -61,6 +61,8 @@ def fluxes(myd, rp, ivars, solid, tc):
     # compute the 4th-order approximation to the cell-average primitive state
     q_fourth = myg.scratch_array(nvar=ivars.nq)
     for n in range(ivars.nq):
+        print(q_cc[:,:,n].min(), q_cc[:,:,n].max())
+        print(q_avg[:,:,n].min(), q_avg[:,:,n].max())
         q_fourth.v(n=n, buf=3)[:,:] = q_cc.v(n=n, buf=3) + myg.dx**2/24.0 * q_avg.lap(n=n, buf=3) 
 
     fluxes = []
@@ -68,11 +70,11 @@ def fluxes(myd, rp, ivars, solid, tc):
     for idir in [1, 2]:
 
         # interpolate <W> to faces (with limiting)
-        q_l = np.zeros_like(q_avg)
-        q_r = np.zeros_like(q_avg)
+        q_l = np.zeros_like(q_fourth)
+        q_r = np.zeros_like(q_fourth)
 
         for n in range(ivars.nq):
-            q_l[:,:,n], q_r[:,:,n] = interface_f.states(q_avg[:,:,n], myg.qx, myg.qy, myg.ng, idir)
+            q_l[:,:,n], q_r[:,:,n] = interface_f.states(q_fourth[:,:,n], myg.qx, myg.qy, myg.ng, idir)
 
         # solve the Riemann problem using the average face values
         if idir == 1:
@@ -94,10 +96,10 @@ def fluxes(myd, rp, ivars, solid, tc):
 
         if idir == 1:
             for n in range(ivars.nq):
-                q_int_fc.v(n=n, buf=myg.ng-1)[:,:] = q_int_avg.v(n=n, buf=myg.ng-1) - 1.0/24.0 * (q_int_avg.jp(1, buf=myg.ng-1) - 2.0*q_int_avg.v(buf=myg.ng-1) + q_int_avg.jp(-1, buf=myg.ng-1))
+                q_int_fc.v(n=n, buf=myg.ng-1)[:,:] = q_int_avg.v(n=n, buf=myg.ng-1) - 1.0/24.0 * (q_int_avg.jp(1, buf=myg.ng-1) - 2*q_int_avg.v(buf=myg.ng-1) + q_int_avg.jp(-1, buf=myg.ng-1))
         else:
             for n in range(ivars.nq):
-                q_int_fc.v(n=n, buf=myg.ng-1)[:,:] = q_int_avg.v(n=n, buf=myg.ng-1) - 1.0/24.0 * (q_int_avg.ip(1, buf=myg.ng-1) - 2.0*q_int_avg.v(buf=myg.ng-1) + q_int_avg.ip(-1, buf=myg.ng-1))
+                q_int_fc.v(n=n, buf=myg.ng-1)[:,:] = q_int_avg.v(n=n, buf=myg.ng-1) - 1.0/24.0 * (q_int_avg.ip(1, buf=myg.ng-1) - 2*q_int_avg.v(buf=myg.ng-1) + q_int_avg.ip(-1, buf=myg.ng-1))
 
         # compute the final fluxes
         F_fc = flux_cons(ivars, idir, gamma, q_int_fc)
@@ -106,10 +108,10 @@ def fluxes(myd, rp, ivars, solid, tc):
         if idir == 1:
             F_x = myg.scratch_array(nvar=ivars.nvar)
             for n in range(ivars.nvar):
-                F_x.v(n=n, buf=1)[:,:] = F_fc.v(n=n, buf=1) + 1.0/24.0 * (F_avg.jp(1, n=n, buf=1) - F_avg.v(n=n, buf=1) + F_avg.jp(-1, n=n, buf=1))
+                F_x.v(n=n, buf=1)[:,:] = F_fc.v(n=n, buf=1) + 1.0/24.0 * (F_avg.jp(1, n=n, buf=1) - 2*F_avg.v(n=n, buf=1) + F_avg.jp(-1, n=n, buf=1))
         else:
             F_y = myg.scratch_array(nvar=ivars.nvar)
             for n in range(ivars.nvar):
-                F_y.v(n=n, buf=1)[:,:] = F_fc.v(n=n, buf=1) + 1.0/24.0 * (F_avg.ip(1, n=n, buf=1) - F_avg.v(n=n, buf=1) + F_avg.ip(-1, n=n, buf=1))
+                F_y.v(n=n, buf=1)[:,:] = F_fc.v(n=n, buf=1) + 1.0/24.0 * (F_avg.ip(1, n=n, buf=1) - 2*F_avg.v(n=n, buf=1) + F_avg.ip(-1, n=n, buf=1))
 
     return F_x, F_y
