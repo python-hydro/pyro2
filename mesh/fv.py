@@ -11,9 +11,9 @@ class FV2d(patch.CellCenterData2d):
         """ convert variable name from an average to cell-centers """
 
         a = self.get_var(name)
-        c = a.grid.scratch_array()
-        ng = a.grid.ng
-        c.v(buf=ng-1)[:,:] = a.v(buf=ng-1) - a.grid.dx**2*a.lap(buf=ng-1)/24.0
+        c = self.grid.scratch_array()
+        ng = self.grid.ng
+        c.v(buf=ng-1)[:,:] = a.v(buf=ng-1) - self.grid.dx**2*a.lap(buf=ng-1)/24.0
         return c
 
 
@@ -23,6 +23,6 @@ class FV2d(patch.CellCenterData2d):
 
         """
         a_stored = self.get_var(name)
-        a_stored.v()[:,:] = c.v() + a.grid.dx**2*a.lap()/24.0
+        a_stored.v()[:,:] = c.v() + self.grid.dx**2*a.lap()/24.0
 
 

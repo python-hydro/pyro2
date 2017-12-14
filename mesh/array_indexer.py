@@ -83,8 +83,8 @@ class ArrayIndexer(np.ndarray):
 
     def lap(self, buf=0):
         """return the 5-point Laplacian"""
-        l = (self.ip(-1, buf=buf) - 2*self.v(buf=buf) + self.ip(1, buf=buf))/self.grid.dx + \
-            (self.jp(-1, buf=buf) - 2*self.v(buf=buf) + self.jp(1, buf=buf))/self.grid.dy
+        l = (self.ip(-1, buf=buf) - 2*self.v(buf=buf) + self.ip(1, buf=buf))/self.g.dx + \
+            (self.jp(-1, buf=buf) - 2*self.v(buf=buf) + self.jp(1, buf=buf))/self.g.dy
         return l
 
 
