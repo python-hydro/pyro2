@@ -94,10 +94,10 @@ def fluxes(myd, rp, ivars, solid, tc):
 
         if idir == 1:
             for n in range(ivars.nq):
-                q_int_fc.v(n=n, buf=myg.ng-1)[:,:] = q_int_avg.v(n=n, buf=myg.ng-1) - 1.0/24.0 * (q_int_avg.jp(1, buf=myg.ng-1) - 2*q_int_avg.v(buf=myg.ng-1) + q_int_avg.jp(-1, buf=myg.ng-1))
+                q_int_fc.v(n=n, buf=myg.ng-1)[:,:] = q_int_avg.v(n=n, buf=myg.ng-1) - 1.0/24.0 * (q_int_avg.jp(1, n=n, buf=myg.ng-1) - 2*q_int_avg.v(n=n, buf=myg.ng-1) + q_int_avg.jp(-1, n=n, buf=myg.ng-1))
         else:
             for n in range(ivars.nq):
-                q_int_fc.v(n=n, buf=myg.ng-1)[:,:] = q_int_avg.v(n=n, buf=myg.ng-1) - 1.0/24.0 * (q_int_avg.ip(1, buf=myg.ng-1) - 2*q_int_avg.v(buf=myg.ng-1) + q_int_avg.ip(-1, buf=myg.ng-1))
+                q_int_fc.v(n=n, buf=myg.ng-1)[:,:] = q_int_avg.v(n=n, buf=myg.ng-1) - 1.0/24.0 * (q_int_avg.ip(1, n=n, buf=myg.ng-1) - 2*q_int_avg.v(n=n, buf=myg.ng-1) + q_int_avg.ip(-1, n=n, buf=myg.ng-1))
 
         # compute the final fluxes
         F_fc = flux_cons(ivars, idir, gamma, q_int_fc)
