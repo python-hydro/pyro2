@@ -10,6 +10,33 @@ import mesh.array_indexer as ai
 
 from util import msg
 
+def flux_cons(ivars, idir, gamma, q):
+
+    flux = q.g.scratch_array(nvar=ivars.nvar)
+
+    if idir == 1:
+        un = q[:,:,ivars.iu]
+        ut = q[:,:,ivars.iv]
+    else:
+        ut = q[:,:,ivars.iu]
+        un = q[:,:,ivars.iv]
+
+    flux[:,:,ivars.idens] = q[:,:,ivars.irho]*un
+
+    if idir == 1:
+        flux[:,:,ivars.ixmom] = q[:,:,ivars.irho]*q[:,:,ivars.iu]**2 + q[:,:,ivars.ip]
+        flux[:,:,ivars.iymom] = q[:,:,ivars.irho]*q[:,:,ivars.iv]*q[:,:,ivars.iu]
+    else:
+        flux[:,:,ivars.ixmom] = q[:,:,ivars.irho]*q[:,:,ivars.iu]*q[:,:,ivars.iv]
+        flux[:,:,ivars.iymom] = q[:,:,ivars.irho]*q[:,:,ivars.iv]**2 + q[:,:,ivars.ip]
+
+    flux[:,:,ivars.iener] = (q[:,:,ivars.ip]/(gamma - 1.0) + 0.5*q[:,:,ivars.irho]*(q[:,:,ivars.iu]**2 + q[:,:,ivars.iv]**2) + q[:,:,ivars.ip])*un
+
+    if ivars.naux > 0:
+        flux[:,:,ivars.irhox:ivars.irhox-1+ivars.naux] = q[:,:,ivars.irho]*q[:,:,ivars.ix:ivars.ix-1+ivars.naux]
+
+    return flux
+
 def fluxes(myd, rp, ivars, solid, tc):
 
     myg = myd.grid
@@ -34,7 +61,7 @@ def fluxes(myd, rp, ivars, solid, tc):
     # compute the 4th-order approximation to the cell-average primitive state
     q_fourth = myg.scratch_array(nvar=ivars.nq)
     for n in range(ivars.nq):
-        q_fourth.v(n=n, buf=3)[:,:] = q_cc.v(n=n, buf=3) + myg.dx**2/24.0 * q_avg.lap(n=n, buf=3)
+        q_fourth.v(n=n, buf=3)[:,:] = q_cc.v(n=n, buf=3) + myg.dx**2/24.0 * q_avg.lap(n=n, buf=3) 
 
     fluxes = []
 
@@ -69,8 +96,8 @@ def fluxes(myd, rp, ivars, solid, tc):
             q_int_fc.v(n=n, buf=myg.ng-1)[:,:] = q_int_avg.v(n=n, buf=myg.ng-1) - myg.dx**2/24.0 * q_int_avg.lap(n=n, buf=myg.ng-1)
 
         # compute the final fluxes
-        F_fc = F_cons(q_int_fc)
-        F_avg = F_cons(q_int_avg)
+        F_fc = flux_cons(ivars, idir, gamma, q_int_fc)
+        F_avg = flux_cons(ivars, idir, gamma, q_int_avg)
 
         if idir == 1:
             F_x = myg.scratch_array(nvar=ivars.nvar)
