@@ -33,7 +33,7 @@ def flux_cons(ivars, idir, gamma, q):
     flux[:,:,ivars.iener] = (q[:,:,ivars.ip]/(gamma - 1.0) + 0.5*q[:,:,ivars.irho]*(q[:,:,ivars.iu]**2 + q[:,:,ivars.iv]**2) + q[:,:,ivars.ip])*un
 
     if ivars.naux > 0:
-        flux[:,:,ivars.irhox:ivars.irhox-1+ivars.naux] = q[:,:,ivars.irho]*q[:,:,ivars.ix:ivars.ix-1+ivars.naux]
+        flux[:,:,ivars.irhox:ivars.irhox-1+ivars.naux] = q[:,:,ivars.irho]*q[:,:,ivars.ix:ivars.ix-1+ivars.naux]*un
 
     return flux
 
@@ -101,9 +101,11 @@ def fluxes(myd, rp, ivars, solid, tc):
 
         if idir == 1:
             F_x = myg.scratch_array(nvar=ivars.nvar)
-            F_x.v()[:,:] = F_fc.v() + 1.0/24.0 * (F_avg.jp(1) - F_avg.v() + F_avg.jp(-1))
+            for n in range(ivars.nvar):
+                F_x.v(n=n, buf=1)[:,:] = F_fc.v(n=n, buf=1) + 1.0/24.0 * (F_avg.jp(1, n=n, buf=1) - F_avg.v(n=n, buf=1) + F_avg.jp(-1, n=n, buf=1))
         else:
             F_y = myg.scratch_array(nvar=ivars.nvar)
-            F_y.v()[:,:] = F_fc.v() + 1.0/24.0 * (F_avg.ip(1) - F_avg.v() + F_avg.ip(-1))
+            for n in range(ivars.nvar):
+                F_y.v(n=n, buf=1)[:,:] = F_fc.v(n=n, buf=1) + 1.0/24.0 * (F_avg.ip(1, n=n, buf=1) - F_avg.v(n=n, buf=1) + F_avg.ip(-1, n=n, buf=1))
 
     return F_x, F_y
