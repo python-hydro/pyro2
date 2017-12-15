@@ -128,4 +128,5 @@ class RKIntegrator(object):
             
         return ytmp
 
-        
+    def __str__(self):
+        return "integration method: {}; number of stages: {}".format(self.method, self.nstages())
