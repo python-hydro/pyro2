@@ -112,7 +112,7 @@ class RKIntegrator(object):
             for n in range(ytmp.nvar):
                 var = ytmp.get_var_by_index(n)
                 for s in range(istage):
-                    var.v()[:,:] += self.dt*a[self.method][istage,s]*self.k[s].v(n=n)[:,:]
+                    var.v(n=n)[:,:] += self.dt*a[self.method][istage,s]*self.k[s].v(n=n)[:,:]
 
             ytmp.t = self.t + c[self.method][istage]*self.dt
 
@@ -124,7 +124,7 @@ class RKIntegrator(object):
         for n in range(ytmp.nvar):
             var = ytmp.get_var_by_index(n)
             for s in range(self.nstages()):
-                var.v()[:,:] += self.dt*b[self.method][s]*self.k[s].v(n=n)[:,:]
+                var.v(n=n)[:,:] += self.dt*b[self.method][s]*self.k[s].v(n=n)[:,:]
             
         return ytmp
 
