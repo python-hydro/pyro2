@@ -140,7 +140,7 @@ class ArrayIndexer(np.ndarray):
         return self.is_symmetric(nodal=nodal, tol=tol, asymmetric=True)
 
 
-    def pretty_print(self, fmt=None):
+    def pretty_print(self, n=0, fmt=None):
         """
         Print out a small dataset to the screen with the ghost cells
         a different color, to make things stand out
@@ -165,10 +165,15 @@ class ArrayIndexer(np.ndarray):
                 else:
                     gc = 0
 
-                if gc:
-                    print("\033[31m" + fmt % (self[i,j]) + "\033[0m", end="")
+                if self.c == 2:
+                    val = self[i,j]
                 else:
-                    print(fmt % (self[i,j]), end="")
+                    val = self[i,j,n]
+
+                if gc:
+                    print("\033[31m" + fmt % (val) + "\033[0m", end="")
+                else:
+                    print(fmt % (val), end="")
 
             print(" ")
 
