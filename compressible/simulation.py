@@ -98,12 +98,12 @@ def prim_to_cons(q, gamma, ivars, myg):
 
 class Simulation(NullSimulation):
 
-    def initialize(self, extra_vars=None):
+    def initialize(self, extra_vars=None, ng=4):
         """
         Initialize the grid and variables for compressible flow and set
         the initial conditions for the chosen problem.
         """
-        my_grid = grid_setup(self.rp, ng=4)
+        my_grid = grid_setup(self.rp, ng=ng)
         my_data = self.data_class(my_grid)
 
         # define solver specific boundary condition routines
