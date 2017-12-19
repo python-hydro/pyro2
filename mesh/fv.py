@@ -13,6 +13,7 @@ class FV2d(patch.CellCenterData2d):
         a = self.get_var(name)
         c = self.grid.scratch_array()
         ng = self.grid.ng
+        c[:,:] = a[:,:]
         c.v(buf=ng-1)[:,:] = a.v(buf=ng-1) - self.grid.dx**2*a.lap(buf=ng-1)/24.0
         return c
 
