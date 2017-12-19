@@ -119,6 +119,11 @@ def doit(solver_name, problem_name, param_file,
 
             tm_vis.end()
 
+    # final output
+    if verbose > 0: msg.warning("outputting...")
+    basename = rp.get_param("io.basename")
+    sim.write("{}{:04d}".format(basename, sim.n))
+
     tm_main.end()
 
 
