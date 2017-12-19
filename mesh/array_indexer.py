@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+import mesh.boundary as bnd
 import numpy as np
 
 def _buf_split(b):
@@ -138,6 +139,137 @@ class ArrayIndexer(np.ndarray):
 
         """
         return self.is_symmetric(nodal=nodal, tol=tol, asymmetric=True)
+
+
+    def fill_ghost(self, n=0, bc=None):
+        """Fill the boundary conditions.  This operates on a single component,
+        n. We do periodic, reflect-even, reflect-odd, and outflow
+
+        We need a BC object to tell us what BC type on each boundary.
+        """
+
+        # there is only a single grid, so every boundary is on
+        # a physical boundary (except if we are periodic)
+
+        # Note: we piggy-back on outflow and reflect-odd for
+        # Neumann and Dirichlet homogeneous BCs respectively, but
+        # this only works for a single ghost cell
+
+        # -x boundary
+        if bc.xlb in ["outflow", "neumann"]:
+            if bc.xl_value is None:
+                for i in range(self.g.ilo):
+                    self[i,:,n] = self[self.g.ilo,:,n]
+            else:
+                self[self.g.ilo-1,:,n] = \
+                    self[self.g.ilo,:,n] - self.g.dx*bc.xl_value[:]
+
+        elif bc.xlb == "reflect-even":
+            for i in range(self.g.ilo):
+                self[i,:,n] = self[2*self.g.ng-i-1,:,n]
+
+        elif bc.xlb in ["reflect-odd", "dirichlet"]:
+            if bc.xl_value is None:
+                for i in range(self.g.ilo):
+                    self[i,:,n] = -self[2*self.g.ng-i-1,:,n]
+            else:
+                self[self.g.ilo-1,:,n] = \
+                    2*bc.xl_value[:] - self[self.g.ilo,:,n]
+
+        elif bc.xlb == "periodic":
+            for i in range(self.g.ilo):
+                self[i,:,n] = self[self.g.ihi-self.g.ng+i+1,:,n]
+
+
+        # +x boundary
+        if bc.xrb in ["outflow", "neumann"]:
+            if bc.xr_value is None:
+                for i in range(self.g.ihi+1, self.g.nx+2*self.g.ng):
+                    self[i,:,n] = self[self.g.ihi,:,n]
+            else:
+                self[self.g.ihi+1,:,n] = \
+                    self[self.g.ihi,:,n] + self.g.dx*bc.xr_value[:]
+
+        elif bc.xrb == "reflect-even":
+            for i in range(self.g.ng):
+                i_bnd = self.g.ihi+1+i
+                i_src = self.g.ihi-i
+
+                self[i_bnd,:,n] = self[i_src,:,n]
+
+        elif bc.xrb in ["reflect-odd", "dirichlet"]:
+            if bc.xr_value is None:
+                for i in range(self.g.ng):
+                    i_bnd = self.g.ihi+1+i
+                    i_src = self.g.ihi-i
+
+                    self[i_bnd,:,n] = -self[i_src,:,n]
+            else:
+                self[self.g.ihi+1,:,n] = \
+                    2*bc.xr_value[:] - self[self.g.ihi,:,n]
+
+        elif bc.xrb == "periodic":
+            for i in range(self.g.ihi+1, 2*self.g.ng + self.g.nx):
+                self[i,:,n] = self[i-self.g.ihi-1+self.g.ng,:,n]
+
+
+        # -y boundary
+        if bc.ylb in ["outflow", "neumann"]:
+            if bc.yl_value is None:
+                for j in range(self.g.jlo):
+                    self[:,j,n] = self[:,self.g.jlo,n]
+            else:
+                self[:,self.g.jlo-1,n] = \
+                    self[:,self.g.jlo,n] - self.g.dy*bc.yl_value[:]
+
+        elif bc.ylb == "reflect-even":
+            for j in range(self.g.jlo):
+                self[:,j,n] = self[:,2*self.g.ng-j-1,n]
+
+        elif bc.ylb in ["reflect-odd", "dirichlet"]:
+            if bc.yl_value is None:
+                for j in range(self.g.jlo):
+                    self[:,j,n] = -self[:,2*self.g.ng-j-1,n]
+            else:
+                self[:,self.g.jlo-1,n] = \
+                    2*bc.yl_value[:] - self[:,self.g.jlo,n]
+
+        elif bc.ylb == "periodic":
+            for j in range(self.g.jlo):
+                self[:,j,n] = self[:,self.g.jhi-self.g.ng+j+1,n]
+
+
+        # +y boundary
+        if bc.yrb in ["outflow", "neumann"]:
+            if bc.yr_value is None:
+                for j in range(self.g.jhi+1, self.g.ny+2*self.g.ng):
+                    self[:,j,n] = self[:,self.g.jhi,n]
+            else:
+                self[:,self.g.jhi+1,n] = \
+                    self[:,self.g.jhi,n] + self.g.dy*bc.yr_value[:]
+
+        elif bc.yrb == "reflect-even":
+            for j in range(self.g.ng):
+                j_bnd = self.g.jhi+1+j
+                j_src = self.g.jhi-j
+
+                self[:,j_bnd,n] = self[:,j_src,n]
+
+        elif bc.yrb in ["reflect-odd", "dirichlet"]:
+            if bc.yr_value is None:
+                for j in range(self.g.ng):
+                    j_bnd = self.g.jhi+1+j
+                    j_src = self.g.jhi-j
+
+                    self[:,j_bnd,n] = -self[:,j_src,n]
+            else:
+                self[:,self.g.jhi+1,n] = \
+                    2*bc.yr_value[:] - self[:,self.g.jhi,n]
+
+        elif bc.yrb == "periodic":
+            for j in range(self.g.jhi+1, 2*self.g.ng + self.g.ny):
+                self[:,j,n] = self[:,j-self.g.jhi-1+self.g.ng,n]
+
 
 
     def pretty_print(self, n=0, fmt=None):
