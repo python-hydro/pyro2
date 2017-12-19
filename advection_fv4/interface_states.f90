@@ -57,18 +57,26 @@ subroutine states(a, qx, qy, ng, idir, &
      enddo
 
      do j = jlo, jhi
-        do i = ilo-1, ihi+2
+        do i = ilo-2, ihi+3
            ! these live on cell-centers
            dafm(i,j) = a(i,j) - a_int(i,j)
            dafp(i,j) = a_int(i+1,j) - a(i,j)
 
            ! these live on cell-centers
            d2af(i,j) = 6.0*(a_int(i,j) - 2.0*a(i,j) + a_int(i+1,j))
-           d2ac(i,j) = a(i-1,j) - 2.0*a(i,j) + a(i+1,j)
+        enddo
+     enddo
 
+     do j = jlo, jhi
+        do i = ilo-3, ihi+3
+           d2ac(i,j) = a(i-1,j) - 2.0*a(i,j) + a(i+1,j)
+        enddo
+     enddo
+
+     do j = jlo, jhi
+        do i = ilo-2, ihi+3
            ! this lives on the interface
            d3a(i,j) = d2ac(i,j) - d2ac(i-1,j)
-
         enddo
      enddo
 
@@ -148,7 +156,7 @@ subroutine states(a, qx, qy, ng, idir, &
         enddo
      enddo
 
-     do j = jlo-1, jhi+2
+     do j = jlo-2, jhi+3
         do i = ilo, ihi
            ! these live on cell-centers
            dafm(i,j) = a(i,j) - a_int(i,j)
@@ -156,11 +164,19 @@ subroutine states(a, qx, qy, ng, idir, &
 
            ! these live on cell-centers
            d2af(i,j) = 6.0*(a_int(i,j) - 2.0*a(i,j) + a_int(i,j+1))
-           d2ac(i,j) = a(i,j-1) - 2.0*a(i,j) + a(i,j+1)
+        enddo
+     enddo
 
+     do j = jlo-3, jhi+3
+        do i = ilo, ihi
+           d2ac(i,j) = a(i,j-1) - 2.0*a(i,j) + a(i,j+1)
+        enddo
+     enddo
+
+     do j = jlo-2, jhi+3
+        do i = ilo, ihi
            ! this lives on the interface
            d3a(i,j) = d2ac(i,j) - d2ac(i,j-1)
-
         enddo
      enddo
 
