@@ -44,7 +44,7 @@ subroutine states(a, qx, qy, ng, idir, &
   ! we need interface values on all faces of the domain
   if (idir == 1) then
 
-     do j = jlo, jhi
+     do j = jlo-1, jhi+1
         do i = ilo-2, ihi+3
 
            ! interpolate to the edges
@@ -56,7 +56,7 @@ subroutine states(a, qx, qy, ng, idir, &
         enddo
      enddo
 
-     do j = jlo, jhi
+     do j = jlo-1, jhi+1
         do i = ilo-2, ihi+3
            ! these live on cell-centers
            dafm(i,j) = a(i,j) - a_int(i,j)
@@ -67,13 +67,13 @@ subroutine states(a, qx, qy, ng, idir, &
         enddo
      enddo
 
-     do j = jlo, jhi
+     do j = jlo-1, jhi+1
         do i = ilo-3, ihi+3
            d2ac(i,j) = a(i-1,j) - 2.0*a(i,j) + a(i+1,j)
         enddo
      enddo
 
-     do j = jlo, jhi
+     do j = jlo-1, jhi+1
         do i = ilo-2, ihi+3
            ! this lives on the interface
            d3a(i,j) = d2ac(i,j) - d2ac(i-1,j)
@@ -82,7 +82,7 @@ subroutine states(a, qx, qy, ng, idir, &
 
      ! this is a look over cell centers, affecting
      ! i-1/2,R and i+1/2,L
-     do j = jlo, jhi
+     do j = jlo-1, jhi+1
         do i = ilo-1, ihi+1
 
            ! limit? MC Eq. 24 and 25
@@ -147,7 +147,7 @@ subroutine states(a, qx, qy, ng, idir, &
   else if (idir == 2) then
 
      do j = jlo-2, jhi+3
-        do i = ilo, ihi
+        do i = ilo-1, ihi+1
 
            ! interpolate to the edges
            a_int(i,j) = (7.0/12.0)*(a(i,j-1) + a(i,j)) - (1.0/12.0)*(a(i,j-2) + a(i,j+1))
@@ -159,7 +159,7 @@ subroutine states(a, qx, qy, ng, idir, &
      enddo
 
      do j = jlo-2, jhi+3
-        do i = ilo, ihi
+        do i = ilo-1, ihi+1
            ! these live on cell-centers
            dafm(i,j) = a(i,j) - a_int(i,j)
            dafp(i,j) = a_int(i,j+1) - a(i,j)
@@ -170,13 +170,13 @@ subroutine states(a, qx, qy, ng, idir, &
      enddo
 
      do j = jlo-3, jhi+3
-        do i = ilo, ihi
+        do i = ilo-1, ihi+1
            d2ac(i,j) = a(i,j-1) - 2.0*a(i,j) + a(i,j+1)
         enddo
      enddo
 
      do j = jlo-2, jhi+3
-        do i = ilo, ihi
+        do i = ilo-1, ihi+1
            ! this lives on the interface
            d3a(i,j) = d2ac(i,j) - d2ac(i,j-1)
         enddo
@@ -185,7 +185,7 @@ subroutine states(a, qx, qy, ng, idir, &
      ! this is a look over cell centers, affecting
      ! j-1/2,R and j+1/2,L
      do j = jlo-1, jhi+1
-        do i = ilo, ihi
+        do i = ilo-1, ihi+1
 
            ! limit? MC Eq. 24 and 25
            if (dafm(i,j) * dafp(i,j) <= 0.0 .or. &
