@@ -46,7 +46,11 @@ def read(filename):
         # requires it.
         custom_bcs = read_bcs(f)
         if custom_bcs is not None:
-            bcmod =  importlib.import_module("{}.{}".format(solver_name, "BC"))
+            if solver_name == "compressible_fv4":
+                bc_solver = "compressible"
+            else:
+                bc_solver = solver_name
+            bcmod =  importlib.import_module("{}.{}".format(bc_solver, "BC"))
             for name in custom_bcs:
                 bnd.define_bc(name, bcmod.user, is_solid=custom_bcs[name])
 
