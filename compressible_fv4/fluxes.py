@@ -63,6 +63,19 @@ def fluxes(myd, rp, ivars, solid, tc):
     for n in range(ivars.nq):
         q_fourth.v(n=n, buf=3)[:,:] = q_cc.v(n=n, buf=3) + myg.dx**2/24.0 * q_avg.lap(n=n, buf=3) 
 
+
+    # flattening -- there is a single flattening coefficient (xi) for all directions
+    use_flattening = rp.get_param("compressible.use_flattening")
+
+    if use_flattening:
+        xi_x = reconstruction.flatten(myg, q_avg, 1, ivars, rp)
+        xi_y = reconstruction.flatten(myg, q_avg, 2, ivars, rp)
+
+        xi = reconstruction.flatten_multid(myg, q_avg, xi_x, xi_y, ivars)
+    else:
+        xi = 1.0
+
+
     fluxes = []
 
     for idir in [1, 2]:
@@ -73,6 +86,16 @@ def fluxes(myd, rp, ivars, solid, tc):
 
         for n in range(ivars.nq):
             q_l[:,:,n], q_r[:,:,n] = interface_f.states(q_fourth[:,:,n], myg.qx, myg.qy, myg.ng, idir)
+
+        # apply flattening
+        for n in range(ivars.nq):
+            if idir == 1:
+                q_l.ip(1, n=n, buf=2)[:,:] = xi.v(buf=2)*q_l.ip(1, n=n, buf=2) + (1.0 - xi.v(buf=2))*q_fourth.v(n=n, buf=2)
+                q_r.v(n=n, buf=2)[:,:] = xi.v(buf=2)*q_r.v(n=n, buf=2) + (1.0 - xi.v(buf=2))*q_fourth.v(n=n, buf=2)
+            else:
+                q_l.jp(1, n=n, buf=2)[:,:] = xi.v(buf=2)*q_l.jp(1, n=n, buf=2) + (1.0 - xi.v(buf=2))*q_fourth.v(n=n, buf=2)
+                q_r.v(n=n, buf=2)[:,:] = xi.v(buf=2)*q_r.v(n=n, buf=2) + (1.0 - xi.v(buf=2))*q_fourth.v(n=n, buf=2)
+
 
         # solve the Riemann problem using the average face values
         if idir == 1:
@@ -88,6 +111,10 @@ def fluxes(myd, rp, ivars, solid, tc):
                              gamma, q_l, q_r)
 
         q_int_avg = ai.ArrayIndexer(_q, grid=myg)
+
+        
+
+        
 
         # calculate the face-centered W using the transverse Laplacian
         q_int_fc = myg.scratch_array(nvar=ivars.nq)
