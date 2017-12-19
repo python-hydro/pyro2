@@ -80,8 +80,10 @@ subroutine states(a, qx, qy, ng, idir, &
         enddo
      enddo
 
+     ! this is a look over cell centers, affecting
+     ! i-1/2,R and i+1/2,L
      do j = jlo, jhi
-        do i = ilo, ihi+1
+        do i = ilo-1, ihi+1
 
            ! limit? MC Eq. 24 and 25
            if (dafm(i,j) * dafp(i,j) <= 0.0 .or. &
@@ -180,7 +182,9 @@ subroutine states(a, qx, qy, ng, idir, &
         enddo
      enddo
 
-     do j = jlo, jhi+1
+     ! this is a look over cell centers, affecting
+     ! j-1/2,R and j+1/2,L
+     do j = jlo-1, jhi+1
         do i = ilo, ihi
 
            ! limit? MC Eq. 24 and 25
