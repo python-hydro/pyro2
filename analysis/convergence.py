@@ -16,9 +16,10 @@ def compare(fine, coarse):
     dens = coarse.get_var("density")
     dens_avg = fine.restrict("density", N=2)
 
-    e = dens.v() - dens_avg.v()
+    e = coarse.grid.scratch_array()
+    e.v()[:,:] = dens.v() - dens_avg.v()
 
-    return np.abs(e).max()
+    return float(np.abs(e).max()), e.norm()
 
 if __name__ == "__main__":
 
@@ -34,4 +35,4 @@ if __name__ == "__main__":
 
     result = compare(ff.cc_data, cc.cc_data)
 
-    print("inf norm of density: ", result)
+    print("inf/L2 norm of density: ", result)
