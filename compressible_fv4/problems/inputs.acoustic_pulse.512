@@ -2,14 +2,15 @@
 max_steps = 5000
 tmax = 0.24
 # 0.192 * dx
-fix_dt = 1.5e-3
+fix_dt = 3.75e-4
+
 
 [compressible]
 cvisc = 0.1
 
 
 [io]
-basename = acoustic_pulse_
+basename = acoustic_pulse_512_
 
 
 [eos]
@@ -17,8 +18,8 @@ gamma = 1.4
 
 
 [mesh]
-nx = 128
-ny = 128
+nx = 512
+ny = 512
 xmax = 1.0
 ymax = 1.0
 
