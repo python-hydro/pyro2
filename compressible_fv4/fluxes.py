@@ -55,13 +55,13 @@ def fluxes(myd, rp, ivars, solid, tc):
     U_cc[:,:,ivars.iener] = myd.to_centers("energy")
 
     # compute the primitive variables of both the cell-center and averages
-    q_avg = comp.cons_to_prim(U_avg, gamma, ivars, myd.grid)
+    q_bar = comp.cons_to_prim(U_avg, gamma, ivars, myd.grid)
     q_cc = comp.cons_to_prim(U_cc, gamma, ivars, myd.grid)
 
     # compute the 4th-order approximation to the cell-average primitive state
-    q_fourth = myg.scratch_array(nvar=ivars.nq)
+    q_avg = myg.scratch_array(nvar=ivars.nq)
     for n in range(ivars.nq):
-        q_fourth.v(n=n, buf=3)[:,:] = q_cc.v(n=n, buf=3) + myg.dx**2/24.0 * q_avg.lap(n=n, buf=3) 
+        q_avg.v(n=n, buf=3)[:,:] = q_cc.v(n=n, buf=3) + myg.dx**2/24.0 * q_bar.lap(n=n, buf=3) 
 
 
     # flattening -- there is a single flattening coefficient (xi) for all directions
@@ -81,20 +81,21 @@ def fluxes(myd, rp, ivars, solid, tc):
     for idir in [1, 2]:
 
         # interpolate <W> to faces (with limiting)
-        q_l = np.zeros_like(q_fourth)
-        q_r = np.zeros_like(q_fourth)
+        q_l = np.zeros_like(q_avg)
+        q_r = np.zeros_like(q_avg)
 
         for n in range(ivars.nq):
-            q_l[:,:,n], q_r[:,:,n] = interface_f.states(q_fourth[:,:,n], myg.qx, myg.qy, myg.ng, idir)
+            q_l[:,:,n], q_r[:,:,n] = interface_f.states(q_avg[:,:,n], myg.qx, myg.qy, myg.ng, idir)
 
         # apply flattening
-        for n in range(ivars.nq):
-            if idir == 1:
-                q_l.ip(1, n=n, buf=2)[:,:] = xi.v(buf=2)*q_l.ip(1, n=n, buf=2) + (1.0 - xi.v(buf=2))*q_fourth.v(n=n, buf=2)
-                q_r.v(n=n, buf=2)[:,:] = xi.v(buf=2)*q_r.v(n=n, buf=2) + (1.0 - xi.v(buf=2))*q_fourth.v(n=n, buf=2)
-            else:
-                q_l.jp(1, n=n, buf=2)[:,:] = xi.v(buf=2)*q_l.jp(1, n=n, buf=2) + (1.0 - xi.v(buf=2))*q_fourth.v(n=n, buf=2)
-                q_r.v(n=n, buf=2)[:,:] = xi.v(buf=2)*q_r.v(n=n, buf=2) + (1.0 - xi.v(buf=2))*q_fourth.v(n=n, buf=2)
+        if use_flattening:
+            for n in range(ivars.nq):
+                if idir == 1:
+                    q_l.ip(1, n=n, buf=2)[:,:] = xi.v(buf=2)*q_l.ip(1, n=n, buf=2) + (1.0 - xi.v(buf=2))*q_avg.v(n=n, buf=2)
+                    q_r.v(n=n, buf=2)[:,:] = xi.v(buf=2)*q_r.v(n=n, buf=2) + (1.0 - xi.v(buf=2))*q_avg.v(n=n, buf=2)
+                else:
+                    q_l.jp(1, n=n, buf=2)[:,:] = xi.v(buf=2)*q_l.jp(1, n=n, buf=2) + (1.0 - xi.v(buf=2))*q_avg.v(n=n, buf=2)
+                    q_r.v(n=n, buf=2)[:,:] = xi.v(buf=2)*q_r.v(n=n, buf=2) + (1.0 - xi.v(buf=2))*q_avg.v(n=n, buf=2)
 
 
         # solve the Riemann problem using the average face values
@@ -112,9 +113,6 @@ def fluxes(myd, rp, ivars, solid, tc):
 
         q_int_avg = ai.ArrayIndexer(_q, grid=myg)
 
-        
-
-        
 
         # calculate the face-centered W using the transverse Laplacian
         q_int_fc = myg.scratch_array(nvar=ivars.nq)
