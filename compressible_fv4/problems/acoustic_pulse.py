@@ -7,26 +7,23 @@ import numpy as np
 from util import msg
 import compressible_fv4.initialization_support as init_support
 
-def init_data(my_data, rp):
+def init_data(myd, rp):
     """initialize the acoustic_pulse problem.  This comes from
     McCourquodale & Coella 2011"""
 
     msg.bold("initializing the acoustic pulse problem...")
 
     # make sure that we are passed a valid patch object
-    if not isinstance(my_data, fv.FV2d):
+    if not isinstance(myd, fv.FV2d):
         print("ERROR: patch invalid in acoustic_pulse.py")
-        print(my_data.__class__)
+        print(myd.__class__)
         sys.exit()
 
-    # we'll initialize on a finer grid and then average down
-    fd = init_support.get_finer(my_data)
-
     # get the density, momenta, and energy as separate variables
-    dens = fd.get_var("density")
-    xmom = fd.get_var("x-momentum")
-    ymom = fd.get_var("y-momentum")
-    ener = fd.get_var("energy")
+    dens = myd.get_var("density")
+    xmom = myd.get_var("x-momentum")
+    ymom = myd.get_var("y-momentum")
+    ener = myd.get_var("energy")
 
     # initialize the components, remember, that ener here is rho*eint
     # + 0.5*rho*v**2, where eint is the specific internal energy
@@ -48,8 +45,8 @@ def init_data(my_data, rp):
     xctr = 0.5*(xmin + xmax)
     yctr = 0.5*(ymin + ymax)
 
-    dist = np.sqrt((fd.grid.x2d - xctr)**2 +
-                   (fd.grid.y2d - yctr)**2)
+    dist = np.sqrt((myd.grid.x2d - xctr)**2 +
+                   (myd.grid.y2d - yctr)**2)
 
     dens[:,:] = rho0
     idx = dist <= 0.5
@@ -58,7 +55,9 @@ def init_data(my_data, rp):
     p = (dens/rho0)**gamma
     ener[:,:] = p/(gamma - 1)
 
-    init_support.average_down(my_data, fd)
+    # we just initialized cell-centers, but we need to store averages
+    for var in myd.names:
+        myd.from_centers(var)
 
 
 def finalize():

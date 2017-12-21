@@ -18,12 +18,13 @@ class FV2d(patch.CellCenterData2d):
         return c
 
 
-    def from_centers(self, name, a, c):
-        """initialize variable name from average and cell-center data,
-        converting to averages
+    def from_centers(self, name):
+        """treat the stored data as if it lives at cell-centers and convert
+        it to an average
 
         """
-        a_stored = self.get_var(name)
-        a_stored.v()[:,:] = c.v() + self.grid.dx**2*a.lap()/24.0
+        self.fill_BC(name)
+        a = self.get_var(name)
+        a.v()[:,:] = a.v() + self.grid.dx**2*a.lap()/24.0
 
 
