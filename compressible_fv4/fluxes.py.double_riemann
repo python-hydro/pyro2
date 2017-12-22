@@ -84,8 +84,8 @@ def fluxes(myd, rp, ivars, solid, tc):
     for idir in [1, 2]:
 
         # interpolate <W> to faces (with limiting)
-        q_l = myg.scratch_array(nvar=ivars.nq)
-        q_r = myg.scratch_array(nvar=ivars.nq)
+        q_l_avg = myg.scratch_array(nvar=ivars.nq)
+        q_r_avg = myg.scratch_array(nvar=ivars.nq)
 
         if nolimit:
             for n in range(ivars.nq):
@@ -97,29 +97,44 @@ def fluxes(myd, rp, ivars, solid, tc):
                     qtmp = 7./12.*(q_avg.jp(-1, n=n, buf=1) + q_avg.v(n=n, buf=1)) - \
                            1./12.*(q_avg.jp(-2, n=n, buf=1) + q_avg.jp(1, n=n, buf=1))
 
-                q_l.v(n=n, buf=1)[:,:] = qtmp
-                q_r.v(n=n, buf=1)[:,:] = qtmp
+                q_l_avg.v(n=n, buf=1)[:,:] = qtmp
+                q_r_avg.v(n=n, buf=1)[:,:] = qtmp
 
         else:
             for n in range(ivars.nq):
-                q_l[:,:,n], q_r[:,:,n] = interface_f.states(q_avg[:,:,n], myg.qx, myg.qy, myg.ng, idir)
+                q_l_avg[:,:,n], q_r_avg[:,:,n] = interface_f.states(q_avg[:,:,n], myg.qx, myg.qy, myg.ng, idir)
+
 
         _q = cf.riemann_prim(idir, myg.qx, myg.qy, myg.ng,
                              ivars.nq, ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix, ivars.naux,
-                             0, 0,
-                             gamma, q_l, q_r)
+                             0, 0, 
+                             gamma, q_l_avg, q_r_avg)
 
         q_int_avg = ai.ArrayIndexer(_q, grid=myg)
 
         # calculate the face-centered W using the transverse Laplacian
-        q_int_fc = myg.scratch_array(nvar=ivars.nq)
+        # -- we need to do the left and right states separately and
+        # then do a Riemann solve
+        q_l_fc = myg.scratch_array(nvar=ivars.nq)
+        q_r_fc = myg.scratch_array(nvar=ivars.nq)
+
 
         if idir == 1:
             for n in range(ivars.nq):
-                q_int_fc.v(n=n, buf=myg.ng-1)[:,:] = q_int_avg.v(n=n, buf=myg.ng-1) - 1.0/24.0 * (q_int_avg.jp(1, n=n, buf=myg.ng-1) - 2*q_int_avg.v(n=n, buf=myg.ng-1) + q_int_avg.jp(-1, n=n, buf=myg.ng-1))
+                q_l_fc.v(n=n, buf=myg.ng-1)[:,:] = q_l_avg.v(n=n, buf=myg.ng-1) - 1.0/24.0 * (q_l_avg.jp(1, n=n, buf=myg.ng-1) - 2*q_l_avg.v(n=n, buf=myg.ng-1) + q_l_avg.jp(-1, n=n, buf=myg.ng-1))
+                q_r_fc.v(n=n, buf=myg.ng-1)[:,:] = q_r_avg.v(n=n, buf=myg.ng-1) - 1.0/24.0 * (q_r_avg.jp(1, n=n, buf=myg.ng-1) - 2*q_r_avg.v(n=n, buf=myg.ng-1) + q_r_avg.jp(-1, n=n, buf=myg.ng-1))
         else:
             for n in range(ivars.nq):
-                q_int_fc.v(n=n, buf=myg.ng-1)[:,:] = q_int_avg.v(n=n, buf=myg.ng-1) - 1.0/24.0 * (q_int_avg.ip(1, n=n, buf=myg.ng-1) - 2*q_int_avg.v(n=n, buf=myg.ng-1) + q_int_avg.ip(-1, n=n, buf=myg.ng-1))
+                q_l_fc.v(n=n, buf=myg.ng-1)[:,:] = q_l_avg.v(n=n, buf=myg.ng-1) - 1.0/24.0 * (q_l_avg.ip(1, n=n, buf=myg.ng-1) - 2*q_l_avg.v(n=n, buf=myg.ng-1) + q_l_avg.ip(-1, n=n, buf=myg.ng-1))
+                q_r_fc.v(n=n, buf=myg.ng-1)[:,:] = q_r_avg.v(n=n, buf=myg.ng-1) - 1.0/24.0 * (q_r_avg.ip(1, n=n, buf=myg.ng-1) - 2*q_r_avg.v(n=n, buf=myg.ng-1) + q_r_avg.ip(-1, n=n, buf=myg.ng-1))
+
+
+        _qfc = cf.riemann_prim(idir, myg.qx, myg.qy, myg.ng,
+                               ivars.nq, ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix, ivars.naux,
+                               0, 0, 
+                               gamma, q_l_fc, q_r_fc)
+
+        q_int_fc = ai.ArrayIndexer(_qfc, grid=myg)
 
         # compute the final fluxes
         F_fc = flux_cons(ivars, idir, gamma, q_int_fc)
