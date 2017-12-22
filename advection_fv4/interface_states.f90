@@ -249,3 +249,69 @@ subroutine states(a, qx, qy, ng, idir, &
   endif
 
 end subroutine states
+
+
+subroutine states_nolimit(a, qx, qy, ng, idir, &
+                         al, ar)
+
+  implicit none
+
+  integer, intent(in) :: idir
+  integer, intent(in) :: qx, qy, ng
+
+  double precision, intent(inout) :: a(0:qx-1, 0:qy-1)
+
+  double precision, intent(out) :: al(0:qx-1, 0:qy-1)
+  double precision, intent(out) :: ar(0:qx-1, 0:qy-1)
+
+!f2py depend(qx, qy) :: a
+!f2py depend(qx, qy) :: al, ar
+!f2py intent(in) :: a
+!f2py intent(out) :: al, ar
+
+  double precision :: a_int(0:qx-1, 0:qy-1)
+
+  integer :: ilo, ihi, jlo, jhi
+  integer :: nx, ny
+
+
+  integer :: i, j
+
+  nx = qx - 2*ng; ny = qy - 2*ng
+  ilo = ng; ihi = ng+nx-1; jlo = ng; jhi = ng+ny-1
+
+  ! our convention here is that:
+  !     al(i,j)   will be al_{i-1/2,j),
+  !     al(i+1,j) will be al_{i+1/2,j)
+
+  ! we need interface values on all faces of the domain
+  if (idir == 1) then
+
+     do j = jlo-1, jhi+1
+        do i = ilo-2, ihi+3
+
+           ! interpolate to the edges
+           a_int(i,j) = (7.0/12.0)*(a(i-1,j) + a(i,j)) - (1.0/12.0)*(a(i-2,j) + a(i+1,j))
+
+           al(i,j) = a_int(i,j)
+           ar(i,j) = a_int(i,j)
+
+        enddo
+     enddo
+
+  else if (idir == 2) then
+
+     do j = jlo-2, jhi+3
+        do i = ilo-1, ihi+1
+
+           ! interpolate to the edges
+           a_int(i,j) = (7.0/12.0)*(a(i,j-1) + a(i,j)) - (1.0/12.0)*(a(i,j-2) + a(i,j+1))
+
+           al(i,j) = a_int(i,j)
+           ar(i,j) = a_int(i,j)
+
+        enddo
+     enddo
+  endif
+
+end subroutine states_nolimit
