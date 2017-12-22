@@ -11,6 +11,7 @@ cvisc = 0.1
 
 [io]
 basename = acoustic_pulse_512_
+dt_out = 0.03
 
 
 [eos]

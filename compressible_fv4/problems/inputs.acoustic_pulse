@@ -10,7 +10,7 @@ cvisc = 0.1
 
 [io]
 basename = acoustic_pulse_
-
+dt_out = 0.03
 
 [eos]
 gamma = 1.4
