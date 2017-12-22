@@ -78,41 +78,38 @@ def fluxes(myd, rp, ivars, solid, tc):
 
     fluxes = []
 
+    # for debugging
+    nolimit = 0
+
     for idir in [1, 2]:
 
         # interpolate <W> to faces (with limiting)
-        q_l = np.zeros_like(q_avg)
-        q_r = np.zeros_like(q_avg)
+        q_l = myg.scratch_array(nvar=ivars.nq)
+        q_r = myg.scratch_array(nvar=ivars.nq)
 
-        for n in range(ivars.nq):
-            q_l[:,:,n], q_r[:,:,n] = interface_f.states(q_avg[:,:,n], myg.qx, myg.qy, myg.ng, idir)
-
-        # apply flattening
-        if use_flattening:
+        if nolimit:
             for n in range(ivars.nq):
+
                 if idir == 1:
-                    q_l.ip(1, n=n, buf=2)[:,:] = xi.v(buf=2)*q_l.ip(1, n=n, buf=2) + (1.0 - xi.v(buf=2))*q_avg.v(n=n, buf=2)
-                    q_r.v(n=n, buf=2)[:,:] = xi.v(buf=2)*q_r.v(n=n, buf=2) + (1.0 - xi.v(buf=2))*q_avg.v(n=n, buf=2)
+                    qtmp = 7./12.*(q_avg.ip(-1, n=n, buf=1) + q_avg.v(n=n, buf=1)) - \
+                           1./12.*(q_avg.ip(-2, n=n, buf=1) + q_avg.ip(1, n=n, buf=1))
                 else:
-                    q_l.jp(1, n=n, buf=2)[:,:] = xi.v(buf=2)*q_l.jp(1, n=n, buf=2) + (1.0 - xi.v(buf=2))*q_avg.v(n=n, buf=2)
-                    q_r.v(n=n, buf=2)[:,:] = xi.v(buf=2)*q_r.v(n=n, buf=2) + (1.0 - xi.v(buf=2))*q_avg.v(n=n, buf=2)
+                    qtmp = 7./12.*(q_avg.jp(-1, n=n, buf=1) + q_avg.v(n=n, buf=1)) - \
+                           1./12.*(q_avg.jp(-2, n=n, buf=1) + q_avg.jp(1, n=n, buf=1))
 
+                q_l.v(n=n, buf=1)[:,:] = qtmp
+                q_r.v(n=n, buf=1)[:,:] = qtmp
 
-        # solve the Riemann problem using the average face values
-        if idir == 1:
-            solid_lo = solid.xl
-            solid_hi = solid.xr
         else:
-            solid_lo = solid.yl
-            solid_hi = solid.yr
+            for n in range(ivars.nq):
+                q_l[:,:,n], q_r[:,:,n] = interface_f.states_nolimit(q_avg[:,:,n], myg.qx, myg.qy, myg.ng, idir)
 
-        _q = cf.riemann_prim(idir, myg.qx, myg.qy, myg.ng, 
-                             ivars.nvar, ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix, ivars.naux,
-                             solid_lo, solid_hi, 
+        _q = cf.riemann_prim(idir, myg.qx, myg.qy, myg.ng,
+                             ivars.nq, ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix, ivars.naux,
+                             0, 0, 
                              gamma, q_l, q_r)
 
         q_int_avg = ai.ArrayIndexer(_q, grid=myg)
-
 
         # calculate the face-centered W using the transverse Laplacian
         q_int_fc = myg.scratch_array(nvar=ivars.nq)
