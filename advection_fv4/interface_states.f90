@@ -48,7 +48,7 @@ subroutine states(a, qx, qy, ng, idir, &
         do i = ilo-2, ihi+3
 
            ! interpolate to the edges
-           a_int(i,j) = (7.0/12.0)*(a(i-1,j) + a(i,j)) - (1.0/12.0)*(a(i-2,j) + a(i+1,j))
+           a_int(i,j) = (7.0d0/12.0d0)*(a(i-1,j) + a(i,j)) - (1.0d0/12.0d0)*(a(i-2,j) + a(i+1,j))
 
            al(i,j) = a_int(i,j)
            ar(i,j) = a_int(i,j)
@@ -63,13 +63,13 @@ subroutine states(a, qx, qy, ng, idir, &
            dafp(i,j) = a_int(i+1,j) - a(i,j)
 
            ! these live on cell-centers
-           d2af(i,j) = 6.0*(a_int(i,j) - 2.0*a(i,j) + a_int(i+1,j))
+           d2af(i,j) = 6.0d0*(a_int(i,j) - 2.0d0*a(i,j) + a_int(i+1,j))
         enddo
      enddo
 
      do j = jlo-1, jhi+1
         do i = ilo-3, ihi+3
-           d2ac(i,j) = a(i-1,j) - 2.0*a(i,j) + a(i+1,j)
+           d2ac(i,j) = a(i-1,j) - 2.0d0*a(i,j) + a(i+1,j)
         enddo
      enddo
 
@@ -86,8 +86,8 @@ subroutine states(a, qx, qy, ng, idir, &
         do i = ilo-1, ihi+1
 
            ! limit? MC Eq. 24 and 25
-           if (dafm(i,j) * dafp(i,j) <= 0.0 .or. &
-                (a(i,j) - a(i-2,j))*(a(i+2,j) - a(i,j)) <= 0.0) then
+           if (dafm(i,j) * dafp(i,j) <= 0.0d0 .or. &
+                (a(i,j) - a(i-2,j))*(a(i+2,j) - a(i,j)) <= 0.0d0) then
 
               ! we are at an extrema
 
@@ -103,7 +103,7 @@ subroutine states(a, qx, qy, ng, idir, &
 
               if (abs(d2af(i,j)) <= 1.e-12*max(abs(a(i-2,j)), abs(a(i-1,j)), &
                                                abs(a(i,j)), abs(a(i+1,j)), abs(a(i+2,j)))) then
-                 rho = 0.0
+                 rho = 0.0d0
               else
                  ! MC Eq. 27
                  rho = d2a_lim/d2af(i,j)
@@ -120,10 +120,10 @@ subroutine states(a, qx, qy, ng, idir, &
                        ! Eqs. 29, 30
                        ar(i,j) = a(i,j) - rho*dafm(i,j)  ! note: typo in Eq 29
                        al(i+1,j) = a(i,j) + rho*dafp(i,j)
-                    else if (abs(dafm(i,j)) >= 2.0*abs(dafp(i,j))) then
+                    else if (abs(dafm(i,j)) >= 2.0d0*abs(dafp(i,j))) then
                        ! Eq. 31
                        ar(i,j) = a(i,j) - 2.0d0*(1.0d0 - rho)*dafp(i,j) - rho*dafm(i,j)
-                    else if (abs(dafp(i,j)) >= 2.0*abs(dafm(i,j))) then
+                    else if (abs(dafp(i,j)) >= 2.0d0*abs(dafm(i,j))) then
                        ! Eq. 32
                        al(i+1,j) = a(i,j) + 2.0d0*(1.0d0 - rho)*dafm(i,j) + rho*dafp(i,j)
                     endif
@@ -150,7 +150,7 @@ subroutine states(a, qx, qy, ng, idir, &
         do i = ilo-1, ihi+1
 
            ! interpolate to the edges
-           a_int(i,j) = (7.0/12.0)*(a(i,j-1) + a(i,j)) - (1.0/12.0)*(a(i,j-2) + a(i,j+1))
+           a_int(i,j) = (7.0d0/12.0d0)*(a(i,j-1) + a(i,j)) - (1.0d0/12.0d0)*(a(i,j-2) + a(i,j+1))
 
            al(i,j) = a_int(i,j)
            ar(i,j) = a_int(i,j)
@@ -165,13 +165,13 @@ subroutine states(a, qx, qy, ng, idir, &
            dafp(i,j) = a_int(i,j+1) - a(i,j)
 
            ! these live on cell-centers
-           d2af(i,j) = 6.0*(a_int(i,j) - 2.0*a(i,j) + a_int(i,j+1))
+           d2af(i,j) = 6.0d0*(a_int(i,j) - 2.0d0*a(i,j) + a_int(i,j+1))
         enddo
      enddo
 
      do j = jlo-3, jhi+3
         do i = ilo-1, ihi+1
-           d2ac(i,j) = a(i,j-1) - 2.0*a(i,j) + a(i,j+1)
+           d2ac(i,j) = a(i,j-1) - 2.0d0*a(i,j) + a(i,j+1)
         enddo
      enddo
 
@@ -188,8 +188,8 @@ subroutine states(a, qx, qy, ng, idir, &
         do i = ilo-1, ihi+1
 
            ! limit? MC Eq. 24 and 25
-           if (dafm(i,j) * dafp(i,j) <= 0.0 .or. &
-                (a(i,j) - a(i,j-2))*(a(i,j+2) - a(i,j)) <= 0.0) then
+           if (dafm(i,j) * dafp(i,j) <= 0.0d0 .or. &
+                (a(i,j) - a(i,j-2))*(a(i,j+2) - a(i,j)) <= 0.0d0) then
 
               ! we are at an extrema
 
@@ -205,7 +205,7 @@ subroutine states(a, qx, qy, ng, idir, &
 
               if (abs(d2af(i,j)) <= 1.e-12*max(abs(a(i,j-2)), abs(a(i,j-1)), &
                                                abs(a(i,j)), abs(a(i,j+1)), abs(a(i,j+2)))) then
-                 rho = 0.0
+                 rho = 0.0d0
               else
                  ! MC Eq. 27
                  rho = d2a_lim/d2af(i,j)
@@ -222,7 +222,7 @@ subroutine states(a, qx, qy, ng, idir, &
                        ! Eqs. 29, 30
                        ar(i,j) = a(i,j) - rho*dafm(i,j)  ! note: typo in Eq 29
                        al(i,j+1) = a(i,j) + rho*dafp(i,j)
-                    else if (abs(dafm(i,j)) >= 2.0*abs(dafp(i,j))) then
+                    else if (abs(dafm(i,j)) >= 2.0d0*abs(dafp(i,j))) then
                        ! Eq. 31
                        ar(i,j) = a(i,j) - 2.0d0*(1.0d0 - rho)*dafp(i,j) - rho*dafm(i,j)
                     else if (abs(dafp(i,j)) >= 2.0*abs(dafm(i,j))) then
@@ -291,7 +291,7 @@ subroutine states_nolimit(a, qx, qy, ng, idir, &
         do i = ilo-2, ihi+3
 
            ! interpolate to the edges
-           a_int(i,j) = (7.0/12.0)*(a(i-1,j) + a(i,j)) - (1.0/12.0)*(a(i-2,j) + a(i+1,j))
+           a_int(i,j) = (7.0d0/12.0d0)*(a(i-1,j) + a(i,j)) - (1.0d0/12.0d0)*(a(i-2,j) + a(i+1,j))
 
            al(i,j) = a_int(i,j)
            ar(i,j) = a_int(i,j)
@@ -305,7 +305,7 @@ subroutine states_nolimit(a, qx, qy, ng, idir, &
         do i = ilo-1, ihi+1
 
            ! interpolate to the edges
-           a_int(i,j) = (7.0/12.0)*(a(i,j-1) + a(i,j)) - (1.0/12.0)*(a(i,j-2) + a(i,j+1))
+           a_int(i,j) = (7.0d0/12.0d0)*(a(i,j-1) + a(i,j)) - (1.0d0/12.0d0)*(a(i,j-2) + a(i,j+1))
 
            al(i,j) = a_int(i,j)
            ar(i,j) = a_int(i,j)
