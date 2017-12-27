@@ -11,7 +11,7 @@ Welcome to pyro's documentation!
    :caption: Contents:
 
    mesh
-   api
+   modules
 
 
 Indices and tables
