@@ -1,6 +1,11 @@
 util package
 ============
 
+.. automodule:: util
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Submodules
 ----------
 
@@ -45,10 +50,3 @@ util\.runparams module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: util
-    :members:
-    :undoc-members:
-    :show-inheritance:

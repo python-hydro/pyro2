@@ -1,6 +1,11 @@
 incompressible package
 ======================
 
+.. automodule:: incompressible
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Subpackages
 -----------
 
@@ -28,10 +33,3 @@ incompressible\.simulation module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: incompressible
-    :members:
-    :undoc-members:
-    :show-inheritance:

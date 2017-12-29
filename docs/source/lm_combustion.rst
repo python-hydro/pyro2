@@ -1,6 +1,11 @@
 lm\_combustion package
 ======================
 
+.. automodule:: lm_combustion
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Submodules
 ----------
 
@@ -21,10 +26,3 @@ lm\_combustion\.simulation module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: lm_combustion
-    :members:
-    :undoc-members:
-    :show-inheritance:

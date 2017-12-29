@@ -1,6 +1,11 @@
 incompressible\.problems package
 ================================
 
+.. automodule:: incompressible.problems
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Submodules
 ----------
 
@@ -21,10 +26,3 @@ incompressible\.problems\.shear module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: incompressible.problems
-    :members:
-    :undoc-members:
-    :show-inheritance:

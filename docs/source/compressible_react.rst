@@ -1,6 +1,11 @@
 compressible\_react package
 ===========================
 
+.. automodule:: compressible_react
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Subpackages
 -----------
 
@@ -20,10 +25,3 @@ compressible\_react\.simulation module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: compressible_react
-    :members:
-    :undoc-members:
-    :show-inheritance:

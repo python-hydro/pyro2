@@ -1,6 +1,11 @@
 compressible package
 ====================
 
+.. automodule:: compressible
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Subpackages
 -----------
 
@@ -60,10 +65,3 @@ compressible\.unsplit\_fluxes module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: compressible
-    :members:
-    :undoc-members:
-    :show-inheritance:

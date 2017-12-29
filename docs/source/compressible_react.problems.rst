@@ -1,6 +1,11 @@
 compressible\_react\.problems package
 =====================================
 
+.. automodule:: compressible_react.problems
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Submodules
 ----------
 
@@ -21,10 +26,3 @@ compressible\_react\.problems\.rt module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: compressible_react.problems
-    :members:
-    :undoc-members:
-    :show-inheritance:

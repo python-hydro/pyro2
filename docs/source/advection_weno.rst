@@ -1,6 +1,11 @@
 advection\_weno package
 =======================
 
+.. automodule:: advection_weno
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Subpackages
 -----------
 
@@ -28,10 +33,3 @@ advection\_weno\.simulation module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: advection_weno
-    :members:
-    :undoc-members:
-    :show-inheritance:

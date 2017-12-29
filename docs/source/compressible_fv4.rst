@@ -1,6 +1,11 @@
 compressible\_fv4 package
 =========================
 
+.. automodule:: compressible_fv4
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Subpackages
 -----------
 
@@ -36,10 +41,3 @@ compressible\_fv4\.simulation module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: compressible_fv4
-    :members:
-    :undoc-members:
-    :show-inheritance:

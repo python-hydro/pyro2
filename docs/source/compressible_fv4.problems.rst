@@ -1,6 +1,11 @@
 compressible\_fv4\.problems package
 ===================================
 
+.. automodule:: compressible_fv4.problems
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Submodules
 ----------
 
@@ -77,10 +82,3 @@ compressible\_fv4\.problems\.sod module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: compressible_fv4.problems
-    :members:
-    :undoc-members:
-    :show-inheritance:

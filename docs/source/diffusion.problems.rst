@@ -1,6 +1,11 @@
 diffusion\.problems package
 ===========================
 
+.. automodule:: diffusion.problems
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Submodules
 ----------
 
@@ -13,10 +18,3 @@ diffusion\.problems\.gaussian module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: diffusion.problems
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -1,6 +1,11 @@
 advection\.problems package
 ===========================
 
+.. automodule:: advection.problems
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Submodules
 ----------
 
@@ -21,10 +26,3 @@ advection\.problems\.tophat module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: advection.problems
-    :members:
-    :undoc-members:
-    :show-inheritance:

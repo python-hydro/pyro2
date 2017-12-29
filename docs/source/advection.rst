@@ -1,6 +1,11 @@
 advection package
 =================
 
+.. automodule:: advection
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Subpackages
 -----------
 
@@ -28,10 +33,3 @@ advection\.simulation module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: advection
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -1,6 +1,11 @@
 advection\_fv4 package
 ======================
 
+.. automodule:: advection_fv4
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Subpackages
 -----------
 
@@ -36,10 +41,3 @@ advection\_fv4\.simulation module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: advection_fv4
-    :members:
-    :undoc-members:
-    :show-inheritance:

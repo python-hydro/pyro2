@@ -1,6 +1,11 @@
 compressible\.problems package
 ==============================
 
+.. automodule:: compressible.problems
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Submodules
 ----------
 
@@ -69,10 +74,3 @@ compressible\.problems\.sod module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: compressible.problems
-    :members:
-    :undoc-members:
-    :show-inheritance:

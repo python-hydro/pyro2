@@ -1,6 +1,11 @@
 lm\_atm package
 ===============
 
+.. automodule:: lm_atm
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Subpackages
 -----------
 
@@ -28,10 +33,3 @@ lm\_atm\.simulation module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: lm_atm
-    :members:
-    :undoc-members:
-    :show-inheritance:

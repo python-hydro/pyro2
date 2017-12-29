@@ -1,6 +1,11 @@
 diffusion package
 =================
 
+.. automodule:: diffusion
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Subpackages
 -----------
 
@@ -20,10 +25,3 @@ diffusion\.simulation module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: diffusion
-    :members:
-    :undoc-members:
-    :show-inheritance:

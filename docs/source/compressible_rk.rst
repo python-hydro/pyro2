@@ -1,6 +1,11 @@
 compressible\_rk package
 ========================
 
+.. automodule:: compressible_rk
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Subpackages
 -----------
 
@@ -28,10 +33,3 @@ compressible\_rk\.simulation module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: compressible_rk
-    :members:
-    :undoc-members:
-    :show-inheritance:

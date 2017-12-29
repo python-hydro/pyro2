@@ -1,6 +1,11 @@
 advection\_rk package
 =====================
 
+.. automodule:: advection_rk
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Subpackages
 -----------
 
@@ -28,10 +33,3 @@ advection\_rk\.simulation module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: advection_rk
-    :members:
-    :undoc-members:
-    :show-inheritance:

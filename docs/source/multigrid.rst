@@ -1,6 +1,11 @@
 multigrid package
 =================
 
+.. automodule:: multigrid
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Submodules
 ----------
 
@@ -133,10 +138,3 @@ multigrid\.variable\_coeff\_MG module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: multigrid
-    :members:
-    :undoc-members:
-    :show-inheritance:

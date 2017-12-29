@@ -1,6 +1,11 @@
 mesh package
 ============
 
+.. automodule:: mesh
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Submodules
 ----------
 
@@ -61,10 +66,3 @@ mesh\.reconstruction module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: mesh
-    :members:
-    :undoc-members:
-    :show-inheritance:
