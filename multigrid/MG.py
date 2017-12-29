@@ -392,7 +392,7 @@ class CellCenterMG2d(object):
 
         plt.imshow(np.transpose(e[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
                    interpolation="nearest", origin="lower",
-                   extent=[self.xmin, self.xmax, self.ymin, self.ymax], cm=cmap)
+                   extent=[self.xmin, self.xmax, self.ymin, self.ymax], cmap=cmap)
 
         plt.xlabel("x")
         plt.ylabel("y")
