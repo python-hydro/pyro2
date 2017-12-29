@@ -50,6 +50,9 @@ templates_path = ['_templates']
 # source_suffix = ['.rst', '.md']
 source_suffix = '.rst'
 
+# see https://github.com/phn/pytpm/issues/3#issuecomment-12133978
+numpydoc_show_class_members = False
+
 # The master toctree document.
 master_doc = 'index'
 
