@@ -11,6 +11,10 @@ Welcome to pyro's documentation!
    :caption: Contents:
 
    intro
+   design
+   running
+   output
+   problems
    mesh_basics
    mesh-examples.ipynb
    advection_basics
