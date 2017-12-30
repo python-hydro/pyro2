@@ -6,63 +6,67 @@ import numpy as np
 import mesh.patch
 import mesh.boundary as bnd
 
-myg = mesh.patch.Grid2d(4, 4, ng=2, xmax=1.0, ymax=1.0)
+def doit():
 
-mydata = mesh.patch.CellCenterData2d(myg, dtype=np.int)
+    myg = mesh.patch.Grid2d(4, 4, ng=2, xmax=1.0, ymax=1.0)
 
-bco = bnd.BC(xlb="outflow", xrb="outflow",
-             ylb="outflow", yrb="outflow")
-mydata.register_var("outflow", bco)
+    mydata = mesh.patch.CellCenterData2d(myg, dtype=np.int)
 
-bcp = bnd.BC(xlb="periodic", xrb="periodic",
-             ylb="periodic", yrb="periodic")
-mydata.register_var("periodic", bcp)
+    bco = bnd.BC(xlb="outflow", xrb="outflow",
+                 ylb="outflow", yrb="outflow")
+    mydata.register_var("outflow", bco)
 
-bcre = bnd.BC(xlb="reflect-even", xrb="reflect-even",
-              ylb="reflect-even", yrb="reflect-even")
-mydata.register_var("reflect-even", bcre)
+    bcp = bnd.BC(xlb="periodic", xrb="periodic",
+                 ylb="periodic", yrb="periodic")
+    mydata.register_var("periodic", bcp)
 
-bcro = bnd.BC(xlb="reflect-odd", xrb="reflect-odd",
-              ylb="reflect-odd", yrb="reflect-odd")
-mydata.register_var("reflect-odd", bcro)
+    bcre = bnd.BC(xlb="reflect-even", xrb="reflect-even",
+                  ylb="reflect-even", yrb="reflect-even")
+    mydata.register_var("reflect-even", bcre)
 
-mydata.create()
+    bcro = bnd.BC(xlb="reflect-odd", xrb="reflect-odd",
+                  ylb="reflect-odd", yrb="reflect-odd")
+    mydata.register_var("reflect-odd", bcro)
 
-
-a = mydata.get_var("outflow")
-
-for i in range(myg.ilo, myg.ihi+1):
-    for j in range(myg.jlo, myg.jhi+1):
-        a[i,j] = (i-myg.ilo) + 10*(j-myg.jlo) + 1
+    mydata.create()
 
 
-b = mydata.get_var("periodic")
-c = mydata.get_var("reflect-even")
-d = mydata.get_var("reflect-odd")
+    a = mydata.get_var("outflow")
 
-b[:,:] = a[:,:]
-c[:,:] = a[:,:]
-d[:,:] = a[:,:]
-
-mydata.fill_BC("outflow")
-mydata.fill_BC("periodic")
-mydata.fill_BC("reflect-even")
-mydata.fill_BC("reflect-odd")
+    for i in range(myg.ilo, myg.ihi+1):
+        for j in range(myg.jlo, myg.jhi+1):
+            a[i,j] = (i-myg.ilo) + 10*(j-myg.jlo) + 1
 
 
+    b = mydata.get_var("periodic")
+    c = mydata.get_var("reflect-even")
+    d = mydata.get_var("reflect-odd")
 
-print("outflow")
-mydata.pretty_print("outflow")
+    b[:,:] = a[:,:]
+    c[:,:] = a[:,:]
+    d[:,:] = a[:,:]
 
-print(" ")
-print("periodic")
-mydata.pretty_print("periodic")
+    mydata.fill_BC("outflow")
+    mydata.fill_BC("periodic")
+    mydata.fill_BC("reflect-even")
+    mydata.fill_BC("reflect-odd")
 
-print(" ")
-print("reflect-even")
-mydata.pretty_print("reflect-even")
 
-print(" ")
-print("reflect-odd")
-mydata.pretty_print("reflect-odd")
+    print("outflow")
+    mydata.pretty_print("outflow")
 
+    print(" ")
+    print("periodic")
+    mydata.pretty_print("periodic")
+
+    print(" ")
+    print("reflect-even")
+    mydata.pretty_print("reflect-even")
+
+    print(" ")
+    print("reflect-odd")
+    mydata.pretty_print("reflect-odd")
+
+
+if __name__ == "__main__":
+    doit()
