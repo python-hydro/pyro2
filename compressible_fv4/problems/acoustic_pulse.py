@@ -5,7 +5,6 @@ import mesh.patch as patch
 import mesh.fv as fv
 import numpy as np
 from util import msg
-import compressible_fv4.initialization_support as init_support
 
 def init_data(myd, rp):
     """initialize the acoustic_pulse problem.  This comes from
