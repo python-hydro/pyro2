@@ -20,6 +20,7 @@ Welcome to pyro's documentation!
    advection_basics
    compressible_basics
    multigrid_basics
+   multigrid-examples.ipynb
    diffusion_basics
    incompressible_basics
    lowmach_basics
