@@ -50,6 +50,8 @@ on :math:`[0,1] \times [0,1]` with :math:`u = 0` on the boundary.
 
 The solution to this is shown below.
 
+.. image:: mg_test.png
+   :align: center
 
 Since this has a known analytic solution:
 
@@ -61,10 +63,19 @@ We can assess the convergence of our solver by running at a variety of
 resolutions and computing the norm of the error with respect to the
 analytic solution. This is shown below:
 
+.. image:: mg_converge.png
+   :align: center
+
 
 The dotted line is 2nd order convergence, which we match perfectly.
 
 The movie below shows the smoothing at each level to realize this solution:
+
+.. raw:: html
+
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
+        <iframe src="https://www.youtube.com/embed/h9MUgwJvr-g?rel=0" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+    </div><br>
 
 
 projection
@@ -72,16 +83,27 @@ projection
 
 Another example that uses multigrid to extract the divergence free part of a velocity field is run as:
 
-./project-periodic.py
-Given a vector field, U, we can decompose it into a divergence free part, Ud, and the gradient of a scalar, φ:
+.. code-block:: none
 
-U = Ud + ∇ φ
+   ./project-periodic.py
+
+Given a vector field, :math:`U`, we can decompose it into a divergence free part, :math:`U_d`, and the gradient of a scalar, :math:`\phi`:
+
+.. math::
+
+   U = U_d + \nabla \phi
 
 We can project out the divergence free part by taking the divergence, leading to an elliptic equation:
 
-∇2 φ = ∇ · U
+.. math::
 
-The project-periodic.py script starts with a divergence free velocity field, adds to it the gradient of a scalar, and then projects it to recover the divergence free part. The error can found by comparing the original velocity field to the recovered field. The results are shown below:
+   \nabla^2 \phi = \nabla \cdot U
+
+The ``project-periodic.py`` script starts with a divergence free
+velocity field, adds to it the gradient of a scalar, and then projects
+it to recover the divergence free part. The error can found by
+comparing the original velocity field to the recovered field. The
+results are shown below:
 
 
 Left is the original u velocity, middle is the modified field after adding the gradient of the scalar, and right is the recovered field.
