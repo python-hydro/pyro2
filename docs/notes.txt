@@ -25,3 +25,10 @@ For the theme:
 
 pip install sphinx_rtd_theme
 
+
+
+Youtube:
+
+https://bitbucket.org/birkenfeld/sphinx-contrib/src/49a8e96bc8a7/youtube/
+
+https://github.com/rtfd/readthedocs.org/issues/879
