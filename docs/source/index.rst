@@ -12,6 +12,7 @@ Welcome to pyro's documentation!
 
    intro
    mesh_basics
+   mesh-examples.ipynb
    advection_basics
    compressible_basics
    multigrid_basics
