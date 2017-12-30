@@ -8,9 +8,12 @@ hydrodynamics solvers.  It is designed to provide a tutorial for
 students in computational astrophysics (and hydrodynamics in
 general). We introduce simple implementations of some popular methods
 used in the field, with the code written to be easily
-understandable. It is not parallel, and not meant for demanding
-scientific simulations—given the choice between performance and
-clarity, clarity is taken.
+understandable. All simulations use a single grid (no domain decomposition)
+
+.. note:: 
+
+   pyro is not meant for demanding scientific simulations—given the
+   choice between performance and clarity, clarity is taken.
 
 pyro builds off of a finite-volume framework for solving PDEs. There
 are a number of solvers in pyro, allowing for the solution of

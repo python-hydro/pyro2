@@ -12,13 +12,17 @@ numerical methods for advection that we implement in pyro.
 
 pyro has several solvers for linear advection:
 
-* ``advection`` implements the directionally unsplit corner transport upwind algorithm with piecewise linear reconstruction
+* :py:mod:`advection` implements the directionally unsplit corner transport upwind algorithm with piecewise linear reconstruction
 
-* ``advection_fv4`` uses a fourth-order accurate finite-volume method with RK4 time integration
+* :py:mod:`advection_fv4` uses a fourth-order accurate finite-volume
+  method with RK4 time integration
 
-* ``advection_rk`` uses a method of lines time-integration approach with piecewise linear spatial reconstruction for linear advection
+* :py:mod:`advection_rk` uses a method of lines time-integration
+  approach with piecewise linear spatial reconstruction for linear
+  advection
 
-* ``advection_weno`` uses a WENO reconstruction and method of lines time-integration
+* :py:mod:`advection_weno` uses a WENO reconstruction and method of
+  lines time-integration
 
 
 The main parameters that affect this solver are:

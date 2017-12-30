@@ -11,6 +11,7 @@ Welcome to pyro's documentation!
    :caption: Contents:
 
    intro
+   notes
    design
    running
    output

@@ -38,15 +38,20 @@ The behavior of the main driver, the solver, and the problem setup can
 be controlled by runtime parameters specified in the inputs file (or
 via the command line). Runtime parameters are grouped into sections,
 with the heading of that section enclosed in ``[ .. ]``. The list of
-parameters are stored in the ``pyro/_defaults`` file, the ``_defaults`` files
-in the solver directory, and the ``_problem-name.defaults`` file in the
-solver's ``problem/`` sub-directory. These three files are parsed at
-runtime to define the list of valid parameters. The inputs file is
-read next and used to override the default value of any of these
-previously defined parameters. Additionally, any parameter can be
-specified at the end of the commandline, and these will be used to
-override the defaults. The collection of runtime parameters is stored
-in a ``RuntimeParameters`` object.
+parameters are stored in three places:
+
+* the ``pyro/_defaults`` file
+* the solver's ``_defaults`` file
+* problem's ``_defaults`` file (named ``_problem-name.defaults`` in the
+  solver's ``problem/`` sub-directory). 
+
+These three files are parsed at runtime to define the list of valid
+parameters. The inputs file is read next and used to override the
+default value of any of these previously defined
+parameters. Additionally, any parameter can be specified at the end of
+the commandline, and these will be used to override the defaults. The
+collection of runtime parameters is stored in a
+:func:`RuntimeParameters <util.runparams.RuntimeParameters>` object.
 
 The ``runparams.py`` module in ``util/`` controls access to the runtime
 parameters. You can setup the runtime parameters, parse an inputs

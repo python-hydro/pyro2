@@ -1,13 +1,28 @@
 Compressible hydrodynamics solvers
 ==================================
 
+The equations of compressible hydrodynamics take the form:
+
+.. math::
+
+   \frac{\partial \rho}{\partial t} + \nabla \cdot (\rho U) &= 0 \\
+   \frac{\partial (\rho U)}{\partial t} + \nabla \cdot (\rho U U) + \nabla p &= \rho g \\
+   \frac{\partial (\rho E)}{\partial t} + \nabla \cdot [(\rho E + p ) U] &= \rho U \cdot g 
+
+with :math:`\rho E = \rho e + \frac{1}{2} \rho |U|^2` and :math:`p = p(\rho, e)`.
+
 pyro has several compressible solvers:
 
-* ``compressible`` is based on a directionally unsplit (the corner transport upwind algorithm) piecewise linear method for the Euler equations
+* :py:mod:`compressible` is based on a directionally unsplit (the
+  corner transport upwind algorithm) piecewise linear method for the
+  Euler equations
 
-* ``compressible_rk`` uses a method of lines time-integration approach with piecewise linear spatial reconstruction for the Euler equations
+* :py:mod:`compressible_rk` uses a method of lines time-integration
+  approach with piecewise linear spatial reconstruction for the Euler
+  equations
 
-* ``compressible_fv4`` uses a 4th order accurate method with RK4 time integration
+* :py:mod:`compressible_fv4` uses a 4th order accurate method with RK4
+  time integration
 
 The implementations here have flattening at shocks, artificial
 viscosity, a simple gamma-law equation of state, and (in some cases) a
