@@ -5,9 +5,9 @@ To build the webpages:
 
 To automatically generate the API docs:
 
-   sphinx-apidoc -f -M -o docs/source/ .
+   sphinx-apidoc -f -M -o docs/source/ . lm_combustion radhydro
 
-  (-M puts the module before submodule in the API pages)
+  (-M puts the module before submodule in the API pages; the directories after . are excludes))
 
 
 To support notebooks:
