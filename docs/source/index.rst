@@ -10,7 +10,18 @@ Welcome to pyro's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   modules
+   intro
+   mesh_basics
+   advection_basics
+   compressible_basics
+   multigrid_basics
+   diffusion_basics
+   incompressible_basics
+   lowmach_basics
+   analysis
+   help
+   ack
+   API <modules>
 
 
 Indices and tables
