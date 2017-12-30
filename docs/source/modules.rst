@@ -13,17 +13,13 @@ pyro2
    compressible_fv4
    compressible_react
    compressible_rk
-   convergence
    diffusion
    incompressible
    lm_atm
-   lm_combustion
    mesh
    multigrid
    plot
    pyro
-   sedov_compare
    simulation_null
-   smooth_error
    test
    util
