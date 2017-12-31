@@ -47,7 +47,7 @@ Quick test
 
 Run the advection solver to quickly test if things are setup correctly:
 
-.. code-block::
+.. code-block:: none
 
    ./pyro.py advection smooth inputs.smooth
 

@@ -4,32 +4,30 @@ data and the grid that it lives on.
 
 Typical usage:
 
-  -- create the grid
+* create the grid::
 
-     grid = Grid2d(nx, ny)
+   grid = Grid2d(nx, ny)
 
+* create the data that lives on that grid::
 
-  -- create the data that lives on that grid
+   data = CellCenterData2d(grid)
 
-     data = CellCenterData2d(grid)
+   bc = BC(xlb="reflect", xrb="reflect",
+          ylb="outflow", yrb="outflow")
+   data.register_var("density", bc)
+   ...
 
-     bc = BC(xlb="reflect", xrb="reflect",
-             ylb="outflow", yrb="outflow")
-     data.register_var("density", bc)
-     ...
+   data.create()
 
-     data.create()
+* initialize some data::
 
-
-  -- initialize some data
-
-     dens = data.get_var("density")
-     dens[:,:] = ...
+   dens = data.get_var("density")
+   dens[:,:] = ...
 
 
-  -- fill the ghost cells
+* fill the ghost cells::
 
-     data.fill_BC("density")
+   data.fill_BC("density")
 
 """
 from __future__ import print_function
@@ -50,15 +48,15 @@ class Grid2d(object):
     the 2-d grid class.  The grid object will contain the coordinate
     information (at various centerings).
 
-    A basic (1-d) representation of the layout is:
+    A basic (1-d) representation of the layout is::
 
-    |     |      |     X     |     |      |     |     X     |      |     |
-    +--*--+- // -+--*--X--*--+--*--+- // -+--*--+--*--X--*--+- // -+--*--+
-       0          ng-1    ng   ng+1         ... ng+nx-1 ng+nx      2ng+nx-1
+       |     |      |     X     |     |      |     |     X     |      |     |
+       +--*--+- // -+--*--X--*--+--*--+- // -+--*--+--*--X--*--+- // -+--*--+
+          0          ng-1    ng   ng+1         ... ng+nx-1 ng+nx      2ng+nx-1
 
-                         ilo                      ihi
+                            ilo                      ihi
 
-    |<- ng guardcells->|<---- nx interior zones ----->|<- ng guardcells->|
+       |<- ng guardcells->|<---- nx interior zones ----->|<- ng guardcells->|
 
     The '*' marks the data locations.
     """
@@ -209,31 +207,31 @@ class CellCenterData2d(object):
     CellCenterData2d object is built in a multi-step process before
     it can be used.
 
-    -- Create the object.  We pass in a grid object to describe where
-       the data lives:
+    * Create the object.  We pass in a grid object to describe where
+      the data lives::
 
-       my_data = patch.CellCenterData2d(myGrid)
+         my_data = patch.CellCenterData2d(myGrid)
 
-    -- Register any variables that we expect to live on this patch.
-       Here BC describes the boundary conditions for that variable.
+    * Register any variables that we expect to live on this patch.
+      Here BC describes the boundary conditions for that variable::
 
-       my_data.register_var('density', BC)
-       my_data.register_var('x-momentum', BC)
-       ...
+         my_data.register_var('density', BC)
+         my_data.register_var('x-momentum', BC)
+         ...
 
-    -- Register any auxillary data -- these are any parameters that are
-       needed to interpret the data outside of the simulation (for
-       example, the gamma for the equation of state).
+    * Register any auxillary data -- these are any parameters that are
+      needed to interpret the data outside of the simulation (for
+      example, the gamma for the equation of state)::
 
-       my_data.set_aux(keyword, value)
+         my_data.set_aux(keyword, value)
 
-    -- Finish the initialization of the patch
+    * Finish the initialization of the patch::
 
-       my_data.create()
+         my_data.create()
 
     This last step actually allocates the storage for the state
     variables.  Once this is done, the patch is considered to be
-   locked.  New variables cannot be added.
+    locked.  New variables cannot be added.
     """
 
     def __init__(self, grid, dtype=np.float64):
@@ -574,23 +572,23 @@ class CellCenterData2d(object):
         the advection routine.  Getting a good multidimensional
         reconstruction polynomial is hard -- we want it to be bilinear
         and monotonic -- we settle for having each slope be
-        independently monotonic:
+        independently monotonic::
 
-                  (x)         (y)
-        f(x,y) = m    x/dx + m    y/dy + <f>
+                     (x)         (y)
+           f(x,y) = m    x/dx + m    y/dy + <f>
 
         where the m's are the limited differences in each direction.
         When averaged over the parent cell, this reproduces <f>.
 
-        Each zone's reconstrution will be averaged over 4 children.
+        Each zone's reconstrution will be averaged over 4 children::
 
-        +-----------+     +-----+-----+
-        |           |     |     |     |
-        |           |     |  3  |  4  |
-        |    <f>    | --> +-----+-----+
-        |           |     |     |     |
-        |           |     |  1  |  2  |
-        +-----------+     +-----+-----+
+           +-----------+     +-----+-----+
+           |           |     |     |     |
+           |           |     |  3  |  4  |
+           |    <f>    | --> +-----+-----+
+           |           |     |     |     |
+           |           |     |  1  |  2  |
+           +-----------+     +-----+-----+
 
         We will fill each of the finer resolution zones by filling all
         the 1's together, using a stride 2 into the fine array.  Then

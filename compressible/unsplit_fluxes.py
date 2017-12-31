@@ -1,5 +1,4 @@
-"""
-Implementation of the Colella 2nd order unsplit Godunov scheme.  This
+"""Implementation of the Colella 2nd order unsplit Godunov scheme.  This
 is a 2-dimensional implementation only.  We assume that the grid is
 uniform, but it is relatively straightforward to relax this
 assumption.
@@ -7,18 +6,13 @@ assumption.
 There are several different options for this solver (they are all
 discussed in the Colella paper).
 
-  limiter          = 0 to use no limiting
-                   = 1 to use the 2nd order MC limiter
-                   = 2 to use the 4th order MC limiter
+* limiter: 0 = no limiting; 1 = 2nd order MC limiter; 2 = 4th order MC limiter
 
-  riemann          = HLLC to use the HLLC solver
-                   = CGF to use the Colella, Glaz, and Ferguson solver
+* riemann: HLLC or CGF (for Colella, Glaz, and Freguson solver)
 
-  use_flattening   = 1 to use the multidimensional flattening
-                     algorithm at shocks
+* use_flattening: set to 1 to use the multidimensional flattening at shocks
 
-  delta, z0, z1      these are the flattening parameters.  The default
-                     are the values listed in Colella 1990.
+* delta, z0, z1: flattening parameters (we use Colella 1990 defaults)
 
 The grid indices look like::
 
@@ -48,54 +42,54 @@ We wish to solve
 
    U_t + F^x_x + F^y_y = H
 
-we want :math:`U_{i+1/2}^{n+1/2}` -- the interface values that are input to
+we want U_{i+1/2}^{n+1/2} -- the interface values that are input to
 the Riemann problem through the faces for each zone.
 
-Taylor expanding yields
+Taylor expanding yields::
 
-   n+1/2                     dU           dU
-  U          = U   + 0.5 dx  --  + 0.5 dt --
-   i+1/2,j,L    i,j          dx           dt
-
-
-                             dU             dF^x   dF^y
-             = U   + 0.5 dx  --  - 0.5 dt ( ---- + ---- - H )
-                i,j          dx              dx     dy
+    n+1/2                     dU           dU
+   U          = U   + 0.5 dx  --  + 0.5 dt --
+    i+1/2,j,L    i,j          dx           dt
 
 
-                              dU      dF^x            dF^y
-             = U   + 0.5 ( dx -- - dt ---- ) - 0.5 dt ---- + 0.5 dt H
-                i,j           dx       dx              dy
+                              dU             dF^x   dF^y
+              = U   + 0.5 dx  --  - 0.5 dt ( ---- + ---- - H )
+                 i,j          dx              dx     dy
 
 
-                                  dt       dU           dF^y
-             = U   + 0.5 dx ( 1 - -- A^x ) --  - 0.5 dt ---- + 0.5 dt H
-                i,j               dx       dx            dy
+                               dU      dF^x            dF^y
+              = U   + 0.5 ( dx -- - dt ---- ) - 0.5 dt ---- + 0.5 dt H
+                 i,j           dx       dx              dy
 
 
-                                dt       _            dF^y
-             = U   + 0.5  ( 1 - -- A^x ) DU  - 0.5 dt ---- + 0.5 dt H
-                i,j             dx                     dy
+                                   dt       dU           dF^y
+              = U   + 0.5 dx ( 1 - -- A^x ) --  - 0.5 dt ---- + 0.5 dt H
+                 i,j               dx       dx            dy
 
-                     +----------+-----------+  +----+----+   +---+---+
-                                |                   |            |
 
-                    this is the monotonized   this is the   source term
-                    central difference term   transverse
-                                              flux term
+                                 dt       _            dF^y
+              = U   + 0.5  ( 1 - -- A^x ) DU  - 0.5 dt ---- + 0.5 dt H
+                 i,j             dx                     dy
+
+                      +----------+-----------+  +----+----+   +---+---+
+                                 |                   |            |
+
+                     this is the monotonized   this is the   source term
+                     central difference term   transverse
+                                               flux term
 
 There are two components, the central difference in the normal to the
 interface, and the transverse flux difference.  This is done for the
 left and right sides of all 4 interfaces in a zone, which are then
 used as input to the Riemann problem, yielding the 1/2 time interface
-values,
+values::
 
-     n+1/2
-    U
-     i+1/2,j
+    n+1/2
+   U
+    i+1/2,j
 
 Then, the zone average values are updated in the usual finite-volume
-way:
+way::
 
     n+1    n     dt    x  n+1/2       x  n+1/2
    U    = U    + -- { F (U       ) - F (U       ) }
@@ -108,24 +102,24 @@ way:
 
 Updating U_{i,j}:
 
-  -- We want to find the state to the left and right (or top and
-     bottom) of each interface, ex. U_{i+1/2,j,[lr]}^{n+1/2}, and use
-     them to solve a Riemann problem across each of the four
-     interfaces.
+* We want to find the state to the left and right (or top and bottom)
+  of each interface, ex. U_{i+1/2,j,[lr]}^{n+1/2}, and use them to
+  solve a Riemann problem across each of the four interfaces.
 
-  -- U_{i+1/2,j,[lr]}^{n+1/2} is comprised of two parts, the
-     computation of the monotonized central differences in the normal
-     direction (eqs. 2.8, 2.10) and the computation of the transverse
-     derivatives, which requires the solution of a Riemann problem in
-     the transverse direction (eqs. 2.9, 2.14).
+* U_{i+1/2,j,[lr]}^{n+1/2} is comprised of two parts, the computation
+  of the monotonized central differences in the normal direction
+  (eqs. 2.8, 2.10) and the computation of the transverse derivatives,
+  which requires the solution of a Riemann problem in the transverse
+  direction (eqs. 2.9, 2.14).
 
-       -- the monotonized central difference part is computed using
-          the primitive variables.
+  * the monotonized central difference part is computed using the
+    primitive variables.
 
-       -- We compute the central difference part in both directions
-          before doing the transverse flux differencing, since for the
-          high-order transverse flux implementation, we use these as
-          the input to the transverse Riemann problem.
+  * We compute the central difference part in both directions before
+    doing the transverse flux differencing, since for the high-order
+    transverse flux implementation, we use these as the input to the
+    transverse Riemann problem.
+
 """
 
 import compressible.eos as eos

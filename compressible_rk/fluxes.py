@@ -4,17 +4,18 @@ This is a 2nd-order PLM method for a method-of-lines integration
 
 We wish to solve
 
-  U_t + F^x_x + F^y_y = H
+.. math::
+
+   U_t + F^x_x + F^y_y = H
 
 we want U_{i+1/2} -- the interface values that are input to
 the Riemann problem through the faces for each zone.
 
-Taylor expanding *in space only* yields
+Taylor expanding *in space only* yields::
 
-                             dU
-  U          = U   + 0.5 dx  --
-   i+1/2,j,L    i,j          dx
-
+                              dU
+   U          = U   + 0.5 dx  --
+    i+1/2,j,L    i,j          dx
 
 """
 

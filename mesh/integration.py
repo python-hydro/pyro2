@@ -1,25 +1,25 @@
 """
 A generic Runge-Kutta type integrator for integrating CellCenterData2d.
-We support a generic Butcher tableau for explicit the Runge-Kutta update
+We support a generic Butcher tableau for explicit the Runge-Kutta update::
+
+   0   |
+   c_2 | a_21
+   c_3 | a_31 a_32
+   :   |  :        .
+   :   |  :          .
+   c_s | a_s1 a_s2 ... a_s,s-1
+   ----+---------------------------
+       | b_1  b_2  ... b_{s-1}  b_s
 
 
-0   |
-c_2 | a_21
-c_3 | a_31 a_32
-:   |  :        .
-:   |  :          .
-c_s | a_s1 a_s2 ... a_s,s-1
-----+---------------------------
-    | b_1  b_2  ... b_{s-1}  b_s
+the update is::
 
+   y_{n+1} = y_n + dt sum_{i=1}^s {b_i k_i}
 
-the update is
+and the s increment is::
 
-  y_{n+1} = y_n + dt sum_{i=1}^s {b_i k_i}
+   k_s = f(t + c_s dt, y_n + dt (a_s1 k1 + a_s2 k2 + ... + a_s,s-1 k_{s-1})
 
-and the s increment is 
-
-  k_s = f(t + c_s dt, y_n + dt (a_s1 k1 + a_s2 k2 + ... + a_s,s-1 k_{s-1})
 """
 
 import numpy as np
