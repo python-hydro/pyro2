@@ -6,8 +6,9 @@ def fluxes(my_data, rp, dt):
     """Construct the fluxes through the interfaces for the linear advection
     equation:
 
-      a  + u a  + v a  = 0
-       t      x      y
+    .. math::
+
+       a_t + u a_x + v a_y = 0
 
     We use a fourth-order Godunov method to construct the interface
     states, using Runge-Kutta integration.  Since this is 4th-order,
@@ -20,15 +21,14 @@ def fluxes(my_data, rp, dt):
     on the sign of the velocity.
 
     Our convection is that the fluxes are going to be defined on the
-    left edge of the computational zones
+    left edge of the computational zones::
 
+        |             |             |             |
+        |             |             |             |
+       -+------+------+------+------+------+------+--
+        |     i-1     |      i      |     i+1     |
 
-     |             |             |             |
-     |             |             |             |
-    -+------+------+------+------+------+------+--
-     |     i-1     |      i      |     i+1     |
-
-              a_l,i  a_r,i   a_l,i+1
+                 a_l,i  a_r,i   a_l,i+1
 
 
     a_r,i and a_l,i+1 are computed using the information in

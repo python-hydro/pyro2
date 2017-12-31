@@ -1,25 +1,7 @@
-"""
-The pyro advection solver.  This implements a fourth-order, unsplit
-method for linear advection based on the McCorquodale & Colella 2011
-paper
-
-The general flow of the solver when invoked through pyro.py is:
-
-  create grid
-
-  initial conditions
-
-  main loop
-
-     fill ghost cells
-
-     compute dt
-
-     compute fluxes
-
-     conservative update
-
-     output
+"""The pyro fourth-order accurate advection solver.  This implements
+a the method of McCorquodale and Colella (2011), with 4th order
+accurate spatial reconstruction together with 4th order Runge-Kutta
+time integration.
 
 """
 

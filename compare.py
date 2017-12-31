@@ -18,6 +18,10 @@ errors = {"gridbad": "grids don't agree",
 
 
 def compare(data1, data2):
+    """given two CellCenterData2d objects, compare the data, zone-by-zone
+    and output any errors
+
+    """
 
     # compare the grids
     if not data1.grid == data2.grid:

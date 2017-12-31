@@ -20,6 +20,8 @@ discussed in the Colella paper).
   delta, z0, z1      these are the flattening parameters.  The default
                      are the values listed in Colella 1990.
 
+The grid indices look like::
+
    j+3/2--+---------+---------+---------+
           |         |         |         |
      j+1 _|         |         |         |
@@ -42,9 +44,11 @@ discussed in the Colella paper).
 
 We wish to solve
 
-  U_t + F^x_x + F^y_y = H
+.. math::
 
-we want U_{i+1/2}^{n+1/2} -- the interface values that are input to
+   U_t + F^x_x + F^y_y = H
+
+we want :math:`U_{i+1/2}^{n+1/2}` -- the interface values that are input to
 the Riemann problem through the faces for each zone.
 
 Taylor expanding yields
