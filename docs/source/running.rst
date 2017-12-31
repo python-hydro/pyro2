@@ -31,6 +31,13 @@ above run, we could do:
    ./pyro.py advection smooth inputs.smooth vis.dovis=0
 
 
+.. note::
+
+   Quite often, the slowest part of the runtime is the visualization, so disabling
+   vis as shown above can dramatically speed up the execution.  You can always
+   plot the results after the fact using the ``plot.py`` script, as discussed
+   in  :ref:`analysis`.
+
 Runtime options
 ---------------
 
