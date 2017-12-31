@@ -1,0 +1,419 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>test &mdash; pyro 2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="pyro 2.0 documentation" href="../index.html"/>
+        <link rel="up" title="Module code" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pyro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mesh-examples.html">Mesh examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>test</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for test</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">pytest</span>
+
+<span class="kn">import</span> <span class="nn">pyro</span>
+<span class="kn">import</span> <span class="nn">multigrid.mg_test_simple</span> <span class="k">as</span> <span class="nn">mg_test_simple</span>
+<span class="kn">import</span> <span class="nn">multigrid.mg_test_vc_dirichlet</span> <span class="k">as</span> <span class="nn">mg_test_vc_dirichlet</span>
+<span class="kn">import</span> <span class="nn">multigrid.mg_test_vc_periodic</span> <span class="k">as</span> <span class="nn">mg_test_vc_periodic</span>
+<span class="kn">import</span> <span class="nn">multigrid.mg_test_general_inhomogeneous</span> <span class="k">as</span> <span class="nn">mg_test_general_inhomogeneous</span>
+
+<div class="viewcode-block" id="PyroTest"><a class="viewcode-back" href="../test.html#test.PyroTest">[docs]</a><span class="k">class</span> <span class="nc">PyroTest</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">problem</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="n">solver</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span> <span class="o">=</span> <span class="n">problem</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span> <span class="o">=</span> <span class="n">inputs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">options</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">-</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="do_tests"><a class="viewcode-back" href="../test.html#test.do_tests">[docs]</a><span class="k">def</span> <span class="nf">do_tests</span><span class="p">(</span><span class="n">build</span><span class="p">,</span> <span class="n">out_file</span><span class="p">,</span> <span class="n">do_standalone</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">do_main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+             <span class="n">reset_fails</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">store_all_benchmarks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+             <span class="n">single</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+    <span class="c1"># make sure we&#39;ve built stuff</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;build = &quot;</span><span class="p">,</span> <span class="n">build</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">build</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;./mk.sh&quot;</span><span class="p">)</span>
+
+    <span class="n">opts</span> <span class="o">=</span> <span class="s2">&quot;driver.verbose=0 vis.dovis=0 io.do_io=0&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">if</span> <span class="n">do_main</span><span class="p">:</span>
+        <span class="n">tests</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;advection&quot;</span><span class="p">,</span> <span class="s2">&quot;smooth&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.smooth&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
+        <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;advection_rk&quot;</span><span class="p">,</span> <span class="s2">&quot;smooth&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.smooth&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
+        <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;compressible&quot;</span><span class="p">,</span> <span class="s2">&quot;quad&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.quad&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
+        <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;compressible&quot;</span><span class="p">,</span> <span class="s2">&quot;sod&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.sod.x&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
+        <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;compressible&quot;</span><span class="p">,</span> <span class="s2">&quot;rt&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.rt&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
+        <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;compressible_rk&quot;</span><span class="p">,</span> <span class="s2">&quot;rt&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.rt&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
+        <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;diffusion&quot;</span><span class="p">,</span> <span class="s2">&quot;gaussian&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.gaussian&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
+        <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;incompressible&quot;</span><span class="p">,</span> <span class="s2">&quot;shear&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.shear&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
+        <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;lm_atm&quot;</span><span class="p">,</span> <span class="s2">&quot;bubble&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.bubble&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">single</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tests_to_run</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">tests</span> <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="o">==</span> <span class="n">single</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">solver</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tests_to_run</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">tests</span> <span class="k">if</span> <span class="n">q</span><span class="o">.</span><span class="n">solver</span> <span class="o">==</span> <span class="n">solver</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tests_to_run</span> <span class="o">=</span> <span class="n">tests</span>
+
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tests_to_run</span><span class="p">:</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="n">pyro</span><span class="o">.</span><span class="n">doit</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">solver</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">problem</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span>
+                            <span class="n">other_commands</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">options</span><span class="p">,</span> <span class="n">comp_bench</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">reset_bench_on_fail</span><span class="o">=</span><span class="n">reset_fails</span><span class="p">,</span> <span class="n">make_bench</span><span class="o">=</span><span class="n">store_all_benchmarks</span><span class="p">)</span>
+            <span class="n">results</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)]</span> <span class="o">=</span> <span class="n">err</span>
+
+
+    <span class="c1"># standalone tests</span>
+    <span class="k">if</span> <span class="n">do_standalone</span> <span class="ow">and</span> <span class="n">single</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">mg_test_simple</span><span class="o">.</span><span class="n">test_poisson_dirichlet</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="n">comp_bench</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                                    <span class="n">store_bench</span><span class="o">=</span><span class="n">store_all_benchmarks</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;mg_poisson_dirichlet&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">err</span>
+
+        <span class="n">err</span> <span class="o">=</span> <span class="n">mg_test_vc_dirichlet</span><span class="o">.</span><span class="n">test_vc_poisson_dirichlet</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span>
+                                                             <span class="n">comp_bench</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                                                             <span class="n">store_bench</span><span class="o">=</span><span class="n">store_all_benchmarks</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;mg_vc_poisson_dirichlet&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">err</span>
+
+        <span class="n">err</span> <span class="o">=</span> <span class="n">mg_test_vc_periodic</span><span class="o">.</span><span class="n">test_vc_poisson_periodic</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="n">comp_bench</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                                                           <span class="n">store_bench</span><span class="o">=</span><span class="n">store_all_benchmarks</span><span class="p">,</span> 
+                                                           <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;mg_vc_poisson_periodic&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">err</span>
+
+        <span class="n">err</span> <span class="o">=</span> <span class="n">mg_test_general_inhomogeneous</span><span class="o">.</span><span class="n">test_general_poisson_inhomogeneous</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> 
+                                                                               <span class="n">comp_bench</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                                                                               <span class="n">store_bench</span><span class="o">=</span><span class="n">store_all_benchmarks</span><span class="p">,</span> 
+                                                                               <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;mg_general_poisson_inhomogeneous&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">err</span>
+
+
+    <span class="n">failed</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">out_file</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">out_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">out</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;pyro tests run: </span><span class="si">{}</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">microsecond</span><span class="o">=</span><span class="mi">0</span><span class="p">))))</span>
+
+        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">r</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:42}</span><span class="s2"> failed</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+                <span class="n">failed</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:42}</span><span class="s2"> passed</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+
+
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{}</span><span class="s2"> test(s) failed</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">failed</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span> <span class="o">==</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="n">p</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+
+    <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-o&quot;</span><span class="p">,</span>
+                   <span class="n">help</span><span class="o">=</span><span class="s2">&quot;name of file to output the report to (otherwise output to the screen&quot;</span><span class="p">,</span>
+                   <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--build&quot;</span><span class="p">,</span>
+                   <span class="n">help</span><span class="o">=</span><span class="s2">&quot;execute the mk.sh script first before any tests&quot;</span><span class="p">,</span>
+                   <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
+
+    <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--single&quot;</span><span class="p">,</span>
+                   <span class="n">help</span><span class="o">=</span><span class="s2">&quot;name of a single test (solver-problem) to run&quot;</span><span class="p">,</span>
+                   <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--solver&quot;</span><span class="p">,</span>
+                   <span class="n">help</span><span class="o">=</span><span class="s2">&quot;only test the solver specified&quot;</span><span class="p">,</span>
+                   <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--skip_standalone&quot;</span><span class="p">,</span>
+                   <span class="n">help</span><span class="o">=</span><span class="s2">&quot;skip the tests that don&#39;t go through pyro.py&quot;</span><span class="p">,</span>
+                   <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
+
+    <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--reset_failures&quot;</span><span class="p">,</span> <span class="s2">&quot;-r&quot;</span><span class="p">,</span>
+                   <span class="n">help</span><span class="o">=</span><span class="s2">&quot;if a test fails, reset the benchmark&quot;</span><span class="p">,</span>
+                   <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
+
+    <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--store_all_benchmarks&quot;</span><span class="p">,</span>
+                   <span class="n">help</span><span class="o">=</span><span class="s2">&quot;rewrite all the benchmarks, regardless of pass / fail&quot;</span><span class="p">,</span>
+                   <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
+
+    <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--skip_main&quot;</span><span class="p">,</span>
+                   <span class="n">help</span><span class="o">=</span><span class="s2">&quot;skip the tests that go through pyro.py, and only run standalone tests&quot;</span><span class="p">,</span>
+                   <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
+
+    <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--unittests_only&quot;</span><span class="p">,</span> <span class="s2">&quot;-u&quot;</span><span class="p">,</span>
+                   <span class="n">help</span><span class="o">=</span><span class="s2">&quot;only do the unit tests&quot;</span><span class="p">,</span>
+                   <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="k">try</span><span class="p">:</span> <span class="n">outfile</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">o</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">except</span><span class="p">:</span> <span class="n">outfile</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">build</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">build</span>
+
+    <span class="n">do_main</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">skip_main</span><span class="p">:</span> <span class="n">do_main</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">do_standalone</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">skip_standalone</span><span class="p">:</span> <span class="n">do_standalone</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">unittests_only</span><span class="p">:</span>
+        <span class="n">do_tests</span><span class="p">(</span><span class="n">build</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> <span class="n">do_standalone</span><span class="o">=</span><span class="n">do_standalone</span><span class="p">,</span> <span class="n">do_main</span><span class="o">=</span><span class="n">do_main</span><span class="p">,</span> 
+                 <span class="n">reset_fails</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">reset_failures</span><span class="p">,</span> 
+                 <span class="n">store_all_benchmarks</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">store_all_benchmarks</span><span class="p">,</span>
+                 <span class="n">single</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">single</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">solver</span><span class="p">)</span>
+
+    <span class="c1"># unit tests</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">single</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">pytest</span><span class="o">.</span><span class="n">main</span><span class="p">([</span><span class="s2">&quot;-v&quot;</span><span class="p">])</span>
+
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Michael Zingale.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

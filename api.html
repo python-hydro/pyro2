@@ -1,0 +1,438 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>API documentation &mdash; pyro 2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="pyro 2.0 documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pyro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">pyro2</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>API documentation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="api-documentation">
+<h1>API documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-advection">
+<span id="advection"></span><h2><code class="docutils literal"><span class="pre">advection</span></code><a class="headerlink" href="#module-advection" title="Permalink to this headline">¶</a></h2>
+<p>The pyro advection solver.  This implements a second-order, unsplit
+method for linear advection based on the Colella 1990 paper.</p>
+<p>The general flow of the solver when invoked through pyro.py is:</p>
+<blockquote>
+<div><p>create grid</p>
+<p>initial conditions</p>
+<p>main loop</p>
+<blockquote>
+<div><p>fill ghost cells</p>
+<p>compute dt</p>
+<p>compute fluxes</p>
+<p>conservative update</p>
+<p>output</p>
+</div></blockquote>
+</div></blockquote>
+</div>
+<div class="section" id="module-advection_fv4">
+<span id="advection-fv4"></span><h2><code class="docutils literal"><span class="pre">advection_fv4</span></code><a class="headerlink" href="#module-advection_fv4" title="Permalink to this headline">¶</a></h2>
+<p>The pyro advection solver.  This implements a fourth-order, unsplit
+method for linear advection based on the McCorquodale &amp; Colella 2011
+paper</p>
+<p>The general flow of the solver when invoked through pyro.py is:</p>
+<blockquote>
+<div><p>create grid</p>
+<p>initial conditions</p>
+<p>main loop</p>
+<blockquote>
+<div><p>fill ghost cells</p>
+<p>compute dt</p>
+<p>compute fluxes</p>
+<p>conservative update</p>
+<p>output</p>
+</div></blockquote>
+</div></blockquote>
+</div>
+<div class="section" id="module-advection_rk">
+<span id="advection-rk"></span><h2><code class="docutils literal"><span class="pre">advection_rk</span></code><a class="headerlink" href="#module-advection_rk" title="Permalink to this headline">¶</a></h2>
+<p>The pyro advection solver.  This implements a second-order, unsplit
+method for linear advection based on the Colella 1990 paper.</p>
+<p>The general flow of the solver when invoked through pyro.py is:</p>
+<blockquote>
+<div><p>create grid</p>
+<p>initial conditions</p>
+<p>main loop</p>
+<blockquote>
+<div><p>fill ghost cells</p>
+<p>compute dt</p>
+<p>compute fluxes</p>
+<p>conservative update</p>
+<p>output</p>
+</div></blockquote>
+</div></blockquote>
+</div>
+<div class="section" id="module-advection_weno">
+<span id="advection-weno"></span><h2><code class="docutils literal"><span class="pre">advection_weno</span></code><a class="headerlink" href="#module-advection_weno" title="Permalink to this headline">¶</a></h2>
+<p>The pyro advection solver.  This implements a finite difference Lax-Friedrichs
+flux split method with WENO reconstruction based on Shu’s review from 1998 (<a class="reference external" href="https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19980007543.pdf">https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19980007543.pdf</a>) although
+the notation more follows Gerolymos et al
+(<a class="reference external" href="https://doi.org/10.1016/j.jcp.2009.07.039">https://doi.org/10.1016/j.jcp.2009.07.039</a>).</p>
+<p>Most of the code is taken from advection_rk and toy-conslaw.</p>
+<p>The general flow of the solver when invoked through pyro.py is:</p>
+<blockquote>
+<div><p>create grid</p>
+<p>initial conditions</p>
+<p>main loop</p>
+<blockquote>
+<div><p>fill ghost cells</p>
+<p>compute dt</p>
+<p>compute fluxes</p>
+<p>conservative update</p>
+<p>output</p>
+</div></blockquote>
+</div></blockquote>
+</div>
+<div class="section" id="module-compressible">
+<span id="compressible"></span><h2><code class="docutils literal"><span class="pre">compressible</span></code><a class="headerlink" href="#module-compressible" title="Permalink to this headline">¶</a></h2>
+<p>The pyro compressible hydrodynamics solver.  This implements the
+second-order (piecewise-linear), unsplit method of Colella 1990.</p>
+</div>
+<div class="section" id="module-compressible_fv4">
+<span id="compressible-fv4"></span><h2><code class="docutils literal"><span class="pre">compressible_fv4</span></code><a class="headerlink" href="#module-compressible_fv4" title="Permalink to this headline">¶</a></h2>
+<p>The pyro compressible hydrodynamics solver.  This implements the
+second-order (piecewise-linear), unsplit method of Colella 1990.</p>
+</div>
+<div class="section" id="module-compressible_react">
+<span id="compressible-react"></span><h2><code class="docutils literal"><span class="pre">compressible_react</span></code><a class="headerlink" href="#module-compressible_react" title="Permalink to this headline">¶</a></h2>
+<p>The pyro compressible hydrodynamics solver with reactions.  This
+implements the second-order (piecewise-linear), unsplit method of
+Colella 1990, and incorporates reactions via Strang splitting.</p>
+</div>
+<div class="section" id="module-compressible_rk">
+<span id="compressible-rk"></span><h2><code class="docutils literal"><span class="pre">compressible_rk</span></code><a class="headerlink" href="#module-compressible_rk" title="Permalink to this headline">¶</a></h2>
+<p>The pyro compressible hydrodynamics solver.  This implements the
+second-order (piecewise-linear), unsplit method of Colella 1990.</p>
+</div>
+<div class="section" id="module-diffusion">
+<span id="diffusion"></span><h2><code class="docutils literal"><span class="pre">diffusion</span></code><a class="headerlink" href="#module-diffusion" title="Permalink to this headline">¶</a></h2>
+<p>The pyro diffusion solver.  This implements second-order implicit 
+diffusion using Crank-Nicolson time-differencing.  The resulting 
+system is solved using multigrid.</p>
+<p>The general flow is:</p>
+<blockquote>
+<div><p>compute the RHS given the current state</p>
+<p>sets up the MG</p>
+<p>solve the system using MG for updated phi</p>
+</div></blockquote>
+<p>The timestep is computed as:</p>
+<blockquote>
+<div>CFL* 0.5*dt/dx**2</div></blockquote>
+</div>
+<div class="section" id="module-incompressible">
+<span id="incompressible"></span><h2><code class="docutils literal"><span class="pre">incompressible</span></code><a class="headerlink" href="#module-incompressible" title="Permalink to this headline">¶</a></h2>
+<p>The pyro solver for incompressible flow.  This implements as second-order
+approximate projection method.  The general flow is:</p>
+<blockquote>
+<div><p>– create the limited slopes of u and v (in both directions)</p>
+<p class="attribution">&mdash;get the advective velocities through a piecewise linear Godunov 
+method</p>
+</div></blockquote>
+<blockquote>
+<div><dl class="docutils">
+<dt>– enforce the divergence constraint on the velocities through a </dt>
+<dd>projection (the MAC projection)</dd>
+</dl>
+<p class="attribution">&mdash;recompute the interface states using the new advective velocity</p>
+</div></blockquote>
+<blockquote>
+<div><p>– update U in time to get the provisional velocity field</p>
+<p class="attribution">&mdash;project the final velocity to enforce the divergence constraint.</p>
+</div></blockquote>
+<p>The projections are done using multigrid</p>
+</div>
+<div class="section" id="module-lm_atm">
+<span id="lm-atm"></span><h2><code class="docutils literal"><span class="pre">lm_atm</span></code><a class="headerlink" href="#module-lm_atm" title="Permalink to this headline">¶</a></h2>
+<p>The pyro solver for incompressible flow.  This implements as second-order
+approximate projection method.  The general flow is:</p>
+<blockquote>
+<div><p>– create the limited slopes of u and v (in both directions)</p>
+<p class="attribution">&mdash;get the advective velocities through a piecewise linear Godunov 
+method</p>
+</div></blockquote>
+<blockquote>
+<div><dl class="docutils">
+<dt>– enforce the divergence constraint on the velocities through a </dt>
+<dd>projection (the MAC projection)</dd>
+</dl>
+<p class="attribution">&mdash;recompute the interface states using the new advective velocity</p>
+</div></blockquote>
+<blockquote>
+<div><p>– update U in time to get the provisional velocity field</p>
+<p class="attribution">&mdash;project the final velocity to enforce the divergence constraint.</p>
+</div></blockquote>
+<p>The projections are done using multigrid</p>
+</div>
+<div class="section" id="module-mesh">
+<span id="mesh"></span><h2><code class="docutils literal"><span class="pre">mesh</span></code><a class="headerlink" href="#module-mesh" title="Permalink to this headline">¶</a></h2>
+<p>This is the general mesh module for pyro.  It implements everything
+necessary to work with finite-volume data.</p>
+</div>
+<div class="section" id="module-multigrid">
+<span id="multigrid"></span><h2><code class="docutils literal"><span class="pre">multigrid</span></code><a class="headerlink" href="#module-multigrid" title="Permalink to this headline">¶</a></h2>
+<p>This is the pyro multigrid solver.  THere are several versions.</p>
+<p>MG implements a second-order discretization of a constant-coefficient
+Helmholtz equation:</p>
+<blockquote>
+<div>(alpha - beta L) phi = f</div></blockquote>
+<p>variable_coeff_MG implements a variable-coefficient Poisson equation:</p>
+<blockquote>
+<div>div { eta grad phi } = f</div></blockquote>
+<p>general_MG implements a more general elliptic equation:</p>
+<blockquote>
+<div>alpha phi + div { beta grad phi } + gamma . grad phi = f</div></blockquote>
+<p>All use pure V-cycles to solve elliptic problems</p>
+</div>
+<div class="section" id="module-util">
+<span id="util"></span><h2><code class="docutils literal"><span class="pre">util</span></code><a class="headerlink" href="#module-util" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Michael Zingale.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,436 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Advection solvers &mdash; pyro 2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="pyro 2.0 documentation" href="index.html"/>
+        <link rel="next" title="Compressible hydrodynamics solvers" href="compressible_basics.html"/>
+        <link rel="prev" title="Mesh examples" href="mesh-examples.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pyro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Advection solvers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#smooth">smooth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tophat">tophat</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#exercises">Exercises</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#explorations">Explorations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#extensions">Extensions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Advection solvers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/advection_basics.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="advection-solvers">
+<h1>Advection solvers<a class="headerlink" href="#advection-solvers" title="Permalink to this headline">¶</a></h1>
+<p>The linear advection equation:</p>
+<div class="math">
+\[a_t + u a_x + v a_y = 0\]</div>
+<p>provides a good basis for understanding the methods used for
+compressible hydrodynamics. Chapter 4 of the notes summarizes the
+numerical methods for advection that we implement in pyro.</p>
+<p>pyro has several solvers for linear advection:</p>
+<ul class="simple">
+<li><a class="reference internal" href="advection.html#module-advection" title="advection"><code class="xref py py-mod docutils literal"><span class="pre">advection</span></code></a> implements the directionally unsplit corner transport upwind algorithm with piecewise linear reconstruction</li>
+<li><a class="reference internal" href="advection_fv4.html#module-advection_fv4" title="advection_fv4"><code class="xref py py-mod docutils literal"><span class="pre">advection_fv4</span></code></a> uses a fourth-order accurate finite-volume
+method with RK4 time integration</li>
+<li><a class="reference internal" href="advection_rk.html#module-advection_rk" title="advection_rk"><code class="xref py py-mod docutils literal"><span class="pre">advection_rk</span></code></a> uses a method of lines time-integration
+approach with piecewise linear spatial reconstruction for linear
+advection</li>
+<li><a class="reference internal" href="advection_weno.html#module-advection_weno" title="advection_weno"><code class="xref py py-mod docutils literal"><span class="pre">advection_weno</span></code></a> uses a WENO reconstruction and method of
+lines time-integration</li>
+</ul>
+<p>The main parameters that affect this solver are:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal"><span class="pre">[driver]</span></code></th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">cfl</span></code></td>
+<td>the advective CFL number (what fraction of a zone can we cross in a single timestep)</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal"><span class="pre">[advection]</span></code></th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">u</span></code></td>
+<td>the advective velocity in the x direction</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">v</span></code></td>
+<td>the advective velocity in the y direction</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">limiter</span></code></td>
+<td>what type of limiting to use in reconstructing the slopes. 0 means use an unlimited second-order
+centered difference. 1 is the MC limiter, and 2 is the 4th-order MC limiter</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">temporal_method</span></code></td>
+<td>the MOL integration method to use (RK2, TVD2, TVD3, RK4) (advection_rk only)</td>
+</tr>
+</tbody>
+</table>
+<p>The main use for the advection solver is to understand how Godunov
+techniques work for hyperbolic problems. These same ideas will be used
+in the compressible and incompressible solvers. This video shows
+graphically how the basic advection algorithm works, consisting of
+reconstruction, evolution, and averaging steps:</p>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
+    <iframe src="https://www.youtube.com/embed/Z_yFd5HqOqc?rel=0" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+</div><br><div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="smooth">
+<h3>smooth<a class="headerlink" href="#smooth" title="Permalink to this headline">¶</a></h3>
+<p>The smooth problem initializes a Gaussian profile and advects it with
+<span class="math">\(u = v = 1\)</span> through periodic boundaries for a period. The result is that
+the final state should be identical to the initial state—any
+disagreement is our numerical error. This is run as:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py advection smooth inputs.smooth
+</pre></div>
+</div>
+<div style="position: relative; padding-bottom: 75%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
+    <iframe src="https://www.youtube.com/embed/712Y0ocuz2M?rel=0" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+</div><br><p>By varying the resolution and comparing to the analytic solution, we
+can measure the convergence rate of the method. The <code class="docutils literal"><span class="pre">smooth_error.py</span></code>
+script in <code class="docutils literal"><span class="pre">analysis/</span></code> will compare an output file to the analytic
+solution for this problem.</p>
+<img alt="_images/smooth_converge.png" class="align-center" src="_images/smooth_converge.png" />
+<p>The points above are the L2-norm of the absolute error for the smooth
+advection problem after 1 period with <code class="docutils literal"><span class="pre">CFL=0.8</span></code>. The dashed line is
+perfect 2nd order convergence. We see that we achieve nearly 2nd order
+convergence. Departures from perfect 2nd order convergence are likely
+due to the use of limiters.</p>
+</div>
+<div class="section" id="tophat">
+<h3>tophat<a class="headerlink" href="#tophat" title="Permalink to this headline">¶</a></h3>
+<p>The tophat problem initializes a circle in the center of the domain
+with value 1, and 0 outside. This has very steep jumps, and the
+limiters will kick in strongly here.</p>
+</div>
+</div>
+<div class="section" id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+<p>The best way to learn these methods is to play with them yourself. The
+exercises below are suggestions for explorations and features to add
+to the advection solver.</p>
+<div class="section" id="explorations">
+<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Test the convergence of the solver for a variety of initial
+conditions (tophat hat will differ from the smooth case because of
+limiting). Test with limiting on and off, and also test with the
+slopes set to 0 (this will reduce it down to a piecewise constant
+reconstruction method).</li>
+<li>Run without any limiting and look for oscillations and under and
+overshoots (does the advected quantity go negative in the tophat
+problem?)</li>
+</ul>
+</div>
+<div class="section" id="extensions">
+<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first">Implement a dimensionally split version of the advection
+algorithm. How does the solution compare between the unsplit and
+split versions? Look at the amount of overshoot and undershoot, for
+example.</p>
+</li>
+<li><p class="first">Research the inviscid Burger’s equation—this looks like the
+advection equation, but now the quantity being advected is the
+velocity itself, so this is a non-linear equation. It is very
+straightforward to modify this solver to solve Burger’s equation
+(the main things that need to change are the Riemann solver and the
+fluxes, and the computation of the timestep).</p>
+<p>The neat thing about Burger’s equation is that it admits shocks and
+rarefactions, so some very interesting flow problems can be setup.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="compressible_basics.html" class="btn btn-neutral float-right" title="Compressible hydrodynamics solvers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="mesh-examples.html" class="btn btn-neutral" title="Mesh examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Michael Zingale.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

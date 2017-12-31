@@ -1,0 +1,965 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>lm_atm.simulation &mdash; pyro 2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="pyro 2.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pyro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mesh-examples.html">Mesh examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>lm_atm.simulation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for lm_atm.simulation</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">importlib</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">h5py</span>
+
+<span class="kn">import</span> <span class="nn">lm_atm.LM_atm_interface_f</span> <span class="k">as</span> <span class="nn">lm_interface_f</span>
+<span class="kn">import</span> <span class="nn">mesh.reconstruction</span> <span class="k">as</span> <span class="nn">reconstruction</span>
+<span class="kn">import</span> <span class="nn">mesh.boundary</span> <span class="k">as</span> <span class="nn">bnd</span>
+<span class="kn">import</span> <span class="nn">mesh.patch</span> <span class="k">as</span> <span class="nn">patch</span>
+<span class="kn">import</span> <span class="nn">mesh.array_indexer</span> <span class="k">as</span> <span class="nn">ai</span>
+
+<span class="kn">from</span> <span class="nn">simulation_null</span> <span class="k">import</span> <span class="n">NullSimulation</span><span class="p">,</span> <span class="n">grid_setup</span><span class="p">,</span> <span class="n">bc_setup</span>
+<span class="kn">import</span> <span class="nn">multigrid.variable_coeff_MG</span> <span class="k">as</span> <span class="nn">vcMG</span>
+<span class="kn">from</span> <span class="nn">util</span> <span class="k">import</span> <span class="n">profile</span>
+
+
+<div class="viewcode-block" id="Basestate"><a class="viewcode-back" href="../../lm_atm.html#lm_atm.simulation.Basestate">[docs]</a><span class="k">class</span> <span class="nc">Basestate</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ny</span> <span class="o">=</span> <span class="n">ny</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ng</span> <span class="o">=</span> <span class="n">ng</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qy</span> <span class="o">=</span> <span class="n">ny</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">ng</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">qy</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">jlo</span> <span class="o">=</span> <span class="n">ng</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">jhi</span> <span class="o">=</span> <span class="n">ng</span><span class="o">+</span><span class="n">ny</span><span class="o">-</span><span class="mi">1</span>
+                        
+<div class="viewcode-block" id="Basestate.v"><a class="viewcode-back" href="../../lm_atm.html#lm_atm.simulation.Basestate.v">[docs]</a>    <span class="k">def</span> <span class="nf">v</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="n">buf</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">buf</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Basestate.v2d"><a class="viewcode-back" href="../../lm_atm.html#lm_atm.simulation.Basestate.v2d">[docs]</a>    <span class="k">def</span> <span class="nf">v2d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="n">buf</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">buf</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Basestate.v2dp"><a class="viewcode-back" href="../../lm_atm.html#lm_atm.simulation.Basestate.v2dp">[docs]</a>    <span class="k">def</span> <span class="nf">v2dp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shift</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">jlo</span><span class="o">+</span><span class="n">shift</span><span class="o">-</span><span class="n">buf</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">shift</span><span class="o">+</span><span class="n">buf</span><span class="p">]</span></div>
+    
+<div class="viewcode-block" id="Basestate.jp"><a class="viewcode-back" href="../../lm_atm.html#lm_atm.simulation.Basestate.jp">[docs]</a>    <span class="k">def</span> <span class="nf">jp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shift</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="n">buf</span><span class="o">+</span><span class="n">shift</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">buf</span><span class="o">+</span><span class="n">shift</span><span class="p">]</span>    </div></div>
+    
+
+<div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../lm_atm.html#lm_atm.simulation.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="n">NullSimulation</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solver_name</span><span class="p">,</span> <span class="n">problem_name</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">timers</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="n">NullSimulation</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solver_name</span><span class="p">,</span> <span class="n">problem_name</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">timers</span><span class="o">=</span><span class="n">timers</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">base</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aux_data</span> <span class="o">=</span> <span class="kc">None</span>
+
+    
+<div class="viewcode-block" id="Simulation.initialize"><a class="viewcode-back" href="../../lm_atm.html#lm_atm.simulation.Simulation.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the grid and variables for low Mach atmospheric flow</span>
+<span class="sd">        and set the initial conditions for the chosen problem.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">myg</span> <span class="o">=</span> <span class="n">grid_setup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+        <span class="n">bc_dens</span><span class="p">,</span> <span class="n">bc_xodd</span><span class="p">,</span> <span class="n">bc_yodd</span> <span class="o">=</span> <span class="n">bc_setup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">)</span>
+
+        <span class="n">my_data</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">CellCenterData2d</span><span class="p">(</span><span class="n">myg</span><span class="p">)</span>
+
+        <span class="n">my_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">,</span> <span class="n">bc_dens</span><span class="p">)</span>
+        <span class="n">my_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">,</span> <span class="n">bc_xodd</span><span class="p">)</span>
+        <span class="n">my_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">,</span> <span class="n">bc_yodd</span><span class="p">)</span>
+
+        <span class="c1"># we&#39;ll keep the internal energy around just as a diagnostic</span>
+        <span class="n">my_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;eint&quot;</span><span class="p">,</span> <span class="n">bc_dens</span><span class="p">)</span>
+
+        <span class="c1"># phi -- used for the projections.  The boundary conditions</span>
+        <span class="c1"># here depend on velocity.  At a wall or inflow, we already</span>
+        <span class="c1"># have the velocity we want on the boundary, so we want</span>
+        <span class="c1"># Neumann (dphi/dn = 0).  For outflow, we want Dirichlet (phi</span>
+        <span class="c1"># = 0) -- this ensures that we do not introduce any tangental</span>
+        <span class="c1"># acceleration.</span>
+        <span class="n">bcs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">bc</span> <span class="ow">in</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.xlboundary&quot;</span><span class="p">),</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.xrboundary&quot;</span><span class="p">),</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.ylboundary&quot;</span><span class="p">),</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.yrboundary&quot;</span><span class="p">)]:</span>
+            <span class="k">if</span> <span class="n">bc</span> <span class="o">==</span> <span class="s2">&quot;periodic&quot;</span><span class="p">:</span>
+                <span class="n">bctype</span> <span class="o">=</span> <span class="s2">&quot;periodic&quot;</span>
+            <span class="k">elif</span> <span class="n">bc</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;reflect&quot;</span><span class="p">,</span> <span class="s2">&quot;slipwall&quot;</span><span class="p">]:</span>
+                <span class="n">bctype</span> <span class="o">=</span> <span class="s2">&quot;neumann&quot;</span>
+            <span class="k">elif</span> <span class="n">bc</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;outflow&quot;</span><span class="p">]:</span>
+                <span class="n">bctype</span> <span class="o">=</span> <span class="s2">&quot;dirichlet&quot;</span>
+            <span class="n">bcs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bctype</span><span class="p">)</span>
+
+        <span class="n">bc_phi</span> <span class="o">=</span> <span class="n">bnd</span><span class="o">.</span><span class="n">BC</span><span class="p">(</span><span class="n">xlb</span><span class="o">=</span><span class="n">bcs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xrb</span><span class="o">=</span><span class="n">bcs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ylb</span><span class="o">=</span><span class="n">bcs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">yrb</span><span class="o">=</span><span class="n">bcs</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+
+        <span class="n">my_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;phi-MAC&quot;</span><span class="p">,</span> <span class="n">bc_phi</span><span class="p">)</span>
+        <span class="n">my_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;phi&quot;</span><span class="p">,</span> <span class="n">bc_phi</span><span class="p">)</span>
+
+
+        <span class="c1"># gradp -- used in the projection and interface states.  We&#39;ll do the</span>
+        <span class="c1"># same BCs as density</span>
+        <span class="n">my_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;gradp_x&quot;</span><span class="p">,</span> <span class="n">bc_dens</span><span class="p">)</span>
+        <span class="n">my_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;gradp_y&quot;</span><span class="p">,</span> <span class="n">bc_dens</span><span class="p">)</span>
+
+        <span class="n">my_data</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span> <span class="o">=</span> <span class="n">my_data</span>
+
+
+        <span class="c1"># some auxillary data that we&#39;ll need to fill GC in, but isn&#39;t</span>
+        <span class="c1"># really part of the main solution</span>
+        <span class="n">aux_data</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">CellCenterData2d</span><span class="p">(</span><span class="n">myg</span><span class="p">)</span>
+
+        <span class="n">aux_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;coeff&quot;</span><span class="p">,</span> <span class="n">bc_dens</span><span class="p">)</span>
+        <span class="n">aux_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;source_y&quot;</span><span class="p">,</span> <span class="n">bc_yodd</span><span class="p">)</span>
+
+        <span class="n">aux_data</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aux_data</span> <span class="o">=</span> <span class="n">aux_data</span>
+
+
+        <span class="c1"># we also need storage for the 1-d base state -- we&#39;ll store this</span>
+        <span class="c1"># in the main class directly.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;rho0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Basestate</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;p0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Basestate</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">)</span>
+
+        <span class="c1"># now set the initial conditions for the problem</span>
+        <span class="n">problem</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;lm_atm.problems.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem_name</span><span class="p">))</span>
+        <span class="n">problem</span><span class="o">.</span><span class="n">init_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">)</span>
+
+        <span class="c1"># Construct beta_0</span>
+        <span class="n">gamma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;eos.gamma&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;beta0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Basestate</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;beta0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">d</span><span class="p">[:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;p0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">d</span><span class="o">**</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="n">gamma</span><span class="p">)</span>
+
+        <span class="c1"># we&#39;ll also need beta_0 on vertical edges -- on the domain edges,</span>
+        <span class="c1"># just do piecewise constant</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;beta0-edges&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Basestate</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;beta0-edges&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)[:]</span> <span class="o">=</span> \
+            <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;beta0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;beta0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;beta0-edges&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;beta0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;beta0-edges&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;beta0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="p">]</span></div>
+        
+
+<div class="viewcode-block" id="Simulation.make_prime"><a class="viewcode-back" href="../../lm_atm.html#lm_atm.simulation.Simulation.make_prime">[docs]</a>    <span class="k">def</span> <span class="nf">make_prime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">a0</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">-</span> <span class="n">a0</span><span class="o">.</span><span class="n">v2d</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">a0</span><span class="o">.</span><span class="n">ng</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Simulation.method_compute_timestep"><a class="viewcode-back" href="../../lm_atm.html#lm_atm.simulation.Simulation.method_compute_timestep">[docs]</a>    <span class="k">def</span> <span class="nf">method_compute_timestep</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The timestep() function computes the advective timestep</span>
+<span class="sd">        (CFL) constraint.  The CFL constraint says that information</span>
+<span class="sd">        cannot propagate further than one zone per timestep.</span>
+
+<span class="sd">        We use the driver.cfl parameter to control what fraction of the CFL</span>
+<span class="sd">        step we actually take.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">grid</span>
+
+        <span class="n">cfl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;driver.cfl&quot;</span><span class="p">)</span>
+
+        <span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">)</span>
+
+        <span class="c1"># the timestep is min(dx/|u|, dy|v|)</span>
+        <span class="n">xtmp</span> <span class="o">=</span> <span class="n">ytmp</span> <span class="o">=</span> <span class="mf">1.e33</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">abs</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">xtmp</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="o">/</span><span class="nb">abs</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">abs</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ytmp</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">dy</span><span class="o">/</span><span class="nb">abs</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">cfl</span><span class="o">*</span><span class="nb">min</span><span class="p">(</span><span class="n">xtmp</span><span class="p">,</span> <span class="n">ytmp</span><span class="p">)</span>
+
+        <span class="c1"># We need an alternate timestep that accounts for buoyancy, to</span>
+        <span class="c1"># handle the case where the velocity is initially zero.</span>
+        <span class="n">rho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
+        <span class="n">rho0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;rho0&quot;</span><span class="p">]</span>
+        <span class="n">rhoprime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_prime</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">rho0</span><span class="p">)</span>
+
+        <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;lm-atmosphere.grav&quot;</span><span class="p">)</span>
+
+        <span class="n">F_buoy</span> <span class="o">=</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">rhoprime</span><span class="o">*</span><span class="n">g</span><span class="p">)</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">/</span><span class="n">rho</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+        <span class="n">dt_buoy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="o">/</span><span class="n">F_buoy</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">dt_buoy</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;timestep is </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dt</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Simulation.preevolve"><a class="viewcode-back" href="../../lm_atm.html#lm_atm.simulation.Simulation.preevolve">[docs]</a>    <span class="k">def</span> <span class="nf">preevolve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        preevolve is called before we being the timestepping loop.  For</span>
+<span class="sd">        the low Mach solver, this does an initial projection on the</span>
+<span class="sd">        velocity field and then goes through the full evolution to get the</span>
+<span class="sd">        value of phi.  The fluid state (rho, u, v) is then reset to values</span>
+<span class="sd">        before this evolve.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_preevolve</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">grid</span>
+
+        <span class="n">rho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">)</span>
+
+        <span class="c1"># 1. do the initial projection.  This makes sure that our original</span>
+        <span class="c1"># velocity field satisties div U = 0</span>
+
+        <span class="c1"># the coefficent for the elliptic equation is beta_0^2/rho</span>
+        <span class="n">coeff</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">rho</span>
+        <span class="n">beta0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;beta0&quot;</span><span class="p">]</span>
+        <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">beta0</span><span class="o">.</span><span class="n">v2d</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span>
+
+        <span class="c1"># next create the multigrid object.  We defined phi with</span>
+        <span class="c1"># the right BCs previously</span>
+        <span class="n">mg</span> <span class="o">=</span> <span class="n">vcMG</span><span class="o">.</span><span class="n">VarCoeffCCMG2d</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span>
+                                 <span class="n">xl_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;phi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">xlb</span><span class="p">,</span>
+                                 <span class="n">xr_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;phi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">xrb</span><span class="p">,</span>
+                                 <span class="n">yl_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;phi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">ylb</span><span class="p">,</span>
+                                 <span class="n">yr_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;phi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">yrb</span><span class="p">,</span>
+                                 <span class="n">xmin</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span>
+                                 <span class="n">ymin</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ymax</span><span class="p">,</span>
+                                 <span class="n">coeffs</span><span class="o">=</span><span class="n">coeff</span><span class="p">,</span>
+                                 <span class="n">coeffs_bc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;density&quot;</span><span class="p">],</span>
+                                 <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># first compute div{beta_0 U}</span>
+        <span class="n">div_beta_U</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">soln_grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+
+        <span class="c1"># u/v are cell-centered, divU is cell-centered</span>
+        <span class="n">div_beta_U</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> \
+            <span class="mf">0.5</span><span class="o">*</span><span class="n">beta0</span><span class="o">.</span><span class="n">v2d</span><span class="p">()</span><span class="o">*</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">u</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span> <span class="o">+</span> \
+            <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">beta0</span><span class="o">.</span><span class="n">v2dp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">beta0</span><span class="o">.</span><span class="n">v2dp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
+
+        <span class="c1"># solve D (beta_0^2/rho) G (phi/beta_0) = D( beta_0 U )</span>
+
+        <span class="c1"># set the RHS to divU and solve</span>
+        <span class="n">mg</span><span class="o">.</span><span class="n">init_RHS</span><span class="p">(</span><span class="n">div_beta_U</span><span class="p">)</span>
+        <span class="n">mg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">rtol</span><span class="o">=</span><span class="mf">1.e-10</span><span class="p">)</span>
+        
+        
+        <span class="c1"># store the solution in our self.cc_data object -- include a single</span>
+        <span class="c1"># ghostcell</span>
+        <span class="n">phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;phi&quot;</span><span class="p">)</span>
+        <span class="n">phi</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">get_solution</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
+
+        <span class="c1"># get the cell-centered gradient of phi and update the</span>
+        <span class="c1"># velocities</span>
+        <span class="c1"># FIXME: this update only needs to be done on the interior</span>
+        <span class="c1"># cells -- not ghost cells</span>
+        <span class="n">gradp_x</span><span class="p">,</span> <span class="n">gradp_y</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">get_solution_gradient</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
+
+
+        <span class="n">coeff</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">rho</span>
+        <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">beta0</span><span class="o">.</span><span class="n">v2d</span><span class="p">()</span>
+
+        <span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">-=</span> <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">gradp_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+        <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">-=</span> <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">gradp_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+
+        <span class="c1"># fill the ghostcells</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">)</span>
+
+
+        <span class="c1"># 2. now get an approximation to gradp at n-1/2 by going through the</span>
+        <span class="c1"># evolution.</span>
+
+        <span class="c1"># store the current solution -- we&#39;ll restore it in a bit</span>
+        <span class="n">orig_data</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">cell_center_data_clone</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="p">)</span>
+
+        <span class="c1"># get the timestep</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method_compute_timestep</span><span class="p">()</span>
+
+        <span class="c1"># evolve</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span>
+
+        <span class="c1"># update gradp_x and gradp_y in our main data object</span>
+        <span class="n">new_gp_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;gradp_x&quot;</span><span class="p">)</span>
+        <span class="n">new_gp_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;gradp_y&quot;</span><span class="p">)</span>
+
+        <span class="n">orig_gp_x</span> <span class="o">=</span> <span class="n">orig_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;gradp_x&quot;</span><span class="p">)</span>
+        <span class="n">orig_gp_y</span> <span class="o">=</span> <span class="n">orig_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;gradp_y&quot;</span><span class="p">)</span>
+
+        <span class="n">orig_gp_x</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">new_gp_x</span><span class="p">[:,:]</span>
+        <span class="n">orig_gp_y</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">new_gp_y</span><span class="p">[:,:]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span> <span class="o">=</span> <span class="n">orig_data</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;done with the pre-evolution&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_preevolve</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="Simulation.evolve"><a class="viewcode-back" href="../../lm_atm.html#lm_atm.simulation.Simulation.evolve">[docs]</a>    <span class="k">def</span> <span class="nf">evolve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Evolve the low Mach system through one timestep.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">rho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">)</span>
+
+        <span class="n">gradp_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;gradp_x&quot;</span><span class="p">)</span>
+        <span class="n">gradp_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;gradp_y&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># note: the base state quantities do not have valid ghost cells</span>
+        <span class="n">beta0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;beta0&quot;</span><span class="p">]</span>
+        <span class="n">beta0_edges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;beta0-edges&quot;</span><span class="p">]</span>
+
+        <span class="n">rho0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;rho0&quot;</span><span class="p">]</span>
+
+        <span class="n">phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;phi&quot;</span><span class="p">)</span>
+
+        <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">grid</span>
+
+
+        <span class="c1">#---------------------------------------------------------------------</span>
+        <span class="c1"># create the limited slopes of rho, u and v (in both directions)</span>
+        <span class="c1">#---------------------------------------------------------------------</span>
+        <span class="n">limiter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;lm-atmosphere.limiter&quot;</span><span class="p">)</span>
+
+        <span class="n">ldelta_rx</span> <span class="o">=</span> <span class="n">reconstruction</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">limiter</span><span class="p">)</span>
+        <span class="n">ldelta_ux</span> <span class="o">=</span> <span class="n">reconstruction</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">limiter</span><span class="p">)</span>
+        <span class="n">ldelta_vx</span> <span class="o">=</span> <span class="n">reconstruction</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">limiter</span><span class="p">)</span>
+
+        <span class="n">ldelta_ry</span> <span class="o">=</span> <span class="n">reconstruction</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">limiter</span><span class="p">)</span>
+        <span class="n">ldelta_uy</span> <span class="o">=</span> <span class="n">reconstruction</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">limiter</span><span class="p">)</span>
+        <span class="n">ldelta_vy</span> <span class="o">=</span> <span class="n">reconstruction</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">limiter</span><span class="p">)</span>
+
+        
+        <span class="c1">#---------------------------------------------------------------------</span>
+        <span class="c1"># get the advective velocities</span>
+        <span class="c1">#---------------------------------------------------------------------</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        the advective velocities are the normal velocity through each cell</span>
+<span class="sd">        interface, and are defined on the cell edges, in a MAC type</span>
+<span class="sd">        staggered form</span>
+
+<span class="sd">                         n+1/2</span>
+<span class="sd">                        v</span>
+<span class="sd">                         i,j+1/2</span>
+<span class="sd">                    +------+------+</span>
+<span class="sd">                    |             |</span>
+<span class="sd">            n+1/2   |             |   n+1/2</span>
+<span class="sd">           u        +     U       +  u</span>
+<span class="sd">            i-1/2,j |      i,j    |   i+1/2,j</span>
+<span class="sd">                    |             |</span>
+<span class="sd">                    +------+------+</span>
+<span class="sd">                         n+1/2</span>
+<span class="sd">                        v</span>
+<span class="sd">                         i,j-1/2</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># this returns u on x-interfaces and v on y-interfaces.  These</span>
+        <span class="c1"># constitute the MAC grid</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  making MAC velocities&quot;</span><span class="p">)</span>
+
+        <span class="c1"># create the coefficient to the grad (pi/beta) term</span>
+        <span class="n">coeff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aux_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;coeff&quot;</span><span class="p">)</span>
+        <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">rho</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+        <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">beta0</span><span class="o">.</span><span class="n">v2d</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aux_data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;coeff&quot;</span><span class="p">)</span>
+
+        <span class="c1"># create the source term</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aux_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;source_y&quot;</span><span class="p">)</span>
+
+        <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;lm-atmosphere.grav&quot;</span><span class="p">)</span>
+        <span class="n">rhoprime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_prime</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">rho0</span><span class="p">)</span>
+        <span class="n">source</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">rhoprime</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">g</span><span class="o">/</span><span class="n">rho</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aux_data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;source_y&quot;</span><span class="p">)</span>
+
+        <span class="n">_um</span><span class="p">,</span> <span class="n">_vm</span> <span class="o">=</span> <span class="n">lm_interface_f</span><span class="o">.</span><span class="n">mac_vels</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">qx</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">qy</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span>
+                                           <span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
+                                           <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span>
+                                           <span class="n">ldelta_ux</span><span class="p">,</span> <span class="n">ldelta_vx</span><span class="p">,</span>
+                                           <span class="n">ldelta_uy</span><span class="p">,</span> <span class="n">ldelta_vy</span><span class="p">,</span>
+                                           <span class="n">coeff</span><span class="o">*</span><span class="n">gradp_x</span><span class="p">,</span> <span class="n">coeff</span><span class="o">*</span><span class="n">gradp_y</span><span class="p">,</span>
+                                           <span class="n">source</span><span class="p">)</span>
+
+
+        <span class="n">u_MAC</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_um</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
+        <span class="n">v_MAC</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_vm</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>        
+
+
+        <span class="c1">#---------------------------------------------------------------------</span>
+        <span class="c1"># do a MAC projection to make the advective velocities divergence</span>
+        <span class="c1"># free</span>
+        <span class="c1">#---------------------------------------------------------------------</span>
+
+        <span class="c1"># we will solve D (beta_0^2/rho) G phi = D (beta_0 U^MAC), where</span>
+        <span class="c1"># phi is cell centered, and U^MAC is the MAC-type staggered</span>
+        <span class="c1"># grid of the advective velocities.</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  MAC projection&quot;</span><span class="p">)</span>
+
+        <span class="c1"># create the coefficient array: beta0**2/rho</span>
+        <span class="c1"># MZ!!!! probably don&#39;t need the buf here</span>
+        <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,:]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">rho</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,:]</span> <span class="o">=</span> <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">beta0</span><span class="o">.</span><span class="n">v2d</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+
+        <span class="c1"># create the multigrid object</span>
+        <span class="n">mg</span> <span class="o">=</span> <span class="n">vcMG</span><span class="o">.</span><span class="n">VarCoeffCCMG2d</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span>
+                                 <span class="n">xl_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;phi-MAC&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">xlb</span><span class="p">,</span>
+                                 <span class="n">xr_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;phi-MAC&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">xrb</span><span class="p">,</span>
+                                 <span class="n">yl_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;phi-MAC&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">ylb</span><span class="p">,</span>
+                                 <span class="n">yr_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;phi-MAC&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">yrb</span><span class="p">,</span>
+                                 <span class="n">xmin</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span>
+                                 <span class="n">ymin</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ymax</span><span class="p">,</span>
+                                 <span class="n">coeffs</span><span class="o">=</span><span class="n">coeff</span><span class="p">,</span>
+                                 <span class="n">coeffs_bc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;density&quot;</span><span class="p">],</span>
+                                 <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># first compute div{beta_0 U}</span>
+        <span class="n">div_beta_U</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">soln_grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+
+        <span class="c1"># MAC velocities are edge-centered.  div{beta_0 U} is cell-centered.</span>
+        <span class="n">div_beta_U</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> \
+            <span class="n">beta0</span><span class="o">.</span><span class="n">v2d</span><span class="p">()</span><span class="o">*</span><span class="p">(</span><span class="n">u_MAC</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">u_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span> <span class="o">+</span> \
+            <span class="p">(</span><span class="n">beta0_edges</span><span class="o">.</span><span class="n">v2dp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">v_MAC</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span>
+             <span class="n">beta0_edges</span><span class="o">.</span><span class="n">v2d</span><span class="p">()</span><span class="o">*</span><span class="n">v_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
+
+        <span class="c1"># solve the Poisson problem</span>
+        <span class="n">mg</span><span class="o">.</span><span class="n">init_RHS</span><span class="p">(</span><span class="n">div_beta_U</span><span class="p">)</span>
+        <span class="n">mg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">rtol</span><span class="o">=</span><span class="mf">1.e-12</span><span class="p">)</span>
+
+
+        <span class="c1"># update the normal velocities with the pressure gradient -- these</span>
+        <span class="c1"># constitute our advective velocities.  Note that what we actually</span>
+        <span class="c1"># solved for here is phi/beta_0</span>
+        <span class="n">phi_MAC</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;phi-MAC&quot;</span><span class="p">)</span>
+        <span class="n">phi_MAC</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">get_solution</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
+
+        <span class="n">coeff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aux_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;coeff&quot;</span><span class="p">)</span>
+        <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">rho</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+        <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">beta0</span><span class="o">.</span><span class="n">v2d</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aux_data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;coeff&quot;</span><span class="p">)</span>
+
+        <span class="n">coeff_x</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># this seems more than we need</span>
+        <span class="n">coeff_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)[:,:]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">coeff</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">))</span>
+
+        <span class="n">coeff_y</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">coeff_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)[:,:]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">coeff</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">))</span>
+        
+        <span class="c1"># we need the MAC velocities on all edges of the computational domain</span>
+        <span class="c1"># here we do U = U - (beta_0/rho) grad (phi/beta_0)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">u_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)[:,:]</span> <span class="o">-=</span> \
+                <span class="n">coeff_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">phi_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)</span> <span class="o">-</span> <span class="n">phi_MAC</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">))</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span>
+
+        <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">v_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)[:,:]</span> <span class="o">-=</span> \
+                <span class="n">coeff_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">phi_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)</span> <span class="o">-</span> <span class="n">phi_MAC</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">))</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
+
+
+        <span class="c1">#---------------------------------------------------------------------</span>
+        <span class="c1"># predict rho to the edges and do its conservative update</span>
+        <span class="c1">#---------------------------------------------------------------------</span>
+        <span class="n">_rx</span><span class="p">,</span> <span class="n">_ry</span> <span class="o">=</span> <span class="n">lm_interface_f</span><span class="o">.</span><span class="n">rho_states</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">qx</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">qy</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span>
+                                             <span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
+                                             <span class="n">rho</span><span class="p">,</span> <span class="n">u_MAC</span><span class="p">,</span> <span class="n">v_MAC</span><span class="p">,</span>
+                                             <span class="n">ldelta_rx</span><span class="p">,</span> <span class="n">ldelta_ry</span><span class="p">)</span>
+
+        <span class="n">rho_xint</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_rx</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
+        <span class="n">rho_yint</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_ry</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
+
+        <span class="n">rho_old</span> <span class="o">=</span> <span class="n">rho</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">rho</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="p">(</span>
+            <span class="c1">#  (rho u)_x</span>
+            <span class="p">(</span><span class="n">rho_xint</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">u_MAC</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">rho_xint</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">u_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span> <span class="o">+</span>
+            <span class="c1">#  (rho v)_y</span>
+            <span class="p">(</span><span class="n">rho_yint</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">v_MAC</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">rho_yint</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">v_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span> <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
+
+        <span class="c1"># update eint as a diagnostic</span>
+        <span class="n">eint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;eint&quot;</span><span class="p">)</span>
+        <span class="n">gamma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;eos.gamma&quot;</span><span class="p">)</span>        
+        <span class="n">eint</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;p0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">v2d</span><span class="p">()</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">/</span><span class="n">rho</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+        
+        
+        <span class="c1">#---------------------------------------------------------------------</span>
+        <span class="c1"># recompute the interface states, using the advective velocity</span>
+        <span class="c1"># from above</span>
+        <span class="c1">#---------------------------------------------------------------------</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  making u, v edge states&quot;</span><span class="p">)</span>
+
+        <span class="n">coeff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aux_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;coeff&quot;</span><span class="p">)</span>
+        <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">/</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="n">rho_old</span><span class="o">.</span><span class="n">v</span><span class="p">())</span>
+        <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">beta0</span><span class="o">.</span><span class="n">v2d</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aux_data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;coeff&quot;</span><span class="p">)</span>
+
+        <span class="n">_ux</span><span class="p">,</span> <span class="n">_vx</span><span class="p">,</span> <span class="n">_uy</span><span class="p">,</span> <span class="n">_vy</span> <span class="o">=</span> \
+               <span class="n">lm_interface_f</span><span class="o">.</span><span class="n">states</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">qx</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">qy</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span>
+                                     <span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
+                                     <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span>
+                                     <span class="n">ldelta_ux</span><span class="p">,</span> <span class="n">ldelta_vx</span><span class="p">,</span>
+                                     <span class="n">ldelta_uy</span><span class="p">,</span> <span class="n">ldelta_vy</span><span class="p">,</span>
+                                     <span class="n">coeff</span><span class="o">*</span><span class="n">gradp_x</span><span class="p">,</span> <span class="n">coeff</span><span class="o">*</span><span class="n">gradp_y</span><span class="p">,</span>
+                                     <span class="n">source</span><span class="p">,</span>
+                                     <span class="n">u_MAC</span><span class="p">,</span> <span class="n">v_MAC</span><span class="p">)</span>
+
+        <span class="n">u_xint</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_ux</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
+        <span class="n">v_xint</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_vx</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
+        <span class="n">u_yint</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_uy</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
+        <span class="n">v_yint</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_vy</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
+
+
+        <span class="c1">#---------------------------------------------------------------------</span>
+        <span class="c1"># update U to get the provisional velocity field</span>
+        <span class="c1">#---------------------------------------------------------------------</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  doing provisional update of u, v&quot;</span><span class="p">)</span>
+
+        <span class="c1"># compute (U.grad)U</span>
+
+        <span class="c1"># we want u_MAC U_x + v_MAC U_y</span>
+        <span class="n">advect_x</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+        <span class="n">advect_y</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+
+        <span class="n">advect_x</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> \
+            <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">u_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="n">u_MAC</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">u_xint</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">u_xint</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span> <span class="o">+</span>\
+            <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">v_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="n">v_MAC</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">u_yint</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">u_yint</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
+
+        <span class="n">advect_y</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> \
+            <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">u_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="n">u_MAC</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">v_xint</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">v_xint</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span> <span class="o">+</span>\
+            <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">v_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="n">v_MAC</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">v_yint</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">v_yint</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
+
+
+        <span class="n">proj_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;lm-atmosphere.proj_type&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">proj_type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">-=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">advect_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">gradp_x</span><span class="o">.</span><span class="n">v</span><span class="p">())</span>
+            <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">-=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">advect_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">gradp_y</span><span class="o">.</span><span class="n">v</span><span class="p">())</span>
+
+        <span class="k">elif</span> <span class="n">proj_type</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">advect_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+            <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">advect_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+
+
+        <span class="c1"># add the gravitational source</span>
+        <span class="n">rho_half</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">rho</span> <span class="o">+</span> <span class="n">rho_old</span><span class="p">)</span>
+        <span class="n">rhoprime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_prime</span><span class="p">(</span><span class="n">rho_half</span><span class="p">,</span> <span class="n">rho0</span><span class="p">)</span>
+        <span class="n">source</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="p">(</span><span class="n">rhoprime</span><span class="o">*</span><span class="n">g</span><span class="o">/</span><span class="n">rho_half</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aux_data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;source_y&quot;</span><span class="p">)</span>
+
+        <span class="n">v</span><span class="p">[:,:]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">source</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;min/max rho = </span><span class="si">{}</span><span class="s2">, </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;min/max u   = </span><span class="si">{}</span><span class="s2">, </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">)))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;min/max v   = </span><span class="si">{}</span><span class="s2">, </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">)))</span>
+
+
+        <span class="c1">#---------------------------------------------------------------------</span>
+        <span class="c1"># project the final velocity</span>
+        <span class="c1">#---------------------------------------------------------------------</span>
+
+        <span class="c1"># now we solve L phi = D (U* /dt)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  final projection&quot;</span><span class="p">)</span>
+
+        <span class="c1"># create the coefficient array: beta0**2/rho</span>
+        <span class="n">coeff</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">rho</span>
+        <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">beta0</span><span class="o">.</span><span class="n">v2d</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span>
+
+        <span class="c1"># create the multigrid object</span>
+        <span class="n">mg</span> <span class="o">=</span> <span class="n">vcMG</span><span class="o">.</span><span class="n">VarCoeffCCMG2d</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span>
+                                 <span class="n">xl_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;phi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">xlb</span><span class="p">,</span>
+                                 <span class="n">xr_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;phi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">xrb</span><span class="p">,</span>
+                                 <span class="n">yl_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;phi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">ylb</span><span class="p">,</span>
+                                 <span class="n">yr_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;phi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">yrb</span><span class="p">,</span>
+                                 <span class="n">xmin</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span>
+                                 <span class="n">ymin</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ymax</span><span class="p">,</span>
+                                 <span class="n">coeffs</span><span class="o">=</span><span class="n">coeff</span><span class="p">,</span>
+                                 <span class="n">coeffs_bc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;density&quot;</span><span class="p">],</span>
+                                 <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># first compute div{beta_0 U}</span>
+
+        <span class="c1"># u/v are cell-centered, divU is cell-centered</span>
+        <span class="n">div_beta_U</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> \
+            <span class="mf">0.5</span><span class="o">*</span><span class="n">beta0</span><span class="o">.</span><span class="n">v2d</span><span class="p">()</span><span class="o">*</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">u</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span> <span class="o">+</span> \
+            <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">beta0</span><span class="o">.</span><span class="n">v2dp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">beta0</span><span class="o">.</span><span class="n">v2dp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
+
+        <span class="n">mg</span><span class="o">.</span><span class="n">init_RHS</span><span class="p">(</span><span class="n">div_beta_U</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
+
+        <span class="c1"># use the old phi as our initial guess</span>
+        <span class="n">phiGuess</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">soln_grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+        <span class="n">phiGuess</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,:]</span> <span class="o">=</span> <span class="n">phi</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">mg</span><span class="o">.</span><span class="n">init_solution</span><span class="p">(</span><span class="n">phiGuess</span><span class="p">)</span>
+
+        <span class="c1"># solve</span>
+        <span class="n">mg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">rtol</span><span class="o">=</span><span class="mf">1.e-12</span><span class="p">)</span>
+
+
+        <span class="c1"># store the solution in our self.cc_data object -- include a single</span>
+        <span class="c1"># ghostcell</span>
+        <span class="n">phi</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">get_solution</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
+
+        <span class="c1"># get the cell-centered gradient of p and update the velocities</span>
+        <span class="c1"># this differs depending on what we projected.</span>
+        <span class="n">gradphi_x</span><span class="p">,</span> <span class="n">gradphi_y</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">get_solution_gradient</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
+
+
+        <span class="c1"># U = U - (beta_0/rho) grad (phi/beta_0)</span>
+        <span class="n">coeff</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">rho</span>
+        <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">beta0</span><span class="o">.</span><span class="n">v2d</span><span class="p">()</span>
+
+        <span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">gradphi_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+        <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">gradphi_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+
+        <span class="c1"># store gradp for the next step</span>
+
+        <span class="k">if</span> <span class="n">proj_type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">gradp_x</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">+=</span> <span class="n">gradphi_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+            <span class="n">gradp_y</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">+=</span> <span class="n">gradphi_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+
+        <span class="k">elif</span> <span class="n">proj_type</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">gradp_x</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">gradphi_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+            <span class="n">gradp_y</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">gradphi_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;gradp_x&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;gradp_y&quot;</span><span class="p">)</span>
+
+        <span class="c1"># increment the time</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_preevolve</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">t</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="Simulation.dovis"><a class="viewcode-back" href="../../lm_atm.html#lm_atm.simulation.Simulation.dovis">[docs]</a>    <span class="k">def</span> <span class="nf">dovis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Do runtime visualization</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
+
+        <span class="c1">#plt.rc(&quot;font&quot;, size=10)</span>
+
+        <span class="n">rho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
+        <span class="n">rho0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;rho0&quot;</span><span class="p">]</span>
+        <span class="n">rhoprime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_prime</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">rho0</span><span class="p">)</span>
+        
+        <span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">)</span>
+
+        <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">grid</span>
+
+        <span class="n">magvel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">v</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">vort</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+
+        <span class="n">dv</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span>
+        <span class="n">du</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">u</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
+        
+        <span class="n">vort</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">dv</span> <span class="o">-</span> <span class="n">du</span>
+
+        <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">rho</span><span class="p">,</span> <span class="n">magvel</span><span class="p">,</span> <span class="n">vort</span><span class="p">,</span> <span class="n">rhoprime</span><span class="p">]</span>
+        <span class="n">field_names</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s2">&quot;$\rho$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;|U|&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\nabla \times U$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\rho&#39;$&quot;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)):</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="o">.</span><span class="n">flat</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+
+            <span class="n">f</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+
+            <span class="n">img</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">v</span><span class="p">()),</span>
+                            <span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;lower&quot;</span><span class="p">,</span>
+                            <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymax</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cm</span><span class="p">)</span>
+
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">field_names</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+
+            <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">figtext</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">0.0125</span><span class="p">,</span> <span class="s2">&quot;t = </span><span class="si">{:10.5f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">t</span><span class="p">))</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">pause</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Simulation.write_extras"><a class="viewcode-back" href="../../lm_atm.html#lm_atm.simulation.Simulation.write_extras">[docs]</a>    <span class="k">def</span> <span class="nf">write_extras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Output simulation-specific data to the h5py file f</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># we implement our own version to allow us to store the base</span>
+        <span class="c1"># state</span>
+
+        <span class="n">gb</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s2">&quot;base state&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">:</span>
+            <span class="n">gb</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">d</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Simulation.read_extras"><a class="viewcode-back" href="../../lm_atm.html#lm_atm.simulation.Simulation.read_extras">[docs]</a>    <span class="k">def</span> <span class="nf">read_extras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        read in any simulation-specific data from an h5py file object f</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">gb</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;base state&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">gb</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">Basestate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">ng</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">d</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">gb</span><span class="p">[</span><span class="n">name</span><span class="p">]</span></div></div>
+
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Michael Zingale.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

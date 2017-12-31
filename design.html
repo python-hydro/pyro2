@@ -1,0 +1,433 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Design ideas &mdash; pyro 2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="pyro 2.0 documentation" href="index.html"/>
+        <link rel="next" title="Running" href="running.html"/>
+        <link rel="prev" title="Notes on the numerical methods" href="notes.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pyro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Design ideas</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#directory-structure">Directory structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fortran">Fortran</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#main-driver">Main driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Design ideas</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/design.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="design-ideas">
+<h1>Design ideas<a class="headerlink" href="#design-ideas" title="Permalink to this headline">¶</a></h1>
+<p>pyro is written primarily in python (by default, we expect python 3),
+with a few low-level routines written in Fortran for performance. The
+<code class="docutils literal"><span class="pre">numpy</span></code> package is used for representing arrays throughout the
+python code and the <code class="docutils literal"><span class="pre">matplotlib</span></code> library is used for
+visualization. We use <code class="docutils literal"><span class="pre">f2py</span></code> (part of NumPy) to interface with some
+Fortran code. Finally, <code class="docutils literal"><span class="pre">pytest</span></code> is used for unit testing of some
+components.</p>
+<p>All solvers are written for a 2-d grid.  This gives a good balance
+between complexity and speed.</p>
+<p>A paper describing the design philosophy of pyro was accepted to
+Astronomy &amp; Computing <a class="reference external" href="http://adsabs.harvard.edu/abs/2013arXiv1306.6883Z">[paper link]</a>.</p>
+<div class="section" id="directory-structure">
+<h2>Directory structure<a class="headerlink" href="#directory-structure" title="Permalink to this headline">¶</a></h2>
+<p>The files for each solver are in their own sub-directory, with
+additional sub-directories for the mesh and utilities. Each solver has
+two sub-directories: <code class="docutils literal"><span class="pre">problems/</span></code> and <code class="docutils literal"><span class="pre">tests/</span></code>. These store the
+different problem setups for the solver and reference output for
+testing.</p>
+<p>Your <code class="docutils literal"><span class="pre">PYTHONPATH</span></code> environment variable should be set to include the
+top-level <code class="docutils literal"><span class="pre">pyro2/</span></code> directory.</p>
+<p>The overall structure is:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">pyro2/</span></code>: This is the top-level directory.  The main driver,
+<code class="docutils literal"><span class="pre">pyro.py</span></code>, is here, and all pyro simulations should be run from
+this directory.</li>
+<li><code class="docutils literal"><span class="pre">advection/</span></code>: The linear advection equation solver using the CTU
+method. All advection-specific routines live here.<ul>
+<li><code class="docutils literal"><span class="pre">problems/</span></code>: The problem setups for the advection solver.</li>
+<li><code class="docutils literal"><span class="pre">tests/</span></code>: Reference advection output files for comparison and regression testing.</li>
+</ul>
+</li>
+<li><code class="docutils literal"><span class="pre">advection_rk/</span></code>: The linear advection equation solver using the
+method-of-lines approach.<ul>
+<li><code class="docutils literal"><span class="pre">problems/</span></code>: This is a symbolic link to the advection/problems/ directory.</li>
+<li><code class="docutils literal"><span class="pre">tests/</span></code>: Reference advection output files for comparison and regression testing.</li>
+</ul>
+</li>
+<li><code class="docutils literal"><span class="pre">analysis/</span></code>: Various analysis scripts for processing pyro output files.</li>
+<li><code class="docutils literal"><span class="pre">compressible/</span></code>: The compressible hydrodynamics solver using the
+CTU method. All source files specific to this solver live here.<ul>
+<li><code class="docutils literal"><span class="pre">problems/</span></code>: The problem setups for the compressible hydrodynamics solver.</li>
+<li><code class="docutils literal"><span class="pre">tests/</span></code>: Reference compressible hydro output for regression testing.</li>
+</ul>
+</li>
+<li><code class="docutils literal"><span class="pre">compressible_rk/</span></code>: The compressible hydrodynamics solver using method of lines integration.<ul>
+<li><code class="docutils literal"><span class="pre">problems/</span></code>: This is a symbolic link to the compressible/problems/ directory.</li>
+<li><code class="docutils literal"><span class="pre">tests/</span></code>: Reference compressible hydro output for regression testing.</li>
+</ul>
+</li>
+<li><code class="docutils literal"><span class="pre">diffusion/</span></code>: The implicit (thermal) diffusion solver. All diffusion-specific routines live here.<ul>
+<li><code class="docutils literal"><span class="pre">problems/</span></code>: The problem setups for the diffusion solver.</li>
+<li><code class="docutils literal"><span class="pre">tests/</span></code>: Reference diffusion output for regression testing.</li>
+</ul>
+</li>
+<li><code class="docutils literal"><span class="pre">incompressible/</span></code>: The incompressible hydrodynamics solver. All incompressible-specific routines live here.<ul>
+<li><code class="docutils literal"><span class="pre">problems/</span></code>: The problem setups for the incompressible solver.</li>
+<li><code class="docutils literal"><span class="pre">tests/</span></code>:  Reference incompressible hydro output for regression testing.</li>
+</ul>
+</li>
+<li><code class="docutils literal"><span class="pre">lm_atm/</span></code>: The low Mach number hydrodynamics solver for atmospherical flows. All low-Mach-specific files live here.<ul>
+<li><code class="docutils literal"><span class="pre">problems/</span></code>: The problem setups for the low Mach number solver.</li>
+<li><code class="docutils literal"><span class="pre">tests/</span></code>: Reference low Mach hydro output for regression testing.</li>
+</ul>
+</li>
+<li><code class="docutils literal"><span class="pre">mesh/</span></code>: The main classes that deal with 2-d cell-centered grids
+and the data that lives on them. All the solvers use these classes
+to represent their discretized data.</li>
+<li><code class="docutils literal"><span class="pre">multigrid/</span></code>: The multigrid solver for cell-centered data. This
+solver is used on its own to illustrate how multigrid works, and
+directly by the diffusion and incompressible solvers.<ul>
+<li><code class="docutils literal"><span class="pre">problems/</span></code>: The problem setups for when the multigrid solver is used in a stand-alone fashion.</li>
+<li><code class="docutils literal"><span class="pre">tests/</span></code>: Reference multigrid solver solutions (from when the multigrid solver is used stand-alone) for regression testing.</li>
+</ul>
+</li>
+<li><code class="docutils literal"><span class="pre">util/</span></code>: Various service modules used by the pyro routines,
+including runtime parameters, I/O, profiling, and pretty output
+modes.</li>
+</ul>
+</div>
+<div class="section" id="fortran">
+<h2>Fortran<a class="headerlink" href="#fortran" title="Permalink to this headline">¶</a></h2>
+<p>Fortran is used to speed up some critical portions of the code, and in
+often cases, provides more clarity than trying to write optimized
+python code using array operations in numpy. The Fortran code
+seemlessly integrates into python using f2py.</p>
+<p>Wherever Fortran is used, we enforce the following design rule: the
+Fortran functions must be completely self-contained, with all
+information coming through the interface. No external dependencies
+are allowed. Each pyro module will have (at most) a single Fortran
+file and can be compiled into a library via a single f2py command line
+invocation.</p>
+<p>A single script, <code class="docutils literal"><span class="pre">mk.sh</span></code>, in the top-level directory will compile
+all the Fortran source.</p>
+</div>
+<div class="section" id="main-driver">
+<h2>Main driver<a class="headerlink" href="#main-driver" title="Permalink to this headline">¶</a></h2>
+<p>All the solvers use the same driver, the main <code class="docutils literal"><span class="pre">pyro.py</span></code> script. The
+flowchart for the driver is:</p>
+<ul class="simple">
+<li>parse runtime parameters</li>
+<li>setup the grid (<code class="docutils literal"><span class="pre">initialize()</span></code> function from the solver)<ul>
+<li>initialize the data for the desired problem (<code class="docutils literal"><span class="pre">init_data()</span></code> function from the problem)</li>
+</ul>
+</li>
+<li>do any necessary pre-evolution initialization (<code class="docutils literal"><span class="pre">preevolve()</span></code> function from the solver)</li>
+<li>evolve while t &lt; tmax and n &lt; max_steps<ul>
+<li>fill boundary conditions (<code class="docutils literal"><span class="pre">fill_BC_all()</span></code> method of the <code class="docutils literal"><span class="pre">CellCenterData2d</span></code> class)</li>
+<li>get the timestep (<code class="docutils literal"><span class="pre">compute_timestep()</span></code> calls the solver’s <code class="docutils literal"><span class="pre">method_compute_timestep()</span></code> function from the solver)</li>
+<li>evolve for a single timestep (<code class="docutils literal"><span class="pre">evolve()</span></code> function from the solver)</li>
+<li>t = t + dt</li>
+<li>output (<code class="docutils literal"><span class="pre">write()</span></code> method of the <code class="docutils literal"><span class="pre">CellCenterData2d</span></code> class)</li>
+<li>visualization (<code class="docutils literal"><span class="pre">dovis()</span></code> function from the solver)</li>
+</ul>
+</li>
+<li>call the solver’s <code class="docutils literal"><span class="pre">finalize()</span></code> function to output any useful information at the end</li>
+</ul>
+<p>This format is flexible enough for the advection, compressible,
+diffusion, and incompressible evolution solver. Each solver provides a
+<code class="docutils literal"><span class="pre">Simulation</span></code> class that provides the following methods (note:
+inheritance is used, so many of these methods come from the base
+<code class="docutils literal"><span class="pre">NullSimulation</span></code> class):</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">compute_timestep</span></code>: return the timestep based on the solver’s
+specific needs (through <code class="docutils literal"><span class="pre">method_compute_timestep()</span></code>) and
+timestepping parameters in the driver</li>
+<li><code class="docutils literal"><span class="pre">dovis</span></code>: performs visualization of the current solution</li>
+<li><code class="docutils literal"><span class="pre">evolve</span></code>: advances the system of equations through a single timestep</li>
+<li><code class="docutils literal"><span class="pre">finalize</span></code>: any final clean-ups, printing of analysis hints.</li>
+<li><code class="docutils literal"><span class="pre">finished</span></code>: return True if we’ve met the stopping criteria for a simulation</li>
+<li><code class="docutils literal"><span class="pre">initialize</span></code>: sets up the grid and solution variables</li>
+<li><code class="docutils literal"><span class="pre">method_compute_timestep</span></code>: returns the timestep for evolving the system</li>
+<li><code class="docutils literal"><span class="pre">preevolve</span></code>: does any initialization to the fluid state that is necessary before the main evolution. Not every solver will need something here.</li>
+<li><code class="docutils literal"><span class="pre">read_extras</span></code>: read in any solver-specific data from a stored output file</li>
+<li><code class="docutils literal"><span class="pre">write</span></code>: write the state of the simulation to an HDF5 file</li>
+<li><code class="docutils literal"><span class="pre">write_extras</span></code>: any solver-specific writing</li>
+</ul>
+<p>Each problem setup needs only provide an <code class="docutils literal"><span class="pre">init_data()</span></code> function that fills the data in the patch object.</p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="running.html" class="btn btn-neutral float-right" title="Running" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="notes.html" class="btn btn-neutral" title="Notes on the numerical methods" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Michael Zingale.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

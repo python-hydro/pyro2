@@ -1,0 +1,379 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>incompressible.problems package &mdash; pyro 2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="pyro 2.0 documentation" href="index.html"/>
+        <link rel="up" title="incompressible package" href="incompressible.html"/>
+        <link rel="next" title="lm_atm package" href="lm_atm.html"/>
+        <link rel="prev" title="incompressible package" href="incompressible.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pyro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="advection.html">advection package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advection_fv4.html">advection_fv4 package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advection_rk.html">advection_rk package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advection_weno.html">advection_weno package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compare.html">compare module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible.html">compressible package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_fv4.html">compressible_fv4 package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_react.html">compressible_react package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_rk.html">compressible_rk package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="diffusion.html">diffusion package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="incompressible.html">incompressible package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="incompressible.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">incompressible.problems package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="incompressible.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="incompressible.html#incompressible-setup-module">incompressible.setup module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="incompressible.html#module-incompressible.simulation">incompressible.simulation module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lm_atm.html">lm_atm package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mesh.html">mesh package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multigrid.html">multigrid package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot.html">plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.html">pyro module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulation_null.html">simulation_null module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test.html">test module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html">util package</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">pyro2</a> &raquo;</li>
+        
+          <li><a href="incompressible.html">incompressible package</a> &raquo;</li>
+        
+      <li>incompressible.problems package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/incompressible.problems.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="incompressible-problems-package">
+<h1>incompressible.problems package<a class="headerlink" href="#incompressible-problems-package" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-incompressible.problems"></span><div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-incompressible.problems.converge">
+<span id="incompressible-problems-converge-module"></span><h2>incompressible.problems.converge module<a class="headerlink" href="#module-incompressible.problems.converge" title="Permalink to this headline">¶</a></h2>
+<p>Initialize a smooth incompressible convergence test.  Here, the
+velocities are initialized as</p>
+<p>u(x,y) = 1 - 2 cos(2 pi x) sin(2 pi y)
+v(x,y) = 1 + 2 sin(2 pi x) cos(2 pi y)</p>
+<p>and the exact solution at some later time t is then</p>
+<p>u(x,y,t) = 1 - 2 cos(2 pi (x - t)) sin(2 pi (y - t))
+v(x,y,t) = 1 + 2 sin(2 pi (x - t)) cos(2 pi (y - t))
+p(x,y,t) = -cos(4 pi (x - t)) - cos(4 pi (y - t))</p>
+<p>The numerical solution can be compared to the exact solution to
+measure the convergence rate of the algorithm.</p>
+<dl class="function">
+<dt id="incompressible.problems.converge.finalize">
+<code class="descclassname">incompressible.problems.converge.</code><code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/incompressible/problems/converge.html#finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#incompressible.problems.converge.finalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>print out any information to the user at the end of the run</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="incompressible.problems.converge.init_data">
+<code class="descclassname">incompressible.problems.converge.</code><code class="descname">init_data</code><span class="sig-paren">(</span><em>my_data</em>, <em>rp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/incompressible/problems/converge.html#init_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#incompressible.problems.converge.init_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize the incompressible converge problem</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-incompressible.problems.shear">
+<span id="incompressible-problems-shear-module"></span><h2>incompressible.problems.shear module<a class="headerlink" href="#module-incompressible.problems.shear" title="Permalink to this headline">¶</a></h2>
+<p>Initialize the doubly periodic shear layer (see, for example, Martin
+and Colella, 2000, JCP, 163, 271).  This is run in a unit square
+domain, with periodic boundary conditions on all sides.  Here, the
+initial velocity is</p>
+<blockquote>
+<div>/ tanh(rho_s (y-0.25))   if y &lt;= 0.5</div></blockquote>
+<dl class="docutils">
+<dt>u(x,y,t=0) = &lt;</dt>
+<dd>tanh(rho_s (0.75-y))   if y &gt; 0.5</dd>
+</dl>
+<p>v(x,y,t=0) = delta_s sin(2 pi x)</p>
+<dl class="function">
+<dt id="incompressible.problems.shear.finalize">
+<code class="descclassname">incompressible.problems.shear.</code><code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/incompressible/problems/shear.html#finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#incompressible.problems.shear.finalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>print out any information to the user at the end of the run</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="incompressible.problems.shear.init_data">
+<code class="descclassname">incompressible.problems.shear.</code><code class="descname">init_data</code><span class="sig-paren">(</span><em>my_data</em>, <em>rp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/incompressible/problems/shear.html#init_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#incompressible.problems.shear.init_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize the incompressible shear problem</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="lm_atm.html" class="btn btn-neutral float-right" title="lm_atm package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="incompressible.html" class="btn btn-neutral" title="incompressible package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Michael Zingale.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

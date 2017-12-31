@@ -1,0 +1,531 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Compressible hydrodynamics solvers &mdash; pyro 2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="pyro 2.0 documentation" href="index.html"/>
+        <link rel="next" title="Multigrid solvers" href="multigrid_basics.html"/>
+        <link rel="prev" title="Advection solvers" href="advection_basics.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pyro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Compressible hydrodynamics solvers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sod">Sod</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sedov">Sedov</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quad">quad</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rt">rt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bubble">bubble</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#exercises">Exercises</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#explorations">Explorations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#extensions">Extensions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#going-further">Going further</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Compressible hydrodynamics solvers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/compressible_basics.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="compressible-hydrodynamics-solvers">
+<h1>Compressible hydrodynamics solvers<a class="headerlink" href="#compressible-hydrodynamics-solvers" title="Permalink to this headline">¶</a></h1>
+<p>The equations of compressible hydrodynamics take the form:</p>
+<div class="math">
+\[\begin{split}\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho U) &amp;= 0 \\
+\frac{\partial (\rho U)}{\partial t} + \nabla \cdot (\rho U U) + \nabla p &amp;= \rho g \\
+\frac{\partial (\rho E)}{\partial t} + \nabla \cdot [(\rho E + p ) U] &amp;= \rho U \cdot g\end{split}\]</div>
+<p>with <span class="math">\(\rho E = \rho e + \frac{1}{2} \rho |U|^2\)</span> and <span class="math">\(p = p(\rho, e)\)</span>.</p>
+<p>pyro has several compressible solvers:</p>
+<ul class="simple">
+<li><a class="reference internal" href="compressible.html#module-compressible" title="compressible"><code class="xref py py-mod docutils literal"><span class="pre">compressible</span></code></a> is based on a directionally unsplit (the
+corner transport upwind algorithm) piecewise linear method for the
+Euler equations</li>
+<li><a class="reference internal" href="compressible_rk.html#module-compressible_rk" title="compressible_rk"><code class="xref py py-mod docutils literal"><span class="pre">compressible_rk</span></code></a> uses a method of lines time-integration
+approach with piecewise linear spatial reconstruction for the Euler
+equations</li>
+<li><a class="reference internal" href="compressible_fv4.html#module-compressible_fv4" title="compressible_fv4"><code class="xref py py-mod docutils literal"><span class="pre">compressible_fv4</span></code></a> uses a 4th order accurate method with RK4
+time integration</li>
+</ul>
+<p>The implementations here have flattening at shocks, artificial
+viscosity, a simple gamma-law equation of state, and (in some cases) a
+choice Riemann solvers. Optional constant gravity in the vertical
+direction is allowed.</p>
+<p>The main parameters that affect this solver are:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="76%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal"><span class="pre">[driver]</span></code></th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">cfl</span></code></td>
+<td>the advective CFL number (what fraction of a zone can
+we cross in a single timestep)</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="26%" />
+<col width="74%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal"><span class="pre">[compressible]</span></code></th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">use_flattening</span></code></td>
+<td>do we flatten the profiles at shocks? (0=no, 1=yes)</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">z0</span></code></td>
+<td rowspan="3">the parameters that affect the flattening algorithm</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">z1</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">delta</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">cvisc</span></code></td>
+<td>the coefficient for the artifical viscosity</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">limiter</span></code></td>
+<td>what type of limiting to use in reconstructing the
+slopes. 0 means use an unlimited second-order centered
+difference. 1 is the MC limiter, and 2 is the 4th-order
+MC limiter</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">riemann</span></code></td>
+<td>which Riemann solver do we use? “HLLE” for the HLLE
+solver, or “CGF” for the Colella, Glaz, and Ferguson
+solver</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">grav</span></code></td>
+<td>the gravitational acceleration (vertical/y direction)</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">temporal_method</span></code></td>
+<td>the MOL integration method to use (RK2, TVD2, TVD3, RK4)
+(<code class="docutils literal"><span class="pre">compressible_rk</span></code> and <code class="docutils literal"><span class="pre">compressible_fv4</span></code> only)</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="26%" />
+<col width="74%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal"><span class="pre">[eos]</span></code></th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">gamma</span></code></td>
+<td>the constant adiabatic index for the gas</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="sod">
+<h3>Sod<a class="headerlink" href="#sod" title="Permalink to this headline">¶</a></h3>
+<p>The Sod problem is a standard hydrodynamics problem. It is a
+one-dimensional shock tube (two states separated by an interface),
+that exhibits all three hydrodynamic waves: a shock, contact, and
+rarefaction. Furthermore, there are exact solutions for a gamma-law
+equation of state, so we can check our solution against these exact
+solutions. See Toro’s book for details on this problem and the exact
+Riemann solver.</p>
+<p>Because it is one-dimensional, we run it in narrow domains in the x- or y-directions. It can be run as:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py compressible sod inputs.sod.x
+./pyro.py compressible sod inputs.sod.y
+</pre></div>
+</div>
+<p>A simple script, <code class="docutils literal"><span class="pre">sod_compare.py</span></code> in <code class="docutils literal"><span class="pre">analysis/</span></code> will read a pyro output
+file and plot the solution over the exact Sod solution. Below we see
+the result for a Sod run with 128 points in the x-direction, gamma =
+1.4, and run until t = 0.2 s.</p>
+<img alt="_images/sod_compare.png" class="align-center" src="_images/sod_compare.png" />
+<p>We see excellent agreement for all quantities. The shock wave is very
+steep, as expected. The contact wave is smeared out over ~5 zones—this
+is discussed in the notes above, and can be improved in the PPM method
+with contact steepening.</p>
+</div>
+<div class="section" id="sedov">
+<h3>Sedov<a class="headerlink" href="#sedov" title="Permalink to this headline">¶</a></h3>
+<p>The Sedov blast wave problem is another standard test with an analytic
+solution (Sedov 1959). A lot of energy is point into a point in a
+uniform medium and a blast wave propagates outward. The Sedov problem
+is run as:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py compressible sedov inputs.sedov
+</pre></div>
+</div>
+<p>The video below shows the output from a 128 x 128 grid with the energy
+put in a radius of 0.0125 surrounding the center of the domain. A
+gamma-law EOS with gamma = 1.4 is used, and we run until 0.1</p>
+<div style="position: relative; padding-bottom: 75%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
+    <iframe src="https://www.youtube.com/embed/1JO6By78p9E?rel=0" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+</div><br><p>We see some grid effects because it is hard to initialize a small
+circular explosion on a rectangular grid. To compare to the analytic
+solution, we need to radially bin the data. Since this is a 2-d
+explosion, the physical geometry it represents is a cylindrical blast
+wave, so we compare to Sedov’s cylindrical solution. The radial
+binning is done with the <code class="docutils literal"><span class="pre">sedov_compare.py</span></code> script in <code class="docutils literal"><span class="pre">analysis/</span></code></p>
+<img alt="_images/sedov_compare.png" class="align-center" src="_images/sedov_compare.png" />
+<p>This shows good agreement with the analytic solution.</p>
+</div>
+<div class="section" id="quad">
+<h3>quad<a class="headerlink" href="#quad" title="Permalink to this headline">¶</a></h3>
+<p>The quad problem sets up different states in four regions of the
+domain and watches the complex interfaces that develop as shocks
+interact. This problem has appear in several places (and a <a class="reference external" href="http://planets.utsc.utoronto.ca/~pawel/Riemann.hydro.html">detailed
+investigation</a> is
+online by Pawel Artymowicz). It is run as:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py compressible quad inputs.quad
+</pre></div>
+</div>
+<img alt="_images/quad.png" class="align-center" src="_images/quad.png" />
+</div>
+<div class="section" id="rt">
+<h3>rt<a class="headerlink" href="#rt" title="Permalink to this headline">¶</a></h3>
+<p>The Rayleigh-Taylor problem puts a dense fluid over a lighter one and
+perturbs the interface with a sinusoidal velocity. Hydrostatic
+boundary conditions are used to ensure any initial pressure waves can
+escape the domain. It is run as:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py compressible er inputs.rt
+</pre></div>
+</div>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
+    <iframe src="https://www.youtube.com/embed/P4zmObEYCOs?rel=0" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+</div><br></div>
+<div class="section" id="bubble">
+<h3>bubble<a class="headerlink" href="#bubble" title="Permalink to this headline">¶</a></h3>
+<p>The bubble problem initializes a hot spot in a stratified domain and
+watches it buoyantly rise and roll up. This is run as:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py compressible bubble inputs.bubble
+</pre></div>
+</div>
+<img alt="_images/bubble.png" class="align-center" src="_images/bubble.png" />
+<p>The shock at the top of the domain is because we cut off the
+stratified atmosphere at some low density and the resulting material
+above that rains down on our atmosphere. Also note the acoustic signal
+propagating outward from the bubble (visible in the U and e panels).</p>
+</div>
+</div>
+<div class="section" id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="explorations">
+<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Measure the growth rate of the Rayleigh-Taylor instability for
+different wavenumbers.</li>
+<li>There are multiple Riemann solvers in the compressible
+algorithm. Run the same problem with the different Riemann solvers
+and look at the differences. Toro’s text is a good book to help
+understand what is happening.</li>
+<li>Run the problems with and without limiting—do you notice any overshoots?</li>
+</ul>
+</div>
+<div class="section" id="extensions">
+<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Limit on the characteristic variables instead of the primitive
+variables. What changes do you see? (the notes show how to implement
+this change.)</li>
+<li>Add passively advected species to the solver.</li>
+<li>Add an external heating term to the equations.</li>
+<li>Add 2-d axisymmetric coordinates (r-z) to the solver. This is
+discussed in the notes. Run the Sedov problem with the explosion on
+the symmetric axis—now the solution will behave like the spherical
+sedov explosion instead of the cylindrical explosion.</li>
+<li>Swap the piecewise linear reconstruction for piecewise parabolic
+(PPM). The notes and Miller and Colella paper provide a good basis
+for this.  Research the Roe Riemann solver and implement it in pyro.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="going-further">
+<h2>Going further<a class="headerlink" href="#going-further" title="Permalink to this headline">¶</a></h2>
+<p>The compressible algorithm presented here is essentially the
+single-grid hydrodynamics algorithm used in the <a class="reference external" href="https://amrex-astro.github.io/Castro/">Castro code</a>—an
+adaptive mesh radiation hydrodynamics code developed at
+CCSE/LBNL. <a class="reference external" href="https://github.com/AMReX-Astro/Castro">Castro is freely available for download</a>.</p>
+<p>A simple, pure Fortran, 1-d compressible hydrodynamics code that does
+piecewise constant, linear, or parabolic (PPM) reconstruction is also
+available. See the <a class="reference external" href="https://zingale.github.io/hydro1d/">hydro1d</a> page.</p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="multigrid_basics.html" class="btn btn-neutral float-right" title="Multigrid solvers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="advection_basics.html" class="btn btn-neutral" title="Advection solvers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Michael Zingale.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

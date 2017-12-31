@@ -1,0 +1,1038 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>multigrid.MG &mdash; pyro 2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="pyro 2.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pyro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mesh-examples.html">Mesh examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>multigrid.MG</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for multigrid.MG</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The multigrid module provides a framework for solving elliptic</span>
+<span class="sd">problems.  A multigrid object is just a list of grids, from the finest</span>
+<span class="sd">mesh down (by factors of two) to a single interior zone (each grid has</span>
+<span class="sd">the same number of guardcells).</span>
+
+<span class="sd">The main multigrid class is setup to solve a constant-coefficient</span>
+<span class="sd">Helmholtz equation:</span>
+
+<span class="sd">(alpha - beta L) phi = f</span>
+
+<span class="sd">where L is the Laplacian and alpha and beta are constants.  If alpha =</span>
+<span class="sd">0 and beta = -1, then this is the Poisson equation.</span>
+
+<span class="sd">We support Dirichlet or Neumann BCs, or a periodic domain.</span>
+
+<span class="sd">The general usage is as follows:</span>
+
+<span class="sd">&gt; a = multigrid.CellCenterMG2d(nx, ny, verbose=1, alpha=alpha, beta=beta)</span>
+
+<span class="sd">this creates the multigrid object a, with a finest grid of nx by ny</span>
+<span class="sd">zones and the default boundary condition types.  alpha and beta are</span>
+<span class="sd">the coefficients of the Helmholtz equation.  Setting verbose = 1</span>
+<span class="sd">causing debugging information to be output, so you can see the</span>
+<span class="sd">residual errors in each of the V-cycles.</span>
+
+<span class="sd">&gt; a.init_zeros()</span>
+
+<span class="sd">this initializes the solution vector with zeros (this is not necessary</span>
+<span class="sd">if you just created the multigrid object, but it can be used to reset</span>
+<span class="sd">the solution between runs on the same object).</span>
+
+<span class="sd">&gt; a.init_RHS(zeros((nx, ny), numpy.float64))</span>
+
+<span class="sd">this initializes the RHS on the finest grid to 0 (Laplace&#39;s equation).</span>
+<span class="sd">Any RHS can be set by passing through an array of (nx, ny) values here.</span>
+
+<span class="sd">Then to solve, you just do:</span>
+
+<span class="sd">&gt; a.solve(rtol = 1.e-10)</span>
+
+<span class="sd">where rtol is the desired tolerance (residual norm / source norm)</span>
+
+<span class="sd">to access the final solution, use the getSolution method</span>
+
+<span class="sd">v = a.get_solution()</span>
+
+<span class="sd">For convenience, the grid information on the solution level is available as</span>
+<span class="sd">attributes to the class,</span>
+
+<span class="sd">a.ilo, a.ihi, a.jlo, a.jhi are the indices bounding the interior</span>
+<span class="sd">of the solution array (i.e. excluding the ghost cells).</span>
+
+<span class="sd">a.x and a.y are the coordinate arrays</span>
+<span class="sd">a.dx and a.dy are the grid spacings</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">math</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+
+<span class="kn">import</span> <span class="nn">mesh.boundary</span> <span class="k">as</span> <span class="nn">bnd</span>
+<span class="kn">import</span> <span class="nn">mesh.patch</span> <span class="k">as</span> <span class="nn">patch</span>
+<span class="kn">from</span> <span class="nn">util</span> <span class="k">import</span> <span class="n">msg</span>
+
+
+<div class="viewcode-block" id="CellCenterMG2d"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d">[docs]</a><span class="k">class</span> <span class="nc">CellCenterMG2d</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The main multigrid class for cell-centered data.</span>
+
+<span class="sd">    We require that nx = ny be a power of 2 and dx = dy, for</span>
+<span class="sd">    simplicity</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">xmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                 <span class="n">xl_BC_type</span><span class="o">=</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">,</span> <span class="n">xr_BC_type</span><span class="o">=</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">,</span>
+                 <span class="n">yl_BC_type</span><span class="o">=</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">,</span> <span class="n">yr_BC_type</span><span class="o">=</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">,</span>
+                 <span class="n">xl_BC</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xr_BC</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">yl_BC</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">yr_BC</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">alpha</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">beta</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span>
+                 <span class="n">nsmooth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">nsmooth_bottom</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                 <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">aux_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aux_bc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">true_function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vis_title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create the CellCenterMG2d object.  Note that this requires a</span>
+<span class="sd">        grid to be a power of 2 in size and square.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nx : int</span>
+<span class="sd">            number of cells in x-direction</span>
+<span class="sd">        ny : int</span>
+<span class="sd">            number of cells in y-direction.</span>
+<span class="sd">        xmin : float, optional</span>
+<span class="sd">            minimum physical coordinate in x-direction</span>
+<span class="sd">        xmax : float, optional</span>
+<span class="sd">            maximum physical coordinate in x-direction</span>
+<span class="sd">        ymin : float, optional</span>
+<span class="sd">            minimum physical coordinate in y-direction</span>
+<span class="sd">        ymax : float, optional</span>
+<span class="sd">            maximum physical coordinate in y-direction</span>
+<span class="sd">        xl_BC_type : {&#39;neumann&#39;, &#39;dirichlet&#39;, &#39;periodic&#39;}, optional</span>
+<span class="sd">            boundary condition to enforce on lower x face</span>
+<span class="sd">        xr_BC_type : {&#39;neumann&#39;, &#39;dirichlet&#39;, &#39;periodic&#39;}, optional</span>
+<span class="sd">            boundary condition to enforce on upper x face</span>
+<span class="sd">        yl_BC_type : {&#39;neumann&#39;, &#39;dirichlet&#39;, &#39;periodic&#39;}, optional</span>
+<span class="sd">            boundary condition to enforce on lower y face</span>
+<span class="sd">        yr_BC_type : {&#39;neumann&#39;, &#39;dirichlet&#39;, &#39;periodic&#39;}, optional</span>
+<span class="sd">            boundary condition to enforce on upper y face</span>
+<span class="sd">        xl_BC : function, optional</span>
+<span class="sd">            function (of y) to call to get -x boundary values</span>
+<span class="sd">            (homogeneous assumed otherwise)</span>
+<span class="sd">        xr_BC : function, optional</span>
+<span class="sd">            function (of y) to call to get +x boundary values</span>
+<span class="sd">            (homogeneous assumed otherwise)</span>
+<span class="sd">        yl_BC : function, optional</span>
+<span class="sd">            function (of x) to call to get -y boundary values</span>
+<span class="sd">            (homogeneous assumed otherwise)</span>
+<span class="sd">        yr_BC : function, optional</span>
+<span class="sd">            function (of x) to call to get +y boundary values</span>
+<span class="sd">            (homogeneous assumed otherwise)</span>
+<span class="sd">        alpha : float, optional</span>
+<span class="sd">            coefficient in Helmholtz equation (alpha - beta L) phi = f</span>
+<span class="sd">        beta : float, optional</span>
+<span class="sd">            coefficient in Helmholtz equation (alpha - beta L) phi = f</span>
+<span class="sd">        nsmooth : int, optional</span>
+<span class="sd">            number of smoothing iterations to be done at each intermediate</span>
+<span class="sd">            level in the V-cycle (up and down)</span>
+<span class="sd">        nsmooth_bottom : int, optional</span>
+<span class="sd">            number of smoothing iterations to be done during the bottom</span>
+<span class="sd">            solve</span>
+<span class="sd">        verbose : int, optional</span>
+<span class="sd">            increase verbosity during the solve (for verbose=1)</span>
+<span class="sd">        aux_field : list of str, optional</span>
+<span class="sd">            extra fields to define and carry at each level.</span>
+<span class="sd">            Useful for subclassing.</span>
+<span class="sd">        aux_bc : list of BC objects, optional</span>
+<span class="sd">            the boundary conditions corresponding to the aux fields</span>
+<span class="sd">        true_function : function, optional</span>
+<span class="sd">            a function (of x,y) that provides the exact solution to</span>
+<span class="sd">            the elliptic problem we are solving.  This is used only</span>
+<span class="sd">            for visualization purposes</span>
+<span class="sd">        vis : int, optional</span>
+<span class="sd">            output a detailed visualization of every smoothing step</span>
+<span class="sd">            all throughout the V-cycle (if vis=1)</span>
+<span class="sd">        vis_title : string, optional</span>
+<span class="sd">            a descriptive title to write on the visualization plots</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        out: CellCenterMG2d object</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">nx</span> <span class="o">!=</span> <span class="n">ny</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;ERROR: multigrid currently requires nx = ny&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">nx</span> <span class="o">=</span> <span class="n">nx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ny</span> <span class="o">=</span> <span class="n">ny</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ng</span> <span class="o">=</span> <span class="n">ng</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmin</span> <span class="o">=</span> <span class="n">xmin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">xmax</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ymin</span> <span class="o">=</span> <span class="n">ymin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ymax</span> <span class="o">=</span> <span class="n">ymax</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">xmax</span><span class="o">-</span><span class="n">xmin</span><span class="p">)</span> <span class="o">!=</span> <span class="p">(</span><span class="n">ymax</span><span class="o">-</span><span class="n">ymin</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;ERROR: multigrid currently requires a square domain&quot;</span><span class="p">)</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="n">beta</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">nsmooth</span> <span class="o">=</span> <span class="n">nsmooth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nsmooth_bottom</span> <span class="o">=</span> <span class="n">nsmooth_bottom</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_cycles</span> <span class="o">=</span> <span class="mi">100</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+
+        <span class="c1"># for visualization purposes, we can set a function name that</span>
+        <span class="c1"># provides the true solution to our elliptic problem.</span>
+        <span class="k">if</span> <span class="n">true_function</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">true_function</span> <span class="o">=</span> <span class="n">true_function</span>
+
+        <span class="c1"># a small number used in computing the error, so we don&#39;t divide by 0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">small</span> <span class="o">=</span> <span class="mf">1.e-16</span>
+
+        <span class="c1"># keep track of whether we&#39;ve initialized the RHS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialized_rhs</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># assume that self.nx = 2^(nlevels-1) and that nx = ny</span>
+        <span class="c1"># this defines nlevels such that we end exactly on a 2x2 grid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">)</span><span class="o">/</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">2.0</span><span class="p">))</span>
+
+        <span class="c1"># a multigrid object will be a list of grids</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grids</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># create the grids.  Here, self.grids[0] will be the coarsest</span>
+        <span class="c1"># grid and self.grids[nlevel-1] will be the finest grid</span>
+        <span class="c1"># we store the solution, v, the rhs, f.</span>
+
+        <span class="c1"># create the boundary condition object</span>
+        <span class="n">bc</span> <span class="o">=</span> <span class="n">bnd</span><span class="o">.</span><span class="n">BC</span><span class="p">(</span><span class="n">xlb</span><span class="o">=</span><span class="n">xl_BC_type</span><span class="p">,</span> <span class="n">xrb</span><span class="o">=</span><span class="n">xr_BC_type</span><span class="p">,</span>
+                    <span class="n">ylb</span><span class="o">=</span><span class="n">yl_BC_type</span><span class="p">,</span> <span class="n">yrb</span><span class="o">=</span><span class="n">yr_BC_type</span><span class="p">)</span>
+
+        <span class="n">nx_t</span> <span class="o">=</span> <span class="n">ny_t</span> <span class="o">=</span> <span class="mi">2</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="p">):</span>
+
+            <span class="c1"># create the grid</span>
+            <span class="n">my_grid</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">Grid2d</span><span class="p">(</span><span class="n">nx_t</span><span class="p">,</span> <span class="n">ny_t</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span>
+                                   <span class="n">xmin</span><span class="o">=</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">ymax</span><span class="p">)</span>
+
+            <span class="c1"># add a CellCenterData2d object for this level to our list</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">patch</span><span class="o">.</span><span class="n">CellCenterData2d</span><span class="p">(</span><span class="n">my_grid</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
+
+            <span class="c1"># create the phi BC object -- this only applies for the finest</span>
+            <span class="c1"># level.  On the coarser levels, phi represents the residual,</span>
+            <span class="c1"># which has homogeneous BCs</span>
+            <span class="n">bc_p</span> <span class="o">=</span> <span class="n">bnd</span><span class="o">.</span><span class="n">BC</span><span class="p">(</span><span class="n">xlb</span><span class="o">=</span><span class="n">xl_BC_type</span><span class="p">,</span> <span class="n">xrb</span><span class="o">=</span><span class="n">xr_BC_type</span><span class="p">,</span>
+                          <span class="n">ylb</span><span class="o">=</span><span class="n">yl_BC_type</span><span class="p">,</span> <span class="n">yrb</span><span class="o">=</span><span class="n">yr_BC_type</span><span class="p">,</span>
+                          <span class="n">xl_func</span><span class="o">=</span><span class="n">xl_BC</span><span class="p">,</span> <span class="n">xr_func</span><span class="o">=</span><span class="n">xr_BC</span><span class="p">,</span>
+                          <span class="n">yl_func</span><span class="o">=</span><span class="n">yl_BC</span><span class="p">,</span> <span class="n">yr_func</span><span class="o">=</span><span class="n">yr_BC</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">my_grid</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="n">bc_p</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;f&quot;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">aux_field</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">aux_field</span><span class="p">,</span> <span class="n">aux_bc</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+            <span class="n">nx_t</span> <span class="o">=</span> <span class="n">nx_t</span><span class="o">*</span><span class="mi">2</span>
+            <span class="n">ny_t</span> <span class="o">=</span> <span class="n">ny_t</span><span class="o">*</span><span class="mi">2</span>
+
+
+        <span class="c1"># provide coordinate and indexing information for the solution mesh</span>
+        <span class="n">soln_grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ilo</span> <span class="o">=</span> <span class="n">soln_grid</span><span class="o">.</span><span class="n">ilo</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ihi</span> <span class="o">=</span> <span class="n">soln_grid</span><span class="o">.</span><span class="n">ihi</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">jlo</span> <span class="o">=</span> <span class="n">soln_grid</span><span class="o">.</span><span class="n">jlo</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">jhi</span> <span class="o">=</span> <span class="n">soln_grid</span><span class="o">.</span><span class="n">jhi</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">soln_grid</span><span class="o">.</span><span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dx</span> <span class="o">=</span> <span class="n">soln_grid</span><span class="o">.</span><span class="n">dx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x2d</span> <span class="o">=</span> <span class="n">soln_grid</span><span class="o">.</span><span class="n">x2d</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">soln_grid</span><span class="o">.</span><span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dy</span> <span class="o">=</span> <span class="n">soln_grid</span><span class="o">.</span><span class="n">dy</span>   <span class="c1"># note, dy = dx is assumed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y2d</span> <span class="o">=</span> <span class="n">soln_grid</span><span class="o">.</span><span class="n">y2d</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">soln_grid</span> <span class="o">=</span> <span class="n">soln_grid</span>
+
+        <span class="c1"># store the source norm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_norm</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="c1"># after solving, keep track of the number of cycles taken, the</span>
+        <span class="c1"># relative error from the previous cycle, and the residual error</span>
+        <span class="c1"># (normalized to the source norm)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_cycles</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">residual_error</span> <span class="o">=</span> <span class="mf">1.e33</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relative_error</span> <span class="o">=</span> <span class="mf">1.e33</span>
+
+        <span class="c1"># keep track of where we are in the V</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_cycle</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_level</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">up_or_down</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="c1"># for visualization -- what frame are we outputting?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vis</span> <span class="o">=</span> <span class="n">vis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vis_title</span> <span class="o">=</span> <span class="n">vis_title</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frame</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+    <span class="c1"># these draw functions are for visualization purposes and are</span>
+    <span class="c1"># not ordinarily used, except for plotting the progression of the</span>
+    <span class="c1"># solution within the V</span>
+    <span class="k">def</span> <span class="nf">_draw_V</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; draw the V-cycle on our optional visualization &quot;&quot;&quot;</span>
+        <span class="n">xdown</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="p">)</span>
+        <span class="n">xup</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="p">)</span>
+
+        <span class="n">ydown</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="p">)</span>
+        <span class="n">yup</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xdown</span><span class="p">,</span> <span class="n">ydown</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xup</span><span class="p">,</span> <span class="n">yup</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xdown</span><span class="p">,</span> <span class="n">ydown</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xup</span><span class="p">,</span> <span class="n">yup</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">up_or_down</span> <span class="o">==</span> <span class="s2">&quot;down&quot;</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xdown</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">current_level</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                        <span class="n">ydown</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">current_level</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                        <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">38</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xup</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_level</span><span class="p">],</span> <span class="n">yup</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_level</span><span class="p">],</span>
+                        <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">38</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;V-cycle </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_cycle</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_draw_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; plot the current solution on our optional visualization &quot;&quot;&quot;</span>
+        <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_level</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span>
+
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_level</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+
+        <span class="n">cm</span> <span class="o">=</span> <span class="s2">&quot;viridis&quot;</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]),</span>
+                   <span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;lower&quot;</span><span class="p">,</span>
+                   <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymax</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="p">)</span>
+
+        <span class="c1">#plt.xlabel(&quot;x&quot;)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_level</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;solving $L\phi = f$&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;solving $Le = r$&quot;</span><span class="p">)</span>
+
+        <span class="n">formatter</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">ScalarFormatter</span><span class="p">(</span><span class="n">useMathText</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">cb</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="n">formatter</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+        <span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">offsetText</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="s2">&quot;small&quot;</span><span class="p">)</span>
+        <span class="n">cl</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="p">,</span> <span class="s1">&#39;ymajorticklabels&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">cl</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;small&quot;</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_draw_main_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        plot the solution at the finest level on our optional</span>
+<span class="sd">        visualization</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span>
+
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+
+        <span class="n">cm</span> <span class="o">=</span> <span class="s2">&quot;viridis&quot;</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]),</span>
+                   <span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;lower&quot;</span><span class="p">,</span>
+                   <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymax</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;current fine grid solution&quot;</span><span class="p">)</span>
+
+        <span class="n">formatter</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">ScalarFormatter</span><span class="p">(</span><span class="n">useMathText</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">cb</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="n">formatter</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+        <span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">offsetText</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="s2">&quot;small&quot;</span><span class="p">)</span>
+        <span class="n">cl</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="p">,</span> <span class="s1">&#39;ymajorticklabels&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">cl</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;small&quot;</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_draw_main_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        plot the error with respect to the true solution on our optional</span>
+<span class="sd">        visualization</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span>
+
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+
+        <span class="n">e</span> <span class="o">=</span> <span class="n">v</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">true_function</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">x2d</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">y2d</span><span class="p">)</span>
+
+        <span class="n">cmap</span> <span class="o">=</span> <span class="s2">&quot;viridis&quot;</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]),</span>
+                   <span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;lower&quot;</span><span class="p">,</span>
+                   <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymax</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;current fine grid error&quot;</span><span class="p">)</span>
+
+        <span class="n">formatter</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">ScalarFormatter</span><span class="p">(</span><span class="n">useMathText</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">cb</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="n">formatter</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+        <span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">offsetText</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="s2">&quot;small&quot;</span><span class="p">)</span>
+        <span class="n">cl</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="p">,</span> <span class="s1">&#39;ymajorticklabels&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">cl</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;small&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="CellCenterMG2d.grid_info"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.grid_info">[docs]</a>    <span class="k">def</span> <span class="nf">grid_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Report simple grid information</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">level: </span><span class="si">{}</span><span class="s2">, grid: </span><span class="si">{}</span><span class="s2"> x </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">indent</span><span class="o">*</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">ny</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="CellCenterMG2d.get_solution"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.get_solution">[docs]</a>    <span class="k">def</span> <span class="nf">get_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the solution after doing the MG solve</span>
+
+<span class="sd">        If a grid object is passed in, then the solution is put on that</span>
+<span class="sd">        grid -- not the passed in grid must have the same dx and dy</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        out : ndarray</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">grid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">v</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">soln_grid</span>
+            <span class="k">assert</span> <span class="n">grid</span><span class="o">.</span><span class="n">dx</span> <span class="o">==</span> <span class="n">myg</span><span class="o">.</span><span class="n">dx</span> <span class="ow">and</span> <span class="n">grid</span><span class="o">.</span><span class="n">dy</span> <span class="o">==</span> <span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
+
+            <span class="n">sol</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+            <span class="n">sol</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,:]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">sol</span></div>
+
+
+<div class="viewcode-block" id="CellCenterMG2d.get_solution_gradient"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.get_solution_gradient">[docs]</a>    <span class="k">def</span> <span class="nf">get_solution_gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the gradient of the solution after doing the MG solve.  The</span>
+<span class="sd">        x- and y-components are returned in separate arrays.</span>
+
+<span class="sd">        If a grid object is passed in, then the gradient is computed on that</span>
+<span class="sd">        grid.  Note: the passed-in grid must have the same dx, dy</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        out : ndarray, ndarray</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">soln_grid</span>
+
+        <span class="k">if</span> <span class="n">grid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">og</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">soln_grid</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">og</span> <span class="o">=</span> <span class="n">grid</span>
+            <span class="k">assert</span> <span class="n">og</span><span class="o">.</span><span class="n">dx</span> <span class="o">==</span> <span class="n">myg</span><span class="o">.</span><span class="n">dx</span> <span class="ow">and</span> <span class="n">og</span><span class="o">.</span><span class="n">dy</span> <span class="o">==</span> <span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
+
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+
+        <span class="n">gx</span> <span class="o">=</span> <span class="n">og</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+        <span class="n">gy</span> <span class="o">=</span> <span class="n">og</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+
+        <span class="n">gx</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span>
+        <span class="n">gy</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
+
+        <span class="k">return</span> <span class="n">gx</span><span class="p">,</span> <span class="n">gy</span></div>
+
+
+<div class="viewcode-block" id="CellCenterMG2d.get_solution_object"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.get_solution_object">[docs]</a>    <span class="k">def</span> <span class="nf">get_solution_object</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the full solution data object at the finest resolution</span>
+<span class="sd">        after doing the MG solve</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        out : CellCenterData2d object</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="CellCenterMG2d.init_solution"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.init_solution">[docs]</a>    <span class="k">def</span> <span class="nf">init_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the solution to the elliptic problem by passing in</span>
+<span class="sd">        a value for all defined zones</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : ndarray</span>
+<span class="sd">            An array (of the same size as the finest MG level) with the</span>
+<span class="sd">            values to initialize the solution to the elliptic problem.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+        <span class="n">v</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="CellCenterMG2d.init_zeros"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.init_zeros">[docs]</a>    <span class="k">def</span> <span class="nf">init_zeros</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the initial solution to zero</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+        <span class="n">v</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="mf">0.0</span></div>
+
+
+<div class="viewcode-block" id="CellCenterMG2d.init_RHS"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.init_RHS">[docs]</a>    <span class="k">def</span> <span class="nf">init_RHS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the right hand side, f, of the Helmholtz equation</span>
+<span class="sd">        (alpha - beta L) phi = f</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : ndarray</span>
+<span class="sd">            An array (of the same size as the finest MG level) with the</span>
+<span class="sd">            values to initialize the solution to the elliptic problem.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;f&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="c1"># store the source norm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_norm</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Source norm = &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_norm</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialized_rhs</span> <span class="o">=</span> <span class="mi">1</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_compute_residual</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; compute the residual and store it in the r variable&quot;&quot;&quot;</span>
+
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;f&quot;</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
+
+        <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span>
+
+        <span class="c1"># compute the residual</span>
+        <span class="c1"># r = f - alpha phi + beta L phi</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">+</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="o">*</span><span class="p">(</span> <span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
+                        <span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="CellCenterMG2d.smooth"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.smooth">[docs]</a>    <span class="k">def</span> <span class="nf">smooth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">nsmooth</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Use red-black Gauss-Seidel iterations to smooth the solution</span>
+<span class="sd">        at a given level.  This is used at each stage of the V-cycle</span>
+<span class="sd">        (up and down) in the MG solution, but it can also be called</span>
+<span class="sd">        directly to solve the elliptic problem (although it will take</span>
+<span class="sd">        many more iterations).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        level : int</span>
+<span class="sd">            The level in the MG hierarchy to smooth the solution</span>
+<span class="sd">        nsmooth : int</span>
+<span class="sd">            The number of r-b Gauss-Seidel smoothing iterations to perform</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;f&quot;</span><span class="p">)</span>
+
+        <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+
+        <span class="n">xcoeff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span>
+        <span class="n">ycoeff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span><span class="o">**</span><span class="mi">2</span>
+
+        <span class="c1"># do red-black G-S</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsmooth</span><span class="p">):</span>
+
+            <span class="c1"># do the red black updating in four decoupled groups</span>
+            <span class="c1">#</span>
+            <span class="c1">#</span>
+            <span class="c1">#        |       |       |</span>
+            <span class="c1">#      --+-------+-------+--</span>
+            <span class="c1">#        |       |       |</span>
+            <span class="c1">#        |   4   |   3   |</span>
+            <span class="c1">#        |       |       |</span>
+            <span class="c1">#      --+-------+-------+--</span>
+            <span class="c1">#        |       |       |</span>
+            <span class="c1">#   jlo  |   1   |   2   |</span>
+            <span class="c1">#        |       |       |</span>
+            <span class="c1">#      --+-------+-------+--</span>
+            <span class="c1">#        |  ilo  |       |</span>
+            <span class="c1">#</span>
+            <span class="c1"># groups 1 and 3 are done together, then we need to</span>
+            <span class="c1"># fill ghost cells, and then groups 2 and 4</span>
+
+            <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]):</span>
+
+                <span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,:]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span>
+                      <span class="n">xcoeff</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span>
+                      <span class="n">ycoeff</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="mi">1</span><span class="o">+</span><span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span> <span class="p">)</span><span class="o">/</span> \
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">+</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">xcoeff</span> <span class="o">+</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">ycoeff</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vis</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
+
+                <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">221</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_draw_solution</span><span class="p">()</span>
+
+                <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">222</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_draw_V</span><span class="p">()</span>
+
+                <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">223</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_draw_main_solution</span><span class="p">()</span>
+
+                <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">224</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_draw_main_error</span><span class="p">()</span>
+
+
+                <span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vis_title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+
+                <span class="n">plt</span><span class="o">.</span><span class="n">pause</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;mg_</span><span class="si">%4.4d</span><span class="s2">.png&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">frame</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="CellCenterMG2d.solve"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.solve">[docs]</a>    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1.e-11</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The main driver for the multigrid solution of the Helmholtz</span>
+<span class="sd">        equation.  This controls the V-cycles, smoothing at each</span>
+<span class="sd">        step of the way and uses simple smoothing at the coarsest</span>
+<span class="sd">        level to perform the bottom solve.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        rtol : float</span>
+<span class="sd">            The relative tolerance (residual norm / source norm) to</span>
+<span class="sd">            solve to.  Note that if the source norm is 0 (e.g. the</span>
+<span class="sd">            righthand side of our equation is 0), then we just use</span>
+<span class="sd">            the norm of the residual.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># start by making sure that we&#39;ve initialized the RHS</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialized_rhs</span><span class="p">:</span>
+            <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ERROR: RHS not initialized&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;source norm = &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_norm</span><span class="p">)</span>
+
+        <span class="n">old_phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">residual_error</span> <span class="o">=</span> <span class="mf">1.e33</span>
+        <span class="n">cycle</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># V-cycles until we achieve the L2 norm of the residual &lt; rtol</span>
+        <span class="k">while</span> <span class="n">residual_error</span> <span class="o">&gt;</span> <span class="n">rtol</span> <span class="ow">and</span> <span class="n">cycle</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_cycles</span><span class="p">:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_cycle</span> <span class="o">=</span> <span class="n">cycle</span>
+
+            <span class="c1"># zero out the solution on all but the finest grid</span>
+            <span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">zero</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&lt;&lt;&lt; beginning V-cycle (cycle </span><span class="si">{}</span><span class="s2">) &gt;&gt;&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cycle</span><span class="p">))</span>
+
+            <span class="c1"># do V-cycles through the entire hierarchy</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">v_cycle</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+
+            <span class="c1"># compute the error with respect to the previous solution</span>
+            <span class="c1"># this is for diagnostic purposes only -- it is not used to</span>
+            <span class="c1"># determine convergence</span>
+            <span class="n">soln</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="n">diff</span> <span class="o">=</span> <span class="p">(</span><span class="n">soln</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="n">old_phi</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">soln</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">small</span><span class="p">)</span>
+            <span class="n">relative_error</span> <span class="o">=</span> <span class="n">soln</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+
+            <span class="n">old_phi</span> <span class="o">=</span> <span class="n">soln</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+            <span class="c1"># compute the residual error, relative to the source norm</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_compute_residual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">fp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_norm</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">residual_error</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">source_norm</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">residual_error</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;cycle </span><span class="si">{}</span><span class="s2">: relative err = </span><span class="si">{}</span><span class="s2">, residual err = </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">cycle</span><span class="p">,</span> <span class="n">relative_error</span><span class="p">,</span> <span class="n">residual_error</span><span class="p">))</span>
+
+            <span class="n">cycle</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_cycles</span> <span class="o">=</span> <span class="n">cycle</span><span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relative_error</span> <span class="o">=</span> <span class="n">relative_error</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">residual_error</span> <span class="o">=</span> <span class="n">residual_error</span>
+        <span class="n">fp</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CellCenterMG2d.v_cycle"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.v_cycle">[docs]</a>    <span class="k">def</span> <span class="nf">v_cycle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform a V-cycle for a single 2-level solve.  This is applied</span>
+<span class="sd">        recursively do V-cycle through the entire hierarchy.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">level</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_level</span> <span class="o">=</span> <span class="n">level</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">up_or_down</span> <span class="o">=</span> <span class="s2">&quot;down&quot;</span>
+
+            <span class="c1"># pointers to the fine and coarse data</span>
+            <span class="n">fp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span>
+            <span class="n">cp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_compute_residual</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">grid_info</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  before G-S, residual L2: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()))</span>
+
+            <span class="c1"># smooth on the current level</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">smooth</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsmooth</span><span class="p">)</span>
+
+            <span class="c1"># compute the residual</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_compute_residual</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  after G-S, residual L2: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()))</span>
+
+            <span class="c1"># restrict the residual down to the RHS of the coarser level</span>
+            <span class="n">f_coarse</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;f&quot;</span><span class="p">)</span>
+            <span class="n">f_coarse</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">restrict</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+
+            <span class="c1"># solve the coarse problem</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">v_cycle</span><span class="p">(</span><span class="n">level</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># ascending part</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_level</span> <span class="o">=</span> <span class="n">level</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">up_or_down</span> <span class="o">=</span> <span class="s2">&quot;up&quot;</span>
+
+            <span class="n">fp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span>
+            <span class="n">cp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="c1"># prolong the error up from the coarse grid</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">prolong</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+
+            <span class="c1"># correct the solution on the current grid</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+            <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">+=</span> <span class="n">e</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+
+            <span class="n">fp</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_compute_residual</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">grid_info</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  before G-S, residual L2: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()))</span>
+
+            <span class="c1"># smooth</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">smooth</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsmooth</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_compute_residual</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  after G-S, residual L2: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()))</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># bottom solve: solve the discrete coarse problem.  We</span>
+            <span class="c1"># could use any number of different matrix solvers here</span>
+            <span class="c1"># (like CG), but since we are 2x2 by design at this point,</span>
+            <span class="c1"># we will just smooth</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  bottom solve:&quot;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_level</span> <span class="o">=</span> <span class="n">level</span>
+            <span class="n">bp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">grid_info</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">smooth</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsmooth_bottom</span><span class="p">)</span>
+
+            <span class="n">bp</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Michael Zingale.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

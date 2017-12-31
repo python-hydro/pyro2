@@ -1,0 +1,381 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>compressible.BC &mdash; pyro 2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="pyro 2.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pyro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mesh-examples.html">Mesh examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>compressible.BC</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for compressible.BC</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">compressible-specific boundary conditions.  Here, in particular, we</span>
+<span class="sd">implement an HSE BC in the vertical direction.</span>
+
+<span class="sd">Note: the pyro BC routines operate on a single variable at a time, so</span>
+<span class="sd">some work will necessarily be repeated.</span>
+
+<span class="sd">Also note: we may come in here with the aux_data (source terms), so</span>
+<span class="sd">we&#39;ll do a special case for them</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">compressible.eos</span> <span class="k">as</span> <span class="nn">eos</span>
+<span class="kn">from</span> <span class="nn">util</span> <span class="k">import</span> <span class="n">msg</span>
+
+<div class="viewcode-block" id="user"><a class="viewcode-back" href="../../compressible.html#compressible.BC.user">[docs]</a><span class="k">def</span> <span class="nf">user</span><span class="p">(</span><span class="n">bc_name</span><span class="p">,</span> <span class="n">bc_edge</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">ccdata</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A hydrostatic boundary.  This integrates the equation of HSE into</span>
+<span class="sd">    the ghost cells to get the pressure and density under the assumption</span>
+<span class="sd">    that the specific internal energy is constant.</span>
+
+<span class="sd">    Upon exit, the ghost cells for the input variable will be set</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    bc_name : {&#39;hse&#39;}</span>
+<span class="sd">        The descriptive name for the boundary condition -- this allows</span>
+<span class="sd">        for pyro to have multiple types of user-supplied boundary</span>
+<span class="sd">        conditions.  For this module, it needs to be &#39;hse&#39;.</span>
+<span class="sd">    bc_edge : {&#39;ylb&#39;, &#39;yrb&#39;}</span>
+<span class="sd">        The boundary to update: ylb = lower y boundary; yrb = upper y</span>
+<span class="sd">        boundary.</span>
+<span class="sd">    variable : {&#39;density&#39;, &#39;x-momentum&#39;, &#39;y-momentum&#39;, &#39;energy&#39;}</span>
+<span class="sd">        The variable whose ghost cells we are filling</span>
+<span class="sd">    ccdata : CellCenterData2d object</span>
+<span class="sd">        The data object</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">myg</span> <span class="o">=</span> <span class="n">ccdata</span><span class="o">.</span><span class="n">grid</span>
+
+    <span class="k">if</span> <span class="n">bc_name</span> <span class="o">==</span> <span class="s2">&quot;hse&quot;</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="n">bc_edge</span> <span class="o">==</span> <span class="s2">&quot;ylb&quot;</span><span class="p">:</span>
+
+            <span class="c1"># lower y boundary</span>
+
+            <span class="c1"># we will take the density to be constant, the velocity to</span>
+            <span class="c1"># be outflow, and the pressure to be in HSE</span>
+            <span class="k">if</span> <span class="n">variable</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;density&quot;</span><span class="p">,</span> <span class="s2">&quot;x-momentum&quot;</span><span class="p">,</span> <span class="s2">&quot;y-momentum&quot;</span><span class="p">,</span> <span class="s2">&quot;ymom_src&quot;</span><span class="p">,</span> <span class="s2">&quot;E_src&quot;</span><span class="p">,</span> <span class="s2">&quot;fuel&quot;</span><span class="p">,</span> <span class="s2">&quot;ash&quot;</span><span class="p">]:</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="n">ccdata</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">variable</span><span class="p">)</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="mi">1</span>
+                <span class="k">while</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">v</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[:,</span><span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">]</span>
+                    <span class="n">j</span> <span class="o">-=</span> <span class="mi">1</span>
+
+            <span class="k">elif</span> <span class="n">variable</span> <span class="o">==</span> <span class="s2">&quot;energy&quot;</span><span class="p">:</span>
+                <span class="n">dens</span> <span class="o">=</span> <span class="n">ccdata</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
+                <span class="n">xmom</span> <span class="o">=</span> <span class="n">ccdata</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;x-momentum&quot;</span><span class="p">)</span>
+                <span class="n">ymom</span> <span class="o">=</span> <span class="n">ccdata</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;y-momentum&quot;</span><span class="p">)</span>
+                <span class="n">ener</span> <span class="o">=</span> <span class="n">ccdata</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;energy&quot;</span><span class="p">)</span>
+
+                <span class="n">grav</span> <span class="o">=</span> <span class="n">ccdata</span><span class="o">.</span><span class="n">get_aux</span><span class="p">(</span><span class="s2">&quot;grav&quot;</span><span class="p">)</span>
+                <span class="n">gamma</span> <span class="o">=</span> <span class="n">ccdata</span><span class="o">.</span><span class="n">get_aux</span><span class="p">(</span><span class="s2">&quot;gamma&quot;</span><span class="p">)</span>
+
+                <span class="n">dens_base</span> <span class="o">=</span> <span class="n">dens</span><span class="p">[:,</span><span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">]</span>
+                <span class="n">ke_base</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">xmom</span><span class="p">[:,</span><span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">ymom</span><span class="p">[:,</span><span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> \
+                    <span class="n">dens</span><span class="p">[:,</span><span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">]</span>
+
+                <span class="n">eint_base</span> <span class="o">=</span> <span class="p">(</span><span class="n">ener</span><span class="p">[:,</span><span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">]</span> <span class="o">-</span> <span class="n">ke_base</span><span class="p">)</span><span class="o">/</span><span class="n">dens</span><span class="p">[:,</span><span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">]</span>
+                <span class="n">pres_base</span> <span class="o">=</span> <span class="n">eos</span><span class="o">.</span><span class="n">pres</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">dens_base</span><span class="p">,</span> <span class="n">eint_base</span><span class="p">)</span>
+
+                <span class="c1"># we are assuming that the density is constant in this</span>
+                <span class="c1"># formulation of HSE, so the pressure comes simply from</span>
+                <span class="c1"># differencing the HSE equation</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="mi">1</span>
+                <span class="k">while</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">pres_below</span> <span class="o">=</span> <span class="n">pres_base</span> <span class="o">-</span> <span class="n">grav</span><span class="o">*</span><span class="n">dens_base</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
+                    <span class="n">rhoe</span> <span class="o">=</span> <span class="n">eos</span><span class="o">.</span><span class="n">rhoe</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">pres_below</span><span class="p">)</span>
+
+                    <span class="n">ener</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">rhoe</span> <span class="o">+</span> <span class="n">ke_base</span>
+
+                    <span class="n">pres_base</span> <span class="o">=</span> <span class="n">pres_below</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+                    <span class="n">j</span> <span class="o">-=</span> <span class="mi">1</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;variable not defined&quot;</span><span class="p">)</span>
+
+
+        <span class="k">elif</span> <span class="n">bc_edge</span> <span class="o">==</span> <span class="s2">&quot;yrb&quot;</span><span class="p">:</span>
+
+            <span class="c1"># upper y boundary</span>
+
+            <span class="c1"># we will take the density to be constant, the velocity to</span>
+            <span class="c1"># be outflow, and the pressure to be in HSE</span>
+            <span class="k">if</span> <span class="n">variable</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;density&quot;</span><span class="p">,</span> <span class="s2">&quot;x-momentum&quot;</span><span class="p">,</span> <span class="s2">&quot;y-momentum&quot;</span><span class="p">,</span> <span class="s2">&quot;ymom_src&quot;</span><span class="p">,</span> <span class="s2">&quot;E_src&quot;</span><span class="p">,</span> <span class="s2">&quot;fuel&quot;</span><span class="p">,</span> <span class="s2">&quot;ash&quot;</span><span class="p">]:</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="n">ccdata</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">variable</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="n">v</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[:,</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="p">]</span>
+
+            <span class="k">elif</span> <span class="n">variable</span> <span class="o">==</span> <span class="s2">&quot;energy&quot;</span><span class="p">:</span>
+                <span class="n">dens</span> <span class="o">=</span> <span class="n">ccdata</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
+                <span class="n">xmom</span> <span class="o">=</span> <span class="n">ccdata</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;x-momentum&quot;</span><span class="p">)</span>
+                <span class="n">ymom</span> <span class="o">=</span> <span class="n">ccdata</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;y-momentum&quot;</span><span class="p">)</span>
+                <span class="n">ener</span> <span class="o">=</span> <span class="n">ccdata</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;energy&quot;</span><span class="p">)</span>
+
+                <span class="n">grav</span> <span class="o">=</span> <span class="n">ccdata</span><span class="o">.</span><span class="n">get_aux</span><span class="p">(</span><span class="s2">&quot;grav&quot;</span><span class="p">)</span>
+                <span class="n">gamma</span> <span class="o">=</span> <span class="n">ccdata</span><span class="o">.</span><span class="n">get_aux</span><span class="p">(</span><span class="s2">&quot;gamma&quot;</span><span class="p">)</span>
+
+                <span class="n">dens_base</span> <span class="o">=</span> <span class="n">dens</span><span class="p">[:,</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="p">]</span>
+                <span class="n">ke_base</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">xmom</span><span class="p">[:,</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">ymom</span><span class="p">[:,</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> \
+                    <span class="n">dens</span><span class="p">[:,</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="p">]</span>
+
+                <span class="n">eint_base</span> <span class="o">=</span> <span class="p">(</span><span class="n">ener</span><span class="p">[:,</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="p">]</span> <span class="o">-</span> <span class="n">ke_base</span><span class="p">)</span><span class="o">/</span><span class="n">dens</span><span class="p">[:,</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="p">]</span>
+                <span class="n">pres_base</span> <span class="o">=</span> <span class="n">eos</span><span class="o">.</span><span class="n">pres</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">dens_base</span><span class="p">,</span> <span class="n">eint_base</span><span class="p">)</span>
+
+                <span class="c1"># we are assuming that the density is constant in this</span>
+                <span class="c1"># formulation of HSE, so the pressure comes simply from</span>
+                <span class="c1"># differencing the HSE equation</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="n">pres_above</span> <span class="o">=</span> <span class="n">pres_base</span> <span class="o">+</span> <span class="n">grav</span><span class="o">*</span><span class="n">dens_base</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
+                    <span class="n">rhoe</span> <span class="o">=</span> <span class="n">eos</span><span class="o">.</span><span class="n">rhoe</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">pres_above</span><span class="p">)</span>
+
+                    <span class="n">ener</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">rhoe</span> <span class="o">+</span> <span class="n">ke_base</span>
+
+                    <span class="n">pres_base</span> <span class="o">=</span> <span class="n">pres_above</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;variable not defined&quot;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;error: hse BC not supported for xlb or xrb&quot;</span><span class="p">)</span>
+
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;error: bc type </span><span class="si">%s</span><span class="s2"> not supported&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">bc_name</span><span class="p">)</span> <span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Michael Zingale.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
