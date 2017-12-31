@@ -92,9 +92,10 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Setting up pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notes.html">Notes on the numerical methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="design.html">Design ideas</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Running</a><ul>
@@ -105,6 +106,9 @@
 <li class="toctree-l1"><a class="reference internal" href="problems.html">Adding a problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="multigrid_basics.html">Multigrid solvers</a></li>
@@ -112,9 +116,18 @@
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API</a></li>
 </ul>
 
@@ -235,6 +248,13 @@ the inputs file. For example, to disable runtime visualization for the
 above run, we could do:</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py advection smooth inputs.smooth vis.dovis=0
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Quite often, the slowest part of the runtime is the visualization, so disabling
+vis as shown above can dramatically speed up the execution.  You can always
+plot the results after the fact using the <code class="docutils literal"><span class="pre">plot.py</span></code> script, as discussed
+in  <a class="reference internal" href="analysis.html#analysis"><span class="std std-ref">Analysis routines</span></a>.</p>
 </div>
 <div class="section" id="runtime-options">
 <h2>Runtime options<a class="headerlink" href="#runtime-options" title="Permalink to this headline">¶</a></h2>

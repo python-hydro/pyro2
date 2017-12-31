@@ -3,14 +3,17 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to pyro's documentation!
-================================
+pyro: a python hydro code
+=========================
+
+.. image:: pyro_plots.png
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 1
+   :caption: pyro basics
 
    intro
+   installation
    notes
    design
    running
@@ -18,6 +21,11 @@ Welcome to pyro's documentation!
    problems
    mesh_basics
    mesh-examples.ipynb
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Solvers
+
    advection_basics
    compressible_basics
    multigrid_basics
@@ -25,9 +33,24 @@ Welcome to pyro's documentation!
    diffusion_basics
    incompressible_basics
    lowmach_basics
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Utilities
+
    analysis
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Community
+
    help
    ack
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Reference
+
    API <modules>
 
 

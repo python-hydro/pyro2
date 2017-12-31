@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Welcome to pyro’s documentation! &mdash; pyro 2.0 documentation</title>
+  <title>pyro: a python hydro code &mdash; pyro 2.0 documentation</title>
   
 
   
@@ -91,9 +91,10 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Setting up pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notes.html">Notes on the numerical methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="design.html">Design ideas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="running.html">Running</a></li>
@@ -101,6 +102,9 @@
 <li class="toctree-l1"><a class="reference internal" href="problems.html">Adding a problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="multigrid_basics.html">Multigrid solvers</a></li>
@@ -108,9 +112,18 @@
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API</a></li>
 </ul>
 
@@ -156,7 +169,7 @@
     
       <li><a href="#">Docs</a> &raquo;</li>
         
-      <li>Welcome to pyro’s documentation!</li>
+      <li>pyro: a python hydro code</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -209,108 +222,52 @@
     margin-right: 4px;  /* make room for the exclamation icon */
 }
 </style>
-<div class="section" id="welcome-to-pyro-s-documentation">
-<h1>Welcome to pyro’s documentation!<a class="headerlink" href="#welcome-to-pyro-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="pyro-a-python-hydro-code">
+<h1>pyro: a python hydro code<a class="headerlink" href="#pyro-a-python-hydro-code" title="Permalink to this headline">¶</a></h1>
+<img alt="_images/pyro_plots.png" src="_images/pyro_plots.png" />
 <div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption"><span class="caption-text">pyro basics</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Setting up pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notes.html">Notes on the numerical methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="design.html">Design ideas</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="design.html#directory-structure">Directory structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="design.html#fortran">Fortran</a></li>
-<li class="toctree-l2"><a class="reference internal" href="design.html#main-driver">Main driver</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="running.html">Running</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="running.html#runtime-options">Runtime options</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="output.html">Working with output</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="output.html#utilities">Utilities</a></li>
-<li class="toctree-l2"><a class="reference internal" href="output.html#reading-and-plotting-manually">Reading and plotting manually</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Working with output</a></li>
 <li class="toctree-l1"><a class="reference internal" href="problems.html">Adding a problem</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="mesh_basics.html#mesh-patch-implementation-and-use"><code class="docutils literal"><span class="pre">mesh.patch</span></code> implementation and use</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mesh_basics.html#jupyter-notebook">Jupyter notebook</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mesh_basics.html#tests">Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
 </ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="mesh-examples.html#Setup-a-Grid-with-Variables">Setup a Grid with Variables</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mesh-examples.html#Working-with-the-data">Working with the data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mesh-examples.html#ArrayIndexer"><code class="docutils literal"><span class="pre">ArrayIndexer</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="mesh-examples.html#Differencing">Differencing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mesh-examples.html#Coarsening-and-prolonging">Coarsening and prolonging</a></li>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
 </ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="advection_basics.html#examples">Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="advection_basics.html#exercises">Exercises</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="compressible_basics.html#examples">Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compressible_basics.html#exercises">Exercises</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compressible_basics.html#going-further">Going further</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="multigrid_basics.html">Multigrid solvers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="multigrid_basics.html#examples">Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="multigrid_basics.html#jupyter-notebook">Jupyter Notebook</a></li>
-<li class="toctree-l2"><a class="reference internal" href="multigrid_basics.html#exercises">Exercises</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="multigrid-examples.html">Multigrid examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="multigrid-examples.html#Constant-coefficent-Poisson-equation">Constant-coefficent Poisson equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="multigrid-examples.html#General-linear-elliptic-equation">General linear elliptic equation</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="diffusion_basics.html#examples">Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="diffusion_basics.html#exercises">Exercises</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="incompressible_basics.html#examples">Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="incompressible_basics.html#exercises">Exercises</a></li>
-<li class="toctree-l2"><a class="reference internal" href="incompressible_basics.html#going-further">Going further</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="lowmach_basics.html#examples">Examples</a></li>
-</ul>
-</li>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
-<li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="help.html#mailing-list">Mailing list</a></li>
 </ul>
-</li>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="advection.html">advection package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="advection_fv4.html">advection_fv4 package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="advection_rk.html">advection_rk package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="advection_weno.html">advection_weno package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compare.html">compare module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compressible.html">compressible package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compressible_fv4.html">compressible_fv4 package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compressible_react.html">compressible_react package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compressible_rk.html">compressible_rk package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="diffusion.html">diffusion package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="incompressible.html">incompressible package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lm_atm.html">lm_atm package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mesh.html">mesh package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="multigrid.html">multigrid package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot.html">plot module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyro.html">pyro module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simulation_null.html">simulation_null module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="test.html">test module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.html">util package</a></li>
 </ul>
-</li>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API</a></li>
 </ul>
 </div>
 </div>

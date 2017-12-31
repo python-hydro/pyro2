@@ -93,9 +93,10 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Setting up pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notes.html">Notes on the numerical methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="design.html">Design ideas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="running.html">Running</a></li>
@@ -103,6 +104,9 @@
 <li class="toctree-l1"><a class="reference internal" href="problems.html">Adding a problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="multigrid_basics.html">Multigrid solvers</a></li>
@@ -110,9 +114,18 @@
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="advection.html">advection package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="advection_fv4.html">advection_fv4 package</a></li>
@@ -512,71 +525,35 @@ discussed in the Colella paper).</p>
 <dt>use_flattening   = 1 to use the multidimensional flattening</dt>
 <dd>algorithm at shocks</dd>
 <dt>delta, z0, z1      these are the flattening parameters.  The default</dt>
-<dd><blockquote class="first">
-<div>are the values listed in Colella 1990.</div></blockquote>
-<dl class="last docutils">
-<dt>j+3/2–+———+———+———+</dt>
-<dd><blockquote class="first">
-<div><div class="line-block">
-<div class="line">|         |         |</div>
-</div>
-</div></blockquote>
-<dl class="last docutils">
-<dt>j+1 _|         |         |         |</dt>
-<dd><div class="first last line-block">
-<div class="line">|         |         |</div>
-<div class="line">|         |         |</div>
-</div>
-</dd>
-</dl>
-</dd>
-<dt>j+1/2–+———XXXXXXXXXXX———+</dt>
-<dd><blockquote class="first">
-<div><div class="line-block">
-<div class="line">X         X         |</div>
-</div>
-</div></blockquote>
-<dl class="last docutils">
-<dt>j _|         X         X         |</dt>
-<dd><div class="first last line-block">
-<div class="line">X         X         |</div>
-<div class="line">X         X         |</div>
-</div>
-</dd>
-</dl>
-</dd>
-<dt>j-1/2–+———XXXXXXXXXXX———+</dt>
-<dd><blockquote class="first">
-<div><div class="line-block">
-<div class="line">|         |         |</div>
-</div>
-</div></blockquote>
-<dl class="last docutils">
-<dt>j-1 _|         |         |         |</dt>
-<dd><div class="first last line-block">
-<div class="line">|         |         |</div>
-<div class="line">|         |         |</div>
-</div>
-</dd>
-</dl>
-</dd>
-<dt>j-3/2–+———+———+———+</dt>
-<dd><blockquote class="first">
-<div><div class="line-block">
-<div class="line">|    |    |    |    |    |
-i-1        i        i+1</div>
-</div>
-</div></blockquote>
-<p class="last">i-3/2     i-1/2     i+1/2     i+3/2</p>
-</dd>
-</dl>
-</dd>
+<dd>are the values listed in Colella 1990.</dd>
 </dl>
 </div></blockquote>
+<p>The grid indices look like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">j</span><span class="o">+</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="o">--+---------+---------+---------+</span>
+       <span class="o">|</span>         <span class="o">|</span>         <span class="o">|</span>         <span class="o">|</span>
+  <span class="n">j</span><span class="o">+</span><span class="mi">1</span> <span class="n">_</span><span class="o">|</span>         <span class="o">|</span>         <span class="o">|</span>         <span class="o">|</span>
+       <span class="o">|</span>         <span class="o">|</span>         <span class="o">|</span>         <span class="o">|</span>
+       <span class="o">|</span>         <span class="o">|</span>         <span class="o">|</span>         <span class="o">|</span>
+<span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="o">--+---------</span><span class="n">XXXXXXXXXXX</span><span class="o">---------+</span>
+       <span class="o">|</span>         <span class="n">X</span>         <span class="n">X</span>         <span class="o">|</span>
+    <span class="n">j</span> <span class="n">_</span><span class="o">|</span>         <span class="n">X</span>         <span class="n">X</span>         <span class="o">|</span>
+       <span class="o">|</span>         <span class="n">X</span>         <span class="n">X</span>         <span class="o">|</span>
+       <span class="o">|</span>         <span class="n">X</span>         <span class="n">X</span>         <span class="o">|</span>
+<span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="o">--+---------</span><span class="n">XXXXXXXXXXX</span><span class="o">---------+</span>
+       <span class="o">|</span>         <span class="o">|</span>         <span class="o">|</span>         <span class="o">|</span>
+  <span class="n">j</span><span class="o">-</span><span class="mi">1</span> <span class="n">_</span><span class="o">|</span>         <span class="o">|</span>         <span class="o">|</span>         <span class="o">|</span>
+       <span class="o">|</span>         <span class="o">|</span>         <span class="o">|</span>         <span class="o">|</span>
+       <span class="o">|</span>         <span class="o">|</span>         <span class="o">|</span>         <span class="o">|</span>
+<span class="n">j</span><span class="o">-</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="o">--+---------+---------+---------+</span>
+       <span class="o">|</span>    <span class="o">|</span>    <span class="o">|</span>    <span class="o">|</span>    <span class="o">|</span>    <span class="o">|</span>    <span class="o">|</span>
+           <span class="n">i</span><span class="o">-</span><span class="mi">1</span>        <span class="n">i</span>        <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+     <span class="n">i</span><span class="o">-</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span>     <span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span>     <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span>     <span class="n">i</span><span class="o">+</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span>
+</pre></div>
+</div>
 <p>We wish to solve</p>
-<blockquote>
-<div>U_t + F^x_x + F^y_y = H</div></blockquote>
-<p>we want U_{i+1/2}^{n+1/2} – the interface values that are input to
+<div class="math">
+\[U_t + F^x_x + F^y_y = H\]</div>
+<p>we want <span class="math">\(U_{i+1/2}^{n+1/2}\)</span> – the interface values that are input to
 the Riemann problem through the faces for each zone.</p>
 <p>Taylor expanding yields</p>
 <blockquote>

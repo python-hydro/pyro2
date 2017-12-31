@@ -93,9 +93,10 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Setting up pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notes.html">Notes on the numerical methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="design.html">Design ideas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="running.html">Running</a></li>
@@ -103,6 +104,9 @@
 <li class="toctree-l1"><a class="reference internal" href="problems.html">Adding a problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="multigrid_basics.html">Multigrid solvers</a></li>
@@ -110,9 +114,18 @@
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="advection.html">advection package</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">advection_fv4 package</a><ul>
@@ -246,22 +259,10 @@
 </style>
 <div class="section" id="module-advection_fv4">
 <span id="advection-fv4-package"></span><h1>advection_fv4 package<a class="headerlink" href="#module-advection_fv4" title="Permalink to this headline">¶</a></h1>
-<p>The pyro advection solver.  This implements a fourth-order, unsplit
-method for linear advection based on the McCorquodale &amp; Colella 2011
-paper</p>
-<p>The general flow of the solver when invoked through pyro.py is:</p>
-<blockquote>
-<div><p>create grid</p>
-<p>initial conditions</p>
-<p>main loop</p>
-<blockquote>
-<div><p>fill ghost cells</p>
-<p>compute dt</p>
-<p>compute fluxes</p>
-<p>conservative update</p>
-<p>output</p>
-</div></blockquote>
-</div></blockquote>
+<p>The pyro fourth-order accurate advection solver.  This implements
+a the method of McCorquodale and Colella (2011), with 4th order
+accurate spatial reconstruction together with 4th order Runge-Kutta
+time integration.</p>
 <div class="section" id="subpackages">
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
@@ -284,12 +285,8 @@ paper</p>
 <code class="descclassname">advection_fv4.fluxes.</code><code class="descname">fluxes</code><span class="sig-paren">(</span><em>my_data</em>, <em>rp</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/advection_fv4/fluxes.html#fluxes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#advection_fv4.fluxes.fluxes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct the fluxes through the interfaces for the linear advection
 equation:</p>
-<blockquote>
-<div><dl class="docutils">
-<dt>a  + u a  + v a  = 0</dt>
-<dd>t      x      y</dd>
-</dl>
-</div></blockquote>
+<div class="math">
+\[a_t + u a_x + v a_y = 0\]</div>
 <p>We use a fourth-order Godunov method to construct the interface
 states, using Runge-Kutta integration.  Since this is 4th-order,
 we need to be aware of the difference between a face-average and
@@ -299,22 +296,15 @@ solve – we just simply do upwinding.  So there is only one ‘state’
 at each interface, and the zone the information comes from depends
 on the sign of the velocity.</p>
 <p>Our convection is that the fluxes are going to be defined on the
-left edge of the computational zones</p>
-<blockquote>
-<div><div class="line-block">
-<div class="line">|             |             |</div>
-<div class="line">|             |             |</div>
+left edge of the computational zones:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="o">|</span>             <span class="o">|</span>             <span class="o">|</span>             <span class="o">|</span>
+ <span class="o">|</span>             <span class="o">|</span>             <span class="o">|</span>             <span class="o">|</span>
+<span class="o">-+------+------+------+------+------+------+--</span>
+ <span class="o">|</span>     <span class="n">i</span><span class="o">-</span><span class="mi">1</span>     <span class="o">|</span>      <span class="n">i</span>      <span class="o">|</span>     <span class="n">i</span><span class="o">+</span><span class="mi">1</span>     <span class="o">|</span>
+
+          <span class="n">a_l</span><span class="p">,</span><span class="n">i</span>  <span class="n">a_r</span><span class="p">,</span><span class="n">i</span>   <span class="n">a_l</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+</pre></div>
 </div>
-</div></blockquote>
-<dl class="docutils">
-<dt>-+——+——+——+——+——+——+–</dt>
-<dd><div class="first line-block">
-<div class="line">i-1     |      i      |     i+1     |</div>
-</div>
-<blockquote class="last">
-<div>a_l,i  a_r,i   a_l,i+1</div></blockquote>
-</dd>
-</dl>
 <p>a_r,i and a_l,i+1 are computed using the information in
 zone i,j.</p>
 <table class="docutils field-list" frame="void" rules="none">
