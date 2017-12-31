@@ -3,12 +3,12 @@
 """
 
 an example of using the multigrid class to solve Laplace's equation.  Here, we
-solve
+solve::
 
-u_xx + u_yy = -2[(1-6x**2)y**2(1-y**2) + (1-6y**2)x**2(1-x**2)]
-u = 0 on the boundary
+   u_xx + u_yy = -2[(1-6x**2)y**2(1-y**2) + (1-6y**2)x**2(1-x**2)]
+   u = 0 on the boundary
 
-this is the example from page 64 of the book `A Multigrid Tutorial, 2nd Ed.'
+this is the example from page 64 of the book `A Multigrid Tutorial, 2nd Ed.`
 
 The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)
 

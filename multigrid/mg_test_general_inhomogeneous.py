@@ -3,11 +3,11 @@
 """Test the general MG solver with inhomogeneous Dirichlet 
    boundary conditions.
 
-Here we solve:
+Here we solve::
 
    alpha phi + div{beta grad phi} + gamma . grad phi = f
 
-with
+with::
 
    alpha = 10.0
    beta = x*y + 1  (note: x*y alone doesn't work)
@@ -18,16 +18,16 @@ with
        - (pi/2)*(y + 1)*sin(pi*x/2)*cos(pi*y/2) + 
        (-pi**2*(x*y+1)/2 + 10)*cos(pi*x/2)*cos(pi*y/2)
 
-This has the exact solution:
+This has the exact solution::
 
    phi = cos(pi*x/2)*cos(pi*y/2)
 
-on [0,1] x [0,1], with Dirichlet boundary conditions
+on [0,1] x [0,1], with Dirichlet boundary conditions::
 
-phi(x=0) = cos(pi*y/2)
-phi(x=1) = 0
-phi(y=0) = cos(pi*x/2)
-phi(y=1) = 0
+   phi(x=0) = cos(pi*y/2)
+   phi(x=1) = 0
+   phi(y=0) = cos(pi*x/2)
+   phi(y=1) = 0
 
 For the coefficients we do not have to impose the same BCs, since that
 may represent a different physical quantity.  beta is the one that
