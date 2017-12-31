@@ -1,17 +1,16 @@
-"""
-The pyro diffusion solver.  This implements second-order implicit 
-diffusion using Crank-Nicolson time-differencing.  The resulting 
-system is solved using multigrid.  
+"""The pyro diffusion solver.  This implements second-order implicit
+diffusion using Crank-Nicolson time-differencing.  The resulting
+system is solved using multigrid.
 
 The general flow is:
 
-   compute the RHS given the current state
+* compute the RHS given the current state
 
-   sets up the MG
+* set up the MG
 
-   solve the system using MG for updated phi
+* solve the system using MG for updated phi
 
-The timestep is computed as:
+The timestep is computed as::
 
    CFL* 0.5*dt/dx**2
 
