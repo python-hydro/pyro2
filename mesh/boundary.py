@@ -42,7 +42,7 @@ def _set_reflect(odd_reflect_dir, dir_string):
 
 class BCProp(object):
     """
-    a simple container to hold properties of the boundary conditions
+    A simple container to hold properties of the boundary conditions.
     """
     def __init__(self, xl_prop, xr_prop, yl_prop, yr_prop):
         self.xl = xl_prop
@@ -52,7 +52,7 @@ class BCProp(object):
 
 def bc_is_solid(rp):
     """
-    return a container class indicated which boundaries are solid walls
+    return a container class indicating which boundaries are solid walls
     """
     solid = BCProp(int(bc_solid[rp.get_param("mesh.xlboundary")]),
                    int(bc_solid[rp.get_param("mesh.xrboundary")]),
