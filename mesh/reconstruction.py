@@ -1,9 +1,11 @@
-import mesh.patch as patch
-import mesh.array_indexer as ai
+"""Support for computing limited differences needed in reconstruction
+of slopes in constructing interface states."""
+
 import numpy as np
 
 def limit(data, myg, idir, limiter):
-
+    """ a single driver that calls the different limiters based on the value
+    of the limiter input variable."""
     if limiter == 0:
         return nolimit(data, myg, idir)
     elif limiter == 1:
@@ -18,9 +20,9 @@ def nolimit(a, myg, idir):
     lda = myg.scratch_array()
 
     if idir == 1:
-        lda.v(buf=2)[:,:] = 0.5*(a.ip(1, buf=2) - a.ip(-1, buf=2))
+        lda.v(buf=2)[:, :] = 0.5*(a.ip(1, buf=2) - a.ip(-1, buf=2))
     elif idir == 2:
-        lda.v(buf=2)[:,:] = 0.5*(a.jp(1, buf=2) - a.jp(-1, buf=2))
+        lda.v(buf=2)[:, :] = 0.5*(a.jp(1, buf=2) - a.jp(-1, buf=2))
 
     return lda
 
@@ -34,18 +36,18 @@ def limit2(a, myg, idir):
     dr = myg.scratch_array()
 
     if idir == 1:
-        dc.v(buf=2)[:,:] = 0.5*(a.ip(1, buf=2) - a.ip(-1, buf=2))
-        dl.v(buf=2)[:,:] = a.ip(1, buf=2) - a.v(buf=2)
-        dr.v(buf=2)[:,:] = a.v(buf=2) - a.ip(-1, buf=2)
+        dc.v(buf=2)[:, :] = 0.5*(a.ip(1, buf=2) - a.ip(-1, buf=2))
+        dl.v(buf=2)[:, :] = a.ip(1, buf=2) - a.v(buf=2)
+        dr.v(buf=2)[:, :] = a.v(buf=2) - a.ip(-1, buf=2)
 
     elif idir == 2:
-        dc.v(buf=2)[:,:] = 0.5*(a.jp(1, buf=2) - a.jp(-1, buf=2))
-        dl.v(buf=2)[:,:] = a.jp(1, buf=2) - a.v(buf=2)
-        dr.v(buf=2)[:,:] = a.v(buf=2) - a.jp(-1, buf=2)
+        dc.v(buf=2)[:, :] = 0.5*(a.jp(1, buf=2) - a.jp(-1, buf=2))
+        dl.v(buf=2)[:, :] = a.jp(1, buf=2) - a.v(buf=2)
+        dr.v(buf=2)[:, :] = a.v(buf=2) - a.jp(-1, buf=2)
 
     d1 = 2.0*np.where(np.fabs(dl) < np.fabs(dr), dl, dr)
     dt = np.where(np.fabs(dc) < np.fabs(d1), dc, d1)
-    lda.v(buf=myg.ng)[:,:] = np.where(dl*dr > 0.0, dt, 0.0)
+    lda.v(buf=myg.ng)[:, :] = np.where(dl*dr > 0.0, dt, 0.0)
 
     return lda
 
@@ -61,20 +63,20 @@ def limit4(a, myg, idir):
     dr = myg.scratch_array()
 
     if idir == 1:
-        dc.v(buf=2)[:,:] = (2./3.)*(a.ip(1, buf=2) - a.ip(-1, buf=2) -
-                                    0.25*(lda_tmp.ip(1, buf=2) + lda_tmp.ip(-1, buf=2)))
-        dl.v(buf=2)[:,:] = a.ip(1, buf=2) - a.v(buf=2)
-        dr.v(buf=2)[:,:] = a.v(buf=2) - a.ip(-1, buf=2)
+        dc.v(buf=2)[:, :] = (2./3.)*(a.ip(1, buf=2) - a.ip(-1, buf=2) -
+                                     0.25*(lda_tmp.ip(1, buf=2) + lda_tmp.ip(-1, buf=2)))
+        dl.v(buf=2)[:, :] = a.ip(1, buf=2) - a.v(buf=2)
+        dr.v(buf=2)[:, :] = a.v(buf=2) - a.ip(-1, buf=2)
 
     elif idir == 2:
-        dc.v(buf=2)[:,:] = (2./3.)*(a.jp(1, buf=2) - a.jp(-1, buf=2) - \
-                                    0.25*(lda_tmp.jp(1, buf=2) + lda_tmp.jp(-1, buf=2)))
-        dl.v(buf=2)[:,:] = a.jp(1, buf=2) - a.v(buf=2)
-        dr.v(buf=2)[:,:] = a.v(buf=2) - a.jp(-1, buf=2)
+        dc.v(buf=2)[:, :] = (2./3.)*(a.jp(1, buf=2) - a.jp(-1, buf=2) - \
+                                     0.25*(lda_tmp.jp(1, buf=2) + lda_tmp.jp(-1, buf=2)))
+        dl.v(buf=2)[:, :] = a.jp(1, buf=2) - a.v(buf=2)
+        dr.v(buf=2)[:, :] = a.v(buf=2) - a.jp(-1, buf=2)
 
     d1 = 2.0*np.where(np.fabs(dl) < np.fabs(dr), dl, dr)
     dt = np.where(np.fabs(dc) < np.fabs(d1), dc, d1)
-    lda.v(buf=myg.ng)[:,:] = np.where(dl*dr > 0.0, dt, 0.0)
+    lda.v(buf=myg.ng)[:, :] = np.where(dl*dr > 0.0, dt, 0.0)
 
     return lda
 
@@ -92,32 +94,32 @@ def flatten(myg, q, idir, ivars, rp):
     smallp = 1.e-10
 
     if idir == 1:
-        t1.v(buf=2)[:,:] = abs(q.ip(1, n=ivars.ip, buf=2) -
-                               q.ip(-1, n=ivars.ip, buf=2))
-        t2.v(buf=2)[:,:] = abs(q.ip(2, n=ivars.ip, buf=2) -
-                               q.ip(-2, n=ivars.ip, buf=2))
+        t1.v(buf=2)[:, :] = abs(q.ip(1, n=ivars.ip, buf=2) -
+                                q.ip(-1, n=ivars.ip, buf=2))
+        t2.v(buf=2)[:, :] = abs(q.ip(2, n=ivars.ip, buf=2) -
+                                q.ip(-2, n=ivars.ip, buf=2))
 
-        z[:,:] = t1/np.maximum(t2, smallp)
+        z[:, :] = t1/np.maximum(t2, smallp)
 
-        t2.v(buf=2)[:,:] = t1.v(buf=2)/np.minimum(q.ip(1, n=ivars.ip, buf=2),
-                                                  q.ip(-1, n=ivars.ip, buf=2))
-        t1.v(buf=2)[:,:] = q.ip(-1, n=ivars.iu, buf=2) - q.ip(1, n=ivars.iu, buf=2)
+        t2.v(buf=2)[:, :] = t1.v(buf=2)/np.minimum(q.ip(1, n=ivars.ip, buf=2),
+                                                   q.ip(-1, n=ivars.ip, buf=2))
+        t1.v(buf=2)[:, :] = q.ip(-1, n=ivars.iu, buf=2) - q.ip(1, n=ivars.iu, buf=2)
 
     elif idir == 2:
-        t1.v(buf=2)[:,:] = abs(q.jp(1, n=ivars.ip, buf=2) -
-                               q.jp(-1, n=ivars.ip, buf=2))
-        t2.v(buf=2)[:,:] = abs(q.jp(2, n=ivars.ip, buf=2) -
-                               q.jp(-2, n=ivars.ip, buf=2))
+        t1.v(buf=2)[:, :] = abs(q.jp(1, n=ivars.ip, buf=2) -
+                                q.jp(-1, n=ivars.ip, buf=2))
+        t2.v(buf=2)[:, :] = abs(q.jp(2, n=ivars.ip, buf=2) -
+                                q.jp(-2, n=ivars.ip, buf=2))
 
-        z[:,:] = t1/np.maximum(t2, smallp)
+        z[:, :] = t1/np.maximum(t2, smallp)
 
-        t2.v(buf=2)[:,:] = t1.v(buf=2)/np.minimum(q.jp(1, n=ivars.ip, buf=2),
-                                                  q.jp(-1, n=ivars.ip, buf=2))
-        t1.v(buf=2)[:,:] = q.jp(-1, n=ivars.iv, buf=2) - q.jp(1, n=ivars.iv, buf=2)
+        t2.v(buf=2)[:, :] = t1.v(buf=2)/np.minimum(q.jp(1, n=ivars.ip, buf=2),
+                                                   q.jp(-1, n=ivars.ip, buf=2))
+        t1.v(buf=2)[:, :] = q.jp(-1, n=ivars.iv, buf=2) - q.jp(1, n=ivars.iv, buf=2)
 
-    xi.v(buf=myg.ng)[:,:] = np.minimum(1.0, np.maximum(0.0, 1.0 - (z - z0)/(z1 - z0)))
+    xi.v(buf=myg.ng)[:, :] = np.minimum(1.0, np.maximum(0.0, 1.0 - (z - z0)/(z1 - z0)))
 
-    xi[:,:] = np.where(np.logical_and(t1 > 0.0, t2 > delta), xi, 1.0)
+    xi[:, :] = np.where(np.logical_and(t1 > 0.0, t2 > delta), xi, 1.0)
 
     return xi
 
@@ -136,7 +138,7 @@ def flatten_multid(myg, q, xi_x, xi_y, ivars):
                   q.jp(-1, n=ivars.ip, buf=2) > 0,
                   xi_y.jp(-1, buf=2), xi_y.jp(1, buf=2))
 
-    xi.v(buf=2)[:,:] = np.minimum(np.minimum(xi_x.v(buf=2), px),
+    xi.v(buf=2)[:, :] = np.minimum(np.minimum(xi_x.v(buf=2), px),
                                   np.minimum(xi_y.v(buf=2), py))
 
     return xi
@@ -231,6 +233,6 @@ def weno(q, order):
     q_minus = np.zeros_like(q)
     q_plus  = np.zeros_like(q)
     for i in range(order, Npoints-order):
-        q_plus [i] = weno_upwind(q[i+1-order:i+order], order)
+        q_plus[i] = weno_upwind(q[i+1-order:i+order], order)
         q_minus[i] = weno_upwind(q[i+order-1:i-order:-1], order)
     return q_minus, q_plus
