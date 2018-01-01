@@ -26,8 +26,8 @@ class PyroTest(object):
         return "{}-{}".format(self.solver, self.problem)
 
 
-def do_tests(build, out_file, do_standalone=True, do_main=True, 
-             reset_fails=False, store_all_benchmarks=False, 
+def do_tests(build, out_file, do_standalone=True, do_main=True,
+             reset_fails=False, store_all_benchmarks=False,
              single=None, solver=None):
 
     # make sure we've built stuff
@@ -43,6 +43,7 @@ def do_tests(build, out_file, do_standalone=True, do_main=True,
         tests = []
         tests.append(PyroTest("advection", "smooth", "inputs.smooth", opts))
         tests.append(PyroTest("advection_rk", "smooth", "inputs.smooth", opts))
+        tests.append(PyroTest("advection_fv4", "smooth", "inputs.smooth", opts))
         tests.append(PyroTest("compressible", "quad", "inputs.quad", opts))
         tests.append(PyroTest("compressible", "sod", "inputs.sod.x", opts))
         tests.append(PyroTest("compressible", "rt", "inputs.rt", opts))
@@ -72,18 +73,18 @@ def do_tests(build, out_file, do_standalone=True, do_main=True,
         results["mg_poisson_dirichlet"] = err
 
         err = mg_test_vc_dirichlet.test_vc_poisson_dirichlet(512,
-                                                             comp_bench=True, 
+                                                             comp_bench=True,
                                                              store_bench=store_all_benchmarks, verbose=0)
         results["mg_vc_poisson_dirichlet"] = err
 
-        err = mg_test_vc_periodic.test_vc_poisson_periodic(512, comp_bench=True, 
-                                                           store_bench=store_all_benchmarks, 
+        err = mg_test_vc_periodic.test_vc_poisson_periodic(512, comp_bench=True,
+                                                           store_bench=store_all_benchmarks,
                                                            verbose=0)
         results["mg_vc_poisson_periodic"] = err
 
-        err = mg_test_general_inhomogeneous.test_general_poisson_inhomogeneous(512, 
-                                                                               comp_bench=True, 
-                                                                               store_bench=store_all_benchmarks, 
+        err = mg_test_general_inhomogeneous.test_general_poisson_inhomogeneous(512,
+                                                                               comp_bench=True,
+                                                                               store_bench=store_all_benchmarks,
                                                                                verbose=0)
         results["mg_general_poisson_inhomogeneous"] = err
 
@@ -164,12 +165,11 @@ if __name__ == "__main__":
     if args.skip_standalone: do_standalone = False
 
     if not args.unittests_only:
-        do_tests(build, outfile, do_standalone=do_standalone, do_main=do_main, 
-                 reset_fails=args.reset_failures, 
+        do_tests(build, outfile, do_standalone=do_standalone, do_main=do_main,
+                 reset_fails=args.reset_failures,
                  store_all_benchmarks=args.store_all_benchmarks,
                  single=args.single, solver=args.solver)
 
     # unit tests
     if args.single is None:
         pytest.main(["-v"])
-
