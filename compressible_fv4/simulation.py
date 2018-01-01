@@ -49,8 +49,18 @@ class Simulation(compressible_rk.Simulation):
 
         return k
 
+    def preevolve(self):
+        """Since we are 4th order accurate we need to make sure that we
+        initialized with accurate zone-averages, so the preevolve for
+        this solver assumes that the initialization was done to
+        cell-centers and converts it to cell-averages."""
+
+        # we just initialized cell-centers, but we need to store averages
+        for var in self.cc_data.names:
+            self.cc_data.from_centers(var)
 
     def evolve(self):
+
         """
         Evolve the equations of compressible hydrodynamics through a
         timestep dt.
