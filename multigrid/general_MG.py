@@ -1,8 +1,8 @@
 """
 This multigrid solver is build from multigrid/MG.py
-and implements a more general solver for an equation of the form:
+and implements a more general solver for an equation of the form::
 
-alpha phi + div { beta grad phi } + gamma . grad phi = f
+   alpha phi + div { beta grad phi } + gamma . grad phi = f
 
 where alpha, beta, and gamma are defined on the same grid as phi.
 These should all come in as cell-centered quantities.  The solver

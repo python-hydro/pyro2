@@ -1,8 +1,8 @@
 """
 This multigrid solver is build from multigrid/MG.py and implements
-a variable coefficient solver for an equation of the form:
+a variable coefficient solver for an equation of the form::
 
-div { eta grad phi } = f
+   div { eta grad phi } = f
 
 where eta is defined on the same grid as phi.
 

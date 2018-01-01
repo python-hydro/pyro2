@@ -3,17 +3,17 @@
 """
 Test the variable-coefficient MG solver with periodic data.
 
-Here we solve:
+Here we solve::
 
    div . ( alpha grad phi ) = f
 
-with
+with::
 
    alpha = 2.0 + cos(2.0*pi*x)*cos(2.0*pi*y)
 
    f = -16.0*pi**2*(cos(2*pi*x)*cos(2*pi*y) + 1)*sin(2*pi*x)*sin(2*pi*y)
 
-This has the exact solution:
+This has the exact solution::
 
    phi = sin(2.0*pi*x)*sin(2.0*pi*y)
 
@@ -144,7 +144,7 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
 
         plt.subplot(122)
 
-        plt.imshow(np.transpose(e.v()), 
+        plt.imshow(np.transpose(e.v()),
                    interpolation="nearest", origin="lower",
                    extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 

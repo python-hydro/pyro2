@@ -3,19 +3,19 @@
 """Test the general MG solver with a variable coeffcient Helmholtz
 problem.  This ensures we didn't screw up the base functionality here.
 
-Here we solve:
+Here we solve::
 
    alpha phi + div . ( beta grad phi ) = f
 
-with
-   
+with::
+
    alpha = 1.0
    beta = 2.0 + cos(2.0*pi*x)*cos(2.0*pi*y)
 
    f = (-16.0*pi**2*cos(2*pi*x)*cos(2*pi*y) - 16.0*pi**2 + 1.0)*sin(2*pi*x)*sin(2*pi*y)
 
 
-This has the exact solution:
+This has the exact solution::
 
    phi = sin(2.0*pi*x)*sin(2.0*pi*y)
 

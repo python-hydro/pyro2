@@ -2,27 +2,27 @@
 
 """Test the general MG solver with Dirichlet boundary conditions.
 
-Here we solve:
+Here we solve::
 
    alpha phi + div{beta grad phi} + gamma . grad phi = f
 
-with
+with::
 
    alpha = 1.0
    beta = cos(2*pi*x)*cos(2*pi*y) + 2.0
    gamma_x = sin(2*pi*x)
    gamma_y = sin(2*pi*y)
 
-   f = (-16.0*pi**2*cos(2*pi*x)*cos(2*pi*y) + 2.0*pi*cos(2*pi*x) + 
+   f = (-16.0*pi**2*cos(2*pi*x)*cos(2*pi*y) + 2.0*pi*cos(2*pi*x) +
          2.0*pi*cos(2*pi*y) - 16.0*pi**2 + 1.0)*sin(2*pi*x)*sin(2*pi*y)
 
-This has the exact solution:
+This has the exact solution::
 
    phi = sin(2.0*pi*x)*sin(2.0*pi*y)
 
 on [0,1] x [0,1]
 
-We use Dirichlet BCs on phi.  
+We use Dirichlet BCs on phi.
 
 For the coefficients we do not have to impose the same BCs, since that
 may represent a different physical quantity.  beta is the one that
@@ -108,7 +108,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     gy = d.get_var("gamma_y")
     gy[:,:] = gamma_y(g.x2d, g.y2d)
 
-    
+
     # create the multigrid object
     a = MG.GeneralMG2d(nx, ny,
                        xl_BC_type="dirichlet", yl_BC_type="dirichlet",
@@ -163,7 +163,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
         plt.subplot(122)
 
-        plt.imshow(np.transpose(e.v()), 
+        plt.imshow(np.transpose(e.v()),
                    interpolation="nearest", origin="lower",
                    extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
@@ -182,7 +182,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     bench_dir = os.environ["PYRO_HOME"] + "/multigrid/tests/"
 
     my_data = a.get_solution_object()
-    
+
     if store_bench:
         my_data.write("{}/{}".format(bench_dir, bench))
 
@@ -201,7 +201,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
         return result
 
-    
+
     # normal return -- error wrt true solution
     return enorm
 
@@ -214,16 +214,16 @@ if __name__ == "__main__":
     plot = False
     store = False
     do_compare = False
-    
+
     for nx in N:
         if nx == max(N):
             plot = True
             #store = True
             #do_compare = True
-            
+
         enorm = test_general_poisson_dirichlet(nx, make_plot=plot,
                                                store_bench=store, comp_bench=do_compare)
-        
+
         err.append(enorm)
 
 

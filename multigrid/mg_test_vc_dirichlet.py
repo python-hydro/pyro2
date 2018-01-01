@@ -3,17 +3,17 @@
 """
 Test the variable-coefficient MG solver with Dirichlet boundary conditions.
 
-Here we solve:
+Here we solve::
 
    div . ( alpha grad phi ) = f
 
-with
+with::
 
    alpha = 2.0 + cos(2.0*pi*x)*cos(2.0*pi*y)
 
    f = -16.0*pi**2*(cos(2*pi*x)*cos(2*pi*y) + 1)*sin(2*pi*x)*sin(2*pi*y)
 
-This has the exact solution:
+This has the exact solution::
 
    phi = sin(2.0*pi*x)*sin(2.0*pi*y)
 
@@ -153,7 +153,7 @@ def test_vc_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     bench_dir = os.environ["PYRO_HOME"] + "/multigrid/tests/"
 
     my_data = a.get_solution_object()
-    
+
     if store_bench:
         my_data.write("{}/{}".format(bench_dir, bench))
 
@@ -172,7 +172,7 @@ def test_vc_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
         return result
 
-    
+
     # normal return -- error wrt true solution
     return enorm
 
@@ -185,16 +185,16 @@ if __name__ == "__main__":
     plot = False
     store = False
     do_compare = False
-    
+
     for nx in N:
         if nx == max(N):
             plot = True
             #store = True
             do_compare = True
-            
+
         enorm = test_vc_poisson_dirichlet(nx, make_plot=plot,
                                           store_bench=store, comp_bench=do_compare)
-        
+
         err.append(enorm)
 
 

@@ -5,18 +5,18 @@ mesh down (by factors of two) to a single interior zone (each grid has
 the same number of guardcells).
 
 The main multigrid class is setup to solve a constant-coefficient
-Helmholtz equation:
+Helmholtz equation::
 
-(alpha - beta L) phi = f
+   (alpha - beta L) phi = f
 
 where L is the Laplacian and alpha and beta are constants.  If alpha =
 0 and beta = -1, then this is the Poisson equation.
 
 We support Dirichlet or Neumann BCs, or a periodic domain.
 
-The general usage is as follows:
+The general usage is as follows::
 
-> a = multigrid.CellCenterMG2d(nx, ny, verbose=1, alpha=alpha, beta=beta)
+   a = multigrid.CellCenterMG2d(nx, ny, verbose=1, alpha=alpha, beta=beta)
 
 this creates the multigrid object a, with a finest grid of nx by ny
 zones and the default boundary condition types.  alpha and beta are
@@ -24,26 +24,30 @@ the coefficients of the Helmholtz equation.  Setting verbose = 1
 causing debugging information to be output, so you can see the
 residual errors in each of the V-cycles.
 
-> a.init_zeros()
+Initialization is done as::
+
+   a.init_zeros()
 
 this initializes the solution vector with zeros (this is not necessary
 if you just created the multigrid object, but it can be used to reset
 the solution between runs on the same object).
 
-> a.init_RHS(zeros((nx, ny), numpy.float64))
+Next::
+
+   a.init_RHS(zeros((nx, ny), numpy.float64))
 
 this initializes the RHS on the finest grid to 0 (Laplace's equation).
 Any RHS can be set by passing through an array of (nx, ny) values here.
 
-Then to solve, you just do:
+Then to solve, you just do::
 
-> a.solve(rtol = 1.e-10)
+   a.solve(rtol = 1.e-10)
 
 where rtol is the desired tolerance (residual norm / source norm)
 
-to access the final solution, use the getSolution method
+to access the final solution, use the get_solution method::
 
-v = a.get_solution()
+   v = a.get_solution()
 
 For convenience, the grid information on the solution level is available as
 attributes to the class,
