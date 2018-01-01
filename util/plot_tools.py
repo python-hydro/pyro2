@@ -1,3 +1,6 @@
+"""Some basic support routines for configuring the plots during
+runtime visualization"""
+
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import AxesGrid
 import math

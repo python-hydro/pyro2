@@ -1,10 +1,16 @@
-import h5py
+"""This manages the reading of the HDF5 output files for pyro.
+
+"""
 import importlib
+
+import h5py
 import mesh.patch as patch
 import mesh.boundary as bnd
 
 def read_bcs(f):
-    try: gb = f["BC"]
+    """read in the boundary condition record from the HDF5 file"""
+    try:
+        gb = f["BC"]
     except:
         return None
     else:
@@ -15,7 +21,10 @@ def read_bcs(f):
         return BCs
 
 def read(filename):
+    """read an HDF5 file and recreate the simulation object that holds the
+    data and state of the simulation.
 
+    """
     if not filename.endswith(".h5"):
         filename += ".h5"
 
@@ -50,7 +59,7 @@ def read(filename):
                 bc_solver = "compressible"
             else:
                 bc_solver = solver_name
-            bcmod =  importlib.import_module("{}.{}".format(bc_solver, "BC"))
+            bcmod = importlib.import_module("{}.{}".format(bc_solver, "BC"))
             for name in custom_bcs:
                 bnd.define_bc(name, bcmod.user, is_solid=custom_bcs[name])
 
@@ -81,7 +90,7 @@ def read(filename):
             data = grp["data"]
 
             v = myd.get_var(n)
-            v.v()[:,:] = data[:,:]
+            v.v()[:, :] = data[:, :]
 
         if solver_name is not None:
             solver = importlib.import_module(solver_name)
@@ -95,5 +104,5 @@ def read(filename):
 
     if solver_name is not None:
         return sim
-    else:
-        return myd
+
+    return myd
