@@ -160,7 +160,7 @@ class RuntimeParameters(object):
     def command_line_params(self, cmd_strings):
         """
         finds dictionary pairs from a string that came from the
-        commandline.  Stores the parameters in globalParams only if they
+        commandline.  Stores the parameters in only if they
         already exist.
 
         we expect things in the string in the form:
