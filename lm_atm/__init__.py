@@ -4,11 +4,11 @@ flow is:
 
 * create the limited slopes of rho, u and v (in both directions)
 
-* get the advective velocities through a piecewise linear Godunov 
+* get the advective velocities through a piecewise linear Godunov
   method
 
-* enforce the divergence constraint on the velocities through a 
-   projection (the MAC projection)
+* enforce the divergence constraint on the velocities through a
+  projection (the MAC projection)
 
 * predict rho to edges and do the conservative update
 
@@ -23,5 +23,3 @@ The projections are done using multigrid
 """
 
 from .simulation import *
-
-
