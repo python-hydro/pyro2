@@ -1,40 +1,40 @@
-"""basic syntax of the parameter file is:
+"""basic syntax of the parameter file is::
 
-# simple parameter file
+   # simple parameter file
 
-[driver]
-nsteps = 100         ; comment
-max_time = 0.25
+   [driver]
+   nsteps = 100         ; comment
+   max_time = 0.25
 
-[riemann]
-tol = 1.e-10
-max_iter = 10
+   [riemann]
+   tol = 1.e-10
+   max_iter = 10
 
-[io]
-basename = myfile_
+   [io]
+   basename = myfile_
 
 
 The recommended way to use this is for the code to have a master list
-of parameters and their defaults (e.g. _defaults), and then the
-user can override these defaults at runtime through an inputs file.
-These two files have the same format.
+of parameters and their defaults (e.g. _defaults), and then the user
+can override these defaults at runtime through an inputs file.  These
+two files have the same format.
 
-The calling sequence would then be:
+The calling sequence would then be::
 
-  rp = RuntimeParameters()
-  rp.load_params("_defaults")
-  rp.load_params("inputs")
+   rp = RuntimeParameters()
+   rp.load_params("_defaults")
+   rp.load_params("inputs")
 
 The parser will determine what datatype the parameter is (string,
-integer, float), and store it in a RuntimeParameters object.
-If a parameter that already exists is encountered a second time (e.g.,
+integer, float), and store it in a RuntimeParameters object.  If a
+parameter that already exists is encountered a second time (e.g.,
 there is a default value in _defaults and the user specifies a new
 value in inputs), then the second instance replaces the first.
 
 Runtime parameters can then be accessed via any module through the
-get_param method:
+get_param method::
 
-  tol = rp.get_param('riemann.tol')
+   tol = rp.get_param('riemann.tol')
 
 If the optional flag no_new=1 is set, then the load_params function
 will not define any new parameters, but only overwrite existing ones.
@@ -53,15 +53,21 @@ from util import msg
 # types are
 def is_int(string):
     """ is the given string an interger? """
-    try: int(string)
-    except ValueError: return False
-    else: return True
+    try:
+        int(string)
+    except ValueError:
+        return False
+    else:
+        return True
 
 def is_float(string):
     """ is the given string a float? """
-    try: float(string)
-    except ValueError: return False
-    else: return True
+    try:
+        float(string)
+    except ValueError:
+        return False
+    else:
+        return True
 
 def _get_val(value):
     if is_int(value):
@@ -119,7 +125,7 @@ class RuntimeParameters(object):
         for line in f.readlines():
 
             if sec.search(line):
-                lbracket, section, rbracket = sec.split(line)
+                _, section, _ = sec.split(line)
                 section = section.strip().lower()
 
             elif eq.search(line):
@@ -206,7 +212,7 @@ class RuntimeParameters(object):
         """
         Print out the list of parameters that were defined by never used
         """
-        for key in self.params.keys():
+        for key in self.params:
             if not key in self.used_params:
                 msg.warning("parameter %s never used" % (key))
 
@@ -255,7 +261,8 @@ class RuntimeParameters(object):
         keys = list(self.params.keys())
         keys.sort()
 
-        try: f = open('inputs.auto', 'w')
+        try:
+            f = open('inputs.auto', 'w')
         except IOError:
             msg.fail("ERROR: unable to open inputs.auto")
 
