@@ -22,7 +22,7 @@ Typical usage:
 * initialize some data::
 
    dens = data.get_var("density")
-   dens[:,:] = ...
+   dens[:, :] = ...
 
 
 * fill the ghost cells::
@@ -33,7 +33,6 @@ Typical usage:
 from __future__ import print_function
 
 import numpy as np
-import pickle
 
 import h5py
 
@@ -162,7 +161,7 @@ class Grid2d(object):
         domain's valid region
         """
         return np.sqrt(self.dx*self.dy*
-                       np.sum((d[self.ilo:self.ihi+1,self.jlo:self.jhi+1]**2).flat))
+                       np.sum((d[self.ilo:self.ihi+1, self.jlo:self.jhi+1]**2).flat))
 
 
     def coarse_like(self, N):
@@ -399,7 +398,7 @@ class CellCenterData2d(object):
                     return var
             raise KeyError("name {} is not valid".format(name))
         else:
-            return ai.ArrayIndexer(d=self.data[:,:,n], grid=self.grid)
+            return ai.ArrayIndexer(d=self.data[:, :, n], grid=self.grid)
 
 
     def get_var_by_index(self, n):
@@ -419,7 +418,7 @@ class CellCenterData2d(object):
             The array of data corresponding to the index
 
         """
-        return ai.ArrayIndexer(d=self.data[:,:,n], grid=self.grid)
+        return ai.ArrayIndexer(d=self.data[:, :, n], grid=self.grid)
 
 
     def get_vars(self):
@@ -468,7 +467,7 @@ class CellCenterData2d(object):
 
         """
         n = self.names.index(name)
-        self.data[:,:,n] = 0.0
+        self.data[:, :, n] = 0.0
 
 
     def fill_BC_all(self):
@@ -514,7 +513,7 @@ class CellCenterData2d(object):
         """
         n = self.names.index(name)
         g = self.grid
-        return np.min(self.data[g.ilo-ng:g.ihi+1+ng,g.jlo-ng:g.jhi+1+ng,n])
+        return np.min(self.data[g.ilo-ng:g.ihi+1+ng, g.jlo-ng:g.jhi+1+ng, n])
 
 
     def max(self, name, ng=0):
@@ -523,7 +522,7 @@ class CellCenterData2d(object):
         """
         n = self.names.index(name)
         g = self.grid
-        return np.max(self.data[g.ilo-ng:g.ihi+1+ng,g.jlo-ng:g.jhi+1+ng,n])
+        return np.max(self.data[g.ilo-ng:g.ihi+1+ng, g.jlo-ng:g.jhi+1+ng, n])
 
 
     def restrict(self, varname, N=2):
@@ -544,15 +543,20 @@ class CellCenterData2d(object):
         # by averaging the fine cells into the corresponding coarse cell
         # that encompasses them.
         if N == 2:
-            cdata.v()[:,:] = \
+            cdata.v()[:, :] = \
                    0.25*(fdata.v(s=2) + fdata.ip(1, s=2) +
                          fdata.jp(1, s=2) + fdata.ip_jp(1, 1, s=2))
         elif N == 4:
-            cdata.v()[:,:] = \
-                 (fdata.v(s=4) + fdata.ip(1, s=4) + fdata.ip(2, s=4) + fdata.ip(3, s=4) +
-                  fdata.jp(1, s=4) + fdata.ip_jp(1, 1, s=4) + fdata.ip_jp(2, 1, s=4) + fdata.ip_jp(3, 1, s=4) +
-                  fdata.jp(2, s=4) + fdata.ip_jp(1, 2, s=4) + fdata.ip_jp(2, 2, s=4) + fdata.ip_jp(3, 2, s=4) +
-                  fdata.jp(3, s=4) + fdata.ip_jp(1, 3, s=4) + fdata.ip_jp(2, 3, s=4) + fdata.ip_jp(3, 3, s=4))/16.0
+            cdata.v()[:, :] = \
+                 (fdata.v(s=4) +
+                  fdata.ip(1, s=4) +
+                  fdata.ip(2, s=4) + fdata.ip(3, s=4) +
+                  fdata.jp(1, s=4) + fdata.ip_jp(1, 1, s=4) +
+                  fdata.ip_jp(2, 1, s=4) + fdata.ip_jp(3, 1, s=4) +
+                  fdata.jp(2, s=4) + fdata.ip_jp(1, 2, s=4) +
+                  fdata.ip_jp(2, 2, s=4) + fdata.ip_jp(3, 2, s=4) +
+                  fdata.jp(3, s=4) + fdata.ip_jp(1, 3, s=4) +
+                  fdata.ip_jp(2, 3, s=4) + fdata.ip_jp(3, 3, s=4))/16.0
 
         else:
             raise ValueError("restriction is only allowed by 2 or 4")
@@ -607,16 +611,16 @@ class CellCenterData2d(object):
 
         # slopes for the coarse data
         m_x = coarse_grid.scratch_array()
-        m_x.v()[:,:] = 0.5*(cdata.ip(1) - cdata.ip(-1))
+        m_x.v()[:, :] = 0.5*(cdata.ip(1) - cdata.ip(-1))
 
         m_y = coarse_grid.scratch_array()
-        m_y.v()[:,:] = 0.5*(cdata.jp(1) - cdata.jp(-1))
+        m_y.v()[:, :] = 0.5*(cdata.jp(1) - cdata.jp(-1))
 
         # fill the children
-        fdata.v(s=2)[:,:] = cdata.v() - 0.25*m_x.v() - 0.25*m_y.v()     # 1 child
-        fdata.ip(1, s=2)[:,:] = cdata.v() + 0.25*m_x.v() - 0.25*m_y.v() # 2
-        fdata.jp(1, s=2)[:,:] = cdata.v() - 0.25*m_x.v() + 0.25*m_y.v() # 3
-        fdata.ip_jp(1, 1, s=2)[:,:] = cdata.v() + 0.25*m_x.v() + 0.25*m_y.v() # 4
+        fdata.v(s=2)[:, :] = cdata.v() - 0.25*m_x.v() - 0.25*m_y.v()     # 1 child
+        fdata.ip(1, s=2)[:, :] = cdata.v() + 0.25*m_x.v() - 0.25*m_y.v() # 2
+        fdata.jp(1, s=2)[:, :] = cdata.v() - 0.25*m_x.v() + 0.25*m_y.v() # 3
+        fdata.ip_jp(1, 1, s=2)[:, :] = cdata.v() + 0.25*m_x.v() + 0.25*m_y.v() # 4
 
         return fdata
 
@@ -671,7 +675,8 @@ class CellCenterData2d(object):
 
 
     def pretty_print(self, var, fmt=None):
-
+        """print out the contents of the data array with pretty formatting
+        indicating where ghost cells are."""
         a = self.get_var(var)
         a.pretty_print(fmt=fmt)
 
@@ -730,7 +735,7 @@ def do_demo():
 
 
     a = mydata.get_var("a")
-    a[:,:] = np.exp(-(myg.x2d - 0.5)**2 - (myg.y2d - 1.0)**2)
+    a[:, :] = np.exp(-(myg.x2d - 0.5)**2 - (myg.y2d - 1.0)**2)
 
     print(mydata)
 
