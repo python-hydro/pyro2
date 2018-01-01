@@ -129,6 +129,7 @@
 <p class="caption"><span class="caption-text">Utilities</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Community</span></p>
 <ul>
@@ -321,10 +322,12 @@ script in <code class="docutils literal"><span class="pre">analysis/</span></cod
 solution for this problem.</p>
 <img alt="_images/smooth_converge.png" class="align-center" src="_images/smooth_converge.png" />
 <p>The points above are the L2-norm of the absolute error for the smooth
-advection problem after 1 period with <code class="docutils literal"><span class="pre">CFL=0.8</span></code>. The dashed line is
-perfect 2nd order convergence. We see that we achieve nearly 2nd order
-convergence. Departures from perfect 2nd order convergence are likely
-due to the use of limiters.</p>
+advection problem after 1 period with <code class="docutils literal"><span class="pre">CFL=0.8</span></code>, for both the
+<code class="docutils literal"><span class="pre">advection</span></code> and <code class="docutils literal"><span class="pre">advection_fv4</span></code> solvers.  The dashed and dotted
+lines show ideal scaling.  We see that we achieve nearly 2nd order
+convergence for the <code class="docutils literal"><span class="pre">advection</span></code> solver and 4th order convergence
+with the <code class="docutils literal"><span class="pre">advection_fv4</span></code> solver.  Departures from perfect scaling
+are likely due to the use of limiters.</p>
 </div>
 <div class="section" id="tophat">
 <h3>tophat<a class="headerlink" href="#tophat" title="Permalink to this headline">¶</a></h3>

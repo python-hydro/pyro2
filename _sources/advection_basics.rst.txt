@@ -94,10 +94,12 @@ solution for this problem.
    :align: center
 
 The points above are the L2-norm of the absolute error for the smooth
-advection problem after 1 period with ``CFL=0.8``. The dashed line is
-perfect 2nd order convergence. We see that we achieve nearly 2nd order
-convergence. Departures from perfect 2nd order convergence are likely
-due to the use of limiters.
+advection problem after 1 period with ``CFL=0.8``, for both the
+``advection`` and ``advection_fv4`` solvers.  The dashed and dotted
+lines show ideal scaling.  We see that we achieve nearly 2nd order
+convergence for the ``advection`` solver and 4th order convergence
+with the ``advection_fv4`` solver.  Departures from perfect scaling
+are likely due to the use of limiters.
 
 
 tophat

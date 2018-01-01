@@ -118,6 +118,7 @@
 <p class="caption"><span class="caption-text">Utilities</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Community</span></p>
 <ul>
@@ -154,8 +155,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#module-multigrid.mg_test_vc_constant">multigrid.mg_test_vc_constant module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-multigrid.mg_test_vc_dirichlet">multigrid.mg_test_vc_dirichlet module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-multigrid.mg_test_vc_periodic">multigrid.mg_test_vc_periodic module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#multigrid-mg-vis-module">multigrid.mg_vis module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#multigrid-project-periodic-module">multigrid.project_periodic module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-multigrid.mg_vis">multigrid.mg_vis module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-multigrid.project_periodic">multigrid.project_periodic module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-multigrid.prolong_restrict_demo">multigrid.prolong_restrict_demo module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-multigrid.variable_coeff_MG">multigrid.variable_coeff_MG module</a></li>
 </ul>
@@ -271,14 +272,17 @@
 <span class="target" id="module-multigrid"></span><p>This is the pyro multigrid solver.  THere are several versions.</p>
 <p>MG implements a second-order discretization of a constant-coefficient
 Helmholtz equation:</p>
-<blockquote>
-<div>(alpha - beta L) phi = f</div></blockquote>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">alpha</span> <span class="o">-</span> <span class="n">beta</span> <span class="n">L</span><span class="p">)</span> <span class="n">phi</span> <span class="o">=</span> <span class="n">f</span>
+</pre></div>
+</div>
 <p>variable_coeff_MG implements a variable-coefficient Poisson equation:</p>
-<blockquote>
-<div>div { eta grad phi } = f</div></blockquote>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">div</span> <span class="p">{</span> <span class="n">eta</span> <span class="n">grad</span> <span class="n">phi</span> <span class="p">}</span> <span class="o">=</span> <span class="n">f</span>
+</pre></div>
+</div>
 <p>general_MG implements a more general elliptic equation:</p>
-<blockquote>
-<div>alpha phi + div { beta grad phi } + gamma . grad phi = f</div></blockquote>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="n">phi</span> <span class="o">+</span> <span class="n">div</span> <span class="p">{</span> <span class="n">beta</span> <span class="n">grad</span> <span class="n">phi</span> <span class="p">}</span> <span class="o">+</span> <span class="n">gamma</span> <span class="o">.</span> <span class="n">grad</span> <span class="n">phi</span> <span class="o">=</span> <span class="n">f</span>
+</pre></div>
+</div>
 <p>All use pure V-cycles to solve elliptic problems</p>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
@@ -291,29 +295,43 @@ mesh down (by factors of two) to a single interior zone (each grid has
 the same number of guardcells).</p>
 <p>The main multigrid class is setup to solve a constant-coefficient
 Helmholtz equation:</p>
-<p>(alpha - beta L) phi = f</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">alpha</span> <span class="o">-</span> <span class="n">beta</span> <span class="n">L</span><span class="p">)</span> <span class="n">phi</span> <span class="o">=</span> <span class="n">f</span>
+</pre></div>
+</div>
 <p>where L is the Laplacian and alpha and beta are constants.  If alpha =
 0 and beta = -1, then this is the Poisson equation.</p>
 <p>We support Dirichlet or Neumann BCs, or a periodic domain.</p>
 <p>The general usage is as follows:</p>
-<p>&gt; a = multigrid.CellCenterMG2d(nx, ny, verbose=1, alpha=alpha, beta=beta)</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">multigrid</span><span class="o">.</span><span class="n">CellCenterMG2d</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>this creates the multigrid object a, with a finest grid of nx by ny
 zones and the default boundary condition types.  alpha and beta are
 the coefficients of the Helmholtz equation.  Setting verbose = 1
 causing debugging information to be output, so you can see the
 residual errors in each of the V-cycles.</p>
-<p>&gt; a.init_zeros()</p>
+<p>Initialization is done as:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">init_zeros</span><span class="p">()</span>
+</pre></div>
+</div>
 <p>this initializes the solution vector with zeros (this is not necessary
 if you just created the multigrid object, but it can be used to reset
 the solution between runs on the same object).</p>
-<p>&gt; a.init_RHS(zeros((nx, ny), numpy.float64))</p>
+<p>Next:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">init_RHS</span><span class="p">(</span><span class="n">zeros</span><span class="p">((</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">),</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
+</pre></div>
+</div>
 <p>this initializes the RHS on the finest grid to 0 (Laplace’s equation).
 Any RHS can be set by passing through an array of (nx, ny) values here.</p>
 <p>Then to solve, you just do:</p>
-<p>&gt; a.solve(rtol = 1.e-10)</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">rtol</span> <span class="o">=</span> <span class="mf">1.e-10</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>where rtol is the desired tolerance (residual norm / source norm)</p>
-<p>to access the final solution, use the getSolution method</p>
-<p>v = a.get_solution()</p>
+<p>to access the final solution, use the get_solution method:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">v</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">get_solution</span><span class="p">()</span>
+</pre></div>
+</div>
 <p>For convenience, the grid information on the solution level is available as
 attributes to the class,</p>
 <p>a.ilo, a.ihi, a.jlo, a.jhi are the indices bounding the interior
@@ -509,7 +527,9 @@ EdgeCoeffs object</p>
 <span id="multigrid-general-mg-module"></span><h2>multigrid.general_MG module<a class="headerlink" href="#module-multigrid.general_MG" title="Permalink to this headline">¶</a></h2>
 <p>This multigrid solver is build from multigrid/MG.py
 and implements a more general solver for an equation of the form:</p>
-<p>alpha phi + div { beta grad phi } + gamma . grad phi = f</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="n">phi</span> <span class="o">+</span> <span class="n">div</span> <span class="p">{</span> <span class="n">beta</span> <span class="n">grad</span> <span class="n">phi</span> <span class="p">}</span> <span class="o">+</span> <span class="n">gamma</span> <span class="o">.</span> <span class="n">grad</span> <span class="n">phi</span> <span class="o">=</span> <span class="n">f</span>
+</pre></div>
+</div>
 <p>where alpha, beta, and gamma are defined on the same grid as phi.
 These should all come in as cell-centered quantities.  The solver
 will put beta on edges.  Note that gamma is a vector here, with
@@ -562,17 +582,20 @@ many more iterations).</p>
 <p>Test the general MG solver with a variable coeffcient Helmholtz
 problem.  This ensures we didn’t screw up the base functionality here.</p>
 <p>Here we solve:</p>
-<blockquote>
-<div>alpha phi + div . ( beta grad phi ) = f</div></blockquote>
-<p>with</p>
-<blockquote>
-<div><p>alpha = 1.0
-beta = 2.0 + cos(2.0*pi*x)*cos(2.0*pi*y)</p>
-<p>f = (-16.0*pi**2*cos(2*pi*x)*cos(2*pi*y) - 16.0*pi**2 + 1.0)*sin(2*pi*x)*sin(2*pi*y)</p>
-</div></blockquote>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="n">phi</span> <span class="o">+</span> <span class="n">div</span> <span class="o">.</span> <span class="p">(</span> <span class="n">beta</span> <span class="n">grad</span> <span class="n">phi</span> <span class="p">)</span> <span class="o">=</span> <span class="n">f</span>
+</pre></div>
+</div>
+<p>with:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">beta</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">+</span> <span class="n">cos</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">16.0</span><span class="o">*</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="mf">16.0</span><span class="o">*</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>This has the exact solution:</p>
-<blockquote>
-<div>phi = sin(2.0*pi*x)*sin(2.0*pi*y)</div></blockquote>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">phi</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>on [0,1] x [0,1]</p>
 <p>We use Dirichlet BCs on phi.  For beta, we do not have to impose the
 same BCs, since that may represent a different physical quantity.
@@ -625,16 +648,19 @@ problem (in essence, we are making this solver act like the
 variable_coefficient_MG.py solver).  This ensures we didn’t
 screw up the base functionality here.</p>
 <p>Here we solve:</p>
-<blockquote>
-<div>div . ( beta grad phi ) = f</div></blockquote>
-<p>with</p>
-<blockquote>
-<div><p>beta = 2.0 + cos(2.0*pi*x)*cos(2.0*pi*y)</p>
-<p>f = -16.0*pi**2*(cos(2*pi*x)*cos(2*pi*y) + 1)*sin(2*pi*x)*sin(2*pi*y)</p>
-</div></blockquote>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">div</span> <span class="o">.</span> <span class="p">(</span> <span class="n">beta</span> <span class="n">grad</span> <span class="n">phi</span> <span class="p">)</span> <span class="o">=</span> <span class="n">f</span>
+</pre></div>
+</div>
+<p>with:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">beta</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">+</span> <span class="n">cos</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="o">-</span><span class="mf">16.0</span><span class="o">*</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>This has the exact solution:</p>
-<blockquote>
-<div>phi = sin(2.0*pi*x)*sin(2.0*pi*y)</div></blockquote>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">phi</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>on [0,1] x [0,1]</p>
 <p>We use Dirichlet BCs on phi.  For beta, we do not have to impose the
 same BCs, since that may represent a different physical quantity.
@@ -685,10 +711,12 @@ error compared to the stored benchmark</p>
 <p>Test the general MG solver with a CONSTANT coefficient problem –
 the same one from the multigrid class test.  This ensures we didn’t
 screw up the base functionality here.</p>
-<p>We solve</p>
-<p>u_xx + u_yy = -2[(1-6x**2)y**2(1-y**2) + (1-6y**2)x**2(1-x**2)]
-u = 0 on the boundary</p>
-<p>this is the example from page 64 of the book <a href="#id1"><span class="problematic" id="id2">`</span></a>A Multigrid Tutorial, 2nd Ed.’</p>
+<p>We solve:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">u_xx</span> <span class="o">+</span> <span class="n">u_yy</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">[(</span><span class="mi">1</span><span class="o">-</span><span class="mi">6</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mi">6</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)]</span>
+<span class="n">u</span> <span class="o">=</span> <span class="mi">0</span> <span class="n">on</span> <span class="n">the</span> <span class="n">boundary</span>
+</pre></div>
+</div>
+<p>this is the example from page 64 of the book <cite>A Multigrid Tutorial, 2nd Ed.</cite></p>
 <p>The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)</p>
 <dl class="function">
 <dt id="multigrid.mg_test_general_constant.alpha">
@@ -734,22 +762,23 @@ error compared to the stored benchmark</p>
 <span id="multigrid-mg-test-general-dirichlet-module"></span><h2>multigrid.mg_test_general_dirichlet module<a class="headerlink" href="#module-multigrid.mg_test_general_dirichlet" title="Permalink to this headline">¶</a></h2>
 <p>Test the general MG solver with Dirichlet boundary conditions.</p>
 <p>Here we solve:</p>
-<blockquote>
-<div>alpha phi + div{beta grad phi} + gamma . grad phi = f</div></blockquote>
-<p>with</p>
-<blockquote>
-<div><p>alpha = 1.0
-beta = cos(2*pi*x)*cos(2*pi*y) + 2.0
-gamma_x = sin(2*pi*x)
-gamma_y = sin(2*pi*y)</p>
-<dl class="docutils">
-<dt>f = (-16.0*pi**2*cos(2*pi*x)*cos(2*pi*y) + 2.0*pi*cos(2*pi*x) + </dt>
-<dd>2.0*pi*cos(2*pi*y) - 16.0*pi**2 + 1.0)*sin(2*pi*x)*sin(2*pi*y)</dd>
-</dl>
-</div></blockquote>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="n">phi</span> <span class="o">+</span> <span class="n">div</span><span class="p">{</span><span class="n">beta</span> <span class="n">grad</span> <span class="n">phi</span><span class="p">}</span> <span class="o">+</span> <span class="n">gamma</span> <span class="o">.</span> <span class="n">grad</span> <span class="n">phi</span> <span class="o">=</span> <span class="n">f</span>
+</pre></div>
+</div>
+<p>with:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">beta</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="mf">2.0</span>
+<span class="n">gamma_x</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+<span class="n">gamma_y</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">16.0</span><span class="o">*</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span>
+      <span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="mf">16.0</span><span class="o">*</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>This has the exact solution:</p>
-<blockquote>
-<div>phi = sin(2.0*pi*x)*sin(2.0*pi*y)</div></blockquote>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">phi</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>on [0,1] x [0,1]</p>
 <p>We use Dirichlet BCs on phi.</p>
 <p>For the coefficients we do not have to impose the same BCs, since that
@@ -804,31 +833,31 @@ error compared to the stored benchmark</p>
 <dd>boundary conditions.</dd>
 </dl>
 <p>Here we solve:</p>
-<blockquote>
-<div>alpha phi + div{beta grad phi} + gamma . grad phi = f</div></blockquote>
-<p>with</p>
-<blockquote>
-<div><p>alpha = 10.0
-beta = x*y + 1  (note: x*y alone doesn’t work)
-gamma_x = 1
-gamma_y = 1</p>
-<dl class="docutils">
-<dt>f =  -(pi/2)*(x + 1)*sin(pi*y/2)*cos(pi*x/2) </dt>
-<dd><ul class="first simple">
-<li>(pi/2)*(y + 1)*sin(pi*x/2)*cos(pi*y/2) +</li>
-</ul>
-<p class="last">(-pi**2*(x*y+1)/2 + 10)*cos(pi*x/2)*cos(pi*y/2)</p>
-</dd>
-</dl>
-</div></blockquote>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="n">phi</span> <span class="o">+</span> <span class="n">div</span><span class="p">{</span><span class="n">beta</span> <span class="n">grad</span> <span class="n">phi</span><span class="p">}</span> <span class="o">+</span> <span class="n">gamma</span> <span class="o">.</span> <span class="n">grad</span> <span class="n">phi</span> <span class="o">=</span> <span class="n">f</span>
+</pre></div>
+</div>
+<p>with:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">10.0</span>
+<span class="n">beta</span> <span class="o">=</span> <span class="n">x</span><span class="o">*</span><span class="n">y</span> <span class="o">+</span> <span class="mi">1</span>  <span class="p">(</span><span class="n">note</span><span class="p">:</span> <span class="n">x</span><span class="o">*</span><span class="n">y</span> <span class="n">alone</span> <span class="n">doesn</span><span class="s1">&#39;t work)</span>
+<span class="n">gamma_x</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">gamma_y</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">f</span> <span class="o">=</span>  <span class="o">-</span><span class="p">(</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> 
+    <span class="o">-</span> <span class="p">(</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> 
+    <span class="p">(</span><span class="o">-</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">y</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">10</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>This has the exact solution:</p>
-<blockquote>
-<div>phi = cos(pi*x/2)*cos(pi*y/2)</div></blockquote>
-<p>on [0,1] x [0,1], with Dirichlet boundary conditions</p>
-<p>phi(x=0) = cos(pi*y/2)
-phi(x=1) = 0
-phi(y=0) = cos(pi*x/2)
-phi(y=1) = 0</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">phi</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>on [0,1] x [0,1], with Dirichlet boundary conditions:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">phi</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">phi</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">phi</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">phi</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
 <p>For the coefficients we do not have to impose the same BCs, since that
 may represent a different physical quantity.  beta is the one that
 really matters since it must be brought to the edges.  Here we take
@@ -887,10 +916,12 @@ error compared to the stored benchmark</p>
 <div class="section" id="module-multigrid.mg_test_simple">
 <span id="multigrid-mg-test-simple-module"></span><h2>multigrid.mg_test_simple module<a class="headerlink" href="#module-multigrid.mg_test_simple" title="Permalink to this headline">¶</a></h2>
 <p>an example of using the multigrid class to solve Laplace’s equation.  Here, we
-solve</p>
-<p>u_xx + u_yy = -2[(1-6x**2)y**2(1-y**2) + (1-6y**2)x**2(1-x**2)]
-u = 0 on the boundary</p>
-<p>this is the example from page 64 of the book <a href="#id3"><span class="problematic" id="id4">`</span></a>A Multigrid Tutorial, 2nd Ed.’</p>
+solve:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">u_xx</span> <span class="o">+</span> <span class="n">u_yy</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">[(</span><span class="mi">1</span><span class="o">-</span><span class="mi">6</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mi">6</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)]</span>
+<span class="n">u</span> <span class="o">=</span> <span class="mi">0</span> <span class="n">on</span> <span class="n">the</span> <span class="n">boundary</span>
+</pre></div>
+</div>
+<p>this is the example from page 64 of the book <cite>A Multigrid Tutorial, 2nd Ed.</cite></p>
 <p>The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)</p>
 <dl class="function">
 <dt id="multigrid.mg_test_simple.f">
@@ -914,9 +945,11 @@ u = 0 on the boundary</p>
 problem – the same one from the multigrid class test.  This ensures
 we didn’t screw up the base functionality here.</p>
 <p>We solve:</p>
-<p>u_xx + u_yy = -2[(1-6x**2)y**2(1-y**2) + (1-6y**2)x**2(1-x**2)]
-u = 0 on the boundary</p>
-<p>this is the example from page 64 of the book <a href="#id5"><span class="problematic" id="id6">`</span></a>A Multigrid Tutorial, 2nd Ed.’</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">u_xx</span> <span class="o">+</span> <span class="n">u_yy</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">[(</span><span class="mi">1</span><span class="o">-</span><span class="mi">6</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mi">6</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)]</span>
+<span class="n">u</span> <span class="o">=</span> <span class="mi">0</span> <span class="n">on</span> <span class="n">the</span> <span class="n">boundary</span>
+</pre></div>
+</div>
+<p>this is the example from page 64 of the book <cite>A Multigrid Tutorial, 2nd Ed.</cite></p>
 <p>The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)</p>
 <dl class="function">
 <dt id="multigrid.mg_test_vc_constant.alpha">
@@ -943,16 +976,19 @@ u = 0 on the boundary</p>
 <span id="multigrid-mg-test-vc-dirichlet-module"></span><h2>multigrid.mg_test_vc_dirichlet module<a class="headerlink" href="#module-multigrid.mg_test_vc_dirichlet" title="Permalink to this headline">¶</a></h2>
 <p>Test the variable-coefficient MG solver with Dirichlet boundary conditions.</p>
 <p>Here we solve:</p>
-<blockquote>
-<div>div . ( alpha grad phi ) = f</div></blockquote>
-<p>with</p>
-<blockquote>
-<div><p>alpha = 2.0 + cos(2.0*pi*x)*cos(2.0*pi*y)</p>
-<p>f = -16.0*pi**2*(cos(2*pi*x)*cos(2*pi*y) + 1)*sin(2*pi*x)*sin(2*pi*y)</p>
-</div></blockquote>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">div</span> <span class="o">.</span> <span class="p">(</span> <span class="n">alpha</span> <span class="n">grad</span> <span class="n">phi</span> <span class="p">)</span> <span class="o">=</span> <span class="n">f</span>
+</pre></div>
+</div>
+<p>with:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">+</span> <span class="n">cos</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="o">-</span><span class="mf">16.0</span><span class="o">*</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>This has the exact solution:</p>
-<blockquote>
-<div>phi = sin(2.0*pi*x)*sin(2.0*pi*y)</div></blockquote>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">phi</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>on [0,1] x [0,1]</p>
 <p>We use Dirichlet BCs on phi.  For alpha, we do not have to impose the
 same BCs, since that may represent a different physical quantity.
@@ -987,16 +1023,19 @@ error compared to the stored benchmark</p>
 <span id="multigrid-mg-test-vc-periodic-module"></span><h2>multigrid.mg_test_vc_periodic module<a class="headerlink" href="#module-multigrid.mg_test_vc_periodic" title="Permalink to this headline">¶</a></h2>
 <p>Test the variable-coefficient MG solver with periodic data.</p>
 <p>Here we solve:</p>
-<blockquote>
-<div>div . ( alpha grad phi ) = f</div></blockquote>
-<p>with</p>
-<blockquote>
-<div><p>alpha = 2.0 + cos(2.0*pi*x)*cos(2.0*pi*y)</p>
-<p>f = -16.0*pi**2*(cos(2*pi*x)*cos(2*pi*y) + 1)*sin(2*pi*x)*sin(2*pi*y)</p>
-</div></blockquote>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">div</span> <span class="o">.</span> <span class="p">(</span> <span class="n">alpha</span> <span class="n">grad</span> <span class="n">phi</span> <span class="p">)</span> <span class="o">=</span> <span class="n">f</span>
+</pre></div>
+</div>
+<p>with:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">+</span> <span class="n">cos</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="o">-</span><span class="mf">16.0</span><span class="o">*</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>This has the exact solution:</p>
-<blockquote>
-<div>phi = sin(2.0*pi*x)*sin(2.0*pi*y)</div></blockquote>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">phi</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>on [0,1] x [0,1]</p>
 <p>We use Dirichlet BCs on phi.  For alpha, we do not have to impose the
 same BCs, since that may represent a different physical quantity.
@@ -1027,11 +1066,39 @@ error compared to the stored benchmark</p>
 <dd></dd></dl>
 
 </div>
-<div class="section" id="multigrid-mg-vis-module">
-<h2>multigrid.mg_vis module<a class="headerlink" href="#multigrid-mg-vis-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-multigrid.mg_vis">
+<span id="multigrid-mg-vis-module"></span><h2>multigrid.mg_vis module<a class="headerlink" href="#module-multigrid.mg_vis" title="Permalink to this headline">¶</a></h2>
+<p>an example of using the multigrid class to solve Laplace’s equation.  Here, we
+solve:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">u_xx</span> <span class="o">+</span> <span class="n">u_yy</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">[(</span><span class="mi">1</span><span class="o">-</span><span class="mi">6</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mi">6</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)]</span>
+<span class="n">u</span> <span class="o">=</span> <span class="mi">0</span> <span class="n">on</span> <span class="n">the</span> <span class="n">boundary</span>
+</pre></div>
 </div>
-<div class="section" id="multigrid-project-periodic-module">
-<h2>multigrid.project_periodic module<a class="headerlink" href="#multigrid-project-periodic-module" title="Permalink to this headline">¶</a></h2>
+<p>this is the example from page 64 of the book <cite>A Multigrid Tutorial, 2nd Ed.</cite></p>
+<p>The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)</p>
+<dl class="function">
+<dt id="multigrid.mg_vis.doit">
+<code class="descclassname">multigrid.mg_vis.</code><code class="descname">doit</code><span class="sig-paren">(</span><em>nx</em>, <em>ny</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_vis.html#doit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_vis.doit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="multigrid.mg_vis.f">
+<code class="descclassname">multigrid.mg_vis.</code><code class="descname">f</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_vis.html#f"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_vis.f" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="multigrid.mg_vis.true">
+<code class="descclassname">multigrid.mg_vis.</code><code class="descname">true</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_vis.html#true"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_vis.true" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-multigrid.project_periodic">
+<span id="multigrid-project-periodic-module"></span><h2>multigrid.project_periodic module<a class="headerlink" href="#module-multigrid.project_periodic" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="multigrid.project_periodic.doit">
+<code class="descclassname">multigrid.project_periodic.</code><code class="descname">doit</code><span class="sig-paren">(</span><em>nx</em>, <em>ny</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/project_periodic.html#doit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.project_periodic.doit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
 <div class="section" id="module-multigrid.prolong_restrict_demo">
 <span id="multigrid-prolong-restrict-demo-module"></span><h2>multigrid.prolong_restrict_demo module<a class="headerlink" href="#module-multigrid.prolong_restrict_demo" title="Permalink to this headline">¶</a></h2>
@@ -1045,7 +1112,9 @@ error compared to the stored benchmark</p>
 <span id="multigrid-variable-coeff-mg-module"></span><h2>multigrid.variable_coeff_MG module<a class="headerlink" href="#module-multigrid.variable_coeff_MG" title="Permalink to this headline">¶</a></h2>
 <p>This multigrid solver is build from multigrid/MG.py and implements
 a variable coefficient solver for an equation of the form:</p>
-<p>div { eta grad phi } = f</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">div</span> <span class="p">{</span> <span class="n">eta</span> <span class="n">grad</span> <span class="n">phi</span> <span class="p">}</span> <span class="o">=</span> <span class="n">f</span>
+</pre></div>
+</div>
 <p>where eta is defined on the same grid as phi.</p>
 <p>A cell-centered discretization is used throughout.</p>
 <dl class="class">

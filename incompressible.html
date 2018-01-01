@@ -118,6 +118,7 @@
 <p class="caption"><span class="caption-text">Utilities</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Community</span></p>
 <ul>
@@ -260,22 +261,16 @@
 <span id="incompressible-package"></span><h1>incompressible package<a class="headerlink" href="#module-incompressible" title="Permalink to this headline">¶</a></h1>
 <p>The pyro solver for incompressible flow.  This implements as second-order
 approximate projection method.  The general flow is:</p>
-<blockquote>
-<div><p>– create the limited slopes of u and v (in both directions)</p>
-<p class="attribution">&mdash;get the advective velocities through a piecewise linear Godunov 
-method</p>
-</div></blockquote>
-<blockquote>
-<div><dl class="docutils">
-<dt>– enforce the divergence constraint on the velocities through a </dt>
-<dd>projection (the MAC projection)</dd>
-</dl>
-<p class="attribution">&mdash;recompute the interface states using the new advective velocity</p>
-</div></blockquote>
-<blockquote>
-<div><p>– update U in time to get the provisional velocity field</p>
-<p class="attribution">&mdash;project the final velocity to enforce the divergence constraint.</p>
-</div></blockquote>
+<ul class="simple">
+<li>create the limited slopes of u and v (in both directions)</li>
+<li>get the advective velocities through a piecewise linear Godunov 
+method</li>
+<li>enforce the divergence constraint on the velocities through a 
+projection (the MAC projection)</li>
+<li>recompute the interface states using the new advective velocity</li>
+<li>update U in time to get the provisional velocity field</li>
+<li>project the final velocity to enforce the divergence constraint.</li>
+</ul>
 <p>The projections are done using multigrid</p>
 <div class="section" id="subpackages">
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>

@@ -54,4 +54,8 @@ the ghost cells).
    plt.plot(dens.g.x, dens[:,dens.g.ny//2])
    plt.show()
 
+.. image:: manual_plot.png
+   :align: center
 
+Note: this includes the ghost cells, by default, seen as the small
+regions of zeros on the left and right.

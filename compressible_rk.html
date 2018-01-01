@@ -118,6 +118,7 @@
 <p class="caption"><span class="caption-text">Utilities</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Community</span></p>
 <ul>
@@ -257,8 +258,9 @@
 </style>
 <div class="section" id="module-compressible_rk">
 <span id="compressible-rk-package"></span><h1>compressible_rk package<a class="headerlink" href="#module-compressible_rk" title="Permalink to this headline">¶</a></h1>
-<p>The pyro compressible hydrodynamics solver.  This implements the
-second-order (piecewise-linear), unsplit method of Colella 1990.</p>
+<p>A method-of-lines compressible hydrodynamics solver.  Piecewise
+constant reconstruction is done in space and a Runge-Kutta time
+integration is used to advance the solutiion.</p>
 <div class="section" id="subpackages">
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
@@ -272,19 +274,16 @@ second-order (piecewise-linear), unsplit method of Colella 1990.</p>
 <p>This is a 2nd-order PLM method for a method-of-lines integration
 (i.e., no characteristic tracing).</p>
 <p>We wish to solve</p>
-<blockquote>
-<div>U_t + F^x_x + F^y_y = H</div></blockquote>
+<div class="math">
+\[U_t + F^x_x + F^y_y = H\]</div>
 <p>we want U_{i+1/2} – the interface values that are input to
 the Riemann problem through the faces for each zone.</p>
-<p>Taylor expanding <em>in space only</em> yields</p>
-<blockquote>
-<div><blockquote>
-<div>dU</div></blockquote>
-<dl class="docutils">
-<dt>U          = U   + 0.5 dx  –</dt>
-<dd>i+1/2,j,L    i,j          dx</dd>
-</dl>
-</div></blockquote>
+<p>Taylor expanding <em>in space only</em> yields:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>                           <span class="n">dU</span>
+<span class="n">U</span>          <span class="o">=</span> <span class="n">U</span>   <span class="o">+</span> <span class="mf">0.5</span> <span class="n">dx</span>  <span class="o">--</span>
+ <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">L</span>    <span class="n">i</span><span class="p">,</span><span class="n">j</span>          <span class="n">dx</span>
+</pre></div>
+</div>
 <dl class="function">
 <dt id="compressible_rk.fluxes.fluxes">
 <code class="descclassname">compressible_rk.fluxes.</code><code class="descname">fluxes</code><span class="sig-paren">(</span><em>my_data</em>, <em>rp</em>, <em>ivars</em>, <em>solid</em>, <em>tc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible_rk/fluxes.html#fluxes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible_rk.fluxes.fluxes" title="Permalink to this definition">¶</a></dt>

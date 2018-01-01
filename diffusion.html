@@ -118,6 +118,7 @@
 <p class="caption"><span class="caption-text">Utilities</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Community</span></p>
 <ul>
@@ -257,18 +258,19 @@
 </style>
 <div class="section" id="module-diffusion">
 <span id="diffusion-package"></span><h1>diffusion package<a class="headerlink" href="#module-diffusion" title="Permalink to this headline">¶</a></h1>
-<p>The pyro diffusion solver.  This implements second-order implicit 
-diffusion using Crank-Nicolson time-differencing.  The resulting 
+<p>The pyro diffusion solver.  This implements second-order implicit
+diffusion using Crank-Nicolson time-differencing.  The resulting
 system is solved using multigrid.</p>
 <p>The general flow is:</p>
-<blockquote>
-<div><p>compute the RHS given the current state</p>
-<p>sets up the MG</p>
-<p>solve the system using MG for updated phi</p>
-</div></blockquote>
+<ul class="simple">
+<li>compute the RHS given the current state</li>
+<li>set up the MG</li>
+<li>solve the system using MG for updated phi</li>
+</ul>
 <p>The timestep is computed as:</p>
-<blockquote>
-<div>CFL* 0.5*dt/dx**2</div></blockquote>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CFL</span><span class="o">*</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dt</span><span class="o">/</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span>
+</pre></div>
+</div>
 <div class="section" id="subpackages">
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">

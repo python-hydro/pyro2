@@ -39,6 +39,7 @@ pyro: a python hydro code
    :caption: Utilities
 
    analysis
+   testing
 
 .. toctree::
    :maxdepth: 1

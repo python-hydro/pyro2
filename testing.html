@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Incompressible hydrodynamics solver &mdash; pyro 2.0 documentation</title>
+  <title>Testing &mdash; pyro 2.0 documentation</title>
   
 
   
@@ -38,8 +38,8 @@
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="pyro 2.0 documentation" href="index.html"/>
-        <link rel="next" title="Low Mach number hydrodynamics solver" href="lowmach_basics.html"/>
-        <link rel="prev" title="Diffusion" href="diffusion_basics.html"/> 
+        <link rel="next" title="Getting help" href="help.html"/>
+        <link rel="prev" title="Analysis routines" href="analysis.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -105,32 +105,23 @@
 <li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Solvers</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="multigrid_basics.html">Multigrid solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="multigrid-examples.html">Multigrid examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Incompressible hydrodynamics solver</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#shear">shear</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#convergence">convergence</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#exercises">Exercises</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#explorations">Explorations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#extensions">Extensions</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#going-further">Going further</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Utilities</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
-<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Testing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#unit-tests">Unit tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#regression-tests">Regression tests</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption"><span class="caption-text">Community</span></p>
 <ul>
@@ -184,13 +175,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Incompressible hydrodynamics solver</li>
+      <li>Testing</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/incompressible_basics.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/testing.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -237,91 +228,38 @@
     margin-right: 4px;  /* make room for the exclamation icon */
 }
 </style>
-<div class="section" id="incompressible-hydrodynamics-solver">
-<h1>Incompressible hydrodynamics solver<a class="headerlink" href="#incompressible-hydrodynamics-solver" title="Permalink to this headline">¶</a></h1>
-<p>pyro’s incompressible solver solves:</p>
-<div class="math">
-\[\begin{split}\frac{\partial U}{\partial t} + U \cdot \nabla U + \nabla p &amp;= 0 \\
-\nabla \cdot U &amp;= 0\end{split}\]</div>
-<p>The algorithm combines the Godunov/advection features
-used in the advection and compressible solver together with multigrid
-to enforce the divergence constraint on the velocities.</p>
-<p>Here we implement a cell-centered approximate projection method for
-solving the incompressible equations. At the moment, only periodic BCs
-are supported.</p>
-<div class="section" id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="shear">
-<h3>shear<a class="headerlink" href="#shear" title="Permalink to this headline">¶</a></h3>
-<p>The shear problem initializes a shear layer in a domain with
-doubly-periodic boundaries and looks at the development of two
-vortices as the shear layer rolls up. This problem was explored in a
-number of papers, for example, Bell, Colella, &amp; Glaz (1989) and Martin
-&amp; Colella (2000). This is run as:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py incompressible shear inputs.shear
+<div class="section" id="testing">
+<h1>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h1>
+<p>There are two types of testing implemented in pyro: unit tests and
+regression tests.  Both of these are driven by the <code class="docutils literal"><span class="pre">test.py</span></code>
+script in the root directory.</p>
+<div class="section" id="unit-tests">
+<h2>Unit tests<a class="headerlink" href="#unit-tests" title="Permalink to this headline">¶</a></h2>
+<p>pyro implements unit tests using py.test.  These can be run via:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">test</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">u</span>
 </pre></div>
 </div>
-<img alt="_images/shear.png" class="align-center" src="_images/shear.png" />
-<p>The vorticity panel (lower left) is what is usually shown in
-papers. Note that the velocity divergence is not zero—this is because
-we are using an approximate projection.</p>
 </div>
-<div class="section" id="convergence">
-<h3>convergence<a class="headerlink" href="#convergence" title="Permalink to this headline">¶</a></h3>
-<p>The convergence test initialize a simple velocity field on a periodic
-unit square with known analytic solution. By evolving at a variety of
-resolutions and comparing to the analytic solution, we can measure the
-convergence rate of the algorithm. The particular set of initial
-conditions is from Minion (1996). Limiting can be disabled by adding
-<code class="docutils literal"><span class="pre">incompressible.limiter=0</span></code> to the run command. The basic set of tests
-shown below are run as:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py incompressible converge inputs.converge.32 vis.dovis=0
-./pyro.py incompressible converge inputs.converge.64 vis.dovis=0
-./pyro.py incompressible converge inputs.converge.128 vis.dovis=0
+<div class="section" id="regression-tests">
+<h2>Regression tests<a class="headerlink" href="#regression-tests" title="Permalink to this headline">¶</a></h2>
+<p>The main driver, <code class="docutils literal"><span class="pre">pyro.py</span></code> has the ability to create benchmarks and
+compare output to stored benchmarks at the end of a simulation.
+Benchmark output is stored in each solver’s <code class="docutils literal"><span class="pre">tests/</span></code> directory.
+When testing, we compare zone-by-zone for each variable to see if we
+agree exactly.  If there is any disagreement, this means that we’ve
+made a change to the code that we need to understand (if may be a bug
+or may be a fix or optimization).</p>
+<p>We can compare to the stored benchmarks simply by running:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">test</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-<p>The error is measured by comparing with the analytic solution using
-the routine <code class="docutils literal"><span class="pre">incomp_converge_error.py</span></code> in <code class="docutils literal"><span class="pre">analysis/</span></code>.</p>
-<img alt="_images/incomp_converge.png" class="align-center" src="_images/incomp_converge.png" />
-<p>The dashed line is second order convergence. We see almost second
-order behavior with the limiters enabled and slightly better than
-second order with no limiting.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When running on a new machine, it is possible that roundoff-level differences
+may mean that we do not pass the regression tests.  In this case, one would
+need to create a new set of benchmarks for that machine and use those for
+future tests.</p>
 </div>
-</div>
-<div class="section" id="exercises">
-<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="explorations">
-<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li>Disable the MAC projection and run the converge problem—is the method still 2nd order?</li>
-<li>Disable all projections—does the solution still even try to preserve <span class="math">\(\nabla \cdot U = 0\)</span>?</li>
-<li>Experiment with what is projected. Try projecting <span class="math">\(U_t\)</span> to see if that makes a difference.</li>
-</ul>
-</div>
-<div class="section" id="extensions">
-<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li>Switch the final projection from a cell-centered approximate
-projection to a nodal projection. This will require writing a new
-multigrid solver that operates on nodal data.</li>
-<li>Add viscosity to the system. This will require doing 2 parabolic
-solves (one for each velocity component). These solves will look
-like the diffusion operation, and will update the provisional
-velocity field.</li>
-<li>Switch to a variable density system. This will require adding a mass
-continuity equation that is advected and switching the projections
-to a variable-coeffient form (since ρ now enters).</li>
-</ul>
-</div>
-</div>
-<div class="section" id="going-further">
-<h2>Going further<a class="headerlink" href="#going-further" title="Permalink to this headline">¶</a></h2>
-<p>The incompressible algorithm presented here is a simplified version of
-the projection methods used in the <a class="reference external" href="http://amrex-astro.github.io/MAESTRO/">Maestro low Mach number
-hydrodynamics code</a>. Maestro
-can do variable-density incompressible, anelastic, and low Mach number
-stratified flows in stellar (and terrestrial) environments in close
-hydrostatic equilibrium.</p>
 </div>
 </div>
 
@@ -335,10 +273,10 @@ hydrostatic equilibrium.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="lowmach_basics.html" class="btn btn-neutral float-right" title="Low Mach number hydrodynamics solver" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="help.html" class="btn btn-neutral float-right" title="Getting help" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="diffusion_basics.html" class="btn btn-neutral" title="Diffusion" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="analysis.html" class="btn btn-neutral" title="Analysis routines" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -118,6 +118,7 @@
 <p class="caption"><span class="caption-text">Utilities</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Community</span></p>
 <ul>
@@ -293,14 +294,14 @@ measure the convergence rate of the algorithm.</p>
 <p>Initialize the doubly periodic shear layer (see, for example, Martin
 and Colella, 2000, JCP, 163, 271).  This is run in a unit square
 domain, with periodic boundary conditions on all sides.  Here, the
-initial velocity is</p>
-<blockquote>
-<div>/ tanh(rho_s (y-0.25))   if y &lt;= 0.5</div></blockquote>
-<dl class="docutils">
-<dt>u(x,y,t=0) = &lt;</dt>
-<dd>tanh(rho_s (0.75-y))   if y &gt; 0.5</dd>
-</dl>
-<p>v(x,y,t=0) = delta_s sin(2 pi x)</p>
+initial velocity is:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>              <span class="o">/</span> <span class="n">tanh</span><span class="p">(</span><span class="n">rho_s</span> <span class="p">(</span><span class="n">y</span><span class="o">-</span><span class="mf">0.25</span><span class="p">))</span>   <span class="k">if</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="mf">0.5</span>
+<span class="n">u</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="o">&lt;</span>
+              \ <span class="n">tanh</span><span class="p">(</span><span class="n">rho_s</span> <span class="p">(</span><span class="mf">0.75</span><span class="o">-</span><span class="n">y</span><span class="p">))</span>   <span class="k">if</span> <span class="n">y</span> <span class="o">&gt;</span> <span class="mf">0.5</span>
+
+<span class="n">v</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">delta_s</span> <span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="n">pi</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="function">
 <dt id="incompressible.problems.shear.finalize">
 <code class="descclassname">incompressible.problems.shear.</code><code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/incompressible/problems/shear.html#finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#incompressible.problems.shear.finalize" title="Permalink to this definition">¶</a></dt>

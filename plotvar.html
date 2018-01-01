@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Setting up pyro &mdash; pyro 2.0 documentation</title>
+  <title>plotvar module &mdash; pyro 2.0 documentation</title>
   
 
   
@@ -37,9 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyro 2.0 documentation" href="index.html"/>
-        <link rel="next" title="Notes on the numerical methods" href="notes.html"/>
-        <link rel="prev" title="Introduction to pyro" href="intro.html"/> 
+    <link rel="top" title="pyro 2.0 documentation" href="index.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -92,43 +90,17 @@
               
             
             
-              <p class="caption"><span class="caption-text">pyro basics</span></p>
-<ul class="current">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Setting up pyro</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#quick-test">Quick test</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="notes.html">Notes on the numerical methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="design.html">Design ideas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="running.html">Running</a></li>
 <li class="toctree-l1"><a class="reference internal" href="output.html">Working with output</a></li>
 <li class="toctree-l1"><a class="reference internal" href="problems.html">Adding a problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Solvers</span></p>
-<ul>
 <li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="multigrid_basics.html">Multigrid solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="multigrid-examples.html">Multigrid examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
-<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Utilities</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
-<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Community</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Reference</span></p>
-<ul>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API</a></li>
 </ul>
 
@@ -174,13 +146,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Setting up pyro</li>
+      <li>plotvar module</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/installation.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/plotvar.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -227,55 +199,8 @@
     margin-right: 4px;  /* make room for the exclamation icon */
 }
 </style>
-<div class="section" id="setting-up-pyro">
-<h1>Setting up pyro<a class="headerlink" href="#setting-up-pyro" title="Permalink to this headline">¶</a></h1>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">It is strongly recommended that you use python 3.x.  While python 2.x might
-still work, we do not test pyro under python 2, so it may break at any time
-in the future.</p>
-</div>
-<p>The following python packages are requires:</p>
-<ul class="simple">
-<li><code class="docutils literal"><span class="pre">numpy</span></code></li>
-<li><code class="docutils literal"><span class="pre">matplotlib</span></code></li>
-<li><code class="docutils literal"><span class="pre">f2py</span></code></li>
-<li><code class="docutils literal"><span class="pre">f2py</span></code> (part of NumPy)</li>
-<li><code class="docutils literal"><span class="pre">pytest</span></code> (for unit tests)</li>
-</ul>
-<p>Additionally, you will need <code class="docutils literal"><span class="pre">gfortran</span></code> installed on your computer, for
-<cite>f2py</cite> to be able to compile the code.</p>
-<p>The following steps are needed before running pyro:</p>
-<ul class="simple">
-<li>add <code class="docutils literal"><span class="pre">pyro/</span></code> to your <code class="docutils literal"><span class="pre">PYTHONPATH</span></code> environment variable.  For
-the bash shell, this is done as:</li>
-</ul>
-<div class="highlight-none"><div class="highlight"><pre><span></span>export PYTHONPATH=&quot;/path/to/pyro/:${PYTHONPATH}&quot;
-</pre></div>
-</div>
-<ul class="simple">
-<li>build the Fortran modules, by running the <code class="docutils literal"><span class="pre">mk.sh</span></code> script. It
-should be sufficient to just do:</li>
-</ul>
-<div class="highlight-none"><div class="highlight"><pre><span></span>./mk.sh
-</pre></div>
-</div>
-<ul class="simple">
-<li>define the environment variable <code class="docutils literal"><span class="pre">PYRO_HOME</span></code> to point to
-the <code class="docutils literal"><span class="pre">pyro2/</span></code> directory (only needed for regression testing)</li>
-</ul>
-<div class="highlight-none"><div class="highlight"><pre><span></span>export PYRO_HOME=&quot;/path/to/pyro/&quot;
-</pre></div>
-</div>
-<div class="section" id="quick-test">
-<h2>Quick test<a class="headerlink" href="#quick-test" title="Permalink to this headline">¶</a></h2>
-<p>Run the advection solver to quickly test if things are setup correctly:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py advection smooth inputs.smooth
-</pre></div>
-</div>
-<p>You should see a plot window pop up with a smooth pulse advecting
-diagonally through the periodic domain.</p>
-</div>
+<div class="section" id="plotvar-module">
+<h1>plotvar module<a class="headerlink" href="#plotvar-module" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -285,15 +210,6 @@ diagonally through the periodic domain.</p>
            </div>
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="notes.html" class="btn btn-neutral float-right" title="Notes on the numerical methods" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="intro.html" class="btn btn-neutral" title="Introduction to pyro" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

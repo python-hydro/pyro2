@@ -118,6 +118,7 @@
 <p class="caption"><span class="caption-text">Utilities</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Community</span></p>
 <ul>
@@ -515,19 +516,12 @@ uniform, but it is relatively straightforward to relax this
 assumption.</p>
 <p>There are several different options for this solver (they are all
 discussed in the Colella paper).</p>
-<blockquote>
-<div><dl class="docutils">
-<dt>limiter          = 0 to use no limiting</dt>
-<dd>= 1 to use the 2nd order MC limiter
-= 2 to use the 4th order MC limiter</dd>
-<dt>riemann          = HLLC to use the HLLC solver</dt>
-<dd>= CGF to use the Colella, Glaz, and Ferguson solver</dd>
-<dt>use_flattening   = 1 to use the multidimensional flattening</dt>
-<dd>algorithm at shocks</dd>
-<dt>delta, z0, z1      these are the flattening parameters.  The default</dt>
-<dd>are the values listed in Colella 1990.</dd>
-</dl>
-</div></blockquote>
+<ul class="simple">
+<li>limiter: 0 = no limiting; 1 = 2nd order MC limiter; 2 = 4th order MC limiter</li>
+<li>riemann: HLLC or CGF (for Colella, Glaz, and Freguson solver)</li>
+<li>use_flattening: set to 1 to use the multidimensional flattening at shocks</li>
+<li>delta, z0, z1: flattening parameters (we use Colella 1990 defaults)</li>
+</ul>
 <p>The grid indices look like:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">j</span><span class="o">+</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="o">--+---------+---------+---------+</span>
        <span class="o">|</span>         <span class="o">|</span>         <span class="o">|</span>         <span class="o">|</span>
@@ -553,115 +547,82 @@ discussed in the Colella paper).</p>
 <p>We wish to solve</p>
 <div class="math">
 \[U_t + F^x_x + F^y_y = H\]</div>
-<p>we want <span class="math">\(U_{i+1/2}^{n+1/2}\)</span> – the interface values that are input to
+<p>we want U_{i+1/2}^{n+1/2} – the interface values that are input to
 the Riemann problem through the faces for each zone.</p>
-<p>Taylor expanding yields</p>
-<blockquote>
-<div><blockquote>
-<div>n+1/2                     dU           dU</div></blockquote>
-<dl class="docutils">
-<dt>U          = U   + 0.5 dx  –  + 0.5 dt –</dt>
-<dd><p class="first">i+1/2,j,L    i,j          dx           dt</p>
-<blockquote class="last">
-<div><blockquote>
-<div>dU             dF^x   dF^y</div></blockquote>
-<dl class="docutils">
-<dt>= U   + 0.5 dx  –  - 0.5 dt ( —- + —- - H )</dt>
-<dd><p class="first">i,j          dx              dx     dy</p>
-<blockquote class="last">
-<div>dU      dF^x            dF^y</div></blockquote>
-</dd>
-<dt>= U   + 0.5 ( dx – - dt —- ) - 0.5 dt —- + 0.5 dt H</dt>
-<dd><p class="first">i,j           dx       dx              dy</p>
-<blockquote class="last">
-<div>dt       dU           dF^y</div></blockquote>
-</dd>
-<dt>= U   + 0.5 dx ( 1 - – A^x ) –  - 0.5 dt —- + 0.5 dt H</dt>
-<dd><p class="first">i,j               dx       dx            dy</p>
-<blockquote class="last">
-<div>dt       _            dF^y</div></blockquote>
-</dd>
-<dt>= U   + 0.5  ( 1 - – A^x ) DU  - 0.5 dt —- + 0.5 dt H</dt>
-<dd><p class="first">i,j             dx                     dy</p>
-<blockquote class="last">
-<div><blockquote>
-<div><dl class="docutils">
-<dt>+———-+———–+  +—-+—-+   +—+—+</dt>
-<dd><div class="first last line-block">
-<div class="line">|            |</div>
+<p>Taylor expanding yields:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span>                     <span class="n">dU</span>           <span class="n">dU</span>
+<span class="n">U</span>          <span class="o">=</span> <span class="n">U</span>   <span class="o">+</span> <span class="mf">0.5</span> <span class="n">dx</span>  <span class="o">--</span>  <span class="o">+</span> <span class="mf">0.5</span> <span class="n">dt</span> <span class="o">--</span>
+ <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">L</span>    <span class="n">i</span><span class="p">,</span><span class="n">j</span>          <span class="n">dx</span>           <span class="n">dt</span>
+
+
+                           <span class="n">dU</span>             <span class="n">dF</span><span class="o">^</span><span class="n">x</span>   <span class="n">dF</span><span class="o">^</span><span class="n">y</span>
+           <span class="o">=</span> <span class="n">U</span>   <span class="o">+</span> <span class="mf">0.5</span> <span class="n">dx</span>  <span class="o">--</span>  <span class="o">-</span> <span class="mf">0.5</span> <span class="n">dt</span> <span class="p">(</span> <span class="o">----</span> <span class="o">+</span> <span class="o">----</span> <span class="o">-</span> <span class="n">H</span> <span class="p">)</span>
+              <span class="n">i</span><span class="p">,</span><span class="n">j</span>          <span class="n">dx</span>              <span class="n">dx</span>     <span class="n">dy</span>
+
+
+                            <span class="n">dU</span>      <span class="n">dF</span><span class="o">^</span><span class="n">x</span>            <span class="n">dF</span><span class="o">^</span><span class="n">y</span>
+           <span class="o">=</span> <span class="n">U</span>   <span class="o">+</span> <span class="mf">0.5</span> <span class="p">(</span> <span class="n">dx</span> <span class="o">--</span> <span class="o">-</span> <span class="n">dt</span> <span class="o">----</span> <span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="n">dt</span> <span class="o">----</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="n">dt</span> <span class="n">H</span>
+              <span class="n">i</span><span class="p">,</span><span class="n">j</span>           <span class="n">dx</span>       <span class="n">dx</span>              <span class="n">dy</span>
+
+
+                                <span class="n">dt</span>       <span class="n">dU</span>           <span class="n">dF</span><span class="o">^</span><span class="n">y</span>
+           <span class="o">=</span> <span class="n">U</span>   <span class="o">+</span> <span class="mf">0.5</span> <span class="n">dx</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">-</span> <span class="o">--</span> <span class="n">A</span><span class="o">^</span><span class="n">x</span> <span class="p">)</span> <span class="o">--</span>  <span class="o">-</span> <span class="mf">0.5</span> <span class="n">dt</span> <span class="o">----</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="n">dt</span> <span class="n">H</span>
+              <span class="n">i</span><span class="p">,</span><span class="n">j</span>               <span class="n">dx</span>       <span class="n">dx</span>            <span class="n">dy</span>
+
+
+                              <span class="n">dt</span>       <span class="n">_</span>            <span class="n">dF</span><span class="o">^</span><span class="n">y</span>
+           <span class="o">=</span> <span class="n">U</span>   <span class="o">+</span> <span class="mf">0.5</span>  <span class="p">(</span> <span class="mi">1</span> <span class="o">-</span> <span class="o">--</span> <span class="n">A</span><span class="o">^</span><span class="n">x</span> <span class="p">)</span> <span class="n">DU</span>  <span class="o">-</span> <span class="mf">0.5</span> <span class="n">dt</span> <span class="o">----</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="n">dt</span> <span class="n">H</span>
+              <span class="n">i</span><span class="p">,</span><span class="n">j</span>             <span class="n">dx</span>                     <span class="n">dy</span>
+
+                   <span class="o">+----------+-----------+</span>  <span class="o">+----+----+</span>   <span class="o">+---+---+</span>
+                              <span class="o">|</span>                   <span class="o">|</span>            <span class="o">|</span>
+
+                  <span class="n">this</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">monotonized</span>   <span class="n">this</span> <span class="ow">is</span> <span class="n">the</span>   <span class="n">source</span> <span class="n">term</span>
+                  <span class="n">central</span> <span class="n">difference</span> <span class="n">term</span>   <span class="n">transverse</span>
+                                            <span class="n">flux</span> <span class="n">term</span>
+</pre></div>
 </div>
-</dd>
-</dl>
-</div></blockquote>
-<p>this is the monotonized   this is the   source term
-central difference term   transverse</p>
-<blockquote>
-<div>flux term</div></blockquote>
-</div></blockquote>
-</dd>
-</dl>
-</div></blockquote>
-</dd>
-</dl>
-</div></blockquote>
 <p>There are two components, the central difference in the normal to the
 interface, and the transverse flux difference.  This is done for the
 left and right sides of all 4 interfaces in a zone, which are then
 used as input to the Riemann problem, yielding the 1/2 time interface
-values,</p>
-<blockquote>
-<div><blockquote>
-<div>n+1/2</div></blockquote>
-<dl class="docutils">
-<dt>U</dt>
-<dd>i+1/2,j</dd>
-</dl>
-</div></blockquote>
+values:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span>
+<span class="n">U</span>
+ <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">j</span>
+</pre></div>
+</div>
 <p>Then, the zone average values are updated in the usual finite-volume
 way:</p>
-<blockquote>
-<div><blockquote>
-<div>n+1    n     dt    x  n+1/2       x  n+1/2</div></blockquote>
-<dl class="docutils">
-<dt>U    = U    + – { F (U       ) - F (U       ) }</dt>
-<dd><p class="first">i,j    i,j   dx       i-1/2,j        i+1/2,j</p>
-<blockquote class="last">
-<div><blockquote>
-<div>dt    y  n+1/2       y  n+1/2</div></blockquote>
-<ul class="simple">
-<li>– { F (U       ) - F (U       ) }
-dy       i,j-1/2        i,j+1/2</li>
-</ul>
-</div></blockquote>
-</dd>
-</dl>
-</div></blockquote>
+<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span>    <span class="n">n</span>     <span class="n">dt</span>    <span class="n">x</span>  <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span>       <span class="n">x</span>  <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span>
+<span class="n">U</span>    <span class="o">=</span> <span class="n">U</span>    <span class="o">+</span> <span class="o">--</span> <span class="p">{</span> <span class="n">F</span> <span class="p">(</span><span class="n">U</span>       <span class="p">)</span> <span class="o">-</span> <span class="n">F</span> <span class="p">(</span><span class="n">U</span>       <span class="p">)</span> <span class="p">}</span>
+ <span class="n">i</span><span class="p">,</span><span class="n">j</span>    <span class="n">i</span><span class="p">,</span><span class="n">j</span>   <span class="n">dx</span>       <span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">j</span>        <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">j</span>
+
+
+              <span class="n">dt</span>    <span class="n">y</span>  <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span>       <span class="n">y</span>  <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span>
+            <span class="o">+</span> <span class="o">--</span> <span class="p">{</span> <span class="n">F</span> <span class="p">(</span><span class="n">U</span>       <span class="p">)</span> <span class="o">-</span> <span class="n">F</span> <span class="p">(</span><span class="n">U</span>       <span class="p">)</span> <span class="p">}</span>
+              <span class="n">dy</span>       <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span>        <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span>
+</pre></div>
+</div>
 <p>Updating U_{i,j}:</p>
-<blockquote>
-<div><dl class="docutils">
-<dt>– We want to find the state to the left and right (or top and</dt>
-<dd>bottom) of each interface, ex. U_{i+1/2,j,[lr]}^{n+1/2}, and use
-them to solve a Riemann problem across each of the four
-interfaces.</dd>
-</dl>
-<p class="attribution">&mdash;U_{i+1/2,j,[lr]}^{n+1/2} is comprised of two parts, the
-computation of the monotonized central differences in the normal
-direction (eqs. 2.8, 2.10) and the computation of the transverse
-derivatives, which requires the solution of a Riemann problem in
-the transverse direction (eqs. 2.9, 2.14).</p>
-</div></blockquote>
-<blockquote>
-<div><blockquote>
-<div><dl class="docutils">
-<dt>– the monotonized central difference part is computed using</dt>
-<dd>the primitive variables.</dd>
-</dl>
-<p class="attribution">&mdash;We compute the central difference part in both directions
-before doing the transverse flux differencing, since for the
-high-order transverse flux implementation, we use these as
-the input to the transverse Riemann problem.</p>
-</div></blockquote>
-</div></blockquote>
+<ul class="simple">
+<li>We want to find the state to the left and right (or top and bottom)
+of each interface, ex. U_{i+1/2,j,[lr]}^{n+1/2}, and use them to
+solve a Riemann problem across each of the four interfaces.</li>
+<li>U_{i+1/2,j,[lr]}^{n+1/2} is comprised of two parts, the computation
+of the monotonized central differences in the normal direction
+(eqs. 2.8, 2.10) and the computation of the transverse derivatives,
+which requires the solution of a Riemann problem in the transverse
+direction (eqs. 2.9, 2.14).<ul>
+<li>the monotonized central difference part is computed using the
+primitive variables.</li>
+<li>We compute the central difference part in both directions before
+doing the transverse flux differencing, since for the high-order
+transverse flux implementation, we use these as the input to the
+transverse Riemann problem.</li>
+</ul>
+</li>
+</ul>
 <dl class="function">
 <dt id="compressible.unsplit_fluxes.unsplit_fluxes">
 <code class="descclassname">compressible.unsplit_fluxes.</code><code class="descname">unsplit_fluxes</code><span class="sig-paren">(</span><em>my_data</em>, <em>my_aux</em>, <em>rp</em>, <em>ivars</em>, <em>solid</em>, <em>tc</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/unsplit_fluxes.html#unsplit_fluxes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.unsplit_fluxes.unsplit_fluxes" title="Permalink to this definition">¶</a></dt>
