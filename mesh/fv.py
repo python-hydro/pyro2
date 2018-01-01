@@ -1,3 +1,8 @@
+"""This implements support for 4th-order accurate finite-volume data
+by adding support for converting between cell averages and centers.
+
+"""
+
 import mesh.patch as patch
 
 class FV2d(patch.CellCenterData2d):
@@ -13,8 +18,8 @@ class FV2d(patch.CellCenterData2d):
         a = self.get_var(name)
         c = self.grid.scratch_array()
         ng = self.grid.ng
-        c[:,:] = a[:,:]
-        c.v(buf=ng-1)[:,:] = a.v(buf=ng-1) - self.grid.dx**2*a.lap(buf=ng-1)/24.0
+        c[:, :] = a[:, :]
+        c.v(buf=ng-1)[:, :] = a.v(buf=ng-1) - self.grid.dx**2*a.lap(buf=ng-1)/24.0
         return c
 
 
@@ -25,6 +30,4 @@ class FV2d(patch.CellCenterData2d):
         """
         self.fill_BC(name)
         a = self.get_var(name)
-        a.v()[:,:] = a.v() + self.grid.dx**2*a.lap()/24.0
-
-
+        a.v()[:, :] = a.v() + self.grid.dx**2*a.lap()/24.0
