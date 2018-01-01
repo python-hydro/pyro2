@@ -54,10 +54,6 @@ def init_data(myd, rp):
     p = (dens/rho0)**gamma
     ener[:,:] = p/(gamma - 1)
 
-    # we just initialized cell-centers, but we need to store averages
-    for var in myd.names:
-        myd.from_centers(var)
-
 
 def finalize():
     """ print out any information to the user at the end of the run """
