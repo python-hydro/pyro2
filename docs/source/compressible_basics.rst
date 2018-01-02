@@ -73,6 +73,17 @@ The main parameters that affect this solver are:
 +--------------------+----------------------------------------------------------+
 
 
+.. note::
+
+   The 4th-order accurate solver (``compressible_fv4``) requires that
+   the initialization create cell-averages accurate to 4th-order.  To
+   allow for all the solvers to use the same problem setups, we assume
+   that the initialization routines initialize cell-centers (which is
+   fine for 2nd-order accuracy), and the
+   :func:`preevolve() <compressible_fv4.simulation.Simulation.preevolve>` method will convert
+   these to cell-averages automatically after initialization.
+
+
 Examples
 --------
 

@@ -3,7 +3,17 @@ Mesh overview
 
 All solvers are based on a finite-volume/cell-centered
 discretization. The basic theory of such methods is discussed in
-Chapter 2 of the notes.
+:ref:`notes`.
+
+.. note::
+
+   The core data structure that holds data on the grid is
+   :func:`CellCenterData2d <mesh.patch.CellCenterData2d>`.  This does
+   not distinguish between cell-centered data and cell-averages.  This
+   is fine for methods that are second-order accurate, but for
+   higher-order methods, the :func:`FV2d <mesh.fv.FV2d>` class has
+   methods for converting between the two data centerings.
+
 
 ``mesh.patch`` implementation and use
 -------------------------------------
