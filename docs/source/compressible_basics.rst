@@ -73,6 +73,9 @@ The main parameters that affect this solver are:
 +--------------------+----------------------------------------------------------+
 
 
+Example problems
+----------------
+
 .. note::
 
    The 4th-order accurate solver (``compressible_fv4``) requires that
@@ -83,9 +86,12 @@ The main parameters that affect this solver are:
    :func:`preevolve() <compressible_fv4.simulation.Simulation.preevolve>` method will convert
    these to cell-averages automatically after initialization.
 
+.. note::
 
-Examples
---------
+   All the compressible solvers share the same ``problems/``
+   directory, which lives in ``compressible/problems/``.  For the
+   other compressible solvers, we simply use a symbolic-link to this
+   directory in the solver's directory.
 
 Sod
 ^^^
