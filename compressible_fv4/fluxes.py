@@ -104,6 +104,15 @@ def fluxes(myd, rp, ivars, solid, tc):
             for n in range(ivars.nq):
                 q_l[:,:,n], q_r[:,:,n] = interface_f.states(q_avg[:,:,n], myg.qx, myg.qy, myg.ng, idir)
 
+            # apply flattening
+            for n in range(ivars.nq):
+                if idir == 1:
+                    q_l.ip(1, n=n, buf=2)[:,:] = xi.v(buf=2)*q_l.ip(1, n=n, buf=2) + (1.0 - xi.v(buf=2))*q_avg.v(n=n, buf=2)
+                    q_r.v(n=n, buf=2)[:,:] = xi.v(buf=2)*q_r.v(n=n, buf=2) + (1.0 - xi.v(buf=2))*q_avg.v(n=n, buf=2)
+                else:
+                    q_l.jp(1, n=n, buf=2)[:,:] = xi.v(buf=2)*q_l.jp(1, n=n, buf=2) + (1.0 - xi.v(buf=2))*q_avg.v(n=n, buf=2)
+                    q_r.v(n=n, buf=2)[:,:] = xi.v(buf=2)*q_r.v(n=n, buf=2) + (1.0 - xi.v(buf=2))*q_avg.v(n=n, buf=2)
+
         _q = cf.riemann_prim(idir, myg.qx, myg.qy, myg.ng,
                              ivars.nq, ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix, ivars.naux,
                              0, 0,
