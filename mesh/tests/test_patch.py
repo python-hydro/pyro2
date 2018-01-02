@@ -32,20 +32,14 @@ class TestGrid2d(object):
         assert self.g.dy == 0.25
 
     def test_grid_coords(self):
-        assert_array_equal(self.g.x[self.g.ilo:self.g.ihi+1], 
+        assert_array_equal(self.g.x[self.g.ilo:self.g.ihi+1],
                            np.array([0.125, 0.375, 0.625, 0.875]))
-        assert_array_equal(self.g.y[self.g.jlo:self.g.jhi+1], 
+        assert_array_equal(self.g.y[self.g.jlo:self.g.jhi+1],
                            np.array([0.125, 0.375, 0.625, 0.875, 1.125, 1.375]))
 
     def test_grid_2d_coords(self):
         assert_array_equal(self.g.x, self.g.x2d[:,self.g.jc])
         assert_array_equal(self.g.y, self.g.y2d[self.g.ic,:])
-
-    def test_course_like(self):
-        c = self.g.coarse_like(2)
-
-        assert c.nx == 2
-        assert c.ny == 3
 
     def test_scratch_array(self):
         q = self.g.scratch_array()
@@ -67,7 +61,7 @@ class TestGrid2d(object):
 
     def test_norm(self):
         q = self.g.scratch_array()
-        # there are 24 elements, the norm L2 norm is 
+        # there are 24 elements, the norm L2 norm is
         # sqrt(dx*dy*24)
         q.v()[:,:] = np.array([[1, 1, 1, 1, 1, 1],
                                [1, 1, 1, 1, 1, 1],
@@ -112,9 +106,9 @@ class TestCellCenterData2d(object):
         self.d = None
 
     def test_zeros(self):
-    
+
         a = self.d.get_var("a")
-        a[:,:] = 1.0
+        a[:, :] = 1.0
 
         self.d.zero("a")
         assert np.all(a.v() == 0.0)
@@ -125,16 +119,46 @@ class TestCellCenterData2d(object):
 
         assert self.d.get_aux("ftest") == 1.0
         assert self.d.get_aux("stest") == "this was a test"
-        
+
     def test_gets(self):
         aname = self.d.get_var("a")
         aname[:,:] = np.random.rand(aname.shape[0], aname.shape[1])
-        
+
         aindex = self.d.get_var_by_index(0)
 
         assert_array_equal(aname, aindex)
-    
-    
+
+    def test_min_and_max(self):
+        a = self.d.get_var("a")
+        a.v()[:, :] = np.arange(self.g.nx*self.g.ny).reshape(self.g.nx, self.g.ny) + 1
+        assert self.d.min("a") == 1.0
+        assert self.d.max("a") == 64.0
+
+    def test_restrict(self):
+        a = self.d.get_var("a")
+        a.v()[:, :] = np.arange(self.g.nx*self.g.ny).reshape(self.g.nx, self.g.ny) + 1
+
+        c = self.d.restrict("a")
+
+        # restriction should be conservative, so compare the volume-weighted sums
+        assert np.sum(a.v()) == 4.0*np.sum(c.v())
+
+    def test_prolong(self):
+        a = self.d.get_var("a")
+        a.v()[:, :] = np.arange(self.g.nx*self.g.ny).reshape(self.g.nx, self.g.ny) + 1
+
+        f = self.d.prolong("a")
+
+        # prologation should be conservative, so compare the volume-weighted sums
+        assert 4.0*np.sum(a.v()) == np.sum(f.v())
+
+    def test_zero(self):
+        a = self.d.get_var("a")
+        a.v()[:, :] = np.arange(self.g.nx*self.g.ny).reshape(self.g.nx, self.g.ny) + 1
+
+        self.d.zero("a")
+        assert self.d.min("a") == 0.0 and self.d.max("a") == 0.0
+
 
 def test_bcs():
 
@@ -183,9 +207,9 @@ def test_bcs():
 
     myd.fill_BC("periodic")
     # x-boundaries
-    assert_array_equal(b[myg.ilo-1,myg.jlo:myg.jhi+1], 
+    assert_array_equal(b[myg.ilo-1,myg.jlo:myg.jhi+1],
                        b[myg.ihi,myg.jlo:myg.jhi+1])
-    assert_array_equal(b[myg.ilo,myg.jlo:myg.jhi+1], 
+    assert_array_equal(b[myg.ilo,myg.jlo:myg.jhi+1],
                        b[myg.ihi+1,myg.jlo:myg.jhi+1])
     # y-boundaries
     assert_array_equal(b[myg.ilo:myg.ihi+1,myg.jlo-1],
@@ -202,14 +226,14 @@ def test_bcs():
     # right
     assert_array_equal(c[myg.ihi-1:myg.ihi+1,myg.jlo:myg.jhi+1],
                        np.flipud(c[myg.ihi+1:myg.ihi+3,myg.jlo:myg.jhi+1]))
-    
+
     # bottom
     assert_array_equal(c[myg.ilo:myg.ihi+1,myg.jlo:myg.jlo+2],
                        np.fliplr(c[myg.ilo:myg.ihi+1,myg.jlo-2:myg.jlo]))
     # top
     assert_array_equal(c[myg.ilo:myg.ihi+1,myg.jhi-1:myg.jhi+1],
                        np.fliplr(c[myg.ilo:myg.ihi+1,myg.jhi+1:myg.jhi+3]))
-    
+
     myd.fill_BC("reflect-odd")
     # left -- we'll check 2 ghost cells here -- now we use flipud here
     # because our 'x' is the row index
@@ -219,13 +243,10 @@ def test_bcs():
     # right
     assert_array_equal(d[myg.ihi-1:myg.ihi+1,myg.jlo:myg.jhi+1],
                        -np.flipud(d[myg.ihi+1:myg.ihi+3,myg.jlo:myg.jhi+1]))
-    
+
     # bottom
     assert_array_equal(d[myg.ilo:myg.ihi+1,myg.jlo:myg.jlo+2],
                        -np.fliplr(d[myg.ilo:myg.ihi+1,myg.jlo-2:myg.jlo]))
     # top
     assert_array_equal(d[myg.ilo:myg.ihi+1,myg.jhi-1:myg.jhi+1],
                        -np.fliplr(d[myg.ilo:myg.ihi+1,myg.jhi+1:myg.jhi+3]))
-
-
-
