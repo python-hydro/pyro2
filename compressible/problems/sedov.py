@@ -50,7 +50,7 @@ def init_data(my_data, rp):
     # initialize the pressure by putting the explosion energy into a
     # volume of constant pressure.  Then compute the energy in a zone
     # from this.
-    nsub = 4
+    nsub = rp.get_param("sedov.nsub")
 
     dist = np.sqrt((my_data.grid.x2d - xctr)**2 +
                    (my_data.grid.y2d - yctr)**2)
