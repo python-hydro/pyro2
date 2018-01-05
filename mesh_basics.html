@@ -233,7 +233,16 @@
 <h1>Mesh overview<a class="headerlink" href="#mesh-overview" title="Permalink to this headline">¶</a></h1>
 <p>All solvers are based on a finite-volume/cell-centered
 discretization. The basic theory of such methods is discussed in
-Chapter 2 of the notes.</p>
+<a class="reference internal" href="notes.html#notes"><span class="std std-ref">Notes on the numerical methods</span></a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The core data structure that holds data on the grid is
+<a class="reference internal" href="mesh.html#mesh.patch.CellCenterData2d" title="mesh.patch.CellCenterData2d"><code class="xref py py-func docutils literal"><span class="pre">CellCenterData2d</span></code></a>.  This does
+not distinguish between cell-centered data and cell-averages.  This
+is fine for methods that are second-order accurate, but for
+higher-order methods, the <a class="reference internal" href="mesh.html#mesh.fv.FV2d" title="mesh.fv.FV2d"><code class="xref py py-func docutils literal"><span class="pre">FV2d</span></code></a> class has
+methods for converting between the two data centerings.</p>
+</div>
 <div class="section" id="mesh-patch-implementation-and-use">
 <h2><code class="docutils literal"><span class="pre">mesh.patch</span></code> implementation and use<a class="headerlink" href="#mesh-patch-implementation-and-use" title="Permalink to this headline">¶</a></h2>
 <p>We import the basic mesh functionality as:</p>

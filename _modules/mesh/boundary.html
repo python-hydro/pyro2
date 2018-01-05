@@ -91,9 +91,10 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Setting up pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes.html">Notes on the numerical methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../design.html">Design ideas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../running.html">Running</a></li>
@@ -101,6 +102,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../problems.html">Adding a problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
@@ -108,9 +112,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../testing.html">Testing</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../help.html">Getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../ack.html">Acknowledgments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../modules.html">API</a></li>
 </ul>
 
@@ -220,7 +234,7 @@
 
 <div class="viewcode-block" id="BCProp"><a class="viewcode-back" href="../../mesh.html#mesh.boundary.BCProp">[docs]</a><span class="k">class</span> <span class="nc">BCProp</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    a simple container to hold properties of the boundary conditions</span>
+<span class="sd">    A simple container to hold properties of the boundary conditions.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xl_prop</span><span class="p">,</span> <span class="n">xr_prop</span><span class="p">,</span> <span class="n">yl_prop</span><span class="p">,</span> <span class="n">yr_prop</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">xl</span> <span class="o">=</span> <span class="n">xl_prop</span>
@@ -230,7 +244,7 @@
 
 <div class="viewcode-block" id="bc_is_solid"><a class="viewcode-back" href="../../mesh.html#mesh.boundary.bc_is_solid">[docs]</a><span class="k">def</span> <span class="nf">bc_is_solid</span><span class="p">(</span><span class="n">rp</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    return a container class indicated which boundaries are solid walls</span>
+<span class="sd">    return a container class indicating which boundaries are solid walls</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">solid</span> <span class="o">=</span> <span class="n">BCProp</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">bc_solid</span><span class="p">[</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.xlboundary&quot;</span><span class="p">)]),</span>
                    <span class="nb">int</span><span class="p">(</span><span class="n">bc_solid</span><span class="p">[</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.xrboundary&quot;</span><span class="p">)]),</span>

@@ -91,9 +91,10 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Setting up pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes.html">Notes on the numerical methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../design.html">Design ideas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../running.html">Running</a></li>
@@ -101,6 +102,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../problems.html">Adding a problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
@@ -108,9 +112,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../testing.html">Testing</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../help.html">Getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../ack.html">Acknowledgments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../modules.html">API</a></li>
 </ul>
 
@@ -183,18 +197,18 @@
 <span class="sd">the same number of guardcells).</span>
 
 <span class="sd">The main multigrid class is setup to solve a constant-coefficient</span>
-<span class="sd">Helmholtz equation:</span>
+<span class="sd">Helmholtz equation::</span>
 
-<span class="sd">(alpha - beta L) phi = f</span>
+<span class="sd">   (alpha - beta L) phi = f</span>
 
 <span class="sd">where L is the Laplacian and alpha and beta are constants.  If alpha =</span>
 <span class="sd">0 and beta = -1, then this is the Poisson equation.</span>
 
 <span class="sd">We support Dirichlet or Neumann BCs, or a periodic domain.</span>
 
-<span class="sd">The general usage is as follows:</span>
+<span class="sd">The general usage is as follows::</span>
 
-<span class="sd">&gt; a = multigrid.CellCenterMG2d(nx, ny, verbose=1, alpha=alpha, beta=beta)</span>
+<span class="sd">   a = multigrid.CellCenterMG2d(nx, ny, verbose=1, alpha=alpha, beta=beta)</span>
 
 <span class="sd">this creates the multigrid object a, with a finest grid of nx by ny</span>
 <span class="sd">zones and the default boundary condition types.  alpha and beta are</span>
@@ -202,26 +216,30 @@
 <span class="sd">causing debugging information to be output, so you can see the</span>
 <span class="sd">residual errors in each of the V-cycles.</span>
 
-<span class="sd">&gt; a.init_zeros()</span>
+<span class="sd">Initialization is done as::</span>
+
+<span class="sd">   a.init_zeros()</span>
 
 <span class="sd">this initializes the solution vector with zeros (this is not necessary</span>
 <span class="sd">if you just created the multigrid object, but it can be used to reset</span>
 <span class="sd">the solution between runs on the same object).</span>
 
-<span class="sd">&gt; a.init_RHS(zeros((nx, ny), numpy.float64))</span>
+<span class="sd">Next::</span>
+
+<span class="sd">   a.init_RHS(zeros((nx, ny), numpy.float64))</span>
 
 <span class="sd">this initializes the RHS on the finest grid to 0 (Laplace&#39;s equation).</span>
 <span class="sd">Any RHS can be set by passing through an array of (nx, ny) values here.</span>
 
-<span class="sd">Then to solve, you just do:</span>
+<span class="sd">Then to solve, you just do::</span>
 
-<span class="sd">&gt; a.solve(rtol = 1.e-10)</span>
+<span class="sd">   a.solve(rtol = 1.e-10)</span>
 
 <span class="sd">where rtol is the desired tolerance (residual norm / source norm)</span>
 
-<span class="sd">to access the final solution, use the getSolution method</span>
+<span class="sd">to access the final solution, use the get_solution method::</span>
 
-<span class="sd">v = a.get_solution()</span>
+<span class="sd">   v = a.get_solution()</span>
 
 <span class="sd">For convenience, the grid information on the solution level is available as</span>
 <span class="sd">attributes to the class,</span>

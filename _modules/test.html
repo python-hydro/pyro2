@@ -91,9 +91,10 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Setting up pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notes.html">Notes on the numerical methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Design ideas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../running.html">Running</a></li>
@@ -101,6 +102,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../problems.html">Adding a problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../multigrid_basics.html">Multigrid solvers</a></li>
@@ -108,9 +112,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../testing.html">Testing</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../help.html">Getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ack.html">Acknowledgments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../modules.html">API</a></li>
 </ul>
 
@@ -204,8 +218,8 @@
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">-</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="do_tests"><a class="viewcode-back" href="../test.html#test.do_tests">[docs]</a><span class="k">def</span> <span class="nf">do_tests</span><span class="p">(</span><span class="n">build</span><span class="p">,</span> <span class="n">out_file</span><span class="p">,</span> <span class="n">do_standalone</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">do_main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
-             <span class="n">reset_fails</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">store_all_benchmarks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+<div class="viewcode-block" id="do_tests"><a class="viewcode-back" href="../test.html#test.do_tests">[docs]</a><span class="k">def</span> <span class="nf">do_tests</span><span class="p">(</span><span class="n">build</span><span class="p">,</span> <span class="n">out_file</span><span class="p">,</span> <span class="n">do_standalone</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">do_main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+             <span class="n">reset_fails</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">store_all_benchmarks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
              <span class="n">single</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
     <span class="c1"># make sure we&#39;ve built stuff</span>
@@ -221,10 +235,12 @@
         <span class="n">tests</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;advection&quot;</span><span class="p">,</span> <span class="s2">&quot;smooth&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.smooth&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
         <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;advection_rk&quot;</span><span class="p">,</span> <span class="s2">&quot;smooth&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.smooth&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
+        <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;advection_fv4&quot;</span><span class="p">,</span> <span class="s2">&quot;smooth&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.smooth&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
         <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;compressible&quot;</span><span class="p">,</span> <span class="s2">&quot;quad&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.quad&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
         <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;compressible&quot;</span><span class="p">,</span> <span class="s2">&quot;sod&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.sod.x&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
         <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;compressible&quot;</span><span class="p">,</span> <span class="s2">&quot;rt&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.rt&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
         <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;compressible_rk&quot;</span><span class="p">,</span> <span class="s2">&quot;rt&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.rt&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
+        <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;compressible_fv4&quot;</span><span class="p">,</span> <span class="s2">&quot;acoustic_pulse&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.acoustic_pulse&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
         <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;diffusion&quot;</span><span class="p">,</span> <span class="s2">&quot;gaussian&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.gaussian&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
         <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;incompressible&quot;</span><span class="p">,</span> <span class="s2">&quot;shear&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.shear&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
         <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;lm_atm&quot;</span><span class="p">,</span> <span class="s2">&quot;bubble&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.bubble&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
@@ -250,18 +266,18 @@
         <span class="n">results</span><span class="p">[</span><span class="s2">&quot;mg_poisson_dirichlet&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">err</span>
 
         <span class="n">err</span> <span class="o">=</span> <span class="n">mg_test_vc_dirichlet</span><span class="o">.</span><span class="n">test_vc_poisson_dirichlet</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span>
-                                                             <span class="n">comp_bench</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                                                             <span class="n">comp_bench</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                                              <span class="n">store_bench</span><span class="o">=</span><span class="n">store_all_benchmarks</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">results</span><span class="p">[</span><span class="s2">&quot;mg_vc_poisson_dirichlet&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">err</span>
 
-        <span class="n">err</span> <span class="o">=</span> <span class="n">mg_test_vc_periodic</span><span class="o">.</span><span class="n">test_vc_poisson_periodic</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="n">comp_bench</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
-                                                           <span class="n">store_bench</span><span class="o">=</span><span class="n">store_all_benchmarks</span><span class="p">,</span> 
+        <span class="n">err</span> <span class="o">=</span> <span class="n">mg_test_vc_periodic</span><span class="o">.</span><span class="n">test_vc_poisson_periodic</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="n">comp_bench</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                                           <span class="n">store_bench</span><span class="o">=</span><span class="n">store_all_benchmarks</span><span class="p">,</span>
                                                            <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">results</span><span class="p">[</span><span class="s2">&quot;mg_vc_poisson_periodic&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">err</span>
 
-        <span class="n">err</span> <span class="o">=</span> <span class="n">mg_test_general_inhomogeneous</span><span class="o">.</span><span class="n">test_general_poisson_inhomogeneous</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> 
-                                                                               <span class="n">comp_bench</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
-                                                                               <span class="n">store_bench</span><span class="o">=</span><span class="n">store_all_benchmarks</span><span class="p">,</span> 
+        <span class="n">err</span> <span class="o">=</span> <span class="n">mg_test_general_inhomogeneous</span><span class="o">.</span><span class="n">test_general_poisson_inhomogeneous</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span>
+                                                                               <span class="n">comp_bench</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                                                               <span class="n">store_bench</span><span class="o">=</span><span class="n">store_all_benchmarks</span><span class="p">,</span>
                                                                                <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">results</span><span class="p">[</span><span class="s2">&quot;mg_general_poisson_inhomogeneous&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">err</span>
 
@@ -342,15 +358,14 @@
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">skip_standalone</span><span class="p">:</span> <span class="n">do_standalone</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">unittests_only</span><span class="p">:</span>
-        <span class="n">do_tests</span><span class="p">(</span><span class="n">build</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> <span class="n">do_standalone</span><span class="o">=</span><span class="n">do_standalone</span><span class="p">,</span> <span class="n">do_main</span><span class="o">=</span><span class="n">do_main</span><span class="p">,</span> 
-                 <span class="n">reset_fails</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">reset_failures</span><span class="p">,</span> 
+        <span class="n">do_tests</span><span class="p">(</span><span class="n">build</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> <span class="n">do_standalone</span><span class="o">=</span><span class="n">do_standalone</span><span class="p">,</span> <span class="n">do_main</span><span class="o">=</span><span class="n">do_main</span><span class="p">,</span>
+                 <span class="n">reset_fails</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">reset_failures</span><span class="p">,</span>
                  <span class="n">store_all_benchmarks</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">store_all_benchmarks</span><span class="p">,</span>
                  <span class="n">single</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">single</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">solver</span><span class="p">)</span>
 
     <span class="c1"># unit tests</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">single</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">pytest</span><span class="o">.</span><span class="n">main</span><span class="p">([</span><span class="s2">&quot;-v&quot;</span><span class="p">])</span>
-
 </pre></div>
 
            </div>

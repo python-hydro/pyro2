@@ -91,9 +91,10 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Setting up pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../notes.html">Notes on the numerical methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../design.html">Design ideas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../running.html">Running</a></li>
@@ -101,6 +102,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../problems.html">Adding a problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../multigrid_basics.html">Multigrid solvers</a></li>
@@ -108,9 +112,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../testing.html">Testing</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../help.html">Getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ack.html">Acknowledgments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API</a></li>
 </ul>
 
@@ -230,11 +244,7 @@
     <span class="n">dens</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho0</span> <span class="o">+</span> <span class="n">drho0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">16</span><span class="o">*</span><span class="n">dist</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">dist</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span><span class="o">**</span><span class="mi">6</span>
 
     <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">dens</span><span class="o">/</span><span class="n">rho0</span><span class="p">)</span><span class="o">**</span><span class="n">gamma</span>
-    <span class="n">ener</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">p</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-
-    <span class="c1"># we just initialized cell-centers, but we need to store averages</span>
-    <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">myd</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
-        <span class="n">myd</span><span class="o">.</span><span class="n">from_centers</span><span class="p">(</span><span class="n">var</span><span class="p">)</span></div>
+    <span class="n">ener</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">p</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="finalize"><a class="viewcode-back" href="../../../compressible_fv4.problems.html#compressible_fv4.problems.acoustic_pulse.finalize">[docs]</a><span class="k">def</span> <span class="nf">finalize</span><span class="p">():</span>

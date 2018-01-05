@@ -91,9 +91,10 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Setting up pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes.html">Notes on the numerical methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../design.html">Design ideas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../running.html">Running</a></li>
@@ -101,6 +102,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../problems.html">Adding a problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
@@ -108,9 +112,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../testing.html">Testing</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../help.html">Getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../ack.html">Acknowledgments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../modules.html">API</a></li>
 </ul>
 
@@ -176,13 +190,19 @@
            <div itemprop="articleBody">
             
   <h1>Source code for util.io</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">h5py</span>
+<span></span><span class="sd">&quot;&quot;&quot;This manages the reading of the HDF5 output files for pyro.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">importlib</span>
+
+<span class="kn">import</span> <span class="nn">h5py</span>
 <span class="kn">import</span> <span class="nn">mesh.patch</span> <span class="k">as</span> <span class="nn">patch</span>
 <span class="kn">import</span> <span class="nn">mesh.boundary</span> <span class="k">as</span> <span class="nn">bnd</span>
 
 <div class="viewcode-block" id="read_bcs"><a class="viewcode-back" href="../../util.html#util.io.read_bcs">[docs]</a><span class="k">def</span> <span class="nf">read_bcs</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="k">try</span><span class="p">:</span> <span class="n">gb</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;BC&quot;</span><span class="p">]</span>
+    <span class="sd">&quot;&quot;&quot;read in the boundary condition record from the HDF5 file&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">gb</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;BC&quot;</span><span class="p">]</span>
     <span class="k">except</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
     <span class="k">else</span><span class="p">:</span>
@@ -193,7 +213,10 @@
         <span class="k">return</span> <span class="n">BCs</span></div>
 
 <div class="viewcode-block" id="read"><a class="viewcode-back" href="../../util.html#util.io.read">[docs]</a><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;read an HDF5 file and recreate the simulation object that holds the</span>
+<span class="sd">    data and state of the simulation.</span>
 
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.h5&quot;</span><span class="p">):</span>
         <span class="n">filename</span> <span class="o">+=</span> <span class="s2">&quot;.h5&quot;</span>
 
@@ -228,7 +251,7 @@
                 <span class="n">bc_solver</span> <span class="o">=</span> <span class="s2">&quot;compressible&quot;</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">bc_solver</span> <span class="o">=</span> <span class="n">solver_name</span>
-            <span class="n">bcmod</span> <span class="o">=</span>  <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bc_solver</span><span class="p">,</span> <span class="s2">&quot;BC&quot;</span><span class="p">))</span>
+            <span class="n">bcmod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bc_solver</span><span class="p">,</span> <span class="s2">&quot;BC&quot;</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">custom_bcs</span><span class="p">:</span>
                 <span class="n">bnd</span><span class="o">.</span><span class="n">define_bc</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">bcmod</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">is_solid</span><span class="o">=</span><span class="n">custom_bcs</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
 
@@ -259,7 +282,7 @@
             <span class="n">data</span> <span class="o">=</span> <span class="n">grp</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
 
             <span class="n">v</span> <span class="o">=</span> <span class="n">myd</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-            <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,:]</span>
+            <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="p">:]</span>
 
         <span class="k">if</span> <span class="n">solver_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">solver</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">solver_name</span><span class="p">)</span>
@@ -273,8 +296,8 @@
 
     <span class="k">if</span> <span class="n">solver_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">sim</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">myd</span></div>
+
+    <span class="k">return</span> <span class="n">myd</span></div>
 </pre></div>
 
            </div>

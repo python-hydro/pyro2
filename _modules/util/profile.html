@@ -91,9 +91,10 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Setting up pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes.html">Notes on the numerical methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../design.html">Design ideas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../running.html">Running</a></li>
@@ -101,6 +102,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../problems.html">Adding a problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
@@ -108,9 +112,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../testing.html">Testing</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../help.html">Getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../ack.html">Acknowledgments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../modules.html">API</a></li>
 </ul>
 
@@ -177,32 +191,9 @@
             
   <h1>Source code for util.profile</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">A very simple profiling class.  Define some timers and methods</span>
-<span class="sd">to start and stop them.  A TimerCollection holds a group of</span>
-<span class="sd">timers.  Nesting of timers is tracked so we can pretty print</span>
-<span class="sd">the profiling information.</span>
-
-<span class="sd">tc = TimerCollection()</span>
-
-<span class="sd">a = tc.timer(&#39;my timer&#39;)</span>
-
-<span class="sd">This will add &#39;my timer&#39; to the list of Timers managed by</span>
-<span class="sd">the TimerCollection.  Subsequent calls to timer() will</span>
-<span class="sd">return the same Timer object.</span>
-
-<span class="sd">To start the timer:</span>
-
-<span class="sd">a.begin()</span>
-
-<span class="sd">... and to end it,</span>
-
-<span class="sd">a.end()</span>
-
-<span class="sd">For best results, the block of code timed should be large</span>
-<span class="sd">enough to offset the overhead of the timer class method</span>
-<span class="sd">calls.</span>
-
-<span class="sd">tc.report() prints out a summary of the timing.</span>
+<span class="sd">A very simple profiling class, to use to determine where</span>
+<span class="sd">most of the time is spent in a code.  This supports nested</span>
+<span class="sd">timers and outputs a report at the end.</span>
 
 <span class="sd">Warning: At present, no enforcement is done to ensure proper</span>
 <span class="sd">nesting.</span>
@@ -214,8 +205,35 @@
 <span class="kn">import</span> <span class="nn">time</span>
 
 <div class="viewcode-block" id="TimerCollection"><a class="viewcode-back" href="../../util.html#util.profile.TimerCollection">[docs]</a><span class="k">class</span> <span class="nc">TimerCollection</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A timer collection---this manages the timers and has methods to</span>
+<span class="sd">    start and stop them.  Nesting of timers is tracked so we can</span>
+<span class="sd">    pretty print the profiling information.</span>
+
+<span class="sd">    To define a timer::</span>
+
+<span class="sd">       tc = TimerCollection()</span>
+<span class="sd">       a = tc.timer(&#39;my timer&#39;)</span>
+
+<span class="sd">    This will add &#39;my timer&#39; to the list of Timers managed by the</span>
+<span class="sd">    TimerCollection.  Subsequent calls to timer() will return the same</span>
+<span class="sd">    Timer object.</span>
+
+<span class="sd">    To start the timer::</span>
+
+<span class="sd">       a.begin()</span>
+
+<span class="sd">    and to end it::</span>
+
+<span class="sd">       a.end()</span>
+
+<span class="sd">    For best results, the block of code timed should be large enough</span>
+<span class="sd">    to offset the overhead of the timer class method calls.</span>
+
+<span class="sd">    tc.report() prints out a summary of the timing.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the collection of timers</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -250,7 +268,8 @@
         <span class="c1"># find out how nested we are (the stack count), for pretty printing</span>
         <span class="n">stack_count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">timers</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">is_running</span><span class="p">:</span> <span class="n">stack_count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">is_running</span><span class="p">:</span>
+                <span class="n">stack_count</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="n">t_new</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">stack_count</span><span class="o">=</span><span class="n">stack_count</span><span class="p">)</span>
 
@@ -270,6 +289,8 @@
 
 
 <div class="viewcode-block" id="Timer"><a class="viewcode-back" href="../../util.html#util.profile.Timer">[docs]</a><span class="k">class</span> <span class="nc">Timer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A single timer -- this simply stores the accumulated time for</span>
+<span class="sd">    a single named region&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">stack_count</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

@@ -91,9 +91,10 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Setting up pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes.html">Notes on the numerical methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../design.html">Design ideas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../running.html">Running</a></li>
@@ -101,6 +102,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../problems.html">Adding a problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
@@ -108,9 +112,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../testing.html">Testing</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../help.html">Getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../ack.html">Acknowledgments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../modules.html">API</a></li>
 </ul>
 
@@ -181,11 +195,11 @@
 <span class="sd">&quot;&quot;&quot;Test the general MG solver with inhomogeneous Dirichlet </span>
 <span class="sd">   boundary conditions.</span>
 
-<span class="sd">Here we solve:</span>
+<span class="sd">Here we solve::</span>
 
 <span class="sd">   alpha phi + div{beta grad phi} + gamma . grad phi = f</span>
 
-<span class="sd">with</span>
+<span class="sd">with::</span>
 
 <span class="sd">   alpha = 10.0</span>
 <span class="sd">   beta = x*y + 1  (note: x*y alone doesn&#39;t work)</span>
@@ -196,16 +210,16 @@
 <span class="sd">       - (pi/2)*(y + 1)*sin(pi*x/2)*cos(pi*y/2) + </span>
 <span class="sd">       (-pi**2*(x*y+1)/2 + 10)*cos(pi*x/2)*cos(pi*y/2)</span>
 
-<span class="sd">This has the exact solution:</span>
+<span class="sd">This has the exact solution::</span>
 
 <span class="sd">   phi = cos(pi*x/2)*cos(pi*y/2)</span>
 
-<span class="sd">on [0,1] x [0,1], with Dirichlet boundary conditions</span>
+<span class="sd">on [0,1] x [0,1], with Dirichlet boundary conditions::</span>
 
-<span class="sd">phi(x=0) = cos(pi*y/2)</span>
-<span class="sd">phi(x=1) = 0</span>
-<span class="sd">phi(y=0) = cos(pi*x/2)</span>
-<span class="sd">phi(y=1) = 0</span>
+<span class="sd">   phi(x=0) = cos(pi*y/2)</span>
+<span class="sd">   phi(x=1) = 0</span>
+<span class="sd">   phi(y=0) = cos(pi*x/2)</span>
+<span class="sd">   phi(y=1) = 0</span>
 
 <span class="sd">For the coefficients we do not have to impose the same BCs, since that</span>
 <span class="sd">may represent a different physical quantity.  beta is the one that</span>

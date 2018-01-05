@@ -91,9 +91,10 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Setting up pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes.html">Notes on the numerical methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../design.html">Design ideas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../running.html">Running</a></li>
@@ -101,6 +102,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../problems.html">Adding a problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
@@ -108,9 +112,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../testing.html">Testing</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../help.html">Getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../ack.html">Acknowledgments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../modules.html">API</a></li>
 </ul>
 
@@ -176,8 +190,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for compressible.unsplit_fluxes</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Implementation of the Colella 2nd order unsplit Godunov scheme.  This</span>
+<span></span><span class="sd">&quot;&quot;&quot;Implementation of the Colella 2nd order unsplit Godunov scheme.  This</span>
 <span class="sd">is a 2-dimensional implementation only.  We assume that the grid is</span>
 <span class="sd">uniform, but it is relatively straightforward to relax this</span>
 <span class="sd">assumption.</span>
@@ -185,18 +198,15 @@
 <span class="sd">There are several different options for this solver (they are all</span>
 <span class="sd">discussed in the Colella paper).</span>
 
-<span class="sd">  limiter          = 0 to use no limiting</span>
-<span class="sd">                   = 1 to use the 2nd order MC limiter</span>
-<span class="sd">                   = 2 to use the 4th order MC limiter</span>
+<span class="sd">* limiter: 0 = no limiting; 1 = 2nd order MC limiter; 2 = 4th order MC limiter</span>
 
-<span class="sd">  riemann          = HLLC to use the HLLC solver</span>
-<span class="sd">                   = CGF to use the Colella, Glaz, and Ferguson solver</span>
+<span class="sd">* riemann: HLLC or CGF (for Colella, Glaz, and Freguson solver)</span>
 
-<span class="sd">  use_flattening   = 1 to use the multidimensional flattening</span>
-<span class="sd">                     algorithm at shocks</span>
+<span class="sd">* use_flattening: set to 1 to use the multidimensional flattening at shocks</span>
 
-<span class="sd">  delta, z0, z1      these are the flattening parameters.  The default</span>
-<span class="sd">                     are the values listed in Colella 1990.</span>
+<span class="sd">* delta, z0, z1: flattening parameters (we use Colella 1990 defaults)</span>
+
+<span class="sd">The grid indices look like::</span>
 
 <span class="sd">   j+3/2--+---------+---------+---------+</span>
 <span class="sd">          |         |         |         |</span>
@@ -220,56 +230,58 @@
 
 <span class="sd">We wish to solve</span>
 
-<span class="sd">  U_t + F^x_x + F^y_y = H</span>
+<span class="sd">.. math::</span>
+
+<span class="sd">   U_t + F^x_x + F^y_y = H</span>
 
 <span class="sd">we want U_{i+1/2}^{n+1/2} -- the interface values that are input to</span>
 <span class="sd">the Riemann problem through the faces for each zone.</span>
 
-<span class="sd">Taylor expanding yields</span>
+<span class="sd">Taylor expanding yields::</span>
 
-<span class="sd">   n+1/2                     dU           dU</span>
-<span class="sd">  U          = U   + 0.5 dx  --  + 0.5 dt --</span>
-<span class="sd">   i+1/2,j,L    i,j          dx           dt</span>
-
-
-<span class="sd">                             dU             dF^x   dF^y</span>
-<span class="sd">             = U   + 0.5 dx  --  - 0.5 dt ( ---- + ---- - H )</span>
-<span class="sd">                i,j          dx              dx     dy</span>
+<span class="sd">    n+1/2                     dU           dU</span>
+<span class="sd">   U          = U   + 0.5 dx  --  + 0.5 dt --</span>
+<span class="sd">    i+1/2,j,L    i,j          dx           dt</span>
 
 
-<span class="sd">                              dU      dF^x            dF^y</span>
-<span class="sd">             = U   + 0.5 ( dx -- - dt ---- ) - 0.5 dt ---- + 0.5 dt H</span>
-<span class="sd">                i,j           dx       dx              dy</span>
+<span class="sd">                              dU             dF^x   dF^y</span>
+<span class="sd">              = U   + 0.5 dx  --  - 0.5 dt ( ---- + ---- - H )</span>
+<span class="sd">                 i,j          dx              dx     dy</span>
 
 
-<span class="sd">                                  dt       dU           dF^y</span>
-<span class="sd">             = U   + 0.5 dx ( 1 - -- A^x ) --  - 0.5 dt ---- + 0.5 dt H</span>
-<span class="sd">                i,j               dx       dx            dy</span>
+<span class="sd">                               dU      dF^x            dF^y</span>
+<span class="sd">              = U   + 0.5 ( dx -- - dt ---- ) - 0.5 dt ---- + 0.5 dt H</span>
+<span class="sd">                 i,j           dx       dx              dy</span>
 
 
-<span class="sd">                                dt       _            dF^y</span>
-<span class="sd">             = U   + 0.5  ( 1 - -- A^x ) DU  - 0.5 dt ---- + 0.5 dt H</span>
-<span class="sd">                i,j             dx                     dy</span>
+<span class="sd">                                   dt       dU           dF^y</span>
+<span class="sd">              = U   + 0.5 dx ( 1 - -- A^x ) --  - 0.5 dt ---- + 0.5 dt H</span>
+<span class="sd">                 i,j               dx       dx            dy</span>
 
-<span class="sd">                     +----------+-----------+  +----+----+   +---+---+</span>
-<span class="sd">                                |                   |            |</span>
 
-<span class="sd">                    this is the monotonized   this is the   source term</span>
-<span class="sd">                    central difference term   transverse</span>
-<span class="sd">                                              flux term</span>
+<span class="sd">                                 dt       _            dF^y</span>
+<span class="sd">              = U   + 0.5  ( 1 - -- A^x ) DU  - 0.5 dt ---- + 0.5 dt H</span>
+<span class="sd">                 i,j             dx                     dy</span>
+
+<span class="sd">                      +----------+-----------+  +----+----+   +---+---+</span>
+<span class="sd">                                 |                   |            |</span>
+
+<span class="sd">                     this is the monotonized   this is the   source term</span>
+<span class="sd">                     central difference term   transverse</span>
+<span class="sd">                                               flux term</span>
 
 <span class="sd">There are two components, the central difference in the normal to the</span>
 <span class="sd">interface, and the transverse flux difference.  This is done for the</span>
 <span class="sd">left and right sides of all 4 interfaces in a zone, which are then</span>
 <span class="sd">used as input to the Riemann problem, yielding the 1/2 time interface</span>
-<span class="sd">values,</span>
+<span class="sd">values::</span>
 
-<span class="sd">     n+1/2</span>
-<span class="sd">    U</span>
-<span class="sd">     i+1/2,j</span>
+<span class="sd">    n+1/2</span>
+<span class="sd">   U</span>
+<span class="sd">    i+1/2,j</span>
 
 <span class="sd">Then, the zone average values are updated in the usual finite-volume</span>
-<span class="sd">way:</span>
+<span class="sd">way::</span>
 
 <span class="sd">    n+1    n     dt    x  n+1/2       x  n+1/2</span>
 <span class="sd">   U    = U    + -- { F (U       ) - F (U       ) }</span>
@@ -282,24 +294,24 @@
 
 <span class="sd">Updating U_{i,j}:</span>
 
-<span class="sd">  -- We want to find the state to the left and right (or top and</span>
-<span class="sd">     bottom) of each interface, ex. U_{i+1/2,j,[lr]}^{n+1/2}, and use</span>
-<span class="sd">     them to solve a Riemann problem across each of the four</span>
-<span class="sd">     interfaces.</span>
+<span class="sd">* We want to find the state to the left and right (or top and bottom)</span>
+<span class="sd">  of each interface, ex. U_{i+1/2,j,[lr]}^{n+1/2}, and use them to</span>
+<span class="sd">  solve a Riemann problem across each of the four interfaces.</span>
 
-<span class="sd">  -- U_{i+1/2,j,[lr]}^{n+1/2} is comprised of two parts, the</span>
-<span class="sd">     computation of the monotonized central differences in the normal</span>
-<span class="sd">     direction (eqs. 2.8, 2.10) and the computation of the transverse</span>
-<span class="sd">     derivatives, which requires the solution of a Riemann problem in</span>
-<span class="sd">     the transverse direction (eqs. 2.9, 2.14).</span>
+<span class="sd">* U_{i+1/2,j,[lr]}^{n+1/2} is comprised of two parts, the computation</span>
+<span class="sd">  of the monotonized central differences in the normal direction</span>
+<span class="sd">  (eqs. 2.8, 2.10) and the computation of the transverse derivatives,</span>
+<span class="sd">  which requires the solution of a Riemann problem in the transverse</span>
+<span class="sd">  direction (eqs. 2.9, 2.14).</span>
 
-<span class="sd">       -- the monotonized central difference part is computed using</span>
-<span class="sd">          the primitive variables.</span>
+<span class="sd">  * the monotonized central difference part is computed using the</span>
+<span class="sd">    primitive variables.</span>
 
-<span class="sd">       -- We compute the central difference part in both directions</span>
-<span class="sd">          before doing the transverse flux differencing, since for the</span>
-<span class="sd">          high-order transverse flux implementation, we use these as</span>
-<span class="sd">          the input to the transverse Riemann problem.</span>
+<span class="sd">  * We compute the central difference part in both directions before</span>
+<span class="sd">    doing the transverse flux differencing, since for the high-order</span>
+<span class="sd">    transverse flux implementation, we use these as the input to the</span>
+<span class="sd">    transverse Riemann problem.</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">compressible.eos</span> <span class="k">as</span> <span class="nn">eos</span>

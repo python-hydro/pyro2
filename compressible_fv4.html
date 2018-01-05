@@ -141,7 +141,6 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-compressible_fv4.fluxes">compressible_fv4.fluxes module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-compressible_fv4.initialization_support">compressible_fv4.initialization_support module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-compressible_fv4.simulation">compressible_fv4.simulation module</a></li>
 </ul>
 </li>
@@ -290,23 +289,6 @@ implementing the algorithm from McCorquodale &amp; Colella (2011).</p>
 <dd></dd></dl>
 
 </div>
-<div class="section" id="module-compressible_fv4.initialization_support">
-<span id="compressible-fv4-initialization-support-module"></span><h2>compressible_fv4.initialization_support module<a class="headerlink" href="#module-compressible_fv4.initialization_support" title="Permalink to this headline">¶</a></h2>
-<p>Routines to help initialize cell-average values by oversampling the
-initial conditions on a finer mesh and averaging down to the requested
-mesh</p>
-<dl class="function">
-<dt id="compressible_fv4.initialization_support.average_down">
-<code class="descclassname">compressible_fv4.initialization_support.</code><code class="descname">average_down</code><span class="sig-paren">(</span><em>myd</em>, <em>fd</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible_fv4/initialization_support.html#average_down"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible_fv4.initialization_support.average_down" title="Permalink to this definition">¶</a></dt>
-<dd><p>average the fine data from fd into the coarser object, myd</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="compressible_fv4.initialization_support.get_finer">
-<code class="descclassname">compressible_fv4.initialization_support.</code><code class="descname">get_finer</code><span class="sig-paren">(</span><em>myd</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible_fv4/initialization_support.html#get_finer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible_fv4.initialization_support.get_finer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
 <div class="section" id="module-compressible_fv4.simulation">
 <span id="compressible-fv4-simulation-module"></span><h2>compressible_fv4.simulation module<a class="headerlink" href="#module-compressible_fv4.simulation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -324,6 +306,15 @@ timestep dt.</p>
 <dt id="compressible_fv4.simulation.Simulation.initialize">
 <code class="descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible_fv4/simulation.html#Simulation.initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible_fv4.simulation.Simulation.initialize" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="compressible_fv4.simulation.Simulation.preevolve">
+<code class="descname">preevolve</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible_fv4/simulation.html#Simulation.preevolve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible_fv4.simulation.Simulation.preevolve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Since we are 4th order accurate we need to make sure that we
+initialized with accurate zone-averages, so the preevolve for
+this solver assumes that the initialization was done to
+cell-centers and converts it to cell-averages.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="compressible_fv4.simulation.Simulation.substep">

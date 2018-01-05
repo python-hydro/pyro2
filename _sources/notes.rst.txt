@@ -1,3 +1,5 @@
+.. _notes:
+
 Notes on the numerical methods
 ==============================
 

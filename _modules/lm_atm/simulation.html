@@ -91,9 +91,10 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Setting up pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes.html">Notes on the numerical methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../design.html">Design ideas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../running.html">Running</a></li>
@@ -101,6 +102,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../problems.html">Adding a problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
@@ -108,9 +112,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../testing.html">Testing</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../help.html">Getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../ack.html">Acknowledgments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../modules.html">API</a></li>
 </ul>
 
@@ -207,7 +221,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">jlo</span> <span class="o">=</span> <span class="n">ng</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">jhi</span> <span class="o">=</span> <span class="n">ng</span><span class="o">+</span><span class="n">ny</span><span class="o">-</span><span class="mi">1</span>
-                        
+
 <div class="viewcode-block" id="Basestate.v"><a class="viewcode-back" href="../../lm_atm.html#lm_atm.simulation.Basestate.v">[docs]</a>    <span class="k">def</span> <span class="nf">v</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="n">buf</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">buf</span><span class="p">]</span></div>
 
@@ -216,10 +230,10 @@
 
 <div class="viewcode-block" id="Basestate.v2dp"><a class="viewcode-back" href="../../lm_atm.html#lm_atm.simulation.Basestate.v2dp">[docs]</a>    <span class="k">def</span> <span class="nf">v2dp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shift</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">jlo</span><span class="o">+</span><span class="n">shift</span><span class="o">-</span><span class="n">buf</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">shift</span><span class="o">+</span><span class="n">buf</span><span class="p">]</span></div>
-    
+
 <div class="viewcode-block" id="Basestate.jp"><a class="viewcode-back" href="../../lm_atm.html#lm_atm.simulation.Basestate.jp">[docs]</a>    <span class="k">def</span> <span class="nf">jp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shift</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="n">buf</span><span class="o">+</span><span class="n">shift</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">buf</span><span class="o">+</span><span class="n">shift</span><span class="p">]</span>    </div></div>
-    
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="n">buf</span><span class="o">+</span><span class="n">shift</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">buf</span><span class="o">+</span><span class="n">shift</span><span class="p">]</span></div></div>
+
 
 <div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../lm_atm.html#lm_atm.simulation.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="n">NullSimulation</span><span class="p">):</span>
 
@@ -230,7 +244,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">base</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">aux_data</span> <span class="o">=</span> <span class="kc">None</span>
 
-    
+
 <div class="viewcode-block" id="Simulation.initialize"><a class="viewcode-back" href="../../lm_atm.html#lm_atm.simulation.Simulation.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the grid and variables for low Mach atmospheric flow</span>
@@ -317,7 +331,7 @@
             <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;beta0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;beta0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;beta0-edges&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;beta0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;beta0-edges&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;beta0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="p">]</span></div>
-        
+
 
 <div class="viewcode-block" id="Simulation.make_prime"><a class="viewcode-back" href="../../lm_atm.html#lm_atm.simulation.Simulation.make_prime">[docs]</a>    <span class="k">def</span> <span class="nf">make_prime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">a0</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">a</span> <span class="o">-</span> <span class="n">a0</span><span class="o">.</span><span class="n">v2d</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">a0</span><span class="o">.</span><span class="n">ng</span><span class="p">)</span></div>
@@ -382,7 +396,7 @@
         <span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">)</span>
         <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">)</span>
 
@@ -420,8 +434,8 @@
         <span class="c1"># set the RHS to divU and solve</span>
         <span class="n">mg</span><span class="o">.</span><span class="n">init_RHS</span><span class="p">(</span><span class="n">div_beta_U</span><span class="p">)</span>
         <span class="n">mg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">rtol</span><span class="o">=</span><span class="mf">1.e-10</span><span class="p">)</span>
-        
-        
+
+
         <span class="c1"># store the solution in our self.cc_data object -- include a single</span>
         <span class="c1"># ghostcell</span>
         <span class="n">phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;phi&quot;</span><span class="p">)</span>
@@ -485,7 +499,7 @@
 
         <span class="n">gradp_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;gradp_x&quot;</span><span class="p">)</span>
         <span class="n">gradp_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;gradp_y&quot;</span><span class="p">)</span>
-        
+
         <span class="c1"># note: the base state quantities do not have valid ghost cells</span>
         <span class="n">beta0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;beta0&quot;</span><span class="p">]</span>
         <span class="n">beta0_edges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;beta0-edges&quot;</span><span class="p">]</span>
@@ -510,7 +524,7 @@
         <span class="n">ldelta_uy</span> <span class="o">=</span> <span class="n">reconstruction</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">limiter</span><span class="p">)</span>
         <span class="n">ldelta_vy</span> <span class="o">=</span> <span class="n">reconstruction</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">limiter</span><span class="p">)</span>
 
-        
+
         <span class="c1">#---------------------------------------------------------------------</span>
         <span class="c1"># get the advective velocities</span>
         <span class="c1">#---------------------------------------------------------------------</span>
@@ -564,7 +578,7 @@
 
 
         <span class="n">u_MAC</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_um</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
-        <span class="n">v_MAC</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_vm</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>        
+        <span class="n">v_MAC</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_vm</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
 
 
         <span class="c1">#---------------------------------------------------------------------</span>
@@ -627,7 +641,7 @@
         <span class="n">coeff_y</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
         <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">coeff_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)[:,:]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">coeff</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="n">coeff</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">))</span>
-        
+
         <span class="c1"># we need the MAC velocities on all edges of the computational domain</span>
         <span class="c1"># here we do U = U - (beta_0/rho) grad (phi/beta_0)</span>
         <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
@@ -662,10 +676,10 @@
 
         <span class="c1"># update eint as a diagnostic</span>
         <span class="n">eint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;eint&quot;</span><span class="p">)</span>
-        <span class="n">gamma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;eos.gamma&quot;</span><span class="p">)</span>        
+        <span class="n">gamma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;eos.gamma&quot;</span><span class="p">)</span>
         <span class="n">eint</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;p0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">v2d</span><span class="p">()</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">/</span><span class="n">rho</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
-        
-        
+
+
         <span class="c1">#---------------------------------------------------------------------</span>
         <span class="c1"># recompute the interface states, using the advective velocity</span>
         <span class="c1"># from above</span>
@@ -831,7 +845,7 @@
         <span class="n">rho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
         <span class="n">rho0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;rho0&quot;</span><span class="p">]</span>
         <span class="n">rhoprime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_prime</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">rho0</span><span class="p">)</span>
-        
+
         <span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">)</span>
         <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">)</span>
 
@@ -843,7 +857,7 @@
 
         <span class="n">dv</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span>
         <span class="n">du</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">u</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
-        
+
         <span class="n">vort</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">dv</span> <span class="o">-</span> <span class="n">du</span>
 
         <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -877,7 +891,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Output simulation-specific data to the h5py file f</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        
+
         <span class="c1"># we implement our own version to allow us to store the base</span>
         <span class="c1"># state</span>
 
@@ -896,7 +910,6 @@
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">gb</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">Basestate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">ng</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">d</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">gb</span><span class="p">[</span><span class="n">name</span><span class="p">]</span></div></div>
-
 </pre></div>
 
            </div>

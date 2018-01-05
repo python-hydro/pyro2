@@ -91,9 +91,10 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Setting up pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes.html">Notes on the numerical methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../design.html">Design ideas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../running.html">Running</a></li>
@@ -101,6 +102,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../problems.html">Adding a problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
@@ -108,9 +112,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../testing.html">Testing</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../help.html">Getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../ack.html">Acknowledgments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../modules.html">API</a></li>
 </ul>
 
@@ -182,38 +196,35 @@
 
 <span class="sd">Typical usage:</span>
 
-<span class="sd">  -- create the grid</span>
+<span class="sd">* create the grid::</span>
 
-<span class="sd">     grid = Grid2d(nx, ny)</span>
+<span class="sd">   grid = Grid2d(nx, ny)</span>
 
+<span class="sd">* create the data that lives on that grid::</span>
 
-<span class="sd">  -- create the data that lives on that grid</span>
+<span class="sd">   data = CellCenterData2d(grid)</span>
 
-<span class="sd">     data = CellCenterData2d(grid)</span>
+<span class="sd">   bc = BC(xlb=&quot;reflect&quot;, xrb=&quot;reflect&quot;,</span>
+<span class="sd">          ylb=&quot;outflow&quot;, yrb=&quot;outflow&quot;)</span>
+<span class="sd">   data.register_var(&quot;density&quot;, bc)</span>
+<span class="sd">   ...</span>
 
-<span class="sd">     bc = BC(xlb=&quot;reflect&quot;, xrb=&quot;reflect&quot;,</span>
-<span class="sd">             ylb=&quot;outflow&quot;, yrb=&quot;outflow&quot;)</span>
-<span class="sd">     data.register_var(&quot;density&quot;, bc)</span>
-<span class="sd">     ...</span>
+<span class="sd">   data.create()</span>
 
-<span class="sd">     data.create()</span>
+<span class="sd">* initialize some data::</span>
 
-
-<span class="sd">  -- initialize some data</span>
-
-<span class="sd">     dens = data.get_var(&quot;density&quot;)</span>
-<span class="sd">     dens[:,:] = ...</span>
+<span class="sd">   dens = data.get_var(&quot;density&quot;)</span>
+<span class="sd">   dens[:, :] = ...</span>
 
 
-<span class="sd">  -- fill the ghost cells</span>
+<span class="sd">* fill the ghost cells::</span>
 
-<span class="sd">     data.fill_BC(&quot;density&quot;)</span>
+<span class="sd">   data.fill_BC(&quot;density&quot;)</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pickle</span>
 
 <span class="kn">import</span> <span class="nn">h5py</span>
 
@@ -228,15 +239,15 @@
 <span class="sd">    the 2-d grid class.  The grid object will contain the coordinate</span>
 <span class="sd">    information (at various centerings).</span>
 
-<span class="sd">    A basic (1-d) representation of the layout is:</span>
+<span class="sd">    A basic (1-d) representation of the layout is::</span>
 
-<span class="sd">    |     |      |     X     |     |      |     |     X     |      |     |</span>
-<span class="sd">    +--*--+- // -+--*--X--*--+--*--+- // -+--*--+--*--X--*--+- // -+--*--+</span>
-<span class="sd">       0          ng-1    ng   ng+1         ... ng+nx-1 ng+nx      2ng+nx-1</span>
+<span class="sd">       |     |      |     X     |     |      |     |     X     |      |     |</span>
+<span class="sd">       +--*--+- // -+--*--X--*--+--*--+- // -+--*--+--*--X--*--+- // -+--*--+</span>
+<span class="sd">          0          ng-1    ng   ng+1         ... ng+nx-1 ng+nx      2ng+nx-1</span>
 
-<span class="sd">                         ilo                      ihi</span>
+<span class="sd">                            ilo                      ihi</span>
 
-<span class="sd">    |&lt;- ng guardcells-&gt;|&lt;---- nx interior zones -----&gt;|&lt;- ng guardcells-&gt;|</span>
+<span class="sd">       |&lt;- ng guardcells-&gt;|&lt;---- nx interior zones -----&gt;|&lt;- ng guardcells-&gt;|</span>
 
 <span class="sd">    The &#39;*&#39; marks the data locations.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -342,7 +353,7 @@
 <span class="sd">        domain&#39;s valid region</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dy</span><span class="o">*</span>
-                       <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">d</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">flat</span><span class="p">))</span></div>
+                       <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">d</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">flat</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="Grid2d.coarse_like"><a class="viewcode-back" href="../../mesh.html#mesh.patch.Grid2d.coarse_like">[docs]</a>    <span class="k">def</span> <span class="nf">coarse_like</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
@@ -387,31 +398,31 @@
 <span class="sd">    CellCenterData2d object is built in a multi-step process before</span>
 <span class="sd">    it can be used.</span>
 
-<span class="sd">    -- Create the object.  We pass in a grid object to describe where</span>
-<span class="sd">       the data lives:</span>
+<span class="sd">    * Create the object.  We pass in a grid object to describe where</span>
+<span class="sd">      the data lives::</span>
 
-<span class="sd">       my_data = patch.CellCenterData2d(myGrid)</span>
+<span class="sd">         my_data = patch.CellCenterData2d(myGrid)</span>
 
-<span class="sd">    -- Register any variables that we expect to live on this patch.</span>
-<span class="sd">       Here BC describes the boundary conditions for that variable.</span>
+<span class="sd">    * Register any variables that we expect to live on this patch.</span>
+<span class="sd">      Here BC describes the boundary conditions for that variable::</span>
 
-<span class="sd">       my_data.register_var(&#39;density&#39;, BC)</span>
-<span class="sd">       my_data.register_var(&#39;x-momentum&#39;, BC)</span>
-<span class="sd">       ...</span>
+<span class="sd">         my_data.register_var(&#39;density&#39;, BC)</span>
+<span class="sd">         my_data.register_var(&#39;x-momentum&#39;, BC)</span>
+<span class="sd">         ...</span>
 
-<span class="sd">    -- Register any auxillary data -- these are any parameters that are</span>
-<span class="sd">       needed to interpret the data outside of the simulation (for</span>
-<span class="sd">       example, the gamma for the equation of state).</span>
+<span class="sd">    * Register any auxillary data -- these are any parameters that are</span>
+<span class="sd">      needed to interpret the data outside of the simulation (for</span>
+<span class="sd">      example, the gamma for the equation of state)::</span>
 
-<span class="sd">       my_data.set_aux(keyword, value)</span>
+<span class="sd">         my_data.set_aux(keyword, value)</span>
 
-<span class="sd">    -- Finish the initialization of the patch</span>
+<span class="sd">    * Finish the initialization of the patch::</span>
 
-<span class="sd">       my_data.create()</span>
+<span class="sd">         my_data.create()</span>
 
 <span class="sd">    This last step actually allocates the storage for the state</span>
 <span class="sd">    variables.  Once this is done, the patch is considered to be</span>
-<span class="sd">   locked.  New variables cannot be added.</span>
+<span class="sd">    locked.  New variables cannot be added.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">):</span>
@@ -579,7 +590,7 @@
                     <span class="k">return</span> <span class="n">var</span>
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;name </span><span class="si">{}</span><span class="s2"> is not valid&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,:,</span><span class="n">n</span><span class="p">],</span> <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span></div>
+            <span class="k">return</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">],</span> <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="CellCenterData2d.get_var_by_index"><a class="viewcode-back" href="../../mesh.html#mesh.patch.CellCenterData2d.get_var_by_index">[docs]</a>    <span class="k">def</span> <span class="nf">get_var_by_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
@@ -599,7 +610,7 @@
 <span class="sd">            The array of data corresponding to the index</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,:,</span><span class="n">n</span><span class="p">],</span> <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">],</span> <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="CellCenterData2d.get_vars"><a class="viewcode-back" href="../../mesh.html#mesh.patch.CellCenterData2d.get_vars">[docs]</a>    <span class="k">def</span> <span class="nf">get_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -648,7 +659,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,:,</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span></div>
 
 
 <div class="viewcode-block" id="CellCenterData2d.fill_BC_all"><a class="viewcode-back" href="../../mesh.html#mesh.patch.CellCenterData2d.fill_BC_all">[docs]</a>    <span class="k">def</span> <span class="nf">fill_BC_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -694,7 +705,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="n">ng</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">ng</span><span class="p">,</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="n">ng</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">ng</span><span class="p">,</span><span class="n">n</span><span class="p">])</span></div>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="n">ng</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">ng</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="n">ng</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">ng</span><span class="p">,</span> <span class="n">n</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="CellCenterData2d.max"><a class="viewcode-back" href="../../mesh.html#mesh.patch.CellCenterData2d.max">[docs]</a>    <span class="k">def</span> <span class="nf">max</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
@@ -703,7 +714,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="n">ng</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">ng</span><span class="p">,</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="n">ng</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">ng</span><span class="p">,</span><span class="n">n</span><span class="p">])</span></div>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="n">ng</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">ng</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="n">ng</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">ng</span><span class="p">,</span> <span class="n">n</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="CellCenterData2d.restrict"><a class="viewcode-back" href="../../mesh.html#mesh.patch.CellCenterData2d.restrict">[docs]</a>    <span class="k">def</span> <span class="nf">restrict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">varname</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
@@ -724,15 +735,20 @@
         <span class="c1"># by averaging the fine cells into the corresponding coarse cell</span>
         <span class="c1"># that encompasses them.</span>
         <span class="k">if</span> <span class="n">N</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="n">cdata</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> \
+            <span class="n">cdata</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> \
                    <span class="mf">0.25</span><span class="o">*</span><span class="p">(</span><span class="n">fdata</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span>
                          <span class="n">fdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
         <span class="k">elif</span> <span class="n">N</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-            <span class="n">cdata</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> \
-                 <span class="p">(</span><span class="n">fdata</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
-                  <span class="n">fdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
-                  <span class="n">fdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
-                  <span class="n">fdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span><span class="o">/</span><span class="mf">16.0</span>
+            <span class="n">cdata</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> \
+                 <span class="p">(</span><span class="n">fdata</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
+                  <span class="n">fdata</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
+                  <span class="n">fdata</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
+                  <span class="n">fdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
+                  <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
+                  <span class="n">fdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
+                  <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
+                  <span class="n">fdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
+                  <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span><span class="o">/</span><span class="mf">16.0</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;restriction is only allowed by 2 or 4&quot;</span><span class="p">)</span>
@@ -752,23 +768,23 @@
 <span class="sd">        the advection routine.  Getting a good multidimensional</span>
 <span class="sd">        reconstruction polynomial is hard -- we want it to be bilinear</span>
 <span class="sd">        and monotonic -- we settle for having each slope be</span>
-<span class="sd">        independently monotonic:</span>
+<span class="sd">        independently monotonic::</span>
 
-<span class="sd">                  (x)         (y)</span>
-<span class="sd">        f(x,y) = m    x/dx + m    y/dy + &lt;f&gt;</span>
+<span class="sd">                     (x)         (y)</span>
+<span class="sd">           f(x,y) = m    x/dx + m    y/dy + &lt;f&gt;</span>
 
 <span class="sd">        where the m&#39;s are the limited differences in each direction.</span>
 <span class="sd">        When averaged over the parent cell, this reproduces &lt;f&gt;.</span>
 
-<span class="sd">        Each zone&#39;s reconstrution will be averaged over 4 children.</span>
+<span class="sd">        Each zone&#39;s reconstrution will be averaged over 4 children::</span>
 
-<span class="sd">        +-----------+     +-----+-----+</span>
-<span class="sd">        |           |     |     |     |</span>
-<span class="sd">        |           |     |  3  |  4  |</span>
-<span class="sd">        |    &lt;f&gt;    | --&gt; +-----+-----+</span>
-<span class="sd">        |           |     |     |     |</span>
-<span class="sd">        |           |     |  1  |  2  |</span>
-<span class="sd">        +-----------+     +-----+-----+</span>
+<span class="sd">           +-----------+     +-----+-----+</span>
+<span class="sd">           |           |     |     |     |</span>
+<span class="sd">           |           |     |  3  |  4  |</span>
+<span class="sd">           |    &lt;f&gt;    | --&gt; +-----+-----+</span>
+<span class="sd">           |           |     |     |     |</span>
+<span class="sd">           |           |     |  1  |  2  |</span>
+<span class="sd">           +-----------+     +-----+-----+</span>
 
 <span class="sd">        We will fill each of the finer resolution zones by filling all</span>
 <span class="sd">        the 1&#39;s together, using a stride 2 into the fine array.  Then</span>
@@ -787,16 +803,16 @@
 
         <span class="c1"># slopes for the coarse data</span>
         <span class="n">m_x</span> <span class="o">=</span> <span class="n">coarse_grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
-        <span class="n">m_x</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">cdata</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">cdata</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">m_x</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">cdata</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">cdata</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
 
         <span class="n">m_y</span> <span class="o">=</span> <span class="n">coarse_grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
-        <span class="n">m_y</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">cdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">cdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">m_y</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">cdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">cdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
 
         <span class="c1"># fill the children</span>
-        <span class="n">fdata</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,:]</span> <span class="o">=</span> <span class="n">cdata</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>     <span class="c1"># 1 child</span>
-        <span class="n">fdata</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,:]</span> <span class="o">=</span> <span class="n">cdata</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="c1"># 2</span>
-        <span class="n">fdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,:]</span> <span class="o">=</span> <span class="n">cdata</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="c1"># 3</span>
-        <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,:]</span> <span class="o">=</span> <span class="n">cdata</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="c1"># 4</span>
+        <span class="n">fdata</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">cdata</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>     <span class="c1"># 1 child</span>
+        <span class="n">fdata</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">cdata</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="c1"># 2</span>
+        <span class="n">fdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">cdata</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="c1"># 3</span>
+        <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">cdata</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="c1"># 4</span>
 
         <span class="k">return</span> <span class="n">fdata</span></div>
 
@@ -851,7 +867,8 @@
 
 
 <div class="viewcode-block" id="CellCenterData2d.pretty_print"><a class="viewcode-back" href="../../mesh.html#mesh.patch.CellCenterData2d.pretty_print">[docs]</a>    <span class="k">def</span> <span class="nf">pretty_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-
+        <span class="sd">&quot;&quot;&quot;print out the contents of the data array with pretty formatting</span>
+<span class="sd">        indicating where ghost cells are.&quot;&quot;&quot;</span>
         <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
         <span class="n">a</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="n">fmt</span><span class="p">)</span></div></div>
 
@@ -910,7 +927,7 @@
 
 
     <span class="n">a</span> <span class="o">=</span> <span class="n">mydata</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
-    <span class="n">a</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">x2d</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">y2d</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">a</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">x2d</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">y2d</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="n">mydata</span><span class="p">)</span>
 

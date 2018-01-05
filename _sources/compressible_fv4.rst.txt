@@ -24,14 +24,6 @@ compressible\_fv4\.fluxes module
     :undoc-members:
     :show-inheritance:
 
-compressible\_fv4\.initialization\_support module
--------------------------------------------------
-
-.. automodule:: compressible_fv4.initialization_support
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 compressible\_fv4\.simulation module
 ------------------------------------
 

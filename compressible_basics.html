@@ -108,7 +108,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Compressible hydrodynamics solvers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#example-problems">Example problems</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#sod">Sod</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#sedov">Sedov</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#quad">quad</a></li>
@@ -338,8 +338,25 @@ solver</td>
 </tr>
 </tbody>
 </table>
-<div class="section" id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="example-problems">
+<h2>Example problems<a class="headerlink" href="#example-problems" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The 4th-order accurate solver (<code class="docutils literal"><span class="pre">compressible_fv4</span></code>) requires that
+the initialization create cell-averages accurate to 4th-order.  To
+allow for all the solvers to use the same problem setups, we assume
+that the initialization routines initialize cell-centers (which is
+fine for 2nd-order accuracy), and the
+<a class="reference internal" href="compressible_fv4.html#compressible_fv4.simulation.Simulation.preevolve" title="compressible_fv4.simulation.Simulation.preevolve"><code class="xref py py-func docutils literal"><span class="pre">preevolve()</span></code></a> method will convert
+these to cell-averages automatically after initialization.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All the compressible solvers share the same <code class="docutils literal"><span class="pre">problems/</span></code>
+directory, which lives in <code class="docutils literal"><span class="pre">compressible/problems/</span></code>.  For the
+other compressible solvers, we simply use a symbolic-link to this
+directory in the solver’s directory.</p>
+</div>
 <div class="section" id="sod">
 <h3>Sod<a class="headerlink" href="#sod" title="Permalink to this headline">¶</a></h3>
 <p>The Sod problem is a standard hydrodynamics problem. It is a

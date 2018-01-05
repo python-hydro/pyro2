@@ -91,9 +91,10 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Setting up pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes.html">Notes on the numerical methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../design.html">Design ideas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../running.html">Running</a></li>
@@ -101,6 +102,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../problems.html">Adding a problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
@@ -108,9 +112,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../testing.html">Testing</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../help.html">Getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../ack.html">Acknowledgments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../modules.html">API</a></li>
 </ul>
 
@@ -178,26 +192,26 @@
   <h1>Source code for mesh.integration</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">A generic Runge-Kutta type integrator for integrating CellCenterData2d.</span>
-<span class="sd">We support a generic Butcher tableau for explicit the Runge-Kutta update</span>
+<span class="sd">We support a generic Butcher tableau for explicit the Runge-Kutta update::</span>
+
+<span class="sd">   0   |</span>
+<span class="sd">   c_2 | a_21</span>
+<span class="sd">   c_3 | a_31 a_32</span>
+<span class="sd">   :   |  :        .</span>
+<span class="sd">   :   |  :          .</span>
+<span class="sd">   c_s | a_s1 a_s2 ... a_s,s-1</span>
+<span class="sd">   ----+---------------------------</span>
+<span class="sd">       | b_1  b_2  ... b_{s-1}  b_s</span>
 
 
-<span class="sd">0   |</span>
-<span class="sd">c_2 | a_21</span>
-<span class="sd">c_3 | a_31 a_32</span>
-<span class="sd">:   |  :        .</span>
-<span class="sd">:   |  :          .</span>
-<span class="sd">c_s | a_s1 a_s2 ... a_s,s-1</span>
-<span class="sd">----+---------------------------</span>
-<span class="sd">    | b_1  b_2  ... b_{s-1}  b_s</span>
+<span class="sd">the update is::</span>
 
+<span class="sd">   y_{n+1} = y_n + dt sum_{i=1}^s {b_i k_i}</span>
 
-<span class="sd">the update is</span>
+<span class="sd">and the s increment is::</span>
 
-<span class="sd">  y_{n+1} = y_n + dt sum_{i=1}^s {b_i k_i}</span>
+<span class="sd">   k_s = f(t + c_s dt, y_n + dt (a_s1 k1 + a_s2 k2 + ... + a_s,s-1 k_{s-1})</span>
 
-<span class="sd">and the s increment is </span>
-
-<span class="sd">  k_s = f(t + c_s dt, y_n + dt (a_s1 k1 + a_s2 k2 + ... + a_s,s-1 k_{s-1})</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>

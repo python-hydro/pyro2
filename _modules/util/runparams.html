@@ -91,9 +91,10 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Setting up pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notes.html">Notes on the numerical methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../design.html">Design ideas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../running.html">Running</a></li>
@@ -101,6 +102,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../problems.html">Adding a problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
@@ -108,9 +112,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../testing.html">Testing</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../help.html">Getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../ack.html">Acknowledgments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../modules.html">API</a></li>
 </ul>
 
@@ -176,43 +190,43 @@
            <div itemprop="articleBody">
             
   <h1>Source code for util.runparams</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;basic syntax of the parameter file is:</span>
+<span></span><span class="sd">&quot;&quot;&quot;basic syntax of the parameter file is::</span>
 
-<span class="sd"># simple parameter file</span>
+<span class="sd">   # simple parameter file</span>
 
-<span class="sd">[driver]</span>
-<span class="sd">nsteps = 100         ; comment</span>
-<span class="sd">max_time = 0.25</span>
+<span class="sd">   [driver]</span>
+<span class="sd">   nsteps = 100         ; comment</span>
+<span class="sd">   max_time = 0.25</span>
 
-<span class="sd">[riemann]</span>
-<span class="sd">tol = 1.e-10</span>
-<span class="sd">max_iter = 10</span>
+<span class="sd">   [riemann]</span>
+<span class="sd">   tol = 1.e-10</span>
+<span class="sd">   max_iter = 10</span>
 
-<span class="sd">[io]</span>
-<span class="sd">basename = myfile_</span>
+<span class="sd">   [io]</span>
+<span class="sd">   basename = myfile_</span>
 
 
 <span class="sd">The recommended way to use this is for the code to have a master list</span>
-<span class="sd">of parameters and their defaults (e.g. _defaults), and then the</span>
-<span class="sd">user can override these defaults at runtime through an inputs file.</span>
-<span class="sd">These two files have the same format.</span>
+<span class="sd">of parameters and their defaults (e.g. _defaults), and then the user</span>
+<span class="sd">can override these defaults at runtime through an inputs file.  These</span>
+<span class="sd">two files have the same format.</span>
 
-<span class="sd">The calling sequence would then be:</span>
+<span class="sd">The calling sequence would then be::</span>
 
-<span class="sd">  rp = RuntimeParameters()</span>
-<span class="sd">  rp.load_params(&quot;_defaults&quot;)</span>
-<span class="sd">  rp.load_params(&quot;inputs&quot;)</span>
+<span class="sd">   rp = RuntimeParameters()</span>
+<span class="sd">   rp.load_params(&quot;_defaults&quot;)</span>
+<span class="sd">   rp.load_params(&quot;inputs&quot;)</span>
 
 <span class="sd">The parser will determine what datatype the parameter is (string,</span>
-<span class="sd">integer, float), and store it in a RuntimeParameters object.</span>
-<span class="sd">If a parameter that already exists is encountered a second time (e.g.,</span>
+<span class="sd">integer, float), and store it in a RuntimeParameters object.  If a</span>
+<span class="sd">parameter that already exists is encountered a second time (e.g.,</span>
 <span class="sd">there is a default value in _defaults and the user specifies a new</span>
 <span class="sd">value in inputs), then the second instance replaces the first.</span>
 
 <span class="sd">Runtime parameters can then be accessed via any module through the</span>
-<span class="sd">get_param method:</span>
+<span class="sd">get_param method::</span>
 
-<span class="sd">  tol = rp.get_param(&#39;riemann.tol&#39;)</span>
+<span class="sd">   tol = rp.get_param(&#39;riemann.tol&#39;)</span>
 
 <span class="sd">If the optional flag no_new=1 is set, then the load_params function</span>
 <span class="sd">will not define any new parameters, but only overwrite existing ones.</span>
@@ -231,15 +245,21 @@
 <span class="c1"># types are</span>
 <div class="viewcode-block" id="is_int"><a class="viewcode-back" href="../../util.html#util.runparams.is_int">[docs]</a><span class="k">def</span> <span class="nf">is_int</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; is the given string an interger? &quot;&quot;&quot;</span>
-    <span class="k">try</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span> <span class="k">return</span> <span class="kc">False</span>
-    <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="kc">True</span></div>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="nb">int</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="is_float"><a class="viewcode-back" href="../../util.html#util.runparams.is_float">[docs]</a><span class="k">def</span> <span class="nf">is_float</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; is the given string a float? &quot;&quot;&quot;</span>
-    <span class="k">try</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span> <span class="k">return</span> <span class="kc">False</span>
-    <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="kc">True</span></div>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="nb">float</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
 
 <span class="k">def</span> <span class="nf">_get_val</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">is_int</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
@@ -297,7 +317,7 @@
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
 
             <span class="k">if</span> <span class="n">sec</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
-                <span class="n">lbracket</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">rbracket</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
                 <span class="n">section</span> <span class="o">=</span> <span class="n">section</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
             <span class="k">elif</span> <span class="n">eq</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
@@ -332,7 +352,7 @@
 <div class="viewcode-block" id="RuntimeParameters.command_line_params"><a class="viewcode-back" href="../../util.html#util.runparams.RuntimeParameters.command_line_params">[docs]</a>    <span class="k">def</span> <span class="nf">command_line_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd_strings</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        finds dictionary pairs from a string that came from the</span>
-<span class="sd">        commandline.  Stores the parameters in globalParams only if they</span>
+<span class="sd">        commandline.  Stores the parameters in only if they</span>
 <span class="sd">        already exist.</span>
 
 <span class="sd">        we expect things in the string in the form:</span>
@@ -384,7 +404,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Print out the list of parameters that were defined by never used</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">used_params</span><span class="p">:</span>
                 <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;parameter </span><span class="si">%s</span><span class="s2"> never used&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span></div>
 
@@ -433,7 +453,8 @@
         <span class="n">keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="n">keys</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
 
-        <span class="k">try</span><span class="p">:</span> <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;inputs.auto&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;inputs.auto&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
             <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ERROR: unable to open inputs.auto&quot;</span><span class="p">)</span>
 
