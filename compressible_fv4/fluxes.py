@@ -68,10 +68,10 @@ def fluxes(myd, rp, ivars, solid, tc):
     use_flattening = rp.get_param("compressible.use_flattening")
 
     if use_flattening:
-        xi_x = reconstruction.flatten(myg, q_avg, 1, ivars, rp)
-        xi_y = reconstruction.flatten(myg, q_avg, 2, ivars, rp)
+        xi_x = reconstruction.flatten(myg, q_bar, 1, ivars, rp)
+        xi_y = reconstruction.flatten(myg, q_bar, 2, ivars, rp)
 
-        xi = reconstruction.flatten_multid(myg, q_avg, xi_x, xi_y, ivars)
+        xi = reconstruction.flatten_multid(myg, q_bar, xi_x, xi_y, ivars)
     else:
         xi = 1.0
 
