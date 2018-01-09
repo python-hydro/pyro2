@@ -112,7 +112,8 @@ class RuntimeParameters(object):
         """
 
         # check to see whether the file exists
-        try: f = open(pfile, 'r')
+        try:
+            f = open(pfile, 'r')
         except IOError:
             msg.fail("ERROR: parameter file does not exist: {}".format(pfile))
 
@@ -129,7 +130,7 @@ class RuntimeParameters(object):
                 section = section.strip().lower()
 
             elif eq.search(line):
-                left, item, value, comment, right = eq.split(line)
+                _, item, value, comment, _ = eq.split(line)
                 item = item.strip().lower()
 
                 # define the key

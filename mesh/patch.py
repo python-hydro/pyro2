@@ -60,6 +60,8 @@ class Grid2d(object):
     The '*' marks the data locations.
     """
 
+    # pylint: disable=too-many-instance-attributes
+
     def __init__(self, nx, ny, ng=1, \
                  xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0):
         """
@@ -91,6 +93,8 @@ class Grid2d(object):
         ymax : float, optional
             Physical coordinate at the upper y boundary
         """
+
+        # pylint: disable=too-many-arguments
 
         # size of grid
         self.nx = int(nx)
@@ -233,6 +237,8 @@ class CellCenterData2d(object):
     locked.  New variables cannot be added.
     """
 
+    # pylint: disable=too-many-instance-attributes
+
     def __init__(self, grid, dtype=np.float64):
 
         """
@@ -352,19 +358,14 @@ class CellCenterData2d(object):
         my_str += "         nvars = {}\n".format(self.nvar)
         my_str += "         variables:\n"
 
-        ilo = self.grid.ilo
-        ihi = self.grid.ihi
-        jlo = self.grid.jlo
-        jhi = self.grid.jhi
-
         for n in range(self.nvar):
             my_str += "%16s: min: %15.10f    max: %15.10f\n" % \
                 (self.names[n], self.min(self.names[n]), self.max(self.names[n]))
             my_str += "%16s  BCs: -x: %-12s +x: %-12s -y: %-12s +y: %-12s\n" %\
-                (" " , self.BCs[self.names[n]].xlb,
-                       self.BCs[self.names[n]].xrb,
-                       self.BCs[self.names[n]].ylb,
-                       self.BCs[self.names[n]].yrb)
+                (" ", self.BCs[self.names[n]].xlb,
+                      self.BCs[self.names[n]].xrb,
+                      self.BCs[self.names[n]].ylb,
+                      self.BCs[self.names[n]].yrb)
 
         return my_str
 
@@ -452,8 +453,8 @@ class CellCenterData2d(object):
         """
         if keyword in self.aux.keys():
             return self.aux[keyword]
-        else:
-            return None
+
+        return None
 
 
     def zero(self, name):
@@ -513,7 +514,7 @@ class CellCenterData2d(object):
         """
         n = self.names.index(name)
         g = self.grid
-        return np.min(self.data[g.ilo-ng:g.ihi+1+ng, g.jlo-ng:g.jhi+1+ng, n])
+        return np.min(self.data.v(buf=ng, n=n))
 
 
     def max(self, name, ng=0):
@@ -522,7 +523,7 @@ class CellCenterData2d(object):
         """
         n = self.names.index(name)
         g = self.grid
-        return np.max(self.data[g.ilo-ng:g.ihi+1+ng, g.jlo-ng:g.jhi+1+ng, n])
+        return np.max(self.data.v(buf=ng, n=n))
 
 
     def restrict(self, varname, N=2):
@@ -719,6 +720,7 @@ def cell_center_data_clone(old):
 
 
 def do_demo():
+    """ show examples of the patch methods / classes """
 
     import util.io as io
 

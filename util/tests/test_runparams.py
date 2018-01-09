@@ -51,9 +51,8 @@ class TestRunParams(object):
     def test_command_line_params(self):
 
         param_string="test.p1=q test3.i1=2"
-        
+
         self.rp.command_line_params(param_string.split())
 
         assert self.rp.get_param("test.p1") == "q"
         assert self.rp.get_param("test3.i1") == 2
-

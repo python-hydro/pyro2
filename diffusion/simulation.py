@@ -1,3 +1,5 @@
+""" A simulation of diffusion """
+
 import importlib
 import math
 import numpy as np
@@ -10,6 +12,7 @@ import multigrid.MG as MG
 from util import msg
 
 class Simulation(NullSimulation):
+    """ A simulation of diffusion """
 
     def initialize(self):
         """
@@ -23,7 +26,7 @@ class Simulation(NullSimulation):
         # for MG, we need to be a power of two
         if my_grid.nx != my_grid.ny:
             msg.fail("need nx = ny for diffusion problems")
-            
+
         n = int(math.log(my_grid.nx)/math.log(2.0))
         if 2**n != my_grid.nx:
             msg.fail("grid needs to be a power of 2")
@@ -40,9 +43,12 @@ class Simulation(NullSimulation):
 
         bcparam = []
         for bc in [xlb_type, xrb_type, ylb_type, yrb_type]:
-            if bc == "periodic": bcparam.append("periodic")
-            elif bc == "neumann": bcparam.append("neumann")
-            elif bc == "dirichlet": bcparam.append("dirichlet")
+            if bc == "periodic":
+                bcparam.append("periodic")
+            elif bc == "neumann":
+                bcparam.append("neumann")
+            elif bc == "dirichlet":
+                bcparam.append("dirichlet")
             else:
                 msg.fail("invalid BC")
 
@@ -114,7 +120,7 @@ class Simulation(NullSimulation):
 
         # form the RHS: f = phi + (dt/2) k L phi  (where L is the Laplacian)
         f = mg.soln_grid.scratch_array()
-        f.v()[:,:] = phi.v() + 0.5*self.dt*k * (
+        f.v()[:, :] = phi.v() + 0.5*self.dt*k * (
             (phi.ip(1) + phi.ip(-1) - 2.0*phi.v())/myg.dx**2 +
             (phi.jp(1) + phi.jp(-1) - 2.0*phi.v())/myg.dy**2)
 
@@ -128,7 +134,7 @@ class Simulation(NullSimulation):
         #mg.smooth(mg.nlevels-1,100)
 
         # update the solution
-        phi.v()[:,:] = mg.get_solution().v()
+        phi.v()[:, :] = mg.get_solution().v()
 
         # increment the time
         self.cc_data.t += self.dt
