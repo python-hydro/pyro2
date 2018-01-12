@@ -113,7 +113,7 @@ class Simulation(NullSimulation):
 
         # are we dealing with solid boundaries? we'll use these for
         # the Riemann solver
-        self.solid = bnd.bc_is_solid(self.rp)
+        self.solid = bnd.bc_is_solid(bc)
 
         # density and energy
         my_data.register_var("density", bc)

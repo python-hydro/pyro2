@@ -206,7 +206,7 @@ class RuntimeParameters(object):
         if key in self.params.keys():
             return self.params[key]
         else:
-            msg.fail("ERROR: runtime parameter %s not found" % (key))
+            raise KeyError("ERROR: runtime parameter {} not found".format(key))
 
 
     def print_unused_params(self):

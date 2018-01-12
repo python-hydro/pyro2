@@ -2,16 +2,35 @@ import h5py
 import importlib
 import mesh.boundary as bnd
 import mesh.patch as patch
-from util import profile
+from util import msg, profile
 
 def grid_setup(rp, ng=1):
     nx = rp.get_param("mesh.nx")
     ny = rp.get_param("mesh.ny")
 
-    xmin = rp.get_param("mesh.xmin")
-    xmax = rp.get_param("mesh.xmax")
-    ymin = rp.get_param("mesh.ymin")
-    ymax = rp.get_param("mesh.ymax")
+    try:
+        xmin = rp.get_param("mesh.xmin")
+    except KeyError:
+        xmin = 0.0
+        msg.warning("mesh.xmin not set, defaulting to 0.0")
+
+    try:
+        xmax = rp.get_param("mesh.xmax")
+    except KeyError:
+        xmax = 1.0
+        msg.warning("mesh.xmax not set, defaulting to 1.0")
+
+    try:
+        ymin = rp.get_param("mesh.ymin")
+    except KeyError:
+        ymin = 0.0
+        msg.warning("mesh.ymin not set, defaulting to 0.0")
+
+    try:
+        ymax = rp.get_param("mesh.ymax")
+    except KeyError:
+        ymax = 1.0
+        msg.warning("mesh.ynax not set, defaulting to 1.0")
 
     my_grid = patch.Grid2d(nx, ny,
                            xmin=xmin, xmax=xmax,
@@ -22,10 +41,29 @@ def grid_setup(rp, ng=1):
 def bc_setup(rp):
 
     # first figure out the BCs
-    xlb_type = rp.get_param("mesh.xlboundary")
-    xrb_type = rp.get_param("mesh.xrboundary")
-    ylb_type = rp.get_param("mesh.ylboundary")
-    yrb_type = rp.get_param("mesh.yrboundary")
+    try:
+        xlb_type = rp.get_param("mesh.xlboundary")
+    except KeyError:
+        xlb_type = "periodic"
+        msg.warning("mesh.xlboundary is not set, defaulting to periodic")
+
+    try:
+        xrb_type = rp.get_param("mesh.xrboundary")
+    except KeyError:
+        xrb_type = "periodic"
+        msg.warning("mesh.xrboundary is not set, defaulting to periodic")
+
+    try:
+        ylb_type = rp.get_param("mesh.ylboundary")
+    except KeyError:
+        ylb_type = "periodic"
+        msg.warning("mesh.ylboundary is not set, defaulting to periodic")
+
+    try:
+        yrb_type = rp.get_param("mesh.yrboundary")
+    except KeyError:
+        yrb_type = "periodic"
+        msg.warning("mesh.yrboundary is not set, defaulting to periodic")
 
     bc = bnd.BC(xlb=xlb_type, xrb=xrb_type,
                 ylb=ylb_type, yrb=yrb_type)

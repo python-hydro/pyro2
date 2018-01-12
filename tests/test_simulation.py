@@ -67,3 +67,21 @@ class TestSimulation(object):
         self.sim.compute_timestep()
         assert self.sim.dt == 0.25
 
+
+def test_grid_setup():
+
+    rp = runparams.RuntimeParameters()
+    rp.params["mesh.nx"] = 8
+    rp.params["mesh.ny"] = 16
+    rp.params["mesh.xmin"] = 0.0
+    rp.params["mesh.xmax"] = 1.0
+    rp.params["mesh.ymin"] = 0.0
+    rp.params["mesh.ymax"] = 2.0
+
+    g = sn.grid_setup(rp)
+
+    assert g.nx == 8
+    assert g.ny == 16
+    assert g.dx == 1.0/8
+    assert g.dy == 1.0/8
+
