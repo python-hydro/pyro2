@@ -11,22 +11,6 @@ from util import msg
 
 class Simulation(compressible_fv4.Simulation):
 
-    def __init__(self, solver_name, problem_name, rp, timers=None):
-        super().__init__(solver_name, problem_name, rp, timers=timers, data_class=fv.FV2d)
-
-    def initialize(self):
-        super().initialize(ng=5)
-
-    def preevolve(self):
-        """Since we are 4th order accurate we need to make sure that we
-        initialized with accurate zone-averages, so the preevolve for
-        this solver assumes that the initialization was done to
-        cell-centers and converts it to cell-averages."""
-
-        # we just initialized cell-centers, but we need to store averages
-        for var in self.cc_data.names:
-            self.cc_data.from_centers(var)
-
     def sdc_integral(self, m_start, m_end, As):
         """Compute the integral over the sources from m to m+1 with a
         Simpson's rule"""
