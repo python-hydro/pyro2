@@ -9,16 +9,15 @@ import compressible_fv4.fluxes as flx
 
 class Simulation(compressible_rk.Simulation):
 
-    def __init__(self, solver_name, problem_name, rp, timers=None):
-        super().__init__(solver_name, problem_name, rp, timers=timers, data_class=fv.FV2d)
+    def __init__(self, solver_name, problem_name, rp, timers=None, data_class=fv.FV2d):
+        super().__init__(solver_name, problem_name, rp, timers=timers, data_class=data_class)
 
-    def initialize(self):
-        super().initialize(ng=5)
+    def initialize(self, ng=5):
+        super().initialize(ng=ng)
 
     def substep(self, myd):
         """
-        take a single substep in the RK timestepping starting with the 
-        conservative state defined as part of myd
+        compute the advective source term for the given state
         """
 
         myg = myd.grid

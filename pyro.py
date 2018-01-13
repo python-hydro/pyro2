@@ -184,6 +184,7 @@ def parse_and_run():
                      "compressible",
                      "compressible_rk",
                      "compressible_fv4",
+                     "compressible_sdc",
                      "compressible_react",
                      "diffusion",
                      "incompressible",
