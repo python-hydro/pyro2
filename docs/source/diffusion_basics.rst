@@ -19,7 +19,7 @@ multigrid class. The main parameters that affect this solver are:
 +===================+=======================================================+
 |``cfl``            | the "CFL" number for the diffusion equation. Since we |
 |                   | are doing an implicit discretization, this is the     |
-|                   | multiple of the explicit timestep to take.)           |
+|                   | multiple of the explicit timestep to take.            |
 +-------------------+-------------------------------------------------------+
 
 +---------------------------------------------------------------------------+
