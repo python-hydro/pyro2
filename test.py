@@ -49,6 +49,7 @@ def do_tests(build, out_file, do_standalone=True, do_main=True,
         tests.append(PyroTest("compressible", "rt", "inputs.rt", opts))
         tests.append(PyroTest("compressible_rk", "rt", "inputs.rt", opts))
         tests.append(PyroTest("compressible_fv4", "acoustic_pulse", "inputs.acoustic_pulse", opts))
+        tests.append(PyroTest("compressible_sdc", "acoustic_pulse", "inputs.acoustic_pulse", opts))
         tests.append(PyroTest("diffusion", "gaussian", "inputs.gaussian", opts))
         tests.append(PyroTest("incompressible", "shear", "inputs.shear", opts))
         tests.append(PyroTest("lm_atm", "bubble", "inputs.bubble", opts))
