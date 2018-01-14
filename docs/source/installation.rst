@@ -1,13 +1,15 @@
 Setting up pyro
 ===============
 
+You can clone pyro from github: `http://github.com/zingale/pyro2 <http://github.com/zingale/pyro2>`_
+
 .. note::
 
    It is strongly recommended that you use python 3.x.  While python 2.x might
    still work, we do not test pyro under python 2, so it may break at any time
    in the future.
 
-The following python packages are requires:
+The following python packages are required:
 
 * ``numpy``
 * ``matplotlib``
@@ -16,7 +18,7 @@ The following python packages are requires:
 * ``pytest`` (for unit tests)
 
 Additionally, you will need ``gfortran`` installed on your computer, for
-`f2py` to be able to compile the code.
+``f2py`` to be able to compile the code.
 
 The following steps are needed before running pyro:
 
