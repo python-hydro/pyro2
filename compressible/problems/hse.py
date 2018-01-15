@@ -34,7 +34,6 @@ def init_data(my_data, rp):
 
     # isothermal sound speed (squared)
     cs2 = H*abs(grav)
-    p0 = dens0*cs2
 
     # initialize the components, remember, that ener here is
     # rho*eint + 0.5*rho*v**2, where eint is the specific

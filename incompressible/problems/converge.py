@@ -45,17 +45,16 @@ def init_data(my_data, rp):
         myg.ymin != 0 or myg.ymax != 1):
         msg.fail("ERROR: domain should be a unit square")
 
-    u[:,:] = 1.0 - 2.0*np.cos(2.0*math.pi*myg.x2d)*np.sin(2.0*math.pi*myg.y2d)
-    v[:,:] = 1.0 + 2.0*np.sin(2.0*math.pi*myg.x2d)*np.cos(2.0*math.pi*myg.y2d)
+    u[:, :] = 1.0 - 2.0*np.cos(2.0*math.pi*myg.x2d)*np.sin(2.0*math.pi*myg.y2d)
+    v[:, :] = 1.0 + 2.0*np.sin(2.0*math.pi*myg.x2d)*np.cos(2.0*math.pi*myg.y2d)
 
 
 def finalize():
     """ print out any information to the user at the end of the run """
 
-    msg = """
+    ostr = """
           Comparisons to the analytic solution can be done using
           analysis/incomp_converge_error.py
           """
 
-    print(msg)
-
+    print(ostr)

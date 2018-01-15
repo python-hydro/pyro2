@@ -4,7 +4,6 @@ import sys
 import mesh.patch as patch
 import numpy as np
 from util import msg
-import math
 
 def init_data(my_data, rp):
     """ initialize a smooth advection problem for testing convergence """

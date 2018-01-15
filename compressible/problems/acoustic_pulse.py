@@ -1,7 +1,6 @@
 from __future__ import print_function
 
 import sys
-import mesh.patch as patch
 import mesh.fv as fv
 import numpy as np
 from util import msg

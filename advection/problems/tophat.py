@@ -2,7 +2,6 @@ from __future__ import print_function
 
 import sys
 import mesh.patch as patch
-import numpy
 from util import msg
 
 def init_data(myd, rp):
@@ -27,7 +26,7 @@ def init_data(myd, rp):
     xctr = 0.5*(xmin + xmax)
     yctr = 0.5*(ymin + ymax)
 
-    dens[:,:] = 0.0
+    dens[:, :] = 0.0
 
     R = 0.1
 
@@ -39,4 +38,3 @@ def init_data(myd, rp):
 def finalize():
     """ print out any information to the user at the end of the run """
     pass
-
