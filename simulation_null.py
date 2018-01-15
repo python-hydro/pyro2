@@ -125,9 +125,10 @@ class NullSimulation(object):
         else:
             self.tc = timers
 
-        try: self.verbose = self.rp.get_param("driver.verbose")
+        try:
+            self.verbose = self.rp.get_param("driver.verbose")
         except:
-            self.verbose = None
+            self.verbose = 0
 
         self.n_num_out = 0
 

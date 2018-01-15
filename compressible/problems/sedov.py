@@ -61,8 +61,6 @@ def init_data(my_data, rp):
 
     for i, j in np.transpose(np.nonzero(dist < 2.0*r_init)):
 
-        pzone = 0.0
-
         xsub = my_data.grid.xl[i] + (my_data.grid.dx/nsub)*(np.arange(nsub) + 0.5)
         ysub = my_data.grid.yl[j] + (my_data.grid.dy/nsub)*(np.arange(nsub) + 0.5)
 

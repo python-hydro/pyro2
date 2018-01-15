@@ -1,15 +1,16 @@
+"""The routines that implement the 4th-order compressible scheme,
+using SDC time integration
+
+"""
+
 from __future__ import print_function
 
-import numpy as np
-
-import mesh.integration as integration
-import mesh.fv as fv
 import mesh.patch as patch
 import compressible_fv4
-import compressible_fv4.fluxes as flx
 from util import msg
 
 class Simulation(compressible_fv4.Simulation):
+    """Drive the 4th-order compressible solver with SDC time integration"""
 
     def sdc_integral(self, m_start, m_end, As):
         """Compute the integral over the sources from m to m+1 with a
@@ -19,11 +20,11 @@ class Simulation(compressible_fv4.Simulation):
 
         if m_start == 0 and m_end == 1:
             for n in range(self.ivars.nvar):
-                I.v(n=n)[:,:] = self.dt/24.0 * (5.0*As[0].v(n=n) + 8.0*As[1].v(n=n) - As[2].v(n=n))
+                I.v(n=n)[:, :] = self.dt/24.0 * (5.0*As[0].v(n=n) + 8.0*As[1].v(n=n) - As[2].v(n=n))
 
         elif m_start == 1 and m_end == 2:
             for n in range(self.ivars.nvar):
-                I.v(n=n)[:,:] = self.dt/24.0 * (-As[0].v(n=n) + 8.0*As[1].v(n=n) + 5.0*As[2].v(n=n))
+                I.v(n=n)[:, :] = self.dt/24.0 * (-As[0].v(n=n) + 8.0*As[1].v(n=n) + 5.0*As[2].v(n=n))
 
         else:
             msg.fail("invalid quadrature range")
@@ -58,7 +59,7 @@ class Simulation(compressible_fv4.Simulation):
         U_knew.append(patch.cell_center_data_clone(self.cc_data))
 
         # loop over iterations
-        for k in range(1, 5):
+        for _ in range(1, 5):
 
             # we need the advective term at all time nodes at the old
             # iteration -- we'll compute this now
@@ -80,7 +81,7 @@ class Simulation(compressible_fv4.Simulation):
 
                 # and the final update
                 for n in range(self.ivars.nvar):
-                    U_knew[m+1].data.v(n=n)[:,:] = U_knew[m].data.v(n=n) + \
+                    U_knew[m+1].data.v(n=n)[:, :] = U_knew[m].data.v(n=n) + \
                        0.5*self.dt * (A_knew.v(n=n) - A_kold[m].v(n=n)) + I.v(n=n)
 
                 # fill ghost cells
@@ -88,11 +89,11 @@ class Simulation(compressible_fv4.Simulation):
 
             # store the current iteration as the old iteration
             for m in range(1, 3):
-                U_kold[m].data[:,:,:] = U_knew[m].data[:,:,:]
+                U_kold[m].data[:, :, :] = U_knew[m].data[:, :, :]
 
 
         # store the new solution
-        self.cc_data.data[:,:,:] = U_knew[-1].data[:,:,:]
+        self.cc_data.data[:, :, :] = U_knew[-1].data[:, :, :]
 
         # increment the time
         myd.t += self.dt

@@ -32,3 +32,11 @@ Youtube:
 https://bitbucket.org/birkenfeld/sphinx-contrib/src/49a8e96bc8a7/youtube/
 
 https://github.com/rtfd/readthedocs.org/issues/879
+
+button:
+
+https://github.com/conda/conda-docs/blob/master/web/button.py
+https://stackoverflow.com/questions/25088113/make-a-css-button-a-link-in-sphinx
+https://buttons.github.io/
+
+http://docs.readthedocs.io/en/latest/guides/adding-custom-css.html
