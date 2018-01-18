@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 import mesh.boundary as bnd
 import mesh.patch as patch
-from simulation_null import NullSimulation, grid_setup
+from simulation_null import NullSimulation, grid_setup, bc_setup
 import multigrid.MG as MG
 from util import msg
 
@@ -36,24 +36,11 @@ class Simulation(NullSimulation):
         # first figure out the boundary conditions -- we allow periodic,
         # Dirichlet, and Neumann.
 
-        xlb_type = self.rp.get_param("mesh.xlboundary")
-        xrb_type = self.rp.get_param("mesh.xrboundary")
-        ylb_type = self.rp.get_param("mesh.ylboundary")
-        yrb_type = self.rp.get_param("mesh.yrboundary")
+        bc, _, _ = bc_setup(self.rp)
 
-        bcparam = []
-        for bc in [xlb_type, xrb_type, ylb_type, yrb_type]:
-            if bc == "periodic":
-                bcparam.append("periodic")
-            elif bc == "neumann":
-                bcparam.append("neumann")
-            elif bc == "dirichlet":
-                bcparam.append("dirichlet")
-            else:
+        for bnd in [bc.xlb, bc.xrb, bc.ylb, bc.yrb]:
+            if bnd not in ["periodic", "neumann", "dirichlet"]:
                 msg.fail("invalid BC")
-
-        bc = bnd.BC(xlb=bcparam[0], xrb=bcparam[1],
-                    ylb=bcparam[2], yrb=bcparam[3])
 
         my_data = patch.CellCenterData2d(my_grid)
         my_data.register_var("phi", bc)
