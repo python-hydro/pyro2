@@ -23,15 +23,22 @@ class Simulation(compressible_rk.Simulation):
         myg = myd.grid
         grav = self.rp.get_param("compressible.grav")
 
-        # compute the source terms
-        dens = myd.get_var("density")
-        ymom = myd.get_var("y-momentum")
+        # compute the source terms -- we need to do these to 4th
+        # order.  Start by evaluating the sources using the
+        # cell-center quantities (including one ghost cell.
+        dens_cc = myd.to_centers("density")
+        ymom_cc = myd.to_centers("y-momentum")
 
         ymom_src = myg.scratch_array()
-        ymom_src.v()[:,:] = dens.v()[:,:]*grav
+        ymom_src.v(buf=1)[:,:] = dens_cc.v(buf=1)[:,:]*grav
 
         E_src = myg.scratch_array()
-        E_src.v()[:,:] = ymom.v()[:,:]*grav
+        E_src.v(buf=1)[:,:] = ymom_cc.v(buf=1)[:,:]*grav
+
+        # now bring back to averages -- we only need this in the
+        # interior (no ghost cells)
+        ymom_src.v()[:,:] = ymom_src.v()[:,:] - myg.dx**2*ymom_src.lap()/24.0
+        E_src.v()[:,:] = E_src.v()[:,:] - myg.dx**2*E_src.lap()/24.0
 
         k = myg.scratch_array(nvar=self.ivars.nvar)
 
