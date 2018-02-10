@@ -49,7 +49,10 @@ def init_data(my_data, rp):
 
     for j in range(myg.jlo, myg.jhi+1):
         dens[:,j] = dens0*np.exp(-myg.y[j]/H)
-        p[:,j] = dens[:,j]*cs2
+        if j == 0:
+            p[:,j] = dens[:,j]*cs2
+        else:
+            p[:,j] = p[:,j-1] - 0.5*myg.dy*(dens[:,j] + dens[:,j-1])*grav
 
     # set the energy
     ener[:,:] = p[:,:]/(gamma - 1.0) + \
