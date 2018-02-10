@@ -145,8 +145,8 @@ def fluxes(my_data, rp, ivars, solid, tc):
             # we want to do p0 + p1 on the interfaces.  We found the
             # limited slope for p1 (it's average is 0).  So now we
             # need p0 on the interface too
-            V_l.jp(1, n=n, buf=2)[:,:] = q.v(n=ivars.ip, buf=2) + 0.5*q.v(n=ivars.irho, buf=2)*grav + 0.5*ldy.v(n=ivars.ip, buf=2)
-            V_r.v(n=n, buf=2)[:,:] = q.v(n=ivars.ip, buf=2) - 0.5*q.v(n=ivars.irho, buf=2)*grav - 0.5*ldy.v(n=ivars.ip, buf=2)
+            V_l.jp(1, n=n, buf=2)[:,:] = q.v(n=ivars.ip, buf=2) + 0.5*myg.dy*q.v(n=ivars.irho, buf=2)*grav + 0.5*ldy.v(n=ivars.ip, buf=2)
+            V_r.v(n=n, buf=2)[:,:] = q.v(n=ivars.ip, buf=2) - 0.5*myg.dy*q.v(n=ivars.irho, buf=2)*grav - 0.5*ldy.v(n=ivars.ip, buf=2)
         else:
             V_l.jp(1, n=n, buf=2)[:,:] = q.v(n=n, buf=2) + 0.5*ldy.v(n=n, buf=2)
             V_r.v(n=n, buf=2)[:,:] = q.v(n=n, buf=2) - 0.5*ldy.v(n=n, buf=2)

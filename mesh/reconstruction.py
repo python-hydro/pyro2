@@ -27,15 +27,16 @@ def well_balance(q, myg, limiter, iv, grav):
 
     p1.v(buf=4)[:,:] = 0.0
 
-    p1_jp1.v(buf=3)[:,:] = q.jp(1, buf=3, n=iv.ip) - (q.v(buf=3, n=iv.ip) -
+    p1_jp1.v(buf=3)[:,:] = q.jp(1, buf=3, n=iv.ip) - (q.v(buf=3, n=iv.ip) +
             0.5*myg.dy*(q.v(buf=3, n=iv.irho) + q.jp(1, buf=3, n=iv.irho))*grav)
 
-    #p1_jp2.v(buf=2)[:,:] = q.jp(2, buf=2, n=iv.ip) - (q.v(buf=2, n=iv.ip) -
+    #p1_jp2.v(buf=2)[:,:] = q.jp(2, buf=2, n=iv.ip) - (q.v(buf=2, n=iv.ip) +
     #        0.5*myg.dy*(q.v(buf=2, n=iv.irho) + 2.0*q.jp(1, buf=2, n=iv.irho) + q.jp(2, buf=2, n=iv.irho))*grav)
-    p1_jm1.v(buf=3)[:,:] = q.jp(-1, buf=3, n=iv.ip) - (q.v(buf=3, n=iv.ip) + \
+
+    p1_jm1.v(buf=3)[:,:] = q.jp(-1, buf=3, n=iv.ip) - (q.v(buf=3, n=iv.ip) -
             0.5*myg.dy*(q.v(buf=3, n=iv.irho) + q.jp(-1, buf=3, n=iv.irho))*grav)
 
-    #p1_jm2.v(buf=2)[:,:] = q.jp(-2, buf=2, n=iv.ip) - (q.v(buf=2, n=iv.ip) + \
+    #p1_jm2.v(buf=2)[:,:] = q.jp(-2, buf=2, n=iv.ip) - (q.v(buf=2, n=iv.ip) -
     #        0.5*myg.dy*(q.v(buf=2, n=iv.irho) + 2.0*q.jp(-1, buf=2, n=iv.irho) + q.jp(-2, buf=2, n=iv.irho))*grav)
 
     # now limit p1 using these -- this is the 4th order MC limiter
