@@ -100,6 +100,15 @@ def fluxes(my_data, rp, ivars, solid, tc):
 
     tm_limit.end()
 
+    # if we are doing a well-balanced scheme, then redo the pressure
+    # note: we only have gravity in the y direction, so we will only
+    # modify the y pressure slope
+    well_balanced = rp.get_param("compressible.well_balanced")
+    grav = rp.get_param("compressible.grav")
+
+    if well_balanced:
+        print("calling well_balance")
+        ldy[:,:,ivars.ip] = reconstruction.well_balance(q, myg, limiter, ivars, grav)
 
     #=========================================================================
     # x-direction
@@ -132,8 +141,15 @@ def fluxes(my_data, rp, ivars, solid, tc):
     tm_states.begin()
 
     for n in range(ivars.nvar):
-        V_l.jp(1, n=n, buf=2)[:,:] = q.v(n=n, buf=2) + 0.5*ldy.v(n=n, buf=2)
-        V_r.v(n=n, buf=2)[:,:] = q.v(n=n, buf=2) - 0.5*ldy.v(n=n, buf=2)
+        if well_balanced and n == ivars.ip:
+            # we want to do p0 + p1 on the interfaces.  We found the
+            # limited slope for p1 (it's average is 0).  So now we
+            # need p0 on the interface too
+            V_l.jp(1, n=n, buf=2)[:,:] = q.v(n=ivars.ip, buf=2) + 0.5*q.v(n=ivars.irho, buf=2)*grav + 0.5*ldy.v(n=ivars.ip, buf=2)
+            V_r.v(n=n, buf=2)[:,:] = q.v(n=ivars.ip, buf=2) - 0.5*q.v(n=ivars.irho, buf=2)*grav - 0.5*ldy.v(n=ivars.ip, buf=2)
+        else:
+            V_l.jp(1, n=n, buf=2)[:,:] = q.v(n=n, buf=2) + 0.5*ldy.v(n=n, buf=2)
+            V_r.v(n=n, buf=2)[:,:] = q.v(n=n, buf=2) - 0.5*ldy.v(n=n, buf=2)
 
     tm_states.end()
 
