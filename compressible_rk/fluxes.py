@@ -107,7 +107,6 @@ def fluxes(my_data, rp, ivars, solid, tc):
     grav = rp.get_param("compressible.grav")
 
     if well_balanced:
-        print("calling well_balance")
         ldy[:,:,ivars.ip] = reconstruction.well_balance(q, myg, limiter, ivars, grav)
 
     #=========================================================================

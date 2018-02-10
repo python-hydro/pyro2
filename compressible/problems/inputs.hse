@@ -19,8 +19,8 @@ ymax = 3.0
 xlboundary = periodic
 xrboundary = periodic
 
-ylboundary = reflect
-yrboundary = reflect
+ylboundary = hse
+yrboundary = hse
 
 
 [hse]
