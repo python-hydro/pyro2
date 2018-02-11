@@ -8,10 +8,9 @@ import matplotlib.pyplot as plt
 import compressible.BC as BC
 import compressible.eos as eos
 import compressible.derives as derives
-import mesh.boundary as bnd
-import mesh.patch as patch
-from simulation_null import NullSimulation, grid_setup, bc_setup
 import compressible.unsplit_fluxes as flx
+import mesh.boundary as bnd
+from simulation_null import NullSimulation, grid_setup, bc_setup
 import util.plot_tools as plot_tools
 
 class Variables(object):
@@ -56,20 +55,20 @@ def cons_to_prim(U, gamma, ivars, myg):
 
     q = myg.scratch_array(nvar=ivars.nq)
 
-    q[:,:,ivars.irho] = U[:,:,ivars.idens]
-    q[:,:,ivars.iu] = U[:,:,ivars.ixmom]/U[:,:,ivars.idens]
-    q[:,:,ivars.iv] = U[:,:,ivars.iymom]/U[:,:,ivars.idens]
+    q[:, :, ivars.irho] = U[:, :, ivars.idens]
+    q[:, :, ivars.iu] = U[:, :, ivars.ixmom]/U[:, :, ivars.idens]
+    q[:, :, ivars.iv] = U[:, :, ivars.iymom]/U[:, :, ivars.idens]
 
-    e = (U[:,:,ivars.iener] -
-         0.5*q[:,:,ivars.irho]*(q[:,:,ivars.iu]**2 +
-                                q[:,:,ivars.iv]**2))/q[:,:,ivars.irho]
+    e = (U[:, :, ivars.iener] -
+         0.5*q[:, :, ivars.irho]*(q[:, :, ivars.iu]**2 +
+                                  q[:, :, ivars.iv]**2))/q[:, :, ivars.irho]
 
-    q[:,:,ivars.ip] = eos.pres(gamma, q[:,:,ivars.irho], e)
+    q[:, :, ivars.ip] = eos.pres(gamma, q[:, :, ivars.irho], e)
 
     if ivars.naux > 0:
         for nq, nu in zip(range(ivars.ix, ivars.ix+ivars.naux),
                           range(ivars.irhox, ivars.irhox+ivars.naux)):
-            q[:,:,nq] = U[:,:,nu]/q[:,:,ivars.irho]
+            q[:, :, nq] = U[:, :, nu]/q[:, :, ivars.irho]
 
     return q
 
@@ -79,24 +78,28 @@ def prim_to_cons(q, gamma, ivars, myg):
 
     U = myg.scratch_array(nvar=ivars.nvar)
 
-    U[:,:,ivars.idens] = q[:,:,ivars.irho]
-    U[:,:,ivars.ixmom] = q[:,:,ivars.iu]*U[:,:,ivars.idens]
-    U[:,:,ivars.iymom] = q[:,:,ivars.iv]*U[:,:,ivars.idens]
+    U[:, :, ivars.idens] = q[:, :, ivars.irho]
+    U[:, :, ivars.ixmom] = q[:, :, ivars.iu]*U[:, :, ivars.idens]
+    U[:, :, ivars.iymom] = q[:, :, ivars.iv]*U[:, :, ivars.idens]
 
-    rhoe = eos.rhoe(gamma, q[:,:,ivars.ip])
+    rhoe = eos.rhoe(gamma, q[:, :, ivars.ip])
 
-    U[:,:,ivars.iener] = rhoe + 0.5*q[:,:,ivars.irho]*(q[:,:,ivars.iu]**2 +
-                                                       q[:,:,ivars.iv]**2)
+    U[:, :, ivars.iener] = rhoe + 0.5*q[:, :, ivars.irho]*(q[:, :, ivars.iu]**2 +
+                                                           q[:, :, ivars.iv]**2)
 
     if ivars.naux > 0:
         for nq, nu in zip(range(ivars.ix, ivars.ix+ivars.naux),
                           range(ivars.irhox, ivars.irhox+ivars.naux)):
-            U[:,:,nu] = q[:,:,nq]*q[:,:,ivars.irho]
+            U[:, :, nu] = q[:, :, nq]*q[:, :, ivars.irho]
 
     return U
 
 
 class Simulation(NullSimulation):
+    """The main simulation class for the corner transport upwind
+    compressible hydrodynamics solver
+
+    """
 
     def initialize(self, extra_vars=None, ng=4):
         """
@@ -209,13 +212,13 @@ class Simulation(NullSimulation):
         for n in range(self.ivars.nvar):
             var = self.cc_data.get_var_by_index(n)
 
-            var.v()[:,:] += \
+            var.v()[:, :] += \
                 dtdx*(Flux_x.v(n=n) - Flux_x.ip(1, n=n)) + \
                 dtdy*(Flux_y.v(n=n) - Flux_y.jp(1, n=n))
 
         # gravitational source terms
-        ymom[:,:] += 0.5*self.dt*(dens[:,:] + old_dens[:,:])*grav
-        ener[:,:] += 0.5*self.dt*(ymom[:,:] + old_ymom[:,:])*grav
+        ymom[:, :] += 0.5*self.dt*(dens[:, :] + old_dens[:, :])*grav
+        ener[:, :] += 0.5*self.dt*(ymom[:, :] + old_ymom[:, :])*grav
 
         # increment the time
         self.cc_data.t += self.dt
@@ -243,10 +246,10 @@ class Simulation(NullSimulation):
 
         q = cons_to_prim(self.cc_data.data, gamma, ivars, self.cc_data.grid)
 
-        rho = q[:,:,ivars.irho]
-        u = q[:,:,ivars.iu]
-        v = q[:,:,ivars.iv]
-        p = q[:,:,ivars.ip]
+        rho = q[:, :, ivars.irho]
+        u = q[:, :, ivars.iu]
+        v = q[:, :, ivars.iv]
+        p = q[:, :, ivars.ip]
         e = eos.rhoe(gamma, p)/rho
 
         magvel = np.sqrt(u**2 + v**2)
@@ -256,7 +259,7 @@ class Simulation(NullSimulation):
         fields = [rho, magvel, p, e]
         field_names = [r"$\rho$", r"U", "p", "e"]
 
-        f, axes, cbar_title = plot_tools.setup_axes(myg, len(fields))
+        _, axes, cbar_title = plot_tools.setup_axes(myg, len(fields))
 
         for n, ax in enumerate(axes):
             v = fields[n]
