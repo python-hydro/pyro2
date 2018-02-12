@@ -12,15 +12,15 @@ n_out = 100
 
 [mesh]
 nx = 128
-ny = 384
+ny = 256
 xmax = 4.0
-ymax = 12.0
+ymax = 8.0
 
 xlboundary = outflow
 xrboundary = outflow
 
-ylboundary = reflect
-yrboundary = outflow
+ylboundary = hse
+yrboundary = hse
 
 
 [bubble]
