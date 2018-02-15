@@ -1,4 +1,0 @@
-To create images without borders, use analysis/plot_thumbnail.py
-
-note: currently we are making them 120x120 and then using convert to
-add a 1-pixel white border on all sides.

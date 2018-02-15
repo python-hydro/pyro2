@@ -400,8 +400,8 @@ div.nboutput div.output_area.stderr {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="o">%</span><span class="k">matplotlib</span> inline
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span></span>%matplotlib inline
+import matplotlib.pyplot as plt
 </pre></div>
 </div>
 </div>
@@ -411,13 +411,13 @@ div.nboutput div.output_area.stderr {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span></span>from __future__ import print_function
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+import numpy as np
 
-<span class="kn">import</span> <span class="nn">mesh.boundary</span> <span class="k">as</span> <span class="nn">bnd</span>
-<span class="kn">import</span> <span class="nn">mesh.patch</span> <span class="k">as</span> <span class="nn">patch</span>
-<span class="kn">import</span> <span class="nn">multigrid.MG</span> <span class="k">as</span> <span class="nn">MG</span>
+import mesh.boundary as bnd
+import mesh.patch as patch
+import multigrid.MG as MG
 </pre></div>
 </div>
 </div>
@@ -442,10 +442,10 @@ of zones our problem is defined on</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">nx</span> <span class="o">=</span> <span class="n">ny</span> <span class="o">=</span> <span class="mi">256</span>
-<span class="n">mg</span> <span class="o">=</span> <span class="n">MG</span><span class="o">.</span><span class="n">CellCenterMG2d</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span>
-                       <span class="n">xl_BC_type</span><span class="o">=</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">,</span> <span class="n">xr_BC_type</span><span class="o">=</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">,</span>
-                       <span class="n">yl_BC_type</span><span class="o">=</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">,</span> <span class="n">yr_BC_type</span><span class="o">=</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span></span>nx = ny = 256
+mg = MG.CellCenterMG2d(nx, ny,
+                       xl_BC_type=&quot;dirichlet&quot;, xr_BC_type=&quot;dirichlet&quot;,
+                       yl_BC_type=&quot;dirichlet&quot;, yr_BC_type=&quot;dirichlet&quot;, verbose=1)
 </pre></div>
 </div>
 </div>
@@ -545,10 +545,10 @@ as <code class="docutils literal"><span class="pre">mg.x2d</span></code> and <co
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="k">def</span> <span class="nf">rhs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-    <span class="k">return</span> <span class="o">-</span><span class="mf">2.0</span><span class="o">*</span><span class="p">((</span><span class="mf">1.0</span><span class="o">-</span><span class="mf">6.0</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="mf">6.0</span><span class="o">*</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+<span></span>def rhs(x, y):
+    return -2.0*((1.0-6.0*x**2)*y**2*(1.0-y**2) + (1.0-6.0*y**2)*x**2*(1.0-x**2))
 
-<span class="n">mg</span><span class="o">.</span><span class="n">init_RHS</span><span class="p">(</span><span class="n">rhs</span><span class="p">(</span><span class="n">mg</span><span class="o">.</span><span class="n">x2d</span><span class="p">,</span> <span class="n">mg</span><span class="o">.</span><span class="n">y2d</span><span class="p">))</span>
+mg.init_RHS(rhs(mg.x2d, mg.y2d))
 </pre></div>
 </div>
 </div>
@@ -569,7 +569,7 @@ use the <code class="docutils literal"><span class="pre">init_zeros()</span></co
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">mg</span><span class="o">.</span><span class="n">init_zeros</span><span class="p">()</span>
+<span></span>mg.init_zeros()
 </pre></div>
 </div>
 </div>
@@ -586,7 +586,7 @@ solution using <code class="docutils literal"><span class="pre">mg.solve()</span
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">mg</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+<span></span>mg.solve()
 </pre></div>
 </div>
 </div>
@@ -1046,7 +1046,7 @@ cycle 7: relative err = 7.062255558417692e-07, residual err = 2.590386214782638e
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">phi</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">get_solution</span><span class="p">()</span>
+<span></span>phi = mg.get_solution()
 </pre></div>
 </div>
 </div>
@@ -1056,7 +1056,7 @@ cycle 7: relative err = 7.062255558417692e-07, residual err = 2.590386214782638e
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">v</span><span class="p">()),</span> <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;lower&quot;</span><span class="p">)</span>
+<span></span>plt.imshow(np.transpose(phi.v()), origin=&quot;lower&quot;)
 </pre></div>
 </div>
 </div>
@@ -1084,7 +1084,7 @@ cycle 7: relative err = 7.062255558417692e-07, residual err = 2.590386214782638e
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">gx</span><span class="p">,</span> <span class="n">gy</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">get_solution_gradient</span><span class="p">()</span>
+<span></span>gx, gy = mg.get_solution_gradient()
 </pre></div>
 </div>
 </div>
@@ -1094,10 +1094,10 @@ cycle 7: relative err = 7.062255558417692e-07, residual err = 2.590386214782638e
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">gx</span><span class="o">.</span><span class="n">v</span><span class="p">()),</span> <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;lower&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">gy</span><span class="o">.</span><span class="n">v</span><span class="p">()),</span> <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;lower&quot;</span><span class="p">)</span>
+<span></span>plt.subplot(121)
+plt.imshow(np.transpose(gx.v()), origin=&quot;lower&quot;)
+plt.subplot(122)
+plt.imshow(np.transpose(gy.v()), origin=&quot;lower&quot;)
 </pre></div>
 </div>
 </div>
@@ -1124,7 +1124,8 @@ cycle 7: relative err = 7.062255558417692e-07, residual err = 2.590386214782638e
 <p>The <code class="docutils literal"><span class="pre">GeneralMG2d</span></code> class implements support for a general elliptic
 equation of the form:</p>
 <div class="math">
-\[ \begin{align}\begin{aligned}\alpha \phi + \nabla \cdot (\beta \nabla \phi) + \gamma \cdot \nabla \phi = f\\with inhomogeneous boundary condtions.\end{aligned}\end{align} \]</div>
+\[\alpha \phi + \nabla \cdot (\beta \nabla \phi) + \gamma \cdot \nabla \phi = f\]</div>
+<p>with inhomogeneous boundary condtions.</p>
 <p>It subclasses the <code class="docutils literal"><span class="pre">CellCenterMG2d</span></code> class, and the basic interface is
 the same</p>
 <p>We will solve the above with</p>
@@ -1155,7 +1156,7 @@ f = &amp;-\frac{\pi}{2}(x + 1)\sin\left(\frac{\pi y}{2}\right) \cos\left(\frac{\
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">multigrid.general_MG</span> <span class="k">as</span> <span class="nn">gMG</span>
+<span></span>import multigrid.general_MG as gMG
 </pre></div>
 </div>
 </div>
@@ -1166,8 +1167,8 @@ f = &amp;-\frac{\pi}{2}(x + 1)\sin\left(\frac{\pi y}{2}\right) \cos\left(\frac{\
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="k">def</span> <span class="nf">true</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span>
+<span></span>def true(x,y):
+    return np.cos(np.pi*x/2.0)*np.cos(np.pi*y/2.0)
 </pre></div>
 </div>
 </div>
@@ -1179,17 +1180,17 @@ a different function for each component</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="k">def</span> <span class="nf">alpha</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
-    <span class="k">return</span> <span class="mf">10.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span></span>def alpha(x,y):
+    return 10.0*np.ones_like(x)
 
-<span class="k">def</span> <span class="nf">beta</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">x</span><span class="o">*</span><span class="n">y</span> <span class="o">+</span> <span class="mf">1.0</span>
+def beta(x,y):
+    return x*y + 1.0
 
-<span class="k">def</span> <span class="nf">gamma_x</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+def gamma_x(x,y):
+    return np.ones_like(x)
 
-<span class="k">def</span> <span class="nf">gamma_y</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+def gamma_y(x,y):
+    return np.ones_like(x)
 </pre></div>
 </div>
 </div>
@@ -1200,10 +1201,10 @@ a different function for each component</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
-    <span class="k">return</span> <span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span> <span class="o">-</span> \
-            <span class="mf">0.5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span> <span class="o">+</span> \
-            <span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">y</span><span class="o">+</span><span class="mf">1.0</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span> <span class="o">+</span> <span class="mf">10.0</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span>
+<span></span>def f(x,y):
+    return -0.5*np.pi*(x + 1.0)*np.sin(np.pi*y/2.0)*np.cos(np.pi*x/2.0) - \
+            0.5*np.pi*(y + 1.0)*np.sin(np.pi*x/2.0)*np.cos(np.pi*y/2.0) + \
+            (-np.pi**2*(x*y+1.0)/2.0 + 10.0)*np.cos(np.pi*x/2.0)*np.cos(np.pi*y/2.0)
 </pre></div>
 </div>
 </div>
@@ -1215,11 +1216,11 @@ evaluated on the boundary to give the value</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="k">def</span> <span class="nf">xl_func</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span>
+<span></span>def xl_func(y):
+    return np.cos(np.pi*y/2.0)
 
-<span class="k">def</span> <span class="nf">yl_func</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span>
+def yl_func(x):
+    return np.cos(np.pi*x/2.0)
 </pre></div>
 </div>
 </div>
@@ -1236,33 +1237,33 @@ boundary conditions on the coefficients are important.</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">mesh.patch</span> <span class="k">as</span> <span class="nn">patch</span>
+<span></span>import mesh.patch as patch
 
-<span class="n">nx</span> <span class="o">=</span> <span class="n">ny</span> <span class="o">=</span> <span class="mi">128</span>
+nx = ny = 128
 
-<span class="n">g</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">Grid2d</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">d</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">CellCenterData2d</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+g = patch.Grid2d(nx, ny, ng=1)
+d = patch.CellCenterData2d(g)
 
-<span class="n">bc_c</span> <span class="o">=</span> <span class="n">bnd</span><span class="o">.</span><span class="n">BC</span><span class="p">(</span><span class="n">xlb</span><span class="o">=</span><span class="s2">&quot;neumann&quot;</span><span class="p">,</span> <span class="n">xrb</span><span class="o">=</span><span class="s2">&quot;neumann&quot;</span><span class="p">,</span>
-              <span class="n">ylb</span><span class="o">=</span><span class="s2">&quot;neumann&quot;</span><span class="p">,</span> <span class="n">yrb</span><span class="o">=</span><span class="s2">&quot;neumann&quot;</span><span class="p">)</span>
+bc_c = bnd.BC(xlb=&quot;neumann&quot;, xrb=&quot;neumann&quot;,
+              ylb=&quot;neumann&quot;, yrb=&quot;neumann&quot;)
 
-<span class="n">d</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="n">bc_c</span><span class="p">)</span>
-<span class="n">d</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="n">bc_c</span><span class="p">)</span>
-<span class="n">d</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;gamma_x&quot;</span><span class="p">,</span> <span class="n">bc_c</span><span class="p">)</span>
-<span class="n">d</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;gamma_y&quot;</span><span class="p">,</span> <span class="n">bc_c</span><span class="p">)</span>
-<span class="n">d</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+d.register_var(&quot;alpha&quot;, bc_c)
+d.register_var(&quot;beta&quot;, bc_c)
+d.register_var(&quot;gamma_x&quot;, bc_c)
+d.register_var(&quot;gamma_y&quot;, bc_c)
+d.create()
 
-<span class="n">a</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;alpha&quot;</span><span class="p">)</span>
-<span class="n">a</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">alpha</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">x2d</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">y2d</span><span class="p">)</span>
+a = d.get_var(&quot;alpha&quot;)
+a[:,:] = alpha(g.x2d, g.y2d)
 
-<span class="n">b</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;beta&quot;</span><span class="p">)</span>
-<span class="n">b</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">beta</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">x2d</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">y2d</span><span class="p">)</span>
+b = d.get_var(&quot;beta&quot;)
+b[:,:] = beta(g.x2d, g.y2d)
 
-<span class="n">gx</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;gamma_x&quot;</span><span class="p">)</span>
-<span class="n">gx</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">gamma_x</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">x2d</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">y2d</span><span class="p">)</span>
+gx = d.get_var(&quot;gamma_x&quot;)
+gx[:,:] = gamma_x(g.x2d, g.y2d)
 
-<span class="n">gy</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;gamma_y&quot;</span><span class="p">)</span>
-<span class="n">gy</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">gamma_y</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">x2d</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">y2d</span><span class="p">)</span>
+gy = d.get_var(&quot;gamma_y&quot;)
+gy[:,:] = gamma_y(g.x2d, g.y2d)
 </pre></div>
 </div>
 </div>
@@ -1273,13 +1274,13 @@ boundary conditions on the coefficients are important.</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">a</span> <span class="o">=</span> <span class="n">gMG</span><span class="o">.</span><span class="n">GeneralMG2d</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span>
-                    <span class="n">xl_BC_type</span><span class="o">=</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">,</span> <span class="n">yl_BC_type</span><span class="o">=</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">,</span>
-                    <span class="n">xr_BC_type</span><span class="o">=</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">,</span> <span class="n">yr_BC_type</span><span class="o">=</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">,</span>
-                    <span class="n">xl_BC</span><span class="o">=</span><span class="n">xl_func</span><span class="p">,</span>
-                    <span class="n">yl_BC</span><span class="o">=</span><span class="n">yl_func</span><span class="p">,</span>
-                    <span class="n">coeffs</span><span class="o">=</span><span class="n">d</span><span class="p">,</span>
-                    <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">vis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">true_function</span><span class="o">=</span><span class="n">true</span><span class="p">)</span>
+<span></span>a = gMG.GeneralMG2d(nx, ny,
+                    xl_BC_type=&quot;dirichlet&quot;, yl_BC_type=&quot;dirichlet&quot;,
+                    xr_BC_type=&quot;dirichlet&quot;, yr_BC_type=&quot;dirichlet&quot;,
+                    xl_BC=xl_func,
+                    yl_BC=yl_func,
+                    coeffs=d,
+                    verbose=1, vis=0, true_function=true)
 </pre></div>
 </div>
 </div>
@@ -1424,8 +1425,8 @@ solution</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">a</span><span class="o">.</span><span class="n">init_zeros</span><span class="p">()</span>
-<span class="n">a</span><span class="o">.</span><span class="n">init_RHS</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">x2d</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">y2d</span><span class="p">))</span>
+<span></span>a.init_zeros()
+a.init_RHS(f(a.x2d, a.y2d))
 </pre></div>
 </div>
 </div>
@@ -1444,7 +1445,7 @@ Source norm =  1.77518149234
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">a</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">rtol</span><span class="o">=</span><span class="mf">1.e-10</span><span class="p">)</span>
+<span></span>a.solve(rtol=1.e-10)
 </pre></div>
 </div>
 </div>
@@ -1903,9 +1904,9 @@ cycle 8: relative err = 5.555107077431201e-11, residual err = 1.5088473495842003
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">v</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">get_solution</span><span class="p">()</span>
-<span class="n">b</span> <span class="o">=</span> <span class="n">true</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">x2d</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">y2d</span><span class="p">)</span>
-<span class="n">e</span> <span class="o">=</span> <span class="n">v</span> <span class="o">-</span> <span class="n">b</span>
+<span></span>v = a.get_solution()
+b = true(a.x2d, a.y2d)
+e = v - b
 </pre></div>
 </div>
 </div>
@@ -1916,7 +1917,7 @@ cycle 8: relative err = 5.555107077431201e-11, residual err = 1.5088473495842003
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">e</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span>
+<span></span>e.norm()
 </pre></div>
 </div>
 </div>

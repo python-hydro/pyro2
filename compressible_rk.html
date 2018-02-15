@@ -332,6 +332,8 @@ variables</p>
 <dt id="compressible_rk.simulation.Simulation">
 <em class="property">class </em><code class="descclassname">compressible_rk.simulation.</code><code class="descname">Simulation</code><span class="sig-paren">(</span><em>solver_name</em>, <em>problem_name</em>, <em>rp</em>, <em>timers=None</em>, <em>data_class=&lt;class 'mesh.patch.CellCenterData2d'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible_rk/simulation.html#Simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible_rk.simulation.Simulation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="compressible.html#compressible.simulation.Simulation" title="compressible.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">compressible.simulation.Simulation</span></code></a></p>
+<p>The main simulation class for the method of lines compressible
+hydrodynamics solver</p>
 <dl class="method">
 <dt id="compressible_rk.simulation.Simulation.evolve">
 <code class="descname">evolve</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible_rk/simulation.html#Simulation.evolve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible_rk.simulation.Simulation.evolve" title="Permalink to this definition">¶</a></dt>
@@ -352,7 +354,7 @@ CFL step we actually take.</p>
 <dl class="method">
 <dt id="compressible_rk.simulation.Simulation.substep">
 <code class="descname">substep</code><span class="sig-paren">(</span><em>myd</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible_rk/simulation.html#Simulation.substep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible_rk.simulation.Simulation.substep" title="Permalink to this definition">¶</a></dt>
-<dd><p>take a single substep in the RK timestepping starting with the 
+<dd><p>take a single substep in the RK timestepping starting with the
 conservative state defined as part of myd</p>
 </dd></dl>
 

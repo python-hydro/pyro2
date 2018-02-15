@@ -247,7 +247,7 @@
         <span class="c1"># requires it.</span>
         <span class="n">custom_bcs</span> <span class="o">=</span> <span class="n">read_bcs</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">custom_bcs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">solver_name</span> <span class="o">==</span> <span class="s2">&quot;compressible_fv4&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">solver_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;compressible_fv4&quot;</span><span class="p">,</span> <span class="s2">&quot;compressible_rk&quot;</span><span class="p">,</span> <span class="s2">&quot;compressible_sdc&quot;</span><span class="p">]:</span>
                 <span class="n">bc_solver</span> <span class="o">=</span> <span class="s2">&quot;compressible&quot;</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">bc_solver</span> <span class="o">=</span> <span class="n">solver_name</span>

@@ -407,12 +407,12 @@ work as expected.</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">mesh.boundary</span> <span class="k">as</span> <span class="nn">bnd</span>
-<span class="kn">import</span> <span class="nn">mesh.patch</span> <span class="k">as</span> <span class="nn">patch</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="o">%</span><span class="k">matplotlib</span> inline
+<span></span>from __future__ import print_function
+import numpy as np
+import mesh.boundary as bnd
+import mesh.patch as patch
+import matplotlib.pyplot as plt
+%matplotlib inline
 </pre></div>
 </div>
 </div>
@@ -441,8 +441,8 @@ cells</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">g</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">Grid2d</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+<span></span>g = patch.Grid2d(4, 6, ng=2)
+print(g)
 </pre></div>
 </div>
 </div>
@@ -460,7 +460,7 @@ cells</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">help</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+<span></span>help(g)
 </pre></div>
 </div>
 </div>
@@ -565,8 +565,8 @@ conditions – this is done through the BC object.</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">bc</span> <span class="o">=</span> <span class="n">bnd</span><span class="o">.</span><span class="n">BC</span><span class="p">(</span><span class="n">xlb</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span> <span class="n">xrb</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span> <span class="n">ylb</span><span class="o">=</span><span class="s2">&quot;reflect&quot;</span><span class="p">,</span> <span class="n">yrb</span><span class="o">=</span><span class="s2">&quot;outflow&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">bc</span><span class="p">)</span>
+<span></span>bc = bnd.BC(xlb=&quot;periodic&quot;, xrb=&quot;periodic&quot;, ylb=&quot;reflect&quot;, yrb=&quot;outflow&quot;)
+print(bc)
 </pre></div>
 </div>
 </div>
@@ -584,10 +584,10 @@ BCs: -x: periodic  +x: periodic  -y: reflect-even  +y: outflow
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">d</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">CellCenterData2d</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
-<span class="n">d</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
-<span class="n">d</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span></span>d = patch.CellCenterData2d(g)
+d.register_var(&quot;a&quot;, bc)
+d.create()
+print(d)
 </pre></div>
 </div>
 </div>
@@ -617,8 +617,8 @@ ghost cells.</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">a</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
-<span class="n">a</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">ny</span><span class="p">)</span>
+<span></span>a = d.get_var(&quot;a&quot;)
+a.v()[:,:] = np.random.rand(g.nx, g.ny)
 </pre></div>
 </div>
 </div>
@@ -630,7 +630,7 @@ red. Note that we just filled the interior above.</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">a</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
+<span></span>a.pretty_print()
 </pre></div>
 </div>
 </div>
@@ -664,7 +664,7 @@ string to be used for the output.</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">a</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%7.3g</span><span class="s2">&quot;</span><span class="p">)</span>
+<span></span>a.pretty_print(fmt=&quot;%7.3g&quot;)
 </pre></div>
 </div>
 </div>
@@ -699,8 +699,8 @@ registered the data above.</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">d</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
-<span class="n">a</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
+<span></span>d.fill_BC(&quot;a&quot;)
+a.pretty_print()
 </pre></div>
 </div>
 </div>
@@ -733,7 +733,7 @@ registered the data above.</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">a</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span>
+<span></span>a.norm()
 </pre></div>
 </div>
 </div>
@@ -754,7 +754,7 @@ registered the data above.</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">a</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<span></span>print(a.min(), a.max())
 </pre></div>
 </div>
 </div>
@@ -791,7 +791,7 @@ the <code class="docutils literal"><span class="pre">Grid2d</span></code> object
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span></span>type(a)
 </pre></div>
 </div>
 </div>
@@ -811,7 +811,7 @@ the <code class="docutils literal"><span class="pre">Grid2d</span></code> object
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">v</span><span class="p">())</span>
+<span></span>type(a.v())
 </pre></div>
 </div>
 </div>
@@ -831,7 +831,7 @@ the <code class="docutils literal"><span class="pre">Grid2d</span></code> object
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">a</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">qx</span><span class="o">*</span><span class="n">g</span><span class="o">.</span><span class="n">qy</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">qx</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">qy</span><span class="p">)</span>
+<span></span>a[:,:] = np.arange(g.qx*g.qy).reshape(g.qx, g.qy)
 </pre></div>
 </div>
 </div>
@@ -841,7 +841,7 @@ the <code class="docutils literal"><span class="pre">Grid2d</span></code> object
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">a</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
+<span></span>a.pretty_print()
 </pre></div>
 </div>
 </div>
@@ -879,7 +879,7 @@ transpose of what we are used to.</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">a</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+<span></span>a.v()
 </pre></div>
 </div>
 </div>
@@ -906,7 +906,7 @@ So here’s a shift by 1</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">a</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span></span>a.ip(-1, buf=1)
 </pre></div>
 </div>
 </div>
@@ -937,9 +937,9 @@ in the <code class="docutils literal"><span class="pre">ArrayIndexer</span></cod
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">d</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
-<span class="n">a</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
+<span></span>d = a.ip(1)
+d[1,1] = 0.0
+a.pretty_print()
 </pre></div>
 </div>
 </div>
@@ -982,15 +982,15 @@ function</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">g</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">Grid2d</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">d</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">CellCenterData2d</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
-<span class="n">bc</span> <span class="o">=</span> <span class="n">bnd</span><span class="o">.</span><span class="n">BC</span><span class="p">(</span><span class="n">xlb</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span> <span class="n">xrb</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span> <span class="n">ylb</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span> <span class="n">yrb</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">)</span>
-<span class="n">d</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
-<span class="n">d</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+<span></span>g = patch.Grid2d(8, 8, ng=2)
+d = patch.CellCenterData2d(g)
+bc = bnd.BC(xlb=&quot;periodic&quot;, xrb=&quot;periodic&quot;, ylb=&quot;periodic&quot;, yrb=&quot;periodic&quot;)
+d.register_var(&quot;a&quot;, bc)
+d.create()
 
-<span class="n">a</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
-<span class="n">a</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">a</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">x2d</span><span class="p">)</span>
-<span class="n">d</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+a = d.get_var(&quot;a&quot;)
+a[:,:] = np.sin(2.0*np.pi*a.g.x2d)
+d.fill_BC(&quot;a&quot;)
 </pre></div>
 </div>
 </div>
@@ -1002,8 +1002,8 @@ object) define on the same grid</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">b</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
-<span class="nb">type</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span></span>b = g.scratch_array()
+type(b)
 </pre></div>
 </div>
 </div>
@@ -1031,9 +1031,9 @@ derivative</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">b</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">a</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">a</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">dx</span><span class="p">)</span>
-<span class="c1"># normalization was 2.0*pi</span>
-<span class="n">b</span><span class="p">[:,:]</span> <span class="o">/=</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+<span></span>b.v()[:,:] = (a.ip(1) - a.ip(-1))/(2.0*a.g.dx)
+# normalization was 2.0*pi
+b[:,:] /= 2.0*np.pi
 </pre></div>
 </div>
 </div>
@@ -1043,9 +1043,9 @@ derivative</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">a</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jc</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">b</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jc</span><span class="p">])</span>
-<span class="nb">print</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">dx</span><span class="p">)</span>
+<span></span>plt.plot(g.x[g.ilo:g.ihi+1], a[g.ilo:g.ihi+1,a.g.jc])
+plt.plot(g.x[g.ilo:g.ihi+1], b[g.ilo:g.ihi+1,b.g.jc])
+print (a.g.dx)
 </pre></div>
 </div>
 </div>
@@ -1075,7 +1075,7 @@ our variables</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">c</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">restrict</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<span></span>c = d.restrict(&quot;a&quot;)
 </pre></div>
 </div>
 </div>
@@ -1085,7 +1085,7 @@ our variables</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">c</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
+<span></span>c.pretty_print()
 </pre></div>
 </div>
 </div>
@@ -1116,7 +1116,7 @@ our variables</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">f</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">prolong</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<span></span>f = d.prolong(&quot;a&quot;)
 </pre></div>
 </div>
 </div>
@@ -1126,7 +1126,7 @@ our variables</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">f</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%6.2g</span><span class="s2">&quot;</span><span class="p">)</span>
+<span></span>f.pretty_print(fmt=&quot;%6.2g&quot;)
 </pre></div>
 </div>
 </div>

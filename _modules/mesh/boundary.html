@@ -242,14 +242,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">yl</span> <span class="o">=</span> <span class="n">yl_prop</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">yr</span> <span class="o">=</span> <span class="n">yr_prop</span></div>
 
-<div class="viewcode-block" id="bc_is_solid"><a class="viewcode-back" href="../../mesh.html#mesh.boundary.bc_is_solid">[docs]</a><span class="k">def</span> <span class="nf">bc_is_solid</span><span class="p">(</span><span class="n">rp</span><span class="p">):</span>
+<div class="viewcode-block" id="bc_is_solid"><a class="viewcode-back" href="../../mesh.html#mesh.boundary.bc_is_solid">[docs]</a><span class="k">def</span> <span class="nf">bc_is_solid</span><span class="p">(</span><span class="n">bc</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    return a container class indicating which boundaries are solid walls</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">solid</span> <span class="o">=</span> <span class="n">BCProp</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">bc_solid</span><span class="p">[</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.xlboundary&quot;</span><span class="p">)]),</span>
-                   <span class="nb">int</span><span class="p">(</span><span class="n">bc_solid</span><span class="p">[</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.xrboundary&quot;</span><span class="p">)]),</span>
-                   <span class="nb">int</span><span class="p">(</span><span class="n">bc_solid</span><span class="p">[</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.ylboundary&quot;</span><span class="p">)]),</span>
-                   <span class="nb">int</span><span class="p">(</span><span class="n">bc_solid</span><span class="p">[</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.yrboundary&quot;</span><span class="p">)]))</span>
+    <span class="n">solid</span> <span class="o">=</span> <span class="n">BCProp</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">bc_solid</span><span class="p">[</span><span class="n">bc</span><span class="o">.</span><span class="n">xlb</span><span class="p">]),</span>
+                   <span class="nb">int</span><span class="p">(</span><span class="n">bc_solid</span><span class="p">[</span><span class="n">bc</span><span class="o">.</span><span class="n">xrb</span><span class="p">]),</span>
+                   <span class="nb">int</span><span class="p">(</span><span class="n">bc_solid</span><span class="p">[</span><span class="n">bc</span><span class="o">.</span><span class="n">ylb</span><span class="p">]),</span>
+                   <span class="nb">int</span><span class="p">(</span><span class="n">bc_solid</span><span class="p">[</span><span class="n">bc</span><span class="o">.</span><span class="n">yrb</span><span class="p">]))</span>
     <span class="k">return</span> <span class="n">solid</span></div>
 
 

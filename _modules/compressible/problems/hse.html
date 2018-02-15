@@ -226,7 +226,6 @@
 
     <span class="c1"># isothermal sound speed (squared)</span>
     <span class="n">cs2</span> <span class="o">=</span> <span class="n">H</span><span class="o">*</span><span class="nb">abs</span><span class="p">(</span><span class="n">grav</span><span class="p">)</span>
-    <span class="n">p0</span> <span class="o">=</span> <span class="n">dens0</span><span class="o">*</span><span class="n">cs2</span>
 
     <span class="c1"># initialize the components, remember, that ener here is</span>
     <span class="c1"># rho*eint + 0.5*rho*v**2, where eint is the specific</span>
@@ -242,7 +241,10 @@
 
     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
         <span class="n">dens</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dens0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">myg</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">/</span><span class="n">H</span><span class="p">)</span>
-        <span class="n">p</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dens</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">cs2</span>
+        <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span>
+            <span class="n">p</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dens</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">cs2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">p</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span><span class="o">*</span><span class="p">(</span><span class="n">dens</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">dens</span><span class="p">[:,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="n">grav</span>
 
     <span class="c1"># set the energy</span>
     <span class="n">ener</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,:]</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">+</span> \

@@ -190,18 +190,21 @@
            <div itemprop="articleBody">
             
   <h1>Source code for diffusion.simulation</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">importlib</span>
+<span></span><span class="sd">&quot;&quot;&quot; A simulation of diffusion &quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">importlib</span>
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 <span class="kn">import</span> <span class="nn">mesh.boundary</span> <span class="k">as</span> <span class="nn">bnd</span>
 <span class="kn">import</span> <span class="nn">mesh.patch</span> <span class="k">as</span> <span class="nn">patch</span>
-<span class="kn">from</span> <span class="nn">simulation_null</span> <span class="k">import</span> <span class="n">NullSimulation</span><span class="p">,</span> <span class="n">grid_setup</span>
+<span class="kn">from</span> <span class="nn">simulation_null</span> <span class="k">import</span> <span class="n">NullSimulation</span><span class="p">,</span> <span class="n">grid_setup</span><span class="p">,</span> <span class="n">bc_setup</span>
 <span class="kn">import</span> <span class="nn">multigrid.MG</span> <span class="k">as</span> <span class="nn">MG</span>
 <span class="kn">from</span> <span class="nn">util</span> <span class="k">import</span> <span class="n">msg</span>
 
 <div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../diffusion.html#diffusion.simulation.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="n">NullSimulation</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A simulation of diffusion &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Simulation.initialize"><a class="viewcode-back" href="../../diffusion.html#diffusion.simulation.Simulation.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -215,7 +218,7 @@
         <span class="c1"># for MG, we need to be a power of two</span>
         <span class="k">if</span> <span class="n">my_grid</span><span class="o">.</span><span class="n">nx</span> <span class="o">!=</span> <span class="n">my_grid</span><span class="o">.</span><span class="n">ny</span><span class="p">:</span>
             <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;need nx = ny for diffusion problems&quot;</span><span class="p">)</span>
-            
+
         <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">my_grid</span><span class="o">.</span><span class="n">nx</span><span class="p">)</span><span class="o">/</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">2.0</span><span class="p">))</span>
         <span class="k">if</span> <span class="mi">2</span><span class="o">**</span><span class="n">n</span> <span class="o">!=</span> <span class="n">my_grid</span><span class="o">.</span><span class="n">nx</span><span class="p">:</span>
             <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;grid needs to be a power of 2&quot;</span><span class="p">)</span>
@@ -225,21 +228,11 @@
         <span class="c1"># first figure out the boundary conditions -- we allow periodic,</span>
         <span class="c1"># Dirichlet, and Neumann.</span>
 
-        <span class="n">xlb_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.xlboundary&quot;</span><span class="p">)</span>
-        <span class="n">xrb_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.xrboundary&quot;</span><span class="p">)</span>
-        <span class="n">ylb_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.ylboundary&quot;</span><span class="p">)</span>
-        <span class="n">yrb_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.yrboundary&quot;</span><span class="p">)</span>
+        <span class="n">bc</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">bc_setup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">)</span>
 
-        <span class="n">bcparam</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">bc</span> <span class="ow">in</span> <span class="p">[</span><span class="n">xlb_type</span><span class="p">,</span> <span class="n">xrb_type</span><span class="p">,</span> <span class="n">ylb_type</span><span class="p">,</span> <span class="n">yrb_type</span><span class="p">]:</span>
-            <span class="k">if</span> <span class="n">bc</span> <span class="o">==</span> <span class="s2">&quot;periodic&quot;</span><span class="p">:</span> <span class="n">bcparam</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;periodic&quot;</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">bc</span> <span class="o">==</span> <span class="s2">&quot;neumann&quot;</span><span class="p">:</span> <span class="n">bcparam</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;neumann&quot;</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">bc</span> <span class="o">==</span> <span class="s2">&quot;dirichlet&quot;</span><span class="p">:</span> <span class="n">bcparam</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">bnd</span> <span class="ow">in</span> <span class="p">[</span><span class="n">bc</span><span class="o">.</span><span class="n">xlb</span><span class="p">,</span> <span class="n">bc</span><span class="o">.</span><span class="n">xrb</span><span class="p">,</span> <span class="n">bc</span><span class="o">.</span><span class="n">ylb</span><span class="p">,</span> <span class="n">bc</span><span class="o">.</span><span class="n">yrb</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">bnd</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span> <span class="s2">&quot;neumann&quot;</span><span class="p">,</span> <span class="s2">&quot;dirichlet&quot;</span><span class="p">]:</span>
                 <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;invalid BC&quot;</span><span class="p">)</span>
-
-        <span class="n">bc</span> <span class="o">=</span> <span class="n">bnd</span><span class="o">.</span><span class="n">BC</span><span class="p">(</span><span class="n">xlb</span><span class="o">=</span><span class="n">bcparam</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xrb</span><span class="o">=</span><span class="n">bcparam</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                    <span class="n">ylb</span><span class="o">=</span><span class="n">bcparam</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">yrb</span><span class="o">=</span><span class="n">bcparam</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
 
         <span class="n">my_data</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">CellCenterData2d</span><span class="p">(</span><span class="n">my_grid</span><span class="p">)</span>
         <span class="n">my_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;phi&quot;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
@@ -306,7 +299,7 @@
 
         <span class="c1"># form the RHS: f = phi + (dt/2) k L phi  (where L is the Laplacian)</span>
         <span class="n">f</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">soln_grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">phi</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">k</span> <span class="o">*</span> <span class="p">(</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">phi</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">k</span> <span class="o">*</span> <span class="p">(</span>
             <span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">phi</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">phi</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
             <span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">phi</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">phi</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
@@ -320,7 +313,7 @@
         <span class="c1">#mg.smooth(mg.nlevels-1,100)</span>
 
         <span class="c1"># update the solution</span>
-        <span class="n">phi</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">get_solution</span><span class="p">()</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+        <span class="n">phi</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">get_solution</span><span class="p">()</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
 
         <span class="c1"># increment the time</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">t</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span>

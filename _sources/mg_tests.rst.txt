@@ -1,7 +1,0 @@
-mg\_tests module
-================
-
-.. automodule:: mg_tests
-    :members:
-    :undoc-members:
-    :show-inheritance:

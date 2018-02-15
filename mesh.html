@@ -397,7 +397,7 @@ value.</p>
 
 <dl class="function">
 <dt id="mesh.boundary.bc_is_solid">
-<code class="descclassname">mesh.boundary.</code><code class="descname">bc_is_solid</code><span class="sig-paren">(</span><em>rp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mesh/boundary.html#bc_is_solid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mesh.boundary.bc_is_solid" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">mesh.boundary.</code><code class="descname">bc_is_solid</code><span class="sig-paren">(</span><em>bc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mesh/boundary.html#bc_is_solid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mesh.boundary.bc_is_solid" title="Permalink to this definition">¶</a></dt>
 <dd><p>return a container class indicating which boundaries are solid walls</p>
 </dd></dl>
 
@@ -941,7 +941,8 @@ one</p>
 <dl class="function">
 <dt id="mesh.patch.do_demo">
 <code class="descclassname">mesh.patch.</code><code class="descname">do_demo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mesh/patch.html#do_demo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mesh.patch.do_demo" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>show examples of the patch methods / classes</p>
+</dd></dl>
 
 </div>
 <div class="section" id="module-mesh.reconstruction">
@@ -983,6 +984,13 @@ of the limiter input variable.</p>
 <dt id="mesh.reconstruction.nolimit">
 <code class="descclassname">mesh.reconstruction.</code><code class="descname">nolimit</code><span class="sig-paren">(</span><em>a</em>, <em>myg</em>, <em>idir</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mesh/reconstruction.html#nolimit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mesh.reconstruction.nolimit" title="Permalink to this definition">¶</a></dt>
 <dd><p>just a centered difference without any limiting</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="mesh.reconstruction.well_balance">
+<code class="descclassname">mesh.reconstruction.</code><code class="descname">well_balance</code><span class="sig-paren">(</span><em>q</em>, <em>myg</em>, <em>limiter</em>, <em>iv</em>, <em>grav</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mesh/reconstruction.html#well_balance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mesh.reconstruction.well_balance" title="Permalink to this definition">¶</a></dt>
+<dd><p>subtract off the hydrostatic pressure before limiting.  Note, this
+only considers the y direction.</p>
 </dd></dl>
 
 <dl class="function">

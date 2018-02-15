@@ -194,16 +194,35 @@
 <span class="kn">import</span> <span class="nn">importlib</span>
 <span class="kn">import</span> <span class="nn">mesh.boundary</span> <span class="k">as</span> <span class="nn">bnd</span>
 <span class="kn">import</span> <span class="nn">mesh.patch</span> <span class="k">as</span> <span class="nn">patch</span>
-<span class="kn">from</span> <span class="nn">util</span> <span class="k">import</span> <span class="n">profile</span>
+<span class="kn">from</span> <span class="nn">util</span> <span class="k">import</span> <span class="n">msg</span><span class="p">,</span> <span class="n">profile</span>
 
 <div class="viewcode-block" id="grid_setup"><a class="viewcode-back" href="../simulation_null.html#simulation_null.grid_setup">[docs]</a><span class="k">def</span> <span class="nf">grid_setup</span><span class="p">(</span><span class="n">rp</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="n">nx</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.nx&quot;</span><span class="p">)</span>
     <span class="n">ny</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.ny&quot;</span><span class="p">)</span>
 
-    <span class="n">xmin</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.xmin&quot;</span><span class="p">)</span>
-    <span class="n">xmax</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.xmax&quot;</span><span class="p">)</span>
-    <span class="n">ymin</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.ymin&quot;</span><span class="p">)</span>
-    <span class="n">ymax</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.ymax&quot;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">xmin</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.xmin&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="n">xmin</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;mesh.xmin not set, defaulting to 0.0&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">xmax</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.xmax&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="n">xmax</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;mesh.xmax not set, defaulting to 1.0&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">ymin</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.ymin&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="n">ymin</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;mesh.ymin not set, defaulting to 0.0&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">ymax</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.ymax&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="n">ymax</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;mesh.ynax not set, defaulting to 1.0&quot;</span><span class="p">)</span>
 
     <span class="n">my_grid</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">Grid2d</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span>
                            <span class="n">xmin</span><span class="o">=</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span>
@@ -214,10 +233,29 @@
 <div class="viewcode-block" id="bc_setup"><a class="viewcode-back" href="../simulation_null.html#simulation_null.bc_setup">[docs]</a><span class="k">def</span> <span class="nf">bc_setup</span><span class="p">(</span><span class="n">rp</span><span class="p">):</span>
 
     <span class="c1"># first figure out the BCs</span>
-    <span class="n">xlb_type</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.xlboundary&quot;</span><span class="p">)</span>
-    <span class="n">xrb_type</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.xrboundary&quot;</span><span class="p">)</span>
-    <span class="n">ylb_type</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.ylboundary&quot;</span><span class="p">)</span>
-    <span class="n">yrb_type</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.yrboundary&quot;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">xlb_type</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.xlboundary&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="n">xlb_type</span> <span class="o">=</span> <span class="s2">&quot;periodic&quot;</span>
+        <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;mesh.xlboundary is not set, defaulting to periodic&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">xrb_type</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.xrboundary&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="n">xrb_type</span> <span class="o">=</span> <span class="s2">&quot;periodic&quot;</span>
+        <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;mesh.xrboundary is not set, defaulting to periodic&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">ylb_type</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.ylboundary&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="n">ylb_type</span> <span class="o">=</span> <span class="s2">&quot;periodic&quot;</span>
+        <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;mesh.ylboundary is not set, defaulting to periodic&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">yrb_type</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.yrboundary&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="n">yrb_type</span> <span class="o">=</span> <span class="s2">&quot;periodic&quot;</span>
+        <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;mesh.yrboundary is not set, defaulting to periodic&quot;</span><span class="p">)</span>
 
     <span class="n">bc</span> <span class="o">=</span> <span class="n">bnd</span><span class="o">.</span><span class="n">BC</span><span class="p">(</span><span class="n">xlb</span><span class="o">=</span><span class="n">xlb_type</span><span class="p">,</span> <span class="n">xrb</span><span class="o">=</span><span class="n">xrb_type</span><span class="p">,</span>
                 <span class="n">ylb</span><span class="o">=</span><span class="n">ylb_type</span><span class="p">,</span> <span class="n">yrb</span><span class="o">=</span><span class="n">yrb_type</span><span class="p">)</span>
@@ -279,9 +317,10 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tc</span> <span class="o">=</span> <span class="n">timers</span>
 
-        <span class="k">try</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;driver.verbose&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;driver.verbose&quot;</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">n_num_out</span> <span class="o">=</span> <span class="mi">0</span>
 

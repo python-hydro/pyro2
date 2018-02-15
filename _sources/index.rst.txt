@@ -3,8 +3,11 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+*************************
 pyro: a python hydro code
-=========================
+*************************
+
+`http://github.com/zingale/pyro2 <http://github.com/zingale/pyro2>`_
 
 .. image:: pyro_plots.png
 

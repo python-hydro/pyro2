@@ -207,6 +207,7 @@
 <div class="viewcode-block" id="doit"><a class="viewcode-back" href="../pyro.html#pyro.doit">[docs]</a><span class="k">def</span> <span class="nf">doit</span><span class="p">(</span><span class="n">solver_name</span><span class="p">,</span> <span class="n">problem_name</span><span class="p">,</span> <span class="n">param_file</span><span class="p">,</span>
          <span class="n">other_commands</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
          <span class="n">comp_bench</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">reset_bench_on_fail</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">make_bench</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The main driver to run pyro&quot;&quot;&quot;</span>
 
     <span class="n">msg</span><span class="o">.</span><span class="n">bold</span><span class="p">(</span><span class="s1">&#39;pyro ...&#39;</span><span class="p">)</span>
 
@@ -289,11 +290,13 @@
         <span class="c1"># evolve for a single timestep</span>
         <span class="n">sim</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%5d</span><span class="s2"> </span><span class="si">%10.5f</span><span class="s2"> </span><span class="si">%10.5f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">dt</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%5d</span><span class="s2"> </span><span class="si">%10.5f</span><span class="s2"> </span><span class="si">%10.5f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">dt</span><span class="p">))</span>
 
         <span class="c1"># output</span>
         <span class="k">if</span> <span class="n">sim</span><span class="o">.</span><span class="n">do_output</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;outputting...&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;outputting...&quot;</span><span class="p">)</span>
             <span class="n">basename</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;io.basename&quot;</span><span class="p">)</span>
             <span class="n">sim</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}{:04d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">n</span><span class="p">))</span>
 
@@ -312,7 +315,8 @@
             <span class="n">tm_vis</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
 
     <span class="c1"># final output</span>
-    <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;outputting...&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;outputting...&quot;</span><span class="p">)</span>
     <span class="n">basename</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;io.basename&quot;</span><span class="p">)</span>
     <span class="n">sim</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}{:04d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">n</span><span class="p">))</span>
 
@@ -328,7 +332,8 @@
         <span class="n">compare_file</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">/tests/</span><span class="si">{}{:04d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="n">solver_name</span><span class="p">,</span> <span class="n">basename</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
         <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;comparing to: </span><span class="si">{}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">compare_file</span><span class="p">))</span>
-        <span class="k">try</span><span class="p">:</span> <span class="n">sim_bench</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">compare_file</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sim_bench</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">compare_file</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;ERROR openning compare file&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="s2">&quot;ERROR openning compare file&quot;</span>
@@ -345,7 +350,8 @@
     <span class="c1"># are we storing a benchmark?</span>
     <span class="k">if</span> <span class="n">make_bench</span> <span class="ow">or</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">reset_bench_on_fail</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">solver_name</span> <span class="o">+</span> <span class="s2">&quot;/tests/&quot;</span><span class="p">):</span>
-            <span class="k">try</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">solver_name</span> <span class="o">+</span> <span class="s2">&quot;/tests/&quot;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">solver_name</span> <span class="o">+</span> <span class="s2">&quot;/tests/&quot;</span><span class="p">)</span>
             <span class="k">except</span><span class="p">:</span>
                 <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ERROR: unable to create the solver&#39;s tests/ directory&quot;</span><span class="p">)</span>
 
@@ -357,18 +363,19 @@
     <span class="c1">#-------------------------------------------------------------------------</span>
     <span class="c1"># final reports</span>
     <span class="c1">#-------------------------------------------------------------------------</span>
-    <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="n">rp</span><span class="o">.</span><span class="n">print_unused_params</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="n">tc</span><span class="o">.</span><span class="n">report</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">rp</span><span class="o">.</span><span class="n">print_unused_params</span><span class="p">()</span>
+        <span class="n">tc</span><span class="o">.</span><span class="n">report</span><span class="p">()</span>
 
     <span class="n">sim</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">comp_bench</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">result</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">None</span></div>
+        <span class="k">return</span> <span class="n">result</span></div>
 
 
 <div class="viewcode-block" id="parse_and_run"><a class="viewcode-back" href="../pyro.html#pyro.parse_and_run">[docs]</a><span class="k">def</span> <span class="nf">parse_and_run</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Parse the runtime parameters and run a pyro instance&quot;&quot;&quot;</span>
+
     <span class="n">valid_solvers</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;advection&quot;</span><span class="p">,</span>
                      <span class="s2">&quot;advection_rk&quot;</span><span class="p">,</span>
                      <span class="s2">&quot;advection_fv4&quot;</span><span class="p">,</span>
@@ -376,6 +383,7 @@
                      <span class="s2">&quot;compressible&quot;</span><span class="p">,</span>
                      <span class="s2">&quot;compressible_rk&quot;</span><span class="p">,</span>
                      <span class="s2">&quot;compressible_fv4&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;compressible_sdc&quot;</span><span class="p">,</span>
                      <span class="s2">&quot;compressible_react&quot;</span><span class="p">,</span>
                      <span class="s2">&quot;diffusion&quot;</span><span class="p">,</span>
                      <span class="s2">&quot;incompressible&quot;</span><span class="p">,</span>

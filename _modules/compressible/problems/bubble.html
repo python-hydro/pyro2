@@ -238,14 +238,21 @@
     <span class="c1"># set the density to be stratified in the y-direction</span>
     <span class="n">myg</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span>
 
-    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-        <span class="n">dens</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">dens_base</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">myg</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">/</span><span class="n">scale_height</span><span class="p">),</span>
-                        <span class="n">dens_cutoff</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
 
     <span class="n">cs2</span> <span class="o">=</span> <span class="n">scale_height</span><span class="o">*</span><span class="nb">abs</span><span class="p">(</span><span class="n">grav</span><span class="p">)</span>
 
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">dens</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">dens_base</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">myg</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">/</span><span class="n">scale_height</span><span class="p">),</span>
+                        <span class="n">dens_cutoff</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span>
+            <span class="n">p</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dens</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">cs2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">p</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span><span class="o">*</span><span class="p">(</span><span class="n">dens</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">dens</span><span class="p">[:,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="n">grav</span>
+
+
     <span class="c1"># set the energy (P = cs2*dens)</span>
-    <span class="n">ener</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">cs2</span><span class="o">*</span><span class="n">dens</span><span class="p">[:,:]</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">+</span> \
+    <span class="n">ener</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,:]</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">+</span> \
                 <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">xmom</span><span class="p">[:,:]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">ymom</span><span class="p">[:,:]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">dens</span><span class="p">[:,:]</span>
 
 
@@ -262,7 +269,7 @@
     <span class="n">dens</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">pres</span><span class="o">/</span><span class="p">(</span><span class="n">eint</span><span class="o">*</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">))</span>
 
     <span class="n">ener</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">dens</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">*</span><span class="n">eint</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">xmom</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">ymom</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">dens</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span></div>
-    
+
 
 <div class="viewcode-block" id="finalize"><a class="viewcode-back" href="../../../compressible.problems.html#compressible.problems.bubble.finalize">[docs]</a><span class="k">def</span> <span class="nf">finalize</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot; print out any information to the user at the end of the run &quot;&quot;&quot;</span>

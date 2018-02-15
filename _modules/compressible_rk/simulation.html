@@ -199,10 +199,12 @@
 <span class="kn">import</span> <span class="nn">compressible_rk.fluxes</span> <span class="k">as</span> <span class="nn">flx</span>
 
 <div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../compressible_rk.html#compressible_rk.simulation.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="n">compressible</span><span class="o">.</span><span class="n">Simulation</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The main simulation class for the method of lines compressible</span>
+<span class="sd">    hydrodynamics solver&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Simulation.substep"><a class="viewcode-back" href="../../compressible_rk.html#compressible_rk.simulation.Simulation.substep">[docs]</a>    <span class="k">def</span> <span class="nf">substep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">myd</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        take a single substep in the RK timestepping starting with the </span>
+<span class="sd">        take a single substep in the RK timestepping starting with the</span>
 <span class="sd">        conservative state defined as part of myd</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -214,10 +216,10 @@
         <span class="n">ymom</span> <span class="o">=</span> <span class="n">myd</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;y-momentum&quot;</span><span class="p">)</span>
 
         <span class="n">ymom_src</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
-        <span class="n">ymom_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">dens</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span><span class="o">*</span><span class="n">grav</span>
+        <span class="n">ymom_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">dens</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span><span class="o">*</span><span class="n">grav</span>
 
         <span class="n">E_src</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
-        <span class="n">E_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">ymom</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span><span class="o">*</span><span class="n">grav</span>
+        <span class="n">E_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">ymom</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span><span class="o">*</span><span class="n">grav</span>
 
         <span class="n">k</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">(</span><span class="n">nvar</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">)</span>
 
@@ -225,12 +227,12 @@
                                     <span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">solid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tc</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">):</span>
-            <span class="n">k</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)[:,:]</span> <span class="o">=</span> \
+            <span class="n">k</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> \
                <span class="p">(</span><span class="n">flux_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="n">flux_x</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">))</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span> <span class="o">+</span> \
                <span class="p">(</span><span class="n">flux_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="n">flux_y</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">))</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
 
-        <span class="n">k</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">)[:,:]</span> <span class="o">+=</span> <span class="n">ymom_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span>
-        <span class="n">k</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">iener</span><span class="p">)[:,:]</span> <span class="o">+=</span> <span class="n">E_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span>
+        <span class="n">k</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="n">ymom_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span>
+        <span class="n">k</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">iener</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="n">E_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span>
 
         <span class="k">return</span> <span class="n">k</span></div>
 
