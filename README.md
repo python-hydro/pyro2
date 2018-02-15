@@ -243,6 +243,15 @@ with their data.
   ```
 
 
+## Acknowledgements
+
+  If you use pyro in a class or workshop, please e-mail us to let us know
+  (we'd like to start listing these on the website).
+
+  If pyro was used for a publication, please cite the article found in
+  the `CITATION` file.
+  
+
 ## Getting help
 
   Join the mailing list to say up-to-date:
