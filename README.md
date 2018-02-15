@@ -23,16 +23,15 @@ http://zingale.github.io/pyro2/
 
 ## Table of Contents
 
-      * [Getting started](#getting-started)
-      * [Core Data Structures](#core-data-structures)
-      * [Solvers](#solvers)
-      * [Working with data](#working-with-data)
-      * [Understanding the algorithms](#understanding-the-algorithms)
-      * [Regression and unit testing](#regression-and-unit-testing)
-      * [python 2.7](#python-27)
-      * [Acknowledgements](#acknowledgements)
-      * [Getting help](#getting-help)
-
+ * [Getting started](#getting-started)
+ * [Core Data Structures](#core-data-structures)
+ * [Solvers](#solvers)
+ * [Working with data](#working-with-data)
+ * [Understanding the algorithms](#understanding-the-algorithms)
+ * [Regression and unit testing](#regression-and-unit-testing)
+ * [python 2.7](#python-27)
+ * [Acknowledgements](#acknowledgements)
+ * [Getting help](#getting-help)
 
 
 ## Getting started
@@ -264,7 +263,7 @@ with their data.
 
   If pyro was used for a publication, please cite the article found in
   the `CITATION` file.
-  
+
 
 ## Getting help
 
