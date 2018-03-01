@@ -21,6 +21,19 @@ etc. is here:
 http://zingale.github.io/pyro2/
 
 
+## Table of Contents
+
+ * [Getting started](#getting-started)
+ * [Core Data Structures](#core-data-structures)
+ * [Solvers](#solvers)
+ * [Working with data](#working-with-data)
+ * [Understanding the algorithms](#understanding-the-algorithms)
+ * [Regression and unit testing](#regression-and-unit-testing)
+ * [python 2.7](#python-27)
+ * [Acknowledgements](#acknowledgements)
+ * [Getting help](#getting-help)
+
+
 ## Getting started
 
   - By default, we assume python 3.4 or later.  Instructions to
@@ -241,6 +254,15 @@ with their data.
   ```
   python2 ./pyro.py compressible sedov inputs.sedov
   ```
+
+
+## Acknowledgements
+
+  If you use pyro in a class or workshop, please e-mail us to let us know
+  (we'd like to start listing these on the website).
+
+  If pyro was used for a publication, please cite the article found in
+  the `CITATION` file.
 
 
 ## Getting help

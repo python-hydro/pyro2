@@ -55,7 +55,7 @@ def read(filename):
         # requires it.
         custom_bcs = read_bcs(f)
         if custom_bcs is not None:
-            if solver_name in ["compressible_fv4", "compressible_sdc"]:
+            if solver_name in ["compressible_fv4", "compressible_rk", "compressible_sdc"]:
                 bc_solver = "compressible"
             else:
                 bc_solver = solver_name
