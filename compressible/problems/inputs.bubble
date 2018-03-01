@@ -19,8 +19,8 @@ ymax = 12.0
 xlboundary = outflow
 xrboundary = outflow
 
-ylboundary = reflect
-yrboundary = outflow
+ylboundary = hse
+yrboundary = hse
 
 
 [bubble]
