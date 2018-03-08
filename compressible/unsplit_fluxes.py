@@ -211,6 +211,15 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
         ldx[:,:,n] = xi*reconstruction.limit(q[:,:,n], myg, 1, limiter)
         ldy[:,:,n] = xi*reconstruction.limit(q[:,:,n], myg, 2, limiter)
 
+    # if we are doing a well-balanced scheme, then redo the pressure
+    # note: we only have gravity in the y direction, so we will only
+    # modify the y pressure slope
+    well_balanced = rp.get_param("compressible.well_balanced")
+    grav = rp.get_param("compressible.grav")
+
+    if well_balanced:
+        ldy[:,:,ivars.ip] = reconstruction.well_balance(q, myg, limiter, ivars, grav)
+
     tm_limit.end()
 
 
@@ -244,13 +253,23 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     # left and right primitive variable states
     tm_states.begin()
 
-    V_l, V_r = ifc.states(2, myg.qx, myg.qy, myg.ng, myg.dy, dt,
-                          ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
-                          ivars.nvar, ivars.naux,
-                          gamma,
-                          q, ldy)
+    _V_l, _V_r = ifc.states(2, myg.qx, myg.qy, myg.ng, myg.dy, dt,
+                            ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
+                            ivars.nvar, ivars.naux,
+                            gamma,
+                            q, ldy)
+    V_l = ai.ArrayIndexer(d=_V_l, grid=myg)
+    V_r = ai.ArrayIndexer(d=_V_r, grid=myg)
 
     tm_states.end()
+
+
+    if well_balanced:
+        # we want to do p0 + p1 on the interfaces.  We found the
+        # limited slope for p1 (it's average is 0).  So now we
+        # need p0 on the interface too
+        V_l.jp(1, n=n, buf=2)[:,:] += q.v(n=ivars.ip, buf=2) + 0.5*myg.dy*q.v(n=ivars.irho, buf=2)*grav
+        V_r.v(n=n, buf=2)[:,:] += q.v(n=ivars.ip, buf=2) - 0.5*myg.dy*q.v(n=ivars.irho, buf=2)*grav
 
 
     # transform interface states back into conserved variables
@@ -271,21 +290,22 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     E_src.v()[:,:] = ymom.v()*grav
     my_aux.fill_BC("E_src")
 
-    # ymom_xl[i,j] += 0.5*dt*dens[i-1,j]*grav
-    U_xl.v(buf=1, n=ivars.iymom)[:,:] += 0.5*dt*ymom_src.ip(-1, buf=1)
-    U_xl.v(buf=1, n=ivars.iener)[:,:] += 0.5*dt*E_src.ip(-1, buf=1)
+    if not well_balanced:
+        # ymom_xl[i,j] += 0.5*dt*dens[i-1,j]*grav
+        U_xl.v(buf=1, n=ivars.iymom)[:,:] += 0.5*dt*ymom_src.ip(-1, buf=1)
+        U_xl.v(buf=1, n=ivars.iener)[:,:] += 0.5*dt*E_src.ip(-1, buf=1)
 
-    # ymom_xr[i,j] += 0.5*dt*dens[i,j]*grav
-    U_xr.v(buf=1, n=ivars.iymom)[:,:] += 0.5*dt*ymom_src.v(buf=1)
-    U_xr.v(buf=1, n=ivars.iener)[:,:] += 0.5*dt*E_src.v(buf=1)
+        # ymom_xr[i,j] += 0.5*dt*dens[i,j]*grav
+        U_xr.v(buf=1, n=ivars.iymom)[:,:] += 0.5*dt*ymom_src.v(buf=1)
+        U_xr.v(buf=1, n=ivars.iener)[:,:] += 0.5*dt*E_src.v(buf=1)
 
-    # ymom_yl[i,j] += 0.5*dt*dens[i,j-1]*grav
-    U_yl.v(buf=1, n=ivars.iymom)[:,:] += 0.5*dt*ymom_src.jp(-1, buf=1)
-    U_yl.v(buf=1, n=ivars.iener)[:,:] += 0.5*dt*E_src.jp(-1, buf=1)
+        # ymom_yl[i,j] += 0.5*dt*dens[i,j-1]*grav
+        U_yl.v(buf=1, n=ivars.iymom)[:,:] += 0.5*dt*ymom_src.jp(-1, buf=1)
+        U_yl.v(buf=1, n=ivars.iener)[:,:] += 0.5*dt*E_src.jp(-1, buf=1)
 
-    # ymom_yr[i,j] += 0.5*dt*dens[i,j]*grav
-    U_yr.v(buf=1, n=ivars.iymom)[:,:] += 0.5*dt*ymom_src.v(buf=1)
-    U_yr.v(buf=1, n=ivars.iener)[:,:] += 0.5*dt*E_src.v(buf=1)
+        # ymom_yr[i,j] += 0.5*dt*dens[i,j]*grav
+        U_yr.v(buf=1, n=ivars.iymom)[:,:] += 0.5*dt*ymom_src.v(buf=1)
+        U_yr.v(buf=1, n=ivars.iener)[:,:] += 0.5*dt*E_src.v(buf=1)
 
 
     #=========================================================================

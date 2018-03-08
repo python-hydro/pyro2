@@ -78,7 +78,7 @@ def init_data(my_data, rp):
 
     # upper half
     xmom[:, :] *= dens
-    ymom[:, :] = dens * w0 * np.sin(4*np.pi*myg.x2d)
+    ymom[:, :] = dens * (w0 * np.sin(4*np.pi*myg.x2d) + 10)
 
     p = 2.5
     ener[:,:] = p/(gamma - 1.0) + 0.5*(xmom[:,:]**2 + ymom[:,:]**2)/dens[:,:]
