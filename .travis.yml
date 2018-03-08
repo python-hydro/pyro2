@@ -1,0 +1,39 @@
+language: python
+
+python:
+  - "3.6"
+  - "3.5"
+  - "3.4"
+
+before_install:
+  - export PATH=$(echo $PATH | tr ':' "\n" | sed '/\/opt\/python/d' | tr "\n" ":" | sed "s|::|:|g")
+
+addons:
+   apt:
+      packages:
+      - gfortran
+      - libgmp-dev
+      - libmpfr-dev
+
+install:
+  - pip install .
+  - pip install -r requirements.txt
+
+before_script:
+  - export PYTHONPATH=$PYTHONPATH:$(pwd)
+
+script:
+  - pytest --cov=. -v
+#  - pytest --nbval examples -v
+#   - travis-sphinx build
+
+# after_success:
+#   - travis-sphinx deploy
+
+# deploy:
+#   provider: pages
+#   skip-cleanup: true
+#   github-token: $GITHUB_TOKEN
+#   keep-history: true
+#   on:
+#     branch: master
