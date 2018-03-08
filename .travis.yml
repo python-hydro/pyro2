@@ -23,7 +23,7 @@ before_script:
   - ./mk.sh
 
 script:
-  - pytest -v --cov=. --ignore=docs --ignore=./multigrid/variable_coeff_elliptic.ipynb
+  - pytest -v --cov=. --nbval --ignore=docs --ignore=./multigrid/variable_coeff_elliptic.ipynb
 #   - travis-sphinx build
 
 # after_success:
