@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/zingale/pyro2.svg?branch=master)](https://travis-ci.org/zingale/pyro2)
+
 ![pyro logo](www/pyro.png)
 
 *A simple python-based tutorial on computational methods for hydrodynamics*
