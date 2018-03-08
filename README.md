@@ -2,7 +2,6 @@
 
 *A simple python-based tutorial on computational methods for hydrodynamics*
 
-
 pyro is a computational hydrodynamics code that presents
 two-dimensional solvers for advection, compressible hydrodynamics,
 diffusion, incompressible hydrodynamics, and multigrid, all in a
