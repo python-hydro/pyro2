@@ -20,6 +20,7 @@ install:
 
 before_script:
   - export PYTHONPATH=$PYTHONPATH:$(pwd)
+  - ./mk.sh
 
 script:
   - pytest --cov=. -v
