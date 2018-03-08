@@ -48,20 +48,39 @@ def init_data(my_data, rp):
 
     myg = my_data.grid
 
-    idx_l = myg.y2d < yctr + 0.01*np.sin(10.0*np.pi*myg.x2d/L_x)
-    idx_h = myg.y2d >= yctr + 0.01*np.sin(10.0*np.pi*myg.x2d/L_x)
+    dy = 0.025
+    w0 = 0.01
+    vm = 0.5*(v_1 - v_2)
+    rhom = 0.5*(rho_1 - rho_2)
 
-    # lower half
-    dens[idx_l] = rho_1
-    xmom[idx_l] = rho_1*v_1
-    ymom[idx_l] = 0.0
-                
+    idx1 = myg.y2d < 0.25
+    idx2 = np.logical_and(myg.y2d >= 0.25, myg.y2d < 0.5)
+    idx3 = np.logical_and(myg.y2d >= 0.5, myg.y2d < 0.75)
+    idx4 = myg.y2d >= 0.75
+
+    # we will initialize momemum as velocity for now
+
+    # lower quarter
+    dens[idx1] = rho_1 - rhom*np.exp((myg.y2d[idx1] - 0.25)/dy)
+    xmom[idx1] = v_1 - vm*np.exp((myg.y2d[idx1] - 0.25)/dy)
+
+    # second quarter
+    dens[idx2] = rho_2 + rhom*np.exp((0.25 - myg.y2d[idx2])/dy)
+    xmom[idx2] = v_2 + vm*np.exp((0.25 - myg.y2d[idx2])/dy)
+
+    # third quarter
+    dens[idx3] = rho_2 + rhom*np.exp((myg.y2d[idx3] - 0.75)/dy)
+    xmom[idx3] = v_2 + vm*np.exp((myg.y2d[idx3] - 0.75)/dy)
+
+    # fourth quarter
+    dens[idx4] = rho_1 - rhom*np.exp((0.75 - myg.y2d[idx4])/dy)
+    xmom[idx4] = v_1 - vm*np.exp((0.75 - myg.y2d[idx4])/dy)
+
     # upper half
-    dens[idx_h] = rho_2
-    xmom[idx_h] = rho_2*v_2
-    ymom[idx_h] = 0.0
+    xmom[:, :] *= dens
+    ymom[:, :] = dens * w0 * np.sin(4*np.pi*myg.x2d)
 
-    p = 1.0
+    p = 2.5
     ener[:,:] = p/(gamma - 1.0) + 0.5*(xmom[:,:]**2 + ymom[:,:]**2)/dens[:,:]
 
 
