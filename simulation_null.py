@@ -107,12 +107,12 @@ class NullSimulation(object):
 
         try:
             self.tmax = rp.get_param("driver.tmax")
-        except KeyError:
+        except (AttributeError, KeyError):
             self.tmax = None
 
         try:
             self.max_steps = rp.get_param("driver.max_steps")
-        except KeyError:
+        except (AttributeError, KeyError):
             self.max_steps = None
 
         self.rp = rp
@@ -130,7 +130,7 @@ class NullSimulation(object):
 
         try:
             self.verbose = self.rp.get_param("driver.verbose")
-        except KeyError:
+        except (AttributeError, KeyError):
             self.verbose = 0
 
         self.n_num_out = 0

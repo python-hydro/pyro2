@@ -157,7 +157,7 @@ if __name__ == "__main__":
 
     try:
         outfile = args.o[0]
-    except IndexError:
+    except TypeError:
         outfile = None
 
     build = args.build
