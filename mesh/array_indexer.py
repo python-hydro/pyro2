@@ -7,14 +7,17 @@ from __future__ import print_function
 
 import numpy as np
 
+
 def _buf_split(b):
     """ take an integer or iterable and break it into a -x, +x, -y, +y
     value representing a ghost cell buffer
     """
-    try: bxlo, bxhi, bylo, byhi = b
-    except:
-        try: blo, bhi = b
-        except:
+    try:
+        bxlo, bxhi, bylo, byhi = b
+    except TypeError:
+        try:
+            blo, bhi = b
+        except TypeError:
             blo = b
             bhi = b
         bxlo = bylo = blo
@@ -35,7 +38,8 @@ class ArrayIndexer(np.ndarray):
         return obj
 
     def __array_finalize__(self, obj):
-        if obj is None: return
+        if obj is None:
+            return
         self.g = getattr(obj, "g", None)
         self.c = getattr(obj, "c", None)
 
@@ -85,13 +89,11 @@ class ArrayIndexer(np.ndarray):
             return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
                                    self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s, n])
 
-
     def lap(self, n=0, buf=0):
         """return the 5-point Laplacian"""
         l = (self.ip(-1, n=n, buf=buf) - 2*self.v(n=n, buf=buf) + self.ip(1, n=n, buf=buf))/self.g.dx**2 + \
             (self.jp(-1, n=n, buf=buf) - 2*self.v(n=n, buf=buf) + self.jp(1, n=n, buf=buf))/self.g.dy**2
         return l
-
 
     def norm(self, n=0):
         """
@@ -105,11 +107,9 @@ class ArrayIndexer(np.ndarray):
         else:
             return self.g.norm(self[:, :, n])
 
-
     def copy(self):
         """make a copy of the array, defined on the same grid"""
         return ArrayIndexer(np.asarray(self).copy(), grid=self.g)
-
 
     def is_symmetric(self, nodal=False, tol=1.e-14, asymmetric=False):
         """return True is the data is left-right symmetric (to the tolerance
@@ -137,14 +137,12 @@ class ArrayIndexer(np.ndarray):
         e = abs(L - s*np.flipud(R)).max()
         return e < tol
 
-
     def is_asymmetric(self, nodal=False, tol=1.e-14):
         """return True is the data is left-right asymmetric (to the tolerance
         tol)---e.g, the sign flips. For node-centered data, set nodal=True
 
         """
         return self.is_symmetric(nodal=nodal, tol=tol, asymmetric=True)
-
 
     def fill_ghost(self, n=0, bc=None):
         """Fill the boundary conditions.  This operates on a single component,
@@ -185,7 +183,6 @@ class ArrayIndexer(np.ndarray):
             for i in range(self.g.ilo):
                 self[i, :, n] = self[self.g.ihi-self.g.ng+i+1, :, n]
 
-
         # +x boundary
         if bc.xrb in ["outflow", "neumann"]:
             if bc.xr_value is None:
@@ -217,7 +214,6 @@ class ArrayIndexer(np.ndarray):
             for i in range(self.g.ihi+1, 2*self.g.ng + self.g.nx):
                 self[i, :, n] = self[i-self.g.ihi-1+self.g.ng, :, n]
 
-
         # -y boundary
         if bc.ylb in ["outflow", "neumann"]:
             if bc.yl_value is None:
@@ -242,7 +238,6 @@ class ArrayIndexer(np.ndarray):
         elif bc.ylb == "periodic":
             for j in range(self.g.jlo):
                 self[:, j, n] = self[:, self.g.jhi-self.g.ng+j+1, n]
-
 
         # +y boundary
         if bc.yrb in ["outflow", "neumann"]:
@@ -274,8 +269,6 @@ class ArrayIndexer(np.ndarray):
         elif bc.yrb == "periodic":
             for j in range(self.g.jhi+1, 2*self.g.ng + self.g.ny):
                 self[:, j, n] = self[:, j-self.g.jhi-1+self.g.ng, n]
-
-
 
     def pretty_print(self, n=0, fmt=None):
         """

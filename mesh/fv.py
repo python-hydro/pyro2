@@ -5,6 +5,7 @@ by adding support for converting between cell averages and centers.
 
 import mesh.patch as patch
 
+
 class FV2d(patch.CellCenterData2d):
     """this is a finite-volume grid.  We expect the data to represent
     cell-averages, and do operations to 4th order.  This assumes dx =
@@ -21,7 +22,6 @@ class FV2d(patch.CellCenterData2d):
         c[:, :] = a[:, :]
         c.v(buf=ng-1)[:, :] = a.v(buf=ng-1) - self.grid.dx**2*a.lap(buf=ng-1)/24.0
         return c
-
 
     def from_centers(self, name):
         """treat the stored data as if it lives at cell-centers and convert
