@@ -5,4 +5,3 @@ reconstruction in space together with a Runge-Kutta integration for time.
 
 __all__ = ['simulation']
 from .simulation import *
-

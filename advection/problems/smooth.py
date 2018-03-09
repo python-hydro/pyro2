@@ -5,6 +5,7 @@ import mesh.patch as patch
 import numpy
 from util import msg
 
+
 def init_data(my_data, rp):
     """ initialize the smooth advection problem """
 

@@ -3,10 +3,10 @@ from __future__ import print_function
 import importlib
 import advection_rk
 import advection_fv4.fluxes as flx
-import mesh.integration as integration
 import mesh.array_indexer as ai
 import mesh.fv as fv
 from simulation_null import grid_setup, bc_setup
+
 
 class Simulation(advection_rk.Simulation):
 
@@ -43,12 +43,12 @@ class Simulation(advection_rk.Simulation):
 
         k = myg.scratch_array()
 
-        flux_x, flux_y =  flx.fluxes(myd, self.rp, self.dt)
+        flux_x, flux_y = flx.fluxes(myd, self.rp, self.dt)
 
         F_x = ai.ArrayIndexer(d=flux_x, grid=myg)
         F_y = ai.ArrayIndexer(d=flux_y, grid=myg)
 
-        k.v()[:,:] = \
+        k.v()[:, :] = \
             (F_x.v() - F_x.ip(1))/myg.dx + \
             (F_y.v() - F_y.jp(1))/myg.dy
 

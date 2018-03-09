@@ -1,10 +1,9 @@
 from __future__ import print_function
 
-import sys
-import mesh.patch as patch
 import mesh.fv as fv
 import numpy
 from util import msg
+
 
 def init_data(my_data, rp):
     """ initialize the smooth advection problem """
@@ -30,7 +29,7 @@ def init_data(my_data, rp):
     # a finer grid, initialize it, and then average down
     mgf = my_data.grid.fine_like(4)
 
-    # since restrict operates in the data class, we need to 
+    # since restrict operates in the data class, we need to
     # create a FV2d object here
     fine_data = fv.FV2d(mgf)
     fine_data.register_var("density", my_data.BCs["density"])
@@ -38,11 +37,12 @@ def init_data(my_data, rp):
 
     dens_fine = fine_data.get_var("density")
 
-    dens_fine[:,:] = 1.0 + numpy.exp(-60.0*((mgf.x2d-xctr)**2 +
-                                            (mgf.y2d-yctr)**2))
+    dens_fine[:, :] = 1.0 + numpy.exp(-60.0*((mgf.x2d-xctr)**2 +
+                                             (mgf.y2d-yctr)**2))
 
     dens = my_data.get_var("density")
-    dens[:,:] = fine_data.restrict("density", N=4)
+    dens[:, :] = fine_data.restrict("density", N=4)
+
 
 def finalize():
     """ print out any information to the user at the end of the run """

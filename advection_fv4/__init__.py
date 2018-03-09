@@ -7,4 +7,3 @@ time integration.
 
 __all__ = ['simulation']
 from .simulation import *
-

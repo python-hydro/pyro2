@@ -3,6 +3,7 @@ from __future__ import print_function
 import sys
 import mesh.patch as patch
 
+
 def init_data(my_data, rp):
     """ an init routine for unit testing """
 
@@ -18,7 +19,8 @@ def init_data(my_data, rp):
     # initialize the components, remember, that ener here is rho*eint
     # + 0.5*rho*v**2, where eint is the specific internal energy
     # (erg/g)
-    dens[:,:] = 1.0
+    dens[:, :] = 1.0
+
 
 def finalize():
     """ print out any information to the user at the end of the run """
