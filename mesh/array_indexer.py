@@ -14,10 +14,10 @@ def _buf_split(b):
     """
     try:
         bxlo, bxhi, bylo, byhi = b
-    except TypeError:
+    except ValueError:
         try:
             blo, bhi = b
-        except TypeError:
+        except ValueError:
             blo = b
             bhi = b
         bxlo = bylo = blo
