@@ -2,8 +2,6 @@ language: python
 
 python:
   - "3.6"
-#  - "3.5"
-#  - "3.4"
 
 before_install:
   - export PATH=$(echo $PATH | tr ':' "\n" | sed '/\/opt\/python/d' | tr "\n" ":" | sed "s|::|:|g")
@@ -23,6 +21,7 @@ before_script:
   - ./mk.sh
 
 script:
+  - flake8 .
   - pytest -v --cov=. --nbval --ignore=docs --ignore=./multigrid/variable_coeff_elliptic.ipynb
 #   - travis-sphinx build
 
