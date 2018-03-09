@@ -1,11 +1,10 @@
 from __future__ import print_function
 
-import numpy as np
-
 import mesh.integration as integration
 import mesh.fv as fv
 import compressible_rk
 import compressible_fv4.fluxes as flx
+
 
 class Simulation(compressible_rk.Simulation):
 
@@ -30,15 +29,15 @@ class Simulation(compressible_rk.Simulation):
         ymom_cc = myd.to_centers("y-momentum")
 
         ymom_src = myg.scratch_array()
-        ymom_src.v(buf=1)[:,:] = dens_cc.v(buf=1)[:,:]*grav
+        ymom_src.v(buf=1)[:, :] = dens_cc.v(buf=1)[:, :]*grav
 
         E_src = myg.scratch_array()
-        E_src.v(buf=1)[:,:] = ymom_cc.v(buf=1)[:,:]*grav
+        E_src.v(buf=1)[:, :] = ymom_cc.v(buf=1)[:, :]*grav
 
         # now bring back to averages -- we only need this in the
         # interior (no ghost cells)
-        ymom_src.v()[:,:] = ymom_src.v()[:,:] - myg.dx**2*ymom_src.lap()/24.0
-        E_src.v()[:,:] = E_src.v()[:,:] - myg.dx**2*E_src.lap()/24.0
+        ymom_src.v()[:, :] = ymom_src.v()[:, :] - myg.dx**2*ymom_src.lap()/24.0
+        E_src.v()[:, :] = E_src.v()[:, :] - myg.dx**2*E_src.lap()/24.0
 
         k = myg.scratch_array(nvar=self.ivars.nvar)
 
@@ -46,12 +45,12 @@ class Simulation(compressible_rk.Simulation):
                                     self.ivars, self.solid, self.tc)
 
         for n in range(self.ivars.nvar):
-            k.v(n=n)[:,:] = \
+            k.v(n=n)[:, :] = \
                (flux_x.v(n=n) - flux_x.ip(1, n=n))/myg.dx + \
                (flux_y.v(n=n) - flux_y.jp(1, n=n))/myg.dy
 
-        k.v(n=self.ivars.iymom)[:,:] += ymom_src.v()[:,:]
-        k.v(n=self.ivars.iener)[:,:] += E_src.v()[:,:]
+        k.v(n=self.ivars.iymom)[:, :] += ymom_src.v()[:, :]
+        k.v(n=self.ivars.iener)[:, :] += E_src.v()[:, :]
 
         return k
 
@@ -89,7 +88,6 @@ class Simulation(compressible_rk.Simulation):
             rk.store_increment(s, k)
 
         rk.compute_final_update()
-
 
         # increment the time
         myd.t += self.dt

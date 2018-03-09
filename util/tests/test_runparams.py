@@ -56,3 +56,12 @@ class TestRunParams(object):
 
         assert self.rp.get_param("test.p1") == "q"
         assert self.rp.get_param("test3.i1") == 2
+
+    def test_failure(self):
+
+        try:
+            p3 = self.rp.get_param("test.p3")
+        except KeyError:
+            p3 = -1
+
+        assert p3 == -1

@@ -2,11 +2,8 @@ from __future__ import print_function
 
 import importlib
 
-import sys
-
 import numpy as np
 import matplotlib.pyplot as plt
-import h5py
 
 import lm_atm.LM_atm_interface_f as lm_interface_f
 import mesh.reconstruction as reconstruction
@@ -16,7 +13,6 @@ import mesh.array_indexer as ai
 
 from simulation_null import NullSimulation, grid_setup, bc_setup
 import multigrid.variable_coeff_MG as vcMG
-from util import profile
 
 
 class Basestate(object):
@@ -34,10 +30,10 @@ class Basestate(object):
         return self.d[self.jlo-buf:self.jhi+1+buf]
 
     def v2d(self, buf=0):
-        return self.d[np.newaxis,self.jlo-buf:self.jhi+1+buf]
+        return self.d[np.newaxis, self.jlo-buf:self.jhi+1+buf]
 
     def v2dp(self, shift, buf=0):
-        return self.d[np.newaxis,self.jlo+shift-buf:self.jhi+1+shift+buf]
+        return self.d[np.newaxis, self.jlo+shift-buf:self.jhi+1+shift+buf]
 
     def jp(self, shift, buf=0):
         return self.d[self.jlo-buf+shift:self.jhi+1+buf+shift]
@@ -51,7 +47,6 @@ class Simulation(NullSimulation):
 
         self.base = {}
         self.aux_data = None
-
 
     def initialize(self):
         """
@@ -96,7 +91,6 @@ class Simulation(NullSimulation):
         my_data.register_var("phi-MAC", bc_phi)
         my_data.register_var("phi", bc_phi)
 
-
         # gradp -- used in the projection and interface states.  We'll do the
         # same BCs as density
         my_data.register_var("gradp_x", bc_dens)
@@ -105,7 +99,6 @@ class Simulation(NullSimulation):
         my_data.create()
 
         self.cc_data = my_data
-
 
         # some auxillary data that we'll need to fill GC in, but isn't
         # really part of the main solution
@@ -116,7 +109,6 @@ class Simulation(NullSimulation):
 
         aux_data.create()
         self.aux_data = aux_data
-
 
         # we also need storage for the 1-d base state -- we'll store this
         # in the main class directly.
@@ -140,10 +132,8 @@ class Simulation(NullSimulation):
         self.base["beta0-edges"].d[myg.jlo] = self.base["beta0"].d[myg.jlo]
         self.base["beta0-edges"].d[myg.jhi+1] = self.base["beta0"].d[myg.jhi]
 
-
     def make_prime(self, a, a0):
         return a - a0.v2d(buf=a0.ng)
-
 
     def method_compute_timestep(self):
         """
@@ -184,8 +174,8 @@ class Simulation(NullSimulation):
         dt_buoy = np.sqrt(2.0*myg.dx/F_buoy)
 
         self.dt = min(dt, dt_buoy)
-        if self.verbose > 0: print("timestep is {}".format(dt))
-
+        if self.verbose > 0:
+            print("timestep is {}".format(dt))
 
     def preevolve(self):
         """
@@ -214,7 +204,7 @@ class Simulation(NullSimulation):
         # the coefficent for the elliptic equation is beta_0^2/rho
         coeff = 1/rho
         beta0 = self.base["beta0"]
-        coeff.v()[:,:] = coeff.v()*beta0.v2d()**2
+        coeff.v()[:, :] = coeff.v()*beta0.v2d()**2
 
         # next create the multigrid object.  We defined phi with
         # the right BCs previously
@@ -233,7 +223,7 @@ class Simulation(NullSimulation):
         div_beta_U = mg.soln_grid.scratch_array()
 
         # u/v are cell-centered, divU is cell-centered
-        div_beta_U.v()[:,:] = \
+        div_beta_U.v()[:, :] = \
             0.5*beta0.v2d()*(u.ip(1) - u.ip(-1))/myg.dx + \
             0.5*(beta0.v2dp(1)*v.jp(1) - beta0.v2dp(-1)*v.jp(-1))/myg.dy
 
@@ -243,11 +233,10 @@ class Simulation(NullSimulation):
         mg.init_RHS(div_beta_U)
         mg.solve(rtol=1.e-10)
 
-
         # store the solution in our self.cc_data object -- include a single
         # ghostcell
         phi = self.cc_data.get_var("phi")
-        phi[:,:] = mg.get_solution(grid=myg)
+        phi[:, :] = mg.get_solution(grid=myg)
 
         # get the cell-centered gradient of phi and update the
         # velocities
@@ -255,17 +244,15 @@ class Simulation(NullSimulation):
         # cells -- not ghost cells
         gradp_x, gradp_y = mg.get_solution_gradient(grid=myg)
 
-
         coeff = 1.0/rho
-        coeff.v()[:,:] = coeff.v()*beta0.v2d()
+        coeff.v()[:, :] = coeff.v()*beta0.v2d()
 
-        u.v()[:,:] -= coeff.v()*gradp_x.v()
-        v.v()[:,:] -= coeff.v()*gradp_y.v()
+        u.v()[:, :] -= coeff.v()*gradp_x.v()
+        v.v()[:, :] -= coeff.v()*gradp_y.v()
 
         # fill the ghostcells
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")
-
 
         # 2. now get an approximation to gradp at n-1/2 by going through the
         # evolution.
@@ -286,15 +273,15 @@ class Simulation(NullSimulation):
         orig_gp_x = orig_data.get_var("gradp_x")
         orig_gp_y = orig_data.get_var("gradp_y")
 
-        orig_gp_x[:,:] = new_gp_x[:,:]
-        orig_gp_y[:,:] = new_gp_y[:,:]
+        orig_gp_x[:, :] = new_gp_x[:, :]
+        orig_gp_y[:, :] = new_gp_y[:, :]
 
         self.cc_data = orig_data
 
-        if self.verbose > 0: print("done with the pre-evolution")
+        if self.verbose > 0:
+            print("done with the pre-evolution")
 
         self.in_preevolve = False
-
 
     def evolve(self):
         """
@@ -318,7 +305,6 @@ class Simulation(NullSimulation):
 
         myg = self.cc_data.grid
 
-
         #---------------------------------------------------------------------
         # create the limited slopes of rho, u and v (in both directions)
         #---------------------------------------------------------------------
@@ -331,7 +317,6 @@ class Simulation(NullSimulation):
         ldelta_ry = reconstruction.limit(rho, myg, 2, limiter)
         ldelta_uy = reconstruction.limit(u, myg, 2, limiter)
         ldelta_vy = reconstruction.limit(v, myg, 2, limiter)
-
 
         #---------------------------------------------------------------------
         # get the advective velocities
@@ -360,12 +345,13 @@ class Simulation(NullSimulation):
 
         # this returns u on x-interfaces and v on y-interfaces.  These
         # constitute the MAC grid
-        if self.verbose > 0: print("  making MAC velocities")
+        if self.verbose > 0:
+            print("  making MAC velocities")
 
         # create the coefficient to the grad (pi/beta) term
         coeff = self.aux_data.get_var("coeff")
-        coeff.v()[:,:] = 1.0/rho.v()
-        coeff.v()[:,:] = coeff.v()*beta0.v2d()
+        coeff.v()[:, :] = 1.0/rho.v()
+        coeff.v()[:, :] = coeff.v()*beta0.v2d()
         self.aux_data.fill_BC("coeff")
 
         # create the source term
@@ -373,7 +359,7 @@ class Simulation(NullSimulation):
 
         g = self.rp.get_param("lm-atmosphere.grav")
         rhoprime = self.make_prime(rho, rho0)
-        source.v()[:,:] = rhoprime.v()*g/rho.v()
+        source.v()[:, :] = rhoprime.v()*g/rho.v()
         self.aux_data.fill_BC("source_y")
 
         _um, _vm = lm_interface_f.mac_vels(myg.qx, myg.qy, myg.ng,
@@ -384,10 +370,8 @@ class Simulation(NullSimulation):
                                            coeff*gradp_x, coeff*gradp_y,
                                            source)
 
-
         u_MAC = ai.ArrayIndexer(d=_um, grid=myg)
         v_MAC = ai.ArrayIndexer(d=_vm, grid=myg)
-
 
         #---------------------------------------------------------------------
         # do a MAC projection to make the advective velocities divergence
@@ -398,12 +382,13 @@ class Simulation(NullSimulation):
         # phi is cell centered, and U^MAC is the MAC-type staggered
         # grid of the advective velocities.
 
-        if self.verbose > 0: print("  MAC projection")
+        if self.verbose > 0:
+            print("  MAC projection")
 
         # create the coefficient array: beta0**2/rho
         # MZ!!!! probably don't need the buf here
-        coeff.v(buf=1)[:,:] = 1.0/rho.v(buf=1)
-        coeff.v(buf=1)[:,:] = coeff.v(buf=1)*beta0.v2d(buf=1)**2
+        coeff.v(buf=1)[:, :] = 1.0/rho.v(buf=1)
+        coeff.v(buf=1)[:, :] = coeff.v(buf=1)*beta0.v2d(buf=1)**2
 
         # create the multigrid object
         mg = vcMG.VarCoeffCCMG2d(myg.nx, myg.ny,
@@ -421,7 +406,7 @@ class Simulation(NullSimulation):
         div_beta_U = mg.soln_grid.scratch_array()
 
         # MAC velocities are edge-centered.  div{beta_0 U} is cell-centered.
-        div_beta_U.v()[:,:] = \
+        div_beta_U.v()[:, :] = \
             beta0.v2d()*(u_MAC.ip(1) - u_MAC.v())/myg.dx + \
             (beta0_edges.v2dp(1)*v_MAC.jp(1) -
              beta0_edges.v2d()*v_MAC.v())/myg.dy
@@ -430,36 +415,34 @@ class Simulation(NullSimulation):
         mg.init_RHS(div_beta_U)
         mg.solve(rtol=1.e-12)
 
-
         # update the normal velocities with the pressure gradient -- these
         # constitute our advective velocities.  Note that what we actually
         # solved for here is phi/beta_0
         phi_MAC = self.cc_data.get_var("phi-MAC")
-        phi_MAC[:,:] = mg.get_solution(grid=myg)
+        phi_MAC[:, :] = mg.get_solution(grid=myg)
 
         coeff = self.aux_data.get_var("coeff")
-        coeff.v()[:,:] = 1.0/rho.v()
-        coeff.v()[:,:] = coeff.v()*beta0.v2d()
+        coeff.v()[:, :] = 1.0/rho.v()
+        coeff.v()[:, :] = coeff.v()*beta0.v2d()
         self.aux_data.fill_BC("coeff")
 
         coeff_x = myg.scratch_array()
         b = (3, 1, 0, 0)  # this seems more than we need
-        coeff_x.v(buf=b)[:,:] = 0.5*(coeff.ip(-1, buf=b) + coeff.v(buf=b))
+        coeff_x.v(buf=b)[:, :] = 0.5*(coeff.ip(-1, buf=b) + coeff.v(buf=b))
 
         coeff_y = myg.scratch_array()
         b = (0, 0, 3, 1)
-        coeff_y.v(buf=b)[:,:] = 0.5*(coeff.jp(-1, buf=b) + coeff.v(buf=b))
+        coeff_y.v(buf=b)[:, :] = 0.5*(coeff.jp(-1, buf=b) + coeff.v(buf=b))
 
         # we need the MAC velocities on all edges of the computational domain
         # here we do U = U - (beta_0/rho) grad (phi/beta_0)
         b = (0, 1, 0, 0)
-        u_MAC.v(buf=b)[:,:] -= \
+        u_MAC.v(buf=b)[:, :] -= \
                 coeff_x.v(buf=b)*(phi_MAC.v(buf=b) - phi_MAC.ip(-1, buf=b))/myg.dx
 
         b = (0, 0, 0, 1)
-        v_MAC.v(buf=b)[:,:] -= \
+        v_MAC.v(buf=b)[:, :] -= \
                 coeff_y.v(buf=b)*(phi_MAC.v(buf=b) - phi_MAC.jp(-1, buf=b))/myg.dy
-
 
         #---------------------------------------------------------------------
         # predict rho to the edges and do its conservative update
@@ -474,29 +457,29 @@ class Simulation(NullSimulation):
 
         rho_old = rho.copy()
 
-        rho.v()[:,:] -= self.dt*(
+        rho.v()[:, :] -= self.dt*(
             #  (rho u)_x
             (rho_xint.ip(1)*u_MAC.ip(1) - rho_xint.v()*u_MAC.v())/myg.dx +
             #  (rho v)_y
-            (rho_yint.jp(1)*v_MAC.jp(1) - rho_yint.v()*v_MAC.v())/myg.dy )
+            (rho_yint.jp(1)*v_MAC.jp(1) - rho_yint.v()*v_MAC.v())/myg.dy)
 
         self.cc_data.fill_BC("density")
 
         # update eint as a diagnostic
         eint = self.cc_data.get_var("eint")
         gamma = self.rp.get_param("eos.gamma")
-        eint.v()[:,:] = self.base["p0"].v2d()/(gamma - 1.0)/rho.v()
-
+        eint.v()[:, :] = self.base["p0"].v2d()/(gamma - 1.0)/rho.v()
 
         #---------------------------------------------------------------------
         # recompute the interface states, using the advective velocity
         # from above
         #---------------------------------------------------------------------
-        if self.verbose > 0: print("  making u, v edge states")
+        if self.verbose > 0:
+            print("  making u, v edge states")
 
         coeff = self.aux_data.get_var("coeff")
-        coeff.v()[:,:] = 2.0/(rho.v() + rho_old.v())
-        coeff.v()[:,:] = coeff.v()*beta0.v2d()
+        coeff.v()[:, :] = 2.0/(rho.v() + rho_old.v())
+        coeff.v()[:, :] = coeff.v()*beta0.v2d()
         self.aux_data.fill_BC("coeff")
 
         _ux, _vx, _uy, _vy = \
@@ -514,11 +497,11 @@ class Simulation(NullSimulation):
         u_yint = ai.ArrayIndexer(d=_uy, grid=myg)
         v_yint = ai.ArrayIndexer(d=_vy, grid=myg)
 
-
         #---------------------------------------------------------------------
         # update U to get the provisional velocity field
         #---------------------------------------------------------------------
-        if self.verbose > 0: print("  doing provisional update of u, v")
+        if self.verbose > 0:
+            print("  doing provisional update of u, v")
 
         # compute (U.grad)U
 
@@ -526,33 +509,31 @@ class Simulation(NullSimulation):
         advect_x = myg.scratch_array()
         advect_y = myg.scratch_array()
 
-        advect_x.v()[:,:] = \
+        advect_x.v()[:, :] = \
             0.5*(u_MAC.v() + u_MAC.ip(1))*(u_xint.ip(1) - u_xint.v())/myg.dx +\
             0.5*(v_MAC.v() + v_MAC.jp(1))*(u_yint.jp(1) - u_yint.v())/myg.dy
 
-        advect_y.v()[:,:] = \
+        advect_y.v()[:, :] = \
             0.5*(u_MAC.v() + u_MAC.ip(1))*(v_xint.ip(1) - v_xint.v())/myg.dx +\
             0.5*(v_MAC.v() + v_MAC.jp(1))*(v_yint.jp(1) - v_yint.v())/myg.dy
-
 
         proj_type = self.rp.get_param("lm-atmosphere.proj_type")
 
         if proj_type == 1:
-            u.v()[:,:] -= (self.dt*advect_x.v() + self.dt*gradp_x.v())
-            v.v()[:,:] -= (self.dt*advect_y.v() + self.dt*gradp_y.v())
+            u.v()[:, :] -= (self.dt*advect_x.v() + self.dt*gradp_x.v())
+            v.v()[:, :] -= (self.dt*advect_y.v() + self.dt*gradp_y.v())
 
         elif proj_type == 2:
-            u.v()[:,:] -= self.dt*advect_x.v()
-            v.v()[:,:] -= self.dt*advect_y.v()
-
+            u.v()[:, :] -= self.dt*advect_x.v()
+            v.v()[:, :] -= self.dt*advect_y.v()
 
         # add the gravitational source
         rho_half = 0.5*(rho + rho_old)
         rhoprime = self.make_prime(rho_half, rho0)
-        source[:,:] = (rhoprime*g/rho_half)
+        source[:, :] = (rhoprime*g/rho_half)
         self.aux_data.fill_BC("source_y")
 
-        v[:,:] += self.dt*source
+        v[:, :] += self.dt*source
 
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")
@@ -562,17 +543,17 @@ class Simulation(NullSimulation):
             print("min/max u   = {}, {}".format(self.cc_data.min("x-velocity"), self.cc_data.max("x-velocity")))
             print("min/max v   = {}, {}".format(self.cc_data.min("y-velocity"), self.cc_data.max("y-velocity")))
 
-
         #---------------------------------------------------------------------
         # project the final velocity
         #---------------------------------------------------------------------
 
         # now we solve L phi = D (U* /dt)
-        if self.verbose > 0: print("  final projection")
+        if self.verbose > 0:
+            print("  final projection")
 
         # create the coefficient array: beta0**2/rho
         coeff = 1.0/rho
-        coeff.v()[:,:] = coeff.v()*beta0.v2d()**2
+        coeff.v()[:, :] = coeff.v()*beta0.v2d()**2
 
         # create the multigrid object
         mg = vcMG.VarCoeffCCMG2d(myg.nx, myg.ny,
@@ -589,7 +570,7 @@ class Simulation(NullSimulation):
         # first compute div{beta_0 U}
 
         # u/v are cell-centered, divU is cell-centered
-        div_beta_U.v()[:,:] = \
+        div_beta_U.v()[:, :] = \
             0.5*beta0.v2d()*(u.ip(1) - u.ip(-1))/myg.dx + \
             0.5*(beta0.v2dp(1)*v.jp(1) - beta0.v2dp(-1)*v.jp(-1))/myg.dy
 
@@ -597,38 +578,36 @@ class Simulation(NullSimulation):
 
         # use the old phi as our initial guess
         phiGuess = mg.soln_grid.scratch_array()
-        phiGuess.v(buf=1)[:,:] = phi.v(buf=1)
+        phiGuess.v(buf=1)[:, :] = phi.v(buf=1)
         mg.init_solution(phiGuess)
 
         # solve
         mg.solve(rtol=1.e-12)
 
-
         # store the solution in our self.cc_data object -- include a single
         # ghostcell
-        phi[:,:] = mg.get_solution(grid=myg)
+        phi[:, :] = mg.get_solution(grid=myg)
 
         # get the cell-centered gradient of p and update the velocities
         # this differs depending on what we projected.
         gradphi_x, gradphi_y = mg.get_solution_gradient(grid=myg)
 
-
         # U = U - (beta_0/rho) grad (phi/beta_0)
         coeff = 1.0/rho
-        coeff.v()[:,:] = coeff.v()*beta0.v2d()
+        coeff.v()[:, :] = coeff.v()*beta0.v2d()
 
-        u.v()[:,:] -= self.dt*coeff.v()*gradphi_x.v()
-        v.v()[:,:] -= self.dt*coeff.v()*gradphi_y.v()
+        u.v()[:, :] -= self.dt*coeff.v()*gradphi_x.v()
+        v.v()[:, :] -= self.dt*coeff.v()*gradphi_y.v()
 
         # store gradp for the next step
 
         if proj_type == 1:
-            gradp_x.v()[:,:] += gradphi_x.v()
-            gradp_y.v()[:,:] += gradphi_y.v()
+            gradp_x.v()[:, :] += gradphi_x.v()
+            gradp_y.v()[:, :] += gradphi_y.v()
 
         elif proj_type == 2:
-            gradp_x.v()[:,:] = gradphi_x.v()
-            gradp_y.v()[:,:] = gradphi_y.v()
+            gradp_x.v()[:, :] = gradphi_x.v()
+            gradp_y.v()[:, :] = gradphi_y.v()
 
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")
@@ -640,7 +619,6 @@ class Simulation(NullSimulation):
         if not self.in_preevolve:
             self.cc_data.t += self.dt
             self.n += 1
-
 
     def dovis(self):
         """
@@ -666,7 +644,7 @@ class Simulation(NullSimulation):
         dv = 0.5*(v.ip(1) - v.ip(-1))/myg.dx
         du = 0.5*(u.jp(1) - u.jp(-1))/myg.dy
 
-        vort.v()[:,:] = dv - du
+        vort.v()[:, :] = dv - du
 
         fig, axes = plt.subplots(nrows=2, ncols=2, num=1)
         plt.subplots_adjust(hspace=0.25)
@@ -689,11 +667,10 @@ class Simulation(NullSimulation):
 
             plt.colorbar(img, ax=ax)
 
-        plt.figtext(0.05,0.0125, "t = {:10.5f}".format(self.cc_data.t))
+        plt.figtext(0.05, 0.0125, "t = {:10.5f}".format(self.cc_data.t))
 
         plt.pause(0.001)
         plt.draw()
-
 
     def write_extras(self, f):
         """
@@ -707,7 +684,6 @@ class Simulation(NullSimulation):
 
         for key in self.base:
             gb.create_dataset(key, data=self.base[key].d)
-
 
     def read_extras(self, f):
         """

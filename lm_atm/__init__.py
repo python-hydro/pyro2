@@ -22,4 +22,6 @@ The projections are done using multigrid
 
 """
 
+__all__ = ["simulation"]
+
 from .simulation import *

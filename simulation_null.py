@@ -4,6 +4,7 @@ import mesh.boundary as bnd
 import mesh.patch as patch
 from util import msg, profile
 
+
 def grid_setup(rp, ng=1):
     nx = rp.get_param("mesh.nx")
     ny = rp.get_param("mesh.ny")
@@ -104,12 +105,14 @@ class NullSimulation(object):
 
         self.data_class = data_class
 
-        try: self.tmax = rp.get_param("driver.tmax")
-        except:
+        try:
+            self.tmax = rp.get_param("driver.tmax")
+        except KeyError:
             self.tmax = None
 
-        try: self.max_steps = rp.get_param("driver.max_steps")
-        except:
+        try:
+            self.max_steps = rp.get_param("driver.max_steps")
+        except KeyError:
             self.max_steps = None
 
         self.rp = rp
@@ -120,28 +123,26 @@ class NullSimulation(object):
         self.solver_name = solver_name
         self.problem_name = problem_name
 
-        if timers == None:
+        if timers is None:
             self.tc = profile.TimerCollection()
         else:
             self.tc = timers
 
         try:
             self.verbose = self.rp.get_param("driver.verbose")
-        except:
+        except KeyError:
             self.verbose = 0
 
         self.n_num_out = 0
 
-        # plotting 
+        # plotting
         self.cm = "viridis"
-
 
     def finished(self):
         """
         is the simulation finished based on time or the number of steps
         """
         return self.cc_data.t >= self.tmax or self.n >= self.max_steps
-
 
     def do_output(self):
         """
@@ -151,24 +152,21 @@ class NullSimulation(object):
         n_out = self.rp.get_param("io.n_out")
         do_io = self.rp.get_param("io.do_io")
 
-        is_time = self.cc_data.t >= (self.n_num_out + 1)*dt_out or self.n%n_out == 0
+        is_time = self.cc_data.t >= (self.n_num_out + 1)*dt_out or self.n % n_out == 0
         if is_time and do_io == 1:
             self.n_num_out += 1
             return True
         else:
             return False
 
-
     def initialize(self):
         pass
-
 
     def method_compute_timestep(self):
         """
         the method-specific timestep code
         """
         pass
-
 
     def compute_timestep(self):
         """
@@ -194,7 +192,6 @@ class NullSimulation(object):
         if self.cc_data.t + self.dt > self.tmax:
             self.dt = self.tmax - self.cc_data.t
 
-
     def preevolve(self):
         """
         Do any necessary evolution before the main evolve loop.  This
@@ -202,17 +199,14 @@ class NullSimulation(object):
         """
         pass
 
-
     def evolve(self):
 
         # increment the time
         self.cc_data.t += self.dt
         self.n += 1
 
-
     def dovis(self):
         pass
-
 
     def finalize(self):
         """
@@ -220,11 +214,9 @@ class NullSimulation(object):
         finalize() method.
         """
         # there should be a cleaner way of doing this
-        solver = importlib.import_module(self.solver_name)
         problem = importlib.import_module("{}.problems.{}".format(self.solver_name, self.problem_name))
 
         problem.finalize()
-
 
     def write(self, filename):
         """
@@ -246,17 +238,14 @@ class NullSimulation(object):
             self.rp.write_params(f)
             self.write_extras(f)
 
-
     def write_extras(self, f):
         """
         write out any extra simulation-specific stuff
         """
         pass
 
-
     def read_extras(self, f):
         """
         read in any simulation-specific data from an h5py file object f
         """
         pass
-

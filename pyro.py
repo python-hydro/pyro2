@@ -55,7 +55,6 @@ def doit(solver_name, problem_name, param_file,
     # write out the inputs.auto
     rp.print_paramfile()
 
-
     #-------------------------------------------------------------------------
     # initialization
     #-------------------------------------------------------------------------
@@ -67,7 +66,6 @@ def doit(solver_name, problem_name, param_file,
 
     sim.initialize()
     sim.preevolve()
-
 
     #-------------------------------------------------------------------------
     # evolve
@@ -130,7 +128,6 @@ def doit(solver_name, problem_name, param_file,
 
     tm_main.end()
 
-
     #-------------------------------------------------------------------------
     # benchmarks (for regression testing)
     #-------------------------------------------------------------------------
@@ -142,10 +139,9 @@ def doit(solver_name, problem_name, param_file,
         msg.warning("comparing to: {} ".format(compare_file))
         try:
             sim_bench = io.read(compare_file)
-        except:
+        except IOError:
             msg.warning("ERROR openning compare file")
             return "ERROR openning compare file"
-
 
         result = compare.compare(sim.cc_data, sim_bench.cc_data)
 
@@ -154,19 +150,17 @@ def doit(solver_name, problem_name, param_file,
         else:
             msg.warning("ERROR: " + compare.errors[result] + "\n")
 
-
     # are we storing a benchmark?
     if make_bench or (result != 0 and reset_bench_on_fail):
         if not os.path.isdir(solver_name + "/tests/"):
             try:
                 os.mkdir(solver_name + "/tests/")
-            except:
+            except (FileNotFoundError, PermissionError):
                 msg.fail("ERROR: unable to create the solver's tests/ directory")
 
         bench_file = solver_name + "/tests/" + basename + "%4.4d" % (sim.n)
         msg.warning("storing new benchmark: {}\n".format(bench_file))
         sim.write(bench_file)
-
 
     #-------------------------------------------------------------------------
     # final reports
