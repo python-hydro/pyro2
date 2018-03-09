@@ -7,11 +7,12 @@ import h5py
 import mesh.patch as patch
 import mesh.boundary as bnd
 
+
 def read_bcs(f):
     """read in the boundary condition record from the HDF5 file"""
     try:
         gb = f["BC"]
-    except:
+    except KeyError:
         return None
     else:
         BCs = {}
@@ -19,6 +20,7 @@ def read_bcs(f):
             BCs[name] = gb[name]
 
         return BCs
+
 
 def read(filename):
     """read an HDF5 file and recreate the simulation object that holds the
@@ -47,7 +49,6 @@ def read(filename):
         myg = patch.Grid2d(grid["nx"], grid["ny"], ng=grid["ng"],
                            xmin=grid["xmin"], xmax=grid["xmax"],
                            ymin=grid["ymin"], ymax=grid["ymax"])
-
 
         # sometimes problems define custom BCs -- at the moment, we
         # are going to assume that these always map to BC.user.  We

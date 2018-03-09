@@ -15,6 +15,7 @@ import multigrid.mg_test_vc_dirichlet as mg_test_vc_dirichlet
 import multigrid.mg_test_vc_periodic as mg_test_vc_periodic
 import multigrid.mg_test_general_inhomogeneous as mg_test_general_inhomogeneous
 
+
 class PyroTest(object):
     def __init__(self, solver, problem, inputs, options):
         self.solver = solver
@@ -33,7 +34,8 @@ def do_tests(build, out_file, do_standalone=True, do_main=True,
     # make sure we've built stuff
     print("build = ", build)
 
-    if build: os.system("./mk.sh")
+    if build:
+        os.system("./mk.sh")
 
     opts = "driver.verbose=0 vis.dovis=0 io.do_io=0".split()
 
@@ -67,7 +69,6 @@ def do_tests(build, out_file, do_standalone=True, do_main=True,
                             reset_bench_on_fail=reset_fails, make_bench=store_all_benchmarks)
             results[str(t)] = err
 
-
     # standalone tests
     if do_standalone and single is None:
         err = mg_test_simple.test_poisson_dirichlet(256, comp_bench=True,
@@ -90,11 +91,10 @@ def do_tests(build, out_file, do_standalone=True, do_main=True,
                                                                                verbose=0)
         results["mg_general_poisson_inhomogeneous"] = err
 
-
     failed = 0
 
     out = [sys.stdout]
-    if not out_file == None:
+    if out_file is not None:
         out.append(open(out_file, "w"))
 
     for f in out:
@@ -107,10 +107,10 @@ def do_tests(build, out_file, do_standalone=True, do_main=True,
             else:
                 f.write("{:42} passed\n".format(s))
 
-
         f.write("\n{} test(s) failed\n".format(failed))
 
-        if not f == sys.stdout: f.close()
+        if not f == sys.stdout:
+            f.close()
 
 
 if __name__ == "__main__":
@@ -155,16 +155,20 @@ if __name__ == "__main__":
 
     args = p.parse_args()
 
-    try: outfile = args.o[0]
-    except: outfile = None
+    try:
+        outfile = args.o[0]
+    except IndexError:
+        outfile = None
 
     build = args.build
 
     do_main = True
-    if args.skip_main: do_main = False
+    if args.skip_main:
+        do_main = False
 
     do_standalone = True
-    if args.skip_standalone: do_standalone = False
+    if args.skip_standalone:
+        do_standalone = False
 
     if not args.unittests_only:
         do_tests(build, outfile, do_standalone=do_standalone, do_main=do_main,

@@ -3,7 +3,9 @@ from util import runparams
 import mesh.patch as patch
 import mesh.boundary as bnd
 
+
 class TestSimulation(object):
+
     @classmethod
     def setup_class(cls):
         """ this is run once for each class before any tests """
@@ -84,4 +86,3 @@ def test_grid_setup():
     assert g.ny == 16
     assert g.dx == 1.0/8
     assert g.dy == 1.0/8
-
