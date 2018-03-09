@@ -1,1 +1,1 @@
-all = ["flame", "rt"]
+__all__ = ["flame", "rt"]

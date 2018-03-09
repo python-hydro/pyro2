@@ -30,7 +30,6 @@ parser.add_argument("plotfile", type=str, nargs=1,
 
 args = parser.parse_args()
 
-
 # read the data and convert to the primitive variables (and velocity
 # magnitude)
 sim = io.read(args.plotfile[0])
@@ -50,17 +49,14 @@ e = (ener.v() - 0.5*rho*u*u)/rho
 gamma = myd.get_aux("gamma")
 p = rho*e*(gamma - 1.0)
 
-
-
 # get the exact solution
 exact = np.loadtxt("cylindrical-sedov.out")
 
-x_exact   = exact[:,1]
-rho_exact = exact[:,2]
-u_exact   = exact[:,5]
-p_exact   = exact[:,4]
-#e_exact   = exact[:,4]
-
+x_exact = exact[:, 1]
+rho_exact = exact[:, 2]
+u_exact = exact[:, 5]
+p_exact = exact[:, 4]
+# e_exact = exact[:, 4]
 
 # radially bin
 
@@ -78,14 +74,12 @@ nbins = np.int(np.sqrt(myg.nx**2 + myg.ny**2))
 bins = np.linspace(rmin, rmax, nbins+1)
 bin_centers = 0.5*(bins[1:] + bins[:-1])
 
-
 # radius of each zone
 xcenter = 0.5*(myg.xmin + myg.xmax)
 ycenter = 0.5*(myg.ymin + myg.ymax)
 
-r = np.sqrt( (myg.x2d[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] - xcenter)**2 +
-             (myg.y2d[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] - ycenter)**2 )
-
+r = np.sqrt((myg.x2d[myg.ilo:myg.ihi+1, myg.jlo:myg.jhi+1] - xcenter)**2 +
+            (myg.y2d[myg.ilo:myg.ihi+1, myg.jlo:myg.jhi+1] - ycenter)**2)
 
 # bin the radii -- digitize returns an array with the same shape as
 # the input array but with elements of the array specifying which bin
@@ -100,30 +94,26 @@ whichbin = np.digitize(r.flat, bins)
 # set by the maximum value in whichbin
 ncount = np.bincount(whichbin)
 
-
 # now bin the associated data
 rho_bin = np.zeros(len(ncount)-1, dtype=np.float64)
-u_bin   = np.zeros(len(ncount)-1, dtype=np.float64)
-p_bin   = np.zeros(len(ncount)-1, dtype=np.float64)
+u_bin = np.zeros(len(ncount)-1, dtype=np.float64)
+p_bin = np.zeros(len(ncount)-1, dtype=np.float64)
 
 for n in range(len(ncount)):
 
     # remember that there are no whichbin == 0, since that corresponds
     # to the left edge.  So we want whichbin == 1 to correspond to the
     # first value of bin_centers (bin_centers[0])
-    rho_bin[n-1] = np.sum(rho.flat[whichbin==n])/np.sum(ncount[n])
-    u_bin[n-1]   = np.sum(  u.flat[whichbin==n])/np.sum(ncount[n])
-    p_bin[n-1]   = np.sum(  p.flat[whichbin==n])/np.sum(ncount[n])
-
+    rho_bin[n-1] = np.sum(rho.flat[whichbin == n])/np.sum(ncount[n])
+    u_bin[n-1] = np.sum(u.flat[whichbin == n])/np.sum(ncount[n])
+    p_bin[n-1] = np.sum(p.flat[whichbin == n])/np.sum(ncount[n])
 
 bin_centers = bin_centers[0:len(ncount)-1]
-
 
 # plot
 fig, axes = plt.subplots(nrows=3, ncols=1, num=1)
 
 plt.rc("font", size=10)
-
 
 ax = axes.flat[0]
 
@@ -131,7 +121,7 @@ ax.plot(x_exact, rho_exact, color="C0", zorder=-100, label="exact")
 ax.scatter(bin_centers, rho_bin, marker="x", s=7, color="C1", label="simulation")
 
 ax.set_ylabel(r"$\rho$")
-ax.set_xlim(0,0.6)
+ax.set_xlim(0, 0.6)
 ax.legend(frameon=False, loc="best", fontsize="small")
 
 ax = axes.flat[1]
@@ -140,7 +130,7 @@ ax.plot(x_exact, u_exact, color="C0", zorder=-100)
 ax.scatter(bin_centers, u_bin, marker="x", s=7, color="C1")
 
 ax.set_ylabel(r"$u$")
-ax.set_xlim(0,0.6)
+ax.set_xlim(0, 0.6)
 
 ax = axes.flat[2]
 
@@ -148,13 +138,11 @@ ax.plot(x_exact, p_exact, color="C0", zorder=-100)
 ax.scatter(bin_centers, p_bin, marker="x", s=7, color="C1")
 
 ax.set_ylabel(r"$p$")
-ax.set_xlim(0,0.6)
+ax.set_xlim(0, 0.6)
 ax.set_xlabel(r"r")
-
 
 plt.subplots_adjust(hspace=0.25)
 
-
-fig.set_size_inches(4.5,8.0)
+fig.set_size_inches(4.5, 8.0)
 
 plt.savefig(args.o, bbox_inches="tight")

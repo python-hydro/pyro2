@@ -9,6 +9,7 @@ import mesh.patch as patch
 import compressible_fv4
 from util import msg
 
+
 class Simulation(compressible_fv4.Simulation):
     """Drive the 4th-order compressible solver with SDC time integration"""
 
@@ -82,7 +83,7 @@ class Simulation(compressible_fv4.Simulation):
                 # and the final update
                 for n in range(self.ivars.nvar):
                     U_knew[m+1].data.v(n=n)[:, :] = U_knew[m].data.v(n=n) + \
-                       0.5*self.dt * (A_knew.v(n=n) - A_kold[m].v(n=n)) + I.v(n=n)
+                        0.5*self.dt * (A_knew.v(n=n) - A_kold[m].v(n=n)) + I.v(n=n)
 
                 # fill ghost cells
                 U_knew[m+1].fill_BC_all()
@@ -90,7 +91,6 @@ class Simulation(compressible_fv4.Simulation):
             # store the current iteration as the old iteration
             for m in range(1, 3):
                 U_kold[m].data[:, :, :] = U_knew[m].data[:, :, :]
-
 
         # store the new solution
         self.cc_data.data[:, :, :] = U_knew[-1].data[:, :, :]

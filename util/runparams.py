@@ -61,6 +61,7 @@ def is_int(string):
     else:
         return True
 
+
 def is_float(string):
     """ is the given string a float? """
     try:
@@ -69,6 +70,7 @@ def is_float(string):
         return False
     else:
         return True
+
 
 def _get_val(value):
     if is_int(value):
@@ -143,7 +145,7 @@ class RuntimeParameters(object):
                 # if we have no_new = 1, then we only want to override existing
                 # key/values
                 if no_new:
-                    if not key in self.params.keys():
+                    if key not in self.params.keys():
                         msg.warning("warning, key: %s not defined" % (key))
                         continue
 
@@ -160,7 +162,6 @@ class RuntimeParameters(object):
                         comment = ""
 
                 self.param_comments[key] = comment.strip()
-
 
     def command_line_params(self, cmd_strings):
         """
@@ -185,13 +186,12 @@ class RuntimeParameters(object):
             key, value = item.split("=")
 
             # we only want to override existing keys/values
-            if not key in self.params.keys():
+            if key not in self.params.keys():
                 msg.warning("warning, key: %s not defined" % (key))
                 continue
 
             # check in turn whether this is an interger, float, or string
             self.params[key] = _get_val(value)
-
 
     def get_param(self, key):
         """
@@ -204,7 +204,7 @@ class RuntimeParameters(object):
             self.load_params("_defaults")
 
         # debugging
-        if not key in self.used_params:
+        if key not in self.used_params:
             self.used_params.append(key)
 
         if key in self.params.keys():
@@ -212,15 +212,13 @@ class RuntimeParameters(object):
         else:
             raise KeyError("ERROR: runtime parameter {} not found".format(key))
 
-
     def print_unused_params(self):
         """
         Print out the list of parameters that were defined by never used
         """
         for key in self.params:
-            if not key in self.used_params:
+            if key not in self.used_params:
                 msg.warning("parameter %s never used" % (key))
-
 
     def print_all_params(self):
         """
@@ -256,7 +254,6 @@ class RuntimeParameters(object):
 
         return ostr
 
-
     def print_paramfile(self):
         """
         Create a file, inputs.auto, that has the structure of a pyro
@@ -270,7 +267,6 @@ class RuntimeParameters(object):
             f = open('inputs.auto', 'w')
         except IOError:
             msg.fail("ERROR: unable to open inputs.auto")
-
 
         f.write('# automagically generated parameter file\n')
 

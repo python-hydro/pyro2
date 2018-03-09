@@ -12,6 +12,7 @@ from __future__ import print_function
 
 import time
 
+
 class TimerCollection(object):
     """A timer collection---this manages the timers and has methods to
     start and stop them.  Nesting of timers is tracked so we can
@@ -46,7 +47,6 @@ class TimerCollection(object):
         Initialize the collection of timers
         """
         self.timers = []
-
 
     def timer(self, name):
         """
@@ -85,7 +85,6 @@ class TimerCollection(object):
 
         return t_new
 
-
     def report(self):
         """
         Generate a timing summary report
@@ -120,14 +119,12 @@ class Timer(object):
         self.start_time = 0
         self.elapsed_time = 0
 
-
     def begin(self):
         """
         Start timing
         """
         self.start_time = time.time()
         self.is_running = True
-
 
     def end(self):
         """
@@ -137,7 +134,6 @@ class Timer(object):
         elapsed_time = time.time() - self.start_time
         self.elapsed_time += elapsed_time
         self.is_running = False
-
 
 
 if __name__ == "__main__":

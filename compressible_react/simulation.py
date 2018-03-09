@@ -3,23 +3,21 @@ from __future__ import print_function
 import matplotlib.pyplot as plt
 import numpy as np
 
-
-import mesh.integration as integration
 import compressible
 import compressible.eos as eos
 
 import util.plot_tools as plot_tools
+
 
 class Simulation(compressible.Simulation):
 
     def initialize(self):
         """
         For the reacting compressible solver, our initialization of
-        the data is the same as the compressible solver, but we 
+        the data is the same as the compressible solver, but we
         supply additional variables.
         """
         super().initialize(extra_vars=["fuel", "ash"])
-
 
     def burn(self, dt):
         """ react fuel to ash """
@@ -30,7 +28,6 @@ class Simulation(compressible.Simulation):
         # update energy due to reaction
         pass
 
-
     def diffuse(self, dt):
         """ diffuse for dt """
 
@@ -40,7 +37,6 @@ class Simulation(compressible.Simulation):
 
         # update energy due to diffusion
         pass
-
 
     def evolve(self):
         """
@@ -59,7 +55,6 @@ class Simulation(compressible.Simulation):
         self.diffuse(self.dt/2)
 
         self.burn(self.dt/2)
-
 
     def dovis(self):
         """
@@ -80,13 +75,13 @@ class Simulation(compressible.Simulation):
 
         q = compressible.cons_to_prim(self.cc_data.data, gamma, ivars, self.cc_data.grid)
 
-        rho = q[:,:,ivars.irho]
-        u = q[:,:,ivars.iu]
-        v = q[:,:,ivars.iv]
-        p = q[:,:,ivars.ip]
+        rho = q[:, :, ivars.irho]
+        u = q[:, :, ivars.iu]
+        v = q[:, :, ivars.iv]
+        p = q[:, :, ivars.ip]
         e = eos.rhoe(gamma, p)/rho
 
-        X = q[:,:,ivars.ix]
+        X = q[:, :, ivars.ix]
 
         magvel = np.sqrt(u**2 + v**2)
 

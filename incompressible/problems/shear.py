@@ -21,6 +21,7 @@ import numpy as np
 import mesh.patch as patch
 from util import msg
 
+
 def init_data(my_data, rp):
     """ initialize the incompressible shear problem """
 

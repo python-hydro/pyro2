@@ -6,6 +6,7 @@ import numpy as np
 from util import msg
 import math
 
+
 def init_data(my_data, rp):
     """ initialize the sedov problem """
 
@@ -26,9 +27,9 @@ def init_data(my_data, rp):
     # initialize the components, remember, that ener here is rho*eint
     # + 0.5*rho*v**2, where eint is the specific internal energy
     # (erg/g)
-    dens[:,:] = 1.0
-    xmom[:,:] = 0.0
-    ymom[:,:] = 0.0
+    dens[:, :] = 1.0
+    xmom[:, :] = 0.0
+    ymom[:, :] = 0.0
 
     E_sedov = 1.0
 
@@ -46,7 +47,6 @@ def init_data(my_data, rp):
     xctr = 0.5*(xmin + xmax)
     yctr = 0.5*(ymin + ymax)
 
-
     # initialize the pressure by putting the explosion energy into a
     # volume of constant pressure.  Then compute the energy in a zone
     # from this.
@@ -55,9 +55,8 @@ def init_data(my_data, rp):
     dist = np.sqrt((my_data.grid.x2d - xctr)**2 +
                    (my_data.grid.y2d - yctr)**2)
 
-
     p = 1.e-5
-    ener[:,:] = p/(gamma - 1.0)
+    ener[:, :] = p/(gamma - 1.0)
 
     for i, j in np.transpose(np.nonzero(dist < 2.0*r_init)):
 
@@ -81,7 +80,7 @@ def init_data(my_data, rp):
 
         p = pzone/(nsub*nsub)
 
-        ener[i,j] = p/(gamma - 1.0)
+        ener[i, j] = p/(gamma - 1.0)
 
 
 def finalize():

@@ -65,16 +65,15 @@ def doit(nx, ny):
     u = U.get_var('u')
     v = U.get_var('v')
 
-    u[:,:] = -(np.sin(np.pi*myg.x2d)**2)*np.sin(2.0*np.pi*myg.y2d)
-    v[:,:] =  (np.sin(np.pi*myg.y2d)**2)*np.sin(2.0*np.pi*myg.x2d)
-
+    u[:, :] = -(np.sin(np.pi*myg.x2d)**2)*np.sin(2.0*np.pi*myg.y2d)
+    v[:, :] = (np.sin(np.pi*myg.y2d)**2)*np.sin(2.0*np.pi*myg.x2d)
 
     # store the original, divergence free velocity field for comparison later
     uold = U.get_var('u-old')
     vold = U.get_var('v-old')
 
-    uold[:,:] = u.copy()
-    vold[:,:] = v.copy()
+    uold[:, :] = u.copy()
+    vold[:, :] = v.copy()
 
     # the projection routine should decompose U into a divergence free
     # part, U_d, plus the gradient of a scalar.  Add on the gradient
@@ -89,42 +88,37 @@ def doit(nx, ny):
     gradphi_x = U.get_var('gradphi_x-old')
     gradphi_y = U.get_var('gradphi_y-old')
 
-    phi[:,:] = np.exp(-((myg.x2d-x0)**2 + (myg.y2d-y0)**2)/R**2)
+    phi[:, :] = np.exp(-((myg.x2d-x0)**2 + (myg.y2d-y0)**2)/R**2)
 
-    gradphi_x[:,:] = phi*(-2.0*(myg.x2d-x0)/R**2)
-    gradphi_y[:,:] = phi*(-2.0*(myg.y2d-y0)/R**2)
+    gradphi_x[:, :] = phi*(-2.0*(myg.x2d-x0)/R**2)
+    gradphi_y[:, :] = phi*(-2.0*(myg.y2d-y0)/R**2)
 
     u += gradphi_x
     v += gradphi_y
 
-
     u_plus_gradphi = U.get_var('u+gphi')
     v_plus_gradphi = U.get_var('v+gphi')
 
-    u_plus_gradphi[:,:] = u[:,:]
-    v_plus_gradphi[:,:] = v[:,:]
-
+    u_plus_gradphi[:, :] = u[:, :]
+    v_plus_gradphi[:, :] = v[:, :]
 
     # use the mesh class to enforce the periodic BCs on the velocity field
     U.fill_BC_all()
 
-
     # now compute the cell-centered, centered-difference divergence
     divU = U.get_var('divU')
 
-    divU[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
-          0.5*(u[myg.ilo+1:myg.ihi+2,myg.jlo  :myg.jhi+1] -
-               u[myg.ilo-1:myg.ihi  ,myg.jlo  :myg.jhi+1])/myg.dx + \
-          0.5*(v[myg.ilo  :myg.ihi+1,myg.jlo+1:myg.jhi+2] -
-               v[myg.ilo  :myg.ihi+1,myg.jlo-1:myg.jhi  ])/myg.dy
-
+    divU[myg.ilo:myg.ihi+1, myg.jlo:myg.jhi+1] = \
+          0.5*(u[myg.ilo+1:myg.ihi+2, myg.jlo:myg.jhi+1] -
+               u[myg.ilo-1:myg.ihi, myg.jlo:myg.jhi+1])/myg.dx + \
+          0.5*(v[myg.ilo:myg.ihi+1, myg.jlo+1:myg.jhi+2] -
+               v[myg.ilo:myg.ihi+1, myg.jlo-1:myg.jhi])/myg.dy
 
     # create the multigrid object with Neumann BCs
     a = MG.CellCenterMG2d(nx, ny,
                           xl_BC_type="periodic", xr_BC_type="periodic",
                           yl_BC_type="periodic", yr_BC_type="periodic",
                           verbose=1)
-
 
     #--------------------------------------------------------------------------
     # projections
@@ -138,24 +132,23 @@ def doit(nx, ny):
         phi = U.get_var('phi')
         solution = a.get_solution()
 
-        phi[myg.ilo-1:myg.ihi+2,myg.jlo-1:myg.jhi+2] = \
-            solution[a.ilo-1:a.ihi+2,a.jlo-1:a.jhi+2]
+        phi[myg.ilo-1:myg.ihi+2, myg.jlo-1:myg.jhi+2] = \
+            solution[a.ilo-1:a.ihi+2, a.jlo-1:a.jhi+2]
 
         dphi = U.get_var('dphi')
-        dphi[:,:] = phi - U.get_var('phi-old')
-
+        dphi[:, :] = phi - U.get_var('phi-old')
 
         # compute the gradient of phi using centered differences
         gradphi_x = U.get_var('gradphi_x')
         gradphi_y = U.get_var('gradphi_y')
 
-        gradphi_x[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
-            0.5*(phi[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
-                 phi[myg.ilo-1:myg.ihi,myg.jlo:myg.jhi+1])/myg.dx
+        gradphi_x[myg.ilo:myg.ihi+1, myg.jlo:myg.jhi+1] = \
+            0.5*(phi[myg.ilo+1:myg.ihi+2, myg.jlo:myg.jhi+1] -
+                 phi[myg.ilo-1:myg.ihi, myg.jlo:myg.jhi+1])/myg.dx
 
-        gradphi_y[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
-            0.5*(phi[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
-                 phi[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi])/myg.dy
+        gradphi_y[myg.ilo:myg.ihi+1, myg.jlo:myg.jhi+1] = \
+            0.5*(phi[myg.ilo:myg.ihi+1, myg.jlo+1:myg.jhi+2] -
+                 phi[myg.ilo:myg.ihi+1, myg.jlo-1:myg.jhi])/myg.dy
 
         # update the velocity field
         u -= gradphi_x
@@ -163,14 +156,12 @@ def doit(nx, ny):
 
         U.fill_BC_all()
 
-
         # recompute the divergence diagnostic
-        divU[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
-             0.5*(u[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
-                  u[myg.ilo-1:myg.ihi,myg.jlo:myg.jhi+1])/myg.dx + \
-             0.5*(v[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
-                  v[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi])/myg.dy
-
+        divU[myg.ilo:myg.ihi+1, myg.jlo:myg.jhi+1] = \
+             0.5*(u[myg.ilo+1:myg.ihi+2, myg.jlo:myg.jhi+1] -
+                  u[myg.ilo-1:myg.ihi, myg.jlo:myg.jhi+1])/myg.dx + \
+             0.5*(v[myg.ilo:myg.ihi+1, myg.jlo+1:myg.jhi+2] -
+                  v[myg.ilo:myg.ihi+1, myg.jlo-1:myg.jhi])/myg.dy
 
         U.write("proj-periodic.after"+("%d" % iproj))
 

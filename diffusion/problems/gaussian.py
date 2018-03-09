@@ -5,9 +5,10 @@ import mesh.patch as patch
 import numpy
 from util import msg
 
+
 def phi_analytic(dist, t, t_0, k, phi_1, phi_2):
     """ the analytic solution to the Gaussian diffusion problem """
-    phi = (phi_2 - phi_1)*(t_0/(t + t_0))* \
+    phi = (phi_2 - phi_1)*(t_0/(t + t_0)) * \
         numpy.exp(-0.25*dist**2/(k*(t + t_0))) + phi_1
     return phi
 
@@ -49,7 +50,6 @@ def init_data(my_data, rp):
     my_data.set_aux("t_0", t_0)
     my_data.set_aux("phi_0", phi_0)
     my_data.set_aux("phi_max", phi_max)
-
 
 
 def finalize():

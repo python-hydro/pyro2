@@ -6,6 +6,7 @@ import numpy as np
 import mesh.patch
 import mesh.boundary as bnd
 
+
 def doit():
 
     myg = mesh.patch.Grid2d(4, 4, ng=2, xmax=1.0, ymax=1.0)
@@ -30,27 +31,24 @@ def doit():
 
     mydata.create()
 
-
     a = mydata.get_var("outflow")
 
     for i in range(myg.ilo, myg.ihi+1):
         for j in range(myg.jlo, myg.jhi+1):
-            a[i,j] = (i-myg.ilo) + 10*(j-myg.jlo) + 1
-
+            a[i, j] = (i-myg.ilo) + 10*(j-myg.jlo) + 1
 
     b = mydata.get_var("periodic")
     c = mydata.get_var("reflect-even")
     d = mydata.get_var("reflect-odd")
 
-    b[:,:] = a[:,:]
-    c[:,:] = a[:,:]
-    d[:,:] = a[:,:]
+    b[:, :] = a[:, :]
+    c[:, :] = a[:, :]
+    d[:, :] = a[:, :]
 
     mydata.fill_BC("outflow")
     mydata.fill_BC("periodic")
     mydata.fill_BC("reflect-even")
     mydata.fill_BC("reflect-odd")
-
 
     print("outflow")
     mydata.pretty_print("outflow")

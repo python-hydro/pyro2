@@ -1,16 +1,9 @@
 from __future__ import print_function
 
-import importlib
-import numpy as np
-import matplotlib.pyplot as plt
-
 import advection
 import advection_weno.fluxes as flx
-import mesh.patch as patch
 import mesh.integration as integration
 import mesh.array_indexer as ai
-
-from util import profile
 
 
 class Simulation(advection.Simulation):
@@ -25,17 +18,16 @@ class Simulation(advection.Simulation):
 
         k = myg.scratch_array()
 
-        flux_x, flux_y =  flx.fluxes(myd, self.rp, self.dt)
+        flux_x, flux_y = flx.fluxes(myd, self.rp, self.dt)
 
         F_x = ai.ArrayIndexer(d=flux_x, grid=myg)
         F_y = ai.ArrayIndexer(d=flux_y, grid=myg)
 
-        k.v()[:,:] = \
+        k.v()[:, :] = \
             (F_x.v() - F_x.ip(1))/myg.dx + \
             (F_y.v() - F_y.jp(1))/myg.dy
 
         return k
-
 
     def method_compute_timestep(self):
         """
@@ -50,11 +42,10 @@ class Simulation(advection.Simulation):
         v = self.rp.get_param("advection.v")
 
         # the timestep is 1/sum{|U|/dx}
-        xtmp = max(abs(u),self.SMALL)/self.cc_data.grid.dx
-        ytmp = max(abs(v),self.SMALL)/self.cc_data.grid.dy
+        xtmp = max(abs(u), self.SMALL)/self.cc_data.grid.dx
+        ytmp = max(abs(v), self.SMALL)/self.cc_data.grid.dy
 
         self.dt = cfl/(xtmp + ytmp)
-
 
     def evolve(self):
         """
@@ -66,7 +57,6 @@ class Simulation(advection.Simulation):
         tm_evolve = self.tc.timer("evolve")
         tm_evolve.begin()
 
-        myg = self.cc_data.grid
         myd = self.cc_data
 
         method = self.rp.get_param("advection.temporal_method")

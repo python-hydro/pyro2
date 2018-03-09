@@ -1,7 +1,6 @@
 import mesh.reconstruction as reconstruction
-import mesh.patch as patch
-import mesh.array_indexer as ai
 import numpy as np
+
 
 def fvs(q, order, u, alpha):
     """
@@ -39,6 +38,7 @@ def fvs(q, order, u, alpha):
     flux[1:-1] = flux_p_r[1:-1] + flux_m_l[1:-1]
 
     return flux
+
 
 def fluxes(my_data, rp, dt):
     """
@@ -92,7 +92,7 @@ def fluxes(my_data, rp, dt):
     assert(weno_order in (2, 3)), "Currently only implemented weno_order=2, 3"
     assert(myg.ng > weno_order), "Need more ghosts than the weno_order"
 
-    q = a.v(buf=myg.ng)[:,:]
+    q = a.v(buf=myg.ng)[:, :]
     F_x = myg.scratch_array()
     F_y = myg.scratch_array()
 

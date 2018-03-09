@@ -15,17 +15,16 @@ class EdgeCoeffs(object):
             # eta_x[i,j] will be eta_{i-1/2,j} and
             # eta_y[i,j] will be eta_{i,j-1/2}
 
-            b = (0,1)
+            b = (0, 1)
 
-            eta_x.v(buf=b)[:,:] = 0.5*(eta.ip(-1, buf=b) + eta.v(buf=b))
-            eta_y.v(buf=b)[:,:] = 0.5*(eta.jp(-1, buf=b) + eta.v(buf=b))
+            eta_x.v(buf=b)[:, :] = 0.5*(eta.ip(-1, buf=b) + eta.v(buf=b))
+            eta_y.v(buf=b)[:, :] = 0.5*(eta.jp(-1, buf=b) + eta.v(buf=b))
 
             eta_x /= g.dx**2
             eta_y /= g.dy**2
 
             self.x = eta_x
             self.y = eta_y
-
 
     def restrict(self):
         """
@@ -43,10 +42,10 @@ class EdgeCoeffs(object):
         fg = self.grid
 
         b = (0, 1, 0, 0)
-        c_eta_x.v(buf=b)[:,:] = 0.5*(self.x.v(buf=b, s=2) + self.x.jp(1, buf=b, s=2))
+        c_eta_x.v(buf=b)[:, :] = 0.5*(self.x.v(buf=b, s=2) + self.x.jp(1, buf=b, s=2))
 
         b = (0, 0, 0, 1)
-        c_eta_y.v(buf=b)[:,:] = 0.5*(self.y.v(buf=b, s=2) + self.y.ip(1, buf=b, s=2))
+        c_eta_y.v(buf=b)[:, :] = 0.5*(self.y.v(buf=b, s=2) + self.y.ip(1, buf=b, s=2))
 
         # redo the normalization
         c_edge_coeffs.x = c_eta_x*fg.dx**2/cg.dx**2

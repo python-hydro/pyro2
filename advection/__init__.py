@@ -5,4 +5,3 @@ unsplit method for linear advection based on the Colella 1990 paper.
 
 __all__ = ['simulation']
 from .simulation import *
-

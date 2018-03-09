@@ -7,20 +7,21 @@ from util import io
 
 # plot an output file using the solver's dovis script
 
+
 def makeplot(myd, variable):
 
-    plt.figure(num=1, figsize=(1.28,1.28), dpi=100, facecolor='w')
+    plt.figure(num=1, figsize=(1.28, 1.28), dpi=100, facecolor='w')
 
     var = myd.get_var(variable)
-    #u = myd.get_var("x-velocity")
-    #v = myd.get_var("y-velocity")
-    #var = np.sqrt(u*u + v*v)
+    # u = myd.get_var("x-velocity")
+    # v = myd.get_var("y-velocity")
+    # var = np.sqrt(u*u + v*v)
 
     myg = myd.grid
 
-    img = plt.imshow(np.transpose(var[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
-                     interpolation="nearest", origin="lower",
-                     extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
+    plt.imshow(np.transpose(var[myg.ilo:myg.ihi+1, myg.jlo:myg.jhi+1]),
+               interpolation="nearest", origin="lower",
+               extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
     plt.axis("off")
 
@@ -30,7 +31,7 @@ def makeplot(myd, variable):
     plt.show()
 
 
-if __name__== "__main__":
+if __name__ == "__main__":
 
     print(sys.argv)
 
@@ -40,7 +41,3 @@ if __name__== "__main__":
     sim = io.read(file)
 
     makeplot(sim.cc_data, variable)
-
-
-
-

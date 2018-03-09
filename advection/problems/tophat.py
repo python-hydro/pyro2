@@ -4,6 +4,7 @@ import sys
 import mesh.patch as patch
 from util import msg
 
+
 def init_data(myd, rp):
     """ initialize the tophat advection problem """
 

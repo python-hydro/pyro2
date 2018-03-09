@@ -27,16 +27,17 @@ import matplotlib.pyplot as plt
 
 
 # the analytic solution
-def true(x,y):
+def true(x, y):
     return (x**2 - x**4)*(y**4 - y**2)
 
 
 # the coefficients
-def alpha(x,y):
+def alpha(x, y):
     return np.ones_like(x)
 
+
 # the righthand side
-def f(x,y):
+def f(x, y):
     return -2.0*((1.0-6.0*x**2)*y**2*(1.0-y**2) + (1.0-6.0*y**2)*x**2*(1.0-x**2))
 
 
@@ -45,7 +46,6 @@ def test_vc_constant(N):
     # test the multigrid solver
     nx = N
     ny = nx
-
 
     # create the coefficient variable -- note we don't want Dirichlet here,
     # because that will try to make alpha = 0 on the interface.  alpha can
@@ -58,14 +58,13 @@ def test_vc_constant(N):
     d.create()
 
     c = d.get_var("c")
-    c[:,:] = alpha(g.x2d, g.y2d)
-
+    c[:, :] = alpha(g.x2d, g.y2d)
 
     plt.clf()
 
-    plt.figure(num=1, figsize=(5.0,5.0), dpi=100, facecolor='w')
+    plt.figure(num=1, figsize=(5.0, 5.0), dpi=100, facecolor='w')
 
-    plt.imshow(np.transpose(c[g.ilo:g.ihi+1,g.jlo:g.jhi+1]),
+    plt.imshow(np.transpose(c[g.ilo:g.ihi+1, g.jlo:g.jhi+1]),
                interpolation="nearest", origin="lower",
                extent=[g.xmin, g.xmax, g.ymin, g.ymax])
 
@@ -77,11 +76,9 @@ def test_vc_constant(N):
 
     plt.savefig("mg_alpha.png")
 
-
     # check whether the RHS sums to zero (necessary for periodic data)
     rhs = f(g.x2d, g.y2d)
-    print("rhs sum: {}".format(np.sum(rhs[g.ilo:g.ihi+1,g.jlo:g.jhi+1])))
-
+    print("rhs sum: {}".format(np.sum(rhs[g.ilo:g.ihi+1, g.jlo:g.jhi+1])))
 
     # create the multigrid object
     a = MG.VarCoeffCCMG2d(nx, ny,
@@ -89,7 +86,6 @@ def test_vc_constant(N):
                           xr_BC_type="dirichlet", yr_BC_type="dirichlet",
                           coeffs=c, coeffs_bc=bc_c,
                           verbose=1)
-
 
     # initialize the solution to 0
     a.init_zeros()
@@ -108,22 +104,20 @@ def test_vc_constant(N):
     v = a.get_solution()
 
     # compute the error from the analytic solution
-    b = true(a.x2d,a.y2d)
+    b = true(a.x2d, a.y2d)
     e = v - b
 
-    print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
+    print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" %
           (a.soln_grid.norm(e), a.relative_error, a.num_cycles))
-
 
     # plot it
     plt.clf()
 
-    plt.figure(num=1, figsize=(10.0,5.0), dpi=100, facecolor='w')
-
+    plt.figure(num=1, figsize=(10.0, 5.0), dpi=100, facecolor='w')
 
     plt.subplot(121)
 
-    plt.imshow(np.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
+    plt.imshow(np.transpose(v[a.ilo:a.ihi+1, a.jlo:a.jhi+1]),
                interpolation="nearest", origin="lower",
                extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
@@ -133,10 +127,9 @@ def test_vc_constant(N):
 
     plt.colorbar()
 
-
     plt.subplot(122)
 
-    plt.imshow(np.transpose(e[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
+    plt.imshow(np.transpose(e[a.ilo:a.ihi+1, a.jlo:a.jhi+1]),
                interpolation="nearest", origin="lower",
                extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
@@ -149,7 +142,6 @@ def test_vc_constant(N):
     plt.tight_layout()
 
     plt.savefig("mg_test.png")
-
 
     # store the output for later comparison
     my_data = a.get_solution_object()

@@ -20,6 +20,7 @@ bc_solid["neumann"] = False
 
 ext_bcs = {}
 
+
 def define_bc(bc_type, function, is_solid=False):
     """
     use this to extend the types of boundary conditions supported
@@ -49,6 +50,7 @@ class BCProp(object):
         self.xr = xr_prop
         self.yl = yl_prop
         self.yr = yr_prop
+
 
 def bc_is_solid(bc):
     """
@@ -182,7 +184,6 @@ class BC(object):
         else:
             msg.fail("ERROR: yrb = %s invalid BC" % (yrb))
 
-
         # periodic checks
         if ((xlb == "periodic" and xrb != "periodic") or
             (xrb == "periodic" and xlb != "periodic")):
@@ -191,7 +192,6 @@ class BC(object):
         if ((ylb == "periodic" and yrb != "periodic") or
             (yrb == "periodic" and ylb != "periodic")):
             msg.fail("ERROR: both ylb and yrb must be periodic")
-
 
         # inhomogeneous functions for Dirichlet or Neumann
         self.xl_value = self.xr_value = self.yl_value = self.yr_value = None
@@ -212,5 +212,3 @@ class BC(object):
             (self.xlb, self.xrb, self.ylb, self.yrb)
 
         return string
-
-

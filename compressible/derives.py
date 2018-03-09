@@ -2,8 +2,9 @@ import numpy as np
 
 import compressible.eos as eos
 
+
 def derive_primitives(myd, varnames):
-    """ 
+    """
     derive desired primitive variables from conserved state
     """
 
@@ -53,4 +54,3 @@ def derive_primitives(myd, varnames):
         return derived_vars
     else:
         return derived_vars[0]
-

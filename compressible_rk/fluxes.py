@@ -26,6 +26,7 @@ import mesh.array_indexer as ai
 
 from util import msg
 
+
 def fluxes(my_data, rp, ivars, solid, tc):
     """
     unsplitFluxes returns the fluxes through the x and y interfaces by
@@ -68,7 +69,6 @@ def fluxes(my_data, rp, ivars, solid, tc):
 
     q = comp.cons_to_prim(my_data.data, gamma, ivars, myg)
 
-
     #=========================================================================
     # compute the flattening coefficients
     #=========================================================================
@@ -84,7 +84,6 @@ def fluxes(my_data, rp, ivars, solid, tc):
     else:
         xi = 1.0
 
-
     # monotonized central differences in x-direction
     tm_limit = tc.timer("limiting")
     tm_limit.begin()
@@ -95,8 +94,8 @@ def fluxes(my_data, rp, ivars, solid, tc):
     ldy = myg.scratch_array(nvar=ivars.nvar)
 
     for n in range(ivars.nvar):
-        ldx[:,:,n] = xi*reconstruction.limit(q[:,:,n], myg, 1, limiter)
-        ldy[:,:,n] = xi*reconstruction.limit(q[:,:,n], myg, 2, limiter)
+        ldx[:, :, n] = xi*reconstruction.limit(q[:, :, n], myg, 1, limiter)
+        ldy[:, :, n] = xi*reconstruction.limit(q[:, :, n], myg, 2, limiter)
 
     tm_limit.end()
 
@@ -107,7 +106,7 @@ def fluxes(my_data, rp, ivars, solid, tc):
     grav = rp.get_param("compressible.grav")
 
     if well_balanced:
-        ldy[:,:,ivars.ip] = reconstruction.well_balance(q, myg, limiter, ivars, grav)
+        ldy[:, :, ivars.ip] = reconstruction.well_balance(q, myg, limiter, ivars, grav)
 
     #=========================================================================
     # x-direction
@@ -121,16 +120,14 @@ def fluxes(my_data, rp, ivars, solid, tc):
     V_r = myg.scratch_array(ivars.nvar)
 
     for n in range(ivars.nvar):
-        V_l.ip(1, n=n, buf=2)[:,:] = q.v(n=n, buf=2) + 0.5*ldx.v(n=n, buf=2)
-        V_r.v(n=n, buf=2)[:,:] = q.v(n=n, buf=2) - 0.5*ldx.v(n=n, buf=2)
+        V_l.ip(1, n=n, buf=2)[:, :] = q.v(n=n, buf=2) + 0.5*ldx.v(n=n, buf=2)
+        V_r.v(n=n, buf=2)[:, :] = q.v(n=n, buf=2) - 0.5*ldx.v(n=n, buf=2)
 
     tm_states.end()
-
 
     # transform interface states back into conserved variables
     U_xl = comp.prim_to_cons(V_l, gamma, ivars, myg)
     U_xr = comp.prim_to_cons(V_r, gamma, ivars, myg)
-
 
     #=========================================================================
     # y-direction
@@ -144,19 +141,19 @@ def fluxes(my_data, rp, ivars, solid, tc):
             # we want to do p0 + p1 on the interfaces.  We found the
             # limited slope for p1 (it's average is 0).  So now we
             # need p0 on the interface too
-            V_l.jp(1, n=n, buf=2)[:,:] = q.v(n=ivars.ip, buf=2) + 0.5*myg.dy*q.v(n=ivars.irho, buf=2)*grav + 0.5*ldy.v(n=ivars.ip, buf=2)
-            V_r.v(n=n, buf=2)[:,:] = q.v(n=ivars.ip, buf=2) - 0.5*myg.dy*q.v(n=ivars.irho, buf=2)*grav - 0.5*ldy.v(n=ivars.ip, buf=2)
+            V_l.jp(1, n=n, buf=2)[:, :] = q.v(n=ivars.ip, buf=2) + \
+                0.5*myg.dy*q.v(n=ivars.irho, buf=2)*grav + 0.5*ldy.v(n=ivars.ip, buf=2)
+            V_r.v(n=n, buf=2)[:, :] = q.v(n=ivars.ip, buf=2) - \
+                0.5*myg.dy*q.v(n=ivars.irho, buf=2)*grav - 0.5*ldy.v(n=ivars.ip, buf=2)
         else:
-            V_l.jp(1, n=n, buf=2)[:,:] = q.v(n=n, buf=2) + 0.5*ldy.v(n=n, buf=2)
-            V_r.v(n=n, buf=2)[:,:] = q.v(n=n, buf=2) - 0.5*ldy.v(n=n, buf=2)
+            V_l.jp(1, n=n, buf=2)[:, :] = q.v(n=n, buf=2) + 0.5*ldy.v(n=n, buf=2)
+            V_r.v(n=n, buf=2)[:, :] = q.v(n=n, buf=2) - 0.5*ldy.v(n=n, buf=2)
 
     tm_states.end()
-
 
     # transform interface states back into conserved variables
     U_yl = comp.prim_to_cons(V_l, gamma, ivars, myg)
     U_yr = comp.prim_to_cons(V_r, gamma, ivars, myg)
-
 
     #=========================================================================
     # construct the fluxes normal to the interfaces
@@ -200,18 +197,17 @@ def fluxes(my_data, rp, ivars, solid, tc):
     avisco_x = ai.ArrayIndexer(d=_ax, grid=myg)
     avisco_y = ai.ArrayIndexer(d=_ay, grid=myg)
 
-
-    b = (2,1)
+    b = (2, 1)
 
     for n in range(ivars.nvar):
         # F_x = F_x + avisco_x * (U(i-1,j) - U(i,j))
         var = my_data.get_var_by_index(n)
 
-        F_x.v(buf=b, n=n)[:,:] += \
+        F_x.v(buf=b, n=n)[:, :] += \
             avisco_x.v(buf=b)*(var.ip(-1, buf=b) - var.v(buf=b))
 
         # F_y = F_y + avisco_y * (U(i,j-1) - U(i,j))
-        F_y.v(buf=b, n=n)[:,:] += \
+        F_y.v(buf=b, n=n)[:, :] += \
             avisco_y.v(buf=b)*(var.jp(-1, buf=b) - var.v(buf=b))
 
     tm_flux.end()

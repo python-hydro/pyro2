@@ -3,6 +3,7 @@ of slopes in constructing interface states."""
 
 import numpy as np
 
+
 def limit(data, myg, idir, limiter):
     """ a single driver that calls the different limiters based on the value
     of the limiter input variable."""
@@ -13,6 +14,7 @@ def limit(data, myg, idir, limiter):
     else:
         return limit4(data, myg, idir)
 
+
 def well_balance(q, myg, limiter, iv, grav):
     """subtract off the hydrostatic pressure before limiting.  Note, this
     only considers the y direction."""
@@ -21,26 +23,17 @@ def well_balance(q, myg, limiter, iv, grav):
 
     p1 = myg.scratch_array()
     p1_jp1 = myg.scratch_array()
-    #p1_jp2 = myg.scratch_array()
     p1_jm1 = myg.scratch_array()
-    #p1_jm2 = myg.scratch_array()
 
-    p1.v(buf=4)[:,:] = 0.0
+    p1.v(buf=4)[:, :] = 0.0
 
-    p1_jp1.v(buf=3)[:,:] = q.jp(1, buf=3, n=iv.ip) - (q.v(buf=3, n=iv.ip) +
+    p1_jp1.v(buf=3)[:, :] = q.jp(1, buf=3, n=iv.ip) - (q.v(buf=3, n=iv.ip) +
             0.5*myg.dy*(q.v(buf=3, n=iv.irho) + q.jp(1, buf=3, n=iv.irho))*grav)
 
-    #p1_jp2.v(buf=2)[:,:] = q.jp(2, buf=2, n=iv.ip) - (q.v(buf=2, n=iv.ip) +
-    #        0.5*myg.dy*(q.v(buf=2, n=iv.irho) + 2.0*q.jp(1, buf=2, n=iv.irho) + q.jp(2, buf=2, n=iv.irho))*grav)
-
-    p1_jm1.v(buf=3)[:,:] = q.jp(-1, buf=3, n=iv.ip) - (q.v(buf=3, n=iv.ip) -
+    p1_jm1.v(buf=3)[:, :] = q.jp(-1, buf=3, n=iv.ip) - (q.v(buf=3, n=iv.ip) -
             0.5*myg.dy*(q.v(buf=3, n=iv.irho) + q.jp(-1, buf=3, n=iv.irho))*grav)
 
-    #p1_jm2.v(buf=2)[:,:] = q.jp(-2, buf=2, n=iv.ip) - (q.v(buf=2, n=iv.ip) -
-    #        0.5*myg.dy*(q.v(buf=2, n=iv.irho) + 2.0*q.jp(-1, buf=2, n=iv.irho) + q.jp(-2, buf=2, n=iv.irho))*grav)
-
     # now limit p1 using these -- this is the 4th order MC limiter
-    lda = myg.scratch_array()
     lda_tmp = myg.scratch_array()
     dc = myg.scratch_array()
     dl = myg.scratch_array()
@@ -54,19 +47,8 @@ def well_balance(q, myg, limiter, iv, grav):
     dt = np.where(np.fabs(dc) < np.fabs(d1), dc, d1)
     lda_tmp.v(buf=myg.ng)[:, :] = np.where(dl*dr > 0.0, dt, 0.0)
 
-    # I'm not sure this part makes sense -- the lda_j+1 and lda_j-1 are for 
-    # a different HSE base.  We should construct an lda_tmp_jp1 and lda_tmp_jm1
-    # using our p1 based on the current zone
-    #dc.v(buf=2)[:, :] = (2./3.)*(p1_jp1.v(buf=2) - p1_jm1.v(buf=2) - \
-    #                             0.25*(lda_tmp.jp(1, buf=2) + lda_tmp.jp(-1, buf=2)))
-
-    #d1 = 2.0*np.where(np.fabs(dl) < np.fabs(dr), dl, dr)
-    #dt = np.where(np.fabs(dc) < np.fabs(d1), dc, d1)
-    #lda.v(buf=myg.ng)[:, :] = np.where(dl*dr > 0.0, dt, 0.0)
-
-    #return lda
-
     return lda_tmp
+
 
 def nolimit(a, myg, idir):
     """ just a centered difference without any limiting """
@@ -123,7 +105,7 @@ def limit4(a, myg, idir):
         dr.v(buf=2)[:, :] = a.v(buf=2) - a.ip(-1, buf=2)
 
     elif idir == 2:
-        dc.v(buf=2)[:, :] = (2./3.)*(a.jp(1, buf=2) - a.jp(-1, buf=2) - \
+        dc.v(buf=2)[:, :] = (2./3.)*(a.jp(1, buf=2) - a.jp(-1, buf=2) -
                                      0.25*(lda_tmp.jp(1, buf=2) + lda_tmp.jp(-1, buf=2)))
         dl.v(buf=2)[:, :] = a.jp(1, buf=2) - a.v(buf=2)
         dr.v(buf=2)[:, :] = a.v(buf=2) - a.jp(-1, buf=2)
@@ -133,6 +115,7 @@ def limit4(a, myg, idir):
     lda.v(buf=myg.ng)[:, :] = np.where(dl*dr > 0.0, dt, 0.0)
 
     return lda
+
 
 def flatten(myg, q, idir, ivars, rp):
     """ compute the 1-d flattening coefficients """
@@ -178,7 +161,6 @@ def flatten(myg, q, idir, ivars, rp):
     return xi
 
 
-
 def flatten_multid(myg, q, xi_x, xi_y, ivars):
     """ compute the multidimensional flattening coefficient """
 
@@ -201,33 +183,40 @@ def flatten_multid(myg, q, xi_x, xi_y, ivars):
 # Constants for the WENO reconstruction
 # NOTE: integer division laziness means this WILL fail on python2
 C_3 = np.array([1, 2]) / 3
-a_3 = np.array([ [3, -1],
-                 [1,  1] ]) / 2
-sigma_3 = np.array([[ [1 , 0],
-                      [-2, 1] ],
-                    [ [1 , 0],
-                      [-2, 1] ] ])
+
+a_3 = np.array([[3, -1],
+                [1,  1]]) / 2
+
+sigma_3 = np.array([[[1, 0],
+                     [-2, 1]],
+                    [[1, 0],
+                     [-2, 1]]])
 
 C_5 = np.array([1, 6, 3]) / 10
-a_5 = np.array([ [11, -7,  2],
-                 [2 ,  5, -1],
-                 [-1,  5,  2]]) / 6
-sigma_5 = np.array([[[40  , 0   , 0 ],
-                     [-124, 100 , 0 ],
-                     [44  , -76 , 16] ],
-                    [[16  , 0   , 0 ],
-                     [-52 , 52  , 0 ],
-                     [20  , -52 , 16] ],
-                    [[16  , 0   , 0 ],
-                     [-76 , 100 , 0 ],
-                     [44  , -124, 40] ] ]) / 12
 
-C_all = { 2 : C_3,
-          3 : C_5 }
-a_all = { 2 : a_3,
-          3 : a_5 }
-sigma_all = { 2 : sigma_3,
-              3 : sigma_5 }
+a_5 = np.array([[11, -7, 2],
+                [2, 5, -1],
+                [-1, 5, 2]]) / 6
+
+sigma_5 = np.array([[[40, 0, 0],
+                     [-124, 100, 0],
+                     [44, -76, 16]],
+                    [[16, 0, 0],
+                     [-52, 52, 0],
+                     [20, -52, 16]],
+                    [[16, 0, 0],
+                     [-76, 100, 0],
+                     [44, -124, 40]]]) / 12
+
+C_all = {2: C_3,
+         3: C_5}
+
+a_all = {2: a_3,
+         3: a_5}
+
+sigma_all = {2: sigma_3,
+             3: sigma_5}
+
 
 def weno_upwind(q, order):
     """
@@ -265,6 +254,7 @@ def weno_upwind(q, order):
 
     return np.dot(w, q_stencils)
 
+
 def weno(q, order):
     """
     Perform WENO reconstruction
@@ -285,8 +275,10 @@ def weno(q, order):
     """
     Npoints = q.shape
     q_minus = np.zeros_like(q)
-    q_plus  = np.zeros_like(q)
+    q_plus = np.zeros_like(q)
+
     for i in range(order, Npoints-order):
         q_plus[i] = weno_upwind(q[i+1-order:i+order], order)
         q_minus[i] = weno_upwind(q[i+order-1:i-order:-1], order)
+
     return q_minus, q_plus

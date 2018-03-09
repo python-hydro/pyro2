@@ -6,6 +6,7 @@ import sys
 import mesh.patch as patch
 from util import msg
 
+
 def init_data(my_data, rp):
     """ initialize the HSE problem """
 
@@ -27,7 +28,6 @@ def init_data(my_data, rp):
 
     grav = rp.get_param("compressible.grav")
 
-
     dens0 = rp.get_param("hse.dens0")
     print("dens0 = ", dens0)
     H = rp.get_param("hse.h")
@@ -38,9 +38,9 @@ def init_data(my_data, rp):
     # initialize the components, remember, that ener here is
     # rho*eint + 0.5*rho*v**2, where eint is the specific
     # internal energy (erg/g)
-    xmom[:,:] = 0.0
-    ymom[:,:] = 0.0
-    dens[:,:] = 0.0
+    xmom[:, :] = 0.0
+    ymom[:, :] = 0.0
+    dens[:, :] = 0.0
 
     # set the density to be stratified in the y-direction
     myg = my_data.grid
@@ -48,15 +48,15 @@ def init_data(my_data, rp):
     p = myg.scratch_array()
 
     for j in range(myg.jlo, myg.jhi+1):
-        dens[:,j] = dens0*np.exp(-myg.y[j]/H)
+        dens[:, j] = dens0*np.exp(-myg.y[j]/H)
         if j == myg.jlo:
-            p[:,j] = dens[:,j]*cs2
+            p[:, j] = dens[:, j]*cs2
         else:
-            p[:,j] = p[:,j-1] + 0.5*myg.dy*(dens[:,j] + dens[:,j-1])*grav
+            p[:, j] = p[:, j-1] + 0.5*myg.dy*(dens[:, j] + dens[:, j-1])*grav
 
     # set the energy
-    ener[:,:] = p[:,:]/(gamma - 1.0) + \
-        0.5*(xmom[:,:]**2 + ymom[:,:]**2)/dens[:,:]
+    ener[:, :] = p[:, :]/(gamma - 1.0) + \
+        0.5*(xmom[:, :]**2 + ymom[:, :]**2)/dens[:, :]
 
 
 def finalize():

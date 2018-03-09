@@ -1,11 +1,6 @@
-import numpy as np
-from numpy.testing import assert_array_equal
-
 from util import runparams
 import compressible_rk.simulation as sn
-import mesh.patch as patch
-import mesh.boundary as bnd
-import pytest
+
 
 class TestSimulation(object):
     @classmethod

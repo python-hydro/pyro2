@@ -62,7 +62,7 @@ class Grid2d(object):
 
     # pylint: disable=too-many-instance-attributes
 
-    def __init__(self, nx, ny, ng=1, \
+    def __init__(self, nx, ny, ng=1,
                  xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0):
         """
         Create a Grid2d object.
@@ -146,7 +146,6 @@ class Grid2d(object):
         y2d = np.transpose(y2d)
         self.y2d = y2d
 
-
     def scratch_array(self, nvar=1):
         """
         return a standard numpy array dimensioned to have the size
@@ -158,15 +157,13 @@ class Grid2d(object):
             _tmp = np.zeros((self.qx, self.qy, nvar), dtype=np.float64)
         return ai.ArrayIndexer(d=_tmp, grid=self)
 
-
     def norm(self, d):
         """
         find the norm of the quantity d defined on the same grid, in the
         domain's valid region
         """
-        return np.sqrt(self.dx*self.dy*
+        return np.sqrt(self.dx * self.dy *
                        np.sum((d[self.ilo:self.ihi+1, self.jlo:self.jhi+1]**2).flat))
-
 
     def coarse_like(self, N):
         """
@@ -177,7 +174,6 @@ class Grid2d(object):
                       xmin=self.xmin, xmax=self.xmax,
                       ymin=self.ymin, ymax=self.ymax)
 
-
     def fine_like(self, N):
         """
         return a new grid object finer by a factor n, but with
@@ -187,12 +183,10 @@ class Grid2d(object):
                       xmin=self.xmin, xmax=self.xmax,
                       ymin=self.ymin, ymax=self.ymax)
 
-
     def __str__(self):
         """ print out some basic information about the grid object """
         return "2-d grid: nx = {}, ny = {}, ng = {}".format(
             self.nx, self.ny, self.ng)
-
 
     def __eq__(self, other):
         """ are two grids equivalent? """
@@ -262,7 +256,7 @@ class CellCenterData2d(object):
         self.data = None
 
         self.names = []
-        self.vars = self.names # backwards compatibility hack
+        self.vars = self.names  # backwards compatibility hack
         self.nvar = 0
 
         self.aux = {}
@@ -276,7 +270,6 @@ class CellCenterData2d(object):
         self.t = -1.0
 
         self.initialized = 0
-
 
     def register_var(self, name, bc):
         """
@@ -299,7 +292,6 @@ class CellCenterData2d(object):
 
         self.BCs[name] = bc
 
-
     def set_aux(self, keyword, value):
         """
         Set any auxillary (scalar) data.  This data is simply carried
@@ -314,7 +306,6 @@ class CellCenterData2d(object):
         """
         self.aux[keyword] = value
 
-
     def add_derived(self, func):
         """
         Register a function to compute derived variable
@@ -327,7 +318,6 @@ class CellCenterData2d(object):
             string variable name (or list of variables)
         """
         self.derives.append(func)
-
 
     def create(self):
         """
@@ -343,7 +333,6 @@ class CellCenterData2d(object):
         self.data = ai.ArrayIndexer(_tmp, grid=self.grid)
 
         self.initialized = 1
-
 
     def __str__(self):
         """ print out some basic information about the CellCenterData2d
@@ -369,7 +358,6 @@ class CellCenterData2d(object):
 
         return my_str
 
-
     def get_var(self, name):
         """
         Return a data array for the variable described by name.  Stored
@@ -392,7 +380,7 @@ class CellCenterData2d(object):
         """
         try:
             n = self.names.index(name)
-        except:
+        except ValueError:
             for f in self.derives:
                 var = f(self, name)
                 if len(var) > 0:
@@ -400,7 +388,6 @@ class CellCenterData2d(object):
             raise KeyError("name {} is not valid".format(name))
         else:
             return ai.ArrayIndexer(d=self.data[:, :, n], grid=self.grid)
-
 
     def get_var_by_index(self, n):
         """
@@ -421,7 +408,6 @@ class CellCenterData2d(object):
         """
         return ai.ArrayIndexer(d=self.data[:, :, n], grid=self.grid)
 
-
     def get_vars(self):
         """
         Return the entire data array.  Any changes made to this
@@ -434,7 +420,6 @@ class CellCenterData2d(object):
 
         """
         return ai.ArrayIndexer(d=self.data, grid=self.grid)
-
 
     def get_aux(self, keyword):
         """
@@ -456,7 +441,6 @@ class CellCenterData2d(object):
 
         return None
 
-
     def zero(self, name):
         """
         Zero out the data array associated with variable name.
@@ -470,14 +454,12 @@ class CellCenterData2d(object):
         n = self.names.index(name)
         self.data[:, :, n] = 0.0
 
-
     def fill_BC_all(self):
         """
         Fill boundary conditions on all variables.
         """
         for name in self.names:
             self.fill_BC(name)
-
 
     def fill_BC(self, name):
         """
@@ -507,24 +489,19 @@ class CellCenterData2d(object):
         if self.BCs[name].yrb in bnd.ext_bcs.keys():
             bnd.ext_bcs[self.BCs[name].yrb](self.BCs[name].yrb, "yrb", name, self)
 
-
     def min(self, name, ng=0):
         """
         return the minimum of the variable name in the domain's valid region
         """
         n = self.names.index(name)
-        g = self.grid
         return np.min(self.data.v(buf=ng, n=n))
-
 
     def max(self, name, ng=0):
         """
         return the maximum of the variable name in the domain's valid region
         """
         n = self.names.index(name)
-        g = self.grid
         return np.max(self.data.v(buf=ng, n=n))
-
 
     def restrict(self, varname, N=2):
         """
@@ -545,25 +522,24 @@ class CellCenterData2d(object):
         # that encompasses them.
         if N == 2:
             cdata.v()[:, :] = \
-                   0.25*(fdata.v(s=2) + fdata.ip(1, s=2) +
-                         fdata.jp(1, s=2) + fdata.ip_jp(1, 1, s=2))
+                0.25*(fdata.v(s=2) + fdata.ip(1, s=2) +
+                      fdata.jp(1, s=2) + fdata.ip_jp(1, 1, s=2))
         elif N == 4:
             cdata.v()[:, :] = \
-                 (fdata.v(s=4) +
-                  fdata.ip(1, s=4) +
-                  fdata.ip(2, s=4) + fdata.ip(3, s=4) +
-                  fdata.jp(1, s=4) + fdata.ip_jp(1, 1, s=4) +
-                  fdata.ip_jp(2, 1, s=4) + fdata.ip_jp(3, 1, s=4) +
-                  fdata.jp(2, s=4) + fdata.ip_jp(1, 2, s=4) +
-                  fdata.ip_jp(2, 2, s=4) + fdata.ip_jp(3, 2, s=4) +
-                  fdata.jp(3, s=4) + fdata.ip_jp(1, 3, s=4) +
-                  fdata.ip_jp(2, 3, s=4) + fdata.ip_jp(3, 3, s=4))/16.0
+                (fdata.v(s=4) +
+                 fdata.ip(1, s=4) +
+                 fdata.ip(2, s=4) + fdata.ip(3, s=4) +
+                 fdata.jp(1, s=4) + fdata.ip_jp(1, 1, s=4) +
+                 fdata.ip_jp(2, 1, s=4) + fdata.ip_jp(3, 1, s=4) +
+                 fdata.jp(2, s=4) + fdata.ip_jp(1, 2, s=4) +
+                 fdata.ip_jp(2, 2, s=4) + fdata.ip_jp(3, 2, s=4) +
+                 fdata.jp(3, s=4) + fdata.ip_jp(1, 3, s=4) +
+                 fdata.ip_jp(2, 3, s=4) + fdata.ip_jp(3, 3, s=4))/16.0
 
         else:
             raise ValueError("restriction is only allowed by 2 or 4")
 
         return cdata
-
 
     def prolong(self, varname):
         """
@@ -618,13 +594,12 @@ class CellCenterData2d(object):
         m_y.v()[:, :] = 0.5*(cdata.jp(1) - cdata.jp(-1))
 
         # fill the children
-        fdata.v(s=2)[:, :] = cdata.v() - 0.25*m_x.v() - 0.25*m_y.v()     # 1 child
-        fdata.ip(1, s=2)[:, :] = cdata.v() + 0.25*m_x.v() - 0.25*m_y.v() # 2
-        fdata.jp(1, s=2)[:, :] = cdata.v() - 0.25*m_x.v() + 0.25*m_y.v() # 3
-        fdata.ip_jp(1, 1, s=2)[:, :] = cdata.v() + 0.25*m_x.v() + 0.25*m_y.v() # 4
+        fdata.v(s=2)[:, :] = cdata.v() - 0.25*m_x.v() - 0.25*m_y.v()      # 1 child
+        fdata.ip(1, s=2)[:, :] = cdata.v() + 0.25*m_x.v() - 0.25*m_y.v()  # 2
+        fdata.jp(1, s=2)[:, :] = cdata.v() - 0.25*m_x.v() + 0.25*m_y.v()  # 3
+        fdata.ip_jp(1, 1, s=2)[:, :] = cdata.v() + 0.25*m_x.v() + 0.25*m_y.v()  # 4
 
         return fdata
-
 
     def write(self, filename):
         """
@@ -637,7 +612,6 @@ class CellCenterData2d(object):
 
         with h5py.File(filename, "w") as f:
             self.write_data(f)
-
 
     def write_data(self, f):
         """
@@ -674,13 +648,11 @@ class CellCenterData2d(object):
             gvar.attrs["ylb"] = self.BCs[self.names[n]].ylb
             gvar.attrs["yrb"] = self.BCs[self.names[n]].yrb
 
-
     def pretty_print(self, var, fmt=None):
         """print out the contents of the data array with pretty formatting
         indicating where ghost cells are."""
         a = self.get_var(var)
         a.pretty_print(fmt=fmt)
-
 
 
 def cell_center_data_clone(old):
@@ -735,7 +707,6 @@ def do_demo():
     mydata.register_var("a", bc)
     mydata.create()
 
-
     a = mydata.get_var("a")
     a[:, :] = np.exp(-(myg.x2d - 0.5)**2 - (myg.y2d - 1.0)**2)
 
@@ -749,10 +720,8 @@ def do_demo():
     myd2 = io.read("mesh_test")
     print(myd2)
 
-
     mydata.pretty_print("a")
 
 
 if __name__ == "__main__":
-
     do_demo()

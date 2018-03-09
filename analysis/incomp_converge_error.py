@@ -14,13 +14,15 @@ usage = """
       usage: ./incomp_converge_error.py file
 """
 
+
 if not len(sys.argv) == 2:
     print(usage)
     sys.exit(2)
 
 
-try: file1 = sys.argv[1]
-except:
+try:
+    file1 = sys.argv[1]
+except IndexError:
     print(usage)
     sys.exit(2)
 
@@ -36,14 +38,13 @@ t = myd.t
 
 # analytic solution
 u_exact = myg.scratch_array()
-u_exact[:,:] = 1.0 - 2.0*np.cos(2.0*math.pi*(myg.x2d-t))*np.sin(2.0*math.pi*(myg.y2d-t))
+u_exact[:, :] = 1.0 - 2.0*np.cos(2.0*math.pi*(myg.x2d-t))*np.sin(2.0*math.pi*(myg.y2d-t))
 
 v_exact = myg.scratch_array()
-v_exact[:,:] = 1.0 + 2.0*np.sin(2.0*math.pi*(myg.x2d-t))*np.cos(2.0*math.pi*(myg.y2d-t))
+v_exact[:, :] = 1.0 + 2.0*np.sin(2.0*math.pi*(myg.x2d-t))*np.cos(2.0*math.pi*(myg.y2d-t))
 
 # error
 udiff = u_exact - u
 vdiff = v_exact - v
 
 print("errors: ", udiff.norm(), vdiff.norm())
-

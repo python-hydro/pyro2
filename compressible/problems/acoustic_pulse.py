@@ -5,6 +5,7 @@ import mesh.fv as fv
 import numpy as np
 from util import msg
 
+
 def init_data(myd, rp):
     """initialize the acoustic_pulse problem.  This comes from
     McCourquodale & Coella 2011"""
@@ -26,8 +27,8 @@ def init_data(myd, rp):
     # initialize the components, remember, that ener here is rho*eint
     # + 0.5*rho*v**2, where eint is the specific internal energy
     # (erg/g)
-    xmom[:,:] = 0.0
-    ymom[:,:] = 0.0
+    xmom[:, :] = 0.0
+    ymom[:, :] = 0.0
 
     gamma = rp.get_param("eos.gamma")
 
@@ -46,12 +47,12 @@ def init_data(myd, rp):
     dist = np.sqrt((myd.grid.x2d - xctr)**2 +
                    (myd.grid.y2d - yctr)**2)
 
-    dens[:,:] = rho0
+    dens[:, :] = rho0
     idx = dist <= 0.5
     dens[idx] = rho0 + drho0*np.exp(-16*dist[idx]**2) * np.cos(np.pi*dist[idx])**6
 
     p = (dens/rho0)**gamma
-    ener[:,:] = p/(gamma - 1)
+    ener[:, :] = p/(gamma - 1)
 
 
 def finalize():

@@ -1,25 +1,25 @@
-from numpy.testing import assert_array_equal
-
 import util.runparams as rp
 
 # test the utilities
+
 
 def test_is_int():
     assert rp.is_int("1")
     assert not rp.is_int("1.0")
     assert not rp.is_int("a")
 
+
 def test_is_float():
     assert rp.is_float("1.0")
     assert rp.is_float("1")
     assert not rp.is_float("a")
+
 
 def test_get_val():
     assert rp._get_val("1.5") == 1.5
 
 
 # test the runtime parameter class
-
 class TestRunParams(object):
 
     @classmethod
@@ -50,7 +50,7 @@ class TestRunParams(object):
 
     def test_command_line_params(self):
 
-        param_string="test.p1=q test3.i1=2"
+        param_string = "test.p1=q test3.i1=2"
 
         self.rp.command_line_params(param_string.split())
 

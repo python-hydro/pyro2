@@ -39,19 +39,21 @@ import mesh.patch as patch
 import multigrid.variable_coeff_MG as MG
 from util import msg, io
 
+
 # the analytic solution
-def true(x,y):
+def true(x, y):
     return np.sin(2.0*np.pi*x)*np.sin(2.0*np.pi*y)
 
+
 # the coefficients
-def alpha(x,y):
+def alpha(x, y):
     return 2.0 + np.cos(2.0*np.pi*x)*np.cos(2.0*np.pi*y)
 
-# the righthand side
-def f(x,y):
-    return -16.0*np.pi**2*(np.cos(2*np.pi*x)*np.cos(2*np.pi*y) + 1)* \
-        np.sin(2*np.pi*x)*np.sin(2*np.pi*y)
 
+# the righthand side
+def f(x, y):
+    return -16.0*np.pi**2*(np.cos(2*np.pi*x)*np.cos(2*np.pi*y) + 1) * \
+        np.sin(2*np.pi*x)*np.sin(2*np.pi*y)
 
 
 def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
@@ -67,7 +69,6 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
     nx = N
     ny = nx
 
-
     # create the coefficient variable
     g = patch.Grid2d(nx, ny, ng=1)
     d = patch.CellCenterData2d(g)
@@ -77,12 +78,11 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
     d.create()
 
     c = d.get_var("c")
-    c[:,:] = alpha(g.x2d, g.y2d)
+    c[:, :] = alpha(g.x2d, g.y2d)
 
     # check whether the RHS sums to zero (necessary for periodic data)
     rhs = f(g.x2d, g.y2d)
-    print("rhs sum: {}".format(np.sum(rhs[g.ilo:g.ihi+1,g.jlo:g.jhi+1])))
-
+    print("rhs sum: {}".format(np.sum(rhs[g.ilo:g.ihi+1, g.jlo:g.jhi+1])))
 
     # create the multigrid object
     a = MG.VarCoeffCCMG2d(nx, ny,
@@ -90,7 +90,6 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
                           xr_BC_type="periodic", yr_BC_type="periodic",
                           coeffs=c, coeffs_bc=bc_c,
                           verbose=verbose, vis=0, true_function=true)
-
 
     # initialize the solution to 0
     a.init_zeros()
@@ -103,31 +102,30 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
     a.solve(rtol=1.e-11)
 
     # alternately, we can just use smoothing by uncommenting the following
-    #a.smooth(a.nlevels-1,10000)
+    # a.smooth(a.nlevels-1,10000)
 
     # get the solution
     v = a.get_solution()
 
     # get the true solution
-    b = true(a.x2d,a.y2d)
+    b = true(a.x2d, a.y2d)
 
     # compute the error from the analytic solution -- note that with
     # periodic BCs all around, there is nothing to normalize the
     # solution.  We subtract off the average of phi from the MG
     # solution (we do the same for the true solution to put them on
     # the same footing)
-    e = v - np.sum(v.v())/(nx*ny) - (b - np.sum(b[a.ilo:a.ihi+1,a.jlo:a.jhi+1])/(nx*ny))
+    e = v - np.sum(v.v())/(nx*ny) - (b - np.sum(b[a.ilo:a.ihi+1, a.jlo:a.jhi+1])/(nx*ny))
 
     enorm = e.norm()
-    print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
+    print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" %
           (enorm, a.relative_error, a.num_cycles))
-
 
     # plot the solution
     if make_plot:
         plt.clf()
 
-        plt.figure(figsize=(10.0,4.0), dpi=100, facecolor='w')
+        plt.figure(figsize=(10.0, 4.0), dpi=100, facecolor='w')
 
         plt.subplot(121)
 
@@ -140,7 +138,6 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
         plt.title("nx = {}".format(nx))
 
         plt.colorbar()
-
 
         plt.subplot(122)
 
@@ -157,7 +154,6 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
         plt.tight_layout()
 
         plt.savefig("mg_vc_periodic_test.png")
-
 
     # store the output for later comparison
     bench = "mg_vc_poisson_periodic"
@@ -183,7 +179,6 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
 
         return result
 
-
     # normal return -- error wrt true solution
     return enorm
 
@@ -200,12 +195,10 @@ if __name__ == "__main__":
     for nx in N:
         if nx == max(N):
             plot = True
-            #store = True
-            #do_compare = True
+
         enorm = test_vc_poisson_periodic(nx, make_plot=plot,
                                          store_bench=store, comp_bench=do_compare)
         err.append(enorm)
-
 
     # plot the convergence
     N = np.array(N, dtype=np.float64)
@@ -218,8 +211,8 @@ if __name__ == "__main__":
     plt.xlabel("N")
     plt.ylabel("error")
 
-    f = plt.gcf()
-    f.set_size_inches(7.0,6.0)
+    fig = plt.gcf()
+    fig.set_size_inches(7.0, 6.0)
 
     plt.tight_layout()
 

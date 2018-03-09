@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 import argparse
 from util import io
 
-# plot an output file using the solver's dovis script
 
+# plot an output file using the solver's dovis script
 def makeplot(plotfile, variable, outfile):
 
     sim = io.read(plotfile)
@@ -19,20 +19,18 @@ def makeplot(plotfile, variable, outfile):
 
         v = myg.scratch_array()
 
-        v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1] = \
-             0.5*(vy[myg.ilo+1:myg.ihi+2,myg.jlo:myg.jhi+1] -
-                  vy[myg.ilo-1:myg.ihi,myg.jlo:myg.jhi+1])/myg.dx - \
-             0.5*(vx[myg.ilo:myg.ihi+1,myg.jlo+1:myg.jhi+2] -
-                  vx[myg.ilo:myg.ihi+1,myg.jlo-1:myg.jhi])/myg.dy
+        v[myg.ilo:myg.ihi+1, myg.jlo:myg.jhi+1] = \
+             0.5*(vy[myg.ilo+1:myg.ihi+2, myg.jlo:myg.jhi+1] -
+                  vy[myg.ilo-1:myg.ihi, myg.jlo:myg.jhi+1])/myg.dx - \
+             0.5*(vx[myg.ilo:myg.ihi+1, myg.jlo+1:myg.jhi+2] -
+                  vx[myg.ilo:myg.ihi+1, myg.jlo-1:myg.jhi])/myg.dy
 
     else:
         v = myd.get_var(variable)
 
+    plt.figure(num=1, figsize=(6.0, 6.0), dpi=100, facecolor='w')
 
-
-    plt.figure(num=1, figsize=(6.0,6.0), dpi=100, facecolor='w')
-
-    plt.imshow(np.transpose(v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
+    plt.imshow(np.transpose(v[myg.ilo:myg.ihi+1, myg.jlo:myg.jhi+1]),
                interpolation="nearest", origin="lower",
                extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
@@ -57,12 +55,8 @@ def get_args():
     return args
 
 
-if __name__== "__main__":
+if __name__ == "__main__":
 
     args = get_args()
 
     makeplot(args.plotfile[0], args.variable[0], args.o)
-
-
-
-

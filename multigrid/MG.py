@@ -180,7 +180,6 @@ class CellCenterMG2d(object):
         if (xmax-xmin) != (ymax-ymin):
             raise ValueError("ERROR: multigrid currently requires a square domain")
 
-
         self.alpha = alpha
         self.beta = beta
 
@@ -250,11 +249,11 @@ class CellCenterMG2d(object):
 
             self.grids[i].create()
 
-            if self.verbose: print(self.grids[i])
+            if self.verbose:
+                print(self.grids[i])
 
             nx_t = nx_t*2
             ny_t = ny_t*2
-
 
         # provide coordinate and indexing information for the solution mesh
         soln_grid = self.grids[self.nlevels-1].grid
@@ -294,7 +293,6 @@ class CellCenterMG2d(object):
         self.vis_title = vis_title
         self.frame = 0
 
-
     # these draw functions are for visualization purposes and are
     # not ordinarily used, except for plotting the progression of the
     # solution within the V
@@ -324,7 +322,6 @@ class CellCenterMG2d(object):
         plt.text(0.7, 0.1, "V-cycle %d" % (self.current_cycle))
         plt.axis("off")
 
-
     def _draw_solution(self):
         """ plot the current solution on our optional visualization """
         myg = self.grids[self.current_level].grid
@@ -333,13 +330,12 @@ class CellCenterMG2d(object):
 
         cm = "viridis"
 
-        plt.imshow(np.transpose(v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
+        plt.imshow(np.transpose(v[myg.ilo:myg.ihi+1, myg.jlo:myg.jhi+1]),
                    interpolation="nearest", origin="lower",
                    extent=[self.xmin, self.xmax, self.ymin, self.ymax], cmap=cm)
 
         #plt.xlabel("x")
         plt.ylabel("y")
-
 
         if self.current_level == self.nlevels-1:
             plt.title(r"solving $L\phi = f$")
@@ -353,7 +349,6 @@ class CellCenterMG2d(object):
         cl = plt.getp(cb.ax, 'ymajorticklabels')
         plt.setp(cl, fontsize="small")
 
-
     def _draw_main_solution(self):
         """
         plot the solution at the finest level on our optional
@@ -365,7 +360,7 @@ class CellCenterMG2d(object):
 
         cm = "viridis"
 
-        plt.imshow(np.transpose(v[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
+        plt.imshow(np.transpose(v[myg.ilo:myg.ihi+1, myg.jlo:myg.jhi+1]),
                    interpolation="nearest", origin="lower",
                    extent=[self.xmin, self.xmax, self.ymin, self.ymax], cmap=cm)
 
@@ -380,7 +375,6 @@ class CellCenterMG2d(object):
         cl = plt.getp(cb.ax, 'ymajorticklabels')
         plt.setp(cl, fontsize="small")
 
-
     def _draw_main_error(self):
         """
         plot the error with respect to the true solution on our optional
@@ -394,7 +388,7 @@ class CellCenterMG2d(object):
 
         cmap = "viridis"
 
-        plt.imshow(np.transpose(e[myg.ilo:myg.ihi+1,myg.jlo:myg.jhi+1]),
+        plt.imshow(np.transpose(e[myg.ilo:myg.ihi+1, myg.jlo:myg.jhi+1]),
                    interpolation="nearest", origin="lower",
                    extent=[self.xmin, self.xmax, self.ymin, self.ymax], cmap=cmap)
 
@@ -409,14 +403,12 @@ class CellCenterMG2d(object):
         cl = plt.getp(cb.ax, 'ymajorticklabels')
         plt.setp(cl, fontsize="small")
 
-
     def grid_info(self, level, indent=0):
         """
         Report simple grid information
         """
         print("{}level: {}, grid: {} x {}".format(
             indent*" ", level, self.grids[level].grid.nx, self.grids[level].grid.ny))
-
 
     def get_solution(self, grid=None):
         """
@@ -440,9 +432,8 @@ class CellCenterMG2d(object):
             assert grid.dx == myg.dx and grid.dy == myg.dy
 
             sol = grid.scratch_array()
-            sol.v(buf=1)[:,:] = v.v(buf=1)
+            sol.v(buf=1)[:, :] = v.v(buf=1)
             return sol
-
 
     def get_solution_gradient(self, grid=None):
         """
@@ -471,11 +462,10 @@ class CellCenterMG2d(object):
         gx = og.scratch_array()
         gy = og.scratch_array()
 
-        gx.v()[:,:] = 0.5*(v.ip(1) - v.ip(-1))/myg.dx
-        gy.v()[:,:] = 0.5*(v.jp(1) - v.jp(-1))/myg.dy
+        gx.v()[:, :] = 0.5*(v.ip(1) - v.ip(-1))/myg.dx
+        gy.v()[:, :] = 0.5*(v.jp(1) - v.jp(-1))/myg.dy
 
         return gx, gy
-
 
     def get_solution_object(self):
         """
@@ -488,7 +478,6 @@ class CellCenterMG2d(object):
 
         """
         return self.grids[self.nlevels-1]
-
 
     def init_solution(self, data):
         """
@@ -503,16 +492,14 @@ class CellCenterMG2d(object):
 
         """
         v = self.grids[self.nlevels-1].get_var("v")
-        v[:,:] = data.copy()
-
+        v[:, :] = data.copy()
 
     def init_zeros(self):
         """
         Set the initial solution to zero
         """
         v = self.grids[self.nlevels-1].get_var("v")
-        v[:,:] = 0.0
-
+        v[:, :] = 0.0
 
     def init_RHS(self, data):
         """
@@ -528,7 +515,7 @@ class CellCenterMG2d(object):
         """
 
         f = self.grids[self.nlevels-1].get_var("f")
-        f[:,:] = data.copy()
+        f[:, :] = data.copy()
 
         # store the source norm
         self.source_norm = f.norm()
@@ -537,7 +524,6 @@ class CellCenterMG2d(object):
             print("Source norm = ", self.source_norm)
 
         self.initialized_rhs = 1
-
 
     def _compute_residual(self, level):
         """ compute the residual and store it in the r variable"""
@@ -550,10 +536,9 @@ class CellCenterMG2d(object):
 
         # compute the residual
         # r = f - alpha phi + beta L phi
-        r.v()[:,:] = f.v()[:,:] - self.alpha*v.v()[:,:] + \
-            self.beta*( (v.ip(-1) + v.ip(1) - 2*v.v())/myg.dx**2 +
-                        (v.jp(-1) + v.jp(1) - 2*v.v())/myg.dy**2)
-
+        r.v()[:, :] = f.v()[:, :] - self.alpha*v.v()[:, :] + \
+            self.beta*((v.ip(-1) + v.ip(1) - 2*v.v())/myg.dx**2 +
+                       (v.jp(-1) + v.jp(1) - 2*v.v())/myg.dy**2)
 
     def smooth(self, level, nsmooth):
         """
@@ -604,14 +589,13 @@ class CellCenterMG2d(object):
 
             for n, (ix, iy) in enumerate([(0, 0), (1, 1), (1, 0), (0, 1)]):
 
-                v.ip_jp(ix, iy, s=2)[:,:] = (f.ip_jp(ix, iy, s=2) +
-                      xcoeff*(v.ip_jp(1+ix, iy, s=2) + v.ip_jp(-1+ix, iy, s=2)) +
-                      ycoeff*(v.ip_jp(ix, 1+iy, s=2) + v.ip_jp(ix, -1+iy, s=2)) )/ \
+                v.ip_jp(ix, iy, s=2)[:, :] = (f.ip_jp(ix, iy, s=2) +
+                    xcoeff*(v.ip_jp(1+ix, iy, s=2) + v.ip_jp(-1+ix, iy, s=2)) +
+                    ycoeff*(v.ip_jp(ix, 1+iy, s=2) + v.ip_jp(ix, -1+iy, s=2))) / \
                     (self.alpha + 2.0*xcoeff + 2.0*ycoeff)
 
                 if n == 1 or n == 3:
                     self.grids[level].fill_BC("v")
-
 
             if self.vis == 1:
                 plt.clf()
@@ -628,14 +612,12 @@ class CellCenterMG2d(object):
                 plt.subplot(224)
                 self._draw_main_error()
 
-
                 plt.suptitle(self.vis_title, fontsize=18)
 
                 plt.pause(0.001)
                 plt.draw()
                 plt.savefig("mg_%4.4d.png" % (self.frame))
                 self.frame += 1
-
 
     def solve(self, rtol=1.e-11):
         """
@@ -713,7 +695,6 @@ class CellCenterMG2d(object):
         self.residual_error = residual_error
         fp.fill_BC("v")
 
-
     def v_cycle(self, level):
         """
         Perform a V-cycle for a single 2-level solve.  This is applied
@@ -746,7 +727,7 @@ class CellCenterMG2d(object):
 
             # restrict the residual down to the RHS of the coarser level
             f_coarse = cp.get_var("f")
-            f_coarse.v()[:,:] = fp.restrict("r").v()
+            f_coarse.v()[:, :] = fp.restrict("r").v()
 
             # solve the coarse problem
             self.v_cycle(level-1)
@@ -763,7 +744,7 @@ class CellCenterMG2d(object):
 
             # correct the solution on the current grid
             v = fp.get_var("v")
-            v.v()[:,:] += e.v()
+            v.v()[:, :] += e.v()
 
             fp.fill_BC("v")
 
@@ -784,7 +765,8 @@ class CellCenterMG2d(object):
             # could use any number of different matrix solvers here
             # (like CG), but since we are 2x2 by design at this point,
             # we will just smooth
-            if self.verbose: print("  bottom solve:")
+            if self.verbose:
+                print("  bottom solve:")
 
             self.current_level = level
             bp = self.grids[level]

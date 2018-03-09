@@ -5,11 +5,11 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 
-import mesh.boundary as bnd
 import mesh.patch as patch
 from simulation_null import NullSimulation, grid_setup, bc_setup
 import multigrid.MG as MG
 from util import msg
+
 
 class Simulation(NullSimulation):
     """ A simulation of diffusion """
@@ -52,7 +52,6 @@ class Simulation(NullSimulation):
         problem = importlib.import_module("diffusion.problems.{}".format(self.problem_name))
         problem.init_data(self.cc_data, self.rp)
 
-
     def method_compute_timestep(self):
         """
         The diffusion timestep() function computes the timestep
@@ -71,7 +70,6 @@ class Simulation(NullSimulation):
 
         self.dt = cfl*min(xtmp, ytmp)
 
-
     def evolve(self):
         """
         Diffusion through dt using C-N implicit solve with multigrid
@@ -83,7 +81,6 @@ class Simulation(NullSimulation):
 
         # diffusion coefficient
         k = self.rp.get_param("diffusion.k")
-
 
         # setup the MG object -- we want to solve a Helmholtz equation
         # equation of the form:
@@ -126,7 +123,6 @@ class Simulation(NullSimulation):
         # increment the time
         self.cc_data.t += self.dt
         self.n += 1
-
 
     def dovis(self):
         """

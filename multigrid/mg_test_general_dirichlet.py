@@ -45,30 +45,34 @@ import mesh.patch as patch
 import multigrid.general_MG as MG
 from util import msg, io
 
+
 # the analytic solution
-def true(x,y):
+def true(x, y):
     return np.sin(2.0*np.pi*x)*np.sin(2.0*np.pi*y)
 
 
 # the coefficients
-def alpha(x,y):
+def alpha(x, y):
     return np.ones_like(x)
 
-def beta(x,y):
+
+def beta(x, y):
     return 2.0 + np.cos(2.0*np.pi*x)*np.cos(2.0*np.pi*y)
 
-def gamma_x(x,y):
+
+def gamma_x(x, y):
     return np.sin(2*np.pi*x)
 
-def gamma_y(x,y):
+
+def gamma_y(x, y):
     return np.sin(2*np.pi*y)
 
+
 # the righthand side
-def f(x,y):
+def f(x, y):
     return (-16.0*np.pi**2*np.cos(2*np.pi*x)*np.cos(2*np.pi*y) +
             2.0*np.pi*np.cos(2*np.pi*x) + 2.0*np.pi*np.cos(2*np.pi*y) -
             16.0*np.pi**2 + 1.0)*np.sin(2*np.pi*x)*np.sin(2*np.pi*y)
-
 
 
 def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
@@ -84,7 +88,6 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     nx = N
     ny = nx
 
-
     # create the coefficient variable
     g = patch.Grid2d(nx, ny, ng=1)
     d = patch.CellCenterData2d(g)
@@ -97,17 +100,16 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     d.create()
 
     a = d.get_var("alpha")
-    a[:,:] = alpha(g.x2d, g.y2d)
+    a[:, :] = alpha(g.x2d, g.y2d)
 
     b = d.get_var("beta")
-    b[:,:] = beta(g.x2d, g.y2d)
+    b[:, :] = beta(g.x2d, g.y2d)
 
     gx = d.get_var("gamma_x")
-    gx[:,:] = gamma_x(g.x2d, g.y2d)
+    gx[:, :] = gamma_x(g.x2d, g.y2d)
 
     gy = d.get_var("gamma_y")
-    gy[:,:] = gamma_y(g.x2d, g.y2d)
-
+    gy[:, :] = gamma_y(g.x2d, g.y2d)
 
     # create the multigrid object
     a = MG.GeneralMG2d(nx, ny,
@@ -115,7 +117,6 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
                        xr_BC_type="dirichlet", yr_BC_type="dirichlet",
                        coeffs=d,
                        verbose=verbose, vis=0, true_function=true)
-
 
     # initialize the solution to 0
     a.init_zeros()
@@ -128,25 +129,24 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     a.solve(rtol=1.e-11)
 
     # alternately, we can just use smoothing by uncommenting the following
-    #a.smooth(a.nlevels-1,50000)
+    # a.smooth(a.nlevels-1,50000)
 
     # get the solution
     v = a.get_solution()
 
     # compute the error from the analytic solution
-    b = true(a.x2d,a.y2d)
+    b = true(a.x2d, a.y2d)
     e = v - b
 
     enorm = e.norm()
-    print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
+    print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" %
           (enorm, a.relative_error, a.num_cycles))
-
 
     # plot the solution
     if make_plot:
         plt.clf()
 
-        plt.figure(figsize=(10.0,4.0), dpi=100, facecolor='w')
+        plt.figure(figsize=(10.0, 4.0), dpi=100, facecolor='w')
 
         plt.subplot(121)
 
@@ -159,7 +159,6 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
         plt.title("nx = {}".format(nx))
 
         plt.colorbar()
-
 
         plt.subplot(122)
 
@@ -189,7 +188,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     # do we do a comparison?
     if comp_bench:
         compare_file = "{}/{}".format(bench_dir, bench)
-        msg.warning("comparing to: %s " % (compare_file) )
+        msg.warning("comparing to: %s " % (compare_file))
         bench = io.read(compare_file)
 
         result = compare.compare(my_data, bench)
@@ -200,7 +199,6 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
             msg.warning("ERROR: " + compare.errors[result] + "\n")
 
         return result
-
 
     # normal return -- error wrt true solution
     return enorm
@@ -226,7 +224,6 @@ if __name__ == "__main__":
 
         err.append(enorm)
 
-
     # plot the convergence
     N = np.array(N, dtype=np.float64)
     err = np.array(err)
@@ -238,8 +235,8 @@ if __name__ == "__main__":
     plt.xlabel("N")
     plt.ylabel("error")
 
-    f = plt.gcf()
-    f.set_size_inches(7.0,6.0)
+    fig = plt.gcf()
+    fig.set_size_inches(7.0, 6.0)
 
     plt.tight_layout()
 

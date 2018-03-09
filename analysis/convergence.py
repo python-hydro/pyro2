@@ -11,15 +11,17 @@ usage = """
       usage: ./convergence.py fine coarse
 """
 
+
 def compare(fine, coarse):
 
     dens = coarse.get_var("density")
     dens_avg = fine.restrict("density", N=2)
 
     e = coarse.grid.scratch_array()
-    e.v()[:,:] = dens.v() - dens_avg.v()
+    e.v()[:, :] = dens.v() - dens_avg.v()
 
     return float(np.abs(e).max()), e.norm()
+
 
 if __name__ == "__main__":
 

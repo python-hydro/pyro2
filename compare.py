@@ -5,7 +5,6 @@ from __future__ import print_function
 import numpy as np
 import sys
 
-import mesh.array_indexer as ai
 from util import io
 
 usage = """
@@ -30,7 +29,6 @@ def compare(data1, data2):
     # compare the data
     if not sorted(data1.names) == sorted(data2.names):
         return "namesbad"
-
 
     print(" ")
     print("variable comparisons:")

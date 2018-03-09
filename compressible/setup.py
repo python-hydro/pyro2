@@ -4,11 +4,9 @@
 
 from numpy.distutils.core import setup, Extension
 
-extra_link_args=[]
+extra_link_args = []
 
-ext = Extension("interface_f", 
+ext = Extension("interface_f",
                 ["interface_f.f90"])
 
 setup(ext_modules=[ext])
-
-                

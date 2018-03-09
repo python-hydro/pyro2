@@ -9,19 +9,20 @@ from util import io
 #
 # Usage: ./plotvar.py filename variable
 
+
 def makeplot(plotfile, variable, outfile):
 
     sim = io.read(plotfile)
     myd = sim.cc_data
     myg = myd.grid
 
-    plt.figure(num=1, figsize=(6.5,5.25), dpi=100, facecolor='w')
+    plt.figure(num=1, figsize=(6.5, 5.25), dpi=100, facecolor='w')
 
     var = myd.get_var(variable)
 
-    img = plt.imshow(np.transpose(var.v()),
-                     interpolation="nearest", origin="lower",
-                     extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
+    plt.imshow(np.transpose(var.v()),
+               interpolation="nearest", origin="lower",
+               extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
     plt.colorbar()
 
@@ -48,7 +49,7 @@ def get_args():
     return args
 
 
-if __name__== "__main__":
+if __name__ == "__main__":
 
     args = get_args()
 
