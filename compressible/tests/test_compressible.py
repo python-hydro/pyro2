@@ -3,9 +3,8 @@ from numpy.testing import assert_array_equal
 
 from util import runparams
 import compressible.simulation as sn
-import mesh.patch as patch
-import mesh.boundary as bnd
 import pytest
+
 
 class TestSimulation(object):
     @classmethod
@@ -48,8 +47,9 @@ class TestSimulation(object):
         # U -> q
         gamma = self.sim.cc_data.get_aux("gamma")
         q = sn.cons_to_prim(self.sim.cc_data.data, gamma, self.sim.ivars, self.sim.cc_data.grid)
-        assert q[:,:,self.sim.ivars.ip].min() == pytest.approx(1.0) and \
-               q[:,:,self.sim.ivars.ip].max() == pytest.approx(1.0)
+
+        assert q[:, :, self.sim.ivars.ip].min() == pytest.approx(1.0) and \
+               q[:, :, self.sim.ivars.ip].max() == pytest.approx(1.0)
 
         # q -> U
         U = sn.prim_to_cons(q, gamma, self.sim.ivars, self.sim.cc_data.grid)

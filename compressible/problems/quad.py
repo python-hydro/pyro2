@@ -7,6 +7,7 @@ import numpy as np
 import mesh.patch as patch
 from util import msg
 
+
 def init_data(my_data, rp):
     """ initialize the quadrant problem """
 
@@ -49,28 +50,28 @@ def init_data(my_data, rp):
 
     cx = rp.get_param("quadrant.cx")
     cy = rp.get_param("quadrant.cy")
-    
+
     gamma = rp.get_param("eos.gamma")
-    
+
     # there is probably an easier way to do this, but for now, we
     # will just do an explicit loop.  Also, we really want to set
     # the pressue and get the internal energy from that, and then
     # compute the total energy (which is what we store).  For now
     # we will just fake this
-    
+
     myg = my_data.grid
 
     iq1 = np.logical_and(myg.x2d >= cx, myg.y2d >= cy)
     iq2 = np.logical_and(myg.x2d < cx,  myg.y2d >= cy)
     iq3 = np.logical_and(myg.x2d < cx,  myg.y2d < cy)
-    iq4 = np.logical_and(myg.x2d >= cx, myg.y2d < cy)    
-    
+    iq4 = np.logical_and(myg.x2d >= cx, myg.y2d < cy)
+
     # quadrant 1
     dens[iq1] = r1
     xmom[iq1] = r1*u1
     ymom[iq1] = r1*v1
     ener[iq1] = p1/(gamma - 1.0) + 0.5*r1*(u1*u1 + v1*v1)
-                
+
     # quadrant 2
     dens[iq2] = r2
     xmom[iq2] = r2*u2
@@ -89,7 +90,7 @@ def init_data(my_data, rp):
     ymom[iq4] = r4*v4
     ener[iq4] = p4/(gamma - 1.0) + 0.5*r4*(u4*u4 + v4*v4)
 
-    
+
 def finalize():
     """ print out any information to the user at the end of the run """
     pass

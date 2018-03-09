@@ -3,6 +3,7 @@ This is a gamma-law equation of state: p = rho e (gamma - 1), where
 gamma is the constant ratio of specific heats.
 """
 
+
 def pres(gamma, dens, eint):
     """
     Given the density and the specific internal energy, return the

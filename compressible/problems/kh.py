@@ -5,6 +5,7 @@ import numpy as np
 import mesh.patch as patch
 from util import msg
 
+
 def init_data(my_data, rp):
     """ initialize the Kelvin-Helmholtz problem """
 
@@ -15,7 +16,6 @@ def init_data(my_data, rp):
         print(my_data.__class__)
         msg.fail("ERROR: patch invalid in sedov.py")
 
-
     # get the density, momenta, and energy as separate variables
     dens = my_data.get_var("density")
     xmom = my_data.get_var("x-momentum")
@@ -25,26 +25,16 @@ def init_data(my_data, rp):
     # initialize the components, remember, that ener here is rho*eint
     # + 0.5*rho*v**2, where eint is the specific internal energy
     # (erg/g)
-    dens[:,:] = 1.0
-    xmom[:,:] = 0.0
-    ymom[:,:] = 0.0
+    dens[:, :] = 1.0
+    xmom[:, :] = 0.0
+    ymom[:, :] = 0.0
 
     rho_1 = rp.get_param("kh.rho_1")
-    v_1   = rp.get_param("kh.v_1")
+    v_1 = rp.get_param("kh.v_1")
     rho_2 = rp.get_param("kh.rho_2")
-    v_2   = rp.get_param("kh.v_2")
+    v_2 = rp.get_param("kh.v_2")
 
     gamma = rp.get_param("eos.gamma")
-
-    xmin = rp.get_param("mesh.xmin")
-    xmax = rp.get_param("mesh.xmax")
-
-    ymin = rp.get_param("mesh.ymin")
-    ymax = rp.get_param("mesh.ymax")
-
-    yctr = 0.5*(ymin + ymax)
-
-    L_x = xmax - xmin
 
     myg = my_data.grid
 
@@ -81,7 +71,7 @@ def init_data(my_data, rp):
     ymom[:, :] = dens * w0 * np.sin(4*np.pi*myg.x2d)
 
     p = 2.5
-    ener[:,:] = p/(gamma - 1.0) + 0.5*(xmom[:,:]**2 + ymom[:,:]**2)/dens[:,:]
+    ener[:, :] = p/(gamma - 1.0) + 0.5*(xmom[:, :]**2 + ymom[:, :]**2)/dens[:, :]
 
 
 def finalize():

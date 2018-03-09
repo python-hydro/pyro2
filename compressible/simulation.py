@@ -13,6 +13,7 @@ import mesh.boundary as bnd
 from simulation_null import NullSimulation, grid_setup, bc_setup
 import util.plot_tools as plot_tools
 
+
 class Variables(object):
     """
     a container class for easy access to the different compressible
@@ -157,8 +158,8 @@ class Simulation(NullSimulation):
             self.solver_name, self.problem_name))
         problem.init_data(self.cc_data, self.rp)
 
-        if self.verbose > 0: print(my_data)
-
+        if self.verbose > 0:
+            print(my_data)
 
     def method_compute_timestep(self):
         """
@@ -180,7 +181,6 @@ class Simulation(NullSimulation):
         ytmp = self.cc_data.grid.dy/(abs(v) + cs)
 
         self.dt = cfl*float(min(xtmp.min(), ytmp.min()))
-
 
     def evolve(self):
         """
@@ -225,7 +225,6 @@ class Simulation(NullSimulation):
         self.n += 1
 
         tm_evolve.end()
-
 
     def dovis(self):
         """
@@ -286,7 +285,6 @@ class Simulation(NullSimulation):
 
         plt.pause(0.001)
         plt.draw()
-
 
     def write_extras(self, f):
         """

@@ -13,6 +13,7 @@ we'll do a special case for them
 import compressible.eos as eos
 from util import msg
 
+
 def user(bc_name, bc_edge, variable, ccdata):
     """
     A hydrostatic boundary.  This integrates the equation of HSE into
@@ -51,7 +52,7 @@ def user(bc_name, bc_edge, variable, ccdata):
                 v = ccdata.get_var(variable)
                 j = myg.jlo-1
                 while j >= 0:
-                    v[:,j] = v[:,myg.jlo]
+                    v[:, j] = v[:, myg.jlo]
                     j -= 1
 
             elif variable == "energy":
@@ -63,11 +64,11 @@ def user(bc_name, bc_edge, variable, ccdata):
                 grav = ccdata.get_aux("grav")
                 gamma = ccdata.get_aux("gamma")
 
-                dens_base = dens[:,myg.jlo]
-                ke_base = 0.5*(xmom[:,myg.jlo]**2 + ymom[:,myg.jlo]**2) / \
-                    dens[:,myg.jlo]
+                dens_base = dens[:, myg.jlo]
+                ke_base = 0.5*(xmom[:, myg.jlo]**2 + ymom[:, myg.jlo]**2) / \
+                    dens[:, myg.jlo]
 
-                eint_base = (ener[:,myg.jlo] - ke_base)/dens[:,myg.jlo]
+                eint_base = (ener[:, myg.jlo] - ke_base)/dens[:, myg.jlo]
                 pres_base = eos.pres(gamma, dens_base, eint_base)
 
                 # we are assuming that the density is constant in this
@@ -78,7 +79,7 @@ def user(bc_name, bc_edge, variable, ccdata):
                     pres_below = pres_base - grav*dens_base*myg.dy
                     rhoe = eos.rhoe(gamma, pres_below)
 
-                    ener[:,j] = rhoe + ke_base
+                    ener[:, j] = rhoe + ke_base
 
                     pres_base = pres_below.copy()
 
@@ -86,7 +87,6 @@ def user(bc_name, bc_edge, variable, ccdata):
 
             else:
                 raise NotImplementedError("variable not defined")
-
 
         elif bc_edge == "yrb":
 
@@ -97,7 +97,7 @@ def user(bc_name, bc_edge, variable, ccdata):
             if variable in ["density", "x-momentum", "y-momentum", "ymom_src", "E_src", "fuel", "ash"]:
                 v = ccdata.get_var(variable)
                 for j in range(myg.jhi+1, myg.jhi+myg.ng+1):
-                    v[:,j] = v[:,myg.jhi]
+                    v[:, j] = v[:, myg.jhi]
 
             elif variable == "energy":
                 dens = ccdata.get_var("density")
@@ -108,11 +108,11 @@ def user(bc_name, bc_edge, variable, ccdata):
                 grav = ccdata.get_aux("grav")
                 gamma = ccdata.get_aux("gamma")
 
-                dens_base = dens[:,myg.jhi]
-                ke_base = 0.5*(xmom[:,myg.jhi]**2 + ymom[:,myg.jhi]**2) / \
-                    dens[:,myg.jhi]
+                dens_base = dens[:, myg.jhi]
+                ke_base = 0.5*(xmom[:, myg.jhi]**2 + ymom[:, myg.jhi]**2) / \
+                    dens[:, myg.jhi]
 
-                eint_base = (ener[:,myg.jhi] - ke_base)/dens[:,myg.jhi]
+                eint_base = (ener[:, myg.jhi] - ke_base)/dens[:, myg.jhi]
                 pres_base = eos.pres(gamma, dens_base, eint_base)
 
                 # we are assuming that the density is constant in this
@@ -122,7 +122,7 @@ def user(bc_name, bc_edge, variable, ccdata):
                     pres_above = pres_base + grav*dens_base*myg.dy
                     rhoe = eos.rhoe(gamma, pres_above)
 
-                    ener[:,j] = rhoe + ke_base
+                    ener[:, j] = rhoe + ke_base
 
                     pres_base = pres_above.copy()
 
@@ -132,6 +132,5 @@ def user(bc_name, bc_edge, variable, ccdata):
         else:
             msg.fail("error: hse BC not supported for xlb or xrb")
 
-
     else:
-        msg.fail("error: bc type %s not supported" % (bc_name) )
+        msg.fail("error: bc type %s not supported" % (bc_name))

@@ -6,6 +6,7 @@ import sys
 import mesh.patch as patch
 from util import msg
 
+
 def init_data(my_data, rp):
     """ initialize the bubble problem """
 
@@ -39,9 +40,9 @@ def init_data(my_data, rp):
     # initialize the components, remember, that ener here is
     # rho*eint + 0.5*rho*v**2, where eint is the specific
     # internal energy (erg/g)
-    xmom[:,:] = 0.0
-    ymom[:,:] = 0.0
-    dens[:,:] = dens_cutoff
+    xmom[:, :] = 0.0
+    ymom[:, :] = 0.0
+    dens[:, :] = dens_cutoff
 
     # set the density to be stratified in the y-direction
     myg = my_data.grid
@@ -51,20 +52,18 @@ def init_data(my_data, rp):
     cs2 = scale_height*abs(grav)
 
     for j in range(myg.jlo, myg.jhi+1):
-        dens[:,j] = max(dens_base*np.exp(-myg.y[j]/scale_height),
+        dens[:, j] = max(dens_base*np.exp(-myg.y[j]/scale_height),
                         dens_cutoff)
         if j == myg.jlo:
-            p[:,j] = dens[:,j]*cs2
+            p[:, j] = dens[:, j]*cs2
         else:
-            p[:,j] = p[:,j-1] + 0.5*myg.dy*(dens[:,j] + dens[:,j-1])*grav
-
+            p[:, j] = p[:, j-1] + 0.5*myg.dy*(dens[:, j] + dens[:, j-1])*grav
 
     # set the energy (P = cs2*dens)
-    ener[:,:] = p[:,:]/(gamma - 1.0) + \
-                0.5*(xmom[:,:]**2 + ymom[:,:]**2)/dens[:,:]
+    ener[:, :] = p[:, :]/(gamma - 1.0) + \
+                0.5*(xmom[:, :]**2 + ymom[:, :]**2)/dens[:, :]
 
-
-    r = np.sqrt((myg.x2d - x_pert)**2  + (myg.y2d - y_pert)**2)
+    r = np.sqrt((myg.x2d - x_pert)**2 + (myg.y2d - y_pert)**2)
     idx = r <= r_pert
 
     # boost the specific internal energy, keeping the pressure

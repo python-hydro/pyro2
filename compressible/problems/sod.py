@@ -5,6 +5,7 @@ import sys
 import mesh.patch as patch
 from util import msg
 
+
 def init_data(my_data, rp):
     """ initialize the sod problem """
 
@@ -16,7 +17,6 @@ def init_data(my_data, rp):
         print(my_data.__class__)
         sys.exit()
 
-
     # get the sod parameters
     dens_left = rp.get_param("sod.dens_left")
     dens_right = rp.get_param("sod.dens_right")
@@ -26,7 +26,6 @@ def init_data(my_data, rp):
 
     p_left = rp.get_param("sod.p_left")
     p_right = rp.get_param("sod.p_right")
-    
 
     # get the density, momenta, and energy as separate variables
     dens = my_data.get_var("density")
@@ -46,12 +45,12 @@ def init_data(my_data, rp):
     gamma = rp.get_param("eos.gamma")
 
     direction = rp.get_param("sod.direction")
-    
+
     xctr = 0.5*(xmin + xmax)
     yctr = 0.5*(ymin + ymax)
 
     myg = my_data.grid
-    
+
     if direction == "x":
 
         # left
@@ -64,7 +63,7 @@ def init_data(my_data, rp):
 
         # right
         idxr = myg.x2d > xctr
-                
+
         dens[idxr] = dens_right
         xmom[idxr] = dens_right*u_right
         ymom[idxr] = 0.0
@@ -79,27 +78,23 @@ def init_data(my_data, rp):
         xmom[idxb] = 0.0
         ymom[idxb] = dens_left*u_left
         ener[idxb] = p_left/(gamma - 1.0) + 0.5*ymom[idxb]*u_left
-                
+
         # top
         idxt = myg.y2d > yctr
-        
+
         dens[idxt] = dens_right
         xmom[idxt] = 0.0
         ymom[idxt] = dens_right*u_right
         ener[idxt] = p_right/(gamma - 1.0) + 0.5*ymom[idxt]*u_right
-        
-    
+
+
 def finalize():
     """ print out any information to the user at the end of the run """
 
     msg = """
-          The script analysis/sod_compare.py can be used to compare 
+          The script analysis/sod_compare.py can be used to compare
           this output to the exact solution.  Some sample exact solution
           data is present as analysis/sod-exact.out
           """
 
     print(msg)
-
-
-
-                             
