@@ -6,6 +6,7 @@ import mesh.integration as integration
 import compressible
 import compressible_rk.fluxes as flx
 
+
 class Simulation(compressible.Simulation):
     """The main simulation class for the method of lines compressible
     hydrodynamics solver"""
@@ -44,7 +45,6 @@ class Simulation(compressible.Simulation):
 
         return k
 
-
     def method_compute_timestep(self):
         """
         The timestep function computes the advective timestep (CFL)
@@ -65,7 +65,6 @@ class Simulation(compressible.Simulation):
         ytmp = (abs(v) + cs)/self.cc_data.grid.dy
 
         self.dt = cfl*float(np.min(1.0/(xtmp + ytmp)))
-
 
     def evolve(self):
         """
@@ -90,7 +89,6 @@ class Simulation(compressible.Simulation):
             rk.store_increment(s, k)
 
         rk.compute_final_update()
-
 
         # increment the time
         myd.t += self.dt

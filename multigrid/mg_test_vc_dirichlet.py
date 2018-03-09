@@ -39,19 +39,21 @@ import mesh.patch as patch
 import multigrid.variable_coeff_MG as MG
 from util import msg, io
 
+
 # the analytic solution
-def true(x,y):
+def true(x, y):
     return np.sin(2.0*np.pi*x)*np.sin(2.0*np.pi*y)
 
+
 # the coefficients
-def alpha(x,y):
+def alpha(x, y):
     return 2.0 + np.cos(2.0*np.pi*x)*np.cos(2.0*np.pi*y)
 
-# the righthand side
-def f(x,y):
-    return -16.0*np.pi**2*(np.cos(2*np.pi*x)*np.cos(2*np.pi*y) + 1)* \
-        np.sin(2*np.pi*x)*np.sin(2*np.pi*y)
 
+# the righthand side
+def f(x, y):
+    return -16.0*np.pi**2*(np.cos(2*np.pi*x)*np.cos(2*np.pi*y) + 1) * \
+        np.sin(2*np.pi*x)*np.sin(2*np.pi*y)
 
 
 def test_vc_poisson_dirichlet(N, store_bench=False, comp_bench=False,
@@ -67,7 +69,6 @@ def test_vc_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     nx = N
     ny = nx
 
-
     # create the coefficient variable
     g = patch.Grid2d(nx, ny, ng=1)
     d = patch.CellCenterData2d(g)
@@ -77,8 +78,7 @@ def test_vc_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     d.create()
 
     c = d.get_var("c")
-    c[:,:] = alpha(g.x2d, g.y2d)
-
+    c[:, :] = alpha(g.x2d, g.y2d)
 
     # create the multigrid object
     a = MG.VarCoeffCCMG2d(nx, ny,
@@ -86,7 +86,6 @@ def test_vc_poisson_dirichlet(N, store_bench=False, comp_bench=False,
                           xr_BC_type="dirichlet", yr_BC_type="dirichlet",
                           coeffs=c, coeffs_bc=bc_c,
                           verbose=verbose, vis=0, true_function=true)
-
 
     # initialize the solution to 0
     a.init_zeros()
@@ -105,19 +104,18 @@ def test_vc_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     v = a.get_solution()
 
     # compute the error from the analytic solution
-    b = true(a.x2d,a.y2d)
+    b = true(a.x2d, a.y2d)
     e = v - b
 
     enorm = e.norm()
-    print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
+    print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" %
           (enorm, a.relative_error, a.num_cycles))
-
 
     # plot the solution
     if make_plot:
         plt.clf()
 
-        plt.figure(figsize=(10.0,4.0), dpi=100, facecolor='w')
+        plt.figure(figsize=(10.0, 4.0), dpi=100, facecolor='w')
 
         plt.subplot(121)
 
@@ -130,7 +128,6 @@ def test_vc_poisson_dirichlet(N, store_bench=False, comp_bench=False,
         plt.title("nx = {}".format(nx))
 
         plt.colorbar()
-
 
         plt.subplot(122)
 
@@ -160,7 +157,7 @@ def test_vc_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     # do we do a comparison?
     if comp_bench:
         compare_file = "{}/{}".format(bench_dir, bench)
-        msg.warning("comparing to: %s " % (compare_file) )
+        msg.warning("comparing to: %s " % (compare_file))
         bench = io.read(compare_file)
 
         result = compare.compare(my_data, bench)
@@ -171,7 +168,6 @@ def test_vc_poisson_dirichlet(N, store_bench=False, comp_bench=False,
             msg.warning("ERROR: " + compare.errors[result] + "\n")
 
         return result
-
 
     # normal return -- error wrt true solution
     return enorm
@@ -197,7 +193,6 @@ if __name__ == "__main__":
 
         err.append(enorm)
 
-
     # plot the convergence
     N = np.array(N, dtype=np.float64)
     err = np.array(err)
@@ -209,8 +204,8 @@ if __name__ == "__main__":
     plt.xlabel("N")
     plt.ylabel("error")
 
-    f = plt.gcf()
-    f.set_size_inches(7.0,6.0)
+    fig = plt.gcf()
+    fig.set_size_inches(7.0, 6.0)
 
     plt.tight_layout()
 

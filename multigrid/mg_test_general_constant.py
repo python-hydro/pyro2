@@ -28,26 +28,31 @@ import mesh.patch as patch
 import multigrid.general_MG as MG
 from util import msg, io
 
+
 # the analytic solution
-def true(x,y):
+def true(x, y):
     return (x**2 - x**4)*(y**4 - y**2)
 
 
 # the coefficients
-def alpha(x,y):
+def alpha(x, y):
     return np.zeros_like(x)
 
-def beta(x,y):
+
+def beta(x, y):
     return np.ones_like(x)
 
-def gamma_x(x,y):
+
+def gamma_x(x, y):
     return np.zeros_like(x)
 
-def gamma_y(x,y):
+
+def gamma_y(x, y):
     return np.zeros_like(x)
+
 
 # the righthand side
-def f(x,y):
+def f(x, y):
     return -2.0*((1.0-6.0*x**2)*y**2*(1.0-y**2) + (1.0-6.0*y**2)*x**2*(1.0-x**2))
 
 
@@ -64,7 +69,6 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     nx = N
     ny = nx
 
-
     # create the coefficient variable
     g = patch.Grid2d(nx, ny, ng=1)
     d = patch.CellCenterData2d(g)
@@ -77,25 +81,23 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     d.create()
 
     a = d.get_var("alpha")
-    a[:,:] = alpha(g.x2d, g.y2d)
+    a[:, :] = alpha(g.x2d, g.y2d)
 
     b = d.get_var("beta")
-    b[:,:] = beta(g.x2d, g.y2d)
+    b[:, :] = beta(g.x2d, g.y2d)
 
     gx = d.get_var("gamma_x")
-    gx[:,:] = gamma_x(g.x2d, g.y2d)
+    gx[:, :] = gamma_x(g.x2d, g.y2d)
 
     gy = d.get_var("gamma_y")
-    gy[:,:] = gamma_y(g.x2d, g.y2d)
+    gy[:, :] = gamma_y(g.x2d, g.y2d)
 
-    
     # create the multigrid object
     a = MG.GeneralMG2d(nx, ny,
                        xl_BC_type="dirichlet", yl_BC_type="dirichlet",
                        xr_BC_type="dirichlet", yr_BC_type="dirichlet",
                        coeffs=d,
                        verbose=verbose, vis=0, true_function=true)
-
 
     # initialize the solution to 0
     a.init_zeros()
@@ -114,23 +116,22 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     v = a.get_solution()
 
     # compute the error from the analytic solution
-    b = true(a.x2d,a.y2d)
+    b = true(a.x2d, a.y2d)
     e = v - b
 
     enorm = e.norm()
-    print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
+    print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" %
           (enorm, a.relative_error, a.num_cycles))
-
 
     # plot the solution
     if make_plot:
         plt.clf()
 
-        plt.figure(figsize=(10.0,4.0), dpi=100, facecolor='w')
+        plt.figure(figsize=(10.0, 4.0), dpi=100, facecolor='w')
 
         plt.subplot(121)
 
-        plt.imshow(np.transpose(v.v()), 
+        plt.imshow(np.transpose(v.v()),
                    interpolation="nearest", origin="lower",
                    extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
@@ -140,10 +141,9 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
         plt.colorbar()
 
-
         plt.subplot(122)
 
-        plt.imshow(np.transpose(e.v()), 
+        plt.imshow(np.transpose(e.v()),
                    interpolation="nearest", origin="lower",
                    extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
@@ -162,14 +162,14 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     bench_dir = os.environ["PYRO_HOME"] + "/multigrid/tests/"
 
     my_data = a.get_solution_object()
-    
+
     if store_bench:
         my_data.write("{}/{}".format(bench_dir, bench))
 
     # do we do a comparison?
     if comp_bench:
         compare_file = "{}/{}".format(bench_dir, bench)
-        msg.warning("comparing to: %s " % (compare_file) )
+        msg.warning("comparing to: %s " % (compare_file))
         bench = io.read(compare_file)
 
         result = compare.compare(my_data, bench)
@@ -181,31 +181,27 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
         return result
 
-    
     # normal return -- error wrt true solution
     return enorm
 
 
 if __name__ == "__main__":
 
-    N = [16, 32, 64] #, 128, 256, 512]
+    N = [16, 32, 64]
     err = []
 
     plot = False
     store = False
     do_compare = False
-    
+
     for nx in N:
         if nx == max(N):
             plot = True
-            #store = True
-            #do_compare = True
-            
+
         enorm = test_general_poisson_dirichlet(nx, make_plot=plot,
                                                store_bench=store, comp_bench=do_compare)
-        
-        err.append(enorm)
 
+        err.append(enorm)
 
     # plot the convergence
     N = np.array(N, dtype=np.float64)
@@ -218,8 +214,8 @@ if __name__ == "__main__":
     plt.xlabel("N")
     plt.ylabel("error")
 
-    f = plt.gcf()
-    f.set_size_inches(7.0,6.0)
+    fig = plt.gcf()
+    fig.set_size_inches(7.0, 6.0)
 
     plt.tight_layout()
 

@@ -20,13 +20,14 @@ import numpy as np
 import multigrid.MG as MG
 import matplotlib.pyplot as plt
 
+
 # the analytic solution
-def true(x,y):
+def true(x, y):
     return (x**2 - x**4)*(y**4 - y**2)
 
 
 # the righthand side
-def f(x,y):
+def f(x, y):
     return -2.0*((1.0-6.0*x**2)*y**2*(1.0-y**2) + (1.0-6.0*y**2)*x**2*(1.0-x**2))
 
 
@@ -44,8 +45,7 @@ def doit(nx, ny):
 
     plt.ion()
 
-    plt.figure(num=1, figsize=(12.8,7.2), dpi=100, facecolor='w')
-
+    plt.figure(num=1, figsize=(12.8, 7.2), dpi=100, facecolor='w')
 
     # initialize the solution to 0
     init = a.soln_grid.scratch_array()
@@ -60,29 +60,28 @@ def doit(nx, ny):
     a.solve(rtol=1.e-11)
 
     # alternately, we can just use smoothing by uncommenting the following
-    #a.smooth(a.nlevels-1,50000)
+    # a.smooth(a.nlevels-1,50000)
 
     # get the solution
     v = a.get_solution()
 
     # compute the error from the analytic solution
-    b = true(a.x2d,a.y2d)
+    b = true(a.x2d, a.y2d)
     e = v - b
 
-    print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" % \
+    print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" %
           (a.soln_grid.norm(e), a.relative_error, a.num_cycles))
 
-
     # plot it
-    #plt.figure(num=1, figsize=(2.10,2.10), dpi=100, facecolor='w')
-    plt.figure(num=1, figsize=(5.0,5.0), dpi=100, facecolor='w')
+    # plt.figure(num=1, figsize=(2.10,2.10), dpi=100, facecolor='w')
+    plt.figure(num=1, figsize=(5.0, 5.0), dpi=100, facecolor='w')
 
-    plt.imshow(np.transpose(v[a.ilo:a.ihi+1,a.jlo:a.jhi+1]),
+    plt.imshow(np.transpose(v[a.ilo:a.ihi+1, a.jlo:a.jhi+1]),
                interpolation="nearest", origin="lower",
                extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
-    #plt.axis("off")
-    #plt.subplots_adjust(bottom=0.0, top=1.0, left=0.0, right=1.0)
+    # plt.axis("off")
+    # plt.subplots_adjust(bottom=0.0, top=1.0, left=0.0, right=1.0)
 
     plt.xlabel("x")
     plt.ylabel("y")
@@ -92,6 +91,7 @@ def doit(nx, ny):
     # store the output for later comparison
     my_data = a.get_solution_object()
     my_data.write("mg_test")
+
 
 if __name__ == "__main__":
     doit(64, 64)
