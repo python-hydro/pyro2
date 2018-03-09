@@ -45,6 +45,7 @@ read default values.
 
 from __future__ import print_function
 
+import os
 import re
 from util import msg
 
@@ -114,6 +115,9 @@ class RuntimeParameters(object):
         """
 
         # check to see whether the file exists
+        if not os.path.isfile(pfile):
+            pfile = "{}/{}".format(os.environ["PYRO_HOME"], pfile)
+
         try:
             f = open(pfile, 'r')
         except IOError:

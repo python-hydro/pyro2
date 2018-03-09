@@ -237,11 +237,13 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     # left and right primitive variable states
     tm_states.begin()
 
-    V_l, V_r = ifc.states(2, myg.qx, myg.qy, myg.ng, myg.dy, dt,
-                          ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
-                          ivars.nvar, ivars.naux,
-                          gamma,
-                          q, ldy)
+    _V_l, _V_r = ifc.states(2, myg.qx, myg.qy, myg.ng, myg.dy, dt,
+                            ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
+                            ivars.nvar, ivars.naux,
+                            gamma,
+                            q, ldy)
+    V_l = ai.ArrayIndexer(d=_V_l, grid=myg)
+    V_r = ai.ArrayIndexer(d=_V_r, grid=myg)
 
     tm_states.end()
 

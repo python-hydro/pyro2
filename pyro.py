@@ -173,6 +173,8 @@ def doit(solver_name, problem_name, param_file,
 
     if comp_bench:
         return result
+    else:
+        return sim
 
 
 def parse_and_run():

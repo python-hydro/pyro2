@@ -270,7 +270,7 @@ class ArrayIndexer(np.ndarray):
             for j in range(self.g.jhi+1, 2*self.g.ng + self.g.ny):
                 self[:, j, n] = self[:, j-self.g.jhi-1+self.g.ng, n]
 
-    def pretty_print(self, n=0, fmt=None):
+    def pretty_print(self, n=0, fmt=None, show_ghost=True):
         """
         Print out a small dataset to the screen with the ghost cells
         a different color, to make things stand out
@@ -286,8 +286,19 @@ class ArrayIndexer(np.ndarray):
 
         # print j descending, so it looks like a grid (y increasing
         # with height)
-        for j in reversed(range(self.g.qy)):
-            for i in range(self.g.qx):
+        if show_ghost:
+            ilo = 0
+            ihi = self.g.qx-1
+            jlo = 0
+            jhi = self.g.qy-1
+        else:
+            ilo = self.g.ilo
+            ihi = self.g.ihi
+            jlo = self.g.jlo
+            jhi = self.g.jhi
+
+        for j in reversed(range(jlo, jhi+1)):
+            for i in range(ilo, ihi+1):
 
                 if (j < self.g.jlo or j > self.g.jhi or
                     i < self.g.ilo or i > self.g.ihi):
