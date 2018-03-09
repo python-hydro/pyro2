@@ -17,7 +17,7 @@ print(b.flags.owndata)
 print(b.shape)
 
 s = b.shape
-b[:,:] = np.arange(s[0]*s[1]).reshape(s)
+b[:, :] = np.arange(s[0]*s[1]).reshape(s)
 
 print(b)
 print(" ")
@@ -37,7 +37,7 @@ print(" ")
 
 d = a.v(s=2)
 print(d)
-d[:,:] = 0.0
+d[:, :] = 0.0
 
 print(" ")
 

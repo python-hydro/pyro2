@@ -20,12 +20,12 @@ from __future__ import print_function
 
 import mesh.patch as patch
 import numpy as np
-import pickle
 
 from util import msg
 
 import mesh.array_indexer as ai
-_buf_split = ai._buf_split 
+_buf_split = ai._buf_split
+
 
 class ArrayIndexer(np.ndarray):
     """ a class that wraps the data region of a single array (d)
@@ -39,7 +39,8 @@ class ArrayIndexer(np.ndarray):
         return obj
 
     def __array_finalize__(self, obj):
-        if obj is None: return
+        if obj is None:
+            return
         self.g = getattr(obj, "g", None)
         self.c = getattr(obj, "c", None)
 
@@ -63,7 +64,7 @@ class ArrayIndexer(np.ndarray):
                         self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s]
         else:
             return self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
-                        self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s,n]
+                        self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s, n]
 
     def norm(self, n=0):
         """
@@ -74,8 +75,7 @@ class ArrayIndexer(np.ndarray):
         if self.c == 2:
             return self.g.norm(self)
         else:
-            return self.g.norm(self[:,:,n])
-
+            return self.g.norm(self[:, :, n])
 
     def copy(self):
         return ArrayIndexer(np.asarray(self).copy(), grid=self.g)
@@ -87,17 +87,16 @@ class ArrayIndexer(np.ndarray):
             R = self[self.g.ilo+self.g.nx/2:self.g.ihi+1,
                      self.g.jlo:self.g.jhi+1]
         else:
-            print(self.g.ilo,self.g.ilo+self.g.nx/2+1)
+            print(self.g.ilo, self.g.ilo+self.g.nx/2+1)
             L = self[self.g.ilo:self.g.ilo+self.g.nx/2+1,
                      self.g.jlo:self.g.jhi+1]
-            print(self.g.ilo+self.g.nx/2,self.g.ihi+2)
+            print(self.g.ilo+self.g.nx/2, self.g.ihi+2)
             R = self[self.g.ilo+self.g.nx/2:self.g.ihi+2,
                      self.g.jlo:self.g.jhi+1]
 
         e = abs(L - np.flipud(R)).max()
         print(e, tol, e < tol)
         return e < tol
-
 
     def is_asymmetric(self, nodal=False, tol=1.e-14):
         if not nodal:
@@ -106,17 +105,16 @@ class ArrayIndexer(np.ndarray):
             R = self[self.g.ilo+self.g.nx/2:self.g.ihi+1,
                      self.g.jlo:self.g.jhi+1]
         else:
-            print(self.g.ilo,self.g.ilo+self.g.nx/2+1)
+            print(self.g.ilo, self.g.ilo+self.g.nx/2+1)
             L = self[self.g.ilo:self.g.ilo+self.g.nx/2+1,
                      self.g.jlo:self.g.jhi+1]
-            print(self.g.ilo+self.g.nx/2,self.g.ihi+2)
+            print(self.g.ilo+self.g.nx/2, self.g.ihi+2)
             R = self[self.g.ilo+self.g.nx/2:self.g.ihi+2,
                      self.g.jlo:self.g.jhi+1]
 
         e = abs(L + np.flipud(R)).max()
         print(e, tol, e < tol)
         return e < tol
-
 
     def pretty_print(self):
         """
@@ -143,9 +141,9 @@ class ArrayIndexer(np.ndarray):
                     gc = 0
 
                 if gc:
-                    print("\033[31m" + fmt % (self[i,j]) + "\033[0m", end="")
+                    print("\033[31m" + fmt % (self[i, j]) + "\033[0m", end="")
                 else:
-                    print (fmt % (self[i,j]), end="")
+                    print(fmt % (self[i, j]), end="")
 
             print(" ")
 
@@ -157,9 +155,8 @@ class ArrayIndexer(np.ndarray):
         print(leg)
 
 
-
 if __name__ == "__main__":
-    
+
     g = patch.Grid2d(4, 5, ng=1)
     d = np.random.random((g.qx, g.qy))
     a = ArrayIndexer(d, grid=g)
@@ -173,13 +170,11 @@ if __name__ == "__main__":
     c.pretty_print()
     print(c.shape)
 
-    d = np.asarray(c.ip_jp(1,1))
+    d = np.asarray(c.ip_jp(1, 1))
     print(d.shape)
 
     print(d)
-    c[:,:] = 0.0
+    c[:, :] = 0.0
     print(d)
 
     print(type(b))
-
-

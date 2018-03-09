@@ -1,7 +1,6 @@
 # unit tests for the patch
 import mesh.boundary as bnd
 import mesh.patch as patch
-import mesh.array_indexer as ai
 import numpy as np
 
 from numpy.testing import assert_array_equal
@@ -38,8 +37,8 @@ class TestGrid2d(object):
                            np.array([0.125, 0.375, 0.625, 0.875, 1.125, 1.375]))
 
     def test_grid_2d_coords(self):
-        assert_array_equal(self.g.x, self.g.x2d[:,self.g.jc])
-        assert_array_equal(self.g.y, self.g.y2d[self.g.ic,:])
+        assert_array_equal(self.g.x, self.g.x2d[:, self.g.jc])
+        assert_array_equal(self.g.y, self.g.y2d[self.g.ic, :])
 
     def test_scratch_array(self):
         q = self.g.scratch_array()
@@ -55,15 +54,11 @@ class TestGrid2d(object):
         assert q.qx == 2*self.g.ng + 2*self.g.nx
         assert q.qy == 2*self.g.ng + 2*self.g.ny
 
-    def test_scratch_array(self):
-        q = self.g.scratch_array()
-        assert q.shape == (self.g.qx, self.g.qy)
-
     def test_norm(self):
         q = self.g.scratch_array()
         # there are 24 elements, the norm L2 norm is
         # sqrt(dx*dy*24)
-        q.v()[:,:] = np.array([[1, 1, 1, 1, 1, 1],
+        q.v()[:, :] = np.array([[1, 1, 1, 1, 1, 1],
                                [1, 1, 1, 1, 1, 1],
                                [1, 1, 1, 1, 1, 1],
                                [1, 1, 1, 1, 1, 1]])
@@ -91,7 +86,7 @@ class TestCellCenterData2d(object):
         """ this is run before each test """
         nx = 8
         ny = 8
-        self.g = patch.Grid2d(nx, ny, ng = 2, xmax=1.0, ymax=1.0)
+        self.g = patch.Grid2d(nx, ny, ng=2, xmax=1.0, ymax=1.0)
         self.d = patch.CellCenterData2d(self.g, dtype=np.int)
 
         bco = bnd.BC(xlb="outflow", xrb="outflow",
@@ -122,7 +117,7 @@ class TestCellCenterData2d(object):
 
     def test_gets(self):
         aname = self.d.get_var("a")
-        aname[:,:] = np.random.rand(aname.shape[0], aname.shape[1])
+        aname[:, :] = np.random.rand(aname.shape[0], aname.shape[1])
 
         aindex = self.d.get_var_by_index(0)
 
@@ -162,7 +157,7 @@ class TestCellCenterData2d(object):
 
 def test_bcs():
 
-    myg = patch.Grid2d(4,4, ng = 2, xmax=1.0, ymax=1.0)
+    myg = patch.Grid2d(4, 4, ng=2, xmax=1.0, ymax=1.0)
     myd = patch.CellCenterData2d(myg, dtype=np.int)
 
     bco = bnd.BC(xlb="outflow", xrb="outflow",
@@ -183,70 +178,69 @@ def test_bcs():
 
     myd.create()
 
-
     a = myd.get_var("outflow")
-    a.v()[:,:] = np.fromfunction(lambda i, j: i+10*j+1, (4,4), dtype=int)
+    a.v()[:, :] = np.fromfunction(lambda i, j: i+10*j+1, (4, 4), dtype=int)
 
     b = myd.get_var("periodic")
     c = myd.get_var("reflect-even")
     d = myd.get_var("reflect-odd")
 
-    b[:,:] = a[:,:]
-    c[:,:] = a[:,:]
-    d[:,:] = a[:,:]
+    b[:, :] = a[:, :]
+    c[:, :] = a[:, :]
+    d[:, :] = a[:, :]
 
     myd.fill_BC("outflow")
     # left ghost
-    assert_array_equal(a[myg.ilo-1,myg.jlo:myg.jhi+1], np.array([ 1, 11, 21, 31]))
+    assert_array_equal(a[myg.ilo-1, myg.jlo:myg.jhi+1], np.array([1, 11, 21, 31]))
     # right ghost
-    assert_array_equal(a[myg.ihi+1,myg.jlo:myg.jhi+1], np.array([ 4, 14, 24, 34]))
+    assert_array_equal(a[myg.ihi+1, myg.jlo:myg.jhi+1], np.array([4, 14, 24, 34]))
     # bottom ghost
-    assert_array_equal(a[myg.ilo:myg.ihi+1,myg.jlo-1], np.array([ 1, 2, 3, 4]))
+    assert_array_equal(a[myg.ilo:myg.ihi+1, myg.jlo-1], np.array([1, 2, 3, 4]))
     # top ghost
-    assert_array_equal(a[myg.ilo:myg.ihi+1,myg.jhi+1], np.array([31, 32, 33, 34]))
+    assert_array_equal(a[myg.ilo:myg.ihi+1, myg.jhi+1], np.array([31, 32, 33, 34]))
 
     myd.fill_BC("periodic")
     # x-boundaries
-    assert_array_equal(b[myg.ilo-1,myg.jlo:myg.jhi+1],
-                       b[myg.ihi,myg.jlo:myg.jhi+1])
-    assert_array_equal(b[myg.ilo,myg.jlo:myg.jhi+1],
-                       b[myg.ihi+1,myg.jlo:myg.jhi+1])
+    assert_array_equal(b[myg.ilo-1, myg.jlo:myg.jhi+1],
+                       b[myg.ihi, myg.jlo:myg.jhi+1])
+    assert_array_equal(b[myg.ilo, myg.jlo:myg.jhi+1],
+                       b[myg.ihi+1, myg.jlo:myg.jhi+1])
     # y-boundaries
-    assert_array_equal(b[myg.ilo:myg.ihi+1,myg.jlo-1],
-                       b[myg.ilo:myg.ihi+1,myg.jhi])
-    assert_array_equal(b[myg.ilo:myg.ihi+1,myg.jlo],
-                       b[myg.ilo:myg.ihi+1,myg.jhi+1])
+    assert_array_equal(b[myg.ilo:myg.ihi+1, myg.jlo-1],
+                       b[myg.ilo:myg.ihi+1, myg.jhi])
+    assert_array_equal(b[myg.ilo:myg.ihi+1, myg.jlo],
+                       b[myg.ilo:myg.ihi+1, myg.jhi+1])
 
     myd.fill_BC("reflect-even")
     # left -- we'll check 2 ghost cells here -- now we use flipud here
     # because our 'x' is the row index
     # left
-    assert_array_equal(c[myg.ilo:myg.ilo+2,myg.jlo:myg.ihi+1],
-                       np.flipud(c[myg.ilo-2:myg.ilo,myg.jlo:myg.jhi+1]))
+    assert_array_equal(c[myg.ilo:myg.ilo+2, myg.jlo:myg.ihi+1],
+                       np.flipud(c[myg.ilo-2:myg.ilo, myg.jlo:myg.jhi+1]))
     # right
-    assert_array_equal(c[myg.ihi-1:myg.ihi+1,myg.jlo:myg.jhi+1],
-                       np.flipud(c[myg.ihi+1:myg.ihi+3,myg.jlo:myg.jhi+1]))
+    assert_array_equal(c[myg.ihi-1:myg.ihi+1, myg.jlo:myg.jhi+1],
+                       np.flipud(c[myg.ihi+1:myg.ihi+3, myg.jlo:myg.jhi+1]))
 
     # bottom
-    assert_array_equal(c[myg.ilo:myg.ihi+1,myg.jlo:myg.jlo+2],
-                       np.fliplr(c[myg.ilo:myg.ihi+1,myg.jlo-2:myg.jlo]))
+    assert_array_equal(c[myg.ilo:myg.ihi+1, myg.jlo:myg.jlo+2],
+                       np.fliplr(c[myg.ilo:myg.ihi+1, myg.jlo-2:myg.jlo]))
     # top
-    assert_array_equal(c[myg.ilo:myg.ihi+1,myg.jhi-1:myg.jhi+1],
-                       np.fliplr(c[myg.ilo:myg.ihi+1,myg.jhi+1:myg.jhi+3]))
+    assert_array_equal(c[myg.ilo:myg.ihi+1, myg.jhi-1:myg.jhi+1],
+                       np.fliplr(c[myg.ilo:myg.ihi+1, myg.jhi+1:myg.jhi+3]))
 
     myd.fill_BC("reflect-odd")
     # left -- we'll check 2 ghost cells here -- now we use flipud here
     # because our 'x' is the row index
     # left
-    assert_array_equal(d[myg.ilo:myg.ilo+2,myg.jlo:myg.ihi+1],
-                       -np.flipud(d[myg.ilo-2:myg.ilo,myg.jlo:myg.jhi+1]))
+    assert_array_equal(d[myg.ilo:myg.ilo+2, myg.jlo:myg.ihi+1],
+                       -np.flipud(d[myg.ilo-2:myg.ilo, myg.jlo:myg.jhi+1]))
     # right
-    assert_array_equal(d[myg.ihi-1:myg.ihi+1,myg.jlo:myg.jhi+1],
-                       -np.flipud(d[myg.ihi+1:myg.ihi+3,myg.jlo:myg.jhi+1]))
+    assert_array_equal(d[myg.ihi-1:myg.ihi+1, myg.jlo:myg.jhi+1],
+                       -np.flipud(d[myg.ihi+1:myg.ihi+3, myg.jlo:myg.jhi+1]))
 
     # bottom
-    assert_array_equal(d[myg.ilo:myg.ihi+1,myg.jlo:myg.jlo+2],
-                       -np.fliplr(d[myg.ilo:myg.ihi+1,myg.jlo-2:myg.jlo]))
+    assert_array_equal(d[myg.ilo:myg.ihi+1, myg.jlo:myg.jlo+2],
+                       -np.fliplr(d[myg.ilo:myg.ihi+1, myg.jlo-2:myg.jlo]))
     # top
-    assert_array_equal(d[myg.ilo:myg.ihi+1,myg.jhi-1:myg.jhi+1],
-                       -np.fliplr(d[myg.ilo:myg.ihi+1,myg.jhi+1:myg.jhi+3]))
+    assert_array_equal(d[myg.ilo:myg.ihi+1, myg.jhi-1:myg.jhi+1],
+                       -np.fliplr(d[myg.ilo:myg.ihi+1, myg.jhi+1:myg.jhi+3]))
