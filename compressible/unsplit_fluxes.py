@@ -208,15 +208,6 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
         ldx[:, :, n] = xi*reconstruction.limit(q[:, :, n], myg, 1, limiter)
         ldy[:, :, n] = xi*reconstruction.limit(q[:, :, n], myg, 2, limiter)
 
-    # if we are doing a well-balanced scheme, then redo the pressure
-    # note: we only have gravity in the y direction, so we will only
-    # modify the y pressure slope
-    well_balanced = rp.get_param("compressible.well_balanced")
-    grav = rp.get_param("compressible.grav")
-
-    if well_balanced:
-        ldy[:,:,ivars.ip] = reconstruction.well_balance(q, myg, limiter, ivars, grav)
-
     tm_limit.end()
 
     #=========================================================================
