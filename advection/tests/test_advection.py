@@ -1,11 +1,6 @@
-import numpy as np
-from numpy.testing import assert_array_equal
-
 from util import runparams
 import advection.simulation as sn
-import mesh.patch as patch
-import mesh.boundary as bnd
-import pytest
+
 
 class TestSimulation(object):
     @classmethod
@@ -36,4 +31,3 @@ class TestSimulation(object):
     def test_initializationst(self):
         dens = self.sim.cc_data.get_var("density")
         assert dens.min() == 1.0 and dens.max() == 1.0
-
