@@ -1,0 +1,4 @@
+[flake8]
+max-line-length = 120
+ignore = E128, E129, E226, E241, E741
+exclude = mesh/experiments/,mesh/tests/,docs/
