@@ -20,8 +20,9 @@ if not len(sys.argv) == 2:
     sys.exit(2)
 
 
-try: file1 = sys.argv[1]
-except:
+try:
+    file1 = sys.argv[1]
+except IndexError:
     print(usage)
     sys.exit(2)
 

@@ -56,7 +56,6 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
                                    true_function=true_function, vis=vis,
                                    vis_title=vis_title)
 
-
         # set the coefficients and restrict them down the hierarchy
         # we only need to do this once.  We need to hold the original
         # coeffs in our grid so we can do a ghost cell fill.
@@ -86,7 +85,7 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
             self.grids[n].fill_BC("coeffs")
 
             # put the coefficients on edges
-            self.edge_coeffs.insert(0, self.edge_coeffs[0].restrict())  #_EdgeCoeffs(self.grids[n].grid, coeffs_c))
+            self.edge_coeffs.insert(0, self.edge_coeffs[0].restrict())  # _EdgeCoeffs(self.grids[n].grid, coeffs_c))
 
             # if we are periodic, then we should force the edge coefficents
             # to be periodic
@@ -119,8 +118,6 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
         v = self.grids[level].get_var("v")
         f = self.grids[level].get_var("f")
 
-        myg = self.grids[level].grid
-
         self.grids[level].fill_BC("v")
 
         eta_x = self.edge_coeffs[level].x
@@ -151,12 +148,12 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
             # groups 1 and 3 are done together, then we need to
             # fill ghost cells, and then groups 2 and 4
 
-            for n, (ix, iy) in enumerate([(0,0), (1,1), (1,0), (0,1)]):
+            for n, (ix, iy) in enumerate([(0, 0), (1, 1), (1, 0), (0, 1)]):
 
                 denom = (eta_x.ip_jp(1+ix, iy, s=2) + eta_x.ip_jp(ix, iy, s=2) +
-                         eta_y.ip_jp(ix, 1+iy, s=2) + eta_y.ip_jp(ix, iy, s=2) )
+                         eta_y.ip_jp(ix, 1+iy, s=2) + eta_y.ip_jp(ix, iy, s=2))
 
-                v.ip_jp(ix, iy, s=2)[:, :] = ( -f.ip_jp(ix, iy, s=2) +
+                v.ip_jp(ix, iy, s=2)[:, :] = (-f.ip_jp(ix, iy, s=2) +
                     # eta_{i+1/2,j} phi_{i+1,j}
                     eta_x.ip_jp(1+ix, iy, s=2) * v.ip_jp(1+ix, iy, s=2) +
                     # eta_{i-1/2,j} phi_{i-1,j}
@@ -164,7 +161,7 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
                     # eta_{i,j+1/2} phi_{i,j+1}
                     eta_y.ip_jp(ix, 1+iy, s=2) * v.ip_jp(ix, 1+iy, s=2) +
                     # eta_{i,j-1/2} phi_{i,j-1}
-                    eta_y.ip_jp(ix, iy, s=2) * v.ip_jp(ix, -1+iy, s=2) ) / denom
+                    eta_y.ip_jp(ix, iy, s=2) * v.ip_jp(ix, -1+iy, s=2)) / denom
 
                 if n == 1 or n == 3:
                     self.grids[level].fill_BC("v")
@@ -197,8 +194,6 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
         f = self.grids[level].get_var("f")
         r = self.grids[level].get_var("r")
 
-        myg = self.grids[level].grid
-
         eta_x = self.edge_coeffs[level].x
         eta_y = self.edge_coeffs[level].y
 
@@ -212,6 +207,6 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
             # eta_{i,j+1/2} (phi_{i,j+1} - phi_{i,j})
             eta_y.jp(1)*(v.jp(1) - v.v()) - \
             # eta_{i,j-1/2} (phi_{i,j} - phi_{i,j-1})
-            eta_y.v()*(v.v() - v.jp(-1)) )
+            eta_y.v()*(v.v() - v.jp(-1)))
 
         r.v()[:, :] = f.v() - L_eta_phi
