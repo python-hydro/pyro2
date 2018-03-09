@@ -1,13 +1,13 @@
-import math
 import numpy as np
 import matplotlib.pyplot as plt
+
 
 def plot_convergence():
 
     data = np.loadtxt("mg_convergence.txt")
 
-    nx = data[:,0]
-    err = data[:,1]
+    nx = data[:, 0]
+    err = data[:, 1]
 
     ax = plt.subplot(111)
     ax.set_xscale('log')
@@ -22,9 +22,9 @@ def plot_convergence():
     plt.title(r"convergence for multigrid solver", fontsize=11)
 
     f = plt.gcf()
-    f.set_size_inches(5.0,5.0)
+    f.set_size_inches(5.0, 5.0)
 
-    plt.xlim(8,512)
+    plt.xlim(8, 512)
 
     plt.tight_layout()
 
@@ -32,5 +32,5 @@ def plot_convergence():
     plt.savefig("mg_converge.eps", bbox_inches="tight")
 
 
-if __name__== "__main__":
+if __name__ == "__main__":
     plot_convergence()
