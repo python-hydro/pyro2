@@ -1,0 +1,13 @@
+-- compressible hydro + gray flux-limited diffusion
+
+   - we'll follow the method in the Castro II paper
+
+   - couple radiation into the hydro as source to Riemann problem
+
+-- use MG solver to solve radiation system
+
+   - the general_MG solver can now handle the form of the
+     elliptic equation + do inhomogeneous BCs
+ 
+
+
