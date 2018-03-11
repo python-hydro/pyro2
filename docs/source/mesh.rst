@@ -17,14 +17,6 @@ mesh\.array\_indexer module
     :undoc-members:
     :show-inheritance:
 
-mesh\.bc\_demo module
----------------------
-
-.. automodule:: mesh.bc_demo
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 mesh\.boundary module
 ---------------------
 

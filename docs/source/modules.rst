@@ -13,7 +13,9 @@ pyro2
    compressible_fv4
    compressible_react
    compressible_rk
+   compressible_sdc
    diffusion
+   examples
    incompressible
    lm_atm
    mesh

@@ -17,6 +17,14 @@ advection\.problems\.smooth module
     :undoc-members:
     :show-inheritance:
 
+advection\.problems\.test module
+--------------------------------
+
+.. automodule:: advection.problems.test
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 advection\.problems\.tophat module
 ----------------------------------
 

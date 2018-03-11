@@ -9,6 +9,14 @@ compressible\.problems package
 Submodules
 ----------
 
+compressible\.problems\.acoustic\_pulse module
+----------------------------------------------
+
+.. automodule:: compressible.problems.acoustic_pulse
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 compressible\.problems\.advect module
 -------------------------------------
 
@@ -69,6 +77,14 @@ compressible\.problems\.sod module
 ----------------------------------
 
 .. automodule:: compressible.problems.sod
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+compressible\.problems\.test module
+-----------------------------------
+
+.. automodule:: compressible.problems.test
     :members:
     :undoc-members:
     :show-inheritance:
