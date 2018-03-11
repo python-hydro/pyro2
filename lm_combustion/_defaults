@@ -1,0 +1,6 @@
+[incompressible]
+limiter = 2               ; limiter (0 = none, 1 = 2nd order, 2 = 4th order)
+proj_type = 2             ; what are we projecting? 1 includes -Gp term in U*
+
+[driver]
+cfl = 0.8
