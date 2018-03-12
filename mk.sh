@@ -27,10 +27,6 @@ else
 	FFLAGS="-C"
     fi
 
-    for d in advection_fv4 incompressible compressible lm_atm
-    do
-	cd ${d}
-	${PYTHON} setup.py config_fc --f90flags "${FFLAGS}" build_ext --inplace
-	cd ..
-    done
+    ${PYTHON} setup.py config_fc --f90flags "${FFLAGS}" build_ext
+
 fi
