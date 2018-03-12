@@ -1,10 +1,10 @@
 # this works for python 2 or 3 directly.  To build, do:
 #
-# python setup.py build_ext --inplace
+# python setup.py build_ext
+#
+# Note the setup.cfg directs the build to be done in-place.
 
 from numpy.distutils.core import setup, Extension
-
-extra_link_args = []
 
 ext_modules = [Extension("compressible.interface_f", ["compressible/interface_f.f90"]),
                Extension("advection_fv4.interface_f", ["advection_fv4/interface_states.f90"]),
