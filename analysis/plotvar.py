@@ -10,13 +10,13 @@ from util import io
 # Usage: ./plotvar.py filename variable
 
 
-def makeplot(plotfile, variable, outfile):
+def makeplot(plotfile, variable, outfile, width=6.5, height=5.25):
 
     sim = io.read(plotfile)
     myd = sim.cc_data
     myg = myd.grid
 
-    plt.figure(num=1, figsize=(6.5, 5.25), dpi=100, facecolor='w')
+    plt.figure(num=1, figsize=(width, height), dpi=100, facecolor='w')
 
     var = myd.get_var(variable)
 
@@ -39,6 +39,10 @@ def get_args():
 
     parser.add_argument("-o", type=str, default="plot.png",
                         metavar="plot.png", help="output file name")
+    parser.add_argument("-W", type=float, default=6.5,
+                        metavar="width", help="plot width (inches)")
+    parser.add_argument("-H", type=float, default=5.25,
+                        metavar="height", help="plot height (inches)")
     parser.add_argument("plotfile", type=str, nargs=1,
                         help="the plotfile you wish to plot")
     parser.add_argument("variable", type=str, nargs=1,
@@ -53,4 +57,4 @@ if __name__ == "__main__":
 
     args = get_args()
 
-    makeplot(args.plotfile[0], args.variable[0], args.o)
+    makeplot(args.plotfile[0], args.variable[0], args.o, width=args.W, height=args.H)
