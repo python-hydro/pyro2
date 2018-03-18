@@ -4,8 +4,8 @@ import sys
 import mesh.patch as patch
 import numpy as np
 from util import msg
-import math
 import matplotlib.pyplot as plt
+
 
 def init_data(my_data, rp):
     """ initialize the sedov problem """
@@ -22,7 +22,7 @@ def init_data(my_data, rp):
     myg = my_data.grid
 
     fig = plt.figure(2, (0.64, 0.64), dpi=100*myg.nx/64)
-    ax = fig.add_subplot(111)
+    fig.add_subplot(111)
 
     fig.text(0.5, 0.5, "pyro", transform=fig.transFigure, fontsize="16",
              horizontalalignment="center", verticalalignment="center")
@@ -33,7 +33,7 @@ def init_data(my_data, rp):
     data = np.fromstring(fig.canvas.tostring_rgb(), dtype=np.uint8, sep='')
     data = data.reshape(fig.canvas.get_width_height()[::-1] + (3,))
 
-    logo = np.rot90(np.rot90(np.rot90((256-data[:,:,1])/255.0)))
+    logo = np.rot90(np.rot90(np.rot90((256-data[:, :, 1])/255.0)))
 
     # get the density, momenta, and energy as separate variables
     dens = my_data.get_var("density")
@@ -53,20 +53,19 @@ def init_data(my_data, rp):
     # set the density in the logo zones to be really large
     logo_dens = 50.0
 
-    dens.v()[:,:] = logo[:,:] * logo_dens
+    dens.v()[:, :] = logo[:, :] * logo_dens
 
     # pressure equilibrium
     gamma = rp.get_param("eos.gamma")
 
     p_ambient = 1.e-5
-    ener[:,:] = p_ambient/(gamma - 1.0)
-
+    ener[:, :] = p_ambient/(gamma - 1.0)
 
     # explosion
-    ener[myg.ilo,myg.jlo] = 1.0
-    ener[myg.ilo,myg.jhi] = 1.0
-    ener[myg.ihi,myg.jlo] = 1.0
-    ener[myg.ihi,myg.jhi] = 1.0
+    ener[myg.ilo, myg.jlo] = 1.0
+    ener[myg.ilo, myg.jhi] = 1.0
+    ener[myg.ihi, myg.jlo] = 1.0
+    ener[myg.ihi, myg.jhi] = 1.0
 
 
 def finalize():
