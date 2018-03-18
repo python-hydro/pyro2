@@ -10,7 +10,9 @@ from util import io
 # Usage: ./plotvar.py filename variable
 
 
-def makeplot(plotfile, variable, outfile, width=6.5, height=5.25):
+def makeplot(plotfile, variable, outfile,
+             width=6.5, height=5.25,
+             log=False, compact=False, quiet=False):
 
     sim = io.read(plotfile)
     myd = sim.cc_data
@@ -20,17 +22,28 @@ def makeplot(plotfile, variable, outfile, width=6.5, height=5.25):
 
     var = myd.get_var(variable)
 
+    if log:
+        var = np.log10(var)
+
     plt.imshow(np.transpose(var.v()),
                interpolation="nearest", origin="lower",
                extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
-    plt.colorbar()
+    if not compact:
+        plt.colorbar()
 
-    plt.xlabel("x")
-    plt.ylabel("y")
+        plt.xlabel("x")
+        plt.ylabel("y")
 
-    plt.savefig(outfile, bbox_inches="tight")
-    plt.show()
+    if compact:
+        plt.axis("off")
+        plt.subplots_adjust(bottom=0.0, top=1.0, left=0.0, right=1.0)
+        plt.savefig(outfile)
+    else:
+        plt.savefig(outfile, bbox_inches="tight")
+
+    if not quiet:
+        plt.show()
 
 
 def get_args():
@@ -39,6 +52,12 @@ def get_args():
 
     parser.add_argument("-o", type=str, default="plot.png",
                         metavar="plot.png", help="output file name")
+    parser.add_argument("--log", action="store_true",
+                        help="plot log of variable")
+    parser.add_argument("--compact", action="store_true",
+                        help="remove axes and border")
+    parser.add_argument("--quiet", action="store_true",
+                        help="don't show the figure")
     parser.add_argument("-W", type=float, default=6.5,
                         metavar="width", help="plot width (inches)")
     parser.add_argument("-H", type=float, default=5.25,
@@ -57,4 +76,6 @@ if __name__ == "__main__":
 
     args = get_args()
 
-    makeplot(args.plotfile[0], args.variable[0], args.o, width=args.W, height=args.H)
+    makeplot(args.plotfile[0], args.variable[0], args.o,
+             width=args.W, height=args.H,
+             log=args.log, compact=args.compact, quiet=args.quiet)
