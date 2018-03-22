@@ -53,7 +53,6 @@ def init_data(my_data, rp):
     # set the density to be stratified in the y-direction
     myg = my_data.grid
 
-    xcenter = 0.5*(myg.xmin + myg.xmax)
     ycenter = 0.5*(myg.ymin + myg.ymax)
 
     p = myg.scratch_array()
@@ -73,10 +72,10 @@ def init_data(my_data, rp):
     idx_l = myg.x2d < (myg.xmax - myg.xmin)/3.0
     idx_r = myg.x2d >= (myg.xmax - myg.xmin)/3.0
 
-    ymom[idx_l] = amp*np.sin(4.0*np.pi*f_l*myg.x2d[idx_l]/(myg.xmax-myg.xmin))*np.exp(-(myg.y2d[idx_l]-ycenter)**2/sigma**2)
-    ymom[idx_r] = amp*np.sin(4.0*np.pi*f_r*myg.x2d[idx_r]/(myg.xmax-myg.xmin))*np.exp(-(myg.y2d[idx_r]-ycenter)**2/sigma**2)
-
-    print(ymom[:,100])
+    ymom[idx_l] = amp*np.sin(4.0*np.pi*f_l*myg.x2d[idx_l] /
+                             (myg.xmax-myg.xmin))*np.exp(-(myg.y2d[idx_l]-ycenter)**2/sigma**2)
+    ymom[idx_r] = amp*np.sin(4.0*np.pi*f_r*myg.x2d[idx_r] /
+                             (myg.xmax-myg.xmin))*np.exp(-(myg.y2d[idx_r]-ycenter)**2/sigma**2)
 
     ymom *= dens
 
