@@ -40,6 +40,9 @@ def flux_cons(ivars, idir, gamma, q):
 
 def fluxes(myd, rp, ivars, solid, tc):
 
+    alpha = 0.3
+    beta = 0.3
+
     myg = myd.grid
 
     gamma = rp.get_param("eos.gamma")
@@ -155,5 +158,39 @@ def fluxes(myd, rp, ivars, solid, tc):
                     1.0/24.0 * (F_avg.ip(1, n=n, buf=1) -
                                 2*F_avg.v(n=n, buf=1) +
                                 F_avg.ip(-1, n=n, buf=1))
+
+        # artificial viscosity McCorquodale & Colella Eq. 35, 36
+        # first find face-centered div
+        lam = myg.scratch_array()
+
+        if idir == 1:
+            lam.v(buf=1)[:, :] = (q_bar.v(buf=1, n=ivars.iu) -
+                                  q_bar.ip(-1, buf=1, n=ivars.iu))/myg.dx + \
+                                  0.25*(q_bar.jp(1, buf=1, n=ivars.iv) -
+                                        q_bar.jp(-1, buf=1, n=ivars.iv) +
+                                        q_bar.ip_jp(-1, 1, buf=1, n=ivars.iv) -
+                                        q_bar.ip_jp(-1, -1, buf=1, n=ivars.iv))/myg.dy
+        else:
+            lam.v(buf=1)[:, :] = (q_bar.v(buf=1, n=ivars.iv) -
+                                  q_bar.jp(-1, buf=1, n=ivars.iv))/myg.dy + \
+                                  0.25*(q_bar.ip(1, buf=1, n=ivars.iu) -
+                                        q_bar.ip(-1, buf=1, n=ivars.iu) +
+                                        q_bar.ip_jp(1, -1, buf=1, n=ivars.iu) -
+                                        q_bar.ip_jp(-1, -1, buf=1, n=ivars.iu))/myg.dx
+
+        test = myg.scratch_array()
+        test.v(buf=1)[:, :] = (myg.dx*lam.v(buf=1))**2 / \
+                                (beta * gamma * q_bar.v(buf=1, n=ivars.ip) /
+                                 q_bar.v(buf=1, n=ivars.irho))
+
+        nu = myg.dx * lam * np.minimum(test, 1.0)
+        nu[lam >= 0.0] = 0.0
+
+        if idir == 1:
+            for n in range(ivars.nvar):
+                F_x.v(buf=1, n=n)[:, :] += alpha * nu.v(buf=1) * (U_avg.v(buf=1, n=n) - U_avg.ip(-1, buf=1, n=n))
+        else:
+            for n in range(ivars.nvar):
+                F_y.v(buf=1, n=n)[:, :] += alpha * nu.v(buf=1) * (U_avg.v(buf=1, n=n) - U_avg.jp(-1, buf=1, n=n))
 
     return F_x, F_y
