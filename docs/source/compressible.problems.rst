@@ -49,6 +49,14 @@ compressible\.problems\.kh module
     :undoc-members:
     :show-inheritance:
 
+compressible\.problems\.logo module
+-----------------------------------
+
+.. automodule:: compressible.problems.logo
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 compressible\.problems\.quad module
 -----------------------------------
 
@@ -61,6 +69,14 @@ compressible\.problems\.rt module
 ---------------------------------
 
 .. automodule:: compressible.problems.rt
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+compressible\.problems\.rt2 module
+----------------------------------
+
+.. automodule:: compressible.problems.rt2
     :members:
     :undoc-members:
     :show-inheritance:
