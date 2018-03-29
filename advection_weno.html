@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>advection_weno package &mdash; pyro 2.0 documentation</title>
+  <title>advection_weno package &mdash; pyro 2.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyro 2.0 documentation" href="index.html"/>
+    <link rel="top" title="pyro 2.1 documentation" href="index.html"/>
         <link rel="up" title="pyro2" href="modules.html"/>
         <link rel="next" title="compare module" href="compare.html"/>
         <link rel="prev" title="advection_rk package" href="advection_rk.html"/> 
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                2.0
+                2.1
               </div>
             
           
@@ -109,6 +109,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_compare.html">Compressible solver comparisons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="multigrid_basics.html">Multigrid solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="multigrid-examples.html">Multigrid examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
@@ -145,14 +146,22 @@
 <li class="toctree-l2"><a class="reference internal" href="compressible_fv4.html">compressible_fv4 package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible_react.html">compressible_react package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible_rk.html">compressible_rk package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_sdc.html">compressible_sdc package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="convergence.html">convergence module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="diffusion.html">diffusion package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html">examples package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="incompressible.html">incompressible package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lm_atm.html">lm_atm package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mesh.html">mesh package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="multigrid.html">multigrid package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot.html">plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotvar.html">plotvar module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyro.html">pyro module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sedov_compare.html">sedov_compare module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulation_null.html">simulation_null module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smooth_error.html">smooth_error module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sod_compare.html">sod_compare module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="test.html">test module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.html">util package</a></li>
 </ul>
@@ -258,9 +267,11 @@
 </style>
 <div class="section" id="module-advection_weno">
 <span id="advection-weno-package"></span><h1>advection_weno package<a class="headerlink" href="#module-advection_weno" title="Permalink to this headline">¶</a></h1>
-<p>The pyro advection solver.  This implements a finite difference Lax-Friedrichs
-flux split method with WENO reconstruction based on Shu’s review from 1998 (<a class="reference external" href="https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19980007543.pdf">https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19980007543.pdf</a>) although
-the notation more follows Gerolymos et al
+<p>The pyro advection solver.  This implements a finite difference
+Lax-Friedrichs flux split method with WENO reconstruction based on
+Shu’s review from 1998
+(<a class="reference external" href="https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19980007543.pdf">https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19980007543.pdf</a>)
+although the notation more follows Gerolymos et al
 (<a class="reference external" href="https://doi.org/10.1016/j.jcp.2009.07.039">https://doi.org/10.1016/j.jcp.2009.07.039</a>).</p>
 <p>Most of the code is taken from advection_rk and toy-conslaw.</p>
 <p>The general flow of the solver when invoked through pyro.py is:</p>
@@ -450,7 +461,7 @@ conservative state defined as part of myd</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'2.0',
+            VERSION:'2.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

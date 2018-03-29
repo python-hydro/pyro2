@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>mesh.fv &mdash; pyro 2.0 documentation</title>
+  <title>mesh.fv &mdash; pyro 2.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="pyro 2.0 documentation" href="../../index.html"/>
+    <link rel="top" title="pyro 2.1 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                2.0
+                2.1
               </div>
             
           
@@ -107,6 +107,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compressible_compare.html">Compressible solver comparisons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid-examples.html">Multigrid examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
@@ -197,6 +198,7 @@
 
 <span class="kn">import</span> <span class="nn">mesh.patch</span> <span class="k">as</span> <span class="nn">patch</span>
 
+
 <div class="viewcode-block" id="FV2d"><a class="viewcode-back" href="../../mesh.html#mesh.fv.FV2d">[docs]</a><span class="k">class</span> <span class="nc">FV2d</span><span class="p">(</span><span class="n">patch</span><span class="o">.</span><span class="n">CellCenterData2d</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;this is a finite-volume grid.  We expect the data to represent</span>
 <span class="sd">    cell-averages, and do operations to 4th order.  This assumes dx =</span>
@@ -213,7 +215,6 @@
         <span class="n">c</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[:,</span> <span class="p">:]</span>
         <span class="n">c</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">ng</span><span class="o">-</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">ng</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">a</span><span class="o">.</span><span class="n">lap</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">ng</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mf">24.0</span>
         <span class="k">return</span> <span class="n">c</span></div>
-
 
 <div class="viewcode-block" id="FV2d.from_centers"><a class="viewcode-back" href="../../mesh.html#mesh.fv.FV2d.from_centers">[docs]</a>    <span class="k">def</span> <span class="nf">from_centers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;treat the stored data as if it lives at cell-centers and convert</span>
@@ -259,7 +260,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'2.0',
+            VERSION:'2.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

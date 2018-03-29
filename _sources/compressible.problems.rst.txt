@@ -9,6 +9,14 @@ compressible\.problems package
 Submodules
 ----------
 
+compressible\.problems\.acoustic\_pulse module
+----------------------------------------------
+
+.. automodule:: compressible.problems.acoustic_pulse
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 compressible\.problems\.advect module
 -------------------------------------
 
@@ -41,6 +49,14 @@ compressible\.problems\.kh module
     :undoc-members:
     :show-inheritance:
 
+compressible\.problems\.logo module
+-----------------------------------
+
+.. automodule:: compressible.problems.logo
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 compressible\.problems\.quad module
 -----------------------------------
 
@@ -57,6 +73,14 @@ compressible\.problems\.rt module
     :undoc-members:
     :show-inheritance:
 
+compressible\.problems\.rt2 module
+----------------------------------
+
+.. automodule:: compressible.problems.rt2
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 compressible\.problems\.sedov module
 ------------------------------------
 
@@ -69,6 +93,14 @@ compressible\.problems\.sod module
 ----------------------------------
 
 .. automodule:: compressible.problems.sod
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+compressible\.problems\.test module
+-----------------------------------
+
+.. automodule:: compressible.problems.test
     :members:
     :undoc-members:
     :show-inheritance:

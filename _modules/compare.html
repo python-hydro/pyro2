@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>compare &mdash; pyro 2.0 documentation</title>
+  <title>compare &mdash; pyro 2.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="pyro 2.0 documentation" href="../index.html"/>
+    <link rel="top" title="pyro 2.1 documentation" href="../index.html"/>
         <link rel="up" title="Module code" href="index.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                2.0
+                2.1
               </div>
             
           
@@ -107,6 +107,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../compressible_compare.html">Compressible solver comparisons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../multigrid_basics.html">Multigrid solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../multigrid-examples.html">Multigrid examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../diffusion_basics.html">Diffusion</a></li>
@@ -197,7 +198,6 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="kn">import</span> <span class="nn">mesh.array_indexer</span> <span class="k">as</span> <span class="nn">ai</span>
 <span class="kn">from</span> <span class="nn">util</span> <span class="k">import</span> <span class="n">io</span>
 
 <span class="n">usage</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
@@ -222,7 +222,6 @@
     <span class="c1"># compare the data</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">data1</span><span class="o">.</span><span class="n">names</span><span class="p">)</span> <span class="o">==</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">data2</span><span class="o">.</span><span class="n">names</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;namesbad&quot;</span>
-
 
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;variable comparisons:&quot;</span><span class="p">)</span>
@@ -298,7 +297,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'2.0',
+            VERSION:'2.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

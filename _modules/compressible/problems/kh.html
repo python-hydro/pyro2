@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>compressible.problems.kh &mdash; pyro 2.0 documentation</title>
+  <title>compressible.problems.kh &mdash; pyro 2.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="pyro 2.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="pyro 2.1 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                2.0
+                2.1
               </div>
             
           
@@ -107,6 +107,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible_compare.html">Compressible solver comparisons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../multigrid_basics.html">Multigrid solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../multigrid-examples.html">Multigrid examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../diffusion_basics.html">Diffusion</a></li>
@@ -197,6 +198,7 @@
 <span class="kn">import</span> <span class="nn">mesh.patch</span> <span class="k">as</span> <span class="nn">patch</span>
 <span class="kn">from</span> <span class="nn">util</span> <span class="k">import</span> <span class="n">msg</span>
 
+
 <div class="viewcode-block" id="init_data"><a class="viewcode-back" href="../../../compressible.problems.html#compressible.problems.kh.init_data">[docs]</a><span class="k">def</span> <span class="nf">init_data</span><span class="p">(</span><span class="n">my_data</span><span class="p">,</span> <span class="n">rp</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; initialize the Kelvin-Helmholtz problem &quot;&quot;&quot;</span>
 
@@ -207,7 +209,6 @@
         <span class="nb">print</span><span class="p">(</span><span class="n">my_data</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span>
         <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ERROR: patch invalid in sedov.py&quot;</span><span class="p">)</span>
 
-
     <span class="c1"># get the density, momenta, and energy as separate variables</span>
     <span class="n">dens</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
     <span class="n">xmom</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;x-momentum&quot;</span><span class="p">)</span>
@@ -217,44 +218,53 @@
     <span class="c1"># initialize the components, remember, that ener here is rho*eint</span>
     <span class="c1"># + 0.5*rho*v**2, where eint is the specific internal energy</span>
     <span class="c1"># (erg/g)</span>
-    <span class="n">dens</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="mf">1.0</span>
-    <span class="n">xmom</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="mf">0.0</span>
-    <span class="n">ymom</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">dens</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">xmom</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">ymom</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span>
 
     <span class="n">rho_1</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;kh.rho_1&quot;</span><span class="p">)</span>
-    <span class="n">v_1</span>   <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;kh.v_1&quot;</span><span class="p">)</span>
+    <span class="n">v_1</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;kh.v_1&quot;</span><span class="p">)</span>
     <span class="n">rho_2</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;kh.rho_2&quot;</span><span class="p">)</span>
-    <span class="n">v_2</span>   <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;kh.v_2&quot;</span><span class="p">)</span>
+    <span class="n">v_2</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;kh.v_2&quot;</span><span class="p">)</span>
 
     <span class="n">gamma</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;eos.gamma&quot;</span><span class="p">)</span>
 
-    <span class="n">xmin</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.xmin&quot;</span><span class="p">)</span>
-    <span class="n">xmax</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.xmax&quot;</span><span class="p">)</span>
-
-    <span class="n">ymin</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.ymin&quot;</span><span class="p">)</span>
-    <span class="n">ymax</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.ymax&quot;</span><span class="p">)</span>
-
-    <span class="n">yctr</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">ymin</span> <span class="o">+</span> <span class="n">ymax</span><span class="p">)</span>
-
-    <span class="n">L_x</span> <span class="o">=</span> <span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span>
-
     <span class="n">myg</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span>
 
-    <span class="n">idx_l</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">y2d</span> <span class="o">&lt;</span> <span class="n">yctr</span> <span class="o">+</span> <span class="mf">0.01</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">10.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">x2d</span><span class="o">/</span><span class="n">L_x</span><span class="p">)</span>
-    <span class="n">idx_h</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">y2d</span> <span class="o">&gt;=</span> <span class="n">yctr</span> <span class="o">+</span> <span class="mf">0.01</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">10.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">x2d</span><span class="o">/</span><span class="n">L_x</span><span class="p">)</span>
+    <span class="n">dy</span> <span class="o">=</span> <span class="mf">0.025</span>
+    <span class="n">w0</span> <span class="o">=</span> <span class="mf">0.01</span>
+    <span class="n">vm</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">v_1</span> <span class="o">-</span> <span class="n">v_2</span><span class="p">)</span>
+    <span class="n">rhom</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">rho_1</span> <span class="o">-</span> <span class="n">rho_2</span><span class="p">)</span>
 
-    <span class="c1"># lower half</span>
-    <span class="n">dens</span><span class="p">[</span><span class="n">idx_l</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho_1</span>
-    <span class="n">xmom</span><span class="p">[</span><span class="n">idx_l</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho_1</span><span class="o">*</span><span class="n">v_1</span>
-    <span class="n">ymom</span><span class="p">[</span><span class="n">idx_l</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
-                
+    <span class="n">idx1</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">y2d</span> <span class="o">&lt;</span> <span class="mf">0.25</span>
+    <span class="n">idx2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">y2d</span> <span class="o">&gt;=</span> <span class="mf">0.25</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">y2d</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">idx3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">y2d</span> <span class="o">&gt;=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">y2d</span> <span class="o">&lt;</span> <span class="mf">0.75</span><span class="p">)</span>
+    <span class="n">idx4</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">y2d</span> <span class="o">&gt;=</span> <span class="mf">0.75</span>
+
+    <span class="c1"># we will initialize momemum as velocity for now</span>
+
+    <span class="c1"># lower quarter</span>
+    <span class="n">dens</span><span class="p">[</span><span class="n">idx1</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho_1</span> <span class="o">-</span> <span class="n">rhom</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="n">myg</span><span class="o">.</span><span class="n">y2d</span><span class="p">[</span><span class="n">idx1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.25</span><span class="p">)</span><span class="o">/</span><span class="n">dy</span><span class="p">)</span>
+    <span class="n">xmom</span><span class="p">[</span><span class="n">idx1</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_1</span> <span class="o">-</span> <span class="n">vm</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="n">myg</span><span class="o">.</span><span class="n">y2d</span><span class="p">[</span><span class="n">idx1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.25</span><span class="p">)</span><span class="o">/</span><span class="n">dy</span><span class="p">)</span>
+
+    <span class="c1"># second quarter</span>
+    <span class="n">dens</span><span class="p">[</span><span class="n">idx2</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho_2</span> <span class="o">+</span> <span class="n">rhom</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="mf">0.25</span> <span class="o">-</span> <span class="n">myg</span><span class="o">.</span><span class="n">y2d</span><span class="p">[</span><span class="n">idx2</span><span class="p">])</span><span class="o">/</span><span class="n">dy</span><span class="p">)</span>
+    <span class="n">xmom</span><span class="p">[</span><span class="n">idx2</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_2</span> <span class="o">+</span> <span class="n">vm</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="mf">0.25</span> <span class="o">-</span> <span class="n">myg</span><span class="o">.</span><span class="n">y2d</span><span class="p">[</span><span class="n">idx2</span><span class="p">])</span><span class="o">/</span><span class="n">dy</span><span class="p">)</span>
+
+    <span class="c1"># third quarter</span>
+    <span class="n">dens</span><span class="p">[</span><span class="n">idx3</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho_2</span> <span class="o">+</span> <span class="n">rhom</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="n">myg</span><span class="o">.</span><span class="n">y2d</span><span class="p">[</span><span class="n">idx3</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.75</span><span class="p">)</span><span class="o">/</span><span class="n">dy</span><span class="p">)</span>
+    <span class="n">xmom</span><span class="p">[</span><span class="n">idx3</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_2</span> <span class="o">+</span> <span class="n">vm</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="n">myg</span><span class="o">.</span><span class="n">y2d</span><span class="p">[</span><span class="n">idx3</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.75</span><span class="p">)</span><span class="o">/</span><span class="n">dy</span><span class="p">)</span>
+
+    <span class="c1"># fourth quarter</span>
+    <span class="n">dens</span><span class="p">[</span><span class="n">idx4</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho_1</span> <span class="o">-</span> <span class="n">rhom</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="mf">0.75</span> <span class="o">-</span> <span class="n">myg</span><span class="o">.</span><span class="n">y2d</span><span class="p">[</span><span class="n">idx4</span><span class="p">])</span><span class="o">/</span><span class="n">dy</span><span class="p">)</span>
+    <span class="n">xmom</span><span class="p">[</span><span class="n">idx4</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_1</span> <span class="o">-</span> <span class="n">vm</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="mf">0.75</span> <span class="o">-</span> <span class="n">myg</span><span class="o">.</span><span class="n">y2d</span><span class="p">[</span><span class="n">idx4</span><span class="p">])</span><span class="o">/</span><span class="n">dy</span><span class="p">)</span>
+
     <span class="c1"># upper half</span>
-    <span class="n">dens</span><span class="p">[</span><span class="n">idx_h</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho_2</span>
-    <span class="n">xmom</span><span class="p">[</span><span class="n">idx_h</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho_2</span><span class="o">*</span><span class="n">v_2</span>
-    <span class="n">ymom</span><span class="p">[</span><span class="n">idx_h</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">xmom</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">*=</span> <span class="n">dens</span>
+    <span class="n">ymom</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">dens</span> <span class="o">*</span> <span class="n">w0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">x2d</span><span class="p">)</span>
 
-    <span class="n">p</span> <span class="o">=</span> <span class="mf">1.0</span>
-    <span class="n">ener</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">p</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">xmom</span><span class="p">[:,:]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">ymom</span><span class="p">[:,:]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">dens</span><span class="p">[:,:]</span></div>
+    <span class="n">p</span> <span class="o">=</span> <span class="mf">2.5</span>
+    <span class="n">ener</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">p</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">xmom</span><span class="p">[:,</span> <span class="p">:]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">ymom</span><span class="p">[:,</span> <span class="p">:]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">dens</span><span class="p">[:,</span> <span class="p">:]</span></div>
 
 
 <div class="viewcode-block" id="finalize"><a class="viewcode-back" href="../../../compressible.problems.html#compressible.problems.kh.finalize">[docs]</a><span class="k">def</span> <span class="nf">finalize</span><span class="p">():</span>
@@ -296,7 +306,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'2.0',
+            VERSION:'2.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

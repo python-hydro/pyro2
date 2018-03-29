@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>util.io &mdash; pyro 2.0 documentation</title>
+  <title>util.io &mdash; pyro 2.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="pyro 2.0 documentation" href="../../index.html"/>
+    <link rel="top" title="pyro 2.1 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                2.0
+                2.1
               </div>
             
           
@@ -107,6 +107,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compressible_compare.html">Compressible solver comparisons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid-examples.html">Multigrid examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
@@ -199,11 +200,12 @@
 <span class="kn">import</span> <span class="nn">mesh.patch</span> <span class="k">as</span> <span class="nn">patch</span>
 <span class="kn">import</span> <span class="nn">mesh.boundary</span> <span class="k">as</span> <span class="nn">bnd</span>
 
+
 <div class="viewcode-block" id="read_bcs"><a class="viewcode-back" href="../../util.html#util.io.read_bcs">[docs]</a><span class="k">def</span> <span class="nf">read_bcs</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;read in the boundary condition record from the HDF5 file&quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">gb</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;BC&quot;</span><span class="p">]</span>
-    <span class="k">except</span><span class="p">:</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">BCs</span> <span class="o">=</span> <span class="p">{}</span>
@@ -211,6 +213,7 @@
             <span class="n">BCs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">gb</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">BCs</span></div>
+
 
 <div class="viewcode-block" id="read"><a class="viewcode-back" href="../../util.html#util.io.read">[docs]</a><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;read an HDF5 file and recreate the simulation object that holds the</span>
@@ -239,7 +242,6 @@
         <span class="n">myg</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">Grid2d</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="s2">&quot;nx&quot;</span><span class="p">],</span> <span class="n">grid</span><span class="p">[</span><span class="s2">&quot;ny&quot;</span><span class="p">],</span> <span class="n">ng</span><span class="o">=</span><span class="n">grid</span><span class="p">[</span><span class="s2">&quot;ng&quot;</span><span class="p">],</span>
                            <span class="n">xmin</span><span class="o">=</span><span class="n">grid</span><span class="p">[</span><span class="s2">&quot;xmin&quot;</span><span class="p">],</span> <span class="n">xmax</span><span class="o">=</span><span class="n">grid</span><span class="p">[</span><span class="s2">&quot;xmax&quot;</span><span class="p">],</span>
                            <span class="n">ymin</span><span class="o">=</span><span class="n">grid</span><span class="p">[</span><span class="s2">&quot;ymin&quot;</span><span class="p">],</span> <span class="n">ymax</span><span class="o">=</span><span class="n">grid</span><span class="p">[</span><span class="s2">&quot;ymax&quot;</span><span class="p">])</span>
-
 
         <span class="c1"># sometimes problems define custom BCs -- at the moment, we</span>
         <span class="c1"># are going to assume that these always map to BC.user.  We</span>
@@ -334,7 +336,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'2.0',
+            VERSION:'2.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

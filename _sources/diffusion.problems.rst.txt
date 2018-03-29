@@ -17,4 +17,12 @@ diffusion\.problems\.gaussian module
     :undoc-members:
     :show-inheritance:
 
+diffusion\.problems\.test module
+--------------------------------
+
+.. automodule:: diffusion.problems.test
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>lm_atm.problems.bubble &mdash; pyro 2.0 documentation</title>
+  <title>lm_atm.problems.bubble &mdash; pyro 2.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="pyro 2.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="pyro 2.1 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                2.0
+                2.1
               </div>
             
           
@@ -107,6 +107,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible_compare.html">Compressible solver comparisons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../multigrid_basics.html">Multigrid solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../multigrid-examples.html">Multigrid examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../diffusion_basics.html">Diffusion</a></li>
@@ -197,6 +198,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span>
 <span class="kn">from</span> <span class="nn">util</span> <span class="k">import</span> <span class="n">msg</span>
 
+
 <div class="viewcode-block" id="init_data"><a class="viewcode-back" href="../../../lm_atm.problems.html#lm_atm.problems.bubble.init_data">[docs]</a><span class="k">def</span> <span class="nf">init_data</span><span class="p">(</span><span class="n">my_data</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">rp</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; initialize the bubble problem &quot;&quot;&quot;</span>
 
@@ -229,9 +231,9 @@
 
     <span class="c1"># initialize the components -- we&#39;ll get a pressure too</span>
     <span class="c1"># but that is used only to initialize the base state</span>
-    <span class="n">xvel</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="mf">0.0</span>
-    <span class="n">yvel</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="mf">0.0</span>
-    <span class="n">dens</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">dens_cutoff</span>
+    <span class="n">xvel</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">yvel</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">dens</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">dens_cutoff</span>
 
     <span class="c1"># set the density to be stratified in the y-direction</span>
     <span class="n">myg</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span>
@@ -239,18 +241,18 @@
 
     <span class="n">j</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span>
     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-        <span class="n">dens</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">dens_base</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">myg</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">/</span><span class="n">scale_height</span><span class="p">),</span>
-                        <span class="n">dens_cutoff</span><span class="p">)</span>
+        <span class="n">dens</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">dens_base</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">myg</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">/</span><span class="n">scale_height</span><span class="p">),</span>
+                         <span class="n">dens_cutoff</span><span class="p">)</span>
 
     <span class="n">cs2</span> <span class="o">=</span> <span class="n">scale_height</span><span class="o">*</span><span class="nb">abs</span><span class="p">(</span><span class="n">grav</span><span class="p">)</span>
 
     <span class="c1"># set the pressure (P = cs2*dens)</span>
     <span class="n">pres</span> <span class="o">=</span> <span class="n">cs2</span><span class="o">*</span><span class="n">dens</span>
-    <span class="n">eint</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">pres</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">/</span><span class="n">dens</span>
-    
+    <span class="n">eint</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">pres</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">/</span><span class="n">dens</span>
+
     <span class="c1"># boost the specific internal energy, keeping the pressure</span>
     <span class="c1"># constant, by dropping the density</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">myg</span><span class="o">.</span><span class="n">x2d</span> <span class="o">-</span> <span class="n">x_pert</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>  <span class="o">+</span> <span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">y2d</span> <span class="o">-</span> <span class="n">y_pert</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">myg</span><span class="o">.</span><span class="n">x2d</span> <span class="o">-</span> <span class="n">x_pert</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">y2d</span> <span class="o">-</span> <span class="n">y_pert</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
     <span class="n">idx</span> <span class="o">=</span> <span class="n">r</span> <span class="o">&lt;=</span> <span class="n">r_pert</span>
     <span class="n">eint</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">eint</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">*</span><span class="n">pert_amplitude_factor</span>
@@ -304,7 +306,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'2.0',
+            VERSION:'2.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

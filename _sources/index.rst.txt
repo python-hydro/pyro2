@@ -31,6 +31,7 @@ pyro: a python hydro code
 
    advection_basics
    compressible_basics
+   compressible_compare
    multigrid_basics
    multigrid-examples.ipynb
    diffusion_basics

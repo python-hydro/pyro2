@@ -1,0 +1,429 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>examples.multigrid.project_periodic &mdash; pyro 2.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="pyro 2.1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> pyro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Setting up pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible_compare.html">Compressible solver comparisons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../testing.html">Testing</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ack.html">Acknowledgments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>examples.multigrid.project_periodic</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for examples.multigrid.project_periodic</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="c1"># test of a cell-centered, centered-difference approximate projection.</span>
+<span class="c1">#</span>
+<span class="c1"># initialize the velocity field to be divergence free and then add to</span>
+<span class="c1"># it the gradient of a scalar (whose normal component vanishes on the</span>
+<span class="c1"># boundaries).  The projection should recover the original divergence-</span>
+<span class="c1"># free velocity field.</span>
+<span class="c1">#</span>
+<span class="c1"># The test velocity field comes from Almgen, Bell, and Szymczak 1996.</span>
+<span class="c1">#</span>
+<span class="c1"># This makes use of the multigrid solver with periodic boundary conditions.</span>
+<span class="c1">#</span>
+<span class="c1"># One of the things that this test demonstrates is that the initial</span>
+<span class="c1"># projection may not be able to completely remove the divergence free</span>
+<span class="c1"># part, so subsequent projections may be necessary.  In this example,</span>
+<span class="c1"># we add a very strong gradient component.</span>
+<span class="c1">#</span>
+<span class="c1"># The total number of projections to perform is given by nproj.  Each</span>
+<span class="c1"># projection uses the divergence of the velocity field from the previous</span>
+<span class="c1"># iteration as its source term.</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">multigrid.MG</span> <span class="k">as</span> <span class="nn">MG</span>
+<span class="kn">import</span> <span class="nn">mesh.boundary</span> <span class="k">as</span> <span class="nn">bnd</span>
+<span class="kn">import</span> <span class="nn">mesh.patch</span> <span class="k">as</span> <span class="nn">patch</span>
+
+
+<div class="viewcode-block" id="doit"><a class="viewcode-back" href="../../../examples.multigrid.html#examples.multigrid.project_periodic.doit">[docs]</a><span class="k">def</span> <span class="nf">doit</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">):</span>
+
+    <span class="n">nproj</span> <span class="o">=</span> <span class="mi">2</span>
+
+    <span class="c1"># create a mesh containing the x- and y-velocities, and periodic boundary</span>
+    <span class="c1"># conditions</span>
+    <span class="n">myg</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">Grid2d</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">bc</span> <span class="o">=</span> <span class="n">bnd</span><span class="o">.</span><span class="n">BC</span><span class="p">(</span><span class="n">xlb</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span> <span class="n">xrb</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span>
+                <span class="n">ylb</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span> <span class="n">yrb</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">)</span>
+
+    <span class="n">U</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">CellCenterData2d</span><span class="p">(</span><span class="n">myg</span><span class="p">)</span>
+
+    <span class="n">U</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s1">&#39;u-old&#39;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+    <span class="n">U</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s1">&#39;v-old&#39;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+    <span class="n">U</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s1">&#39;u+gphi&#39;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+    <span class="n">U</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s1">&#39;v+gphi&#39;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+    <span class="n">U</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+    <span class="n">U</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+
+    <span class="n">U</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s1">&#39;divU&#39;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+
+    <span class="n">U</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s1">&#39;phi-old&#39;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+    <span class="n">U</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s1">&#39;phi&#39;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+    <span class="n">U</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s1">&#39;dphi&#39;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+
+    <span class="n">U</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s1">&#39;gradphi_x-old&#39;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+    <span class="n">U</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s1">&#39;gradphi_y-old&#39;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+    <span class="n">U</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s1">&#39;gradphi_x&#39;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+    <span class="n">U</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s1">&#39;gradphi_y&#39;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+
+    <span class="n">U</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+
+    <span class="c1"># initialize a divergence free velocity field,</span>
+    <span class="c1"># u = -sin^2(pi x) sin(2 pi y), v = sin^2(pi y) sin(2 pi x)</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s1">&#39;u&#39;</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
+
+    <span class="n">u</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">x2d</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">y2d</span><span class="p">)</span>
+    <span class="n">v</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">y2d</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">x2d</span><span class="p">)</span>
+
+    <span class="c1"># store the original, divergence free velocity field for comparison later</span>
+    <span class="n">uold</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s1">&#39;u-old&#39;</span><span class="p">)</span>
+    <span class="n">vold</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s1">&#39;v-old&#39;</span><span class="p">)</span>
+
+    <span class="n">uold</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">vold</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="c1"># the projection routine should decompose U into a divergence free</span>
+    <span class="c1"># part, U_d, plus the gradient of a scalar.  Add on the gradient</span>
+    <span class="c1"># of a scalar that satisfies gradphi.n = 0.  After the projection,</span>
+    <span class="c1"># we should recover the divergence free field above.  Take phi to</span>
+    <span class="c1"># be a gaussian, exp(-((x-x0)^2 + (y-y0)^2)/R)</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="mf">0.1</span>
+    <span class="n">x0</span> <span class="o">=</span> <span class="mf">0.5</span>
+    <span class="n">y0</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s1">&#39;phi-old&#39;</span><span class="p">)</span>
+    <span class="n">gradphi_x</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s1">&#39;gradphi_x-old&#39;</span><span class="p">)</span>
+    <span class="n">gradphi_y</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s1">&#39;gradphi_y-old&#39;</span><span class="p">)</span>
+
+    <span class="n">phi</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">myg</span><span class="o">.</span><span class="n">x2d</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">y2d</span><span class="o">-</span><span class="n">y0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">R</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">gradphi_x</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">phi</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="o">*</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">x2d</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">/</span><span class="n">R</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">gradphi_y</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">phi</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="o">*</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">y2d</span><span class="o">-</span><span class="n">y0</span><span class="p">)</span><span class="o">/</span><span class="n">R</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">u</span> <span class="o">+=</span> <span class="n">gradphi_x</span>
+    <span class="n">v</span> <span class="o">+=</span> <span class="n">gradphi_y</span>
+
+    <span class="n">u_plus_gradphi</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s1">&#39;u+gphi&#39;</span><span class="p">)</span>
+    <span class="n">v_plus_gradphi</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s1">&#39;v+gphi&#39;</span><span class="p">)</span>
+
+    <span class="n">u_plus_gradphi</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">u</span><span class="p">[:,</span> <span class="p">:]</span>
+    <span class="n">v_plus_gradphi</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[:,</span> <span class="p">:]</span>
+
+    <span class="c1"># use the mesh class to enforce the periodic BCs on the velocity field</span>
+    <span class="n">U</span><span class="o">.</span><span class="n">fill_BC_all</span><span class="p">()</span>
+
+    <span class="c1"># now compute the cell-centered, centered-difference divergence</span>
+    <span class="n">divU</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s1">&#39;divU&#39;</span><span class="p">)</span>
+
+    <span class="n">divU</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> \
+          <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span>
+               <span class="n">u</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span> <span class="o">+</span> \
+          <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span>
+               <span class="n">v</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="p">])</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
+
+    <span class="c1"># create the multigrid object with Neumann BCs</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">MG</span><span class="o">.</span><span class="n">CellCenterMG2d</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span>
+                          <span class="n">xl_BC_type</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span> <span class="n">xr_BC_type</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span>
+                          <span class="n">yl_BC_type</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span> <span class="n">yr_BC_type</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span>
+                          <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1">#--------------------------------------------------------------------------</span>
+    <span class="c1"># projections</span>
+    <span class="c1">#--------------------------------------------------------------------------</span>
+    <span class="k">for</span> <span class="n">iproj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nproj</span><span class="p">):</span>
+
+        <span class="n">a</span><span class="o">.</span><span class="n">init_zeros</span><span class="p">()</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">init_RHS</span><span class="p">(</span><span class="n">divU</span><span class="p">)</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">rtol</span><span class="o">=</span><span class="mf">1.e-12</span><span class="p">)</span>
+
+        <span class="n">phi</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s1">&#39;phi&#39;</span><span class="p">)</span>
+        <span class="n">solution</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">get_solution</span><span class="p">()</span>
+
+        <span class="n">phi</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="n">solution</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">a</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">a</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="n">dphi</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s1">&#39;dphi&#39;</span><span class="p">)</span>
+        <span class="n">dphi</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">phi</span> <span class="o">-</span> <span class="n">U</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s1">&#39;phi-old&#39;</span><span class="p">)</span>
+
+        <span class="c1"># compute the gradient of phi using centered differences</span>
+        <span class="n">gradphi_x</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s1">&#39;gradphi_x&#39;</span><span class="p">)</span>
+        <span class="n">gradphi_y</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s1">&#39;gradphi_y&#39;</span><span class="p">)</span>
+
+        <span class="n">gradphi_x</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span>
+                 <span class="n">phi</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span>
+
+        <span class="n">gradphi_y</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span>
+                 <span class="n">phi</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="p">])</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
+
+        <span class="c1"># update the velocity field</span>
+        <span class="n">u</span> <span class="o">-=</span> <span class="n">gradphi_x</span>
+        <span class="n">v</span> <span class="o">-=</span> <span class="n">gradphi_y</span>
+
+        <span class="n">U</span><span class="o">.</span><span class="n">fill_BC_all</span><span class="p">()</span>
+
+        <span class="c1"># recompute the divergence diagnostic</span>
+        <span class="n">divU</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> \
+             <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span>
+                  <span class="n">u</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span> <span class="o">+</span> \
+             <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span>
+                  <span class="n">v</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="p">])</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
+
+        <span class="n">U</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;proj-periodic.after&quot;</span><span class="o">+</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">iproj</span><span class="p">))</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">doit</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Michael Zingale.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'2.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

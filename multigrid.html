@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>multigrid package &mdash; pyro 2.0 documentation</title>
+  <title>multigrid package &mdash; pyro 2.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyro 2.0 documentation" href="index.html"/>
+    <link rel="top" title="pyro 2.1 documentation" href="index.html"/>
         <link rel="up" title="pyro2" href="modules.html"/>
         <link rel="next" title="plot module" href="plot.html"/>
         <link rel="prev" title="mesh package" href="mesh.html"/> 
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                2.0
+                2.1
               </div>
             
           
@@ -109,6 +109,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_compare.html">Compressible solver comparisons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="multigrid_basics.html">Multigrid solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="multigrid-examples.html">Multigrid examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
@@ -137,7 +138,10 @@
 <li class="toctree-l2"><a class="reference internal" href="compressible_fv4.html">compressible_fv4 package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible_react.html">compressible_react package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible_rk.html">compressible_rk package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_sdc.html">compressible_sdc package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="convergence.html">convergence module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="diffusion.html">diffusion package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html">examples package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="incompressible.html">incompressible package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lm_atm.html">lm_atm package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mesh.html">mesh package</a></li>
@@ -146,24 +150,17 @@
 <li class="toctree-l3"><a class="reference internal" href="#module-multigrid.MG">multigrid.MG module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-multigrid.edge_coeffs">multigrid.edge_coeffs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-multigrid.general_MG">multigrid.general_MG module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-multigrid.mg_test_general_alphabeta_only">multigrid.mg_test_general_alphabeta_only module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-multigrid.mg_test_general_beta_only">multigrid.mg_test_general_beta_only module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-multigrid.mg_test_general_constant">multigrid.mg_test_general_constant module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-multigrid.mg_test_general_dirichlet">multigrid.mg_test_general_dirichlet module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-multigrid.mg_test_general_inhomogeneous">multigrid.mg_test_general_inhomogeneous module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-multigrid.mg_test_simple">multigrid.mg_test_simple module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-multigrid.mg_test_vc_constant">multigrid.mg_test_vc_constant module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-multigrid.mg_test_vc_dirichlet">multigrid.mg_test_vc_dirichlet module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-multigrid.mg_test_vc_periodic">multigrid.mg_test_vc_periodic module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-multigrid.mg_vis">multigrid.mg_vis module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-multigrid.project_periodic">multigrid.project_periodic module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-multigrid.prolong_restrict_demo">multigrid.prolong_restrict_demo module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-multigrid.variable_coeff_MG">multigrid.variable_coeff_MG module</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="plot.html">plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotvar.html">plotvar module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyro.html">pyro module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sedov_compare.html">sedov_compare module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulation_null.html">simulation_null module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smooth_error.html">smooth_error module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sod_compare.html">sod_compare module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="test.html">test module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.html">util package</a></li>
 </ul>
@@ -577,537 +574,6 @@ many more iterations).</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-multigrid.mg_test_general_alphabeta_only">
-<span id="multigrid-mg-test-general-alphabeta-only-module"></span><h2>multigrid.mg_test_general_alphabeta_only module<a class="headerlink" href="#module-multigrid.mg_test_general_alphabeta_only" title="Permalink to this headline">¶</a></h2>
-<p>Test the general MG solver with a variable coeffcient Helmholtz
-problem.  This ensures we didn’t screw up the base functionality here.</p>
-<p>Here we solve:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="n">phi</span> <span class="o">+</span> <span class="n">div</span> <span class="o">.</span> <span class="p">(</span> <span class="n">beta</span> <span class="n">grad</span> <span class="n">phi</span> <span class="p">)</span> <span class="o">=</span> <span class="n">f</span>
-</pre></div>
-</div>
-<p>with:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">1.0</span>
-<span class="n">beta</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">+</span> <span class="n">cos</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
-
-<span class="n">f</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">16.0</span><span class="o">*</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="mf">16.0</span><span class="o">*</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>This has the exact solution:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">phi</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>on [0,1] x [0,1]</p>
-<p>We use Dirichlet BCs on phi.  For beta, we do not have to impose the
-same BCs, since that may represent a different physical quantity.
-Here we take beta to have Neumann BCs.  (Dirichlet BCs for beta will
-force it to 0 on the boundary, which is not correct here)</p>
-<dl class="function">
-<dt id="multigrid.mg_test_general_alphabeta_only.alpha">
-<code class="descclassname">multigrid.mg_test_general_alphabeta_only.</code><code class="descname">alpha</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_alphabeta_only.html#alpha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_alphabeta_only.alpha" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_alphabeta_only.beta">
-<code class="descclassname">multigrid.mg_test_general_alphabeta_only.</code><code class="descname">beta</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_alphabeta_only.html#beta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_alphabeta_only.beta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_alphabeta_only.f">
-<code class="descclassname">multigrid.mg_test_general_alphabeta_only.</code><code class="descname">f</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_alphabeta_only.html#f"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_alphabeta_only.f" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_alphabeta_only.gamma_x">
-<code class="descclassname">multigrid.mg_test_general_alphabeta_only.</code><code class="descname">gamma_x</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_alphabeta_only.html#gamma_x"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_alphabeta_only.gamma_x" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_alphabeta_only.gamma_y">
-<code class="descclassname">multigrid.mg_test_general_alphabeta_only.</code><code class="descname">gamma_y</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_alphabeta_only.html#gamma_y"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_alphabeta_only.gamma_y" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_alphabeta_only.test_general_poisson_dirichlet">
-<code class="descclassname">multigrid.mg_test_general_alphabeta_only.</code><code class="descname">test_general_poisson_dirichlet</code><span class="sig-paren">(</span><em>N</em>, <em>store_bench=False</em>, <em>comp_bench=False</em>, <em>make_plot=False</em>, <em>verbose=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_alphabeta_only.html#test_general_poisson_dirichlet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_alphabeta_only.test_general_poisson_dirichlet" title="Permalink to this definition">¶</a></dt>
-<dd><p>test the general MG solver.  The return value
-here is the error compared to the exact solution, UNLESS
-comp_bench=True, in which case the return value is the
-error compared to the stored benchmark</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_alphabeta_only.true">
-<code class="descclassname">multigrid.mg_test_general_alphabeta_only.</code><code class="descname">true</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_alphabeta_only.html#true"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_alphabeta_only.true" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-multigrid.mg_test_general_beta_only">
-<span id="multigrid-mg-test-general-beta-only-module"></span><h2>multigrid.mg_test_general_beta_only module<a class="headerlink" href="#module-multigrid.mg_test_general_beta_only" title="Permalink to this headline">¶</a></h2>
-<p>Test the general MG solver with a variable coeffcient Poisson
-problem (in essence, we are making this solver act like the 
-variable_coefficient_MG.py solver).  This ensures we didn’t
-screw up the base functionality here.</p>
-<p>Here we solve:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">div</span> <span class="o">.</span> <span class="p">(</span> <span class="n">beta</span> <span class="n">grad</span> <span class="n">phi</span> <span class="p">)</span> <span class="o">=</span> <span class="n">f</span>
-</pre></div>
-</div>
-<p>with:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">beta</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">+</span> <span class="n">cos</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
-
-<span class="n">f</span> <span class="o">=</span> <span class="o">-</span><span class="mf">16.0</span><span class="o">*</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>This has the exact solution:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">phi</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>on [0,1] x [0,1]</p>
-<p>We use Dirichlet BCs on phi.  For beta, we do not have to impose the
-same BCs, since that may represent a different physical quantity.
-Here we take beta to have Neumann BCs.  (Dirichlet BCs for beta will
-force it to 0 on the boundary, which is not correct here)</p>
-<dl class="function">
-<dt id="multigrid.mg_test_general_beta_only.alpha">
-<code class="descclassname">multigrid.mg_test_general_beta_only.</code><code class="descname">alpha</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_beta_only.html#alpha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_beta_only.alpha" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_beta_only.beta">
-<code class="descclassname">multigrid.mg_test_general_beta_only.</code><code class="descname">beta</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_beta_only.html#beta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_beta_only.beta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_beta_only.f">
-<code class="descclassname">multigrid.mg_test_general_beta_only.</code><code class="descname">f</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_beta_only.html#f"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_beta_only.f" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_beta_only.gamma_x">
-<code class="descclassname">multigrid.mg_test_general_beta_only.</code><code class="descname">gamma_x</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_beta_only.html#gamma_x"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_beta_only.gamma_x" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_beta_only.gamma_y">
-<code class="descclassname">multigrid.mg_test_general_beta_only.</code><code class="descname">gamma_y</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_beta_only.html#gamma_y"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_beta_only.gamma_y" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_beta_only.test_general_poisson_dirichlet">
-<code class="descclassname">multigrid.mg_test_general_beta_only.</code><code class="descname">test_general_poisson_dirichlet</code><span class="sig-paren">(</span><em>N</em>, <em>store_bench=False</em>, <em>comp_bench=False</em>, <em>make_plot=False</em>, <em>verbose=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_beta_only.html#test_general_poisson_dirichlet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_beta_only.test_general_poisson_dirichlet" title="Permalink to this definition">¶</a></dt>
-<dd><p>test the general MG solver.  The return value
-here is the error compared to the exact solution, UNLESS
-comp_bench=True, in which case the return value is the
-error compared to the stored benchmark</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_beta_only.true">
-<code class="descclassname">multigrid.mg_test_general_beta_only.</code><code class="descname">true</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_beta_only.html#true"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_beta_only.true" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-multigrid.mg_test_general_constant">
-<span id="multigrid-mg-test-general-constant-module"></span><h2>multigrid.mg_test_general_constant module<a class="headerlink" href="#module-multigrid.mg_test_general_constant" title="Permalink to this headline">¶</a></h2>
-<p>Test the general MG solver with a CONSTANT coefficient problem –
-the same one from the multigrid class test.  This ensures we didn’t
-screw up the base functionality here.</p>
-<p>We solve:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">u_xx</span> <span class="o">+</span> <span class="n">u_yy</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">[(</span><span class="mi">1</span><span class="o">-</span><span class="mi">6</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mi">6</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)]</span>
-<span class="n">u</span> <span class="o">=</span> <span class="mi">0</span> <span class="n">on</span> <span class="n">the</span> <span class="n">boundary</span>
-</pre></div>
-</div>
-<p>this is the example from page 64 of the book <cite>A Multigrid Tutorial, 2nd Ed.</cite></p>
-<p>The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)</p>
-<dl class="function">
-<dt id="multigrid.mg_test_general_constant.alpha">
-<code class="descclassname">multigrid.mg_test_general_constant.</code><code class="descname">alpha</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_constant.html#alpha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_constant.alpha" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_constant.beta">
-<code class="descclassname">multigrid.mg_test_general_constant.</code><code class="descname">beta</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_constant.html#beta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_constant.beta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_constant.f">
-<code class="descclassname">multigrid.mg_test_general_constant.</code><code class="descname">f</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_constant.html#f"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_constant.f" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_constant.gamma_x">
-<code class="descclassname">multigrid.mg_test_general_constant.</code><code class="descname">gamma_x</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_constant.html#gamma_x"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_constant.gamma_x" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_constant.gamma_y">
-<code class="descclassname">multigrid.mg_test_general_constant.</code><code class="descname">gamma_y</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_constant.html#gamma_y"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_constant.gamma_y" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_constant.test_general_poisson_dirichlet">
-<code class="descclassname">multigrid.mg_test_general_constant.</code><code class="descname">test_general_poisson_dirichlet</code><span class="sig-paren">(</span><em>N</em>, <em>store_bench=False</em>, <em>comp_bench=False</em>, <em>make_plot=False</em>, <em>verbose=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_constant.html#test_general_poisson_dirichlet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_constant.test_general_poisson_dirichlet" title="Permalink to this definition">¶</a></dt>
-<dd><p>test the general MG solver.  The return value
-here is the error compared to the exact solution, UNLESS
-comp_bench=True, in which case the return value is the
-error compared to the stored benchmark</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_constant.true">
-<code class="descclassname">multigrid.mg_test_general_constant.</code><code class="descname">true</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_constant.html#true"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_constant.true" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-multigrid.mg_test_general_dirichlet">
-<span id="multigrid-mg-test-general-dirichlet-module"></span><h2>multigrid.mg_test_general_dirichlet module<a class="headerlink" href="#module-multigrid.mg_test_general_dirichlet" title="Permalink to this headline">¶</a></h2>
-<p>Test the general MG solver with Dirichlet boundary conditions.</p>
-<p>Here we solve:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="n">phi</span> <span class="o">+</span> <span class="n">div</span><span class="p">{</span><span class="n">beta</span> <span class="n">grad</span> <span class="n">phi</span><span class="p">}</span> <span class="o">+</span> <span class="n">gamma</span> <span class="o">.</span> <span class="n">grad</span> <span class="n">phi</span> <span class="o">=</span> <span class="n">f</span>
-</pre></div>
-</div>
-<p>with:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">1.0</span>
-<span class="n">beta</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="mf">2.0</span>
-<span class="n">gamma_x</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
-<span class="n">gamma_y</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
-
-<span class="n">f</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">16.0</span><span class="o">*</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span>
-      <span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="mf">16.0</span><span class="o">*</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>This has the exact solution:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">phi</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>on [0,1] x [0,1]</p>
-<p>We use Dirichlet BCs on phi.</p>
-<p>For the coefficients we do not have to impose the same BCs, since that
-may represent a different physical quantity.  beta is the one that
-really matters since it must be brought to the edges.  Here we take
-beta to have Neumann BCs.  (Dirichlet BCs for beta will force it to 0
-on the boundary, which is not correct here)</p>
-<dl class="function">
-<dt id="multigrid.mg_test_general_dirichlet.alpha">
-<code class="descclassname">multigrid.mg_test_general_dirichlet.</code><code class="descname">alpha</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_dirichlet.html#alpha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_dirichlet.alpha" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_dirichlet.beta">
-<code class="descclassname">multigrid.mg_test_general_dirichlet.</code><code class="descname">beta</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_dirichlet.html#beta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_dirichlet.beta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_dirichlet.f">
-<code class="descclassname">multigrid.mg_test_general_dirichlet.</code><code class="descname">f</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_dirichlet.html#f"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_dirichlet.f" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_dirichlet.gamma_x">
-<code class="descclassname">multigrid.mg_test_general_dirichlet.</code><code class="descname">gamma_x</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_dirichlet.html#gamma_x"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_dirichlet.gamma_x" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_dirichlet.gamma_y">
-<code class="descclassname">multigrid.mg_test_general_dirichlet.</code><code class="descname">gamma_y</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_dirichlet.html#gamma_y"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_dirichlet.gamma_y" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_dirichlet.test_general_poisson_dirichlet">
-<code class="descclassname">multigrid.mg_test_general_dirichlet.</code><code class="descname">test_general_poisson_dirichlet</code><span class="sig-paren">(</span><em>N</em>, <em>store_bench=False</em>, <em>comp_bench=False</em>, <em>make_plot=False</em>, <em>verbose=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_dirichlet.html#test_general_poisson_dirichlet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_dirichlet.test_general_poisson_dirichlet" title="Permalink to this definition">¶</a></dt>
-<dd><p>test the general MG solver.  The return value
-here is the error compared to the exact solution, UNLESS
-comp_bench=True, in which case the return value is the
-error compared to the stored benchmark</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_dirichlet.true">
-<code class="descclassname">multigrid.mg_test_general_dirichlet.</code><code class="descname">true</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_dirichlet.html#true"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_dirichlet.true" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-multigrid.mg_test_general_inhomogeneous">
-<span id="multigrid-mg-test-general-inhomogeneous-module"></span><h2>multigrid.mg_test_general_inhomogeneous module<a class="headerlink" href="#module-multigrid.mg_test_general_inhomogeneous" title="Permalink to this headline">¶</a></h2>
-<dl class="docutils">
-<dt>Test the general MG solver with inhomogeneous Dirichlet </dt>
-<dd>boundary conditions.</dd>
-</dl>
-<p>Here we solve:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="n">phi</span> <span class="o">+</span> <span class="n">div</span><span class="p">{</span><span class="n">beta</span> <span class="n">grad</span> <span class="n">phi</span><span class="p">}</span> <span class="o">+</span> <span class="n">gamma</span> <span class="o">.</span> <span class="n">grad</span> <span class="n">phi</span> <span class="o">=</span> <span class="n">f</span>
-</pre></div>
-</div>
-<p>with:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">10.0</span>
-<span class="n">beta</span> <span class="o">=</span> <span class="n">x</span><span class="o">*</span><span class="n">y</span> <span class="o">+</span> <span class="mi">1</span>  <span class="p">(</span><span class="n">note</span><span class="p">:</span> <span class="n">x</span><span class="o">*</span><span class="n">y</span> <span class="n">alone</span> <span class="n">doesn</span><span class="s1">&#39;t work)</span>
-<span class="n">gamma_x</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">gamma_y</span> <span class="o">=</span> <span class="mi">1</span>
-
-<span class="n">f</span> <span class="o">=</span>  <span class="o">-</span><span class="p">(</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> 
-    <span class="o">-</span> <span class="p">(</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> 
-    <span class="p">(</span><span class="o">-</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">y</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">10</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>This has the exact solution:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">phi</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>on [0,1] x [0,1], with Dirichlet boundary conditions:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">phi</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">phi</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">phi</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">phi</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span>
-</pre></div>
-</div>
-<p>For the coefficients we do not have to impose the same BCs, since that
-may represent a different physical quantity.  beta is the one that
-really matters since it must be brought to the edges.  Here we take
-beta to have Neumann BCs.  (Dirichlet BCs for beta will force it to 0
-on the boundary, which is not correct here)</p>
-<dl class="function">
-<dt id="multigrid.mg_test_general_inhomogeneous.alpha">
-<code class="descclassname">multigrid.mg_test_general_inhomogeneous.</code><code class="descname">alpha</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_inhomogeneous.html#alpha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_inhomogeneous.alpha" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_inhomogeneous.beta">
-<code class="descclassname">multigrid.mg_test_general_inhomogeneous.</code><code class="descname">beta</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_inhomogeneous.html#beta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_inhomogeneous.beta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_inhomogeneous.f">
-<code class="descclassname">multigrid.mg_test_general_inhomogeneous.</code><code class="descname">f</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_inhomogeneous.html#f"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_inhomogeneous.f" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_inhomogeneous.gamma_x">
-<code class="descclassname">multigrid.mg_test_general_inhomogeneous.</code><code class="descname">gamma_x</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_inhomogeneous.html#gamma_x"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_inhomogeneous.gamma_x" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_inhomogeneous.gamma_y">
-<code class="descclassname">multigrid.mg_test_general_inhomogeneous.</code><code class="descname">gamma_y</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_inhomogeneous.html#gamma_y"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_inhomogeneous.gamma_y" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_inhomogeneous.test_general_poisson_inhomogeneous">
-<code class="descclassname">multigrid.mg_test_general_inhomogeneous.</code><code class="descname">test_general_poisson_inhomogeneous</code><span class="sig-paren">(</span><em>N</em>, <em>store_bench=False</em>, <em>comp_bench=False</em>, <em>make_plot=False</em>, <em>verbose=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_inhomogeneous.html#test_general_poisson_inhomogeneous"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_inhomogeneous.test_general_poisson_inhomogeneous" title="Permalink to this definition">¶</a></dt>
-<dd><p>test the general MG solver.  The return value
-here is the error compared to the exact solution, UNLESS
-comp_bench=True, in which case the return value is the
-error compared to the stored benchmark</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_inhomogeneous.true">
-<code class="descclassname">multigrid.mg_test_general_inhomogeneous.</code><code class="descname">true</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_inhomogeneous.html#true"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_inhomogeneous.true" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_inhomogeneous.xl_func">
-<code class="descclassname">multigrid.mg_test_general_inhomogeneous.</code><code class="descname">xl_func</code><span class="sig-paren">(</span><em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_inhomogeneous.html#xl_func"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_inhomogeneous.xl_func" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_general_inhomogeneous.yl_func">
-<code class="descclassname">multigrid.mg_test_general_inhomogeneous.</code><code class="descname">yl_func</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_general_inhomogeneous.html#yl_func"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_general_inhomogeneous.yl_func" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-multigrid.mg_test_simple">
-<span id="multigrid-mg-test-simple-module"></span><h2>multigrid.mg_test_simple module<a class="headerlink" href="#module-multigrid.mg_test_simple" title="Permalink to this headline">¶</a></h2>
-<p>an example of using the multigrid class to solve Laplace’s equation.  Here, we
-solve:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">u_xx</span> <span class="o">+</span> <span class="n">u_yy</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">[(</span><span class="mi">1</span><span class="o">-</span><span class="mi">6</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mi">6</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)]</span>
-<span class="n">u</span> <span class="o">=</span> <span class="mi">0</span> <span class="n">on</span> <span class="n">the</span> <span class="n">boundary</span>
-</pre></div>
-</div>
-<p>this is the example from page 64 of the book <cite>A Multigrid Tutorial, 2nd Ed.</cite></p>
-<p>The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)</p>
-<dl class="function">
-<dt id="multigrid.mg_test_simple.f">
-<code class="descclassname">multigrid.mg_test_simple.</code><code class="descname">f</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_simple.html#f"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_simple.f" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_simple.test_poisson_dirichlet">
-<code class="descclassname">multigrid.mg_test_simple.</code><code class="descname">test_poisson_dirichlet</code><span class="sig-paren">(</span><em>N</em>, <em>store_bench=False</em>, <em>comp_bench=False</em>, <em>make_plot=False</em>, <em>verbose=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_simple.html#test_poisson_dirichlet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_simple.test_poisson_dirichlet" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_simple.true">
-<code class="descclassname">multigrid.mg_test_simple.</code><code class="descname">true</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_simple.html#true"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_simple.true" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-multigrid.mg_test_vc_constant">
-<span id="multigrid-mg-test-vc-constant-module"></span><h2>multigrid.mg_test_vc_constant module<a class="headerlink" href="#module-multigrid.mg_test_vc_constant" title="Permalink to this headline">¶</a></h2>
-<p>Test the variable coefficient MG solver with a CONSTANT coefficient
-problem – the same one from the multigrid class test.  This ensures
-we didn’t screw up the base functionality here.</p>
-<p>We solve:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">u_xx</span> <span class="o">+</span> <span class="n">u_yy</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">[(</span><span class="mi">1</span><span class="o">-</span><span class="mi">6</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mi">6</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)]</span>
-<span class="n">u</span> <span class="o">=</span> <span class="mi">0</span> <span class="n">on</span> <span class="n">the</span> <span class="n">boundary</span>
-</pre></div>
-</div>
-<p>this is the example from page 64 of the book <cite>A Multigrid Tutorial, 2nd Ed.</cite></p>
-<p>The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)</p>
-<dl class="function">
-<dt id="multigrid.mg_test_vc_constant.alpha">
-<code class="descclassname">multigrid.mg_test_vc_constant.</code><code class="descname">alpha</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_vc_constant.html#alpha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_vc_constant.alpha" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_vc_constant.f">
-<code class="descclassname">multigrid.mg_test_vc_constant.</code><code class="descname">f</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_vc_constant.html#f"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_vc_constant.f" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_vc_constant.test_vc_constant">
-<code class="descclassname">multigrid.mg_test_vc_constant.</code><code class="descname">test_vc_constant</code><span class="sig-paren">(</span><em>N</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_vc_constant.html#test_vc_constant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_vc_constant.test_vc_constant" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_vc_constant.true">
-<code class="descclassname">multigrid.mg_test_vc_constant.</code><code class="descname">true</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_vc_constant.html#true"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_vc_constant.true" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-multigrid.mg_test_vc_dirichlet">
-<span id="multigrid-mg-test-vc-dirichlet-module"></span><h2>multigrid.mg_test_vc_dirichlet module<a class="headerlink" href="#module-multigrid.mg_test_vc_dirichlet" title="Permalink to this headline">¶</a></h2>
-<p>Test the variable-coefficient MG solver with Dirichlet boundary conditions.</p>
-<p>Here we solve:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">div</span> <span class="o">.</span> <span class="p">(</span> <span class="n">alpha</span> <span class="n">grad</span> <span class="n">phi</span> <span class="p">)</span> <span class="o">=</span> <span class="n">f</span>
-</pre></div>
-</div>
-<p>with:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">+</span> <span class="n">cos</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
-
-<span class="n">f</span> <span class="o">=</span> <span class="o">-</span><span class="mf">16.0</span><span class="o">*</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>This has the exact solution:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">phi</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>on [0,1] x [0,1]</p>
-<p>We use Dirichlet BCs on phi.  For alpha, we do not have to impose the
-same BCs, since that may represent a different physical quantity.
-Here we take alpha to have Neumann BCs.  (Dirichlet BCs for alpha will
-force it to 0 on the boundary, which is not correct here)</p>
-<dl class="function">
-<dt id="multigrid.mg_test_vc_dirichlet.alpha">
-<code class="descclassname">multigrid.mg_test_vc_dirichlet.</code><code class="descname">alpha</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_vc_dirichlet.html#alpha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_vc_dirichlet.alpha" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_vc_dirichlet.f">
-<code class="descclassname">multigrid.mg_test_vc_dirichlet.</code><code class="descname">f</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_vc_dirichlet.html#f"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_vc_dirichlet.f" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_vc_dirichlet.test_vc_poisson_dirichlet">
-<code class="descclassname">multigrid.mg_test_vc_dirichlet.</code><code class="descname">test_vc_poisson_dirichlet</code><span class="sig-paren">(</span><em>N</em>, <em>store_bench=False</em>, <em>comp_bench=False</em>, <em>make_plot=False</em>, <em>verbose=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_vc_dirichlet.html#test_vc_poisson_dirichlet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_vc_dirichlet.test_vc_poisson_dirichlet" title="Permalink to this definition">¶</a></dt>
-<dd><p>test the variable-coefficient MG solver.  The return value
-here is the error compared to the exact solution, UNLESS
-comp_bench=True, in which case the return value is the
-error compared to the stored benchmark</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_vc_dirichlet.true">
-<code class="descclassname">multigrid.mg_test_vc_dirichlet.</code><code class="descname">true</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_vc_dirichlet.html#true"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_vc_dirichlet.true" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-multigrid.mg_test_vc_periodic">
-<span id="multigrid-mg-test-vc-periodic-module"></span><h2>multigrid.mg_test_vc_periodic module<a class="headerlink" href="#module-multigrid.mg_test_vc_periodic" title="Permalink to this headline">¶</a></h2>
-<p>Test the variable-coefficient MG solver with periodic data.</p>
-<p>Here we solve:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">div</span> <span class="o">.</span> <span class="p">(</span> <span class="n">alpha</span> <span class="n">grad</span> <span class="n">phi</span> <span class="p">)</span> <span class="o">=</span> <span class="n">f</span>
-</pre></div>
-</div>
-<p>with:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">+</span> <span class="n">cos</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
-
-<span class="n">f</span> <span class="o">=</span> <span class="o">-</span><span class="mf">16.0</span><span class="o">*</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>This has the exact solution:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">phi</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>on [0,1] x [0,1]</p>
-<p>We use Dirichlet BCs on phi.  For alpha, we do not have to impose the
-same BCs, since that may represent a different physical quantity.
-Here we take alpha to have Neumann BCs.  (Dirichlet BCs for alpha will
-force it to 0 on the boundary, which is not correct here)</p>
-<dl class="function">
-<dt id="multigrid.mg_test_vc_periodic.alpha">
-<code class="descclassname">multigrid.mg_test_vc_periodic.</code><code class="descname">alpha</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_vc_periodic.html#alpha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_vc_periodic.alpha" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_vc_periodic.f">
-<code class="descclassname">multigrid.mg_test_vc_periodic.</code><code class="descname">f</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_vc_periodic.html#f"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_vc_periodic.f" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_vc_periodic.test_vc_poisson_periodic">
-<code class="descclassname">multigrid.mg_test_vc_periodic.</code><code class="descname">test_vc_poisson_periodic</code><span class="sig-paren">(</span><em>N</em>, <em>store_bench=False</em>, <em>comp_bench=False</em>, <em>make_plot=False</em>, <em>verbose=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_vc_periodic.html#test_vc_poisson_periodic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_vc_periodic.test_vc_poisson_periodic" title="Permalink to this definition">¶</a></dt>
-<dd><p>test the variable-coefficient MG solver.  The return value
-here is the error compared to the exact solution, UNLESS
-comp_bench=True, in which case the return value is the
-error compared to the stored benchmark</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_test_vc_periodic.true">
-<code class="descclassname">multigrid.mg_test_vc_periodic.</code><code class="descname">true</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_test_vc_periodic.html#true"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_test_vc_periodic.true" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-multigrid.mg_vis">
-<span id="multigrid-mg-vis-module"></span><h2>multigrid.mg_vis module<a class="headerlink" href="#module-multigrid.mg_vis" title="Permalink to this headline">¶</a></h2>
-<p>an example of using the multigrid class to solve Laplace’s equation.  Here, we
-solve:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">u_xx</span> <span class="o">+</span> <span class="n">u_yy</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">[(</span><span class="mi">1</span><span class="o">-</span><span class="mi">6</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mi">6</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)]</span>
-<span class="n">u</span> <span class="o">=</span> <span class="mi">0</span> <span class="n">on</span> <span class="n">the</span> <span class="n">boundary</span>
-</pre></div>
-</div>
-<p>this is the example from page 64 of the book <cite>A Multigrid Tutorial, 2nd Ed.</cite></p>
-<p>The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)</p>
-<dl class="function">
-<dt id="multigrid.mg_vis.doit">
-<code class="descclassname">multigrid.mg_vis.</code><code class="descname">doit</code><span class="sig-paren">(</span><em>nx</em>, <em>ny</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_vis.html#doit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_vis.doit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_vis.f">
-<code class="descclassname">multigrid.mg_vis.</code><code class="descname">f</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_vis.html#f"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_vis.f" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="multigrid.mg_vis.true">
-<code class="descclassname">multigrid.mg_vis.</code><code class="descname">true</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/mg_vis.html#true"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.mg_vis.true" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-multigrid.project_periodic">
-<span id="multigrid-project-periodic-module"></span><h2>multigrid.project_periodic module<a class="headerlink" href="#module-multigrid.project_periodic" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="multigrid.project_periodic.doit">
-<code class="descclassname">multigrid.project_periodic.</code><code class="descname">doit</code><span class="sig-paren">(</span><em>nx</em>, <em>ny</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/project_periodic.html#doit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.project_periodic.doit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-multigrid.prolong_restrict_demo">
-<span id="multigrid-prolong-restrict-demo-module"></span><h2>multigrid.prolong_restrict_demo module<a class="headerlink" href="#module-multigrid.prolong_restrict_demo" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="multigrid.prolong_restrict_demo.doit">
-<code class="descclassname">multigrid.prolong_restrict_demo.</code><code class="descname">doit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/prolong_restrict_demo.html#doit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.prolong_restrict_demo.doit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
 <div class="section" id="module-multigrid.variable_coeff_MG">
 <span id="multigrid-variable-coeff-mg-module"></span><h2>multigrid.variable_coeff_MG module<a class="headerlink" href="#module-multigrid.variable_coeff_MG" title="Permalink to this headline">¶</a></h2>
 <p>This multigrid solver is build from multigrid/MG.py and implements
@@ -1202,7 +668,7 @@ many more iterations).</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'2.0',
+            VERSION:'2.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>mesh.reconstruction &mdash; pyro 2.0 documentation</title>
+  <title>mesh.reconstruction &mdash; pyro 2.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="pyro 2.0 documentation" href="../../index.html"/>
+    <link rel="top" title="pyro 2.1 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                2.0
+                2.1
               </div>
             
           
@@ -107,6 +107,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compressible_compare.html">Compressible solver comparisons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid-examples.html">Multigrid examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
@@ -195,6 +196,7 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+
 <div class="viewcode-block" id="limit"><a class="viewcode-back" href="../../mesh.html#mesh.reconstruction.limit">[docs]</a><span class="k">def</span> <span class="nf">limit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="n">idir</span><span class="p">,</span> <span class="n">limiter</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; a single driver that calls the different limiters based on the value</span>
 <span class="sd">    of the limiter input variable.&quot;&quot;&quot;</span>
@@ -205,6 +207,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">limit4</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="n">idir</span><span class="p">)</span></div>
 
+
 <div class="viewcode-block" id="well_balance"><a class="viewcode-back" href="../../mesh.html#mesh.reconstruction.well_balance">[docs]</a><span class="k">def</span> <span class="nf">well_balance</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="n">limiter</span><span class="p">,</span> <span class="n">iv</span><span class="p">,</span> <span class="n">grav</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;subtract off the hydrostatic pressure before limiting.  Note, this</span>
 <span class="sd">    only considers the y direction.&quot;&quot;&quot;</span>
@@ -213,26 +216,17 @@
 
     <span class="n">p1</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
     <span class="n">p1_jp1</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
-    <span class="c1">#p1_jp2 = myg.scratch_array()</span>
     <span class="n">p1_jm1</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
-    <span class="c1">#p1_jm2 = myg.scratch_array()</span>
 
-    <span class="n">p1</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">4</span><span class="p">)[:,:]</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">p1</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">4</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span>
 
-    <span class="n">p1_jp1</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">3</span><span class="p">)[:,:]</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">iv</span><span class="o">.</span><span class="n">ip</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">iv</span><span class="o">.</span><span class="n">ip</span><span class="p">)</span> <span class="o">+</span>
+    <span class="n">p1_jp1</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">3</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">iv</span><span class="o">.</span><span class="n">ip</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">iv</span><span class="o">.</span><span class="n">ip</span><span class="p">)</span> <span class="o">+</span>
             <span class="mf">0.5</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span><span class="o">*</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">iv</span><span class="o">.</span><span class="n">irho</span><span class="p">)</span> <span class="o">+</span> <span class="n">q</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">iv</span><span class="o">.</span><span class="n">irho</span><span class="p">))</span><span class="o">*</span><span class="n">grav</span><span class="p">)</span>
 
-    <span class="c1">#p1_jp2.v(buf=2)[:,:] = q.jp(2, buf=2, n=iv.ip) - (q.v(buf=2, n=iv.ip) +</span>
-    <span class="c1">#        0.5*myg.dy*(q.v(buf=2, n=iv.irho) + 2.0*q.jp(1, buf=2, n=iv.irho) + q.jp(2, buf=2, n=iv.irho))*grav)</span>
-
-    <span class="n">p1_jm1</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">3</span><span class="p">)[:,:]</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">iv</span><span class="o">.</span><span class="n">ip</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">iv</span><span class="o">.</span><span class="n">ip</span><span class="p">)</span> <span class="o">-</span>
+    <span class="n">p1_jm1</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">3</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">iv</span><span class="o">.</span><span class="n">ip</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">iv</span><span class="o">.</span><span class="n">ip</span><span class="p">)</span> <span class="o">-</span>
             <span class="mf">0.5</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span><span class="o">*</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">iv</span><span class="o">.</span><span class="n">irho</span><span class="p">)</span> <span class="o">+</span> <span class="n">q</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">iv</span><span class="o">.</span><span class="n">irho</span><span class="p">))</span><span class="o">*</span><span class="n">grav</span><span class="p">)</span>
 
-    <span class="c1">#p1_jm2.v(buf=2)[:,:] = q.jp(-2, buf=2, n=iv.ip) - (q.v(buf=2, n=iv.ip) -</span>
-    <span class="c1">#        0.5*myg.dy*(q.v(buf=2, n=iv.irho) + 2.0*q.jp(-1, buf=2, n=iv.irho) + q.jp(-2, buf=2, n=iv.irho))*grav)</span>
-
     <span class="c1"># now limit p1 using these -- this is the 4th order MC limiter</span>
-    <span class="n">lda</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
     <span class="n">lda_tmp</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
     <span class="n">dc</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
     <span class="n">dl</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
@@ -246,19 +240,8 @@
     <span class="n">dt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">dc</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">d1</span><span class="p">),</span> <span class="n">dc</span><span class="p">,</span> <span class="n">d1</span><span class="p">)</span>
     <span class="n">lda_tmp</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">dl</span><span class="o">*</span><span class="n">dr</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
 
-    <span class="c1"># I&#39;m not sure this part makes sense -- the lda_j+1 and lda_j-1 are for </span>
-    <span class="c1"># a different HSE base.  We should construct an lda_tmp_jp1 and lda_tmp_jm1</span>
-    <span class="c1"># using our p1 based on the current zone</span>
-    <span class="c1">#dc.v(buf=2)[:, :] = (2./3.)*(p1_jp1.v(buf=2) - p1_jm1.v(buf=2) - \</span>
-    <span class="c1">#                             0.25*(lda_tmp.jp(1, buf=2) + lda_tmp.jp(-1, buf=2)))</span>
-
-    <span class="c1">#d1 = 2.0*np.where(np.fabs(dl) &lt; np.fabs(dr), dl, dr)</span>
-    <span class="c1">#dt = np.where(np.fabs(dc) &lt; np.fabs(d1), dc, d1)</span>
-    <span class="c1">#lda.v(buf=myg.ng)[:, :] = np.where(dl*dr &gt; 0.0, dt, 0.0)</span>
-
-    <span class="c1">#return lda</span>
-
     <span class="k">return</span> <span class="n">lda_tmp</span></div>
+
 
 <div class="viewcode-block" id="nolimit"><a class="viewcode-back" href="../../mesh.html#mesh.reconstruction.nolimit">[docs]</a><span class="k">def</span> <span class="nf">nolimit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="n">idir</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; just a centered difference without any limiting &quot;&quot;&quot;</span>
@@ -315,7 +298,7 @@
         <span class="n">dr</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">a</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
     <span class="k">elif</span> <span class="n">idir</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">dc</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">2.</span><span class="o">/</span><span class="mf">3.</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">a</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> \
+        <span class="n">dc</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">2.</span><span class="o">/</span><span class="mf">3.</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">a</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span>
                                      <span class="mf">0.25</span><span class="o">*</span><span class="p">(</span><span class="n">lda_tmp</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">lda_tmp</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)))</span>
         <span class="n">dl</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">a</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">dr</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">a</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -325,6 +308,7 @@
     <span class="n">lda</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">dl</span><span class="o">*</span><span class="n">dr</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">lda</span></div>
+
 
 <div class="viewcode-block" id="flatten"><a class="viewcode-back" href="../../mesh.html#mesh.reconstruction.flatten">[docs]</a><span class="k">def</span> <span class="nf">flatten</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">idir</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span> <span class="n">rp</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; compute the 1-d flattening coefficients &quot;&quot;&quot;</span>
@@ -370,7 +354,6 @@
     <span class="k">return</span> <span class="n">xi</span></div>
 
 
-
 <div class="viewcode-block" id="flatten_multid"><a class="viewcode-back" href="../../mesh.html#mesh.reconstruction.flatten_multid">[docs]</a><span class="k">def</span> <span class="nf">flatten_multid</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">xi_x</span><span class="p">,</span> <span class="n">xi_y</span><span class="p">,</span> <span class="n">ivars</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; compute the multidimensional flattening coefficient &quot;&quot;&quot;</span>
 
@@ -393,33 +376,40 @@
 <span class="c1"># Constants for the WENO reconstruction</span>
 <span class="c1"># NOTE: integer division laziness means this WILL fail on python2</span>
 <span class="n">C_3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="mi">3</span>
-<span class="n">a_3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-                 <span class="p">[</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">]</span> <span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
-<span class="n">sigma_3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span> <span class="p">[</span><span class="mi">1</span> <span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-                      <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="p">],</span>
-                    <span class="p">[</span> <span class="p">[</span><span class="mi">1</span> <span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-                      <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="p">]</span> <span class="p">])</span>
+
+<span class="n">a_3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">]])</span> <span class="o">/</span> <span class="mi">2</span>
+
+<span class="n">sigma_3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                     <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span>
+                    <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                     <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]])</span>
 
 <span class="n">C_5</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span> <span class="o">/</span> <span class="mi">10</span>
-<span class="n">a_5</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="o">-</span><span class="mi">7</span><span class="p">,</span>  <span class="mi">2</span><span class="p">],</span>
-                 <span class="p">[</span><span class="mi">2</span> <span class="p">,</span>  <span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-                 <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">5</span><span class="p">,</span>  <span class="mi">2</span><span class="p">]])</span> <span class="o">/</span> <span class="mi">6</span>
-<span class="n">sigma_5</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[[</span><span class="mi">40</span>  <span class="p">,</span> <span class="mi">0</span>   <span class="p">,</span> <span class="mi">0</span> <span class="p">],</span>
-                     <span class="p">[</span><span class="o">-</span><span class="mi">124</span><span class="p">,</span> <span class="mi">100</span> <span class="p">,</span> <span class="mi">0</span> <span class="p">],</span>
-                     <span class="p">[</span><span class="mi">44</span>  <span class="p">,</span> <span class="o">-</span><span class="mi">76</span> <span class="p">,</span> <span class="mi">16</span><span class="p">]</span> <span class="p">],</span>
-                    <span class="p">[[</span><span class="mi">16</span>  <span class="p">,</span> <span class="mi">0</span>   <span class="p">,</span> <span class="mi">0</span> <span class="p">],</span>
-                     <span class="p">[</span><span class="o">-</span><span class="mi">52</span> <span class="p">,</span> <span class="mi">52</span>  <span class="p">,</span> <span class="mi">0</span> <span class="p">],</span>
-                     <span class="p">[</span><span class="mi">20</span>  <span class="p">,</span> <span class="o">-</span><span class="mi">52</span> <span class="p">,</span> <span class="mi">16</span><span class="p">]</span> <span class="p">],</span>
-                    <span class="p">[[</span><span class="mi">16</span>  <span class="p">,</span> <span class="mi">0</span>   <span class="p">,</span> <span class="mi">0</span> <span class="p">],</span>
-                     <span class="p">[</span><span class="o">-</span><span class="mi">76</span> <span class="p">,</span> <span class="mi">100</span> <span class="p">,</span> <span class="mi">0</span> <span class="p">],</span>
-                     <span class="p">[</span><span class="mi">44</span>  <span class="p">,</span> <span class="o">-</span><span class="mi">124</span><span class="p">,</span> <span class="mi">40</span><span class="p">]</span> <span class="p">]</span> <span class="p">])</span> <span class="o">/</span> <span class="mi">12</span>
 
-<span class="n">C_all</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">2</span> <span class="p">:</span> <span class="n">C_3</span><span class="p">,</span>
-          <span class="mi">3</span> <span class="p">:</span> <span class="n">C_5</span> <span class="p">}</span>
-<span class="n">a_all</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">2</span> <span class="p">:</span> <span class="n">a_3</span><span class="p">,</span>
-          <span class="mi">3</span> <span class="p">:</span> <span class="n">a_5</span> <span class="p">}</span>
-<span class="n">sigma_all</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">2</span> <span class="p">:</span> <span class="n">sigma_3</span><span class="p">,</span>
-              <span class="mi">3</span> <span class="p">:</span> <span class="n">sigma_5</span> <span class="p">}</span>
+<span class="n">a_5</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">11</span><span class="p">,</span> <span class="o">-</span><span class="mi">7</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span> <span class="o">/</span> <span class="mi">6</span>
+
+<span class="n">sigma_5</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[[</span><span class="mi">40</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                     <span class="p">[</span><span class="o">-</span><span class="mi">124</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                     <span class="p">[</span><span class="mi">44</span><span class="p">,</span> <span class="o">-</span><span class="mi">76</span><span class="p">,</span> <span class="mi">16</span><span class="p">]],</span>
+                    <span class="p">[[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                     <span class="p">[</span><span class="o">-</span><span class="mi">52</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                     <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="o">-</span><span class="mi">52</span><span class="p">,</span> <span class="mi">16</span><span class="p">]],</span>
+                    <span class="p">[[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                     <span class="p">[</span><span class="o">-</span><span class="mi">76</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                     <span class="p">[</span><span class="mi">44</span><span class="p">,</span> <span class="o">-</span><span class="mi">124</span><span class="p">,</span> <span class="mi">40</span><span class="p">]]])</span> <span class="o">/</span> <span class="mi">12</span>
+
+<span class="n">C_all</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">:</span> <span class="n">C_3</span><span class="p">,</span>
+         <span class="mi">3</span><span class="p">:</span> <span class="n">C_5</span><span class="p">}</span>
+
+<span class="n">a_all</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">:</span> <span class="n">a_3</span><span class="p">,</span>
+         <span class="mi">3</span><span class="p">:</span> <span class="n">a_5</span><span class="p">}</span>
+
+<span class="n">sigma_all</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">:</span> <span class="n">sigma_3</span><span class="p">,</span>
+             <span class="mi">3</span><span class="p">:</span> <span class="n">sigma_5</span><span class="p">}</span>
+
 
 <div class="viewcode-block" id="weno_upwind"><a class="viewcode-back" href="../../mesh.html#mesh.reconstruction.weno_upwind">[docs]</a><span class="k">def</span> <span class="nf">weno_upwind</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">order</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -457,6 +447,7 @@
 
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">q_stencils</span><span class="p">)</span></div>
 
+
 <div class="viewcode-block" id="weno"><a class="viewcode-back" href="../../mesh.html#mesh.reconstruction.weno">[docs]</a><span class="k">def</span> <span class="nf">weno</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">order</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Perform WENO reconstruction</span>
@@ -477,10 +468,12 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">Npoints</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">q_minus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
-    <span class="n">q_plus</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+    <span class="n">q_plus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">Npoints</span><span class="o">-</span><span class="n">order</span><span class="p">):</span>
         <span class="n">q_plus</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">weno_upwind</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">-</span><span class="n">order</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">order</span><span class="p">],</span> <span class="n">order</span><span class="p">)</span>
         <span class="n">q_minus</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">weno_upwind</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">order</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">i</span><span class="o">-</span><span class="n">order</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">order</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">q_minus</span><span class="p">,</span> <span class="n">q_plus</span></div>
 </pre></div>
 
@@ -518,7 +511,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'2.0',
+            VERSION:'2.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

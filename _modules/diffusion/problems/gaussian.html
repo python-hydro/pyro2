@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>diffusion.problems.gaussian &mdash; pyro 2.0 documentation</title>
+  <title>diffusion.problems.gaussian &mdash; pyro 2.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="pyro 2.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="pyro 2.1 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                2.0
+                2.1
               </div>
             
           
@@ -107,6 +107,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible_compare.html">Compressible solver comparisons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../multigrid_basics.html">Multigrid solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../multigrid-examples.html">Multigrid examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../diffusion_basics.html">Diffusion</a></li>
@@ -197,9 +198,10 @@
 <span class="kn">import</span> <span class="nn">numpy</span>
 <span class="kn">from</span> <span class="nn">util</span> <span class="k">import</span> <span class="n">msg</span>
 
+
 <div class="viewcode-block" id="phi_analytic"><a class="viewcode-back" href="../../../diffusion.problems.html#diffusion.problems.gaussian.phi_analytic">[docs]</a><span class="k">def</span> <span class="nf">phi_analytic</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">t_0</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">phi_1</span><span class="p">,</span> <span class="n">phi_2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; the analytic solution to the Gaussian diffusion problem &quot;&quot;&quot;</span>
-    <span class="n">phi</span> <span class="o">=</span> <span class="p">(</span><span class="n">phi_2</span> <span class="o">-</span> <span class="n">phi_1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">t_0</span><span class="o">/</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">t_0</span><span class="p">))</span><span class="o">*</span> \
+    <span class="n">phi</span> <span class="o">=</span> <span class="p">(</span><span class="n">phi_2</span> <span class="o">-</span> <span class="n">phi_1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">t_0</span><span class="o">/</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">t_0</span><span class="p">))</span> <span class="o">*</span> \
         <span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25</span><span class="o">*</span><span class="n">dist</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">t_0</span><span class="p">)))</span> <span class="o">+</span> <span class="n">phi_1</span>
     <span class="k">return</span> <span class="n">phi</span></div>
 
@@ -241,7 +243,6 @@
     <span class="n">my_data</span><span class="o">.</span><span class="n">set_aux</span><span class="p">(</span><span class="s2">&quot;t_0&quot;</span><span class="p">,</span> <span class="n">t_0</span><span class="p">)</span>
     <span class="n">my_data</span><span class="o">.</span><span class="n">set_aux</span><span class="p">(</span><span class="s2">&quot;phi_0&quot;</span><span class="p">,</span> <span class="n">phi_0</span><span class="p">)</span>
     <span class="n">my_data</span><span class="o">.</span><span class="n">set_aux</span><span class="p">(</span><span class="s2">&quot;phi_max&quot;</span><span class="p">,</span> <span class="n">phi_max</span><span class="p">)</span></div>
-
 
 
 <div class="viewcode-block" id="finalize"><a class="viewcode-back" href="../../../diffusion.problems.html#diffusion.problems.gaussian.finalize">[docs]</a><span class="k">def</span> <span class="nf">finalize</span><span class="p">():</span>
@@ -289,7 +290,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'2.0',
+            VERSION:'2.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

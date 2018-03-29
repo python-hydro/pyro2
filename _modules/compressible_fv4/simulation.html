@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>compressible_fv4.simulation &mdash; pyro 2.0 documentation</title>
+  <title>compressible_fv4.simulation &mdash; pyro 2.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="pyro 2.0 documentation" href="../../index.html"/>
+    <link rel="top" title="pyro 2.1 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                2.0
+                2.1
               </div>
             
           
@@ -107,6 +107,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compressible_compare.html">Compressible solver comparisons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid-examples.html">Multigrid examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
@@ -192,12 +193,11 @@
   <h1>Source code for compressible_fv4.simulation</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
 <span class="kn">import</span> <span class="nn">mesh.integration</span> <span class="k">as</span> <span class="nn">integration</span>
 <span class="kn">import</span> <span class="nn">mesh.fv</span> <span class="k">as</span> <span class="nn">fv</span>
 <span class="kn">import</span> <span class="nn">compressible_rk</span>
 <span class="kn">import</span> <span class="nn">compressible_fv4.fluxes</span> <span class="k">as</span> <span class="nn">flx</span>
+
 
 <div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../compressible_fv4.html#compressible_fv4.simulation.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="n">compressible_rk</span><span class="o">.</span><span class="n">Simulation</span><span class="p">):</span>
 
@@ -222,15 +222,15 @@
         <span class="n">ymom_cc</span> <span class="o">=</span> <span class="n">myd</span><span class="o">.</span><span class="n">to_centers</span><span class="p">(</span><span class="s2">&quot;y-momentum&quot;</span><span class="p">)</span>
 
         <span class="n">ymom_src</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
-        <span class="n">ymom_src</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,:]</span> <span class="o">=</span> <span class="n">dens_cc</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,:]</span><span class="o">*</span><span class="n">grav</span>
+        <span class="n">ymom_src</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">dens_cc</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span><span class="o">*</span><span class="n">grav</span>
 
         <span class="n">E_src</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
-        <span class="n">E_src</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,:]</span> <span class="o">=</span> <span class="n">ymom_cc</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,:]</span><span class="o">*</span><span class="n">grav</span>
+        <span class="n">E_src</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">ymom_cc</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span><span class="o">*</span><span class="n">grav</span>
 
         <span class="c1"># now bring back to averages -- we only need this in the</span>
         <span class="c1"># interior (no ghost cells)</span>
-        <span class="n">ymom_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">ymom_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">-</span> <span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">ymom_src</span><span class="o">.</span><span class="n">lap</span><span class="p">()</span><span class="o">/</span><span class="mf">24.0</span>
-        <span class="n">E_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">E_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">-</span> <span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">E_src</span><span class="o">.</span><span class="n">lap</span><span class="p">()</span><span class="o">/</span><span class="mf">24.0</span>
+        <span class="n">ymom_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">ymom_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">ymom_src</span><span class="o">.</span><span class="n">lap</span><span class="p">()</span><span class="o">/</span><span class="mf">24.0</span>
+        <span class="n">E_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">E_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">E_src</span><span class="o">.</span><span class="n">lap</span><span class="p">()</span><span class="o">/</span><span class="mf">24.0</span>
 
         <span class="n">k</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">(</span><span class="n">nvar</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">)</span>
 
@@ -238,12 +238,12 @@
                                     <span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">solid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tc</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">):</span>
-            <span class="n">k</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)[:,:]</span> <span class="o">=</span> \
+            <span class="n">k</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> \
                <span class="p">(</span><span class="n">flux_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="n">flux_x</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">))</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span> <span class="o">+</span> \
                <span class="p">(</span><span class="n">flux_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="n">flux_y</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">))</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
 
-        <span class="n">k</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">)[:,:]</span> <span class="o">+=</span> <span class="n">ymom_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span>
-        <span class="n">k</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">iener</span><span class="p">)[:,:]</span> <span class="o">+=</span> <span class="n">E_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span>
+        <span class="n">k</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="n">ymom_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span>
+        <span class="n">k</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">iener</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="n">E_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span>
 
         <span class="k">return</span> <span class="n">k</span></div>
 
@@ -281,7 +281,6 @@
             <span class="n">rk</span><span class="o">.</span><span class="n">store_increment</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
 
         <span class="n">rk</span><span class="o">.</span><span class="n">compute_final_update</span><span class="p">()</span>
-
 
         <span class="c1"># increment the time</span>
         <span class="n">myd</span><span class="o">.</span><span class="n">t</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
@@ -324,7 +323,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'2.0',
+            VERSION:'2.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

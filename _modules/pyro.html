@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyro &mdash; pyro 2.0 documentation</title>
+  <title>pyro &mdash; pyro 2.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="pyro 2.0 documentation" href="../index.html"/>
+    <link rel="top" title="pyro 2.1 documentation" href="../index.html"/>
         <link rel="up" title="Module code" href="index.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                2.0
+                2.1
               </div>
             
           
@@ -107,6 +107,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../compressible_compare.html">Compressible solver comparisons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../multigrid_basics.html">Multigrid solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../multigrid-examples.html">Multigrid examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../diffusion_basics.html">Diffusion</a></li>
@@ -247,7 +248,6 @@
     <span class="c1"># write out the inputs.auto</span>
     <span class="n">rp</span><span class="o">.</span><span class="n">print_paramfile</span><span class="p">()</span>
 
-
     <span class="c1">#-------------------------------------------------------------------------</span>
     <span class="c1"># initialization</span>
     <span class="c1">#-------------------------------------------------------------------------</span>
@@ -259,7 +259,6 @@
 
     <span class="n">sim</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
     <span class="n">sim</span><span class="o">.</span><span class="n">preevolve</span><span class="p">()</span>
-
 
     <span class="c1">#-------------------------------------------------------------------------</span>
     <span class="c1"># evolve</span>
@@ -322,7 +321,6 @@
 
     <span class="n">tm_main</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
 
-
     <span class="c1">#-------------------------------------------------------------------------</span>
     <span class="c1"># benchmarks (for regression testing)</span>
     <span class="c1">#-------------------------------------------------------------------------</span>
@@ -334,10 +332,9 @@
         <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;comparing to: </span><span class="si">{}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">compare_file</span><span class="p">))</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">sim_bench</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">compare_file</span><span class="p">)</span>
-        <span class="k">except</span><span class="p">:</span>
+        <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
             <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;ERROR openning compare file&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="s2">&quot;ERROR openning compare file&quot;</span>
-
 
         <span class="n">result</span> <span class="o">=</span> <span class="n">compare</span><span class="o">.</span><span class="n">compare</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">cc_data</span><span class="p">,</span> <span class="n">sim_bench</span><span class="o">.</span><span class="n">cc_data</span><span class="p">)</span>
 
@@ -346,19 +343,17 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;ERROR: &quot;</span> <span class="o">+</span> <span class="n">compare</span><span class="o">.</span><span class="n">errors</span><span class="p">[</span><span class="n">result</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
-
     <span class="c1"># are we storing a benchmark?</span>
     <span class="k">if</span> <span class="n">make_bench</span> <span class="ow">or</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">reset_bench_on_fail</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">solver_name</span> <span class="o">+</span> <span class="s2">&quot;/tests/&quot;</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">solver_name</span> <span class="o">+</span> <span class="s2">&quot;/tests/&quot;</span><span class="p">)</span>
-            <span class="k">except</span><span class="p">:</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">PermissionError</span><span class="p">):</span>
                 <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ERROR: unable to create the solver&#39;s tests/ directory&quot;</span><span class="p">)</span>
 
         <span class="n">bench_file</span> <span class="o">=</span> <span class="n">solver_name</span> <span class="o">+</span> <span class="s2">&quot;/tests/&quot;</span> <span class="o">+</span> <span class="n">basename</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%4.4d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
         <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;storing new benchmark: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bench_file</span><span class="p">))</span>
         <span class="n">sim</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">bench_file</span><span class="p">)</span>
-
 
     <span class="c1">#-------------------------------------------------------------------------</span>
     <span class="c1"># final reports</span>
@@ -370,7 +365,9 @@
     <span class="n">sim</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">comp_bench</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">result</span></div>
+        <span class="k">return</span> <span class="n">result</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">sim</span></div>
 
 
 <div class="viewcode-block" id="parse_and_run"><a class="viewcode-back" href="../pyro.html#pyro.parse_and_run">[docs]</a><span class="k">def</span> <span class="nf">parse_and_run</span><span class="p">():</span>
@@ -455,7 +452,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'2.0',
+            VERSION:'2.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

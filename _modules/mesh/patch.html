@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>mesh.patch &mdash; pyro 2.0 documentation</title>
+  <title>mesh.patch &mdash; pyro 2.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="pyro 2.0 documentation" href="../../index.html"/>
+    <link rel="top" title="pyro 2.1 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                2.0
+                2.1
               </div>
             
           
@@ -107,6 +107,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compressible_compare.html">Compressible solver comparisons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid-examples.html">Multigrid examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
@@ -254,7 +255,7 @@
 
     <span class="c1"># pylint: disable=too-many-instance-attributes</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> \
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                  <span class="n">xmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a Grid2d object.</span>
@@ -338,7 +339,6 @@
         <span class="n">y2d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">y2d</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y2d</span> <span class="o">=</span> <span class="n">y2d</span>
 
-
 <div class="viewcode-block" id="Grid2d.scratch_array"><a class="viewcode-back" href="../../mesh.html#mesh.patch.Grid2d.scratch_array">[docs]</a>    <span class="k">def</span> <span class="nf">scratch_array</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nvar</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        return a standard numpy array dimensioned to have the size</span>
@@ -350,15 +350,13 @@
             <span class="n">_tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">qx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qy</span><span class="p">,</span> <span class="n">nvar</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_tmp</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span></div>
 
-
 <div class="viewcode-block" id="Grid2d.norm"><a class="viewcode-back" href="../../mesh.html#mesh.patch.Grid2d.norm">[docs]</a>    <span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        find the norm of the quantity d defined on the same grid, in the</span>
 <span class="sd">        domain&#39;s valid region</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dy</span><span class="o">*</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dx</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dy</span> <span class="o">*</span>
                        <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">d</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">flat</span><span class="p">))</span></div>
-
 
 <div class="viewcode-block" id="Grid2d.coarse_like"><a class="viewcode-back" href="../../mesh.html#mesh.patch.Grid2d.coarse_like">[docs]</a>    <span class="k">def</span> <span class="nf">coarse_like</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -369,7 +367,6 @@
                       <span class="n">xmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span>
                       <span class="n">ymin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ymax</span><span class="p">)</span></div>
 
-
 <div class="viewcode-block" id="Grid2d.fine_like"><a class="viewcode-back" href="../../mesh.html#mesh.patch.Grid2d.fine_like">[docs]</a>    <span class="k">def</span> <span class="nf">fine_like</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        return a new grid object finer by a factor n, but with</span>
@@ -379,12 +376,10 @@
                       <span class="n">xmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span>
                       <span class="n">ymin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ymax</span><span class="p">)</span></div>
 
-
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; print out some basic information about the grid object &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;2-d grid: nx = </span><span class="si">{}</span><span class="s2">, ny = </span><span class="si">{}</span><span class="s2">, ng = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ng</span><span class="p">)</span>
-
 
     <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; are two grids equivalent? &quot;&quot;&quot;</span>
@@ -454,7 +449,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">vars</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="c1"># backwards compatibility hack</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vars</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span>  <span class="c1"># backwards compatibility hack</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nvar</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">aux</span> <span class="o">=</span> <span class="p">{}</span>
@@ -468,7 +463,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">initialized</span> <span class="o">=</span> <span class="mi">0</span>
-
 
 <div class="viewcode-block" id="CellCenterData2d.register_var"><a class="viewcode-back" href="../../mesh.html#mesh.patch.CellCenterData2d.register_var">[docs]</a>    <span class="k">def</span> <span class="nf">register_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bc</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -491,7 +485,6 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">bc</span></div>
 
-
 <div class="viewcode-block" id="CellCenterData2d.set_aux"><a class="viewcode-back" href="../../mesh.html#mesh.patch.CellCenterData2d.set_aux">[docs]</a>    <span class="k">def</span> <span class="nf">set_aux</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set any auxillary (scalar) data.  This data is simply carried</span>
@@ -506,7 +499,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">aux</span><span class="p">[</span><span class="n">keyword</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
 
-
 <div class="viewcode-block" id="CellCenterData2d.add_derived"><a class="viewcode-back" href="../../mesh.html#mesh.patch.CellCenterData2d.add_derived">[docs]</a>    <span class="k">def</span> <span class="nf">add_derived</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Register a function to compute derived variable</span>
@@ -519,7 +511,6 @@
 <span class="sd">            string variable name (or list of variables)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">derives</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">func</span><span class="p">)</span></div>
-
 
 <div class="viewcode-block" id="CellCenterData2d.create"><a class="viewcode-back" href="../../mesh.html#mesh.patch.CellCenterData2d.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -535,7 +526,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">_tmp</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">initialized</span> <span class="o">=</span> <span class="mi">1</span></div>
-
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; print out some basic information about the CellCenterData2d</span>
@@ -561,7 +551,6 @@
 
         <span class="k">return</span> <span class="n">my_str</span>
 
-
 <div class="viewcode-block" id="CellCenterData2d.get_var"><a class="viewcode-back" href="../../mesh.html#mesh.patch.CellCenterData2d.get_var">[docs]</a>    <span class="k">def</span> <span class="nf">get_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return a data array for the variable described by name.  Stored</span>
@@ -584,7 +573,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="k">except</span><span class="p">:</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">derives</span><span class="p">:</span>
                 <span class="n">var</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">var</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -592,7 +581,6 @@
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;name </span><span class="si">{}</span><span class="s2"> is not valid&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">],</span> <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span></div>
-
 
 <div class="viewcode-block" id="CellCenterData2d.get_var_by_index"><a class="viewcode-back" href="../../mesh.html#mesh.patch.CellCenterData2d.get_var_by_index">[docs]</a>    <span class="k">def</span> <span class="nf">get_var_by_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -613,7 +601,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">],</span> <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span></div>
 
-
 <div class="viewcode-block" id="CellCenterData2d.get_vars"><a class="viewcode-back" href="../../mesh.html#mesh.patch.CellCenterData2d.get_vars">[docs]</a>    <span class="k">def</span> <span class="nf">get_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the entire data array.  Any changes made to this</span>
@@ -626,7 +613,6 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span></div>
-
 
 <div class="viewcode-block" id="CellCenterData2d.get_aux"><a class="viewcode-back" href="../../mesh.html#mesh.patch.CellCenterData2d.get_aux">[docs]</a>    <span class="k">def</span> <span class="nf">get_aux</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyword</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -648,7 +634,6 @@
 
         <span class="k">return</span> <span class="kc">None</span></div>
 
-
 <div class="viewcode-block" id="CellCenterData2d.zero"><a class="viewcode-back" href="../../mesh.html#mesh.patch.CellCenterData2d.zero">[docs]</a>    <span class="k">def</span> <span class="nf">zero</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Zero out the data array associated with variable name.</span>
@@ -662,14 +647,12 @@
         <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span></div>
 
-
 <div class="viewcode-block" id="CellCenterData2d.fill_BC_all"><a class="viewcode-back" href="../../mesh.html#mesh.patch.CellCenterData2d.fill_BC_all">[docs]</a>    <span class="k">def</span> <span class="nf">fill_BC_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fill boundary conditions on all variables.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
-
 
 <div class="viewcode-block" id="CellCenterData2d.fill_BC"><a class="viewcode-back" href="../../mesh.html#mesh.patch.CellCenterData2d.fill_BC">[docs]</a>    <span class="k">def</span> <span class="nf">fill_BC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -699,24 +682,19 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">yrb</span> <span class="ow">in</span> <span class="n">bnd</span><span class="o">.</span><span class="n">ext_bcs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">bnd</span><span class="o">.</span><span class="n">ext_bcs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">yrb</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">yrb</span><span class="p">,</span> <span class="s2">&quot;yrb&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
-
 <div class="viewcode-block" id="CellCenterData2d.min"><a class="viewcode-back" href="../../mesh.html#mesh.patch.CellCenterData2d.min">[docs]</a>    <span class="k">def</span> <span class="nf">min</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        return the minimum of the variable name in the domain&#39;s valid region</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">ng</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">))</span></div>
-
 
 <div class="viewcode-block" id="CellCenterData2d.max"><a class="viewcode-back" href="../../mesh.html#mesh.patch.CellCenterData2d.max">[docs]</a>    <span class="k">def</span> <span class="nf">max</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        return the maximum of the variable name in the domain&#39;s valid region</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">ng</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">))</span></div>
-
 
 <div class="viewcode-block" id="CellCenterData2d.restrict"><a class="viewcode-back" href="../../mesh.html#mesh.patch.CellCenterData2d.restrict">[docs]</a>    <span class="k">def</span> <span class="nf">restrict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">varname</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -737,25 +715,24 @@
         <span class="c1"># that encompasses them.</span>
         <span class="k">if</span> <span class="n">N</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">cdata</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> \
-                   <span class="mf">0.25</span><span class="o">*</span><span class="p">(</span><span class="n">fdata</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span>
-                         <span class="n">fdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+                <span class="mf">0.25</span><span class="o">*</span><span class="p">(</span><span class="n">fdata</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span>
+                      <span class="n">fdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
         <span class="k">elif</span> <span class="n">N</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
             <span class="n">cdata</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> \
-                 <span class="p">(</span><span class="n">fdata</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
-                  <span class="n">fdata</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
-                  <span class="n">fdata</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
-                  <span class="n">fdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
-                  <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
-                  <span class="n">fdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
-                  <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
-                  <span class="n">fdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
-                  <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span><span class="o">/</span><span class="mf">16.0</span>
+                <span class="p">(</span><span class="n">fdata</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
+                 <span class="n">fdata</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
+                 <span class="n">fdata</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
+                 <span class="n">fdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
+                 <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
+                 <span class="n">fdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
+                 <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
+                 <span class="n">fdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
+                 <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span><span class="o">/</span><span class="mf">16.0</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;restriction is only allowed by 2 or 4&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">cdata</span></div>
-
 
 <div class="viewcode-block" id="CellCenterData2d.prolong"><a class="viewcode-back" href="../../mesh.html#mesh.patch.CellCenterData2d.prolong">[docs]</a>    <span class="k">def</span> <span class="nf">prolong</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">varname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -810,13 +787,12 @@
         <span class="n">m_y</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">cdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">cdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
 
         <span class="c1"># fill the children</span>
-        <span class="n">fdata</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">cdata</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>     <span class="c1"># 1 child</span>
-        <span class="n">fdata</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">cdata</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="c1"># 2</span>
-        <span class="n">fdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">cdata</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="c1"># 3</span>
-        <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">cdata</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="c1"># 4</span>
+        <span class="n">fdata</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">cdata</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>      <span class="c1"># 1 child</span>
+        <span class="n">fdata</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">cdata</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>  <span class="c1"># 2</span>
+        <span class="n">fdata</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">cdata</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>  <span class="c1"># 3</span>
+        <span class="n">fdata</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">cdata</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">m_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>  <span class="c1"># 4</span>
 
         <span class="k">return</span> <span class="n">fdata</span></div>
-
 
 <div class="viewcode-block" id="CellCenterData2d.write"><a class="viewcode-back" href="../../mesh.html#mesh.patch.CellCenterData2d.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -829,7 +805,6 @@
 
         <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">write_data</span><span class="p">(</span><span class="n">f</span><span class="p">)</span></div>
-
 
 <div class="viewcode-block" id="CellCenterData2d.write_data"><a class="viewcode-back" href="../../mesh.html#mesh.patch.CellCenterData2d.write_data">[docs]</a>    <span class="k">def</span> <span class="nf">write_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -866,13 +841,11 @@
             <span class="n">gvar</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;ylb&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="n">n</span><span class="p">]]</span><span class="o">.</span><span class="n">ylb</span>
             <span class="n">gvar</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;yrb&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="n">n</span><span class="p">]]</span><span class="o">.</span><span class="n">yrb</span></div>
 
-
 <div class="viewcode-block" id="CellCenterData2d.pretty_print"><a class="viewcode-back" href="../../mesh.html#mesh.patch.CellCenterData2d.pretty_print">[docs]</a>    <span class="k">def</span> <span class="nf">pretty_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;print out the contents of the data array with pretty formatting</span>
 <span class="sd">        indicating where ghost cells are.&quot;&quot;&quot;</span>
         <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
         <span class="n">a</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="n">fmt</span><span class="p">)</span></div></div>
-
 
 
 <div class="viewcode-block" id="cell_center_data_clone"><a class="viewcode-back" href="../../mesh.html#mesh.patch.cell_center_data_clone">[docs]</a><span class="k">def</span> <span class="nf">cell_center_data_clone</span><span class="p">(</span><span class="n">old</span><span class="p">):</span>
@@ -927,7 +900,6 @@
     <span class="n">mydata</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
     <span class="n">mydata</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
 
-
     <span class="n">a</span> <span class="o">=</span> <span class="n">mydata</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
     <span class="n">a</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">x2d</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">y2d</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
@@ -941,12 +913,10 @@
     <span class="n">myd2</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;mesh_test&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">myd2</span><span class="p">)</span>
 
-
     <span class="n">mydata</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-
     <span class="n">do_demo</span><span class="p">()</span>
 </pre></div>
 
@@ -984,7 +954,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'2.0',
+            VERSION:'2.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

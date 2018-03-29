@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>multigrid.MG &mdash; pyro 2.0 documentation</title>
+  <title>multigrid.MG &mdash; pyro 2.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="pyro 2.0 documentation" href="../../index.html"/>
+    <link rel="top" title="pyro 2.1 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                2.0
+                2.1
               </div>
             
           
@@ -107,6 +107,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compressible_compare.html">Compressible solver comparisons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid-examples.html">Multigrid examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
@@ -372,7 +373,6 @@
         <span class="k">if</span> <span class="p">(</span><span class="n">xmax</span><span class="o">-</span><span class="n">xmin</span><span class="p">)</span> <span class="o">!=</span> <span class="p">(</span><span class="n">ymax</span><span class="o">-</span><span class="n">ymin</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;ERROR: multigrid currently requires a square domain&quot;</span><span class="p">)</span>
 
-
         <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="n">beta</span>
 
@@ -442,11 +442,11 @@
 
             <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
 
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 
             <span class="n">nx_t</span> <span class="o">=</span> <span class="n">nx_t</span><span class="o">*</span><span class="mi">2</span>
             <span class="n">ny_t</span> <span class="o">=</span> <span class="n">ny_t</span><span class="o">*</span><span class="mi">2</span>
-
 
         <span class="c1"># provide coordinate and indexing information for the solution mesh</span>
         <span class="n">soln_grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span>
@@ -486,7 +486,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">vis_title</span> <span class="o">=</span> <span class="n">vis_title</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">frame</span> <span class="o">=</span> <span class="mi">0</span>
 
-
     <span class="c1"># these draw functions are for visualization purposes and are</span>
     <span class="c1"># not ordinarily used, except for plotting the progression of the</span>
     <span class="c1"># solution within the V</span>
@@ -516,7 +515,6 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;V-cycle </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_cycle</span><span class="p">))</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
 
-
     <span class="k">def</span> <span class="nf">_draw_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot the current solution on our optional visualization &quot;&quot;&quot;</span>
         <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_level</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span>
@@ -525,13 +523,12 @@
 
         <span class="n">cm</span> <span class="o">=</span> <span class="s2">&quot;viridis&quot;</span>
 
-        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]),</span>
                    <span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;lower&quot;</span><span class="p">,</span>
                    <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymax</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="p">)</span>
 
         <span class="c1">#plt.xlabel(&quot;x&quot;)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
-
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_level</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;solving $L\phi = f$&quot;</span><span class="p">)</span>
@@ -545,7 +542,6 @@
         <span class="n">cl</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="p">,</span> <span class="s1">&#39;ymajorticklabels&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">cl</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;small&quot;</span><span class="p">)</span>
 
-
     <span class="k">def</span> <span class="nf">_draw_main_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        plot the solution at the finest level on our optional</span>
@@ -557,7 +553,7 @@
 
         <span class="n">cm</span> <span class="o">=</span> <span class="s2">&quot;viridis&quot;</span>
 
-        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]),</span>
                    <span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;lower&quot;</span><span class="p">,</span>
                    <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymax</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="p">)</span>
 
@@ -572,7 +568,6 @@
         <span class="n">cl</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="p">,</span> <span class="s1">&#39;ymajorticklabels&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">cl</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;small&quot;</span><span class="p">)</span>
 
-
     <span class="k">def</span> <span class="nf">_draw_main_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        plot the error with respect to the true solution on our optional</span>
@@ -586,7 +581,7 @@
 
         <span class="n">cmap</span> <span class="o">=</span> <span class="s2">&quot;viridis&quot;</span>
 
-        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]),</span>
                    <span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;lower&quot;</span><span class="p">,</span>
                    <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymax</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
 
@@ -601,14 +596,12 @@
         <span class="n">cl</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="p">,</span> <span class="s1">&#39;ymajorticklabels&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">cl</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;small&quot;</span><span class="p">)</span>
 
-
 <div class="viewcode-block" id="CellCenterMG2d.grid_info"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.grid_info">[docs]</a>    <span class="k">def</span> <span class="nf">grid_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Report simple grid information</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">level: </span><span class="si">{}</span><span class="s2">, grid: </span><span class="si">{}</span><span class="s2"> x </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="n">indent</span><span class="o">*</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">ny</span><span class="p">))</span></div>
-
 
 <div class="viewcode-block" id="CellCenterMG2d.get_solution"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.get_solution">[docs]</a>    <span class="k">def</span> <span class="nf">get_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -632,9 +625,8 @@
             <span class="k">assert</span> <span class="n">grid</span><span class="o">.</span><span class="n">dx</span> <span class="o">==</span> <span class="n">myg</span><span class="o">.</span><span class="n">dx</span> <span class="ow">and</span> <span class="n">grid</span><span class="o">.</span><span class="n">dy</span> <span class="o">==</span> <span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
 
             <span class="n">sol</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
-            <span class="n">sol</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,:]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">sol</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">sol</span></div>
-
 
 <div class="viewcode-block" id="CellCenterMG2d.get_solution_gradient"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.get_solution_gradient">[docs]</a>    <span class="k">def</span> <span class="nf">get_solution_gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -663,11 +655,10 @@
         <span class="n">gx</span> <span class="o">=</span> <span class="n">og</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
         <span class="n">gy</span> <span class="o">=</span> <span class="n">og</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
 
-        <span class="n">gx</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span>
-        <span class="n">gy</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
+        <span class="n">gx</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span>
+        <span class="n">gy</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
 
         <span class="k">return</span> <span class="n">gx</span><span class="p">,</span> <span class="n">gy</span></div>
-
 
 <div class="viewcode-block" id="CellCenterMG2d.get_solution_object"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.get_solution_object">[docs]</a>    <span class="k">def</span> <span class="nf">get_solution_object</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -680,7 +671,6 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
-
 
 <div class="viewcode-block" id="CellCenterMG2d.init_solution"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.init_solution">[docs]</a>    <span class="k">def</span> <span class="nf">init_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -695,16 +685,14 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
-        <span class="n">v</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
-
+        <span class="n">v</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="CellCenterMG2d.init_zeros"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.init_zeros">[docs]</a>    <span class="k">def</span> <span class="nf">init_zeros</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set the initial solution to zero</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
-        <span class="n">v</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="mf">0.0</span></div>
-
+        <span class="n">v</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span></div>
 
 <div class="viewcode-block" id="CellCenterMG2d.init_RHS"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.init_RHS">[docs]</a>    <span class="k">def</span> <span class="nf">init_RHS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -720,7 +708,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;f&quot;</span><span class="p">)</span>
-        <span class="n">f</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">f</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
         <span class="c1"># store the source norm</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">source_norm</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span>
@@ -729,7 +717,6 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Source norm = &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_norm</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">initialized_rhs</span> <span class="o">=</span> <span class="mi">1</span></div>
-
 
     <span class="k">def</span> <span class="nf">_compute_residual</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; compute the residual and store it in the r variable&quot;&quot;&quot;</span>
@@ -742,10 +729,9 @@
 
         <span class="c1"># compute the residual</span>
         <span class="c1"># r = f - alpha phi + beta L phi</span>
-        <span class="n">r</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">+</span> \
-            <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="o">*</span><span class="p">(</span> <span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
-                        <span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-
+        <span class="n">r</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">+</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="o">*</span><span class="p">((</span><span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
+                       <span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
 <div class="viewcode-block" id="CellCenterMG2d.smooth"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.smooth">[docs]</a>    <span class="k">def</span> <span class="nf">smooth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">nsmooth</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -796,14 +782,13 @@
 
             <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]):</span>
 
-                <span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,:]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span>
-                      <span class="n">xcoeff</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span>
-                      <span class="n">ycoeff</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="mi">1</span><span class="o">+</span><span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span> <span class="p">)</span><span class="o">/</span> \
+                <span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span>
+                    <span class="n">xcoeff</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span>
+                    <span class="n">ycoeff</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="mi">1</span><span class="o">+</span><span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)))</span> <span class="o">/</span> \
                     <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">+</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">xcoeff</span> <span class="o">+</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">ycoeff</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
-
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vis</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
@@ -820,14 +805,12 @@
                 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">224</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_draw_main_error</span><span class="p">()</span>
 
-
                 <span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vis_title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
 
                 <span class="n">plt</span><span class="o">.</span><span class="n">pause</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
                 <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
                 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;mg_</span><span class="si">%4.4d</span><span class="s2">.png&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">))</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">frame</span> <span class="o">+=</span> <span class="mi">1</span></div>
-
 
 <div class="viewcode-block" id="CellCenterMG2d.solve"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.solve">[docs]</a>    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1.e-11</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -905,7 +888,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">residual_error</span> <span class="o">=</span> <span class="n">residual_error</span>
         <span class="n">fp</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span></div>
 
-
 <div class="viewcode-block" id="CellCenterMG2d.v_cycle"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.v_cycle">[docs]</a>    <span class="k">def</span> <span class="nf">v_cycle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Perform a V-cycle for a single 2-level solve.  This is applied</span>
@@ -938,7 +920,7 @@
 
             <span class="c1"># restrict the residual down to the RHS of the coarser level</span>
             <span class="n">f_coarse</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;f&quot;</span><span class="p">)</span>
-            <span class="n">f_coarse</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">restrict</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+            <span class="n">f_coarse</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">restrict</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
 
             <span class="c1"># solve the coarse problem</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">v_cycle</span><span class="p">(</span><span class="n">level</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
@@ -955,7 +937,7 @@
 
             <span class="c1"># correct the solution on the current grid</span>
             <span class="n">v</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
-            <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">+=</span> <span class="n">e</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+            <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="n">e</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
 
             <span class="n">fp</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
 
@@ -976,7 +958,8 @@
             <span class="c1"># could use any number of different matrix solvers here</span>
             <span class="c1"># (like CG), but since we are 2x2 by design at this point,</span>
             <span class="c1"># we will just smooth</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  bottom solve:&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  bottom solve:&quot;</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">current_level</span> <span class="o">=</span> <span class="n">level</span>
             <span class="n">bp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span>
@@ -1024,7 +1007,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'2.0',
+            VERSION:'2.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

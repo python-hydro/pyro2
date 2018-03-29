@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>mesh.array_indexer &mdash; pyro 2.0 documentation</title>
+  <title>mesh.array_indexer &mdash; pyro 2.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="pyro 2.0 documentation" href="../../index.html"/>
+    <link rel="top" title="pyro 2.1 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                2.0
+                2.1
               </div>
             
           
@@ -107,6 +107,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compressible_compare.html">Compressible solver comparisons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid-examples.html">Multigrid examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
@@ -199,14 +200,17 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+
 <span class="k">def</span> <span class="nf">_buf_split</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; take an integer or iterable and break it into a -x, +x, -y, +y</span>
 <span class="sd">    value representing a ghost cell buffer</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">try</span><span class="p">:</span> <span class="n">bxlo</span><span class="p">,</span> <span class="n">bxhi</span><span class="p">,</span> <span class="n">bylo</span><span class="p">,</span> <span class="n">byhi</span> <span class="o">=</span> <span class="n">b</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span> <span class="n">blo</span><span class="p">,</span> <span class="n">bhi</span> <span class="o">=</span> <span class="n">b</span>
-        <span class="k">except</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">bxlo</span><span class="p">,</span> <span class="n">bxhi</span><span class="p">,</span> <span class="n">bylo</span><span class="p">,</span> <span class="n">byhi</span> <span class="o">=</span> <span class="n">b</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">blo</span><span class="p">,</span> <span class="n">bhi</span> <span class="o">=</span> <span class="n">b</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
             <span class="n">blo</span> <span class="o">=</span> <span class="n">b</span>
             <span class="n">bhi</span> <span class="o">=</span> <span class="n">b</span>
         <span class="n">bxlo</span> <span class="o">=</span> <span class="n">bylo</span> <span class="o">=</span> <span class="n">blo</span>
@@ -227,7 +231,8 @@
         <span class="k">return</span> <span class="n">obj</span>
 
     <span class="k">def</span> <span class="nf">__array_finalize__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span>
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
@@ -277,13 +282,11 @@
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="n">bxlo</span><span class="o">+</span><span class="n">ishift</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">bxhi</span><span class="o">+</span><span class="n">ishift</span><span class="p">:</span><span class="n">s</span><span class="p">,</span>
                                    <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="n">bylo</span><span class="o">+</span><span class="n">jshift</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">byhi</span><span class="o">+</span><span class="n">jshift</span><span class="p">:</span><span class="n">s</span><span class="p">,</span> <span class="n">n</span><span class="p">])</span></div>
 
-
 <div class="viewcode-block" id="ArrayIndexer.lap"><a class="viewcode-back" href="../../mesh.html#mesh.array_indexer.ArrayIndexer.lap">[docs]</a>    <span class="k">def</span> <span class="nf">lap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;return the 5-point Laplacian&quot;&quot;&quot;</span>
         <span class="n">l</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">))</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> \
             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">))</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">dy</span><span class="o">**</span><span class="mi">2</span>
         <span class="k">return</span> <span class="n">l</span></div>
-
 
 <div class="viewcode-block" id="ArrayIndexer.norm"><a class="viewcode-back" href="../../mesh.html#mesh.array_indexer.ArrayIndexer.norm">[docs]</a>    <span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -297,11 +300,9 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">])</span></div>
 
-
 <div class="viewcode-block" id="ArrayIndexer.copy"><a class="viewcode-back" href="../../mesh.html#mesh.array_indexer.ArrayIndexer.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;make a copy of the array, defined on the same grid&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">)</span></div>
-
 
 <div class="viewcode-block" id="ArrayIndexer.is_symmetric"><a class="viewcode-back" href="../../mesh.html#mesh.array_indexer.ArrayIndexer.is_symmetric">[docs]</a>    <span class="k">def</span> <span class="nf">is_symmetric</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1.e-14</span><span class="p">,</span> <span class="n">asymmetric</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;return True is the data is left-right symmetric (to the tolerance</span>
@@ -329,14 +330,12 @@
         <span class="n">e</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">L</span> <span class="o">-</span> <span class="n">s</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">R</span><span class="p">))</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">e</span> <span class="o">&lt;</span> <span class="n">tol</span></div>
 
-
 <div class="viewcode-block" id="ArrayIndexer.is_asymmetric"><a class="viewcode-back" href="../../mesh.html#mesh.array_indexer.ArrayIndexer.is_asymmetric">[docs]</a>    <span class="k">def</span> <span class="nf">is_asymmetric</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1.e-14</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;return True is the data is left-right asymmetric (to the tolerance</span>
 <span class="sd">        tol)---e.g, the sign flips. For node-centered data, set nodal=True</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_symmetric</span><span class="p">(</span><span class="n">nodal</span><span class="o">=</span><span class="n">nodal</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">,</span> <span class="n">asymmetric</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
-
 
 <div class="viewcode-block" id="ArrayIndexer.fill_ghost"><a class="viewcode-back" href="../../mesh.html#mesh.array_indexer.ArrayIndexer.fill_ghost">[docs]</a>    <span class="k">def</span> <span class="nf">fill_ghost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bc</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Fill the boundary conditions.  This operates on a single component,</span>
@@ -377,7 +376,6 @@
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">):</span>
                 <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span><span class="o">+</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span>
 
-
         <span class="c1"># +x boundary</span>
         <span class="k">if</span> <span class="n">bc</span><span class="o">.</span><span class="n">xrb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;outflow&quot;</span><span class="p">,</span> <span class="s2">&quot;neumann&quot;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="n">bc</span><span class="o">.</span><span class="n">xr_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -409,7 +407,6 @@
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">nx</span><span class="p">):</span>
                 <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span>
 
-
         <span class="c1"># -y boundary</span>
         <span class="k">if</span> <span class="n">bc</span><span class="o">.</span><span class="n">ylb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;outflow&quot;</span><span class="p">,</span> <span class="s2">&quot;neumann&quot;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="n">bc</span><span class="o">.</span><span class="n">yl_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -434,7 +431,6 @@
         <span class="k">elif</span> <span class="n">bc</span><span class="o">.</span><span class="n">ylb</span> <span class="o">==</span> <span class="s2">&quot;periodic&quot;</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="p">):</span>
                 <span class="bp">self</span><span class="p">[:,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span><span class="o">+</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span>
-
 
         <span class="c1"># +y boundary</span>
         <span class="k">if</span> <span class="n">bc</span><span class="o">.</span><span class="n">yrb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;outflow&quot;</span><span class="p">,</span> <span class="s2">&quot;neumann&quot;</span><span class="p">]:</span>
@@ -467,9 +463,7 @@
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ny</span><span class="p">):</span>
                 <span class="bp">self</span><span class="p">[:,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[:,</span> <span class="n">j</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span></div>
 
-
-
-<div class="viewcode-block" id="ArrayIndexer.pretty_print"><a class="viewcode-back" href="../../mesh.html#mesh.array_indexer.ArrayIndexer.pretty_print">[docs]</a>    <span class="k">def</span> <span class="nf">pretty_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ArrayIndexer.pretty_print"><a class="viewcode-back" href="../../mesh.html#mesh.array_indexer.ArrayIndexer.pretty_print">[docs]</a>    <span class="k">def</span> <span class="nf">pretty_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_ghost</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Print out a small dataset to the screen with the ghost cells</span>
 <span class="sd">        a different color, to make things stand out</span>
@@ -485,8 +479,19 @@
 
         <span class="c1"># print j descending, so it looks like a grid (y increasing</span>
         <span class="c1"># with height)</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">qy</span><span class="p">)):</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">qx</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">show_ghost</span><span class="p">:</span>
+            <span class="n">ilo</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">ihi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">qx</span><span class="o">-</span><span class="mi">1</span>
+            <span class="n">jlo</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">jhi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">qy</span><span class="o">-</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ilo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span>
+            <span class="n">ihi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span>
+            <span class="n">jlo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span>
+            <span class="n">jhi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">jlo</span><span class="p">,</span> <span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ilo</span><span class="p">,</span> <span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
 
                 <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span> <span class="ow">or</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span> <span class="ow">or</span>
                     <span class="n">i</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="p">):</span>
@@ -548,7 +553,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'2.0',
+            VERSION:'2.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

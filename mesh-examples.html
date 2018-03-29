@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Mesh examples &mdash; pyro 2.0 documentation</title>
+  <title>Mesh examples &mdash; pyro 2.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyro 2.0 documentation" href="index.html"/>
+    <link rel="top" title="pyro 2.1 documentation" href="index.html"/>
         <link rel="next" title="Advection solvers" href="advection_basics.html"/>
         <link rel="prev" title="Mesh overview" href="mesh_basics.html"/> 
 
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                2.0
+                2.1
               </div>
             
           
@@ -115,6 +115,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_compare.html">Compressible solver comparisons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="multigrid_basics.html">Multigrid solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="multigrid-examples.html">Multigrid examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
@@ -413,6 +414,9 @@ import mesh.boundary as bnd
 import mesh.patch as patch
 import matplotlib.pyplot as plt
 %matplotlib inline
+
+# for unit testing, we want to ensure the same random numbers
+np.random.seed(100)
 </pre></div>
 </div>
 </div>
@@ -475,15 +479,15 @@ class Grid2d(builtins.object)
  |  the 2-d grid class.  The grid object will contain the coordinate
  |  information (at various centerings).
  |
- |  A basic (1-d) representation of the layout is:
+ |  A basic (1-d) representation of the layout is::
  |
- |  |     |      |     X     |     |      |     |     X     |      |     |
- |  +--*--+- // -+--*--X--*--+--*--+- // -+--*--+--*--X--*--+- // -+--*--+
- |     0          ng-1    ng   ng+1         ... ng+nx-1 ng+nx      2ng+nx-1
+ |     |     |      |     X     |     |      |     |     X     |      |     |
+ |     +--*--+- // -+--*--X--*--+--*--+- // -+--*--+--*--X--*--+- // -+--*--+
+ |        0          ng-1    ng   ng+1         ... ng+nx-1 ng+nx      2ng+nx-1
  |
- |                       ilo                      ihi
+ |                          ilo                      ihi
  |
- |  |&lt;- ng guardcells-&gt;|&lt;---- nx interior zones -----&gt;|&lt;- ng guardcells-&gt;|
+ |     |&lt;- ng guardcells-&gt;|&lt;---- nx interior zones -----&gt;|&lt;- ng guardcells-&gt;|
  |
  |  The &#39;*&#39; marks the data locations.
  |
@@ -641,12 +645,12 @@ red. Note that we just filled the interior above.</p>
 <div class="highlight"><pre>
 <span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>
 <span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>
-<span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>    0.7636   0.28986   0.71662   0.13201<span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>
-<span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>   0.69531   0.47711   0.34895   0.98664<span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>
-<span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>   0.25486   0.67202  0.015758   0.21423<span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>
-<span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>  0.030989   0.95598   0.62982    0.5783<span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>
-<span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>   0.40632   0.26816  0.046952   0.90701<span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>
-<span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>   0.21225   0.99915   0.11244   0.76953<span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>
+<span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>   0.12157    0.2092   0.17194   0.33611<span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>
+<span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span> 0.0047189   0.89132   0.81168   0.81765<span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>
+<span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>   0.84478   0.57509   0.97862   0.94003<span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>
+<span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>   0.42452   0.13671    0.2197    0.4317<span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>
+<span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>   0.27837   0.82585   0.10838   0.27407<span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>
+<span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>    0.5434   0.67075   0.18533   0.81622<span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>
 <span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>
 <span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span><span class="ansi-red-fg">         0</span>
 
@@ -675,12 +679,12 @@ string to be used for the output.</p>
 <div class="highlight"><pre>
 <span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>
 <span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>
-<span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>  0.764   0.29  0.717  0.132<span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>
-<span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>  0.695  0.477  0.349  0.987<span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>
-<span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>  0.255  0.672 0.0158  0.214<span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>
-<span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>  0.031  0.956   0.63  0.578<span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>
-<span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>  0.406  0.268  0.047  0.907<span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>
-<span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>  0.212  0.999  0.112   0.77<span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>
+<span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>  0.122  0.209  0.172  0.336<span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>
+<span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>0.00472  0.891  0.812  0.818<span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>
+<span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>  0.845  0.575  0.979   0.94<span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>
+<span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>  0.425  0.137   0.22  0.432<span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>
+<span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>  0.278  0.826  0.108  0.274<span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>
+<span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>  0.543  0.671  0.185  0.816<span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>
 <span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>
 <span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span><span class="ansi-red-fg">      0</span>
 
@@ -709,16 +713,16 @@ a.pretty_print()
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">   0.71662</span><span class="ansi-red-fg">   0.13201</span><span class="ansi-red-fg">    0.7636</span><span class="ansi-red-fg">   0.28986</span><span class="ansi-red-fg">   0.71662</span><span class="ansi-red-fg">   0.13201</span><span class="ansi-red-fg">    0.7636</span><span class="ansi-red-fg">   0.28986</span>
-<span class="ansi-red-fg">   0.71662</span><span class="ansi-red-fg">   0.13201</span><span class="ansi-red-fg">    0.7636</span><span class="ansi-red-fg">   0.28986</span><span class="ansi-red-fg">   0.71662</span><span class="ansi-red-fg">   0.13201</span><span class="ansi-red-fg">    0.7636</span><span class="ansi-red-fg">   0.28986</span>
-<span class="ansi-red-fg">   0.71662</span><span class="ansi-red-fg">   0.13201</span>    0.7636   0.28986   0.71662   0.13201<span class="ansi-red-fg">    0.7636</span><span class="ansi-red-fg">   0.28986</span>
-<span class="ansi-red-fg">   0.34895</span><span class="ansi-red-fg">   0.98664</span>   0.69531   0.47711   0.34895   0.98664<span class="ansi-red-fg">   0.69531</span><span class="ansi-red-fg">   0.47711</span>
-<span class="ansi-red-fg">  0.015758</span><span class="ansi-red-fg">   0.21423</span>   0.25486   0.67202  0.015758   0.21423<span class="ansi-red-fg">   0.25486</span><span class="ansi-red-fg">   0.67202</span>
-<span class="ansi-red-fg">   0.62982</span><span class="ansi-red-fg">    0.5783</span>  0.030989   0.95598   0.62982    0.5783<span class="ansi-red-fg">  0.030989</span><span class="ansi-red-fg">   0.95598</span>
-<span class="ansi-red-fg">  0.046952</span><span class="ansi-red-fg">   0.90701</span>   0.40632   0.26816  0.046952   0.90701<span class="ansi-red-fg">   0.40632</span><span class="ansi-red-fg">   0.26816</span>
-<span class="ansi-red-fg">   0.11244</span><span class="ansi-red-fg">   0.76953</span>   0.21225   0.99915   0.11244   0.76953<span class="ansi-red-fg">   0.21225</span><span class="ansi-red-fg">   0.99915</span>
-<span class="ansi-red-fg">   0.11244</span><span class="ansi-red-fg">   0.76953</span><span class="ansi-red-fg">   0.21225</span><span class="ansi-red-fg">   0.99915</span><span class="ansi-red-fg">   0.11244</span><span class="ansi-red-fg">   0.76953</span><span class="ansi-red-fg">   0.21225</span><span class="ansi-red-fg">   0.99915</span>
-<span class="ansi-red-fg">  0.046952</span><span class="ansi-red-fg">   0.90701</span><span class="ansi-red-fg">   0.40632</span><span class="ansi-red-fg">   0.26816</span><span class="ansi-red-fg">  0.046952</span><span class="ansi-red-fg">   0.90701</span><span class="ansi-red-fg">   0.40632</span><span class="ansi-red-fg">   0.26816</span>
+<span class="ansi-red-fg">   0.17194</span><span class="ansi-red-fg">   0.33611</span><span class="ansi-red-fg">   0.12157</span><span class="ansi-red-fg">    0.2092</span><span class="ansi-red-fg">   0.17194</span><span class="ansi-red-fg">   0.33611</span><span class="ansi-red-fg">   0.12157</span><span class="ansi-red-fg">    0.2092</span>
+<span class="ansi-red-fg">   0.17194</span><span class="ansi-red-fg">   0.33611</span><span class="ansi-red-fg">   0.12157</span><span class="ansi-red-fg">    0.2092</span><span class="ansi-red-fg">   0.17194</span><span class="ansi-red-fg">   0.33611</span><span class="ansi-red-fg">   0.12157</span><span class="ansi-red-fg">    0.2092</span>
+<span class="ansi-red-fg">   0.17194</span><span class="ansi-red-fg">   0.33611</span>   0.12157    0.2092   0.17194   0.33611<span class="ansi-red-fg">   0.12157</span><span class="ansi-red-fg">    0.2092</span>
+<span class="ansi-red-fg">   0.81168</span><span class="ansi-red-fg">   0.81765</span> 0.0047189   0.89132   0.81168   0.81765<span class="ansi-red-fg"> 0.0047189</span><span class="ansi-red-fg">   0.89132</span>
+<span class="ansi-red-fg">   0.97862</span><span class="ansi-red-fg">   0.94003</span>   0.84478   0.57509   0.97862   0.94003<span class="ansi-red-fg">   0.84478</span><span class="ansi-red-fg">   0.57509</span>
+<span class="ansi-red-fg">    0.2197</span><span class="ansi-red-fg">    0.4317</span>   0.42452   0.13671    0.2197    0.4317<span class="ansi-red-fg">   0.42452</span><span class="ansi-red-fg">   0.13671</span>
+<span class="ansi-red-fg">   0.10838</span><span class="ansi-red-fg">   0.27407</span>   0.27837   0.82585   0.10838   0.27407<span class="ansi-red-fg">   0.27837</span><span class="ansi-red-fg">   0.82585</span>
+<span class="ansi-red-fg">   0.18533</span><span class="ansi-red-fg">   0.81622</span>    0.5434   0.67075   0.18533   0.81622<span class="ansi-red-fg">    0.5434</span><span class="ansi-red-fg">   0.67075</span>
+<span class="ansi-red-fg">   0.18533</span><span class="ansi-red-fg">   0.81622</span><span class="ansi-red-fg">    0.5434</span><span class="ansi-red-fg">   0.67075</span><span class="ansi-red-fg">   0.18533</span><span class="ansi-red-fg">   0.81622</span><span class="ansi-red-fg">    0.5434</span><span class="ansi-red-fg">   0.67075</span>
+<span class="ansi-red-fg">   0.10838</span><span class="ansi-red-fg">   0.27407</span><span class="ansi-red-fg">   0.27837</span><span class="ansi-red-fg">   0.82585</span><span class="ansi-red-fg">   0.10838</span><span class="ansi-red-fg">   0.27407</span><span class="ansi-red-fg">   0.27837</span><span class="ansi-red-fg">   0.82585</span>
 
          ^ y
          |
@@ -743,7 +747,7 @@ a.pretty_print()
 </pre></div>
 </div>
 <div class="output_area highlight-none"><div class="highlight"><pre>
-<span></span>0.57456784339455258
+<span></span>0.5749769043407793
 </pre></div>
 </div>
 </div>
@@ -763,7 +767,7 @@ a.pretty_print()
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.015758064874379474 0.9991483475680665
+0.004718856190972565 0.9786237847073697
 </pre></div></div>
 </div>
 </div>
@@ -1209,7 +1213,7 @@ our variables</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'2.0',
+            VERSION:'2.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

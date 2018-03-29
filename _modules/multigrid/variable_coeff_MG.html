@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>multigrid.variable_coeff_MG &mdash; pyro 2.0 documentation</title>
+  <title>multigrid.variable_coeff_MG &mdash; pyro 2.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="pyro 2.0 documentation" href="../../index.html"/>
+    <link rel="top" title="pyro 2.1 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                2.0
+                2.1
               </div>
             
           
@@ -107,6 +107,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compressible_compare.html">Compressible solver comparisons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid-examples.html">Multigrid examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
@@ -248,7 +249,6 @@
                                    <span class="n">true_function</span><span class="o">=</span><span class="n">true_function</span><span class="p">,</span> <span class="n">vis</span><span class="o">=</span><span class="n">vis</span><span class="p">,</span>
                                    <span class="n">vis_title</span><span class="o">=</span><span class="n">vis_title</span><span class="p">)</span>
 
-
         <span class="c1"># set the coefficients and restrict them down the hierarchy</span>
         <span class="c1"># we only need to do this once.  We need to hold the original</span>
         <span class="c1"># coeffs in our grid so we can do a ghost cell fill.</span>
@@ -257,7 +257,7 @@
         <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">nx</span> <span class="o">!=</span> <span class="n">nx</span> <span class="ow">or</span> <span class="n">c</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ny</span> <span class="o">!=</span> <span class="n">ny</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s2">&quot;coefficient array not the same size as multigrid problem&quot;</span><span class="p">)</span>
 
-        <span class="n">c</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">coeffs</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">coeffs</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;coeffs&quot;</span><span class="p">)</span>
 
@@ -273,12 +273,12 @@
             <span class="n">c_patch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
 
             <span class="n">coeffs_c</span> <span class="o">=</span> <span class="n">c_patch</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;coeffs&quot;</span><span class="p">)</span>
-            <span class="n">coeffs_c</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">f_patch</span><span class="o">.</span><span class="n">restrict</span><span class="p">(</span><span class="s2">&quot;coeffs&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+            <span class="n">coeffs_c</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">f_patch</span><span class="o">.</span><span class="n">restrict</span><span class="p">(</span><span class="s2">&quot;coeffs&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;coeffs&quot;</span><span class="p">)</span>
 
             <span class="c1"># put the coefficients on edges</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">edge_coeffs</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_coeffs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">restrict</span><span class="p">())</span>  <span class="c1">#_EdgeCoeffs(self.grids[n].grid, coeffs_c))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">edge_coeffs</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_coeffs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">restrict</span><span class="p">())</span>  <span class="c1"># _EdgeCoeffs(self.grids[n].grid, coeffs_c))</span>
 
             <span class="c1"># if we are periodic, then we should force the edge coefficents</span>
             <span class="c1"># to be periodic</span>
@@ -291,8 +291,6 @@
             <span class="c1">#         self.edge_coeffs[0].y[:,self.grids[n].grid.jlo]</span>
 
             <span class="n">n</span> <span class="o">-=</span> <span class="mi">1</span>
-
-
 
 <div class="viewcode-block" id="VarCoeffCCMG2d.smooth"><a class="viewcode-back" href="../../multigrid.html#multigrid.variable_coeff_MG.VarCoeffCCMG2d.smooth">[docs]</a>    <span class="k">def</span> <span class="nf">smooth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">nsmooth</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -313,8 +311,6 @@
         <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
         <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;f&quot;</span><span class="p">)</span>
 
-        <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
 
         <span class="n">eta_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_coeffs</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">x</span>
@@ -323,7 +319,6 @@
         <span class="c1"># print( &quot;min/max c: {}, {}&quot;.format(np.min(c), np.max(c)))</span>
         <span class="c1"># print( &quot;min/max eta_x: {}, {}&quot;.format(np.min(eta_x), np.max(eta_x)))</span>
         <span class="c1"># print( &quot;min/max eta_y: {}, {}&quot;.format(np.min(eta_y), np.max(eta_y)))</span>
-
 
         <span class="c1"># do red-black G-S</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsmooth</span><span class="p">):</span>
@@ -346,12 +341,12 @@
             <span class="c1"># groups 1 and 3 are done together, then we need to</span>
             <span class="c1"># fill ghost cells, and then groups 2 and 4</span>
 
-            <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)]):</span>
+            <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]):</span>
 
                 <span class="n">denom</span> <span class="o">=</span> <span class="p">(</span><span class="n">eta_x</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">eta_x</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span>
-                         <span class="n">eta_y</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="mi">1</span><span class="o">+</span><span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">eta_y</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="p">)</span>
+                         <span class="n">eta_y</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="mi">1</span><span class="o">+</span><span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">eta_y</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
 
-                <span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,:]</span> <span class="o">=</span> <span class="p">(</span> <span class="o">-</span><span class="n">f</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span>
+                <span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">f</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span>
                     <span class="c1"># eta_{i+1/2,j} phi_{i+1,j}</span>
                     <span class="n">eta_x</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span>
                     <span class="c1"># eta_{i-1/2,j} phi_{i-1,j}</span>
@@ -359,11 +354,10 @@
                     <span class="c1"># eta_{i,j+1/2} phi_{i,j+1}</span>
                     <span class="n">eta_y</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="mi">1</span><span class="o">+</span><span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="mi">1</span><span class="o">+</span><span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span>
                     <span class="c1"># eta_{i,j-1/2} phi_{i,j-1}</span>
-                    <span class="n">eta_y</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="p">)</span> <span class="o">/</span> <span class="n">denom</span>
+                    <span class="n">eta_y</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="n">denom</span>
 
                 <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
-
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vis</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
@@ -386,7 +380,6 @@
                 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;mg_</span><span class="si">%4.4d</span><span class="s2">.png&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">))</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">frame</span> <span class="o">+=</span> <span class="mi">1</span></div>
 
-
     <span class="k">def</span> <span class="nf">_compute_residual</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; compute the residual and store it in the r variable&quot;&quot;&quot;</span>
 
@@ -394,11 +387,8 @@
         <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;f&quot;</span><span class="p">)</span>
         <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
 
-        <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span>
-
         <span class="n">eta_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_coeffs</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">x</span>
         <span class="n">eta_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_coeffs</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">y</span>
-
 
         <span class="c1"># compute the residual</span>
         <span class="c1"># r = f - L_eta phi</span>
@@ -410,9 +400,9 @@
             <span class="c1"># eta_{i,j+1/2} (phi_{i,j+1} - phi_{i,j})</span>
             <span class="n">eta_y</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">())</span> <span class="o">-</span> \
             <span class="c1"># eta_{i,j-1/2} (phi_{i,j} - phi_{i,j-1})</span>
-            <span class="n">eta_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="p">)</span>
+            <span class="n">eta_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
 
-        <span class="n">r</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="n">L_eta_phi</span></div>
+        <span class="n">r</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="n">L_eta_phi</span></div>
 </pre></div>
 
            </div>
@@ -449,7 +439,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'2.0',
+            VERSION:'2.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
