@@ -138,7 +138,6 @@
 <li class="toctree-l2"><a class="reference internal" href="compressible_react.html">compressible_react package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible_rk.html">compressible_rk package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible_sdc.html">compressible_sdc package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="convergence.html">convergence module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="diffusion.html">diffusion package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html">examples package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="incompressible.html">incompressible package</a></li>
@@ -146,13 +145,8 @@
 <li class="toctree-l2"><a class="reference internal" href="mesh.html">mesh package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="multigrid.html">multigrid package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot.html">plot module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plotvar.html">plotvar module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyro.html">pyro module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sedov_compare.html">sedov_compare module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulation_null.html">simulation_null module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smooth_error.html">smooth_error module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sod_compare.html">sod_compare module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="test.html">test module</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">util package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
@@ -341,7 +335,7 @@ nesting.</p>
 <dl class="class">
 <dt id="util.profile.Timer">
 <em class="property">class </em><code class="descclassname">util.profile.</code><code class="descname">Timer</code><span class="sig-paren">(</span><em>name</em>, <em>stack_count=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/profile.html#Timer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.profile.Timer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A single timer – this simply stores the accumulated time for
 a single named region</p>
 <dl class="method">
@@ -362,12 +356,12 @@ stops it from counting time.</p>
 <dl class="class">
 <dt id="util.profile.TimerCollection">
 <em class="property">class </em><code class="descclassname">util.profile.</code><code class="descname">TimerCollection</code><a class="reference internal" href="_modules/util/profile.html#TimerCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.profile.TimerCollection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A timer collection—this manages the timers and has methods to
 start and stop them.  Nesting of timers is tracked so we can
 pretty print the profiling information.</p>
 <p>To define a timer:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">tc</span> <span class="o">=</span> <span class="n">TimerCollection</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tc</span> <span class="o">=</span> <span class="n">TimerCollection</span><span class="p">()</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">timer</span><span class="p">(</span><span class="s1">&#39;my timer&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -375,11 +369,11 @@ pretty print the profiling information.</p>
 TimerCollection.  Subsequent calls to timer() will return the same
 Timer object.</p>
 <p>To start the timer:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>and to end it:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>For best results, the block of code timed should be large enough
@@ -422,7 +416,7 @@ exists, then we return that timer.</p>
 <div class="section" id="module-util.runparams">
 <span id="util-runparams-module"></span><h2>util.runparams module<a class="headerlink" href="#module-util.runparams" title="Permalink to this headline">¶</a></h2>
 <p>basic syntax of the parameter file is:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># simple parameter file</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># simple parameter file</span>
 
 <span class="p">[</span><span class="n">driver</span><span class="p">]</span>
 <span class="n">nsteps</span> <span class="o">=</span> <span class="mi">100</span>         <span class="p">;</span> <span class="n">comment</span>
@@ -441,7 +435,7 @@ of parameters and their defaults (e.g. _defaults), and then the user
 can override these defaults at runtime through an inputs file.  These
 two files have the same format.</p>
 <p>The calling sequence would then be:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">rp</span> <span class="o">=</span> <span class="n">RuntimeParameters</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rp</span> <span class="o">=</span> <span class="n">RuntimeParameters</span><span class="p">()</span>
 <span class="n">rp</span><span class="o">.</span><span class="n">load_params</span><span class="p">(</span><span class="s2">&quot;_defaults&quot;</span><span class="p">)</span>
 <span class="n">rp</span><span class="o">.</span><span class="n">load_params</span><span class="p">(</span><span class="s2">&quot;inputs&quot;</span><span class="p">)</span>
 </pre></div>
@@ -453,7 +447,7 @@ there is a default value in _defaults and the user specifies a new
 value in inputs), then the second instance replaces the first.</p>
 <p>Runtime parameters can then be accessed via any module through the
 get_param method:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">tol</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s1">&#39;riemann.tol&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tol</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s1">&#39;riemann.tol&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>If the optional flag no_new=1 is set, then the load_params function
@@ -463,7 +457,7 @@ read default values.</p>
 <dl class="class">
 <dt id="util.runparams.RuntimeParameters">
 <em class="property">class </em><code class="descclassname">util.runparams.</code><code class="descname">RuntimeParameters</code><a class="reference internal" href="_modules/util/runparams.html#RuntimeParameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.runparams.RuntimeParameters" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="util.runparams.RuntimeParameters.command_line_params">
 <code class="descname">command_line_params</code><span class="sig-paren">(</span><em>cmd_strings</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/runparams.html#RuntimeParameters.command_line_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.runparams.RuntimeParameters.command_line_params" title="Permalink to this definition">¶</a></dt>

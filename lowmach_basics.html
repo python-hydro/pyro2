@@ -237,11 +237,11 @@
 flows. It captures the effects of stratification on a fluid element by
 enforcing a divergence constraint on the velocity field.  The
 governing equations are:</p>
-<div class="math">
+<div class="math notranslate">
 \[\begin{split}\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho U) &amp;= 0 \\
 \frac{\partial U}{\partial t} + U \cdot \nabla U + \frac{\beta_0}{\rho} \nabla \left ( \frac{p'}{\beta_0} \right ) &amp;= \frac{\rho'}{\rho} g \\
 \nabla \cdot (\beta_0 U) = 0\end{split}\]</div>
-<p>with <span class="math">\(\nabla p_0 = \rho_0 g\)</span> and <span class="math">\(\beta_0 = p_0^{1/\gamma}\)</span>.</p>
+<p>with <span class="math notranslate">\(\nabla p_0 = \rho_0 g\)</span> and <span class="math notranslate">\(\beta_0 = p_0^{1/\gamma}\)</span>.</p>
 <p>As with the incompressible solver, we implement a cell-centered approximate projection method.</p>
 <div class="section" id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
@@ -250,7 +250,7 @@ governing equations are:</p>
 <p>The bubble problem places a buoyant bubble in a stratified atmosphere
 and watches the development of the roll-up due to shear as it
 rises. This is run as:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py lm_atm bubble inputs.bubble
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./pyro.py lm_atm bubble inputs.bubble
 </pre></div>
 </div>
 </div>

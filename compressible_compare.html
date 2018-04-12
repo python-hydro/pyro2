@@ -110,6 +110,10 @@
 <li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Compressible solver comparisons</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#kelvin-helmholtz">Kelvin-Helmholtz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sedov">Sedov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quad">Quad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bubble">Bubble</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rayleigh-taylor">Rayleigh-Taylor</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="multigrid_basics.html">Multigrid solvers</a></li>
@@ -230,8 +234,66 @@
 </style>
 <div class="section" id="compressible-solver-comparisons">
 <h1>Compressible solver comparisons<a class="headerlink" href="#compressible-solver-comparisons" title="Permalink to this headline">¶</a></h1>
+<p>We run various problems run with the different compressible solvers in pyro (standard Riemann, Runge-Kutta, fourth order).</p>
 <div class="section" id="kelvin-helmholtz">
 <h2>Kelvin-Helmholtz<a class="headerlink" href="#kelvin-helmholtz" title="Permalink to this headline">¶</a></h2>
+<p>The McNally Kelvin-Helmholtz problem sets up a heavier fluid moving in the negative x-direction sandwiched between regions of lighter fluid moving in the positive x-direction.</p>
+<p>The image below shows the KH problem initialized with McNally’s test. It ran on a 128 x 128 grid, with gamma = 1.7, and ran until t = 2.0. This is run with:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./pyro.py compressible kh inputs.kh kh.vbulk=0
+./pyro.py compressible_rk kh inputs.kh kh.vbulk=0
+./pyro.py compressible_fv4 kh inputs.kh kh.vbulk=0
+</pre></div>
+</div>
+<img alt="_images/kh.png" class="align-center" src="_images/kh.png" />
+<p>We vary the velocity in the positive y-direction (vbulk) to see how effective the solvers are at preserving the initial shape.</p>
+</div>
+<div class="section" id="sedov">
+<h2>Sedov<a class="headerlink" href="#sedov" title="Permalink to this headline">¶</a></h2>
+<p>The Sedov problem ran on a 128 x 128 grid, with gamma = 1.4, and until t = 0.1, which can be run as:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./pyro.py compressible sedov inputs.sedov
+./pyro.py compressible_rk sedov inputs.sedov
+./pyro.py compressible_fv4 sedov inputs.sedov
+</pre></div>
+</div>
+<img alt="_images/sedov.png" src="_images/sedov.png" />
+<img alt="_images/sedov_rk.png" src="_images/sedov_rk.png" />
+<img alt="_images/sedov_fv4.png" src="_images/sedov_fv4.png" />
+</div>
+<div class="section" id="quad">
+<h2>Quad<a class="headerlink" href="#quad" title="Permalink to this headline">¶</a></h2>
+<p>The quad problem ran on a 256 x 256 grid until t = 0.8, which can be run as:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./pyro.py compressible quad inputs.quad
+./pyro.py compressible_rk quad inputs.quad
+./pyro.py compressible_fv4 quad inputs.quad
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/quad1.png"><img alt="_images/quad1.png" src="_images/quad1.png" style="width: 30%;" /></a>
+<a class="reference internal image-reference" href="_images/quad_rk.png"><img alt="_images/quad_rk.png" src="_images/quad_rk.png" style="width: 30%;" /></a>
+<a class="reference internal image-reference" href="_images/quad_fv4.png"><img alt="_images/quad_fv4.png" src="_images/quad_fv4.png" style="width: 30%;" /></a>
+</div>
+<div class="section" id="bubble">
+<h2>Bubble<a class="headerlink" href="#bubble" title="Permalink to this headline">¶</a></h2>
+<p>The bubble problem ran on a 128 x 256 grid until t = 3.0, which can be run as:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./pyro.py compressible bubble inputs.bubble
+./pyro.py compressible_rk bubble inputs.bubble
+./pyro.py compressible_fv4 bubble inputs.bubble
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/bubble1.png"><img alt="_images/bubble1.png" src="_images/bubble1.png" style="width: 30%;" /></a>
+<a class="reference internal image-reference" href="_images/bubble_rk.png"><img alt="_images/bubble_rk.png" src="_images/bubble_rk.png" style="width: 30%;" /></a>
+<a class="reference internal image-reference" href="_images/bubble_fv4.png"><img alt="_images/bubble_fv4.png" src="_images/bubble_fv4.png" style="width: 30%;" /></a>
+</div>
+<div class="section" id="rayleigh-taylor">
+<h2>Rayleigh-Taylor<a class="headerlink" href="#rayleigh-taylor" title="Permalink to this headline">¶</a></h2>
+<p>The Rayleigh-Taylor problem ran on a 64 x 192 grid until t = 3.0, which can be run as:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./pyro.py compressible rt inputs.rt
+./pyro.py compressible_rk rt inputs.rt
+./pyro.py compressible_fv4 rt inputs.rt
+</pre></div>
+</div>
+<img alt="_images/rt.png" class="align-center" src="_images/rt.png" />
+<img alt="_images/rt_rk.png" class="align-center" src="_images/rt_rk.png" />
+<img alt="_images/rt_fv4.png" class="align-center" src="_images/rt_fv4.png" />
 </div>
 </div>
 

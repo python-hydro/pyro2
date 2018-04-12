@@ -209,8 +209,8 @@
 <span class="sd">        For the reacting compressible solver, our initialization of</span>
 <span class="sd">        the data is the same as the compressible solver, but we</span>
 <span class="sd">        supply additional variables.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">extra_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;fuel&quot;</span><span class="p">,</span> <span class="s2">&quot;ash&quot;</span><span class="p">])</span></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">extra_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;fuel&quot;</span><span class="p">,</span> <span class="s2">&quot;ash&quot;</span><span class="p">])</span>
 
 <div class="viewcode-block" id="Simulation.burn"><a class="viewcode-back" href="../../compressible_react.html#compressible_react.simulation.Simulation.burn">[docs]</a>    <span class="k">def</span> <span class="nf">burn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; react fuel to ash &quot;&quot;&quot;</span>
@@ -218,8 +218,8 @@
 
         <span class="c1"># compute energy generation rate</span>
 
-        <span class="c1"># update energy due to reaction</span>
-        <span class="k">pass</span></div>
+        <span class="c1"># update energy due to reaction</span></div>
+        <span class="k">pass</span>
 
 <div class="viewcode-block" id="Simulation.diffuse"><a class="viewcode-back" href="../../compressible_react.html#compressible_react.simulation.Simulation.diffuse">[docs]</a>    <span class="k">def</span> <span class="nf">diffuse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; diffuse for dt &quot;&quot;&quot;</span>
@@ -228,8 +228,8 @@
 
         <span class="c1"># compute div kappa grad T</span>
 
-        <span class="c1"># update energy due to diffusion</span>
-        <span class="k">pass</span></div>
+        <span class="c1"># update energy due to diffusion</span></div>
+        <span class="k">pass</span>
 
 <div class="viewcode-block" id="Simulation.evolve"><a class="viewcode-back" href="../../compressible_react.html#compressible_react.simulation.Simulation.evolve">[docs]</a>    <span class="k">def</span> <span class="nf">evolve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -246,8 +246,8 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">diffuse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">burn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span></div>
+</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">burn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Simulation.dovis"><a class="viewcode-back" href="../../compressible_react.html#compressible_react.simulation.Simulation.dovis">[docs]</a>    <span class="k">def</span> <span class="nf">dovis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -308,8 +308,8 @@
 
         <span class="n">plt</span><span class="o">.</span><span class="n">figtext</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.0125</span><span class="p">,</span> <span class="s2">&quot;t = </span><span class="si">{:10.5g}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">t</span><span class="p">))</span>
 
-        <span class="n">plt</span><span class="o">.</span><span class="n">pause</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div></div>
+        <span class="n">plt</span><span class="o">.</span><span class="n">pause</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span></div></div>
+        <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 </pre></div>
 
            </div>

@@ -239,9 +239,9 @@
 <div class="section" id="diffusion">
 <h1>Diffusion<a class="headerlink" href="#diffusion" title="Permalink to this headline">¶</a></h1>
 <p>pyro solves the constant-conductivity diffusion equation:</p>
-<div class="math">
+<div class="math notranslate">
 \[\frac{\partial \phi}{\partial t} = k \nabla^2 \phi\]</div>
-<p>This is done implicitly using multigrid, using the solver <a class="reference internal" href="diffusion.html#module-diffusion" title="diffusion"><code class="xref py py-mod docutils literal"><span class="pre">diffusion</span></code></a>.</p>
+<p>This is done implicitly using multigrid, using the solver <a class="reference internal" href="diffusion.html#module-diffusion" title="diffusion"><code class="xref py py-mod docutils literal notranslate"><span class="pre">diffusion</span></code></a>.</p>
 <p>The diffusion equation is discretized using Crank-Nicolson
 differencing (this makes the diffusion operator time-centered) and the
 implicit discretization forms a Helmholtz equation solved by the pyro
@@ -252,11 +252,11 @@ multigrid class. The main parameters that affect this solver are:</p>
 <col width="74%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal"><span class="pre">[driver]</span></code></th>
+<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal notranslate"><span class="pre">[driver]</span></code></th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">cfl</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cfl</span></code></td>
 <td>the “CFL” number for the diffusion equation. Since we
 are doing an implicit discretization, this is the
 multiple of the explicit timestep to take.</td>
@@ -269,11 +269,11 @@ multiple of the explicit timestep to take.</td>
 <col width="74%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal"><span class="pre">[diffusion]</span></code></th>
+<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal notranslate"><span class="pre">[diffusion]</span></code></th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">k</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">k</span></code></td>
 <td>the conductivity (constant)</td>
 </tr>
 </tbody>
@@ -286,7 +286,7 @@ multiple of the explicit timestep to take.</td>
 in the domain. The analytic solution for this shows that the profile
 remains a Gaussian, with a changing width and peak. This allows us to
 compare our solver to the analytic solution. This is run as:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py diffusion gaussian inputs.gaussian
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./pyro.py diffusion gaussian inputs.gaussian
 </pre></div>
 </div>
 <img alt="_images/gauss_diffusion.png" class="align-center" src="_images/gauss_diffusion.png" />

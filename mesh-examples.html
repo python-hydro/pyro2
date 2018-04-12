@@ -105,7 +105,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Mesh examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#Setup-a-Grid-with-Variables">Setup a Grid with Variables</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#Working-with-the-data">Working with the data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#ArrayIndexer"><code class="docutils literal"><span class="pre">ArrayIndexer</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ArrayIndexer"><code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#Differencing">Differencing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#Coarsening-and-prolonging">Coarsening and prolonging</a></li>
 </ul>
@@ -403,11 +403,11 @@ mesh module. We create some data that lives on a grid and show how to
 fill the ghost cells. The pretty_print() function shows us that they
 work as expected.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>from __future__ import print_function
 import numpy as np
 import mesh.boundary as bnd
@@ -425,26 +425,26 @@ np.random.seed(100)
 <p>There are a few core classes that we deal with when creating a grid with
 associated variables:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">Grid2d</span></code> : this holds the size of the grid (in zones) and the
+<li><code class="docutils literal notranslate"><span class="pre">Grid2d</span></code> : this holds the size of the grid (in zones) and the
 physical coordinate information, including coordinates of cell edges
 and centers</li>
-<li><code class="docutils literal"><span class="pre">BC</span></code> : this is a container class that simply holds the type of
+<li><code class="docutils literal notranslate"><span class="pre">BC</span></code> : this is a container class that simply holds the type of
 boundary condition on each domain edge.</li>
-<li><code class="docutils literal"><span class="pre">ArrayIndexer</span></code> : this is an array of data along with methods that
+<li><code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> : this is an array of data along with methods that
 know how to access it with different offsets into the data that
 usually arise in stencils (like {i+1, j})</li>
-<li><code class="docutils literal"><span class="pre">CellCenterData2d</span></code> : this holds the data that lives on a grid. Each
+<li><code class="docutils literal notranslate"><span class="pre">CellCenterData2d</span></code> : this holds the data that lives on a grid. Each
 variable that is part of this class has its own boundary condition
 type.</li>
 </ul>
-<p>We start by creating a <code class="docutils literal"><span class="pre">Grid2d</span></code> object with 4 x 6 cells and 2 ghost
+<p>We start by creating a <code class="docutils literal notranslate"><span class="pre">Grid2d</span></code> object with 4 x 6 cells and 2 ghost
 cells</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>g = patch.Grid2d(4, 6, ng=2)
 print(g)
 </pre></div>
@@ -459,11 +459,11 @@ print(g)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>help(g)
 </pre></div>
 </div>
@@ -564,11 +564,11 @@ class Grid2d(builtins.object)
 For each variable that lives on the grid, we need to define the boundary
 conditions – this is done through the BC object.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>bc = bnd.BC(xlb=&quot;periodic&quot;, xrb=&quot;periodic&quot;, ylb=&quot;reflect&quot;, yrb=&quot;outflow&quot;)
 print(bc)
 </pre></div>
@@ -583,11 +583,11 @@ BCs: -x: periodic  +x: periodic  -y: reflect-even  +y: outflow
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>d = patch.CellCenterData2d(g)
 d.register_var(&quot;a&quot;, bc)
 d.create()
@@ -611,16 +611,16 @@ cc data: nx = 4, ny = 6, ng = 2
 </div>
 <div class="section" id="Working-with-the-data">
 <h2>Working with the data<a class="headerlink" href="#Working-with-the-data" title="Permalink to this headline">¶</a></h2>
-<p>Now we fill the grid with random data. <code class="docutils literal"><span class="pre">get_var()</span></code> returns an
-<code class="docutils literal"><span class="pre">ArrayIndexer</span></code> object that has methods for accessing views into the
-data. Here we use <code class="docutils literal"><span class="pre">a.v()</span></code> to get the “valid” region, i.e. excluding
+<p>Now we fill the grid with random data. <code class="docutils literal notranslate"><span class="pre">get_var()</span></code> returns an
+<code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> object that has methods for accessing views into the
+data. Here we use <code class="docutils literal notranslate"><span class="pre">a.v()</span></code> to get the “valid” region, i.e. excluding
 ghost cells.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>a = d.get_var(&quot;a&quot;)
 a.v()[:,:] = np.random.rand(g.nx, g.ny)
 </pre></div>
@@ -629,11 +629,11 @@ a.v()[:,:] = np.random.rand(g.nx, g.ny)
 <p>when we pretty_print() the variable, we see the ghost cells colored
 red. Note that we just filled the interior above.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>a.pretty_print()
 </pre></div>
 </div>
@@ -660,14 +660,14 @@ red. Note that we just filled the interior above.</p>
 
 </pre></div></div>
 </div>
-<p><code class="docutils literal"><span class="pre">pretty_print()</span></code> can also take an argumet, specifying the format
+<p><code class="docutils literal notranslate"><span class="pre">pretty_print()</span></code> can also take an argumet, specifying the format
 string to be used for the output.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>a.pretty_print(fmt=&quot;%7.3g&quot;)
 </pre></div>
 </div>
@@ -698,11 +698,11 @@ string to be used for the output.</p>
 the upper is outflow, and the lower is reflect, as specified when we
 registered the data above.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>d.fill_BC(&quot;a&quot;)
 a.pretty_print()
 </pre></div>
@@ -732,32 +732,32 @@ a.pretty_print()
 </div>
 <p>We can find the L2 norm of the data easily</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>a.norm()
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>Out[10]:
 </pre></div>
 </div>
-<div class="output_area highlight-none"><div class="highlight"><pre>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
 <span></span>0.5749769043407793
 </pre></div>
 </div>
 </div>
 <p>and the min and max</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>print(a.min(), a.max())
 </pre></div>
 </div>
@@ -772,79 +772,79 @@ a.pretty_print()
 </div>
 </div>
 <div class="section" id="ArrayIndexer">
-<h2><code class="docutils literal"><span class="pre">ArrayIndexer</span></code><a class="headerlink" href="#ArrayIndexer" title="Permalink to this headline">¶</a></h2>
-<p>We we access the data, an <code class="docutils literal"><span class="pre">ArrayIndexer</span></code> object is returned. The
-<code class="docutils literal"><span class="pre">ArrayIndexer</span></code> sub-classes the NumPy <code class="docutils literal"><span class="pre">ndarray</span></code>, so it can do all of
+<h2><code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code><a class="headerlink" href="#ArrayIndexer" title="Permalink to this headline">¶</a></h2>
+<p>We we access the data, an <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> object is returned. The
+<code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> sub-classes the NumPy <code class="docutils literal notranslate"><span class="pre">ndarray</span></code>, so it can do all of
 the methods that a NumPy array can, but in addition, we can use the
-<code class="docutils literal"><span class="pre">ip()</span></code>, <code class="docutils literal"><span class="pre">jp()</span></code>, or <code class="docutils literal"><span class="pre">ipjp()</span></code> methods to the <code class="docutils literal"><span class="pre">ArrayIndexer</span></code> object
+<code class="docutils literal notranslate"><span class="pre">ip()</span></code>, <code class="docutils literal notranslate"><span class="pre">jp()</span></code>, or <code class="docutils literal notranslate"><span class="pre">ipjp()</span></code> methods to the <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> object
 shift our view in the x, y, or x &amp; y directions.</p>
 <p>To make this clearer, we’ll change our data set to be nicely ordered
-numbers. We index the <code class="docutils literal"><span class="pre">ArrayIndex</span></code> the same way we would a NumPy
-array. The index space includes ghost cells, so the <code class="docutils literal"><span class="pre">ilo</span></code> and <code class="docutils literal"><span class="pre">ihi</span></code>
+numbers. We index the <code class="docutils literal notranslate"><span class="pre">ArrayIndex</span></code> the same way we would a NumPy
+array. The index space includes ghost cells, so the <code class="docutils literal notranslate"><span class="pre">ilo</span></code> and <code class="docutils literal notranslate"><span class="pre">ihi</span></code>
 attributes from the grid object are useful to index just the valid
-region. The <code class="docutils literal"><span class="pre">.v()</span></code> method is a shortcut that also gives a view into
+region. The <code class="docutils literal notranslate"><span class="pre">.v()</span></code> method is a shortcut that also gives a view into
 just the valid data.</p>
-<p>Note: when we use one of the <code class="docutils literal"><span class="pre">ip()</span></code>, <code class="docutils literal"><span class="pre">jp()</span></code>, <code class="docutils literal"><span class="pre">ipjp()</span></code>, or <code class="docutils literal"><span class="pre">v()</span></code>
-methods, the result is a regular NumPy <code class="docutils literal"><span class="pre">ndarray</span></code>, not an
-<code class="docutils literal"><span class="pre">ArrayIndexer</span></code> object. This is because it only spans part of the
+<p>Note: when we use one of the <code class="docutils literal notranslate"><span class="pre">ip()</span></code>, <code class="docutils literal notranslate"><span class="pre">jp()</span></code>, <code class="docutils literal notranslate"><span class="pre">ipjp()</span></code>, or <code class="docutils literal notranslate"><span class="pre">v()</span></code>
+methods, the result is a regular NumPy <code class="docutils literal notranslate"><span class="pre">ndarray</span></code>, not an
+<code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> object. This is because it only spans part of the
 domain (e.g., no ghost cells), and therefore cannot be associated with
-the <code class="docutils literal"><span class="pre">Grid2d</span></code> object that the <code class="docutils literal"><span class="pre">ArrayIndexer</span></code> is built from.</p>
+the <code class="docutils literal notranslate"><span class="pre">Grid2d</span></code> object that the <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> is built from.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>type(a)
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>Out[12]:
 </pre></div>
 </div>
-<div class="output_area highlight-none"><div class="highlight"><pre>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
 <span></span>mesh.array_indexer.ArrayIndexer
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>type(a.v())
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>Out[13]:
 </pre></div>
 </div>
-<div class="output_area highlight-none"><div class="highlight"><pre>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
 <span></span>numpy.ndarray
 </pre></div>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>a[:,:] = np.arange(g.qx*g.qy).reshape(g.qx, g.qy)
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>a.pretty_print()
 </pre></div>
 </div>
@@ -875,24 +875,24 @@ the <code class="docutils literal"><span class="pre">Grid2d</span></code> object
 (indexed by j) is the column in the NumPy array. Note that python arrays
 are stored in row-major order, which means that all of the entries in
 the same row are adjacent in memory. This means that when we simply
-print out the <code class="docutils literal"><span class="pre">ndarray</span></code>, we see constant-x horizontally, which is the
+print out the <code class="docutils literal notranslate"><span class="pre">ndarray</span></code>, we see constant-x horizontally, which is the
 transpose of what we are used to.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>a.v()
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>Out[16]:
 </pre></div>
 </div>
-<div class="output_area highlight-none"><div class="highlight"><pre>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
 <span></span>array([[ 22.,  23.,  24.,  25.,  26.,  27.],
        [ 32.,  33.,  34.,  35.,  36.,  37.],
        [ 42.,  43.,  44.,  45.,  46.,  47.],
@@ -901,25 +901,25 @@ transpose of what we are used to.</p>
 </div>
 </div>
 <p>We can offset our view into the array by one in x – this would be like
-{i+1, j} when we loop over data. The <code class="docutils literal"><span class="pre">ip()</span></code> method is used here, and
+{i+1, j} when we loop over data. The <code class="docutils literal notranslate"><span class="pre">ip()</span></code> method is used here, and
 takes an argument which is the (positive) shift in the x (i) direction.
 So here’s a shift by 1</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>a.ip(-1, buf=1)
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>Out[17]:
 </pre></div>
 </div>
-<div class="output_area highlight-none"><div class="highlight"><pre>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
 <span></span>array([[  1.,   2.,   3.,   4.,   5.,   6.,   7.,   8.],
        [ 11.,  12.,  13.,  14.,  15.,  16.,  17.,  18.],
        [ 21.,  22.,  23.,  24.,  25.,  26.,  27.,  28.],
@@ -932,15 +932,15 @@ So here’s a shift by 1</p>
 <p>A shifted view is necessarily smaller than the original array, and
 relies on ghost cells to bring new data into view. Because of this, the
 underlying data is no longer the same size as the original data, so we
-return it as an <code class="docutils literal"><span class="pre">ndarray</span></code> (which is actually just a view into the data
-in the <code class="docutils literal"><span class="pre">ArrayIndexer</span></code> object, so no copy is made.</p>
+return it as an <code class="docutils literal notranslate"><span class="pre">ndarray</span></code> (which is actually just a view into the data
+in the <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> object, so no copy is made.</p>
 <p>To see that it is simply a view, lets shift and edit the data</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>d = a.ip(1)
 d[1,1] = 0.0
 a.pretty_print()
@@ -969,23 +969,23 @@ a.pretty_print()
 
 </pre></div></div>
 </div>
-<p>Here, since d was really a view into <span class="math">\(a_{i+1,j}\)</span>, and we accessed
+<p>Here, since d was really a view into <span class="math notranslate">\(a_{i+1,j}\)</span>, and we accessed
 element (1,1) into that view (with 0,0 as the origin), we were really
 accessing the element (2,1) in the valid region</p>
 </div>
 <div class="section" id="Differencing">
 <h2>Differencing<a class="headerlink" href="#Differencing" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal"><span class="pre">ArrayIndexer</span></code> objects are easy to use to construct differences, like
+<p><code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> objects are easy to use to construct differences, like
 those that appear in a stencil for a finite-difference, without having
 to explicitly loop over the elements of the array.</p>
 <p>Here’s we’ll create a new dataset that is initialized with a sine
 function</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>g = patch.Grid2d(8, 8, ng=2)
 d = patch.CellCenterData2d(g)
 bc = bnd.BC(xlb=&quot;periodic&quot;, xrb=&quot;periodic&quot;, ylb=&quot;periodic&quot;, yrb=&quot;periodic&quot;)
@@ -998,43 +998,43 @@ d.fill_BC(&quot;a&quot;)
 </pre></div>
 </div>
 </div>
-<p>Our grid object can provide us with a scratch array (an <code class="docutils literal"><span class="pre">ArrayIndexer</span></code>
+<p>Our grid object can provide us with a scratch array (an <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code>
 object) define on the same grid</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>b = g.scratch_array()
 type(b)
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>Out[20]:
 </pre></div>
 </div>
-<div class="output_area highlight-none"><div class="highlight"><pre>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
 <span></span>mesh.array_indexer.ArrayIndexer
 </pre></div>
 </div>
 </div>
 <p>We can then fill the data in this array with differenced data from our
-original array – since <code class="docutils literal"><span class="pre">b</span></code> has a separate data region in memory, its
-elements are independent of <code class="docutils literal"><span class="pre">a</span></code>. We do need to make sure that we have
-the same number of elements on the left and right of the <code class="docutils literal"><span class="pre">=</span></code>. Since by
-default, <code class="docutils literal"><span class="pre">ip()</span></code> will return a view with the same size as the valid
-region, we can use <code class="docutils literal"><span class="pre">.v()</span></code> on the left to accept the differences.</p>
+original array – since <code class="docutils literal notranslate"><span class="pre">b</span></code> has a separate data region in memory, its
+elements are independent of <code class="docutils literal notranslate"><span class="pre">a</span></code>. We do need to make sure that we have
+the same number of elements on the left and right of the <code class="docutils literal notranslate"><span class="pre">=</span></code>. Since by
+default, <code class="docutils literal notranslate"><span class="pre">ip()</span></code> will return a view with the same size as the valid
+region, we can use <code class="docutils literal notranslate"><span class="pre">.v()</span></code> on the left to accept the differences.</p>
 <p>Here we compute a centered-difference approximation to the first
 derivative</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>b.v()[:,:] = (a.ip(1) - a.ip(-1))/(2.0*a.g.dx)
 # normalization was 2.0*pi
 b[:,:] /= 2.0*np.pi
@@ -1042,11 +1042,11 @@ b[:,:] /= 2.0*np.pi
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>plt.plot(g.x[g.ilo:g.ihi+1], a[g.ilo:g.ihi+1,a.g.jc])
 plt.plot(g.x[g.ilo:g.ihi+1], b[g.ilo:g.ihi+1,b.g.jc])
 print (a.g.dx)
@@ -1071,24 +1071,24 @@ print (a.g.dx)
 </div>
 <div class="section" id="Coarsening-and-prolonging">
 <h2>Coarsening and prolonging<a class="headerlink" href="#Coarsening-and-prolonging" title="Permalink to this headline">¶</a></h2>
-<p>we can get a new <code class="docutils literal"><span class="pre">ArrayIndexer</span></code> object on a coarser grid for one of
+<p>we can get a new <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> object on a coarser grid for one of
 our variables</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>c = d.restrict(&quot;a&quot;)
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>c.pretty_print()
 </pre></div>
 </div>
@@ -1115,21 +1115,21 @@ our variables</p>
 </div>
 <p>or a finer grid</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [25]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>f = d.prolong(&quot;a&quot;)
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [26]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span>f.pretty_print(fmt=&quot;%6.2g&quot;)
 </pre></div>
 </div>

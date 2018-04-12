@@ -233,13 +233,13 @@
     <span class="n">dens_fine</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">60.0</span><span class="o">*</span><span class="p">((</span><span class="n">mgf</span><span class="o">.</span><span class="n">x2d</span><span class="o">-</span><span class="n">xctr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
                                              <span class="p">(</span><span class="n">mgf</span><span class="o">.</span><span class="n">y2d</span><span class="o">-</span><span class="n">yctr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 
-    <span class="n">dens</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
-    <span class="n">dens</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">fine_data</span><span class="o">.</span><span class="n">restrict</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
+    <span class="n">dens</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span></div>
+    <span class="n">dens</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">fine_data</span><span class="o">.</span><span class="n">restrict</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="finalize"><a class="viewcode-back" href="../../../advection_fv4.problems.html#advection_fv4.problems.smooth.finalize">[docs]</a><span class="k">def</span> <span class="nf">finalize</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot; print out any information to the user at the end of the run &quot;&quot;&quot;</span>
-    <span class="k">pass</span></div>
+    <span class="sd">&quot;&quot;&quot; print out any information to the user at the end of the run &quot;&quot;&quot;</span></div>
+    <span class="k">pass</span>
 </pre></div>
 
            </div>

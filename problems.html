@@ -231,23 +231,23 @@
 in the solver you wish to use (in its problems/ sub-directory. Three
 different files will need to be copied (created):</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">problem.py</span></code>: this is the main initialization routine. The
-function <code class="docutils literal"><span class="pre">init_data()</span></code> is called at runtime by the <code class="docutils literal"><span class="pre">Simulation</span></code>
-object’s <code class="docutils literal"><span class="pre">initialize()</span></code> method. Two arguments are passed in, the
-simulation’s <code class="docutils literal"><span class="pre">CellCenterData2d</span></code> object and the
-<code class="docutils literal"><span class="pre">RuntimeParameters</span></code> object.  The job of <code class="docutils literal"><span class="pre">init_data()</span></code> is to fill
-all of the variables defined in the <code class="docutils literal"><span class="pre">CellCenterData2d</span></code> object.</li>
-<li><code class="docutils literal"><span class="pre">_problem.defaults</span></code>: this contains the runtime parameters and
+<li><code class="docutils literal notranslate"><span class="pre">problem.py</span></code>: this is the main initialization routine. The
+function <code class="docutils literal notranslate"><span class="pre">init_data()</span></code> is called at runtime by the <code class="docutils literal notranslate"><span class="pre">Simulation</span></code>
+object’s <code class="docutils literal notranslate"><span class="pre">initialize()</span></code> method. Two arguments are passed in, the
+simulation’s <code class="docutils literal notranslate"><span class="pre">CellCenterData2d</span></code> object and the
+<code class="docutils literal notranslate"><span class="pre">RuntimeParameters</span></code> object.  The job of <code class="docutils literal notranslate"><span class="pre">init_data()</span></code> is to fill
+all of the variables defined in the <code class="docutils literal notranslate"><span class="pre">CellCenterData2d</span></code> object.</li>
+<li><code class="docutils literal notranslate"><span class="pre">_problem.defaults</span></code>: this contains the runtime parameters and
 their defaults for your problem. They should be placed in a block
-with the heading <code class="docutils literal"><span class="pre">[problem]</span></code> (where <code class="docutils literal"><span class="pre">problem</span></code> is your problem’s
+with the heading <code class="docutils literal notranslate"><span class="pre">[problem]</span></code> (where <code class="docutils literal notranslate"><span class="pre">problem</span></code> is your problem’s
 name). Anything listed here will be available through the
-<code class="docutils literal"><span class="pre">RuntimeParameters</span></code> object at runtime.</li>
-<li><code class="docutils literal"><span class="pre">inputs.problem</span></code>: this is the inputs file that is used at runtime
+<code class="docutils literal notranslate"><span class="pre">RuntimeParameters</span></code> object at runtime.</li>
+<li><code class="docutils literal notranslate"><span class="pre">inputs.problem</span></code>: this is the inputs file that is used at runtime
 to set the parameters for your problem. Any of the general
 parameters (like the grid size, boundary conditions, etc.) as well
 as the problem-specific parameters can be set here.  Once the
 problem is defined, you need to add the problem name to the
-<code class="docutils literal"><span class="pre">__all__</span></code> list in the <code class="docutils literal"><span class="pre">__init__.py</span></code> file in the <code class="docutils literal"><span class="pre">problems/</span></code>
+<code class="docutils literal notranslate"><span class="pre">__all__</span></code> list in the <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file in the <code class="docutils literal notranslate"><span class="pre">problems/</span></code>
 sub-directory. This lets python know about the problem.</li>
 </ul>
 </div>

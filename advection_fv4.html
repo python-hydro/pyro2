@@ -137,6 +137,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-advection_fv4.fluxes">advection_fv4.fluxes module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#advection-fv4-setup-module">advection_fv4.setup module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-advection_fv4.simulation">advection_fv4.simulation module</a></li>
 </ul>
 </li>
@@ -148,7 +149,6 @@
 <li class="toctree-l2"><a class="reference internal" href="compressible_react.html">compressible_react package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible_rk.html">compressible_rk package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible_sdc.html">compressible_sdc package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="convergence.html">convergence module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="diffusion.html">diffusion package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html">examples package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="incompressible.html">incompressible package</a></li>
@@ -156,13 +156,8 @@
 <li class="toctree-l2"><a class="reference internal" href="mesh.html">mesh package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="multigrid.html">multigrid package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot.html">plot module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plotvar.html">plotvar module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyro.html">pyro module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sedov_compare.html">sedov_compare module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulation_null.html">simulation_null module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smooth_error.html">smooth_error module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sod_compare.html">sod_compare module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="test.html">test module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.html">util package</a></li>
 </ul>
@@ -294,7 +289,7 @@ time integration.</p>
 <code class="descclassname">advection_fv4.fluxes.</code><code class="descname">fluxes</code><span class="sig-paren">(</span><em>my_data</em>, <em>rp</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/advection_fv4/fluxes.html#fluxes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#advection_fv4.fluxes.fluxes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct the fluxes through the interfaces for the linear advection
 equation:</p>
-<div class="math">
+<div class="math notranslate">
 \[a_t + u a_x + v a_y = 0\]</div>
 <p>We use a fourth-order Godunov method to construct the interface
 states, using Runge-Kutta integration.  Since this is 4th-order,
@@ -306,7 +301,7 @@ at each interface, and the zone the information comes from depends
 on the sign of the velocity.</p>
 <p>Our convection is that the fluxes are going to be defined on the
 left edge of the computational zones:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="o">|</span>             <span class="o">|</span>             <span class="o">|</span>             <span class="o">|</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="o">|</span>             <span class="o">|</span>             <span class="o">|</span>             <span class="o">|</span>
  <span class="o">|</span>             <span class="o">|</span>             <span class="o">|</span>             <span class="o">|</span>
 <span class="o">-+------+------+------+------+------+------+--</span>
  <span class="o">|</span>     <span class="n">i</span><span class="o">-</span><span class="mi">1</span>     <span class="o">|</span>      <span class="n">i</span>      <span class="o">|</span>     <span class="n">i</span><span class="o">+</span><span class="mi">1</span>     <span class="o">|</span>
@@ -351,12 +346,15 @@ advecting</p>
 </dd></dl>
 
 </div>
+<div class="section" id="advection-fv4-setup-module">
+<h2>advection_fv4.setup module<a class="headerlink" href="#advection-fv4-setup-module" title="Permalink to this headline">¶</a></h2>
+</div>
 <div class="section" id="module-advection_fv4.simulation">
 <span id="advection-fv4-simulation-module"></span><h2>advection_fv4.simulation module<a class="headerlink" href="#module-advection_fv4.simulation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="advection_fv4.simulation.Simulation">
 <em class="property">class </em><code class="descclassname">advection_fv4.simulation.</code><code class="descname">Simulation</code><span class="sig-paren">(</span><em>solver_name</em>, <em>problem_name</em>, <em>rp</em>, <em>timers=None</em>, <em>data_class=&lt;class 'mesh.patch.CellCenterData2d'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/advection_fv4/simulation.html#Simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#advection_fv4.simulation.Simulation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="advection_rk.html#advection_rk.simulation.Simulation" title="advection_rk.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">advection_rk.simulation.Simulation</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="advection_rk.html#advection_rk.simulation.Simulation" title="advection_rk.simulation.Simulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">advection_rk.simulation.Simulation</span></code></a></p>
 <dl class="method">
 <dt id="advection_fv4.simulation.Simulation.initialize">
 <code class="descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/advection_fv4/simulation.html#Simulation.initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#advection_fv4.simulation.Simulation.initialize" title="Permalink to this definition">¶</a></dt>

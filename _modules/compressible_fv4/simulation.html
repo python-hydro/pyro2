@@ -204,8 +204,8 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solver_name</span><span class="p">,</span> <span class="n">problem_name</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">timers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data_class</span><span class="o">=</span><span class="n">fv</span><span class="o">.</span><span class="n">FV2d</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">solver_name</span><span class="p">,</span> <span class="n">problem_name</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">timers</span><span class="o">=</span><span class="n">timers</span><span class="p">,</span> <span class="n">data_class</span><span class="o">=</span><span class="n">data_class</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Simulation.initialize"><a class="viewcode-back" href="../../compressible_fv4.html#compressible_fv4.simulation.Simulation.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">ng</span><span class="o">=</span><span class="n">ng</span><span class="p">)</span></div>
+<div class="viewcode-block" id="Simulation.initialize"><a class="viewcode-back" href="../../compressible_fv4.html#compressible_fv4.simulation.Simulation.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">ng</span><span class="o">=</span><span class="n">ng</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Simulation.substep"><a class="viewcode-back" href="../../compressible_fv4.html#compressible_fv4.simulation.Simulation.substep">[docs]</a>    <span class="k">def</span> <span class="nf">substep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">myd</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -244,8 +244,8 @@
 
         <span class="n">k</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="n">ymom_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span>
         <span class="n">k</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">iener</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="n">E_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span>
-
-        <span class="k">return</span> <span class="n">k</span></div>
+</div>
+        <span class="k">return</span> <span class="n">k</span>
 
 <div class="viewcode-block" id="Simulation.preevolve"><a class="viewcode-back" href="../../compressible_fv4.html#compressible_fv4.simulation.Simulation.preevolve">[docs]</a>    <span class="k">def</span> <span class="nf">preevolve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Since we are 4th order accurate we need to make sure that we</span>
@@ -254,8 +254,8 @@
 <span class="sd">        cell-centers and converts it to cell-averages.&quot;&quot;&quot;</span>
 
         <span class="c1"># we just initialized cell-centers, but we need to store averages</span>
-        <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">from_centers</span><span class="p">(</span><span class="n">var</span><span class="p">)</span></div>
+        <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">names</span><span class="p">:</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">from_centers</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Simulation.evolve"><a class="viewcode-back" href="../../compressible_fv4.html#compressible_fv4.simulation.Simulation.evolve">[docs]</a>    <span class="k">def</span> <span class="nf">evolve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
@@ -285,8 +285,8 @@
         <span class="c1"># increment the time</span>
         <span class="n">myd</span><span class="o">.</span><span class="n">t</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
-
-        <span class="n">tm_evolve</span><span class="o">.</span><span class="n">end</span><span class="p">()</span></div></div>
+</div></div>
+        <span class="n">tm_evolve</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
 </pre></div>
 
            </div>

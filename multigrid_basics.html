@@ -246,16 +246,16 @@ simple relaxation by moving the solution down and up through a series
 of grids. Chapter</p>
 <p>There are three solvers:</p>
 <ul>
-<li><p class="first">The core solver, provided in the class <a class="reference internal" href="multigrid.html#multigrid.MG.CellCenterMG2d" title="multigrid.MG.CellCenterMG2d"><code class="xref py py-func docutils literal"><span class="pre">MG.CellCenterMG2d</span></code></a> solves constant-coefficient Helmholtz problems of the form
-<span class="math">\((\alpha - \beta \nabla^2) \phi = f\)</span></p>
+<li><p class="first">The core solver, provided in the class <a class="reference internal" href="multigrid.html#multigrid.MG.CellCenterMG2d" title="multigrid.MG.CellCenterMG2d"><code class="xref py py-func docutils literal notranslate"><span class="pre">MG.CellCenterMG2d</span></code></a> solves constant-coefficient Helmholtz problems of the form
+<span class="math notranslate">\((\alpha - \beta \nabla^2) \phi = f\)</span></p>
 </li>
-<li><p class="first">The class <a class="reference internal" href="multigrid.html#multigrid.variable_coeff_MG.VarCoeffCCMG2d" title="multigrid.variable_coeff_MG.VarCoeffCCMG2d"><code class="xref py py-func docutils literal"><span class="pre">variable_coeff_MG.VarCoeffCCMG2d</span></code></a> solves variable coefficient Poisson problems of the form
-<span class="math">\(\nabla \cdot (\eta \nabla \phi ) = f\)</span>.  This class inherits the core functionality from <code class="docutils literal"><span class="pre">MG.CellCenterMG2d</span></code>.</p>
+<li><p class="first">The class <a class="reference internal" href="multigrid.html#multigrid.variable_coeff_MG.VarCoeffCCMG2d" title="multigrid.variable_coeff_MG.VarCoeffCCMG2d"><code class="xref py py-func docutils literal notranslate"><span class="pre">variable_coeff_MG.VarCoeffCCMG2d</span></code></a> solves variable coefficient Poisson problems of the form
+<span class="math notranslate">\(\nabla \cdot (\eta \nabla \phi ) = f\)</span>.  This class inherits the core functionality from <code class="docutils literal notranslate"><span class="pre">MG.CellCenterMG2d</span></code>.</p>
 </li>
-<li><p class="first">The class <a class="reference internal" href="multigrid.html#multigrid.general_MG.GeneralMG2d" title="multigrid.general_MG.GeneralMG2d"><code class="xref py py-func docutils literal"><span class="pre">general_MG.GeneralMG2d</span></code></a> solves a general elliptic
-equation of the form <span class="math">\(\alpha \phi + \nabla \cdot ( \beta
+<li><p class="first">The class <a class="reference internal" href="multigrid.html#multigrid.general_MG.GeneralMG2d" title="multigrid.general_MG.GeneralMG2d"><code class="xref py py-func docutils literal notranslate"><span class="pre">general_MG.GeneralMG2d</span></code></a> solves a general elliptic
+equation of the form <span class="math notranslate">\(\alpha \phi + \nabla \cdot ( \beta
 \nabla \phi) + \gamma \cdot \nabla \phi = f\)</span>.  This class inherits
-the core functionality from <code class="docutils literal"><span class="pre">MG.CellCenterMG2d</span></code>.</p>
+the core functionality from <code class="docutils literal notranslate"><span class="pre">MG.CellCenterMG2d</span></code>.</p>
 <p>This solver is the only one to support inhomogeneous boundary
 conditions.</p>
 </li>
@@ -268,19 +268,19 @@ to square grids with zoning a power of 2.</p>
 <div class="section" id="multigrid-test">
 <h3>multigrid test<a class="headerlink" href="#multigrid-test" title="Permalink to this headline">¶</a></h3>
 <p>A basic multigrid test is run as:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>./mg_test_simple.py
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./mg_test_simple.py
 </pre></div>
 </div>
-<p>The <code class="docutils literal"><span class="pre">mg_test_simple.py</span></code> script solves a Poisson equation with a
+<p>The <code class="docutils literal notranslate"><span class="pre">mg_test_simple.py</span></code> script solves a Poisson equation with a
 known analytic solution. This particular example comes from the text
 <cite>A Multigrid Tutorial, 2nd Ed.</cite>. The example is:</p>
-<div class="math">
+<div class="math notranslate">
 \[u_{xx} + u_{yy} = -2 \left [(1-6x^2)y^2(1-y^2) + (1-6y^2)x^2(1-x^2)\right ]\]</div>
-<p>on <span class="math">\([0,1] \times [0,1]\)</span> with <span class="math">\(u = 0\)</span> on the boundary.</p>
+<p>on <span class="math notranslate">\([0,1] \times [0,1]\)</span> with <span class="math notranslate">\(u = 0\)</span> on the boundary.</p>
 <p>The solution to this is shown below.</p>
 <img alt="_images/mg_test.png" class="align-center" src="_images/mg_test.png" />
 <p>Since this has a known analytic solution:</p>
-<div class="math">
+<div class="math notranslate">
 \[u(x,y) = (x^2 - x^4)(y^4 - y^2)\]</div>
 <p>We can assess the convergence of our solver by running at a variety of
 resolutions and computing the norm of the error with respect to the
@@ -294,16 +294,16 @@ analytic solution. This is shown below:</p>
 <div class="section" id="projection">
 <h3>projection<a class="headerlink" href="#projection" title="Permalink to this headline">¶</a></h3>
 <p>Another example that uses multigrid to extract the divergence free part of a velocity field is run as:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>./project-periodic.py
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./project-periodic.py
 </pre></div>
 </div>
-<p>Given a vector field, <span class="math">\(U\)</span>, we can decompose it into a divergence free part, <span class="math">\(U_d\)</span>, and the gradient of a scalar, <span class="math">\(\phi\)</span>:</p>
-<div class="math">
+<p>Given a vector field, <span class="math notranslate">\(U\)</span>, we can decompose it into a divergence free part, <span class="math notranslate">\(U_d\)</span>, and the gradient of a scalar, <span class="math notranslate">\(\phi\)</span>:</p>
+<div class="math notranslate">
 \[U = U_d + \nabla \phi\]</div>
 <p>We can project out the divergence free part by taking the divergence, leading to an elliptic equation:</p>
-<div class="math">
+<div class="math notranslate">
 \[\nabla^2 \phi = \nabla \cdot U\]</div>
-<p>The <code class="docutils literal"><span class="pre">project-periodic.py</span></code> script starts with a divergence free
+<p>The <code class="docutils literal notranslate"><span class="pre">project-periodic.py</span></code> script starts with a divergence free
 velocity field, adds to it the gradient of a scalar, and then projects
 it to recover the divergence free part. The error can found by
 comparing the original velocity field to the recovered field. The

@@ -232,26 +232,26 @@
 <div class="section" id="testing">
 <h1>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h1>
 <p>There are two types of testing implemented in pyro: unit tests and
-regression tests.  Both of these are driven by the <code class="docutils literal"><span class="pre">test.py</span></code>
+regression tests.  Both of these are driven by the <code class="docutils literal notranslate"><span class="pre">test.py</span></code>
 script in the root directory.</p>
 <div class="section" id="unit-tests">
 <h2>Unit tests<a class="headerlink" href="#unit-tests" title="Permalink to this headline">¶</a></h2>
 <p>pyro implements unit tests using py.test.  These can be run via:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">test</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">u</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">test</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">u</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="regression-tests">
 <h2>Regression tests<a class="headerlink" href="#regression-tests" title="Permalink to this headline">¶</a></h2>
-<p>The main driver, <code class="docutils literal"><span class="pre">pyro.py</span></code> has the ability to create benchmarks and
+<p>The main driver, <code class="docutils literal notranslate"><span class="pre">pyro.py</span></code> has the ability to create benchmarks and
 compare output to stored benchmarks at the end of a simulation.
-Benchmark output is stored in each solver’s <code class="docutils literal"><span class="pre">tests/</span></code> directory.
+Benchmark output is stored in each solver’s <code class="docutils literal notranslate"><span class="pre">tests/</span></code> directory.
 When testing, we compare zone-by-zone for each variable to see if we
 agree exactly.  If there is any disagreement, this means that we’ve
 made a change to the code that we need to understand (if may be a bug
 or may be a fix or optimization).</p>
 <p>We can compare to the stored benchmarks simply by running:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">test</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">test</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <div class="admonition note">
