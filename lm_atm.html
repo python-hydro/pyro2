@@ -139,6 +139,7 @@
 <li class="toctree-l2"><a class="reference internal" href="compressible_react.html">compressible_react package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible_rk.html">compressible_rk package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible_sdc.html">compressible_sdc package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="convergence.html">convergence module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="diffusion.html">diffusion package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html">examples package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="incompressible.html">incompressible package</a></li>
@@ -148,15 +149,19 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#lm-atm-setup-module">lm_atm.setup module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-lm_atm.simulation">lm_atm.simulation module</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="mesh.html">mesh package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="multigrid.html">multigrid package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot.html">plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotvar.html">plotvar module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyro.html">pyro module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sedov_compare.html">sedov_compare module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulation_null.html">simulation_null module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smooth_error.html">smooth_error module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sod_compare.html">sod_compare module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="test.html">test module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.html">util package</a></li>
 </ul>
@@ -292,15 +297,12 @@ projection (the MAC projection)</li>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="lm-atm-setup-module">
-<h2>lm_atm.setup module<a class="headerlink" href="#lm-atm-setup-module" title="Permalink to this headline">¶</a></h2>
-</div>
 <div class="section" id="module-lm_atm.simulation">
 <span id="lm-atm-simulation-module"></span><h2>lm_atm.simulation module<a class="headerlink" href="#module-lm_atm.simulation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="lm_atm.simulation.Basestate">
 <em class="property">class </em><code class="descclassname">lm_atm.simulation.</code><code class="descname">Basestate</code><span class="sig-paren">(</span><em>ny</em>, <em>ng=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lm_atm/simulation.html#Basestate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lm_atm.simulation.Basestate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="lm_atm.simulation.Basestate.jp">
 <code class="descname">jp</code><span class="sig-paren">(</span><em>shift</em>, <em>buf=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lm_atm/simulation.html#Basestate.jp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lm_atm.simulation.Basestate.jp" title="Permalink to this definition">¶</a></dt>
@@ -326,7 +328,7 @@ projection (the MAC projection)</li>
 <dl class="class">
 <dt id="lm_atm.simulation.Simulation">
 <em class="property">class </em><code class="descclassname">lm_atm.simulation.</code><code class="descname">Simulation</code><span class="sig-paren">(</span><em>solver_name</em>, <em>problem_name</em>, <em>rp</em>, <em>timers=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lm_atm/simulation.html#Simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lm_atm.simulation.Simulation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="simulation_null.html#simulation_null.NullSimulation" title="simulation_null.NullSimulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">simulation_null.NullSimulation</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="simulation_null.html#simulation_null.NullSimulation" title="simulation_null.NullSimulation"><code class="xref py py-class docutils literal"><span class="pre">simulation_null.NullSimulation</span></code></a></p>
 <dl class="method">
 <dt id="lm_atm.simulation.Simulation.dovis">
 <code class="descname">dovis</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lm_atm/simulation.html#Simulation.dovis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lm_atm.simulation.Simulation.dovis" title="Permalink to this definition">¶</a></dt>

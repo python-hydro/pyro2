@@ -241,7 +241,7 @@
 <div class="section" id="incompressible-hydrodynamics-solver">
 <h1>Incompressible hydrodynamics solver<a class="headerlink" href="#incompressible-hydrodynamics-solver" title="Permalink to this headline">¶</a></h1>
 <p>pyro’s incompressible solver solves:</p>
-<div class="math notranslate">
+<div class="math">
 \[\begin{split}\frac{\partial U}{\partial t} + U \cdot \nabla U + \nabla p &amp;= 0 \\
 \nabla \cdot U &amp;= 0\end{split}\]</div>
 <p>The algorithm combines the Godunov/advection features
@@ -259,7 +259,7 @@ doubly-periodic boundaries and looks at the development of two
 vortices as the shear layer rolls up. This problem was explored in a
 number of papers, for example, Bell, Colella, &amp; Glaz (1989) and Martin
 &amp; Colella (2000). This is run as:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./pyro.py incompressible shear inputs.shear
+<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py incompressible shear inputs.shear
 </pre></div>
 </div>
 <img alt="_images/shear.png" class="align-center" src="_images/shear.png" />
@@ -274,15 +274,15 @@ unit square with known analytic solution. By evolving at a variety of
 resolutions and comparing to the analytic solution, we can measure the
 convergence rate of the algorithm. The particular set of initial
 conditions is from Minion (1996). Limiting can be disabled by adding
-<code class="docutils literal notranslate"><span class="pre">incompressible.limiter=0</span></code> to the run command. The basic set of tests
+<code class="docutils literal"><span class="pre">incompressible.limiter=0</span></code> to the run command. The basic set of tests
 shown below are run as:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./pyro.py incompressible converge inputs.converge.32 vis.dovis=0
+<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py incompressible converge inputs.converge.32 vis.dovis=0
 ./pyro.py incompressible converge inputs.converge.64 vis.dovis=0
 ./pyro.py incompressible converge inputs.converge.128 vis.dovis=0
 </pre></div>
 </div>
 <p>The error is measured by comparing with the analytic solution using
-the routine <code class="docutils literal notranslate"><span class="pre">incomp_converge_error.py</span></code> in <code class="docutils literal notranslate"><span class="pre">analysis/</span></code>.</p>
+the routine <code class="docutils literal"><span class="pre">incomp_converge_error.py</span></code> in <code class="docutils literal"><span class="pre">analysis/</span></code>.</p>
 <img alt="_images/incomp_converge.png" class="align-center" src="_images/incomp_converge.png" />
 <p>The dashed line is second order convergence. We see almost second
 order behavior with the limiters enabled and slightly better than
@@ -295,8 +295,8 @@ second order with no limiting.</p>
 <h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Disable the MAC projection and run the converge problem—is the method still 2nd order?</li>
-<li>Disable all projections—does the solution still even try to preserve <span class="math notranslate">\(\nabla \cdot U = 0\)</span>?</li>
-<li>Experiment with what is projected. Try projecting <span class="math notranslate">\(U_t\)</span> to see if that makes a difference.</li>
+<li>Disable all projections—does the solution still even try to preserve <span class="math">\(\nabla \cdot U = 0\)</span>?</li>
+<li>Experiment with what is projected. Try projecting <span class="math">\(U_t\)</span> to see if that makes a difference.</li>
 </ul>
 </div>
 <div class="section" id="extensions">

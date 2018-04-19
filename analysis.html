@@ -232,55 +232,55 @@ that we describe here. Note: some problems write a report at the end
 of the simulation specifying the analysis routines that can be used
 with their data.</p>
 <ul>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">compare.py</span></code>: this takes two simulation output files as input and
+<li><p class="first"><code class="docutils literal"><span class="pre">compare.py</span></code>: this takes two simulation output files as input and
 compares zone-by-zone for exact agreement. This is used as part of
 the regression testing.</p>
-<p>usage: <code class="docutils literal notranslate"><span class="pre">./compare.py</span> <span class="pre">file1</span> <span class="pre">file2</span></code></p>
+<p>usage: <code class="docutils literal"><span class="pre">./compare.py</span> <span class="pre">file1</span> <span class="pre">file2</span></code></p>
 </li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">plot.py</span></code>: this takes an output file as input and plots the data
+<li><p class="first"><code class="docutils literal"><span class="pre">plot.py</span></code>: this takes an output file as input and plots the data
 using the solver’s dovis method. It deduces the solver from the
 attributes stored in the HDF5 file.</p>
-<p>usage: <code class="docutils literal notranslate"><span class="pre">./plot.py</span> <span class="pre">file</span></code></p>
+<p>usage: <code class="docutils literal"><span class="pre">./plot.py</span> <span class="pre">file</span></code></p>
 </li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">analysis/</span></code></p>
+<li><p class="first"><code class="docutils literal"><span class="pre">analysis/</span></code></p>
 <ul>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">convergence.py</span></code>: this compares two files with different
+<li><p class="first"><code class="docutils literal"><span class="pre">convergence.py</span></code>: this compares two files with different
 resolutions (one a factor of 2 finer than the other).  It coarsens
 the finer data and then computes the norm of the difference.  This
 is used to test the convergence of solvers.</p>
 </li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">gauss_diffusion_compare.py</span></code>: this is for the diffusion solver’s
+<li><p class="first"><code class="docutils literal"><span class="pre">gauss_diffusion_compare.py</span></code>: this is for the diffusion solver’s
 Gaussian diffusion problem. It takes a sequence of output files as
 arguments, computes the angle-average, and the plots the resulting
 points over the analytic solution for comparison with the exact
 result.</p>
-<p>usage: <code class="docutils literal notranslate"><span class="pre">./gauss_diffusion_compare.py</span> <span class="pre">file*</span></code></p>
+<p>usage: <code class="docutils literal"><span class="pre">./gauss_diffusion_compare.py</span> <span class="pre">file*</span></code></p>
 </li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">incomp_converge_error.py</span></code>: this is for the incompressible
+<li><p class="first"><code class="docutils literal"><span class="pre">incomp_converge_error.py</span></code>: this is for the incompressible
 solver’s converge problem. This takes a single output file as
 input and compares the velocity field to the analytic solution,
 reporting the L2 norm of the error.</p>
-<p>usage: <code class="docutils literal notranslate"><span class="pre">./incomp_converge_error.py</span> <span class="pre">file</span></code></p>
+<p>usage: <code class="docutils literal"><span class="pre">./incomp_converge_error.py</span> <span class="pre">file</span></code></p>
 </li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">plotvar.py</span></code>: this takes a single output file and a variable
+<li><p class="first"><code class="docutils literal"><span class="pre">plotvar.py</span></code>: this takes a single output file and a variable
 name and plots the data for that variable.</p>
-<p>usage: <code class="docutils literal notranslate"><span class="pre">./plotvar.py</span> <span class="pre">file</span> <span class="pre">variable</span></code></p>
+<p>usage: <code class="docutils literal"><span class="pre">./plotvar.py</span> <span class="pre">file</span> <span class="pre">variable</span></code></p>
 </li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">sedov_compare.py</span></code>: this takes an output file from the
+<li><p class="first"><code class="docutils literal"><span class="pre">sedov_compare.py</span></code>: this takes an output file from the
 compressible Sedov problem, computes the angle-average profile of
 the solution and plots it together with the analytic data (read in
-from <code class="docutils literal notranslate"><span class="pre">cylindrical-sedov.out</span></code>).</p>
-<p>usage: <code class="docutils literal notranslate"><span class="pre">./sedov_compare.py</span> <span class="pre">file</span></code></p>
+from <code class="docutils literal"><span class="pre">cylindrical-sedov.out</span></code>).</p>
+<p>usage: <code class="docutils literal"><span class="pre">./sedov_compare.py</span> <span class="pre">file</span></code></p>
 </li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">smooth_error.py</span></code>: this takes an output file from the advection
+<li><p class="first"><code class="docutils literal"><span class="pre">smooth_error.py</span></code>: this takes an output file from the advection
 solver’s smooth problem and compares to the analytic solution,
 outputing the L2 norm of the error.</p>
-<p>usage: <code class="docutils literal notranslate"><span class="pre">./smooth_error.py</span> <span class="pre">file</span></code></p>
+<p>usage: <code class="docutils literal"><span class="pre">./smooth_error.py</span> <span class="pre">file</span></code></p>
 </li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">sod_compare.py</span></code>: this takes an output file from the
+<li><p class="first"><code class="docutils literal"><span class="pre">sod_compare.py</span></code>: this takes an output file from the
 compressible Sod problem and plots a slice through the domain over
-the analytic solution (read in from <code class="docutils literal notranslate"><span class="pre">sod-exact.out</span></code>).</p>
-<p>usage: <code class="docutils literal notranslate"><span class="pre">./sod_compare.py</span> <span class="pre">file</span></code></p>
+the analytic solution (read in from <code class="docutils literal"><span class="pre">sod-exact.out</span></code>).</p>
+<p>usage: <code class="docutils literal"><span class="pre">./sod_compare.py</span> <span class="pre">file</span></code></p>
 </li>
 </ul>
 </li>

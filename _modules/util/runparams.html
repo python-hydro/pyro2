@@ -251,8 +251,8 @@
         <span class="nb">int</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span>
-    <span class="k">else</span><span class="p">:</span></div>
-        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
 
 
 <div class="viewcode-block" id="is_float"><a class="viewcode-back" href="../../util.html#util.runparams.is_float">[docs]</a><span class="k">def</span> <span class="nf">is_float</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
@@ -261,8 +261,8 @@
         <span class="nb">float</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span>
-    <span class="k">else</span><span class="p">:</span></div>
-        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
 
 
 <span class="k">def</span> <span class="nf">_get_val</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
@@ -353,8 +353,8 @@
                         <span class="n">comment</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_comments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
                     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                         <span class="n">comment</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-</div>
-                <span class="bp">self</span><span class="o">.</span><span class="n">param_comments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">comment</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">param_comments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">comment</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="RuntimeParameters.command_line_params"><a class="viewcode-back" href="../../util.html#util.runparams.RuntimeParameters.command_line_params">[docs]</a>    <span class="k">def</span> <span class="nf">command_line_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd_strings</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -383,8 +383,8 @@
                 <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;warning, key: </span><span class="si">%s</span><span class="s2"> not defined&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span>
                 <span class="k">continue</span>
 
-            <span class="c1"># check in turn whether this is an interger, float, or string</span></div>
-            <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">_get_val</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="c1"># check in turn whether this is an interger, float, or string</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">_get_val</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="RuntimeParameters.get_param"><a class="viewcode-back" href="../../util.html#util.runparams.RuntimeParameters.get_param">[docs]</a>    <span class="k">def</span> <span class="nf">get_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -402,16 +402,16 @@
 
         <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span></div>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;ERROR: runtime parameter </span><span class="si">{}</span><span class="s2"> not found&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;ERROR: runtime parameter </span><span class="si">{}</span><span class="s2"> not found&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="RuntimeParameters.print_unused_params"><a class="viewcode-back" href="../../util.html#util.runparams.RuntimeParameters.print_unused_params">[docs]</a>    <span class="k">def</span> <span class="nf">print_unused_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Print out the list of parameters that were defined by never used</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">used_params</span><span class="p">:</span></div>
-                <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;parameter </span><span class="si">%s</span><span class="s2"> never used&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">used_params</span><span class="p">:</span>
+                <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;parameter </span><span class="si">%s</span><span class="s2"> never used&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="RuntimeParameters.print_all_params"><a class="viewcode-back" href="../../util.html#util.runparams.RuntimeParameters.print_all_params">[docs]</a>    <span class="k">def</span> <span class="nf">print_all_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -422,8 +422,8 @@
 
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
-</div>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="RuntimeParameters.write_params"><a class="viewcode-back" href="../../util.html#util.runparams.RuntimeParameters.write_params">[docs]</a>    <span class="k">def</span> <span class="nf">write_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -434,8 +434,8 @@
         <span class="n">grp</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s2">&quot;runtime parameters&quot;</span><span class="p">)</span>
 
         <span class="n">keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">keys</span><span class="p">):</span></div>
-            <span class="n">grp</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">keys</span><span class="p">):</span>
+            <span class="n">grp</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span></div>
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">ostr</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
@@ -486,8 +486,8 @@
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">option</span> <span class="o">+</span> <span class="s1">&#39; = &#39;</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s1">&#39;       ; &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_comments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">option</span> <span class="o">+</span> <span class="s1">&#39; = &#39;</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-</div></div>
-        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>

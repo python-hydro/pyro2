@@ -239,40 +239,40 @@ in the future.</p>
 </div>
 <p>The following python packages are required:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">numpy</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">matplotlib</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">f2py</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">f2py</span></code> (part of NumPy)</li>
-<li><code class="docutils literal notranslate"><span class="pre">pytest</span></code> (for unit tests)</li>
+<li><code class="docutils literal"><span class="pre">numpy</span></code></li>
+<li><code class="docutils literal"><span class="pre">matplotlib</span></code></li>
+<li><code class="docutils literal"><span class="pre">f2py</span></code></li>
+<li><code class="docutils literal"><span class="pre">f2py</span></code> (part of NumPy)</li>
+<li><code class="docutils literal"><span class="pre">pytest</span></code> (for unit tests)</li>
 </ul>
-<p>Additionally, you will need <code class="docutils literal notranslate"><span class="pre">gfortran</span></code> installed on your computer, for
-<code class="docutils literal notranslate"><span class="pre">f2py</span></code> to be able to compile the code.</p>
+<p>Additionally, you will need <code class="docutils literal"><span class="pre">gfortran</span></code> installed on your computer, for
+<code class="docutils literal"><span class="pre">f2py</span></code> to be able to compile the code.</p>
 <p>The following steps are needed before running pyro:</p>
 <ul class="simple">
-<li>add <code class="docutils literal notranslate"><span class="pre">pyro/</span></code> to your <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> environment variable.  For
+<li>add <code class="docutils literal"><span class="pre">pyro/</span></code> to your <code class="docutils literal"><span class="pre">PYTHONPATH</span></code> environment variable.  For
 the bash shell, this is done as:</li>
 </ul>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>export PYTHONPATH=&quot;/path/to/pyro/:${PYTHONPATH}&quot;
+<div class="highlight-none"><div class="highlight"><pre><span></span>export PYTHONPATH=&quot;/path/to/pyro/:${PYTHONPATH}&quot;
 </pre></div>
 </div>
 <ul class="simple">
-<li>build the Fortran modules, by running the <code class="docutils literal notranslate"><span class="pre">mk.sh</span></code> script. It
+<li>build the Fortran modules, by running the <code class="docutils literal"><span class="pre">mk.sh</span></code> script. It
 should be sufficient to just do:</li>
 </ul>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./mk.sh
+<div class="highlight-none"><div class="highlight"><pre><span></span>./mk.sh
 </pre></div>
 </div>
 <ul class="simple">
-<li>define the environment variable <code class="docutils literal notranslate"><span class="pre">PYRO_HOME</span></code> to point to
-the <code class="docutils literal notranslate"><span class="pre">pyro2/</span></code> directory (only needed for regression testing)</li>
+<li>define the environment variable <code class="docutils literal"><span class="pre">PYRO_HOME</span></code> to point to
+the <code class="docutils literal"><span class="pre">pyro2/</span></code> directory (only needed for regression testing)</li>
 </ul>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>export PYRO_HOME=&quot;/path/to/pyro/&quot;
+<div class="highlight-none"><div class="highlight"><pre><span></span>export PYRO_HOME=&quot;/path/to/pyro/&quot;
 </pre></div>
 </div>
 <div class="section" id="quick-test">
 <h2>Quick test<a class="headerlink" href="#quick-test" title="Permalink to this headline">¶</a></h2>
 <p>Run the advection solver to quickly test if things are setup correctly:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./pyro.py advection smooth inputs.smooth
+<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py advection smooth inputs.smooth
 </pre></div>
 </div>
 <p>You should see a plot window pop up with a smooth pulse advecting

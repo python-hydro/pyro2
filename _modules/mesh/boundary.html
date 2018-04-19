@@ -223,8 +223,8 @@
 <span class="sd">    a solid wall (no flux through the BC)&quot;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">bc_solid</span><span class="p">[</span><span class="n">bc_type</span><span class="p">]</span> <span class="o">=</span> <span class="n">is_solid</span></div>
-    <span class="n">ext_bcs</span><span class="p">[</span><span class="n">bc_type</span><span class="p">]</span> <span class="o">=</span> <span class="n">function</span>
+    <span class="n">bc_solid</span><span class="p">[</span><span class="n">bc_type</span><span class="p">]</span> <span class="o">=</span> <span class="n">is_solid</span>
+    <span class="n">ext_bcs</span><span class="p">[</span><span class="n">bc_type</span><span class="p">]</span> <span class="o">=</span> <span class="n">function</span></div>
 
 
 <span class="k">def</span> <span class="nf">_set_reflect</span><span class="p">(</span><span class="n">odd_reflect_dir</span><span class="p">,</span> <span class="n">dir_string</span><span class="p">):</span>
@@ -241,8 +241,8 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xl_prop</span><span class="p">,</span> <span class="n">xr_prop</span><span class="p">,</span> <span class="n">yl_prop</span><span class="p">,</span> <span class="n">yr_prop</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">xl</span> <span class="o">=</span> <span class="n">xl_prop</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">xr</span> <span class="o">=</span> <span class="n">xr_prop</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">yl</span> <span class="o">=</span> <span class="n">yl_prop</span></div>
-        <span class="bp">self</span><span class="o">.</span><span class="n">yr</span> <span class="o">=</span> <span class="n">yr_prop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yl</span> <span class="o">=</span> <span class="n">yl_prop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yr</span> <span class="o">=</span> <span class="n">yr_prop</span></div>
 
 
 <div class="viewcode-block" id="bc_is_solid"><a class="viewcode-back" href="../../mesh.html#mesh.boundary.bc_is_solid">[docs]</a><span class="k">def</span> <span class="nf">bc_is_solid</span><span class="p">(</span><span class="n">bc</span><span class="p">):</span>
@@ -252,8 +252,8 @@
     <span class="n">solid</span> <span class="o">=</span> <span class="n">BCProp</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">bc_solid</span><span class="p">[</span><span class="n">bc</span><span class="o">.</span><span class="n">xlb</span><span class="p">]),</span>
                    <span class="nb">int</span><span class="p">(</span><span class="n">bc_solid</span><span class="p">[</span><span class="n">bc</span><span class="o">.</span><span class="n">xrb</span><span class="p">]),</span>
                    <span class="nb">int</span><span class="p">(</span><span class="n">bc_solid</span><span class="p">[</span><span class="n">bc</span><span class="o">.</span><span class="n">ylb</span><span class="p">]),</span>
-                   <span class="nb">int</span><span class="p">(</span><span class="n">bc_solid</span><span class="p">[</span><span class="n">bc</span><span class="o">.</span><span class="n">yrb</span><span class="p">]))</span></div>
-    <span class="k">return</span> <span class="n">solid</span>
+                   <span class="nb">int</span><span class="p">(</span><span class="n">bc_solid</span><span class="p">[</span><span class="n">bc</span><span class="o">.</span><span class="n">yrb</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">solid</span></div>
 
 
 <div class="viewcode-block" id="BC"><a class="viewcode-back" href="../../mesh.html#mesh.boundary.BC">[docs]</a><span class="k">class</span> <span class="nc">BC</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -403,8 +403,8 @@
 
         <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;BCs: -x: </span><span class="si">%s</span><span class="s2">  +x: </span><span class="si">%s</span><span class="s2">  -y: </span><span class="si">%s</span><span class="s2">  +y: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> \
             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xlb</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xrb</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ylb</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">yrb</span><span class="p">)</span>
-</div>
-        <span class="k">return</span> <span class="n">string</span>
+
+        <span class="k">return</span> <span class="n">string</span></div>
 </pre></div>
 
            </div>

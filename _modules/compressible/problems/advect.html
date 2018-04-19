@@ -245,8 +245,8 @@
     <span class="n">ymom</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">dens</span><span class="p">[:,</span> <span class="p">:]</span><span class="o">*</span><span class="n">v</span>
 
     <span class="c1"># pressure is constant</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="mf">1.0</span></div>
-    <span class="n">ener</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">p</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">xmom</span><span class="p">[:,</span> <span class="p">:]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">ymom</span><span class="p">[:,</span> <span class="p">:]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">dens</span><span class="p">[:,</span> <span class="p">:]</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">ener</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">p</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">xmom</span><span class="p">[:,</span> <span class="p">:]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">ymom</span><span class="p">[:,</span> <span class="p">:]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">dens</span><span class="p">[:,</span> <span class="p">:]</span></div>
 
 
 <div class="viewcode-block" id="finalize"><a class="viewcode-back" href="../../../compressible.problems.html#compressible.problems.advect.finalize">[docs]</a><span class="k">def</span> <span class="nf">finalize</span><span class="p">():</span>
@@ -254,8 +254,8 @@
 
     <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">          &quot;&quot;&quot;</span>
-</div>
-    <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

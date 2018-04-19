@@ -220,8 +220,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span> <span class="o">=</span> <span class="n">my_data</span>
 
         <span class="c1"># now set the initial conditions for the problem</span>
-        <span class="n">problem</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;advection_fv4.problems.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem_name</span><span class="p">))</span></div>
-        <span class="n">problem</span><span class="o">.</span><span class="n">init_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">)</span>
+        <span class="n">problem</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;advection_fv4.problems.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem_name</span><span class="p">))</span>
+        <span class="n">problem</span><span class="o">.</span><span class="n">init_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Simulation.substep"><a class="viewcode-back" href="../../advection_fv4.html#advection_fv4.simulation.Simulation.substep">[docs]</a>    <span class="k">def</span> <span class="nf">substep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">myd</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -244,8 +244,8 @@
         <span class="n">k</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> \
             <span class="p">(</span><span class="n">F_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="n">F_x</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span> <span class="o">+</span> \
             <span class="p">(</span><span class="n">F_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="n">F_y</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
-</div></div>
-        <span class="k">return</span> <span class="n">k</span>
+
+        <span class="k">return</span> <span class="n">k</span></div></div>
 </pre></div>
 
            </div>

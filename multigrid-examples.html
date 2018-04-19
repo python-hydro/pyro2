@@ -396,22 +396,22 @@ div.nboutput div.output_area.stderr {
 <div class="section" id="Multigrid-examples">
 <h1>Multigrid examples<a class="headerlink" href="#Multigrid-examples" title="Permalink to this headline">¶</a></h1>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span>%matplotlib inline
 import matplotlib.pyplot as plt
 </pre></div>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span>from __future__ import print_function
 
 import numpy as np
@@ -425,24 +425,24 @@ import multigrid.MG as MG
 <div class="section" id="Constant-coefficent-Poisson-equation">
 <h2>Constant-coefficent Poisson equation<a class="headerlink" href="#Constant-coefficent-Poisson-equation" title="Permalink to this headline">¶</a></h2>
 <p>We want to solve</p>
-<div class="math notranslate">
+<div class="math">
 \[\phi_{xx} + \phi_{yy} = -2[(1-6x^2)y^2(1-y^2) + (1-6y^2)x^2(1-x^2)]\]</div>
 <p>on</p>
-<div class="math notranslate">
+<div class="math">
 \[[0,1]\times [0,1]\]</div>
 <p>with homogeneous Dirichlet boundary conditions (this example comes from
 “A Multigrid Tutorial”).</p>
 <p>This has the analytic solution</p>
-<div class="math notranslate">
+<div class="math">
 \[u(x,y) = (x^2 - x^4)(y^4 - y^2)\]</div>
 <p>We start by setting up a multigrid object–this needs to know the number
 of zones our problem is defined on</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span>nx = ny = 256
 mg = MG.CellCenterMG2d(nx, ny,
                        xl_BC_type=&quot;dirichlet&quot;, xr_BC_type=&quot;dirichlet&quot;,
@@ -537,15 +537,15 @@ cc data: nx = 256, ny = 256, ng = 1
 
 </pre></div></div>
 </div>
-<p>Next, we initialize the RHS. To make life easier, the <code class="docutils literal notranslate"><span class="pre">CellCenterMG2d</span></code>
+<p>Next, we initialize the RHS. To make life easier, the <code class="docutils literal"><span class="pre">CellCenterMG2d</span></code>
 object has the coordinates of the solution grid (including ghost cells)
-as <code class="docutils literal notranslate"><span class="pre">mg.x2d</span></code> and <code class="docutils literal notranslate"><span class="pre">mg.y2d</span></code> (these are two-dimensional arrays).</p>
+as <code class="docutils literal"><span class="pre">mg.x2d</span></code> and <code class="docutils literal"><span class="pre">mg.y2d</span></code> (these are two-dimensional arrays).</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span>def rhs(x, y):
     return -2.0*((1.0-6.0*x**2)*y**2*(1.0-y**2) + (1.0-6.0*y**2)*x**2*(1.0-x**2))
 
@@ -563,30 +563,30 @@ Source norm =  1.09751581367
 </div>
 <p>The last setup step is to initialize the solution–this is the starting
 point for the solve. Usually we just want to start with all zeros, so we
-use the <code class="docutils literal notranslate"><span class="pre">init_zeros()</span></code> method</p>
+use the <code class="docutils literal"><span class="pre">init_zeros()</span></code> method</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span>mg.init_zeros()
 </pre></div>
 </div>
 </div>
 <p>we can now solve – there are actually two different techniques we can
 do here. We can just do pure smoothing on the solution grid using
-<code class="docutils literal notranslate"><span class="pre">mg.smooth(mg.nlevels-1,</span> <span class="pre">N)</span></code>, where <code class="docutils literal notranslate"><span class="pre">N</span></code> is the number of smoothing
-iterations. To get the solution <code class="docutils literal notranslate"><span class="pre">N</span></code> will need to be large and this
+<code class="docutils literal"><span class="pre">mg.smooth(mg.nlevels-1,</span> <span class="pre">N)</span></code>, where <code class="docutils literal"><span class="pre">N</span></code> is the number of smoothing
+iterations. To get the solution <code class="docutils literal"><span class="pre">N</span></code> will need to be large and this
 will take a long time.</p>
 <p>Multigrid accelerates the smoothing. We can do a V-cycle multigrid
-solution using <code class="docutils literal notranslate"><span class="pre">mg.solve()</span></code></p>
+solution using <code class="docutils literal"><span class="pre">mg.solve()</span></code></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span>mg.solve()
 </pre></div>
 </div>
@@ -1040,33 +1040,33 @@ cycle 7: relative err = 7.062255558417692e-07, residual err = 2.590386214782638e
 
 </pre></div></div>
 </div>
-<p>We can access the solution on the finest grid using <code class="docutils literal notranslate"><span class="pre">get_solution()</span></code></p>
+<p>We can access the solution on the finest grid using <code class="docutils literal"><span class="pre">get_solution()</span></code></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span>phi = mg.get_solution()
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span>plt.imshow(np.transpose(phi.v()), origin=&quot;lower&quot;)
 </pre></div>
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>Out[8]:
 </pre></div>
 </div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<div class="output_area highlight-none"><div class="highlight"><pre>
 <span></span>&lt;matplotlib.image.AxesImage at 0x7f7c47a0cc50&gt;
 </pre></div>
 </div>
@@ -1080,21 +1080,21 @@ cycle 7: relative err = 7.062255558417692e-07, residual err = 2.590386214782638e
 </div>
 <p>we can also get the gradient of the solution</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span>gx, gy = mg.get_solution_gradient()
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span>plt.subplot(121)
 plt.imshow(np.transpose(gx.v()), origin=&quot;lower&quot;)
 plt.subplot(122)
@@ -1103,11 +1103,11 @@ plt.imshow(np.transpose(gy.v()), origin=&quot;lower&quot;)
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>Out[10]:
 </pre></div>
 </div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<div class="output_area highlight-none"><div class="highlight"><pre>
 <span></span>&lt;matplotlib.image.AxesImage at 0x7f7c47a345f8&gt;
 </pre></div>
 </div>
@@ -1122,65 +1122,65 @@ plt.imshow(np.transpose(gy.v()), origin=&quot;lower&quot;)
 </div>
 <div class="section" id="General-linear-elliptic-equation">
 <h2>General linear elliptic equation<a class="headerlink" href="#General-linear-elliptic-equation" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">GeneralMG2d</span></code> class implements support for a general elliptic
+<p>The <code class="docutils literal"><span class="pre">GeneralMG2d</span></code> class implements support for a general elliptic
 equation of the form:</p>
-<div class="math notranslate">
+<div class="math">
 \[\alpha \phi + \nabla \cdot (\beta \nabla \phi) + \gamma \cdot \nabla \phi = f\]</div>
 <p>with inhomogeneous boundary condtions.</p>
-<p>It subclasses the <code class="docutils literal notranslate"><span class="pre">CellCenterMG2d</span></code> class, and the basic interface is
+<p>It subclasses the <code class="docutils literal"><span class="pre">CellCenterMG2d</span></code> class, and the basic interface is
 the same</p>
 <p>We will solve the above with</p>
-<div class="math notranslate">
+<div class="math">
 \begin{align}
 \alpha &amp;= 10 \\
 \beta &amp;= xy + 1 \\
 \gamma &amp;= \hat{x} + \hat{y}
 \end{align}</div><p>and</p>
-<div class="math notranslate">
+<div class="math">
 \begin{align}
 f = &amp;-\frac{\pi}{2}(x + 1)\sin\left(\frac{\pi y}{2}\right) \cos\left(\frac{\pi x}{2}\right ) \\
     &amp;-\frac{\pi}{2}(y + 1)\sin\left(\frac{\pi x}{2}\right) \cos\left(\frac{\pi y}{2}\right ) \\
     &amp;+\left(\frac{-\pi^2 (xy+1)}{2} + 10\right) \cos\left(\frac{\pi x}{2}\right) \cos\left(\frac{\pi y}{2}\right)
-\end{align}</div><p>on <span class="math notranslate">\([0, 1] \times [0,1]\)</span> with boundary conditions:</p>
-<div class="math notranslate">
+\end{align}</div><p>on <span class="math">\([0, 1] \times [0,1]\)</span> with boundary conditions:</p>
+<div class="math">
 \begin{align}
 \phi(x=0) &amp;= \cos(\pi y/2) \\
 \phi(x=1) &amp;= 0 \\
 \phi(y=0) &amp;= \cos(\pi x/2) \\
 \phi(y=1) &amp;= 0
 \end{align}</div><p>This has the exact solution:</p>
-<div class="math notranslate">
+<div class="math">
 \[\phi = \cos(\pi x/2) \cos(\pi y/2)\]</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span>import multigrid.general_MG as gMG
 </pre></div>
 </div>
 </div>
 <p>For reference, we’ll define a function providing the analytic solution</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span>def true(x,y):
     return np.cos(np.pi*x/2.0)*np.cos(np.pi*y/2.0)
 </pre></div>
 </div>
 </div>
-<p>Now the coefficents–note that since <span class="math notranslate">\(\gamma\)</span> is a vector, we have
+<p>Now the coefficents–note that since <span class="math">\(\gamma\)</span> is a vector, we have
 a different function for each component</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span>def alpha(x,y):
     return 10.0*np.ones_like(x)
 
@@ -1197,11 +1197,11 @@ def gamma_y(x,y):
 </div>
 <p>and the righthand side function</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span>def f(x,y):
     return -0.5*np.pi*(x + 1.0)*np.sin(np.pi*y/2.0)*np.cos(np.pi*x/2.0) - \
             0.5*np.pi*(y + 1.0)*np.sin(np.pi*x/2.0)*np.cos(np.pi*y/2.0) + \
@@ -1212,11 +1212,11 @@ def gamma_y(x,y):
 <p>Our inhomogeneous boundary conditions require a function that can be
 evaluated on the boundary to give the value</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span>def xl_func(y):
     return np.cos(np.pi*y/2.0)
 
@@ -1226,18 +1226,18 @@ def yl_func(x):
 </div>
 </div>
 <p>Now we can setup our grid object and the coefficients, which are stored
-as a <code class="docutils literal notranslate"><span class="pre">CellCenter2d</span></code> object. Note, the coefficients do not need to have
-the same boundary conditions as <span class="math notranslate">\(\phi\)</span> (and for real problems,
-they may not). The one that matters the most is <span class="math notranslate">\(\beta\)</span>, since
+as a <code class="docutils literal"><span class="pre">CellCenter2d</span></code> object. Note, the coefficients do not need to have
+the same boundary conditions as <span class="math">\(\phi\)</span> (and for real problems,
+they may not). The one that matters the most is <span class="math">\(\beta\)</span>, since
 that will need to be averaged to the edges of the domain, so the
 boundary conditions on the coefficients are important.</p>
 <p>Here we use Neumann boundary conditions</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span>import mesh.patch as patch
 
 nx = ny = 128
@@ -1270,11 +1270,11 @@ gy[:,:] = gamma_y(g.x2d, g.y2d)
 </div>
 <p>Now we can setup the multigrid object</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span>a = gMG.GeneralMG2d(nx, ny,
                     xl_BC_type=&quot;dirichlet&quot;, yl_BC_type=&quot;dirichlet&quot;,
                     xr_BC_type=&quot;dirichlet&quot;, yr_BC_type=&quot;dirichlet&quot;,
@@ -1421,11 +1421,11 @@ cc data: nx = 128, ny = 128, ng = 1
 <p>just as before, we specify the righthand side and initialize the
 solution</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span>a.init_zeros()
 a.init_RHS(f(a.x2d, a.y2d))
 </pre></div>
@@ -1441,11 +1441,11 @@ Source norm =  1.77518149234
 </div>
 <p>and we can solve it</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span>a.solve(rtol=1.e-10)
 </pre></div>
 </div>
@@ -1900,11 +1900,11 @@ cycle 8: relative err = 5.555107077431201e-11, residual err = 1.5088473495842003
 </div>
 <p>We can compare to the true solution</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span>v = a.get_solution()
 b = true(a.x2d, a.y2d)
 e = v - b
@@ -1913,32 +1913,22 @@ e = v - b
 </div>
 <p>The norm of the error is</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span>e.norm()
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>Out[21]:
 </pre></div>
 </div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<div class="output_area highlight-none"><div class="highlight"><pre>
 <span></span>1.6719344048744095e-05
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
 </pre></div>
 </div>
 </div>

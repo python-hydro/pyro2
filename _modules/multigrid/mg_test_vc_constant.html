@@ -107,7 +107,6 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../compressible_compare.html">Compressible solver comparisons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid-examples.html">Multigrid examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
@@ -220,17 +219,17 @@
 
 
 <span class="c1"># the analytic solution</span>
-<div class="viewcode-block" id="true"><a class="viewcode-back" href="../../multigrid.html#multigrid.mg_test_vc_constant.true">[docs]</a><span class="k">def</span> <span class="nf">true</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span></div>
-    <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">x</span><span class="o">**</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">y</span><span class="o">**</span><span class="mi">4</span> <span class="o">-</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<div class="viewcode-block" id="true"><a class="viewcode-back" href="../../multigrid.html#multigrid.mg_test_vc_constant.true">[docs]</a><span class="k">def</span> <span class="nf">true</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">x</span><span class="o">**</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">y</span><span class="o">**</span><span class="mi">4</span> <span class="o">-</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span></div>
 
 
 <span class="c1"># the coefficients</span>
-<div class="viewcode-block" id="alpha"><a class="viewcode-back" href="../../multigrid.html#multigrid.mg_test_vc_constant.alpha">[docs]</a><span class="k">def</span> <span class="nf">alpha</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span></div>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<div class="viewcode-block" id="alpha"><a class="viewcode-back" href="../../multigrid.html#multigrid.mg_test_vc_constant.alpha">[docs]</a><span class="k">def</span> <span class="nf">alpha</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
 
 <span class="c1"># the righthand side</span>
-<div class="viewcode-block" id="f"><a class="viewcode-back" href="../../multigrid.html#multigrid.mg_test_vc_constant.f">[docs]</a><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span></div>
-    <span class="k">return</span> <span class="o">-</span><span class="mf">2.0</span><span class="o">*</span><span class="p">((</span><span class="mf">1.0</span><span class="o">-</span><span class="mf">6.0</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="mf">6.0</span><span class="o">*</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+<div class="viewcode-block" id="f"><a class="viewcode-back" href="../../multigrid.html#multigrid.mg_test_vc_constant.f">[docs]</a><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mf">2.0</span><span class="o">*</span><span class="p">((</span><span class="mf">1.0</span><span class="o">-</span><span class="mf">6.0</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="mf">6.0</span><span class="o">*</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="test_vc_constant"><a class="viewcode-back" href="../../multigrid.html#multigrid.mg_test_vc_constant.test_vc_constant">[docs]</a><span class="k">def</span> <span class="nf">test_vc_constant</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
@@ -345,8 +344,8 @@
 
 
     <span class="c1"># store the output for later comparison</span>
-    <span class="n">my_data</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">get_solution_object</span><span class="p">()</span></div>
-    <span class="n">my_data</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;mg_test&quot;</span><span class="p">)</span>
+    <span class="n">my_data</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">get_solution_object</span><span class="p">()</span>
+    <span class="n">my_data</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;mg_test&quot;</span><span class="p">)</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>

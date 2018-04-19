@@ -222,29 +222,29 @@
     <span class="c1"># only defined in interactive mode.</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="s1">&#39;ps1&#39;</span><span class="p">):</span>
         <span class="k">return</span>
-    <span class="k">else</span><span class="p">:</span></div>
-        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="warning"><a class="viewcode-back" href="../../util.html#util.msg.warning">[docs]</a><span class="k">def</span> <span class="nf">warning</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Output a string to the terminal colored orange to indicate a</span>
 <span class="sd">    warning</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
-    <span class="nb">print</span><span class="p">(</span><span class="n">_TermColors</span><span class="o">.</span><span class="n">WARNING</span> <span class="o">+</span> <span class="n">string</span> <span class="o">+</span> <span class="n">_TermColors</span><span class="o">.</span><span class="n">ENDC</span><span class="p">)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">_TermColors</span><span class="o">.</span><span class="n">WARNING</span> <span class="o">+</span> <span class="n">string</span> <span class="o">+</span> <span class="n">_TermColors</span><span class="o">.</span><span class="n">ENDC</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="success"><a class="viewcode-back" href="../../util.html#util.msg.success">[docs]</a><span class="k">def</span> <span class="nf">success</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Output a string to the terminal colored green to indicate</span>
 <span class="sd">    success</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
-    <span class="nb">print</span><span class="p">(</span><span class="n">_TermColors</span><span class="o">.</span><span class="n">SUCCESS</span> <span class="o">+</span> <span class="n">string</span> <span class="o">+</span> <span class="n">_TermColors</span><span class="o">.</span><span class="n">ENDC</span><span class="p">)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">_TermColors</span><span class="o">.</span><span class="n">SUCCESS</span> <span class="o">+</span> <span class="n">string</span> <span class="o">+</span> <span class="n">_TermColors</span><span class="o">.</span><span class="n">ENDC</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="bold"><a class="viewcode-back" href="../../util.html#util.msg.bold">[docs]</a><span class="k">def</span> <span class="nf">bold</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Output a string in a bold weight&quot;&quot;&quot;</span></div>
-    <span class="nb">print</span><span class="p">(</span><span class="n">_TermColors</span><span class="o">.</span><span class="n">BOLD</span> <span class="o">+</span> <span class="n">string</span> <span class="o">+</span> <span class="n">_TermColors</span><span class="o">.</span><span class="n">ENDC</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot; Output a string in a bold weight&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">_TermColors</span><span class="o">.</span><span class="n">BOLD</span> <span class="o">+</span> <span class="n">string</span> <span class="o">+</span> <span class="n">_TermColors</span><span class="o">.</span><span class="n">ENDC</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

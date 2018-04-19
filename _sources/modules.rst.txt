@@ -14,6 +14,7 @@ pyro2
    compressible_react
    compressible_rk
    compressible_sdc
+   convergence
    diffusion
    examples
    incompressible
@@ -21,7 +22,12 @@ pyro2
    mesh
    multigrid
    plot
+   plotvar
    pyro
+   sedov_compare
+   setup
    simulation_null
+   smooth_error
+   sod_compare
    test
    util

@@ -240,20 +240,20 @@
 <div class="section" id="advection-solvers">
 <h1>Advection solvers<a class="headerlink" href="#advection-solvers" title="Permalink to this headline">¶</a></h1>
 <p>The linear advection equation:</p>
-<div class="math notranslate">
+<div class="math">
 \[a_t + u a_x + v a_y = 0\]</div>
 <p>provides a good basis for understanding the methods used for
 compressible hydrodynamics. Chapter 4 of the notes summarizes the
 numerical methods for advection that we implement in pyro.</p>
 <p>pyro has several solvers for linear advection:</p>
 <ul class="simple">
-<li><a class="reference internal" href="advection.html#module-advection" title="advection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">advection</span></code></a> implements the directionally unsplit corner transport upwind algorithm with piecewise linear reconstruction</li>
-<li><a class="reference internal" href="advection_fv4.html#module-advection_fv4" title="advection_fv4"><code class="xref py py-mod docutils literal notranslate"><span class="pre">advection_fv4</span></code></a> uses a fourth-order accurate finite-volume
+<li><a class="reference internal" href="advection.html#module-advection" title="advection"><code class="xref py py-mod docutils literal"><span class="pre">advection</span></code></a> implements the directionally unsplit corner transport upwind algorithm with piecewise linear reconstruction</li>
+<li><a class="reference internal" href="advection_fv4.html#module-advection_fv4" title="advection_fv4"><code class="xref py py-mod docutils literal"><span class="pre">advection_fv4</span></code></a> uses a fourth-order accurate finite-volume
 method with RK4 time integration</li>
-<li><a class="reference internal" href="advection_rk.html#module-advection_rk" title="advection_rk"><code class="xref py py-mod docutils literal notranslate"><span class="pre">advection_rk</span></code></a> uses a method of lines time-integration
+<li><a class="reference internal" href="advection_rk.html#module-advection_rk" title="advection_rk"><code class="xref py py-mod docutils literal"><span class="pre">advection_rk</span></code></a> uses a method of lines time-integration
 approach with piecewise linear spatial reconstruction for linear
 advection</li>
-<li><a class="reference internal" href="advection_weno.html#module-advection_weno" title="advection_weno"><code class="xref py py-mod docutils literal notranslate"><span class="pre">advection_weno</span></code></a> uses a WENO reconstruction and method of
+<li><a class="reference internal" href="advection_weno.html#module-advection_weno" title="advection_weno"><code class="xref py py-mod docutils literal"><span class="pre">advection_weno</span></code></a> uses a WENO reconstruction and method of
 lines time-integration</li>
 </ul>
 <p>The main parameters that affect this solver are:</p>
@@ -263,11 +263,11 @@ lines time-integration</li>
 <col width="83%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal notranslate"><span class="pre">[driver]</span></code></th>
+<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal"><span class="pre">[driver]</span></code></th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cfl</span></code></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">cfl</span></code></td>
 <td>the advective CFL number (what fraction of a zone can we cross in a single timestep)</td>
 </tr>
 </tbody>
@@ -278,21 +278,21 @@ lines time-integration</li>
 <col width="83%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal notranslate"><span class="pre">[advection]</span></code></th>
+<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal"><span class="pre">[advection]</span></code></th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">u</span></code></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">u</span></code></td>
 <td>the advective velocity in the x direction</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">v</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">v</span></code></td>
 <td>the advective velocity in the y direction</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">limiter</span></code></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">limiter</span></code></td>
 <td>what type of limiting to use in reconstructing the slopes. 0 means use an unlimited second-order
 centered difference. 1 is the MC limiter, and 2 is the 4th-order MC limiter</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">temporal_method</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">temporal_method</span></code></td>
 <td>the MOL integration method to use (RK2, TVD2, TVD3, RK4) (advection_rk only)</td>
 </tr>
 </tbody>
@@ -309,25 +309,25 @@ reconstruction, evolution, and averaging steps:</p>
 <div class="section" id="smooth">
 <h3>smooth<a class="headerlink" href="#smooth" title="Permalink to this headline">¶</a></h3>
 <p>The smooth problem initializes a Gaussian profile and advects it with
-<span class="math notranslate">\(u = v = 1\)</span> through periodic boundaries for a period. The result is that
+<span class="math">\(u = v = 1\)</span> through periodic boundaries for a period. The result is that
 the final state should be identical to the initial state—any
 disagreement is our numerical error. This is run as:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./pyro.py advection smooth inputs.smooth
+<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py advection smooth inputs.smooth
 </pre></div>
 </div>
 <div style="position: relative; padding-bottom: 75%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
     <iframe src="https://www.youtube.com/embed/712Y0ocuz2M?rel=0" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
 </div><br><p>By varying the resolution and comparing to the analytic solution, we
-can measure the convergence rate of the method. The <code class="docutils literal notranslate"><span class="pre">smooth_error.py</span></code>
-script in <code class="docutils literal notranslate"><span class="pre">analysis/</span></code> will compare an output file to the analytic
+can measure the convergence rate of the method. The <code class="docutils literal"><span class="pre">smooth_error.py</span></code>
+script in <code class="docutils literal"><span class="pre">analysis/</span></code> will compare an output file to the analytic
 solution for this problem.</p>
 <img alt="_images/smooth_converge.png" class="align-center" src="_images/smooth_converge.png" />
 <p>The points above are the L2-norm of the absolute error for the smooth
-advection problem after 1 period with <code class="docutils literal notranslate"><span class="pre">CFL=0.8</span></code>, for both the
-<code class="docutils literal notranslate"><span class="pre">advection</span></code> and <code class="docutils literal notranslate"><span class="pre">advection_fv4</span></code> solvers.  The dashed and dotted
+advection problem after 1 period with <code class="docutils literal"><span class="pre">CFL=0.8</span></code>, for both the
+<code class="docutils literal"><span class="pre">advection</span></code> and <code class="docutils literal"><span class="pre">advection_fv4</span></code> solvers.  The dashed and dotted
 lines show ideal scaling.  We see that we achieve nearly 2nd order
-convergence for the <code class="docutils literal notranslate"><span class="pre">advection</span></code> solver and 4th order convergence
-with the <code class="docutils literal notranslate"><span class="pre">advection_fv4</span></code> solver.  Departures from perfect scaling
+convergence for the <code class="docutils literal"><span class="pre">advection</span></code> solver and 4th order convergence
+with the <code class="docutils literal"><span class="pre">advection_fv4</span></code> solver.  Departures from perfect scaling
 are likely due to the use of limiters.</p>
 </div>
 <div class="section" id="tophat">

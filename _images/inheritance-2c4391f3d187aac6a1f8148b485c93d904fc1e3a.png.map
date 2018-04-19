@@ -1,0 +1,5 @@
+<map id="inheritance3c2109f193" name="inheritance3c2109f193">
+<area shape="rect" id="node1" href="#compressible.simulation.Simulation" target="_top" title="The main simulation class for the corner transport upwind" alt="" coords="300,55,556,80"/>
+<area shape="rect" id="node2" href="simulation_null.html#simulation_null.NullSimulation" target="_top" title="simulation_null.NullSimulation" alt="" coords="17,55,240,80"/>
+<area shape="rect" id="node3" href="#compressible.simulation.Variables" target="_top" title="a container class for easy access to the different compressible" alt="" coords="5,5,252,31"/>
+</map>

@@ -227,8 +227,8 @@
     <span class="k">if</span> <span class="n">ivars</span><span class="o">.</span><span class="n">naux</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">flux</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">irhox</span><span class="p">:</span><span class="n">ivars</span><span class="o">.</span><span class="n">irhox</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="n">ivars</span><span class="o">.</span><span class="n">naux</span><span class="p">]</span> <span class="o">=</span> \
             <span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">irho</span><span class="p">]</span><span class="o">*</span><span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ix</span><span class="p">:</span><span class="n">ivars</span><span class="o">.</span><span class="n">ix</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="n">ivars</span><span class="o">.</span><span class="n">naux</span><span class="p">]</span><span class="o">*</span><span class="n">un</span>
-</div>
-    <span class="k">return</span> <span class="n">flux</span>
+
+    <span class="k">return</span> <span class="n">flux</span></div>
 
 
 <div class="viewcode-block" id="fluxes"><a class="viewcode-back" href="../../compressible_fv4.html#compressible_fv4.fluxes.fluxes">[docs]</a><span class="k">def</span> <span class="nf">fluxes</span><span class="p">(</span><span class="n">myd</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span> <span class="n">solid</span><span class="p">,</span> <span class="n">tc</span><span class="p">):</span>
@@ -385,8 +385,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">):</span>
                 <span class="n">F_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">nu</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">U_avg</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="n">U_avg</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">))</span>
-</div>
-    <span class="k">return</span> <span class="n">F_x</span><span class="p">,</span> <span class="n">F_y</span>
+
+    <span class="k">return</span> <span class="n">F_x</span><span class="p">,</span> <span class="n">F_y</span></div>
 </pre></div>
 
            </div>

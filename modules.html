@@ -138,6 +138,7 @@
 <li class="toctree-l2"><a class="reference internal" href="compressible_react.html">compressible_react package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible_rk.html">compressible_rk package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible_sdc.html">compressible_sdc package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="convergence.html">convergence module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="diffusion.html">diffusion package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html">examples package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="incompressible.html">incompressible package</a></li>
@@ -145,8 +146,13 @@
 <li class="toctree-l2"><a class="reference internal" href="mesh.html">mesh package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="multigrid.html">multigrid package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot.html">plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotvar.html">plotvar module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyro.html">pyro module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sedov_compare.html">sedov_compare module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulation_null.html">simulation_null module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smooth_error.html">smooth_error module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sod_compare.html">sod_compare module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="test.html">test module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.html">util package</a></li>
 </ul>
@@ -279,7 +285,6 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="advection_fv4.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="advection_fv4.html#module-advection_fv4.fluxes">advection_fv4.fluxes module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="advection_fv4.html#advection-fv4-setup-module">advection_fv4.setup module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="advection_fv4.html#module-advection_fv4.simulation">advection_fv4.simulation module</a></li>
 </ul>
 </li>
@@ -311,8 +316,10 @@
 <li class="toctree-l4"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.bubble">compressible.problems.bubble module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.hse">compressible.problems.hse module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.kh">compressible.problems.kh module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.logo">compressible.problems.logo module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.quad">compressible.problems.quad module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.rt">compressible.problems.rt module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.rt2">compressible.problems.rt2 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.sedov">compressible.problems.sedov module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.sod">compressible.problems.sod module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.test">compressible.problems.test module</a></li>
@@ -324,7 +331,6 @@
 <li class="toctree-l2"><a class="reference internal" href="compressible.html#module-compressible.BC">compressible.BC module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible.html#module-compressible.derives">compressible.derives module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible.html#module-compressible.eos">compressible.eos module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compressible.html#compressible-setup-module">compressible.setup module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible.html#module-compressible.simulation">compressible.simulation module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible.html#module-compressible.unsplit_fluxes">compressible.unsplit_fluxes module</a></li>
 </ul>
@@ -374,6 +380,7 @@
 <li class="toctree-l2"><a class="reference internal" href="compressible_sdc.html#module-compressible_sdc.simulation">compressible_sdc.simulation module</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="convergence.html">convergence module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="diffusion.html">diffusion package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="diffusion.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="diffusion.problems.html">diffusion.problems package</a><ul>
@@ -421,7 +428,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="incompressible.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="incompressible.html#incompressible-setup-module">incompressible.setup module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="incompressible.html#module-incompressible.simulation">incompressible.simulation module</a></li>
 </ul>
 </li>
@@ -435,7 +441,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="lm_atm.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lm_atm.html#lm-atm-setup-module">lm_atm.setup module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lm_atm.html#module-lm_atm.simulation">lm_atm.simulation module</a></li>
 </ul>
 </li>
@@ -458,8 +463,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="plot.html">plot module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plotvar.html">plotvar module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pyro.html">pyro module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sedov_compare.html">sedov_compare module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">setup module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulation_null.html">simulation_null module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smooth_error.html">smooth_error module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sod_compare.html">sod_compare module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="test.html">test module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">util package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="util.html#submodules">Submodules</a></li>

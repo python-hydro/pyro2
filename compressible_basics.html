@@ -244,20 +244,20 @@
 <div class="section" id="compressible-hydrodynamics-solvers">
 <h1>Compressible hydrodynamics solvers<a class="headerlink" href="#compressible-hydrodynamics-solvers" title="Permalink to this headline">¶</a></h1>
 <p>The equations of compressible hydrodynamics take the form:</p>
-<div class="math notranslate">
+<div class="math">
 \[\begin{split}\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho U) &amp;= 0 \\
 \frac{\partial (\rho U)}{\partial t} + \nabla \cdot (\rho U U) + \nabla p &amp;= \rho g \\
 \frac{\partial (\rho E)}{\partial t} + \nabla \cdot [(\rho E + p ) U] &amp;= \rho U \cdot g\end{split}\]</div>
-<p>with <span class="math notranslate">\(\rho E = \rho e + \frac{1}{2} \rho |U|^2\)</span> and <span class="math notranslate">\(p = p(\rho, e)\)</span>.</p>
+<p>with <span class="math">\(\rho E = \rho e + \frac{1}{2} \rho |U|^2\)</span> and <span class="math">\(p = p(\rho, e)\)</span>.</p>
 <p>pyro has several compressible solvers:</p>
 <ul class="simple">
-<li><a class="reference internal" href="compressible.html#module-compressible" title="compressible"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compressible</span></code></a> is based on a directionally unsplit (the
+<li><a class="reference internal" href="compressible.html#module-compressible" title="compressible"><code class="xref py py-mod docutils literal"><span class="pre">compressible</span></code></a> is based on a directionally unsplit (the
 corner transport upwind algorithm) piecewise linear method for the
 Euler equations</li>
-<li><a class="reference internal" href="compressible_rk.html#module-compressible_rk" title="compressible_rk"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compressible_rk</span></code></a> uses a method of lines time-integration
+<li><a class="reference internal" href="compressible_rk.html#module-compressible_rk" title="compressible_rk"><code class="xref py py-mod docutils literal"><span class="pre">compressible_rk</span></code></a> uses a method of lines time-integration
 approach with piecewise linear spatial reconstruction for the Euler
 equations</li>
-<li><a class="reference internal" href="compressible_fv4.html#module-compressible_fv4" title="compressible_fv4"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compressible_fv4</span></code></a> uses a 4th order accurate method with RK4
+<li><a class="reference internal" href="compressible_fv4.html#module-compressible_fv4" title="compressible_fv4"><code class="xref py py-mod docutils literal"><span class="pre">compressible_fv4</span></code></a> uses a 4th order accurate method with RK4
 time integration</li>
 </ul>
 <p>The implementations here have flattening at shocks, artificial
@@ -271,11 +271,11 @@ direction is allowed.</p>
 <col width="76%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal notranslate"><span class="pre">[driver]</span></code></th>
+<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal"><span class="pre">[driver]</span></code></th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cfl</span></code></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">cfl</span></code></td>
 <td>the advective CFL number (what fraction of a zone can
 we cross in a single timestep)</td>
 </tr>
@@ -287,40 +287,40 @@ we cross in a single timestep)</td>
 <col width="74%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal notranslate"><span class="pre">[compressible]</span></code></th>
+<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal"><span class="pre">[compressible]</span></code></th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">use_flattening</span></code></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">use_flattening</span></code></td>
 <td>do we flatten the profiles at shocks? (0=no, 1=yes)</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">z0</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">z0</span></code></td>
 <td rowspan="3">the parameters that affect the flattening algorithm</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">z1</span></code></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">z1</span></code></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">delta</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">delta</span></code></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cvisc</span></code></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">cvisc</span></code></td>
 <td>the coefficient for the artifical viscosity</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">limiter</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">limiter</span></code></td>
 <td>what type of limiting to use in reconstructing the
 slopes. 0 means use an unlimited second-order centered
 difference. 1 is the MC limiter, and 2 is the 4th-order
 MC limiter</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">riemann</span></code></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">riemann</span></code></td>
 <td>which Riemann solver do we use? “HLLE” for the HLLE
 solver, or “CGF” for the Colella, Glaz, and Ferguson
 solver</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">grav</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">grav</span></code></td>
 <td>the gravitational acceleration (vertical/y direction)</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">temporal_method</span></code></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">temporal_method</span></code></td>
 <td>the MOL integration method to use (RK2, TVD2, TVD3, RK4)
-(<code class="docutils literal notranslate"><span class="pre">compressible_rk</span></code> and <code class="docutils literal notranslate"><span class="pre">compressible_fv4</span></code> only)</td>
+(<code class="docutils literal"><span class="pre">compressible_rk</span></code> and <code class="docutils literal"><span class="pre">compressible_fv4</span></code> only)</td>
 </tr>
 </tbody>
 </table>
@@ -330,11 +330,11 @@ solver</td>
 <col width="74%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal notranslate"><span class="pre">[eos]</span></code></th>
+<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal"><span class="pre">[eos]</span></code></th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">gamma</span></code></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">gamma</span></code></td>
 <td>the constant adiabatic index for the gas</td>
 </tr>
 </tbody>
@@ -343,18 +343,18 @@ solver</td>
 <h2>Example problems<a class="headerlink" href="#example-problems" title="Permalink to this headline">¶</a></h2>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The 4th-order accurate solver (<code class="docutils literal notranslate"><span class="pre">compressible_fv4</span></code>) requires that
+<p class="last">The 4th-order accurate solver (<code class="docutils literal"><span class="pre">compressible_fv4</span></code>) requires that
 the initialization create cell-averages accurate to 4th-order.  To
 allow for all the solvers to use the same problem setups, we assume
 that the initialization routines initialize cell-centers (which is
 fine for 2nd-order accuracy), and the
-<a class="reference internal" href="compressible_fv4.html#compressible_fv4.simulation.Simulation.preevolve" title="compressible_fv4.simulation.Simulation.preevolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">preevolve()</span></code></a> method will convert
+<a class="reference internal" href="compressible_fv4.html#compressible_fv4.simulation.Simulation.preevolve" title="compressible_fv4.simulation.Simulation.preevolve"><code class="xref py py-func docutils literal"><span class="pre">preevolve()</span></code></a> method will convert
 these to cell-averages automatically after initialization.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">All the compressible solvers share the same <code class="docutils literal notranslate"><span class="pre">problems/</span></code>
-directory, which lives in <code class="docutils literal notranslate"><span class="pre">compressible/problems/</span></code>.  For the
+<p class="last">All the compressible solvers share the same <code class="docutils literal"><span class="pre">problems/</span></code>
+directory, which lives in <code class="docutils literal"><span class="pre">compressible/problems/</span></code>.  For the
 other compressible solvers, we simply use a symbolic-link to this
 directory in the solver’s directory.</p>
 </div>
@@ -368,11 +368,11 @@ equation of state, so we can check our solution against these exact
 solutions. See Toro’s book for details on this problem and the exact
 Riemann solver.</p>
 <p>Because it is one-dimensional, we run it in narrow domains in the x- or y-directions. It can be run as:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./pyro.py compressible sod inputs.sod.x
+<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py compressible sod inputs.sod.x
 ./pyro.py compressible sod inputs.sod.y
 </pre></div>
 </div>
-<p>A simple script, <code class="docutils literal notranslate"><span class="pre">sod_compare.py</span></code> in <code class="docutils literal notranslate"><span class="pre">analysis/</span></code> will read a pyro output
+<p>A simple script, <code class="docutils literal"><span class="pre">sod_compare.py</span></code> in <code class="docutils literal"><span class="pre">analysis/</span></code> will read a pyro output
 file and plot the solution over the exact Sod solution. Below we see
 the result for a Sod run with 128 points in the x-direction, gamma =
 1.4, and run until t = 0.2 s.</p>
@@ -388,7 +388,7 @@ with contact steepening.</p>
 solution (Sedov 1959). A lot of energy is point into a point in a
 uniform medium and a blast wave propagates outward. The Sedov problem
 is run as:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./pyro.py compressible sedov inputs.sedov
+<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py compressible sedov inputs.sedov
 </pre></div>
 </div>
 <p>The video below shows the output from a 128 x 128 grid with the energy
@@ -401,7 +401,7 @@ circular explosion on a rectangular grid. To compare to the analytic
 solution, we need to radially bin the data. Since this is a 2-d
 explosion, the physical geometry it represents is a cylindrical blast
 wave, so we compare to Sedov’s cylindrical solution. The radial
-binning is done with the <code class="docutils literal notranslate"><span class="pre">sedov_compare.py</span></code> script in <code class="docutils literal notranslate"><span class="pre">analysis/</span></code></p>
+binning is done with the <code class="docutils literal"><span class="pre">sedov_compare.py</span></code> script in <code class="docutils literal"><span class="pre">analysis/</span></code></p>
 <img alt="_images/sedov_compare.png" class="align-center" src="_images/sedov_compare.png" />
 <p>This shows good agreement with the analytic solution.</p>
 </div>
@@ -412,7 +412,7 @@ domain and watches the complex interfaces that develop as shocks
 interact. This problem has appear in several places (and a <a class="reference external" href="http://planets.utsc.utoronto.ca/~pawel/Riemann.hydro.html">detailed
 investigation</a> is
 online by Pawel Artymowicz). It is run as:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./pyro.py compressible quad inputs.quad
+<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py compressible quad inputs.quad
 </pre></div>
 </div>
 <img alt="_images/quad.png" class="align-center" src="_images/quad.png" />
@@ -423,7 +423,7 @@ online by Pawel Artymowicz). It is run as:</p>
 perturbs the interface with a sinusoidal velocity. Hydrostatic
 boundary conditions are used to ensure any initial pressure waves can
 escape the domain. It is run as:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./pyro.py compressible er inputs.rt
+<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py compressible er inputs.rt
 </pre></div>
 </div>
 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
@@ -433,7 +433,7 @@ escape the domain. It is run as:</p>
 <h3>bubble<a class="headerlink" href="#bubble" title="Permalink to this headline">¶</a></h3>
 <p>The bubble problem initializes a hot spot in a stratified domain and
 watches it buoyantly rise and roll up. This is run as:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./pyro.py compressible bubble inputs.bubble
+<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py compressible bubble inputs.bubble
 </pre></div>
 </div>
 <img alt="_images/bubble.png" class="align-center" src="_images/bubble.png" />

@@ -600,8 +600,8 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Report simple grid information</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">level: </span><span class="si">{}</span><span class="s2">, grid: </span><span class="si">{}</span><span class="s2"> x </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span></div>
-            <span class="n">indent</span><span class="o">*</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">ny</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">level: </span><span class="si">{}</span><span class="s2">, grid: </span><span class="si">{}</span><span class="s2"> x </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">indent</span><span class="o">*</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">ny</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="CellCenterMG2d.get_solution"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.get_solution">[docs]</a>    <span class="k">def</span> <span class="nf">get_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -625,8 +625,8 @@
             <span class="k">assert</span> <span class="n">grid</span><span class="o">.</span><span class="n">dx</span> <span class="o">==</span> <span class="n">myg</span><span class="o">.</span><span class="n">dx</span> <span class="ow">and</span> <span class="n">grid</span><span class="o">.</span><span class="n">dy</span> <span class="o">==</span> <span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
 
             <span class="n">sol</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
-            <span class="n">sol</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
-            <span class="k">return</span> <span class="n">sol</span>
+            <span class="n">sol</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">sol</span></div>
 
 <div class="viewcode-block" id="CellCenterMG2d.get_solution_gradient"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.get_solution_gradient">[docs]</a>    <span class="k">def</span> <span class="nf">get_solution_gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -657,8 +657,8 @@
 
         <span class="n">gx</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span>
         <span class="n">gy</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
-</div>
-        <span class="k">return</span> <span class="n">gx</span><span class="p">,</span> <span class="n">gy</span>
+
+        <span class="k">return</span> <span class="n">gx</span><span class="p">,</span> <span class="n">gy</span></div>
 
 <div class="viewcode-block" id="CellCenterMG2d.get_solution_object"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.get_solution_object">[docs]</a>    <span class="k">def</span> <span class="nf">get_solution_object</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -669,8 +669,8 @@
 <span class="sd">        -------</span>
 <span class="sd">        out : CellCenterData2d object</span>
 
-<span class="sd">        &quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="CellCenterMG2d.init_solution"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.init_solution">[docs]</a>    <span class="k">def</span> <span class="nf">init_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -684,15 +684,15 @@
 <span class="sd">            values to initialize the solution to the elliptic problem.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span></div>
-        <span class="n">v</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+        <span class="n">v</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="CellCenterMG2d.init_zeros"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.init_zeros">[docs]</a>    <span class="k">def</span> <span class="nf">init_zeros</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set the initial solution to zero</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span></div>
-        <span class="n">v</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+        <span class="n">v</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span></div>
 
 <div class="viewcode-block" id="CellCenterMG2d.init_RHS"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.init_RHS">[docs]</a>    <span class="k">def</span> <span class="nf">init_RHS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -715,8 +715,8 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Source norm = &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_norm</span><span class="p">)</span>
-</div>
-        <span class="bp">self</span><span class="o">.</span><span class="n">initialized_rhs</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialized_rhs</span> <span class="o">=</span> <span class="mi">1</span></div>
 
     <span class="k">def</span> <span class="nf">_compute_residual</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; compute the residual and store it in the r variable&quot;&quot;&quot;</span>
@@ -809,8 +809,8 @@
 
                 <span class="n">plt</span><span class="o">.</span><span class="n">pause</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
                 <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;mg_</span><span class="si">%4.4d</span><span class="s2">.png&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">))</span></div>
-                <span class="bp">self</span><span class="o">.</span><span class="n">frame</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;mg_</span><span class="si">%4.4d</span><span class="s2">.png&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">frame</span> <span class="o">+=</span> <span class="mi">1</span></div>
 
 <div class="viewcode-block" id="CellCenterMG2d.solve"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.solve">[docs]</a>    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1.e-11</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -885,8 +885,8 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">num_cycles</span> <span class="o">=</span> <span class="n">cycle</span><span class="o">-</span><span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">relative_error</span> <span class="o">=</span> <span class="n">relative_error</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">residual_error</span> <span class="o">=</span> <span class="n">residual_error</span></div>
-        <span class="n">fp</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">residual_error</span> <span class="o">=</span> <span class="n">residual_error</span>
+        <span class="n">fp</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CellCenterMG2d.v_cycle"><a class="viewcode-back" href="../../multigrid.html#multigrid.MG.CellCenterMG2d.v_cycle">[docs]</a>    <span class="k">def</span> <span class="nf">v_cycle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -969,8 +969,8 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">smooth</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsmooth_bottom</span><span class="p">)</span>
-</div></div>
-            <span class="n">bp</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+
+            <span class="n">bp</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

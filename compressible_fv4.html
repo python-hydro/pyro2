@@ -148,6 +148,7 @@
 <li class="toctree-l2"><a class="reference internal" href="compressible_react.html">compressible_react package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible_rk.html">compressible_rk package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible_sdc.html">compressible_sdc package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="convergence.html">convergence module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="diffusion.html">diffusion package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html">examples package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="incompressible.html">incompressible package</a></li>
@@ -155,8 +156,13 @@
 <li class="toctree-l2"><a class="reference internal" href="mesh.html">mesh package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="multigrid.html">multigrid package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot.html">plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotvar.html">plotvar module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyro.html">pyro module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sedov_compare.html">sedov_compare module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulation_null.html">simulation_null module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smooth_error.html">smooth_error module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sod_compare.html">sod_compare module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="test.html">test module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.html">util package</a></li>
 </ul>
@@ -297,7 +303,7 @@ implementing the algorithm from McCorquodale &amp; Colella (2011).</p>
 <dl class="class">
 <dt id="compressible_fv4.simulation.Simulation">
 <em class="property">class </em><code class="descclassname">compressible_fv4.simulation.</code><code class="descname">Simulation</code><span class="sig-paren">(</span><em>solver_name</em>, <em>problem_name</em>, <em>rp</em>, <em>timers=None</em>, <em>data_class=&lt;class 'mesh.fv.FV2d'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible_fv4/simulation.html#Simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible_fv4.simulation.Simulation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="compressible_rk.html#compressible_rk.simulation.Simulation" title="compressible_rk.simulation.Simulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">compressible_rk.simulation.Simulation</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="compressible_rk.html#compressible_rk.simulation.Simulation" title="compressible_rk.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">compressible_rk.simulation.Simulation</span></code></a></p>
 <dl class="method">
 <dt id="compressible_fv4.simulation.Simulation.evolve">
 <code class="descname">evolve</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible_fv4/simulation.html#Simulation.evolve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible_fv4.simulation.Simulation.evolve" title="Permalink to this definition">¶</a></dt>
@@ -308,9 +314,7 @@ timestep dt.</p>
 <dl class="method">
 <dt id="compressible_fv4.simulation.Simulation.initialize">
 <code class="descname">initialize</code><span class="sig-paren">(</span><em>ng=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible_fv4/simulation.html#Simulation.initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible_fv4.simulation.Simulation.initialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize the grid and variables for compressible flow and set
-the initial conditions for the chosen problem.</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="compressible_fv4.simulation.Simulation.preevolve">

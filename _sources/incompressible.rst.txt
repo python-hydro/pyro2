@@ -16,14 +16,6 @@ Subpackages
 Submodules
 ----------
 
-incompressible\.setup module
-----------------------------
-
-.. automodule:: incompressible.setup
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 incompressible\.simulation module
 ---------------------------------
 
