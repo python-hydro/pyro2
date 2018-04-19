@@ -34,11 +34,14 @@ The Sedov problem ran on a 128 x 128 grid, with gamma = 1.4, and until t = 0.1, 
    ./pyro.py compressible_fv4 sedov inputs.sedov
 
 .. image:: ./solver_comparisons/sedov.png
-
+   :align: center
+	
 .. image:: ./solver_comparisons/sedov_rk.png
-  
+   :align: center
+	   
 .. image:: ./solver_comparisons/sedov_fv4.png
-
+   :align: center
+	   
 Quad
 ^^^^
 The quad problem ran on a 256 x 256 grid until t = 0.8, which can be run as:
@@ -50,13 +53,13 @@ The quad problem ran on a 256 x 256 grid until t = 0.8, which can be run as:
    ./pyro.py compressible_fv4 quad inputs.quad
 
 .. image:: ./solver_comparisons/quad.png
-   :width: 30%
+   :align: center
 	
 .. image:: ./solver_comparisons/quad_rk.png
-   :width: 30%
+   :align: center
 
 .. image:: ./solver_comparisons/quad_fv4.png
-   :width: 30%
+   :align: center
 	      
    
 Bubble
@@ -70,13 +73,13 @@ The bubble problem ran on a 128 x 256 grid until t = 3.0, which can be run as:
    ./pyro.py compressible_fv4 bubble inputs.bubble
 
 .. image:: ./solver_comparisons/bubble.png
-   :width: 30%
+   :align: center
 
 .. image:: ./solver_comparisons/bubble_rk.png
-   :width: 30%
+   :align: center
 
 .. image:: ./solver_comparisons/bubble_fv4.png
-   :width: 30%
+   :align: center
 
 
 Rayleigh-Taylor
