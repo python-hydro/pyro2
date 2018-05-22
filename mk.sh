@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # this script builds the shared-object libraries that interface
 # Fortran with python for some lower-level pyro routines.  f2py is
