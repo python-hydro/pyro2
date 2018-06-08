@@ -1,0 +1,39 @@
+# simple inputs files for the four-corner problem.
+
+[driver]
+max_steps = 1000
+tmax = 100.0
+
+
+[io]
+basename = bubble_
+n_out = 100
+
+
+[mesh]
+nx = 128
+ny = 256
+xmax = 4.0
+ymax = 8.0
+
+xlboundary = outflow
+xrboundary = outflow
+
+ylboundary = hse
+yrboundary = hse
+
+
+[bubble]
+scale_height = 1.0
+dens_base = 1000.0
+
+x_pert = 2.0
+y_pert = 2.0
+r_pert = 0.25
+pert_amplitude_factor = 2.0
+
+
+[compressible]
+grav = -2.0
+
+limiter = 2

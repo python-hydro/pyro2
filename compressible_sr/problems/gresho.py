@@ -18,7 +18,7 @@ def init_data(my_data, rp):
         sys.exit()
 
     # get the density and velocities
-    dens = my_data.get_var("density")
+    dens = my_data.get_var("densityW")
     xmom = my_data.get_var("x-momentum")
     ymom = my_data.get_var("y-momentum")
     ener = my_data.get_var("energy")
