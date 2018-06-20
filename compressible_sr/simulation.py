@@ -52,62 +52,6 @@ class Variables(object):
             self.ix = -1
 
 
-def cons_to_prim(U, gamma, ivars, myg):
-    """ convert an input vector of conserved variables to primitive variables """
-
-    def f(p, U_ij):
-        D = U_ij[ivars.idens]
-        tau = U_ij[ivars.iener]
-
-        if abs(tau+p) < 1.e-6:
-            u = U_ij[ivars.ixmom]
-            v = U_ij[ivars.iymom]
-        else:
-            u = U_ij[ivars.ixmom] / (tau + p + D)
-            v = U_ij[ivars.iymom] / (tau + p + D)
-        W = 1 / np.sqrt(1 - u**2 - v**2)
-
-        return (gamma-1) * (tau + D*(1-W) + p*(1-W**2)) / W**2 - p
-
-    q = myg.scratch_array(nvar=ivars.nq)
-
-    for j in range(len(q[0, :, 0])):
-        for i in range(len(q[:, 0, 0])):
-            pmax = max((gamma-1)*U[i, j, ivars.iener], 1e-2)
-
-            pmin = max(1e-6*pmax, np.sqrt(U[i, j, ivars.ixmom]**2+U[i, j, ivars.iymom]**2) - U[i, j, ivars.iener] - U[i, j, ivars.idens])
-
-            if f(pmin, U[i, j, :])*f(pmax, U[i, j, :]) > 0:
-                pmin *= 0.01
-            if f(pmin, U[i, j, :])*f(pmax, U[i, j, :]) > 0:
-                pmax = min(pmax*100, 1)
-            # print(pmin, pmax)
-
-            try:
-                q[i, j, ivars.ip] = brentq(f, pmin, pmax, rtol=1.e-5, args=(U[i, j, :]))
-            except ValueError:
-                q[i, j, ivars.ip] = max((gamma-1)*U[i, j, ivars.iener], 0)
-
-    idx = abs(U[:, :, ivars.iener] + U[:, :, ivars.idens] + q[:, :, ivars.ip]) < 1.e-5
-
-    q[:, :, ivars.iu][~idx] = U[:, :, ivars.ixmom][~idx]/(U[:, :, ivars.iener][~idx] + U[:, :, ivars.idens][~idx] + q[:, :, ivars.ip][~idx])
-    q[:, :, ivars.iv][~idx] = U[:, :, ivars.iymom][~idx]/(U[:, :, ivars.iener][~idx] + U[:, :, ivars.idens][~idx] + q[:, :, ivars.ip][~idx])
-
-    q[:, :, ivars.iu][idx] = U[:, :, ivars.ixmom][idx]
-    q[:, :, ivars.iv][idx] = U[:, :, ivars.iymom][idx]
-
-    W = 1/np.sqrt(1 - q[:, :, ivars.iu]**2 - q[:, :, ivars.iv]**2)
-
-    q[:, :, ivars.irho] = U[:, :, ivars.idens] / W[:, :]
-
-    if ivars.naux > 0:
-        for nq, nu in zip(range(ivars.ix, ivars.ix+ivars.naux),
-                          range(ivars.irhox, ivars.irhox+ivars.naux)):
-            q[:, :, nq] = U[:, :, nu]/(q[:, :, ivars.irho] * W)
-
-    return q
-
-
 def prim_to_cons(q, gamma, ivars, myg):
     """ convert an input vector of primitive variables to conserved variables """
 
@@ -278,7 +222,11 @@ class Simulation(NullSimulation):
         # outside of a running simulation.
         gamma = self.cc_data.get_aux("gamma")
 
-        q = cons_to_prim(self.cc_data.data, gamma, ivars, self.cc_data.grid)
+        myg = self.cc_data.grid
+
+        # q = cons_to_prim(self.cc_data.data, gamma, ivars, self.cc_data.grid)
+
+        q = flx.cons_to_prim_wrapper(self.cc_data.data, gamma, ivars, myg)
 
         rho = q[:, :, ivars.irho]
         u = q[:, :, ivars.iu]
@@ -288,7 +236,6 @@ class Simulation(NullSimulation):
 
         magvel = np.sqrt(u**2 + v**2)
 
-        myg = self.cc_data.grid
 
         fields = [rho, magvel, p, e]
         field_names = [r"$\rho$", r"U", "p", "e"]

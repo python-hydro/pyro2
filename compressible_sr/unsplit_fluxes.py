@@ -123,6 +123,7 @@ Updating U_{i,j}:
 """
 
 import compressible_sr.interface_f as ifc
+import compressible_sr.c2p_f as c2p
 import compressible_sr as comp
 import mesh.reconstruction as reconstruction
 import mesh.array_indexer as ai
@@ -179,7 +180,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     dens = my_data.get_var("densityW")
     ymom = my_data.get_var("y-momentum")
 
-    q = comp.cons_to_prim(my_data.data, gamma, ivars, myg)
+    q = cons_to_prim_wrapper(my_data.data, gamma, ivars, myg)
 
     #=========================================================================
     # compute the flattening coefficients
@@ -292,10 +293,10 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     else:
         msg.fail("ERROR: Riemann solver undefined")
 
-    q_xl = comp.cons_to_prim(U_xl, gamma, ivars, myg)
-    q_xr = comp.cons_to_prim(U_xr, gamma, ivars, myg)
-    q_yl = comp.cons_to_prim(U_yl, gamma, ivars, myg)
-    q_yr = comp.cons_to_prim(U_yr, gamma, ivars, myg)
+    q_xl = cons_to_prim_wrapper(U_xl, gamma, ivars, myg)
+    q_xr = cons_to_prim_wrapper(U_xr, gamma, ivars, myg)
+    q_yl = cons_to_prim_wrapper(U_yl, gamma, ivars, myg)
+    q_yr = cons_to_prim_wrapper(U_yr, gamma, ivars, myg)
 
     _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
                       ivars.nvar, ivars.idens, ivars.ixmom,
@@ -398,10 +399,10 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     tm_riem.begin()
 
-    q_xl = comp.cons_to_prim(U_xl, gamma, ivars, myg)
-    q_xr = comp.cons_to_prim(U_xr, gamma, ivars, myg)
-    q_yl = comp.cons_to_prim(U_yl, gamma, ivars, myg)
-    q_yr = comp.cons_to_prim(U_yr, gamma, ivars, myg)
+    q_xl = cons_to_prim_wrapper(U_xl, gamma, ivars, myg)
+    q_xr = cons_to_prim_wrapper(U_xr, gamma, ivars, myg)
+    q_yl = cons_to_prim_wrapper(U_yl, gamma, ivars, myg)
+    q_yr = cons_to_prim_wrapper(U_yr, gamma, ivars, myg)
 
     _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
                       ivars.nvar, ivars.idens, ivars.ixmom,
@@ -452,3 +453,19 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     tm_flux.end()
 
     return F_x, F_y
+
+def cons_to_prim_wrapper(U, gamma, ivars, myg):
+    """
+    wrapper for fortran cons to prim routine
+    """
+
+    q = myg.scratch_array(nvar=ivars.nq)
+
+    q[:,:,:] = c2p.cons_to_prim(U, myg.qx, myg.qy,
+                         ivars.irho, ivars.iu, ivars.iv,
+                         ivars.ip, ivars.ix, ivars.irhox,
+                         ivars.idens, ivars.ixmom, ivars.iymom,
+                         ivars.iener, ivars.nvar, ivars.naux,
+                         gamma)
+
+    return q
