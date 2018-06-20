@@ -309,9 +309,9 @@ subroutine riemann_cgf(idir, qx, qy, ng, &
   double precision, intent(inout) :: q_r(0:qx-1,0:qy-1,0:nvar-1)
   double precision, intent(  out) :: F(0:qx-1,0:qy-1,0:nvar-1)
 
-!f2py depend(qx, qy, nvar) :: U_l, U_r, F
-!f2py intent(in) :: U_l, U_r
-!f2py intent(out) :: F
+  !f2py depend(qx, qy, nvar) :: q_l, q_r, U_l, U_r
+  !f2py intent(in) :: q_l, q_r, U_l, U_r
+  !f2py intent(out) :: F
 
   ! Solve riemann shock tube problem for a general equation of
   ! state using the method of Colella, Glaz, and Ferguson.  See
@@ -963,15 +963,7 @@ subroutine riemann_HLLC(idir, qx, qy, ng, &
   double precision :: rho_r, un_r, ut_r, rhoe_r, p_r
   double precision :: xn(nspec)
 
-  ! double precision :: rhostar_l, rhostar_r, rho_avg
-  ! double precision :: ustar, pstar
-  ! double precision :: Q, p_min, p_max, p_lr, p_guess
-  ! double precision :: factor, factor2
-  ! double precision :: g_l, g_r, A_l, B_l, A_r, B_r, z
-  ! double precision :: S_l, S_r, S_c
-  ! double precision :: c_l, c_r, c_avg
-
-  double precision :: S_HLLE, F_S, a_star, A, B
+  double precision :: S_HLLE, E_HLLE, F_S, a_star, A, B
   double precision :: p_lstar, p_rstar, a_l, a_r, c_l, c_r
   double precision :: U_HLLE(0:nvar-1)
   double precision :: F_HLLE(0:nvar-1)
@@ -982,7 +974,6 @@ subroutine riemann_HLLC(idir, qx, qy, ng, &
 
   double precision :: U_state(0:nvar-1)
   double precision :: q_state(0:nvar-1)
-  ! double precision :: HLLCfactor
 
 
 
@@ -1033,8 +1024,8 @@ subroutine riemann_HLLC(idir, qx, qy, ng, &
         a_l = 0.5d0*(un_l+un_r - c_l-c_r) / (1.0d0-0.25d0*(un_l+un_r)*(c_l+c_r))
         a_r = 0.5d0*(un_l+un_r + c_l+c_r) / (1.0d0+0.25d0*(un_l+un_r)*(c_l+c_r))
 
-        ! a_l = -1.0d0
-        ! a_r = 1.0d0
+        a_l = -1.0d0
+        a_r = 1.0d0
 
         call consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nvar, nspec, &
                       U_l(i,j,:), q_l(i,j,:), F_l)
@@ -1062,8 +1053,10 @@ subroutine riemann_HLLC(idir, qx, qy, ng, &
             F_S = F_HLLE(iymom)
         endif
 
-        a_star = ( U_HLLE(iener) + F_S - &
-            sqrt( (U_HLLE(iener) + F_S)**2 +  &
+        E_HLLE = U_HLLE(iener) + U_HLLE(idens)
+
+        a_star = ( E_HLLE + F_S - &
+            sqrt( (E_HLLE + F_S)**2 -  &
             S_HLLE * 2.0d0 * F_HLLE(iener) ) ) / &
             (2.0d0 * F_HLLE(iener))
 
@@ -1339,6 +1332,10 @@ subroutine riemann_HLLC(idir, qx, qy, ng, &
 end subroutine riemann_HLLC
 
 subroutine consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nvar, nspec, U_state, q_state, F)
+
+!f2py depend(nvar) :: U_state, q_state, F
+!f2py intent(in) :: U_state, q_state
+!f2py intent(out) :: F
 
   integer, intent(in) :: idir
   double precision, intent(in) :: gamma
