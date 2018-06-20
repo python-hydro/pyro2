@@ -1,28 +1,39 @@
 import numpy as np
 
 import compressible_sr.eos as eos
+import compressible_sr as comp
 
 
-def derive_primitives(myd, varnames):
+def derive_primitives(myd, varnames, ivars, myg):
     """
     derive desired primitive variables from conserved state
     """
 
     # get the variables we need
-    dens = myd.get_var("densityW")
-    xmom = myd.get_var("x-momentum")
-    ymom = myd.get_var("y-momentum")
-    ener = myd.get_var("energy")
+    # dens = myd.get_var("densityW")
+    # xmom = myd.get_var("x-momentum")
+    # ymom = myd.get_var("y-momentum")
+    # ener = myd.get_var("energy")
+
+    gamma = myd.get_aux("gamma")
+
+    q = comp.cons_to_prim(myd.data, gamma, ivars, myg)
 
     derived_vars = []
 
-    u = xmom/dens
-    v = ymom/dens
+    dens = q[:, :, ivars.irho]
+    u = q[:, :, ivars.iu]
+    v = q[:, :, ivars.iv]
+    p = q[:, :, ivars.ip]
+    e = eos.rhoe(gamma, p)/dens
 
-    e = (ener - 0.5*dens*(u*u + v*v))/dens
+    # u = xmom/dens
+    # v = ymom/dens
+    #
+    # e = (ener - 0.5*dens*(u*u + v*v))/dens
 
     gamma = myd.get_aux("gamma")
-    p = eos.pres(gamma, dens, e)
+    # p = eos.pres(gamma, dens, e)
 
     if isinstance(varnames, str):
         wanted = [varnames]

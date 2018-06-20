@@ -5,6 +5,8 @@ import mesh.patch as patch
 import numpy as np
 from util import msg
 
+import compressible_sr.eos as eos
+
 
 def init_data(my_data, rp):
     """ initialize a smooth advection problem for testing convergence """
@@ -26,7 +28,7 @@ def init_data(my_data, rp):
     # initialize the components, remember, that ener here is rho*eint
     # + 0.5*rho*v**2, where eint is the specific internal energy
     # (erg/g)
-    dens[:, :] = 1.0
+    dens[:, :] = 0.05
     xmom[:, :] = 0.0
     ymom[:, :] = 0.0
 
@@ -42,18 +44,24 @@ def init_data(my_data, rp):
     yctr = 0.5*(ymin + ymax)
 
     # this is identical to the advection/smooth problem
-    dens[:, :] = 1.0 + np.exp(-60.0*((my_data.grid.x2d-xctr)**2 +
-                                    (my_data.grid.y2d-yctr)**2))
+    dens[:, :] = 0.05 * (1  + np.exp(-60.0*((my_data.grid.x2d-xctr)**2 +
+                                    (my_data.grid.y2d-yctr)**2)))
 
     # velocity is diagonal
-    u = 1.0
-    v = 1.0
-    xmom[:, :] = dens[:, :]*u
-    ymom[:, :] = dens[:, :]*v
+    u = 0.02
+    v = 0.02
 
     # pressure is constant
-    p = 1.0
-    ener[:, :] = p/(gamma - 1.0) + 0.5*(xmom[:, :]**2 + ymom[:, :]**2)/dens[:, :]
+    p = 0.05
+
+    rhoh = eos.rhoh_from_rho_p(gamma, dens, p)
+
+    W = np.sqrt(1-u**2-v**2)
+    dens[:,:] *= W
+    xmom[:, :] = rhoh[:, :]*u*W**2
+    ymom[:, :] = rhoh[:, :]*v*W**2
+
+    ener[:,:] = rhoh[:,:]*W**2 - p - dens[:,:]
 
 
 def finalize():

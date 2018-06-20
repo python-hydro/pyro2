@@ -59,8 +59,12 @@ def cons_to_prim(U, gamma, ivars, myg):
         D = U_ij[ivars.idens]
         tau = U_ij[ivars.iener]
 
-        u = U_ij[ivars.ixmom] / (tau + p)
-        v = U_ij[ivars.iymom] / (tau + p)
+        if abs(tau+p) < 1.e-6:
+            u = U_ij[ivars.ixmom]
+            v = U_ij[ivars.iymom]
+        else:
+            u = U_ij[ivars.ixmom] / (tau + p + D)
+            v = U_ij[ivars.iymom] / (tau + p + D)
         W = 1 / np.sqrt(1 - u**2 - v**2)
 
         return (gamma-1) * (tau + D*(1-W) + p*(1-W**2)) / W**2 - p
@@ -69,14 +73,30 @@ def cons_to_prim(U, gamma, ivars, myg):
 
     for j in range(len(q[0, :, 0])):
         for i in range(len(q[:, 0, 0])):
-            pmin = (gamma-1)*U[i, j, ivars.iener]
-            pmax = np.sqrt(U[i, j, ivars.imom]**2+U[i, j, ivars.iymom]**2) - U[i, j, ivars.iener] - U[i, j, ivars.idens]
-            q[i, j, ivars.ip] = brentq(f, pmin, pmax, args=(U[i, j, :]))
+            pmax = max((gamma-1)*U[i, j, ivars.iener], 1e-2)
 
-    q[:, :, ivars.iu] = U[:, :, ivars.ixmom]/(U[:, :, ivars.iener] + U[:, :, ivars.idens] + q[:, :, ivars.ip])
-    q[:, :, ivars.iv] = U[:, :, ivars.iymom]/(U[:, :, ivars.iener] + U[:, :, ivars.idens] + q[:, :, ivars.ip])
+            pmin = max(1e-6*pmax, np.sqrt(U[i, j, ivars.ixmom]**2+U[i, j, ivars.iymom]**2) - U[i, j, ivars.iener] - U[i, j, ivars.idens])
 
-    W = 1/np.sqrt(1 - q[:, :, ivars.iu]**2 + q[:, :, ivars.iv]**2)
+            if f(pmin, U[i, j, :])*f(pmax, U[i, j, :]) > 0:
+                pmin *= 0.01
+            if f(pmin, U[i, j, :])*f(pmax, U[i, j, :]) > 0:
+                pmax = min(pmax*100, 1)
+            # print(pmin, pmax)
+
+            try:
+                q[i, j, ivars.ip] = brentq(f, pmin, pmax, rtol=1.e-5, args=(U[i, j, :]))
+            except ValueError:
+                q[i, j, ivars.ip] = max((gamma-1)*U[i, j, ivars.iener], 0)
+
+    idx = abs(U[:, :, ivars.iener] + U[:, :, ivars.idens] + q[:, :, ivars.ip]) < 1.e-5
+
+    q[:, :, ivars.iu][~idx] = U[:, :, ivars.ixmom][~idx]/(U[:, :, ivars.iener][~idx] + U[:, :, ivars.idens][~idx] + q[:, :, ivars.ip][~idx])
+    q[:, :, ivars.iv][~idx] = U[:, :, ivars.iymom][~idx]/(U[:, :, ivars.iener][~idx] + U[:, :, ivars.idens][~idx] + q[:, :, ivars.ip][~idx])
+
+    q[:, :, ivars.iu][idx] = U[:, :, ivars.ixmom][idx]
+    q[:, :, ivars.iv][idx] = U[:, :, ivars.iymom][idx]
+
+    W = 1/np.sqrt(1 - q[:, :, ivars.iu]**2 - q[:, :, ivars.iv]**2)
 
     q[:, :, ivars.irho] = U[:, :, ivars.idens] / W[:, :]
 

@@ -17,6 +17,7 @@ if [ "$1" == "clean" ]; then
     rm -rf mesh/*.so
     rm -rf incompressible/*.so
     rm -rf compressible/*.so
+    rm -rf compressible_sr/*.so
     rm -rf lm_atm/*.so
     find . -name "*.pyc" -exec rm -f {} \;
     find . -type d -name "__pycache__" -exec rm -rf {} \;

@@ -128,6 +128,7 @@ import mesh.reconstruction as reconstruction
 import mesh.array_indexer as ai
 
 from util import msg
+import numpy
 
 
 def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
@@ -310,7 +311,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
                       ivars.irho, ivars.iu, ivars.iv, ivars.ip,
                       ivars.naux,
                       solid.yl, solid.yr,
-                      gamma, U_yl, U_yr)
+                      gamma, U_yl, U_yr, q_yl, q_yr)
 
     F_x = ai.ArrayIndexer(d=_fx, grid=myg)
     F_y = ai.ArrayIndexer(d=_fy, grid=myg)
@@ -416,7 +417,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
                       ivars.irho, ivars.iu, ivars.iv, ivars.ip,
                       ivars.naux,
                       solid.yl, solid.yr,
-                      gamma, U_yl, U_yr, q_xl, q_xr)
+                      gamma, U_yl, U_yr, q_yl, q_yr)
 
     F_x = ai.ArrayIndexer(d=_fx, grid=myg)
     F_y = ai.ArrayIndexer(d=_fy, grid=myg)

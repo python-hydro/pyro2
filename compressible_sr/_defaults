@@ -20,4 +20,3 @@ limiter = 2               ; limiter (0 = none, 1 = 2nd order, 2 = 4th order)
 grav = 0.0                ; gravitational acceleration (in y-direction)
 
 riemann = HLLC            ; HLLC or CGF
-

@@ -7,6 +7,7 @@
 from numpy.distutils.core import setup, Extension
 
 ext_modules = [Extension("compressible.interface_f", ["compressible/interface_f.f90"]),
+               Extension("compressible_sr.interface_f", ["compressible_sr/interface_f.f90"]),
                Extension("advection_fv4.interface_f", ["advection_fv4/interface_states.f90"]),
                Extension("lm_atm.LM_atm_interface_f", ["lm_atm/LM_atm_interface_f.f90"]),
                Extension("incompressible.incomp_interface_f", ["incompressible/incomp_interface_f.f90"])]

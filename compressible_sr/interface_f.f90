@@ -45,17 +45,17 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
   ! the primitive variable formulation of the Euler equations
   ! projected in the x-direction is:
   !
-  !        / u   r   0   0 \
+  !        / u   r   0   0 &
   !        | 0   u   0  1/r |
   !    A = | 0   0   u   0  |
-  !        \ 0  rc^2 0   u  /
+  !        & 0  rc^2 0   u  /
   !
   ! The right eigenvectors are
   !
-  !        /  1  \        / 1 \        / 0 \        /  1  \
+  !        /  1  &        / 1 &        / 0 &        /  1  &
   !        |-c/r |        | 0 |        | 0 |        | c/r |
   !   r1 = |  0  |   r2 = | 0 |   r3 = | 1 |   r4 = |  0  |
-  !        \ c^2 /        \ 0 /        \ 0 /        \ c^2 /
+  !        & c^2 /        & 0 /        & 0 /        & c^2 /
   !
   ! In particular, we see from r3 that the transverse velocity (v in
   ! this case) is simply advected at a speed u in the x-direction.
@@ -91,7 +91,7 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
   double precision :: dtdx, dtdx4
   double precision :: cs2, v2, Ap, Am, W, h, Delta
 
-  double precision :: sum, sum_l, sum_r, factor
+  double precision :: summ, sum_l, sum_r, factor
 
   integer :: ns
 
@@ -110,7 +110,7 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
         dq(:) = dqv(i,j,:)
         q(:) = qv(i,j,:)
 
-        cs = gamma*q(ip)/q(irho)
+        cs2 = gamma*q(ip)/q(irho)
         v2 = sum(q(iu:iv)**2)
         h = 1 + gamma / (gamma - 1.0d0) * q(ip) / q(irho)
 
@@ -123,23 +123,54 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
         ! compute the eigenvalues and eigenvectors
         if (idir == 1) then
            eval(1:2) = [q(iu), q(iu)]
-           eval(0) = 1.0d0 / (1.0d0 - v2 * cs2) * (q(iu)*(1.0d0-cs2) - sqrt(cs2) * sqrt((1.0d0-v2) * (1.0d0-v2*cs2 - q(iu)**2*(1.0d0-cs2))))
-           eval(3) = 1.0d0 / (1.0d0 - v2 * cs2) * (q(iu)*(1-cs2) + sqrt(cs2) * sqrt((1.0d0-v2) * (1.0d0-v2*cs2 - q(iu)**2*(1.0d0-cs2))))
+           eval(0) = 1.0d0 / (1.0d0 - v2 * cs2) *&
+                (q(iu)*(1.0d0-cs2) - sqrt(cs2) * sqrt((1.0d0-v2) *&
+                (1.0d0-v2*cs2 - q(iu)**2*(1.0d0-cs2))))
+           eval(3) = 1.0d0 / (1.0d0 - v2 * cs2) * &
+                (q(iu)*(1.0d0-cs2) + sqrt(cs2) * sqrt((1.0d0-v2) *&
+                (1.0d0-v2*cs2 - q(iu)**2*(1.0d0-cs2))))
 
            Am = (1.0d0-q(iu)**2) / (1.0d0-q(iu)*eval(0))
            Ap = (1.0d0-q(iu)**2) / (1.0d0-q(iu)*eval(3))
 
            Delta = h**3*W * (h-1.0d0) * (1.0d0-q(iu)**2) * (Ap*eval(3) - Am*eval(0))
 
-           lvec(0,0:ns-1) = [ h*W*Ap*(q(iu)-eval(3)), 1.0d0+W**2*(v2-q(iu)**2)*(2.0d0*h-1.0d0) * (1.0d0-Ap) - h*Ap, W**2*q(iv)*(2.0d0*h-1.0d0)*Ap * (q(iu)-eval(3)), -q(iu) - W**2*(v2-q(iu)**2) * (2.0d0*h-1.0d0)*(q(iu)-Ap*eval(3)) + h * Ap*eval(3)  ]
-           lvec(1,0:ns-1) = [ W*h/(h-1.0d0), W**2*q(iu)/(h-1.0d0), W**2*q(iv)/(h-1.0d0), -W**2/(h-1.0d0) ]
-           lvec(2,0:ns-1) = [ 0.0d0, q(iu)*q(iv)/(h*(1.0d0-q(iu)**2)), (1.0d0-q(iu)**2)/(h*(1.0d0-q(iu)**2)), -q(iv)/(h*(1.0d0-q(iu)**2)) ]
-           lvec(3,0:ns-1) = [ h*W*Am*(q(iu)-eval(0)), 1.0d0+W**2*(v2-q(iu)**2)*(2.0d0*h-1.0d0) * (1.0d0-Am) - h*Am, W**2*q(iv)*(2.0d0*h-1.0d0)*Am * (q(iu)-eval(0)), -q(iu) - W**2*(v2-q(iu)**2) * (2.0d0*h-1.0d0)*(q(iu)-Am*eval(0)) + h * Am*eval(0)    ]
+           lvec(0,0:ns-1) = [ h*W*Ap*(q(iu)-eval(3)) - q(iu) - W**2*(v2-q(iu)**2)*&
+                (2.0d0*h-1.0d0)*(q(iu)-Ap*eval(3)) + h*Ap*eval(3),&
+                1.0d0+W**2*(v2-q(iu)**2)*(2.0d0*h-1.0d0) * (1.0d0-Ap) - h*Ap,&
+                W**2*q(iv)*(2.0d0*h-1.0d0)*Ap * (q(iu)-eval(3)),&
+                -q(iu) - W**2*(v2-q(iu)**2) *&
+                (2.0d0*h-1.0d0)*(q(iu)-Ap*eval(3)) + h * Ap*eval(3)  ]
 
-           rvec(0,0:ns-1) = [1.0d0, h*W*Am*eval(0), h*W*q(iv), h*W*Am-1.0d0]
-           rvec(1,0:ns-1) = [1.0d0/W, q(iu),       q(iv), 1.0d0-1.0d0/W ]
-           rvec(2,0:ns-1) = [W*q(iv), 2.0d0*h*W**2*q(iu),       h*(1.0d0 + 2.0d0*W**2*q(iv)**2), 2*h*W**2*q(iv)-W*q(iv) ]
-           rvec(3,0:ns-1) = [1.0d0, h*W*Ap*eval(3),  h*W*q(iv), h*W*Ap-1.0d0 ]
+           lvec(0,0:ns-1) = lvec(0,0:ns-1) * h**2 / Delta
+
+           lvec(1,0:ns-1) = [ h-W, W*q(iu), W*q(iv), -W]
+           lvec(1,0:ns-1) = lvec(1,0:ns-1) * W / (h - 1.0d0)
+
+           lvec(2,0:ns-1) = [ -q(iv), q(iu)*q(iv),&
+                1.0d0-q(iu), -q(iv) ]
+
+            lvec(2,0:ns-1) = lvec(2,0:ns-1) / (h * (1.0d0-q(iu)**2))
+
+           lvec(3,0:ns-1) = [ h*W*Am*(q(iu)-eval(0)) - q(iu) -&
+                W**2 * (v2-q(iu)**2)*(2.0d0*h-1.0d0)*&
+                (q(iu)-Am*eval(0)) + h*Am*eval(0),&
+                1.0d0+W**2*(v2-q(iu)**2)*(2.0d0*h-1.0d0) *&
+                (1.0d0-Am) - h*Am,&
+                W**2*q(iv)*(2.0d0*h-1.0d0)*Am * (q(iu)-eval(0)),&
+                -q(iu) - W**2*(v2-q(iu)**2) *&
+                (2.0d0*h-1.0d0)*(q(iu)-Am*eval(0)) + h * Am*eval(0)]
+
+           lvec(3,0:ns-1) = -lvec(3,0:ns-1) * h**2 / Delta
+
+           rvec(0,0:ns-1) = [1.0d0, h*W*Am*eval(0), h*W*q(iv),&
+                h*W*Am-1.0d0]
+           rvec(1,0:ns-1) = [1.0d0/W, q(iu), q(iv), 1.0d0-1.0d0/W ]
+           rvec(2,0:ns-1) = [W*q(iv), 2.0d0*h*W**2*q(iu)*q(iv),&
+                h*(1.0d0 + 2.0d0*W**2*q(iv)**2),&
+                2*h*W**2*q(iv)-W*q(iv) ]
+           rvec(3,0:ns-1) = [1.0d0, h*W*Ap*eval(3),  h*W*q(iv),&
+                h*W*Ap-1.0d0 ]
 
            ! now the species -- they only have a 1 in their corresponding slot
            eval(ns:) = q(iu)
@@ -149,26 +180,53 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
            enddo
         else
             eval(1:2) = [q(iv), q(iv)]
-            eval(0) = 1.0d0 / (1.0d0 - v2 * cs2) * (q(iv)*(1.0d0-cs2) - sqrt(cs2) * sqrt((1-v2) * (1.0d0-v2*cs2 - q(iv)**2*(1.0d0-cs2))))
-            eval(3) = 1.0d0 / (1.0d0 - v2 * cs2) * (q(iv)*(1.0d0-cs2) + sqrt(cs2) * sqrt((1.0d0-v2) * (1.0d0-v2*cs2 - q(iv)**2*(1.0d0-cs2))))
+            eval(0) = 1.0d0 / (1.0d0 - v2 * cs2) * &
+                (q(iv)*(1.0d0-cs2) - sqrt(cs2) * sqrt((1-v2) * &
+                (1.0d0-v2*cs2 - q(iv)**2*(1.0d0-cs2))))
+            eval(3) = 1.0d0 / (1.0d0 - v2 * cs2) * &
+                (q(iv)*(1.0d0-cs2) + sqrt(cs2) * sqrt((1.0d0-v2) *&
+                (1.0d0-v2*cs2 - q(iv)**2*(1.0d0-cs2))))
 
             Am = (1.0d0-q(iv)**2) / (1.0d0-q(iv)*eval(0))
             Ap = (1.0d0-q(iv)**2) / (1.0d0-q(iv)*eval(3))
 
             Delta = h**3*W * (h-1.0d0) * (1.0d0-q(iv)**2) * (Ap*eval(3) - Am*eval(0))
 
-            lvec(0,0:ns-1) = [ h*W*Ap*(q(iv)-eval(3)), W**2*q(iu)*(2.0d0*h-1.0d0)*Ap * (q(iv)-eval(3)), 1.0d0+W**2*(v2-q(iv)**2)*(2.0d0*h-1.0d0) * (1.0d0-Ap) - h*Ap, -q(iv) - W**2*(v2-q(iv)**2) * (2.0d0*h-1.0d0)*(q(iv)-Ap*eval(3)) + h * Ap*eval(3)  ]
+            lvec(0,0:ns-1) = [ h*W*Ap*(q(iv)-eval(3)) - q(iv) - W**2*(v2-q(iv)**2)*&
+                (2.0d0*h-1.0d0)*(q(iv)-Ap*eval(3)) + h*Ap*eval(3),&
+                W**2*q(iu)*(2.0d0*h-1.0d0)*Ap * (q(iv)-eval(3)),&
+                1.0d0+W**2*(v2-q(iv)**2)*(2.0d0*h-1.0d0) * (1.0d0-Ap) - h*Ap,&
+                -q(iv) - W**2*(v2-q(iv)**2) *&
+                (2.0d0*h-1.0d0)*(q(iv)-Ap*eval(3)) + h * Ap*eval(3)  ]
 
-            lvec(1,0:ns-1) = [ 0.0d0, (1.0d0-q(iv)**2)/(h*(1.0d0-q(iv)**2)), q(iu)*q(iv)/(h*(1.0d0-q(iv)**2)), -q(iu)/(h*(1.0d0-q(iv)**2)) ]
+            lvec(0,0:ns-1) = lvec(0,0:ns-1) * h**2 / Delta
 
-            lvec(2,0:ns-1) = [ W*h/(h-1.0d0), W**2*q(iu)/(h-1.0d0), W**2*q(iv)/(h-1.0d0), -W**2/(h-1.0d0) ]
+            lvec(1,0:ns-1) = [ -q(iu), 1.0d0-q(iv), q(iu)*q(iv),&
+                -q(iu)]
 
-            lvec(3,0:ns-1) = [ h*W*Am*(q(iv)-eval(0)), W**2*q(iu)*(2.0d0*h-1.0d0)*Am * (q(iv)-eval(0)), 1.0d0+W**2*(v2-q(iv)**2)*(2.0d0*h-1.0d0) * (1.0d0-Am) - h*Am, -q(iv) - W**2*(v2-q(iv)**2) * (2.0d0*h-1.0d0)*(q(iv)-Am*eval(0)) + h * Am*eval(0)    ]
+            lvec(1,0:ns-1) = lvec(1,0:ns-1) / (h*(1-q(iv)**2))
 
-           rvec(0,0:ns-1) = [1.0d0, h*W*q(iu), h*W*Am*eval(0), h*W*Am-1.0d0]
-           rvec(1,0:ns-1) = [W*q(iu), h*(1.0d0 + 2.0d0*W**2*q(iu)**2), 2.0d0*h*W**2*q(iv), 2*h*W**2*q(iu)-W*q(iu) ]
-           rvec(2,0:ns-1) = [1.0d0/W, q(iu),       q(iv), 1.0d0-1.0d0/W ]
-           rvec(3,0:ns-1) = [1.0d0, h*W*q(iu), h*W*Ap*eval(3), h*W*Ap-1.0d0 ]
+            lvec(2,0:ns-1) = [ h-W, W*q(iu), W*q(iv), -W ]
+            lvec(2,0:ns-1) = lvec(2,0:ns-1) * W / (h-1.0d0)
+
+            lvec(3,0:ns-1) = [ h*W*Am*(q(iv)-eval(0)) - q(iv) -&
+                W**2 * (v2-q(iv)**2)*(2.0d0*h-1.0d0)*&
+                (q(iv)-Am*eval(0)) + h*Am*eval(0),&
+                W**2*q(iu)*(2.0d0*h-1.0d0)*Am * (q(iv)-eval(0)),&
+                1.0d0+W**2*(v2-q(iv)**2)*(2.0d0*h-1.0d0) * (1.0d0-Am) - h*Am,&
+                -q(iv) - W**2*(v2-q(iv)**2) *&
+                (2.0d0*h-1.0d0)*(q(iv)-Am*eval(0)) + h * Am*eval(0)    ]
+
+            lvec(3,0:ns-1) = -lvec(3,0:ns-1) * h**2 / Delta
+
+           rvec(0,0:ns-1) = [1.0d0, h*W*q(iu), h*W*Am*eval(0),&
+                h*W*Am-1.0d0]
+           rvec(1,0:ns-1) = [W*q(iu),&
+                h*(1.0d0 + 2.0d0*W**2*q(iu)**2),&
+                2.0d0*h*W**2*q(iu)*q(iv), 2*h*W**2*q(iu)-W*q(iu) ]
+           rvec(2,0:ns-1) = [1.0d0/W, q(iu), q(iv), 1.0d0-1.0d0/W ]
+           rvec(3,0:ns-1) = [1.0d0, h*W*q(iu), h*W*Ap*eval(3),&
+                h*W*Ap-1.0d0 ]
 
            ! now the species -- they only have a 1 in their corresponding slot
            eval(ns:) = q(iv)
@@ -203,10 +261,10 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
 
         ! compute the Vhat functions
         do m = 0, nvar-1
-           sum = dot_product(lvec(m,:),dq(:))
+           summ = dot_product(lvec(m,:),dq(:))
 
-           betal(m) = dtdx4*(eval(3) - eval(m))*(sign(1.0d0,eval(m)) + 1.0d0)*sum
-           betar(m) = dtdx4*(eval(0) - eval(m))*(1.0d0 - sign(1.0d0,eval(m)))*sum
+           betal(m) = dtdx4*(eval(3) - eval(m))*(sign(1.0d0,eval(m)) + 1.0d0)*summ
+           betar(m) = dtdx4*(eval(0) - eval(m))*(1.0d0 - sign(1.0d0,eval(m)))*summ
         enddo
 
         ! construct the states
@@ -264,14 +322,14 @@ subroutine riemann_cgf(idir, qx, qy, ng, &
   !
   !
   !        u - cs    t    u      u + cs
-  !          \       ^   .       /
-  !           \  *L  |   . *R   /
-  !            \     |  .     /
-  !             \    |  .    /
-  !         L    \   | .   /    R
-  !               \  | .  /
-  !                \ |. /
-  !                 \|./
+  !          &       ^   .       /
+  !           &  *L  |   . *R   /
+  !            &     |  .     /
+  !             &    |  .    /
+  !         L    &   | .   /    R
+  !               &  | .  /
+  !                & |. /
+  !                 &|./
   !        ----------+----------------> x
   !
   ! We care about the solution on the axis.  The basic idea is to use
@@ -594,14 +652,14 @@ subroutine riemann_prim(idir, qx, qy, ng, &
   !
   !
   !        u - cs    t    u      u + cs
-  !          \       ^   .       /
-  !           \  *L  |   . *R   /
-  !            \     |  .     /
-  !             \    |  .    /
-  !         L    \   | .   /    R
-  !               \  | .  /
-  !                \ |. /
-  !                 \|./
+  !          &       ^   .       /
+  !           &  *L  |   . *R   /
+  !            &     |  .     /
+  !             &    |  .    /
+  !         L    &   | .   /    R
+  !               &  | .  /
+  !                & |. /
+  !                 &|./
   !        ----------+----------------> x
   !
   ! We care about the solution on the axis.  The basic idea is to use
@@ -885,8 +943,8 @@ subroutine riemann_HLLC(idir, qx, qy, ng, &
   double precision, intent(inout) :: q_r(0:qx-1,0:qy-1,0:nvar-1)
   double precision, intent(  out) :: F(0:qx-1,0:qy-1,0:nvar-1)
 
-!f2py depend(qx, qy, nvar) :: U_l, U_r
-!f2py intent(in) :: U_l, U_r
+!f2py depend(qx, qy, nvar) :: q_l, q_r, U_l, U_r
+!f2py intent(in) :: q_l, q_r, U_l, U_r
 !f2py intent(out) :: F
 
   ! this is the HLLC Riemann solver.  The implementation follows
@@ -905,17 +963,26 @@ subroutine riemann_HLLC(idir, qx, qy, ng, &
   double precision :: rho_r, un_r, ut_r, rhoe_r, p_r
   double precision :: xn(nspec)
 
-  double precision :: rhostar_l, rhostar_r, rho_avg
-  double precision :: ustar, pstar
-  double precision :: Q, p_min, p_max, p_lr, p_guess
-  double precision :: factor, factor2
-  double precision :: g_l, g_r, A_l, B_l, A_r, B_r, z
-  double precision :: S_l, S_r, S_c
-  double precision :: c_l, c_r, c_avg
+  ! double precision :: rhostar_l, rhostar_r, rho_avg
+  ! double precision :: ustar, pstar
+  ! double precision :: Q, p_min, p_max, p_lr, p_guess
+  ! double precision :: factor, factor2
+  ! double precision :: g_l, g_r, A_l, B_l, A_r, B_r, z
+  ! double precision :: S_l, S_r, S_c
+  ! double precision :: c_l, c_r, c_avg
+
+  double precision :: S_HLLE, F_S, a_star, A, B
+  double precision :: p_lstar, p_rstar, a_l, a_r, c_l, c_r
+  double precision :: U_HLLE(0:nvar-1)
+  double precision :: F_HLLE(0:nvar-1)
+  double precision :: F_l(0:nvar-1)
+  double precision :: F_r(0:nvar-1)
+  double precision :: U_lstar(0:nvar-1)
+  double precision :: U_rstar(0:nvar-1)
 
   double precision :: U_state(0:nvar-1)
   double precision :: q_state(0:nvar-1)
-  double precision :: HLLCfactor
+  ! double precision :: HLLCfactor
 
 
 
@@ -926,7 +993,7 @@ subroutine riemann_HLLC(idir, qx, qy, ng, &
      do i = ilo-1, ihi+1
 
         ! primitive variable states
-        rho_l  = q_l(i,j,irho)
+        ! rho_l  = q_l(i,j,irho)
 
         ! un = normal velocity; ut = transverse velocity
         if (idir == 1) then
@@ -937,12 +1004,12 @@ subroutine riemann_HLLC(idir, qx, qy, ng, &
            ut_l    = q_l(i,j,iu)
         endif
 
-        rhoe_l = q_l(i,j,ip) / (gamma-1.0d0)
+        ! rhoe_l = q_l(i,j,ip) / (gamma-1.0d0)
 
         p_l   = q_l(i,j,ip)
         p_l = max(p_l, smallp)
 
-        rho_r  = q_r(i,j,irho)
+        ! rho_r  = q_r(i,j,irho)
 
         if (idir == 1) then
            un_r    = q_r(i,j,iu)
@@ -952,7 +1019,7 @@ subroutine riemann_HLLC(idir, qx, qy, ng, &
            ut_r    = q_r(i,j,iu)
         endif
 
-        rhoe_r = q_r(i,j,ip) / (gamma-1.0d0)
+        ! rhoe_r = q_r(i,j,ip) / (gamma-1.0d0)
 
         p_r   = q_r(i,j,ip)
         p_r = max(p_r, smallp)
@@ -962,184 +1029,308 @@ subroutine riemann_HLLC(idir, qx, qy, ng, &
         c_l = max(smallc, sqrt(gamma*p_l/rho_l))
         c_r = max(smallc, sqrt(gamma*p_r/rho_r))
 
+
+        a_l = 0.5d0*(un_l+un_r - c_l-c_r) / (1.0d0-0.25d0*(un_l+un_r)*(c_l+c_r))
+        a_r = 0.5d0*(un_l+un_r + c_l+c_r) / (1.0d0+0.25d0*(un_l+un_r)*(c_l+c_r))
+
+        ! a_l = -1.0d0
+        ! a_r = 1.0d0
+
+        call consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nvar, nspec, &
+                      U_l(i,j,:), q_l(i,j,:), F_l)
+
+        call consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nvar, nspec, &
+                    U_r(i,j,:), q_r(i,j,:), F_r)
+
+        F_HLLE = (a_r*F_l - a_l*F_r + a_r*a_l*(U_r(i,j,:) - U_l(i,j,:))) / (a_r - a_l)
+
+        ! q_star = (a_r*q_r(i,j,:) - a_l*q_l(i,j,:)-F_r+F_l) / (a_r - a_l)
+
+        if (a_r <= 0.0d0) then ! right state
+            U_HLLE = U_r(i,j,:)
+        else if (a_l < 0.0d0) then !middle
+            U_HLLE = (a_r*U_r(i,j,:) - a_l*U_l(i,j,:)-F_r+F_l) / (a_r - a_l)
+        else ! left
+            U_HLLE = U_l(i,j,:)
+        endif
+
+        if (idir == 1) then
+            S_HLLE = U_HLLE(ixmom)
+            F_S = F_HLLE(ixmom)
+        else
+            S_HLLE = U_HLLE(iymom)
+            F_S = F_HLLE(iymom)
+        endif
+
+        a_star = ( U_HLLE(iener) + F_S - &
+            sqrt( (U_HLLE(iener) + F_S)**2 +  &
+            S_HLLE * 2.0d0 * F_HLLE(iener) ) ) / &
+            (2.0d0 * F_HLLE(iener))
+
+        ! left
+
+        if (idir == 1) then
+            A = (U_l(i,j,iener) + U_l(i,j,idens)) * a_l - U_l(i,j,ixmom)
+            B = U_l(i,j,ixmom) * (a_l - un_l) - p_l
+        else
+            A = (U_l(i,j,iener) + U_l(i,j,idens)) * a_l - U_l(i,j,iymom)
+            B = U_l(i,j,iymom) * (a_l - un_l) - p_l
+        endif
+
+        p_lstar = ((A * a_star) - B) / (1.0d0 - a_l * a_star)
+
+        U_lstar(idens) = U_l(i,j,idens) * (a_l - un_l) / (a_l - a_star)
+
+        if (idir == 1) then
+            U_lstar(ixmom) = (U_l(i,j,ixmom) * (a_l - un_l) + p_lstar - p_l) / (a_l - a_star)
+            U_lstar(iymom) = U_l(i,j,iymom) * (a_l - un_l) / (a_l - a_star)
+        else
+            U_lstar(ixmom) = U_l(i,j,ixmom) * (a_l - un_l)/ (a_l - a_star)
+            U_lstar(iymom) = (U_l(i,j,iymom) * (a_l - un_l) + p_lstar - p_l) / (a_l - a_star)
+        endif
+
+        ! U_lstar(iener) = (U_l(i,j,iener) * (a_l - un_l) + p_lstar * a_star - p_l * un_l)
+
+
+        ! right
+
+        if (idir == 1) then
+            A = (U_r(i,j,iener) + U_r(i,j,idens)) * a_r - U_r(i,j,ixmom)
+            B = U_r(i,j,ixmom) * (a_r - un_r) - p_r
+        else
+            A = (U_r(i,j,iener) + U_r(i,j,idens)) * a_r - U_r(i,j,iymom)
+            B = U_r(i,j,iymom) * (a_r - un_r) - p_r
+        endif
+
+        p_rstar = ((A * a_star) - B) / (1.0d0 - a_r * a_star)
+
+        U_rstar(idens) = U_r(i,j,idens) * (a_r - un_r) / (a_r - a_star)
+
+        if (idir == 1) then
+            U_rstar(ixmom) = (U_r(i,j,ixmom) * (a_r - un_r) + p_rstar - p_r) / (a_r - a_star)
+            U_rstar(iymom) = U_r(i,j,iymom) * (a_r - un_r) / (a_r - a_star)
+        else
+            U_rstar(ixmom) = U_r(i,j,ixmom) * (a_r - un_r)/ (a_r - a_star)
+            U_rstar(iymom) = (U_r(i,j,iymom) * (a_r - un_r) + p_rstar - p_r) / (a_r - a_star)
+        endif
+
+        ! U_rstar(iener) = (U_r(i,j,iener) * (a_r - un_r) + p_rstar * a_star - p_r * un_r)
+
+        if (a_r <= 0.0d0) then ! right state
+
+            F(i,j,:) = F_r
+
+        else if (a_star <= 0.0d0) then ! right star
+
+            F(i,j,:) = U_rstar(:) * a_star
+
+            if (idir == 1) then
+                F(i,j,ixmom) = F(i,j,ixmom) + p_rstar
+                F(i,j,iener) = U_rstar(ixmom) - F(i,j,idens)
+            else
+                F(i,j,iymom) = F(i,j,iymom) + p_rstar
+                F(i,j,iener) = U_rstar(iymom) - F(i,j,idens)
+            endif
+
+        else if (a_l < 0.0d0) then ! left star
+
+            F(i,j,:) = U_lstar(:) * a_star
+
+            if (idir == 1) then
+                F(i,j,ixmom) = F(i,j,ixmom) + p_lstar
+                F(i,j,iener) = U_lstar(ixmom) - F(i,j,idens)
+            else
+                F(i,j,iymom) = F(i,j,iymom) + p_lstar
+                F(i,j,iener) = U_lstar(iymom) - F(i,j,idens)
+            endif
+
+        else ! left
+
+            F(i,j,:) = F_l
+
+        endif
+
+
         ! Estimate the star quantities -- use one of three methods to
         ! do this -- the primitive variable Riemann solver, the two
         ! shock approximation, or the two rarefaction approximation.
         ! Pick the method based on the pressure states at the
         ! interface.
 
-        p_max = max(p_l, p_r)
-        p_min = min(p_l, p_r)
-
-        Q = p_max/p_min
-
-        rho_avg = 0.5*(rho_l + rho_r)
-        c_avg = 0.5*(c_l + c_r)
-
-        ! primitive variable Riemann solver (Toro, 9.3)
-        factor = rho_avg*c_avg
-        factor2 = rho_avg/c_avg
-
-        pstar = 0.5*(p_l + p_r) + 0.5*(un_l - un_r)*factor
-        ustar = 0.5*(un_l + un_r) + 0.5*(p_l - p_r)/factor
-
-        rhostar_l = rho_l + (un_l - ustar)*factor2
-        rhostar_r = rho_r + (ustar - un_r)*factor2
-
-        if (Q > 2 .and. (pstar < p_min .or. pstar > p_max)) then
-
-           ! use a more accurate Riemann solver for the estimate here
-
-           if (pstar < p_min) then
-
-              ! 2-rarefaction Riemann solver
-              z = (gamma - 1.0d0)/(2.0d0*gamma)
-              p_lr = (p_l/p_r)**z
-
-              ustar = (p_lr*un_l/c_l + un_r/c_r + &
-                        2.0d0*(p_lr - 1.0d0)/(gamma - 1.0d0)) / &
-                      (p_lr/c_l + 1.0d0/c_r)
-
-              pstar = 0.5d0*(p_l*(1.0d0 + (gamma - 1.0d0)*(un_l - ustar)/ &
-                                   (2.0d0*c_l) )**(1.0d0/z) + &
-                             p_r*(1.0d0 + (gamma - 1.0d0)*(ustar - un_r)/ &
-                                   (2.0d0*c_r) )**(1.0d0/z) )
-
-              rhostar_l = rho_l*(pstar/p_l)**(1.0d0/gamma)
-              rhostar_r = rho_r*(pstar/p_r)**(1.0d0/gamma)
-
-           else
-
-              ! 2-shock Riemann solver
-              A_r = 2.0/((gamma + 1.0d0)*rho_r)
-              B_r = p_r*(gamma - 1.0d0)/(gamma + 1.0d0)
-
-              A_l = 2.0/((gamma + 1.0d0)*rho_l)
-              B_l = p_l*(gamma - 1.0d0)/(gamma + 1.0d0)
-
-              ! guess of the pressure
-              p_guess = max(0.0d0, pstar)
-
-              g_l = sqrt(A_l / (p_guess + B_l))
-              g_r = sqrt(A_r / (p_guess + B_r))
-
-              pstar = (g_l*p_l + g_r*p_r - (un_r - un_l))/(g_l + g_r)
-
-              ustar = 0.5*(un_l + un_r) + &
-                   0.5*( (pstar - p_r)*g_r - (pstar - p_l)*g_l)
-
-              rhostar_l = rho_l*(pstar/p_l + (gamma-1.0d0)/(gamma+1.0d0))/ &
-                   ( (gamma-1.0d0)/(gamma+1.0d0)*(pstar/p_l) + 1.0d0)
-
-              rhostar_r = rho_r*(pstar/p_r + (gamma-1.0d0)/(gamma+1.0d0))/ &
-                   ( (gamma-1.0d0)/(gamma+1.0d0)*(pstar/p_r) + 1.0d0)
-
-           endif
-        endif
-
-        ! estimate the nonlinear wave speeds
-
-        if (pstar <= p_l) then
-           ! rarefaction
-           S_l = un_l - c_l
-        else
-           ! shock
-           S_l = un_l - c_l*sqrt(1.0d0 + ((gamma+1.0d0)/(2.0d0*gamma))* &
-                                   (pstar/p_l - 1.0d0))
-        endif
-
-        if (pstar <= p_r) then
-           ! rarefaction
-           S_r = un_r + c_r
-        else
-           ! shock
-           S_r = un_r + c_r*sqrt(1.0d0 + ((gamma+1.0d0)/(2.0d0/gamma))* &
-                                  (pstar/p_r - 1.0d0))
-        endif
-
-        !  We could just take S_c = u_star as the estimate for the
-        !  contact speed, but we can actually do this more accurately
-        !  by using the Rankine-Hugonoit jump conditions across each
-        !  of the waves (see Toro 10.58, Batten et al. SIAM
-        !  J. Sci. and Stat. Comp., 18:1553 (1997)
-        S_c = (p_r - p_l + rho_l*un_l*(S_l - un_l) - rho_r*un_r*(S_r - un_r))/ &
-             (rho_l*(S_l - un_l) - rho_r*(S_r - un_r))
-
-
-        ! figure out which region we are in and compute the state and
-        ! the interface fluxes using the HLLC Riemann solver
-        if (S_r <= 0.0d0) then
-           ! R region
-           U_state(:) = U_r(i,j,:)
-
-           call consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nvar, nspec, &
-                         U_state, q_state, F(i,j,:))
-
-        else if (S_r > 0.0d0 .and. S_c <= 0) then
-           ! R* region
-           HLLCfactor = rho_r*(S_r - un_r)/(S_r - S_c)
-
-           U_state(idens) = HLLCfactor
-
-           if (idir == 1) then
-              U_state(ixmom) = HLLCfactor*S_c
-              U_state(iymom) = HLLCfactor*ut_r
-           else
-              U_state(ixmom) = HLLCfactor*ut_r
-              U_state(iymom) = HLLCfactor*S_c
-           endif
-
-           U_state(iener) = HLLCfactor*(U_r(i,j,iener)/rho_r + &
-                (S_c - un_r)*(S_c + p_r/(rho_r*(S_r - un_r))))
-
-           ! species
-           if (nspec > 0) then
-              U_state(irhoX:irhoX-1+nspec) = HLLCfactor*U_r(i,j,irhoX:irhoX-1+nspec)/rho_r
-           endif
-
-           ! find the flux on the right interface
-           call consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nvar, nspec, &
-                         U_r(i,j,:), q_r(i,j,:), F(i,j,:))
-
-           ! correct the flux
-           F(i,j,:) = F(i,j,:) + S_r*(U_state(:) - U_r(i,j,:))
-
-        else if (S_c > 0.0d0 .and. S_l < 0.0) then
-           ! L* region
-           HLLCfactor = rho_l*(S_l - un_l)/(S_l - S_c)
-
-           U_state(idens) = HLLCfactor
-
-           if (idir == 1) then
-              U_state(ixmom) = HLLCfactor*S_c
-              U_state(iymom) = HLLCfactor*ut_l
-           else
-              U_state(ixmom) = HLLCfactor*ut_l
-              U_state(iymom) = HLLCfactor*S_c
-           endif
-
-           U_state(iener) = HLLCfactor*(U_l(i,j,iener)/rho_l + &
-                (S_c - un_l)*(S_c + p_l/(rho_l*(S_l - un_l))))
-
-           ! species
-           if (nspec > 0) then
-              U_state(irhoX:irhoX-1+nspec) = HLLCfactor*U_l(i,j,irhoX:irhoX-1+nspec)/rho_l
-           endif
-
-           ! find the flux on the left interface
-           call consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nvar, nspec, &
-                         U_l(i,j,:), q_l(i,j,:), F(i,j,:))
-
-           ! correct the flux
-           F(i,j,:) = F(i,j,:) + S_l*(U_state(:) - U_l(i,j,:))
-
-        else
-           ! L region
-           U_state(:) = U_l(i,j,:)
-
-           call consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nvar, nspec, U_state, q_state, F(i,j,:))
-
-        endif
+        ! p_max = max(p_l, p_r)
+        ! p_min = min(p_l, p_r)
+        !
+        ! Q = p_max/p_min
+        !
+        ! rho_avg = 0.5*(rho_l + rho_r)
+        ! c_avg = 0.5*(c_l + c_r)
+        !
+        ! ! primitive variable Riemann solver (Toro, 9.3)
+        ! factor = rho_avg*c_avg
+        ! factor2 = rho_avg/c_avg
+        !
+        ! pstar = 0.5*(p_l + p_r) + 0.5*(un_l - un_r)*factor
+        ! ustar = 0.5*(un_l + un_r) + 0.5*(p_l - p_r)/factor
+        !
+        ! rhostar_l = rho_l + (un_l - ustar)*factor2
+        ! rhostar_r = rho_r + (ustar - un_r)*factor2
+        !
+        ! if (Q > 2 .and. (pstar < p_min .or. pstar > p_max)) then
+        !
+        !    ! use a more accurate Riemann solver for the estimate here
+        !
+        !    if (pstar < p_min) then
+        !
+        !       ! 2-rarefaction Riemann solver
+        !       z = (gamma - 1.0d0)/(2.0d0*gamma)
+        !       p_lr = (p_l/p_r)**z
+        !
+        !       ustar = (p_lr*un_l/c_l + un_r/c_r + &
+        !                 2.0d0*(p_lr - 1.0d0)/(gamma - 1.0d0)) / &
+        !               (p_lr/c_l + 1.0d0/c_r)
+        !
+        !       pstar = 0.5d0*(p_l*(1.0d0 + (gamma - 1.0d0)*(un_l - ustar)/ &
+        !                            (2.0d0*c_l) )**(1.0d0/z) + &
+        !                      p_r*(1.0d0 + (gamma - 1.0d0)*(ustar - un_r)/ &
+        !                            (2.0d0*c_r) )**(1.0d0/z) )
+        !
+        !       rhostar_l = rho_l*(pstar/p_l)**(1.0d0/gamma)
+        !       rhostar_r = rho_r*(pstar/p_r)**(1.0d0/gamma)
+        !
+        !    else
+        !
+        !       ! 2-shock Riemann solver
+        !       A_r = 2.0/((gamma + 1.0d0)*rho_r)
+        !       B_r = p_r*(gamma - 1.0d0)/(gamma + 1.0d0)
+        !
+        !       A_l = 2.0/((gamma + 1.0d0)*rho_l)
+        !       B_l = p_l*(gamma - 1.0d0)/(gamma + 1.0d0)
+        !
+        !       ! guess of the pressure
+        !       p_guess = max(0.0d0, pstar)
+        !
+        !       g_l = sqrt(A_l / (p_guess + B_l))
+        !       g_r = sqrt(A_r / (p_guess + B_r))
+        !
+        !       pstar = (g_l*p_l + g_r*p_r - (un_r - un_l))/(g_l + g_r)
+        !
+        !       ustar = 0.5*(un_l + un_r) + &
+        !            0.5*( (pstar - p_r)*g_r - (pstar - p_l)*g_l)
+        !
+        !       rhostar_l = rho_l*(pstar/p_l + (gamma-1.0d0)/(gamma+1.0d0))/ &
+        !            ( (gamma-1.0d0)/(gamma+1.0d0)*(pstar/p_l) + 1.0d0)
+        !
+        !       rhostar_r = rho_r*(pstar/p_r + (gamma-1.0d0)/(gamma+1.0d0))/ &
+        !            ( (gamma-1.0d0)/(gamma+1.0d0)*(pstar/p_r) + 1.0d0)
+        !
+        !    endif
+        ! endif
+        !
+        ! ! estimate the nonlinear wave speeds
+        !
+        ! if (pstar <= p_l) then
+        !    ! rarefaction
+        !    S_l = un_l - c_l
+        ! else
+        !    ! shock
+        !    S_l = un_l - c_l*sqrt(1.0d0 + ((gamma+1.0d0)/(2.0d0*gamma))* &
+        !                            (pstar/p_l - 1.0d0))
+        ! endif
+        !
+        ! if (pstar <= p_r) then
+        !    ! rarefaction
+        !    S_r = un_r + c_r
+        ! else
+        !    ! shock
+        !    S_r = un_r + c_r*sqrt(1.0d0 + ((gamma+1.0d0)/(2.0d0/gamma))* &
+        !                           (pstar/p_r - 1.0d0))
+        ! endif
+        !
+        ! !  We could just take S_c = u_star as the estimate for the
+        ! !  contact speed, but we can actually do this more accurately
+        ! !  by using the Rankine-Hugonoit jump conditions across each
+        ! !  of the waves (see Toro 10.58, Batten et al. SIAM
+        ! !  J. Sci. and Stat. Comp., 18:1553 (1997)
+        ! S_c = (p_r - p_l + rho_l*un_l*(S_l - un_l) - rho_r*un_r*(S_r - un_r))/ &
+        !      (rho_l*(S_l - un_l) - rho_r*(S_r - un_r))
+        !
+        !
+        ! ! figure out which region we are in and compute the state and
+        ! ! the interface fluxes using the HLLC Riemann solver
+        ! if (S_r <= 0.0d0) then
+        !    ! R region
+        !    U_state(:) = U_r(i,j,:)
+        !    q_state(:) = q_r(i,j,:)
+        !
+        !    call consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nvar, nspec, &
+        !                  U_state, q_state, F(i,j,:))
+        !
+        ! else if (S_r > 0.0d0 .and. S_c <= 0) then
+        !    ! R* region
+        !    HLLCfactor = rho_r*(S_r - un_r)/(S_r - S_c)
+        !
+        !    U_state(idens) = HLLCfactor
+        !
+        !    if (idir == 1) then
+        !       U_state(ixmom) = HLLCfactor*S_c
+        !       U_state(iymom) = HLLCfactor*ut_r
+        !    else
+        !       U_state(ixmom) = HLLCfactor*ut_r
+        !       U_state(iymom) = HLLCfactor*S_c
+        !    endif
+        !
+        !    U_state(iener) = HLLCfactor*(U_r(i,j,iener)/rho_r + &
+        !         (S_c - un_r)*(S_c + p_r/(rho_r*(S_r - un_r))))
+        !
+        !    ! species
+        !    if (nspec > 0) then
+        !       U_state(irhoX:irhoX-1+nspec) = HLLCfactor*U_r(i,j,irhoX:irhoX-1+nspec)/rho_r
+        !    endif
+        !
+        !    ! find the flux on the right interface
+        !    call consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nvar, nspec, &
+        !                  U_r(i,j,:), q_r(i,j,:), F(i,j,:))
+        !
+        !    ! correct the flux
+        !    F(i,j,:) = F(i,j,:) + S_r*(U_state(:) - U_r(i,j,:))
+        !
+        ! else if (S_c > 0.0d0 .and. S_l < 0.0) then
+        !    ! L* region
+        !    HLLCfactor = rho_l*(S_l - un_l)/(S_l - S_c)
+        !
+        !    U_state(idens) = HLLCfactor
+        !
+        !    if (idir == 1) then
+        !       U_state(ixmom) = HLLCfactor*S_c
+        !       U_state(iymom) = HLLCfactor*ut_l
+        !    else
+        !       U_state(ixmom) = HLLCfactor*ut_l
+        !       U_state(iymom) = HLLCfactor*S_c
+        !    endif
+        !
+        !    U_state(iener) = HLLCfactor*(U_l(i,j,iener)/rho_l + &
+        !         (S_c - un_l)*(S_c + p_l/(rho_l*(S_l - un_l))))
+        !
+        !    ! species
+        !    if (nspec > 0) then
+        !       U_state(irhoX:irhoX-1+nspec) = HLLCfactor*U_l(i,j,irhoX:irhoX-1+nspec)/rho_l
+        !    endif
+        !
+        !    ! find the flux on the left interface
+        !    call consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nvar, nspec, &
+        !                  U_l(i,j,:), q_l(i,j,:), F(i,j,:))
+        !
+        !    ! correct the flux
+        !    F(i,j,:) = F(i,j,:) + S_l*(U_state(:) - U_l(i,j,:))
+        !
+        ! else
+        !    ! L region
+        !    U_state(:) = U_l(i,j,:)
+        !    q_state(:) = q_l(i,j,:)
+        !
+        !    call consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nvar, nspec, U_state, q_state, F(i,j,:))
+        !
+        ! endif
 
         ! we should deal with solid boundaries somehow here
 
