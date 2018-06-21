@@ -48,15 +48,15 @@ def init_data(my_data, rp):
                                     (my_data.grid.y2d-yctr)**2)))
 
     # velocity is diagonal
-    u = 0.2
-    v = 0.2
+    u = 0.4
+    v = 0.4
 
     # pressure is constant
     p = 0.2
 
     rhoh = eos.rhoh_from_rho_p(gamma, dens, p)
 
-    W = np.sqrt(1-u**2-v**2)
+    W = 1./np.sqrt(1-u**2-v**2)
     dens[:,:] *= W
     xmom[:, :] = rhoh[:, :]*u*W**2
     ymom[:, :] = rhoh[:, :]*v*W**2

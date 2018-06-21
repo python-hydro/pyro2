@@ -4,6 +4,7 @@ import numpy as np
 
 import sys
 import mesh.patch as patch
+import compressible_sr.eos as eos
 from util import msg
 
 
@@ -48,8 +49,10 @@ def init_data(my_data, rp):
 
     p = myg.scratch_array()
 
-    j = myg.jlo
-    while j <= myg.jhi:
+    p[:,:] = p0
+    dens[:,:] = dens1
+
+    for j in range(myg.jlo, myg.jhi+1):
         if (myg.y[j] < ycenter):
             dens[:, j] = dens1
             p[:, j] = p0 + dens1*grav*myg.y[j]
@@ -58,15 +61,25 @@ def init_data(my_data, rp):
             dens[:, j] = dens2
             p[:, j] = p0 + dens1*grav*ycenter + dens2*grav*(myg.y[j] - ycenter)
 
-        j += 1
 
     ymom[:, :] = amp*np.cos(2.0*np.pi*myg.x2d/(myg.xmax-myg.xmin))*np.exp(-(myg.y2d-ycenter)**2/sigma**2)
 
-    ymom *= dens
+    rhoh = eos.rhoh_from_rho_p(gamma, dens, p)
+
+    u = xmom
+    v = ymom
+    W = 1./np.sqrt(1-u**2-v**2)
+    dens[:,:] *= W
+    xmom[:, :] *= rhoh[:, :]*W**2
+    ymom[:, :] *= rhoh[:, :]*W**2
+
+    ener[:,:] = rhoh[:,:]*W**2 - p - dens[:,:]
+
+    print(p[2:-2, 2:-2])
 
     # set the energy (P = cs2*dens)
-    ener[:, :] = p[:, :]/(gamma - 1.0) + \
-        0.5*(xmom[:, :]**2 + ymom[:, :]**2)/dens[:, :]
+    # ener[:, :] = p[:, :]/(gamma - 1.0) + \
+    #     0.5*(xmom[:, :]**2 + ymom[:, :]**2)/dens[:, :]
 
 
 def finalize():

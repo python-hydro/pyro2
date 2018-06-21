@@ -3,6 +3,8 @@ from __future__ import print_function
 import sys
 
 import mesh.patch as patch
+import compressible_sr.eos as eos
+import numpy as np
 from util import msg
 
 
@@ -51,23 +53,29 @@ def init_data(my_data, rp):
 
     myg = my_data.grid
 
+    p = np.zeros_like(dens)
+
     if direction == "x":
 
         # left
         idxl = myg.x2d <= xctr
 
         dens[idxl] = dens_left
-        xmom[idxl] = dens_left*u_left
+        xmom[idxl] = u_left
         ymom[idxl] = 0.0
-        ener[idxl] = p_left/(gamma - 1.0) + 0.5*xmom[idxl]*u_left
+        # ener[idxl] = p_left/(gamma - 1.0) + 0.5*xmom[idxl]*u_left
+
+        p[idxl] = p_left
 
         # right
         idxr = myg.x2d > xctr
 
         dens[idxr] = dens_right
-        xmom[idxr] = dens_right*u_right
+        xmom[idxr] = u_right
         ymom[idxr] = 0.0
-        ener[idxr] = p_right/(gamma - 1.0) + 0.5*xmom[idxr]*u_right
+        # ener[idxr] = p_right/(gamma - 1.0) + 0.5*xmom[idxr]*u_right
+
+        p[idxr] = p_right
 
     else:
 
@@ -76,16 +84,34 @@ def init_data(my_data, rp):
 
         dens[idxb] = dens_left
         xmom[idxb] = 0.0
-        ymom[idxb] = dens_left*u_left
-        ener[idxb] = p_left/(gamma - 1.0) + 0.5*ymom[idxb]*u_left
+        ymom[idxb] = u_left
+        # ener[idxb] = p_left/(gamma - 1.0) + 0.5*ymom[idxb]*u_left
+
+        p[idxb] = p_left
 
         # top
         idxt = myg.y2d > yctr
 
         dens[idxt] = dens_right
         xmom[idxt] = 0.0
-        ymom[idxt] = dens_right*u_right
-        ener[idxt] = p_right/(gamma - 1.0) + 0.5*ymom[idxt]*u_right
+        ymom[idxt] = u_right
+        # ener[idxt] = p_right/(gamma - 1.0) + 0.5*ymom[idxt]*u_right
+
+        p[idxt] = p_right
+
+    rhoh = eos.rhoh_from_rho_p(gamma, dens, p)
+
+    u = xmom
+    v = ymom
+    W = 1./np.sqrt(1-u**2-v**2)
+    dens[:,:] *= W
+    xmom[:, :] *= rhoh*W**2
+    ymom[:, :] *= rhoh*W**2
+
+    ener[:,:] = rhoh*W**2 - p - dens
+
+    # print(f'ener = {ener}')
+    # exit()
 
 
 def finalize():

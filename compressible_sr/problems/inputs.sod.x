@@ -18,6 +18,9 @@ xmax = 1.0
 ymax = .05
 xlboundary = outflow
 xrboundary = outflow
+ylboundary = periodic
+yrboundary = periodic
+
 
 [sod]
 direction = x
@@ -30,3 +33,6 @@ u_right = 0.0
 
 p_left = 1.0
 p_right = 0.1
+
+[eos]
+gamma = 1.4

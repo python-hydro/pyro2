@@ -189,6 +189,9 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     # there is a single flattening coefficient (xi) for all directions
     use_flattening = rp.get_param("compressible.use_flattening")
 
+    # print("before flattening")
+    # print(f'rho = {q.jp(0, n=ivars.irho, buf=2)}')
+
     if use_flattening:
         xi_x = reconstruction.flatten(myg, q, 1, ivars, rp)
         xi_y = reconstruction.flatten(myg, q, 2, ivars, rp)
@@ -298,6 +301,9 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     q_yl = cons_to_prim_wrapper(U_yl, gamma, ivars, myg)
     q_yr = cons_to_prim_wrapper(U_yr, gamma, ivars, myg)
 
+    # print("before transverse fluxes")
+    # print(f'rho = {q_xl.jp(0, n=ivars.irho, buf=2)}')
+
     _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
                       ivars.nvar, ivars.idens, ivars.ixmom,
                       ivars.iymom, ivars.iener, ivars.irhox,
@@ -403,6 +409,9 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     q_xr = cons_to_prim_wrapper(U_xr, gamma, ivars, myg)
     q_yl = cons_to_prim_wrapper(U_yl, gamma, ivars, myg)
     q_yr = cons_to_prim_wrapper(U_yr, gamma, ivars, myg)
+
+    # print("before normal fluxes")
+    # print(f'F_rho = {F_x.jp(0, n=ivars.ixmom, buf=2)}')
 
     _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
                       ivars.nvar, ivars.idens, ivars.ixmom,

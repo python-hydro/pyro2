@@ -18,8 +18,8 @@ gamma = 1.4
 
 
 [mesh]
-nx = 64
-ny = 64
+nx = 128
+ny = 128
 xmax = 1.0
 ymax = 1.0
 

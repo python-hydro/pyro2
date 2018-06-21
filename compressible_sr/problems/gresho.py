@@ -2,8 +2,10 @@ from __future__ import print_function
 
 import sys
 import mesh.patch as patch
-import numpy
+import numpy as np
 from util import msg
+
+import compressible_sr.eos as eos
 
 
 def init_data(my_data, rp):
@@ -23,13 +25,9 @@ def init_data(my_data, rp):
     ymom = my_data.get_var("y-momentum")
     ener = my_data.get_var("energy")
 
-    grav = rp.get_param("compressible.grav")
-
     gamma = rp.get_param("eos.gamma")
 
-    scale_height = rp.get_param("gresho.scale_height")
     dens_base = rp.get_param("gresho.dens_base")
-    dens_cutoff = rp.get_param("gresho.dens_cutoff")
 
     R = rp.get_param("gresho.r")
     u0 = rp.get_param("gresho.u0")
@@ -39,7 +37,6 @@ def init_data(my_data, rp):
     # but that is used only to initialize the base state
     xmom[:, :] = 0.0
     ymom[:, :] = 0.0
-    dens[:, :] = dens_cutoff
 
     # set the density to be stratified in the y-direction
     myg = my_data.grid
@@ -52,29 +49,39 @@ def init_data(my_data, rp):
     x_centre = 0.5 * (myg.x[0] + myg.x[-1])
     y_centre = 0.5 * (myg.y[0] + myg.y[-1])
 
-    r = numpy.sqrt((myg.x2d - x_centre)**2 + (myg.y2d - y_centre)**2)
+    r = np.sqrt((myg.x2d - x_centre)**2 + (myg.y2d - y_centre)**2)
 
     p[r <= R] += 0.5 * (u0 * r[r<=R]/R)**2
-    p[(r > R) & (r <= 2*R)] += u0**2 * (0.5 *(r[(r > R) & (r <= 2*R)]/R)**2 + 4 * (1 - r[(r > R) & (r <= 2*R)]/R + numpy.log(r[(r > R) & (r <= 2*R)]/R)))
-    p[r > 2*R] += u0**2 * (4 * numpy.log(2) - 2)
+    p[(r > R) & (r <= 2*R)] += u0**2 * (0.5 *(r[(r > R) & (r <= 2*R)]/R)**2 + 4 * (1 - r[(r > R) & (r <= 2*R)]/R + np.log(r[(r > R) & (r <= 2*R)]/R)))
+    p[r > 2*R] += u0**2 * (4 * np.log(2) - 2)
+    # print(p[r > 2*R])
     #
-    uphi = numpy.zeros_like(p)
+    uphi = np.zeros_like(p)
     uphi[r <= R] = u0 * r[r<=R]/R
     uphi[(r > R) & (r <= 2*R)] = u0 * (2 - r[(r > R) & (r <= 2*R)]/R)
 
-    xmom[:,:] = -dens[:,:] * uphi[:,:] * (myg.y2d - y_centre) / r[:,:]
-    ymom[:,:] = dens[:,:] * uphi[:,:] * (myg.x2d - x_centre) / r[:,:]
+    xmom[:,:] = -uphi[:,:] * (myg.y2d - y_centre) / r[:,:]
+    ymom[:,:] = uphi[:,:] * (myg.x2d - x_centre) / r[:,:]
 
-    ener[:, :] = p[:, :]/(gamma - 1.0) + \
-                0.5*(xmom[:, :]**2 + ymom[:, :]**2)/dens[:, :]
+    # rhoe
+    # ener[:, :] = p[:, :]/(gamma - 1.0) + \
+    #             0.5*(xmom[:, :]**2 + ymom[:, :]**2)/dens[:, :]
 
-    eint = p[:, :]/(gamma - 1.0)
+    # dens[:,:] = p[:,:]/(eint[:,:]*(gamma - 1.0))
 
-    dens[:,:] = p[:,:]/(eint[:,:]*(gamma - 1.0))
+    rhoh = eos.rhoh_from_rho_p(gamma, dens, p)
 
-    print(p)
+    u = xmom
+    v = ymom
+    W = 1./np.sqrt(1. - u**2 - v**2)
+    dens[:,:] *= W
+    xmom[:, :] *= rhoh*W**2
+    ymom[:, :] *= rhoh*W**2
 
+    ener[:,:] = rhoh*W**2 - p - dens
 
+    # print(ymom[5:-5, 5:-5])
+    # exit()
 
 def finalize():
     """ print out any information to the user at the end of the run """

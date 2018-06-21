@@ -1055,10 +1055,20 @@ subroutine riemann_HLLC(idir, qx, qy, ng, &
 
         E_HLLE = U_HLLE(iener) + U_HLLE(idens)
 
-        a_star = ( E_HLLE + F_S - &
-            sqrt( (E_HLLE + F_S)**2 -  &
-            S_HLLE * 2.0d0 * F_HLLE(iener) ) ) / &
-            (2.0d0 * F_HLLE(iener))
+        if (abs(F_HLLE(iener)) < 1.d-9) then
+            a_star = S_HLLE / (E_HLLE + F_S)
+        else
+            a_star = ( E_HLLE + F_S - &
+                sqrt( (E_HLLE + F_S)**2 -  &
+                S_HLLE * 2.0d0 * F_HLLE(iener) ) ) / &
+                (2.0d0 * F_HLLE(iener))
+        endif
+
+
+        ! NOTE: this shouldn't happpen but just in case?
+        if (a_star /= a_star) then
+            a_star = 0.0d0
+        endif
 
         ! left
 
@@ -1143,192 +1153,9 @@ subroutine riemann_HLLC(idir, qx, qy, ng, &
 
         endif
 
-
-        ! Estimate the star quantities -- use one of three methods to
-        ! do this -- the primitive variable Riemann solver, the two
-        ! shock approximation, or the two rarefaction approximation.
-        ! Pick the method based on the pressure states at the
-        ! interface.
-
-        ! p_max = max(p_l, p_r)
-        ! p_min = min(p_l, p_r)
-        !
-        ! Q = p_max/p_min
-        !
-        ! rho_avg = 0.5*(rho_l + rho_r)
-        ! c_avg = 0.5*(c_l + c_r)
-        !
-        ! ! primitive variable Riemann solver (Toro, 9.3)
-        ! factor = rho_avg*c_avg
-        ! factor2 = rho_avg/c_avg
-        !
-        ! pstar = 0.5*(p_l + p_r) + 0.5*(un_l - un_r)*factor
-        ! ustar = 0.5*(un_l + un_r) + 0.5*(p_l - p_r)/factor
-        !
-        ! rhostar_l = rho_l + (un_l - ustar)*factor2
-        ! rhostar_r = rho_r + (ustar - un_r)*factor2
-        !
-        ! if (Q > 2 .and. (pstar < p_min .or. pstar > p_max)) then
-        !
-        !    ! use a more accurate Riemann solver for the estimate here
-        !
-        !    if (pstar < p_min) then
-        !
-        !       ! 2-rarefaction Riemann solver
-        !       z = (gamma - 1.0d0)/(2.0d0*gamma)
-        !       p_lr = (p_l/p_r)**z
-        !
-        !       ustar = (p_lr*un_l/c_l + un_r/c_r + &
-        !                 2.0d0*(p_lr - 1.0d0)/(gamma - 1.0d0)) / &
-        !               (p_lr/c_l + 1.0d0/c_r)
-        !
-        !       pstar = 0.5d0*(p_l*(1.0d0 + (gamma - 1.0d0)*(un_l - ustar)/ &
-        !                            (2.0d0*c_l) )**(1.0d0/z) + &
-        !                      p_r*(1.0d0 + (gamma - 1.0d0)*(ustar - un_r)/ &
-        !                            (2.0d0*c_r) )**(1.0d0/z) )
-        !
-        !       rhostar_l = rho_l*(pstar/p_l)**(1.0d0/gamma)
-        !       rhostar_r = rho_r*(pstar/p_r)**(1.0d0/gamma)
-        !
-        !    else
-        !
-        !       ! 2-shock Riemann solver
-        !       A_r = 2.0/((gamma + 1.0d0)*rho_r)
-        !       B_r = p_r*(gamma - 1.0d0)/(gamma + 1.0d0)
-        !
-        !       A_l = 2.0/((gamma + 1.0d0)*rho_l)
-        !       B_l = p_l*(gamma - 1.0d0)/(gamma + 1.0d0)
-        !
-        !       ! guess of the pressure
-        !       p_guess = max(0.0d0, pstar)
-        !
-        !       g_l = sqrt(A_l / (p_guess + B_l))
-        !       g_r = sqrt(A_r / (p_guess + B_r))
-        !
-        !       pstar = (g_l*p_l + g_r*p_r - (un_r - un_l))/(g_l + g_r)
-        !
-        !       ustar = 0.5*(un_l + un_r) + &
-        !            0.5*( (pstar - p_r)*g_r - (pstar - p_l)*g_l)
-        !
-        !       rhostar_l = rho_l*(pstar/p_l + (gamma-1.0d0)/(gamma+1.0d0))/ &
-        !            ( (gamma-1.0d0)/(gamma+1.0d0)*(pstar/p_l) + 1.0d0)
-        !
-        !       rhostar_r = rho_r*(pstar/p_r + (gamma-1.0d0)/(gamma+1.0d0))/ &
-        !            ( (gamma-1.0d0)/(gamma+1.0d0)*(pstar/p_r) + 1.0d0)
-        !
-        !    endif
-        ! endif
-        !
-        ! ! estimate the nonlinear wave speeds
-        !
-        ! if (pstar <= p_l) then
-        !    ! rarefaction
-        !    S_l = un_l - c_l
-        ! else
-        !    ! shock
-        !    S_l = un_l - c_l*sqrt(1.0d0 + ((gamma+1.0d0)/(2.0d0*gamma))* &
-        !                            (pstar/p_l - 1.0d0))
-        ! endif
-        !
-        ! if (pstar <= p_r) then
-        !    ! rarefaction
-        !    S_r = un_r + c_r
-        ! else
-        !    ! shock
-        !    S_r = un_r + c_r*sqrt(1.0d0 + ((gamma+1.0d0)/(2.0d0/gamma))* &
-        !                           (pstar/p_r - 1.0d0))
-        ! endif
-        !
-        ! !  We could just take S_c = u_star as the estimate for the
-        ! !  contact speed, but we can actually do this more accurately
-        ! !  by using the Rankine-Hugonoit jump conditions across each
-        ! !  of the waves (see Toro 10.58, Batten et al. SIAM
-        ! !  J. Sci. and Stat. Comp., 18:1553 (1997)
-        ! S_c = (p_r - p_l + rho_l*un_l*(S_l - un_l) - rho_r*un_r*(S_r - un_r))/ &
-        !      (rho_l*(S_l - un_l) - rho_r*(S_r - un_r))
-        !
-        !
-        ! ! figure out which region we are in and compute the state and
-        ! ! the interface fluxes using the HLLC Riemann solver
-        ! if (S_r <= 0.0d0) then
-        !    ! R region
-        !    U_state(:) = U_r(i,j,:)
-        !    q_state(:) = q_r(i,j,:)
-        !
-        !    call consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nvar, nspec, &
-        !                  U_state, q_state, F(i,j,:))
-        !
-        ! else if (S_r > 0.0d0 .and. S_c <= 0) then
-        !    ! R* region
-        !    HLLCfactor = rho_r*(S_r - un_r)/(S_r - S_c)
-        !
-        !    U_state(idens) = HLLCfactor
-        !
-        !    if (idir == 1) then
-        !       U_state(ixmom) = HLLCfactor*S_c
-        !       U_state(iymom) = HLLCfactor*ut_r
-        !    else
-        !       U_state(ixmom) = HLLCfactor*ut_r
-        !       U_state(iymom) = HLLCfactor*S_c
-        !    endif
-        !
-        !    U_state(iener) = HLLCfactor*(U_r(i,j,iener)/rho_r + &
-        !         (S_c - un_r)*(S_c + p_r/(rho_r*(S_r - un_r))))
-        !
-        !    ! species
-        !    if (nspec > 0) then
-        !       U_state(irhoX:irhoX-1+nspec) = HLLCfactor*U_r(i,j,irhoX:irhoX-1+nspec)/rho_r
-        !    endif
-        !
-        !    ! find the flux on the right interface
-        !    call consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nvar, nspec, &
-        !                  U_r(i,j,:), q_r(i,j,:), F(i,j,:))
-        !
-        !    ! correct the flux
-        !    F(i,j,:) = F(i,j,:) + S_r*(U_state(:) - U_r(i,j,:))
-        !
-        ! else if (S_c > 0.0d0 .and. S_l < 0.0) then
-        !    ! L* region
-        !    HLLCfactor = rho_l*(S_l - un_l)/(S_l - S_c)
-        !
-        !    U_state(idens) = HLLCfactor
-        !
-        !    if (idir == 1) then
-        !       U_state(ixmom) = HLLCfactor*S_c
-        !       U_state(iymom) = HLLCfactor*ut_l
-        !    else
-        !       U_state(ixmom) = HLLCfactor*ut_l
-        !       U_state(iymom) = HLLCfactor*S_c
-        !    endif
-        !
-        !    U_state(iener) = HLLCfactor*(U_l(i,j,iener)/rho_l + &
-        !         (S_c - un_l)*(S_c + p_l/(rho_l*(S_l - un_l))))
-        !
-        !    ! species
-        !    if (nspec > 0) then
-        !       U_state(irhoX:irhoX-1+nspec) = HLLCfactor*U_l(i,j,irhoX:irhoX-1+nspec)/rho_l
-        !    endif
-        !
-        !    ! find the flux on the left interface
-        !    call consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nvar, nspec, &
-        !                  U_l(i,j,:), q_l(i,j,:), F(i,j,:))
-        !
-        !    ! correct the flux
-        !    F(i,j,:) = F(i,j,:) + S_l*(U_state(:) - U_l(i,j,:))
-        !
-        ! else
-        !    ! L region
-        !    U_state(:) = U_l(i,j,:)
-        !    q_state(:) = q_l(i,j,:)
-        !
-        !    call consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nvar, nspec, U_state, q_state, F(i,j,:))
-        !
-        ! endif
-
-        ! we should deal with solid boundaries somehow here
-
      enddo
   enddo
+
 end subroutine riemann_HLLC
 
 subroutine consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nvar, nspec, U_state, q_state, F)

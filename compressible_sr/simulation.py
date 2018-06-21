@@ -3,6 +3,7 @@ from __future__ import print_function
 import importlib
 
 import numpy as np
+np.seterr(all='raise')
 import matplotlib.pyplot as plt
 from scipy.optimize import brentq
 
@@ -25,10 +26,16 @@ class Variables(object):
 
         # conserved variables -- we set these when we initialize for
         # they match the CellCenterData2d object
-        self.idens = myd.names.index("densityW")
-        self.ixmom = myd.names.index("x-momentum")
-        self.iymom = myd.names.index("y-momentum")
-        self.iener = myd.names.index("energy")
+        try:
+            self.idens = myd.names.index("densityW")
+            self.ixmom = myd.names.index("x-momentum")
+            self.iymom = myd.names.index("y-momentum")
+            self.iener = myd.names.index("energy")
+        except ValueError:
+            self.idens = 0
+            self.ixmom = 1
+            self.iymom = 2
+            self.iener = 3
 
         # if there are any additional variable, we treat them as
         # passively advected scalars
@@ -127,10 +134,11 @@ class Simulation(NullSimulation):
         aux_data.create()
         self.aux_data = aux_data
 
-        self.ivars = Variables(my_data)
-
         # derived variables
         self.cc_data.add_derived(derives.derive_primitives)
+
+        self.ivars = Variables(my_data)
+        self.cc_data.add_ivars(self.ivars)
 
         # initial conditions for the problem
         problem = importlib.import_module("{}.problems.{}".format(
@@ -154,6 +162,10 @@ class Simulation(NullSimulation):
 
         # get the variables we need
         u, v, cs = self.cc_data.get_var(["velocity", "soundspeed"])
+
+        # print(f'u = {u}')
+        # print(f'v = {v}')
+        # print(f'cs = {cs}')
 
         # the timestep is min(dx/(|u| + cs), dy/(|v| + cs))
         xtmp = self.cc_data.grid.dx/(abs(u) + cs)
@@ -224,18 +236,27 @@ class Simulation(NullSimulation):
 
         myg = self.cc_data.grid
 
-        # q = cons_to_prim(self.cc_data.data, gamma, ivars, self.cc_data.grid)
-
         q = flx.cons_to_prim_wrapper(self.cc_data.data, gamma, ivars, myg)
+
 
         rho = q[:, :, ivars.irho]
         u = q[:, :, ivars.iu]
         v = q[:, :, ivars.iv]
         p = q[:, :, ivars.ip]
-        e = eos.rhoe(gamma, p)/rho
+        try:
+            e = eos.rhoe(gamma, p)/rho
+        except FloatingPointError:
+            print(np.isfinite(p).all())
+            print(f'ener = {self.cc_data.data[:,:,ivars.iener]}')
+            print(f'ip = {ivars.ip}')
+            print(f'p = {p}')
+            p[:,:] = self.cc_data.data[:,:,ivars.iener] * (gamma-1)
+            e = self.cc_data.data[:,:,ivars.iener] #p / (gamma - 1)
 
         magvel = np.sqrt(u**2 + v**2)
-
+        # print(rho)
+        # print(magvel)
+        # exit()
 
         fields = [rho, magvel, p, e]
         field_names = [r"$\rho$", r"U", "p", "e"]

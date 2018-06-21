@@ -2,6 +2,7 @@ from __future__ import print_function
 
 import sys
 import mesh.patch as patch
+import compressible_sr.eos as eos
 import numpy as np
 from util import msg
 import matplotlib.pyplot as plt
@@ -46,26 +47,42 @@ def init_data(my_data, rp):
     # initialize the components, remember, that ener here is rho*eint
     # + 0.5*rho*v**2, where eint is the specific internal energy
     # (erg/g)
-    dens[:, :] = 1.0
     xmom[:, :] = 0.0
     ymom[:, :] = 0.0
 
     # set the density in the logo zones to be really large
-    logo_dens = 50.0
+    logo_dens = 0.1
 
-    dens.v()[:, :] = logo[:, :] * logo_dens
+    dens[:, :] = logo_dens * (0.5 + logo[0,0])
+
+    dens.v()[:, :] = (0.5 + logo[:, :]) * logo_dens
 
     # pressure equilibrium
     gamma = rp.get_param("eos.gamma")
 
-    p_ambient = 1.e-5
-    ener[:, :] = p_ambient/(gamma - 1.0)
+    p_ambient = 1.e-1
+    p = myg.scratch_array(nvar=1)
+    p[:,:] = p_ambient * (0.8 + logo[0,0])
+    p.v()[:,:] *= (0.8 + logo[:, :])
+    # ener[:, :] = p/(gamma - 1.0)
+    # ener.v()[:,:] *= (0.2 + logo[:, :])
 
     # explosion
-    ener[myg.ilo, myg.jlo] = 1.0
-    ener[myg.ilo, myg.jhi] = 1.0
-    ener[myg.ihi, myg.jlo] = 1.0
-    ener[myg.ihi, myg.jhi] = 1.0
+    # ener[myg.ilo, myg.jlo] = 1.0
+    # ener[myg.ilo, myg.jhi] = 1.0
+    # ener[myg.ihi, myg.jlo] = 1.0
+    # ener[myg.ihi, myg.jhi] = 1.0
+
+    rhoh = eos.rhoh_from_rho_p(gamma, dens, p)
+
+    u = xmom/dens
+    v = ymom/dens
+    W = 1./np.sqrt(1-u**2-v**2)
+    dens[:,:] *= W
+    xmom[:, :] = rhoh[:, :]*u*W**2
+    ymom[:, :] = rhoh[:, :]*v*W**2
+
+    ener[:,:] = rhoh[:,:]*W**2 - p - dens[:,:]
 
 
 def finalize():

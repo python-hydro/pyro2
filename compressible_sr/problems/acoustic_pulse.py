@@ -5,6 +5,8 @@ import mesh.fv as fv
 import numpy as np
 from util import msg
 
+import compressible_sr.eos as eos
+
 
 def init_data(myd, rp):
     """initialize the acoustic_pulse problem.  This comes from
@@ -13,10 +15,10 @@ def init_data(myd, rp):
     msg.bold("initializing the acoustic pulse problem...")
 
     # make sure that we are passed a valid patch object
-    if not isinstance(myd, fv.FV2d):
-        print("ERROR: patch invalid in acoustic_pulse.py")
-        print(myd.__class__)
-        sys.exit()
+    # if not isinstance(myd, fv.FV2d):
+    #     print("ERROR: patch invalid in acoustic_pulse.py")
+    #     print(myd.__class__)
+    #     sys.exit()
 
     # get the density, momenta, and energy as separate variables
     dens = myd.get_var("densityW")
@@ -53,6 +55,10 @@ def init_data(myd, rp):
 
     p = (dens/rho0)**gamma
     ener[:, :] = p/(gamma - 1)
+
+    rhoh = eos.rhoh_from_rho_p(gamma, dens, p)
+
+    ener[:,:] = rhoh[:,:] - p - dens[:,:]
 
 
 def finalize():

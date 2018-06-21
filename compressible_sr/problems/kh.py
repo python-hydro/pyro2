@@ -5,16 +5,18 @@ import numpy as np
 import mesh.patch as patch
 from util import msg
 
+import compressible_sr.eos as eos
+
 
 def init_data(my_data, rp):
     """ initialize the Kelvin-Helmholtz problem """
 
-    msg.bold("initializing the sedov problem...")
+    msg.bold("initializing the Kelvin-Helmholtz problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):
         print(my_data.__class__)
-        msg.fail("ERROR: patch invalid in sedov.py")
+        msg.fail("ERROR: patch invalid in kh.py")
 
     # get the density, momenta, and energy as separate variables
     dens = my_data.get_var("densityW")
@@ -72,6 +74,17 @@ def init_data(my_data, rp):
 
     p = 2.5
     ener[:, :] = p/(gamma - 1.0) + 0.5*(xmom[:, :]**2 + ymom[:, :]**2)/dens[:, :]
+
+    rhoh = eos.rhoh_from_rho_p(gamma, dens, p)
+
+    u = xmom/dens
+    v = ymom/dens
+    W = 1./np.sqrt(1-u**2-v**2)
+    dens[:,:] *= W
+    xmom[:, :] = rhoh[:, :]*u*W**2
+    ymom[:, :] = rhoh[:, :]*v*W**2
+
+    ener[:,:] = rhoh[:,:]*W**2 - p - dens[:,:]
 
 
 def finalize():

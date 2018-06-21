@@ -1,4 +1,5 @@
 function f(p, U_ij, gamma, idens, ixmom, iymom, iener, nvar) result (root)
+    ! function for doing root finding
 
     implicit none
 
@@ -164,6 +165,8 @@ subroutine cons_to_prim(U, qx, qy, &
 
     double precision :: f, brentq
 
+    double precision, parameter :: smallp = 1.0e-6
+
     do j = 0, qx-1
         do i = 0, qy-1
             pmax = max((gamma-1.0d0)*U(i, j, iener), 1.0d-2)
@@ -184,6 +187,13 @@ subroutine cons_to_prim(U, qx, qy, &
 
             ! try:
             q(i, j, ip) = brentq(pmin, pmax, U(i,j,:), gamma, idens, ixmom, iymom, iener, nvar)
+
+            if ((q(i, j, ip) /= q(i, j, ip)) .or. &
+                (q(i, j, ip)-1 == q(i, j, ip)) .or. &
+                (abs(q(i, j, ip)) > 1.0e10)) then ! nan or infty alert
+                q(i, j, ip) = max((gamma-1.0d0)*U(i, j, iener), smallp)
+            endif
+
             ! except ValueError:
             !     q(i, j, ip) = max((gamma-1.0d0)*U(i, j, iener), 0.0d0)
 
@@ -194,6 +204,15 @@ subroutine cons_to_prim(U, qx, qy, &
                 q(i, j, iu) = U(i, j, ixmom)/(U(i, j, iener) + U(i, j, idens) + q(i, j, ip))
                 q(i, j, iv) = U(i, j, iymom)/(U(i, j, iener) + U(i, j, idens) + q(i, j, ip))
             endif
+
+            ! nan check
+            if (q(i,j,iu) /= q(i,j,iu)) then
+                q(i,j,iu) = 0.0d0
+            endif
+            if (q(i,j,iv) /= q(i,j,iv)) then
+                q(i,j,iv) = 0.0d0
+            endif
+
         enddo
     enddo
 

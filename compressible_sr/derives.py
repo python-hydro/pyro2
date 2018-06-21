@@ -1,7 +1,7 @@
 import numpy as np
 
 import compressible_sr.eos as eos
-import compressible_sr as comp
+import compressible_sr.unsplit_fluxes as flx
 
 
 def derive_primitives(myd, varnames, ivars, myg):
@@ -10,14 +10,14 @@ def derive_primitives(myd, varnames, ivars, myg):
     """
 
     # get the variables we need
-    # dens = myd.get_var("densityW")
+    densU = myd.get_var("densityW")
     # xmom = myd.get_var("x-momentum")
     # ymom = myd.get_var("y-momentum")
     # ener = myd.get_var("energy")
 
     gamma = myd.get_aux("gamma")
 
-    q = comp.cons_to_prim(myd.data, gamma, ivars, myg)
+    q = flx.cons_to_prim_wrapper(myd.data, gamma, ivars, myg)
 
     derived_vars = []
 
@@ -25,7 +25,15 @@ def derive_primitives(myd, varnames, ivars, myg):
     u = q[:, :, ivars.iu]
     v = q[:, :, ivars.iv]
     p = q[:, :, ivars.ip]
-    e = eos.rhoe(gamma, p)/dens
+    try:
+        e = eos.rhoe(gamma, p)/dens
+    except FloatingPointError:
+        # print(np.isfinite(p).all())
+        # print(f'ener = {self.cc_data.data[:,:,ivars.iener]}')
+        # print(f'ip = {ivars.ip}')
+        # print(f'p = {p}')
+        p[:,:] = myd.data[:,:,ivars.iener] * (gamma-1)
+        e = myd.data[:,:,ivars.iener] #p / (gamma - 1)
 
     # u = xmom/dens
     # v = ymom/dens
@@ -59,8 +67,9 @@ def derive_primitives(myd, varnames, ivars, myg):
             derived_vars.append(p)
 
         elif var == "soundspeed":
+            # print(f'p = {p[5:-5,5:-5]}')
+            # print(f'rho = {densU}')
             derived_vars.append(np.sqrt(gamma*p/dens))
-
     if len(derived_vars) > 1:
         return derived_vars
     else:

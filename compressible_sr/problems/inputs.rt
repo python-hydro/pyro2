@@ -24,7 +24,14 @@ yrboundary = hse
 
 
 [rt]
-amp = 0.25
+dens1 = 1.0
+dens2 = 2.0
+
+amp = 1.0
+sigma = 0.1
+
+p0 = 10.0
+
 
 
 [compressible]

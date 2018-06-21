@@ -11,10 +11,12 @@ we'll do a special case for them
 """
 
 import compressible_sr.eos as eos
+import compressible_sr.unsplit_fluxes as flx
 from util import msg
+import numpy as np
 
 
-def user(bc_name, bc_edge, variable, ccdata):
+def user(bc_name, bc_edge, variable, ccdata, ivars):
     """
     A hydrostatic boundary.  This integrates the equation of HSE into
     the ghost cells to get the pressure and density under the assumption
@@ -56,30 +58,38 @@ def user(bc_name, bc_edge, variable, ccdata):
                     j -= 1
 
             elif variable == "energy":
-                dens = ccdata.get_var("densityW")
-                xmom = ccdata.get_var("x-momentum")
-                ymom = ccdata.get_var("y-momentum")
+                # dens = ccdata.get_var("densityW")
+                # xmom = ccdata.get_var("x-momentum")
+                # ymom = ccdata.get_var("y-momentum")
                 ener = ccdata.get_var("energy")
 
                 grav = ccdata.get_aux("grav")
                 gamma = ccdata.get_aux("gamma")
 
-                dens_base = dens[:, myg.jlo]
-                ke_base = 0.5*(xmom[:, myg.jlo]**2 + ymom[:, myg.jlo]**2) / \
-                    dens[:, myg.jlo]
+                q = flx.cons_to_prim_wrapper(ccdata.data, gamma, ivars, myg)
 
-                eint_base = (ener[:, myg.jlo] - ke_base)/dens[:, myg.jlo]
-                pres_base = eos.pres(gamma, dens_base, eint_base)
+                rho = q[:,:,ivars.irho]
+                u = q[:,myg.jlo,ivars.iu]
+                v = q[:,myg.jlo,ivars.iv]
+                p = q[:,:,ivars.ip]
+
+                dens_base = rho[:, myg.jlo]
+                # ke_base = 0.5*(u[:, myg.jlo]**2 + v[:, myg.jlo]**2) * rho[:, myg.jlo]
+
+                # eint_base = (ener[:, myg.jlo] - ke_base)/dens[:, myg.jlo]
+                # pres_base = eos.pres(gamma, dens_base, eint_base)
+                pres_base = p[:, myg.jlo]
 
                 # we are assuming that the density is constant in this
                 # formulation of HSE, so the pressure comes simply from
                 # differencing the HSE equation
+                W = np.sqrt(1-u**2-v**2)
                 j = myg.jlo-1
                 while j >= 0:
                     pres_below = pres_base - grav*dens_base*myg.dy
-                    rhoe = eos.rhoe(gamma, pres_below)
+                    rhoh = eos.rhoh_from_rho_p(gamma, dens_base, pres_below)
 
-                    ener[:, j] = rhoe + ke_base
+                    ener[:, j] = rhoh*W**2 - pres_below - dens_base
 
                     pres_base = pres_below.copy()
 
@@ -100,29 +110,40 @@ def user(bc_name, bc_edge, variable, ccdata):
                     v[:, j] = v[:, myg.jhi]
 
             elif variable == "energy":
-                dens = ccdata.get_var("densityW")
-                xmom = ccdata.get_var("x-momentum")
-                ymom = ccdata.get_var("y-momentum")
+                # dens = ccdata.get_var("densityW")
+                # xmom = ccdata.get_var("x-momentum")
+                # ymom = ccdata.get_var("y-momentum")
                 ener = ccdata.get_var("energy")
 
                 grav = ccdata.get_aux("grav")
                 gamma = ccdata.get_aux("gamma")
 
-                dens_base = dens[:, myg.jhi]
-                ke_base = 0.5*(xmom[:, myg.jhi]**2 + ymom[:, myg.jhi]**2) / \
-                    dens[:, myg.jhi]
+                q = flx.cons_to_prim_wrapper(ccdata.data, gamma, ivars, myg)
 
-                eint_base = (ener[:, myg.jhi] - ke_base)/dens[:, myg.jhi]
-                pres_base = eos.pres(gamma, dens_base, eint_base)
+                rho = q[:,:,ivars.irho]
+                u = q[:,myg.jhi,ivars.iu]
+                v = q[:,myg.jhi,ivars.iv]
+                p = q[:,:,ivars.ip]
+
+                dens_base = rho[:, myg.jhi]
+                # ke_base = 0.5*(xmom[:, myg.jhi]**2 + ymom[:, myg.jhi]**2) / \
+                    # dens[:, myg.jhi]
+
+                # eint_base = (ener[:, myg.jhi] - ke_base)/dens[:, myg.jhi]
+                # pres_base = eos.pres(gamma, dens_base, eint_base)
+                pres_base = p[:, myg.jhi]
 
                 # we are assuming that the density is constant in this
                 # formulation of HSE, so the pressure comes simply from
                 # differencing the HSE equation
+                W = np.sqrt(1-u**2-v**2)
                 for j in range(myg.jhi+1, myg.jhi+myg.ng+1):
                     pres_above = pres_base + grav*dens_base*myg.dy
-                    rhoe = eos.rhoe(gamma, pres_above)
+                    # rhoe = eos.rhoe(gamma, pres_above)
+                    rhoh = eos.rhoh_from_rho_p(gamma, dens_base, pres_above)
 
-                    ener[:, j] = rhoe + ke_base
+                    # ener[:, j] = rhoe + ke_base
+                    ener[:, j] = rhoh*W**2 - pres_above - dens_base
 
                     pres_base = pres_above.copy()
 
