@@ -21,6 +21,6 @@ def test_eos_consistency():
 
     assert (1 + gamma*eint) == h
 
-    rhoh = eos.rhoh_from_rho_p(gamma, dens, h)
+    rhoh = eos.rhoh_from_rho_p(gamma, dens, p)
 
     assert dens*h == rhoh
