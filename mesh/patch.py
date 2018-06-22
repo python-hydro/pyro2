@@ -521,7 +521,7 @@ class CellCenterData2d(object):
         n = self.names.index(name)
         return np.max(self.data.v(buf=ng, n=n))
 
-    def restrict(self, varname, ivars, N=2):
+    def restrict(self, varname, N=2):
         """
         Restrict the variable varname to a coarser grid (factor of 2
         coarser) and return an array with the resulting data (and same
@@ -559,7 +559,7 @@ class CellCenterData2d(object):
 
         return cdata
 
-    def prolong(self, varname, ivars):
+    def prolong(self, varname):
         """
         Prolong the data in the current (coarse) grid to a finer
         (factor of 2 finer) grid.  Return an array with the resulting

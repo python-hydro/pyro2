@@ -50,7 +50,7 @@ def user(bc_name, bc_edge, variable, ccdata, ivars):
 
             # we will take the density to be constant, the velocity to
             # be outflow, and the pressure to be in HSE
-            if variable in ["densityW", "x-momentum", "y-momentum", "ymom_src", "E_src", "fuel", "ash"]:
+            if variable in ["density", "x-momentum", "y-momentum", "ymom_src", "E_src", "fuel", "ash"]:
                 v = ccdata.get_var(variable)
                 j = myg.jlo-1
                 while j >= 0:
@@ -58,7 +58,7 @@ def user(bc_name, bc_edge, variable, ccdata, ivars):
                     j -= 1
 
             elif variable == "energy":
-                # dens = ccdata.get_var("densityW")
+                # dens = ccdata.get_var("density")
                 # xmom = ccdata.get_var("x-momentum")
                 # ymom = ccdata.get_var("y-momentum")
                 ener = ccdata.get_var("energy")
@@ -104,13 +104,13 @@ def user(bc_name, bc_edge, variable, ccdata, ivars):
 
             # we will take the density to be constant, the velocity to
             # be outflow, and the pressure to be in HSE
-            if variable in ["densityW", "x-momentum", "y-momentum", "ymom_src", "E_src", "fuel", "ash"]:
+            if variable in ["density", "x-momentum", "y-momentum", "ymom_src", "E_src", "fuel", "ash"]:
                 v = ccdata.get_var(variable)
                 for j in range(myg.jhi+1, myg.jhi+myg.ng+1):
                     v[:, j] = v[:, myg.jhi]
 
             elif variable == "energy":
-                # dens = ccdata.get_var("densityW")
+                # dens = ccdata.get_var("density")
                 # xmom = ccdata.get_var("x-momentum")
                 # ymom = ccdata.get_var("y-momentum")
                 ener = ccdata.get_var("energy")

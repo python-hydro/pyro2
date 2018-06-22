@@ -165,13 +165,13 @@ subroutine cons_to_prim(U, qx, qy, &
 
     double precision :: f, brentq
 
-    double precision, parameter :: smallp = 1.0e-6
+    double precision, parameter :: smallp = 1.0d-6
 
     do j = 0, qx-1
         do i = 0, qy-1
-            pmax = max((gamma-1.0d0)*U(i, j, iener), 1.0d-2)
+            pmax = max((gamma-1.0d0)*U(i, j, iener)*1.0000000001d0, smallp)
 
-            pmin = max(1.0d-6*pmax, sqrt(U(i, j, ixmom)**2+U(i, j, iymom)**2) - U(i, j, iener) - U(i, j, idens))
+            pmin = max(min(1.0d-6*pmax, smallp), sqrt(U(i, j, ixmom)**2+U(i, j, iymom)**2) - U(i, j, iener) - U(i, j, idens))
 
             fmin = f(pmin, U(i, j, :), gamma, idens, ixmom, iymom, iener, nvar)
             fmax = f(pmax, U(i, j, :), gamma, idens, ixmom, iymom, iener, nvar)
@@ -185,8 +185,12 @@ subroutine cons_to_prim(U, qx, qy, &
                 pmax = min(pmax*1.0d2, 1.0d0)
             endif
 
-            ! try:
-            q(i, j, ip) = brentq(pmin, pmax, U(i,j,:), gamma, idens, ixmom, iymom, iener, nvar)
+            if (fmin * fmax > 0.0d0) then
+                q(i, j, ip) = max((gamma-1.0d0)*U(i, j, iener), smallp)
+            else
+                ! try:
+                q(i, j, ip) = brentq(pmin, pmax, U(i,j,:), gamma, idens, ixmom, iymom, iener, nvar)
+            endif
 
             if ((q(i, j, ip) /= q(i, j, ip)) .or. &
                 (q(i, j, ip)-1 == q(i, j, ip)) .or. &

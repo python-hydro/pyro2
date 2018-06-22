@@ -37,7 +37,7 @@ def init_data(my_data, rp):
     logo = np.rot90(np.rot90(np.rot90((256-data[:, :, 1])/255.0)))
 
     # get the density, momenta, and energy as separate variables
-    dens = my_data.get_var("densityW")
+    dens = my_data.get_var("density")
     xmom = my_data.get_var("x-momentum")
     ymom = my_data.get_var("y-momentum")
     ener = my_data.get_var("energy")

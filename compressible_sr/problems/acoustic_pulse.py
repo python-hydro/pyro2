@@ -21,7 +21,7 @@ def init_data(myd, rp):
     #     sys.exit()
 
     # get the density, momenta, and energy as separate variables
-    dens = myd.get_var("densityW")
+    dens = myd.get_var("density")
     xmom = myd.get_var("x-momentum")
     ymom = myd.get_var("y-momentum")
     ener = myd.get_var("energy")

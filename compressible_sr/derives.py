@@ -10,7 +10,7 @@ def derive_primitives(myd, varnames, ivars, myg):
     """
 
     # get the variables we need
-    densU = myd.get_var("densityW")
+    densU = myd.get_var("density")
     # xmom = myd.get_var("x-momentum")
     # ymom = myd.get_var("y-momentum")
     # ener = myd.get_var("energy")

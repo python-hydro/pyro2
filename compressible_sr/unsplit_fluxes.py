@@ -177,7 +177,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     #=========================================================================
     # Q = (rho, u, v, p, {X})
 
-    dens = my_data.get_var("densityW")
+    dens = my_data.get_var("density")
     ymom = my_data.get_var("y-momentum")
 
     q = cons_to_prim_wrapper(my_data.data, gamma, ivars, myg)

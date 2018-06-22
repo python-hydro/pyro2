@@ -27,7 +27,7 @@ class Variables(object):
         # conserved variables -- we set these when we initialize for
         # they match the CellCenterData2d object
         try:
-            self.idens = myd.names.index("densityW")
+            self.idens = myd.names.index("density")
             self.ixmom = myd.names.index("x-momentum")
             self.iymom = myd.names.index("y-momentum")
             self.iener = myd.names.index("energy")
@@ -106,7 +106,7 @@ class Simulation(NullSimulation):
         self.solid = bnd.bc_is_solid(bc)
 
         # density and energy
-        my_data.register_var("densityW", bc)
+        my_data.register_var("density", bc)
         my_data.register_var("energy", bc)
         my_data.register_var("x-momentum", bc_xodd)
         my_data.register_var("y-momentum", bc_yodd)
@@ -182,7 +182,7 @@ class Simulation(NullSimulation):
         tm_evolve = self.tc.timer("evolve")
         tm_evolve.begin()
 
-        dens = self.cc_data.get_var("densityW")
+        dens = self.cc_data.get_var("density")
         ymom = self.cc_data.get_var("y-momentum")
         ener = self.cc_data.get_var("energy")
 

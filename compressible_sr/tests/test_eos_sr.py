@@ -16,3 +16,11 @@ def test_eos_consistency():
     rhoe_eos = eos.rhoe(gamma, p)
 
     assert dens*eint == rhoe_eos
+
+    h = eos.h_from_eps(gamma, eint)
+
+    assert (1 + gamma*eint) == h
+
+    rhoh = eos.rhoh_from_rho_p(gamma, dens, h)
+
+    assert dens*h == eos.rhoh_from_rho_p(gamma, dens, p)
