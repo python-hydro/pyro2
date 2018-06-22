@@ -134,7 +134,7 @@ def user(bc_name, bc_edge, variable, ccdata):
 
         else:
             msg.fail("error: hse BC not supported for xlb or xrb")
-    
+            
     elif bc_name == "ramp":
         # Boundary conditions for double Mach reflection problem
         
@@ -145,77 +145,75 @@ def user(bc_name, bc_edge, variable, ccdata):
             # inflow condition with post shock setup
             
             v = ccdata.get_var(variable)
-            i = myg.ilo -1
-            if variable in ["density", "x-momentum", "y-momentum","energy"]:
-                val = inflow_post_bc(variable,gamma)
+            i = myg.ilo - 1
+            if variable in ["density", "x-momentum", "y-momentum", "energy"]:
+                val = inflow_post_bc(variable, gamma)
                 while i >= 0:
-                    v[i,:] = val
-                    i = i -1
+                    v[i, :] = val
+                    i = i - 1
             else:
-                v[:,:] = 0.0 #no source term
-                
-        
+                v[:, :] = 0.0   # no source term
+                        
         elif bc_edge == "ylb":
-            #lower y boundary
-            #for x > 1./6., reflective boundary
-            #for x < 1./6., inflow with post shock setup
+            # lower y boundary
+            # for x > 1./6., reflective boundary
+            # for x < 1./6., inflow with post shock setup
             
-            if variable in ["density", "x-momentum", "y-momentum","energy"]:
+            if variable in ["density", "x-momentum", "y-momentum", "energy"]:
                 v = ccdata.get_var(variable)
-                j = myg.jlo -1
+                j = myg.jlo - 1
                 jj = 0
                 while j >= 0:
                     xcen_l = myg.x < 1.0/6.0
                     xcen_r = myg.x >= 1.0/6.0
-                    v[xcen_l,j] = inflow_post_bc(variable,gamma)
+                    v[xcen_l, j] = inflow_post_bc(variable, gamma)
                     
                     if variable == "y-momentum":
-                        v[xcen_r,j] = -1.0*v[xcen_r,myg.jlo+jj]
+                        v[xcen_r, j] = -1.0*v[xcen_r, myg.jlo+jj]
                     else:
-                        v[xcen_r,j] = v[xcen_r,myg.jlo+jj]
-                    j = j-1
-                    jj = jj +1
+                        v[xcen_r, j] = v[xcen_r, myg.jlo+jj]
+                    j = j - 1
+                    jj = jj + 1
             else:
                 v = ccdata.get_var(variable)
-                v[:,:] = 0.0 #no source term
-              
-        
+                v[:, :] = 0.0   # no source term
+                
         elif bc_edge == "yrb":
             # upper y boundary
             # time-dependent boundary, the shockfront moves with a 10 mach velocity forming an angle
             # to the x-axis of 30 degrees clockwise.
-            # x coordinate of the grid is used to judge whether the cell belongs to pure post shock area, 
+            # x coordinate of the grid is used to judge whether the cell belongs to pure post shock area,
             # the pure pre shock area or the mixed area.
             
-            if variable in ["density", "x-momentum", "y-momentum","energy"]:
+            if variable in ["density", "x-momentum", "y-momentum", "energy"]:
                 v = ccdata.get_var(variable)
                 for j in range(myg.jhi+1, myg.jhi+myg.ng+1):
                     shockfront_up = 1.0/6.0 + (myg.y[j] + 0.5*myg.dy*math.sqrt(3))/math.tan(math.pi/3.0) \
                                     + (10.0/math.sin(math.pi/3.0))*ccdata.t
                     shockfront_down = 1.0/6.0 + (myg.y[j] - 0.5*myg.dy*math.sqrt(3))/math.tan(math.pi/3.0) \
                                     + (10.0/math.sin(math.pi/3.0))*ccdata.t
-                    shockfront = np.array([shockfront_down,shockfront_up])
+                    shockfront = np.array([shockfront_down, shockfront_up])
                     for i in range(myg.ihi+myg.ng+1):
-                        v[i,j] = 0.0
+                        v[i, j] = 0.0
                         cx_down = myg.x[i] - 0.5*myg.dx*math.sqrt(3)
                         cx_up = myg.x[i] + 0.5*myg.dx*math.sqrt(3)
-                        cx = np.array([cx_down,cx_up])
+                        cx = np.array([cx_down, cx_up])
                         
                         for sf in shockfront:
                             for x in cx:
                                 if x < sf:
-                                    v[i,j] = v[i,j] + 0.25*inflow_post_bc(variable,gamma)
+                                    v[i, j] = v[i, j] + 0.25*inflow_post_bc(variable, gamma)
                                 else:
-                                    v[i,j] = v[i,j] + 0.25*inflow_pre_bc(variable,gamma)
+                                    v[i, j] = v[i, j] + 0.25*inflow_pre_bc(variable, gamma)
             else:
                 v = ccdata.get_var(variable)
-                v[:,:] = 0.0 #no source term
-                                  
+                v[:, :] = 0.0   # no source term
+                
     else:
         msg.fail("error: bc type %s not supported" % (bc_name))
-
         
-def inflow_post_bc(var,g):
+        
+def inflow_post_bc(var, g):
     # inflow boundary condition with post shock setup
     r_l = 8.0
     u_l = 7.1447096
@@ -233,7 +231,8 @@ def inflow_post_bc(var,g):
         vl = 0.0
     return vl
 
-def inflow_pre_bc(var,g):
+
+def inflow_pre_bc(var, g):
     # pre shock setup
     r_r = 1.4
     u_r = 0.0
@@ -248,8 +247,5 @@ def inflow_pre_bc(var,g):
     elif var == "energy":
         vl = p_r/(g - 1.0) + 0.5*r_r*(u_r*u_r + v_r*v_r)
     else:
-        vl = 0.0       
+        vl = 0.0
     return vl
-     
-
-    
