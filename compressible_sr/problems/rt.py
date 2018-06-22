@@ -49,8 +49,8 @@ def init_data(my_data, rp):
 
     p = myg.scratch_array()
 
-    p[:,:] = p0
-    dens[:,:] = dens1
+    p[:, :] = p0
+    dens[:, :] = dens1
 
     for j in range(myg.jlo, myg.jhi+1):
         if (myg.y[j] < ycenter):
@@ -61,7 +61,6 @@ def init_data(my_data, rp):
             dens[:, j] = dens2
             p[:, j] = p0 + dens1*grav*ycenter + dens2*grav*(myg.y[j] - ycenter)
 
-
     ymom[:, :] = amp*np.cos(2.0*np.pi*myg.x2d/(myg.xmax-myg.xmin))*np.exp(-(myg.y2d-ycenter)**2/sigma**2)
 
     rhoh = eos.rhoh_from_rho_p(gamma, dens, p)
@@ -69,11 +68,11 @@ def init_data(my_data, rp):
     u = xmom
     v = ymom
     W = 1./np.sqrt(1-u**2-v**2)
-    dens[:,:] *= W
+    dens[:, :] *= W
     xmom[:, :] *= rhoh[:, :]*W**2
     ymom[:, :] *= rhoh[:, :]*W**2
 
-    ener[:,:] = rhoh[:,:]*W**2 - p - dens[:,:]
+    ener[:, :] = rhoh[:, :]*W**2 - p - dens[:, :]
 
     print(p[2:-2, 2:-2])
 

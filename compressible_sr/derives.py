@@ -10,11 +10,6 @@ def derive_primitives(myd, varnames, ivars, myg):
     """
 
     # get the variables we need
-    densU = myd.get_var("density")
-    # xmom = myd.get_var("x-momentum")
-    # ymom = myd.get_var("y-momentum")
-    # ener = myd.get_var("energy")
-
     gamma = myd.get_aux("gamma")
 
     q = flx.cons_to_prim_wrapper(myd.data, gamma, ivars, myg)
@@ -29,11 +24,11 @@ def derive_primitives(myd, varnames, ivars, myg):
         e = eos.rhoe(gamma, p)/dens
     except FloatingPointError:
         # print(np.isfinite(p).all())
-        # print(f'ener = {self.cc_data.data[:,:,ivars.iener]}')
+        # print(f'ener = {self.cc_data.data[:, :, ivars.iener]}')
         # print(f'ip = {ivars.ip}')
         # print(f'p = {p}')
-        p[:,:] = myd.data[:,:,ivars.iener] * (gamma-1)
-        e = myd.data[:,:,ivars.iener] #p / (gamma - 1)
+        p[:, :] = myd.data[:, :, ivars.iener] * (gamma-1)
+        e = myd.data[:, :, ivars.iener]  # p / (gamma - 1)
 
     # u = xmom/dens
     # v = ymom/dens

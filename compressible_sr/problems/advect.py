@@ -44,8 +44,9 @@ def init_data(my_data, rp):
     yctr = 0.5*(ymin + ymax)
 
     # this is identical to the advection/smooth problem
-    dens[:, :] = 0.2 * (1  + np.exp(-60.0*((my_data.grid.x2d-xctr)**2 +
-                                    (my_data.grid.y2d-yctr)**2)))
+    dens[:, :] = 0.2 * (1 +
+                 np.exp(-60.0 * ((my_data.grid.x2d-xctr)**2 +
+                                 (my_data.grid.y2d-yctr)**2)))
 
     # velocity is diagonal
     u = 0.4

@@ -1,11 +1,8 @@
 from __future__ import print_function
 
 import importlib
-
-import numpy as np
-np.seterr(all='raise')
 import matplotlib.pyplot as plt
-from scipy.optimize import brentq
+import numpy as np
 
 import compressible_sr.BC as BC
 import compressible_sr.eos as eos
@@ -14,6 +11,8 @@ import compressible_sr.unsplit_fluxes as flx
 import mesh.boundary as bnd
 from simulation_null import NullSimulation, grid_setup, bc_setup
 import util.plot_tools as plot_tools
+
+np.seterr(all='raise')
 
 
 class Variables(object):
@@ -238,7 +237,6 @@ class Simulation(NullSimulation):
 
         q = flx.cons_to_prim_wrapper(self.cc_data.data, gamma, ivars, myg)
 
-
         rho = q[:, :, ivars.irho]
         u = q[:, :, ivars.iu]
         v = q[:, :, ivars.iv]
@@ -247,11 +245,11 @@ class Simulation(NullSimulation):
             e = eos.rhoe(gamma, p)/rho
         except FloatingPointError:
             print(np.isfinite(p).all())
-            print(f'ener = {self.cc_data.data[:,:,ivars.iener]}')
+            print(f'ener = {self.cc_data.data[:, :, ivars.iener]}')
             print(f'ip = {ivars.ip}')
             print(f'p = {p}')
-            p[:,:] = self.cc_data.data[:,:,ivars.iener] * (gamma-1)
-            e = self.cc_data.data[:,:,ivars.iener] #p / (gamma - 1)
+            p[:, :] = self.cc_data.data[:, :, ivars.iener] * (gamma-1)
+            e = self.cc_data.data[:, :, ivars.iener]  # p / (gamma - 1)
 
         magvel = np.sqrt(u**2 + v**2)
         # print(rho)

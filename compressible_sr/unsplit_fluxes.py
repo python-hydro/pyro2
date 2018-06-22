@@ -129,7 +129,6 @@ import mesh.reconstruction as reconstruction
 import mesh.array_indexer as ai
 
 from util import msg
-import numpy
 
 
 def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
@@ -343,19 +342,19 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
              |          |          |          |
         j+1 -+          |          |          |
              |          |          |          |
-             |          |          |          |    1: U_xl[i,j,:] = U
+             |          |          |          |    1: U_xl[i,j, :] = U
       j+1/2--+----------XXXXXXXXXXXX----------+                      i-1/2,j,L
              |          X          X          |
              |          X          X          |
-          j -+        1 X 2        X          |    2: U_xr[i,j,:] = U
+          j -+        1 X 2        X          |    2: U_xr[i,j, :] = U
              |          X          X          |                      i-1/2,j,R
              |          X    4     X          |
       j-1/2--+----------XXXXXXXXXXXX----------+
-             |          |    3     |          |    3: U_yl[i,j,:] = U
+             |          |    3     |          |    3: U_yl[i,j, :] = U
              |          |          |          |                      i,j-1/2,L
         j-1 -+          |          |          |
              |          |          |          |
-             |          |          |          |    4: U_yr[i,j,:] = U
+             |          |          |          |    4: U_yr[i,j, :] = U
       j-3/2--+----------+----------+----------+                      i,j-1/2,R
              |    |     |    |     |    |     |
                  i-1         i         i+1
@@ -364,10 +363,10 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     remember that the fluxes are stored on the left edge, so
 
-    F_x[i,j,:] = F_x
+    F_x[i,j, :] = F_x
                     i-1/2, j
 
-    F_y[i,j,:] = F_y
+    F_y[i,j, :] = F_y
                     i, j-1/2
 
     """
@@ -463,6 +462,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     return F_x, F_y
 
+
 def cons_to_prim_wrapper(U, gamma, ivars, myg):
     """
     wrapper for fortran cons to prim routine
@@ -470,7 +470,7 @@ def cons_to_prim_wrapper(U, gamma, ivars, myg):
 
     q = myg.scratch_array(nvar=ivars.nq)
 
-    q[:,:,:] = c2p.cons_to_prim(U, myg.qx, myg.qy,
+    q[:, :, :] = c2p.cons_to_prim(U, myg.qx, myg.qy,
                          ivars.irho, ivars.iu, ivars.iv,
                          ivars.ip, ivars.ix, ivars.irhox,
                          ivars.idens, ivars.ixmom, ivars.iymom,

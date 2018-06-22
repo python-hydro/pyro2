@@ -1,7 +1,5 @@
 from __future__ import print_function
 
-import sys
-import mesh.fv as fv
 import numpy as np
 from util import msg
 
@@ -58,7 +56,7 @@ def init_data(myd, rp):
 
     rhoh = eos.rhoh_from_rho_p(gamma, dens, p)
 
-    ener[:,:] = rhoh[:,:] - p - dens[:,:]
+    ener[:, :] = rhoh[:, :] - p - dens[:, :]
 
 
 def finalize():

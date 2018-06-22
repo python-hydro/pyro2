@@ -68,10 +68,10 @@ def user(bc_name, bc_edge, variable, ccdata, ivars):
 
                 q = flx.cons_to_prim_wrapper(ccdata.data, gamma, ivars, myg)
 
-                rho = q[:,:,ivars.irho]
-                u = q[:,myg.jlo,ivars.iu]
-                v = q[:,myg.jlo,ivars.iv]
-                p = q[:,:,ivars.ip]
+                rho = q[:, :, ivars.irho]
+                u = q[:, myg.jlo, ivars.iu]
+                v = q[:, myg.jlo, ivars.iv]
+                p = q[:, :, ivars.ip]
 
                 dens_base = rho[:, myg.jlo]
                 # ke_base = 0.5*(u[:, myg.jlo]**2 + v[:, myg.jlo]**2) * rho[:, myg.jlo]
@@ -120,14 +120,14 @@ def user(bc_name, bc_edge, variable, ccdata, ivars):
 
                 q = flx.cons_to_prim_wrapper(ccdata.data, gamma, ivars, myg)
 
-                rho = q[:,:,ivars.irho]
-                u = q[:,myg.jhi,ivars.iu]
-                v = q[:,myg.jhi,ivars.iv]
-                p = q[:,:,ivars.ip]
+                rho = q[:, :, ivars.irho]
+                u = q[:, myg.jhi, ivars.iu]
+                v = q[:, myg.jhi, ivars.iv]
+                p = q[:, :, ivars.ip]
 
                 dens_base = rho[:, myg.jhi]
                 # ke_base = 0.5*(xmom[:, myg.jhi]**2 + ymom[:, myg.jhi]**2) / \
-                    # dens[:, myg.jhi]
+                #   dens[:, myg.jhi]
 
                 # eint_base = (ener[:, myg.jhi] - ke_base)/dens[:, myg.jhi]
                 # pres_base = eos.pres(gamma, dens_base, eint_base)

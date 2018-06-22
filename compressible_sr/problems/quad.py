@@ -102,12 +102,11 @@ def init_data(my_data, rp):
     u = xmom
     v = ymom
     W = 1./np.sqrt(1-u**2-v**2)
-    dens[:,:] *= W
+    dens[:, :] *= W
     xmom[:, :] = rhoh[:, :]*u*W**2
     ymom[:, :] = rhoh[:, :]*v*W**2
 
-    ener[:,:] = rhoh[:,:]*W**2 - p - dens[:,:]
-
+    ener[:, :] = rhoh[:, :]*W**2 - p - dens[:, :]
 
 
 def finalize():
