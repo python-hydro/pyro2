@@ -66,13 +66,6 @@ def init_data(my_data, rp):
     p.v()[:, :] *= (0.8 + logo[:, :])
     # ener[:, :] = p/(gamma - 1.0)
     # ener.v()[:, :] *= (0.2 + logo[:, :])
-
-    # explosion
-    # ener[myg.ilo, myg.jlo] = 1.0
-    # ener[myg.ilo, myg.jhi] = 1.0
-    # ener[myg.ihi, myg.jlo] = 1.0
-    # ener[myg.ihi, myg.jhi] = 1.0
-
     rhoh = eos.rhoh_from_rho_p(gamma, dens, p)
 
     u = xmom/dens

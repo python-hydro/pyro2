@@ -2,6 +2,7 @@ from __future__ import print_function
 
 import sys
 import mesh.patch as patch
+import compressible_sr.eos as eos
 import numpy as np
 from util import msg
 import math
@@ -31,7 +32,7 @@ def init_data(my_data, rp):
     xmom[:, :] = 0.0
     ymom[:, :] = 0.0
 
-    E_sedov = 1.0
+    E_sedov = 2.0e-3
 
     r_init = rp.get_param("sedov.r_init")
 
@@ -73,8 +74,12 @@ def init_data(my_data, rp):
             (nsub*nsub - n_in_pert)*1.e-5
 
         p = p/(nsub*nsub)
+        #
+        # ener[i, j] = p/(gamma - 1.0)
 
-        ener[i, j] = p/(gamma - 1.0)
+        # W = 1
+        rhoh = eos.rhoh_from_rho_p(gamma, dens[i, j], p)
+        ener[i, j] = rhoh - p - dens[i, j]
 
 
 def finalize():
