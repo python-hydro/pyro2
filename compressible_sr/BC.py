@@ -231,6 +231,7 @@ def user(bc_name, bc_edge, variable, ccdata, ivars):
     else:
         msg.fail("error: bc type %s not supported" % (bc_name))
 
+
 def inflow_post_bc(var, g):
     # inflow boundary condition with post shock setup
     r_l = 8.0
