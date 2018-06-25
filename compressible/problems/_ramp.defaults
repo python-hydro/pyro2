@@ -1,0 +1,19 @@
+# these defaults comes from the third test problem in 
+# Woodward and Colella. Journal of Computational Physics, 54, 115-174, 1984
+#
+# Also, the numbers is consitent with the ones in Castro
+#
+
+
+[ramp]
+rhol = 8.0                 ; post-shock initial density
+ul = 7.1447096             ; post-shock initial x-velocity
+vl = -4.125                ; post-shock initial y-velocity
+pl = 116.5                 ; post-shock initial pressure
+ 
+rhor = 1.4                 ; pre-shock initial density
+ur = 0.0                   ; pre-shock initial x-velocity
+vr = 0.0                   ; pre-shock initial y-velocity
+pr = 1.0                   ; pre-shock initial pressure
+ 
+ 
