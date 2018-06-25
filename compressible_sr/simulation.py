@@ -250,7 +250,7 @@ class Simulation(NullSimulation):
             e = self.cc_data.data[:, :, ivars.iener]  # p / (gamma - 1)
 
         magvel = np.sqrt(u**2 + v**2)
-        
+
         fields = [rho, magvel, p, e]
         field_names = [r"$\rho$", r"U", "p", "e"]
 

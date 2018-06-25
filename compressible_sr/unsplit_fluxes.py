@@ -129,7 +129,6 @@ import mesh.reconstruction as reconstruction
 import mesh.array_indexer as ai
 
 from util import msg
-import numpy as np
 
 
 def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):

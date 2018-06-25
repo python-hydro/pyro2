@@ -54,7 +54,7 @@ def init_data(my_data, rp):
     myg = my_data.grid
 
     p = np.ones_like(dens) * p_left
-    dens[:,:] = dens_left
+    dens[:, :] = dens_left
 
     if direction == "x":
 
@@ -108,9 +108,6 @@ def init_data(my_data, rp):
     ymom[:, :] *= rhoh*W**2
 
     ener[:, :] = rhoh*W**2 - p - dens
-
-    # print(f'p = {p}')
-    # exit()
 
 
 def finalize():
