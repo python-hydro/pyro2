@@ -74,8 +74,6 @@ def init_data(my_data, rp):
 
     ener[:, :] = rhoh[:, :]*W**2 - p - dens[:, :]
 
-    print(p[2:-2, 2:-2])
-
     # set the energy (P = cs2*dens)
     # ener[:, :] = p[:, :]/(gamma - 1.0) + \
     #     0.5*(xmom[:, :]**2 + ymom[:, :]**2)/dens[:, :]

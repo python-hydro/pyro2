@@ -12,7 +12,7 @@ import mesh.boundary as bnd
 from simulation_null import NullSimulation, grid_setup, bc_setup
 import util.plot_tools as plot_tools
 
-np.seterr(all='raise')
+# np.seterr(all='raise')
 
 
 class Variables(object):
@@ -63,13 +63,21 @@ def prim_to_cons(q, gamma, ivars, myg):
 
     U = myg.scratch_array(nvar=ivars.nvar)
 
-    W = 1 / np.sqrt(1 - q[:, :, ivars.iu]**2 - q[:, :, ivars.iv]**2)
+    u = q[:, :, ivars.iu]
+    v = q[:, :, ivars.iv]
+
+    try:
+        W = 1 / np.sqrt(1 - u**2 - v**2)
+    except FloatingPointError:
+        u[np.isnan(u)] = 0
+        v[np.isnan(v)] = 0
+        W = np.ones_like(u)
 
     rhoh = eos.rhoh_from_rho_p(gamma, q[:, :, ivars.irho], q[:, :, ivars.ip])
 
     U[:, :, ivars.idens] = q[:, :, ivars.irho] * W
-    U[:, :, ivars.ixmom] = q[:, :, ivars.iu] * rhoh * W**2
-    U[:, :, ivars.iymom] = q[:, :, ivars.iv] * rhoh * W**2
+    U[:, :, ivars.ixmom] = u * rhoh * W**2
+    U[:, :, ivars.iymom] = v * rhoh * W**2
 
     U[:, :, ivars.iener] = rhoh * W**2 - q[:, :, ivars.ip] - U[:, :, ivars.idens]
 

@@ -9,6 +9,7 @@ import numpy as np
 
 import sys
 import mesh.patch as patch
+import compressible_sr.eos as eos
 from util import msg
 
 
@@ -79,9 +80,14 @@ def init_data(my_data, rp):
 
     ymom *= dens
 
-    # set the energy (P = cs2*dens)
-    ener[:, :] = p[:, :]/(gamma - 1.0) + \
-        0.5*(xmom[:, :]**2 + ymom[:, :]**2)/dens[:, :]
+    rhoh = eos.rhoh_from_rho_p(gamma, dens, p)
+
+    W = 1./np.sqrt(1-xmom**2-ymom**2)
+    dens[:, :] *= W
+    xmom[:, :] *= rhoh*W**2
+    ymom[:, :] *= rhoh*W**2
+
+    ener[:, :] = rhoh*W**2 - p - dens
 
 
 def finalize():

@@ -27,8 +27,8 @@ yrboundary = hse
 dens1 = 1.0
 dens2 = 2.0
 
-amp = 1.0
-sigma = 0.1
+amp = 0.1
+sigma = 0.025
 
 p0 = 10.0
 
