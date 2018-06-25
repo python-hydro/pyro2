@@ -167,8 +167,8 @@ subroutine cons_to_prim(U, qx, qy, &
 
     double precision, parameter :: smallp = 1.0d-6
 
-    do j = 0, qx-1
-        do i = 0, qy-1
+    do j = 0, qy-1
+        do i = 0, qx-1
             pmax = max((gamma-1.0d0)*U(i, j, iener)*1.0000000001d0, smallp)
 
             pmin = max(min(1.0d-6*pmax, smallp), sqrt(U(i, j, ixmom)**2+U(i, j, iymom)**2) - U(i, j, iener) - U(i, j, idens))
@@ -198,6 +198,7 @@ subroutine cons_to_prim(U, qx, qy, &
                 q(i, j, ip) = max((gamma-1.0d0)*U(i, j, iener), smallp)
             endif
 
+            q(i, j, ip) = max(q(i, j, ip), smallp)
             ! except ValueError:
             !     q(i, j, ip) = max((gamma-1.0d0)*U(i, j, iener), 0.0d0)
 
@@ -223,6 +224,8 @@ subroutine cons_to_prim(U, qx, qy, &
     W = 1.0d0/sqrt(1.0d0 - q(:, :, iu)**2 - q(:, :, iv)**2)
 
     q(:, :, irho) = U(:, :, idens) / W
+
+    ! write(*,*) "p = ", q(:, :, ip)
 
     if (naux > 0) then
         do i = 0, naux-1

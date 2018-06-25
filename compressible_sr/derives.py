@@ -23,21 +23,10 @@ def derive_primitives(myd, varnames, ivars, myg):
     try:
         e = eos.rhoe(gamma, p)/dens
     except FloatingPointError:
-        # print(np.isfinite(p).all())
-        # print(f'ener = {self.cc_data.data[:, :, ivars.iener]}')
-        # print(f'ip = {ivars.ip}')
-        # print(f'p = {p}')
         p[:, :] = myd.data[:, :, ivars.iener] * (gamma-1)
         e = myd.data[:, :, ivars.iener]  # p / (gamma - 1)
 
-    # u = xmom/dens
-    # v = ymom/dens
-    #
-    # e = (ener - 0.5*dens*(u*u + v*v))/dens
-
     gamma = myd.get_aux("gamma")
-    # p = eos.pres(gamma, dens, e)
-
     if isinstance(varnames, str):
         wanted = [varnames]
     else:
@@ -62,8 +51,6 @@ def derive_primitives(myd, varnames, ivars, myg):
             derived_vars.append(p)
 
         elif var == "soundspeed":
-            # print(f'p = {p[5:-5,5:-5]}')
-            # print(f'rho = {densU}')
             derived_vars.append(np.sqrt(gamma*p/dens))
     if len(derived_vars) > 1:
         return derived_vars

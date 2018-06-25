@@ -53,7 +53,8 @@ def init_data(my_data, rp):
 
     myg = my_data.grid
 
-    p = np.zeros_like(dens)
+    p = np.ones_like(dens) * p_left
+    dens[:,:] = dens_left
 
     if direction == "x":
 
@@ -101,16 +102,14 @@ def init_data(my_data, rp):
 
     rhoh = eos.rhoh_from_rho_p(gamma, dens, p)
 
-    u = xmom
-    v = ymom
-    W = 1./np.sqrt(1-u**2-v**2)
+    W = 1./np.sqrt(1-xmom**2-ymom**2)
     dens[:, :] *= W
     xmom[:, :] *= rhoh*W**2
     ymom[:, :] *= rhoh*W**2
 
     ener[:, :] = rhoh*W**2 - p - dens
 
-    # print(f'ener = {ener}')
+    # print(f'p = {p}')
     # exit()
 
 

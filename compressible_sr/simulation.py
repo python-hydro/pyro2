@@ -166,6 +166,8 @@ class Simulation(NullSimulation):
         # print(f'v = {v}')
         # print(f'cs = {cs}')
 
+        # print(sum(abs(u)))
+
         # the timestep is min(dx/(|u| + cs), dy/(|v| + cs))
         xtmp = self.cc_data.grid.dx/(abs(u) + cs)
         ytmp = self.cc_data.grid.dy/(abs(v) + cs)
@@ -244,18 +246,11 @@ class Simulation(NullSimulation):
         try:
             e = eos.rhoe(gamma, p)/rho
         except FloatingPointError:
-            print(np.isfinite(p).all())
-            print(f'ener = {self.cc_data.data[:, :, ivars.iener]}')
-            print(f'ip = {ivars.ip}')
-            print(f'p = {p}')
             p[:, :] = self.cc_data.data[:, :, ivars.iener] * (gamma-1)
             e = self.cc_data.data[:, :, ivars.iener]  # p / (gamma - 1)
 
         magvel = np.sqrt(u**2 + v**2)
-        # print(rho)
-        # print(magvel)
-        # exit()
-
+        
         fields = [rho, magvel, p, e]
         field_names = [r"$\rho$", r"U", "p", "e"]
 
