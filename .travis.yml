@@ -27,7 +27,7 @@ script:
 after_success:
     - codecov
 after_failure:
-- codecov
+   - codecov
 #   - travis-sphinx build
 
 # after_success:
