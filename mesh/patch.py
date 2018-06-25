@@ -497,9 +497,15 @@ class CellCenterData2d(object):
         # that will handle the standard type of BCs, but if we asked
         # for a custom BC, we handle it here
         if self.BCs[name].xlb in bnd.ext_bcs.keys():
-            bnd.ext_bcs[self.BCs[name].xlb](self.BCs[name].xlb, "xlb", name, self)
+            try:
+                bnd.ext_bcs[self.BCs[name].xlb](self.BCs[name].xlb, "xlb", name, self, self.ivars)
+            except TypeError:
+                bnd.ext_bcs[self.BCs[name].xlb](self.BCs[name].xlb, "xlb", name, self)
         if self.BCs[name].xrb in bnd.ext_bcs.keys():
-            bnd.ext_bcs[self.BCs[name].xrb](self.BCs[name].xrb, "xrb", name, self)
+            try:
+                bnd.ext_bcs[self.BCs[name].xrb](self.BCs[name].xrb, "xrb", name, self)
+            except TypeError:
+                bnd.ext_bcs[self.BCs[name].xrb](self.BCs[name].xrb, "xrb", name, self, self.ivars)
         if self.BCs[name].ylb in bnd.ext_bcs.keys():
             try:
                 bnd.ext_bcs[self.BCs[name].ylb](self.BCs[name].ylb, "ylb", name, self)
