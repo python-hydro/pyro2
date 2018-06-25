@@ -26,7 +26,7 @@ yrboundary = outflow
 
 [gresho]
 r = 0.2
-u0 = 0.01
+u0 = 0.5
 p0 = 0.1
 dens_base = 0.1
 
