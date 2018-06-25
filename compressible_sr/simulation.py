@@ -107,7 +107,6 @@ class Simulation(NullSimulation):
         bnd.define_bc("hse", BC.user, is_solid=False)
         bnd.define_bc("ramp", BC.user, is_solid=False)  # for double mach reflection problem
 
-
         bc, bc_xodd, bc_yodd = bc_setup(self.rp)
 
         # are we dealing with solid boundaries? we'll use these for
