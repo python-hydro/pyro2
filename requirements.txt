@@ -9,3 +9,4 @@ nbval>=0.9.0
 pytest-cov>=2.5.1
 flake8>=3.5.0
 scipy>=1.0.0
+codecov
