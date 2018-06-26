@@ -224,8 +224,15 @@ class Simulation(NullSimulation):
 
         myg = self.cc_data.grid
 
-        fields = [h, magvel, u, v]
-        field_names = [r"$h$", r"$|U|$", r"$u$", r"$v$"]
+        vort = myg.scratch_array()
+
+        dv = 0.5*(v.ip(1) - v.ip(-1))/myg.dx
+        du = 0.5*(u.jp(1) - u.jp(-1))/myg.dy
+
+        vort.v()[:, :] = dv - du
+
+        fields = [h, magvel, u, vort]
+        field_names = [r"$h$", r"$|U|$", r"$u$", r"$\nabla\times U$"]
 
         _, axes, cbar_title = plot_tools.setup_axes(myg, len(fields))
 

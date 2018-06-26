@@ -59,14 +59,14 @@ ymom = myd.get_var("y-momentum")
 
 # parameter defaults
 rp = runparams.RuntimeParameters()
-rp.load_params("_defaults")
-rp.load_params("swe/_defaults")
-rp.load_params("swe/problems/_dam.defaults")
+rp.load_params("../_defaults")
+rp.load_params("../swe/_defaults")
+rp.load_params("../swe/problems/_dam.defaults")
 
 # now read in the inputs file
 if not os.path.isfile(param_file):
     # check if the param file lives in the solver's problems directory
-    param_file = "swe/problems/" + param_file
+    param_file = "../swe/problems/" + param_file
     if not os.path.isfile(param_file):
         msg.fail("ERROR: inputs file does not exist")
 
@@ -125,8 +125,6 @@ u2 = 2 * (c1 - c2)
 xi = c0 * np.sqrt(1/8 * ((2*(c2/c0)**2 + 1)**2 - 1))
 
 xctr = 0.5*(xmin + xmax)
-
-print(h_exact)
 
 # h0
 idx = x >= xctr + xi*t
