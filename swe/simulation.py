@@ -5,10 +5,9 @@ import importlib
 import numpy as np
 import matplotlib.pyplot as plt
 
-import compressible.BC as BC
-import compressible.eos as eos
-import compressible.derives as derives
-import compressible.unsplit_fluxes as flx
+import swe.BC as BC
+import swe.derives as derives
+import swe.unsplit_fluxes as flx
 import mesh.boundary as bnd
 from simulation_null import NullSimulation, grid_setup, bc_setup
 import util.plot_tools as plot_tools
@@ -16,7 +15,7 @@ import util.plot_tools as plot_tools
 
 class Variables(object):
     """
-    a container class for easy access to the different compressible
+    a container class for easy access to the different swe
     variable by an integer key
     """
     def __init__(self, myd):
@@ -24,87 +23,74 @@ class Variables(object):
 
         # conserved variables -- we set these when we initialize for
         # they match the CellCenterData2d object
-        self.idens = myd.names.index("density")
+        self.ih = myd.names.index("height")
         self.ixmom = myd.names.index("x-momentum")
         self.iymom = myd.names.index("y-momentum")
-        self.iener = myd.names.index("energy")
 
         # if there are any additional variable, we treat them as
         # passively advected scalars
-        self.naux = self.nvar - 4
+        self.naux = self.nvar - 3
         if self.naux > 0:
-            self.irhox = 4
+            self.ihx = 3
         else:
-            self.irhox = -1
+            self.ihx = -1
 
         # primitive variables
-        self.nq = 4 + self.naux
+        self.nq = 3 + self.naux
 
-        self.irho = 0
+        self.ih = 0
         self.iu = 1
         self.iv = 2
-        self.ip = 3
 
         if self.naux > 0:
-            self.ix = 4   # advected scalar
+            self.ix = 3   # advected scalar
         else:
             self.ix = -1
 
 
-def cons_to_prim(U, gamma, ivars, myg):
+def cons_to_prim(U, g, ivars, myg):
     """ convert an input vector of conserved variables to primitive variables """
 
     q = myg.scratch_array(nvar=ivars.nq)
 
-    q[:, :, ivars.irho] = U[:, :, ivars.idens]
-    q[:, :, ivars.iu] = U[:, :, ivars.ixmom]/U[:, :, ivars.idens]
-    q[:, :, ivars.iv] = U[:, :, ivars.iymom]/U[:, :, ivars.idens]
-
-    e = (U[:, :, ivars.iener] -
-         0.5*q[:, :, ivars.irho]*(q[:, :, ivars.iu]**2 +
-                                  q[:, :, ivars.iv]**2))/q[:, :, ivars.irho]
-
-    q[:, :, ivars.ip] = eos.pres(gamma, q[:, :, ivars.irho], e)
+    q[:, :, ivars.ih] = U[:, :, ivars.ih]
+    q[:, :, ivars.iu] = U[:, :, ivars.ixmom]/U[:, :, ivars.ih]
+    q[:, :, ivars.iv] = U[:, :, ivars.iymom]/U[:, :, ivars.ih]
 
     if ivars.naux > 0:
         for nq, nu in zip(range(ivars.ix, ivars.ix+ivars.naux),
-                          range(ivars.irhox, ivars.irhox+ivars.naux)):
-            q[:, :, nq] = U[:, :, nu]/q[:, :, ivars.irho]
+                          range(ivars.ihx, ivars.ihx+ivars.naux)):
+            q[:, :, nq] = U[:, :, nu]/q[:, :, ivars.ih]
 
     return q
 
 
-def prim_to_cons(q, gamma, ivars, myg):
+def prim_to_cons(q, g, ivars, myg):
     """ convert an input vector of primitive variables to conserved variables """
 
     U = myg.scratch_array(nvar=ivars.nvar)
 
-    U[:, :, ivars.idens] = q[:, :, ivars.irho]
-    U[:, :, ivars.ixmom] = q[:, :, ivars.iu]*U[:, :, ivars.idens]
-    U[:, :, ivars.iymom] = q[:, :, ivars.iv]*U[:, :, ivars.idens]
-
-    rhoe = eos.rhoe(gamma, q[:, :, ivars.ip])
-
-    U[:, :, ivars.iener] = rhoe + 0.5*q[:, :, ivars.irho]*(q[:, :, ivars.iu]**2 +
-                                                           q[:, :, ivars.iv]**2)
+    U[:, :, ivars.ih] = q[:, :, ivars.ih]
+    U[:, :, ivars.ixmom] = q[:, :, ivars.iu]*U[:, :, ivars.ih]
+    U[:, :, ivars.iymom] = q[:, :, ivars.iv]*U[:, :, ivars.ih]
 
     if ivars.naux > 0:
         for nq, nu in zip(range(ivars.ix, ivars.ix+ivars.naux),
-                          range(ivars.irhox, ivars.irhox+ivars.naux)):
-            U[:, :, nu] = q[:, :, nq]*q[:, :, ivars.irho]
+                          range(ivars.ihx, ivars.ihx+ivars.naux)):
+            U[:, :, nu] = q[:, :, nq]*q[:, :, ivars.ih]
 
     return U
 
 
 class Simulation(NullSimulation):
     """The main simulation class for the corner transport upwind
-    compressible hydrodynamics solver
+    swe hydrodynamics solver
 
     """
 
     def initialize(self, extra_vars=None, ng=4):
         """
-        Initialize the grid and variables for compressible flow and set
+        Initialize the grid and variables for swe flow and set
         the initial conditions for the chosen problem.
         """
         my_grid = grid_setup(self.rp, ng=ng)
@@ -121,8 +107,7 @@ class Simulation(NullSimulation):
         self.solid = bnd.bc_is_solid(bc)
 
         # density and energy
-        my_data.register_var("density", bc)
-        my_data.register_var("energy", bc)
+        my_data.register_var("height", bc)
         my_data.register_var("x-momentum", bc_xodd)
         my_data.register_var("y-momentum", bc_yodd)
 
@@ -131,11 +116,10 @@ class Simulation(NullSimulation):
             for v in extra_vars:
                 my_data.register_var(v, bc)
 
-        # store the EOS gamma as an auxillary quantity so we can have a
+        # store the EOS g as an auxillary quantity so we can have a
         # self-contained object stored in output files to make plots.
         # store grav because we'll need that in some BCs
-        my_data.set_aux("gamma", self.rp.get_param("eos.gamma"))
-        my_data.set_aux("grav", self.rp.get_param("compressible.grav"))
+        my_data.set_aux("g", self.rp.get_param("swe.grav"))
 
         my_data.create()
 
@@ -145,7 +129,6 @@ class Simulation(NullSimulation):
         # really part of the main solution
         aux_data = self.data_class(my_grid)
         aux_data.register_var("ymom_src", bc_yodd)
-        aux_data.register_var("E_src", bc)
         aux_data.create()
         self.aux_data = aux_data
 
@@ -185,26 +168,17 @@ class Simulation(NullSimulation):
 
     def evolve(self):
         """
-        Evolve the equations of compressible hydrodynamics through a
+        Evolve the equations of swe hydrodynamics through a
         timestep dt.
         """
 
         tm_evolve = self.tc.timer("evolve")
         tm_evolve.begin()
 
-        dens = self.cc_data.get_var("density")
-        ymom = self.cc_data.get_var("y-momentum")
-        ener = self.cc_data.get_var("energy")
-
-        grav = self.rp.get_param("compressible.grav")
-
         myg = self.cc_data.grid
 
         Flux_x, Flux_y = flx.unsplit_fluxes(self.cc_data, self.aux_data, self.rp,
                                             self.ivars, self.solid, self.tc, self.dt)
-
-        old_dens = dens.copy()
-        old_ymom = ymom.copy()
 
         # conservative update
         dtdx = self.dt/myg.dx
@@ -216,10 +190,6 @@ class Simulation(NullSimulation):
             var.v()[:, :] += \
                 dtdx*(Flux_x.v(n=n) - Flux_x.ip(1, n=n)) + \
                 dtdy*(Flux_y.v(n=n) - Flux_y.jp(1, n=n))
-
-        # gravitational source terms
-        ymom[:, :] += 0.5*self.dt*(dens[:, :] + old_dens[:, :])*grav
-        ener[:, :] += 0.5*self.dt*(ymom[:, :] + old_ymom[:, :])*grav
 
         # increment the time
         self.cc_data.t += self.dt
@@ -240,24 +210,22 @@ class Simulation(NullSimulation):
         # we are plotting from a file
         ivars = Variables(self.cc_data)
 
-        # access gamma from the cc_data object so we can use dovis
+        # access g from the cc_data object so we can use dovis
         # outside of a running simulation.
-        gamma = self.cc_data.get_aux("gamma")
+        g = self.cc_data.get_aux("g")
 
-        q = cons_to_prim(self.cc_data.data, gamma, ivars, self.cc_data.grid)
+        q = cons_to_prim(self.cc_data.data, g, ivars, self.cc_data.grid)
 
-        rho = q[:, :, ivars.irho]
+        h = q[:, :, ivars.ih]
         u = q[:, :, ivars.iu]
         v = q[:, :, ivars.iv]
-        p = q[:, :, ivars.ip]
-        e = eos.rhoe(gamma, p)/rho
 
         magvel = np.sqrt(u**2 + v**2)
 
         myg = self.cc_data.grid
 
-        fields = [rho, magvel, p, e]
-        field_names = [r"$\rho$", r"U", "p", "e"]
+        fields = [h, magvel, u, v]
+        field_names = [r"$\h$", r"U", r"u", r"v"]
 
         _, axes, cbar_title = plot_tools.setup_axes(myg, len(fields))
 

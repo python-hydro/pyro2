@@ -122,12 +122,10 @@ Updating U_{i,j}:
 
 """
 
-import compressible.interface_f as ifc
-import compressible as comp
+import swe.interface_f as ifc
+import swe as comp
 import mesh.reconstruction as reconstruction
 import mesh.array_indexer as ai
-
-from util import msg
 
 
 def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
@@ -136,9 +134,9 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     doing an unsplit reconstruction of the interface values and then
     solving the Riemann problem through all the interfaces at once
 
-    currently we assume a gamma-law EOS
+    currently we assume a g-law EOS
 
-    The runtime parameter grav is assumed to be the gravitational
+    The runtime parameter g is assumed to be the gitational
     acceleration in the y-direction
 
     Parameters
@@ -168,24 +166,21 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     myg = my_data.grid
 
-    gamma = rp.get_param("eos.gamma")
+    g = rp.get_param("swe.grav")
 
     #=========================================================================
     # compute the primitive variables
     #=========================================================================
-    # Q = (rho, u, v, p, {X})
+    # Q = (h, u, v, p, {X})
 
-    dens = my_data.get_var("density")
-    ymom = my_data.get_var("y-momentum")
-
-    q = comp.cons_to_prim(my_data.data, gamma, ivars, myg)
+    q = comp.cons_to_prim(my_data.data, g, ivars, myg)
 
     #=========================================================================
     # compute the flattening coefficients
     #=========================================================================
 
     # there is a single flattening coefficient (xi) for all directions
-    use_flattening = rp.get_param("compressible.use_flattening")
+    use_flattening = rp.get_param("swe.use_flattening")
 
     if use_flattening:
         xi_x = reconstruction.flatten(myg, q, 1, ivars, rp)
@@ -199,7 +194,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     tm_limit = tc.timer("limiting")
     tm_limit.begin()
 
-    limiter = rp.get_param("compressible.limiter")
+    limiter = rp.get_param("swe.limiter")
 
     ldx = myg.scratch_array(nvar=ivars.nvar)
     ldy = myg.scratch_array(nvar=ivars.nvar)
@@ -219,16 +214,16 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     tm_states.begin()
 
     V_l, V_r = ifc.states(1, myg.qx, myg.qy, myg.ng, myg.dx, dt,
-                          ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
+                          ivars.ih, ivars.iu, ivars.iv, ivars.ix,
                           ivars.nvar, ivars.naux,
-                          gamma,
+                          g,
                           q, ldx)
 
     tm_states.end()
 
     # transform interface states back into conserved variables
-    U_xl = comp.prim_to_cons(V_l, gamma, ivars, myg)
-    U_xr = comp.prim_to_cons(V_r, gamma, ivars, myg)
+    U_xl = comp.prim_to_cons(V_l, g, ivars, myg)
+    U_xr = comp.prim_to_cons(V_r, g, ivars, myg)
 
     #=========================================================================
     # y-direction
@@ -238,9 +233,9 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     tm_states.begin()
 
     _V_l, _V_r = ifc.states(2, myg.qx, myg.qy, myg.ng, myg.dy, dt,
-                            ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
+                            ivars.ih, ivars.iu, ivars.iv, ivars.ix,
                             ivars.nvar, ivars.naux,
-                            gamma,
+                            g,
                             q, ldy)
     V_l = ai.ArrayIndexer(d=_V_l, grid=myg)
     V_r = ai.ArrayIndexer(d=_V_r, grid=myg)
@@ -248,37 +243,8 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     tm_states.end()
 
     # transform interface states back into conserved variables
-    U_yl = comp.prim_to_cons(V_l, gamma, ivars, myg)
-    U_yr = comp.prim_to_cons(V_r, gamma, ivars, myg)
-
-    #=========================================================================
-    # apply source terms
-    #=========================================================================
-    grav = rp.get_param("compressible.grav")
-
-    ymom_src = my_aux.get_var("ymom_src")
-    ymom_src.v()[:, :] = dens.v()*grav
-    my_aux.fill_BC("ymom_src")
-
-    E_src = my_aux.get_var("E_src")
-    E_src.v()[:, :] = ymom.v()*grav
-    my_aux.fill_BC("E_src")
-
-    # ymom_xl[i,j] += 0.5*dt*dens[i-1,j]*grav
-    U_xl.v(buf=1, n=ivars.iymom)[:, :] += 0.5*dt*ymom_src.ip(-1, buf=1)
-    U_xl.v(buf=1, n=ivars.iener)[:, :] += 0.5*dt*E_src.ip(-1, buf=1)
-
-    # ymom_xr[i,j] += 0.5*dt*dens[i,j]*grav
-    U_xr.v(buf=1, n=ivars.iymom)[:, :] += 0.5*dt*ymom_src.v(buf=1)
-    U_xr.v(buf=1, n=ivars.iener)[:, :] += 0.5*dt*E_src.v(buf=1)
-
-    # ymom_yl[i,j] += 0.5*dt*dens[i,j-1]*grav
-    U_yl.v(buf=1, n=ivars.iymom)[:, :] += 0.5*dt*ymom_src.jp(-1, buf=1)
-    U_yl.v(buf=1, n=ivars.iener)[:, :] += 0.5*dt*E_src.jp(-1, buf=1)
-
-    # ymom_yr[i,j] += 0.5*dt*dens[i,j]*grav
-    U_yr.v(buf=1, n=ivars.iymom)[:, :] += 0.5*dt*ymom_src.v(buf=1)
-    U_yr.v(buf=1, n=ivars.iener)[:, :] += 0.5*dt*E_src.v(buf=1)
+    U_yl = comp.prim_to_cons(V_l, g, ivars, myg)
+    U_yr = comp.prim_to_cons(V_r, g, ivars, myg)
 
     #=========================================================================
     # compute transverse fluxes
@@ -286,24 +252,17 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     tm_riem = tc.timer("riemann")
     tm_riem.begin()
 
-    riemann = rp.get_param("compressible.riemann")
-
-    if riemann == "HLLC":
-        riemannFunc = ifc.riemann_hllc
-    elif riemann == "CGF":
-        riemannFunc = ifc.riemann_cgf
-    else:
-        msg.fail("ERROR: Riemann solver undefined")
+    riemannFunc = ifc.riemann_hllc
 
     _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
-                      ivars.nvar, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+                      ivars.nvar, ivars.ih, ivars.ixmom, ivars.iymom, ivars.iener, ivars.ihx, ivars.naux,
                       solid.xl, solid.xr,
-                      gamma, U_xl, U_xr)
+                      g, U_xl, U_xr)
 
     _fy = riemannFunc(2, myg.qx, myg.qy, myg.ng,
-                      ivars.nvar, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+                      ivars.nvar, ivars.ih, ivars.ixmom, ivars.iymom, ivars.iener, ivars.ihx, ivars.naux,
                       solid.yl, solid.yr,
-                      gamma, U_yl, U_yr)
+                      g, U_yl, U_yr)
 
     F_x = ai.ArrayIndexer(d=_fx, grid=myg)
     F_y = ai.ArrayIndexer(d=_fy, grid=myg)
@@ -395,44 +354,19 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     tm_riem.begin()
 
     _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
-                      ivars.nvar, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+                      ivars.nvar, ivars.ih, ivars.ixmom, ivars.iymom, ivars.iener, ivars.ihx, ivars.naux,
                       solid.xl, solid.xr,
-                      gamma, U_xl, U_xr)
+                      g, U_xl, U_xr)
 
     _fy = riemannFunc(2, myg.qx, myg.qy, myg.ng,
-                      ivars.nvar, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+                      ivars.nvar, ivars.ih, ivars.ixmom, ivars.iymom, ivars.iener, ivars.ihx, ivars.naux,
                       solid.yl, solid.yr,
-                      gamma, U_yl, U_yr)
+                      g, U_yl, U_yr)
 
     F_x = ai.ArrayIndexer(d=_fx, grid=myg)
     F_y = ai.ArrayIndexer(d=_fy, grid=myg)
 
     tm_riem.end()
-
-    #=========================================================================
-    # apply artificial viscosity
-    #=========================================================================
-    cvisc = rp.get_param("compressible.cvisc")
-
-    _ax, _ay = ifc.artificial_viscosity(
-        myg.qx, myg.qy, myg.ng, myg.dx, myg.dy,
-        cvisc, q.v(n=ivars.iu, buf=myg.ng), q.v(n=ivars.iv, buf=myg.ng))
-
-    avisco_x = ai.ArrayIndexer(d=_ax, grid=myg)
-    avisco_y = ai.ArrayIndexer(d=_ay, grid=myg)
-
-    b = (2, 1)
-
-    for n in range(ivars.nvar):
-        # F_x = F_x + avisco_x * (U(i-1,j) - U(i,j))
-        var = my_data.get_var_by_index(n)
-
-        F_x.v(buf=b, n=n)[:, :] += \
-            avisco_x.v(buf=b)*(var.ip(-1, buf=b) - var.v(buf=b))
-
-        # F_y = F_y + avisco_y * (U(i,j-1) - U(i,j))
-        F_y.v(buf=b, n=n)[:, :] += \
-            avisco_y.v(buf=b)*(var.jp(-1, buf=b) - var.v(buf=b))
 
     tm_flux.end()
 

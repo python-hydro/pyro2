@@ -1,5 +1,5 @@
 """
-The pyro compressible hydrodynamics solver.  This implements the
+The pyro swe hydrodynamics solver.  This implements the
 second-order (piecewise-linear), unsplit method of Colella 1990.
 
 """

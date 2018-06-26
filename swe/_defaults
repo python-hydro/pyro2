@@ -6,7 +6,7 @@ cfl = 0.8
 gamma = 1.4    ; pres = rho ener (gamma - 1)
 
 
-[compressible]
+[swe]
 use_flattening = 1        ; apply flattening at shocks (1)
 
 z0 = 0.75                 ; flattening z0 parameter
@@ -20,4 +20,3 @@ limiter = 2               ; limiter (0 = none, 1 = 2nd order, 2 = 4th order)
 grav = 0.0                ; gravitational acceleration (in y-direction)
 
 riemann = HLLC            ; HLLC or CGF
-
