@@ -1,0 +1,32 @@
+[driver]
+max_steps = 5000
+tmax = 0.25#
+
+
+[swe]
+grav = 1.0
+
+
+[io]
+basename = acoustic_pulse_
+n_out = 20
+
+[mesh]
+nx = 256
+ny = 256
+xmax = 1.0
+ymax = 1.0
+
+xlboundary = periodic
+xrboundary = periodic
+
+ylboundary = periodic
+yrboundary = periodic
+
+
+[acoustic_pulse]
+h0 = 1.4
+dh0 = 2
+
+[vis]
+dovis = 1
