@@ -255,12 +255,12 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     riemannFunc = ifc.riemann_hllc
 
     _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
-                      ivars.nvar, ivars.ih, ivars.ixmom, ivars.iymom, ivars.iener, ivars.ihx, ivars.naux,
+                      ivars.nvar, ivars.ih, ivars.ixmom, ivars.iymom, ivars.ihx, ivars.naux,
                       solid.xl, solid.xr,
                       g, U_xl, U_xr)
 
     _fy = riemannFunc(2, myg.qx, myg.qy, myg.ng,
-                      ivars.nvar, ivars.ih, ivars.ixmom, ivars.iymom, ivars.iener, ivars.ihx, ivars.naux,
+                      ivars.nvar, ivars.ih, ivars.ixmom, ivars.iymom, ivars.ihx, ivars.naux,
                       solid.yl, solid.yr,
                       g, U_yl, U_yr)
 
@@ -354,12 +354,12 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     tm_riem.begin()
 
     _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
-                      ivars.nvar, ivars.ih, ivars.ixmom, ivars.iymom, ivars.iener, ivars.ihx, ivars.naux,
+                      ivars.nvar, ivars.ih, ivars.ixmom, ivars.iymom, ivars.ihx, ivars.naux,
                       solid.xl, solid.xr,
                       g, U_xl, U_xr)
 
     _fy = riemannFunc(2, myg.qx, myg.qy, myg.ng,
-                      ivars.nvar, ivars.ih, ivars.ixmom, ivars.iymom, ivars.iener, ivars.ihx, ivars.naux,
+                      ivars.nvar, ivars.ih, ivars.ixmom, ivars.iymom, ivars.ihx, ivars.naux,
                       solid.yl, solid.yr,
                       g, U_yl, U_yr)
 

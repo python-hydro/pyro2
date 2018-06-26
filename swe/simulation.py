@@ -225,7 +225,7 @@ class Simulation(NullSimulation):
         myg = self.cc_data.grid
 
         fields = [h, magvel, u, v]
-        field_names = [r"$\h$", r"U", r"u", r"v"]
+        field_names = [r"$h$", r"$|U|$", r"$u$", r"$v$"]
 
         _, axes, cbar_title = plot_tools.setup_axes(myg, len(fields))
 
