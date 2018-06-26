@@ -29,8 +29,6 @@ def init_data(my_data, rp):
     xmom[:, :] = 0.0
     ymom[:, :] = 0.0
 
-    g = rp.get_param("swe.grav")
-
     xmin = rp.get_param("mesh.xmin")
     xmax = rp.get_param("mesh.xmax")
 
