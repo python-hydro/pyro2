@@ -1,26 +1,22 @@
 [driver]
 max_steps = 5000
-tmax = 0.24
-# 0.192 * dx
-fix_dt = 7.5e-4
+tmax = 2.0
+splitting = unsplit
 
 
-[compressible]
+[swe]
+limiter = 2
 cvisc = 0.1
 
 
 [io]
-basename = acoustic_pulse_256_
-dt_out = 0.03
-
-
-[eos]
-gamma = 1.4
+basename = kh_
+tplot = 0.01
 
 
 [mesh]
-nx = 256
-ny = 256
+nx = 128
+ny = 128
 xmax = 1.0
 ymax = 1.0
 
@@ -31,9 +27,13 @@ ylboundary = periodic
 yrboundary = periodic
 
 
-[acoustic_pulse]
-rho0 = 1.4
-drho0 = 0.14
+[kh]
+h_1 = 1
+v_1 = -0.5
+
+h_2 = 1.0
+v_2 = 0.5
+
 
 [vis]
 dovis = 1

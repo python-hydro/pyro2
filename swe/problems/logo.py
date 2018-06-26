@@ -39,6 +39,7 @@ def init_data(my_data, rp):
     h = my_data.get_var("height")
     xmom = my_data.get_var("x-momentum")
     ymom = my_data.get_var("y-momentum")
+    X = my_data.get_var("fuel")
 
     myg = my_data.grid
 
@@ -51,6 +52,8 @@ def init_data(my_data, rp):
     logo_h = 2
 
     h.v()[:, :] = logo[:, :] * logo_h
+
+    X.v()[:, :] = logo[:, :]
 
     corner_height = 2
 
@@ -71,6 +74,8 @@ def init_data(my_data, rp):
     ymom[myg.ilo, myg.jhi] = -v
     ymom[myg.ihi, myg.jlo] = v
     ymom[myg.ihi, myg.jhi] = -v
+
+    X[:, :] *= h
 
 
 def finalize():

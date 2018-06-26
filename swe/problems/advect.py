@@ -21,6 +21,7 @@ def init_data(my_data, rp):
     h = my_data.get_var("height")
     xmom = my_data.get_var("x-momentum")
     ymom = my_data.get_var("y-momentum")
+    X = my_data.get_var("fuel")
 
     # initialize the components, remember, that ener here is rho*eint
     # + 0.5*rho*v**2, where eint is the specific internal energy
@@ -47,6 +48,8 @@ def init_data(my_data, rp):
     v = 1.0
     xmom[:, :] = h[:, :]*u
     ymom[:, :] = h[:, :]*v
+
+    X[:, :] = h**2 / np.max(h)
 
 
 def finalize():

@@ -2,13 +2,10 @@
 max_steps = 500
 tmax = 1.0
 
-init_tstep_factor = 1.0
-fix_dt = 0.005
-
-
-[compressible]
+[swe]
 limiter = 0
 cvisc = 0.1
+grav = 0.0
 
 
 [io]

@@ -28,6 +28,7 @@ def init_data(my_data, rp):
     h = my_data.get_var("height")
     xmom = my_data.get_var("x-momentum")
     ymom = my_data.get_var("y-momentum")
+    X = my_data.get_var("fuel")
 
     # initialize the components
     xmin = rp.get_param("mesh.xmin")
@@ -51,6 +52,7 @@ def init_data(my_data, rp):
         h[idxl] = h_left
         xmom[idxl] = h_left*u_left
         ymom[idxl] = 0.0
+        X[idxl] = 1.0
 
         # right
         idxr = myg.x2d > xctr
@@ -58,6 +60,7 @@ def init_data(my_data, rp):
         h[idxr] = h_right
         xmom[idxr] = h_right*u_right
         ymom[idxr] = 0.0
+        X[idxr] = 0.0
 
     else:
 
@@ -67,6 +70,7 @@ def init_data(my_data, rp):
         h[idxb] = h_left
         xmom[idxb] = 0.0
         ymom[idxb] = h_left*u_left
+        X[idxb] = 1.0
 
         # top
         idxt = myg.y2d > yctr
@@ -74,6 +78,9 @@ def init_data(my_data, rp):
         h[idxt] = h_right
         xmom[idxt] = 0.0
         ymom[idxt] = h_right*u_right
+        X[idxt] = 0.0
+
+    X[:, :] *= h
 
 
 def finalize():

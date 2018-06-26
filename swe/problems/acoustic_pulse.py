@@ -22,6 +22,7 @@ def init_data(myd, rp):
     h = myd.get_var("height")
     xmom = myd.get_var("x-momentum")
     ymom = myd.get_var("y-momentum")
+    X = myd.get_var("fuel")
 
     # initialize the components
     xmom[:, :] = 0.0
@@ -45,6 +46,8 @@ def init_data(myd, rp):
     h[:, :] = h0
     idx = dist <= 0.5
     h[idx] = h0 + dh0*np.exp(-16*dist[idx]**2) * np.cos(np.pi*dist[idx])**6
+
+    X[:, :] = h[:, :]**2 / np.max(h)
 
 
 def finalize():

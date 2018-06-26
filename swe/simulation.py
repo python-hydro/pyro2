@@ -110,6 +110,7 @@ class Simulation(NullSimulation):
         my_data.register_var("height", bc)
         my_data.register_var("x-momentum", bc_xodd)
         my_data.register_var("y-momentum", bc_yodd)
+        my_data.register_var("fuel", bc)
 
         # any extras?
         if extra_vars is not None:
@@ -219,6 +220,7 @@ class Simulation(NullSimulation):
         h = q[:, :, ivars.ih]
         u = q[:, :, ivars.iu]
         v = q[:, :, ivars.iv]
+        fuel = q[:, :, ivars.ix]
 
         magvel = np.sqrt(u**2 + v**2)
 
@@ -231,8 +233,8 @@ class Simulation(NullSimulation):
 
         vort.v()[:, :] = dv - du
 
-        fields = [h, magvel, u, vort]
-        field_names = [r"$h$", r"$|U|$", r"$u$", r"$\nabla\times U$"]
+        fields = [h, magvel, fuel, vort]
+        field_names = [r"$h$", r"$|U|$", r"$X$", r"$\nabla\times U$"]
 
         _, axes, cbar_title = plot_tools.setup_axes(myg, len(fields))
 

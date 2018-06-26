@@ -23,6 +23,7 @@ def init_data(my_data, rp):
     h = my_data.get_var("height")
     xmom = my_data.get_var("x-momentum")
     ymom = my_data.get_var("y-momentum")
+    X = my_data.get_var("fuel")
 
     # initialize the components, remember, that ener here is
     # h*eint + 0.5*h*v**2, where eint is the specific
@@ -63,21 +64,27 @@ def init_data(my_data, rp):
     h[iq1] = r1
     xmom[iq1] = r1*u1
     ymom[iq1] = r1*v1
+    X[iq1] = 1.0
 
     # quadrant 2
     h[iq2] = r2
     xmom[iq2] = r2*u2
     ymom[iq2] = r2*v2
+    X[iq2] = 0.0
 
     # quadrant 3
     h[iq3] = r3
     xmom[iq3] = r3*u3
     ymom[iq3] = r3*v3
+    X[iq3] = 1.0
 
     # quadrant 4
     h[iq4] = r4
     xmom[iq4] = r4*u4
     ymom[iq4] = r4*v4
+    X[iq4] = 0.0
+
+    X *= h
 
 
 def finalize():
