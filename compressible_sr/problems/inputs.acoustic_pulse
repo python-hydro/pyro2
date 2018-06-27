@@ -7,6 +7,7 @@ fix_dt = 1.5e-3
 [compressible]
 cvisc = 0.1
 grav = 0.0
+riemann = CGF
 
 
 [io]

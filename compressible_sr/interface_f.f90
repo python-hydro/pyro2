@@ -289,7 +289,7 @@ end subroutine states
 
 
 subroutine riemann_cgf(idir, qx, qy, ng, &
-                        nvar, idens, ixmom, iymom, iener, irhoX, irho, iu, iv, ip, nspec, &
+                        nvar, idens, ixmom, iymom, iener, irhoX, irho, iu, iv, ip, ix, nspec, &
                         lower_solid, upper_solid, &
                         gamma, U_l, U_r, q_l, q_r, F)
 
@@ -298,7 +298,7 @@ subroutine riemann_cgf(idir, qx, qy, ng, &
 
   integer, intent(in) :: idir
   integer, intent(in) :: qx, qy, ng
-  integer, intent(in) :: nvar, idens, ixmom, iymom, iener, irhoX, irho, iu, iv, ip, nspec
+  integer, intent(in) :: nvar, idens, ixmom, iymom, iener, irhoX, irho, iu, iv, ip, ix, nspec
   integer, intent(in) :: lower_solid, upper_solid
   double precision, intent(in) :: gamma
 
@@ -355,9 +355,10 @@ subroutine riemann_cgf(idir, qx, qy, ng, &
   double precision :: ustar, pstar, cstar_l, cstar_r
   double precision :: lambda_l, lambdastar_l, lambda_r, lambdastar_r
   double precision :: W_l, W_r, c_l, c_r, sigma
-  double precision :: alpha
+  double precision :: alpha, v2
 
   double precision :: rho_state, un_state, ut_state, p_state, rhoe_state
+  double precision :: U(0:nvar-1), q(0:nvar-1), W
 
 
   nx = qx - 2*ng; ny = qy - 2*ng
@@ -367,35 +368,34 @@ subroutine riemann_cgf(idir, qx, qy, ng, &
      do i = ilo-1, ihi+1
 
         ! primitive variable states
-        rho_l  = U_l(i,j,idens)
+        rho_l  = q_l(i,j,irho)
 
         ! un = normal velocity; ut = transverse velocity
         if (idir == 1) then
-           un_l    = U_l(i,j,ixmom)/rho_l
-           ut_l    = U_l(i,j,iymom)/rho_l
+           un_l    = q_l(i,j,iu)
+           ut_l    = q_l(i,j,iv)
         else
-           un_l    = U_l(i,j,iymom)/rho_l
-           ut_l    = U_l(i,j,ixmom)/rho_l
+           un_l    = q_l(i,j,iv)
+           ut_l    = q_l(i,j,iu)
         endif
 
-        p_l   = rhoe_l*(gamma - 1.0d0)
+        p_l   = q_l(i,j,ip)
         p_l = max(p_l, smallp)
+        rhoe_l = p_l / (gamma - 1.0d0)
 
-        rho_r  = U_r(i,j,idens)
+        rho_r  = q_r(i,j,irho)
 
         if (idir == 1) then
-           un_r    = U_r(i,j,ixmom)/rho_r
-           ut_r    = U_r(i,j,iymom)/rho_r
+           un_r    = q_r(i,j,iu)
+           ut_r    = q_r(i,j,iv)
         else
-           un_r    = U_r(i,j,iymom)/rho_r
-           ut_r    = U_r(i,j,ixmom)/rho_r
+           un_r    = q_r(i,j,iv)
+           ut_r    = q_r(i,j,iu)
         endif
 
-        rhoe_r = U_r(i,j,iener) - 0.5*rho_r*(un_r**2 + ut_r**2)
-
-        p_r   = rhoe_r*(gamma - 1.0d0)
+        p_r   = q_r(i,j,ip)
         p_r = max(p_r, smallp)
-
+        rhoe_r = p_r / (gamma - 1.0d0)
 
         ! define the Lagrangian sound speed
         W_l = max(smallrho*smallc, sqrt(gamma*p_l*rho_l))
@@ -434,8 +434,17 @@ subroutine riemann_cgf(idir, qx, qy, ng, &
            ut_state = ut_l
 
            ! define eigenvalues
-           lambda_l = un_l - c_l
-           lambdastar_l = ustar - cstar_l
+           v2 = un_l**2 + ut_l**2
+           lambda_l = 1.0d0 / (1.0d0 - v2 * c_l**2) *&
+                (un_l*(1.0d0-c_l**2) - c_l * sqrt((1.0d0-v2) *&
+                (1.0d0-v2*c_l**2 - un_l**2*(1.0d0-c_l**2))))
+
+           v2 = ustar**2 + ut_l**2
+           lambdastar_l = 1.0d0 / (1.0d0 - v2 * cstar_l**2) *&
+                (ustar*(1.0d0-cstar_l**2) - &
+                cstar_l * sqrt((1.0d0-v2) * &
+                (1.0d0-v2*cstar_l**2 - &
+                 ustar**2*(1.0d0-cstar_l**2))))
 
            if (pstar > p_l) then
               ! the wave is a shock -- find the shock speed
@@ -495,8 +504,17 @@ subroutine riemann_cgf(idir, qx, qy, ng, &
            ut_state = ut_r
 
            ! define eigenvalues
-           lambda_r = un_r + c_r
-           lambdastar_r = ustar + cstar_r
+           v2 = un_r**2 + ut_r**2
+           lambda_r = 1.0d0 / (1.0d0 - v2 * c_r**2) * &
+                (un_r*(1.0d0-c_r**2) + c_r * sqrt((1.0d0-v2) *&
+                (1.0d0-v2*c_r**2 - un_r**2*(1.0d0-c_r**2))))
+
+           v2 = ustar**2 + ut_r**2
+           lambdastar_r = 1.0d0 / (1.0d0 - v2 * cstar_r**2) * &
+                (ustar*(1.0d0-cstar_r**2) + &
+                cstar_r * sqrt((1.0d0-v2) * &
+                (1.0d0-v2*cstar_r**2 - &
+                 ustar**2*(1.0d0-cstar_r**2))))
 
            if (pstar > p_r) then
               ! the wave if a shock -- find the shock speed
@@ -561,13 +579,13 @@ subroutine riemann_cgf(idir, qx, qy, ng, &
         ! species now
         if (nspec > 0) then
            if (ustar > 0.0) then
-              xn(:) = U_l(i,j,irhoX:irhoX-1+nspec)/U_l(i,j,idens)
+              xn(:) = q_l(i,j,ix:ix-1+nspec)
 
            else if (ustar < 0.0) then
-              xn(:) = U_r(i,j,irhoX:irhoX-1+nspec)/U_r(i,j,idens)
+              xn(:) = q_r(i,j,ix:ix-1+nspec)
            else
-              xn(:) = 0.5d0*(U_l(i,j,irhoX:irhoX-1+nspec)/U_l(i,j,idens) + &
-                             U_r(i,j,irhoX:irhoX-1+nspec)/U_r(i,j,idens))
+              xn(:) = 0.5d0*(q_l(i,j,ix:ix-1+nspec) + &
+                             q_r(i,j,ix:ix-1+nspec))
            endif
         endif
 
@@ -592,24 +610,37 @@ subroutine riemann_cgf(idir, qx, qy, ng, &
 
         endif
 
-        ! compute the fluxes
-        F(i,j,idens) = rho_state*un_state
+        ! Make primitive state
 
+        q(irho) = rho_state
         if (idir == 1) then
-           F(i,j,ixmom) = rho_state*un_state**2 + p_state
-           F(i,j,iymom) = rho_state*ut_state*un_state
+            q(iu) = un_state
+            q(iv) = ut_state
         else
-           F(i,j,ixmom) = rho_state*ut_state*un_state
-           F(i,j,iymom) = rho_state*un_state**2 + p_state
+            q(iu) = ut_state
+            q(iv) = un_state
         endif
 
-        F(i,j,iener) = rhoe_state*un_state + &
-             0.5*rho_state*(un_state**2 + ut_state**2)*un_state + &
-             p_state*un_state
+        q(ip) = p_state
+
+        ! Make conservative state
+
+        W = 1 / sqrt(1 - q(iu)**2 - q(iv)**2)
+
+        U(idens) = rho_state * W
+        U(ixmom) = (rho_state + p_state * gamma / (gamma - 1.0d0)) * q(iu) * W**2
+        U(iymom) = (rho_state + p_state * gamma / (gamma - 1.0d0)) * q(iv) * W**2
+        U(iener) = (rho_state + p_state * gamma / (gamma - 1.0d0)) * W**2 - p_state - U(idens)
 
         if (nspec > 0) then
-           F(i,j,irhoX:irhoX-1+nspec) = xn(:)*rho_state*un_state
+            q(ix:ix-1+nspec) = xn(:)
+            U(irhoX:irhoX-1+nspec) = xn(:) * U(idens)
         endif
+
+        ! compute the fluxes
+        call consFlux(idir, gamma, idens, ixmom, iymom, iener, &
+                      irhoX, iu, iv, ip, nvar, nspec, &
+                      U, q, F(i, j, :))
 
      enddo
   enddo
@@ -923,7 +954,7 @@ end subroutine riemann_prim
 
 
 subroutine riemann_HLLC(idir, qx, qy, ng, &
-                        nvar, idens, ixmom, iymom, iener, irhoX, irho, iu, iv, ip, nspec, &
+                        nvar, idens, ixmom, iymom, iener, irhoX, irho, iu, iv, ip, ix, nspec, &
                         lower_solid, upper_solid, &
                         gamma, U_l, U_r, q_l, q_r, F)
 
@@ -932,7 +963,7 @@ subroutine riemann_HLLC(idir, qx, qy, ng, &
 
   integer, intent(in) :: idir
   integer, intent(in) :: qx, qy, ng
-  integer, intent(in) :: nvar, idens, ixmom, iymom, iener, irhoX, irho, iu, iv, ip, nspec
+  integer, intent(in) :: nvar, idens, ixmom, iymom, iener, irhoX, irho, iu, iv, ip, ix, nspec
   integer, intent(in) :: lower_solid, upper_solid
   double precision, intent(in) :: gamma
 
@@ -1092,7 +1123,10 @@ subroutine riemann_HLLC(idir, qx, qy, ng, &
             U_lstar(iymom) = (U_l(i,j,iymom) * (a_l - un_l) + p_lstar - p_l) / (a_l - a_star)
         endif
 
-        ! U_lstar(iener) = (U_l(i,j,iener) * (a_l - un_l) + p_lstar * a_star - p_l * un_l)
+        ! species
+        if (nspec > 0) then
+            U_lstar(irhoX:irhoX-1+nspec) = U_l(i,j,irhoX:irhoX-1+nspec) * (a_l - un_l)/ (a_l - a_star)
+        endif
 
 
         ! right
@@ -1117,7 +1151,10 @@ subroutine riemann_HLLC(idir, qx, qy, ng, &
             U_rstar(iymom) = (U_r(i,j,iymom) * (a_r - un_r) + p_rstar - p_r) / (a_r - a_star)
         endif
 
-        ! U_rstar(iener) = (U_r(i,j,iener) * (a_r - un_r) + p_rstar * a_star - p_r * un_r)
+        ! species
+        if (nspec > 0) then
+            U_rstar(irhoX:irhoX-1+nspec) = U_r(i,j,irhoX:irhoX-1+nspec) * (a_r - un_r)/ (a_r - a_star)
+        endif
 
         if (a_r <= 0.0d0) then ! right state
 

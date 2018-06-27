@@ -10,6 +10,7 @@ fix_dt = 0.005
 limiter = 0
 cvisc = 0.1
 grav = 0.0
+riemann = CGF
 
 
 [io]

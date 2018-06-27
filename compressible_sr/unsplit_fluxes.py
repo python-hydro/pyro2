@@ -307,7 +307,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
                       ivars.nvar, ivars.idens, ivars.ixmom,
                       ivars.iymom, ivars.iener, ivars.irhox,
                       ivars.irho, ivars.iu, ivars.iv, ivars.ip,
-                      ivars.naux,
+                      ivars.ix, ivars.naux,
                       solid.xl, solid.xr,
                       gamma, U_xl, U_xr, q_xl, q_xr)
 
@@ -315,7 +315,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
                       ivars.nvar, ivars.idens, ivars.ixmom,
                       ivars.iymom, ivars.iener, ivars.irhox,
                       ivars.irho, ivars.iu, ivars.iv, ivars.ip,
-                      ivars.naux,
+                      ivars.ix, ivars.naux,
                       solid.yl, solid.yr,
                       gamma, U_yl, U_yr, q_yl, q_yr)
 
@@ -416,7 +416,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
                       ivars.nvar, ivars.idens, ivars.ixmom,
                       ivars.iymom, ivars.iener, ivars.irhox,
                       ivars.irho, ivars.iu, ivars.iv, ivars.ip,
-                      ivars.naux,
+                      ivars.ix, ivars.naux,
                       solid.xl, solid.xr,
                       gamma, U_xl, U_xr, q_xl, q_xr)
 
@@ -424,7 +424,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
                       ivars.nvar, ivars.idens, ivars.ixmom,
                       ivars.iymom, ivars.iener, ivars.irhox,
                       ivars.irho, ivars.iu, ivars.iv, ivars.ip,
-                      ivars.naux,
+                      ivars.ix, ivars.naux,
                       solid.yl, solid.yr,
                       gamma, U_yl, U_yr, q_yl, q_yr)
 
