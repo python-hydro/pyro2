@@ -715,7 +715,7 @@ subroutine riemann_prim(idir, qx, qy, ng, &
   double precision :: rhostar_l, rhostar_r
   double precision :: ustar, pstar, cstar_l, cstar_r
   double precision :: lambda_l, lambdastar_l, lambda_r, lambdastar_r
-  double precision :: W_l, W_r, c_l, c_r, sigma
+  double precision :: W_l, W_r, c_l, c_r, sigma, v2
   double precision :: alpha
 
   double precision :: rho_state, un_state, ut_state, p_state
@@ -787,8 +787,17 @@ subroutine riemann_prim(idir, qx, qy, ng, &
            ut_state = ut_l
 
            ! define eigenvalues
-           lambda_l = un_l - c_l
-           lambdastar_l = ustar - cstar_l
+           v2 = un_l**2 + ut_l**2
+           lambda_l = 1.0d0 / (1.0d0 - v2 * c_l**2) *&
+                (un_l*(1.0d0-c_l**2) - c_l * sqrt((1.0d0-v2) *&
+                (1.0d0-v2*c_l**2 - un_l**2*(1.0d0-c_l**2))))
+
+           v2 = ustar**2 + ut_l**2
+           lambdastar_l = 1.0d0 / (1.0d0 - v2 * cstar_l**2) *&
+                (ustar*(1.0d0-cstar_l**2) - &
+                cstar_l * sqrt((1.0d0-v2) * &
+                (1.0d0-v2*cstar_l**2 - &
+                 ustar**2*(1.0d0-cstar_l**2))))
 
            if (pstar > p_l) then
               ! the wave is a shock -- find the shock speed
@@ -843,8 +852,17 @@ subroutine riemann_prim(idir, qx, qy, ng, &
            ut_state = ut_r
 
            ! define eigenvalues
-           lambda_r = un_r + c_r
-           lambdastar_r = ustar + cstar_r
+           v2 = un_r**2 + ut_r**2
+           lambda_r = 1.0d0 / (1.0d0 - v2 * c_r**2) * &
+                (un_r*(1.0d0-c_r**2) + c_r * sqrt((1.0d0-v2) *&
+                (1.0d0-v2*c_r**2 - un_r**2*(1.0d0-c_r**2))))
+
+           v2 = ustar**2 + ut_r**2
+           lambdastar_r = 1.0d0 / (1.0d0 - v2 * cstar_r**2) * &
+                (ustar*(1.0d0-cstar_r**2) + &
+                cstar_r * sqrt((1.0d0-v2) * &
+                (1.0d0-v2*cstar_r**2 - &
+                 ustar**2*(1.0d0-cstar_r**2))))
 
            if (pstar > p_r) then
               ! the wave if a shock -- find the shock speed
