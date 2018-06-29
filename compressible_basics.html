@@ -262,7 +262,7 @@ time integration</li>
 </ul>
 <p>The implementations here have flattening at shocks, artificial
 viscosity, a simple gamma-law equation of state, and (in some cases) a
-choice Riemann solvers. Optional constant gravity in the vertical
+choice of Riemann solvers. Optional constant gravity in the vertical
 direction is allowed.</p>
 <p>The main parameters that affect this solver are:</p>
 <table border="1" class="docutils">
@@ -409,7 +409,7 @@ binning is done with the <code class="docutils literal"><span class="pre">sedov_
 <h3>quad<a class="headerlink" href="#quad" title="Permalink to this headline">¶</a></h3>
 <p>The quad problem sets up different states in four regions of the
 domain and watches the complex interfaces that develop as shocks
-interact. This problem has appear in several places (and a <a class="reference external" href="http://planets.utsc.utoronto.ca/~pawel/Riemann.hydro.html">detailed
+interact. This problem has appeared in several places (and a <a class="reference external" href="http://planets.utsc.utoronto.ca/~pawel/Riemann.hydro.html">detailed
 investigation</a> is
 online by Pawel Artymowicz). It is run as:</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py compressible quad inputs.quad
@@ -470,7 +470,7 @@ discussed in the notes. Run the Sedov problem with the explosion on
 the symmetric axis—now the solution will behave like the spherical
 sedov explosion instead of the cylindrical explosion.</li>
 <li>Swap the piecewise linear reconstruction for piecewise parabolic
-(PPM). The notes and Miller and Colella paper provide a good basis
+(PPM). The notes and the Miller and Colella paper provide a good basis
 for this.  Research the Roe Riemann solver and implement it in pyro.</li>
 </ul>
 </div>
