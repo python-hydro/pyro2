@@ -94,7 +94,7 @@ Fortran
 -------
 
 Fortran is used to speed up some critical portions of the code, and in
-often cases, provides more clarity than trying to write optimized
+many cases, provides more clarity than trying to write optimized
 python code using array operations in numpy. The Fortran code
 seemlessly integrates into python using f2py.
 
@@ -165,5 +165,3 @@ inheritance is used, so many of these methods come from the base
 * ``write_extras``: any solver-specific writing
 
 Each problem setup needs only provide an ``init_data()`` function that fills the data in the patch object.
-
-
