@@ -235,8 +235,8 @@ subroutine riemann_Roe(idir, qx, qy, ng, &
 !f2py intent(in) :: U_l, U_r
 !f2py intent(out) :: F
 
-  ! This is the Roe Riemann solver.  The implementation follows
-  ! Toro's book and F_rom the clawpack 2d SWE Roe solver.
+  ! This is the Roe Riemann solver with entropy fix. The implementation
+  ! follows Toro's SWE book and the clawpack 2d SWE Roe solver.
 
   integer :: ilo, ihi, jlo, jhi
   integer :: nx, ny
@@ -245,6 +245,9 @@ subroutine riemann_Roe(idir, qx, qy, ng, &
 
   double precision, parameter :: smallc = 1.e-10
   double precision, parameter :: tol = 0.1d-1 ! entropy fix parameter
+  ! Note that I've basically assumed that cfl = 0.1 here to get away with
+  ! not passing dx/dt or cfl to this function. If this isn't the case, will need
+  ! to pass one of these to the function or else things will go wrong.
 
   double precision :: h_l, un_l, ut_l, c_l
   double precision :: h_r, un_r, ut_r, c_r
@@ -347,12 +350,10 @@ subroutine riemann_Roe(idir, qx, qy, ng, &
 
         ! modified evalues for entropy fix
         if (abs(lambda_roe(0)) < tol) then
-          write(*,*) "l1 fix"
           lambda_roe(0) = lambda_roe(0) * (u_star - c_star - lambda_roe(0)) / &
             (u_star - c_star - (un_l - c_l))
         endif
         if (abs(lambda_roe(2)) < tol) then
-          write(*,*) "l3 fix"
           lambda_roe(2) = lambda_roe(2) * (u_star + c_star - lambda_roe(2)) / &
             (u_star + c_star - (un_r + c_r))
         endif

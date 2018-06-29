@@ -5,7 +5,7 @@ tmax = 1.0
 [swe]
 limiter = 0
 cvisc = 0.1
-grav = 0.0
+grav = 0.001
 
 
 [io]
