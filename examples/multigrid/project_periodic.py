@@ -30,6 +30,7 @@ import multigrid.MG as MG
 import mesh.boundary as bnd
 import mesh.patch as patch
 
+
 def doit(nx, ny):
     """manage the entire projection"""
 
