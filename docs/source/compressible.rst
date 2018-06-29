@@ -40,14 +40,6 @@ compressible\.eos module
     :undoc-members:
     :show-inheritance:
 
-compressible\.setup module
---------------------------
-
-.. automodule:: compressible.setup
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 compressible\.simulation module
 -------------------------------
 
