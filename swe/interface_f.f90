@@ -244,8 +244,7 @@ subroutine riemann_Roe(idir, qx, qy, ng, &
   integer :: ns
 
   double precision, parameter :: smallc = 1.e-10
-  double precision, parameter :: smallrho = 1.e-10
-  double precision, parameter :: smallp = 1.e-10
+  double precision, parameter :: tol = 0.1d-1 ! entropy fix parameter
 
   double precision :: h_l, un_l, ut_l, c_l
   double precision :: h_r, un_r, ut_r, c_r
@@ -290,7 +289,6 @@ subroutine riemann_Roe(idir, qx, qy, ng, &
         c_r = max(smallc, sqrt(g*h_r))
 
         ! Calculate the Roe averages
-
         U_roe = (U_l(i,j,:)/sqrt(h_l) + U_r(i,j,:)/sqrt(h_r)) / &
                   (sqrt(h_l) + sqrt(h_r))
 
@@ -315,25 +313,25 @@ subroutine riemann_Roe(idir, qx, qy, ng, &
                            U_roe(ih) * delta(iymom), &
                            0.5d0*(delta(ih) + U_roe(ih)/c_roe*delta(ixmom))]
 
-          K_roe(0, 0:2) = [1.0d0, un_roe - c_roe, U_roe(ixmom)]
+          K_roe(0, 0:2) = [1.0d0, un_roe - c_roe, U_roe(iymom)]
           K_roe(1, 0:2) = [0.0d0, 0.0d0, 1.0d0]
-          K_roe(2, 0:2) = [1.0d0, un_roe + c_roe, U_roe(ixmom)]
+          K_roe(2, 0:2) = [1.0d0, un_roe + c_roe, U_roe(iymom)]
         else
           alpha_roe(0:2) = [0.5d0*(delta(ih) - U_roe(ih)/c_roe*delta(iymom)), &
                            U_roe(ih) * delta(ixmom), &
                            0.5d0*(delta(ih) + U_roe(ih)/c_roe*delta(iymom))]
 
-          K_roe(0, 0:2) = [1.0d0, U_roe(iymom), un_roe - c_roe]
+          K_roe(0, 0:2) = [1.0d0, U_roe(ixmom), un_roe - c_roe]
           K_roe(1, 0:2) = [0.0d0, 1.0d0, 0.0d0]
-          K_roe(2, 0:2) = [1.0d0, U_roe(iymom), un_roe + c_roe]
+          K_roe(2, 0:2) = [1.0d0, U_roe(ixmom), un_roe + c_roe]
         endif
 
-        ! lambda_roe(ns:) = un_roe
-        ! alpha_roe(ns:) = U_roe(ih) * delta(ns:)
-        ! do n = ns, nvar-1
-        !    K_roe(n,:) = 0.0d0
-        !    K_roe(n,n) = 1.0d0
-        ! enddo
+        lambda_roe(ns:) = un_roe
+        alpha_roe(ns:) = U_roe(ih) * delta(ns:)
+        do n = ns, nvar-1
+           K_roe(n,:) = 0.0d0
+           K_roe(n,n) = 1.0d0
+        enddo
 
         call consFlux(idir, g, ih, ixmom, iymom, ihX, nvar, nspec, &
                       U_l(i,j,:), F(i,j,:))
@@ -342,27 +340,29 @@ subroutine riemann_Roe(idir, qx, qy, ng, &
 
         F(i,j,:) = 0.5d0 * (F(i,j,:) + F_r)
 
-        ! calculate star states for entropy fix
-        h_star = 0.5d0 * (h_l + h_r) - &
-          0.25d0 * (un_r - un_l) * (h_l + h_r) / (c_l + c_r)
-        u_star = 0.5d0 * (un_l + un_r) - &
-          (h_r - h_l) * (c_l + c_r) / (h_l + h_r)
+        h_star = 1.0d0 / g * (0.5d0 * (c_l + c_r) + 0.25d0 * (un_l - un_r))**2
+        u_star = 0.5d0 * (un_l + un_r) + c_l - c_r
+
         c_star = sqrt(g * h_star)
 
-        ! modified evalues
-        lambda_roe(0) = lambda_roe(0) * (u_star - c_star - lambda_roe(0)) / &
-          (u_star - c_star - (un_l - c_l))
-        lambda_roe(2) = lambda_roe(2) * (u_star + c_star - lambda_roe(2)) / &
-          (u_star + c_star - (un_r + c_r))
+        ! modified evalues for entropy fix
+        if (abs(lambda_roe(0)) < tol) then
+          write(*,*) "l1 fix"
+          lambda_roe(0) = lambda_roe(0) * (u_star - c_star - lambda_roe(0)) / &
+            (u_star - c_star - (un_l - c_l))
+        endif
+        if (abs(lambda_roe(2)) < tol) then
+          write(*,*) "l3 fix"
+          lambda_roe(2) = lambda_roe(2) * (u_star + c_star - lambda_roe(2)) / &
+            (u_star + c_star - (un_r + c_r))
+        endif
 
-        do n = 0, ns-1
-          do m = 0, ns-1
+        do n = 0, nvar-1
+          do m = 0, nvar-1
             F(i,j,n) = F(i,j,n) - &
                 0.5d0 * alpha_roe(m) * abs(lambda_roe(m)) * K_roe(m,n)
           enddo
         enddo
-
-      ! write(*,*) "alpha_roe = ", h_star
 
      enddo
   enddo

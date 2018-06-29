@@ -7,7 +7,7 @@ tmax = 0.3
 [swe]
 limiter = 1
 grav = 1.0
-riemann = HLLC
+riemann = Roe
 
 [io]
 basename = dam_x_
