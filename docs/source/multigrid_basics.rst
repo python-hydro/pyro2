@@ -108,10 +108,6 @@ results are shown below:
 
 Left is the original u velocity, middle is the modified field after adding the gradient of the scalar, and right is the recovered field.
 
-Jupyter Notebook
-----------------
-
-A jupyter notebook showing how to use the basic solver can be found here: multigrid-examples.ipynb
 
 Exercises
 ---------
