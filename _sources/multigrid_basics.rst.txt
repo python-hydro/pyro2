@@ -4,7 +4,7 @@ Multigrid solvers
 pyro solves elliptic problems (like Laplace's equation or Poisson's
 equation) through multigrid. This accelerates the convergence of
 simple relaxation by moving the solution down and up through a series
-of grids. Chapter 9 of the `pdf notes<http://bender.astro.sunysb.edu/hydro_by_example/CompHydroTutorial.pdf>`_ gives an introduction to solving elliptic equations, including multigrid.
+of grids. Chapter 9 of the `pdf notes <http://bender.astro.sunysb.edu/hydro_by_example/CompHydroTutorial.pdf>`_ gives an introduction to solving elliptic equations, including multigrid.
 
 There are three solvers:
 
