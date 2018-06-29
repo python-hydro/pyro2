@@ -13,7 +13,6 @@ The following python packages are required:
 
 * ``numpy``
 * ``matplotlib``
-* ``f2py``
 * ``f2py`` (part of NumPy)
 * ``pytest`` (for unit tests)
 

@@ -8,9 +8,9 @@ hydrodynamics solvers.  It is designed to provide a tutorial for
 students in computational astrophysics (and hydrodynamics in
 general). We introduce simple implementations of some popular methods
 used in the field, with the code written to be easily
-understandable. All simulations use a single grid (no domain decomposition)
+understandable. All simulations use a single grid (no domain decomposition).
 
-.. note:: 
+.. note::
 
    pyro is not meant for demanding scientific simulations—given the
    choice between performance and clarity, clarity is taken.
@@ -37,7 +37,7 @@ Runtime visualization shows the evolution as the equations are solved.
 In the pages that follow, the following format is adopted:
 
 * PDF notes provide the basic theory behind the methods.  References
-  are cited to provide more detail. 
+  are cited to provide more detail.
 
 * An overview of the use of the applicable modules from pyro provided.
 

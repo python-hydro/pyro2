@@ -55,7 +55,7 @@ There are several main objects in the patch class that we interact with:
   class that subclasses the NumPy ndarray and makes the data in the
   array know about the details of the grid it is defined on. In
   particular, it knows which cells are valid and which are the ghost
-  cells, and it has methods to do the ai+1,j operations that are
+  cells, and it has methods to do the :math:`a_{i+1,j}` operations that are
   common in difference methods.
 
 * :func:`integration.RKIntegrator <mesh.integration.RKIntegrator>`:
@@ -110,6 +110,3 @@ The actual filling of the boundary conditions is done by the ``fill_BC()``
 method. The script ``bc_demo.py`` tests the various types of boundary
 conditions by initializing a small grid with sequential data, filling
 the BCs, and printing out the results.
-
-
-
