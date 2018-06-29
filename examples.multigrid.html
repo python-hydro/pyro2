@@ -139,7 +139,6 @@
 <li class="toctree-l2"><a class="reference internal" href="compressible_react.html">compressible_react package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible_rk.html">compressible_rk package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible_sdc.html">compressible_sdc package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="convergence.html">convergence module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="diffusion.html">diffusion package</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="examples.html">examples package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="examples.html#subpackages">Subpackages</a><ul class="current">
@@ -155,11 +154,8 @@
 <li class="toctree-l2"><a class="reference internal" href="plot.html">plot module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plotvar.html">plotvar module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyro.html">pyro module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sedov_compare.html">sedov_compare module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulation_null.html">simulation_null module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smooth_error.html">smooth_error module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sod_compare.html">sod_compare module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="test.html">test module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.html">util package</a></li>
 </ul>
@@ -785,12 +781,56 @@ solve:</p>
 <dd></dd></dl>
 
 </div>
+<div class="section" id="module-examples.multigrid.plot">
+<span id="examples-multigrid-plot-module"></span><h2>examples.multigrid.plot module<a class="headerlink" href="#module-examples.multigrid.plot" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="examples.multigrid.plot.get_args">
+<code class="descclassname">examples.multigrid.plot.</code><code class="descname">get_args</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/examples/multigrid/plot.html#get_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#examples.multigrid.plot.get_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="examples.multigrid.plot.makeplot">
+<code class="descclassname">examples.multigrid.plot.</code><code class="descname">makeplot</code><span class="sig-paren">(</span><em>plotfile_name</em>, <em>outfile</em>, <em>width</em>, <em>height</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/examples/multigrid/plot.html#makeplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#examples.multigrid.plot.makeplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot the data in a plotfile using the solver’s vis() method</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-examples.multigrid.plotvar">
+<span id="examples-multigrid-plotvar-module"></span><h2>examples.multigrid.plotvar module<a class="headerlink" href="#module-examples.multigrid.plotvar" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="examples.multigrid.plotvar.get_args">
+<code class="descclassname">examples.multigrid.plotvar.</code><code class="descname">get_args</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/examples/multigrid/plotvar.html#get_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#examples.multigrid.plotvar.get_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="examples.multigrid.plotvar.makeplot">
+<code class="descclassname">examples.multigrid.plotvar.</code><code class="descname">makeplot</code><span class="sig-paren">(</span><em>plotfile</em>, <em>variable</em>, <em>outfile</em>, <em>width=6.5</em>, <em>height=5.25</em>, <em>log=False</em>, <em>compact=False</em>, <em>quiet=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/examples/multigrid/plotvar.html#makeplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#examples.multigrid.plotvar.makeplot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
 <div class="section" id="module-examples.multigrid.project_periodic">
 <span id="examples-multigrid-project-periodic-module"></span><h2>examples.multigrid.project_periodic module<a class="headerlink" href="#module-examples.multigrid.project_periodic" title="Permalink to this headline">¶</a></h2>
+<p>test of a cell-centered, centered-difference approximate projection.</p>
+<p>initialize the velocity field to be divergence free and then add to it
+the gradient of a scalar (whose normal component vanishes on the
+boundaries).  The projection should recover the original divergence-
+free velocity field.</p>
+<p>The test velocity field comes from Almgen, Bell, and Szymczak 1996.</p>
+<p>This makes use of the multigrid solver with periodic boundary conditions.</p>
+<p>One of the things that this test demonstrates is that the initial
+projection may not be able to completely remove the divergence free
+part, so subsequent projections may be necessary.  In this example, we
+add a very strong gradient component.</p>
+<p>The total number of projections to perform is given by nproj.  Each
+projection uses the divergence of the velocity field from the previous
+iteration as its source term.</p>
+<p>Note: the output file created stores the original field, the poluted
+field, and the recovered field.</p>
 <dl class="function">
 <dt id="examples.multigrid.project_periodic.doit">
 <code class="descclassname">examples.multigrid.project_periodic.</code><code class="descname">doit</code><span class="sig-paren">(</span><em>nx</em>, <em>ny</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/examples/multigrid/project_periodic.html#doit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#examples.multigrid.project_periodic.doit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>manage the entire projection</p>
+</dd></dl>
 
 </div>
 <div class="section" id="module-examples.multigrid.prolong_restrict_demo">

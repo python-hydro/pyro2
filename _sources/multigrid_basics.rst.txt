@@ -81,7 +81,9 @@ The movie below shows the smoothing at each level to realize this solution:
 projection
 ^^^^^^^^^^
 
-Another example that uses multigrid to extract the divergence free part of a velocity field is run as:
+Another example (``examples/multigrid/project_periodic.py``) uses
+multigrid to extract the divergence free part of a velocity field.
+This is run as:
 
 .. code-block:: none
 
@@ -104,6 +106,9 @@ velocity field, adds to it the gradient of a scalar, and then projects
 it to recover the divergence free part. The error can found by
 comparing the original velocity field to the recovered field. The
 results are shown below:
+
+.. image:: project.png
+   :align: center
 
 
 Left is the original u velocity, middle is the modified field after adding the gradient of the scalar, and right is the recovered field.

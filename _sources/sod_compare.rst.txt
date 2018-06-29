@@ -1,7 +1,0 @@
-sod\_compare module
-===================
-
-.. automodule:: sod_compare
-    :members:
-    :undoc-members:
-    :show-inheritance:

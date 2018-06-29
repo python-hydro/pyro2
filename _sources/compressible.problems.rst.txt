@@ -65,6 +65,14 @@ compressible\.problems\.quad module
     :undoc-members:
     :show-inheritance:
 
+compressible\.problems\.ramp module
+-----------------------------------
+
+.. automodule:: compressible.problems.ramp
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 compressible\.problems\.rt module
 ---------------------------------
 

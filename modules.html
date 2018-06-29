@@ -138,7 +138,6 @@
 <li class="toctree-l2"><a class="reference internal" href="compressible_react.html">compressible_react package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible_rk.html">compressible_rk package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible_sdc.html">compressible_sdc package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="convergence.html">convergence module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="diffusion.html">diffusion package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html">examples package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="incompressible.html">incompressible package</a></li>
@@ -148,11 +147,8 @@
 <li class="toctree-l2"><a class="reference internal" href="plot.html">plot module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plotvar.html">plotvar module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyro.html">pyro module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sedov_compare.html">sedov_compare module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulation_null.html">simulation_null module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smooth_error.html">smooth_error module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sod_compare.html">sod_compare module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="test.html">test module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.html">util package</a></li>
 </ul>
@@ -279,6 +275,7 @@
 <li class="toctree-l3"><a class="reference internal" href="advection_fv4.problems.html">advection_fv4.problems package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="advection_fv4.problems.html#submodules">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="advection_fv4.problems.html#module-advection_fv4.problems.smooth">advection_fv4.problems.smooth module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="advection_fv4.problems.html#module-advection_fv4.problems.tophat">advection_fv4.problems.tophat module</a></li>
 </ul>
 </li>
 </ul>
@@ -318,6 +315,7 @@
 <li class="toctree-l4"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.kh">compressible.problems.kh module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.logo">compressible.problems.logo module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.quad">compressible.problems.quad module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.ramp">compressible.problems.ramp module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.rt">compressible.problems.rt module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.rt2">compressible.problems.rt2 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.sedov">compressible.problems.sedov module</a></li>
@@ -380,7 +378,6 @@
 <li class="toctree-l2"><a class="reference internal" href="compressible_sdc.html#module-compressible_sdc.simulation">compressible_sdc.simulation module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="convergence.html">convergence module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="diffusion.html">diffusion package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="diffusion.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="diffusion.problems.html">diffusion.problems package</a><ul>
@@ -409,6 +406,8 @@
 <li class="toctree-l4"><a class="reference internal" href="examples.multigrid.html#module-examples.multigrid.mg_test_vc_dirichlet">examples.multigrid.mg_test_vc_dirichlet module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="examples.multigrid.html#module-examples.multigrid.mg_test_vc_periodic">examples.multigrid.mg_test_vc_periodic module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="examples.multigrid.html#module-examples.multigrid.mg_vis">examples.multigrid.mg_vis module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="examples.multigrid.html#module-examples.multigrid.plot">examples.multigrid.plot module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="examples.multigrid.html#module-examples.multigrid.plotvar">examples.multigrid.plotvar module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="examples.multigrid.html#module-examples.multigrid.project_periodic">examples.multigrid.project_periodic module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="examples.multigrid.html#module-examples.multigrid.prolong_restrict_demo">examples.multigrid.prolong_restrict_demo module</a></li>
 </ul>
@@ -465,11 +464,8 @@
 <li class="toctree-l1"><a class="reference internal" href="plot.html">plot module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plotvar.html">plotvar module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pyro.html">pyro module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sedov_compare.html">sedov_compare module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup.html">setup module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulation_null.html">simulation_null module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="smooth_error.html">smooth_error module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sod_compare.html">sod_compare module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="test.html">test module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">util package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="util.html#submodules">Submodules</a></li>

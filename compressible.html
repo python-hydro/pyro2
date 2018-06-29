@@ -151,7 +151,6 @@
 <li class="toctree-l2"><a class="reference internal" href="compressible_react.html">compressible_react package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible_rk.html">compressible_rk package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible_sdc.html">compressible_sdc package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="convergence.html">convergence module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="diffusion.html">diffusion package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html">examples package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="incompressible.html">incompressible package</a></li>
@@ -161,11 +160,8 @@
 <li class="toctree-l2"><a class="reference internal" href="plot.html">plot module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plotvar.html">plotvar module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyro.html">pyro module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sedov_compare.html">sedov_compare module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulation_null.html">simulation_null module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smooth_error.html">smooth_error module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sod_compare.html">sod_compare module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="test.html">test module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.html">util package</a></li>
 </ul>
@@ -286,6 +282,7 @@ second-order (piecewise-linear), unsplit method of Colella 1990.</p>
 <li class="toctree-l2"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.kh">compressible.problems.kh module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.logo">compressible.problems.logo module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.quad">compressible.problems.quad module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.ramp">compressible.problems.ramp module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.rt">compressible.problems.rt module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.rt2">compressible.problems.rt2 module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.sedov">compressible.problems.sedov module</a></li>
@@ -307,6 +304,16 @@ implement an HSE BC in the vertical direction.</p>
 some work will necessarily be repeated.</p>
 <p>Also note: we may come in here with the aux_data (source terms), so
 we’ll do a special case for them</p>
+<dl class="function">
+<dt id="compressible.BC.inflow_post_bc">
+<code class="descclassname">compressible.BC.</code><code class="descname">inflow_post_bc</code><span class="sig-paren">(</span><em>var</em>, <em>g</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/BC.html#inflow_post_bc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.BC.inflow_post_bc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="compressible.BC.inflow_pre_bc">
+<code class="descclassname">compressible.BC.</code><code class="descname">inflow_pre_bc</code><span class="sig-paren">(</span><em>var</em>, <em>g</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/BC.html#inflow_pre_bc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.BC.inflow_pre_bc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="function">
 <dt id="compressible.BC.user">
 <code class="descclassname">compressible.BC.</code><code class="descname">user</code><span class="sig-paren">(</span><em>bc_name</em>, <em>bc_edge</em>, <em>variable</em>, <em>ccdata</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/BC.html#user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.BC.user" title="Permalink to this definition">¶</a></dt>

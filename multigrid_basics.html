@@ -293,7 +293,9 @@ analytic solution. This is shown below:</p>
 </div><br></div>
 <div class="section" id="projection">
 <h3>projection<a class="headerlink" href="#projection" title="Permalink to this headline">¶</a></h3>
-<p>Another example that uses multigrid to extract the divergence free part of a velocity field is run as:</p>
+<p>Another example (<code class="docutils literal"><span class="pre">examples/multigrid/project_periodic.py</span></code>) uses
+multigrid to extract the divergence free part of a velocity field.
+This is run as:</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>./project-periodic.py
 </pre></div>
 </div>
@@ -308,6 +310,7 @@ velocity field, adds to it the gradient of a scalar, and then projects
 it to recover the divergence free part. The error can found by
 comparing the original velocity field to the recovered field. The
 results are shown below:</p>
+<img alt="_images/project.png" class="align-center" src="_images/project.png" />
 <p>Left is the original u velocity, middle is the modified field after adding the gradient of the scalar, and right is the recovered field.</p>
 </div>
 </div>

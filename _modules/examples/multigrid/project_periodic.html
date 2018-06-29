@@ -193,25 +193,29 @@
   <h1>Source code for examples.multigrid.project_periodic</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 
-<span class="c1"># test of a cell-centered, centered-difference approximate projection.</span>
-<span class="c1">#</span>
-<span class="c1"># initialize the velocity field to be divergence free and then add to</span>
-<span class="c1"># it the gradient of a scalar (whose normal component vanishes on the</span>
-<span class="c1"># boundaries).  The projection should recover the original divergence-</span>
-<span class="c1"># free velocity field.</span>
-<span class="c1">#</span>
-<span class="c1"># The test velocity field comes from Almgen, Bell, and Szymczak 1996.</span>
-<span class="c1">#</span>
-<span class="c1"># This makes use of the multigrid solver with periodic boundary conditions.</span>
-<span class="c1">#</span>
-<span class="c1"># One of the things that this test demonstrates is that the initial</span>
-<span class="c1"># projection may not be able to completely remove the divergence free</span>
-<span class="c1"># part, so subsequent projections may be necessary.  In this example,</span>
-<span class="c1"># we add a very strong gradient component.</span>
-<span class="c1">#</span>
-<span class="c1"># The total number of projections to perform is given by nproj.  Each</span>
-<span class="c1"># projection uses the divergence of the velocity field from the previous</span>
-<span class="c1"># iteration as its source term.</span>
+<span class="sd">&quot;&quot;&quot;test of a cell-centered, centered-difference approximate projection.</span>
+
+<span class="sd">initialize the velocity field to be divergence free and then add to it</span>
+<span class="sd">the gradient of a scalar (whose normal component vanishes on the</span>
+<span class="sd">boundaries).  The projection should recover the original divergence-</span>
+<span class="sd">free velocity field.</span>
+
+<span class="sd">The test velocity field comes from Almgen, Bell, and Szymczak 1996.</span>
+
+<span class="sd">This makes use of the multigrid solver with periodic boundary conditions.</span>
+
+<span class="sd">One of the things that this test demonstrates is that the initial</span>
+<span class="sd">projection may not be able to completely remove the divergence free</span>
+<span class="sd">part, so subsequent projections may be necessary.  In this example, we</span>
+<span class="sd">add a very strong gradient component.</span>
+
+<span class="sd">The total number of projections to perform is given by nproj.  Each</span>
+<span class="sd">projection uses the divergence of the velocity field from the previous</span>
+<span class="sd">iteration as its source term.</span>
+
+<span class="sd">Note: the output file created stores the original field, the poluted</span>
+<span class="sd">field, and the recovered field.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -221,6 +225,7 @@
 
 
 <div class="viewcode-block" id="doit"><a class="viewcode-back" href="../../../examples.multigrid.html#examples.multigrid.project_periodic.doit">[docs]</a><span class="k">def</span> <span class="nf">doit</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;manage the entire projection&quot;&quot;&quot;</span>
 
     <span class="n">nproj</span> <span class="o">=</span> <span class="mi">2</span>
 
