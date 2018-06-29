@@ -57,7 +57,7 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
   !   r1 = |  0  |   r2 = | 0 |   r3 = | 1 |   r4 = |  0  |
   !        \ c^2 /        \ 0 /        \ 0 /        \ c^2 /
   !
-  ! In particular, we see from r3 that the transverse velocity (v in
+  ! In particular, we see F_rom r3 that the transverse velocity (v in
   ! this case) is simply advected at a speed u in the x-direction.
   !
   ! The left eigenvectors are
@@ -118,7 +118,7 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
 
         ! compute the eigenvalues and eigenvectors
         if (idir == 1) then
-           eval(:) = [q(iu) - cs, q(iu), q(iu) + cs]
+           eval(0:ns-1) = [q(iu) - cs, q(iu), q(iu) + cs]
 
            lvec(0,0:ns-1) = [ cs, -q(ih), 0.0d0 ]
            lvec(1,0:ns-1) = [ 0.0d0, 0.0d0, 1.0d0 ]
@@ -134,12 +134,16 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
               lvec(n,n) = 1.0
               rvec(n,n) = 1.0
            enddo
-        else
-           eval = [q(iv) - cs, q(iv), q(iv) + cs]
 
-           lvec(0,0:ns-1) = [ cs, -q(ih), 0.0d0 ]
+           ! multiply by scaling factors
+           lvec(0,:) = lvec(0,:) * 0.50d0 / (cs * q(ih))
+           lvec(2,:) = lvec(2,:) * 0.50d0 / (cs * q(ih))
+        else
+           eval(0:ns-1) = [q(iv) - cs, q(iv), q(iv) + cs]
+
+           lvec(0,0:ns-1) = [ cs, 0.0d0, -q(ih) ]
            lvec(1,0:ns-1) = [ 0.0d0, 1.0d0, 0.0d0 ]
-           lvec(2,0:ns-1) = [ cs, 0.0d0, 1.0d0 ]
+           lvec(2,0:ns-1) = [ cs, 0.0d0, q(ih) ]
 
            rvec(0,0:ns-1) = [ q(ih), 0.0d0, -cs ]
            rvec(1,0:ns-1) = [ 0.0d0, 1.0d0, 0.0d0 ]
@@ -151,6 +155,10 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
               lvec(n,n) = 1.0
               rvec(n,n) = 1.0
            enddo
+
+           ! multiply by scaling factors
+           lvec(0,:) = lvec(0,:) * 0.50d0 / (cs * q(ih))
+           lvec(2,:) = lvec(2,:) * 0.50d0 / (cs * q(ih))
 
         endif
 
@@ -203,6 +211,162 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
   enddo
 
 end subroutine states
+
+
+subroutine riemann_Roe(idir, qx, qy, ng, &
+                        nvar, ih, ixmom, iymom, ihX, nspec, &
+                        lower_solid, upper_solid, &
+                        g, U_l, U_r, F)
+
+  implicit none
+
+  integer, intent(in) :: idir
+  integer, intent(in) :: qx, qy, ng
+  integer, intent(in) :: nvar, ih, ixmom, iymom, ihX, nspec
+  integer, intent(in) :: lower_solid, upper_solid
+  double precision, intent(in) :: g
+
+  ! 0-based indexing to match python
+  double precision, intent(inout) :: U_l(0:qx-1,0:qy-1,0:nvar-1)
+  double precision, intent(inout) :: U_r(0:qx-1,0:qy-1,0:nvar-1)
+  double precision, intent(  out) :: F(0:qx-1,0:qy-1,0:nvar-1)
+
+!f2py depend(qx, qy, nvar) :: U_l, U_r
+!f2py intent(in) :: U_l, U_r
+!f2py intent(out) :: F
+
+  ! This is the Roe Riemann solver.  The implementation follows
+  ! Toro's book and F_rom the clawpack 2d SWE Roe solver.
+
+  integer :: ilo, ihi, jlo, jhi
+  integer :: nx, ny
+  integer :: i, j, n, m
+  integer :: ns
+
+  double precision, parameter :: smallc = 1.e-10
+  double precision, parameter :: smallrho = 1.e-10
+  double precision, parameter :: smallp = 1.e-10
+
+  double precision :: h_l, un_l, ut_l, c_l
+  double precision :: h_r, un_r, ut_r, c_r
+  double precision :: h_star, u_star, c_star
+  double precision :: xn(nspec)
+
+  double precision :: U_roe(0:nvar-1), c_roe, un_roe
+  double precision :: lambda_roe(0:nvar-1), K_roe(0:nvar-1, 0:nvar-1)
+  double precision :: alpha_roe(0:nvar-1), delta(0:nvar-1), F_r(0:nvar-1)
+
+  nx = qx - 2*ng; ny = qy - 2*ng
+  ilo = ng; ihi = ng+nx-1; jlo = ng; jhi = ng+ny-1
+  ns = nvar - nspec
+
+  do j = jlo-1, jhi+1
+     do i = ilo-1, ihi+1
+
+        ! primitive variable states
+        h_l  = U_l(i,j,ih)
+
+        ! un = normal velocity; ut = transverse velocity
+        if (idir == 1) then
+           un_l    = U_l(i,j,ixmom)/h_l
+           ut_l    = U_l(i,j,iymom)/h_l
+        else
+           un_l    = U_l(i,j,iymom)/h_l
+           ut_l    = U_l(i,j,ixmom)/h_l
+        endif
+
+        h_r  = U_r(i,j,ih)
+
+        if (idir == 1) then
+           un_r    = U_r(i,j,ixmom)/h_r
+           ut_r    = U_r(i,j,iymom)/h_r
+        else
+           un_r    = U_r(i,j,iymom)/h_r
+           ut_r    = U_r(i,j,ixmom)/h_r
+        endif
+
+        ! compute the sound speeds
+        c_l = max(smallc, sqrt(g*h_l))
+        c_r = max(smallc, sqrt(g*h_r))
+
+        ! Calculate the Roe averages
+
+        U_roe = (U_l(i,j,:)/sqrt(h_l) + U_r(i,j,:)/sqrt(h_r)) / &
+                  (sqrt(h_l) + sqrt(h_r))
+
+        U_roe(ih) = sqrt(h_l * h_r)
+        c_roe = sqrt(0.5d0 * (c_l**2 + c_r**2))
+
+        delta(:) = U_r(i,j,:)/h_r - U_l(i,j,:)/h_l
+        delta(ih) = h_r - h_l
+
+        ! evalues and right evectors
+        if (idir == 1) then
+          un_roe = U_roe(ixmom)
+        else
+          un_roe = U_roe(iymom)
+        endif
+
+        K_roe(:,:) = 0.0d0
+
+        lambda_roe(0:2) = [un_roe - c_roe, un_roe, un_roe + c_roe]
+        if (idir == 1) then
+          alpha_roe(0:2) = [0.5d0*(delta(ih) - U_roe(ih)/c_roe*delta(ixmom)), &
+                           U_roe(ih) * delta(iymom), &
+                           0.5d0*(delta(ih) + U_roe(ih)/c_roe*delta(ixmom))]
+
+          K_roe(0, 0:2) = [1.0d0, un_roe - c_roe, U_roe(ixmom)]
+          K_roe(1, 0:2) = [0.0d0, 0.0d0, 1.0d0]
+          K_roe(2, 0:2) = [1.0d0, un_roe + c_roe, U_roe(ixmom)]
+        else
+          alpha_roe(0:2) = [0.5d0*(delta(ih) - U_roe(ih)/c_roe*delta(iymom)), &
+                           U_roe(ih) * delta(ixmom), &
+                           0.5d0*(delta(ih) + U_roe(ih)/c_roe*delta(iymom))]
+
+          K_roe(0, 0:2) = [1.0d0, U_roe(iymom), un_roe - c_roe]
+          K_roe(1, 0:2) = [0.0d0, 1.0d0, 0.0d0]
+          K_roe(2, 0:2) = [1.0d0, U_roe(iymom), un_roe + c_roe]
+        endif
+
+        ! lambda_roe(ns:) = un_roe
+        ! alpha_roe(ns:) = U_roe(ih) * delta(ns:)
+        ! do n = ns, nvar-1
+        !    K_roe(n,:) = 0.0d0
+        !    K_roe(n,n) = 1.0d0
+        ! enddo
+
+        call consFlux(idir, g, ih, ixmom, iymom, ihX, nvar, nspec, &
+                      U_l(i,j,:), F(i,j,:))
+        call consFlux(idir, g, ih, ixmom, iymom, ihX, nvar, nspec, &
+                      U_r(i,j,:), F_r)
+
+        F(i,j,:) = 0.5d0 * (F(i,j,:) + F_r)
+
+        ! calculate star states for entropy fix
+        h_star = 0.5d0 * (h_l + h_r) - &
+          0.25d0 * (un_r - un_l) * (h_l + h_r) / (c_l + c_r)
+        u_star = 0.5d0 * (un_l + un_r) - &
+          (h_r - h_l) * (c_l + c_r) / (h_l + h_r)
+        c_star = sqrt(g * h_star)
+
+        ! modified evalues
+        lambda_roe(0) = lambda_roe(0) * (u_star - c_star - lambda_roe(0)) / &
+          (u_star - c_star - (un_l - c_l))
+        lambda_roe(2) = lambda_roe(2) * (u_star + c_star - lambda_roe(2)) / &
+          (u_star + c_star - (un_r + c_r))
+
+        do n = 0, ns-1
+          do m = 0, ns-1
+            F(i,j,n) = F(i,j,n) - &
+                0.5d0 * alpha_roe(m) * abs(lambda_roe(m)) * K_roe(m,n)
+          enddo
+        enddo
+
+      ! write(*,*) "alpha_roe = ", h_star
+
+     enddo
+  enddo
+end subroutine riemann_Roe
 
 
 subroutine riemann_HLLC(idir, qx, qy, ng, &
@@ -398,6 +562,7 @@ subroutine riemann_HLLC(idir, qx, qy, ng, &
      enddo
   enddo
 end subroutine riemann_HLLC
+
 
 subroutine consFlux(idir, g, ih, ixmom, iymom, ihX, nvar, nspec, U_state, F)
 

@@ -126,6 +126,7 @@ import swe.interface_f as ifc
 import swe as comp
 import mesh.reconstruction as reconstruction
 import mesh.array_indexer as ai
+from util import msg
 
 
 def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
@@ -252,7 +253,14 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     tm_riem = tc.timer("riemann")
     tm_riem.begin()
 
-    riemannFunc = ifc.riemann_hllc
+    riemann = rp.get_param("swe.riemann")
+
+    if riemann == "HLLC":
+        riemannFunc = ifc.riemann_hllc
+    elif riemann == "Roe":
+        riemannFunc = ifc.riemann_roe
+    else:
+        msg.fail("ERROR: Riemann solver undefined")
 
     _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
                       ivars.nvar, ivars.ih, ivars.ixmom, ivars.iymom, ivars.ihx, ivars.naux,
