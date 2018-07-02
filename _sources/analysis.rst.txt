@@ -27,6 +27,12 @@ with their data.
     the finer data and then computes the norm of the difference.  This
     is used to test the convergence of solvers.
 
+  * ``dam_compare.py``: this takes an output file from the
+    shallow water dam break problem and plots a slice through the domain
+    together with the analytic solution (calculated in the script).
+
+    usage: ``./dam_compare.py file``
+
   * ``gauss_diffusion_compare.py``: this is for the diffusion solver's
     Gaussian diffusion problem. It takes a sequence of output files as
     arguments, computes the angle-average, and the plots the resulting
@@ -65,6 +71,3 @@ with their data.
     the analytic solution (read in from ``sod-exact.out``).
 
     usage: ``./sod_compare.py file``
-
-
-

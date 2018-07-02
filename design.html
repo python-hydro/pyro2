@@ -119,6 +119,7 @@
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solvers</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Utilities</span></p>
 <ul>
@@ -304,6 +305,11 @@ solver is used on its own to illustrate how multigrid works, and
 directly by the diffusion and incompressible solvers.<ul>
 <li><code class="docutils literal"><span class="pre">problems/</span></code>: The problem setups for when the multigrid solver is used in a stand-alone fashion.</li>
 <li><code class="docutils literal"><span class="pre">tests/</span></code>: Reference multigrid solver solutions (from when the multigrid solver is used stand-alone) for regression testing.</li>
+</ul>
+</li>
+<li><code class="docutils literal"><span class="pre">swe/</span></code>: The shallow water solver.<ul>
+<li><code class="docutils literal"><span class="pre">problems/</span></code>: The problem setups for the shallow water solver.</li>
+<li><code class="docutils literal"><span class="pre">tests/</span></code>: Reference shallow water output for regression testing.</li>
 </ul>
 </li>
 <li><code class="docutils literal"><span class="pre">util/</span></code>: Various service modules used by the pyro routines,

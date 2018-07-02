@@ -89,22 +89,6 @@ examples\.multigrid\.mg\_vis module
     :undoc-members:
     :show-inheritance:
 
-examples\.multigrid\.plot module
---------------------------------
-
-.. automodule:: examples.multigrid.plot
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-examples\.multigrid\.plotvar module
------------------------------------
-
-.. automodule:: examples.multigrid.plotvar
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 examples\.multigrid\.project\_periodic module
 ---------------------------------------------
 

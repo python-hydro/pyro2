@@ -115,6 +115,7 @@
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solvers</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Utilities</span></p>
 <ul>
@@ -143,6 +144,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#module-compressible.BC">compressible.BC module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-compressible.derives">compressible.derives module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-compressible.eos">compressible.eos module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#compressible-setup-module">compressible.setup module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-compressible.simulation">compressible.simulation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-compressible.unsplit_fluxes">compressible.unsplit_fluxes module</a></li>
 </ul>
@@ -158,10 +160,9 @@
 <li class="toctree-l2"><a class="reference internal" href="mesh.html">mesh package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="multigrid.html">multigrid package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot.html">plot module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plotvar.html">plotvar module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyro.html">pyro module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulation_null.html">simulation_null module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="swe.html">swe package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="test.html">test module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.html">util package</a></li>
 </ul>
@@ -280,11 +281,8 @@ second-order (piecewise-linear), unsplit method of Colella 1990.</p>
 <li class="toctree-l2"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.bubble">compressible.problems.bubble module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.hse">compressible.problems.hse module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.kh">compressible.problems.kh module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.logo">compressible.problems.logo module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.quad">compressible.problems.quad module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.ramp">compressible.problems.ramp module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.rt">compressible.problems.rt module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.rt2">compressible.problems.rt2 module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.sedov">compressible.problems.sedov module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.sod">compressible.problems.sod module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible.problems.html#module-compressible.problems.test">compressible.problems.test module</a></li>
@@ -458,6 +456,9 @@ pressure</p>
 </table>
 </dd></dl>
 
+</div>
+<div class="section" id="compressible-setup-module">
+<h2>compressible.setup module<a class="headerlink" href="#compressible-setup-module" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="module-compressible.simulation">
 <span id="compressible-simulation-module"></span><h2>compressible.simulation module<a class="headerlink" href="#module-compressible.simulation" title="Permalink to this headline">¶</a></h2>

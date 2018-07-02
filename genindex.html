@@ -113,6 +113,7 @@
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solvers</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Utilities</span></p>
 <ul>
@@ -243,14 +244,12 @@
 </li>
       <li><a href="advection_fv4.problems.html#module-advection_fv4.problems.smooth">advection_fv4.problems.smooth (module)</a>
 </li>
-      <li><a href="advection_fv4.problems.html#module-advection_fv4.problems.tophat">advection_fv4.problems.tophat (module)</a>
-</li>
       <li><a href="advection_fv4.html#module-advection_fv4.simulation">advection_fv4.simulation (module)</a>
+</li>
+      <li><a href="advection_rk.html#module-advection_rk">advection_rk (module)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="advection_rk.html#module-advection_rk">advection_rk (module)</a>
-</li>
       <li><a href="advection_rk.html#module-advection_rk.fluxes">advection_rk.fluxes (module)</a>
 </li>
       <li><a href="advection_rk.html#module-advection_rk.simulation">advection_rk.simulation (module)</a>
@@ -357,24 +356,18 @@
 </li>
       <li><a href="compressible.problems.html#module-compressible.problems.kh">compressible.problems.kh (module)</a>
 </li>
-      <li><a href="compressible.problems.html#module-compressible.problems.logo">compressible.problems.logo (module)</a>
-</li>
       <li><a href="compressible.problems.html#module-compressible.problems.quad">compressible.problems.quad (module)</a>
-</li>
-      <li><a href="compressible.problems.html#module-compressible.problems.ramp">compressible.problems.ramp (module)</a>
 </li>
       <li><a href="compressible.problems.html#module-compressible.problems.rt">compressible.problems.rt (module)</a>
 </li>
-      <li><a href="compressible.problems.html#module-compressible.problems.rt2">compressible.problems.rt2 (module)</a>
-</li>
       <li><a href="compressible.problems.html#module-compressible.problems.sedov">compressible.problems.sedov (module)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="compressible.problems.html#module-compressible.problems.sod">compressible.problems.sod (module)</a>
 </li>
       <li><a href="compressible.problems.html#module-compressible.problems.test">compressible.problems.test (module)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="compressible.html#module-compressible.simulation">compressible.simulation (module)</a>
 </li>
       <li><a href="compressible.html#module-compressible.unsplit_fluxes">compressible.unsplit_fluxes (module)</a>
@@ -414,7 +407,11 @@
       <li><a href="simulation_null.html#simulation_null.NullSimulation.compute_timestep">compute_timestep() (simulation_null.NullSimulation method)</a>
 </li>
       <li><a href="compressible.html#compressible.simulation.cons_to_prim">cons_to_prim() (in module compressible.simulation)</a>
+
+      <ul>
+        <li><a href="swe.html#swe.simulation.cons_to_prim">(in module swe.simulation)</a>
 </li>
+      </ul></li>
       <li><a href="mesh.html#mesh.array_indexer.ArrayIndexer.copy">copy() (mesh.array_indexer.ArrayIndexer method)</a>
 </li>
       <li><a href="mesh.html#mesh.patch.CellCenterData2d.create">create() (mesh.patch.CellCenterData2d method)</a>
@@ -430,7 +427,11 @@
       <li><a href="compressible.html#compressible.eos.dens">dens() (in module compressible.eos)</a>
 </li>
       <li><a href="compressible.html#compressible.derives.derive_primitives">derive_primitives() (in module compressible.derives)</a>
+
+      <ul>
+        <li><a href="swe.html#swe.derives.derive_primitives">(in module swe.derives)</a>
 </li>
+      </ul></li>
       <li><a href="compressible_react.html#compressible_react.simulation.Simulation.diffuse">diffuse() (compressible_react.simulation.Simulation method)</a>
 </li>
       <li><a href="diffusion.html#module-diffusion">diffusion (module)</a>
@@ -476,6 +477,8 @@
 </li>
         <li><a href="simulation_null.html#simulation_null.NullSimulation.dovis">(simulation_null.NullSimulation method)</a>
 </li>
+        <li><a href="swe.html#swe.simulation.Simulation.dovis">(swe.simulation.Simulation method)</a>
+</li>
       </ul></li>
   </ul></td>
 </tr></table>
@@ -512,11 +515,13 @@
 </li>
         <li><a href="simulation_null.html#simulation_null.NullSimulation.evolve">(simulation_null.NullSimulation method)</a>
 </li>
-      </ul></li>
-      <li><a href="examples.html#module-examples">examples (module)</a>
+        <li><a href="swe.html#swe.simulation.Simulation.evolve">(swe.simulation.Simulation method)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="examples.html#module-examples">examples (module)</a>
+</li>
       <li><a href="examples.multigrid.html#module-examples.multigrid">examples.multigrid (module)</a>
 </li>
       <li><a href="examples.multigrid.html#module-examples.multigrid.mg_test_general_alphabeta_only">examples.multigrid.mg_test_general_alphabeta_only (module)</a>
@@ -538,10 +543,6 @@
       <li><a href="examples.multigrid.html#module-examples.multigrid.mg_test_vc_periodic">examples.multigrid.mg_test_vc_periodic (module)</a>
 </li>
       <li><a href="examples.multigrid.html#module-examples.multigrid.mg_vis">examples.multigrid.mg_vis (module)</a>
-</li>
-      <li><a href="examples.multigrid.html#module-examples.multigrid.plot">examples.multigrid.plot (module)</a>
-</li>
-      <li><a href="examples.multigrid.html#module-examples.multigrid.plotvar">examples.multigrid.plotvar (module)</a>
 </li>
       <li><a href="examples.multigrid.html#module-examples.multigrid.project_periodic">examples.multigrid.project_periodic (module)</a>
 </li>
@@ -592,8 +593,6 @@
 </li>
         <li><a href="advection_fv4.problems.html#advection_fv4.problems.smooth.finalize">(in module advection_fv4.problems.smooth)</a>
 </li>
-        <li><a href="advection_fv4.problems.html#advection_fv4.problems.tophat.finalize">(in module advection_fv4.problems.tophat)</a>
-</li>
         <li><a href="compressible.problems.html#compressible.problems.acoustic_pulse.finalize">(in module compressible.problems.acoustic_pulse)</a>
 </li>
         <li><a href="compressible.problems.html#compressible.problems.advect.finalize">(in module compressible.problems.advect)</a>
@@ -604,15 +603,9 @@
 </li>
         <li><a href="compressible.problems.html#compressible.problems.kh.finalize">(in module compressible.problems.kh)</a>
 </li>
-        <li><a href="compressible.problems.html#compressible.problems.logo.finalize">(in module compressible.problems.logo)</a>
-</li>
         <li><a href="compressible.problems.html#compressible.problems.quad.finalize">(in module compressible.problems.quad)</a>
 </li>
-        <li><a href="compressible.problems.html#compressible.problems.ramp.finalize">(in module compressible.problems.ramp)</a>
-</li>
         <li><a href="compressible.problems.html#compressible.problems.rt.finalize">(in module compressible.problems.rt)</a>
-</li>
-        <li><a href="compressible.problems.html#compressible.problems.rt2.finalize">(in module compressible.problems.rt2)</a>
 </li>
         <li><a href="compressible.problems.html#compressible.problems.sedov.finalize">(in module compressible.problems.sedov)</a>
 </li>
@@ -635,6 +628,18 @@
         <li><a href="incompressible.problems.html#incompressible.problems.shear.finalize">(in module incompressible.problems.shear)</a>
 </li>
         <li><a href="lm_atm.problems.html#lm_atm.problems.bubble.finalize">(in module lm_atm.problems.bubble)</a>
+</li>
+        <li><a href="swe.problems.html#swe.problems.acoustic_pulse.finalize">(in module swe.problems.acoustic_pulse)</a>
+</li>
+        <li><a href="swe.problems.html#swe.problems.advect.finalize">(in module swe.problems.advect)</a>
+</li>
+        <li><a href="swe.problems.html#swe.problems.dam.finalize">(in module swe.problems.dam)</a>
+</li>
+        <li><a href="swe.problems.html#swe.problems.kh.finalize">(in module swe.problems.kh)</a>
+</li>
+        <li><a href="swe.problems.html#swe.problems.quad.finalize">(in module swe.problems.quad)</a>
+</li>
+        <li><a href="swe.problems.html#swe.problems.test.finalize">(in module swe.problems.test)</a>
 </li>
         <li><a href="simulation_null.html#simulation_null.NullSimulation.finalize">(simulation_null.NullSimulation method)</a>
 </li>
@@ -701,16 +706,8 @@
       </ul></li>
       <li><a href="multigrid.html#multigrid.general_MG.GeneralMG2d">GeneralMG2d (class in multigrid.general_MG)</a>
 </li>
-      <li><a href="examples.multigrid.html#examples.multigrid.plot.get_args">get_args() (in module examples.multigrid.plot)</a>
-
-      <ul>
-        <li><a href="examples.multigrid.html#examples.multigrid.plotvar.get_args">(in module examples.multigrid.plotvar)</a>
+      <li><a href="plot.html#plot.get_args">get_args() (in module plot)</a>
 </li>
-        <li><a href="plot.html#plot.get_args">(in module plot)</a>
-</li>
-        <li><a href="plotvar.html#plotvar.get_args">(in module plotvar)</a>
-</li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="mesh.html#mesh.patch.CellCenterData2d.get_aux">get_aux() (mesh.patch.CellCenterData2d method)</a>
@@ -766,8 +763,6 @@
 </li>
         <li><a href="advection_fv4.problems.html#advection_fv4.problems.smooth.init_data">(in module advection_fv4.problems.smooth)</a>
 </li>
-        <li><a href="advection_fv4.problems.html#advection_fv4.problems.tophat.init_data">(in module advection_fv4.problems.tophat)</a>
-</li>
         <li><a href="compressible.problems.html#compressible.problems.acoustic_pulse.init_data">(in module compressible.problems.acoustic_pulse)</a>
 </li>
         <li><a href="compressible.problems.html#compressible.problems.advect.init_data">(in module compressible.problems.advect)</a>
@@ -778,15 +773,9 @@
 </li>
         <li><a href="compressible.problems.html#compressible.problems.kh.init_data">(in module compressible.problems.kh)</a>
 </li>
-        <li><a href="compressible.problems.html#compressible.problems.logo.init_data">(in module compressible.problems.logo)</a>
-</li>
         <li><a href="compressible.problems.html#compressible.problems.quad.init_data">(in module compressible.problems.quad)</a>
 </li>
-        <li><a href="compressible.problems.html#compressible.problems.ramp.init_data">(in module compressible.problems.ramp)</a>
-</li>
         <li><a href="compressible.problems.html#compressible.problems.rt.init_data">(in module compressible.problems.rt)</a>
-</li>
-        <li><a href="compressible.problems.html#compressible.problems.rt2.init_data">(in module compressible.problems.rt2)</a>
 </li>
         <li><a href="compressible.problems.html#compressible.problems.sedov.init_data">(in module compressible.problems.sedov)</a>
 </li>
@@ -809,6 +798,18 @@
         <li><a href="incompressible.problems.html#incompressible.problems.shear.init_data">(in module incompressible.problems.shear)</a>
 </li>
         <li><a href="lm_atm.problems.html#lm_atm.problems.bubble.init_data">(in module lm_atm.problems.bubble)</a>
+</li>
+        <li><a href="swe.problems.html#swe.problems.acoustic_pulse.init_data">(in module swe.problems.acoustic_pulse)</a>
+</li>
+        <li><a href="swe.problems.html#swe.problems.advect.init_data">(in module swe.problems.advect)</a>
+</li>
+        <li><a href="swe.problems.html#swe.problems.dam.init_data">(in module swe.problems.dam)</a>
+</li>
+        <li><a href="swe.problems.html#swe.problems.kh.init_data">(in module swe.problems.kh)</a>
+</li>
+        <li><a href="swe.problems.html#swe.problems.quad.init_data">(in module swe.problems.quad)</a>
+</li>
+        <li><a href="swe.problems.html#swe.problems.test.init_data">(in module swe.problems.test)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -837,6 +838,8 @@
         <li><a href="lm_atm.html#lm_atm.simulation.Simulation.initialize">(lm_atm.simulation.Simulation method)</a>
 </li>
         <li><a href="simulation_null.html#simulation_null.NullSimulation.initialize">(simulation_null.NullSimulation method)</a>
+</li>
+        <li><a href="swe.html#swe.simulation.Simulation.initialize">(swe.simulation.Simulation method)</a>
 </li>
       </ul></li>
       <li><a href="mesh.html#mesh.array_indexer.ArrayIndexer.ip">ip() (mesh.array_indexer.ArrayIndexer method)</a>
@@ -897,16 +900,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lm_atm.html#lm_atm.simulation.Simulation.make_prime">make_prime() (lm_atm.simulation.Simulation method)</a>
 </li>
-      <li><a href="examples.multigrid.html#examples.multigrid.plot.makeplot">makeplot() (in module examples.multigrid.plot)</a>
-
-      <ul>
-        <li><a href="examples.multigrid.html#examples.multigrid.plotvar.makeplot">(in module examples.multigrid.plotvar)</a>
+      <li><a href="plot.html#plot.makeplot">makeplot() (in module plot)</a>
 </li>
-        <li><a href="plot.html#plot.makeplot">(in module plot)</a>
-</li>
-        <li><a href="plotvar.html#plotvar.makeplot">(in module plotvar)</a>
-</li>
-      </ul></li>
       <li><a href="mesh.html#mesh.patch.CellCenterData2d.max">max() (mesh.patch.CellCenterData2d method)</a>
 </li>
       <li><a href="mesh.html#module-mesh">mesh (module)</a>
@@ -941,6 +936,8 @@
         <li><a href="lm_atm.html#lm_atm.simulation.Simulation.method_compute_timestep">(lm_atm.simulation.Simulation method)</a>
 </li>
         <li><a href="simulation_null.html#simulation_null.NullSimulation.method_compute_timestep">(simulation_null.NullSimulation method)</a>
+</li>
+        <li><a href="swe.html#swe.simulation.Simulation.method_compute_timestep">(swe.simulation.Simulation method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -989,8 +986,6 @@
 </li>
       <li><a href="plot.html#module-plot">plot (module)</a>
 </li>
-      <li><a href="plotvar.html#module-plotvar">plotvar (module)</a>
-</li>
       <li><a href="compressible_fv4.html#compressible_fv4.simulation.Simulation.preevolve">preevolve() (compressible_fv4.simulation.Simulation method)</a>
 
       <ul>
@@ -1003,16 +998,20 @@
       </ul></li>
       <li><a href="compressible.html#compressible.eos.pres">pres() (in module compressible.eos)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="mesh.html#mesh.array_indexer.ArrayIndexer.pretty_print">pretty_print() (mesh.array_indexer.ArrayIndexer method)</a>
 
       <ul>
         <li><a href="mesh.html#mesh.patch.CellCenterData2d.pretty_print">(mesh.patch.CellCenterData2d method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="compressible.html#compressible.simulation.prim_to_cons">prim_to_cons() (in module compressible.simulation)</a>
+
+      <ul>
+        <li><a href="swe.html#swe.simulation.prim_to_cons">(in module swe.simulation)</a>
 </li>
+      </ul></li>
       <li><a href="util.html#util.runparams.RuntimeParameters.print_all_params">print_all_params() (util.runparams.RuntimeParameters method)</a>
 </li>
       <li><a href="util.html#util.runparams.RuntimeParameters.print_paramfile">print_paramfile() (util.runparams.RuntimeParameters method)</a>
@@ -1100,9 +1099,9 @@
 </li>
         <li><a href="lm_atm.html#lm_atm.simulation.Simulation">(class in lm_atm.simulation)</a>
 </li>
+        <li><a href="swe.html#swe.simulation.Simulation">(class in swe.simulation)</a>
+</li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="simulation_null.html#module-simulation_null">simulation_null (module)</a>
 </li>
       <li><a href="multigrid.html#multigrid.general_MG.GeneralMG2d.smooth">smooth() (multigrid.general_MG.GeneralMG2d method)</a>
@@ -1113,6 +1112,8 @@
         <li><a href="multigrid.html#multigrid.variable_coeff_MG.VarCoeffCCMG2d.smooth">(multigrid.variable_coeff_MG.VarCoeffCCMG2d method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="multigrid.html#multigrid.MG.CellCenterMG2d.solve">solve() (multigrid.MG.CellCenterMG2d method)</a>
 </li>
       <li><a href="mesh.html#mesh.integration.RKIntegrator.store_increment">store_increment() (mesh.integration.RKIntegrator method)</a>
@@ -1130,6 +1131,28 @@
 </li>
       </ul></li>
       <li><a href="util.html#util.msg.success">success() (in module util.msg)</a>
+</li>
+      <li><a href="swe.html#module-swe">swe (module)</a>
+</li>
+      <li><a href="swe.html#module-swe.derives">swe.derives (module)</a>
+</li>
+      <li><a href="swe.problems.html#module-swe.problems">swe.problems (module)</a>
+</li>
+      <li><a href="swe.problems.html#module-swe.problems.acoustic_pulse">swe.problems.acoustic_pulse (module)</a>
+</li>
+      <li><a href="swe.problems.html#module-swe.problems.advect">swe.problems.advect (module)</a>
+</li>
+      <li><a href="swe.problems.html#module-swe.problems.dam">swe.problems.dam (module)</a>
+</li>
+      <li><a href="swe.problems.html#module-swe.problems.kh">swe.problems.kh (module)</a>
+</li>
+      <li><a href="swe.problems.html#module-swe.problems.quad">swe.problems.quad (module)</a>
+</li>
+      <li><a href="swe.problems.html#module-swe.problems.test">swe.problems.test (module)</a>
+</li>
+      <li><a href="swe.html#module-swe.simulation">swe.simulation (module)</a>
+</li>
+      <li><a href="swe.html#module-swe.unsplit_fluxes">swe.unsplit_fluxes (module)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1202,6 +1225,8 @@
       <ul>
         <li><a href="compressible.html#compressible.unsplit_fluxes.unsplit_fluxes">(in module compressible.unsplit_fluxes)</a>
 </li>
+        <li><a href="swe.html#swe.unsplit_fluxes.unsplit_fluxes">(in module swe.unsplit_fluxes)</a>
+</li>
       </ul></li>
       <li><a href="compressible.html#compressible.BC.user">user() (in module compressible.BC)</a>
 </li>
@@ -1233,16 +1258,20 @@
       </ul></li>
       <li><a href="lm_atm.html#lm_atm.simulation.Basestate.v2d">v2d() (lm_atm.simulation.Basestate method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lm_atm.html#lm_atm.simulation.Basestate.v2dp">v2dp() (lm_atm.simulation.Basestate method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="multigrid.html#multigrid.MG.CellCenterMG2d.v_cycle">v_cycle() (multigrid.MG.CellCenterMG2d method)</a>
 </li>
       <li><a href="multigrid.html#multigrid.variable_coeff_MG.VarCoeffCCMG2d">VarCoeffCCMG2d (class in multigrid.variable_coeff_MG)</a>
 </li>
       <li><a href="compressible.html#compressible.simulation.Variables">Variables (class in compressible.simulation)</a>
+
+      <ul>
+        <li><a href="swe.html#swe.simulation.Variables">(class in swe.simulation)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 

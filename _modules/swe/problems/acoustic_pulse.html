@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>advection_fv4.problems.tophat &mdash; pyro 2.1 documentation</title>
+  <title>swe.problems.acoustic_pulse &mdash; pyro 2.1 documentation</title>
   
 
   
@@ -113,6 +113,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../swe_basics.html">Shallow water solvers</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Utilities</span></p>
 <ul>
@@ -173,7 +174,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>advection_fv4.problems.tophat</li>
+      <li>swe.problems.acoustic_pulse</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -190,46 +191,60 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for advection_fv4.problems.tophat</h1><div class="highlight"><pre>
+  <h1>Source code for swe.problems.acoustic_pulse</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
 
 <span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">mesh.patch</span> <span class="k">as</span> <span class="nn">patch</span>
 <span class="kn">from</span> <span class="nn">util</span> <span class="k">import</span> <span class="n">msg</span>
 
 
-<div class="viewcode-block" id="init_data"><a class="viewcode-back" href="../../../advection_fv4.problems.html#advection_fv4.problems.tophat.init_data">[docs]</a><span class="k">def</span> <span class="nf">init_data</span><span class="p">(</span><span class="n">myd</span><span class="p">,</span> <span class="n">rp</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; initialize the tophat advection problem &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="init_data"><a class="viewcode-back" href="../../../swe.problems.html#swe.problems.acoustic_pulse.init_data">[docs]</a><span class="k">def</span> <span class="nf">init_data</span><span class="p">(</span><span class="n">myd</span><span class="p">,</span> <span class="n">rp</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;initialize the acoustic_pulse problem.  This comes from</span>
+<span class="sd">    McCourquodale &amp; Coella 2011&quot;&quot;&quot;</span>
 
-    <span class="n">msg</span><span class="o">.</span><span class="n">bold</span><span class="p">(</span><span class="s2">&quot;initializing the tophat advection problem...&quot;</span><span class="p">)</span>
+    <span class="n">msg</span><span class="o">.</span><span class="n">bold</span><span class="p">(</span><span class="s2">&quot;initializing the acoustic pulse problem...&quot;</span><span class="p">)</span>
 
     <span class="c1"># make sure that we are passed a valid patch object</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">myd</span><span class="p">,</span> <span class="n">patch</span><span class="o">.</span><span class="n">CellCenterData2d</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: patch invalid in tophat.py&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: patch invalid in acoustic_pulse.py&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">myd</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
 
-    <span class="n">dens</span> <span class="o">=</span> <span class="n">myd</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
+    <span class="c1"># get the height, momenta as separate variables</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">myd</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">)</span>
+    <span class="n">xmom</span> <span class="o">=</span> <span class="n">myd</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;x-momentum&quot;</span><span class="p">)</span>
+    <span class="n">ymom</span> <span class="o">=</span> <span class="n">myd</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;y-momentum&quot;</span><span class="p">)</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">myd</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;fuel&quot;</span><span class="p">)</span>
 
-    <span class="n">xmin</span> <span class="o">=</span> <span class="n">myd</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">xmin</span>
-    <span class="n">xmax</span> <span class="o">=</span> <span class="n">myd</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">xmax</span>
+    <span class="c1"># initialize the components</span>
+    <span class="n">xmom</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">ymom</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span>
 
-    <span class="n">ymin</span> <span class="o">=</span> <span class="n">myd</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">ymin</span>
-    <span class="n">ymax</span> <span class="o">=</span> <span class="n">myd</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">ymax</span>
+    <span class="n">h0</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;acoustic_pulse.h0&quot;</span><span class="p">)</span>
+    <span class="n">dh0</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;acoustic_pulse.dh0&quot;</span><span class="p">)</span>
+
+    <span class="n">xmin</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.xmin&quot;</span><span class="p">)</span>
+    <span class="n">xmax</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.xmax&quot;</span><span class="p">)</span>
+
+    <span class="n">ymin</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.ymin&quot;</span><span class="p">)</span>
+    <span class="n">ymax</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.ymax&quot;</span><span class="p">)</span>
 
     <span class="n">xctr</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">xmin</span> <span class="o">+</span> <span class="n">xmax</span><span class="p">)</span>
     <span class="n">yctr</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">ymin</span> <span class="o">+</span> <span class="n">ymax</span><span class="p">)</span>
 
-    <span class="n">dens</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">myd</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">x2d</span> <span class="o">-</span> <span class="n">xctr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
+                   <span class="p">(</span><span class="n">myd</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">y2d</span> <span class="o">-</span> <span class="n">yctr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
-    <span class="n">R</span> <span class="o">=</span> <span class="mf">0.1</span>
+    <span class="n">h</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">h0</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">&lt;=</span> <span class="mf">0.5</span>
+    <span class="n">h</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">h0</span> <span class="o">+</span> <span class="n">dh0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">16</span><span class="o">*</span><span class="n">dist</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">dist</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span><span class="o">**</span><span class="mi">6</span>
 
-    <span class="n">inside</span> <span class="o">=</span> <span class="p">(</span><span class="n">myd</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">x2d</span> <span class="o">-</span> <span class="n">xctr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">myd</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">y2d</span> <span class="o">-</span> <span class="n">yctr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">&lt;</span> <span class="n">R</span><span class="o">**</span><span class="mi">2</span>
-
-    <span class="n">dens</span><span class="p">[</span><span class="n">inside</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span></div>
+    <span class="n">X</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">h</span><span class="p">[:,</span> <span class="p">:]</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">h</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="finalize"><a class="viewcode-back" href="../../../advection_fv4.problems.html#advection_fv4.problems.tophat.finalize">[docs]</a><span class="k">def</span> <span class="nf">finalize</span><span class="p">():</span>
+<div class="viewcode-block" id="finalize"><a class="viewcode-back" href="../../../swe.problems.html#swe.problems.acoustic_pulse.finalize">[docs]</a><span class="k">def</span> <span class="nf">finalize</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot; print out any information to the user at the end of the run &quot;&quot;&quot;</span>
     <span class="k">pass</span></div>
 </pre></div>

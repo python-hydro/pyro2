@@ -21,9 +21,8 @@ pyro2
    mesh
    multigrid
    plot
-   plotvar
    pyro
-   setup
    simulation_null
+   swe
    test
    util
