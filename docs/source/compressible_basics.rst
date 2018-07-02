@@ -7,7 +7,7 @@ The equations of compressible hydrodynamics take the form:
 
    \frac{\partial \rho}{\partial t} + \nabla \cdot (\rho U) &= 0 \\
    \frac{\partial (\rho U)}{\partial t} + \nabla \cdot (\rho U U) + \nabla p &= \rho g \\
-   \frac{\partial (\rho E)}{\partial t} + \nabla \cdot [(\rho E + p ) U] &= \rho U \cdot g 
+   \frac{\partial (\rho E)}{\partial t} + \nabla \cdot [(\rho E + p ) U] &= \rho U \cdot g
 
 with :math:`\rho E = \rho e + \frac{1}{2} \rho |U|^2` and :math:`p = p(\rho, e)`.
 
@@ -26,7 +26,7 @@ pyro has several compressible solvers:
 
 The implementations here have flattening at shocks, artificial
 viscosity, a simple gamma-law equation of state, and (in some cases) a
-choice Riemann solvers. Optional constant gravity in the vertical
+choice of Riemann solvers. Optional constant gravity in the vertical
 direction is allowed.
 
 The main parameters that affect this solver are:
@@ -164,7 +164,7 @@ quad
 
 The quad problem sets up different states in four regions of the
 domain and watches the complex interfaces that develop as shocks
-interact. This problem has appear in several places (and a `detailed
+interact. This problem has appeared in several places (and a `detailed
 investigation
 <http://planets.utsc.utoronto.ca/~pawel/Riemann.hydro.html>`_ is
 online by Pawel Artymowicz). It is run as:
@@ -250,7 +250,7 @@ Extensions
   sedov explosion instead of the cylindrical explosion.
 
 * Swap the piecewise linear reconstruction for piecewise parabolic
-  (PPM). The notes and Miller and Colella paper provide a good basis
+  (PPM). The notes and the Miller and Colella paper provide a good basis
   for this.  Research the Roe Riemann solver and implement it in pyro.
 
 
