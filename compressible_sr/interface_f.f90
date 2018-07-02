@@ -1063,8 +1063,6 @@ subroutine riemann_HLLC(idir, qx, qy, ng, &
 
         F_HLLE = (a_r*F_l - a_l*F_r + a_r*a_l*(U_r(i,j,:) - U_l(i,j,:))) / (a_r - a_l)
 
-        ! q_star = (a_r*q_r(i,j,:) - a_l*q_l(i,j,:)-F_r+F_l) / (a_r - a_l)
-
         if (a_r <= 0.0d0) then ! right state
             U_HLLE = U_r(i,j,:)
         else if (a_l < 0.0d0) then !middle
@@ -1091,7 +1089,6 @@ subroutine riemann_HLLC(idir, qx, qy, ng, &
                 S_HLLE * 2.0d0 * F_HLLE(iener) ) ) / &
                 (2.0d0 * F_HLLE(iener))
         endif
-
 
         ! NOTE: this shouldn't happpen but just in case?
         if (a_star /= a_star) then
