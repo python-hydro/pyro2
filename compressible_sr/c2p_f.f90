@@ -7,7 +7,6 @@ function f(p, U_ij, gamma, idens, ixmom, iymom, iener, nvar) result (root)
     double precision :: p, gamma, U_ij(0:nvar-1)
     integer :: idens, ixmom, iymom, iener, nvar
 
-
     double precision :: D, tau, u, v, W
 
     D = U_ij(idens)
@@ -188,7 +187,6 @@ subroutine cons_to_prim(U, qx, qy, &
             if (fmin * fmax > 0.0d0) then
                 q(i, j, ip) = max((gamma-1.0d0)*U(i, j, iener), smallp)
             else
-                ! try:
                 q(i, j, ip) = brentq(pmin, pmax, U(i,j,:), gamma, idens, ixmom, iymom, iener, nvar)
             endif
 
@@ -199,9 +197,6 @@ subroutine cons_to_prim(U, qx, qy, &
             endif
 
             q(i, j, ip) = max(q(i, j, ip), smallp)
-            ! except ValueError:
-            !     q(i, j, ip) = max((gamma-1.0d0)*U(i, j, iener), 0.0d0)
-
             if (abs(U(i, j, iener) + U(i, j, idens) + q(i, j, ip)) < 1.0d-5) then
                 q(i, j, iu) = U(i, j, ixmom)
                 q(i, j, iv) = U(i, j, iymom)
@@ -224,9 +219,6 @@ subroutine cons_to_prim(U, qx, qy, &
     W = 1.0d0/sqrt(1.0d0 - q(:, :, iu)**2 - q(:, :, iv)**2)
 
     q(:, :, irho) = U(:, :, idens) / W
-
-    ! write(*,*) "p = ", q(:, :, ip)
-
     if (naux > 0) then
         do i = 0, naux-1
             q(:, :, ix+i) = U(:, :, irhox+i)/(q(:, :, irho) * W)

@@ -35,37 +35,8 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
   ! We need the left and right eigenvectors and the eigenvalues for
   ! the system projected along the x-direction
   !
-  ! Taking our state vector as Q = (rho, u, v, p)^T, the eigenvalues
-  ! are u - c, u, u + c.
-  !
-  ! We look at the equations of hydrodynamics in a split fashion --
-  ! i.e., we only consider one dimension at a time.
-  !
-  ! Considering advection in the x-direction, the Jacobian matrix for
-  ! the primitive variable formulation of the Euler equations
-  ! projected in the x-direction is:
-  !
-  !        / u   r   0   0 &
-  !        | 0   u   0  1/r |
-  !    A = | 0   0   u   0  |
-  !        & 0  rc^2 0   u  /
-  !
-  ! The right eigenvectors are
-  !
-  !        /  1  &        / 1 &        / 0 &        /  1  &
-  !        |-c/r |        | 0 |        | 0 |        | c/r |
-  !   r1 = |  0  |   r2 = | 0 |   r3 = | 1 |   r4 = |  0  |
-  !        & c^2 /        & 0 /        & 0 /        & c^2 /
-  !
-  ! In particular, we see from r3 that the transverse velocity (v in
-  ! this case) is simply advected at a speed u in the x-direction.
-  !
-  ! The left eigenvectors are
-  !
-  !    l1 =     ( 0,  -r/(2c),  0, 1/(2c^2) )
-  !    l2 =     ( 1,     0,     0,  -1/c^2  )
-  !    l3 =     ( 0,     0,     1,     0    )
-  !    l4 =     ( 0,   r/(2c),  0, 1/(2c^2) )
+  ! See Marti & Muller (2003) for the eigenvalues and left & right
+  ! eigenvectors.
   !
   ! The fluxes are going to be defined on the left edge of the
   ! computational zones
@@ -318,10 +289,14 @@ subroutine riemann_cgf(idir, qx, qy, ng, &
   ! Almgren et al. 2010 (the CASTRO paper) for details.
   !
   ! The Riemann problem for the Euler's equation produces 4 regions,
-  ! separated by the three characteristics (u - cs, u, u + cs):
+  ! separated by the three characteristics
   !
+  ! l_\pm = 1 / (1 - v^2c^2) * ( v^x(1-c^2) \pm
+  !         c \sqrt([1-v^2] [1 - v^xv^x - (v^2 - v^xv^x)c^2]) )
   !
-  !        u - cs    t    u      u + cs
+  ! l_0 = v^x
+  !
+  !        l_-       t   l_0     l+1
   !          &       ^   .       /
   !           &  *L  |   . *R   /
   !            &     |  .     /
@@ -517,7 +492,7 @@ subroutine riemann_cgf(idir, qx, qy, ng, &
                  ustar**2*(1.0d0-cstar_r**2))))
 
            if (pstar > p_r) then
-              ! the wave if a shock -- find the shock speed
+              ! the wave is a shock -- find the shock speed
               sigma = (lambda_r + lambdastar_r)/2.0d0
 
               if (sigma > 0.0d0) then
@@ -679,10 +654,14 @@ subroutine riemann_prim(idir, qx, qy, ng, &
   ! Almgren et al. 2010 (the CASTRO paper) for details.
   !
   ! The Riemann problem for the Euler's equation produces 4 regions,
-  ! separated by the three characteristics (u - cs, u, u + cs):
+  ! separated by the three characteristics
   !
+  ! l_\pm = 1 / (1 - v^2c^2) * ( v^x(1-c^2) \pm
+  !         c \sqrt([1-v^2] [1 - v^xv^x - (v^2 - v^xv^x)c^2]) )
   !
-  !        u - cs    t    u      u + cs
+  ! l_0 = v^x
+  !
+  !        l_-       t   l_0     l+1
   !          &       ^   .       /
   !           &  *L  |   . *R   /
   !            &     |  .     /
