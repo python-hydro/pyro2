@@ -45,27 +45,21 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
   ! the primitive variable formulation of the Euler equations
   ! projected in the x-direction is:
   !
-  !        / u   r   0   0 \
-  !        | 0   u   0  1/r |
-  !    A = | 0   0   u   0  |
-  !        \ 0  rc^2 0   u  /
+  !        / u   0   0 \
+  !        | g   u   0 |
+  !    A = \ 0   0   u /
   !
   ! The right eigenvectors are
   !
-  !        /  1  \        / 1 \        / 0 \        /  1  \
-  !        |-c/r |        | 0 |        | 0 |        | c/r |
-  !   r1 = |  0  |   r2 = | 0 |   r3 = | 1 |   r4 = |  0  |
-  !        \ c^2 /        \ 0 /        \ 0 /        \ c^2 /
-  !
-  ! In particular, we see F_rom r3 that the transverse velocity (v in
-  ! this case) is simply advected at a speed u in the x-direction.
+  !        /  h  \       /  0  \      /  h  \
+  !   r1 = | -c  |  r2 = |  0  | r3 = |  c  |
+  !        \  0  /       \  1  /      \  0  /
   !
   ! The left eigenvectors are
   !
-  !    l1 =     ( 0,  -r/(2c),  0, 1/(2c^2) )
-  !    l2 =     ( 1,     0,     0,  -1/c^2  )
-  !    l3 =     ( 0,     0,     1,     0    )
-  !    l4 =     ( 0,   r/(2c),  0, 1/(2c^2) )
+  !    l1 =     ( 1/(2h),  -h/(2hc),  0 )
+  !    l2 =     ( 0,          0,  1 )
+  !    l3 =     ( -1/(2h), -h/(2hc),  0 )
   !
   ! The fluxes are going to be defined on the left edge of the
   ! computational zones
@@ -137,7 +131,7 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
 
            ! multiply by scaling factors
            lvec(0,:) = lvec(0,:) * 0.50d0 / (cs * q(ih))
-           lvec(2,:) = lvec(2,:) * 0.50d0 / (cs * q(ih))
+           lvec(2,:) = -lvec(2,:) * 0.50d0 / (cs * q(ih))
         else
            eval(0:ns-1) = [q(iv) - cs, q(iv), q(iv) + cs]
 
@@ -158,7 +152,7 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
 
            ! multiply by scaling factors
            lvec(0,:) = lvec(0,:) * 0.50d0 / (cs * q(ih))
-           lvec(2,:) = lvec(2,:) * 0.50d0 / (cs * q(ih))
+           lvec(2,:) = -lvec(2,:) * 0.50d0 / (cs * q(ih))
 
         endif
 
@@ -479,14 +473,8 @@ subroutine riemann_HLLC(idir, qx, qy, ng, &
            S_r = un_r + c_r*sqrt(0.5d0 * (hstar+h_r) * hstar) / h_r
         endif
 
-        !  We could just take S_c = u_star as the estimate for the
-        !  contact speed, but we can actually do this more accurately
-        !  by using the Rankine-Hugonoit jump conditions across each
-        !  of the waves (see Toro 10.58, Batten et al. SIAM
-        !  J. Sci. and Stat. Comp., 18:1553 (1997)
         S_c = (S_l*h_r*(un_r-S_r) - S_r*h_l*(un_l-S_l)) / &
                 (h_r*(un_r-S_r) - h_l*(un_l-S_l))
-
 
         ! figure out which region we are in and compute the state and
         ! the interface fluxes using the HLLC Riemann solver
@@ -567,11 +555,20 @@ end subroutine riemann_HLLC
 
 subroutine consFlux(idir, g, ih, ixmom, iymom, ihX, nvar, nspec, U_state, F)
 
+  implicit none
+
   integer, intent(in) :: idir
   double precision, intent(in) :: g
   integer, intent(in) :: ih, ixmom, iymom, ihX, nvar, nspec
   double precision, intent(in) :: U_state(0:nvar-1)
   double precision, intent(out) :: F(0:nvar-1)
+
+! Calculate the conserved flux for the shallow water equations. In the
+! x-direction, this is given by
+!
+!     /      hu       \
+! F = | hu^2 + gh^2/2 |
+!     \      huv      /
 
   double precision :: u, v
 

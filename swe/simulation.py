@@ -5,7 +5,6 @@ import importlib
 import numpy as np
 import matplotlib.pyplot as plt
 
-import swe.BC as BC
 import swe.derives as derives
 import swe.unsplit_fluxes as flx
 import mesh.boundary as bnd
@@ -16,7 +15,7 @@ import util.plot_tools as plot_tools
 class Variables(object):
     """
     a container class for easy access to the different swe
-    variable by an integer key
+    variables by an integer key
     """
     def __init__(self, myd):
         self.nvar = len(myd.names)
@@ -27,7 +26,7 @@ class Variables(object):
         self.ixmom = myd.names.index("x-momentum")
         self.iymom = myd.names.index("y-momentum")
 
-        # if there are any additional variable, we treat them as
+        # if there are any additional variables, we treat them as
         # passively advected scalars
         self.naux = self.nvar - 3
         if self.naux > 0:
@@ -49,7 +48,11 @@ class Variables(object):
 
 
 def cons_to_prim(U, g, ivars, myg):
-    """ convert an input vector of conserved variables to primitive variables """
+    """
+    Convert an input vector of conserved variables
+    :math:`U = (h, hu, hv, {hX})`
+    to primitive variables :math:`q = (h, u, v, {X})`.
+    """
 
     q = myg.scratch_array(nvar=ivars.nq)
 
@@ -66,7 +69,10 @@ def cons_to_prim(U, g, ivars, myg):
 
 
 def prim_to_cons(q, g, ivars, myg):
-    """ convert an input vector of primitive variables to conserved variables """
+    """
+    Convert an input vector of primitive variables :math:`q = (h, u, v, {X})`
+    to conserved variables :math:`U = (h, hu, hv, {hX})`
+    """
 
     U = myg.scratch_array(nvar=ivars.nvar)
 
@@ -96,10 +102,6 @@ class Simulation(NullSimulation):
         my_grid = grid_setup(self.rp, ng=ng)
         my_data = self.data_class(my_grid)
 
-        # define solver specific boundary condition routines
-        bnd.define_bc("hse", BC.user, is_solid=False)
-        bnd.define_bc("ramp", BC.user, is_solid=False)  # for double mach reflection problem
-
         bc, bc_xodd, bc_yodd = bc_setup(self.rp)
 
         # are we dealing with solid boundaries? we'll use these for
@@ -117,7 +119,8 @@ class Simulation(NullSimulation):
             for v in extra_vars:
                 my_data.register_var(v, bc)
 
-        # store the EOS g as an auxillary quantity so we can have a
+        # store the gravitational acceration g as an auxillary quantity
+        # so we can have a
         # self-contained object stored in output files to make plots.
         # store grav because we'll need that in some BCs
         my_data.set_aux("g", self.rp.get_param("swe.grav"))

@@ -8,7 +8,7 @@ discussed in the Colella paper).
 
 * limiter: 0 = no limiting; 1 = 2nd order MC limiter; 2 = 4th order MC limiter
 
-* riemann: HLLC or CGF (for Colella, Glaz, and Freguson solver)
+* riemann: HLLC or Roe-fix
 
 * use_flattening: set to 1 to use the multidimensional flattening at shocks
 
@@ -135,9 +135,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     doing an unsplit reconstruction of the interface values and then
     solving the Riemann problem through all the interfaces at once
 
-    currently we assume a g-law EOS
-
-    The runtime parameter g is assumed to be the gitational
+    The runtime parameter g is assumed to be the gravitational
     acceleration in the y-direction
 
     Parameters
@@ -172,7 +170,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     #=========================================================================
     # compute the primitive variables
     #=========================================================================
-    # Q = (h, u, v, p, {X})
+    # Q = (h, u, v, {X})
 
     q = comp.cons_to_prim(my_data.data, g, ivars, myg)
 

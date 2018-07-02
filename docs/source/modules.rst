@@ -23,5 +23,6 @@ pyro2
    plot
    pyro
    simulation_null
+   swe
    test
    util

@@ -88,8 +88,7 @@ def finalize():
 
     msg = """
           The script analysis/dam_compare.py can be used to compare
-          this output to the exact solution.  Some sample exact solution
-          data is present as analysis/dam-exact.out
+          this output to the exact solution.
           """
 
     print(msg)
