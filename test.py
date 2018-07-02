@@ -55,6 +55,7 @@ def do_tests(build, out_file, do_standalone=True, do_main=True,
         tests.append(PyroTest("diffusion", "gaussian", "inputs.gaussian", opts))
         tests.append(PyroTest("incompressible", "shear", "inputs.shear", opts))
         tests.append(PyroTest("lm_atm", "bubble", "inputs.bubble", opts))
+        tests.append(PyroTest("swe", "dam", "inputs.dam.x", opts))
 
         if single is not None:
             tests_to_run = [q for q in tests if str(q) == single]

@@ -25,5 +25,6 @@ pyro2
    pyro
    setup
    simulation_null
+   swe
    test
    util
