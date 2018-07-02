@@ -1,0 +1,31 @@
+[driver]
+max_steps = 5000
+tmax = 0.9
+
+
+[swe]
+limiter = 2
+cvisc = 0.1
+grav = 0.1
+riemann = HLLC
+
+
+[io]
+basename = logo_
+
+
+[mesh]
+nx = 256
+ny = 256
+xmax = 1.0
+ymax = 1.0
+
+xlboundary = outflow
+xrboundary = outflow
+
+ylboundary = outflow
+yrboundary = outflow
+
+
+[vis]
+dovis = 1

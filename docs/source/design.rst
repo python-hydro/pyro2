@@ -85,6 +85,11 @@ The overall structure is:
   * ``problems/``: The problem setups for when the multigrid solver is used in a stand-alone fashion.
   * ``tests/``: Reference multigrid solver solutions (from when the multigrid solver is used stand-alone) for regression testing.
 
+* ``swe/``: The shallow water solver.
+
+  * ``problems/``: The problem setups for the shallow water solver.
+  * ``tests/``: Reference shallow water output for regression testing.
+
 * ``util/``: Various service modules used by the pyro routines,
   including runtime parameters, I/O, profiling, and pretty output
   modes.

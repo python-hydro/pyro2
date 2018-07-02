@@ -11,7 +11,7 @@ finite-volume framework.  The code is mainly written in python and is
 designed with simplicity in mind.  The algorithms are written to
 encourage experimentation and allow for self-learning of these code
 methods.
- 
+
 The latest version of pyro is always available at:
 
 https://github.com/zingale/pyro2
@@ -154,6 +154,8 @@ pyro provides the following solvers (all in 2-d):
     variable-coefficient Poisson equation (which inherits from the
     constant-coefficient solver).
 
+  - `swe`: a solver for the shallow water equations.
+
 
 ## Working with data
 
@@ -174,6 +176,12 @@ with their data.
       usage: `./plot.py file`
 
   - `analysis/`
+
+      * `dam_compare.py`: this takes an output file from the
+        shallow water dam break problem and plots a slice through the domain
+        together with the analytic solution (calculated in the script).
+
+         usage: `./dam_compare.py file`
 
       * `gauss_diffusion_compare.py`: this is for the diffusion solver's
         Gaussian diffusion problem. It takes a sequence of output
