@@ -266,14 +266,3 @@ class Simulation(NullSimulation):
 
         plt.pause(0.001)
         plt.draw()
-
-    def write_extras(self, f):
-        """
-        Output simulation-specific data to the h5py file f
-        """
-
-        # make note of the custom BC
-        gb = f.create_group("BC")
-
-        # the value here is the value of "is_solid"
-        gb.create_dataset("hse", data=False)

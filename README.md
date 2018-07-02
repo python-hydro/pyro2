@@ -11,7 +11,7 @@ finite-volume framework.  The code is mainly written in python and is
 designed with simplicity in mind.  The algorithms are written to
 encourage experimentation and allow for self-learning of these code
 methods.
- 
+
 The latest version of pyro is always available at:
 
 https://github.com/zingale/pyro2
@@ -153,6 +153,8 @@ pyro provides the following solvers (all in 2-d):
     constant-coefficient Helmholtz equation, as well as a
     variable-coefficient Poisson equation (which inherits from the
     constant-coefficient solver).
+
+  - `swe`: a solver for the shallow water equations.
 
 
 ## Working with data
