@@ -2,7 +2,7 @@ Adding a problem
 ================
 
 The easiest way to add a problem is to copy an existing problem setup
-in the solver you wish to use (in its problems/ sub-directory. Three
+in the solver you wish to use (in its problems/ sub-directory). Three
 different files will need to be copied (created):
 
 * ``problem.py``: this is the main initialization routine. The
@@ -25,4 +25,3 @@ different files will need to be copied (created):
   problem is defined, you need to add the problem name to the
   ``__all__`` list in the ``__init__.py`` file in the ``problems/``
   sub-directory. This lets python know about the problem.
-

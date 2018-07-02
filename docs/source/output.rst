@@ -17,7 +17,7 @@ Several simply utilities exist to operate on output files
 
     ./compare.py shear_128_0216.pyro incompressible/tests/shear_128_0216.pyro
 
-  Differences on the order of machine precision are may arise because
+  Differences on the order of machine precision may arise because
   of optimizations and compiler differences across platforms. Students
   should familiarize themselves with the details of how computers
   store numbers (floating point). An excellent read is `What every

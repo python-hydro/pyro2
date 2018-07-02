@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import argparse
 from util import io
+import mesh.patch as patch
 
 # plot a single variable from an output file
 #
@@ -15,7 +16,11 @@ def makeplot(plotfile, variable, outfile,
              log=False, compact=False, quiet=False):
 
     sim = io.read(plotfile)
-    myd = sim.cc_data
+
+    if isinstance(sim, patch.CellCenterData2d):
+        myd = sim
+    else:
+        myd = sim.cc_data
     myg = myd.grid
 
     plt.figure(num=1, figsize=(width, height), dpi=100, facecolor='w')
