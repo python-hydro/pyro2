@@ -129,6 +129,7 @@ import mesh.reconstruction as reconstruction
 import mesh.array_indexer as ai
 
 from util import msg
+import numpy as np
 
 
 def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
@@ -188,16 +189,8 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     # there is a single flattening coefficient (xi) for all directions
     use_flattening = rp.get_param("compressible.use_flattening")
 
-    # print("before flattening")
-    # print(f'rho = {q.jp(0, n=ivars.irho, buf=2)}')
-
     if use_flattening:
-        xi_x = reconstruction.flatten(myg, q, 1, ivars, rp)
-        xi_y = reconstruction.flatten(myg, q, 2, ivars, rp)
-
-        xi = reconstruction.flatten_multid(myg, q, xi_x, xi_y, ivars)
-    else:
-        xi = 1.0
+        msg.fail("ERROR: Flattening is not allowed for the sr compressible problem")
 
     # monotonized central differences
     tm_limit = tc.timer("limiting")
@@ -209,8 +202,8 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     ldy = myg.scratch_array(nvar=ivars.nvar)
 
     for n in range(ivars.nvar):
-        ldx[:, :, n] = xi*reconstruction.limit(q[:, :, n], myg, 1, limiter)
-        ldy[:, :, n] = xi*reconstruction.limit(q[:, :, n], myg, 2, limiter)
+        ldx[:, :, n] = reconstruction.limit(my_data.data[:, :, n], myg, 1, limiter)
+        ldy[:, :, n] = reconstruction.limit(my_data.data[:, :, n], myg, 2, limiter)
 
     tm_limit.end()
 
@@ -222,17 +215,16 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     tm_states = tc.timer("interfaceStates")
     tm_states.begin()
 
-    V_l, V_r = ifc.states(1, myg.qx, myg.qy, myg.ng, myg.dx, dt,
+    _U_l, _U_r = ifc.states(1, myg.qx, myg.qy, myg.ng, myg.dx, dt,
                           ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
-                          ivars.nvar, ivars.naux,
-                          gamma,
-                          q, ldx)
+                          ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
+                          ivars.irhox, ivars.nvar, ivars.naux,
+                          gamma, q, my_data.data, ldx)
+
+    U_xl = ai.ArrayIndexer(d=_U_l, grid=myg)
+    U_xr = ai.ArrayIndexer(d=_U_r, grid=myg)
 
     tm_states.end()
-
-    # transform interface states back into conserved variables
-    U_xl = comp.prim_to_cons(V_l, gamma, ivars, myg)
-    U_xr = comp.prim_to_cons(V_r, gamma, ivars, myg)
 
     #=========================================================================
     # y-direction
@@ -241,19 +233,16 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     # left and right primitive variable states
     tm_states.begin()
 
-    _V_l, _V_r = ifc.states(2, myg.qx, myg.qy, myg.ng, myg.dy, dt,
+    _U_l, _U_r = ifc.states(2, myg.qx, myg.qy, myg.ng, myg.dy, dt,
                             ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
-                            ivars.nvar, ivars.naux,
-                            gamma,
-                            q, ldy)
-    V_l = ai.ArrayIndexer(d=_V_l, grid=myg)
-    V_r = ai.ArrayIndexer(d=_V_r, grid=myg)
+                            ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
+                            ivars.irhox, ivars.nvar, ivars.naux,
+                            gamma, q, my_data.data, ldy)
+
+    U_yl = ai.ArrayIndexer(d=_U_l, grid=myg)
+    U_yr = ai.ArrayIndexer(d=_U_r, grid=myg)
 
     tm_states.end()
-
-    # transform interface states back into conserved variables
-    U_yl = comp.prim_to_cons(V_l, gamma, ivars, myg)
-    U_yr = comp.prim_to_cons(V_r, gamma, ivars, myg)
 
     #=========================================================================
     # apply source terms

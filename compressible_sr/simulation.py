@@ -261,7 +261,7 @@ class Simulation(NullSimulation):
         magvel = np.sqrt(u**2 + v**2)
 
         fields = [rho, magvel, p, e]
-        field_names = [r"$\rho$", r"U", "p", "e"]
+        field_names = [r"$\rho$", r"$|U|$", "$p$", "$e$"]
 
         _, axes, cbar_title = plot_tools.setup_axes(myg, len(fields))
 

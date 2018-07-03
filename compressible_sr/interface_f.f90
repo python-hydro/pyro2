@@ -1,8 +1,9 @@
 subroutine states(idir, qx, qy, ng, dx, dt, &
-                  irho, iu, iv, ip, ix, nvar, nspec, &
+                  irho, iu, iv, ip, ix, &
+                  idens, ixmom, iymom, iener, irhoX, nvar, nspec, &
                   gamma, &
-                  qv, dqv, &
-                  q_l, q_r)
+                  qv, Uv, dUv, &
+                  U_l, U_r)
 
   implicit none
 
@@ -10,19 +11,21 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
   integer, intent(in) :: qx, qy, ng
   double precision, intent(in) :: dx, dt
   integer, intent(in) :: irho, iu, iv, ip, ix, nvar, nspec
+  integer, intent(in) :: idens, ixmom, iymom, iener, irhoX
   double precision, intent(in) :: gamma
 
   ! 0-based indexing to match python
   double precision, intent(inout) :: qv(0:qx-1, 0:qy-1, 0:nvar-1)
-  double precision, intent(inout) :: dqv(0:qx-1, 0:qy-1, 0:nvar-1)
+  double precision, intent(inout) :: Uv(0:qx-1, 0:qy-1, 0:nvar-1)
+  double precision, intent(inout) :: dUv(0:qx-1, 0:qy-1, 0:nvar-1)
 
-  double precision, intent(  out) :: q_l(0:qx-1, 0:qy-1, 0:nvar-1)
-  double precision, intent(  out) :: q_r(0:qx-1, 0:qy-1, 0:nvar-1)
+  double precision, intent(  out) :: U_l(0:qx-1, 0:qy-1, 0:nvar-1)
+  double precision, intent(  out) :: U_r(0:qx-1, 0:qy-1, 0:nvar-1)
 
-!f2py depend(qx, qy, nvar) :: qv, dqv
-!f2py depend(qx, qy, nvar) :: q_l, q_r
-!f2py intent(in) :: qv, dqv
-!f2py intent(out) :: q_l, q_r
+!f2py depend(qx, qy, nvar) :: qv, Uv, dUv
+!f2py depend(qx, qy, nvar) :: U_l, U_r
+!f2py intent(in) :: qv, Uv, dUv
+!f2py intent(out) :: U_l, U_r
 
   ! predict the cell-centered state to the edges in one-dimension
   ! using the reconstructed, limited slopes.
@@ -30,7 +33,6 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
   ! We follow the convection here that V_l[i] is the left state at the
   ! i-1/2 interface and V_l[i+1] is the left state at the i+1/2
   ! interface.
-  !
   !
   ! We need the left and right eigenvectors and the eigenvalues for
   ! the system projected along the x-direction
@@ -54,10 +56,11 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
   integer :: nx, ny
   integer :: i, j, n, m
 
-  double precision :: dq(0:nvar-1), q(0:nvar-1)
+  double precision :: dU(0:nvar-1), q(0:nvar-1), U(0:nvar-1)
   double precision :: lvec(0:nvar-1,0:nvar-1), rvec(0:nvar-1,0:nvar-1)
   double precision :: eval(0:nvar-1)
   double precision :: betal(0:nvar-1), betar(0:nvar-1)
+  double precision :: q_l(0:nvar-1), q_r(0:nvar-1)
 
   double precision :: dtdx, dtdx4
   double precision :: cs2, v2, Ap, Am, W, h, Delta
@@ -78,8 +81,9 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
   do j = jlo-2, jhi+2
      do i = ilo-2, ihi+2
 
-        dq(:) = dqv(i,j,:)
+        dU(:) = dUv(i,j,:)
         q(:) = qv(i,j,:)
+        U(:) = Uv(i,j,:)
 
         cs2 = gamma*q(ip)/q(irho)
         v2 = sum(q(iu:iv)**2)
@@ -213,26 +217,25 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
            ! this is one the right face of the current zone,
            ! so the fastest moving eigenvalue is eval[3] = u + c
            factor = 0.5d0*(1.0d0 - dtdx*max(eval(3), 0.0d0))
-           q_l(i+1,j,:) = q(:) + factor*dq(:)
+           U_l(i+1,j,:) = U(:) + factor*dU(:)
 
            ! left face of the current zone, so the fastest moving
            ! eigenvalue is eval[3] = u - c
            factor = 0.5d0*(1.0d0 + dtdx*min(eval(0), 0.0d0))
-           q_r(i,  j,:) = q(:) - factor*dq(:)
-
+           U_r(i,  j,:) = U(:) - factor*dU(:)
         else
 
            factor = 0.5d0*(1.0d0 - dtdx*max(eval(3), 0.0d0))
-           q_l(i,j+1,:) = q(:) + factor*dq(:)
+           U_l(i,j+1,:) = U(:) + factor*dU(:)
 
            factor = 0.5d0*(1.0d0 + dtdx*min(eval(0), 0.0d0))
-           q_r(i,j,  :) = q(:) - factor*dq(:)
+           U_r(i,  j,:) = U(:) - factor*dU(:)
 
         endif
 
         ! compute the Vhat functions
         do m = 0, nvar-1
-           summ = dot_product(lvec(m,:),dq(:))
+           summ = dot_product(lvec(m,:),dU(:))
 
            betal(m) = dtdx4*(eval(3) - eval(m))*(sign(1.0d0,eval(m)) + 1.0d0)*summ
            betar(m) = dtdx4*(eval(0) - eval(m))*(1.0d0 - sign(1.0d0,eval(m)))*summ
@@ -244,11 +247,11 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
            sum_r = dot_product(betar(:),rvec(:,m))
 
            if (idir == 1) then
-              q_l(i+1,j,m) = q_l(i+1,j,m) + sum_l
-              q_r(i,  j,m) = q_r(i,  j,m) + sum_r
+              U_l(i+1,j,m) = U_l(i+1,j,m) + sum_l
+              U_r(i,  j,m) = U_r(i,  j,m) + sum_r
            else
-              q_l(i,j+1,m) = q_l(i,j+1,m) + sum_l
-              q_r(i,j,  m) = q_r(i,j,  m) + sum_r
+              U_l(i,j+1,m) = U_l(i,j+1,m) + sum_l
+              U_r(i,j,  m) = U_r(i,j,  m) + sum_r
            endif
 
         enddo
@@ -1309,3 +1312,33 @@ subroutine artificial_viscosity(qx, qy, ng, dx, dy, &
   enddo
 
 end subroutine artificial_viscosity
+
+
+subroutine prim_to_cons(q, irho, iu, iv, ip, ix, &
+                      idens, ixmom, iymom, iener, irhoX, &
+                      nvar, nspec, gamma, U)
+  implicit none
+
+  double precision :: q(0:nvar-1), U(0:nvar-1)
+  integer :: irho, iu, iv, ip, ix, nvar, nspec
+  integer :: idens, ixmom, iymom, iener, irhoX
+  double precision :: gamma
+
+  double precision :: W, rhoh
+  integer :: n
+
+  W = 1.0d0 / sqrt(1.0d0 - q(iu)**2 - q(iv)**2)
+  rhoh = q(irho) + gamma / (gamma - 1.0d0) * q(ip)
+
+  U(idens) = q(irho) * W
+  U(ixmom) = q(iu) * rhoh * W**2
+  U(iymom) = q(iv) * rhoh * W**2
+  U(iener) = rhoh * W**2 - q(ip) - U(idens)
+
+  if (nspec > 0) then
+    do n = 0, nspec-1
+      U(irhoX + n) = q(ix + n) * U(idens)
+    enddo
+  endif
+
+end subroutine prim_to_cons

@@ -7,7 +7,7 @@ gamma = 1.4    ; pres = rho ener (gamma - 1)
 
 
 [compressible]
-use_flattening = 1        ; apply flattening at shocks (1)
+use_flattening = 0        ; apply flattening at shocks (1)
 
 z0 = 0.75                 ; flattening z0 parameter
 z1 = 0.85                 ; flattening z1 parameter

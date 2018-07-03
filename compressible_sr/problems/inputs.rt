@@ -2,7 +2,7 @@
 
 [driver]
 max_steps = 10000
-tmax = 3.0
+tmax = 5.0
 
 
 [io]
@@ -35,6 +35,6 @@ p0 = 10.0
 
 
 [compressible]
-grav = -1.0
+grav = -2.0
 
 limiter = 2
