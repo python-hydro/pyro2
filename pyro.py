@@ -192,7 +192,8 @@ def parse_and_run():
                      "compressible_sr",
                      "diffusion",
                      "incompressible",
-                     "lm_atm"]
+                     "lm_atm",
+                     "swe"]
 
     p = argparse.ArgumentParser()
 
