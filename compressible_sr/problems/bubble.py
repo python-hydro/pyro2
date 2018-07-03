@@ -89,8 +89,8 @@ def init_data(my_data, rp):
     ymom[:, :] *= rhoh[:, :]/dens*W**2
 
     # HACK: didn't work but W = 1 so shall cheat
-    # ener[:, :] = rhoh[:, :]*W**2 - p - dens[:, :]
-    ener[:, :] = p / (gamma-1)
+    ener[:, :] = rhoh[:, :]*W**2 - p - dens[:, :]
+    # ener[:, :] = p / (gamma-1)
 
     # print(ener[:,myg.jlo:myg.jhi])#*W[:,myg.jlo:myg.jhi]**2)
     # exit()
