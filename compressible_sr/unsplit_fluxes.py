@@ -124,12 +124,10 @@ Updating U_{i,j}:
 
 import compressible_sr.interface_f as ifc
 import compressible_sr.c2p_f as c2p
-import compressible_sr as comp
 import mesh.reconstruction as reconstruction
 import mesh.array_indexer as ai
 
 from util import msg
-import numpy as np
 
 
 def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
