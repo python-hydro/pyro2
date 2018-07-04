@@ -115,7 +115,7 @@ def test_particles_advect():
 
     ps.update_particles(u, v, 1)
 
-    positions = set([(p.x, p.y) for p in ps.particles])
+    positions = set([(p.x, p.y) for p in ps.particles.values()])
 
     xs, step = np.linspace(0, 1, num=7, endpoint=False, retstep=True)
     xs += 0.5 * step
@@ -129,7 +129,7 @@ def test_particles_advect():
 
     ps.update_particles(u, v, 1)
 
-    positions = set([(p.x, p.y) for p in ps.particles])
+    positions = set([(p.x, p.y) for p in ps.particles.values()])
 
     correct_positions = set([(x+1, y) for x in xs for y in xs])
 
@@ -142,7 +142,7 @@ def test_particles_advect():
     ps = particles.Particles(sim.cc_data, bc, rp)
     ps.update_particles(u, v, 1)
 
-    positions = set([(p.x, p.y) for p in ps.particles])
+    positions = set([(p.x, p.y) for p in ps.particles.values()])
 
     correct_positions = set([(x, y+1) for x in xs for y in xs])
 
@@ -154,7 +154,7 @@ def test_particles_advect():
     ps = particles.Particles(sim.cc_data, bc, rp)
     ps.update_particles(u, v, 1)
 
-    positions = set([(p.x, p.y) for p in ps.particles])
+    positions = set([(p.x, p.y) for p in ps.particles.values()])
 
     correct_positions = set([(x+1, y+1) for x in xs for y in xs])
 

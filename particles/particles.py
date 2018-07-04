@@ -59,7 +59,7 @@ class Particles(object):
 
         self.sim_data = sim_data
         self.bc = bc
-        self.particles = set()
+        self.particles = dict()
         self.rp = rp
 
         # TODO: read something from rp here to determine how to
@@ -94,7 +94,8 @@ class Particles(object):
         positions[:, 1] = positions[:, 1] * (myg.ymax - myg.ymin) + \
             myg.ymin
 
-        self.particles = set([Particle(x, y) for (x, y) in positions])
+        for (x, y) in positions:
+            self.particles[(x, y)] = Particle(x, y)
 
     def grid_generate_particles(self, n_particles):
         """
@@ -105,8 +106,6 @@ class Particles(object):
         """
         sq_n_particles = int(round(np.sqrt(n_particles)))
 
-        print(f'sq_n_particles = {sq_n_particles}')
-
         if sq_n_particles**2 != n_particles:
             msg.warning("WARNING: Changing number of particles from {} to {}".format(n_particles, sq_n_particles**2))
 
@@ -116,10 +115,9 @@ class Particles(object):
         xs += 0.5 * step
         ys, step = np.linspace(myg.ymin, myg.ymax, num=sq_n_particles, endpoint=False, retstep=True)
         ys += 0.5 * step
-
-        print(f'xs = {xs}')
-
-        self.particles = set([Particle(x, y) for x in xs for y in ys])
+        for x in xs:
+            for y in ys:
+                self.particles[(x, y)] = Particle(x, y)
 
     def update_particles(self, u, v, dt, limiter=0):
         """
@@ -145,7 +143,7 @@ class Particles(object):
         ldelta_vx = reconstruction.limit(v, myg, 1, limiter)
         ldelta_vy = reconstruction.limit(v, myg, 2, limiter)
 
-        for p in self.particles:
+        for k, p in self.particles.items():
             # find what cell it lives in
             x_idx = (p.x - myg.xmin) / myg.dx - 0.5
             y_idx = (p.y - myg.ymin) / myg.dy - 0.5
@@ -199,8 +197,8 @@ class Particles(object):
         TODO: copying the set and adding everything back again is messy
         - think of a better way to do this?
         """
-        new_particles = self.particles.copy()
-        self.particles = set()
+        old_particles = self.particles.copy()
+        self.particles = dict()
 
         myg = self.sim_data.grid
 
@@ -209,8 +207,8 @@ class Particles(object):
         ylb = self.bc.ylb
         yrb = self.bc.yrb
 
-        while new_particles:
-            p = new_particles.pop()
+        while old_particles:
+            k, p = old_particles.popitem()
 
             # -x boundary
             if p.x < myg.xmin:
@@ -256,7 +254,7 @@ class Particles(object):
                 else:
                     msg.fail("ERROR: yrb = %s invalid BC" % (yrb))
 
-            self.particles.add(p)
+            self.particles[k] = p
 
         self.n_particles = len(self.particles)
 
@@ -264,7 +262,14 @@ class Particles(object):
         """
         Return an array of particle positions.
         """
-        return np.array([[p.x, p.y] for p in self.particles])
+        return np.array([[p.x, p.y] for p in self.particles.values()])
+
+    def get_init_positions(self):
+        """
+        We defined the particles as a dictionary with their initial positions
+        as the keys, so this just becomes a restructuring operation.
+        """
+        return np.array([[x, y] for (x,y) in self.particles.keys()])
 
     def write_particles(self, filename):
         """

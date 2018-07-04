@@ -127,8 +127,12 @@ class Simulation(NullSimulation):
         if self.particles is not None:
             particle_positions = self.particles.get_positions()
 
+            # dye particles
+            colors = self.particles.get_init_positions()[:,0]
+
             # plot particles
-            ax.scatter(particle_positions[:, 0], particle_positions[:, 1])
+            ax.scatter(particle_positions[:, 0],
+                particle_positions[:, 1], c=colors, cmap="Greys")
             ax.set_xlim([myg.xmin, myg.xmax])
             ax.set_ylim([myg.ymin, myg.ymax])
 

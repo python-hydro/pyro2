@@ -445,12 +445,15 @@ class Simulation(NullSimulation):
 
             plt.colorbar(img, ax=ax)
 
-        ax = axes.flat[0]
         if self.particles is not None:
+            ax = axes.flat[0]
             particle_positions = self.particles.get_positions()
+            # dye particles
+            colors = self.particles.get_init_positions()[:, 0]
 
             # plot particles
-            ax.scatter(particle_positions[:, 0], particle_positions[:, 1], s=5)
+            ax.scatter(particle_positions[:, 0],
+                particle_positions[:, 1], s=5, c=colors, alpha=0.8, cmap="Greys")
             ax.set_xlim([myg.xmin, myg.xmax])
             ax.set_ylim([myg.ymin, myg.ymax])
 
