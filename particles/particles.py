@@ -185,10 +185,10 @@ class Particles(object):
                 v_vel -= y_frac*(1.0 + cy)*ldelta_vy.v()[x_idx, y_idx]
             else:
                 v_vel += y_frac*(1.0 - cy)*ldelta_vy.v()[x_idx, y_idx]
-
-            # transverse velocity
-            u_vel += y_frac / myg.dy * ldelta_uy.v()[x_idx, y_idx]
-            v_vel += x_frac / myg.dx * ldelta_vx.v()[x_idx, y_idx]
+            #
+            # # transverse velocity
+            u_vel += y_frac * ldelta_uy.v()[x_idx, y_idx]
+            v_vel += x_frac * ldelta_vx.v()[x_idx, y_idx]
 
             p.advect(u_vel, v_vel, dt)
 

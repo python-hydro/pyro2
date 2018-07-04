@@ -12,6 +12,7 @@ import mesh.array_indexer as ai
 
 from simulation_null import NullSimulation, grid_setup, bc_setup
 import multigrid.MG as MG
+import particles.particles as particles
 
 
 class Simulation(NullSimulation):
@@ -42,6 +43,9 @@ class Simulation(NullSimulation):
         my_data.create()
 
         self.cc_data = my_data
+
+        if self.rp.get_param("particles.do_particles") == 1:
+            self.particles = particles.Particles(self.cc_data, bc, self.rp)
 
         # now set the initial conditions for the problem
         problem = importlib.import_module("incompressible.problems.{}".format(self.problem_name))
@@ -388,6 +392,10 @@ class Simulation(NullSimulation):
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")
 
+        if self.particles is not None:
+            self.particles.update_particles(u, v, self.dt, limiter)
+            self.particles.enforce_particle_boundaries()
+
         # increment the time
         if not self.in_preevolve:
             self.cc_data.t += self.dt
@@ -436,6 +444,15 @@ class Simulation(NullSimulation):
             ax.set_title(field_names[n])
 
             plt.colorbar(img, ax=ax)
+
+        ax = axes.flat[0]
+        if self.particles is not None:
+            particle_positions = self.particles.get_positions()
+
+            # plot particles
+            ax.scatter(particle_positions[:, 0], particle_positions[:, 1], s=5)
+            ax.set_xlim([myg.xmin, myg.xmax])
+            ax.set_ylim([myg.ymin, myg.ymax])
 
         plt.figtext(0.05, 0.0125, "t = {:10.5f}".format(self.cc_data.t))
 

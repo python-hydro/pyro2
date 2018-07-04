@@ -96,9 +96,6 @@ def doit(solver_name, problem_name, param_file,
         # evolve for a single timestep
         sim.evolve()
 
-        if sim.particles is not None:
-            sim.particles.enforce_particle_boundaries()
-
         if verbose > 0:
             print("%5d %10.5f %10.5f" % (sim.n, sim.cc_data.t, sim.dt))
 

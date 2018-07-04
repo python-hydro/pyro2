@@ -89,6 +89,8 @@ class Simulation(NullSimulation):
             self.particles.update_particles(u2d, v2d, self.dt,
                 self.rp.get_param("advection.limiter"))
 
+            self.particles.enforce_particle_boundaries()
+
         # increment the time
         self.cc_data.t += self.dt
         self.n += 1
