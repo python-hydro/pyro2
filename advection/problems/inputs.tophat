@@ -33,3 +33,5 @@ v = 1.0
 
 limiter = 2
 
+[particles]
+do_particles = 1

@@ -117,6 +117,7 @@ class NullSimulation(object):
 
         self.rp = rp
         self.cc_data = None
+        self.particles = None
 
         self.SMALL = 1.e-12
 
