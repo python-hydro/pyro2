@@ -6,8 +6,8 @@ import advection.advective_fluxes as flx
 import mesh.patch as patch
 from simulation_null import NullSimulation, grid_setup, bc_setup
 import particles.particles as particles
-from util import msg
 import util.plot_tools as plot_tools
+
 
 class Simulation(NullSimulation):
 
@@ -28,12 +28,7 @@ class Simulation(NullSimulation):
         self.cc_data = my_data
 
         if self.rp.get_param("particles.do_particles") == 1:
-            n_particles = self.rp.get_param("particles.n_particles")
-            if n_particles > 0:
-                self.particles = particles.Particles(self.cc_data, bc, n_particles)
-            else:
-                msg.fail("ERROR: n_particles = %s < 0" % (n_particles))
-
+            self.particles = particles.Particles(self.cc_data, bc, self.rp)
 
         # now set the initial conditions for the problem
         problem = importlib.import_module("advection.problems.{}".format(self.problem_name))

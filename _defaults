@@ -42,3 +42,4 @@ ny = 25                   ; number of zones in the y-direction
 [particles]
 do_particles = 0          ; include particles? (1=yes, 0=no)
 n_particles = 100         ; number of particles
+particle_generator = random ; how do we generate particles? (random, grid)

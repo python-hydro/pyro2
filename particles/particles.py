@@ -9,6 +9,12 @@ from util import msg
 
 
 class Particle(object):
+    """
+    Class to hold properties of a single particle.
+
+    Not sure need velocity (or mass?), but will store it
+    here for now.
+    """
 
     def __init__(self, x, y, u=0, v=0, mass=1):
         self.x = x
@@ -41,7 +47,7 @@ class Particle(object):
 
 class Particles(object):
 
-    def __init__(self, sim_data, bc, n_particles=100):
+    def __init__(self, sim_data, bc, rp):
         """
         Initialize the Particles object.
 
@@ -53,11 +59,26 @@ class Particles(object):
 
         self.sim_data = sim_data
         self.bc = bc
+        self.particles = set()
+        self.rp = rp
 
         # TODO: read something from rp here to determine how to
         # generate the particles - for now, we shall assume random.
 
-        self.randomly_generate_particles(n_particles)
+        particle_generator = self.rp.get_param("particles.particle_generator")
+        n_particles = self.rp.get_param("particles.n_particles")
+        if n_particles <= 0:
+            msg.fail("ERROR: n_particles = %s <= 0" % (n_particles))
+
+        if particle_generator == "random":
+            self.randomly_generate_particles(n_particles)
+        elif particle_generator == "grid":
+            self.grid_generate_particles(n_particles)
+        else:
+            msg.fail("ERROR: do not recognise particle generator %s"
+                     % (particle_generator))
+
+        self.n_particles = len(self.particles)
 
     def randomly_generate_particles(self, n_particles):
         """
@@ -75,6 +96,31 @@ class Particles(object):
 
         self.particles = set([Particle(x, y) for (x, y) in positions])
 
+    def grid_generate_particles(self, n_particles):
+        """
+        Generate particles equally spaced across the grid.
+
+        If necessary, shall increase/decrease n_particles
+        in order to
+        """
+        sq_n_particles = int(round(np.sqrt(n_particles)))
+
+        print(f'sq_n_particles = {sq_n_particles}')
+
+        if sq_n_particles**2 != n_particles:
+            msg.warning("WARNING: Changing number of particles from {} to {}".format(n_particles, sq_n_particles**2))
+
+        myg = self.sim_data.grid
+
+        xs, step = np.linspace(myg.xmin, myg.xmax, num=sq_n_particles, endpoint=False, retstep=True)
+        xs += 0.5 * step
+        ys, step = np.linspace(myg.ymin, myg.ymax, num=sq_n_particles, endpoint=False, retstep=True)
+        ys += 0.5 * step
+
+        print(f'xs = {xs}')
+
+        self.particles = set([Particle(x, y) for x in xs for y in ys])
+
     def update_particles(self, u, v, dt, limiter=0):
         """
         Update the particles on the grid. To do this, we need to
@@ -89,7 +135,7 @@ class Particles(object):
         differently in different problems.
         """
         myg = self.sim_data.grid
-        myd = self.sim_data.data
+        # myd = self.sim_data.data
 
         # limit the velocity
 
@@ -120,7 +166,7 @@ class Particles(object):
             if x_idx >= myg.nx:
                 x_frac += (x_idx - myg.nx) + 1
                 x_idx = myg.nx - 1
-            if y_idx >=  myg.ny:
+            if y_idx >= myg.ny:
                 y_frac += (y_idx - myg.ny) + 1
                 y_idx = myg.ny - 1
 
@@ -167,46 +213,52 @@ class Particles(object):
             p = new_particles.pop()
 
             # -x boundary
-            if xlb == "outflow":
-                if p.x < myg.xmin:
+            if p.x < myg.xmin:
+                if xlb in ["outflow", "neumann"]:
                     continue
-            elif xlb == "periodic":
-                if p.x < myg.xmin:
+                elif xlb == "periodic":
                     p.x = myg.xmax + p.x - myg.xmin
-            else:
-                msg.fail("ERROR: xlb = %s invalid BC" % (xlb))
+                elif xlb in ["reflect-even", "reflect-odd"]:
+                    p.x = 2 * myg.xmin - p.x
+                else:
+                    msg.fail("ERROR: xlb = %s invalid BC" % (xlb))
 
             # +x boundary
-            if xrb == "outflow":
-                if p.x > myg.xmax:
+            if p.x > myg.xmax:
+                if xrb in ["outflow", "neumann"]:
                     continue
-            elif xrb == "periodic":
-                if p.x > myg.xmax:
+                elif xrb == "periodic":
                     p.x = myg.xmin + p.x - myg.xmax
-            else:
-                msg.fail("ERROR: xrb = %s invalid BC" % (xrb))
+                elif xrb in ["reflect-even", "reflect-odd"]:
+                    p.x = 2 * myg.xmax - p.x
+                else:
+                    msg.fail("ERROR: xrb = %s invalid BC" % (xrb))
 
             # -y boundary
-            if ylb == "outflow":
-                if p.y < myg.ymin:
+            if p.y < myg.ymin:
+                if ylb in ["outflow", "neumann"]:
                     continue
-            elif ylb == "periodic":
-                if p.y < myg.ymin:
+                elif ylb == "periodic":
                     p.y = myg.ymax + p.y - myg.ymin
-            else:
-                msg.fail("ERROR: ylb = %s invalid BC" % (ylb))
+                elif ylb in ["reflect-even", "reflect-odd"]:
+                    p.y = 2 * myg.ymin - p.y
+                else:
+                    msg.fail("ERROR: ylb = %s invalid BC" % (ylb))
 
-            # +x boundary
-            if yrb == "outflow":
-                if p.y > myg.ymax:
+            # +y boundary
+            if p.y > myg.ymax:
+                if yrb in ["outflow", "neumann"]:
                     continue
-            elif yrb == "periodic":
-                if p.y > myg.ymax:
+                elif yrb == "periodic":
                     p.y = myg.ymin + p.y - myg.ymax
-            else:
-                msg.fail("ERROR: yrb = %s invalid BC" % (yrb))
+                elif yrb in ["reflect-even", "reflect-odd"]:
+                    p.y = 2 * myg.ymax - p.y
+                else:
+                    msg.fail("ERROR: yrb = %s invalid BC" % (yrb))
 
             self.particles.add(p)
+
+        self.n_particles = len(self.particles)
 
     def get_positions(self):
         """
