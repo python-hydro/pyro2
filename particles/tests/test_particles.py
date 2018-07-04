@@ -40,7 +40,7 @@ def test_particles_random_gen():
     np.random.seed(3287469)
 
     ps = particles.Particles(sim.cc_data, bc, rp)
-    positions = set([(p.x, p.y) for p in ps.particles])
+    positions = set([(p.x, p.y) for p in ps.particles.values()])
 
     assert len(ps.particles) == 50, "There should be 50 particles"
 
@@ -76,7 +76,7 @@ def test_particles_grid_gen():
 
     assert len(ps.particles) == 49, "There should be 49 particles"
 
-    positions = set([(p.x, p.y) for p in ps.particles])
+    positions = set([(p.x, p.y) for p in ps.particles.values()])
 
     xs, step = np.linspace(0, 1, num=7, endpoint=False, retstep=True)
     xs += 0.5 * step

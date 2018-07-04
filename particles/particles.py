@@ -269,7 +269,7 @@ class Particles(object):
         We defined the particles as a dictionary with their initial positions
         as the keys, so this just becomes a restructuring operation.
         """
-        return np.array([[x, y] for (x,y) in self.particles.keys()])
+        return np.array([[x, y] for (x, y) in self.particles.keys()])
 
     def write_particles(self, filename):
         """

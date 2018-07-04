@@ -128,7 +128,7 @@ class Simulation(NullSimulation):
             particle_positions = self.particles.get_positions()
 
             # dye particles
-            colors = self.particles.get_init_positions()[:,0]
+            colors = self.particles.get_init_positions()[:, 0]
 
             # plot particles
             ax.scatter(particle_positions[:, 0],
