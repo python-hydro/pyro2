@@ -7,6 +7,10 @@ from simulation_null import NullSimulation, grid_setup, bc_setup
 
 
 def test_particle():
+    """
+    Test Particle class
+    """
+
     n_particles = 5
 
     for n in range(n_particles):
@@ -18,6 +22,10 @@ def test_particle():
 
 
 def test_particles_random_gen():
+    """
+    Test random particle generator.
+    """
+
     rp = runparams.RuntimeParameters()
 
     rp.params["mesh.nx"] = 8
@@ -53,6 +61,10 @@ def test_particles_random_gen():
 
 
 def test_particles_grid_gen():
+    """
+    Test Particles grid generator.
+    """
+
     rp = runparams.RuntimeParameters()
 
     rp.params["mesh.nx"] = 8
@@ -80,6 +92,41 @@ def test_particles_grid_gen():
     xs += 0.5 * step
 
     correct_positions = set([(x, y) for x in xs for y in xs])
+
+    assert positions == correct_positions, "sets are not the same"
+
+
+def test_particles_array_gen():
+    """
+    Test Particles particle generator from input array.
+    """
+
+    rp = runparams.RuntimeParameters()
+
+    rp.params["mesh.nx"] = 8
+    rp.params["mesh.ny"] = 8
+    rp.params["particles.do_particles"] = 1
+    n_particles = 50
+
+    # set up sim
+    sim = NullSimulation("", "", rp)
+
+    # set up grid
+    my_grid = grid_setup(rp)
+    my_data = patch.CellCenterData2d(my_grid)
+    bc = bc_setup(rp)[0]
+    my_data.create()
+    sim.cc_data = my_data
+
+    # generate random array of particles
+    init_positions = np.random.rand(n_particles, 2)
+
+    ps = particles.Particles(sim.cc_data, bc, n_particles,
+        "array", pos_array=init_positions)
+
+    positions = set([(p.x, p.y) for p in ps.particles.values()])
+
+    correct_positions = set([(x, y) for (x, y) in init_positions])
 
     assert positions == correct_positions, "sets are not the same"
 
