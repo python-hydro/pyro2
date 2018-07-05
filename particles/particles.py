@@ -4,24 +4,22 @@ on the velocity on the grid.
 """
 
 import numpy as np
-import mesh.reconstruction as reconstruction
 from util import msg
 
 
 class Particle(object):
     """
-    Class to hold properties of a single particle.
+    Class to hold properties of a single (massless) particle.
 
-    Not sure need velocity (or mass?), but will store it
-    here for now.
+    This class could be extended (i.e. inherited from) to
+    model e.g. massive/charged particles.
     """
 
-    def __init__(self, x, y, u=0, v=0, mass=1):
+    def __init__(self, x, y, u=0, v=0):
         self.x = x
         self.y = y
         self.u = u
         self.v = v
-        self.mass = mass
 
     def pos(self):
         """
@@ -35,7 +33,7 @@ class Particle(object):
         """
         return np.array([self.u, self.v])
 
-    def advect(self, u, v, dt):
+    def update(self, u, v, dt):
         """
         Advect the particle and update its velocity.
         """
@@ -46,15 +44,33 @@ class Particle(object):
 
 
 class Particles(object):
+    """
+    Class to hold multiple particles.
+    """
 
-    def __init__(self, sim_data, bc, rp):
+    def __init__(self, sim_data, bc, rp, particle_generator_func=None):
         """
         Initialize the Particles object.
+
+        Particles are stored as a dictionary, with their keys being tuples
+        of their initial position. This was done in order to have a simple way
+        to access the initial particle positions when plotting.
+
+        However, this assumes that no two particles are
+        initialised with the same initial position, which is fine for the
+        massless particle case, however could no longer be a sensible thing
+        to do if have particles have other properties (e.g. mass).
 
         Parameters
         ----------
         sim_data : CellCenterData2d object
-            The simulation data
+            The cell-centered simulation data
+        bc : BC object
+            Boundary conditions
+        rp: RuntimeParameters parameters object
+            Runtime parameters
+        particle_generator_func : function
+            Custom particle generator function
         """
 
         self.sim_data = sim_data
@@ -62,21 +78,21 @@ class Particles(object):
         self.particles = dict()
         self.rp = rp
 
-        # TODO: read something from rp here to determine how to
-        # generate the particles - for now, we shall assume random.
-
         particle_generator = self.rp.get_param("particles.particle_generator")
         n_particles = self.rp.get_param("particles.n_particles")
         if n_particles <= 0:
             msg.fail("ERROR: n_particles = %s <= 0" % (n_particles))
 
-        if particle_generator == "random":
-            self.randomly_generate_particles(n_particles)
-        elif particle_generator == "grid":
-            self.grid_generate_particles(n_particles)
+        if particle_generator_func is not None:
+            self.particles = particle_generator_func(n_particles)
         else:
-            msg.fail("ERROR: do not recognise particle generator %s"
-                     % (particle_generator))
+            if particle_generator == "random":
+                self.randomly_generate_particles(n_particles)
+            elif particle_generator == "grid":
+                self.grid_generate_particles(n_particles)
+            else:
+                msg.fail("ERROR: do not recognise particle generator %s"
+                         % (particle_generator))
 
         self.n_particles = len(self.particles)
 
@@ -100,9 +116,12 @@ class Particles(object):
     def grid_generate_particles(self, n_particles):
         """
         Generate particles equally spaced across the grid.
+        Currently has the same number of particles in the x and y
+        directions (so dx != dy unless the domain is square) -
+        may be better to scale this.
 
         If necessary, shall increase/decrease n_particles
-        in order to
+        in order to fill grid.
         """
         sq_n_particles = int(round(np.sqrt(n_particles)))
 
@@ -119,31 +138,27 @@ class Particles(object):
             for y in ys:
                 self.particles[(x, y)] = Particle(x, y)
 
-    def update_particles(self, u, v, dt, limiter=0):
+    def update_particles(self, u, v, dt):
         """
-        Update the particles on the grid. To do this, we need to
-        calculate the velocity at the particle's position (do we
-        do this by interpolating - ie assuming the grid velocities
-        to live at points - or by using the velocity in the cell well
-        the particle is - ie assuming the grid velocities to live in the
-        entire cell. I think I'll try using the same projection methods
-        used in other codes?)
+        Update the particles on the grid. This is based off the
+        AdvectWithUcc function in AMReX, which used the midpoint
+        method to advance particles using the cell-centered velocity.
 
         We will explicitly pass in u and v here as these are accessed
         differently in different problems.
+
+        Parameters
+        ----------
+        u : ArrayIndexer object
+            x-velocity
+        v : ArrayIndexer object
+            y-velocity
+        dt : float
+            timestep
         """
         myg = self.sim_data.grid
-        # myd = self.sim_data.data
 
-        # limit the velocity
-
-        ldelta_ux = reconstruction.limit(u, myg, 1, limiter)
-        ldelta_uy = reconstruction.limit(u, myg, 2, limiter)
-
-        ldelta_vx = reconstruction.limit(v, myg, 1, limiter)
-        ldelta_vy = reconstruction.limit(v, myg, 2, limiter)
-
-        for k, p in self.particles.items():
+        for _, p in self.particles.items():
             # find what cell it lives in
             x_idx = (p.x - myg.xmin) / myg.dx - 0.5
             y_idx = (p.y - myg.ymin) / myg.dy - 0.5
@@ -151,50 +166,31 @@ class Particles(object):
             x_frac = x_idx % 1
             y_frac = y_idx % 1
 
-            x_idx = int(round(x_idx))
-            y_idx = int(round(y_idx))
+            # get the index of the bottom left cell
+            # we'll add one as going to use buf'd quantities -
+            # this will catch the cases where the particle is on the edges
+            # of the grid.
+            x_idx = int(x_idx) + 1
+            y_idx = int(y_idx) + 1
 
-            if x_frac > 0.5 and x_idx+1 < myg.nx:
-                x_frac -= 1
-                x_idx += 1
-            if y_frac > 0.5 and y_idx+1 < myg.ny:
-                y_frac -= 1
-                y_idx += 1
+            # interpolate velocity
+            u_vel = (1-x_frac)*(1-y_frac)*u.v(buf=1)[x_idx, y_idx] + \
+                    x_frac*(1-y_frac)*u.v(buf=1)[x_idx+1, y_idx] + \
+                    (1-x_frac)*y_frac*u.v(buf=1)[x_idx, y_idx+1] + \
+                    x_frac*y_frac*u.v(buf=1)[x_idx+1, y_idx+1]
 
-            if x_idx >= myg.nx:
-                x_frac += (x_idx - myg.nx) + 1
-                x_idx = myg.nx - 1
-            if y_idx >= myg.ny:
-                y_frac += (y_idx - myg.ny) + 1
-                y_idx = myg.ny - 1
+            v_vel = (1-x_frac)*(1-y_frac)*v.v(buf=1)[x_idx, y_idx] + \
+                    x_frac*(1-y_frac)*v.v(buf=1)[x_idx+1, y_idx] + \
+                    (1-x_frac)*y_frac*v.v(buf=1)[x_idx, y_idx+1] + \
+                    x_frac*y_frac*v.v(buf=1)[x_idx+1, y_idx+1]
 
-            u_vel = u.v()[x_idx, y_idx]
-            v_vel = v.v()[x_idx, y_idx]
-            cx = u_vel * dt / myg.dx
-            cy = v_vel * dt / myg.dy
-
-            # normal velocity
-            if (u_vel*x_frac) < 0:
-                u_vel -= x_frac*(1.0 + cx)*ldelta_ux.v()[x_idx, y_idx]
-            else:
-                u_vel += x_frac*(1.0 - cx)*ldelta_ux.v()[x_idx, y_idx]
-
-            if (v_vel*y_frac) < 0:
-                v_vel -= y_frac*(1.0 + cy)*ldelta_vy.v()[x_idx, y_idx]
-            else:
-                v_vel += y_frac*(1.0 - cy)*ldelta_vy.v()[x_idx, y_idx]
-            #
-            # # transverse velocity
-            u_vel += y_frac * ldelta_uy.v()[x_idx, y_idx]
-            v_vel += x_frac * ldelta_vx.v()[x_idx, y_idx]
-
-            p.advect(u_vel, v_vel, dt)
+            p.update(u_vel, v_vel, dt)
 
     def enforce_particle_boundaries(self):
         """
         Enforce the particle boundaries
 
-        TODO: copying the set and adding everything back again is messy
+        TODO: copying the dict and adding everything back again is messy
         - think of a better way to do this?
         """
         old_particles = self.particles.copy()
@@ -219,7 +215,7 @@ class Particles(object):
                 elif xlb in ["reflect-even", "reflect-odd"]:
                     p.x = 2 * myg.xmin - p.x
                 else:
-                    msg.fail("ERROR: xlb = %s invalid BC" % (xlb))
+                    msg.fail("ERROR: xlb = %s invalid BC for particles" % (xlb))
 
             # +x boundary
             if p.x > myg.xmax:
@@ -230,7 +226,7 @@ class Particles(object):
                 elif xrb in ["reflect-even", "reflect-odd"]:
                     p.x = 2 * myg.xmax - p.x
                 else:
-                    msg.fail("ERROR: xrb = %s invalid BC" % (xrb))
+                    msg.fail("ERROR: xrb = %s invalid BC for particles" % (xrb))
 
             # -y boundary
             if p.y < myg.ymin:
@@ -241,7 +237,7 @@ class Particles(object):
                 elif ylb in ["reflect-even", "reflect-odd"]:
                     p.y = 2 * myg.ymin - p.y
                 else:
-                    msg.fail("ERROR: ylb = %s invalid BC" % (ylb))
+                    msg.fail("ERROR: ylb = %s invalid BC for particles" % (ylb))
 
             # +y boundary
             if p.y > myg.ymax:
@@ -252,7 +248,7 @@ class Particles(object):
                 elif yrb in ["reflect-even", "reflect-odd"]:
                     p.y = 2 * myg.ymax - p.y
                 else:
-                    msg.fail("ERROR: yrb = %s invalid BC" % (yrb))
+                    msg.fail("ERROR: yrb = %s invalid BC for particles" % (yrb))
 
             self.particles[k] = p
 
@@ -260,12 +256,14 @@ class Particles(object):
 
     def get_positions(self):
         """
-        Return an array of particle positions.
+        Return an array of current particle positions.
         """
         return np.array([[p.x, p.y] for p in self.particles.values()])
 
     def get_init_positions(self):
         """
+        Return initial positions of the particles as an array.
+
         We defined the particles as a dictionary with their initial positions
         as the keys, so this just becomes a restructuring operation.
         """

@@ -37,6 +37,7 @@ pyro: a python hydro code
    diffusion_basics
    incompressible_basics
    lowmach_basics
+   particles_basics
    swe_basics
 
 .. toctree::

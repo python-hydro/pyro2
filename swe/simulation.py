@@ -200,10 +200,9 @@ class Simulation(NullSimulation):
                 dtdy*(Flux_y.v(n=n) - Flux_y.jp(1, n=n))
 
         if self.particles is not None:
-            limiter = self.rp.get_param("swe.limiter")
             u, v = self.cc_data.get_var("velocity")
 
-            self.particles.update_particles(u, v, self.dt, limiter)
+            self.particles.update_particles(u, v, self.dt)
             self.particles.enforce_particle_boundaries()
 
         # increment the time

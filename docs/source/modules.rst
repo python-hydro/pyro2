@@ -20,6 +20,7 @@ pyro2
    lm_atm
    mesh
    multigrid
+   particles
    plot
    pyro
    simulation_null

@@ -86,8 +86,7 @@ class Simulation(NullSimulation):
             u2d = myg.scratch_array() + u
             v2d = myg.scratch_array() + v
 
-            self.particles.update_particles(u2d, v2d, self.dt,
-                self.rp.get_param("advection.limiter"))
+            self.particles.update_particles(u2d, v2d, self.dt)
 
             self.particles.enforce_particle_boundaries()
 

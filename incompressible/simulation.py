@@ -393,7 +393,7 @@ class Simulation(NullSimulation):
         self.cc_data.fill_BC("y-velocity")
 
         if self.particles is not None:
-            self.particles.update_particles(u, v, self.dt, limiter)
+            self.particles.update_particles(u, v, self.dt)
             self.particles.enforce_particle_boundaries()
 
         # increment the time
