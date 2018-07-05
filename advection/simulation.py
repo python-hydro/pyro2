@@ -28,7 +28,9 @@ class Simulation(NullSimulation):
         self.cc_data = my_data
 
         if self.rp.get_param("particles.do_particles") == 1:
-            self.particles = particles.Particles(self.cc_data, bc, self.rp)
+            n_particles = self.rp.get_param("particles.n_particles")
+            particle_generator = self.rp.get_param("particles.particle_generator")
+            self.particles = particles.Particles(self.cc_data, bc, n_particles, particle_generator)
 
         # now set the initial conditions for the problem
         problem = importlib.import_module("advection.problems.{}".format(self.problem_name))
@@ -86,9 +88,7 @@ class Simulation(NullSimulation):
             u2d = myg.scratch_array() + u
             v2d = myg.scratch_array() + v
 
-            self.particles.update_particles(u2d, v2d, self.dt)
-
-            self.particles.enforce_particle_boundaries()
+            self.particles.update_particles(self.dt, u2d, v2d)
 
         # increment the time
         self.cc_data.t += self.dt

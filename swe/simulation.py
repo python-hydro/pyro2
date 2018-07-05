@@ -131,7 +131,9 @@ class Simulation(NullSimulation):
         self.cc_data = my_data
 
         if self.rp.get_param("particles.do_particles") == 1:
-            self.particles = particles.Particles(self.cc_data, bc, self.rp)
+            n_particles = self.rp.get_param("particles.n_particles")
+            particle_generator = self.rp.get_param("particles.particle_generator")
+            self.particles = particles.Particles(self.cc_data, bc, n_particles, particle_generator)
 
         # some auxillary data that we'll need to fill GC in, but isn't
         # really part of the main solution
@@ -200,10 +202,7 @@ class Simulation(NullSimulation):
                 dtdy*(Flux_y.v(n=n) - Flux_y.jp(1, n=n))
 
         if self.particles is not None:
-            u, v = self.cc_data.get_var("velocity")
-
-            self.particles.update_particles(u, v, self.dt)
-            self.particles.enforce_particle_boundaries()
+            self.particles.update_particles(self.dt)
 
         # increment the time
         self.cc_data.t += self.dt

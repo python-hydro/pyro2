@@ -6,5 +6,5 @@ proj_type = 2             ; what are we projecting? 1 includes -Gp term in U*
 cfl = 0.8
 
 [particles]
-do_particles = 1
+do_particles = 0
 particle_generator = grid

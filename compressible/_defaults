@@ -22,5 +22,5 @@ grav = 0.0                ; gravitational acceleration (in y-direction)
 riemann = HLLC            ; HLLC or CGF
 
 [particles]
-do_particles = 1
+do_particles = 0
 particle_generator = grid

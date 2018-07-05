@@ -48,7 +48,8 @@ class Particles(object):
     Class to hold multiple particles.
     """
 
-    def __init__(self, sim_data, bc, rp, particle_generator_func=None):
+    def __init__(self, sim_data, bc, n_particles, particle_generator="grid",
+                 pos_array=None, init_array=None):
         """
         Initialize the Particles object.
 
@@ -67,29 +68,30 @@ class Particles(object):
             The cell-centered simulation data
         bc : BC object
             Boundary conditions
-        rp: RuntimeParameters parameters object
-            Runtime parameters
-        particle_generator_func : function
-            Custom particle generator function
+        n_particles : int
+            Number of particles
+        particle_generator : string or function
+            String with generator name of custom particle generator function
+        pos_array : float array
+            Array of particle positions to use with particle initialization
         """
 
         self.sim_data = sim_data
         self.bc = bc
         self.particles = dict()
-        self.rp = rp
 
-        particle_generator = self.rp.get_param("particles.particle_generator")
-        n_particles = self.rp.get_param("particles.n_particles")
         if n_particles <= 0:
             msg.fail("ERROR: n_particles = %s <= 0" % (n_particles))
 
-        if particle_generator_func is not None:
-            self.particles = particle_generator_func(n_particles)
+        if callable(particle_generator):  # custom particle generator function
+            self.particles = particle_generator(n_particles)
         else:
             if particle_generator == "random":
                 self.randomly_generate_particles(n_particles)
             elif particle_generator == "grid":
                 self.grid_generate_particles(n_particles)
+            elif particle_generator == "array":
+                self.array_generate_particles(pos_array, init_array)
             else:
                 msg.fail("ERROR: do not recognise particle generator %s"
                          % (particle_generator))
@@ -123,6 +125,7 @@ class Particles(object):
         If necessary, shall increase/decrease n_particles
         in order to fill grid.
         """
+
         sq_n_particles = int(round(np.sqrt(n_particles)))
 
         if sq_n_particles**2 != n_particles:
@@ -138,14 +141,38 @@ class Particles(object):
             for y in ys:
                 self.particles[(x, y)] = Particle(x, y)
 
-    def update_particles(self, u, v, dt):
+    def array_generate_particles(self, pos_array, init_array=None):
+        """
+        Generate particles based on array of their positions. This is used
+        when reading particle data from file.
+
+        Parameters
+        ----------
+        pos_array : float array
+            Array of particle positions.
+        init_array : float array
+            Array of initial particle positions.
+        """
+        # check a pos_array has been passed to the constructor
+        if pos_array is None:
+            msg.fail("ERROR: Array of particle positions has not been passed into Particles constructor.\
+            Cannot generate particles.")
+
+        if init_array is None:
+            for (x, y) in pos_array:
+                self.particles[(x, y)] = Particle(x, y)
+        else:
+            for (ix, iy), (x, y) in zip(init_array, pos_array):
+                self.particles[(ix, iy)] = Particle(x, y)
+
+    def update_particles(self, dt, u=None, v=None):
         """
         Update the particles on the grid. This is based off the
         AdvectWithUcc function in AMReX, which used the midpoint
         method to advance particles using the cell-centered velocity.
 
-        We will explicitly pass in u and v here as these are accessed
-        differently in different problems.
+        We will explicitly pass in u and v if they cannot be accessed from the
+        sim_data in the usual way.
 
         Parameters
         ----------
@@ -157,6 +184,13 @@ class Particles(object):
             timestep
         """
         myg = self.sim_data.grid
+
+        if (u is None) and (v is None):
+            u, v = self.sim_data.get_var("velocity")
+        elif u is None:
+            u = self.sim_data.get_var("x-velocity")
+        elif v is None:
+            v = self.sim_data.get_var("y-velocity")
 
         for _, p in self.particles.items():
             # find what cell it lives in
@@ -185,6 +219,8 @@ class Particles(object):
                     x_frac*y_frac*v.v(buf=1)[x_idx+1, y_idx+1]
 
             p.update(u_vel, v_vel, dt)
+
+        self.enforce_particle_boundaries()
 
     def enforce_particle_boundaries(self):
         """
@@ -269,9 +305,18 @@ class Particles(object):
         """
         return np.array([[x, y] for (x, y) in self.particles.keys()])
 
-    def write_particles(self, filename):
+    def write_particles(self, f):
         """
-        Output the particles to an HDF5 file
+        Output the particles' positions to an HDF5 file.
+
+        Parameters
+        ----------
+        f : h5py object
+            HDF5 file to write to
         """
 
-        pass
+        gparticles = f.create_group("particles")
+        gparticles.create_dataset("init_particle_positions",
+            data=self.get_init_positions())
+        gparticles.create_dataset("particle_positions",
+            data=self.get_positions())

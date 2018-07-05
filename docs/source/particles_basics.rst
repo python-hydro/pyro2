@@ -34,7 +34,9 @@ The particles can be initialised in a number of ways:
   each direction, so the spacing will be different in each direction if the
   domain is not square.) The number of particles will be increased/decreased
   in order to fill the whole domain;
-* the user can define their own ``particle_generator_func`` and pass this into the
+* :func:`array_generate_particles <particles.particles.Particle.array_generate_particles>`,
+  generates particles based on array of particle positions passed to the constructor;
+* the user can define their own ``particle_generator`` and pass this into the
   Particles constructor. This function takes the number of particles to be
   generated and returns a dictionary of ``Particle`` objects.
 
@@ -44,7 +46,9 @@ solver's ``Simulation.initialize`` function:
 .. code-block:: python
 
    if self.rp.get_param("particles.do_particles") == 1:
-       self.particles = particles.Particles(self.cc_data, bc, self.rp)
+         n_particles = self.rp.get_param("particles.n_particles")
+         particle_generator = self.rp.get_param("particles.particle_generator")
+         self.particles = particles.Particles(self.cc_data, bc, n_particles, particle_generator)
 
 The particles can then be advanced by inserting the following code after the
 update of the other variables in the solver's ``Simulation.evolve`` function:
@@ -52,11 +56,11 @@ update of the other variables in the solver's ``Simulation.evolve`` function:
 .. code-block:: python
 
    if self.particles is not None:
-        self.particles.update_particles(u, v, self.dt)
-        self.particles.enforce_particle_boundaries()
+        self.particles.update_particles(self.dt)
 
-where ``u`` and ``v`` are the ``ArrayIndexer`` objects holding the x-velocity and
-y-velocity on the grid.
+For some problems (e.g. advection), the x- and y- velocities must also be passed
+in as arguments to this function as they cannot be accessed using the standard
+``get_var("velocity")`` command.
 
 We can turn on/off the particles solver using the following runtime paramters:
 
@@ -73,3 +77,37 @@ We can turn on/off the particles solver using the following runtime paramters:
 |                       | option can be overridden by passing a custom generator |
 |                       | function to the ``Particles`` constructor.             |
 +-----------------------+--------------------------------------------------------+
+
+Plotting particles
+------------------
+
+Particles can be plotted by getting their positions using
+
+.. code-block:: python
+
+   particle_positions = particles.get_positions()
+
+In order to track the movement of particles over time, it's useful
+to 'dye' the particles based on their initial positions. This can
+be done by calling
+
+.. code-block:: python
+
+   colors = particles.get_init_positions()
+
+For example, if we color the particles from white to black based on their initial
+x-position, we can plot them on the figure axis ``ax`` using the following code:
+
+.. code-block:: python
+
+      particle_positions = particles.get_positions()
+
+      # dye particles based on initial x-position
+      colors = particles.get_init_positions()[:, 0]
+
+      # plot particles
+      ax.scatter(particle_positions[:, 0],
+          particle_positions[:, 1], s=5, c=colors, alpha=0.8, cmap="Greys")
+
+      ax.set_xlim([myg.xmin, myg.xmax])
+      ax.set_ylim([myg.ymin, myg.ymax])

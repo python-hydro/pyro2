@@ -45,7 +45,9 @@ class Simulation(NullSimulation):
         self.cc_data = my_data
 
         if self.rp.get_param("particles.do_particles") == 1:
-            self.particles = particles.Particles(self.cc_data, bc, self.rp)
+            n_particles = self.rp.get_param("particles.n_particles")
+            particle_generator = self.rp.get_param("particles.particle_generator")
+            self.particles = particles.Particles(self.cc_data, bc, n_particles, particle_generator)
 
         # now set the initial conditions for the problem
         problem = importlib.import_module("incompressible.problems.{}".format(self.problem_name))
@@ -393,8 +395,7 @@ class Simulation(NullSimulation):
         self.cc_data.fill_BC("y-velocity")
 
         if self.particles is not None:
-            self.particles.update_particles(u, v, self.dt)
-            self.particles.enforce_particle_boundaries()
+            self.particles.update_particles(self.dt)
 
         # increment the time
         if not self.in_preevolve:

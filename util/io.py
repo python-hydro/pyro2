@@ -6,6 +6,7 @@ import importlib
 import h5py
 import mesh.patch as patch
 import mesh.boundary as bnd
+import particles.particles as particles
 
 
 def read_bcs(f):
@@ -93,6 +94,17 @@ def read(filename):
             v = myd.get_var(n)
             v.v()[:, :] = data[:, :]
 
+        # restore the particle data
+        try:
+            gparticles = f["particles"]
+            particle_data = gparticles["particle_positions"]
+            init_data = gparticles["init_particle_positions"]
+
+            my_particles = particles.Particles(myd, None, len(particle_data),
+                                            "array", particle_data, init_data)
+        except KeyError:
+            my_particles = None
+
         if solver_name is not None:
             solver = importlib.import_module(solver_name)
 
@@ -100,6 +112,7 @@ def read(filename):
             sim.n = n
             sim.cc_data = myd
             sim.cc_data.t = t
+            sim.particles = my_particles
 
             sim.read_extras(f)
 

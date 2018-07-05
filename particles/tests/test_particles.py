@@ -22,9 +22,8 @@ def test_particles_random_gen():
 
     rp.params["mesh.nx"] = 8
     rp.params["mesh.ny"] = 8
-    rp.params["particles.do_particles"] = 0
-    rp.params["particles.n_particles"] = 50
-    rp.params["particles.particle_generator"] = "random"
+    rp.params["particles.do_particles"] = 1
+    n_particles = 50
 
     # set up sim
     sim = NullSimulation("", "", rp)
@@ -39,15 +38,15 @@ def test_particles_random_gen():
     # seed random number generator
     np.random.seed(3287469)
 
-    ps = particles.Particles(sim.cc_data, bc, rp)
+    ps = particles.Particles(sim.cc_data, bc, n_particles, "random")
     positions = set([(p.x, p.y) for p in ps.particles.values()])
 
-    assert len(ps.particles) == 50, "There should be 50 particles"
+    assert len(ps.particles) == n_particles, "There should be {} particles".format(n_particles)
 
     # reseed random number generator
     np.random.seed(3287469)
 
-    correct_positions = np.random.rand(50, 2)
+    correct_positions = np.random.rand(n_particles, 2)
     correct_positions = set([(x, y) for (x, y) in correct_positions])
 
     assert positions == correct_positions, "sets are not the same"
@@ -58,9 +57,8 @@ def test_particles_grid_gen():
 
     rp.params["mesh.nx"] = 8
     rp.params["mesh.ny"] = 8
-    rp.params["particles.do_particles"] = 0
-    rp.params["particles.n_particles"] = 50
-    rp.params["particles.particle_generator"] = "grid"
+    rp.params["particles.do_particles"] = 1
+    n_particles = 50
 
     # set up sim
     sim = NullSimulation("", "", rp)
@@ -72,7 +70,7 @@ def test_particles_grid_gen():
     my_data.create()
     sim.cc_data = my_data
 
-    ps = particles.Particles(sim.cc_data, bc, rp)
+    ps = particles.Particles(sim.cc_data, bc, n_particles, "grid")
 
     assert len(ps.particles) == 49, "There should be 49 particles"
 
@@ -91,9 +89,16 @@ def test_particles_advect():
 
     rp.params["mesh.nx"] = 8
     rp.params["mesh.ny"] = 8
-    rp.params["particles.do_particles"] = 0
-    rp.params["particles.n_particles"] = 50
-    rp.params["particles.particle_generator"] = "grid"
+    rp.params["mesh.xlboundary"] = "periodic"
+    rp.params["mesh.xrboundary"] = "periodic"
+    rp.params["mesh.ylboundary"] = "periodic"
+    rp.params["mesh.yrboundary"] = "periodic"
+    rp.params["mesh.xmin"] = 0
+    rp.params["mesh.xmax"] = 1
+    rp.params["mesh.ymin"] = 0
+    rp.params["mesh.ymax"] = 1
+    rp.params["particles.do_particles"] = 1
+    n_particles = 50
 
     # set up sim
     sim = NullSimulation("", "", rp)
@@ -105,7 +110,7 @@ def test_particles_advect():
     my_data.create()
     sim.cc_data = my_data
 
-    ps = particles.Particles(sim.cc_data, bc, rp)
+    ps = particles.Particles(sim.cc_data, bc, n_particles, "grid")
 
     # advect with constant velocity
 
@@ -113,7 +118,7 @@ def test_particles_advect():
     u = my_grid.scratch_array()
     v = my_grid.scratch_array()
 
-    ps.update_particles(u, v, 1)
+    ps.update_particles(1, u, v)
 
     positions = set([(p.x, p.y) for p in ps.particles.values()])
 
@@ -127,11 +132,11 @@ def test_particles_advect():
     # now move constant speed to the right
     u[:, :] = 1
 
-    ps.update_particles(u, v, 1)
+    ps.update_particles(1, u, v)
 
     positions = set([(p.x, p.y) for p in ps.particles.values()])
 
-    correct_positions = set([(x+1, y) for x in xs for y in xs])
+    correct_positions = set([((x+1) % 1, y) for x in xs for y in xs])
 
     assert positions == correct_positions, "sets are not the same"
 
@@ -139,23 +144,23 @@ def test_particles_advect():
     u[:, :] = 0
     v[:, :] = 1
 
-    ps = particles.Particles(sim.cc_data, bc, rp)
-    ps.update_particles(u, v, 1)
+    ps = particles.Particles(sim.cc_data, bc, n_particles, "grid")
+    ps.update_particles(1, u, v)
 
     positions = set([(p.x, p.y) for p in ps.particles.values()])
 
-    correct_positions = set([(x, y+1) for x in xs for y in xs])
+    correct_positions = set([(x, (y+1) % 1) for x in xs for y in xs])
 
     assert positions == correct_positions, "sets are not the same"
 
     # constant speed right + up
     u[:, :] = 1
 
-    ps = particles.Particles(sim.cc_data, bc, rp)
-    ps.update_particles(u, v, 1)
+    ps = particles.Particles(sim.cc_data, bc, n_particles, "grid")
+    ps.update_particles(1, u, v)
 
     positions = set([(p.x, p.y) for p in ps.particles.values()])
 
-    correct_positions = set([(x+1, y+1) for x in xs for y in xs])
+    correct_positions = set([((x+1) % 1, (y+1) % 1) for x in xs for y in xs])
 
     assert positions == correct_positions, "sets are not the same"
