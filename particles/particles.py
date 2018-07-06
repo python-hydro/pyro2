@@ -248,7 +248,7 @@ class Particles(object):
             # -x boundary
             if p.x < myg.xmin:
                 if xlb in ["outflow", "neumann"]:
-                    del self.particles[k]
+                    del(self.particles[k])
                     continue
                 elif xlb == "periodic":
                     p.x = myg.xmax + p.x - myg.xmin
@@ -260,7 +260,7 @@ class Particles(object):
             # +x boundary
             if p.x > myg.xmax:
                 if xrb in ["outflow", "neumann"]:
-                    del self.particles[k]
+                    del(self.particles[k])
                     continue
                 elif xrb == "periodic":
                     p.x = myg.xmin + p.x - myg.xmax
@@ -272,7 +272,7 @@ class Particles(object):
             # -y boundary
             if p.y < myg.ymin:
                 if ylb in ["outflow", "neumann"]:
-                    del self.particles[k]
+                    del(self.particles[k])
                     continue
                 elif ylb == "periodic":
                     p.y = myg.ymax + p.y - myg.ymin
@@ -284,7 +284,7 @@ class Particles(object):
             # +y boundary
             if p.y > myg.ymax:
                 if yrb in ["outflow", "neumann"]:
-                    del self.particles[k]
+                    del(self.particles[k])
                     continue
                 elif yrb == "periodic":
                     p.y = myg.ymin + p.y - myg.ymax
