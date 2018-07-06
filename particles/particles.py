@@ -42,6 +42,48 @@ class Particle(object):
         self.x += u * dt
         self.y += v * dt
 
+    def interpolate_velocity(self, myg, u, v):
+        """
+        Interpolate the x- and y-velocities defined on grid myg to the
+        particle's position.
+
+        Parameters
+        ----------
+        myg : Grid2d
+            grid which the velocities are defined on
+        u : ArrayIndexer
+            x-velocity
+        v : ArrayIndexer
+            y_velocity
+        """
+
+        # find what cell it lives in
+        x_idx = (self.x - myg.xmin) / myg.dx - 0.5
+        y_idx = (self.y - myg.ymin) / myg.dy - 0.5
+
+        x_frac = x_idx % 1
+        y_frac = y_idx % 1
+
+        # get the index of the particle's closest bottom left cell
+        # we'll add one as going to use buf'd grids -
+        # this will catch the cases where the particle is on the edges
+        # of the grid.
+        x_idx = int(x_idx) + 1
+        y_idx = int(y_idx) + 1
+
+        # interpolate velocity
+        u_vel = (1-x_frac)*(1-y_frac)*u.v(buf=1)[x_idx, y_idx] + \
+                x_frac*(1-y_frac)*u.v(buf=1)[x_idx+1, y_idx] + \
+                (1-x_frac)*y_frac*u.v(buf=1)[x_idx, y_idx+1] + \
+                x_frac*y_frac*u.v(buf=1)[x_idx+1, y_idx+1]
+
+        v_vel = (1-x_frac)*(1-y_frac)*v.v(buf=1)[x_idx, y_idx] + \
+                x_frac*(1-y_frac)*v.v(buf=1)[x_idx+1, y_idx] + \
+                (1-x_frac)*y_frac*v.v(buf=1)[x_idx, y_idx+1] + \
+                x_frac*y_frac*v.v(buf=1)[x_idx+1, y_idx+1]
+
+        return u_vel, v_vel
+
 
 class Particles(object):
     """
@@ -194,31 +236,20 @@ class Particles(object):
         elif v is None:
             v = self.sim_data.get_var("y-velocity")
 
-        for _, p in self.particles.items():
-            # find what cell it lives in
-            x_idx = (p.x - myg.xmin) / myg.dx - 0.5
-            y_idx = (p.y - myg.ymin) / myg.dy - 0.5
+        for k, p in self.particles.items():
 
-            x_frac = x_idx % 1
-            y_frac = y_idx % 1
+            # save old position and predict location at dt/2
+            initial_position = p.pos()
 
-            # get the index of the particle's closest bottom left cell
-            # we'll add one as going to use buf'd grids -
-            # this will catch the cases where the particle is on the edges
-            # of the grid.
-            x_idx = int(x_idx) + 1
-            y_idx = int(y_idx) + 1
+            u_vel, v_vel = p.interpolate_velocity(myg, u, v)
 
-            # interpolate velocity
-            u_vel = (1-x_frac)*(1-y_frac)*u.v(buf=1)[x_idx, y_idx] + \
-                    x_frac*(1-y_frac)*u.v(buf=1)[x_idx+1, y_idx] + \
-                    (1-x_frac)*y_frac*u.v(buf=1)[x_idx, y_idx+1] + \
-                    x_frac*y_frac*u.v(buf=1)[x_idx+1, y_idx+1]
+            p.update(u_vel, v_vel, 0.5*dt)
 
-            v_vel = (1-x_frac)*(1-y_frac)*v.v(buf=1)[x_idx, y_idx] + \
-                    x_frac*(1-y_frac)*v.v(buf=1)[x_idx+1, y_idx] + \
-                    (1-x_frac)*y_frac*v.v(buf=1)[x_idx, y_idx+1] + \
-                    x_frac*y_frac*v.v(buf=1)[x_idx+1, y_idx+1]
+            # find velocity at dt/2
+            u_vel, v_vel = p.interpolate_velocity(myg, u, v)
+
+            # update to final time using original position and vel at dt/2
+            p.x, p.y = initial_position
 
             p.update(u_vel, v_vel, dt)
 
@@ -234,6 +265,7 @@ class Particles(object):
         boundaries.
         """
         old_particles = self.particles.copy()
+        self.particles = dict()
 
         myg = self.sim_data.grid
 
@@ -248,7 +280,6 @@ class Particles(object):
             # -x boundary
             if p.x < myg.xmin:
                 if xlb in ["outflow", "neumann"]:
-                    del(self.particles[k])
                     continue
                 elif xlb == "periodic":
                     p.x = myg.xmax + p.x - myg.xmin
@@ -260,7 +291,6 @@ class Particles(object):
             # +x boundary
             if p.x > myg.xmax:
                 if xrb in ["outflow", "neumann"]:
-                    del(self.particles[k])
                     continue
                 elif xrb == "periodic":
                     p.x = myg.xmin + p.x - myg.xmax
@@ -272,7 +302,6 @@ class Particles(object):
             # -y boundary
             if p.y < myg.ymin:
                 if ylb in ["outflow", "neumann"]:
-                    del(self.particles[k])
                     continue
                 elif ylb == "periodic":
                     p.y = myg.ymax + p.y - myg.ymin
@@ -284,7 +313,6 @@ class Particles(object):
             # +y boundary
             if p.y > myg.ymax:
                 if yrb in ["outflow", "neumann"]:
-                    del(self.particles[k])
                     continue
                 elif yrb == "periodic":
                     p.y = myg.ymin + p.y - myg.ymax
@@ -292,6 +320,10 @@ class Particles(object):
                     p.y = 2 * myg.ymax - p.y
                 else:
                     msg.fail("ERROR: yrb = %s invalid BC for particles" % (yrb))
+
+            self.particles[k] = p
+
+        self.n_particles = len(self.particles)
 
     def get_positions(self):
         """

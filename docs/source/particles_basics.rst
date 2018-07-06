@@ -127,3 +127,10 @@ x-position, we can plot them on the figure axis ``ax`` using the following code:
 
       ax.set_xlim([myg.xmin, myg.xmax])
       ax.set_ylim([myg.ymin, myg.ymax])
+
+Applying this to the Kelvin-Helmholtz problem with the ``compressible`` solver,
+we can produce a plot such as the one below, where the particles have been
+plotted on top of the fluid density.
+
+.. image:: particles_kh_compressible.png
+   :align: center

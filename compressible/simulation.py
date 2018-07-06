@@ -143,9 +143,7 @@ class Simulation(NullSimulation):
         self.cc_data = my_data
 
         if self.rp.get_param("particles.do_particles") == 1:
-            n_particles = self.rp.get_param("particles.n_particles")
-            particle_generator = self.rp.get_param("particles.particle_generator")
-            self.particles = particles.Particles(self.cc_data, bc, n_particles, particle_generator)
+            self.particles = particles.Particles(self.cc_data, bc, self.rp)
 
         # some auxillary data that we'll need to fill GC in, but isn't
         # really part of the main solution
