@@ -10,6 +10,7 @@ import swe.unsplit_fluxes as flx
 import mesh.boundary as bnd
 from simulation_null import NullSimulation, grid_setup, bc_setup
 import util.plot_tools as plot_tools
+import particles.particles as particles
 
 
 class Variables(object):
@@ -129,6 +130,11 @@ class Simulation(NullSimulation):
 
         self.cc_data = my_data
 
+        if self.rp.get_param("particles.do_particles") == 1:
+            n_particles = self.rp.get_param("particles.n_particles")
+            particle_generator = self.rp.get_param("particles.particle_generator")
+            self.particles = particles.Particles(self.cc_data, bc, n_particles, particle_generator)
+
         # some auxillary data that we'll need to fill GC in, but isn't
         # really part of the main solution
         aux_data = self.data_class(my_grid)
@@ -194,6 +200,9 @@ class Simulation(NullSimulation):
             var.v()[:, :] += \
                 dtdx*(Flux_x.v(n=n) - Flux_x.ip(1, n=n)) + \
                 dtdy*(Flux_y.v(n=n) - Flux_y.jp(1, n=n))
+
+        if self.particles is not None:
+            self.particles.update_particles(self.dt)
 
         # increment the time
         self.cc_data.t += self.dt
@@ -261,6 +270,18 @@ class Simulation(NullSimulation):
                 cb.ax.set_title(field_names[n])
             else:
                 ax.set_title(field_names[n])
+
+        if self.particles is not None:
+            ax = axes[0]
+            particle_positions = self.particles.get_positions()
+            # dye particles
+            colors = self.particles.get_init_positions()[:, 0]
+
+            # plot particles
+            ax.scatter(particle_positions[:, 0],
+                particle_positions[:, 1], s=5, c=colors, alpha=0.8, cmap="Greys")
+            ax.set_xlim([myg.xmin, myg.xmax])
+            ax.set_ylim([myg.ymin, myg.ymax])
 
         plt.figtext(0.05, 0.0125, "t = {:10.5g}".format(self.cc_data.t))
 
