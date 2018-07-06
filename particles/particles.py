@@ -74,6 +74,8 @@ class Particles(object):
             String with generator name of custom particle generator function
         pos_array : float array
             Array of particle positions to use with particle initialization
+        init_array : float array
+            Array of initial particle positions required for plotting from file.
         """
 
         self.sim_data = sim_data
@@ -172,16 +174,16 @@ class Particles(object):
         method to advance particles using the cell-centered velocity.
 
         We will explicitly pass in u and v if they cannot be accessed from the
-        sim_data in the usual way.
+        sim_data using get_var("velocity").
 
         Parameters
         ----------
+        dt : float
+            timestep
         u : ArrayIndexer object
             x-velocity
         v : ArrayIndexer object
             y-velocity
-        dt : float
-            timestep
         """
         myg = self.sim_data.grid
 
@@ -200,8 +202,8 @@ class Particles(object):
             x_frac = x_idx % 1
             y_frac = y_idx % 1
 
-            # get the index of the bottom left cell
-            # we'll add one as going to use buf'd quantities -
+            # get the index of the particle's closest bottom left cell
+            # we'll add one as going to use buf'd grids -
             # this will catch the cases where the particle is on the edges
             # of the grid.
             x_idx = int(x_idx) + 1
@@ -227,10 +229,11 @@ class Particles(object):
         Enforce the particle boundaries
 
         TODO: copying the dict and adding everything back again is messy
-        - think of a better way to do this?
+        - think of a better way to do this? Did it this way so don't have
+        to remove items from a dictionary while iterating it for outflow
+        boundaries.
         """
         old_particles = self.particles.copy()
-        self.particles = dict()
 
         myg = self.sim_data.grid
 
@@ -245,10 +248,11 @@ class Particles(object):
             # -x boundary
             if p.x < myg.xmin:
                 if xlb in ["outflow", "neumann"]:
+                    del self.particles[k]
                     continue
                 elif xlb == "periodic":
                     p.x = myg.xmax + p.x - myg.xmin
-                elif xlb in ["reflect-even", "reflect-odd"]:
+                elif xlb in ["reflect-even", "reflect-odd", "dirichlet"]:
                     p.x = 2 * myg.xmin - p.x
                 else:
                     msg.fail("ERROR: xlb = %s invalid BC for particles" % (xlb))
@@ -256,10 +260,11 @@ class Particles(object):
             # +x boundary
             if p.x > myg.xmax:
                 if xrb in ["outflow", "neumann"]:
+                    del self.particles[k]
                     continue
                 elif xrb == "periodic":
                     p.x = myg.xmin + p.x - myg.xmax
-                elif xrb in ["reflect-even", "reflect-odd"]:
+                elif xrb in ["reflect-even", "reflect-odd", "dirichlet"]:
                     p.x = 2 * myg.xmax - p.x
                 else:
                     msg.fail("ERROR: xrb = %s invalid BC for particles" % (xrb))
@@ -267,10 +272,11 @@ class Particles(object):
             # -y boundary
             if p.y < myg.ymin:
                 if ylb in ["outflow", "neumann"]:
+                    del self.particles[k]
                     continue
                 elif ylb == "periodic":
                     p.y = myg.ymax + p.y - myg.ymin
-                elif ylb in ["reflect-even", "reflect-odd"]:
+                elif ylb in ["reflect-even", "reflect-odd", "dirichlet"]:
                     p.y = 2 * myg.ymin - p.y
                 else:
                     msg.fail("ERROR: ylb = %s invalid BC for particles" % (ylb))
@@ -278,17 +284,14 @@ class Particles(object):
             # +y boundary
             if p.y > myg.ymax:
                 if yrb in ["outflow", "neumann"]:
+                    del self.particles[k]
                     continue
                 elif yrb == "periodic":
                     p.y = myg.ymin + p.y - myg.ymax
-                elif yrb in ["reflect-even", "reflect-odd"]:
+                elif yrb in ["reflect-even", "reflect-odd", "dirichlet"]:
                     p.y = 2 * myg.ymax - p.y
                 else:
                     msg.fail("ERROR: yrb = %s invalid BC for particles" % (yrb))
-
-            self.particles[k] = p
-
-        self.n_particles = len(self.particles)
 
     def get_positions(self):
         """
@@ -307,7 +310,7 @@ class Particles(object):
 
     def write_particles(self, f):
         """
-        Output the particles' positions to an HDF5 file.
+        Output the particles' positions (and initial positions) to an HDF5 file.
 
         Parameters
         ----------
