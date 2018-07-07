@@ -95,6 +95,9 @@ class Simulation(compressible_fv4.Simulation):
         # store the new solution
         self.cc_data.data[:, :, :] = U_knew[-1].data[:, :, :]
 
+        if self.particles is not None:
+            self.particles.update_particles(self.dt)
+
         # increment the time
         myd.t += self.dt
         self.n += 1

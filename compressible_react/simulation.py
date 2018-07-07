@@ -49,8 +49,14 @@ class Simulation(compressible.Simulation):
 
         self.diffuse(self.dt/2)
 
+        if self.particles is not None:
+            self.particles.update_particles(self.dt/2)
+
         # note: this will do the time increment and n increment
         super().evolve()
+
+        if self.particles is not None:
+            self.particles.update_particles(self.dt/2)
 
         self.diffuse(self.dt/2)
 

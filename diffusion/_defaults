@@ -5,7 +5,3 @@ cfl       = 0.8           ; diffusion CFL number
 
 [diffusion]
 k = 1.0      ; conductivity
-
-
-
-

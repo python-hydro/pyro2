@@ -117,6 +117,7 @@ class NullSimulation(object):
 
         self.rp = rp
         self.cc_data = None
+        self.particles = None
 
         self.SMALL = 1.e-12
 
@@ -235,6 +236,8 @@ class NullSimulation(object):
             f.attrs["nsteps"] = self.n
 
             self.cc_data.write_data(f)
+            if self.particles is not None:
+                self.particles.write_particles(f)
             self.rp.write_params(f)
             self.write_extras(f)
 

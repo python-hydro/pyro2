@@ -72,6 +72,15 @@ class Simulation(advection.Simulation):
 
         rk.compute_final_update()
 
+        if self.particles is not None:
+            myg = self.cc_data.grid
+            u = self.rp.get_param("advection.u")
+            v = self.rp.get_param("advection.v")
+
+            u2d = myg.scratch_array() + u
+            v2d = myg.scratch_array() + v
+
+            self.particles.update_particles(self.dt, u2d, v2d)
         # increment the time
         myd.t += self.dt
         self.n += 1

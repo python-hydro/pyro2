@@ -19,6 +19,7 @@ class TestSimulation(object):
 
         self.rp.params["mesh.nx"] = 8
         self.rp.params["mesh.ny"] = 8
+        self.rp.params["particles.do_particles"] = 0
 
         self.rp.params["eos.gamma"] = 1.4
         self.rp.params["compressible.grav"] = 1.0

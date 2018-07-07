@@ -9,5 +9,6 @@ v = 1.0      ; advective velocity in y-direction
 limiter = 2  ; limiter (0 = none, 1 = 2nd order, 2 = 4th order)
 
 
-
-
+[particles]
+do_particles = 0
+particle_generator = grid
