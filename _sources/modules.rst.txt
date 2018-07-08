@@ -14,14 +14,18 @@ pyro2
    compressible_react
    compressible_rk
    compressible_sdc
+   convergence
    diffusion
    examples
    incompressible
    lm_atm
    mesh
    multigrid
+   particles
    plot
+   plotvar
    pyro
+   setup
    simulation_null
    swe
    test

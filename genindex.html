@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; pyro 2.1 documentation</title>
+  <title>Index &mdash; pyro 2.2 documentation</title>
   
 
   
@@ -38,7 +38,7 @@
         <link rel="index" title="Index"
               href="#"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyro 2.1 documentation" href="index.html"/> 
+    <link rel="top" title="pyro 2.2 documentation" href="index.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                2.1
+                2.2
               </div>
             
           
@@ -113,6 +113,7 @@
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solvers</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Utilities</span></p>
@@ -278,6 +279,8 @@
         <li><a href="examples.multigrid.html#examples.multigrid.mg_test_vc_periodic.alpha">(in module examples.multigrid.mg_test_vc_periodic)</a>
 </li>
       </ul></li>
+      <li><a href="particles.html#particles.particles.Particles.array_generate_particles">array_generate_particles() (particles.particles.Particles method)</a>
+</li>
       <li><a href="mesh.html#mesh.array_indexer.ArrayIndexer">ArrayIndexer (class in mesh.array_indexer)</a>
 </li>
   </ul></td>
@@ -335,7 +338,11 @@
       <li><a href="compare.html#module-compare">compare (module)</a>
 </li>
       <li><a href="compare.html#compare.compare">compare() (in module compare)</a>
+
+      <ul>
+        <li><a href="convergence.html#convergence.compare">(in module convergence)</a>
 </li>
+      </ul></li>
       <li><a href="compressible.html#module-compressible">compressible (module)</a>
 </li>
       <li><a href="compressible.html#module-compressible.BC">compressible.BC (module)</a>
@@ -356,18 +363,24 @@
 </li>
       <li><a href="compressible.problems.html#module-compressible.problems.kh">compressible.problems.kh (module)</a>
 </li>
+      <li><a href="compressible.problems.html#module-compressible.problems.logo">compressible.problems.logo (module)</a>
+</li>
       <li><a href="compressible.problems.html#module-compressible.problems.quad">compressible.problems.quad (module)</a>
 </li>
+      <li><a href="compressible.problems.html#module-compressible.problems.ramp">compressible.problems.ramp (module)</a>
+</li>
       <li><a href="compressible.problems.html#module-compressible.problems.rt">compressible.problems.rt (module)</a>
+</li>
+      <li><a href="compressible.problems.html#module-compressible.problems.rt2">compressible.problems.rt2 (module)</a>
 </li>
       <li><a href="compressible.problems.html#module-compressible.problems.sedov">compressible.problems.sedov (module)</a>
 </li>
       <li><a href="compressible.problems.html#module-compressible.problems.sod">compressible.problems.sod (module)</a>
 </li>
-      <li><a href="compressible.problems.html#module-compressible.problems.test">compressible.problems.test (module)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="compressible.problems.html#module-compressible.problems.test">compressible.problems.test (module)</a>
+</li>
       <li><a href="compressible.html#module-compressible.simulation">compressible.simulation (module)</a>
 </li>
       <li><a href="compressible.html#module-compressible.unsplit_fluxes">compressible.unsplit_fluxes (module)</a>
@@ -412,6 +425,8 @@
         <li><a href="swe.html#swe.simulation.cons_to_prim">(in module swe.simulation)</a>
 </li>
       </ul></li>
+      <li><a href="convergence.html#module-convergence">convergence (module)</a>
+</li>
       <li><a href="mesh.html#mesh.array_indexer.ArrayIndexer.copy">copy() (mesh.array_indexer.ArrayIndexer method)</a>
 </li>
       <li><a href="mesh.html#mesh.patch.CellCenterData2d.create">create() (mesh.patch.CellCenterData2d method)</a>
@@ -489,6 +504,8 @@
       <li><a href="multigrid.html#multigrid.edge_coeffs.EdgeCoeffs">EdgeCoeffs (class in multigrid.edge_coeffs)</a>
 </li>
       <li><a href="util.html#util.profile.Timer.end">end() (util.profile.Timer method)</a>
+</li>
+      <li><a href="particles.html#particles.particles.Particles.enforce_particle_boundaries">enforce_particle_boundaries() (particles.particles.Particles method)</a>
 </li>
       <li><a href="advection.html#advection.simulation.Simulation.evolve">evolve() (advection.simulation.Simulation method)</a>
 
@@ -603,9 +620,15 @@
 </li>
         <li><a href="compressible.problems.html#compressible.problems.kh.finalize">(in module compressible.problems.kh)</a>
 </li>
+        <li><a href="compressible.problems.html#compressible.problems.logo.finalize">(in module compressible.problems.logo)</a>
+</li>
         <li><a href="compressible.problems.html#compressible.problems.quad.finalize">(in module compressible.problems.quad)</a>
 </li>
+        <li><a href="compressible.problems.html#compressible.problems.ramp.finalize">(in module compressible.problems.ramp)</a>
+</li>
         <li><a href="compressible.problems.html#compressible.problems.rt.finalize">(in module compressible.problems.rt)</a>
+</li>
+        <li><a href="compressible.problems.html#compressible.problems.rt2.finalize">(in module compressible.problems.rt2)</a>
 </li>
         <li><a href="compressible.problems.html#compressible.problems.sedov.finalize">(in module compressible.problems.sedov)</a>
 </li>
@@ -636,6 +659,8 @@
         <li><a href="swe.problems.html#swe.problems.dam.finalize">(in module swe.problems.dam)</a>
 </li>
         <li><a href="swe.problems.html#swe.problems.kh.finalize">(in module swe.problems.kh)</a>
+</li>
+        <li><a href="swe.problems.html#swe.problems.logo.finalize">(in module swe.problems.logo)</a>
 </li>
         <li><a href="swe.problems.html#swe.problems.quad.finalize">(in module swe.problems.quad)</a>
 </li>
@@ -707,12 +732,20 @@
       <li><a href="multigrid.html#multigrid.general_MG.GeneralMG2d">GeneralMG2d (class in multigrid.general_MG)</a>
 </li>
       <li><a href="plot.html#plot.get_args">get_args() (in module plot)</a>
+
+      <ul>
+        <li><a href="plotvar.html#plotvar.get_args">(in module plotvar)</a>
+</li>
+      </ul></li>
+      <li><a href="mesh.html#mesh.patch.CellCenterData2d.get_aux">get_aux() (mesh.patch.CellCenterData2d method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="mesh.html#mesh.patch.CellCenterData2d.get_aux">get_aux() (mesh.patch.CellCenterData2d method)</a>
+      <li><a href="particles.html#particles.particles.Particles.get_init_positions">get_init_positions() (particles.particles.Particles method)</a>
 </li>
       <li><a href="util.html#util.runparams.RuntimeParameters.get_param">get_param() (util.runparams.RuntimeParameters method)</a>
+</li>
+      <li><a href="particles.html#particles.particles.Particles.get_positions">get_positions() (particles.particles.Particles method)</a>
 </li>
       <li><a href="multigrid.html#multigrid.MG.CellCenterMG2d.get_solution">get_solution() (multigrid.MG.CellCenterMG2d method)</a>
 </li>
@@ -729,6 +762,8 @@
       <li><a href="mesh.html#mesh.patch.CellCenterData2d.get_vars">get_vars() (mesh.patch.CellCenterData2d method)</a>
 </li>
       <li><a href="mesh.html#mesh.patch.Grid2d">Grid2d (class in mesh.patch)</a>
+</li>
+      <li><a href="particles.html#particles.particles.Particles.grid_generate_particles">grid_generate_particles() (particles.particles.Particles method)</a>
 </li>
       <li><a href="multigrid.html#multigrid.MG.CellCenterMG2d.grid_info">grid_info() (multigrid.MG.CellCenterMG2d method)</a>
 </li>
@@ -773,9 +808,15 @@
 </li>
         <li><a href="compressible.problems.html#compressible.problems.kh.init_data">(in module compressible.problems.kh)</a>
 </li>
+        <li><a href="compressible.problems.html#compressible.problems.logo.init_data">(in module compressible.problems.logo)</a>
+</li>
         <li><a href="compressible.problems.html#compressible.problems.quad.init_data">(in module compressible.problems.quad)</a>
 </li>
+        <li><a href="compressible.problems.html#compressible.problems.ramp.init_data">(in module compressible.problems.ramp)</a>
+</li>
         <li><a href="compressible.problems.html#compressible.problems.rt.init_data">(in module compressible.problems.rt)</a>
+</li>
+        <li><a href="compressible.problems.html#compressible.problems.rt2.init_data">(in module compressible.problems.rt2)</a>
 </li>
         <li><a href="compressible.problems.html#compressible.problems.sedov.init_data">(in module compressible.problems.sedov)</a>
 </li>
@@ -806,6 +847,8 @@
         <li><a href="swe.problems.html#swe.problems.dam.init_data">(in module swe.problems.dam)</a>
 </li>
         <li><a href="swe.problems.html#swe.problems.kh.init_data">(in module swe.problems.kh)</a>
+</li>
+        <li><a href="swe.problems.html#swe.problems.logo.init_data">(in module swe.problems.logo)</a>
 </li>
         <li><a href="swe.problems.html#swe.problems.quad.init_data">(in module swe.problems.quad)</a>
 </li>
@@ -842,6 +885,8 @@
         <li><a href="swe.html#swe.simulation.Simulation.initialize">(swe.simulation.Simulation method)</a>
 </li>
       </ul></li>
+      <li><a href="particles.html#particles.particles.Particle.interpolate_velocity">interpolate_velocity() (particles.particles.Particle method)</a>
+</li>
       <li><a href="mesh.html#mesh.array_indexer.ArrayIndexer.ip">ip() (mesh.array_indexer.ArrayIndexer method)</a>
 </li>
       <li><a href="mesh.html#mesh.array_indexer.ArrayIndexer.ip_jp">ip_jp() (mesh.array_indexer.ArrayIndexer method)</a>
@@ -901,7 +946,11 @@
       <li><a href="lm_atm.html#lm_atm.simulation.Simulation.make_prime">make_prime() (lm_atm.simulation.Simulation method)</a>
 </li>
       <li><a href="plot.html#plot.makeplot">makeplot() (in module plot)</a>
+
+      <ul>
+        <li><a href="plotvar.html#plotvar.makeplot">(in module plotvar)</a>
 </li>
+      </ul></li>
       <li><a href="mesh.html#mesh.patch.CellCenterData2d.max">max() (mesh.patch.CellCenterData2d method)</a>
 </li>
       <li><a href="mesh.html#module-mesh">mesh (module)</a>
@@ -982,9 +1031,21 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyro.html#pyro.parse_and_run">parse_and_run() (in module pyro)</a>
 </li>
+      <li><a href="particles.html#particles.particles.Particle">Particle (class in particles.particles)</a>
+</li>
+      <li><a href="particles.html#particles.particles.Particles">Particles (class in particles.particles)</a>
+</li>
+      <li><a href="particles.html#module-particles">particles (module)</a>
+</li>
+      <li><a href="particles.html#module-particles.particles">particles.particles (module)</a>
+</li>
       <li><a href="diffusion.problems.html#diffusion.problems.gaussian.phi_analytic">phi_analytic() (in module diffusion.problems.gaussian)</a>
 </li>
       <li><a href="plot.html#module-plot">plot (module)</a>
+</li>
+      <li><a href="plotvar.html#module-plotvar">plotvar (module)</a>
+</li>
+      <li><a href="particles.html#particles.particles.Particle.pos">pos() (particles.particles.Particle method)</a>
 </li>
       <li><a href="compressible_fv4.html#compressible_fv4.simulation.Simulation.preevolve">preevolve() (compressible_fv4.simulation.Simulation method)</a>
 
@@ -996,6 +1057,8 @@
         <li><a href="simulation_null.html#simulation_null.NullSimulation.preevolve">(simulation_null.NullSimulation method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="compressible.html#compressible.eos.pres">pres() (in module compressible.eos)</a>
 </li>
       <li><a href="mesh.html#mesh.array_indexer.ArrayIndexer.pretty_print">pretty_print() (mesh.array_indexer.ArrayIndexer method)</a>
@@ -1004,8 +1067,6 @@
         <li><a href="mesh.html#mesh.patch.CellCenterData2d.pretty_print">(mesh.patch.CellCenterData2d method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="compressible.html#compressible.simulation.prim_to_cons">prim_to_cons() (in module compressible.simulation)</a>
 
       <ul>
@@ -1030,6 +1091,8 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="particles.html#particles.particles.Particles.randomly_generate_particles">randomly_generate_particles() (particles.particles.Particles method)</a>
+</li>
       <li><a href="util.html#util.io.read">read() (in module util.io)</a>
 </li>
       <li><a href="util.html#util.io.read_bcs">read_bcs() (in module util.io)</a>
@@ -1146,6 +1209,8 @@
 </li>
       <li><a href="swe.problems.html#module-swe.problems.kh">swe.problems.kh (module)</a>
 </li>
+      <li><a href="swe.problems.html#module-swe.problems.logo">swe.problems.logo (module)</a>
+</li>
       <li><a href="swe.problems.html#module-swe.problems.quad">swe.problems.quad (module)</a>
 </li>
       <li><a href="swe.problems.html#module-swe.problems.test">swe.problems.test (module)</a>
@@ -1228,12 +1293,16 @@
         <li><a href="swe.html#swe.unsplit_fluxes.unsplit_fluxes">(in module swe.unsplit_fluxes)</a>
 </li>
       </ul></li>
-      <li><a href="compressible.html#compressible.BC.user">user() (in module compressible.BC)</a>
+      <li><a href="particles.html#particles.particles.Particle.update">update() (particles.particles.Particle method)</a>
 </li>
-      <li><a href="util.html#module-util">util (module)</a>
+      <li><a href="particles.html#particles.particles.Particles.update_particles">update_particles() (particles.particles.Particles method)</a>
+</li>
+      <li><a href="compressible.html#compressible.BC.user">user() (in module compressible.BC)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="util.html#module-util">util (module)</a>
+</li>
       <li><a href="util.html#module-util.io">util.io (module)</a>
 </li>
       <li><a href="util.html#module-util.msg">util.msg (module)</a>
@@ -1272,6 +1341,8 @@
         <li><a href="swe.html#swe.simulation.Variables">(class in swe.simulation)</a>
 </li>
       </ul></li>
+      <li><a href="particles.html#particles.particles.Particle.velocity">velocity() (particles.particles.Particle method)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -1305,6 +1376,8 @@
 </li>
       </ul></li>
       <li><a href="util.html#util.runparams.RuntimeParameters.write_params">write_params() (util.runparams.RuntimeParameters method)</a>
+</li>
+      <li><a href="particles.html#particles.particles.Particles.write_particles">write_particles() (particles.particles.Particles method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1369,7 +1442,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'2.1',
+            VERSION:'2.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

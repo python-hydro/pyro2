@@ -1,5 +1,5 @@
 swe package
-====================
+===========
 
 .. automodule:: swe
     :members:
@@ -17,7 +17,7 @@ Submodules
 ----------
 
 swe\.derives module
-----------------------------
+-------------------
 
 .. automodule:: swe.derives
     :members:
@@ -25,7 +25,7 @@ swe\.derives module
     :show-inheritance:
 
 swe\.simulation module
--------------------------------
+----------------------
 
 .. automodule:: swe.simulation
     :members:
@@ -33,9 +33,11 @@ swe\.simulation module
     :show-inheritance:
 
 swe\.unsplit\_fluxes module
-------------------------------------
+---------------------------
 
 .. automodule:: swe.unsplit_fluxes
     :members:
     :undoc-members:
     :show-inheritance:
+
+

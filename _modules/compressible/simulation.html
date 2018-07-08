@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>compressible.simulation &mdash; pyro 2.1 documentation</title>
+  <title>compressible.simulation &mdash; pyro 2.2 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="pyro 2.1 documentation" href="../../index.html"/>
+    <link rel="top" title="pyro 2.2 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                2.1
+                2.2
               </div>
             
           
@@ -113,6 +113,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../particles_basics.html">Particles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../swe_basics.html">Shallow water solvers</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Utilities</span></p>
@@ -206,6 +207,7 @@
 <span class="kn">import</span> <span class="nn">mesh.boundary</span> <span class="k">as</span> <span class="nn">bnd</span>
 <span class="kn">from</span> <span class="nn">simulation_null</span> <span class="k">import</span> <span class="n">NullSimulation</span><span class="p">,</span> <span class="n">grid_setup</span><span class="p">,</span> <span class="n">bc_setup</span>
 <span class="kn">import</span> <span class="nn">util.plot_tools</span> <span class="k">as</span> <span class="nn">plot_tools</span>
+<span class="kn">import</span> <span class="nn">particles.particles</span> <span class="k">as</span> <span class="nn">particles</span>
 
 
 <div class="viewcode-block" id="Variables"><a class="viewcode-back" href="../../compressible.html#compressible.simulation.Variables">[docs]</a><span class="k">class</span> <span class="nc">Variables</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -335,6 +337,9 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span> <span class="o">=</span> <span class="n">my_data</span>
 
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;particles.do_particles&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="n">particles</span><span class="o">.</span><span class="n">Particles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="p">,</span> <span class="n">bc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">)</span>
+
         <span class="c1"># some auxillary data that we&#39;ll need to fill GC in, but isn&#39;t</span>
         <span class="c1"># really part of the main solution</span>
         <span class="n">aux_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_class</span><span class="p">(</span><span class="n">my_grid</span><span class="p">)</span>
@@ -415,6 +420,9 @@
         <span class="n">ymom</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="p">(</span><span class="n">dens</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">old_dens</span><span class="p">[:,</span> <span class="p">:])</span><span class="o">*</span><span class="n">grav</span>
         <span class="n">ener</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="p">(</span><span class="n">ymom</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">old_ymom</span><span class="p">[:,</span> <span class="p">:])</span><span class="o">*</span><span class="n">grav</span>
 
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">update_particles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
+
         <span class="c1"># increment the time</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">t</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -476,6 +484,18 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">field_names</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
 
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">particle_positions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">get_positions</span><span class="p">()</span>
+            <span class="c1"># dye particles</span>
+            <span class="n">colors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">get_init_positions</span><span class="p">()[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+            <span class="c1"># plot particles</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">particle_positions</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
+                <span class="n">particle_positions</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Greys&quot;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="n">myg</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">xmax</span><span class="p">])</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="n">myg</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymax</span><span class="p">])</span>
+
         <span class="n">plt</span><span class="o">.</span><span class="n">figtext</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.0125</span><span class="p">,</span> <span class="s2">&quot;t = </span><span class="si">{:10.5g}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">t</span><span class="p">))</span>
 
         <span class="n">plt</span><span class="o">.</span><span class="n">pause</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
@@ -527,7 +547,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'2.1',
+            VERSION:'2.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

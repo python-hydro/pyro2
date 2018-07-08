@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>advection.simulation &mdash; pyro 2.1 documentation</title>
+  <title>advection.simulation &mdash; pyro 2.2 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="pyro 2.1 documentation" href="../../index.html"/>
+    <link rel="top" title="pyro 2.2 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                2.1
+                2.2
               </div>
             
           
@@ -113,6 +113,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../particles_basics.html">Particles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../swe_basics.html">Shallow water solvers</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Utilities</span></p>
@@ -199,6 +200,8 @@
 <span class="kn">import</span> <span class="nn">advection.advective_fluxes</span> <span class="k">as</span> <span class="nn">flx</span>
 <span class="kn">import</span> <span class="nn">mesh.patch</span> <span class="k">as</span> <span class="nn">patch</span>
 <span class="kn">from</span> <span class="nn">simulation_null</span> <span class="k">import</span> <span class="n">NullSimulation</span><span class="p">,</span> <span class="n">grid_setup</span><span class="p">,</span> <span class="n">bc_setup</span>
+<span class="kn">import</span> <span class="nn">particles.particles</span> <span class="k">as</span> <span class="nn">particles</span>
+<span class="kn">import</span> <span class="nn">util.plot_tools</span> <span class="k">as</span> <span class="nn">plot_tools</span>
 
 
 <div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../advection.html#advection.simulation.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="n">NullSimulation</span><span class="p">):</span>
@@ -218,6 +221,11 @@
         <span class="n">my_data</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span> <span class="o">=</span> <span class="n">my_data</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;particles.do_particles&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">n_particles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;particles.n_particles&quot;</span><span class="p">)</span>
+            <span class="n">particle_generator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;particles.particle_generator&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="n">particles</span><span class="o">.</span><span class="n">Particles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="p">,</span> <span class="n">bc</span><span class="p">,</span> <span class="n">n_particles</span><span class="p">,</span> <span class="n">particle_generator</span><span class="p">)</span>
 
         <span class="c1"># now set the initial conditions for the problem</span>
         <span class="n">problem</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;advection.problems.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem_name</span><span class="p">))</span>
@@ -267,6 +275,16 @@
         <span class="n">dens</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">dens</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="n">dtdx</span><span class="o">*</span><span class="p">(</span><span class="n">flux_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="n">flux_x</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="o">+</span> \
                                     <span class="n">dtdy</span><span class="o">*</span><span class="p">(</span><span class="n">flux_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="n">flux_y</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
 
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">grid</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;advection.u&quot;</span><span class="p">)</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;advection.v&quot;</span><span class="p">)</span>
+
+            <span class="n">u2d</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span> <span class="o">+</span> <span class="n">u</span>
+            <span class="n">v2d</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span> <span class="o">+</span> <span class="n">v</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">update_particles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span> <span class="n">u2d</span><span class="p">,</span> <span class="n">v2d</span><span class="p">)</span>
+
         <span class="c1"># increment the time</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">t</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span></div>
@@ -281,16 +299,36 @@
 
         <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">grid</span>
 
-        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">dens</span><span class="o">.</span><span class="n">v</span><span class="p">()),</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">axes</span><span class="p">,</span> <span class="n">cbar_title</span> <span class="o">=</span> <span class="n">plot_tools</span><span class="o">.</span><span class="n">setup_axes</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># plot density</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">dens</span><span class="o">.</span><span class="n">v</span><span class="p">()),</span>
                    <span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;lower&quot;</span><span class="p">,</span>
                    <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymax</span><span class="p">],</span>
                    <span class="n">cmap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cm</span><span class="p">)</span>
 
-        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+
+        <span class="c1"># needed for PDF rendering</span>
+        <span class="n">cb</span> <span class="o">=</span> <span class="n">axes</span><span class="o">.</span><span class="n">cbar_axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+        <span class="n">cb</span><span class="o">.</span><span class="n">solids</span><span class="o">.</span><span class="n">set_rasterized</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">cb</span><span class="o">.</span><span class="n">solids</span><span class="o">.</span><span class="n">set_edgecolor</span><span class="p">(</span><span class="s2">&quot;face&quot;</span><span class="p">)</span>
+
         <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
 
-        <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">particle_positions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">get_positions</span><span class="p">()</span>
+
+            <span class="c1"># dye particles</span>
+            <span class="n">colors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">get_init_positions</span><span class="p">()[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+            <span class="c1"># plot particles</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">particle_positions</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
+                <span class="n">particle_positions</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Greys&quot;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="n">myg</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">xmax</span><span class="p">])</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="n">myg</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymax</span><span class="p">])</span>
 
         <span class="n">plt</span><span class="o">.</span><span class="n">figtext</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.0125</span><span class="p">,</span> <span class="s2">&quot;t = </span><span class="si">{:10.5f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">t</span><span class="p">))</span>
 
@@ -332,7 +370,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'2.1',
+            VERSION:'2.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

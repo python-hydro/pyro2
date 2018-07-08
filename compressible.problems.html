@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>compressible.problems package &mdash; pyro 2.1 documentation</title>
+  <title>compressible.problems package &mdash; pyro 2.2 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyro 2.1 documentation" href="index.html"/>
+    <link rel="top" title="pyro 2.2 documentation" href="index.html"/>
         <link rel="up" title="compressible package" href="compressible.html"/>
         <link rel="next" title="compressible_fv4 package" href="compressible_fv4.html"/>
         <link rel="prev" title="compressible package" href="compressible.html"/> 
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                2.1
+                2.2
               </div>
             
           
@@ -115,6 +115,7 @@
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solvers</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Utilities</span></p>
@@ -144,7 +145,6 @@
 <li class="toctree-l3"><a class="reference internal" href="compressible.html#module-compressible.BC">compressible.BC module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="compressible.html#module-compressible.derives">compressible.derives module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="compressible.html#module-compressible.eos">compressible.eos module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="compressible.html#compressible-setup-module">compressible.setup module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="compressible.html#module-compressible.simulation">compressible.simulation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="compressible.html#module-compressible.unsplit_fluxes">compressible.unsplit_fluxes module</a></li>
 </ul>
@@ -153,14 +153,18 @@
 <li class="toctree-l2"><a class="reference internal" href="compressible_react.html">compressible_react package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible_rk.html">compressible_rk package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible_sdc.html">compressible_sdc package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="convergence.html">convergence module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="diffusion.html">diffusion package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html">examples package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="incompressible.html">incompressible package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lm_atm.html">lm_atm package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mesh.html">mesh package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="multigrid.html">multigrid package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="particles.html">particles package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot.html">plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotvar.html">plotvar module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyro.html">pyro module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulation_null.html">simulation_null module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="swe.html">swe package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="test.html">test module</a></li>
@@ -349,6 +353,21 @@ McCourquodale &amp; Coella 2011</p>
 </dd></dl>
 
 </div>
+<div class="section" id="module-compressible.problems.logo">
+<span id="compressible-problems-logo-module"></span><h2>compressible.problems.logo module<a class="headerlink" href="#module-compressible.problems.logo" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="compressible.problems.logo.finalize">
+<code class="descclassname">compressible.problems.logo.</code><code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/logo.html#finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.logo.finalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>print out any information to the user at the end of the run</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compressible.problems.logo.init_data">
+<code class="descclassname">compressible.problems.logo.</code><code class="descname">init_data</code><span class="sig-paren">(</span><em>my_data</em>, <em>rp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/logo.html#init_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.logo.init_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize the logo problem</p>
+</dd></dl>
+
+</div>
 <div class="section" id="module-compressible.problems.quad">
 <span id="compressible-problems-quad-module"></span><h2>compressible.problems.quad module<a class="headerlink" href="#module-compressible.problems.quad" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
@@ -364,6 +383,21 @@ McCourquodale &amp; Coella 2011</p>
 </dd></dl>
 
 </div>
+<div class="section" id="module-compressible.problems.ramp">
+<span id="compressible-problems-ramp-module"></span><h2>compressible.problems.ramp module<a class="headerlink" href="#module-compressible.problems.ramp" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="compressible.problems.ramp.finalize">
+<code class="descclassname">compressible.problems.ramp.</code><code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/ramp.html#finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.ramp.finalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>print out any information to the user at the end of the run</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compressible.problems.ramp.init_data">
+<code class="descclassname">compressible.problems.ramp.</code><code class="descname">init_data</code><span class="sig-paren">(</span><em>my_data</em>, <em>rp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/ramp.html#init_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.ramp.init_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize the double Mach reflection problem</p>
+</dd></dl>
+
+</div>
 <div class="section" id="module-compressible.problems.rt">
 <span id="compressible-problems-rt-module"></span><h2>compressible.problems.rt module<a class="headerlink" href="#module-compressible.problems.rt" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
@@ -375,6 +409,24 @@ McCourquodale &amp; Coella 2011</p>
 <dl class="function">
 <dt id="compressible.problems.rt.init_data">
 <code class="descclassname">compressible.problems.rt.</code><code class="descname">init_data</code><span class="sig-paren">(</span><em>my_data</em>, <em>rp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/rt.html#init_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.rt.init_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize the rt problem</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compressible.problems.rt2">
+<span id="compressible-problems-rt2-module"></span><h2>compressible.problems.rt2 module<a class="headerlink" href="#module-compressible.problems.rt2" title="Permalink to this headline">¶</a></h2>
+<p>A RT problem with two distinct modes: short wave length on the
+left and long wavelenght on the right.  This allows one to see
+how the growth rate depends on wavenumber.</p>
+<dl class="function">
+<dt id="compressible.problems.rt2.finalize">
+<code class="descclassname">compressible.problems.rt2.</code><code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/rt2.html#finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.rt2.finalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>print out any information to the user at the end of the run</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compressible.problems.rt2.init_data">
+<code class="descclassname">compressible.problems.rt2.</code><code class="descname">init_data</code><span class="sig-paren">(</span><em>my_data</em>, <em>rp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/rt2.html#init_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.rt2.init_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>initialize the rt problem</p>
 </dd></dl>
 
@@ -470,7 +522,7 @@ McCourquodale &amp; Coella 2011</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'2.1',
+            VERSION:'2.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

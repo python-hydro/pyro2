@@ -16,14 +16,6 @@ Subpackages
 Submodules
 ----------
 
-lm\_atm\.setup module
----------------------
-
-.. automodule:: lm_atm.setup
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 lm\_atm\.simulation module
 --------------------------
 
