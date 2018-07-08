@@ -14,7 +14,7 @@ To support notebooks:
 
 pip3 install nbsphinx --user
 dnf install pandoc
-
+dnf install python3-ipython-sphinx
 
 For numpy doc format:
 
