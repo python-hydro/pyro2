@@ -1,17 +1,38 @@
-import h5py
+"""This manages the reading of the HDF5 output files for pyro.
+
+"""
 import importlib
+
+import h5py
 import mesh.patch as patch
 import mesh.boundary as bnd
 
 
-def read(filename):
+def read_bcs(f):
+    """read in the boundary condition record from the HDF5 file"""
+    try:
+        gb = f["BC"]
+    except KeyError:
+        return None
+    else:
+        BCs = {}
+        for name in gb:
+            BCs[name] = gb[name]
 
+        return BCs
+
+
+def read(filename):
+    """read an HDF5 file and recreate the simulation object that holds the
+    data and state of the simulation.
+
+    """
     if not filename.endswith(".h5"):
         filename += ".h5"
 
     with h5py.File(filename, "r") as f:
-        
-        # read the simulation information -- this only exists if the 
+
+        # read the simulation information -- this only exists if the
         # file was created as a simulation object
         try:
             solver_name = f.attrs["solver"]
@@ -25,10 +46,23 @@ def read(filename):
         # read in the grid info and create our grid
         grid = f["grid"].attrs
 
-        myg = patch.Grid2d(grid["nx"], grid["ny"], ng=grid["ng"], 
-                           xmin=grid["xmin"], xmax=grid["xmax"], 
+        myg = patch.Grid2d(grid["nx"], grid["ny"], ng=grid["ng"],
+                           xmin=grid["xmin"], xmax=grid["xmax"],
                            ymin=grid["ymin"], ymax=grid["ymax"])
 
+        # sometimes problems define custom BCs -- at the moment, we
+        # are going to assume that these always map to BC.user.  We
+        # need to read these in now, since the variable creation
+        # requires it.
+        custom_bcs = read_bcs(f)
+        if custom_bcs is not None:
+            if solver_name in ["compressible_fv4", "compressible_rk", "compressible_sdc"]:
+                bc_solver = "compressible"
+            else:
+                bc_solver = solver_name
+            bcmod = importlib.import_module("{}.{}".format(bc_solver, "BC"))
+            for name in custom_bcs:
+                bnd.define_bc(name, bcmod.user, is_solid=custom_bcs[name])
 
         # read in the variable info -- start by getting the names
         gs = f["state"]
@@ -55,9 +89,9 @@ def read(filename):
         for n in names:
             grp = gs[n]
             data = grp["data"]
-            
+
             v = myd.get_var(n)
-            v.v()[:,:] = data[:,:]
+            v.v()[:, :] = data[:, :]
 
         if solver_name is not None:
             solver = importlib.import_module(solver_name)
@@ -71,7 +105,5 @@ def read(filename):
 
     if solver_name is not None:
         return sim
-    else:
-        return myd
 
-            
+    return myd

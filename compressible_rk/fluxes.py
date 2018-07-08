@@ -1,74 +1,31 @@
 """
-Implementation of the Colella 2nd order unsplit Godunov scheme.  This
-is a 2-dimensional implementation only.  We assume that the grid is
-uniform, but it is relatively straightforward to relax this
-assumption.
-
-There are several different options for this solver (they are all
-discussed in the Colella paper).
-
-  limiter          = 0 to use no limiting
-                   = 1 to use the 2nd order MC limiter
-                   = 2 to use the 4th order MC limiter
-
-  riemann          = HLLC to use the HLLC solver
-                   = CGF to use the Colella, Glaz, and Ferguson solver
-
-  use_flattening   = 1 to use the multidimensional flattening
-                     algorithm at shocks
-
-  delta, z0, z1      these are the flattening parameters.  The default
-                     are the values listed in Colella 1990.
-
-   j+3/2--+---------+---------+---------+
-          |         |         |         |
-     j+1 _|         |         |         |
-          |         |         |         |
-          |         |         |         |
-   j+1/2--+---------XXXXXXXXXXX---------+
-          |         X         X         |
-       j _|         X         X         |
-          |         X         X         |
-          |         X         X         |
-   j-1/2--+---------XXXXXXXXXXX---------+
-          |         |         |         |
-     j-1 _|         |         |         |
-          |         |         |         |
-          |         |         |         |
-   j-3/2--+---------+---------+---------+
-          |    |    |    |    |    |    |
-              i-1        i        i+1
-        i-3/2     i-1/2     i+1/2     i+3/2
+This is a 2nd-order PLM method for a method-of-lines integration
+(i.e., no characteristic tracing).
 
 We wish to solve
 
-  U_t + F^x_x + F^y_y = H
+.. math::
 
-we want U_{i+1/2}^{n+1/2} -- the interface values that are input to
+   U_t + F^x_x + F^y_y = H
+
+we want U_{i+1/2} -- the interface values that are input to
 the Riemann problem through the faces for each zone.
 
-Taylor expanding yields in space only
+Taylor expanding *in space only* yields::
 
-                             dU
-  U          = U   + 0.5 dx  --
-   i+1/2,j,L    i,j          dx
+                              dU
+   U          = U   + 0.5 dx  --
+    i+1/2,j,L    i,j          dx
 
-
-Updating U_{i,j}:
-
-  -- We want to find the state to the left and right (or top and
-     bottom) of each interface, ex. U_{i+1/2,j,[lr]}^{n+1/2}, and use
-     them to solve a Riemann problem across each of the four
-     interfaces.
 """
 
-import compressible.eos as eos
 import compressible.interface_f as interface_f
 import compressible as comp
 import mesh.reconstruction as reconstruction
 import mesh.array_indexer as ai
 
 from util import msg
+
 
 def fluxes(my_data, rp, ivars, solid, tc):
     """
@@ -110,13 +67,7 @@ def fluxes(my_data, rp, ivars, solid, tc):
     #=========================================================================
     # Q = (rho, u, v, p)
 
-    dens = my_data.get_var("density")
-    xmom = my_data.get_var("x-momentum")
-    ymom = my_data.get_var("y-momentum")
-    ener = my_data.get_var("energy")
-
     q = comp.cons_to_prim(my_data.data, gamma, ivars, myg)
-
 
     #=========================================================================
     # compute the flattening coefficients
@@ -133,7 +84,6 @@ def fluxes(my_data, rp, ivars, solid, tc):
     else:
         xi = 1.0
 
-
     # monotonized central differences in x-direction
     tm_limit = tc.timer("limiting")
     tm_limit.begin()
@@ -144,11 +94,19 @@ def fluxes(my_data, rp, ivars, solid, tc):
     ldy = myg.scratch_array(nvar=ivars.nvar)
 
     for n in range(ivars.nvar):
-        ldx[:,:,n] = xi*reconstruction.limit(q[:,:,n], myg, 1, limiter)
-        ldy[:,:,n] = xi*reconstruction.limit(q[:,:,n], myg, 2, limiter)        
+        ldx[:, :, n] = xi*reconstruction.limit(q[:, :, n], myg, 1, limiter)
+        ldy[:, :, n] = xi*reconstruction.limit(q[:, :, n], myg, 2, limiter)
 
     tm_limit.end()
 
+    # if we are doing a well-balanced scheme, then redo the pressure
+    # note: we only have gravity in the y direction, so we will only
+    # modify the y pressure slope
+    well_balanced = rp.get_param("compressible.well_balanced")
+    grav = rp.get_param("compressible.grav")
+
+    if well_balanced:
+        ldy[:, :, ivars.ip] = reconstruction.well_balance(q, myg, limiter, ivars, grav)
 
     #=========================================================================
     # x-direction
@@ -162,16 +120,14 @@ def fluxes(my_data, rp, ivars, solid, tc):
     V_r = myg.scratch_array(ivars.nvar)
 
     for n in range(ivars.nvar):
-        V_l.ip(1, n=n, buf=2)[:,:] = q.v(n=n, buf=2) + 0.5*ldx.v(n=n, buf=2)
-        V_r.v(n=n, buf=2)[:,:] = q.v(n=n, buf=2) - 0.5*ldx.v(n=n, buf=2)
+        V_l.ip(1, n=n, buf=2)[:, :] = q.v(n=n, buf=2) + 0.5*ldx.v(n=n, buf=2)
+        V_r.v(n=n, buf=2)[:, :] = q.v(n=n, buf=2) - 0.5*ldx.v(n=n, buf=2)
 
     tm_states.end()
-
 
     # transform interface states back into conserved variables
     U_xl = comp.prim_to_cons(V_l, gamma, ivars, myg)
     U_xr = comp.prim_to_cons(V_r, gamma, ivars, myg)
-
 
     #=========================================================================
     # y-direction
@@ -181,16 +137,23 @@ def fluxes(my_data, rp, ivars, solid, tc):
     tm_states.begin()
 
     for n in range(ivars.nvar):
-        V_l.jp(1, n=n, buf=2)[:,:] = q.v(n=n, buf=2) + 0.5*ldy.v(n=n, buf=2)
-        V_r.v(n=n, buf=2)[:,:] = q.v(n=n, buf=2) - 0.5*ldy.v(n=n, buf=2)
+        if well_balanced and n == ivars.ip:
+            # we want to do p0 + p1 on the interfaces.  We found the
+            # limited slope for p1 (it's average is 0).  So now we
+            # need p0 on the interface too
+            V_l.jp(1, n=n, buf=2)[:, :] = q.v(n=ivars.ip, buf=2) + \
+                0.5*myg.dy*q.v(n=ivars.irho, buf=2)*grav + 0.5*ldy.v(n=ivars.ip, buf=2)
+            V_r.v(n=n, buf=2)[:, :] = q.v(n=ivars.ip, buf=2) - \
+                0.5*myg.dy*q.v(n=ivars.irho, buf=2)*grav - 0.5*ldy.v(n=ivars.ip, buf=2)
+        else:
+            V_l.jp(1, n=n, buf=2)[:, :] = q.v(n=n, buf=2) + 0.5*ldy.v(n=n, buf=2)
+            V_r.v(n=n, buf=2)[:, :] = q.v(n=n, buf=2) - 0.5*ldy.v(n=n, buf=2)
 
     tm_states.end()
-
 
     # transform interface states back into conserved variables
     U_yl = comp.prim_to_cons(V_l, gamma, ivars, myg)
     U_yr = comp.prim_to_cons(V_r, gamma, ivars, myg)
-
 
     #=========================================================================
     # construct the fluxes normal to the interfaces
@@ -208,12 +171,12 @@ def fluxes(my_data, rp, ivars, solid, tc):
         msg.fail("ERROR: Riemann solver undefined")
 
     _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
-                      ivars.nvar, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
+                      ivars.nvar, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
                       solid.xl, solid.xr,
                       gamma, U_xl, U_xr)
 
     _fy = riemannFunc(2, myg.qx, myg.qy, myg.ng,
-                      ivars.nvar, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
+                      ivars.nvar, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
                       solid.yl, solid.yr,
                       gamma, U_yl, U_yr)
 
@@ -234,18 +197,17 @@ def fluxes(my_data, rp, ivars, solid, tc):
     avisco_x = ai.ArrayIndexer(d=_ax, grid=myg)
     avisco_y = ai.ArrayIndexer(d=_ay, grid=myg)
 
-
-    b = (2,1)
+    b = (2, 1)
 
     for n in range(ivars.nvar):
         # F_x = F_x + avisco_x * (U(i-1,j) - U(i,j))
         var = my_data.get_var_by_index(n)
 
-        F_x.v(buf=b, n=n)[:,:] += \
+        F_x.v(buf=b, n=n)[:, :] += \
             avisco_x.v(buf=b)*(var.ip(-1, buf=b) - var.v(buf=b))
 
         # F_y = F_y + avisco_y * (U(i,j-1) - U(i,j))
-        F_y.v(buf=b, n=n)[:,:] += \
+        F_y.v(buf=b, n=n)[:, :] += \
             avisco_y.v(buf=b)*(var.jp(-1, buf=b) - var.v(buf=b))
 
     tm_flux.end()

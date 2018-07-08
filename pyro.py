@@ -15,6 +15,7 @@ from util import msg, profile, runparams, io
 def doit(solver_name, problem_name, param_file,
          other_commands=None,
          comp_bench=False, reset_bench_on_fail=False, make_bench=False):
+    """The main driver to run pyro"""
 
     msg.bold('pyro ...')
 
@@ -54,7 +55,6 @@ def doit(solver_name, problem_name, param_file,
     # write out the inputs.auto
     rp.print_paramfile()
 
-
     #-------------------------------------------------------------------------
     # initialization
     #-------------------------------------------------------------------------
@@ -66,7 +66,6 @@ def doit(solver_name, problem_name, param_file,
 
     sim.initialize()
     sim.preevolve()
-
 
     #-------------------------------------------------------------------------
     # evolve
@@ -97,11 +96,13 @@ def doit(solver_name, problem_name, param_file,
         # evolve for a single timestep
         sim.evolve()
 
-        if verbose > 0: print("%5d %10.5f %10.5f" % (sim.n, sim.cc_data.t, sim.dt))
+        if verbose > 0:
+            print("%5d %10.5f %10.5f" % (sim.n, sim.cc_data.t, sim.dt))
 
         # output
         if sim.do_output():
-            if verbose > 0: msg.warning("outputting...")
+            if verbose > 0:
+                msg.warning("outputting...")
             basename = rp.get_param("io.basename")
             sim.write("{}{:04d}".format(basename, sim.n))
 
@@ -119,8 +120,13 @@ def doit(solver_name, problem_name, param_file,
 
             tm_vis.end()
 
-    tm_main.end()
+    # final output
+    if verbose > 0:
+        msg.warning("outputting...")
+    basename = rp.get_param("io.basename")
+    sim.write("{}{:04d}".format(basename, sim.n))
 
+    tm_main.end()
 
     #-------------------------------------------------------------------------
     # benchmarks (for regression testing)
@@ -131,11 +137,11 @@ def doit(solver_name, problem_name, param_file,
         compare_file = "{}/tests/{}{:04d}".format(
             solver_name, basename, sim.n)
         msg.warning("comparing to: {} ".format(compare_file))
-        try: sim_bench = io.read(compare_file)
-        except:
+        try:
+            sim_bench = io.read(compare_file)
+        except IOError:
             msg.warning("ERROR openning compare file")
             return "ERROR openning compare file"
-
 
         result = compare.compare(sim.cc_data, sim_bench.cc_data)
 
@@ -144,42 +150,49 @@ def doit(solver_name, problem_name, param_file,
         else:
             msg.warning("ERROR: " + compare.errors[result] + "\n")
 
-
     # are we storing a benchmark?
     if make_bench or (result != 0 and reset_bench_on_fail):
         if not os.path.isdir(solver_name + "/tests/"):
-            try: os.mkdir(solver_name + "/tests/")
-            except:
+            try:
+                os.mkdir(solver_name + "/tests/")
+            except (FileNotFoundError, PermissionError):
                 msg.fail("ERROR: unable to create the solver's tests/ directory")
 
         bench_file = solver_name + "/tests/" + basename + "%4.4d" % (sim.n)
         msg.warning("storing new benchmark: {}\n".format(bench_file))
         sim.write(bench_file)
 
-
     #-------------------------------------------------------------------------
     # final reports
     #-------------------------------------------------------------------------
-    if verbose > 0: rp.print_unused_params()
-    if verbose > 0: tc.report()
+    if verbose > 0:
+        rp.print_unused_params()
+        tc.report()
 
     sim.finalize()
 
     if comp_bench:
         return result
     else:
-        return None
+        return sim
 
 
 def parse_and_run():
+    """Parse the runtime parameters and run a pyro instance"""
+
     valid_solvers = ["advection",
                      "advection_rk",
+                     "advection_fv4",
+                     "advection_weno",
                      "compressible",
                      "compressible_rk",
+                     "compressible_fv4",
+                     "compressible_sdc",
                      "compressible_react",
                      "diffusion",
                      "incompressible",
-                     "lm_atm"]
+                     "lm_atm",
+                     "swe"]
 
     p = argparse.ArgumentParser()
 
@@ -211,4 +224,3 @@ def parse_and_run():
 
 if __name__ == "__main__":
     parse_and_run()
-

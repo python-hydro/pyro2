@@ -4,15 +4,15 @@ import importlib
 
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.axes_grid1 import AxesGrid
 
 import compressible.BC as BC
 import compressible.eos as eos
 import compressible.derives as derives
-import mesh.boundary as bnd
-import mesh.patch as patch
-from simulation_null import NullSimulation, grid_setup, bc_setup
 import compressible.unsplit_fluxes as flx
+import mesh.boundary as bnd
+from simulation_null import NullSimulation, grid_setup, bc_setup
+import util.plot_tools as plot_tools
+
 
 class Variables(object):
     """
@@ -53,67 +53,72 @@ class Variables(object):
 
 def cons_to_prim(U, gamma, ivars, myg):
     """ convert an input vector of conserved variables to primitive variables """
-    
+
     q = myg.scratch_array(nvar=ivars.nq)
 
-    q[:,:,ivars.irho] = U[:,:,ivars.idens]
-    q[:,:,ivars.iu] = U[:,:,ivars.ixmom]/U[:,:,ivars.idens]
-    q[:,:,ivars.iv] = U[:,:,ivars.iymom]/U[:,:,ivars.idens]
+    q[:, :, ivars.irho] = U[:, :, ivars.idens]
+    q[:, :, ivars.iu] = U[:, :, ivars.ixmom]/U[:, :, ivars.idens]
+    q[:, :, ivars.iv] = U[:, :, ivars.iymom]/U[:, :, ivars.idens]
 
-    e = (U[:,:,ivars.iener] - 
-         0.5*q[:,:,ivars.irho]*(q[:,:,ivars.iu]**2 + 
-                                q[:,:,ivars.iv]**2))/q[:,:,ivars.irho]
+    e = (U[:, :, ivars.iener] -
+         0.5*q[:, :, ivars.irho]*(q[:, :, ivars.iu]**2 +
+                                  q[:, :, ivars.iv]**2))/q[:, :, ivars.irho]
 
-    q[:,:,ivars.ip] = eos.pres(gamma, q[:,:,ivars.irho], e)
+    q[:, :, ivars.ip] = eos.pres(gamma, q[:, :, ivars.irho], e)
 
     if ivars.naux > 0:
         for nq, nu in zip(range(ivars.ix, ivars.ix+ivars.naux),
                           range(ivars.irhox, ivars.irhox+ivars.naux)):
-            q[:,:,nq] = U[:,:,nu]/q[:,:,ivars.irho]
+            q[:, :, nq] = U[:, :, nu]/q[:, :, ivars.irho]
 
     return q
 
 
 def prim_to_cons(q, gamma, ivars, myg):
     """ convert an input vector of primitive variables to conserved variables """
-    
+
     U = myg.scratch_array(nvar=ivars.nvar)
 
-    U[:,:,ivars.idens] = q[:,:,ivars.irho] 
-    U[:,:,ivars.ixmom] = q[:,:,ivars.iu]*U[:,:,ivars.idens]
-    U[:,:,ivars.iymom] = q[:,:,ivars.iv]*U[:,:,ivars.idens]
+    U[:, :, ivars.idens] = q[:, :, ivars.irho]
+    U[:, :, ivars.ixmom] = q[:, :, ivars.iu]*U[:, :, ivars.idens]
+    U[:, :, ivars.iymom] = q[:, :, ivars.iv]*U[:, :, ivars.idens]
 
-    rhoe = eos.rhoe(gamma, q[:,:,ivars.ip])
+    rhoe = eos.rhoe(gamma, q[:, :, ivars.ip])
 
-    U[:,:,ivars.iener] = rhoe + 0.5*q[:,:,ivars.irho]*(q[:,:,ivars.iu]**2 + 
-                                                       q[:,:,ivars.iv]**2)
+    U[:, :, ivars.iener] = rhoe + 0.5*q[:, :, ivars.irho]*(q[:, :, ivars.iu]**2 +
+                                                           q[:, :, ivars.iv]**2)
 
     if ivars.naux > 0:
         for nq, nu in zip(range(ivars.ix, ivars.ix+ivars.naux),
                           range(ivars.irhox, ivars.irhox+ivars.naux)):
-            U[:,:,nu] = q[:,:,nq]*q[:,:,ivars.irho] 
+            U[:, :, nu] = q[:, :, nq]*q[:, :, ivars.irho]
 
     return U
 
 
 class Simulation(NullSimulation):
+    """The main simulation class for the corner transport upwind
+    compressible hydrodynamics solver
 
-    def initialize(self, extra_vars=None):
+    """
+
+    def initialize(self, extra_vars=None, ng=4):
         """
         Initialize the grid and variables for compressible flow and set
         the initial conditions for the chosen problem.
         """
-        my_grid = grid_setup(self.rp, ng=4)
-        my_data = patch.CellCenterData2d(my_grid)
+        my_grid = grid_setup(self.rp, ng=ng)
+        my_data = self.data_class(my_grid)
 
         # define solver specific boundary condition routines
         bnd.define_bc("hse", BC.user, is_solid=False)
+        bnd.define_bc("ramp", BC.user, is_solid=False)  # for double mach reflection problem
 
         bc, bc_xodd, bc_yodd = bc_setup(self.rp)
 
         # are we dealing with solid boundaries? we'll use these for
         # the Riemann solver
-        self.solid = bnd.bc_is_solid(self.rp)
+        self.solid = bnd.bc_is_solid(bc)
 
         # density and energy
         my_data.register_var("density", bc)
@@ -138,7 +143,7 @@ class Simulation(NullSimulation):
 
         # some auxillary data that we'll need to fill GC in, but isn't
         # really part of the main solution
-        aux_data = patch.CellCenterData2d(my_grid)
+        aux_data = self.data_class(my_grid)
         aux_data.register_var("ymom_src", bc_yodd)
         aux_data.register_var("E_src", bc)
         aux_data.create()
@@ -154,8 +159,8 @@ class Simulation(NullSimulation):
             self.solver_name, self.problem_name))
         problem.init_data(self.cc_data, self.rp)
 
-        if self.verbose > 0: print(my_data)
-
+        if self.verbose > 0:
+            print(my_data)
 
     def method_compute_timestep(self):
         """
@@ -177,7 +182,6 @@ class Simulation(NullSimulation):
         ytmp = self.cc_data.grid.dy/(abs(v) + cs)
 
         self.dt = cfl*float(min(xtmp.min(), ytmp.min()))
-
 
     def evolve(self):
         """
@@ -209,20 +213,19 @@ class Simulation(NullSimulation):
         for n in range(self.ivars.nvar):
             var = self.cc_data.get_var_by_index(n)
 
-            var.v()[:,:] += \
+            var.v()[:, :] += \
                 dtdx*(Flux_x.v(n=n) - Flux_x.ip(1, n=n)) + \
                 dtdy*(Flux_y.v(n=n) - Flux_y.jp(1, n=n))
 
         # gravitational source terms
-        ymom[:,:] += 0.5*self.dt*(dens[:,:] + old_dens[:,:])*grav
-        ener[:,:] += 0.5*self.dt*(ymom[:,:] + old_ymom[:,:])*grav
+        ymom[:, :] += 0.5*self.dt*(dens[:, :] + old_dens[:, :])*grav
+        ener[:, :] += 0.5*self.dt*(ymom[:, :] + old_ymom[:, :])*grav
 
         # increment the time
         self.cc_data.t += self.dt
         self.n += 1
 
         tm_evolve.end()
-
 
     def dovis(self):
         """
@@ -243,66 +246,22 @@ class Simulation(NullSimulation):
 
         q = cons_to_prim(self.cc_data.data, gamma, ivars, self.cc_data.grid)
 
-        rho = q[:,:,ivars.irho]
-        u = q[:,:,ivars.iu]
-        v = q[:,:,ivars.iv]
-        p = q[:,:,ivars.ip]
+        rho = q[:, :, ivars.irho]
+        u = q[:, :, ivars.iu]
+        v = q[:, :, ivars.iv]
+        p = q[:, :, ivars.ip]
         e = eos.rhoe(gamma, p)/rho
 
         magvel = np.sqrt(u**2 + v**2)
 
         myg = self.cc_data.grid
 
-        # figure out the geometry
-        L_x = self.cc_data.grid.xmax - self.cc_data.grid.xmin
-        L_y = self.cc_data.grid.ymax - self.cc_data.grid.ymin
-
-        f = plt.figure(1)
-
-        cbar_title = False
-
-        if L_x > 2*L_y:
-            # we want 4 rows:
-            axes = AxesGrid(f, 111,
-                            nrows_ncols=(4, 1),
-                            share_all=True,
-                            cbar_mode="each",
-                            cbar_location="top",
-                            cbar_pad="10%",
-                            cbar_size="25%",
-                            axes_pad=(0.25, 0.65),
-                            add_all=True, label_mode="L")
-            cbar_title = True
-
-        elif L_y > 2*L_x:
-            # we want 4 columns:  rho  |U|  p  e
-            axes = AxesGrid(f, 111,
-                            nrows_ncols=(1, 4),
-                            share_all=True,
-                            cbar_mode="each",
-                            cbar_location="right",
-                            cbar_pad="10%",
-                            cbar_size="25%",
-                            axes_pad=(0.65, 0.25),
-                            add_all=True, label_mode="L")
-
-        else:
-            # 2x2 grid of plots
-            axes = AxesGrid(f, 111,
-                            nrows_ncols=(2, 2),
-                            share_all=True,
-                            cbar_mode="each",
-                            cbar_location="right",
-                            cbar_pad="2%",
-                            axes_pad=(0.65, 0.25),
-                            add_all=True, label_mode="L")
-
         fields = [rho, magvel, p, e]
         field_names = [r"$\rho$", r"U", "p", "e"]
 
-        for n in range(4):
-            ax = axes[n]
+        _, axes, cbar_title = plot_tools.setup_axes(myg, len(fields))
 
+        for n, ax in enumerate(axes):
             v = fields[n]
 
             img = ax.imshow(np.transpose(v.v()),
@@ -312,7 +271,7 @@ class Simulation(NullSimulation):
 
             ax.set_xlabel("x")
             ax.set_ylabel("y")
-            
+
             # needed for PDF rendering
             cb = axes.cbar_axes[n].colorbar(img)
             cb.solids.set_rasterized(True)
@@ -327,3 +286,14 @@ class Simulation(NullSimulation):
 
         plt.pause(0.001)
         plt.draw()
+
+    def write_extras(self, f):
+        """
+        Output simulation-specific data to the h5py file f
+        """
+
+        # make note of the custom BC
+        gb = f.create_group("BC")
+
+        # the value here is the value of "is_solid"
+        gb.create_dataset("hse", data=False)

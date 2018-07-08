@@ -2,10 +2,10 @@
 
 from __future__ import print_function
 
+import importlib
 import numpy as np
 import mesh.patch as patch
 import sys
-import advection.problems.smooth as smooth
 from util import io
 
 usage = """
@@ -20,8 +20,9 @@ if not len(sys.argv) == 2:
     sys.exit(2)
 
 
-try: file1 = sys.argv[1]
-except:
+try:
+    file1 = sys.argv[1]
+except IndexError:
     print(usage)
     sys.exit(2)
 
@@ -37,7 +38,8 @@ analytic.register_var("density", bco)
 analytic.create()
 
 # use the original initialization routine to set the analytic solution
-smooth.init_data(analytic, None)
+problem = importlib.import_module("{}.problems.{}".format(sim.solver_name, sim.problem_name))
+problem.init_data(analytic, None)
 
 # compare the error
 dens_numerical = myd.get_var("density")

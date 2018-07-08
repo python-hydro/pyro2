@@ -1,15 +1,18 @@
+""" A simulation of diffusion """
+
 import importlib
 import math
 import numpy as np
 import matplotlib.pyplot as plt
 
-import mesh.boundary as bnd
 import mesh.patch as patch
-from simulation_null import NullSimulation, grid_setup
+from simulation_null import NullSimulation, grid_setup, bc_setup
 import multigrid.MG as MG
 from util import msg
 
+
 class Simulation(NullSimulation):
+    """ A simulation of diffusion """
 
     def initialize(self):
         """
@@ -23,7 +26,7 @@ class Simulation(NullSimulation):
         # for MG, we need to be a power of two
         if my_grid.nx != my_grid.ny:
             msg.fail("need nx = ny for diffusion problems")
-            
+
         n = int(math.log(my_grid.nx)/math.log(2.0))
         if 2**n != my_grid.nx:
             msg.fail("grid needs to be a power of 2")
@@ -33,21 +36,11 @@ class Simulation(NullSimulation):
         # first figure out the boundary conditions -- we allow periodic,
         # Dirichlet, and Neumann.
 
-        xlb_type = self.rp.get_param("mesh.xlboundary")
-        xrb_type = self.rp.get_param("mesh.xrboundary")
-        ylb_type = self.rp.get_param("mesh.ylboundary")
-        yrb_type = self.rp.get_param("mesh.yrboundary")
+        bc, _, _ = bc_setup(self.rp)
 
-        bcparam = []
-        for bc in [xlb_type, xrb_type, ylb_type, yrb_type]:
-            if bc == "periodic": bcparam.append("periodic")
-            elif bc == "neumann": bcparam.append("neumann")
-            elif bc == "dirichlet": bcparam.append("dirichlet")
-            else:
+        for bnd in [bc.xlb, bc.xrb, bc.ylb, bc.yrb]:
+            if bnd not in ["periodic", "neumann", "dirichlet"]:
                 msg.fail("invalid BC")
-
-        bc = bnd.BC(xlb=bcparam[0], xrb=bcparam[1],
-                    ylb=bcparam[2], yrb=bcparam[3])
 
         my_data = patch.CellCenterData2d(my_grid)
         my_data.register_var("phi", bc)
@@ -58,7 +51,6 @@ class Simulation(NullSimulation):
         # now set the initial conditions for the problem
         problem = importlib.import_module("diffusion.problems.{}".format(self.problem_name))
         problem.init_data(self.cc_data, self.rp)
-
 
     def method_compute_timestep(self):
         """
@@ -78,7 +70,6 @@ class Simulation(NullSimulation):
 
         self.dt = cfl*min(xtmp, ytmp)
 
-
     def evolve(self):
         """
         Diffusion through dt using C-N implicit solve with multigrid
@@ -90,7 +81,6 @@ class Simulation(NullSimulation):
 
         # diffusion coefficient
         k = self.rp.get_param("diffusion.k")
-
 
         # setup the MG object -- we want to solve a Helmholtz equation
         # equation of the form:
@@ -114,7 +104,7 @@ class Simulation(NullSimulation):
 
         # form the RHS: f = phi + (dt/2) k L phi  (where L is the Laplacian)
         f = mg.soln_grid.scratch_array()
-        f.v()[:,:] = phi.v() + 0.5*self.dt*k * (
+        f.v()[:, :] = phi.v() + 0.5*self.dt*k * (
             (phi.ip(1) + phi.ip(-1) - 2.0*phi.v())/myg.dx**2 +
             (phi.jp(1) + phi.jp(-1) - 2.0*phi.v())/myg.dy**2)
 
@@ -128,12 +118,11 @@ class Simulation(NullSimulation):
         #mg.smooth(mg.nlevels-1,100)
 
         # update the solution
-        phi.v()[:,:] = mg.get_solution().v()
+        phi.v()[:, :] = mg.get_solution().v()
 
         # increment the time
         self.cc_data.t += self.dt
         self.n += 1
-
 
     def dovis(self):
         """

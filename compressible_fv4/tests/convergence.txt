@@ -1,0 +1,33 @@
+2017-12-22 (2dd269eb12e86dff1711715031eec19679e996e5)
+
+Running the tests as:
+
+ ./pyro.py compressible_fv4 acoustic_pulse inputs.acoustic_pulse.512 vis.dovis=0
+ ./pyro.py compressible_fv4 acoustic_pulse inputs.acoustic_pulse.256 vis.dovis=0
+ ./pyro.py compressible_fv4 acoustic_pulse inputs.acoustic_pulse vis.dovis=0
+ ./pyro.py compressible_fv4 acoustic_pulse inputs.acoustic_pulse.64 vis.dovis=0
+
+Analysis as:
+
+./convergence.py acoustic_pulse_512_0641.h5 acoustic_pulse_256_0320.h5
+inf/L2 norm of density:  (7.282642333628075e-08, 1.929593132662066e-08)
+
+./convergence.py acoustic_pulse_256_0320.h5 acoustic_pulse_0160.h5
+inf/L2 norm of density:  (1.3214920793203078e-06, 3.0769036841664511e-07)
+
+./convergence.py acoustic_pulse_0160.h5 acoustic_pulse_64_0080.h5
+inf/L2 norm of density:  (1.7923237683126203e-05, 4.8255402486336417e-06)
+
+
+Note that the numbers for the first 2 sets match the McCorquodale and
+Collella table 2 to 3 significant digits.
+
+We see:
+
+                L-inf                         L2
+ 64 to 128    1.7923237683126203e-05     4.8255402486336417e-06
+   rate              3.76                       3.97
+128 to 258    1.3214920793203078e-06     3.0769036841664511e-07
+   rate              4.18                       4.00
+256 to 512    7.282642333628075e-08      1.929593132662066e-08
+

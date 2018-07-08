@@ -1,8 +1,8 @@
 """
 This multigrid solver is build from multigrid/MG.py and implements
-a variable coefficient solver for an equation of the form:
+a variable coefficient solver for an equation of the form::
 
-div { eta grad phi } = f
+   div { eta grad phi } = f
 
 where eta is defined on the same grid as phi.
 
@@ -56,12 +56,15 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
                                    true_function=true_function, vis=vis,
                                    vis_title=vis_title)
 
-
         # set the coefficients and restrict them down the hierarchy
         # we only need to do this once.  We need to hold the original
         # coeffs in our grid so we can do a ghost cell fill.
         c = self.grids[self.nlevels-1].get_var("coeffs")
-        c.v()[:,:] = coeffs.v().copy()
+
+        if c.g.nx != nx or c.g.ny != ny:
+            raise IndexError("coefficient array not the same size as multigrid problem")
+
+        c.v()[:, :] = coeffs.v().copy()
 
         self.grids[self.nlevels-1].fill_BC("coeffs")
 
@@ -77,12 +80,12 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
             c_patch = self.grids[n]
 
             coeffs_c = c_patch.get_var("coeffs")
-            coeffs_c.v()[:,:] = f_patch.restrict("coeffs").v()
+            coeffs_c.v()[:, :] = f_patch.restrict("coeffs").v()
 
             self.grids[n].fill_BC("coeffs")
 
             # put the coefficients on edges
-            self.edge_coeffs.insert(0, self.edge_coeffs[0].restrict())  #_EdgeCoeffs(self.grids[n].grid, coeffs_c))
+            self.edge_coeffs.insert(0, self.edge_coeffs[0].restrict())  # _EdgeCoeffs(self.grids[n].grid, coeffs_c))
 
             # if we are periodic, then we should force the edge coefficents
             # to be periodic
@@ -95,8 +98,6 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
             #         self.edge_coeffs[0].y[:,self.grids[n].grid.jlo]
 
             n -= 1
-
-
 
     def smooth(self, level, nsmooth):
         """
@@ -117,8 +118,6 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
         v = self.grids[level].get_var("v")
         f = self.grids[level].get_var("f")
 
-        myg = self.grids[level].grid
-
         self.grids[level].fill_BC("v")
 
         eta_x = self.edge_coeffs[level].x
@@ -127,7 +126,6 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
         # print( "min/max c: {}, {}".format(np.min(c), np.max(c)))
         # print( "min/max eta_x: {}, {}".format(np.min(eta_x), np.max(eta_x)))
         # print( "min/max eta_y: {}, {}".format(np.min(eta_y), np.max(eta_y)))
-
 
         # do red-black G-S
         for i in range(nsmooth):
@@ -150,12 +148,12 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
             # groups 1 and 3 are done together, then we need to
             # fill ghost cells, and then groups 2 and 4
 
-            for n, (ix, iy) in enumerate([(0,0), (1,1), (1,0), (0,1)]):
+            for n, (ix, iy) in enumerate([(0, 0), (1, 1), (1, 0), (0, 1)]):
 
                 denom = (eta_x.ip_jp(1+ix, iy, s=2) + eta_x.ip_jp(ix, iy, s=2) +
-                         eta_y.ip_jp(ix, 1+iy, s=2) + eta_y.ip_jp(ix, iy, s=2) )
+                         eta_y.ip_jp(ix, 1+iy, s=2) + eta_y.ip_jp(ix, iy, s=2))
 
-                v.ip_jp(ix, iy, s=2)[:,:] = ( -f.ip_jp(ix, iy, s=2) +
+                v.ip_jp(ix, iy, s=2)[:, :] = (-f.ip_jp(ix, iy, s=2) +
                     # eta_{i+1/2,j} phi_{i+1,j}
                     eta_x.ip_jp(1+ix, iy, s=2) * v.ip_jp(1+ix, iy, s=2) +
                     # eta_{i-1/2,j} phi_{i-1,j}
@@ -163,11 +161,10 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
                     # eta_{i,j+1/2} phi_{i,j+1}
                     eta_y.ip_jp(ix, 1+iy, s=2) * v.ip_jp(ix, 1+iy, s=2) +
                     # eta_{i,j-1/2} phi_{i,j-1}
-                    eta_y.ip_jp(ix, iy, s=2) * v.ip_jp(ix, -1+iy, s=2) ) / denom
+                    eta_y.ip_jp(ix, iy, s=2) * v.ip_jp(ix, -1+iy, s=2)) / denom
 
                 if n == 1 or n == 3:
                     self.grids[level].fill_BC("v")
-
 
             if self.vis == 1:
                 plt.clf()
@@ -190,7 +187,6 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
                 plt.savefig("mg_%4.4d.png" % (self.frame))
                 self.frame += 1
 
-
     def _compute_residual(self, level):
         """ compute the residual and store it in the r variable"""
 
@@ -198,11 +194,8 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
         f = self.grids[level].get_var("f")
         r = self.grids[level].get_var("r")
 
-        myg = self.grids[level].grid
-
         eta_x = self.edge_coeffs[level].x
         eta_y = self.edge_coeffs[level].y
-
 
         # compute the residual
         # r = f - L_eta phi
@@ -214,6 +207,6 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
             # eta_{i,j+1/2} (phi_{i,j+1} - phi_{i,j})
             eta_y.jp(1)*(v.jp(1) - v.v()) - \
             # eta_{i,j-1/2} (phi_{i,j} - phi_{i,j-1})
-            eta_y.v()*(v.v() - v.jp(-1)) )
+            eta_y.v()*(v.v() - v.jp(-1)))
 
-        r.v()[:,:] = f.v() - L_eta_phi
+        r.v()[:, :] = f.v() - L_eta_phi

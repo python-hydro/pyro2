@@ -1,30 +1,7 @@
 """
-A very simple profiling class.  Define some timers and methods
-to start and stop them.  A TimerCollection holds a group of
-timers.  Nesting of timers is tracked so we can pretty print
-the profiling information.
-
-tc = TimerCollection()
-
-a = tc.timer('my timer')
-
-This will add 'my timer' to the list of Timers managed by
-the TimerCollection.  Subsequent calls to timer() will
-return the same Timer object.
-
-To start the timer:
-
-a.begin()
-
-... and to end it,
-
-a.end()
-
-For best results, the block of code timed should be large
-enough to offset the overhead of the timer class method
-calls.
-
-tc.report() prints out a summary of the timing.
+A very simple profiling class, to use to determine where
+most of the time is spent in a code.  This supports nested
+timers and outputs a report at the end.
 
 Warning: At present, no enforcement is done to ensure proper
 nesting.
@@ -35,14 +12,41 @@ from __future__ import print_function
 
 import time
 
+
 class TimerCollection(object):
+    """A timer collection---this manages the timers and has methods to
+    start and stop them.  Nesting of timers is tracked so we can
+    pretty print the profiling information.
+
+    To define a timer::
+
+       tc = TimerCollection()
+       a = tc.timer('my timer')
+
+    This will add 'my timer' to the list of Timers managed by the
+    TimerCollection.  Subsequent calls to timer() will return the same
+    Timer object.
+
+    To start the timer::
+
+       a.begin()
+
+    and to end it::
+
+       a.end()
+
+    For best results, the block of code timed should be large enough
+    to offset the overhead of the timer class method calls.
+
+    tc.report() prints out a summary of the timing.
+    """
 
     def __init__(self):
+
         """
         Initialize the collection of timers
         """
         self.timers = []
-
 
     def timer(self, name):
         """
@@ -72,14 +76,14 @@ class TimerCollection(object):
         # find out how nested we are (the stack count), for pretty printing
         stack_count = 0
         for t in self.timers:
-            if t.is_running: stack_count += 1
+            if t.is_running:
+                stack_count += 1
 
         t_new = Timer(name, stack_count=stack_count)
 
         self.timers.append(t_new)
 
         return t_new
-
 
     def report(self):
         """
@@ -92,6 +96,8 @@ class TimerCollection(object):
 
 
 class Timer(object):
+    """A single timer -- this simply stores the accumulated time for
+    a single named region"""
 
     def __init__(self, name, stack_count=0):
         """
@@ -113,14 +119,12 @@ class Timer(object):
         self.start_time = 0
         self.elapsed_time = 0
 
-
     def begin(self):
         """
         Start timing
         """
         self.start_time = time.time()
         self.is_running = True
-
 
     def end(self):
         """
@@ -130,7 +134,6 @@ class Timer(object):
         elapsed_time = time.time() - self.start_time
         self.elapsed_time += elapsed_time
         self.is_running = False
-
 
 
 if __name__ == "__main__":

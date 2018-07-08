@@ -1,8 +1,8 @@
 """
 This multigrid solver is build from multigrid/MG.py
-and implements a more general solver for an equation of the form:
+and implements a more general solver for an equation of the form::
 
-alpha phi + div { beta grad phi } + gamma . grad phi = f
+   alpha phi + div { beta grad phi } + gamma . grad phi = f
 
 where alpha, beta, and gamma are defined on the same grid as phi.
 These should all come in as cell-centered quantities.  The solver
@@ -73,14 +73,13 @@ class GeneralMG2d(MG.CellCenterMG2d):
                                    true_function=true_function, vis=vis,
                                    vis_title=vis_title)
 
-
         # the coefficents come in a dictionary.  Set the coefficients
         # and restrict them down the hierarchy we only need to do this
         # once.  We need to hold the original coeffs in our grid so we
         # can do a ghost cell fill.
         for c in ["alpha", "beta", "gamma_x", "gamma_y"]:
             v = self.grids[self.nlevels-1].get_var(c)
-            v.v()[:,:] = coeffs.get_var(c).v()
+            v.v()[:, :] = coeffs.get_var(c).v()
 
             self.grids[self.nlevels-1].fill_BC(c)
 
@@ -90,11 +89,10 @@ class GeneralMG2d(MG.CellCenterMG2d):
                 c_patch = self.grids[n]
 
                 coeffs_c = c_patch.get_var(c)
-                coeffs_c.v()[:,:] = f_patch.restrict(c).v()
+                coeffs_c.v()[:, :] = f_patch.restrict(c).v()
 
                 self.grids[n].fill_BC(c)
                 n -= 1
-
 
         # put the beta coefficients on edges
         beta = self.grids[self.nlevels-1].get_var("beta")
@@ -104,8 +102,6 @@ class GeneralMG2d(MG.CellCenterMG2d):
         while n >= 0:
             self.beta_edge.insert(0, self.beta_edge[0].restrict())
             n -= 1
-
-
 
     def smooth(self, level, nsmooth):
         """
@@ -142,7 +138,6 @@ class GeneralMG2d(MG.CellCenterMG2d):
         beta_x = self.beta_edge[level].x
         beta_y = self.beta_edge[level].y
 
-
         # do red-black G-S
         for i in range(nsmooth):
 
@@ -164,30 +159,25 @@ class GeneralMG2d(MG.CellCenterMG2d):
             # groups 1 and 3 are done together, then we need to
             # fill ghost cells, and then groups 2 and 4
 
-            for n, (ix, iy) in enumerate([(0,0), (1,1), (1,0), (0,1)]):
+            for n, (ix, iy) in enumerate([(0, 0), (1, 1), (1, 0), (0, 1)]):
 
                 denom = (
                     alpha.ip_jp(ix, iy, s=2) -
                     beta_x.ip_jp(1+ix, iy, s=2) - beta_x.ip_jp(ix, iy, s=2) -
-                    beta_y.ip_jp(ix, 1+iy, s=2) - beta_y.ip_jp(ix, iy, s=2) )
+                    beta_y.ip_jp(ix, 1+iy, s=2) - beta_y.ip_jp(ix, iy, s=2))
 
-                v.ip_jp(ix, iy, s=2)[:,:] = (f.ip_jp(ix, iy, s=2) -
+                v.ip_jp(ix, iy, s=2)[:, :] = (f.ip_jp(ix, iy, s=2) -
                     # (beta_{i+1/2,j} + gamma^x_{i,j}) phi_{i+1,j}
-                    (beta_x.ip_jp(1+ix, iy, s=2) + gamma_x.ip_jp(ix, iy, s=2))*
-                     v.ip_jp(1+ix, iy, s=2) - 
+                    (beta_x.ip_jp(1+ix, iy, s=2) + gamma_x.ip_jp(ix, iy, s=2)) * v.ip_jp(1+ix, iy, s=2) -
                     # (beta_{i-1/2,j} - gamma^x_{i,j}) phi_{i-1,j}
-                    (beta_x.ip_jp(ix, iy, s=2) - gamma_x.ip_jp(ix, iy, s=2))*
-                     v.ip_jp(-1+ix, iy, s=2) - 
+                    (beta_x.ip_jp(ix, iy, s=2) - gamma_x.ip_jp(ix, iy, s=2)) * v.ip_jp(-1+ix, iy, s=2) -
                     # (beta_{i,j+1/2} + gamma^y_{i,j}) phi_{i,j+1}
-                    (beta_y.ip_jp(ix, 1+iy, s=2) + gamma_y.ip_jp(ix, iy, s=2))*
-                     v.ip_jp(ix, 1+iy, s=2) -
+                    (beta_y.ip_jp(ix, 1+iy, s=2) + gamma_y.ip_jp(ix, iy, s=2)) * v.ip_jp(ix, 1+iy, s=2) -
                     # (beta_{i,j-1/2} - gamma^y_{i,j}) phi_{i,j-1}
-                    (beta_y.ip_jp(ix, iy, s=2) - gamma_y.ip_jp(ix, iy, s=2))*
-                     v.ip_jp(ix, -1+iy, s=2)) / denom
+                    (beta_y.ip_jp(ix, iy, s=2) - gamma_y.ip_jp(ix, iy, s=2)) * v.ip_jp(ix, -1+iy, s=2)) / denom
 
                 if n == 1 or n == 3:
                     self.grids[level].fill_BC("v")
-
 
             if self.vis == 1:
                 plt.clf()
@@ -204,17 +194,14 @@ class GeneralMG2d(MG.CellCenterMG2d):
                 plt.subplot(224)
                 self._draw_main_error()
 
-
                 plt.suptitle(self.vis_title, fontsize=18)
 
                 plt.draw()
                 plt.savefig("mg_%4.4d.png" % (self.frame))
                 self.frame += 1
 
-
     def _compute_residual(self, level):
         """ compute the residual and store it in the r variable"""
-
 
         v = self.grids[level].get_var("v")
         f = self.grids[level].get_var("f")
@@ -228,17 +215,16 @@ class GeneralMG2d(MG.CellCenterMG2d):
         alpha = self.grids[level].get_var("alpha")
         gamma_x = 0.5*self.grids[level].get_var("gamma_x")/dx
         gamma_y = 0.5*self.grids[level].get_var("gamma_y")/dy
-        
+
         # these already have a 1/dx**2 scaling in them
         beta_x = self.beta_edge[level].x
         beta_y = self.beta_edge[level].y
-
 
         # compute the residual
         # r = f - L_eta phi
         L_eta_phi = (
             # alpha_{i,j} phi_{i,j}
-            alpha.v()*v.v() + 
+            alpha.v()*v.v() +
             # beta_{i+1/2,j} (phi_{i+1,j} - phi_{i,j})
             beta_x.ip(1)*(v.ip(1) - v.v()) - \
             # beta_{i-1/2,j} (phi_{i,j} - phi_{i-1,j})
@@ -250,7 +236,6 @@ class GeneralMG2d(MG.CellCenterMG2d):
             # gamma^x_{i,j} (phi_{i+1,j} - phi_{i-1,j})
             gamma_x.v()*(v.ip(1) - v.ip(-1)) + \
             # gamma^y_{i,j} (phi_{i,j+1} - phi_{i,j-1})
-            gamma_y.v()*(v.jp(1) - v.jp(-1))
-          )
+            gamma_y.v()*(v.jp(1) - v.jp(-1)))
 
-        r.v()[:,:] = f.v() - L_eta_phi
+        r.v()[:, :] = f.v() - L_eta_phi

@@ -5,6 +5,7 @@ import mesh.patch as patch
 import numpy
 from util import msg
 
+
 def init_data(my_data, base, rp):
     """ initialize the bubble problem """
 
@@ -37,9 +38,9 @@ def init_data(my_data, base, rp):
 
     # initialize the components -- we'll get a pressure too
     # but that is used only to initialize the base state
-    xvel[:,:] = 0.0
-    yvel[:,:] = 0.0
-    dens[:,:] = dens_cutoff
+    xvel[:, :] = 0.0
+    yvel[:, :] = 0.0
+    dens[:, :] = dens_cutoff
 
     # set the density to be stratified in the y-direction
     myg = my_data.grid
@@ -47,18 +48,18 @@ def init_data(my_data, base, rp):
 
     j = myg.jlo
     for j in range(myg.jlo, myg.jhi+1):
-        dens[:,j] = max(dens_base*numpy.exp(-myg.y[j]/scale_height),
-                        dens_cutoff)
+        dens[:, j] = max(dens_base*numpy.exp(-myg.y[j]/scale_height),
+                         dens_cutoff)
 
     cs2 = scale_height*abs(grav)
 
     # set the pressure (P = cs2*dens)
     pres = cs2*dens
-    eint[:,:] = pres/(gamma - 1.0)/dens
-    
+    eint[:, :] = pres/(gamma - 1.0)/dens
+
     # boost the specific internal energy, keeping the pressure
     # constant, by dropping the density
-    r = numpy.sqrt((myg.x2d - x_pert)**2  + (myg.y2d - y_pert)**2)
+    r = numpy.sqrt((myg.x2d - x_pert)**2 + (myg.y2d - y_pert)**2)
 
     idx = r <= r_pert
     eint[idx] = eint[idx]*pert_amplitude_factor

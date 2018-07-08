@@ -1,40 +1,40 @@
-"""basic syntax of the parameter file is:
+"""basic syntax of the parameter file is::
 
-# simple parameter file
+   # simple parameter file
 
-[driver]
-nsteps = 100         ; comment
-max_time = 0.25
+   [driver]
+   nsteps = 100         ; comment
+   max_time = 0.25
 
-[riemann]
-tol = 1.e-10
-max_iter = 10
+   [riemann]
+   tol = 1.e-10
+   max_iter = 10
 
-[io]
-basename = myfile_
+   [io]
+   basename = myfile_
 
 
 The recommended way to use this is for the code to have a master list
-of parameters and their defaults (e.g. _defaults), and then the
-user can override these defaults at runtime through an inputs file.
-These two files have the same format.
+of parameters and their defaults (e.g. _defaults), and then the user
+can override these defaults at runtime through an inputs file.  These
+two files have the same format.
 
-The calling sequence would then be:
+The calling sequence would then be::
 
-  rp = RuntimeParameters()
-  rp.load_params("_defaults")
-  rp.load_params("inputs")
+   rp = RuntimeParameters()
+   rp.load_params("_defaults")
+   rp.load_params("inputs")
 
 The parser will determine what datatype the parameter is (string,
-integer, float), and store it in a RuntimeParameters object.
-If a parameter that already exists is encountered a second time (e.g.,
+integer, float), and store it in a RuntimeParameters object.  If a
+parameter that already exists is encountered a second time (e.g.,
 there is a default value in _defaults and the user specifies a new
 value in inputs), then the second instance replaces the first.
 
 Runtime parameters can then be accessed via any module through the
-get_param method:
+get_param method::
 
-  tol = rp.get_param('riemann.tol')
+   tol = rp.get_param('riemann.tol')
 
 If the optional flag no_new=1 is set, then the load_params function
 will not define any new parameters, but only overwrite existing ones.
@@ -45,6 +45,7 @@ read default values.
 
 from __future__ import print_function
 
+import os
 import re
 from util import msg
 
@@ -53,15 +54,23 @@ from util import msg
 # types are
 def is_int(string):
     """ is the given string an interger? """
-    try: int(string)
-    except ValueError: return False
-    else: return True
+    try:
+        int(string)
+    except ValueError:
+        return False
+    else:
+        return True
+
 
 def is_float(string):
     """ is the given string a float? """
-    try: float(string)
-    except ValueError: return False
-    else: return True
+    try:
+        float(string)
+    except ValueError:
+        return False
+    else:
+        return True
+
 
 def _get_val(value):
     if is_int(value):
@@ -106,7 +115,11 @@ class RuntimeParameters(object):
         """
 
         # check to see whether the file exists
-        try: f = open(pfile, 'r')
+        if not os.path.isfile(pfile):
+            pfile = "{}/{}".format(os.environ["PYRO_HOME"], pfile)
+
+        try:
+            f = open(pfile, 'r')
         except IOError:
             msg.fail("ERROR: parameter file does not exist: {}".format(pfile))
 
@@ -119,11 +132,11 @@ class RuntimeParameters(object):
         for line in f.readlines():
 
             if sec.search(line):
-                lbracket, section, rbracket = sec.split(line)
+                _, section, _ = sec.split(line)
                 section = section.strip().lower()
 
             elif eq.search(line):
-                left, item, value, comment, right = eq.split(line)
+                _, item, value, comment, _ = eq.split(line)
                 item = item.strip().lower()
 
                 # define the key
@@ -132,7 +145,7 @@ class RuntimeParameters(object):
                 # if we have no_new = 1, then we only want to override existing
                 # key/values
                 if no_new:
-                    if not key in self.params.keys():
+                    if key not in self.params.keys():
                         msg.warning("warning, key: %s not defined" % (key))
                         continue
 
@@ -150,11 +163,10 @@ class RuntimeParameters(object):
 
                 self.param_comments[key] = comment.strip()
 
-
     def command_line_params(self, cmd_strings):
         """
         finds dictionary pairs from a string that came from the
-        commandline.  Stores the parameters in globalParams only if they
+        commandline.  Stores the parameters in only if they
         already exist.
 
         we expect things in the string in the form:
@@ -174,13 +186,12 @@ class RuntimeParameters(object):
             key, value = item.split("=")
 
             # we only want to override existing keys/values
-            if not key in self.params.keys():
+            if key not in self.params.keys():
                 msg.warning("warning, key: %s not defined" % (key))
                 continue
 
             # check in turn whether this is an interger, float, or string
             self.params[key] = _get_val(value)
-
 
     def get_param(self, key):
         """
@@ -193,23 +204,21 @@ class RuntimeParameters(object):
             self.load_params("_defaults")
 
         # debugging
-        if not key in self.used_params:
+        if key not in self.used_params:
             self.used_params.append(key)
 
         if key in self.params.keys():
             return self.params[key]
         else:
-            msg.fail("ERROR: runtime parameter %s not found" % (key))
-
+            raise KeyError("ERROR: runtime parameter {} not found".format(key))
 
     def print_unused_params(self):
         """
         Print out the list of parameters that were defined by never used
         """
-        for key in self.params.keys():
-            if not key in self.used_params:
+        for key in self.params:
+            if key not in self.used_params:
                 msg.warning("parameter %s never used" % (key))
-
 
     def print_all_params(self):
         """
@@ -245,7 +254,6 @@ class RuntimeParameters(object):
 
         return ostr
 
-
     def print_paramfile(self):
         """
         Create a file, inputs.auto, that has the structure of a pyro
@@ -255,10 +263,10 @@ class RuntimeParameters(object):
         keys = list(self.params.keys())
         keys.sort()
 
-        try: f = open('inputs.auto', 'w')
+        try:
+            f = open('inputs.auto', 'w')
         except IOError:
             msg.fail("ERROR: unable to open inputs.auto")
-
 
         f.write('# automagically generated parameter file\n')
 

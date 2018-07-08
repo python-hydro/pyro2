@@ -6,6 +6,7 @@ import numpy as np
 from util import msg
 import math
 
+
 def init_data(my_data, rp):
     """ initialize the sedov problem """
 
@@ -26,9 +27,9 @@ def init_data(my_data, rp):
     # initialize the components, remember, that ener here is rho*eint
     # + 0.5*rho*v**2, where eint is the specific internal energy
     # (erg/g)
-    dens[:,:] = 1.0
-    xmom[:,:] = 0.0
-    ymom[:,:] = 0.0
+    dens[:, :] = 1.0
+    xmom[:, :] = 0.0
+    ymom[:, :] = 0.0
 
     E_sedov = 1.0
 
@@ -46,42 +47,34 @@ def init_data(my_data, rp):
     xctr = 0.5*(xmin + xmax)
     yctr = 0.5*(ymin + ymax)
 
-
     # initialize the pressure by putting the explosion energy into a
     # volume of constant pressure.  Then compute the energy in a zone
     # from this.
-    nsub = 4
+    nsub = rp.get_param("sedov.nsub")
 
     dist = np.sqrt((my_data.grid.x2d - xctr)**2 +
                    (my_data.grid.y2d - yctr)**2)
 
-
     p = 1.e-5
-    ener[:,:] = p/(gamma - 1.0)
-    
+    ener[:, :] = p/(gamma - 1.0)
+
     for i, j in np.transpose(np.nonzero(dist < 2.0*r_init)):
 
-        pzone = 0.0
+        xsub = my_data.grid.xl[i] + (my_data.grid.dx/nsub)*(np.arange(nsub) + 0.5)
+        ysub = my_data.grid.yl[j] + (my_data.grid.dy/nsub)*(np.arange(nsub) + 0.5)
 
-        for ii in range(nsub):
-            for jj in range(nsub):
+        xx, yy = np.meshgrid(xsub, ysub, indexing="ij")
 
-                xsub = my_data.grid.xl[i] + (my_data.grid.dx/nsub)*(ii + 0.5)
-                ysub = my_data.grid.yl[j] + (my_data.grid.dy/nsub)*(jj + 0.5)
+        dist = np.sqrt((xx - xctr)**2 + (yy - yctr)**2)
 
-                dist = np.sqrt((xsub - xctr)**2 + 
-                                  (ysub - yctr)**2)
-                
-                if dist <= r_init:
-                    p = (gamma - 1.0)*E_sedov/(pi*r_init*r_init)
-                else:
-                    p = 1.e-5
+        n_in_pert = np.count_nonzero(dist <= r_init)
 
-                pzone += p
+        p = n_in_pert*(gamma - 1.0)*E_sedov/(pi*r_init*r_init) + \
+            (nsub*nsub - n_in_pert)*1.e-5
 
-        p = pzone/(nsub*nsub)
-            
-        ener[i,j] = p/(gamma - 1.0)
+        p = p/(nsub*nsub)
+
+        ener[i, j] = p/(gamma - 1.0)
 
 
 def finalize():
@@ -95,4 +88,3 @@ def finalize():
           """
 
     print(msg)
-

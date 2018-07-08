@@ -1,7 +1,8 @@
-![pyro logo](www/pyro.png)
+[![Build Status](https://travis-ci.org/zingale/pyro2.svg?branch=master)](https://travis-ci.org/zingale/pyro2)
+
+![pyro logo](www/logo.gif)
 
 *A simple python-based tutorial on computational methods for hydrodynamics*
-
 
 pyro is a computational hydrodynamics code that presents
 two-dimensional solvers for advection, compressible hydrodynamics,
@@ -21,6 +22,19 @@ etc. is here:
 http://zingale.github.io/pyro2/
 
 
+## Table of Contents
+
+ * [Getting started](#getting-started)
+ * [Core Data Structures](#core-data-structures)
+ * [Solvers](#solvers)
+ * [Working with data](#working-with-data)
+ * [Understanding the algorithms](#understanding-the-algorithms)
+ * [Regression and unit testing](#regression-and-unit-testing)
+ * [python 2.7](#python-27)
+ * [Acknowledgements](#acknowledgements)
+ * [Getting help](#getting-help)
+
+
 ## Getting started
 
   - By default, we assume python 3.4 or later.  Instructions to
@@ -35,11 +49,11 @@ http://zingale.github.io/pyro2/
 
     (note, for older Fedora releases, replace `dnf` with `yum`.  For
 	python 2.x, leave off the `2` in the package names.)
-	
+
   - You also need to make sure gfortran is present on you system. On a
     Fedora system, it can be installed as:
 
-       `dnf install gcc-gfortran` 
+       `dnf install gcc-gfortran`
 
   - Not all matplotlib backends allow for the interactive plotting as
     pyro is run. One that does is the TkAgg backend. This can be made
@@ -48,30 +62,30 @@ http://zingale.github.io/pyro2/
 
        `backend: TkAgg`
 
-     You can check what backend is your current default in python via: 
+     You can check what backend is your current default in python via:
 
        ```python
-       import matplotlib.pyplot 
-       print matplotlib.pyplot.get_backend() 
+       import matplotlib.pyplot
+       print matplotlib.pyplot.get_backend()
        ```
-	   
+
   - If you want to run the unit tests, you need to have `pytest` installed.
-  
-  - The remaining steps are: 
+
+  - The remaining steps are:
 
       * Set the `PYTHONPATH` environment variable to point to the `pyro2/`
         directory.
 
       * Define the environment variable `PYRO_HOME` to point to the
         `pyro2/` directory (only needed to regression testing)
-	  
-      * Build the Fortran source. In `pyro2/` type 
 
-          `./mk.sh` 
+      * Build the Fortran source. In `pyro2/` type
 
-      * Run a quick test of the advection solver: 
+          `./mk.sh`
 
-          `./pyro.py advection smooth inputs.smooth` 
+      * Run a quick test of the advection solver:
+
+          `./pyro.py advection smooth inputs.smooth`
 
         you should see a graphing window pop up with a smooth pulse
         advecting diagonally through the periodic domain.
@@ -99,19 +113,29 @@ pyro provides the following solvers (all in 2-d):
     of the interface states.  This is the basic method to understand
     hydrodynamics.
 
+  - `advection_fv4`: a fourth-order accurate finite-volume advection
+    solver that uses RK4 time integration.
+
   - `advection_rk`: a second-order unsplit solver for linear advection
     that uses Runge-Kutta integration instead of characteristic
     tracing.
-  
+
+  - `advection_weno`: a method-of-lines WENO solver for linear
+    advection.
+
   - `compressible`: a second-order unsplit solver for the Euler
     equations of compressible hydrodynamics.  This uses characteristic
 	tracing and corner coupling for the prediction of the interface
 	states and a 2-shock or HLLC approximate Riemann solver.
 
+  - `compressible_fv4`: a fourth-order accurate finite-volume compressible
+     hydro solver that uses RK4 time integration.  This is built from the
+     method of McCourquodale and Colella (2011).
+
   - `compressible_rk`: a second-order unsplit solver for Euler
      equations that uses Runge-Kutta integration instead of
 	 characteristic tracing.
-	 
+
   - `incompressible`: a second-order cell-centered approximate
     projection method for the incompressible equations of
     hydrodynamics.
@@ -129,6 +153,8 @@ pyro provides the following solvers (all in 2-d):
     constant-coefficient Helmholtz equation, as well as a
     variable-coefficient Poisson equation (which inherits from the
     constant-coefficient solver).
+
+  - `swe`: a solver for the shallow water equations.
 
 
 ## Working with data
@@ -150,6 +176,12 @@ with their data.
       usage: `./plot.py file`
 
   - `analysis/`
+
+      * `dam_compare.py`: this takes an output file from the
+        shallow water dam break problem and plots a slice through the domain
+        together with the analytic solution (calculated in the script).
+
+         usage: `./dam_compare.py file`
 
       * `gauss_diffusion_compare.py`: this is for the diffusion solver's
         Gaussian diffusion problem. It takes a sequence of output
@@ -211,7 +243,7 @@ with their data.
 
   It will also invoke the python `pytest` module to run the unit tests
   for the different modules in pyro.
-  
+
   Tests are run nightly and reported here:
 
   http://bender.astro.sunysb.edu/hydro_by_example/download/_stage/pyro2/tests.out
@@ -231,7 +263,16 @@ with their data.
   ```
   python2 ./pyro.py compressible sedov inputs.sedov
   ```
-  
+
+
+## Acknowledgements
+
+  If you use pyro in a class or workshop, please e-mail us to let us know
+  (we'd like to start listing these on the website).
+
+  If pyro was used for a publication, please cite the article found in
+  the `CITATION` file.
+
 
 ## Getting help
 

@@ -1,14 +1,14 @@
 import mesh.reconstruction as reconstruction
-import mesh.patch as patch
-import mesh.array_indexer as ai
+
 
 def unsplit_fluxes(my_data, rp, dt, scalar_name):
     """
     Construct the fluxes through the interfaces for the linear advection
     equation:
 
-      a  + u a  + v a  = 0
-       t      x      y
+    .. math::
+
+       a_t  + u a_x  + v a_y  = 0
 
     We use a second-order (piecewise linear) unsplit Godunov method
     (following Colella 1990).
@@ -19,15 +19,14 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
     on the sign of the velocity.
 
     Our convection is that the fluxes are going to be defined on the
-    left edge of the computational zones
+    left edge of the computational zones::
 
+        |             |             |             |
+        |             |             |             |
+       -+------+------+------+------+------+------+--
+        |     i-1     |      i      |     i+1     |
 
-     |             |             |             |
-     |             |             |             |
-    -+------+------+------+------+------+------+--
-     |     i-1     |      i      |     i+1     |
-
-              a_l,i  a_r,i   a_l,i+1
+                 a_l,i  a_r,i   a_l,i+1
 
 
     a_r,i and a_l,i+1 are computed using the information in
@@ -64,9 +63,6 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
     cx = u*dt/myg.dx
     cy = v*dt/myg.dy
 
-    qx = myg.qx
-    qy = myg.qy
-
     #--------------------------------------------------------------------------
     # monotonized central differences
     #--------------------------------------------------------------------------
@@ -81,11 +77,10 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
     # upwind
     if u < 0:
         # a_x[i,j] = a[i,j] - 0.5*(1.0 + cx)*ldelta_a[i,j]
-        a_x.v(buf=1)[:,:] = a.v(buf=1) - 0.5*(1.0 + cx)*ldelta_ax.v(buf=1)
+        a_x.v(buf=1)[:, :] = a.v(buf=1) - 0.5*(1.0 + cx)*ldelta_ax.v(buf=1)
     else:
         # a_x[i,j] = a[i-1,j] + 0.5*(1.0 - cx)*ldelta_a[i-1,j]
-        a_x.v(buf=1)[:,:] = a.ip(-1, buf=1) + 0.5*(1.0 - cx)*ldelta_ax.ip(-1, buf=1)
-
+        a_x.v(buf=1)[:, :] = a.ip(-1, buf=1) + 0.5*(1.0 - cx)*ldelta_ax.ip(-1, buf=1)
 
     # y-direction
     a_y = myg.scratch_array()
@@ -93,11 +88,10 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
     # upwind
     if v < 0:
         # a_y[i,j] = a[i,j] - 0.5*(1.0 + cy)*ldelta_a[i,j]
-        a_y.v(buf=1)[:,:] = a.v(buf=1) - 0.5*(1.0 + cy)*ldelta_ay.v(buf=1)
+        a_y.v(buf=1)[:, :] = a.v(buf=1) - 0.5*(1.0 + cy)*ldelta_ay.v(buf=1)
     else:
         # a_y[i,j] = a[i,j-1] + 0.5*(1.0 - cy)*ldelta_a[i,j-1]
-        a_y.v(buf=1)[:,:] = a.jp(-1, buf=1) + 0.5*(1.0 - cy)*ldelta_ay.jp(-1, buf=1)
-
+        a_y.v(buf=1)[:, :] = a.jp(-1, buf=1) + 0.5*(1.0 - cy)*ldelta_ay.jp(-1, buf=1)
 
     # compute the transverse flux differences.  The flux is just (u a)
     # HOTF
@@ -120,15 +114,14 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
     else:
         my = -1
 
-
     dtdx2 = 0.5*dt/myg.dx
     dtdy2 = 0.5*dt/myg.dy
 
-    F_x.v(buf=1)[:,:] = u*(a_x.v(buf=1) -
+    F_x.v(buf=1)[:, :] = u*(a_x.v(buf=1) -
                            dtdy2*(F_yt.ip_jp(mx, 1, buf=1) -
                                   F_yt.ip(mx, buf=1)))
 
-    F_y.v(buf=1)[:,:] = v*(a_y.v(buf=1) -
+    F_y.v(buf=1)[:, :] = v*(a_y.v(buf=1) -
                            dtdx2*(F_xt.ip_jp(1, my, buf=1) -
                                   F_xt.jp(my, buf=1)))
 

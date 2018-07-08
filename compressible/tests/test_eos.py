@@ -1,5 +1,6 @@
 import compressible.eos as eos
 
+
 def test_eos_consistency():
 
     dens = 1.0

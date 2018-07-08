@@ -1,5 +1,10 @@
+"""
+support output in highlighted colors
+"""
+
 from __future__ import print_function
 import sys
+
 
 # inspiration from
 # http://stackoverflow.com/questions/287871/print-in-terminal-with-colors-using-python
@@ -27,6 +32,7 @@ def fail(string):
     else:
         sys.exit()
 
+
 def warning(string):
     """
     Output a string to the terminal colored orange to indicate a
@@ -34,12 +40,14 @@ def warning(string):
     """
     print(_TermColors.WARNING + string + _TermColors.ENDC)
 
+
 def success(string):
     """
     Output a string to the terminal colored green to indicate
     success
     """
     print(_TermColors.SUCCESS + string + _TermColors.ENDC)
+
 
 def bold(string):
     """ Output a string in a bold weight"""

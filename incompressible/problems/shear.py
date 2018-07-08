@@ -1,15 +1,14 @@
-"""
+r"""
 Initialize the doubly periodic shear layer (see, for example, Martin
 and Colella, 2000, JCP, 163, 271).  This is run in a unit square
 domain, with periodic boundary conditions on all sides.  Here, the
-initial velocity is
+initial velocity is::
 
-              / tanh(rho_s (y-0.25))   if y <= 0.5
-u(x,y,t=0) = <
-              \ tanh(rho_s (0.75-y))   if y > 0.5
+                 / tanh(rho_s (y-0.25))   if y <= 0.5
+   u(x,y,t=0) = <
+                 \ tanh(rho_s (0.75-y))   if y > 0.5
 
-
-v(x,y,t=0) = delta_s sin(2 pi x)
+   v(x,y,t=0) = delta_s sin(2 pi x)
 
 
 """
@@ -22,6 +21,7 @@ import numpy as np
 import mesh.patch as patch
 from util import msg
 
+
 def init_data(my_data, rp):
     """ initialize the incompressible shear problem """
 
@@ -32,11 +32,9 @@ def init_data(my_data, rp):
         print(my_data.__class__)
         msg.fail("ERROR: patch invalid in shear.py")
 
-
     # get the necessary runtime parameters
     rho_s = rp.get_param("shear.rho_s")
     delta_s = rp.get_param("shear.delta_s")
-
 
     # get the velocities
     u = my_data.get_var("x-velocity")
@@ -60,7 +58,7 @@ def init_data(my_data, rp):
     idx = myg.y2d > y_half
     u[idx] = np.tanh(rho_s*(0.75 - myg.y2d[idx]))
 
-    v[:,:] = delta_s*np.sin(2.0*math.pi*myg.x2d)
+    v[:, :] = delta_s*np.sin(2.0*math.pi*myg.x2d)
 
     print("extrema: ", u.min(), u.max())
 

@@ -1,15 +1,23 @@
+"""An array class that has methods supporting the type of stencil
+operations we see in finite-difference methods, like i+1, i-1, etc.
+
+"""
+
 from __future__ import print_function
 
 import numpy as np
+
 
 def _buf_split(b):
     """ take an integer or iterable and break it into a -x, +x, -y, +y
     value representing a ghost cell buffer
     """
-    try: bxlo, bxhi, bylo, byhi = b
-    except:
-        try: blo, bhi = b
-        except:
+    try:
+        bxlo, bxhi, bylo, byhi = b
+    except (ValueError, TypeError):
+        try:
+            blo, bhi = b
+        except (ValueError, TypeError):
             blo = b
             bhi = b
         bxlo = bylo = blo
@@ -30,7 +38,8 @@ class ArrayIndexer(np.ndarray):
         return obj
 
     def __array_finalize__(self, obj):
-        if obj is None: return
+        if obj is None:
+            return
         self.g = getattr(obj, "g", None)
         self.c = getattr(obj, "c", None)
 
@@ -78,7 +87,13 @@ class ArrayIndexer(np.ndarray):
                                    self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s])
         else:
             return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
-                                   self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s,n])
+                                   self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s, n])
+
+    def lap(self, n=0, buf=0):
+        """return the 5-point Laplacian"""
+        l = (self.ip(-1, n=n, buf=buf) - 2*self.v(n=n, buf=buf) + self.ip(1, n=n, buf=buf))/self.g.dx**2 + \
+            (self.jp(-1, n=n, buf=buf) - 2*self.v(n=n, buf=buf) + self.jp(1, n=n, buf=buf))/self.g.dy**2
+        return l
 
     def norm(self, n=0):
         """
@@ -90,13 +105,11 @@ class ArrayIndexer(np.ndarray):
         if c == 2:
             return self.g.norm(self)
         else:
-            return self.g.norm(self[:,:,n])
-
+            return self.g.norm(self[:, :, n])
 
     def copy(self):
         """make a copy of the array, defined on the same grid"""
         return ArrayIndexer(np.asarray(self).copy(), grid=self.g)
-
 
     def is_symmetric(self, nodal=False, tol=1.e-14, asymmetric=False):
         """return True is the data is left-right symmetric (to the tolerance
@@ -106,7 +119,8 @@ class ArrayIndexer(np.ndarray):
 
         # prefactor to convert from symmetric to asymmetric test
         s = 1
-        if asymmetric: s = -1
+        if asymmetric:
+            s = -1
 
         if not nodal:
             L = self[self.g.ilo:self.g.ilo+self.g.nx//2,
@@ -116,13 +130,12 @@ class ArrayIndexer(np.ndarray):
         else:
             L = self[self.g.ilo:self.g.ilo+self.g.nx//2+1,
                      self.g.jlo:self.g.jhi+1]
-            print(self.g.ilo+self.g.nx//2,self.g.ihi+2)
+            print(self.g.ilo+self.g.nx//2, self.g.ihi+2)
             R = self[self.g.ilo+self.g.nx//2:self.g.ihi+2,
                      self.g.jlo:self.g.jhi+1]
 
         e = abs(L - s*np.flipud(R)).max()
         return e < tol
-
 
     def is_asymmetric(self, nodal=False, tol=1.e-14):
         """return True is the data is left-right asymmetric (to the tolerance
@@ -131,8 +144,133 @@ class ArrayIndexer(np.ndarray):
         """
         return self.is_symmetric(nodal=nodal, tol=tol, asymmetric=True)
 
+    def fill_ghost(self, n=0, bc=None):
+        """Fill the boundary conditions.  This operates on a single component,
+        n. We do periodic, reflect-even, reflect-odd, and outflow
 
-    def pretty_print(self, fmt=None):
+        We need a BC object to tell us what BC type on each boundary.
+        """
+
+        # there is only a single grid, so every boundary is on
+        # a physical boundary (except if we are periodic)
+
+        # Note: we piggy-back on outflow and reflect-odd for
+        # Neumann and Dirichlet homogeneous BCs respectively, but
+        # this only works for a single ghost cell
+
+        # -x boundary
+        if bc.xlb in ["outflow", "neumann"]:
+            if bc.xl_value is None:
+                for i in range(self.g.ilo):
+                    self[i, :, n] = self[self.g.ilo, :, n]
+            else:
+                self[self.g.ilo-1, :, n] = \
+                    self[self.g.ilo, :, n] - self.g.dx*bc.xl_value[:]
+
+        elif bc.xlb == "reflect-even":
+            for i in range(self.g.ilo):
+                self[i, :, n] = self[2*self.g.ng-i-1, :, n]
+
+        elif bc.xlb in ["reflect-odd", "dirichlet"]:
+            if bc.xl_value is None:
+                for i in range(self.g.ilo):
+                    self[i, :, n] = -self[2*self.g.ng-i-1, :, n]
+            else:
+                self[self.g.ilo-1, :, n] = \
+                    2*bc.xl_value[:] - self[self.g.ilo, :, n]
+
+        elif bc.xlb == "periodic":
+            for i in range(self.g.ilo):
+                self[i, :, n] = self[self.g.ihi-self.g.ng+i+1, :, n]
+
+        # +x boundary
+        if bc.xrb in ["outflow", "neumann"]:
+            if bc.xr_value is None:
+                for i in range(self.g.ihi+1, self.g.nx+2*self.g.ng):
+                    self[i, :, n] = self[self.g.ihi, :, n]
+            else:
+                self[self.g.ihi+1, :, n] = \
+                    self[self.g.ihi, :, n] + self.g.dx*bc.xr_value[:]
+
+        elif bc.xrb == "reflect-even":
+            for i in range(self.g.ng):
+                i_bnd = self.g.ihi+1+i
+                i_src = self.g.ihi-i
+
+                self[i_bnd, :, n] = self[i_src, :, n]
+
+        elif bc.xrb in ["reflect-odd", "dirichlet"]:
+            if bc.xr_value is None:
+                for i in range(self.g.ng):
+                    i_bnd = self.g.ihi+1+i
+                    i_src = self.g.ihi-i
+
+                    self[i_bnd, :, n] = -self[i_src, :, n]
+            else:
+                self[self.g.ihi+1, :, n] = \
+                    2*bc.xr_value[:] - self[self.g.ihi, :, n]
+
+        elif bc.xrb == "periodic":
+            for i in range(self.g.ihi+1, 2*self.g.ng + self.g.nx):
+                self[i, :, n] = self[i-self.g.ihi-1+self.g.ng, :, n]
+
+        # -y boundary
+        if bc.ylb in ["outflow", "neumann"]:
+            if bc.yl_value is None:
+                for j in range(self.g.jlo):
+                    self[:, j, n] = self[:, self.g.jlo, n]
+            else:
+                self[:, self.g.jlo-1, n] = \
+                    self[:, self.g.jlo, n] - self.g.dy*bc.yl_value[:]
+
+        elif bc.ylb == "reflect-even":
+            for j in range(self.g.jlo):
+                self[:, j, n] = self[:, 2*self.g.ng-j-1, n]
+
+        elif bc.ylb in ["reflect-odd", "dirichlet"]:
+            if bc.yl_value is None:
+                for j in range(self.g.jlo):
+                    self[:, j, n] = -self[:, 2*self.g.ng-j-1, n]
+            else:
+                self[:, self.g.jlo-1, n] = \
+                    2*bc.yl_value[:] - self[:, self.g.jlo, n]
+
+        elif bc.ylb == "periodic":
+            for j in range(self.g.jlo):
+                self[:, j, n] = self[:, self.g.jhi-self.g.ng+j+1, n]
+
+        # +y boundary
+        if bc.yrb in ["outflow", "neumann"]:
+            if bc.yr_value is None:
+                for j in range(self.g.jhi+1, self.g.ny+2*self.g.ng):
+                    self[:, j, n] = self[:, self.g.jhi, n]
+            else:
+                self[:, self.g.jhi+1, n] = \
+                    self[:, self.g.jhi, n] + self.g.dy*bc.yr_value[:]
+
+        elif bc.yrb == "reflect-even":
+            for j in range(self.g.ng):
+                j_bnd = self.g.jhi+1+j
+                j_src = self.g.jhi-j
+
+                self[:, j_bnd, n] = self[:, j_src, n]
+
+        elif bc.yrb in ["reflect-odd", "dirichlet"]:
+            if bc.yr_value is None:
+                for j in range(self.g.ng):
+                    j_bnd = self.g.jhi+1+j
+                    j_src = self.g.jhi-j
+
+                    self[:, j_bnd, n] = -self[:, j_src, n]
+            else:
+                self[:, self.g.jhi+1, n] = \
+                    2*bc.yr_value[:] - self[:, self.g.jhi, n]
+
+        elif bc.yrb == "periodic":
+            for j in range(self.g.jhi+1, 2*self.g.ng + self.g.ny):
+                self[:, j, n] = self[:, j-self.g.jhi-1+self.g.ng, n]
+
+    def pretty_print(self, n=0, fmt=None, show_ghost=True):
         """
         Print out a small dataset to the screen with the ghost cells
         a different color, to make things stand out
@@ -148,8 +286,19 @@ class ArrayIndexer(np.ndarray):
 
         # print j descending, so it looks like a grid (y increasing
         # with height)
-        for j in reversed(range(self.g.qy)):
-            for i in range(self.g.qx):
+        if show_ghost:
+            ilo = 0
+            ihi = self.g.qx-1
+            jlo = 0
+            jhi = self.g.qy-1
+        else:
+            ilo = self.g.ilo
+            ihi = self.g.ihi
+            jlo = self.g.jlo
+            jhi = self.g.jhi
+
+        for j in reversed(range(jlo, jhi+1)):
+            for i in range(ilo, ihi+1):
 
                 if (j < self.g.jlo or j > self.g.jhi or
                     i < self.g.ilo or i > self.g.ihi):
@@ -157,10 +306,15 @@ class ArrayIndexer(np.ndarray):
                 else:
                     gc = 0
 
-                if gc:
-                    print("\033[31m" + fmt % (self[i,j]) + "\033[0m", end="")
+                if self.c == 2:
+                    val = self[i, j]
                 else:
-                    print(fmt % (self[i,j]), end="")
+                    val = self[i, j, n]
+
+                if gc:
+                    print("\033[31m" + fmt % (val) + "\033[0m", end="")
+                else:
+                    print(fmt % (val), end="")
 
             print(" ")
 

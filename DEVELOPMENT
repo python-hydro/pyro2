@@ -4,7 +4,7 @@ new solvers:
 
   -- Burgers equation (viscous and inviscid)
 
-  -- low Mach number hydro (both combustion and atmospheric)
+  -- low Mach number hydro (combustion)
 
   -- nodal MG solver?
 

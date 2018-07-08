@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import advection.advective_fluxes as flx
 import mesh.patch as patch
 from simulation_null import NullSimulation, grid_setup, bc_setup
-from util import profile
+
 
 class Simulation(NullSimulation):
 
@@ -29,7 +29,6 @@ class Simulation(NullSimulation):
         problem = importlib.import_module("advection.problems.{}".format(self.problem_name))
         problem.init_data(self.cc_data, self.rp)
 
-
     def method_compute_timestep(self):
         """
         Compute the advective timestep (CFL) constraint.  We use the
@@ -43,11 +42,10 @@ class Simulation(NullSimulation):
         v = self.rp.get_param("advection.v")
 
         # the timestep is min(dx/|u|, dy/|v|)
-        xtmp = self.cc_data.grid.dx/max(abs(u),self.SMALL)
-        ytmp = self.cc_data.grid.dy/max(abs(v),self.SMALL)
+        xtmp = self.cc_data.grid.dx/max(abs(u), self.SMALL)
+        ytmp = self.cc_data.grid.dy/max(abs(v), self.SMALL)
 
         self.dt = cfl*min(xtmp, ytmp)
-
 
     def evolve(self):
         """
@@ -59,7 +57,7 @@ class Simulation(NullSimulation):
         dtdx = self.dt/self.cc_data.grid.dx
         dtdy = self.dt/self.cc_data.grid.dy
 
-        flux_x, flux_y =  flx.unsplit_fluxes(self.cc_data, self.rp, self.dt, "density")
+        flux_x, flux_y = flx.unsplit_fluxes(self.cc_data, self.rp, self.dt, "density")
 
         """
         do the differencing for the fluxes now.  Here, we use slices so we
@@ -70,18 +68,14 @@ class Simulation(NullSimulation):
                                dtdy*(flux_y[i,j] - flux_y[i,j+1])
         """
 
-        qx = self.cc_data.grid.qx
-        qy = self.cc_data.grid.qy
-
         dens = self.cc_data.get_var("density")
 
-        dens.v()[:,:] = dens.v() + dtdx*(flux_x.v() - flux_x.ip(1)) + \
-                                   dtdy*(flux_y.v() - flux_y.jp(1))
+        dens.v()[:, :] = dens.v() + dtdx*(flux_x.v() - flux_x.ip(1)) + \
+                                    dtdy*(flux_y.v() - flux_y.jp(1))
 
         # increment the time
         self.cc_data.t += self.dt
         self.n += 1
-
 
     def dovis(self):
         """
@@ -104,9 +98,7 @@ class Simulation(NullSimulation):
 
         plt.colorbar()
 
-        plt.figtext(0.05,0.0125, "t = {:10.5f}".format(self.cc_data.t))
+        plt.figtext(0.05, 0.0125, "t = {:10.5f}".format(self.cc_data.t))
 
         plt.pause(0.001)
         plt.draw()
-
-

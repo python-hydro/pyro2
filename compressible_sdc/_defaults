@@ -1,0 +1,25 @@
+[driver]
+cfl = 0.8
+
+
+[eos]
+gamma = 1.4    ; pres = rho ener (gamma - 1)
+
+
+[compressible]
+use_flattening = 1        ; apply flattening at shocks (1)
+
+z0 = 0.75                 ; flattening z0 parameter
+z1 = 0.85                 ; flattening z1 parameter
+delta = 0.33              ; flattening delta parameter
+
+cvisc = 0.1               ; artifical viscosity coefficient
+
+limiter = 2               ; limiter (0 = none, 1 = 2nd order, 2 = 4th order)
+
+temporal_method = RK4     ; integration method (see mesh/integration.py)
+
+grav = 0.0                ; gravitational acceleration (in y-direction)
+
+
+

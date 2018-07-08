@@ -1,1 +1,2 @@
-__all__ = ['advect', 'sedov','sod','quad','kh','bubble', 'rt']
+__all__ = ['acoustic_pulse', 'advect', 'bubble', 'hse', 'kh', 'logo', 'quad', 'rt', 'rt2', 'sedov', 'sod',
+           'test', 'ramp']

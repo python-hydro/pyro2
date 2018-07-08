@@ -5,10 +5,11 @@ import mesh.patch as patch
 import numpy
 from util import msg
 
+
 def phi_analytic(dist, t, t_0, k, phi_1, phi_2):
     """ the analytic solution to the Gaussian diffusion problem """
-    phi = (phi_2 - phi_1)*(t_0/(t + t_0))* \
-        numpy.exp(-0.25*dist**2/(k*(t + t_0)) ) + phi_1
+    phi = (phi_2 - phi_1)*(t_0/(t + t_0)) * \
+        numpy.exp(-0.25*dist**2/(k*(t + t_0))) + phi_1
     return phi
 
 
@@ -33,16 +34,16 @@ def init_data(my_data, rp):
 
     xctr = 0.5*(xmin + xmax)
     yctr = 0.5*(ymin + ymax)
-    
+
     k = rp.get_param("diffusion.k")
     t_0 = rp.get_param("gaussian.t_0")
     phi_max = rp.get_param("gaussian.phi_max")
-    phi_0   = rp.get_param("gaussian.phi_0")
+    phi_0 = rp.get_param("gaussian.phi_0")
 
     dist = numpy.sqrt((my_data.grid.x2d - xctr)**2 +
                       (my_data.grid.y2d - yctr)**2)
-    
-    phi[:,:] = phi_analytic(dist, 0.0, t_0, k, phi_0, phi_max)
+
+    phi[:, :] = phi_analytic(dist, 0.0, t_0, k, phi_0, phi_max)
 
     # for later interpretation / analysis, store some auxillary data
     my_data.set_aux("k", k)
@@ -50,15 +51,13 @@ def init_data(my_data, rp):
     my_data.set_aux("phi_0", phi_0)
     my_data.set_aux("phi_max", phi_max)
 
-    
-                             
+
 def finalize():
     """ print out any information to the user at the end of the run """
 
-    msg = """
+    ostr = """
           The solution can be compared to the analytic solution with
           the script analysis/gauss_diffusion_compare.py
           """
 
-    print(msg)
-
+    print(ostr)

@@ -6,11 +6,14 @@ import mesh.integration as integration
 import compressible
 import compressible_rk.fluxes as flx
 
+
 class Simulation(compressible.Simulation):
+    """The main simulation class for the method of lines compressible
+    hydrodynamics solver"""
 
     def substep(self, myd):
         """
-        take a single substep in the RK timestepping starting with the 
+        take a single substep in the RK timestepping starting with the
         conservative state defined as part of myd
         """
 
@@ -22,10 +25,10 @@ class Simulation(compressible.Simulation):
         ymom = myd.get_var("y-momentum")
 
         ymom_src = myg.scratch_array()
-        ymom_src.v()[:,:] = dens.v()[:,:]*grav
+        ymom_src.v()[:, :] = dens.v()[:, :]*grav
 
         E_src = myg.scratch_array()
-        E_src.v()[:,:] = ymom.v()[:,:]*grav
+        E_src.v()[:, :] = ymom.v()[:, :]*grav
 
         k = myg.scratch_array(nvar=self.ivars.nvar)
 
@@ -33,15 +36,14 @@ class Simulation(compressible.Simulation):
                                     self.ivars, self.solid, self.tc)
 
         for n in range(self.ivars.nvar):
-            k.v(n=n)[:,:] = \
+            k.v(n=n)[:, :] = \
                (flux_x.v(n=n) - flux_x.ip(1, n=n))/myg.dx + \
                (flux_y.v(n=n) - flux_y.jp(1, n=n))/myg.dy
 
-        k.v(n=self.ivars.iymom)[:,:] += ymom_src.v()[:,:]
-        k.v(n=self.ivars.iener)[:,:] += E_src.v()[:,:]
+        k.v(n=self.ivars.iymom)[:, :] += ymom_src.v()[:, :]
+        k.v(n=self.ivars.iener)[:, :] += E_src.v()[:, :]
 
         return k
-
 
     def method_compute_timestep(self):
         """
@@ -63,7 +65,6 @@ class Simulation(compressible.Simulation):
         ytmp = (abs(v) + cs)/self.cc_data.grid.dy
 
         self.dt = cfl*float(np.min(1.0/(xtmp + ytmp)))
-
 
     def evolve(self):
         """
@@ -88,7 +89,6 @@ class Simulation(compressible.Simulation):
             rk.store_increment(s, k)
 
         rk.compute_final_update()
-
 
         # increment the time
         myd.t += self.dt

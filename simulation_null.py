@@ -2,16 +2,36 @@ import h5py
 import importlib
 import mesh.boundary as bnd
 import mesh.patch as patch
-from util import profile
+from util import msg, profile
+
 
 def grid_setup(rp, ng=1):
     nx = rp.get_param("mesh.nx")
     ny = rp.get_param("mesh.ny")
 
-    xmin = rp.get_param("mesh.xmin")
-    xmax = rp.get_param("mesh.xmax")
-    ymin = rp.get_param("mesh.ymin")
-    ymax = rp.get_param("mesh.ymax")
+    try:
+        xmin = rp.get_param("mesh.xmin")
+    except KeyError:
+        xmin = 0.0
+        msg.warning("mesh.xmin not set, defaulting to 0.0")
+
+    try:
+        xmax = rp.get_param("mesh.xmax")
+    except KeyError:
+        xmax = 1.0
+        msg.warning("mesh.xmax not set, defaulting to 1.0")
+
+    try:
+        ymin = rp.get_param("mesh.ymin")
+    except KeyError:
+        ymin = 0.0
+        msg.warning("mesh.ymin not set, defaulting to 0.0")
+
+    try:
+        ymax = rp.get_param("mesh.ymax")
+    except KeyError:
+        ymax = 1.0
+        msg.warning("mesh.ynax not set, defaulting to 1.0")
 
     my_grid = patch.Grid2d(nx, ny,
                            xmin=xmin, xmax=xmax,
@@ -22,10 +42,29 @@ def grid_setup(rp, ng=1):
 def bc_setup(rp):
 
     # first figure out the BCs
-    xlb_type = rp.get_param("mesh.xlboundary")
-    xrb_type = rp.get_param("mesh.xrboundary")
-    ylb_type = rp.get_param("mesh.ylboundary")
-    yrb_type = rp.get_param("mesh.yrboundary")
+    try:
+        xlb_type = rp.get_param("mesh.xlboundary")
+    except KeyError:
+        xlb_type = "periodic"
+        msg.warning("mesh.xlboundary is not set, defaulting to periodic")
+
+    try:
+        xrb_type = rp.get_param("mesh.xrboundary")
+    except KeyError:
+        xrb_type = "periodic"
+        msg.warning("mesh.xrboundary is not set, defaulting to periodic")
+
+    try:
+        ylb_type = rp.get_param("mesh.ylboundary")
+    except KeyError:
+        ylb_type = "periodic"
+        msg.warning("mesh.ylboundary is not set, defaulting to periodic")
+
+    try:
+        yrb_type = rp.get_param("mesh.yrboundary")
+    except KeyError:
+        yrb_type = "periodic"
+        msg.warning("mesh.yrboundary is not set, defaulting to periodic")
 
     bc = bnd.BC(xlb=xlb_type, xrb=xrb_type,
                 ylb=ylb_type, yrb=yrb_type)
@@ -45,7 +84,7 @@ def bc_setup(rp):
 
 class NullSimulation(object):
 
-    def __init__(self, solver_name, problem_name, rp, timers=None):
+    def __init__(self, solver_name, problem_name, rp, timers=None, data_class=patch.CellCenterData2d):
         """
         Initialize the Simulation object
 
@@ -64,12 +103,16 @@ class NullSimulation(object):
         self.dt = -1.e33
         self.old_dt = -1.e33
 
-        try: self.tmax = rp.get_param("driver.tmax")
-        except:
+        self.data_class = data_class
+
+        try:
+            self.tmax = rp.get_param("driver.tmax")
+        except (AttributeError, KeyError):
             self.tmax = None
 
-        try: self.max_steps = rp.get_param("driver.max_steps")
-        except:
+        try:
+            self.max_steps = rp.get_param("driver.max_steps")
+        except (AttributeError, KeyError):
             self.max_steps = None
 
         self.rp = rp
@@ -80,27 +123,26 @@ class NullSimulation(object):
         self.solver_name = solver_name
         self.problem_name = problem_name
 
-        if timers == None:
+        if timers is None:
             self.tc = profile.TimerCollection()
         else:
             self.tc = timers
 
-        try: self.verbose = self.rp.get_param("driver.verbose")
-        except:
-            self.verbose = None
+        try:
+            self.verbose = self.rp.get_param("driver.verbose")
+        except (AttributeError, KeyError):
+            self.verbose = 0
 
         self.n_num_out = 0
 
-        # plotting 
+        # plotting
         self.cm = "viridis"
-
 
     def finished(self):
         """
         is the simulation finished based on time or the number of steps
         """
         return self.cc_data.t >= self.tmax or self.n >= self.max_steps
-
 
     def do_output(self):
         """
@@ -110,24 +152,21 @@ class NullSimulation(object):
         n_out = self.rp.get_param("io.n_out")
         do_io = self.rp.get_param("io.do_io")
 
-        is_time = self.cc_data.t >= (self.n_num_out + 1)*dt_out or self.n%n_out == 0
+        is_time = self.cc_data.t >= (self.n_num_out + 1)*dt_out or self.n % n_out == 0
         if is_time and do_io == 1:
             self.n_num_out += 1
             return True
         else:
             return False
 
-
     def initialize(self):
         pass
-
 
     def method_compute_timestep(self):
         """
         the method-specific timestep code
         """
         pass
-
 
     def compute_timestep(self):
         """
@@ -153,7 +192,6 @@ class NullSimulation(object):
         if self.cc_data.t + self.dt > self.tmax:
             self.dt = self.tmax - self.cc_data.t
 
-
     def preevolve(self):
         """
         Do any necessary evolution before the main evolve loop.  This
@@ -161,17 +199,14 @@ class NullSimulation(object):
         """
         pass
 
-
     def evolve(self):
 
         # increment the time
         self.cc_data.t += self.dt
         self.n += 1
 
-
     def dovis(self):
         pass
-
 
     def finalize(self):
         """
@@ -179,11 +214,9 @@ class NullSimulation(object):
         finalize() method.
         """
         # there should be a cleaner way of doing this
-        solver = importlib.import_module(self.solver_name)
         problem = importlib.import_module("{}.problems.{}".format(self.solver_name, self.problem_name))
 
         problem.finalize()
-
 
     def write(self, filename):
         """
@@ -205,17 +238,14 @@ class NullSimulation(object):
             self.rp.write_params(f)
             self.write_extras(f)
 
-
     def write_extras(self, f):
         """
         write out any extra simulation-specific stuff
         """
         pass
 
-
     def read_extras(self, f):
         """
         read in any simulation-specific data from an h5py file object f
         """
         pass
-

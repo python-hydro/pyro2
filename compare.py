@@ -5,7 +5,6 @@ from __future__ import print_function
 import numpy as np
 import sys
 
-import mesh.array_indexer as ai
 from util import io
 
 usage = """
@@ -18,6 +17,10 @@ errors = {"gridbad": "grids don't agree",
 
 
 def compare(data1, data2):
+    """given two CellCenterData2d objects, compare the data, zone-by-zone
+    and output any errors
+
+    """
 
     # compare the grids
     if not data1.grid == data2.grid:
@@ -26,7 +29,6 @@ def compare(data1, data2):
     # compare the data
     if not sorted(data1.names) == sorted(data2.names):
         return "namesbad"
-
 
     print(" ")
     print("variable comparisons:")

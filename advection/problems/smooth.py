@@ -5,6 +5,7 @@ import mesh.patch as patch
 import numpy
 from util import msg
 
+
 def init_data(my_data, rp):
     """ initialize the smooth advection problem """
 
@@ -27,8 +28,8 @@ def init_data(my_data, rp):
     xctr = 0.5*(xmin + xmax)
     yctr = 0.5*(ymin + ymax)
 
-    dens[:,:] = 1.0 + numpy.exp(-60.0*((my_data.grid.x2d-xctr)**2 + 
-                                       (my_data.grid.y2d-yctr)**2))
+    dens[:, :] = 1.0 + numpy.exp(-60.0*((my_data.grid.x2d-xctr)**2 +
+                                        (my_data.grid.y2d-yctr)**2))
 
 
 def finalize():
