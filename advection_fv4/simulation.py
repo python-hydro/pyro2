@@ -6,6 +6,7 @@ import advection_fv4.fluxes as flx
 import mesh.array_indexer as ai
 import mesh.fv as fv
 from simulation_null import grid_setup, bc_setup
+import particles.particles as particles
 
 
 class Simulation(advection_rk.Simulation):
@@ -25,6 +26,11 @@ class Simulation(advection_rk.Simulation):
         my_data.create()
 
         self.cc_data = my_data
+
+        if self.rp.get_param("particles.do_particles") == 1:
+            n_particles = self.rp.get_param("particles.n_particles")
+            particle_generator = self.rp.get_param("particles.particle_generator")
+            self.particles = particles.Particles(self.cc_data, bc, n_particles, particle_generator)
 
         # now set the initial conditions for the problem
         problem = importlib.import_module("advection_fv4.problems.{}".format(self.problem_name))

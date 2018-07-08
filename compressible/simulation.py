@@ -12,6 +12,7 @@ import compressible.unsplit_fluxes as flx
 import mesh.boundary as bnd
 from simulation_null import NullSimulation, grid_setup, bc_setup
 import util.plot_tools as plot_tools
+import particles.particles as particles
 
 
 class Variables(object):
@@ -141,6 +142,9 @@ class Simulation(NullSimulation):
 
         self.cc_data = my_data
 
+        if self.rp.get_param("particles.do_particles") == 1:
+            self.particles = particles.Particles(self.cc_data, bc, self.rp)
+
         # some auxillary data that we'll need to fill GC in, but isn't
         # really part of the main solution
         aux_data = self.data_class(my_grid)
@@ -221,6 +225,9 @@ class Simulation(NullSimulation):
         ymom[:, :] += 0.5*self.dt*(dens[:, :] + old_dens[:, :])*grav
         ener[:, :] += 0.5*self.dt*(ymom[:, :] + old_ymom[:, :])*grav
 
+        if self.particles is not None:
+            self.particles.update_particles(self.dt)
+
         # increment the time
         self.cc_data.t += self.dt
         self.n += 1
@@ -281,6 +288,18 @@ class Simulation(NullSimulation):
                 cb.ax.set_title(field_names[n])
             else:
                 ax.set_title(field_names[n])
+
+        if self.particles is not None:
+            ax = axes[0]
+            particle_positions = self.particles.get_positions()
+            # dye particles
+            colors = self.particles.get_init_positions()[:, 0]
+
+            # plot particles
+            ax.scatter(particle_positions[:, 0],
+                particle_positions[:, 1], s=5, c=colors, alpha=0.8, cmap="Greys")
+            ax.set_xlim([myg.xmin, myg.xmax])
+            ax.set_ylim([myg.ymin, myg.ymax])
 
         plt.figtext(0.05, 0.0125, "t = {:10.5g}".format(self.cc_data.t))
 
