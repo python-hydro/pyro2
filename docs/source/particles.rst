@@ -10,7 +10,7 @@ Submodules
 ----------
 
 particles\.particles module
---------------------
+---------------------------
 
 .. automodule:: particles.particles
     :members:
