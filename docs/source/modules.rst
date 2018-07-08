@@ -14,6 +14,7 @@ pyro2
    compressible_react
    compressible_rk
    compressible_sdc
+   convergence
    diffusion
    examples
    incompressible
