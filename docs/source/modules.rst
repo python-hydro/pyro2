@@ -14,6 +14,7 @@ pyro2
    compressible_react
    compressible_rk
    compressible_sdc
+   convergence
    diffusion
    examples
    incompressible
@@ -22,7 +23,9 @@ pyro2
    multigrid
    particles
    plot
+   plotvar
    pyro
+   setup
    simulation_null
    swe
    test
