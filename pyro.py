@@ -12,173 +12,238 @@ import compare
 from util import msg, profile, runparams, io
 
 
-def doit(solver_name, problem_name, param_file,
-         other_commands=None,
-         comp_bench=False, reset_bench_on_fail=False, make_bench=False):
-    """The main driver to run pyro"""
+class Pyro(object):
+    """
+    The main driver to run pyro.
 
-    msg.bold('pyro ...')
+    Notes / TODO:
+    * Further decouple some of the benchmarking stuff?
+    * Should it be possible to pass in a problem function and initialise a Pyro/
+      Simulation object using that? That would also require some modifications
+      of the Simulation class, as we currently pass the problem name to its
+      constructor. I think this would make sense though if we were moving
+      towards something that worked better as a Jupyter Notebook.
+    """
 
-    tc = profile.TimerCollection()
+    def __init__(self, solver_name, comp_bench=False,
+                 reset_bench_on_fail=False, make_bench=False):
+        """
+        Constructor
 
-    tm_main = tc.timer("main")
-    tm_main.begin()
+        Parameters
+        ----------
+        solver_name : str
+            Name of solver to use
+        comp_bench : bool
+            Are we comparing to a benchmark?
+        reset_bench_on_fail : bool
+            Do we reset the benchmark on fail?
+        make_bench : bool
+            Are we storing a benchmark?
+        """
+        msg.bold('pyro ...')
 
-    # import desired solver under "solver" namespace
-    solver = importlib.import_module(solver_name)
+        # import desired solver under "solver" namespace
+        self.solver = importlib.import_module(solver_name)
+        self.solver_name = solver_name
+        self.comp_bench = comp_bench
+        self.reset_bench_on_fail = reset_bench_on_fail
+        self.make_bench = make_bench
 
-    #-------------------------------------------------------------------------
-    # runtime parameters
-    #-------------------------------------------------------------------------
+        #-------------------------------------------------------------------------
+        # runtime parameters
+        #-------------------------------------------------------------------------
 
-    # parameter defaults
-    rp = runparams.RuntimeParameters()
-    rp.load_params("_defaults")
-    rp.load_params(solver_name + "/_defaults")
+        # parameter defaults
+        self.rp = runparams.RuntimeParameters()
+        self.rp.load_params("_defaults")
+        self.rp.load_params(solver_name + "/_defaults")
 
-    # problem-specific runtime parameters
-    rp.load_params(solver_name + "/problems/_" + problem_name + ".defaults")
+        self.tc = profile.TimerCollection()
 
-    # now read in the inputs file
-    if not os.path.isfile(param_file):
-        # check if the param file lives in the solver's problems directory
-        param_file = solver_name + "/problems/" + param_file
-        if not os.path.isfile(param_file):
-            msg.fail("ERROR: inputs file does not exist")
+    def initialize_problem(self, problem_name, param_file=None, param_dict=None,
+                           other_commands=None):
+        """
+        Initialize the specific problem
 
-    rp.load_params(param_file, no_new=1)
+        Parameters
+        ----------
+        problem_name : str
+            Name of the problem
+        param_file : str
+            Filename containing problem's runtime parameters
+        param_dict : dict
+            Dictionary containing extra runtime parameters
+        other_commands : str
+            Other command line parameter options
+        """
 
-    # and any commandline overrides
-    if other_commands is not None:
-        rp.command_line_params(other_commands)
+        # problem-specific runtime parameters
+        self.rp.load_params(self.solver_name + "/problems/_" + problem_name + ".defaults")
 
-    # write out the inputs.auto
-    rp.print_paramfile()
+        # now read in the inputs file
+        if param_dict is not None:
+            for k, v in param_dict.items():
+                self.rp.params[k] = v
+        if param_file is not None:
+            if not os.path.isfile(param_file):
+                # check if the param file lives in the solver's problems directory
+                param_file = self.solver_name + "/problems/" + param_file
+                if not os.path.isfile(param_file):
+                    msg.fail("ERROR: inputs file does not exist")
 
-    #-------------------------------------------------------------------------
-    # initialization
-    #-------------------------------------------------------------------------
+            self.rp.load_params(param_file, no_new=1)
 
-    # initialize the Simulation object -- this will hold the grid and
-    # data and know about the runtime parameters and which problem we
-    # are running
-    sim = solver.Simulation(solver_name, problem_name, rp, timers=tc)
+        # and any commandline overrides
+        if other_commands is not None:
+            self.rp.command_line_params(other_commands)
 
-    sim.initialize()
-    sim.preevolve()
+        # write out the inputs.auto
+        self.rp.print_paramfile()
 
-    #-------------------------------------------------------------------------
-    # evolve
-    #-------------------------------------------------------------------------
-    verbose = rp.get_param("driver.verbose")
+        self.verbose = self.rp.get_param("driver.verbose")
+        self.dovis = self.rp.get_param("vis.dovis")
 
-    plt.ion()
+        #-------------------------------------------------------------------------
+        # initialization
+        #-------------------------------------------------------------------------
 
-    sim.cc_data.t = 0.0
+        # initialize the Simulation object -- this will hold the grid and
+        # data and know about the runtime parameters and which problem we
+        # are running
+        self.sim = self.solver.Simulation(self.solver_name, problem_name, self.rp, timers=self.tc)
 
-    # output the 0th data
-    basename = rp.get_param("io.basename")
-    sim.write("{}{:04d}".format(basename, sim.n))
+        self.sim.initialize()
+        self.sim.preevolve()
 
-    dovis = rp.get_param("vis.dovis")
-    if dovis:
-        plt.figure(num=1, figsize=(8, 6), dpi=100, facecolor='w')
-        sim.dovis()
+    def run_sim(self):
+        """
+        Evolve entire simulation
+        """
 
-    while not sim.finished():
+        tm_main = self.tc.timer("main")
+        tm_main.begin()
 
+        plt.ion()
+
+        self.sim.cc_data.t = 0.0
+
+        # output the 0th data
+        basename = self.rp.get_param("io.basename")
+        self.sim.write("{}{:04d}".format(basename, self.sim.n))
+
+        if self.dovis:
+            plt.figure(num=1, figsize=(8, 6), dpi=100, facecolor='w')
+            self.sim.dovis()
+
+        while not self.sim.finished():
+
+            self.single_step()
+
+        # final output
+        if self.verbose > 0:
+            msg.warning("outputting...")
+        basename = self.rp.get_param("io.basename")
+        self.sim.write("{}{:04d}".format(basename, self.sim.n))
+
+        tm_main.end()
+
+        result = self.compare_to_benchmark()
+        self.make_bench(result)
+
+        #-------------------------------------------------------------------------
+        # final reports
+        #-------------------------------------------------------------------------
+        if self.verbose > 0:
+            self.rp.print_unused_params()
+            self.tc.report()
+
+        self.sim.finalize()
+
+        if self.comp_bench:
+            return result
+        else:
+            return self.sim
+
+    def single_step(self):
+        """
+        Do a single step
+        """
         # fill boundary conditions
-        sim.cc_data.fill_BC_all()
+        self.sim.cc_data.fill_BC_all()
 
         # get the timestep
-        sim.compute_timestep()
+        self.sim.compute_timestep()
 
         # evolve for a single timestep
-        sim.evolve()
+        self.sim.evolve()
 
-        if verbose > 0:
-            print("%5d %10.5f %10.5f" % (sim.n, sim.cc_data.t, sim.dt))
+        if self.verbose > 0:
+            print("%5d %10.5f %10.5f" % (self.sim.n, self.sim.cc_data.t, self.sim.dt))
 
         # output
-        if sim.do_output():
-            if verbose > 0:
+        if self.sim.do_output():
+            if self.verbose > 0:
                 msg.warning("outputting...")
-            basename = rp.get_param("io.basename")
-            sim.write("{}{:04d}".format(basename, sim.n))
+            basename = self.rp.get_param("io.basename")
+            self.sim.write("{}{:04d}".format(basename, self.sim.n))
 
         # visualization
-        if dovis:
-            tm_vis = tc.timer("vis")
+        if self.dovis:
+            tm_vis = self.tc.timer("vis")
             tm_vis.begin()
 
-            sim.dovis()
-            store = rp.get_param("vis.store_images")
+            self.sim.dovis()
+            store = self.rp.get_param("vis.store_images")
 
             if store == 1:
-                basename = rp.get_param("io.basename")
-                plt.savefig("{}{:04d}.png".format(basename, sim.n))
+                basename = self.rp.get_param("io.basename")
+                plt.savefig("{}{:04d}.png".format(basename, self.sim.n))
 
             tm_vis.end()
 
-    # final output
-    if verbose > 0:
-        msg.warning("outputting...")
-    basename = rp.get_param("io.basename")
-    sim.write("{}{:04d}".format(basename, sim.n))
+    def compare_to_benchmark(self):
+        """ Are we comparing to a benchmark? """
 
-    tm_main.end()
+        result = 0
 
-    #-------------------------------------------------------------------------
-    # benchmarks (for regression testing)
-    #-------------------------------------------------------------------------
-    result = 0
-    # are we comparing to a benchmark?
-    if comp_bench:
-        compare_file = "{}/tests/{}{:04d}".format(
-            solver_name, basename, sim.n)
-        msg.warning("comparing to: {} ".format(compare_file))
-        try:
-            sim_bench = io.read(compare_file)
-        except IOError:
-            msg.warning("ERROR openning compare file")
-            return "ERROR openning compare file"
-
-        result = compare.compare(sim.cc_data, sim_bench.cc_data)
-
-        if result == 0:
-            msg.success("results match benchmark\n")
-        else:
-            msg.warning("ERROR: " + compare.errors[result] + "\n")
-
-    # are we storing a benchmark?
-    if make_bench or (result != 0 and reset_bench_on_fail):
-        if not os.path.isdir(solver_name + "/tests/"):
+        if self.comp_bench:
+            basename = self.rp.get_param("io.basename")
+            compare_file = "{}/tests/{}{:04d}".format(
+                self.solver_name, basename, self.sim.n)
+            msg.warning("comparing to: {} ".format(compare_file))
             try:
-                os.mkdir(solver_name + "/tests/")
-            except (FileNotFoundError, PermissionError):
-                msg.fail("ERROR: unable to create the solver's tests/ directory")
+                sim_bench = io.read(compare_file)
+            except IOError:
+                msg.warning("ERROR openning compare file")
+                return "ERROR openning compare file"
 
-        bench_file = solver_name + "/tests/" + basename + "%4.4d" % (sim.n)
-        msg.warning("storing new benchmark: {}\n".format(bench_file))
-        sim.write(bench_file)
+            result = compare.compare(self.sim.cc_data, sim_bench.cc_data)
 
-    #-------------------------------------------------------------------------
-    # final reports
-    #-------------------------------------------------------------------------
-    if verbose > 0:
-        rp.print_unused_params()
-        tc.report()
+            if result == 0:
+                msg.success("results match benchmark\n")
+            else:
+                msg.warning("ERROR: " + compare.errors[result] + "\n")
 
-    sim.finalize()
-
-    if comp_bench:
         return result
-    else:
-        return sim
+
+    def store_as_benchmark(self, result):
+        """ Are we storing a benchmark? """
+        if self.make_bench or (result != 0 and self.reset_bench_on_fail):
+            if not os.path.isdir(self.solver_name + "/tests/"):
+                try:
+                    os.mkdir(self.solver_name + "/tests/")
+                except (FileNotFoundError, PermissionError):
+                    msg.fail("ERROR: unable to create the solver's tests/ directory")
+
+            basename = self.rp.get_param("io.basename")
+            bench_file = self.solver_name + "/tests/" + basename + "%4.4d" % (self.sim.n)
+            msg.warning("storing new benchmark: {}\n".format(bench_file))
+            self.sim.write(bench_file)
 
 
-def parse_and_run():
-    """Parse the runtime parameters and run a pyro instance"""
+def parse_args():
+    """Parse the runtime parameters"""
 
     valid_solvers = ["advection",
                      "advection_rk",
@@ -214,13 +279,13 @@ def parse_and_run():
                    help="additional runtime parameters that override the inputs file "
                    "in the format section.option=value")
 
-    args = p.parse_args()
-
-    doit(args.solver[0], args.problem[0], args.param[0],
-         other_commands=args.other,
-         comp_bench=args.compare_benchmark,
-         make_bench=args.make_benchmark)
+    return p.parse_args()
 
 
 if __name__ == "__main__":
-    parse_and_run()
+    args = parse_args()
+    pyro = Pyro(args.solver[0], comp_bench=args.compare_benchmark,
+                make_bench=args.make_benchmark)
+    pyro.initialize_problem(problem_name=args.problem[0], param_file=args.param[0],
+                other_commands=args.other)
+    pyro.run_sim()
