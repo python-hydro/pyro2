@@ -29,14 +29,6 @@ valid_solvers = ["advection",
 class Pyro(object):
     """
     The main driver to run pyro.
-
-    Notes / TODO:
-
-        * Should it be possible to pass in a problem function and initialise a Pyro/
-          Simulation object using that? That would also require some modifications
-          of the Simulation class, as we currently pass the problem name to its
-          constructor. I think this would make sense though if we were moving
-          towards something that worked better as a Jupyter Notebook.
     """
 
     def __init__(self, solver_name):
@@ -88,8 +80,9 @@ class Pyro(object):
 
         problem_defaults_file = self.solver_name + \
             "/problems/_" + problem_name + ".defaults"
+
+        # problem-specific runtime parameters
         if os.path.isfile(problem_defaults_file):
-            # problem-specific runtime parameters
             self.rp.load_params(problem_defaults_file)
 
         # now read in the inputs file
@@ -240,7 +233,7 @@ class PyroBenchmark(Pyro):
 
     def run_sim(self):
         """
-        Evolve entire simulation. Benchmark at the end.
+        Evolve entire simulation and benchmark at the end.
         """
 
         super().run_sim()
