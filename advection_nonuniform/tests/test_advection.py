@@ -1,5 +1,5 @@
 from util import runparams
-import advection.simulation as sn
+import advection_nonuniform.simulation as sn
 
 
 class TestSimulation(object):
@@ -21,7 +21,7 @@ class TestSimulation(object):
         self.rp.params["mesh.ny"] = 8
         self.rp.params["particles.do_particles"] = 0
 
-        self.sim = sn.Simulation("advection", "test", self.rp)
+        self.sim = sn.Simulation("advection_nonuniform", "test", self.rp)
         self.sim.initialize()
 
     def teardown_method(self):
