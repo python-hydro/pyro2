@@ -11,22 +11,35 @@ import matplotlib.pyplot as plt
 import compare
 from util import msg, profile, runparams, io
 
+valid_solvers = ["advection",
+                 "advection_rk",
+                 "advection_fv4",
+                 "advection_weno",
+                 "compressible",
+                 "compressible_rk",
+                 "compressible_fv4",
+                 "compressible_sdc",
+                 "compressible_react",
+                 "diffusion",
+                 "incompressible",
+                 "lm_atm",
+                 "swe"]
+
 
 class Pyro(object):
     """
     The main driver to run pyro.
 
     Notes / TODO:
-    * Further decouple some of the benchmarking stuff?
-    * Should it be possible to pass in a problem function and initialise a Pyro/
-      Simulation object using that? That would also require some modifications
-      of the Simulation class, as we currently pass the problem name to its
-      constructor. I think this would make sense though if we were moving
-      towards something that worked better as a Jupyter Notebook.
+
+        * Should it be possible to pass in a problem function and initialise a Pyro/
+          Simulation object using that? That would also require some modifications
+          of the Simulation class, as we currently pass the problem name to its
+          constructor. I think this would make sense though if we were moving
+          towards something that worked better as a Jupyter Notebook.
     """
 
-    def __init__(self, solver_name, comp_bench=False,
-                 reset_bench_on_fail=False, make_bench=False):
+    def __init__(self, solver_name):
         """
         Constructor
 
@@ -34,25 +47,20 @@ class Pyro(object):
         ----------
         solver_name : str
             Name of solver to use
-        comp_bench : bool
-            Are we comparing to a benchmark?
-        reset_bench_on_fail : bool
-            Do we reset the benchmark on fail?
-        make_bench : bool
-            Are we storing a benchmark?
         """
+
         msg.bold('pyro ...')
+
+        if solver_name not in valid_solvers:
+            msg.fail("ERROR: %s is not a valid solver" % solver_name)
 
         # import desired solver under "solver" namespace
         self.solver = importlib.import_module(solver_name)
         self.solver_name = solver_name
-        self.comp_bench = comp_bench
-        self.reset_bench_on_fail = reset_bench_on_fail
-        self.make_bench = make_bench
 
-        #-------------------------------------------------------------------------
+        # -------------------------------------------------------------------------
         # runtime parameters
-        #-------------------------------------------------------------------------
+        # -------------------------------------------------------------------------
 
         # parameter defaults
         self.rp = runparams.RuntimeParameters()
@@ -61,7 +69,7 @@ class Pyro(object):
 
         self.tc = profile.TimerCollection()
 
-    def initialize_problem(self, problem_name, param_file=None, param_dict=None,
+    def initialize_problem(self, problem_name, inputs_file=None, inputs_dict=None,
                            other_commands=None):
         """
         Initialize the specific problem
@@ -70,29 +78,33 @@ class Pyro(object):
         ----------
         problem_name : str
             Name of the problem
-        param_file : str
+        inputs_file : str
             Filename containing problem's runtime parameters
-        param_dict : dict
+        inputs_dict : dict
             Dictionary containing extra runtime parameters
         other_commands : str
             Other command line parameter options
         """
 
-        # problem-specific runtime parameters
-        self.rp.load_params(self.solver_name + "/problems/_" + problem_name + ".defaults")
+        problem_defaults_file = self.solver_name + \
+            "/problems/_" + problem_name + ".defaults"
+        if os.path.isfile(problem_defaults_file):
+            # problem-specific runtime parameters
+            self.rp.load_params(problem_defaults_file)
 
         # now read in the inputs file
-        if param_dict is not None:
-            for k, v in param_dict.items():
-                self.rp.params[k] = v
-        if param_file is not None:
-            if not os.path.isfile(param_file):
+        if inputs_file is not None:
+            if not os.path.isfile(inputs_file):
                 # check if the param file lives in the solver's problems directory
-                param_file = self.solver_name + "/problems/" + param_file
-                if not os.path.isfile(param_file):
+                inputs_file = self.solver_name + "/problems/" + inputs_file
+                if not os.path.isfile(inputs_file):
                     msg.fail("ERROR: inputs file does not exist")
 
-            self.rp.load_params(param_file, no_new=1)
+            self.rp.load_params(inputs_file, no_new=1)
+
+        if inputs_dict is not None:
+            for k, v in inputs_dict.items():
+                self.rp.params[k] = v
 
         # and any commandline overrides
         if other_commands is not None:
@@ -104,17 +116,22 @@ class Pyro(object):
         self.verbose = self.rp.get_param("driver.verbose")
         self.dovis = self.rp.get_param("vis.dovis")
 
-        #-------------------------------------------------------------------------
+        # -------------------------------------------------------------------------
         # initialization
-        #-------------------------------------------------------------------------
+        # -------------------------------------------------------------------------
 
         # initialize the Simulation object -- this will hold the grid and
         # data and know about the runtime parameters and which problem we
         # are running
-        self.sim = self.solver.Simulation(self.solver_name, problem_name, self.rp, timers=self.tc)
+        self.sim = self.solver.Simulation(
+            self.solver_name, problem_name, self.rp, timers=self.tc)
 
         self.sim.initialize()
         self.sim.preevolve()
+
+        plt.ion()
+
+        self.sim.cc_data.t = 0.0
 
     def run_sim(self):
         """
@@ -123,10 +140,6 @@ class Pyro(object):
 
         tm_main = self.tc.timer("main")
         tm_main.begin()
-
-        plt.ion()
-
-        self.sim.cc_data.t = 0.0
 
         # output the 0th data
         basename = self.rp.get_param("io.basename")
@@ -147,23 +160,16 @@ class Pyro(object):
         self.sim.write("{}{:04d}".format(basename, self.sim.n))
 
         tm_main.end()
-
-        result = self.compare_to_benchmark()
-        self.make_bench(result)
-
-        #-------------------------------------------------------------------------
+        # -------------------------------------------------------------------------
         # final reports
-        #-------------------------------------------------------------------------
+        # -------------------------------------------------------------------------
         if self.verbose > 0:
             self.rp.print_unused_params()
             self.tc.report()
 
         self.sim.finalize()
 
-        if self.comp_bench:
-            return result
-        else:
-            return self.sim
+        return self.sim
 
     def single_step(self):
         """
@@ -179,7 +185,8 @@ class Pyro(object):
         self.sim.evolve()
 
         if self.verbose > 0:
-            print("%5d %10.5f %10.5f" % (self.sim.n, self.sim.cc_data.t, self.sim.dt))
+            print("%5d %10.5f %10.5f" %
+                  (self.sim.n, self.sim.cc_data.t, self.sim.dt))
 
         # output
         if self.sim.do_output():
@@ -202,62 +209,96 @@ class Pyro(object):
 
             tm_vis.end()
 
-    def compare_to_benchmark(self):
-        """ Are we comparing to a benchmark? """
+
+class PyroBenchmark(Pyro):
+    """
+    A subclass of Pyro for benchmarking. Inherits everything from pyro, but adds benchmarking routines.
+    """
+
+    def __init__(self, solver_name, comp_bench=False,
+                 reset_bench_on_fail=False, make_bench=False):
+        """
+        Constructor
+
+        Parameters
+        ----------
+        solver_name : str
+            Name of solver to use
+        comp_bench : bool
+            Are we comparing to a benchmark?
+        reset_bench_on_fail : bool
+            Do we reset the benchmark on fail?
+        make_bench : bool
+            Are we storing a benchmark?
+        """
+
+        super().__init__(solver_name)
+
+        self.comp_bench = comp_bench
+        self.reset_bench_on_fail = reset_bench_on_fail
+        self.make_bench = make_bench
+
+    def run_sim(self):
+        """
+        Evolve entire simulation. Benchmark at the end.
+        """
+
+        super().run_sim()
 
         result = 0
 
         if self.comp_bench:
-            basename = self.rp.get_param("io.basename")
-            compare_file = "{}/tests/{}{:04d}".format(
-                self.solver_name, basename, self.sim.n)
-            msg.warning("comparing to: {} ".format(compare_file))
-            try:
-                sim_bench = io.read(compare_file)
-            except IOError:
-                msg.warning("ERROR openning compare file")
-                return "ERROR openning compare file"
+            result = self.compare_to_benchmark()
 
-            result = compare.compare(self.sim.cc_data, sim_bench.cc_data)
+        if self.make_bench or (result != 0 and self.reset_bench_on_fail):
+            self.store_as_benchmark()
 
-            if result == 0:
-                msg.success("results match benchmark\n")
-            else:
-                msg.warning("ERROR: " + compare.errors[result] + "\n")
+        if self.comp_bench:
+            return result
+        else:
+            return self.sim
+
+    def compare_to_benchmark(self):
+        """ Are we comparing to a benchmark? """
+
+        basename = self.rp.get_param("io.basename")
+        compare_file = "{}/tests/{}{:04d}".format(
+            self.solver_name, basename, self.sim.n)
+        msg.warning("comparing to: {} ".format(compare_file))
+        try:
+            sim_bench = io.read(compare_file)
+        except IOError:
+            msg.warning("ERROR openning compare file")
+            return "ERROR openning compare file"
+
+        result = compare.compare(self.sim.cc_data, sim_bench.cc_data)
+
+        if result == 0:
+            msg.success("results match benchmark\n")
+        else:
+            msg.warning("ERROR: " + compare.errors[result] + "\n")
 
         return result
 
-    def store_as_benchmark(self, result):
+    def store_as_benchmark(self):
         """ Are we storing a benchmark? """
-        if self.make_bench or (result != 0 and self.reset_bench_on_fail):
-            if not os.path.isdir(self.solver_name + "/tests/"):
-                try:
-                    os.mkdir(self.solver_name + "/tests/")
-                except (FileNotFoundError, PermissionError):
-                    msg.fail("ERROR: unable to create the solver's tests/ directory")
 
-            basename = self.rp.get_param("io.basename")
-            bench_file = self.solver_name + "/tests/" + basename + "%4.4d" % (self.sim.n)
-            msg.warning("storing new benchmark: {}\n".format(bench_file))
-            self.sim.write(bench_file)
+        if not os.path.isdir(self.solver_name + "/tests/"):
+            try:
+                os.mkdir(self.solver_name + "/tests/")
+            except (FileNotFoundError, PermissionError):
+                msg.fail(
+                    "ERROR: unable to create the solver's tests/ directory")
+
+        basename = self.rp.get_param("io.basename")
+        bench_file = self.solver_name + "/tests/" + \
+            basename + "%4.4d" % (self.sim.n)
+        msg.warning("storing new benchmark: {}\n".format(bench_file))
+        self.sim.write(bench_file)
 
 
 def parse_args():
     """Parse the runtime parameters"""
-
-    valid_solvers = ["advection",
-                     "advection_rk",
-                     "advection_fv4",
-                     "advection_weno",
-                     "compressible",
-                     "compressible_rk",
-                     "compressible_fv4",
-                     "compressible_sdc",
-                     "compressible_react",
-                     "diffusion",
-                     "incompressible",
-                     "lm_atm",
-                     "swe"]
 
     p = argparse.ArgumentParser()
 
@@ -284,8 +325,15 @@ def parse_args():
 
 if __name__ == "__main__":
     args = parse_args()
-    pyro = Pyro(args.solver[0], comp_bench=args.compare_benchmark,
-                make_bench=args.make_benchmark)
-    pyro.initialize_problem(problem_name=args.problem[0], param_file=args.param[0],
-                other_commands=args.other)
+
+    if args.compare_benchmark or args.make_benchmark:
+        pyro = PyroBenchmark(args.solver[0],
+                             comp_bench=args.compare_benchmark,
+                             make_bench=args.make_benchmark)
+    else:
+        pyro = Pyro(args.solver[0])
+
+    pyro.initialize_problem(problem_name=args.problem[0],
+                            inputs_file=args.param[0],
+                            other_commands=args.other)
     pyro.run_sim()
