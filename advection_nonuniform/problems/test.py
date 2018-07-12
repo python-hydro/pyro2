@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 import mesh.patch as patch
+from util import msg
 
 
 def init_data(my_data, rp):
