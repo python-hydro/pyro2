@@ -6,6 +6,8 @@ import numpy as np
 import compressible
 import compressible.eos as eos
 
+import compressible_react.burning as burning
+
 import util.plot_tools as plot_tools
 
 
@@ -19,24 +21,51 @@ class Simulation(compressible.Simulation):
         """
         super().initialize(extra_vars=["fuel", "ash"])
 
+        myd = self.cc_data
+
     def burn(self, dt):
         """ react fuel to ash """
+
+        e = self.cc_data.get_var("eint")
+        ener = self.cc_data.get_var("eint")
+        dens = self.cc_data.get_var("density")
+        fuel = self.cc_data.get_var("fuel")
+        ash = self.cc_data.get_var("ash")
+
         # compute T
+        Cv = self.rp.get_param("eos.cv")
+        temp = eos.temp(e, Cv)
 
         # compute energy generation rate
+        omega_dot = burning.compute_energy_gen_rate(self.cc_data, temp)
 
         # update energy due to reaction
-        pass
+        ener[:,:] += dens * omega_dot * dt
+
+        # update fuel and ash??
 
     def diffuse(self, dt):
         """ diffuse for dt """
 
+        myg = self.cc_data.grid
+
+        e = self.cc_data.get_var("eint")
+        ener = self.cc_data.get_var("eint")
+
         # compute T
+        Cv = self.rp.get_param("eos.cv")
+        temp = eos.temp(e, Cv)
 
         # compute div kappa grad T
+        k = self.rp.get_param("diffusion.k")
+
+        div_kappa_grad_T = myg.scratch_array()
+        div_kappa_grad_T.v()[:, :] = k * (
+            (temp.ip(1) + temp.ip(-1) - 2.0*temp.v())/myg.dx**2 +
+            (temp.jp(1) + temp.jp(-1) - 2.0*temp.v())/myg.dy**2)
 
         # update energy due to diffusion
-        pass
+        ener[:,:] += div_kappa_grad_T * dt
 
     def evolve(self):
         """

@@ -4,6 +4,7 @@ cfl = 0.8
 
 [eos]
 gamma = 1.4    ; pres = rho ener (gamma - 1)
+cv = 1         ; Heat capacity at constant volume
 
 
 [compressible]
@@ -24,3 +25,5 @@ grav = 0.0                ; gravitational acceleration (in y-direction)
 riemann = HLLC            ; HLLC or CGF
 
 
+[diffusion]
+k = 1.0      ; conductivity
