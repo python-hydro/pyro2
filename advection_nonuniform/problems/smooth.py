@@ -1,8 +1,7 @@
 from __future__ import print_function
 
-import sys
 import mesh.patch as patch
-import numpy
+import numpy as np
 from util import msg
 
 
@@ -27,14 +26,15 @@ def init_data(my_data, rp):
     xctr = 0.5*(xmin + xmax)
     yctr = 0.5*(ymin + ymax)
 
-    dens[:, :] = 1.0 + numpy.exp(-60.0*((my_data.grid.x2d-xctr)**2 +
+    dens[:, :] = 1.0 + np.exp(-60.0*((my_data.grid.x2d-xctr)**2 +
                                         (my_data.grid.y2d-yctr)**2))
-    
+
     u = my_data.get_var("x-velocity")
     v = my_data.get_var("y-velocity")
-    
+
     u[:, :] = rp.get_param("advection.u")
     v[:, :] = rp.get_param("advection.v")
+
 
 def finalize():
     """ print out any information to the user at the end of the run """

@@ -19,18 +19,18 @@ class Simulation(NullSimulation):
         def shift(velocity):
             """
             Computes the direction of shift for each node for upwind
-            discretization based on sign of veclocity 
+            discretization based on sign of veclocity
             """
             shift_vel = np.sign(velocity)
             shift_vel[np.where(shift_vel <= 0)] = 0
-            shift_vel[np.where(shift_vel >  0)] = -1
+            shift_vel[np.where(shift_vel > 0)] = -1
             return shift_vel
-            
+
         my_grid = grid_setup(self.rp, ng=4)
-        
+
         # create the variables
         bc, bc_xodd, bc_yodd = bc_setup(self.rp)
-        
+
         my_data = patch.CellCenterData2d(my_grid)
 
         # velocities
@@ -40,10 +40,10 @@ class Simulation(NullSimulation):
         # shift
         my_data.register_var("x-shift", bc_xodd)
         my_data.register_var("y-shift", bc_yodd)
-        
+
         # density
         my_data.register_var("density", bc)
-        
+
         my_data.create()
 
         self.cc_data = my_data
@@ -56,13 +56,13 @@ class Simulation(NullSimulation):
         # now set the initial conditions for the problem
         problem = importlib.import_module("advection_nonuniform.problems.{}".format(self.problem_name))
         problem.init_data(self.cc_data, self.rp)
-        
+
         # compute the required shift for each node using corresponding velocity at the node
         shx = self.cc_data.get_var("x-shift")
         shx[:, :] = shift(self.cc_data.get_var("x-velocity"))
         shy = self.cc_data.get_var("y-shift")
         shy[:, :] = shift(self.cc_data.get_var("y-velocity"))
-        
+
     def method_compute_timestep(self):
         """
         The timestep() function computes the advective timestep
@@ -76,7 +76,7 @@ class Simulation(NullSimulation):
 
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
-        
+
         # the timestep is min(dx/|u|, dy|v|)
         xtmp = self.cc_data.grid.dx/np.amax(np.fabs(u))
         ytmp = self.cc_data.grid.dy/np.amax(np.fabs(v))
@@ -90,7 +90,7 @@ class Simulation(NullSimulation):
         is part of the Simulation.
         """
         myd = self.cc_data
-        
+
         dtdx = self.dt/myd.grid.dx
         dtdy = self.dt/myd.grid.dy
 
@@ -110,7 +110,6 @@ class Simulation(NullSimulation):
                                     dtdy*(flux_y.v() - flux_y.jp(1))
 
         if self.particles is not None:
-            
             u = myd.get_var("x-velocity")
             v = myd.get_var("y-velocity")
 
@@ -165,4 +164,3 @@ class Simulation(NullSimulation):
 
         plt.pause(0.001)
         plt.draw()
-        

@@ -31,4 +31,9 @@ class TestSimulation(object):
 
     def test_initializationst(self):
         dens = self.sim.cc_data.get_var("density")
+        u = self.sim.cc_data.get_var("x-velocity")
+        v = self.sim.cc_data.get_var("y-velocity")
+
         assert dens.min() == 1.0 and dens.max() == 1.0
+        assert u.min() == 1.0 and u.max() == 1.0
+        assert v.min() == 1.0 and v.max() == 1.0
