@@ -27,3 +27,4 @@ riemann = HLLC            ; HLLC or CGF
 
 [diffusion]
 k = 1.0      ; conductivity
+constant_kappa = 1  ; Is the conductivity constant (1) or constant opacity (0)
