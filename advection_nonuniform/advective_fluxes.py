@@ -60,11 +60,8 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
     u = my_data.get_var("x-velocity")
     v = my_data.get_var("y-velocity")
 
-    cx = myg.scratch_array()
-    cy = myg.scratch_array()
-
-    cx.v(buf=1)[:, :] = u.v(buf=1)*dt/myg.dx
-    cy.v(buf=1)[:, :] = v.v(buf=1)*dt/myg.dy
+    cx = u*dt/myg.dx
+    cy = v*dt/myg.dy
 
     #--------------------------------------------------------------------------
     # monotonized central differences
@@ -75,12 +72,11 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
     ldelta_ax = reconstruction.limit(a, myg, 1, limiter)
     ldelta_ay = reconstruction.limit(a, myg, 2, limiter)
 
-    # x-direction
+    # upwind in x-direction
     a_x = myg.scratch_array()
     shift_x = my_data.get_var("x-shift").astype(int)
 
     for index, vel in np.ndenumerate(u.v(buf=1)):
-        # upwind
         if vel < 0:
             a_x.v(buf=1)[index] = a.ip(shift_x.v(buf=1)[index], buf=1)[index] - \
                                   0.5*(1.0 + cx.v(buf=1)[index]) * \
@@ -90,12 +86,11 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
                                   0.5*(1.0 - cx.v(buf=1)[index]) * \
                                   ldelta_ax.ip(shift_x.v(buf=1)[index], buf=1)[index]
 
-    # y-direction
+    # upwind in y-direction
     a_y = myg.scratch_array()
     shift_y = my_data.get_var("y-shift").astype(int)
 
     for index, vel in np.ndenumerate(v.v(buf=1)):
-        # upwind
         if vel < 0:
             a_y.v(buf=1)[index] = a.jp(shift_y.v(buf=1)[index], buf=1)[index] - \
                                   0.5*(1.0 + cy.v(buf=1)[index]) * \
