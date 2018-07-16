@@ -9,6 +9,7 @@ import compressible.eos as eos
 import compressible_react.burning as burning
 
 import util.plot_tools as plot_tools
+from util import msg
 
 
 class Simulation(compressible.Simulation):
@@ -21,27 +22,39 @@ class Simulation(compressible.Simulation):
         """
         super().initialize(extra_vars=["fuel", "ash"])
 
+        network = self.rp.get_param("network.network_type")
+
+        if network == "powerlaw":
+            self.network = burning.PowerLaw()
+        elif network == "null":
+            self.network = burning.Network(nspec_evolve=2)
+        else:
+            msg.fail("ERROR: Do not recognise network %s" % network)
+
+        self.network.initialize(self.rp)
+
     def burn(self, dt):
         """ react fuel to ash """
 
-        e = self.cc_data.get_var("eint")
-        ener = self.cc_data.get_var("eint")
+        # e = self.cc_data.get_var("eint")
+        ener = self.cc_data.get_var("energy")
         dens = self.cc_data.get_var("density")
         fuel = self.cc_data.get_var("fuel")
         ash = self.cc_data.get_var("ash")
 
         # compute T
-        Cv = self.rp.get_param("eos.cv")
-        temp = eos.temp(e, Cv)
+        # Cv = self.rp.get_param("eos.cv")
+        # temp = eos.temp(e, Cv)
 
         # compute energy generation rate
-        H, omega_dot = burning.energy_and_species_creation(self.cc_data, temp)
+        H, omega_dot = self.network.energy_and_species_creation(self.cc_data)
 
         # update energy due to reaction
         ener[:, :] += dens * H * dt
 
-        fuel[:, :] -= omega_dot * dt
-        ash[:, :] += omega_dot * dt
+        fuel[:, :] += omega_dot[:,:,0] * dt * dens
+        ash[:, :] += omega_dot[:,:,1] * dt * dens
+
 
     def diffuse(self, dt):
         """ diffuse for dt """
@@ -49,7 +62,7 @@ class Simulation(compressible.Simulation):
         myg = self.cc_data.grid
 
         e = self.cc_data.get_var("eint")
-        ener = self.cc_data.get_var("eint")
+        ener = self.cc_data.get_var("energy")
 
         # compute T
         Cv = self.rp.get_param("eos.cv")
