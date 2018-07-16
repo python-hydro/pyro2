@@ -1,15 +1,23 @@
 import numpy as np
 import compressible.eos as eos
-from scipy.integrate import odeint
 
 
 class Network(object):
     """
-    Class for holding info about the reaction network.
+    Implements calculations to do with the reaction network.
+
+    This is a base class which implements the null case (no burning). Other networks should inherit from this one.
     """
 
     def __init__(self, nspec_evolve=0):
-        """ Constructor """
+        """
+        Constructor
+
+        Parameters
+        ----------
+        nspec_evolve : int
+            Number of species to evolve.
+        """
 
         self.nspec = 0
         self.nspec_evolve = nspec_evolve
@@ -28,6 +36,9 @@ class Network(object):
         self.dT_crit = 1e9
 
     def initialize(self, rp):
+        """
+        Initialize the class. Will try to find the heat capacities at constant volume and pressure.
+        """
         try:
             self.Cv = rp.get_param("eos.cv")
         except KeyError:
@@ -37,13 +48,17 @@ class Network(object):
         except KeyError:
             pass
 
-    def finalize(self):
-        pass
-
-    def enery_gen_rate(self, dydt):
-        pass
-
     def temperature_rhs(self, cc_data, E_nuc):
+        """
+        Calculates the time derivative of the temperature.
+
+        Parameters
+        ----------
+        cc_data : CellCenterData2d
+            Cell-centered data
+        E_nuc : Grid2d
+            Instantaneous energy generation rate.
+        """
 
         myg = cc_data.grid
 
@@ -59,6 +74,14 @@ class Network(object):
         return rhs
 
     def energy_and_species_creation(self, cc_data):
+        """
+        Returns the instantaneous energy generation rate and the species creation rate.
+
+        Parameters
+        ----------
+        cc_data : CellCenterData2d
+            The cell-centered data
+        """
 
         myg = cc_data.grid
         return myg.scratch_array(), myg.scratch_array(nvar=self.nspec_evolve)
@@ -66,7 +89,12 @@ class Network(object):
 
 class PowerLaw(Network):
     """
-    powerlaw network. This is a single-step reaction rate. There are only two species, fuel f and ash a which react through the reaction $f + f \rightarrow a + \gamma$. Baryon conservation requires that $A_f = A_a/2$ and charge conservation requires that $Z_f = Z_a/2$. The reaction rate is a powerlaw in temperature.
+    powerlaw network. This is a single-step reaction rate.
+    There are only two species, fuel f and ash a which react
+    through the reaction $f + f \rightarrow a + \gamma$.
+    Baryon conservation requires that $A_f = A_a/2$ and
+    charge conservation requires that $Z_f = Z_a/2$. The
+    reaction rate is a powerlaw in temperature.
     """
 
     def __init__(self):
@@ -76,6 +104,14 @@ class PowerLaw(Network):
         self.self_heat = True
 
     def initialize(self, rp):
+        """
+        Initialize the object, loading up a number of runtime parameters.
+
+        Parameters
+        ----------
+        rp : RuntimeParameters
+            Runtime paramters
+        """
         super().initialize(rp)
 
         self.spec_names = ["fuel", "ash", "inert"]
@@ -91,10 +127,14 @@ class PowerLaw(Network):
         self.rtilde = rp.get_param("network.rtilde")
         self.nu = rp.get_param("network.nu")
 
-
     def enery_gen_rate(self, dydt):
         """
-        Computers instantaneous energy generation rate
+        Computes instantaneous energy generation rate
+
+        Parameters
+        ----------
+        dydt : Grid2d
+            Species creation rate
         """
         return np.sum(dydt[:, :, :] *
                       self.A_ion[np.newaxis,
@@ -105,14 +145,19 @@ class PowerLaw(Network):
 
     def energy_and_species_creation(self, cc_data):
         """
-        RHS of reactions ODE
+        Returns the instantaneous energy generation rate and the species creation rate.
+
+        Parameters
+        ----------
+        cc_data : CellCenterData2d
+            The cell-centered data
         """
 
         myg = cc_data.grid
 
-        xfueltmp = np.maximum(cc_data.get_var("fuel"), 0)
         dens = cc_data.get_var("density")
         eint = cc_data.get_var("eint")
+        xfueltmp = np.maximum(cc_data.get_var("fuel")/dens, 0)
 
         T = myg.scratch_array()
         T[:, :] = eos.temp(eint, self.Cv)

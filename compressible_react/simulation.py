@@ -52,9 +52,8 @@ class Simulation(compressible.Simulation):
         # update energy due to reaction
         ener[:, :] += dens * H * dt
 
-        fuel[:, :] += omega_dot[:,:,0] * dt * dens
-        ash[:, :] += omega_dot[:,:,1] * dt * dens
-
+        fuel[:, :] += omega_dot[:, :, 0] * dt * dens
+        ash[:, :] += omega_dot[:, :, 1] * dt * dens
 
     def diffuse(self, dt):
         """ diffuse for dt """
