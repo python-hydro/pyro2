@@ -18,9 +18,6 @@ def init_data(my_data, rp):
     xmom = my_data.get_var("x-momentum")
     ymom = my_data.get_var("y-momentum")
     ener = my_data.get_var("energy")
-    fuel = my_data.get_var("fuel")
-    ash = my_data.get_var("ash")
-
     # initialize the components, remember, that ener here is rho*eint
     # + 0.5*rho*v**2, where eint is the specific internal energy
     # (erg/g)
@@ -28,8 +25,15 @@ def init_data(my_data, rp):
     xmom[:, :] = 0.0
     ymom[:, :] = 0.0
     ener[:, :] = 2.5
-    fuel[:, :] = 0.2
-    ash[:, :] = 0.8
+
+    try:
+        fuel = my_data.get_var("fuel")
+        ash = my_data.get_var("ash")
+
+        fuel[:, :] = 0.2
+        ash[:, :] = 0.8
+    except IndexError:
+        pass
 
 
 def finalize():

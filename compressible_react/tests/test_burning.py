@@ -47,7 +47,7 @@ class TestSimulation(object):
         ntk = self.sim.network
 
         assert ntk.nspec == 0
-        assert ntk.spec_names == []
+        assert ntk.spec_names is None
 
         ntk.initialize(self.rp)
 
@@ -95,7 +95,7 @@ class TestSimulation(object):
         assert_array_almost_equal(omega_dot, omega_dot_correct)
         assert_array_almost_equal(E_nuc, E_nuc_correct)
 
-    def test_kappa(self):
+    def test_k_th(self):
         """
         Test the conductivity
         """
@@ -105,11 +105,11 @@ class TestSimulation(object):
         myd = self.sim.cc_data
         myg = myd.grid
 
-        k = burning.kappa(myd, 1, 30, 1)
+        k = burning.k_th(myd, 1, 30, 1)
 
         assert_array_equal(myg.scratch_array() + 30, k)
 
         temp = myg.scratch_array() + 1
         k_correct = myg.scratch_array() + 1.512106667e-4
 
-        assert_array_almost_equal(k_correct, burning.kappa(myd, temp, 2, 0))
+        assert_array_almost_equal(k_correct, burning.k_th(myd, temp, 2, 0))

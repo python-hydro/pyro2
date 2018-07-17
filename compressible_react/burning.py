@@ -157,9 +157,14 @@ class PowerLaw(Network):
 
             \dot{\omega}_k = \tilde{r} \frac{\rho}{\rho_{\text{ref}}}X_k^2 \left(\frac{T}{T_{\text{ref}}}\right)^\nu,
 
-        where :math:`\tilde{r}` is the coefficient for the reaction rate, :math:`\rho_{\text{ref}}` and :math:`T_{\text{ref}}` are the reference density and temperature, and :math:`\nu` is the exponent for the temperature.
+        where :math:`\tilde{r}` is the coefficient for the reaction rate,
+        :math:`\rho_{\text{ref}}` and :math:`T_{\text{ref}}` are the reference
+        density and temperature, and :math:`\nu` is the exponent for the
+        temperature.
 
-        :math:`\tilde{r}` is zero if the temperature is below some activation temperature, given by some fraction :math:`F_{\text{act}}` of the reference temperature.
+        :math:`\tilde{r}` is zero if the temperature is below some activation
+        temperature, given by some fraction :math:`F_{\text{act}}` of the
+        reference temperature.
 
         Parameters
         ----------
@@ -171,7 +176,7 @@ class PowerLaw(Network):
 
         dens = cc_data.get_var("density")
         eint = cc_data.get_var("eint")
-        xfueltmp = np.maximum(cc_data.get_var("fuel")/dens, 0)
+        xfueltmp = np.maximum(cc_data.get_var("fuel") / dens, 0)
 
         T = myg.scratch_array()
         T[:, :] = eos.temp(eint, self.Cv)
