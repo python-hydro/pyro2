@@ -20,7 +20,6 @@ class Simulation(compressible.Simulation):
         the data is the same as the compressible solver, but we
         supply additional variables.
         """
-        super().initialize(extra_vars=["fuel", "ash"])
 
         network = self.rp.get_param("network.network_type")
 
@@ -33,18 +32,15 @@ class Simulation(compressible.Simulation):
 
         self.network.initialize(self.rp)
 
+        super().initialize(extra_vars=self.network.spec_names)
+
     def burn(self, dt):
         """ react fuel to ash """
 
-        # e = self.cc_data.get_var("eint")
         ener = self.cc_data.get_var("energy")
         dens = self.cc_data.get_var("density")
         fuel = self.cc_data.get_var("fuel")
         ash = self.cc_data.get_var("ash")
-
-        # compute T
-        # Cv = self.rp.get_param("eos.cv")
-        # temp = eos.temp(e, Cv)
 
         # compute energy generation rate
         H, omega_dot = self.network.energy_and_species_creation(self.cc_data)
@@ -54,6 +50,18 @@ class Simulation(compressible.Simulation):
 
         fuel[:, :] += omega_dot[:, :, 0] * dt * dens
         ash[:, :] += omega_dot[:, :, 1] * dt * dens
+
+        # enforce 0 <= X_k <= 1
+        fuel[fuel < 0] = 0
+        ash[ash < 0] = 0
+
+        fuel[fuel > dens] = dens[fuel > dens]
+        ash[ash > dens] = dens[ash > dens]
+
+        # enforce sum_k X_k = 1 by renormalizing
+        sum = (fuel + ash) / dens
+        fuel[:, :] /= sum
+        ash[:, :] /= sum
 
     def diffuse(self, dt):
         """ diffuse for dt """
@@ -68,9 +76,9 @@ class Simulation(compressible.Simulation):
         temp = eos.temp(e, Cv)
 
         # compute div kappa grad T
-        kappa = self.rp.get_param("diffusion.k")
+        k_const = self.rp.get_param("diffusion.k")
         const_opacity = self.rp.get_param("diffusion.constant_kappa")
-        k = burning.kappa(self.cc_data, temp, kappa, const_opacity)
+        k = burning.k_th(self.cc_data, temp, k_const, const_opacity)
 
         div_kappa_grad_T = myg.scratch_array()
 
@@ -139,8 +147,8 @@ class Simulation(compressible.Simulation):
 
         myg = self.cc_data.grid
 
-        fields = [rho, magvel, p, e, X]
-        field_names = [r"$\rho$", r"U", "p", "e", r"$X_\mathrm{fuel}$"]
+        fields = [rho, magvel, u, p, e, X]
+        field_names = [r"$\rho$", r"U", "u", "p", "e", r"$X_\mathrm{fuel}$"]
 
         f, axes, cbar_title = plot_tools.setup_axes(myg, len(fields))
 

@@ -23,12 +23,10 @@ class Network(object):
         self.nspec_evolve = nspec_evolve
         self.naux = 0
 
-        self.spec_names = []
+        self.spec_names = None
         self.A_ion = []
         self.Z_ion = []
         self.E_binding = []
-
-        self.nrates = 0
 
         self.do_constant_volume_burn = False
         self.self_heat = False
@@ -88,12 +86,12 @@ class Network(object):
 
 
 class PowerLaw(Network):
-    """
+    r"""
     powerlaw network. This is a single-step reaction rate.
-    There are only two species, fuel f and ash a which react
-    through the reaction $f + f \rightarrow a + \gamma$.
-    Baryon conservation requires that $A_f = A_a/2$ and
-    charge conservation requires that $Z_f = Z_a/2$. The
+    There are only two species, fuel :math:`f` and ash :math:`a` which react
+    through the reaction :math:`f + f \rightarrow a + \gamma`.
+    Baryon conservation requires that :math:`A_f = A_a/2` and
+    charge conservation requires that :math:`Z_f = Z_a/2`. The
     reaction rate is a powerlaw in temperature.
     """
 
@@ -128,8 +126,14 @@ class PowerLaw(Network):
         self.nu = rp.get_param("network.nu")
 
     def enery_gen_rate(self, dydt):
-        """
-        Computes instantaneous energy generation rate
+        r"""
+        Computes instantaneous energy generation rate. It is given by
+
+        .. math::
+
+            f(\dot{Y}_k) = \sum_k \dot{Y}_k A_k E_{\text{bin},k},
+
+        where :math:`E_{\text{bin},k}` is the binding energy of species :math:`k`.
 
         Parameters
         ----------
@@ -144,8 +148,18 @@ class PowerLaw(Network):
                       axis=2)
 
     def energy_and_species_creation(self, cc_data):
-        """
+        r"""
         Returns the instantaneous energy generation rate and the species creation rate.
+
+        The rate is given by
+
+        .. math::
+
+            \dot{\omega}_k = \tilde{r} \frac{\rho}{\rho_{\text{ref}}}X_k^2 \left(\frac{T}{T_{\text{ref}}}\right)^\nu,
+
+        where :math:`\tilde{r}` is the coefficient for the reaction rate, :math:`\rho_{\text{ref}}` and :math:`T_{\text{ref}}` are the reference density and temperature, and :math:`\nu` is the exponent for the temperature.
+
+        :math:`\tilde{r}` is zero if the temperature is below some activation temperature, given by some fraction :math:`F_{\text{act}}` of the reference temperature.
 
         Parameters
         ----------
@@ -184,7 +198,7 @@ class PowerLaw(Network):
         return E_nuc, omega_dot
 
 
-def kappa(cc_data, temp, const, constant=1):
+def k_th(cc_data, temp, const, constant=1):
     """
     Conductivity
 

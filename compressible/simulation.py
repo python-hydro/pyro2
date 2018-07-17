@@ -207,8 +207,10 @@ class Simulation(NullSimulation):
 
         myg = self.cc_data.grid
 
-        Flux_x, Flux_y = flx.unsplit_fluxes(self.cc_data, self.aux_data, self.rp,
-                                            self.ivars, self.solid, self.tc, self.dt)
+        Flux_x, Flux_y = flx.unsplit_fluxes(self.cc_data,
+                                            self.aux_data, self.rp,
+                                            self.ivars, self.solid,
+                                            self.tc, self.dt)
 
         old_dens = dens.copy()
         old_ymom = ymom.copy()
@@ -300,7 +302,8 @@ class Simulation(NullSimulation):
 
             # plot particles
             ax.scatter(particle_positions[:, 0],
-                       particle_positions[:, 1], s=5, c=colors, alpha=0.8, cmap="Greys")
+                       particle_positions[:, 1], s=5, c=colors,
+                       alpha=0.8, cmap="Greys")
             ax.set_xlim([myg.xmin, myg.xmax])
             ax.set_ylim([myg.ymin, myg.ymax])
 

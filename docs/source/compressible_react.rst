@@ -24,4 +24,10 @@ compressible\_react\.simulation module
     :undoc-members:
     :show-inheritance:
 
+compressible\_react\.burning module
+--------------------------------------
 
+.. automodule:: compressible_react.burning
+    :members:
+    :undoc-members:
+    :show-inheritance:
