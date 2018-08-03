@@ -83,11 +83,11 @@ class ArrayIndexer(np.ndarray):
         c = len(self.shape)
 
         if c == 2:
-            return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
-                                   self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s])
+            return self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
+                        self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s]
         else:
-            return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
-                                   self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s, n])
+            return self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
+                        self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s, n]
 
     def lap(self, n=0, buf=0):
         """return the 5-point Laplacian"""
