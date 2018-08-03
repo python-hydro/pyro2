@@ -1,0 +1,29 @@
+[driver]
+max_steps = 500
+tmax = 1.0
+
+[swe]
+limiter = 0
+cvisc = 0.1
+grav = 0.001
+
+
+[io]
+basename = advect_
+
+
+[mesh]
+nx = 64
+ny = 64
+xmax = 1.0
+ymax = 1.0
+
+xlboundary = periodic
+xrboundary = periodic
+
+ylboundary = periodic
+yrboundary = periodic
+
+
+[vis]
+dovis = 1

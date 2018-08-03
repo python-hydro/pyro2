@@ -1,24 +1,28 @@
 #!/usr/bin/env python3
 
-# test of a cell-centered, centered-difference approximate projection.
-#
-# initialize the velocity field to be divergence free and then add to
-# it the gradient of a scalar (whose normal component vanishes on the
-# boundaries).  The projection should recover the original divergence-
-# free velocity field.
-#
-# The test velocity field comes from Almgen, Bell, and Szymczak 1996.
-#
-# This makes use of the multigrid solver with periodic boundary conditions.
-#
-# One of the things that this test demonstrates is that the initial
-# projection may not be able to completely remove the divergence free
-# part, so subsequent projections may be necessary.  In this example,
-# we add a very strong gradient component.
-#
-# The total number of projections to perform is given by nproj.  Each
-# projection uses the divergence of the velocity field from the previous
-# iteration as its source term.
+"""test of a cell-centered, centered-difference approximate projection.
+
+initialize the velocity field to be divergence free and then add to it
+the gradient of a scalar (whose normal component vanishes on the
+boundaries).  The projection should recover the original divergence-
+free velocity field.
+
+The test velocity field comes from Almgen, Bell, and Szymczak 1996.
+
+This makes use of the multigrid solver with periodic boundary conditions.
+
+One of the things that this test demonstrates is that the initial
+projection may not be able to completely remove the divergence free
+part, so subsequent projections may be necessary.  In this example, we
+add a very strong gradient component.
+
+The total number of projections to perform is given by nproj.  Each
+projection uses the divergence of the velocity field from the previous
+iteration as its source term.
+
+Note: the output file created stores the original field, the poluted
+field, and the recovered field.
+"""
 
 import numpy as np
 
@@ -28,6 +32,7 @@ import mesh.patch as patch
 
 
 def doit(nx, ny):
+    """manage the entire projection"""
 
     nproj = 2
 

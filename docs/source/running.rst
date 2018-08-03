@@ -16,7 +16,7 @@ For example, to run the Sedov problem with the compressible solver we would do:
 This knows to look for ``inputs.sedov`` in ``compressible/problems/``
 (alternately, you can specify the full path for the inputs file).
 
-To run the smooth Gaussin advection problem with the advection solver, we would do:
+To run the smooth Gaussian advection problem with the advection solver, we would do:
 
 .. code-block:: none
 
@@ -50,7 +50,7 @@ parameters are stored in three places:
 * the ``pyro/_defaults`` file
 * the solver's ``_defaults`` file
 * problem's ``_defaults`` file (named ``_problem-name.defaults`` in the
-  solver's ``problem/`` sub-directory). 
+  solver's ``problem/`` sub-directory).
 
 These three files are parsed at runtime to define the list of valid
 parameters. The inputs file is read next and used to override the
@@ -135,5 +135,3 @@ All solvers use the following parameters:
 +---------------------+---------------------------------------------------------------------------------------------------------+
 |``ny``               | the number zones in the y-direction                                                                     |
 +---------------------+---------------------------------------------------------------------------------------------------------+
-
-

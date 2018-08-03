@@ -1,0 +1,40 @@
+# simple inputs files for the double Mach reflection problem.
+
+[driver]
+max_steps = 12500
+tmax = 0.25
+
+
+[compressible]
+limiter = 2
+cvisc = 0.1
+
+[io]
+basename = double_mach_reflection_
+dt_out = 0.1
+
+
+[mesh]
+nx = 1024
+ny = 256
+xmax = 4.0
+ymax = 1.0
+
+xlboundary = ramp
+xrboundary = outflow
+
+ylboundary = ramp
+yrboundary = ramp
+
+
+[ramp]
+rhol = 8.0
+ul = 7.1447096
+vl = -4.125
+pl = 116.5
+
+rhor = 1.4
+ur = 0.0
+vr = 0.0
+pr = 1.0
+

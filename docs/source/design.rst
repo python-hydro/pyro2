@@ -85,6 +85,11 @@ The overall structure is:
   * ``problems/``: The problem setups for when the multigrid solver is used in a stand-alone fashion.
   * ``tests/``: Reference multigrid solver solutions (from when the multigrid solver is used stand-alone) for regression testing.
 
+* ``swe/``: The shallow water solver.
+
+  * ``problems/``: The problem setups for the shallow water solver.
+  * ``tests/``: Reference shallow water output for regression testing.
+
 * ``util/``: Various service modules used by the pyro routines,
   including runtime parameters, I/O, profiling, and pretty output
   modes.
@@ -94,7 +99,7 @@ Fortran
 -------
 
 Fortran is used to speed up some critical portions of the code, and in
-often cases, provides more clarity than trying to write optimized
+many cases, provides more clarity than trying to write optimized
 python code using array operations in numpy. The Fortran code
 seemlessly integrates into python using f2py.
 
@@ -165,5 +170,3 @@ inheritance is used, so many of these methods come from the base
 * ``write_extras``: any solver-specific writing
 
 Each problem setup needs only provide an ``init_data()`` function that fills the data in the patch object.
-
-

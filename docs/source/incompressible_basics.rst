@@ -4,7 +4,7 @@ Incompressible hydrodynamics solver
 pyro's incompressible solver solves:
 
 .. math::
-  
+
    \frac{\partial U}{\partial t} + U \cdot \nabla U + \nabla p &= 0 \\
    \nabla \cdot U &= 0
 
@@ -43,7 +43,7 @@ we are using an approximate projection.
 convergence
 ^^^^^^^^^^^
 
-The convergence test initialize a simple velocity field on a periodic
+The convergence test initializes a simple velocity field on a periodic
 unit square with known analytic solution. By evolving at a variety of
 resolutions and comparing to the analytic solution, we can measure the
 convergence rate of the algorithm. The particular set of initial
@@ -105,4 +105,3 @@ hydrodynamics code <http://amrex-astro.github.io/MAESTRO/>`_. Maestro
 can do variable-density incompressible, anelastic, and low Mach number
 stratified flows in stellar (and terrestrial) environments in close
 hydrostatic equilibrium.
-

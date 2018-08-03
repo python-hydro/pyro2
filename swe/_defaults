@@ -1,0 +1,19 @@
+[driver]
+cfl = 0.8
+
+
+[swe]
+use_flattening = 0        ; apply flattening at shocks (1)
+
+cvisc = 0.1               ; artifical viscosity coefficient
+
+limiter = 2               ; limiter (0 = none, 1 = 2nd order, 2 = 4th order)
+
+grav = 1.0                ; gravitational acceleration (in y-direction)
+
+riemann = Roe            ; HLLC or Roe
+
+
+[particles]
+do_particles = 0
+particle_generator = grid

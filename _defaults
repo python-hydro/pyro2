@@ -31,7 +31,7 @@ ymin = 0.0                ; domain minimum y-coordinate
 ymax = 1.0                ; domain maximum y-coordinate
 
 xlboundary = reflect     ; minimum x BC ('reflect', 'outflow', or 'periodic')
-xrboundary = reflect     ; maximum x BC ('reflect', 'outflow', or 'periodic') 
+xrboundary = reflect     ; maximum x BC ('reflect', 'outflow', or 'periodic')
 ylboundary = reflect     ; minimum y BC ('reflect', 'outflow', or 'periodic')
 yrboundary = reflect     ; maximum y BC ('reflect', 'outflow', or 'periodic')
 
@@ -39,6 +39,7 @@ nx = 25                   ; number of zones in the x-direction
 ny = 25                   ; number of zones in the y-direction
 
 
-
-
-
+[particles]
+do_particles = 0          ; include particles? (1=yes, 0=no)
+n_particles = 100         ; number of particles
+particle_generator = random ; how do we generate particles? (random, grid)

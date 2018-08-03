@@ -8,13 +8,13 @@ import matplotlib.pyplot as plt
 
 
 def init_data(my_data, rp):
-    """ initialize the sedov problem """
+    """ initialize the logo problem """
 
     msg.bold("initializing the logo problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):
-        print("ERROR: patch invalid in sedov.py")
+        print("ERROR: patch invalid in logo.py")
         print(my_data.__class__)
         sys.exit()
 
