@@ -6,6 +6,7 @@ operations we see in finite-difference methods, like i+1, i-1, etc.
 from __future__ import print_function
 
 import numpy as np
+from unyt import unyt_array
 
 
 def _buf_split(b):
@@ -25,13 +26,15 @@ def _buf_split(b):
     return bxlo, bxhi, bylo, byhi
 
 
-class ArrayIndexer(np.ndarray):
+class ArrayIndexer(unyt_array):
     """ a class that wraps the data region of a single array (d)
         and allows us to easily do array operations like d[i+1,j]
         using the ip() method. """
 
-    def __new__(self, d, grid=None):
-        obj = np.asarray(d).view(self)
+    def __new__(self, d, input_units=None, registry=None, dtype=None, bypass_validation=False, 
+                grid=None):
+        obj = super(ArrayIndexer, self).__new__(self, d, input_units, registry, dtype, 
+                                                bypass_validation)
         obj.g = grid
         obj.c = len(d.shape)
 
@@ -40,6 +43,7 @@ class ArrayIndexer(np.ndarray):
     def __array_finalize__(self, obj):
         if obj is None:
             return
+        super(ArrayIndexer, self).__array_finalize__(obj)
         self.g = getattr(obj, "g", None)
         self.c = getattr(obj, "c", None)
 
