@@ -25,7 +25,6 @@ pyro2
    plot
    plotvar
    pyro
-   setup
    simulation_null
    swe
    test
