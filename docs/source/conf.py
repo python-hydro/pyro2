@@ -39,6 +39,8 @@ extensions = ['sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'nbsphinx',
     'numpydoc',
+    'sphinx.ext.inheritance_diagram',
+    'sphinx.ext.graphviz',
     'IPython.sphinxext.ipython_console_highlighting',
     'sphinx.ext.githubpages']
 
