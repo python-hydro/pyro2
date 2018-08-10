@@ -1,7 +1,7 @@
 Setting up pyro
 ===============
 
-You can clone pyro from github: `http://github.com/zingale/pyro2 <http://github.com/zingale/pyro2>`_
+You can clone pyro from github: `http://github.com/python-hydro/pyro2 <http://github.com/python-hydro/pyro2>`_
 
 .. note::
 
