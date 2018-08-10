@@ -73,7 +73,7 @@ def do_tests(build, out_file, do_standalone=True, do_main=True,
                                    reset_bench_on_fail=reset_fails, make_bench=store_all_benchmarks)
             p.initialize_problem(t.problem, t.inputs, t.options)
             err = p.run_sim
-            
+
             results[str(t)] = err
 
     # standalone tests
