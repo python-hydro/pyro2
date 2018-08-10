@@ -72,7 +72,7 @@ def do_tests(build, out_file, do_standalone=True, do_main=True,
             p = pyro.PyroBenchmark(t.solver, comp_bench=True,
                                    reset_bench_on_fail=reset_fails, make_bench=store_all_benchmarks)
             p.initialize_problem(t.problem, t.inputs, t.options)
-            err = p.run_sim
+            err = p.run_sim()
 
             results[str(t)] = err
 

@@ -143,7 +143,6 @@ class Pyro(object):
             self.sim.dovis()
 
         while not self.sim.finished():
-
             self.single_step()
 
         # final output
