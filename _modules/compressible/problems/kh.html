@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>compressible.problems.kh &mdash; pyro 2.1 documentation</title>
+  <title>compressible.problems.kh &mdash; pyro 2.2 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="pyro 2.1 documentation" href="../../../index.html"/>
+    <link rel="top" title="pyro 2.2 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                2.1
+                2.2
               </div>
             
           
@@ -113,6 +113,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../particles_basics.html">Particles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../swe_basics.html">Shallow water solvers</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Utilities</span></p>
 <ul>
@@ -123,6 +125,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../help.html">Getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ack.html#history">History</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
@@ -202,12 +205,12 @@
 <div class="viewcode-block" id="init_data"><a class="viewcode-back" href="../../../compressible.problems.html#compressible.problems.kh.init_data">[docs]</a><span class="k">def</span> <span class="nf">init_data</span><span class="p">(</span><span class="n">my_data</span><span class="p">,</span> <span class="n">rp</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; initialize the Kelvin-Helmholtz problem &quot;&quot;&quot;</span>
 
-    <span class="n">msg</span><span class="o">.</span><span class="n">bold</span><span class="p">(</span><span class="s2">&quot;initializing the sedov problem...&quot;</span><span class="p">)</span>
+    <span class="n">msg</span><span class="o">.</span><span class="n">bold</span><span class="p">(</span><span class="s2">&quot;initializing the Kelvin-Helmholtz problem...&quot;</span><span class="p">)</span>
 
     <span class="c1"># make sure that we are passed a valid patch object</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">my_data</span><span class="p">,</span> <span class="n">patch</span><span class="o">.</span><span class="n">CellCenterData2d</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">my_data</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span>
-        <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ERROR: patch invalid in sedov.py&quot;</span><span class="p">)</span>
+        <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ERROR: patch invalid in kh.py&quot;</span><span class="p">)</span>
 
     <span class="c1"># get the density, momenta, and energy as separate variables</span>
     <span class="n">dens</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
@@ -284,7 +287,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Michael Zingale.
+        &copy; Copyright 2018, pyro development tem.
 
     </p>
   </div>
@@ -306,7 +309,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'2.1',
+            VERSION:'2.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

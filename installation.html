@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Setting up pyro &mdash; pyro 2.1 documentation</title>
+  <title>Setting up pyro &mdash; pyro 2.2 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyro 2.1 documentation" href="index.html"/>
+    <link rel="top" title="pyro 2.2 documentation" href="index.html"/>
         <link rel="next" title="Notes on the numerical methods" href="notes.html"/>
         <link rel="prev" title="Introduction to pyro" href="intro.html"/> 
 
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                2.1
+                2.2
               </div>
             
           
@@ -117,6 +117,8 @@
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solvers</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Utilities</span></p>
 <ul>
@@ -127,6 +129,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html#history">History</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
@@ -230,7 +233,7 @@
 </style>
 <div class="section" id="setting-up-pyro">
 <h1>Setting up pyro<a class="headerlink" href="#setting-up-pyro" title="Permalink to this headline">¶</a></h1>
-<p>You can clone pyro from github: <a class="reference external" href="http://github.com/zingale/pyro2">http://github.com/zingale/pyro2</a></p>
+<p>You can clone pyro from github: <a class="reference external" href="http://github.com/python-hydro/pyro2">http://github.com/python-hydro/pyro2</a></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">It is strongly recommended that you use python 3.x.  While python 2.x might
@@ -241,7 +244,6 @@ in the future.</p>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">numpy</span></code></li>
 <li><code class="docutils literal"><span class="pre">matplotlib</span></code></li>
-<li><code class="docutils literal"><span class="pre">f2py</span></code></li>
 <li><code class="docutils literal"><span class="pre">f2py</span></code> (part of NumPy)</li>
 <li><code class="docutils literal"><span class="pre">pytest</span></code> (for unit tests)</li>
 </ul>
@@ -302,7 +304,7 @@ diagonally through the periodic domain.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Michael Zingale.
+        &copy; Copyright 2018, pyro development tem.
 
     </p>
   </div>
@@ -324,7 +326,7 @@ diagonally through the periodic domain.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'2.1',
+            VERSION:'2.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

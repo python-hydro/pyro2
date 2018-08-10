@@ -1,0 +1,619 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>particles.particles &mdash; pyro 2.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="pyro 2.2 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pyro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Setting up pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compressible_compare.html">Compressible solver comparisons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../particles_basics.html">Particles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../swe_basics.html">Shallow water solvers</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../testing.html">Testing</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ack.html#history">History</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>particles.particles</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for particles.particles</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Stores and manages particles and updates their positions based</span>
+<span class="sd">on the velocity on the grid.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">util</span> <span class="k">import</span> <span class="n">msg</span>
+
+
+<div class="viewcode-block" id="Particle"><a class="viewcode-back" href="../../particles.html#particles.particles.Particle">[docs]</a><span class="k">class</span> <span class="nc">Particle</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class to hold properties of a single (massless) particle.</span>
+
+<span class="sd">    This class could be extended (i.e. inherited from) to</span>
+<span class="sd">    model e.g. massive/charged particles.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">v</span>
+
+<div class="viewcode-block" id="Particle.pos"><a class="viewcode-back" href="../../particles.html#particles.particles.Particle.pos">[docs]</a>    <span class="k">def</span> <span class="nf">pos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return position vector.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Particle.velocity"><a class="viewcode-back" href="../../particles.html#particles.particles.Particle.velocity">[docs]</a>    <span class="k">def</span> <span class="nf">velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return velocity vector.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Particle.update"><a class="viewcode-back" href="../../particles.html#particles.particles.Particle.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Advect the particle and update its velocity.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="n">u</span> <span class="o">*</span> <span class="n">dt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+=</span> <span class="n">v</span> <span class="o">*</span> <span class="n">dt</span></div>
+
+<div class="viewcode-block" id="Particle.interpolate_velocity"><a class="viewcode-back" href="../../particles.html#particles.particles.Particle.interpolate_velocity">[docs]</a>    <span class="k">def</span> <span class="nf">interpolate_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Interpolate the x- and y-velocities defined on grid myg to the</span>
+<span class="sd">        particle&#39;s position.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        myg : Grid2d</span>
+<span class="sd">            grid which the velocities are defined on</span>
+<span class="sd">        u : ArrayIndexer</span>
+<span class="sd">            x-velocity</span>
+<span class="sd">        v : ArrayIndexer</span>
+<span class="sd">            y_velocity</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># find what cell it lives in</span>
+        <span class="n">x_idx</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">myg</span><span class="o">.</span><span class="n">xmin</span><span class="p">)</span> <span class="o">/</span> <span class="n">myg</span><span class="o">.</span><span class="n">dx</span> <span class="o">-</span> <span class="mf">0.5</span>
+        <span class="n">y_idx</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymin</span><span class="p">)</span> <span class="o">/</span> <span class="n">myg</span><span class="o">.</span><span class="n">dy</span> <span class="o">-</span> <span class="mf">0.5</span>
+
+        <span class="n">x_frac</span> <span class="o">=</span> <span class="n">x_idx</span> <span class="o">%</span> <span class="mi">1</span>
+        <span class="n">y_frac</span> <span class="o">=</span> <span class="n">y_idx</span> <span class="o">%</span> <span class="mi">1</span>
+
+        <span class="c1"># get the index of the particle&#39;s closest bottom left cell</span>
+        <span class="c1"># we&#39;ll add one as going to use buf&#39;d grids -</span>
+        <span class="c1"># this will catch the cases where the particle is on the edges</span>
+        <span class="c1"># of the grid.</span>
+        <span class="n">x_idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x_idx</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">y_idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">y_idx</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="c1"># interpolate velocity</span>
+        <span class="n">u_vel</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x_frac</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">y_frac</span><span class="p">)</span><span class="o">*</span><span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="n">x_idx</span><span class="p">,</span> <span class="n">y_idx</span><span class="p">]</span> <span class="o">+</span> \
+                <span class="n">x_frac</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">y_frac</span><span class="p">)</span><span class="o">*</span><span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="n">x_idx</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">y_idx</span><span class="p">]</span> <span class="o">+</span> \
+                <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x_frac</span><span class="p">)</span><span class="o">*</span><span class="n">y_frac</span><span class="o">*</span><span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="n">x_idx</span><span class="p">,</span> <span class="n">y_idx</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> \
+                <span class="n">x_frac</span><span class="o">*</span><span class="n">y_frac</span><span class="o">*</span><span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="n">x_idx</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">y_idx</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">v_vel</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x_frac</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">y_frac</span><span class="p">)</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="n">x_idx</span><span class="p">,</span> <span class="n">y_idx</span><span class="p">]</span> <span class="o">+</span> \
+                <span class="n">x_frac</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">y_frac</span><span class="p">)</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="n">x_idx</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">y_idx</span><span class="p">]</span> <span class="o">+</span> \
+                <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x_frac</span><span class="p">)</span><span class="o">*</span><span class="n">y_frac</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="n">x_idx</span><span class="p">,</span> <span class="n">y_idx</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> \
+                <span class="n">x_frac</span><span class="o">*</span><span class="n">y_frac</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="n">x_idx</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">y_idx</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">u_vel</span><span class="p">,</span> <span class="n">v_vel</span></div></div>
+
+
+<div class="viewcode-block" id="Particles"><a class="viewcode-back" href="../../particles.html#particles.particles.Particles">[docs]</a><span class="k">class</span> <span class="nc">Particles</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class to hold multiple particles.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim_data</span><span class="p">,</span> <span class="n">bc</span><span class="p">,</span> <span class="n">n_particles</span><span class="p">,</span> <span class="n">particle_generator</span><span class="o">=</span><span class="s2">&quot;grid&quot;</span><span class="p">,</span>
+                 <span class="n">pos_array</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">init_array</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the Particles object.</span>
+
+<span class="sd">        Particles are stored as a dictionary, with their keys being tuples</span>
+<span class="sd">        of their initial position. This was done in order to have a simple way</span>
+<span class="sd">        to access the initial particle positions when plotting.</span>
+
+<span class="sd">        However, this assumes that no two particles are</span>
+<span class="sd">        initialised with the same initial position, which is fine for the</span>
+<span class="sd">        massless particle case, however could no longer be a sensible thing</span>
+<span class="sd">        to do if have particles have other properties (e.g. mass).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sim_data : CellCenterData2d object</span>
+<span class="sd">            The cell-centered simulation data</span>
+<span class="sd">        bc : BC object</span>
+<span class="sd">            Boundary conditions</span>
+<span class="sd">        n_particles : int</span>
+<span class="sd">            Number of particles</span>
+<span class="sd">        particle_generator : string or function</span>
+<span class="sd">            String with generator name of custom particle generator function</span>
+<span class="sd">        pos_array : float array</span>
+<span class="sd">            Array of particle positions to use with particle initialization</span>
+<span class="sd">        init_array : float array</span>
+<span class="sd">            Array of initial particle positions required for plotting from file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sim_data</span> <span class="o">=</span> <span class="n">sim_data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bc</span> <span class="o">=</span> <span class="n">bc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">n_particles</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ERROR: n_particles = </span><span class="si">%s</span><span class="s2"> &lt;= 0&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n_particles</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">particle_generator</span><span class="p">):</span>  <span class="c1"># custom particle generator function</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="n">particle_generator</span><span class="p">(</span><span class="n">n_particles</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">particle_generator</span> <span class="o">==</span> <span class="s2">&quot;random&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">randomly_generate_particles</span><span class="p">(</span><span class="n">n_particles</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">particle_generator</span> <span class="o">==</span> <span class="s2">&quot;grid&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">grid_generate_particles</span><span class="p">(</span><span class="n">n_particles</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">particle_generator</span> <span class="o">==</span> <span class="s2">&quot;array&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">array_generate_particles</span><span class="p">(</span><span class="n">pos_array</span><span class="p">,</span> <span class="n">init_array</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ERROR: do not recognise particle generator </span><span class="si">%s</span><span class="s2">&quot;</span>
+                         <span class="o">%</span> <span class="p">(</span><span class="n">particle_generator</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_particles</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Particles.randomly_generate_particles"><a class="viewcode-back" href="../../particles.html#particles.particles.Particles.randomly_generate_particles">[docs]</a>    <span class="k">def</span> <span class="nf">randomly_generate_particles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_particles</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Randomly generate n_particles.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_data</span><span class="o">.</span><span class="n">grid</span>
+
+        <span class="n">positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_particles</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">positions</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">positions</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">myg</span><span class="o">.</span><span class="n">xmin</span><span class="p">)</span> <span class="o">+</span> \
+            <span class="n">myg</span><span class="o">.</span><span class="n">xmin</span>
+
+        <span class="n">positions</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">positions</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymin</span><span class="p">)</span> <span class="o">+</span> \
+            <span class="n">myg</span><span class="o">.</span><span class="n">ymin</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">positions</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">Particle</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Particles.grid_generate_particles"><a class="viewcode-back" href="../../particles.html#particles.particles.Particles.grid_generate_particles">[docs]</a>    <span class="k">def</span> <span class="nf">grid_generate_particles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_particles</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate particles equally spaced across the grid.</span>
+<span class="sd">        Currently has the same number of particles in the x and y</span>
+<span class="sd">        directions (so dx != dy unless the domain is square) -</span>
+<span class="sd">        may be better to scale this.</span>
+
+<span class="sd">        If necessary, shall increase/decrease n_particles</span>
+<span class="sd">        in order to fill grid.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">sq_n_particles</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n_particles</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="n">sq_n_particles</span><span class="o">**</span><span class="mi">2</span> <span class="o">!=</span> <span class="n">n_particles</span><span class="p">:</span>
+            <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;WARNING: Changing number of particles from </span><span class="si">{}</span><span class="s2"> to </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n_particles</span><span class="p">,</span> <span class="n">sq_n_particles</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+
+        <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_data</span><span class="o">.</span><span class="n">grid</span>
+
+        <span class="n">xs</span><span class="p">,</span> <span class="n">step</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">sq_n_particles</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">retstep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">xs</span> <span class="o">+=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">step</span>
+        <span class="n">ys</span><span class="p">,</span> <span class="n">step</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymax</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">sq_n_particles</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">retstep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">ys</span> <span class="o">+=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">step</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">ys</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">Particle</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Particles.array_generate_particles"><a class="viewcode-back" href="../../particles.html#particles.particles.Particles.array_generate_particles">[docs]</a>    <span class="k">def</span> <span class="nf">array_generate_particles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos_array</span><span class="p">,</span> <span class="n">init_array</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate particles based on array of their positions. This is used</span>
+<span class="sd">        when reading particle data from file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pos_array : float array</span>
+<span class="sd">            Array of particle positions.</span>
+<span class="sd">        init_array : float array</span>
+<span class="sd">            Array of initial particle positions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># check a pos_array has been passed to the constructor</span>
+        <span class="k">if</span> <span class="n">pos_array</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ERROR: Array of particle positions has not been passed into Particles constructor.</span><span class="se">\</span>
+<span class="s2">            Cannot generate particles.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">init_array</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">pos_array</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">Particle</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">),</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">init_array</span><span class="p">,</span> <span class="n">pos_array</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">[(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">)]</span> <span class="o">=</span> <span class="n">Particle</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Particles.update_particles"><a class="viewcode-back" href="../../particles.html#particles.particles.Particles.update_particles">[docs]</a>    <span class="k">def</span> <span class="nf">update_particles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the particles on the grid. This is based off the</span>
+<span class="sd">        AdvectWithUcc function in AMReX, which used the midpoint</span>
+<span class="sd">        method to advance particles using the cell-centered velocity.</span>
+
+<span class="sd">        We will explicitly pass in u and v if they cannot be accessed from the</span>
+<span class="sd">        sim_data using get_var(&quot;velocity&quot;).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dt : float</span>
+<span class="sd">            timestep</span>
+<span class="sd">        u : ArrayIndexer object</span>
+<span class="sd">            x-velocity</span>
+<span class="sd">        v : ArrayIndexer object</span>
+<span class="sd">            y-velocity</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_data</span><span class="o">.</span><span class="n">grid</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">u</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;velocity&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">u</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+            <span class="c1"># save old position and predict location at dt/2</span>
+            <span class="n">initial_position</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">pos</span><span class="p">()</span>
+
+            <span class="n">u_vel</span><span class="p">,</span> <span class="n">v_vel</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">interpolate_velocity</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+
+            <span class="n">p</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">u_vel</span><span class="p">,</span> <span class="n">v_vel</span><span class="p">,</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dt</span><span class="p">)</span>
+
+            <span class="c1"># find velocity at dt/2</span>
+            <span class="n">u_vel</span><span class="p">,</span> <span class="n">v_vel</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">interpolate_velocity</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+
+            <span class="c1"># update to final time using original position and vel at dt/2</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">initial_position</span>
+
+            <span class="n">p</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">u_vel</span><span class="p">,</span> <span class="n">v_vel</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">enforce_particle_boundaries</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Particles.enforce_particle_boundaries"><a class="viewcode-back" href="../../particles.html#particles.particles.Particles.enforce_particle_boundaries">[docs]</a>    <span class="k">def</span> <span class="nf">enforce_particle_boundaries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Enforce the particle boundaries</span>
+
+<span class="sd">        TODO: copying the dict and adding everything back again is messy</span>
+<span class="sd">        - think of a better way to do this? Did it this way so don&#39;t have</span>
+<span class="sd">        to remove items from a dictionary while iterating it for outflow</span>
+<span class="sd">        boundaries.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">old_particles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+        <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_data</span><span class="o">.</span><span class="n">grid</span>
+
+        <span class="n">xlb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bc</span><span class="o">.</span><span class="n">xlb</span>
+        <span class="n">xrb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bc</span><span class="o">.</span><span class="n">xrb</span>
+        <span class="n">ylb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bc</span><span class="o">.</span><span class="n">ylb</span>
+        <span class="n">yrb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bc</span><span class="o">.</span><span class="n">yrb</span>
+
+        <span class="k">while</span> <span class="n">old_particles</span><span class="p">:</span>
+            <span class="n">k</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">old_particles</span><span class="o">.</span><span class="n">popitem</span><span class="p">()</span>
+
+            <span class="c1"># -x boundary</span>
+            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">myg</span><span class="o">.</span><span class="n">xmin</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">xlb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;outflow&quot;</span><span class="p">,</span> <span class="s2">&quot;neumann&quot;</span><span class="p">]:</span>
+                    <span class="k">continue</span>
+                <span class="k">elif</span> <span class="n">xlb</span> <span class="o">==</span> <span class="s2">&quot;periodic&quot;</span><span class="p">:</span>
+                    <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">xmax</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">myg</span><span class="o">.</span><span class="n">xmin</span>
+                <span class="k">elif</span> <span class="n">xlb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;reflect-even&quot;</span><span class="p">,</span> <span class="s2">&quot;reflect-odd&quot;</span><span class="p">,</span> <span class="s2">&quot;dirichlet&quot;</span><span class="p">]:</span>
+                    <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">myg</span><span class="o">.</span><span class="n">xmin</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">x</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ERROR: xlb = </span><span class="si">%s</span><span class="s2"> invalid BC for particles&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">xlb</span><span class="p">))</span>
+
+            <span class="c1"># +x boundary</span>
+            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">myg</span><span class="o">.</span><span class="n">xmax</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">xrb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;outflow&quot;</span><span class="p">,</span> <span class="s2">&quot;neumann&quot;</span><span class="p">]:</span>
+                    <span class="k">continue</span>
+                <span class="k">elif</span> <span class="n">xrb</span> <span class="o">==</span> <span class="s2">&quot;periodic&quot;</span><span class="p">:</span>
+                    <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">xmin</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">myg</span><span class="o">.</span><span class="n">xmax</span>
+                <span class="k">elif</span> <span class="n">xrb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;reflect-even&quot;</span><span class="p">,</span> <span class="s2">&quot;reflect-odd&quot;</span><span class="p">,</span> <span class="s2">&quot;dirichlet&quot;</span><span class="p">]:</span>
+                    <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">myg</span><span class="o">.</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">x</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ERROR: xrb = </span><span class="si">%s</span><span class="s2"> invalid BC for particles&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">xrb</span><span class="p">))</span>
+
+            <span class="c1"># -y boundary</span>
+            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymin</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">ylb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;outflow&quot;</span><span class="p">,</span> <span class="s2">&quot;neumann&quot;</span><span class="p">]:</span>
+                    <span class="k">continue</span>
+                <span class="k">elif</span> <span class="n">ylb</span> <span class="o">==</span> <span class="s2">&quot;periodic&quot;</span><span class="p">:</span>
+                    <span class="n">p</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymax</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymin</span>
+                <span class="k">elif</span> <span class="n">ylb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;reflect-even&quot;</span><span class="p">,</span> <span class="s2">&quot;reflect-odd&quot;</span><span class="p">,</span> <span class="s2">&quot;dirichlet&quot;</span><span class="p">]:</span>
+                    <span class="n">p</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymin</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ERROR: ylb = </span><span class="si">%s</span><span class="s2"> invalid BC for particles&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ylb</span><span class="p">))</span>
+
+            <span class="c1"># +y boundary</span>
+            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymax</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">yrb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;outflow&quot;</span><span class="p">,</span> <span class="s2">&quot;neumann&quot;</span><span class="p">]:</span>
+                    <span class="k">continue</span>
+                <span class="k">elif</span> <span class="n">yrb</span> <span class="o">==</span> <span class="s2">&quot;periodic&quot;</span><span class="p">:</span>
+                    <span class="n">p</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymin</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymax</span>
+                <span class="k">elif</span> <span class="n">yrb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;reflect-even&quot;</span><span class="p">,</span> <span class="s2">&quot;reflect-odd&quot;</span><span class="p">,</span> <span class="s2">&quot;dirichlet&quot;</span><span class="p">]:</span>
+                    <span class="n">p</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ERROR: yrb = </span><span class="si">%s</span><span class="s2"> invalid BC for particles&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">yrb</span><span class="p">))</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_particles</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Particles.get_positions"><a class="viewcode-back" href="../../particles.html#particles.particles.Particles.get_positions">[docs]</a>    <span class="k">def</span> <span class="nf">get_positions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return an array of current particle positions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">values</span><span class="p">()])</span></div>
+
+<div class="viewcode-block" id="Particles.get_init_positions"><a class="viewcode-back" href="../../particles.html#particles.particles.Particles.get_init_positions">[docs]</a>    <span class="k">def</span> <span class="nf">get_init_positions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return initial positions of the particles as an array.</span>
+
+<span class="sd">        We defined the particles as a dictionary with their initial positions</span>
+<span class="sd">        as the keys, so this just becomes a restructuring operation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">keys</span><span class="p">()])</span></div>
+
+<div class="viewcode-block" id="Particles.write_particles"><a class="viewcode-back" href="../../particles.html#particles.particles.Particles.write_particles">[docs]</a>    <span class="k">def</span> <span class="nf">write_particles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Output the particles&#39; positions (and initial positions) to an HDF5 file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        f : h5py object</span>
+<span class="sd">            HDF5 file to write to</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">gparticles</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s2">&quot;particles&quot;</span><span class="p">)</span>
+        <span class="n">gparticles</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;init_particle_positions&quot;</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_init_positions</span><span class="p">())</span>
+        <span class="n">gparticles</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;particle_positions&quot;</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_positions</span><span class="p">())</span></div></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, pyro development tem.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

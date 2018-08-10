@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Mesh overview &mdash; pyro 2.1 documentation</title>
+  <title>Mesh overview &mdash; pyro 2.2 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyro 2.1 documentation" href="index.html"/>
+    <link rel="top" title="pyro 2.2 documentation" href="index.html"/>
         <link rel="next" title="Mesh examples" href="mesh-examples.html"/>
         <link rel="prev" title="Adding a problem" href="problems.html"/> 
 
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                2.1
+                2.2
               </div>
             
           
@@ -119,6 +119,8 @@
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solvers</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Utilities</span></p>
 <ul>
@@ -129,6 +131,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html#history">History</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
@@ -277,7 +280,7 @@ domain.</li>
 class that subclasses the NumPy ndarray and makes the data in the
 array know about the details of the grid it is defined on. In
 particular, it knows which cells are valid and which are the ghost
-cells, and it has methods to do the ai+1,j operations that are
+cells, and it has methods to do the <span class="math">\(a_{i+1,j}\)</span> operations that are
 common in difference methods.</li>
 <li><a class="reference internal" href="mesh.html#mesh.integration.RKIntegrator" title="mesh.integration.RKIntegrator"><code class="xref py py-func docutils literal"><span class="pre">integration.RKIntegrator</span></code></a>:
 This class implements Runge-Kutta integration in time by managing a
@@ -348,7 +351,7 @@ the BCs, and printing out the results.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Michael Zingale.
+        &copy; Copyright 2018, pyro development tem.
 
     </p>
   </div>
@@ -370,7 +373,7 @@ the BCs, and printing out the results.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'2.1',
+            VERSION:'2.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

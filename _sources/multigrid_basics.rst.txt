@@ -4,7 +4,7 @@ Multigrid solvers
 pyro solves elliptic problems (like Laplace's equation or Poisson's
 equation) through multigrid. This accelerates the convergence of
 simple relaxation by moving the solution down and up through a series
-of grids. Chapter 
+of grids. Chapter 9 of the `pdf notes<http://bender.astro.sunysb.edu/hydro_by_example/CompHydroTutorial.pdf>`_ gives an introduction to solving elliptic equations, including multigrid.
 
 There are three solvers:
 
@@ -17,10 +17,10 @@ There are three solvers:
 * The class :func:`general_MG.GeneralMG2d <multigrid.general_MG.GeneralMG2d>` solves a general elliptic
   equation of the form :math:`\alpha \phi + \nabla \cdot ( \beta
   \nabla \phi) + \gamma \cdot \nabla \phi = f`.  This class inherits
-  the core functionality from ``MG.CellCenterMG2d``. 
+  the core functionality from ``MG.CellCenterMG2d``.
 
   This solver is the only one to support inhomogeneous boundary
-  conditions.  
+  conditions.
 
 We simply use V-cycles in our implementation, and restrict ourselves
 to square grids with zoning a power of 2.
@@ -40,12 +40,12 @@ A basic multigrid test is run as:
 
 The ``mg_test_simple.py`` script solves a Poisson equation with a
 known analytic solution. This particular example comes from the text
-`A Multigrid Tutorial, 2nd Ed.`. The example is:
+`A Multigrid Tutorial, 2nd Ed.`, by Briggs. The example is:
 
 .. math::
 
    u_{xx} + u_{yy} = -2 \left [(1-6x^2)y^2(1-y^2) + (1-6y^2)x^2(1-x^2)\right ]
- 
+
 on :math:`[0,1] \times [0,1]` with :math:`u = 0` on the boundary.
 
 The solution to this is shown below.
@@ -81,7 +81,9 @@ The movie below shows the smoothing at each level to realize this solution:
 projection
 ^^^^^^^^^^
 
-Another example that uses multigrid to extract the divergence free part of a velocity field is run as:
+Another example (``examples/multigrid/project_periodic.py``) uses
+multigrid to extract the divergence free part of a velocity field.
+This is run as:
 
 .. code-block:: none
 
@@ -105,13 +107,12 @@ it to recover the divergence free part. The error can found by
 comparing the original velocity field to the recovered field. The
 results are shown below:
 
+.. image:: project.png
+   :align: center
+
 
 Left is the original u velocity, middle is the modified field after adding the gradient of the scalar, and right is the recovered field.
 
-Jupyter Notebook
-----------------
-
-A jupyter notebook showing how to use the basic solver can be found here: multigrid-examples.ipynb
 
 Exercises
 ---------

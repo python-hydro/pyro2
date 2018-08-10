@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Compressible hydrodynamics solvers &mdash; pyro 2.1 documentation</title>
+  <title>Compressible hydrodynamics solvers &mdash; pyro 2.2 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyro 2.1 documentation" href="index.html"/>
+    <link rel="top" title="pyro 2.2 documentation" href="index.html"/>
         <link rel="next" title="Compressible solver comparisons" href="compressible_compare.html"/>
         <link rel="prev" title="Advection solvers" href="advection_basics.html"/> 
 
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                2.1
+                2.2
               </div>
             
           
@@ -130,6 +130,8 @@
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solvers</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Utilities</span></p>
 <ul>
@@ -140,6 +142,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html#history">History</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
@@ -262,7 +265,7 @@ time integration</li>
 </ul>
 <p>The implementations here have flattening at shocks, artificial
 viscosity, a simple gamma-law equation of state, and (in some cases) a
-choice Riemann solvers. Optional constant gravity in the vertical
+choice of Riemann solvers. Optional constant gravity in the vertical
 direction is allowed.</p>
 <p>The main parameters that affect this solver are:</p>
 <table border="1" class="docutils">
@@ -409,7 +412,7 @@ binning is done with the <code class="docutils literal"><span class="pre">sedov_
 <h3>quad<a class="headerlink" href="#quad" title="Permalink to this headline">¶</a></h3>
 <p>The quad problem sets up different states in four regions of the
 domain and watches the complex interfaces that develop as shocks
-interact. This problem has appear in several places (and a <a class="reference external" href="http://planets.utsc.utoronto.ca/~pawel/Riemann.hydro.html">detailed
+interact. This problem has appeared in several places (and a <a class="reference external" href="http://planets.utsc.utoronto.ca/~pawel/Riemann.hydro.html">detailed
 investigation</a> is
 online by Pawel Artymowicz). It is run as:</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py compressible quad inputs.quad
@@ -470,7 +473,7 @@ discussed in the notes. Run the Sedov problem with the explosion on
 the symmetric axis—now the solution will behave like the spherical
 sedov explosion instead of the cylindrical explosion.</li>
 <li>Swap the piecewise linear reconstruction for piecewise parabolic
-(PPM). The notes and Miller and Colella paper provide a good basis
+(PPM). The notes and the Miller and Colella paper provide a good basis
 for this.  Research the Roe Riemann solver and implement it in pyro.</li>
 </ul>
 </div>
@@ -509,7 +512,7 @@ available. See the <a class="reference external" href="https://zingale.github.io
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Michael Zingale.
+        &copy; Copyright 2018, pyro development tem.
 
     </p>
   </div>
@@ -531,7 +534,7 @@ available. See the <a class="reference external" href="https://zingale.github.io
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'2.1',
+            VERSION:'2.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>test module &mdash; pyro 2.1 documentation</title>
+  <title>test module &mdash; pyro 2.2 documentation</title>
   
 
   
@@ -37,10 +37,10 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyro 2.1 documentation" href="index.html"/>
+    <link rel="top" title="pyro 2.2 documentation" href="index.html"/>
         <link rel="up" title="pyro2" href="modules.html"/>
         <link rel="next" title="util package" href="util.html"/>
-        <link rel="prev" title="sod_compare module" href="sod_compare.html"/> 
+        <link rel="prev" title="swe.problems package" href="swe.problems.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                2.1
+                2.2
               </div>
             
           
@@ -115,6 +115,8 @@
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solvers</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Utilities</span></p>
 <ul>
@@ -125,6 +127,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html#history">History</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
 <ul class="current">
@@ -146,14 +149,12 @@
 <li class="toctree-l2"><a class="reference internal" href="lm_atm.html">lm_atm package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mesh.html">mesh package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="multigrid.html">multigrid package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="particles.html">particles package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot.html">plot module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plotvar.html">plotvar module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyro.html">pyro module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sedov_compare.html">sedov_compare module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulation_null.html">simulation_null module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smooth_error.html">smooth_error module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sod_compare.html">sod_compare module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="swe.html">swe package</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">test module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.html">util package</a></li>
 </ul>
@@ -285,7 +286,7 @@
         <a href="util.html" class="btn btn-neutral float-right" title="util package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="sod_compare.html" class="btn btn-neutral" title="sod_compare module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="swe.problems.html" class="btn btn-neutral" title="swe.problems package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -294,7 +295,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Michael Zingale.
+        &copy; Copyright 2018, pyro development tem.
 
     </p>
   </div>
@@ -316,7 +317,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'2.1',
+            VERSION:'2.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

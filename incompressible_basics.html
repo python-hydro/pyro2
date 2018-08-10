@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Incompressible hydrodynamics solver &mdash; pyro 2.1 documentation</title>
+  <title>Incompressible hydrodynamics solver &mdash; pyro 2.2 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyro 2.1 documentation" href="index.html"/>
+    <link rel="top" title="pyro 2.2 documentation" href="index.html"/>
         <link rel="next" title="Low Mach number hydrodynamics solver" href="lowmach_basics.html"/>
         <link rel="prev" title="Diffusion" href="diffusion_basics.html"/> 
 
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                2.1
+                2.2
               </div>
             
           
@@ -127,6 +127,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solvers</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Utilities</span></p>
 <ul>
@@ -137,6 +139,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html#history">History</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
@@ -269,7 +272,7 @@ we are using an approximate projection.</p>
 </div>
 <div class="section" id="convergence">
 <h3>convergence<a class="headerlink" href="#convergence" title="Permalink to this headline">¶</a></h3>
-<p>The convergence test initialize a simple velocity field on a periodic
+<p>The convergence test initializes a simple velocity field on a periodic
 unit square with known analytic solution. By evolving at a variety of
 resolutions and comparing to the analytic solution, we can measure the
 convergence rate of the algorithm. The particular set of initial
@@ -348,7 +351,7 @@ hydrostatic equilibrium.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Michael Zingale.
+        &copy; Copyright 2018, pyro development tem.
 
     </p>
   </div>
@@ -370,7 +373,7 @@ hydrostatic equilibrium.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'2.1',
+            VERSION:'2.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

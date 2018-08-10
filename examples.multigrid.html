@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>examples.multigrid package &mdash; pyro 2.1 documentation</title>
+  <title>examples.multigrid package &mdash; pyro 2.2 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyro 2.1 documentation" href="index.html"/>
+    <link rel="top" title="pyro 2.2 documentation" href="index.html"/>
         <link rel="up" title="examples package" href="examples.html"/>
         <link rel="next" title="incompressible package" href="incompressible.html"/>
         <link rel="prev" title="examples package" href="examples.html"/> 
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                2.1
+                2.2
               </div>
             
           
@@ -115,6 +115,8 @@
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solvers</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Utilities</span></p>
 <ul>
@@ -125,6 +127,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html#history">History</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
 <ul class="current">
@@ -152,14 +155,12 @@
 <li class="toctree-l2"><a class="reference internal" href="lm_atm.html">lm_atm package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mesh.html">mesh package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="multigrid.html">multigrid package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="particles.html">particles package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot.html">plot module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plotvar.html">plotvar module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyro.html">pyro module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sedov_compare.html">sedov_compare module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulation_null.html">simulation_null module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smooth_error.html">smooth_error module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sod_compare.html">sod_compare module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="swe.html">swe package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="test.html">test module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.html">util package</a></li>
 </ul>
@@ -787,10 +788,27 @@ solve:</p>
 </div>
 <div class="section" id="module-examples.multigrid.project_periodic">
 <span id="examples-multigrid-project-periodic-module"></span><h2>examples.multigrid.project_periodic module<a class="headerlink" href="#module-examples.multigrid.project_periodic" title="Permalink to this headline">¶</a></h2>
+<p>test of a cell-centered, centered-difference approximate projection.</p>
+<p>initialize the velocity field to be divergence free and then add to it
+the gradient of a scalar (whose normal component vanishes on the
+boundaries).  The projection should recover the original divergence-
+free velocity field.</p>
+<p>The test velocity field comes from Almgen, Bell, and Szymczak 1996.</p>
+<p>This makes use of the multigrid solver with periodic boundary conditions.</p>
+<p>One of the things that this test demonstrates is that the initial
+projection may not be able to completely remove the divergence free
+part, so subsequent projections may be necessary.  In this example, we
+add a very strong gradient component.</p>
+<p>The total number of projections to perform is given by nproj.  Each
+projection uses the divergence of the velocity field from the previous
+iteration as its source term.</p>
+<p>Note: the output file created stores the original field, the poluted
+field, and the recovered field.</p>
 <dl class="function">
 <dt id="examples.multigrid.project_periodic.doit">
 <code class="descclassname">examples.multigrid.project_periodic.</code><code class="descname">doit</code><span class="sig-paren">(</span><em>nx</em>, <em>ny</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/examples/multigrid/project_periodic.html#doit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#examples.multigrid.project_periodic.doit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>manage the entire projection</p>
+</dd></dl>
 
 </div>
 <div class="section" id="module-examples.multigrid.prolong_restrict_demo">
@@ -825,7 +843,7 @@ solve:</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Michael Zingale.
+        &copy; Copyright 2018, pyro development tem.
 
     </p>
   </div>
@@ -847,7 +865,7 @@ solve:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'2.1',
+            VERSION:'2.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
