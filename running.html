@@ -99,6 +99,8 @@
 <li class="toctree-l1"><a class="reference internal" href="notes.html">Notes on the numerical methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="design.html">Design ideas</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Running</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#commandline">Commandline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pyro-class">Pyro class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#runtime-options">Runtime options</a></li>
 </ul>
 </li>
@@ -233,7 +235,10 @@
 </style>
 <div class="section" id="running">
 <h1>Running<a class="headerlink" href="#running" title="Permalink to this headline">¶</a></h1>
-<p>All the solvers are run through the <code class="docutils literal"><span class="pre">pyro.py</span></code> script. This takes 3
+<p>Pyro can be run in two ways: either from the commandline, using the <code class="docutils literal"><span class="pre">pyro.py</span></code> script and passing in the solver, problem and inputs as arguments, or by using the <a class="reference internal" href="pyro.html#pyro.Pyro" title="pyro.Pyro"><code class="xref py py-func docutils literal"><span class="pre">Pyro</span></code></a> class.</p>
+<div class="section" id="commandline">
+<h2>Commandline<a class="headerlink" href="#commandline" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">pyro.py</span></code> script takes 3
 arguments: the solver name, the problem setup to run with that solver
 (this is defined in the solver’s <code class="docutils literal"><span class="pre">problems/</span></code> sub-directory), and the
 inputs file (again, usually from the solver’s <code class="docutils literal"><span class="pre">problems/</span></code>
@@ -261,11 +266,40 @@ vis as shown above can dramatically speed up the execution.  You can always
 plot the results after the fact using the <code class="docutils literal"><span class="pre">plot.py</span></code> script, as discussed
 in  <a class="reference internal" href="analysis.html#analysis"><span class="std std-ref">Analysis routines</span></a>.</p>
 </div>
+</div>
+<div class="section" id="pyro-class">
+<h2>Pyro class<a class="headerlink" href="#pyro-class" title="Permalink to this headline">¶</a></h2>
+<p>Alternatively, pyro can be run using the <a class="reference internal" href="pyro.html#pyro.Pyro" title="pyro.Pyro"><code class="xref py py-func docutils literal"><span class="pre">Pyro</span></code></a> class. This is done by the following steps:</p>
+<ul class="simple">
+<li>create a <code class="docutils literal"><span class="pre">Pyro</span></code> object, initializing it with a specific solver</li>
+<li>initialize the problem, passing in runtime parameters and inputs</li>
+<li>run the simulation</li>
+</ul>
+<p>For example, if we wished to use the <code class="docutils literal"><span class="pre">compressible</span></code> solver to run the Kelvin-Helmholtz problem <code class="docutils literal"><span class="pre">kh</span></code>, we would do the following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">pyro</span> <span class="o">=</span> <span class="n">Pyro</span><span class="p">(</span><span class="s2">&quot;compressible&quot;</span><span class="p">)</span>
+<span class="n">pyro</span><span class="o">.</span><span class="n">initialize_problem</span><span class="p">(</span><span class="n">problem_name</span><span class="o">=</span><span class="s2">&quot;kh&quot;</span><span class="p">,</span>
+                        <span class="n">inputs_file</span><span class="o">=</span><span class="s2">&quot;inputs.kh&quot;</span><span class="p">)</span>
+<span class="n">pyro</span><span class="o">.</span><span class="n">run_sim</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Instead of using an inputs file to define the problem parameters, we can define a dictionary of parameters and pass them into the <a class="reference internal" href="pyro.html#pyro.Pyro.initialize_problem" title="pyro.Pyro.initialize_problem"><code class="xref py py-func docutils literal"><span class="pre">initialize_problem</span></code></a> function using the keyword argument <code class="docutils literal"><span class="pre">inputs_dict</span></code>. If an inputs file is also passed into the function, the parameters in the dictionary will override any parameters in the file. For example, if we wished to turn off visualization for the previous example, we would do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;vis.dovis&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">}</span>
+<span class="n">pyro</span><span class="o">.</span><span class="n">initialize_problem</span><span class="p">(</span><span class="n">problem_name</span><span class="o">=</span><span class="s2">&quot;kh&quot;</span><span class="p">,</span>
+                        <span class="n">inputs_file</span><span class="o">=</span><span class="s2">&quot;inputs.kh&quot;</span><span class="p">,</span>
+                        <span class="n">inputs_dict</span><span class="o">=</span><span class="n">parameters</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It’s possible to evolve the simulation forward timestep by timestep manually using the <a class="reference internal" href="pyro.html#pyro.Pyro.single_step" title="pyro.Pyro.single_step"><code class="xref py py-func docutils literal"><span class="pre">single_step</span></code></a> function (rather than allowing <a class="reference internal" href="pyro.html#pyro.Pyro.run_sim" title="pyro.Pyro.run_sim"><code class="xref py py-func docutils literal"><span class="pre">run_sim</span></code></a> to do this for us). To evolve our example simulation forward by a single step, we’d run</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">pyro</span><span class="o">.</span><span class="n">single_step</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This will fill the boundary conditions, compute the timestep <code class="docutils literal"><span class="pre">dt</span></code>, evolve a single timestep and do output/visualization (if required).</p>
+</div>
 <div class="section" id="runtime-options">
 <h2>Runtime options<a class="headerlink" href="#runtime-options" title="Permalink to this headline">¶</a></h2>
 <p>The behavior of the main driver, the solver, and the problem setup can
 be controlled by runtime parameters specified in the inputs file (or
-via the command line). Runtime parameters are grouped into sections,
+via the command line or passed into the <code class="docutils literal"><span class="pre">initialize_problem</span></code> function). Runtime parameters are grouped into sections,
 with the heading of that section enclosed in <code class="docutils literal"><span class="pre">[</span> <span class="pre">..</span> <span class="pre">]</span></code>. The list of
 parameters are stored in three places:</p>
 <ul class="simple">

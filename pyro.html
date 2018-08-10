@@ -39,7 +39,7 @@
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="pyro 2.2 documentation" href="index.html"/>
         <link rel="up" title="pyro2" href="modules.html"/>
-        <link rel="next" title="simulation_null module" href="simulation_null.html"/>
+        <link rel="next" title="setup module" href="setup.html"/>
         <link rel="prev" title="plotvar module" href="plotvar.html"/> 
 
   
@@ -142,7 +142,6 @@
 <li class="toctree-l2"><a class="reference internal" href="compressible_react.html">compressible_react package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible_rk.html">compressible_rk package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="compressible_sdc.html">compressible_sdc package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="convergence.html">convergence module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="diffusion.html">diffusion package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html">examples package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="incompressible.html">incompressible package</a></li>
@@ -153,6 +152,7 @@
 <li class="toctree-l2"><a class="reference internal" href="plot.html">plot module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plotvar.html">plotvar module</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">pyro module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulation_null.html">simulation_null module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="swe.html">swe package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="test.html">test module</a></li>
@@ -260,16 +260,84 @@
 </style>
 <div class="section" id="module-pyro">
 <span id="pyro-module"></span><h1>pyro module<a class="headerlink" href="#module-pyro" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="pyro.doit">
-<code class="descclassname">pyro.</code><code class="descname">doit</code><span class="sig-paren">(</span><em>solver_name</em>, <em>problem_name</em>, <em>param_file</em>, <em>other_commands=None</em>, <em>comp_bench=False</em>, <em>reset_bench_on_fail=False</em>, <em>make_bench=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro.html#doit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyro.doit" title="Permalink to this definition">¶</a></dt>
-<dd><p>The main driver to run pyro</p>
+<dl class="class">
+<dt id="pyro.Pyro">
+<em class="property">class </em><code class="descclassname">pyro.</code><code class="descname">Pyro</code><span class="sig-paren">(</span><em>solver_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro.html#Pyro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyro.Pyro" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>The main driver to run pyro.</p>
+<dl class="method">
+<dt id="pyro.Pyro.initialize_problem">
+<code class="descname">initialize_problem</code><span class="sig-paren">(</span><em>problem_name</em>, <em>inputs_file=None</em>, <em>inputs_dict=None</em>, <em>other_commands=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro.html#Pyro.initialize_problem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyro.Pyro.initialize_problem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the specific problem</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>problem_name</strong> : str</p>
+<blockquote>
+<div><p>Name of the problem</p>
+</div></blockquote>
+<p><strong>inputs_file</strong> : str</p>
+<blockquote>
+<div><p>Filename containing problem’s runtime parameters</p>
+</div></blockquote>
+<p><strong>inputs_dict</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary containing extra runtime parameters</p>
+</div></blockquote>
+<p><strong>other_commands</strong> : str</p>
+<blockquote class="last">
+<div><p>Other command line parameter options</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyro.Pyro.run_sim">
+<code class="descname">run_sim</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro.html#Pyro.run_sim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyro.Pyro.run_sim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evolve entire simulation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyro.Pyro.single_step">
+<code class="descname">single_step</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro.html#Pyro.single_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyro.Pyro.single_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do a single step</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pyro.PyroBenchmark">
+<em class="property">class </em><code class="descclassname">pyro.</code><code class="descname">PyroBenchmark</code><span class="sig-paren">(</span><em>solver_name</em>, <em>comp_bench=False</em>, <em>reset_bench_on_fail=False</em>, <em>make_bench=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro.html#PyroBenchmark"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyro.PyroBenchmark" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyro.Pyro" title="pyro.Pyro"><code class="xref py py-class docutils literal"><span class="pre">pyro.Pyro</span></code></a></p>
+<p>A subclass of Pyro for benchmarking. Inherits everything from pyro, but adds benchmarking routines.</p>
+<dl class="method">
+<dt id="pyro.PyroBenchmark.compare_to_benchmark">
+<code class="descname">compare_to_benchmark</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro.html#PyroBenchmark.compare_to_benchmark"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyro.PyroBenchmark.compare_to_benchmark" title="Permalink to this definition">¶</a></dt>
+<dd><p>Are we comparing to a benchmark?</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyro.PyroBenchmark.run_sim">
+<code class="descname">run_sim</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro.html#PyroBenchmark.run_sim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyro.PyroBenchmark.run_sim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evolve entire simulation and benchmark at the end.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyro.PyroBenchmark.store_as_benchmark">
+<code class="descname">store_as_benchmark</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro.html#PyroBenchmark.store_as_benchmark"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyro.PyroBenchmark.store_as_benchmark" title="Permalink to this definition">¶</a></dt>
+<dd><p>Are we storing a benchmark?</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="function">
-<dt id="pyro.parse_and_run">
-<code class="descclassname">pyro.</code><code class="descname">parse_and_run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro.html#parse_and_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyro.parse_and_run" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parse the runtime parameters and run a pyro instance</p>
+<dt id="pyro.parse_args">
+<code class="descclassname">pyro.</code><code class="descname">parse_args</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro.html#parse_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyro.parse_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the runtime parameters</p>
 </dd></dl>
 
 </div>
@@ -284,7 +352,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="simulation_null.html" class="btn btn-neutral float-right" title="simulation_null module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="setup.html" class="btn btn-neutral float-right" title="setup module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="plotvar.html" class="btn btn-neutral" title="plotvar module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
