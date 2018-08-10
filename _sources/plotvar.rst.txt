@@ -1,0 +1,7 @@
+plotvar module
+==============
+
+.. automodule:: plotvar
+    :members:
+    :undoc-members:
+    :show-inheritance:

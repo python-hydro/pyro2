@@ -1,0 +1,639 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>util package &mdash; pyro 2.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="pyro 2.2 documentation" href="index.html"/>
+        <link rel="up" title="pyro2" href="modules.html"/>
+        <link rel="prev" title="test module" href="test.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pyro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Setting up pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_compare.html">Compressible solver comparisons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solvers</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html#history">History</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="advection.html">advection package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advection_fv4.html">advection_fv4 package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advection_rk.html">advection_rk package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advection_weno.html">advection_weno package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compare.html">compare module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible.html">compressible package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_fv4.html">compressible_fv4 package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_react.html">compressible_react package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_rk.html">compressible_rk package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_sdc.html">compressible_sdc package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="convergence.html">convergence module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="diffusion.html">diffusion package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html">examples package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="incompressible.html">incompressible package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lm_atm.html">lm_atm package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mesh.html">mesh package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multigrid.html">multigrid package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="particles.html">particles package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot.html">plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotvar.html">plotvar module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.html">pyro module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulation_null.html">simulation_null module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="swe.html">swe package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test.html">test module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">util package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-util.io">util.io module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-util.msg">util.msg module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-util.plot_tools">util.plot_tools module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-util.profile">util.profile module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-util.runparams">util.runparams module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">pyro2</a> &raquo;</li>
+        
+      <li>util package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/util.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="module-util">
+<span id="util-package"></span><h1>util package<a class="headerlink" href="#module-util" title="Permalink to this headline">¶</a></h1>
+<p>This module provides utility functions for pyro</p>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-util.io">
+<span id="util-io-module"></span><h2>util.io module<a class="headerlink" href="#module-util.io" title="Permalink to this headline">¶</a></h2>
+<p>This manages the reading of the HDF5 output files for pyro.</p>
+<dl class="function">
+<dt id="util.io.read">
+<code class="descclassname">util.io.</code><code class="descname">read</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/io.html#read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.io.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>read an HDF5 file and recreate the simulation object that holds the
+data and state of the simulation.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.io.read_bcs">
+<code class="descclassname">util.io.</code><code class="descname">read_bcs</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/io.html#read_bcs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.io.read_bcs" title="Permalink to this definition">¶</a></dt>
+<dd><p>read in the boundary condition record from the HDF5 file</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-util.msg">
+<span id="util-msg-module"></span><h2>util.msg module<a class="headerlink" href="#module-util.msg" title="Permalink to this headline">¶</a></h2>
+<p>support output in highlighted colors</p>
+<dl class="function">
+<dt id="util.msg.bold">
+<code class="descclassname">util.msg.</code><code class="descname">bold</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/msg.html#bold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.msg.bold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Output a string in a bold weight</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.msg.fail">
+<code class="descclassname">util.msg.</code><code class="descname">fail</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/msg.html#fail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.msg.fail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Output a string to the terminal and abort if we are running
+non-interactively.  The string is colored red to indicate a
+failure</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.msg.success">
+<code class="descclassname">util.msg.</code><code class="descname">success</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/msg.html#success"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.msg.success" title="Permalink to this definition">¶</a></dt>
+<dd><p>Output a string to the terminal colored green to indicate
+success</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.msg.warning">
+<code class="descclassname">util.msg.</code><code class="descname">warning</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/msg.html#warning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.msg.warning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Output a string to the terminal colored orange to indicate a
+warning</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-util.plot_tools">
+<span id="util-plot-tools-module"></span><h2>util.plot_tools module<a class="headerlink" href="#module-util.plot_tools" title="Permalink to this headline">¶</a></h2>
+<p>Some basic support routines for configuring the plots during
+runtime visualization</p>
+<dl class="function">
+<dt id="util.plot_tools.setup_axes">
+<code class="descclassname">util.plot_tools.</code><code class="descname">setup_axes</code><span class="sig-paren">(</span><em>myg</em>, <em>num</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/plot_tools.html#setup_axes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.plot_tools.setup_axes" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a grid of axes whose layout depends on the aspect ratio of the
+domain</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-util.profile">
+<span id="util-profile-module"></span><h2>util.profile module<a class="headerlink" href="#module-util.profile" title="Permalink to this headline">¶</a></h2>
+<p>A very simple profiling class, to use to determine where
+most of the time is spent in a code.  This supports nested
+timers and outputs a report at the end.</p>
+<p>Warning: At present, no enforcement is done to ensure proper
+nesting.</p>
+<dl class="class">
+<dt id="util.profile.Timer">
+<em class="property">class </em><code class="descclassname">util.profile.</code><code class="descname">Timer</code><span class="sig-paren">(</span><em>name</em>, <em>stack_count=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/profile.html#Timer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.profile.Timer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A single timer – this simply stores the accumulated time for
+a single named region</p>
+<dl class="method">
+<dt id="util.profile.Timer.begin">
+<code class="descname">begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/profile.html#Timer.begin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.profile.Timer.begin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start timing</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="util.profile.Timer.end">
+<code class="descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/profile.html#Timer.end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.profile.Timer.end" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop timing.  This does not destroy the timer, it simply
+stops it from counting time.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="util.profile.TimerCollection">
+<em class="property">class </em><code class="descclassname">util.profile.</code><code class="descname">TimerCollection</code><a class="reference internal" href="_modules/util/profile.html#TimerCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.profile.TimerCollection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A timer collection—this manages the timers and has methods to
+start and stop them.  Nesting of timers is tracked so we can
+pretty print the profiling information.</p>
+<p>To define a timer:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">tc</span> <span class="o">=</span> <span class="n">TimerCollection</span><span class="p">()</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">timer</span><span class="p">(</span><span class="s1">&#39;my timer&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This will add ‘my timer’ to the list of Timers managed by the
+TimerCollection.  Subsequent calls to timer() will return the same
+Timer object.</p>
+<p>To start the timer:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>and to end it:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For best results, the block of code timed should be large enough
+to offset the overhead of the timer class method calls.</p>
+<p>tc.report() prints out a summary of the timing.</p>
+<dl class="method">
+<dt id="util.profile.TimerCollection.report">
+<code class="descname">report</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/profile.html#TimerCollection.report"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.profile.TimerCollection.report" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a timing summary report</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="util.profile.TimerCollection.timer">
+<code class="descname">timer</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/profile.html#TimerCollection.timer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.profile.TimerCollection.timer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a timer with the given name.  If one with that name already
+exists, then we return that timer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : str</p>
+<blockquote>
+<div><p>Name of the timer</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> : Timer object</p>
+<blockquote class="last">
+<div><p>A timer object corresponding to the name.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-util.runparams">
+<span id="util-runparams-module"></span><h2>util.runparams module<a class="headerlink" href="#module-util.runparams" title="Permalink to this headline">¶</a></h2>
+<p>basic syntax of the parameter file is:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># simple parameter file</span>
+
+<span class="p">[</span><span class="n">driver</span><span class="p">]</span>
+<span class="n">nsteps</span> <span class="o">=</span> <span class="mi">100</span>         <span class="p">;</span> <span class="n">comment</span>
+<span class="n">max_time</span> <span class="o">=</span> <span class="mf">0.25</span>
+
+<span class="p">[</span><span class="n">riemann</span><span class="p">]</span>
+<span class="n">tol</span> <span class="o">=</span> <span class="mf">1.e-10</span>
+<span class="n">max_iter</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="p">[</span><span class="n">io</span><span class="p">]</span>
+<span class="n">basename</span> <span class="o">=</span> <span class="n">myfile_</span>
+</pre></div>
+</div>
+<p>The recommended way to use this is for the code to have a master list
+of parameters and their defaults (e.g. _defaults), and then the user
+can override these defaults at runtime through an inputs file.  These
+two files have the same format.</p>
+<p>The calling sequence would then be:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">rp</span> <span class="o">=</span> <span class="n">RuntimeParameters</span><span class="p">()</span>
+<span class="n">rp</span><span class="o">.</span><span class="n">load_params</span><span class="p">(</span><span class="s2">&quot;_defaults&quot;</span><span class="p">)</span>
+<span class="n">rp</span><span class="o">.</span><span class="n">load_params</span><span class="p">(</span><span class="s2">&quot;inputs&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The parser will determine what datatype the parameter is (string,
+integer, float), and store it in a RuntimeParameters object.  If a
+parameter that already exists is encountered a second time (e.g.,
+there is a default value in _defaults and the user specifies a new
+value in inputs), then the second instance replaces the first.</p>
+<p>Runtime parameters can then be accessed via any module through the
+get_param method:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">tol</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s1">&#39;riemann.tol&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If the optional flag no_new=1 is set, then the load_params function
+will not define any new parameters, but only overwrite existing ones.
+This is useful for reading in an inputs file that overrides previously
+read default values.</p>
+<dl class="class">
+<dt id="util.runparams.RuntimeParameters">
+<em class="property">class </em><code class="descclassname">util.runparams.</code><code class="descname">RuntimeParameters</code><a class="reference internal" href="_modules/util/runparams.html#RuntimeParameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.runparams.RuntimeParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="util.runparams.RuntimeParameters.command_line_params">
+<code class="descname">command_line_params</code><span class="sig-paren">(</span><em>cmd_strings</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/runparams.html#RuntimeParameters.command_line_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.runparams.RuntimeParameters.command_line_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>finds dictionary pairs from a string that came from the
+commandline.  Stores the parameters in only if they
+already exist.</p>
+<dl class="docutils">
+<dt>we expect things in the string in the form:</dt>
+<dd>[“sec.opt=value”,  “sec.opt=value”]</dd>
+</dl>
+<p>with each opt an element in the list</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cmd_strings</strong> : list</p>
+<blockquote class="last">
+<div><p>The list of strings containing runtime parameter pairs</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="util.runparams.RuntimeParameters.get_param">
+<code class="descname">get_param</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/runparams.html#RuntimeParameters.get_param"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.runparams.RuntimeParameters.get_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the value of the runtime parameter corresponding to the
+input key</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="util.runparams.RuntimeParameters.load_params">
+<code class="descname">load_params</code><span class="sig-paren">(</span><em>pfile</em>, <em>no_new=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/runparams.html#RuntimeParameters.load_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.runparams.RuntimeParameters.load_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads line from file and makes dictionary pairs from the data
+to store.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>file</strong> : str</p>
+<blockquote>
+<div><p>The name of the file to parse</p>
+</div></blockquote>
+<p><strong>no_new</strong> : int, optional</p>
+<blockquote class="last">
+<div><p>If no_new = 1, then we don’t add any new paramters to the
+dictionary of runtime parameters, but instead just override
+the values of existing ones.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="util.runparams.RuntimeParameters.print_all_params">
+<code class="descname">print_all_params</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/runparams.html#RuntimeParameters.print_all_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.runparams.RuntimeParameters.print_all_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print out all runtime parameters and their values</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="util.runparams.RuntimeParameters.print_paramfile">
+<code class="descname">print_paramfile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/runparams.html#RuntimeParameters.print_paramfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.runparams.RuntimeParameters.print_paramfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a file, inputs.auto, that has the structure of a pyro
+inputs file, with all known parameters and values</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="util.runparams.RuntimeParameters.print_unused_params">
+<code class="descname">print_unused_params</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/runparams.html#RuntimeParameters.print_unused_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.runparams.RuntimeParameters.print_unused_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print out the list of parameters that were defined by never used</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="util.runparams.RuntimeParameters.write_params">
+<code class="descname">write_params</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/runparams.html#RuntimeParameters.write_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.runparams.RuntimeParameters.write_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the runtime parameters to an HDF5 file.  Here, f is the
+h5py file object</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="util.runparams.is_float">
+<code class="descclassname">util.runparams.</code><code class="descname">is_float</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/runparams.html#is_float"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.runparams.is_float" title="Permalink to this definition">¶</a></dt>
+<dd><p>is the given string a float?</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.runparams.is_int">
+<code class="descclassname">util.runparams.</code><code class="descname">is_int</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/runparams.html#is_int"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.runparams.is_int" title="Permalink to this definition">¶</a></dt>
+<dd><p>is the given string an interger?</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="test.html" class="btn btn-neutral" title="test module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, pyro development tem.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'2.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

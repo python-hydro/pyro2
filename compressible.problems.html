@@ -1,0 +1,554 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>compressible.problems package &mdash; pyro 2.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="pyro 2.2 documentation" href="index.html"/>
+        <link rel="up" title="compressible package" href="compressible.html"/>
+        <link rel="next" title="compressible_fv4 package" href="compressible_fv4.html"/>
+        <link rel="prev" title="compressible package" href="compressible.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pyro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Setting up pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_compare.html">Compressible solver comparisons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solvers</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html#history">History</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="advection.html">advection package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advection_fv4.html">advection_fv4 package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advection_rk.html">advection_rk package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advection_weno.html">advection_weno package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compare.html">compare module</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="compressible.html">compressible package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="compressible.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">compressible.problems package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="compressible.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compressible.html#module-compressible.BC">compressible.BC module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compressible.html#module-compressible.derives">compressible.derives module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compressible.html#module-compressible.eos">compressible.eos module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compressible.html#module-compressible.simulation">compressible.simulation module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compressible.html#module-compressible.unsplit_fluxes">compressible.unsplit_fluxes module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_fv4.html">compressible_fv4 package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_react.html">compressible_react package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_rk.html">compressible_rk package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_sdc.html">compressible_sdc package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="convergence.html">convergence module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="diffusion.html">diffusion package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html">examples package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="incompressible.html">incompressible package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lm_atm.html">lm_atm package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mesh.html">mesh package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multigrid.html">multigrid package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="particles.html">particles package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot.html">plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotvar.html">plotvar module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.html">pyro module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulation_null.html">simulation_null module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="swe.html">swe package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test.html">test module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html">util package</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">pyro2</a> &raquo;</li>
+        
+          <li><a href="compressible.html">compressible package</a> &raquo;</li>
+        
+      <li>compressible.problems package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/compressible.problems.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="compressible-problems-package">
+<h1>compressible.problems package<a class="headerlink" href="#compressible-problems-package" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-compressible.problems"></span><div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-compressible.problems.acoustic_pulse">
+<span id="compressible-problems-acoustic-pulse-module"></span><h2>compressible.problems.acoustic_pulse module<a class="headerlink" href="#module-compressible.problems.acoustic_pulse" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="compressible.problems.acoustic_pulse.finalize">
+<code class="descclassname">compressible.problems.acoustic_pulse.</code><code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/acoustic_pulse.html#finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.acoustic_pulse.finalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>print out any information to the user at the end of the run</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compressible.problems.acoustic_pulse.init_data">
+<code class="descclassname">compressible.problems.acoustic_pulse.</code><code class="descname">init_data</code><span class="sig-paren">(</span><em>myd</em>, <em>rp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/acoustic_pulse.html#init_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.acoustic_pulse.init_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize the acoustic_pulse problem.  This comes from
+McCourquodale &amp; Coella 2011</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compressible.problems.advect">
+<span id="compressible-problems-advect-module"></span><h2>compressible.problems.advect module<a class="headerlink" href="#module-compressible.problems.advect" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="compressible.problems.advect.finalize">
+<code class="descclassname">compressible.problems.advect.</code><code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/advect.html#finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.advect.finalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>print out any information to the user at the end of the run</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compressible.problems.advect.init_data">
+<code class="descclassname">compressible.problems.advect.</code><code class="descname">init_data</code><span class="sig-paren">(</span><em>my_data</em>, <em>rp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/advect.html#init_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.advect.init_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize a smooth advection problem for testing convergence</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compressible.problems.bubble">
+<span id="compressible-problems-bubble-module"></span><h2>compressible.problems.bubble module<a class="headerlink" href="#module-compressible.problems.bubble" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="compressible.problems.bubble.finalize">
+<code class="descclassname">compressible.problems.bubble.</code><code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/bubble.html#finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.bubble.finalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>print out any information to the user at the end of the run</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compressible.problems.bubble.init_data">
+<code class="descclassname">compressible.problems.bubble.</code><code class="descname">init_data</code><span class="sig-paren">(</span><em>my_data</em>, <em>rp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/bubble.html#init_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.bubble.init_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize the bubble problem</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compressible.problems.hse">
+<span id="compressible-problems-hse-module"></span><h2>compressible.problems.hse module<a class="headerlink" href="#module-compressible.problems.hse" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="compressible.problems.hse.finalize">
+<code class="descclassname">compressible.problems.hse.</code><code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/hse.html#finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.hse.finalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>print out any information to the user at the end of the run</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compressible.problems.hse.init_data">
+<code class="descclassname">compressible.problems.hse.</code><code class="descname">init_data</code><span class="sig-paren">(</span><em>my_data</em>, <em>rp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/hse.html#init_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.hse.init_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize the HSE problem</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compressible.problems.kh">
+<span id="compressible-problems-kh-module"></span><h2>compressible.problems.kh module<a class="headerlink" href="#module-compressible.problems.kh" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="compressible.problems.kh.finalize">
+<code class="descclassname">compressible.problems.kh.</code><code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/kh.html#finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.kh.finalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>print out any information to the user at the end of the run</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compressible.problems.kh.init_data">
+<code class="descclassname">compressible.problems.kh.</code><code class="descname">init_data</code><span class="sig-paren">(</span><em>my_data</em>, <em>rp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/kh.html#init_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.kh.init_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize the Kelvin-Helmholtz problem</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compressible.problems.logo">
+<span id="compressible-problems-logo-module"></span><h2>compressible.problems.logo module<a class="headerlink" href="#module-compressible.problems.logo" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="compressible.problems.logo.finalize">
+<code class="descclassname">compressible.problems.logo.</code><code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/logo.html#finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.logo.finalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>print out any information to the user at the end of the run</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compressible.problems.logo.init_data">
+<code class="descclassname">compressible.problems.logo.</code><code class="descname">init_data</code><span class="sig-paren">(</span><em>my_data</em>, <em>rp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/logo.html#init_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.logo.init_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize the logo problem</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compressible.problems.quad">
+<span id="compressible-problems-quad-module"></span><h2>compressible.problems.quad module<a class="headerlink" href="#module-compressible.problems.quad" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="compressible.problems.quad.finalize">
+<code class="descclassname">compressible.problems.quad.</code><code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/quad.html#finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.quad.finalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>print out any information to the user at the end of the run</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compressible.problems.quad.init_data">
+<code class="descclassname">compressible.problems.quad.</code><code class="descname">init_data</code><span class="sig-paren">(</span><em>my_data</em>, <em>rp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/quad.html#init_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.quad.init_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize the quadrant problem</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compressible.problems.ramp">
+<span id="compressible-problems-ramp-module"></span><h2>compressible.problems.ramp module<a class="headerlink" href="#module-compressible.problems.ramp" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="compressible.problems.ramp.finalize">
+<code class="descclassname">compressible.problems.ramp.</code><code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/ramp.html#finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.ramp.finalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>print out any information to the user at the end of the run</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compressible.problems.ramp.init_data">
+<code class="descclassname">compressible.problems.ramp.</code><code class="descname">init_data</code><span class="sig-paren">(</span><em>my_data</em>, <em>rp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/ramp.html#init_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.ramp.init_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize the double Mach reflection problem</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compressible.problems.rt">
+<span id="compressible-problems-rt-module"></span><h2>compressible.problems.rt module<a class="headerlink" href="#module-compressible.problems.rt" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="compressible.problems.rt.finalize">
+<code class="descclassname">compressible.problems.rt.</code><code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/rt.html#finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.rt.finalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>print out any information to the user at the end of the run</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compressible.problems.rt.init_data">
+<code class="descclassname">compressible.problems.rt.</code><code class="descname">init_data</code><span class="sig-paren">(</span><em>my_data</em>, <em>rp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/rt.html#init_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.rt.init_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize the rt problem</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compressible.problems.rt2">
+<span id="compressible-problems-rt2-module"></span><h2>compressible.problems.rt2 module<a class="headerlink" href="#module-compressible.problems.rt2" title="Permalink to this headline">¶</a></h2>
+<p>A RT problem with two distinct modes: short wave length on the
+left and long wavelenght on the right.  This allows one to see
+how the growth rate depends on wavenumber.</p>
+<dl class="function">
+<dt id="compressible.problems.rt2.finalize">
+<code class="descclassname">compressible.problems.rt2.</code><code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/rt2.html#finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.rt2.finalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>print out any information to the user at the end of the run</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compressible.problems.rt2.init_data">
+<code class="descclassname">compressible.problems.rt2.</code><code class="descname">init_data</code><span class="sig-paren">(</span><em>my_data</em>, <em>rp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/rt2.html#init_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.rt2.init_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize the rt problem</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compressible.problems.sedov">
+<span id="compressible-problems-sedov-module"></span><h2>compressible.problems.sedov module<a class="headerlink" href="#module-compressible.problems.sedov" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="compressible.problems.sedov.finalize">
+<code class="descclassname">compressible.problems.sedov.</code><code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/sedov.html#finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.sedov.finalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>print out any information to the user at the end of the run</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compressible.problems.sedov.init_data">
+<code class="descclassname">compressible.problems.sedov.</code><code class="descname">init_data</code><span class="sig-paren">(</span><em>my_data</em>, <em>rp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/sedov.html#init_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.sedov.init_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize the sedov problem</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compressible.problems.sod">
+<span id="compressible-problems-sod-module"></span><h2>compressible.problems.sod module<a class="headerlink" href="#module-compressible.problems.sod" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="compressible.problems.sod.finalize">
+<code class="descclassname">compressible.problems.sod.</code><code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/sod.html#finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.sod.finalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>print out any information to the user at the end of the run</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compressible.problems.sod.init_data">
+<code class="descclassname">compressible.problems.sod.</code><code class="descname">init_data</code><span class="sig-paren">(</span><em>my_data</em>, <em>rp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/sod.html#init_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.sod.init_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize the sod problem</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compressible.problems.test">
+<span id="compressible-problems-test-module"></span><h2>compressible.problems.test module<a class="headerlink" href="#module-compressible.problems.test" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="compressible.problems.test.finalize">
+<code class="descclassname">compressible.problems.test.</code><code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/test.html#finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.test.finalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>print out any information to the user at the end of the run</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compressible.problems.test.init_data">
+<code class="descclassname">compressible.problems.test.</code><code class="descname">init_data</code><span class="sig-paren">(</span><em>my_data</em>, <em>rp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible/problems/test.html#init_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible.problems.test.init_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>an init routine for unit testing</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="compressible_fv4.html" class="btn btn-neutral float-right" title="compressible_fv4 package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="compressible.html" class="btn btn-neutral" title="compressible package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, pyro development tem.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'2.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

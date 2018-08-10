@@ -1,0 +1,503 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>multigrid.general_MG &mdash; pyro 2.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="pyro 2.2 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pyro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Setting up pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compressible_compare.html">Compressible solver comparisons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../particles_basics.html">Particles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../swe_basics.html">Shallow water solvers</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../testing.html">Testing</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ack.html#history">History</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>multigrid.general_MG</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for multigrid.general_MG</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This multigrid solver is build from multigrid/MG.py</span>
+<span class="sd">and implements a more general solver for an equation of the form::</span>
+
+<span class="sd">   alpha phi + div { beta grad phi } + gamma . grad phi = f</span>
+
+<span class="sd">where alpha, beta, and gamma are defined on the same grid as phi.</span>
+<span class="sd">These should all come in as cell-centered quantities.  The solver</span>
+<span class="sd">will put beta on edges.  Note that gamma is a vector here, with</span>
+<span class="sd">x- and y-components.</span>
+
+<span class="sd">A cell-centered discretization for phi is used throughout.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">import</span> <span class="nn">multigrid.edge_coeffs</span> <span class="k">as</span> <span class="nn">ec</span>
+<span class="kn">import</span> <span class="nn">multigrid.MG</span> <span class="k">as</span> <span class="nn">MG</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="GeneralMG2d"><a class="viewcode-back" href="../../multigrid.html#multigrid.general_MG.GeneralMG2d">[docs]</a><span class="k">class</span> <span class="nc">GeneralMG2d</span><span class="p">(</span><span class="n">MG</span><span class="o">.</span><span class="n">CellCenterMG2d</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    this is a multigrid solver that supports our general elliptic</span>
+<span class="sd">    equation.</span>
+
+<span class="sd">    we need to accept a coefficient CellCenterData2d object with</span>
+<span class="sd">    fields defined for alpha, beta, gamma_x, and gamma_y on the</span>
+<span class="sd">    fine level.</span>
+
+<span class="sd">    We then restrict this data through the MG hierarchy (and</span>
+<span class="sd">    average beta to the edges).</span>
+
+<span class="sd">    we need a new compute_residual() and smooth() function, that</span>
+<span class="sd">    understands these coeffs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                 <span class="n">xl_BC_type</span><span class="o">=</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">,</span> <span class="n">xr_BC_type</span><span class="o">=</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">,</span>
+                 <span class="n">yl_BC_type</span><span class="o">=</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">,</span> <span class="n">yr_BC_type</span><span class="o">=</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">,</span>
+                 <span class="n">xl_BC</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xr_BC</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">yl_BC</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">yr_BC</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">nsmooth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">nsmooth_bottom</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                 <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">coeffs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">true_function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vis_title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        here, coeffs is a CCData2d object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># we&#39;ll keep a list of the beta coefficients averaged to the</span>
+        <span class="c1"># interfaces on each level -- note: these will already be</span>
+        <span class="c1"># scaled by 1/dx**2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta_edge</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># initialize the MG object with the auxillary fields</span>
+        <span class="n">MG</span><span class="o">.</span><span class="n">CellCenterMG2d</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                   <span class="n">xmin</span><span class="o">=</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">ymax</span><span class="p">,</span>
+                                   <span class="n">xl_BC_type</span><span class="o">=</span><span class="n">xl_BC_type</span><span class="p">,</span> <span class="n">xr_BC_type</span><span class="o">=</span><span class="n">xr_BC_type</span><span class="p">,</span>
+                                   <span class="n">yl_BC_type</span><span class="o">=</span><span class="n">yl_BC_type</span><span class="p">,</span> <span class="n">yr_BC_type</span><span class="o">=</span><span class="n">yr_BC_type</span><span class="p">,</span>
+                                   <span class="n">xl_BC</span><span class="o">=</span><span class="n">xl_BC</span><span class="p">,</span> <span class="n">xr_BC</span><span class="o">=</span><span class="n">xr_BC</span><span class="p">,</span>
+                                   <span class="n">yl_BC</span><span class="o">=</span><span class="n">yl_BC</span><span class="p">,</span> <span class="n">yr_BC</span><span class="o">=</span><span class="n">yr_BC</span><span class="p">,</span>
+                                   <span class="n">alpha</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                                   <span class="n">nsmooth</span><span class="o">=</span><span class="n">nsmooth</span><span class="p">,</span> <span class="n">nsmooth_bottom</span><span class="o">=</span><span class="n">nsmooth_bottom</span><span class="p">,</span>
+                                   <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+                                   <span class="n">aux_field</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;gamma_x&quot;</span><span class="p">,</span> <span class="s2">&quot;gamma_y&quot;</span><span class="p">],</span>
+                                   <span class="n">aux_bc</span><span class="o">=</span><span class="p">[</span><span class="n">coeffs</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">],</span> <span class="n">coeffs</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;beta&quot;</span><span class="p">],</span>
+                                           <span class="n">coeffs</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;gamma_x&quot;</span><span class="p">],</span> <span class="n">coeffs</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;gamma_y&quot;</span><span class="p">]],</span>
+                                   <span class="n">true_function</span><span class="o">=</span><span class="n">true_function</span><span class="p">,</span> <span class="n">vis</span><span class="o">=</span><span class="n">vis</span><span class="p">,</span>
+                                   <span class="n">vis_title</span><span class="o">=</span><span class="n">vis_title</span><span class="p">)</span>
+
+        <span class="c1"># the coefficents come in a dictionary.  Set the coefficients</span>
+        <span class="c1"># and restrict them down the hierarchy we only need to do this</span>
+        <span class="c1"># once.  We need to hold the original coeffs in our grid so we</span>
+        <span class="c1"># can do a ghost cell fill.</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;gamma_x&quot;</span><span class="p">,</span> <span class="s2">&quot;gamma_y&quot;</span><span class="p">]:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">coeffs</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+            <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">2</span>
+            <span class="k">while</span> <span class="n">n</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">f_patch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">c_patch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+
+                <span class="n">coeffs_c</span> <span class="o">=</span> <span class="n">c_patch</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+                <span class="n">coeffs_c</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">f_patch</span><span class="o">.</span><span class="n">restrict</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+                <span class="n">n</span> <span class="o">-=</span> <span class="mi">1</span>
+
+        <span class="c1"># put the beta coefficients on edges</span>
+        <span class="n">beta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;beta&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta_edge</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ec</span><span class="o">.</span><span class="n">EdgeCoeffs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">beta</span><span class="p">))</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlevels</span><span class="o">-</span><span class="mi">2</span>
+        <span class="k">while</span> <span class="n">n</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">beta_edge</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta_edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">restrict</span><span class="p">())</span>
+            <span class="n">n</span> <span class="o">-=</span> <span class="mi">1</span>
+
+<div class="viewcode-block" id="GeneralMG2d.smooth"><a class="viewcode-back" href="../../multigrid.html#multigrid.general_MG.GeneralMG2d.smooth">[docs]</a>    <span class="k">def</span> <span class="nf">smooth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">nsmooth</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Use red-black Gauss-Seidel iterations to smooth the solution</span>
+<span class="sd">        at a given level.  This is used at each stage of the V-cycle</span>
+<span class="sd">        (up and down) in the MG solution, but it can also be called</span>
+<span class="sd">        directly to solve the elliptic problem (although it will take</span>
+<span class="sd">        many more iterations).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        level : int</span>
+<span class="sd">            The level in the MG hierarchy to smooth the solution</span>
+<span class="sd">        nsmooth : int</span>
+<span class="sd">            The number of r-b Gauss-Seidel smoothing iterations to perform</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;f&quot;</span><span class="p">)</span>
+
+        <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span>
+
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">dx</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+
+        <span class="n">alpha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;alpha&quot;</span><span class="p">)</span>
+        <span class="n">gamma_x</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;gamma_x&quot;</span><span class="p">)</span><span class="o">/</span><span class="n">dx</span>
+        <span class="n">gamma_y</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;gamma_y&quot;</span><span class="p">)</span><span class="o">/</span><span class="n">dy</span>
+
+        <span class="c1"># these are already scaled by 1/dx**2 in the EdgeCoeffs</span>
+        <span class="c1"># construction</span>
+        <span class="n">beta_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta_edge</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">beta_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta_edge</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">y</span>
+
+        <span class="c1"># do red-black G-S</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsmooth</span><span class="p">):</span>
+
+            <span class="c1"># do the red black updating in four decoupled groups</span>
+            <span class="c1">#</span>
+            <span class="c1">#</span>
+            <span class="c1">#        |       |       |</span>
+            <span class="c1">#      --+-------+-------+--</span>
+            <span class="c1">#        |       |       |</span>
+            <span class="c1">#        |   4   |   3   |</span>
+            <span class="c1">#        |       |       |</span>
+            <span class="c1">#      --+-------+-------+--</span>
+            <span class="c1">#        |       |       |</span>
+            <span class="c1">#   jlo  |   1   |   2   |</span>
+            <span class="c1">#        |       |       |</span>
+            <span class="c1">#      --+-------+-------+--</span>
+            <span class="c1">#        |  ilo  |       |</span>
+            <span class="c1">#</span>
+            <span class="c1"># groups 1 and 3 are done together, then we need to</span>
+            <span class="c1"># fill ghost cells, and then groups 2 and 4</span>
+
+            <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]):</span>
+
+                <span class="n">denom</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">alpha</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span>
+                    <span class="n">beta_x</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">beta_x</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span>
+                    <span class="n">beta_y</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="mi">1</span><span class="o">+</span><span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">beta_y</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+
+                <span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span>
+                    <span class="c1"># (beta_{i+1/2,j} + gamma^x_{i,j}) phi_{i+1,j}</span>
+                    <span class="p">(</span><span class="n">beta_x</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">gamma_x</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span>
+                    <span class="c1"># (beta_{i-1/2,j} - gamma^x_{i,j}) phi_{i-1,j}</span>
+                    <span class="p">(</span><span class="n">beta_x</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">gamma_x</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span>
+                    <span class="c1"># (beta_{i,j+1/2} + gamma^y_{i,j}) phi_{i,j+1}</span>
+                    <span class="p">(</span><span class="n">beta_y</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="mi">1</span><span class="o">+</span><span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">gamma_y</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="mi">1</span><span class="o">+</span><span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span>
+                    <span class="c1"># (beta_{i,j-1/2} - gamma^y_{i,j}) phi_{i,j-1}</span>
+                    <span class="p">(</span><span class="n">beta_y</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">gamma_y</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">v</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="n">iy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="n">denom</span>
+
+                <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vis</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
+
+                <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">221</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_draw_solution</span><span class="p">()</span>
+
+                <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">222</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_draw_V</span><span class="p">()</span>
+
+                <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">223</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_draw_main_solution</span><span class="p">()</span>
+
+                <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">224</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_draw_main_error</span><span class="p">()</span>
+
+                <span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vis_title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+
+                <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;mg_</span><span class="si">%4.4d</span><span class="s2">.png&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">frame</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+    <span class="k">def</span> <span class="nf">_compute_residual</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; compute the residual and store it in the r variable&quot;&quot;&quot;</span>
+
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;f&quot;</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
+
+        <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span>
+
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">dx</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
+
+        <span class="n">alpha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;alpha&quot;</span><span class="p">)</span>
+        <span class="n">gamma_x</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;gamma_x&quot;</span><span class="p">)</span><span class="o">/</span><span class="n">dx</span>
+        <span class="n">gamma_y</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;gamma_y&quot;</span><span class="p">)</span><span class="o">/</span><span class="n">dy</span>
+
+        <span class="c1"># these already have a 1/dx**2 scaling in them</span>
+        <span class="n">beta_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta_edge</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">beta_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta_edge</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">y</span>
+
+        <span class="c1"># compute the residual</span>
+        <span class="c1"># r = f - L_eta phi</span>
+        <span class="n">L_eta_phi</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="c1"># alpha_{i,j} phi_{i,j}</span>
+            <span class="n">alpha</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span>
+            <span class="c1"># beta_{i+1/2,j} (phi_{i+1,j} - phi_{i,j})</span>
+            <span class="n">beta_x</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">())</span> <span class="o">-</span> \
+            <span class="c1"># beta_{i-1/2,j} (phi_{i,j} - phi_{i-1,j})</span>
+            <span class="n">beta_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">+</span> \
+            <span class="c1"># beta_{i,j+1/2} (phi_{i,j+1} - phi_{i,j})</span>
+            <span class="n">beta_y</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">())</span> <span class="o">-</span> \
+            <span class="c1"># beta_{i,j-1/2} (phi_{i,j} - phi_{i,j-1})</span>
+            <span class="n">beta_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">+</span> \
+            <span class="c1"># gamma^x_{i,j} (phi_{i+1,j} - phi_{i-1,j})</span>
+            <span class="n">gamma_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">+</span> \
+            <span class="c1"># gamma^y_{i,j} (phi_{i,j+1} - phi_{i,j-1})</span>
+            <span class="n">gamma_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
+
+        <span class="n">r</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> <span class="n">L_eta_phi</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, pyro development tem.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

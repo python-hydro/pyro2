@@ -1,0 +1,371 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Analysis routines &mdash; pyro 2.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="pyro 2.2 documentation" href="index.html"/>
+        <link rel="next" title="Testing" href="testing.html"/>
+        <link rel="prev" title="Shallow water solvers" href="swe_basics.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pyro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Setting up pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_compare.html">Compressible solver comparisons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solvers</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html#history">History</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Analysis routines</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/analysis.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="analysis-routines">
+<span id="analysis"></span><h1>Analysis routines<a class="headerlink" href="#analysis-routines" title="Permalink to this headline">¶</a></h1>
+<p>In addition to the main pyro program, there are many analysis tools
+that we describe here. Note: some problems write a report at the end
+of the simulation specifying the analysis routines that can be used
+with their data.</p>
+<ul>
+<li><p class="first"><code class="docutils literal"><span class="pre">compare.py</span></code>: this takes two simulation output files as input and
+compares zone-by-zone for exact agreement. This is used as part of
+the regression testing.</p>
+<p>usage: <code class="docutils literal"><span class="pre">./compare.py</span> <span class="pre">file1</span> <span class="pre">file2</span></code></p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">plot.py</span></code>: this takes an output file as input and plots the data
+using the solver’s dovis method. It deduces the solver from the
+attributes stored in the HDF5 file.</p>
+<p>usage: <code class="docutils literal"><span class="pre">./plot.py</span> <span class="pre">file</span></code></p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">analysis/</span></code></p>
+<ul>
+<li><p class="first"><code class="docutils literal"><span class="pre">convergence.py</span></code>: this compares two files with different
+resolutions (one a factor of 2 finer than the other).  It coarsens
+the finer data and then computes the norm of the difference.  This
+is used to test the convergence of solvers.</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">dam_compare.py</span></code>: this takes an output file from the
+shallow water dam break problem and plots a slice through the domain
+together with the analytic solution (calculated in the script).</p>
+<p>usage: <code class="docutils literal"><span class="pre">./dam_compare.py</span> <span class="pre">file</span></code></p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">gauss_diffusion_compare.py</span></code>: this is for the diffusion solver’s
+Gaussian diffusion problem. It takes a sequence of output files as
+arguments, computes the angle-average, and the plots the resulting
+points over the analytic solution for comparison with the exact
+result.</p>
+<p>usage: <code class="docutils literal"><span class="pre">./gauss_diffusion_compare.py</span> <span class="pre">file*</span></code></p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">incomp_converge_error.py</span></code>: this is for the incompressible
+solver’s converge problem. This takes a single output file as
+input and compares the velocity field to the analytic solution,
+reporting the L2 norm of the error.</p>
+<p>usage: <code class="docutils literal"><span class="pre">./incomp_converge_error.py</span> <span class="pre">file</span></code></p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">plotvar.py</span></code>: this takes a single output file and a variable
+name and plots the data for that variable.</p>
+<p>usage: <code class="docutils literal"><span class="pre">./plotvar.py</span> <span class="pre">file</span> <span class="pre">variable</span></code></p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">sedov_compare.py</span></code>: this takes an output file from the
+compressible Sedov problem, computes the angle-average profile of
+the solution and plots it together with the analytic data (read in
+from <code class="docutils literal"><span class="pre">cylindrical-sedov.out</span></code>).</p>
+<p>usage: <code class="docutils literal"><span class="pre">./sedov_compare.py</span> <span class="pre">file</span></code></p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">smooth_error.py</span></code>: this takes an output file from the advection
+solver’s smooth problem and compares to the analytic solution,
+outputing the L2 norm of the error.</p>
+<p>usage: <code class="docutils literal"><span class="pre">./smooth_error.py</span> <span class="pre">file</span></code></p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">sod_compare.py</span></code>: this takes an output file from the
+compressible Sod problem and plots a slice through the domain over
+the analytic solution (read in from <code class="docutils literal"><span class="pre">sod-exact.out</span></code>).</p>
+<p>usage: <code class="docutils literal"><span class="pre">./sod_compare.py</span> <span class="pre">file</span></code></p>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="testing.html" class="btn btn-neutral float-right" title="Testing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="swe_basics.html" class="btn btn-neutral" title="Shallow water solvers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, pyro development tem.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'2.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

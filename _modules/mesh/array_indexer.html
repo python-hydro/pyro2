@@ -1,0 +1,588 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>mesh.array_indexer &mdash; pyro 2.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="pyro 2.2 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pyro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Setting up pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compressible_compare.html">Compressible solver comparisons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../particles_basics.html">Particles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../swe_basics.html">Shallow water solvers</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../testing.html">Testing</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ack.html#history">History</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>mesh.array_indexer</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for mesh.array_indexer</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;An array class that has methods supporting the type of stencil</span>
+<span class="sd">operations we see in finite-difference methods, like i+1, i-1, etc.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<span class="k">def</span> <span class="nf">_buf_split</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; take an integer or iterable and break it into a -x, +x, -y, +y</span>
+<span class="sd">    value representing a ghost cell buffer</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">bxlo</span><span class="p">,</span> <span class="n">bxhi</span><span class="p">,</span> <span class="n">bylo</span><span class="p">,</span> <span class="n">byhi</span> <span class="o">=</span> <span class="n">b</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">blo</span><span class="p">,</span> <span class="n">bhi</span> <span class="o">=</span> <span class="n">b</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="n">blo</span> <span class="o">=</span> <span class="n">b</span>
+            <span class="n">bhi</span> <span class="o">=</span> <span class="n">b</span>
+        <span class="n">bxlo</span> <span class="o">=</span> <span class="n">bylo</span> <span class="o">=</span> <span class="n">blo</span>
+        <span class="n">bxhi</span> <span class="o">=</span> <span class="n">byhi</span> <span class="o">=</span> <span class="n">bhi</span>
+    <span class="k">return</span> <span class="n">bxlo</span><span class="p">,</span> <span class="n">bxhi</span><span class="p">,</span> <span class="n">bylo</span><span class="p">,</span> <span class="n">byhi</span>
+
+
+<div class="viewcode-block" id="ArrayIndexer"><a class="viewcode-back" href="../../mesh.html#mesh.array_indexer.ArrayIndexer">[docs]</a><span class="k">class</span> <span class="nc">ArrayIndexer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; a class that wraps the data region of a single array (d)</span>
+<span class="sd">        and allows us to easily do array operations like d[i+1,j]</span>
+<span class="sd">        using the ip() method. &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="n">grid</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">obj</span>
+
+    <span class="k">def</span> <span class="nf">__array_finalize__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__array_wrap__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_arr</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="o">.</span><span class="n">__array_wrap__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_arr</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ArrayIndexer.v"><a class="viewcode-back" href="../../mesh.html#mesh.array_indexer.ArrayIndexer.v">[docs]</a>    <span class="k">def</span> <span class="nf">v</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;return a view of the valid data region for component n, with stride</span>
+<span class="sd">        s, and a buffer of ghost cells given by buf</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ArrayIndexer.ip"><a class="viewcode-back" href="../../mesh.html#mesh.array_indexer.ArrayIndexer.ip">[docs]</a>    <span class="k">def</span> <span class="nf">ip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shift</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;return a view of the data shifted by shift in the x direction.  By</span>
+<span class="sd">        default the view is the same size as the valid region, but the</span>
+<span class="sd">        buf can specify how many ghost cells on each side to include.</span>
+<span class="sd">        The component is n and s is the stride</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">shift</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ArrayIndexer.jp"><a class="viewcode-back" href="../../mesh.html#mesh.array_indexer.ArrayIndexer.jp">[docs]</a>    <span class="k">def</span> <span class="nf">jp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shift</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;return a view of the data shifted by shift in the y direction.  By</span>
+<span class="sd">        default the view is the same size as the valid region, but the</span>
+<span class="sd">        buf can specify how many ghost cells on each side to include.</span>
+<span class="sd">        The component is n and s is the stride</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">shift</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ArrayIndexer.ip_jp"><a class="viewcode-back" href="../../mesh.html#mesh.array_indexer.ArrayIndexer.ip_jp">[docs]</a>    <span class="k">def</span> <span class="nf">ip_jp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ishift</span><span class="p">,</span> <span class="n">jshift</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;return a view of the data shifted by ishift in the x direction and</span>
+<span class="sd">        jshift in the y direction.  By default the view is the same</span>
+<span class="sd">        size as the valid region, but the buf can specify how many</span>
+<span class="sd">        ghost cells on each side to include.  The component is n and s</span>
+<span class="sd">        is the stride</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bxlo</span><span class="p">,</span> <span class="n">bxhi</span><span class="p">,</span> <span class="n">bylo</span><span class="p">,</span> <span class="n">byhi</span> <span class="o">=</span> <span class="n">_buf_split</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="n">bxlo</span><span class="o">+</span><span class="n">ishift</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">bxhi</span><span class="o">+</span><span class="n">ishift</span><span class="p">:</span><span class="n">s</span><span class="p">,</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="n">bylo</span><span class="o">+</span><span class="n">jshift</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">byhi</span><span class="o">+</span><span class="n">jshift</span><span class="p">:</span><span class="n">s</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="n">bxlo</span><span class="o">+</span><span class="n">ishift</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">bxhi</span><span class="o">+</span><span class="n">ishift</span><span class="p">:</span><span class="n">s</span><span class="p">,</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="n">bylo</span><span class="o">+</span><span class="n">jshift</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">byhi</span><span class="o">+</span><span class="n">jshift</span><span class="p">:</span><span class="n">s</span><span class="p">,</span> <span class="n">n</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="ArrayIndexer.lap"><a class="viewcode-back" href="../../mesh.html#mesh.array_indexer.ArrayIndexer.lap">[docs]</a>    <span class="k">def</span> <span class="nf">lap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;return the 5-point Laplacian&quot;&quot;&quot;</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">))</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> \
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">))</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">dy</span><span class="o">**</span><span class="mi">2</span>
+        <span class="k">return</span> <span class="n">l</span></div>
+
+<div class="viewcode-block" id="ArrayIndexer.norm"><a class="viewcode-back" href="../../mesh.html#mesh.array_indexer.ArrayIndexer.norm">[docs]</a>    <span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        find the norm of the quantity (index n) defined on the same grid,</span>
+<span class="sd">        in the domain&#39;s valid region</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="ArrayIndexer.copy"><a class="viewcode-back" href="../../mesh.html#mesh.array_indexer.ArrayIndexer.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;make a copy of the array, defined on the same grid&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ArrayIndexer.is_symmetric"><a class="viewcode-back" href="../../mesh.html#mesh.array_indexer.ArrayIndexer.is_symmetric">[docs]</a>    <span class="k">def</span> <span class="nf">is_symmetric</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1.e-14</span><span class="p">,</span> <span class="n">asymmetric</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;return True is the data is left-right symmetric (to the tolerance</span>
+<span class="sd">        tol) For node-centered data, set nodal=True</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># prefactor to convert from symmetric to asymmetric test</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">asymmetric</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">nodal</span><span class="p">:</span>
+            <span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">nx</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span>
+                     <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">R</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">nx</span><span class="o">//</span><span class="mi">2</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+                     <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">nx</span><span class="o">//</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+                     <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">nx</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">R</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">nx</span><span class="o">//</span><span class="mi">2</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span>
+                     <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">e</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">L</span> <span class="o">-</span> <span class="n">s</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">R</span><span class="p">))</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">e</span> <span class="o">&lt;</span> <span class="n">tol</span></div>
+
+<div class="viewcode-block" id="ArrayIndexer.is_asymmetric"><a class="viewcode-back" href="../../mesh.html#mesh.array_indexer.ArrayIndexer.is_asymmetric">[docs]</a>    <span class="k">def</span> <span class="nf">is_asymmetric</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1.e-14</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;return True is the data is left-right asymmetric (to the tolerance</span>
+<span class="sd">        tol)---e.g, the sign flips. For node-centered data, set nodal=True</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_symmetric</span><span class="p">(</span><span class="n">nodal</span><span class="o">=</span><span class="n">nodal</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">,</span> <span class="n">asymmetric</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ArrayIndexer.fill_ghost"><a class="viewcode-back" href="../../mesh.html#mesh.array_indexer.ArrayIndexer.fill_ghost">[docs]</a>    <span class="k">def</span> <span class="nf">fill_ghost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bc</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fill the boundary conditions.  This operates on a single component,</span>
+<span class="sd">        n. We do periodic, reflect-even, reflect-odd, and outflow</span>
+
+<span class="sd">        We need a BC object to tell us what BC type on each boundary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># there is only a single grid, so every boundary is on</span>
+        <span class="c1"># a physical boundary (except if we are periodic)</span>
+
+        <span class="c1"># Note: we piggy-back on outflow and reflect-odd for</span>
+        <span class="c1"># Neumann and Dirichlet homogeneous BCs respectively, but</span>
+        <span class="c1"># this only works for a single ghost cell</span>
+
+        <span class="c1"># -x boundary</span>
+        <span class="k">if</span> <span class="n">bc</span><span class="o">.</span><span class="n">xlb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;outflow&quot;</span><span class="p">,</span> <span class="s2">&quot;neumann&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">bc</span><span class="o">.</span><span class="n">xl_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> \
+                    <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">dx</span><span class="o">*</span><span class="n">bc</span><span class="o">.</span><span class="n">xl_value</span><span class="p">[:]</span>
+
+        <span class="k">elif</span> <span class="n">bc</span><span class="o">.</span><span class="n">xlb</span> <span class="o">==</span> <span class="s2">&quot;reflect-even&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">):</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span><span class="o">-</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="n">bc</span><span class="o">.</span><span class="n">xlb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;reflect-odd&quot;</span><span class="p">,</span> <span class="s2">&quot;dirichlet&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">bc</span><span class="o">.</span><span class="n">xl_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span><span class="o">-</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> \
+                    <span class="mi">2</span><span class="o">*</span><span class="n">bc</span><span class="o">.</span><span class="n">xl_value</span><span class="p">[:]</span> <span class="o">-</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="n">bc</span><span class="o">.</span><span class="n">xlb</span> <span class="o">==</span> <span class="s2">&quot;periodic&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">):</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span><span class="o">+</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span>
+
+        <span class="c1"># +x boundary</span>
+        <span class="k">if</span> <span class="n">bc</span><span class="o">.</span><span class="n">xrb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;outflow&quot;</span><span class="p">,</span> <span class="s2">&quot;neumann&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">bc</span><span class="o">.</span><span class="n">xr_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">nx</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> \
+                    <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">dx</span><span class="o">*</span><span class="n">bc</span><span class="o">.</span><span class="n">xr_value</span><span class="p">[:]</span>
+
+        <span class="k">elif</span> <span class="n">bc</span><span class="o">.</span><span class="n">xrb</span> <span class="o">==</span> <span class="s2">&quot;reflect-even&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span><span class="p">):</span>
+                <span class="n">i_bnd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">i</span>
+                <span class="n">i_src</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">-</span><span class="n">i</span>
+
+                <span class="bp">self</span><span class="p">[</span><span class="n">i_bnd</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">i_src</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="n">bc</span><span class="o">.</span><span class="n">xrb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;reflect-odd&quot;</span><span class="p">,</span> <span class="s2">&quot;dirichlet&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">bc</span><span class="o">.</span><span class="n">xr_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span><span class="p">):</span>
+                    <span class="n">i_bnd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">i</span>
+                    <span class="n">i_src</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">-</span><span class="n">i</span>
+
+                    <span class="bp">self</span><span class="p">[</span><span class="n">i_bnd</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="p">[</span><span class="n">i_src</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> \
+                    <span class="mi">2</span><span class="o">*</span><span class="n">bc</span><span class="o">.</span><span class="n">xr_value</span><span class="p">[:]</span> <span class="o">-</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="n">bc</span><span class="o">.</span><span class="n">xrb</span> <span class="o">==</span> <span class="s2">&quot;periodic&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">nx</span><span class="p">):</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span>
+
+        <span class="c1"># -y boundary</span>
+        <span class="k">if</span> <span class="n">bc</span><span class="o">.</span><span class="n">ylb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;outflow&quot;</span><span class="p">,</span> <span class="s2">&quot;neumann&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">bc</span><span class="o">.</span><span class="n">yl_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="p">[:,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> \
+                    <span class="bp">self</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">dy</span><span class="o">*</span><span class="n">bc</span><span class="o">.</span><span class="n">yl_value</span><span class="p">[:]</span>
+
+        <span class="k">elif</span> <span class="n">bc</span><span class="o">.</span><span class="n">ylb</span> <span class="o">==</span> <span class="s2">&quot;reflect-even&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="p">):</span>
+                <span class="bp">self</span><span class="p">[:,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[:,</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span><span class="o">-</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="n">bc</span><span class="o">.</span><span class="n">ylb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;reflect-odd&quot;</span><span class="p">,</span> <span class="s2">&quot;dirichlet&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">bc</span><span class="o">.</span><span class="n">yl_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="p">[:,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="p">[:,</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span><span class="o">-</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> \
+                    <span class="mi">2</span><span class="o">*</span><span class="n">bc</span><span class="o">.</span><span class="n">yl_value</span><span class="p">[:]</span> <span class="o">-</span> <span class="bp">self</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="n">bc</span><span class="o">.</span><span class="n">ylb</span> <span class="o">==</span> <span class="s2">&quot;periodic&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="p">):</span>
+                <span class="bp">self</span><span class="p">[:,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span><span class="o">+</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span>
+
+        <span class="c1"># +y boundary</span>
+        <span class="k">if</span> <span class="n">bc</span><span class="o">.</span><span class="n">yrb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;outflow&quot;</span><span class="p">,</span> <span class="s2">&quot;neumann&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">bc</span><span class="o">.</span><span class="n">yr_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ny</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="p">[:,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> \
+                    <span class="bp">self</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">dy</span><span class="o">*</span><span class="n">bc</span><span class="o">.</span><span class="n">yr_value</span><span class="p">[:]</span>
+
+        <span class="k">elif</span> <span class="n">bc</span><span class="o">.</span><span class="n">yrb</span> <span class="o">==</span> <span class="s2">&quot;reflect-even&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span><span class="p">):</span>
+                <span class="n">j_bnd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">j</span>
+                <span class="n">j_src</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">-</span><span class="n">j</span>
+
+                <span class="bp">self</span><span class="p">[:,</span> <span class="n">j_bnd</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[:,</span> <span class="n">j_src</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="n">bc</span><span class="o">.</span><span class="n">yrb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;reflect-odd&quot;</span><span class="p">,</span> <span class="s2">&quot;dirichlet&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">bc</span><span class="o">.</span><span class="n">yr_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span><span class="p">):</span>
+                    <span class="n">j_bnd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">j</span>
+                    <span class="n">j_src</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">-</span><span class="n">j</span>
+
+                    <span class="bp">self</span><span class="p">[:,</span> <span class="n">j_bnd</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="p">[:,</span> <span class="n">j_src</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> \
+                    <span class="mi">2</span><span class="o">*</span><span class="n">bc</span><span class="o">.</span><span class="n">yr_value</span><span class="p">[:]</span> <span class="o">-</span> <span class="bp">self</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="n">bc</span><span class="o">.</span><span class="n">yrb</span> <span class="o">==</span> <span class="s2">&quot;periodic&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ny</span><span class="p">):</span>
+                <span class="bp">self</span><span class="p">[:,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[:,</span> <span class="n">j</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="ArrayIndexer.pretty_print"><a class="viewcode-back" href="../../mesh.html#mesh.array_indexer.ArrayIndexer.pretty_print">[docs]</a>    <span class="k">def</span> <span class="nf">pretty_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_ghost</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Print out a small dataset to the screen with the ghost cells</span>
+<span class="sd">        a different color, to make things stand out</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">fmt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">:</span>
+                <span class="n">fmt</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%4d</span><span class="s2">&quot;</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">:</span>
+                <span class="n">fmt</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%10.5g</span><span class="s2">&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;ERROR: dtype not supported&quot;</span><span class="p">)</span>
+
+        <span class="c1"># print j descending, so it looks like a grid (y increasing</span>
+        <span class="c1"># with height)</span>
+        <span class="k">if</span> <span class="n">show_ghost</span><span class="p">:</span>
+            <span class="n">ilo</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">ihi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">qx</span><span class="o">-</span><span class="mi">1</span>
+            <span class="n">jlo</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">jhi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">qy</span><span class="o">-</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ilo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span>
+            <span class="n">ihi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span>
+            <span class="n">jlo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span>
+            <span class="n">jhi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">jlo</span><span class="p">,</span> <span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ilo</span><span class="p">,</span> <span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span> <span class="ow">or</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span> <span class="ow">or</span>
+                    <span class="n">i</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="p">):</span>
+                    <span class="n">gc</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">gc</span> <span class="o">=</span> <span class="mi">0</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">gc</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[31m&quot;</span> <span class="o">+</span> <span class="n">fmt</span> <span class="o">%</span> <span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[0m&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">fmt</span> <span class="o">%</span> <span class="p">(</span><span class="n">val</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+        <span class="n">leg</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">         ^ y</span>
+<span class="s2">         |</span>
+<span class="s2">         +---&gt; x</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">leg</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, pyro development tem.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,413 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>compressible_fv4 package &mdash; pyro 2.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="pyro 2.2 documentation" href="index.html"/>
+        <link rel="up" title="pyro2" href="modules.html"/>
+        <link rel="next" title="compressible_fv4.problems package" href="compressible_fv4.problems.html"/>
+        <link rel="prev" title="compressible.problems package" href="compressible.problems.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pyro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Setting up pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_compare.html">Compressible solver comparisons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solvers</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html#history">History</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="advection.html">advection package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advection_fv4.html">advection_fv4 package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advection_rk.html">advection_rk package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advection_weno.html">advection_weno package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compare.html">compare module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible.html">compressible package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">compressible_fv4 package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="compressible_fv4.problems.html">compressible_fv4.problems package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-compressible_fv4.fluxes">compressible_fv4.fluxes module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-compressible_fv4.simulation">compressible_fv4.simulation module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_react.html">compressible_react package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_rk.html">compressible_rk package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_sdc.html">compressible_sdc package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="convergence.html">convergence module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="diffusion.html">diffusion package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html">examples package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="incompressible.html">incompressible package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lm_atm.html">lm_atm package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mesh.html">mesh package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multigrid.html">multigrid package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="particles.html">particles package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot.html">plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotvar.html">plotvar module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.html">pyro module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulation_null.html">simulation_null module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="swe.html">swe package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test.html">test module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html">util package</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">pyro2</a> &raquo;</li>
+        
+      <li>compressible_fv4 package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/compressible_fv4.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="module-compressible_fv4">
+<span id="compressible-fv4-package"></span><h1>compressible_fv4 package<a class="headerlink" href="#module-compressible_fv4" title="Permalink to this headline">¶</a></h1>
+<p>This is a 4th order accurate compressible hydrodynamics solver,
+implementing the algorithm from McCorquodale &amp; Colella (2011).</p>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="compressible_fv4.problems.html">compressible_fv4.problems package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="compressible_fv4.problems.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_fv4.problems.html#module-compressible_fv4.problems.acoustic_pulse">compressible_fv4.problems.acoustic_pulse module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-compressible_fv4.fluxes">
+<span id="compressible-fv4-fluxes-module"></span><h2>compressible_fv4.fluxes module<a class="headerlink" href="#module-compressible_fv4.fluxes" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="compressible_fv4.fluxes.flux_cons">
+<code class="descclassname">compressible_fv4.fluxes.</code><code class="descname">flux_cons</code><span class="sig-paren">(</span><em>ivars</em>, <em>idir</em>, <em>gamma</em>, <em>q</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible_fv4/fluxes.html#flux_cons"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible_fv4.fluxes.flux_cons" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="compressible_fv4.fluxes.fluxes">
+<code class="descclassname">compressible_fv4.fluxes.</code><code class="descname">fluxes</code><span class="sig-paren">(</span><em>myd</em>, <em>rp</em>, <em>ivars</em>, <em>solid</em>, <em>tc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible_fv4/fluxes.html#fluxes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible_fv4.fluxes.fluxes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-compressible_fv4.simulation">
+<span id="compressible-fv4-simulation-module"></span><h2>compressible_fv4.simulation module<a class="headerlink" href="#module-compressible_fv4.simulation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="compressible_fv4.simulation.Simulation">
+<em class="property">class </em><code class="descclassname">compressible_fv4.simulation.</code><code class="descname">Simulation</code><span class="sig-paren">(</span><em>solver_name</em>, <em>problem_name</em>, <em>rp</em>, <em>timers=None</em>, <em>data_class=&lt;class 'mesh.fv.FV2d'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible_fv4/simulation.html#Simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible_fv4.simulation.Simulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="compressible_rk.html#compressible_rk.simulation.Simulation" title="compressible_rk.simulation.Simulation"><code class="xref py py-class docutils literal"><span class="pre">compressible_rk.simulation.Simulation</span></code></a></p>
+<dl class="method">
+<dt id="compressible_fv4.simulation.Simulation.evolve">
+<code class="descname">evolve</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible_fv4/simulation.html#Simulation.evolve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible_fv4.simulation.Simulation.evolve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evolve the equations of compressible hydrodynamics through a
+timestep dt.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compressible_fv4.simulation.Simulation.initialize">
+<code class="descname">initialize</code><span class="sig-paren">(</span><em>ng=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible_fv4/simulation.html#Simulation.initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible_fv4.simulation.Simulation.initialize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="compressible_fv4.simulation.Simulation.preevolve">
+<code class="descname">preevolve</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible_fv4/simulation.html#Simulation.preevolve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible_fv4.simulation.Simulation.preevolve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Since we are 4th order accurate we need to make sure that we
+initialized with accurate zone-averages, so the preevolve for
+this solver assumes that the initialization was done to
+cell-centers and converts it to cell-averages.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compressible_fv4.simulation.Simulation.substep">
+<code class="descname">substep</code><span class="sig-paren">(</span><em>myd</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/compressible_fv4/simulation.html#Simulation.substep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compressible_fv4.simulation.Simulation.substep" title="Permalink to this definition">¶</a></dt>
+<dd><p>compute the advective source term for the given state</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="compressible_fv4.problems.html" class="btn btn-neutral float-right" title="compressible_fv4.problems package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="compressible.problems.html" class="btn btn-neutral" title="compressible.problems package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, pyro development tem.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'2.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

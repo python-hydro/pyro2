@@ -1,0 +1,701 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>multigrid package &mdash; pyro 2.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="pyro 2.2 documentation" href="index.html"/>
+        <link rel="up" title="pyro2" href="modules.html"/>
+        <link rel="next" title="particles package" href="particles.html"/>
+        <link rel="prev" title="mesh package" href="mesh.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pyro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">pyro basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Setting up pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Solvers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_compare.html">Compressible solver comparisons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solvers</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html#history">History</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="advection.html">advection package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advection_fv4.html">advection_fv4 package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advection_rk.html">advection_rk package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advection_weno.html">advection_weno package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compare.html">compare module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible.html">compressible package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_fv4.html">compressible_fv4 package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_react.html">compressible_react package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_rk.html">compressible_rk package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_sdc.html">compressible_sdc package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="convergence.html">convergence module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="diffusion.html">diffusion package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html">examples package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="incompressible.html">incompressible package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lm_atm.html">lm_atm package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mesh.html">mesh package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">multigrid package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-multigrid.MG">multigrid.MG module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-multigrid.edge_coeffs">multigrid.edge_coeffs module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-multigrid.general_MG">multigrid.general_MG module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-multigrid.variable_coeff_MG">multigrid.variable_coeff_MG module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="particles.html">particles package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot.html">plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotvar.html">plotvar module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.html">pyro module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulation_null.html">simulation_null module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="swe.html">swe package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test.html">test module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html">util package</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">pyro2</a> &raquo;</li>
+        
+      <li>multigrid package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/multigrid.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="multigrid-package">
+<h1>multigrid package<a class="headerlink" href="#multigrid-package" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-multigrid"></span><p>This is the pyro multigrid solver.  THere are several versions.</p>
+<p>MG implements a second-order discretization of a constant-coefficient
+Helmholtz equation:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">alpha</span> <span class="o">-</span> <span class="n">beta</span> <span class="n">L</span><span class="p">)</span> <span class="n">phi</span> <span class="o">=</span> <span class="n">f</span>
+</pre></div>
+</div>
+<p>variable_coeff_MG implements a variable-coefficient Poisson equation:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">div</span> <span class="p">{</span> <span class="n">eta</span> <span class="n">grad</span> <span class="n">phi</span> <span class="p">}</span> <span class="o">=</span> <span class="n">f</span>
+</pre></div>
+</div>
+<p>general_MG implements a more general elliptic equation:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="n">phi</span> <span class="o">+</span> <span class="n">div</span> <span class="p">{</span> <span class="n">beta</span> <span class="n">grad</span> <span class="n">phi</span> <span class="p">}</span> <span class="o">+</span> <span class="n">gamma</span> <span class="o">.</span> <span class="n">grad</span> <span class="n">phi</span> <span class="o">=</span> <span class="n">f</span>
+</pre></div>
+</div>
+<p>All use pure V-cycles to solve elliptic problems</p>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-multigrid.MG">
+<span id="multigrid-mg-module"></span><h2>multigrid.MG module<a class="headerlink" href="#module-multigrid.MG" title="Permalink to this headline">¶</a></h2>
+<p>The multigrid module provides a framework for solving elliptic
+problems.  A multigrid object is just a list of grids, from the finest
+mesh down (by factors of two) to a single interior zone (each grid has
+the same number of guardcells).</p>
+<p>The main multigrid class is setup to solve a constant-coefficient
+Helmholtz equation:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">alpha</span> <span class="o">-</span> <span class="n">beta</span> <span class="n">L</span><span class="p">)</span> <span class="n">phi</span> <span class="o">=</span> <span class="n">f</span>
+</pre></div>
+</div>
+<p>where L is the Laplacian and alpha and beta are constants.  If alpha =
+0 and beta = -1, then this is the Poisson equation.</p>
+<p>We support Dirichlet or Neumann BCs, or a periodic domain.</p>
+<p>The general usage is as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">multigrid</span><span class="o">.</span><span class="n">CellCenterMG2d</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>this creates the multigrid object a, with a finest grid of nx by ny
+zones and the default boundary condition types.  alpha and beta are
+the coefficients of the Helmholtz equation.  Setting verbose = 1
+causing debugging information to be output, so you can see the
+residual errors in each of the V-cycles.</p>
+<p>Initialization is done as:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">init_zeros</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>this initializes the solution vector with zeros (this is not necessary
+if you just created the multigrid object, but it can be used to reset
+the solution between runs on the same object).</p>
+<p>Next:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">init_RHS</span><span class="p">(</span><span class="n">zeros</span><span class="p">((</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">),</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>this initializes the RHS on the finest grid to 0 (Laplace’s equation).
+Any RHS can be set by passing through an array of (nx, ny) values here.</p>
+<p>Then to solve, you just do:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">rtol</span> <span class="o">=</span> <span class="mf">1.e-10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where rtol is the desired tolerance (residual norm / source norm)</p>
+<p>to access the final solution, use the get_solution method:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">v</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">get_solution</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For convenience, the grid information on the solution level is available as
+attributes to the class,</p>
+<p>a.ilo, a.ihi, a.jlo, a.jhi are the indices bounding the interior
+of the solution array (i.e. excluding the ghost cells).</p>
+<p>a.x and a.y are the coordinate arrays
+a.dx and a.dy are the grid spacings</p>
+<dl class="class">
+<dt id="multigrid.MG.CellCenterMG2d">
+<em class="property">class </em><code class="descclassname">multigrid.MG.</code><code class="descname">CellCenterMG2d</code><span class="sig-paren">(</span><em>nx</em>, <em>ny</em>, <em>ng=1</em>, <em>xmin=0.0</em>, <em>xmax=1.0</em>, <em>ymin=0.0</em>, <em>ymax=1.0</em>, <em>xl_BC_type='dirichlet'</em>, <em>xr_BC_type='dirichlet'</em>, <em>yl_BC_type='dirichlet'</em>, <em>yr_BC_type='dirichlet'</em>, <em>xl_BC=None</em>, <em>xr_BC=None</em>, <em>yl_BC=None</em>, <em>yr_BC=None</em>, <em>alpha=0.0</em>, <em>beta=-1.0</em>, <em>nsmooth=10</em>, <em>nsmooth_bottom=50</em>, <em>verbose=0</em>, <em>aux_field=None</em>, <em>aux_bc=None</em>, <em>true_function=None</em>, <em>vis=0</em>, <em>vis_title=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/MG.html#CellCenterMG2d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.MG.CellCenterMG2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>The main multigrid class for cell-centered data.</p>
+<p>We require that nx = ny be a power of 2 and dx = dy, for
+simplicity</p>
+<dl class="method">
+<dt id="multigrid.MG.CellCenterMG2d.get_solution">
+<code class="descname">get_solution</code><span class="sig-paren">(</span><em>grid=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/MG.html#CellCenterMG2d.get_solution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.MG.CellCenterMG2d.get_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the solution after doing the MG solve</p>
+<p>If a grid object is passed in, then the solution is put on that
+grid – not the passed in grid must have the same dx and dy</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>out</strong> : ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="multigrid.MG.CellCenterMG2d.get_solution_gradient">
+<code class="descname">get_solution_gradient</code><span class="sig-paren">(</span><em>grid=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/MG.html#CellCenterMG2d.get_solution_gradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.MG.CellCenterMG2d.get_solution_gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the gradient of the solution after doing the MG solve.  The
+x- and y-components are returned in separate arrays.</p>
+<p>If a grid object is passed in, then the gradient is computed on that
+grid.  Note: the passed-in grid must have the same dx, dy</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>out</strong> : ndarray, ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="multigrid.MG.CellCenterMG2d.get_solution_object">
+<code class="descname">get_solution_object</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/MG.html#CellCenterMG2d.get_solution_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.MG.CellCenterMG2d.get_solution_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the full solution data object at the finest resolution
+after doing the MG solve</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>out</strong> : CellCenterData2d object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="multigrid.MG.CellCenterMG2d.grid_info">
+<code class="descname">grid_info</code><span class="sig-paren">(</span><em>level</em>, <em>indent=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/MG.html#CellCenterMG2d.grid_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.MG.CellCenterMG2d.grid_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Report simple grid information</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="multigrid.MG.CellCenterMG2d.init_RHS">
+<code class="descname">init_RHS</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/MG.html#CellCenterMG2d.init_RHS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.MG.CellCenterMG2d.init_RHS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the right hand side, f, of the Helmholtz equation
+(alpha - beta L) phi = f</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>An array (of the same size as the finest MG level) with the
+values to initialize the solution to the elliptic problem.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="multigrid.MG.CellCenterMG2d.init_solution">
+<code class="descname">init_solution</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/MG.html#CellCenterMG2d.init_solution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.MG.CellCenterMG2d.init_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the solution to the elliptic problem by passing in
+a value for all defined zones</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>An array (of the same size as the finest MG level) with the
+values to initialize the solution to the elliptic problem.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="multigrid.MG.CellCenterMG2d.init_zeros">
+<code class="descname">init_zeros</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/MG.html#CellCenterMG2d.init_zeros"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.MG.CellCenterMG2d.init_zeros" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the initial solution to zero</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="multigrid.MG.CellCenterMG2d.smooth">
+<code class="descname">smooth</code><span class="sig-paren">(</span><em>level</em>, <em>nsmooth</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/MG.html#CellCenterMG2d.smooth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.MG.CellCenterMG2d.smooth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use red-black Gauss-Seidel iterations to smooth the solution
+at a given level.  This is used at each stage of the V-cycle
+(up and down) in the MG solution, but it can also be called
+directly to solve the elliptic problem (although it will take
+many more iterations).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>level</strong> : int</p>
+<blockquote>
+<div><p>The level in the MG hierarchy to smooth the solution</p>
+</div></blockquote>
+<p><strong>nsmooth</strong> : int</p>
+<blockquote class="last">
+<div><p>The number of r-b Gauss-Seidel smoothing iterations to perform</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="multigrid.MG.CellCenterMG2d.solve">
+<code class="descname">solve</code><span class="sig-paren">(</span><em>rtol=1e-11</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/MG.html#CellCenterMG2d.solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.MG.CellCenterMG2d.solve" title="Permalink to this definition">¶</a></dt>
+<dd><p>The main driver for the multigrid solution of the Helmholtz
+equation.  This controls the V-cycles, smoothing at each
+step of the way and uses simple smoothing at the coarsest
+level to perform the bottom solve.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rtol</strong> : float</p>
+<blockquote class="last">
+<div><p>The relative tolerance (residual norm / source norm) to
+solve to.  Note that if the source norm is 0 (e.g. the
+righthand side of our equation is 0), then we just use
+the norm of the residual.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="multigrid.MG.CellCenterMG2d.v_cycle">
+<code class="descname">v_cycle</code><span class="sig-paren">(</span><em>level</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/MG.html#CellCenterMG2d.v_cycle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.MG.CellCenterMG2d.v_cycle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a V-cycle for a single 2-level solve.  This is applied
+recursively do V-cycle through the entire hierarchy.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-multigrid.edge_coeffs">
+<span id="multigrid-edge-coeffs-module"></span><h2>multigrid.edge_coeffs module<a class="headerlink" href="#module-multigrid.edge_coeffs" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="multigrid.edge_coeffs.EdgeCoeffs">
+<em class="property">class </em><code class="descclassname">multigrid.edge_coeffs.</code><code class="descname">EdgeCoeffs</code><span class="sig-paren">(</span><em>g</em>, <em>eta</em>, <em>empty=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/edge_coeffs.html#EdgeCoeffs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.edge_coeffs.EdgeCoeffs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>a simple container class to hold edge-centered coefficients
+and restrict them to coarse levels</p>
+<dl class="method">
+<dt id="multigrid.edge_coeffs.EdgeCoeffs.restrict">
+<code class="descname">restrict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/edge_coeffs.html#EdgeCoeffs.restrict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.edge_coeffs.EdgeCoeffs.restrict" title="Permalink to this definition">¶</a></dt>
+<dd><p>restrict the edge values to a coarser grid.  Return a new
+EdgeCoeffs object</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-multigrid.general_MG">
+<span id="multigrid-general-mg-module"></span><h2>multigrid.general_MG module<a class="headerlink" href="#module-multigrid.general_MG" title="Permalink to this headline">¶</a></h2>
+<p>This multigrid solver is build from multigrid/MG.py
+and implements a more general solver for an equation of the form:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="n">phi</span> <span class="o">+</span> <span class="n">div</span> <span class="p">{</span> <span class="n">beta</span> <span class="n">grad</span> <span class="n">phi</span> <span class="p">}</span> <span class="o">+</span> <span class="n">gamma</span> <span class="o">.</span> <span class="n">grad</span> <span class="n">phi</span> <span class="o">=</span> <span class="n">f</span>
+</pre></div>
+</div>
+<p>where alpha, beta, and gamma are defined on the same grid as phi.
+These should all come in as cell-centered quantities.  The solver
+will put beta on edges.  Note that gamma is a vector here, with
+x- and y-components.</p>
+<p>A cell-centered discretization for phi is used throughout.</p>
+<dl class="class">
+<dt id="multigrid.general_MG.GeneralMG2d">
+<em class="property">class </em><code class="descclassname">multigrid.general_MG.</code><code class="descname">GeneralMG2d</code><span class="sig-paren">(</span><em>nx</em>, <em>ny</em>, <em>xmin=0.0</em>, <em>xmax=1.0</em>, <em>ymin=0.0</em>, <em>ymax=1.0</em>, <em>xl_BC_type='dirichlet'</em>, <em>xr_BC_type='dirichlet'</em>, <em>yl_BC_type='dirichlet'</em>, <em>yr_BC_type='dirichlet'</em>, <em>xl_BC=None</em>, <em>xr_BC=None</em>, <em>yl_BC=None</em>, <em>yr_BC=None</em>, <em>nsmooth=10</em>, <em>nsmooth_bottom=50</em>, <em>verbose=0</em>, <em>coeffs=None</em>, <em>true_function=None</em>, <em>vis=0</em>, <em>vis_title=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/general_MG.html#GeneralMG2d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.general_MG.GeneralMG2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#multigrid.MG.CellCenterMG2d" title="multigrid.MG.CellCenterMG2d"><code class="xref py py-class docutils literal"><span class="pre">multigrid.MG.CellCenterMG2d</span></code></a></p>
+<p>this is a multigrid solver that supports our general elliptic
+equation.</p>
+<p>we need to accept a coefficient CellCenterData2d object with
+fields defined for alpha, beta, gamma_x, and gamma_y on the
+fine level.</p>
+<p>We then restrict this data through the MG hierarchy (and
+average beta to the edges).</p>
+<p>we need a new compute_residual() and smooth() function, that
+understands these coeffs.</p>
+<dl class="method">
+<dt id="multigrid.general_MG.GeneralMG2d.smooth">
+<code class="descname">smooth</code><span class="sig-paren">(</span><em>level</em>, <em>nsmooth</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/general_MG.html#GeneralMG2d.smooth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.general_MG.GeneralMG2d.smooth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use red-black Gauss-Seidel iterations to smooth the solution
+at a given level.  This is used at each stage of the V-cycle
+(up and down) in the MG solution, but it can also be called
+directly to solve the elliptic problem (although it will take
+many more iterations).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>level</strong> : int</p>
+<blockquote>
+<div><p>The level in the MG hierarchy to smooth the solution</p>
+</div></blockquote>
+<p><strong>nsmooth</strong> : int</p>
+<blockquote class="last">
+<div><p>The number of r-b Gauss-Seidel smoothing iterations to perform</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-multigrid.variable_coeff_MG">
+<span id="multigrid-variable-coeff-mg-module"></span><h2>multigrid.variable_coeff_MG module<a class="headerlink" href="#module-multigrid.variable_coeff_MG" title="Permalink to this headline">¶</a></h2>
+<p>This multigrid solver is build from multigrid/MG.py and implements
+a variable coefficient solver for an equation of the form:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">div</span> <span class="p">{</span> <span class="n">eta</span> <span class="n">grad</span> <span class="n">phi</span> <span class="p">}</span> <span class="o">=</span> <span class="n">f</span>
+</pre></div>
+</div>
+<p>where eta is defined on the same grid as phi.</p>
+<p>A cell-centered discretization is used throughout.</p>
+<dl class="class">
+<dt id="multigrid.variable_coeff_MG.VarCoeffCCMG2d">
+<em class="property">class </em><code class="descclassname">multigrid.variable_coeff_MG.</code><code class="descname">VarCoeffCCMG2d</code><span class="sig-paren">(</span><em>nx</em>, <em>ny</em>, <em>xmin=0.0</em>, <em>xmax=1.0</em>, <em>ymin=0.0</em>, <em>ymax=1.0</em>, <em>xl_BC_type='dirichlet'</em>, <em>xr_BC_type='dirichlet'</em>, <em>yl_BC_type='dirichlet'</em>, <em>yr_BC_type='dirichlet'</em>, <em>nsmooth=10</em>, <em>nsmooth_bottom=50</em>, <em>verbose=0</em>, <em>coeffs=None</em>, <em>coeffs_bc=None</em>, <em>true_function=None</em>, <em>vis=0</em>, <em>vis_title=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/variable_coeff_MG.html#VarCoeffCCMG2d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.variable_coeff_MG.VarCoeffCCMG2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#multigrid.MG.CellCenterMG2d" title="multigrid.MG.CellCenterMG2d"><code class="xref py py-class docutils literal"><span class="pre">multigrid.MG.CellCenterMG2d</span></code></a></p>
+<p>this is a multigrid solver that supports variable coefficients</p>
+<p>we need to accept a coefficient array, coeffs, defined at each
+level.  We can do this at the fine level and restrict it
+down the MG grids once.</p>
+<p>we need a new compute_residual() and smooth() function, that
+understands coeffs.</p>
+<dl class="method">
+<dt id="multigrid.variable_coeff_MG.VarCoeffCCMG2d.smooth">
+<code class="descname">smooth</code><span class="sig-paren">(</span><em>level</em>, <em>nsmooth</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multigrid/variable_coeff_MG.html#VarCoeffCCMG2d.smooth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#multigrid.variable_coeff_MG.VarCoeffCCMG2d.smooth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use red-black Gauss-Seidel iterations to smooth the solution
+at a given level.  This is used at each stage of the V-cycle
+(up and down) in the MG solution, but it can also be called
+directly to solve the elliptic problem (although it will take
+many more iterations).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>level</strong> : int</p>
+<blockquote>
+<div><p>The level in the MG hierarchy to smooth the solution</p>
+</div></blockquote>
+<p><strong>nsmooth</strong> : int</p>
+<blockquote class="last">
+<div><p>The number of r-b Gauss-Seidel smoothing iterations to perform</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="particles.html" class="btn btn-neutral float-right" title="particles package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="mesh.html" class="btn btn-neutral" title="mesh package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, pyro development tem.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'2.2',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
