@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/python-hydro/pyro2.svg?branch=master)](https://travis-ci.org/python-hydro/pyro2)
+[![Build Status](https://travis-ci.com/python-hydro/pyro2.svg?branch=master)](https://travis-ci.com/python-hydro/pyro2)
 
 ![pyro logo](www/logo.gif)
 
