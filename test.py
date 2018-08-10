@@ -37,7 +37,7 @@ def do_tests(build, out_file, do_standalone=True, do_main=True,
     if build:
         os.system("./mk.sh")
 
-    opts = "driver.verbose=0 vis.dovis=0 io.do_io=0".split()
+    opts = {"driver.verbose": 0, "vis.dovis": 0, "io.do_io": 0}
 
     results = {}
 
@@ -45,14 +45,18 @@ def do_tests(build, out_file, do_standalone=True, do_main=True,
         tests = []
         tests.append(PyroTest("advection", "smooth", "inputs.smooth", opts))
         tests.append(PyroTest("advection_rk", "smooth", "inputs.smooth", opts))
-        tests.append(PyroTest("advection_fv4", "smooth", "inputs.smooth", opts))
+        tests.append(PyroTest("advection_fv4",
+                              "smooth", "inputs.smooth", opts))
         tests.append(PyroTest("compressible", "quad", "inputs.quad", opts))
         tests.append(PyroTest("compressible", "sod", "inputs.sod.x", opts))
         tests.append(PyroTest("compressible", "rt", "inputs.rt", opts))
         tests.append(PyroTest("compressible_rk", "rt", "inputs.rt", opts))
-        tests.append(PyroTest("compressible_fv4", "acoustic_pulse", "inputs.acoustic_pulse", opts))
-        tests.append(PyroTest("compressible_sdc", "acoustic_pulse", "inputs.acoustic_pulse", opts))
-        tests.append(PyroTest("diffusion", "gaussian", "inputs.gaussian", opts))
+        tests.append(PyroTest("compressible_fv4", "acoustic_pulse",
+                              "inputs.acoustic_pulse", opts))
+        tests.append(PyroTest("compressible_sdc", "acoustic_pulse",
+                              "inputs.acoustic_pulse", opts))
+        tests.append(PyroTest("diffusion", "gaussian",
+                              "inputs.gaussian", opts))
         tests.append(PyroTest("incompressible", "shear", "inputs.shear", opts))
         tests.append(PyroTest("lm_atm", "bubble", "inputs.bubble", opts))
         tests.append(PyroTest("swe", "dam", "inputs.dam.x", opts))
@@ -65,9 +69,11 @@ def do_tests(build, out_file, do_standalone=True, do_main=True,
             tests_to_run = tests
 
         for t in tests_to_run:
-            err = pyro.doit(t.solver, t.problem, t.inputs,
-                            other_commands=t.options, comp_bench=True,
-                            reset_bench_on_fail=reset_fails, make_bench=store_all_benchmarks)
+            p = pyro.PyroBenchmark(t.solver, comp_bench=True,
+                                   reset_bench_on_fail=reset_fails, make_bench=store_all_benchmarks)
+            p.initialize_problem(t.problem, t.inputs, t.options)
+            err = p.run_sim
+            
             results[str(t)] = err
 
     # standalone tests
@@ -99,7 +105,8 @@ def do_tests(build, out_file, do_standalone=True, do_main=True,
         out.append(open(out_file, "w"))
 
     for f in out:
-        f.write("pyro tests run: {}\n\n".format(str(datetime.datetime.now().replace(microsecond=0))))
+        f.write("pyro tests run: {}\n\n".format(
+            str(datetime.datetime.now().replace(microsecond=0))))
 
         for s, r in sorted(results.items()):
             if not r == 0:
