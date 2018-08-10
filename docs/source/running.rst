@@ -1,7 +1,12 @@
 Running
 =======
 
-All the solvers are run through the ``pyro.py`` script. This takes 3
+Pyro can be run in two ways: either from the commandline, using the ``pyro.py`` script and passing in the solver, problem and inputs as arguments, or by using the :func:`Pyro <pyro.Pyro>` class.
+
+Commandline
+------------
+
+The ``pyro.py`` script takes 3
 arguments: the solver name, the problem setup to run with that solver
 (this is defined in the solver's ``problems/`` sub-directory), and the
 inputs file (again, usually from the solver's ``problems/``
@@ -38,12 +43,49 @@ above run, we could do:
    plot the results after the fact using the ``plot.py`` script, as discussed
    in  :ref:`analysis`.
 
+
+Pyro class
+----------
+
+Alternatively, pyro can be run using the :func:`Pyro <pyro.Pyro>` class. This is done by the following steps:
+
+* create a ``Pyro`` object, initializing it with a specific solver
+* initialize the problem, passing in runtime parameters and inputs
+* run the simulation
+
+For example, if we wished to use the ``compressible`` solver to run the Kelvin-Helmholtz problem ``kh``, we would do the following:
+
+.. code-block:: python
+
+    pyro = Pyro("compressible")
+    pyro.initialize_problem(problem_name="kh",
+                            inputs_file="inputs.kh")
+    pyro.run_sim()
+
+Instead of using an inputs file to define the problem parameters, we can define a dictionary of parameters and pass them into the :func:`initialize_problem <pyro.Pyro.initialize_problem>` function using the keyword argument ``inputs_dict``. If an inputs file is also passed into the function, the parameters in the dictionary will override any parameters in the file. For example, if we wished to turn off visualization for the previous example, we would do:
+
+.. code-block:: python
+
+    parameters = {"vis.dovis":0}
+    pyro.initialize_problem(problem_name="kh",
+                            inputs_file="inputs.kh",
+                            inputs_dict=parameters)
+
+It's possible to evolve the simulation forward timestep by timestep manually using the :func:`single_step <pyro.Pyro.single_step>` function (rather than allowing :func:`run_sim <pyro.Pyro.run_sim>` to do this for us). To evolve our example simulation forward by a single step, we'd run
+
+.. code-block:: python
+
+    pyro.single_step()
+
+This will fill the boundary conditions, compute the timestep ``dt``, evolve a single timestep and do output/visualization (if required).
+
+
 Runtime options
 ---------------
 
 The behavior of the main driver, the solver, and the problem setup can
 be controlled by runtime parameters specified in the inputs file (or
-via the command line). Runtime parameters are grouped into sections,
+via the command line or passed into the ``initialize_problem`` function). Runtime parameters are grouped into sections,
 with the heading of that section enclosed in ``[ .. ]``. The list of
 parameters are stored in three places:
 
