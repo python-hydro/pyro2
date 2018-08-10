@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/zingale/pyro2.svg?branch=master)](https://travis-ci.org/zingale/pyro2)
+[![Build Status](https://travis-ci.com/python-hydro/pyro2.svg?branch=master)](https://travis-ci.com/python-hydro/pyro2)
 
 ![pyro logo](www/logo.gif)
 
@@ -14,12 +14,12 @@ methods.
 
 The latest version of pyro is always available at:
 
-https://github.com/zingale/pyro2
+https://github.com/python-hydro/pyro2
 
 The project webpage, where you'll find documentation, plots, notes,
 etc. is here:
 
-http://zingale.github.io/pyro2/
+http://python-hydro.github.io/pyro2/
 
 
 ## Table of Contents
@@ -96,12 +96,12 @@ http://zingale.github.io/pyro2/
 The main data structures that describe the grid and the data the lives
 on the grid are described in a jupyter notebook:
 
-https://github.com/zingale/pyro2/blob/master/mesh/mesh-examples.ipynb
+https://github.com/python-hydro/pyro2/blob/master/mesh/mesh-examples.ipynb
 
 Many of the methods here rely on multigrid.  The multigrid solver is
 demonstrated in the juputer notebook:
 
-https://github.com/zingale/pyro2/blob/master/multigrid/multigrid-examples.ipynb
+https://github.com/python-hydro/pyro2/blob/master/multigrid/multigrid-examples.ipynb
 
 
 ## Solvers
