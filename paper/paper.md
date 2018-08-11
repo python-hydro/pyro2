@@ -59,13 +59,13 @@ algorithms before porting them to science codes.
 The current pyro solvers are:
 
   * linear advection (including a second-order unsplit CTU scheme, a
-    method-of-lines piecewise linear solver&star;, a 4th-order
-    finite-volume scheme&star;, and a WENO method&star;)
+    method-of-lines piecewise linear solver$^\star$, a 4th-order
+    finite-volume scheme$^\star$, and a WENO method$^\star$)
 
   * compressible hydrodynamics (including a second-order unsplit CTU
-    scheme, a method-of-lines piecewise linear solver&star;,
+    scheme, a method-of-lines piecewise linear solver$^\star$,
     and two 4th-order finite-volume schemes, one with Runge-Kutta
-    integration and the other using a spectral deferred corrections method&star;)
+    integration and the other using a spectral deferred corrections method$^\star$)
 
   * diffusion using a second-order discretization
 
@@ -75,7 +75,7 @@ The current pyro solvers are:
 
   * shallow water equations solver
 
-(solvers since the first pyro paper are marked with a &star;).  Also
+(solvers since the first pyro paper are marked with a $^\star$).  Also
 new is support for Lagrangian tracer particles, which can be added to
 any solver that has a velocity field.
 
