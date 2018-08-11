@@ -40,7 +40,8 @@ adopted unit testing through pytest and documentation through sphinx,
 and a number of new contributors.  pyro's functionality can now
 be accessed directly through a `Pyro()` class, in addition to the
 original commandline script interface.  This new interface in particular
-allows for easy use within Jupyter notebooks.  
+allows for easy use within Jupyter notebooks.  We also now use HDF5
+for output instead of python's `pickle()` function.
 
 The original goal of pyro was to learn hydrodynamics methods through
 example, and it still serves this goal.  At Stony Brook, pyro is used
