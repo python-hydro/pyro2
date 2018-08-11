@@ -75,7 +75,9 @@ The current pyro solvers are:
 
   * shallow water equations solver
 
-(solvers since the first pyro paper are marked with a &star;).
+(solvers since the first pyro paper are marked with a &star;).  Also
+new is support for Lagrangian tracer particles, which can be added to
+any solver that has a velocity field.
 
 
 # References
