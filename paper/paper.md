@@ -75,7 +75,7 @@ The current pyro solvers are:
 
   * shallow water equations solver
 
-(solvers since the first pyro paper are marked with a &star).
+(solvers since the first pyro paper are marked with a &star;).
 
 
 # References
