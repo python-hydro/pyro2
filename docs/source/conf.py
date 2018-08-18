@@ -39,6 +39,8 @@ extensions = ['sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'nbsphinx',
     'numpydoc',
+    'sphinx.ext.inheritance_diagram',
+    'sphinx.ext.graphviz',
     'IPython.sphinxext.ipython_console_highlighting',
     'sphinx.ext.githubpages']
 
@@ -59,8 +61,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'pyro'
-copyright = '2017, Michael Zingale'
-author = 'Michael Zingale'
+copyright = '2018, pyro development tem'
+author = 'pyro development team'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -159,7 +161,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'pyro.tex', 'pyro Documentation',
-     'Michael Zingale', 'manual'),
+     'pyro development team', 'manual'),
 ]
 
 
