@@ -24,7 +24,7 @@ def pres(gamma, dens, eint):
        The pressure
 
      """
-    p = dens*eint*(gamma - 1.0)
+    p = dens * eint * (gamma - 1.0)
     return p
 
 
@@ -48,7 +48,7 @@ def dens(gamma, pres, eint):
        The density
 
     """
-    dens = pres/(eint*(gamma - 1.0))
+    dens = pres / (eint * (gamma - 1.0))
     return dens
 
 
@@ -69,5 +69,20 @@ def rhoe(gamma, pres):
        The internal energy density, rho e
 
     """
-    rhoe = pres/(gamma - 1.0)
+    rhoe = pres / (gamma - 1.0)
     return rhoe
+
+
+def temp(eint, Cv):
+    """
+    Given the internal energy and the heat capacity at constant volume, return the temperature
+
+    Parameters
+    ----------
+    eint : float
+        internal energy
+    Cv : float
+        Heat capacity at constant volume
+    """
+
+    return eint / Cv

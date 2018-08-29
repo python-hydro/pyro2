@@ -23,6 +23,8 @@ def init_data(my_data, rp):
     xmom = my_data.get_var("x-momentum")
     ymom = my_data.get_var("y-momentum")
     ener = my_data.get_var("energy")
+    fuel = my_data.get_var("fuel")
+    ash = my_data.get_var("ash")
 
     # initialize the components, remember, that ener here is rho*eint
     # + 0.5*rho*v**2, where eint is the specific internal energy
@@ -30,6 +32,8 @@ def init_data(my_data, rp):
     dens[:, :] = 1.0
     xmom[:, :] = 0.0
     ymom[:, :] = 0.0
+    fuel[:, :] = dens
+    ash[:, :] = 0.0
 
     E_sedov = 1.0
 
@@ -44,8 +48,8 @@ def init_data(my_data, rp):
     ymin = rp.get_param("mesh.ymin")
     ymax = rp.get_param("mesh.ymax")
 
-    xctr = 0.5*(xmin + xmax)
-    yctr = 0.5*(ymin + ymax)
+    xctr = 0.5 * (xmin + xmax)
+    yctr = 0.5 * (ymin + ymax)
 
     # initialize the pressure by putting the explosion energy into a
     # volume of constant pressure.  Then compute the energy in a zone
@@ -56,31 +60,35 @@ def init_data(my_data, rp):
                    (my_data.grid.y2d - yctr)**2)
 
     p = 1.e-5
-    ener[:, :] = p/(gamma - 1.0)
+    ener[:, :] = p / (gamma - 1.0)
 
-    for i, j in np.transpose(np.nonzero(dist < 2.0*r_init)):
+    for i, j in np.transpose(np.nonzero(dist < 2.0 * r_init)):
 
         pzone = 0.0
 
         for ii in range(nsub):
             for jj in range(nsub):
 
-                xsub = my_data.grid.xl[i] + (my_data.grid.dx/nsub)*(ii + 0.5)
-                ysub = my_data.grid.yl[j] + (my_data.grid.dy/nsub)*(jj + 0.5)
+                xsub = my_data.grid.xl[i] + \
+                    (my_data.grid.dx / nsub) * (ii + 0.5)
+                ysub = my_data.grid.yl[j] + \
+                    (my_data.grid.dy / nsub) * (jj + 0.5)
 
                 dist = np.sqrt((xsub - xctr)**2 +
                                (ysub - yctr)**2)
 
                 if dist <= r_init:
-                    p = (gamma - 1.0)*E_sedov/(pi*r_init*r_init)
+                    p = (gamma - 1.0) * E_sedov / (pi * r_init * r_init)
                 else:
                     p = 1.e-5
 
                 pzone += p
 
-        p = pzone/(nsub*nsub)
+        p = pzone / (nsub * nsub)
 
-        ener[i, j] = p/(gamma - 1.0)
+        ener[i, j] = p / (gamma - 1.0)
+        ash[i, j] = dens[i, j]
+        fuel[i, j] = 0.0
 
 
 def finalize():

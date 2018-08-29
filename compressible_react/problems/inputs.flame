@@ -36,3 +36,8 @@ r_init = 0.01
 
 [vis]
 dovis = 1
+
+
+[network]
+rho_burn_ref = 1
+t_burn_ref = 100

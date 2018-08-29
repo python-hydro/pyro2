@@ -54,10 +54,15 @@ The overall structure is:
   * ``problems/``: The problem setups for the compressible hydrodynamics solver.
   * ``tests/``: Reference compressible hydro output for regression testing.
 
+* ``compressible_react/``: The compressible hydrodynamics solver with reactions.
+
+  * ``problems/``: The problem setups for the reactive compressible hydrodynamics solver.
+  * ``tests/``: Reference compressible hydro output for regression testing.
+
 * ``compressible_rk/``: The compressible hydrodynamics solver using method of lines integration.
 
-  * ``problems/``: This is a symbolic link to the compressible/problems/ directory.
-  * ``tests/``: Reference compressible hydro output for regression testing.
+    * ``problems/``: This is a symbolic link to the compressible/problems/ directory.
+    * ``tests/``: Reference compressible hydro output for regression testing.
 
 * ``diffusion/``: The implicit (thermal) diffusion solver. All diffusion-specific routines live here.
 
@@ -84,6 +89,10 @@ The overall structure is:
 
   * ``problems/``: The problem setups for when the multigrid solver is used in a stand-alone fashion.
   * ``tests/``: Reference multigrid solver solutions (from when the multigrid solver is used stand-alone) for regression testing.
+
+* ``particles/``: The particles solver
+
+    * ``tests/``: Unit tests for particles solver
 
 * ``swe/``: The shallow water solver.
 

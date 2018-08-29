@@ -4,7 +4,8 @@ cfl = 0.8
 
 [eos]
 gamma = 1.4    ; pres = rho ener (gamma - 1)
-
+cv = 1         ; Heat capacity at constant volume
+cp = 1
 
 [compressible]
 use_flattening = 1        ; apply flattening at shocks (1)
@@ -24,3 +25,17 @@ grav = 0.0                ; gravitational acceleration (in y-direction)
 riemann = HLLC            ; HLLC or CGF
 
 
+[diffusion]
+k = 1e-2    ; conductivity
+constant_kappa = 1  ; Is the conductivity constant (1) or constant opacity (0)
+
+
+
+[network]
+network_type = powerlaw
+specific_q_burn = 10
+f_act = 1
+t_burn_ref = 10
+rho_burn_ref = 1.5
+rtilde = 1
+nu = 4
