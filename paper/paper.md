@@ -9,11 +9,11 @@ tags:
 - partial differential equations
 
 authors:
-- name: Michael Zingale
-  orcid: 0000-0001-8401-030X
-  affiliation: 1
 - name: Alice Harpole
   orcid: 0000-0002-1530-781X
+  affiliation: 1
+- name: Michael Zingale
+  orcid: 0000-0001-8401-030X
   affiliation: 1
 - name: Ian Hawke
   orcid: 0000-0003-4805-0309
