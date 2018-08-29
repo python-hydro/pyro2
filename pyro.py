@@ -312,7 +312,6 @@ class PyroBenchmark(Pyro):
         self.sim.write(bench_file)
 
 
-
 def parse_args():
     """Parse the runtime parameters"""
 
