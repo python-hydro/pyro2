@@ -61,6 +61,8 @@ class Pyro(object):
 
         self.tc = profile.TimerCollection()
 
+        self.is_initialized = False
+
     def initialize_problem(self, problem_name, inputs_file=None, inputs_dict=None,
                            other_commands=None):
         """
@@ -126,10 +128,15 @@ class Pyro(object):
 
         self.sim.cc_data.t = 0.0
 
+        self.is_initialized = True
+
     def run_sim(self):
         """
         Evolve entire simulation
         """
+
+        if not self.is_initialized:
+            msg.fail("ERROR: problem has not been initialized")
 
         tm_main = self.tc.timer("main")
         tm_main.begin()
@@ -167,6 +174,10 @@ class Pyro(object):
         """
         Do a single step
         """
+
+        if not self.is_initialized:
+            msg.fail("ERROR: problem has not been initialized")
+
         # fill boundary conditions
         self.sim.cc_data.fill_BC_all()
 
@@ -200,6 +211,18 @@ class Pyro(object):
                 plt.savefig("{}{:04d}.png".format(basename, self.sim.n))
 
             tm_vis.end()
+
+    def __repr__(self):
+        """ Return a representation of the Pyro object """
+        s = "Solver = {}\n".format(self.solver_name)
+        if self.is_initialized:
+            s += "Problem = {}\n".format(self.sim.problem_name)
+            s += "Simulation time = {}\n".format(self.sim.cc_data.t)
+            s += "Simulation step number = {}\n".format(self.sim.n)
+        s += "\nRuntime Parameters"
+        s += "\n------------------\n"
+        s += str(self.sim.rp)
+        return s
 
 
 class PyroBenchmark(Pyro):
@@ -287,6 +310,7 @@ class PyroBenchmark(Pyro):
             basename + "%4.4d" % (self.sim.n)
         msg.warning("storing new benchmark: {}\n".format(bench_file))
         self.sim.write(bench_file)
+
 
 
 def parse_args():
