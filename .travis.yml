@@ -18,6 +18,7 @@ install:
 
 before_script:
   - export PYTHONPATH=$PYTHONPATH:$(pwd)
+  - export PYRO_HOME=$(pwd)
   - ./mk.sh
 
 script:

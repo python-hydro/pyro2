@@ -46,6 +46,8 @@ class Pyro(object):
         if solver_name not in valid_solvers:
             msg.fail("ERROR: %s is not a valid solver" % solver_name)
 
+        os.chdir(os.environ["PYRO_HOME"])
+
         # import desired solver under "solver" namespace
         self.solver = importlib.import_module(solver_name)
         self.solver_name = solver_name
