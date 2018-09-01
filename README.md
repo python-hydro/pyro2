@@ -77,7 +77,7 @@ http://python-hydro.github.io/pyro2/
         directory.
 
       * Define the environment variable `PYRO_HOME` to point to the
-        `pyro2/` directory 
+        `pyro2/` directory (only needed for regression testing)
 
       * Build the Fortran source. In `pyro2/` type
 

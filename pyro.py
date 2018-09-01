@@ -46,7 +46,7 @@ class Pyro(object):
         if solver_name not in valid_solvers:
             msg.fail("ERROR: %s is not a valid solver" % solver_name)
 
-        os.chdir(os.environ["PYRO_HOME"])
+        self.pyro_home = os.path.dirname(os.path.realpath(__file__)) + '/'
 
         # import desired solver under "solver" namespace
         self.solver = importlib.import_module(solver_name)
@@ -58,8 +58,8 @@ class Pyro(object):
 
         # parameter defaults
         self.rp = runparams.RuntimeParameters()
-        self.rp.load_params("_defaults")
-        self.rp.load_params(solver_name + "/_defaults")
+        self.rp.load_params(self.pyro_home + "_defaults")
+        self.rp.load_params(self.pyro_home + solver_name + "/_defaults")
 
         self.tc = profile.TimerCollection()
 
@@ -82,7 +82,7 @@ class Pyro(object):
             Other command line parameter options
         """
 
-        problem_defaults_file = self.solver_name + \
+        problem_defaults_file = self.pyro_home + self.solver_name + \
             "/problems/_" + problem_name + ".defaults"
 
         # problem-specific runtime parameters
@@ -93,7 +93,7 @@ class Pyro(object):
         if inputs_file is not None:
             if not os.path.isfile(inputs_file):
                 # check if the param file lives in the solver's problems directory
-                inputs_file = self.solver_name + "/problems/" + inputs_file
+                inputs_file = self.pyro_home + self.solver_name + "/problems/" + inputs_file
                 if not os.path.isfile(inputs_file):
                     msg.fail("ERROR: inputs file does not exist")
 
@@ -308,7 +308,7 @@ class PyroBenchmark(Pyro):
                     "ERROR: unable to create the solver's tests/ directory")
 
         basename = self.rp.get_param("io.basename")
-        bench_file = self.solver_name + "/tests/" + \
+        bench_file = self.pyro_home + self.solver_name + "/tests/" + \
             basename + "%4.4d" % (self.sim.n)
         msg.warning("storing new benchmark: {}\n".format(bench_file))
         self.sim.write(bench_file)
