@@ -1,7 +1,9 @@
 Running
 =======
 
-Pyro can be run in two ways: either from the commandline, using the ``pyro.py`` script and passing in the solver, problem and inputs as arguments, or by using the :func:`Pyro <pyro.Pyro>` class.
+Pyro can be run in two ways: either from the commandline, using the ``pyro.py``
+script and passing in the solver, problem and inputs as arguments, or by using
+the :func:`Pyro <pyro.Pyro>` class.
 
 Commandline
 ------------
@@ -47,13 +49,17 @@ above run, we could do:
 Pyro class
 ----------
 
-Alternatively, pyro can be run using the :func:`Pyro <pyro.Pyro>` class. This is done by the following steps:
+Alternatively, pyro can be run using the :func:`Pyro <pyro.Pyro>` class. This provides
+an interface that enables simulations to be set up and run in a Jupyter notebook - see
+``examples/examples.ipynb`` for an example notebook. A simulation can be set up and run
+by carrying out the following steps:
 
 * create a ``Pyro`` object, initializing it with a specific solver
 * initialize the problem, passing in runtime parameters and inputs
 * run the simulation
 
-For example, if we wished to use the ``compressible`` solver to run the Kelvin-Helmholtz problem ``kh``, we would do the following:
+For example, if we wished to use the ``compressible`` solver to run the
+Kelvin-Helmholtz problem ``kh``, we would do the following:
 
 .. code-block:: python
 
@@ -62,7 +68,12 @@ For example, if we wished to use the ``compressible`` solver to run the Kelvin-H
                             inputs_file="inputs.kh")
     pyro.run_sim()
 
-Instead of using an inputs file to define the problem parameters, we can define a dictionary of parameters and pass them into the :func:`initialize_problem <pyro.Pyro.initialize_problem>` function using the keyword argument ``inputs_dict``. If an inputs file is also passed into the function, the parameters in the dictionary will override any parameters in the file. For example, if we wished to turn off visualization for the previous example, we would do:
+Instead of using an inputs file to define the problem parameters, we can define a
+dictionary of parameters and pass them into the :func:`initialize_problem
+<pyro.Pyro.initialize_problem>` function using the keyword argument ``inputs_dict``.
+If an inputs file is also passed into the function, the parameters in the dictionary
+ will override any parameters in the file. For example, if we wished to turn off
+ visualization for the previous example, we would do:
 
 .. code-block:: python
 
@@ -71,13 +82,17 @@ Instead of using an inputs file to define the problem parameters, we can define 
                             inputs_file="inputs.kh",
                             inputs_dict=parameters)
 
-It's possible to evolve the simulation forward timestep by timestep manually using the :func:`single_step <pyro.Pyro.single_step>` function (rather than allowing :func:`run_sim <pyro.Pyro.run_sim>` to do this for us). To evolve our example simulation forward by a single step, we'd run
+It's possible to evolve the simulation forward timestep by timestep manually using
+the :func:`single_step <pyro.Pyro.single_step>` function (rather than allowing
+:func:`run_sim <pyro.Pyro.run_sim>` to do this for us). To evolve our example
+simulation forward by a single step, we'd run
 
 .. code-block:: python
 
     pyro.single_step()
 
-This will fill the boundary conditions, compute the timestep ``dt``, evolve a single timestep and do output/visualization (if required).
+This will fill the boundary conditions, compute the timestep ``dt``, evolve a
+single timestep and do output/visualization (if required).
 
 
 Runtime options
@@ -85,7 +100,8 @@ Runtime options
 
 The behavior of the main driver, the solver, and the problem setup can
 be controlled by runtime parameters specified in the inputs file (or
-via the command line or passed into the ``initialize_problem`` function). Runtime parameters are grouped into sections,
+via the command line or passed into the ``initialize_problem`` function).
+Runtime parameters are grouped into sections,
 with the heading of that section enclosed in ``[ .. ]``. The list of
 parameters are stored in three places:
 

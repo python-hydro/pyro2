@@ -47,6 +47,8 @@ class Pyro(object):
         if solver_name not in valid_solvers:
             msg.fail("ERROR: %s is not a valid solver" % solver_name)
 
+        self.pyro_home = os.path.dirname(os.path.realpath(__file__)) + '/'
+
         # import desired solver under "solver" namespace
         self.solver = importlib.import_module(solver_name)
         self.solver_name = solver_name
@@ -57,10 +59,12 @@ class Pyro(object):
 
         # parameter defaults
         self.rp = runparams.RuntimeParameters()
-        self.rp.load_params("_defaults")
-        self.rp.load_params(solver_name + "/_defaults")
+        self.rp.load_params(self.pyro_home + "_defaults")
+        self.rp.load_params(self.pyro_home + solver_name + "/_defaults")
 
         self.tc = profile.TimerCollection()
+
+        self.is_initialized = False
 
     def initialize_problem(self, problem_name, inputs_file=None, inputs_dict=None,
                            other_commands=None):
@@ -79,7 +83,7 @@ class Pyro(object):
             Other command line parameter options
         """
 
-        problem_defaults_file = self.solver_name + \
+        problem_defaults_file = self.pyro_home + self.solver_name + \
             "/problems/_" + problem_name + ".defaults"
 
         # problem-specific runtime parameters
@@ -90,7 +94,7 @@ class Pyro(object):
         if inputs_file is not None:
             if not os.path.isfile(inputs_file):
                 # check if the param file lives in the solver's problems directory
-                inputs_file = self.solver_name + "/problems/" + inputs_file
+                inputs_file = self.pyro_home + self.solver_name + "/problems/" + inputs_file
                 if not os.path.isfile(inputs_file):
                     msg.fail("ERROR: inputs file does not exist")
 
@@ -127,10 +131,15 @@ class Pyro(object):
 
         self.sim.cc_data.t = 0.0
 
+        self.is_initialized = True
+
     def run_sim(self):
         """
         Evolve entire simulation
         """
+
+        if not self.is_initialized:
+            msg.fail("ERROR: problem has not been initialized")
 
         tm_main = self.tc.timer("main")
         tm_main.begin()
@@ -168,6 +177,10 @@ class Pyro(object):
         """
         Do a single step
         """
+
+        if not self.is_initialized:
+            msg.fail("ERROR: problem has not been initialized")
+
         # fill boundary conditions
         self.sim.cc_data.fill_BC_all()
 
@@ -200,7 +213,20 @@ class Pyro(object):
                 basename = self.rp.get_param("io.basename")
                 plt.savefig("{}{:04d}.png".format(basename, self.sim.n))
 
-            tm_vis.end()
+        if self.make_bench or (result != 0 and self.reset_bench_on_fail):
+            self.store_as_benchmark()
+
+    def __repr__(self):
+        """ Return a representation of the Pyro object """
+        s = "Solver = {}\n".format(self.solver_name)
+        if self.is_initialized:
+            s += "Problem = {}\n".format(self.sim.problem_name)
+            s += "Simulation time = {}\n".format(self.sim.cc_data.t)
+            s += "Simulation step number = {}\n".format(self.sim.n)
+        s += "\nRuntime Parameters"
+        s += "\n------------------\n"
+        s += str(self.sim.rp)
+        return s
 
 
 class PyroBenchmark(Pyro):
@@ -284,7 +310,7 @@ class PyroBenchmark(Pyro):
                     "ERROR: unable to create the solver's tests/ directory")
 
         basename = self.rp.get_param("io.basename")
-        bench_file = self.solver_name + "/tests/" + \
+        bench_file = self.pyro_home + self.solver_name + "/tests/" + \
             basename + "%4.4d" % (self.sim.n)
         msg.warning("storing new benchmark: {}\n".format(bench_file))
         self.sim.write(bench_file)

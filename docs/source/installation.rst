@@ -36,7 +36,7 @@ The following steps are needed before running pyro:
    ./mk.sh
 
 * define the environment variable ``PYRO_HOME`` to point to
-  the ``pyro2/`` directory (only needed for regression testing)
+  the ``pyro2/`` directory
 
 .. code-block:: none
 
