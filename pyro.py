@@ -12,10 +12,10 @@ import compare
 from util import msg, profile, runparams, io
 
 valid_solvers = ["advection",
+                 "advection_nonuniform",
                  "advection_rk",
                  "advection_fv4",
                  "advection_weno",
-                 "advection_nonuniform",
                  "compressible",
                  "compressible_rk",
                  "compressible_fv4",
@@ -213,8 +213,7 @@ class Pyro(object):
                 basename = self.rp.get_param("io.basename")
                 plt.savefig("{}{:04d}.png".format(basename, self.sim.n))
 
-        if self.make_bench or (result != 0 and self.reset_bench_on_fail):
-            self.store_as_benchmark()
+            tm_vis.end()
 
     def __repr__(self):
         """ Return a representation of the Pyro object """

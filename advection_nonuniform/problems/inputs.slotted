@@ -32,7 +32,7 @@ yrboundary = periodic
 u = 1.0
 v = 1.0
 
-limiter = 1
+limiter = 2
 
 [particles]
 do_particles = 0
