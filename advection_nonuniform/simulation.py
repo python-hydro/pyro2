@@ -52,11 +52,16 @@ class Simulation(NullSimulation):
 
         if self.rp.get_param("particles.do_particles") == 1:
             n_particles = self.rp.get_param("particles.n_particles")
-            particle_generator = self.rp.get_param("particles.particle_generator")
-            self.particles = particles.Particles(self.cc_data, bc, n_particles, particle_generator)
+            particle_generator = \
+                self.rp.get_param("particles.particle_generator")
+            self.particles = particles.Particles(self.cc_data,
+                                                 bc,
+                                                 n_particles,
+                                                 particle_generator)
 
         # now set the initial conditions for the problem
-        problem = importlib.import_module("advection_nonuniform.problems.{}".format(self.problem_name))
+        problem = importlib.import_module("advection_nonuniform.problems.{}"
+                                          .format(self.problem_name))
         problem.init_data(self.cc_data, self.rp)
 
         # compute the required shift for each node using corresponding velocity at the node
@@ -131,14 +136,14 @@ class Simulation(NullSimulation):
 
         myg = self.cc_data.grid
 
-        _, axes, cbar_title = plot_tools.setup_axes(myg, 1)
+        _, axes, _ = plot_tools.setup_axes(myg, 1)
 
         # plot density
         ax = axes[0]
         img = ax.imshow(np.transpose(dens.v()),
-                   interpolation="nearest", origin="lower",
-                   extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax],
-                   cmap=self.cm)
+                        interpolation="nearest", origin="lower",
+                        extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax],
+                        cmap=self.cm)
 
         ax.set_xlabel("x")
         ax.set_ylabel("y")
@@ -158,7 +163,7 @@ class Simulation(NullSimulation):
 
             # plot particles
             ax.scatter(particle_positions[:, 0],
-                particle_positions[:, 1], c=colors, cmap="Greys")
+                       particle_positions[:, 1], c=colors, cmap="Greys")
             ax.set_xlim([myg.xmin, myg.xmax])
             ax.set_ylim([myg.ymin, myg.ymax])
 
