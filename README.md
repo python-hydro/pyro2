@@ -116,6 +116,8 @@ pyro provides the following solvers (all in 2-d):
   - `advection_fv4`: a fourth-order accurate finite-volume advection
     solver that uses RK4 time integration.
 
+  - `advection_nonuniform`: a solver for advection with a non-uniform velocity field.
+
   - `advection_rk`: a second-order unsplit solver for linear advection
     that uses Runge-Kutta integration instead of characteristic
     tracing.
@@ -136,12 +138,15 @@ pyro provides the following solvers (all in 2-d):
      equations that uses Runge-Kutta integration instead of
 	 characteristic tracing.
 
-  - `incompressible`: a second-order cell-centered approximate
-    projection method for the incompressible equations of
-    hydrodynamics.
+  - `compressible_sdc`: a fourth-order compressible solver,
+  using spectral-deferred correction (SDC) for the time integration.
 
   - `diffusion`: a Crank-Nicolson time-discretized solver for the
     constant-coefficient diffusion equation.
+
+  - `incompressible`: a second-order cell-centered approximate
+    projection method for the incompressible equations of
+    hydrodynamics.
 
   - `lm_atm`: a solver for the equations of low Mach number
     hydrodynamics for atmospheric flows.
@@ -153,6 +158,8 @@ pyro provides the following solvers (all in 2-d):
     constant-coefficient Helmholtz equation, as well as a
     variable-coefficient Poisson equation (which inherits from the
     constant-coefficient solver).
+
+  - `particles`: a solver for Lagrangian tracer particles.
 
   - `swe`: a solver for the shallow water equations.
 

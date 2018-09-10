@@ -6,6 +6,7 @@ pyro2
 
    advection
    advection_fv4
+   advection_nonuniform
    advection_rk
    advection_weno
    compare
