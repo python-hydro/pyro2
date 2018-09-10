@@ -25,7 +25,7 @@ pyro has several compressible solvers:
   time integration
 
 * :py:mod:`compressible_sdc` uses fourth-order compressible solver,
-with spectral-deferred correction (SDC) for the time integration.
+  with spectral-deferred correction (SDC) for the time integration.
 
 The implementations here have flattening at shocks, artificial
 viscosity, a simple gamma-law equation of state, and (in some cases) a

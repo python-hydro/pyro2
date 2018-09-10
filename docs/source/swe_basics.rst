@@ -1,5 +1,5 @@
-Shallow water solvers
-==================================
+Shallow water solver
+====================
 
 The (augmented) shallow water equations take the form:
 

@@ -227,6 +227,17 @@ class Pyro(object):
         s += str(self.sim.rp)
         return s
 
+    def get_var(self, v):
+        """
+        Alias for cc_data's get_var routine, returns the cell-centered data
+        given the variable name v.
+        """
+
+        if not self.is_initialized:
+            msg.fail("ERROR: problem has not been initialized")
+
+        return self.sim.cc_data.get_var(v)
+
 
 class PyroBenchmark(Pyro):
     """
