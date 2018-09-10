@@ -63,30 +63,29 @@ to science codes.
 
 The current pyro solvers are:
 
-  * linear advection (including a second-order unsplit CTU scheme, a
-    method-of-lines piecewise linear solver$^\star$, a 4th-order
-    finite-volume scheme$^\star$, and a WENO method$^\star$)
+-   linear advection (including a second-order unsplit CTU scheme, a
+    method-of-lines piecewise linear solver$^\\star$, a 4th-order
+    finite-volume scheme$^\\star$, a WENO method$^\\star$, and
+    advection with a non-uniform velocity field$^\\star$)
 
-  * compressible hydrodynamics (including a second-order unsplit CTU
-    scheme, a method-of-lines piecewise linear solver$^\star$, and two
+-   compressible hydrodynamics (including a second-order unsplit CTU
+    scheme, a method-of-lines piecewise linear solver$^\\star$, and two
     4th-order finite-volume schemes, one with Runge-Kutta integration
     and the other using a spectral deferred corrections
-    method$^\star$)
+    method$^\\star$)
 
-  * diffusion using a second-order implicit discretization
+-   diffusion using a second-order implicit discretization
 
-  * incompressible hydrodynamics using a second-order approximate
+-   incompressible hydrodynamics using a second-order approximate
     projection method.
 
-  * low Mach number atmospheric solver$^\star$, using an approximate
+-   low Mach number atmospheric solver$^\\star$, using an approximate
     projection method.
 
-  * shallow water equations solver$^\star$
+-   shallow water equations solver$^\\star$
 
-(solvers since the first pyro paper are marked with a $^\star$).  Also
+(solvers since the first pyro paper are marked with a $^\\star$).  Also
 new is support for Lagrangian tracer particles, which can be added to
 any solver that has a velocity field.
-
-
 
 # References

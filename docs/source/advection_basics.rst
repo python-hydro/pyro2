@@ -12,10 +12,15 @@ numerical methods for advection that we implement in pyro.
 
 pyro has several solvers for linear advection:
 
-* :py:mod:`advection` implements the directionally unsplit corner transport upwind algorithm with piecewise linear reconstruction
+* :py:mod:`advection` implements the directionally unsplit corner transport upwind
+  algorithm with piecewise linear reconstruction
 
 * :py:mod:`advection_fv4` uses a fourth-order accurate finite-volume
   method with RK4 time integration
+
+* :py:mod:`advection_nonuniform` models advection with a non-uniform velocity field.
+  This is used to implement
+  `Zalesak (1979) <https://doi.org/10.1016/0021-9991(79)90051-2>`_'s slotted disk problem.
 
 * :py:mod:`advection_rk` uses a method of lines time-integration
   approach with piecewise linear spatial reconstruction for linear
@@ -146,4 +151,3 @@ Extensions
 
   The neat thing about Burger's equation is that it admits shocks and
   rarefactions, so some very interesting flow problems can be setup.
-
