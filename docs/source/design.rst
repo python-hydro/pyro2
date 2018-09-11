@@ -43,13 +43,13 @@ The overall structure is:
 * ``advection_fv4/``: The fourth-order accurate finite-volume advection
   solver that uses RK4 time integration.
 
-    * ``problems/``: The problem setups for the fourth-order advection solver.
-    * ``tests/``: Reference advection output files for comparison and regression testing.
+  * ``problems/``: The problem setups for the fourth-order advection solver.
+  * ``tests/``: Reference advection output files for comparison and regression testing.
 
 * ``advection_nonuniform/``: The solver for advection with a non-uniform velocity field.
 
-    * ``problems/``: The problem setups for the non-uniform advection solver.
-    * ``tests/``: Reference advection output files for comparison and regression testing.
+  * ``problems/``: The problem setups for the non-uniform advection solver.
+  * ``tests/``: Reference advection output files for comparison and regression testing.
 
 * ``advection_rk/``: The linear advection equation solver using the
   method-of-lines approach.
@@ -65,8 +65,8 @@ The overall structure is:
 * ``analysis/``: Various analysis scripts for processing pyro output files.
 
 * ``compressible/``: The fourth-order accurate finite-volume compressible
-   hydro solver that uses RK4 time integration.  This is built from the
-   method of McCourquodale and Colella (2011).
+  hydro solver that uses RK4 time integration.  This is built from the
+  method of McCourquodale and Colella (2011).
 
   * ``problems/``: The problem setups for the fourth-order compressible hydrodynamics solver.
   * ``tests/``: Reference compressible hydro output for regression testing.
@@ -83,7 +83,7 @@ The overall structure is:
   * ``tests/``: Reference compressible hydro output for regression testing.
 
 * ``compressible_sdc/``: The fourth-order compressible solver,
-using spectral-deferred correction (SDC) for the time integration.
+  using spectral-deferred correction (SDC) for the time integration.
 
   * ``problems/``: This is a symbolic link to the compressible/problems/ directory.
   * ``tests/``: Reference compressible hydro output for regression testing.

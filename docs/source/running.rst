@@ -50,7 +50,7 @@ Pyro class
 ----------
 
 Alternatively, pyro can be run using the :func:`Pyro <pyro.Pyro>` class. This provides
-an interface that enables simulations to be set up and run in a Jupyter notebook - see
+an interface that enables simulations to be set up and run in a Jupyter notebook -- see
 ``examples/examples.ipynb`` for an example notebook. A simulation can be set up and run
 by carrying out the following steps:
 
@@ -72,8 +72,8 @@ Instead of using an inputs file to define the problem parameters, we can define 
 dictionary of parameters and pass them into the :func:`initialize_problem
 <pyro.Pyro.initialize_problem>` function using the keyword argument ``inputs_dict``.
 If an inputs file is also passed into the function, the parameters in the dictionary
- will override any parameters in the file. For example, if we wished to turn off
- visualization for the previous example, we would do:
+will override any parameters in the file. For example, if we wished to turn off
+visualization for the previous example, we would do:
 
 .. code-block:: python
 
