@@ -122,7 +122,7 @@ Updating U_{i,j}:
 
 """
 
-import swe.interface_f as ifc
+import swe.interface as ifc
 import swe as comp
 import mesh.reconstruction as reconstruction
 import mesh.array_indexer as ai
