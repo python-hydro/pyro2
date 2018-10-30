@@ -1,6 +1,7 @@
 import numpy as np
 from numba import njit
 
+
 @njit(cache=True)
 def states(idir, qx, qy, ng, dx, dt,
            irho, iu, iv, ip, ix, nvar, nspec,
@@ -185,6 +186,7 @@ def states(idir, qx, qy, ng, dx, dt,
                     q_r[i, j,  m] = q_r[i, j,  m] + sum_r
 
     return q_l, q_r
+
 
 @njit(cache=True)
 def riemann_cgf(idir, qx, qy, ng,
@@ -466,6 +468,7 @@ def riemann_cgf(idir, qx, qy, ng,
 
     return F
 
+
 @njit(cache=True)
 def riemann_prim(idir, qx, qy, ng,
                  nvar, irho, iu, iv, ip, iX, nspec,
@@ -724,6 +727,7 @@ def riemann_prim(idir, qx, qy, ng,
 
     return q_int
 
+
 @njit(cache=True)
 def riemann_hllc(idir, qx, qy, ng,
                  nvar, idens, ixmom, iymom, iener, irhoX, nspec,
@@ -802,13 +806,13 @@ def riemann_hllc(idir, qx, qy, ng,
 
             # primitive variable Riemann solver (Toro, 9.3)
             factor = rho_avg * c_avg
-            factor2 = rho_avg / c_avg
+            # factor2 = rho_avg / c_avg
 
             pstar = 0.5 * (p_l + p_r) + 0.5 * (un_l - un_r) * factor
             ustar = 0.5 * (un_l + un_r) + 0.5 * (p_l - p_r) / factor
 
-            rhostar_l = rho_l + (un_l - ustar) * factor2
-            rhostar_r = rho_r + (ustar - un_r) * factor2
+            # rhostar_l = rho_l + (un_l - ustar) * factor2
+            # rhostar_r = rho_r + (ustar - un_r) * factor2
 
             if (Q > 2 and (pstar < p_min or pstar > p_max)):
 
@@ -829,8 +833,8 @@ def riemann_hllc(idir, qx, qy, ng,
                                    p_r * (1.0 + (gamma - 1.0) * (ustar - un_r) /
                                           (2.0 * c_r))**(1.0 / z))
 
-                    rhostar_l = rho_l * (pstar / p_l)**(1.0 / gamma)
-                    rhostar_r = rho_r * (pstar / p_r)**(1.0 / gamma)
+                    # rhostar_l = rho_l * (pstar / p_l)**(1.0 / gamma)
+                    # rhostar_r = rho_r * (pstar / p_r)**(1.0 / gamma)
 
                 else:
 
@@ -853,11 +857,11 @@ def riemann_hllc(idir, qx, qy, ng,
                     ustar = 0.5 * (un_l + un_r) + \
                         0.5 * ((pstar - p_r) * g_r - (pstar - p_l) * g_l)
 
-                    rhostar_l = rho_l * (pstar / p_l + (gamma - 1.0) / (gamma + 1.0)) / \
-                        ((gamma - 1.0) / (gamma + 1.0) * (pstar / p_l) + 1.0)
-
-                    rhostar_r = rho_r * (pstar / p_r + (gamma - 1.0) / (gamma + 1.0)) / \
-                        ((gamma - 1.0) / (gamma + 1.0) * (pstar / p_r) + 1.0)
+                    # rhostar_l = rho_l * (pstar / p_l + (gamma - 1.0) / (gamma + 1.0)) / \
+                    #     ((gamma - 1.0) / (gamma + 1.0) * (pstar / p_l) + 1.0)
+                    #
+                    # rhostar_r = rho_r * (pstar / p_r + (gamma - 1.0) / (gamma + 1.0)) / \
+                    #     ((gamma - 1.0) / (gamma + 1.0) * (pstar / p_r) + 1.0)
 
             # estimate the nonlinear wave speeds
 
@@ -892,7 +896,7 @@ def riemann_hllc(idir, qx, qy, ng,
                 U_state[:] = U_r[i, j, :]
 
                 F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nvar, nspec,
-                         U_state)
+                                      U_state)
 
             elif (S_r > 0.0 and S_c <= 0):
                 # R* region
@@ -917,7 +921,7 @@ def riemann_hllc(idir, qx, qy, ng,
 
                 # find the flux on the right interface
                 F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nvar, nspec,
-                         U_r[i, j, :])
+                                      U_r[i, j, :])
 
                 # correct the flux
                 F[i, j, :] = F[i, j, :] + S_r * (U_state[:] - U_r[i, j, :])
@@ -945,7 +949,7 @@ def riemann_hllc(idir, qx, qy, ng,
 
                 # find the flux on the left interface
                 F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nvar, nspec,
-                         U_l[i, j, :])
+                                      U_l[i, j, :])
 
                 # correct the flux
                 F[i, j, :] = F[i, j, :] + S_l * (U_state[:] - U_l[i, j, :])
@@ -955,11 +959,12 @@ def riemann_hllc(idir, qx, qy, ng,
                 U_state[:] = U_l[i, j, :]
 
                 F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nvar, nspec,
-                         U_state)
+                                      U_state)
 
             # we should deal with solid boundaries somehow here
 
     return F
+
 
 @njit(cache=True)
 def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nvar, nspec, U_state):
@@ -969,8 +974,8 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nvar, nspec, U_stat
     u = U_state[ixmom] / U_state[idens]
     v = U_state[iymom] / U_state[idens]
 
-    p = (U_state[iener] - 0.5 * U_state[idens]
-         * (u * u + v * v)) * (gamma - 1.0)
+    p = (U_state[iener] - 0.5 * U_state[idens] *
+         (u * u + v * v)) * (gamma - 1.0)
 
     if (idir == 1):
         F[idens] = U_state[idens] * u
@@ -991,6 +996,7 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nvar, nspec, U_stat
             F[irhoX:irhoX + nspec] = U_state[irhoX:irhoX + nspec] * v
 
     return F
+
 
 @njit(cache=True)
 def artificial_viscosity(qx, qy, ng, dx, dy,

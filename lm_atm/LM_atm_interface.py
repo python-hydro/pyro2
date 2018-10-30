@@ -1,6 +1,7 @@
 import numpy as np
 from numba import njit
 
+
 @njit(cache=True)
 def is_symmetric_pair(qx, qy, ng, nodal, sl, sr):
 
@@ -45,10 +46,12 @@ def is_symmetric_pair(qx, qy, ng, nodal, sl, sr):
 
     return sym
 
+
 @njit(cache=True)
 def is_symmetric(qx, qy, ng, nodal, s):
 
     return is_symmetric_pair(qx, qy, ng, nodal, s, s)
+
 
 @njit(cache=True)
 def is_asymmetric_pair(qx, qy, ng, nodal, sl, sr):
@@ -95,10 +98,12 @@ def is_asymmetric_pair(qx, qy, ng, nodal, sl, sr):
 
     return asym
 
+
 @njit(cache=True)
 def is_asymmetric(qx, qy, ng, nodal, s):
 
     return is_asymmetric_pair(qx, qy, ng, nodal, s, s)
+
 
 @njit(cache=True)
 def mac_vels(qx, qy, ng, dx, dy, dt,
@@ -110,13 +115,6 @@ def mac_vels(qx, qy, ng, dx, dy, dt,
 
     u_MAC = np.zeros((qx, qy))
     v_MAC = np.zeros((qx, qy))
-
-    nx = qx - 2 * ng
-    ny = qy - 2 * ng
-    ilo = ng
-    ihi = ng + nx
-    jlo = ng
-    jhi = ng + ny
 
     # assertions
     # print *, "checking ldelta_ux"

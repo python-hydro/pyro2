@@ -1,15 +1,12 @@
 import numpy as np
 from numba import njit
 
+
 @njit(cache=True)
 def states(idir, qx, qy, ng, dx, dt,
            ih, iu, iv, ix, nvar, nspec,
            g,
            qv, dqv):
-
-    q_l = np.zeros((qx, qy, nvar))
-    q_r = np.zeros((qx, qy, nvar))
-
     """
     predict the cell-centered state to the edges in one-dimension
     using the reconstructed, limited slopes.
@@ -61,6 +58,8 @@ def states(idir, qx, qy, ng, dx, dt,
     q_r,i and q_l,i+1 are computed using the information in zone i,j.
     """
 
+    q_l = np.zeros((qx, qy, nvar))
+    q_r = np.zeros((qx, qy, nvar))
     dq = np.zeros(nvar)
     q = np.zeros(nvar)
     lvec = np.zeros((nvar, nvar))
@@ -180,7 +179,7 @@ def states(idir, qx, qy, ng, dx, dt,
 
 
 @njit(cache=True)
-def riemann_Roe(idir, qx, qy, ng,
+def riemann_roe(idir, qx, qy, ng,
                 nvar, ih, ixmom, iymom, ihX, nspec,
                 lower_solid, upper_solid,
                 g, U_l, U_r):
@@ -196,10 +195,9 @@ def riemann_Roe(idir, qx, qy, ng,
     # not passing dx/dt or cfl to this function. If this isn't the case, will need
     # to pass one of these to the function or else: things will go wrong.
 
-    xn = np.zeros(nspec)
     U_roe = np.zeros(nvar)
     lambda_roe = np.zeros(nvar)
-    K_roe = np.zeros(nvar)
+    K_roe = np.zeros((nvar,nvar))
     alpha_roe = np.zeros(nvar)
     delta = np.zeros(nvar)
     F_r = np.zeros(nvar)
@@ -221,19 +219,15 @@ def riemann_Roe(idir, qx, qy, ng,
             # un = normal velocity; ut = transverse velocity
             if (idir == 1):
                 un_l = U_l[i, j, ixmom] / h_l
-                ut_l = U_l[i, j, iymom] / h_l
             else:
                 un_l = U_l[i, j, iymom] / h_l
-                ut_l = U_l[i, j, ixmom] / h_l
 
             h_r = U_r[i, j, ih]
 
             if (idir == 1):
                 un_r = U_r[i, j, ixmom] / h_r
-                ut_r = U_r[i, j, iymom] / h_r
             else:
                 un_r = U_r[i, j, iymom] / h_r
-                ut_r = U_r[i, j, ixmom] / h_r
 
             # compute the sound speeds
             c_l = max(smallc, np.sqrt(g * h_l))
@@ -324,10 +318,6 @@ def riemann_hllc(idir, qx, qy, ng,
     F = np.zeros((qx, qy, nvar))
 
     smallc = 1.e-10
-    smallrho = 1.e-10
-    smallp = 1.e-10
-
-    xn = np.zeros(nspec)
     U_state = np.zeros(nvar)
 
     nx = qx - 2 * ng
@@ -372,10 +362,8 @@ def riemann_hllc(idir, qx, qy, ng,
 
             h_avg = 0.5 * (h_l + h_r)
             c_avg = 0.5 * (c_l + c_r)
-            u_avg = 0.5 * (un_l + un_r)
 
             hstar = h_avg - 0.25 * (un_r - un_l) * h_avg / c_avg
-            ustar = u_avg - (h_r - h_l) * c_avg / h_avg
 
             # estimate the nonlinear wave speeds
 
