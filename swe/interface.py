@@ -197,7 +197,7 @@ def riemann_roe(idir, qx, qy, ng,
 
     U_roe = np.zeros(nvar)
     lambda_roe = np.zeros(nvar)
-    K_roe = np.zeros((nvar,nvar))
+    K_roe = np.zeros((nvar, nvar))
     alpha_roe = np.zeros(nvar)
     delta = np.zeros(nvar)
     F_r = np.zeros(nvar)

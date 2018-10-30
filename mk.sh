@@ -22,13 +22,18 @@ if [ "$1" == "clean" ]; then
     find . -type d -name "__pycache__" -exec rm -rf {} \;
     find . -type d -name "build" -exec rm -rf {} \;
 
-else
+elif [ "$1" == "fortran" ]; then
+
     if [ "$1" == "debug" ]; then
 	FFLAGS="-fbounds-check -fbacktrace -Wuninitialized -Wunused -ffpe-trap=invalid -finit-real=snan"
     else
 	FFLAGS="-C"
     fi
 
-    ${PYTHON} setup.py config_fc --f90flags "${FFLAGS}" build_ext
+    ${PYTHON} setup_fortran.py config_fc --f90flags "${FFLAGS}" build_ext
+
+else
+
+    ${PYTHON} setup.py build
 
 fi

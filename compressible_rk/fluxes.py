@@ -19,7 +19,7 @@ Taylor expanding *in space only* yields::
 
 """
 
-import compressible.interface_f as interface_f
+import compressible.interface as interface_f
 import compressible as comp
 import mesh.reconstruction as reconstruction
 import mesh.array_indexer as ai

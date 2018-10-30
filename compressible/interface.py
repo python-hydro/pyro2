@@ -552,6 +552,8 @@ def riemann_prim(idir, qx, qy, ng,
             p_r = max(p_r, smallp)
 
             # define the Lagrangian sound speed
+            rho_l = max(smallrho, rho_l)
+            rho_r = max(smallrho, rho_r)
             W_l = max(smallrho * smallc, np.sqrt(gamma * p_l * rho_l))
             W_r = max(smallrho * smallc, np.sqrt(gamma * p_r * rho_r))
 

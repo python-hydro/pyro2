@@ -60,11 +60,11 @@ class ArrayIndexer(np.ndarray):
         bxlo, bxhi, bylo, byhi = _buf_split(buf)
 
         if self.c == 2:
-            return self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
-                        self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s]
+            return self[self.g.ilo - bxlo + ishift:self.g.ihi + 1 + bxhi + ishift:s,
+                        self.g.jlo - bylo + jshift:self.g.jhi + 1 + byhi + jshift:s]
         else:
-            return self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
-                        self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s, n]
+            return self[self.g.ilo - bxlo + ishift:self.g.ihi + 1 + bxhi + ishift:s,
+                        self.g.jlo - bylo + jshift:self.g.jhi + 1 + byhi + jshift:s, n]
 
     def norm(self, n=0):
         """
@@ -82,17 +82,17 @@ class ArrayIndexer(np.ndarray):
 
     def is_symmetric(self, nodal=False, tol=1.e-14):
         if not nodal:
-            L = self[self.g.ilo:self.g.ilo+self.g.nx/2,
-                     self.g.jlo:self.g.jhi+1]
-            R = self[self.g.ilo+self.g.nx/2:self.g.ihi+1,
-                     self.g.jlo:self.g.jhi+1]
+            L = self[self.g.ilo:self.g.ilo + self.g.nx / 2,
+                     self.g.jlo:self.g.jhi + 1]
+            R = self[self.g.ilo + self.g.nx / 2:self.g.ihi + 1,
+                     self.g.jlo:self.g.jhi + 1]
         else:
-            print(self.g.ilo, self.g.ilo+self.g.nx/2+1)
-            L = self[self.g.ilo:self.g.ilo+self.g.nx/2+1,
-                     self.g.jlo:self.g.jhi+1]
-            print(self.g.ilo+self.g.nx/2, self.g.ihi+2)
-            R = self[self.g.ilo+self.g.nx/2:self.g.ihi+2,
-                     self.g.jlo:self.g.jhi+1]
+            print(self.g.ilo, self.g.ilo + self.g.nx / 2 + 1)
+            L = self[self.g.ilo:self.g.ilo + self.g.nx / 2 + 1,
+                     self.g.jlo:self.g.jhi + 1]
+            print(self.g.ilo + self.g.nx / 2, self.g.ihi + 2)
+            R = self[self.g.ilo + self.g.nx / 2:self.g.ihi + 2,
+                     self.g.jlo:self.g.jhi + 1]
 
         e = abs(L - np.flipud(R)).max()
         print(e, tol, e < tol)
@@ -100,17 +100,17 @@ class ArrayIndexer(np.ndarray):
 
     def is_asymmetric(self, nodal=False, tol=1.e-14):
         if not nodal:
-            L = self[self.g.ilo:self.g.ilo+self.g.nx/2,
-                     self.g.jlo:self.g.jhi+1]
-            R = self[self.g.ilo+self.g.nx/2:self.g.ihi+1,
-                     self.g.jlo:self.g.jhi+1]
+            L = self[self.g.ilo:self.g.ilo + self.g.nx / 2,
+                     self.g.jlo:self.g.jhi + 1]
+            R = self[self.g.ilo + self.g.nx / 2:self.g.ihi + 1,
+                     self.g.jlo:self.g.jhi + 1]
         else:
-            print(self.g.ilo, self.g.ilo+self.g.nx/2+1)
-            L = self[self.g.ilo:self.g.ilo+self.g.nx/2+1,
-                     self.g.jlo:self.g.jhi+1]
-            print(self.g.ilo+self.g.nx/2, self.g.ihi+2)
-            R = self[self.g.ilo+self.g.nx/2:self.g.ihi+2,
-                     self.g.jlo:self.g.jhi+1]
+            print(self.g.ilo, self.g.ilo + self.g.nx / 2 + 1)
+            L = self[self.g.ilo:self.g.ilo + self.g.nx / 2 + 1,
+                     self.g.jlo:self.g.jhi + 1]
+            print(self.g.ilo + self.g.nx / 2, self.g.ihi + 2)
+            R = self[self.g.ilo + self.g.nx / 2:self.g.ihi + 2,
+                     self.g.jlo:self.g.jhi + 1]
 
         e = abs(L + np.flipud(R)).max()
         print(e, tol, e < tol)
@@ -134,8 +134,7 @@ class ArrayIndexer(np.ndarray):
         for j in reversed(range(self.g.qy)):
             for i in range(self.g.qx):
 
-                if (j < self.g.jlo or j > self.g.jhi or
-                    i < self.g.ilo or i > self.g.ihi):
+                if (j < self.g.jlo or j > self.g.jhi or i < self.g.ilo or i > self.g.ihi):
                     gc = 1
                 else:
                     gc = 0
