@@ -7,7 +7,7 @@ def states(idir, qx, qy, ng, dx, dt,
            ih, iu, iv, ix, nvar, nspec,
            g,
            qv, dqv):
-    """
+    r"""
     predict the cell-centered state to the edges in one-dimension
     using the reconstructed, limited slopes.
 
@@ -183,7 +183,7 @@ def riemann_roe(idir, qx, qy, ng,
                 nvar, ih, ixmom, iymom, ihX, nspec,
                 lower_solid, upper_solid,
                 g, U_l, U_r):
-    """
+    r"""
     This is the Roe Riemann solver with entropy fix. The implementation
     follows Toro's SWE book and the clawpack 2d SWE Roe solver.
     """
@@ -309,7 +309,7 @@ def riemann_hllc(idir, qx, qy, ng,
                  nvar, ih, ixmom, iymom, ihX, nspec,
                  lower_solid, upper_solid,
                  g, U_l, U_r):
-    """
+    r"""
     this is the HLLC Riemann solver.  The implementation follows
     directly out of Toro's book.  Note: this does not handle the
     transonic rarefaction.
@@ -454,7 +454,7 @@ def riemann_hllc(idir, qx, qy, ng,
 
 @njit(cache=True)
 def consFlux(idir, g, ih, ixmom, iymom, ihX, nvar, nspec, U_state):
-    """
+    r"""
     Calculate the conserved flux for the shallow water equations. In the
     x-direction, this is given by
 

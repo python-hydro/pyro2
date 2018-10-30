@@ -6,7 +6,7 @@ from numba import njit
 def states(idir, qx, qy, ng, dx, dt,
            irho, iu, iv, ip, ix, nvar, nspec,
            gamma, qv, dqv):
-    """
+    r"""
     predict the cell-centered state to the edges in one-dimension
     using the reconstructed, limited slopes.
 
@@ -193,7 +193,7 @@ def riemann_cgf(idir, qx, qy, ng,
                 nvar, idens, ixmom, iymom, iener, irhoX, nspec,
                 lower_solid, upper_solid,
                 gamma, U_l, U_r):
-    """
+    r"""
     Solve riemann shock tube problem for a general equation of
     state using the method of Colella, Glaz, and Ferguson.  See
     Almgren et al. 2010 (the CASTRO paper) for details.
@@ -474,7 +474,7 @@ def riemann_prim(idir, qx, qy, ng,
                  nvar, irho, iu, iv, ip, iX, nspec,
                  lower_solid, upper_solid,
                  gamma, q_l, q_r):
-    """
+    r"""
     this is like riemann_cgf, except that it works on a primitive
     variable input state and returns the primitive variable interface
     state
@@ -735,7 +735,7 @@ def riemann_hllc(idir, qx, qy, ng,
                  nvar, idens, ixmom, iymom, iener, irhoX, nspec,
                  lower_solid, upper_solid,
                  gamma, U_l, U_r):
-    """
+    r"""
     this is the HLLC Riemann solver.  The implementation follows
     directly out of Toro's book.  Note: this does not handle the
     transonic rarefaction.
@@ -1003,7 +1003,7 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nvar, nspec, U_stat
 @njit(cache=True)
 def artificial_viscosity(qx, qy, ng, dx, dy,
                          cvisc, u, v):
-    """
+    r"""
     compute the artifical viscosity.  Here, we compute edge-centered
     approximations to the divergence of the velocity.  This follows
     directly Colella \ Woodward (1984) Eq. 4.5
