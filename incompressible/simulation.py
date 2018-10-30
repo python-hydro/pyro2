@@ -5,7 +5,7 @@ import importlib
 import numpy as np
 import matplotlib.pyplot as plt
 
-import incompressible.incomp_interface_f as incomp_interface_f
+import incompressible.incomp_interface as incomp_interface_f
 import mesh.reconstruction as reconstruction
 import mesh.patch as patch
 import mesh.array_indexer as ai

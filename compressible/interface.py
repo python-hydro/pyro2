@@ -1,7 +1,7 @@
 import numpy as np
 from numba import njit
 
-@njit
+@njit(cache=True)
 def states(idir, qx, qy, ng, dx, dt,
            irho, iu, iv, ip, ix, nvar, nspec,
            gamma, qv, dqv):
@@ -186,7 +186,7 @@ def states(idir, qx, qy, ng, dx, dt,
 
     return q_l, q_r
 
-@njit
+@njit(cache=True)
 def riemann_cgf(idir, qx, qy, ng,
                 nvar, idens, ixmom, iymom, iener, irhoX, nspec,
                 lower_solid, upper_solid,
@@ -466,7 +466,7 @@ def riemann_cgf(idir, qx, qy, ng,
 
     return F
 
-@njit
+@njit(cache=True)
 def riemann_prim(idir, qx, qy, ng,
                  nvar, irho, iu, iv, ip, iX, nspec,
                  lower_solid, upper_solid,
@@ -724,7 +724,7 @@ def riemann_prim(idir, qx, qy, ng,
 
     return q_int
 
-@njit
+@njit(cache=True)
 def riemann_hllc(idir, qx, qy, ng,
                  nvar, idens, ixmom, iymom, iener, irhoX, nspec,
                  lower_solid, upper_solid,
@@ -961,7 +961,7 @@ def riemann_hllc(idir, qx, qy, ng,
 
     return F
 
-@njit
+@njit(cache=True)
 def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nvar, nspec, U_state):
 
     F = np.zeros(nvar)
@@ -992,7 +992,7 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nvar, nspec, U_stat
 
     return F
 
-@njit
+@njit(cache=True)
 def artificial_viscosity(qx, qy, ng, dx, dy,
                          cvisc, u, v):
     """
