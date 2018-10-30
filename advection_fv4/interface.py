@@ -32,8 +32,8 @@ def states(a, qx, qy, ng, idir):
     # we need interface values on all faces of the domain
     if (idir == 1):
 
-        for j in range(jlo - 1, jhi + 2):
-            for i in range(ilo - 2, ihi + 4):
+        for j in range(jlo - 1, jhi + 1):
+            for i in range(ilo - 2, ihi + 3):
 
                 # interpolate to the edges
                 a_int[i, j] = (7.0 / 12.0) * (a[i - 1, j] + a[i, j]) - \
@@ -42,8 +42,8 @@ def states(a, qx, qy, ng, idir):
                 al[i, j] = a_int[i, j]
                 ar[i, j] = a_int[i, j]
 
-        for j in range(jlo - 1, jhi + 2):
-            for i in range(ilo - 2, ihi + 4):
+        for j in range(jlo - 1, jhi + 1):
+            for i in range(ilo - 2, ihi + 3):
                 # these live on cell-centers
                 dafm[i, j] = a[i, j] - a_int[i, j]
                 dafp[i, j] = a_int[i + 1, j] - a[i, j]
@@ -52,19 +52,19 @@ def states(a, qx, qy, ng, idir):
                 d2af[i, j] = 6.0 * (a_int[i, j] - 2.0 *
                                     a[i, j] + a_int[i + 1, j])
 
-        for j in range(jlo - 1, jhi + 2):
-            for i in range(ilo - 3, ihi + 4):
+        for j in range(jlo - 1, jhi + 1):
+            for i in range(ilo - 3, ihi + 3):
                 d2ac[i, j] = a[i - 1, j] - 2.0 * a[i, j] + a[i + 1, j]
 
-        for j in range(jlo - 1, jhi + 2):
-            for i in range(ilo - 2, ihi + 4):
+        for j in range(jlo - 1, jhi + 1):
+            for i in range(ilo - 2, ihi + 3):
                 # this lives on the interface
                 d3a[i, j] = d2ac[i, j] - d2ac[i - 1, j]
 
         # this is a look over cell centers, affecting
         # i-1/2,R and i+1/2,L
-        for j in range(jlo - 1, jhi + 2):
-            for i in range(ilo - 1, ihi + 2):
+        for j in range(jlo - 1, jhi + 1):
+            for i in range(ilo - 1, ihi + 1):
 
                 # limit? MC Eq. 24 and 25
                 if (dafm[i, j] * dafp[i, j] <= 0.0 or
@@ -121,8 +121,8 @@ def states(a, qx, qy, ng, idir):
 
     elif (idir == 2):
 
-        for j in range(jlo - 2, jhi + 4):
-            for i in range(ilo - 1, ihi + 2):
+        for j in range(jlo - 2, jhi + 3):
+            for i in range(ilo - 1, ihi + 1):
 
                 # interpolate to the edges
                 a_int[i, j] = (7.0 / 12.0) * (a[i, j - 1] + a[i, j]) - \
@@ -131,8 +131,8 @@ def states(a, qx, qy, ng, idir):
                 al[i, j] = a_int[i, j]
                 ar[i, j] = a_int[i, j]
 
-        for j in range(jlo - 2, jhi + 4):
-            for i in range(ilo - 1, ihi + 2):
+        for j in range(jlo - 2, jhi + 3):
+            for i in range(ilo - 1, ihi + 1):
                 # these live on cell-centers
                 dafm[i, j] = a[i, j] - a_int[i, j]
                 dafp[i, j] = a_int[i, j + 1] - a[i, j]
@@ -141,19 +141,19 @@ def states(a, qx, qy, ng, idir):
                 d2af[i, j] = 6.0 * (a_int[i, j] - 2.0 *
                                     a[i, j] + a_int[i, j + 1])
 
-        for j in range(jlo - 3, jhi + 4):
-            for i in range(ilo - 1, ihi + 2):
+        for j in range(jlo - 3, jhi + 3):
+            for i in range(ilo - 1, ihi + 1):
                 d2ac[i, j] = a[i, j - 1] - 2.0 * a[i, j] + a[i, j + 1]
 
-        for j in range(jlo - 2, jhi + 3):
-            for i in range(ilo - 1, ihi + 2):
+        for j in range(jlo - 2, jhi + 2):
+            for i in range(ilo - 1, ihi + 1):
                 # this lives on the interface
                 d3a[i, j] = d2ac[i, j] - d2ac[i, j - 1]
 
         # this is a look over cell centers, affecting
         # j-1/2,R and j+1/2,L
-        for j in range(jlo - 1, jhi + 2):
-            for i in range(ilo - 1, ihi + 2):
+        for j in range(jlo - 1, jhi + 1):
+            for i in range(ilo - 1, ihi + 1):
 
                 # limit? MC Eq. 24 and 25
                 if (dafm[i, j] * dafp[i, j] <= 0.0 or
@@ -232,8 +232,8 @@ def states_nolimit(a, qx, qy, ng, idir):
     # we need interface values on all faces of the domain
     if (idir == 1):
 
-        for j in range(jlo - 1, jhi + 2):
-            for i in range(ilo - 2, ihi + 4):
+        for j in range(jlo - 1, jhi + 1):
+            for i in range(ilo - 2, ihi + 3):
 
                 # interpolate to the edges
                 a_int[i, j] = (7.0 / 12.0) * (a[i - 1, j] + a[i, j]) - \
@@ -244,8 +244,8 @@ def states_nolimit(a, qx, qy, ng, idir):
 
     elif (idir == 2):
 
-        for j in range(jlo - 2, jhi + 4):
-            for i in range(ilo - 1, ihi + 2):
+        for j in range(jlo - 2, jhi + 3):
+            for i in range(ilo - 1, ihi + 1):
 
                 # interpolate to the edges
                 a_int[i, j] = (7.0 / 12.0) * (a[i, j - 1] + a[i, j]) - \

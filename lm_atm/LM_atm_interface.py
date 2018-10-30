@@ -235,8 +235,8 @@ def rho_states(qx, qy, ng, dx, dy, dt,
     dtdx = dt / dx
     dtdy = dt / dy
 
-    for j in range(jlo - 2, jhi + 3):
-        for i in range(ilo - 2, ihi + 3):
+    for j in range(jlo - 2, jhi + 2):
+        for i in range(ilo - 2, ihi + 2):
 
             # u on x-edges
             rho_xl[i + 1, j] = rho[i, j] + 0.5 * \
@@ -256,8 +256,8 @@ def rho_states(qx, qy, ng, dx, dy, dt,
 
     # now add the transverse term and the non-advective part of the normal
     # divergence
-    for j in range(jlo - 2, jhi + 3):
-        for i in range(ilo - 2, ihi + 3):
+    for j in range(jlo - 2, jhi + 2):
+        for i in range(ilo - 2, ihi + 2):
 
             u_x = (u_MAC[i + 1, j] - u_MAC[i, j]) / dx
             v_y = (v_MAC[i, j + 1] - v_MAC[i, j]) / dy
@@ -333,8 +333,8 @@ def get_interface_states(qx, qy, ng, dx, dy, dt,
     dtdx = dt / dx
     dtdy = dt / dy
 
-    for j in range(jlo - 2, jhi + 3):
-        for i in range(ilo - 2, ihi + 3):
+    for j in range(jlo - 2, jhi + 2):
+        for i in range(ilo - 2, ihi + 2):
 
             # u on x-edges
             u_xl[i + 1, j] = u[i, j] + 0.5 * \
@@ -385,8 +385,8 @@ def get_interface_states(qx, qy, ng, dx, dy, dt,
     # considered the normal to the interface portion of the predictor.
 
     # add the transverse flux differences to the preliminary interface states
-    for j in range(jlo - 1, jhi + 2):
-        for i in range(ilo - 1, ihi + 2):
+    for j in range(jlo - 1, jhi + 1):
+        for i in range(ilo - 1, ihi + 1):
 
             ubar = 0.5 * (uhat_adv[i, j] + uhat_adv[i + 1, j])
             vbar = 0.5 * (vhat_adv[i, j] + vhat_adv[i, j + 1])
@@ -440,8 +440,8 @@ def upwind(qx, qy, ng, q_l, q_r, s, q_int):
     jlo = ng
     jhi = ng + ny
 
-    for j in range(jlo - 1, jhi + 3):
-        for i in range(ilo - 1, ihi + 3):
+    for j in range(jlo - 1, jhi + 2):
+        for i in range(ilo - 1, ihi + 2):
 
             if (s[i, j] > 0.0):
                 q_int[i, j] = q_l[i, j]
@@ -467,8 +467,8 @@ def riemann(qx, qy, ng, q_l, q_r, s):
     jlo = ng
     jhi = ng + ny
 
-    for j in range(jlo - 1, jhi + 3):
-        for i in range(ilo - 1, ihi + 3):
+    for j in range(jlo - 1, jhi + 2):
+        for i in range(ilo - 1, ihi + 2):
 
             if (q_l[i, j] > 0.0 and q_l[i, j] + q_r[i, j] > 0.0):
                 s[i, j] = q_l[i, j]

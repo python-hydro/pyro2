@@ -87,8 +87,8 @@ def states(idir, qx, qy, ng, dx, dt,
     betar = np.zeros(nvar)
 
     # this is the loop over zones.  For zone i, we see q_l[i+1] and q_r[i]
-    for j in range(jlo - 2, jhi + 3):
-        for i in range(ilo - 2, ihi + 3):
+    for j in range(jlo - 2, jhi + 2):
+        for i in range(ilo - 2, ihi + 2):
 
             dq[:] = dqv[i, j, :]
             q[:] = qv[i, j, :]
@@ -166,7 +166,7 @@ def states(idir, qx, qy, ng, dx, dt,
 
             # compute the Vhat functions
             for m in range(nvar):
-                sum = np.dot(lvec[m, :], dq[:])
+                sum = np.dot(lvec[m, :], dq)
 
                 betal[m] = dtdx4 * (e_val[3] - e_val[m]) * \
                     (np.copysign(1.0, e_val[m]) + 1.0) * sum
@@ -175,8 +175,8 @@ def states(idir, qx, qy, ng, dx, dt,
 
             # construct the states
             for m in range(nvar):
-                sum_l = np.dot(betal[:], rvec[:, m])
-                sum_r = np.dot(betar[:], rvec[:, m])
+                sum_l = np.dot(betal, rvec[:, m])
+                sum_r = np.dot(betar, rvec[:, m])
 
                 if (idir == 1):
                     q_l[i + 1, j, m] = q_l[i + 1, j, m] + sum_l
@@ -237,8 +237,8 @@ def riemann_cgf(idir, qx, qy, ng,
     jlo = ng
     jhi = ng + ny
 
-    for j in range(jlo - 1, jhi + 2):
-        for i in range(ilo - 1, ihi + 2):
+    for j in range(jlo - 1, jhi + 1):
+        for i in range(ilo - 1, ihi + 1):
 
             # primitive variable states
             rho_l = U_l[i, j, idens]
@@ -522,8 +522,8 @@ def riemann_prim(idir, qx, qy, ng,
     jlo = ng
     jhi = ng + ny
 
-    for j in range(jlo - 1, jhi + 2):
-        for i in range(ilo - 1, ihi + 2):
+    for j in range(jlo - 1, jhi + 1):
+        for i in range(ilo - 1, ihi + 1):
 
             # primitive variable states
             rho_l = q_l[i, j, irho]
@@ -755,8 +755,8 @@ def riemann_hllc(idir, qx, qy, ng,
     jlo = ng
     jhi = ng + ny
 
-    for j in range(jlo - 1, jhi + 2):
-        for i in range(ilo - 1, ihi + 2):
+    for j in range(jlo - 1, jhi + 1):
+        for i in range(ilo - 1, ihi + 1):
 
             # primitive variable states
             rho_l = U_l[i, j, idens]
@@ -976,8 +976,7 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nvar, nspec, U_stat
     u = U_state[ixmom] / U_state[idens]
     v = U_state[iymom] / U_state[idens]
 
-    p = (U_state[iener] - 0.5 * U_state[idens] *
-         (u * u + v * v)) * (gamma - 1.0)
+    p = (U_state[iener] - 0.5 * U_state[idens] * (u * u + v * v)) * (gamma - 1.0)
 
     if (idir == 1):
         F[idens] = U_state[idens] * u
@@ -1041,8 +1040,8 @@ def artificial_viscosity(qx, qy, ng, dx, dy,
     jlo = ng
     jhi = ng + ny
 
-    for j in range(jlo - 1, jhi + 2):
-        for i in range(ilo - 1, ihi + 2):
+    for j in range(jlo - 1, jhi + 1):
+        for i in range(ilo - 1, ihi + 1):
 
                 # start by computing the divergence on the x-interface.  The
                 # x-difference is simply the difference of the cell-centered
