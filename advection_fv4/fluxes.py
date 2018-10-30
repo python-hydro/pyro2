@@ -1,4 +1,4 @@
-import advection_fv4.interface_states as interface_f
+import advection_fv4.interface as interface_f
 import mesh.array_indexer as ai
 
 

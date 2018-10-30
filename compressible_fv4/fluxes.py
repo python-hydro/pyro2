@@ -2,7 +2,7 @@
 
 import numpy as np
 
-import advection_fv4.interface_states as interface_f
+import advection_fv4.interface as interface_f
 import compressible as comp
 import compressible.interface as cf
 import mesh.reconstruction as reconstruction
