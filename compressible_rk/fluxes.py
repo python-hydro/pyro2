@@ -62,16 +62,16 @@ def fluxes(my_data, rp, ivars, solid, tc):
 
     gamma = rp.get_param("eos.gamma")
 
-    #=========================================================================
+    # =========================================================================
     # compute the primitive variables
-    #=========================================================================
+    # =========================================================================
     # Q = (rho, u, v, p)
 
     q = comp.cons_to_prim(my_data.data, gamma, ivars, myg)
 
-    #=========================================================================
+    # =========================================================================
     # compute the flattening coefficients
-    #=========================================================================
+    # =========================================================================
 
     # there is a single flattening coefficient (xi) for all directions
     use_flattening = rp.get_param("compressible.use_flattening")
@@ -94,8 +94,8 @@ def fluxes(my_data, rp, ivars, solid, tc):
     ldy = myg.scratch_array(nvar=ivars.nvar)
 
     for n in range(ivars.nvar):
-        ldx[:, :, n] = xi*reconstruction.limit(q[:, :, n], myg, 1, limiter)
-        ldy[:, :, n] = xi*reconstruction.limit(q[:, :, n], myg, 2, limiter)
+        ldx[:, :, n] = xi * reconstruction.limit(q[:, :, n], myg, 1, limiter)
+        ldy[:, :, n] = xi * reconstruction.limit(q[:, :, n], myg, 2, limiter)
 
     tm_limit.end()
 
@@ -106,11 +106,12 @@ def fluxes(my_data, rp, ivars, solid, tc):
     grav = rp.get_param("compressible.grav")
 
     if well_balanced:
-        ldy[:, :, ivars.ip] = reconstruction.well_balance(q, myg, limiter, ivars, grav)
+        ldy[:, :, ivars.ip] = reconstruction.well_balance(
+            q, myg, limiter, ivars, grav)
 
-    #=========================================================================
+    # =========================================================================
     # x-direction
-    #=========================================================================
+    # =========================================================================
 
     # left and right primitive variable states
     tm_states = tc.timer("interfaceStates")
@@ -120,8 +121,8 @@ def fluxes(my_data, rp, ivars, solid, tc):
     V_r = myg.scratch_array(ivars.nvar)
 
     for n in range(ivars.nvar):
-        V_l.ip(1, n=n, buf=2)[:, :] = q.v(n=n, buf=2) + 0.5*ldx.v(n=n, buf=2)
-        V_r.v(n=n, buf=2)[:, :] = q.v(n=n, buf=2) - 0.5*ldx.v(n=n, buf=2)
+        V_l.ip(1, n=n, buf=2)[:, :] = q.v(n=n, buf=2) + 0.5 * ldx.v(n=n, buf=2)
+        V_r.v(n=n, buf=2)[:, :] = q.v(n=n, buf=2) - 0.5 * ldx.v(n=n, buf=2)
 
     tm_states.end()
 
@@ -129,9 +130,9 @@ def fluxes(my_data, rp, ivars, solid, tc):
     U_xl = comp.prim_to_cons(V_l, gamma, ivars, myg)
     U_xr = comp.prim_to_cons(V_r, gamma, ivars, myg)
 
-    #=========================================================================
+    # =========================================================================
     # y-direction
-    #=========================================================================
+    # =========================================================================
 
     # left and right primitive variable states
     tm_states.begin()
@@ -142,12 +143,15 @@ def fluxes(my_data, rp, ivars, solid, tc):
             # limited slope for p1 (it's average is 0).  So now we
             # need p0 on the interface too
             V_l.jp(1, n=n, buf=2)[:, :] = q.v(n=ivars.ip, buf=2) + \
-                0.5*myg.dy*q.v(n=ivars.irho, buf=2)*grav + 0.5*ldy.v(n=ivars.ip, buf=2)
+                0.5 * myg.dy * q.v(n=ivars.irho, buf=2) * \
+                grav + 0.5 * ldy.v(n=ivars.ip, buf=2)
             V_r.v(n=n, buf=2)[:, :] = q.v(n=ivars.ip, buf=2) - \
-                0.5*myg.dy*q.v(n=ivars.irho, buf=2)*grav - 0.5*ldy.v(n=ivars.ip, buf=2)
+                0.5 * myg.dy * q.v(n=ivars.irho, buf=2) * \
+                grav - 0.5 * ldy.v(n=ivars.ip, buf=2)
         else:
-            V_l.jp(1, n=n, buf=2)[:, :] = q.v(n=n, buf=2) + 0.5*ldy.v(n=n, buf=2)
-            V_r.v(n=n, buf=2)[:, :] = q.v(n=n, buf=2) - 0.5*ldy.v(n=n, buf=2)
+            V_l.jp(1, n=n, buf=2)[:, :] = q.v(
+                n=n, buf=2) + 0.5 * ldy.v(n=n, buf=2)
+            V_r.v(n=n, buf=2)[:, :] = q.v(n=n, buf=2) - 0.5 * ldy.v(n=n, buf=2)
 
     tm_states.end()
 
@@ -155,9 +159,9 @@ def fluxes(my_data, rp, ivars, solid, tc):
     U_yl = comp.prim_to_cons(V_l, gamma, ivars, myg)
     U_yr = comp.prim_to_cons(V_r, gamma, ivars, myg)
 
-    #=========================================================================
+    # =========================================================================
     # construct the fluxes normal to the interfaces
-    #=========================================================================
+    # =========================================================================
     tm_riem = tc.timer("Riemann")
     tm_riem.begin()
 
@@ -185,9 +189,9 @@ def fluxes(my_data, rp, ivars, solid, tc):
 
     tm_riem.end()
 
-    #=========================================================================
+    # =========================================================================
     # apply artificial viscosity
-    #=========================================================================
+    # =========================================================================
     cvisc = rp.get_param("compressible.cvisc")
 
     _ax, _ay = interface_f.artificial_viscosity(
@@ -204,11 +208,11 @@ def fluxes(my_data, rp, ivars, solid, tc):
         var = my_data.get_var_by_index(n)
 
         F_x.v(buf=b, n=n)[:, :] += \
-            avisco_x.v(buf=b)*(var.ip(-1, buf=b) - var.v(buf=b))
+            avisco_x.v(buf=b) * (var.ip(-1, buf=b) - var.v(buf=b))
 
         # F_y = F_y + avisco_y * (U(i,j-1) - U(i,j))
         F_y.v(buf=b, n=n)[:, :] += \
-            avisco_y.v(buf=b)*(var.jp(-1, buf=b) - var.v(buf=b))
+            avisco_y.v(buf=b) * (var.jp(-1, buf=b) - var.v(buf=b))
 
     tm_flux.end()
 

@@ -115,7 +115,7 @@ class Simulation(NullSimulation):
 
         # solve the MG problem for the updated phi
         mg.solve(rtol=1.e-10)
-        #mg.smooth(mg.nlevels-1,100)
+        # mg.smooth(mg.nlevels-1,100)
 
         # update the solution
         phi.v()[:, :] = mg.get_solution().v()

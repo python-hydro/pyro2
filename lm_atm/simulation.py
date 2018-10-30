@@ -305,9 +305,9 @@ class Simulation(NullSimulation):
 
         myg = self.cc_data.grid
 
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # create the limited slopes of rho, u and v (in both directions)
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         limiter = self.rp.get_param("lm-atmosphere.limiter")
 
         ldelta_rx = reconstruction.limit(rho, myg, 1, limiter)
@@ -318,9 +318,9 @@ class Simulation(NullSimulation):
         ldelta_uy = reconstruction.limit(u, myg, 2, limiter)
         ldelta_vy = reconstruction.limit(v, myg, 2, limiter)
 
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # get the advective velocities
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         """
         the advective velocities are the normal velocity through each cell
@@ -373,10 +373,10 @@ class Simulation(NullSimulation):
         u_MAC = ai.ArrayIndexer(d=_um, grid=myg)
         v_MAC = ai.ArrayIndexer(d=_vm, grid=myg)
 
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # do a MAC projection to make the advective velocities divergence
         # free
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         # we will solve D (beta_0^2/rho) G phi = D (beta_0 U^MAC), where
         # phi is cell centered, and U^MAC is the MAC-type staggered
@@ -444,9 +444,9 @@ class Simulation(NullSimulation):
         v_MAC.v(buf=b)[:, :] -= \
                 coeff_y.v(buf=b)*(phi_MAC.v(buf=b) - phi_MAC.jp(-1, buf=b))/myg.dy
 
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # predict rho to the edges and do its conservative update
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         _rx, _ry = lm_interface_f.rho_states(myg.qx, myg.qy, myg.ng,
                                              myg.dx, myg.dy, self.dt,
                                              rho, u_MAC, v_MAC,
@@ -470,10 +470,10 @@ class Simulation(NullSimulation):
         gamma = self.rp.get_param("eos.gamma")
         eint.v()[:, :] = self.base["p0"].v2d()/(gamma - 1.0)/rho.v()
 
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # recompute the interface states, using the advective velocity
         # from above
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         if self.verbose > 0:
             print("  making u, v edge states")
 
@@ -497,9 +497,9 @@ class Simulation(NullSimulation):
         u_yint = ai.ArrayIndexer(d=_uy, grid=myg)
         v_yint = ai.ArrayIndexer(d=_vy, grid=myg)
 
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # update U to get the provisional velocity field
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         if self.verbose > 0:
             print("  doing provisional update of u, v")
 
@@ -543,9 +543,9 @@ class Simulation(NullSimulation):
             print("min/max u   = {}, {}".format(self.cc_data.min("x-velocity"), self.cc_data.max("x-velocity")))
             print("min/max v   = {}, {}".format(self.cc_data.min("y-velocity"), self.cc_data.max("y-velocity")))
 
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # project the final velocity
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         # now we solve L phi = D (U* /dt)
         if self.verbose > 0:

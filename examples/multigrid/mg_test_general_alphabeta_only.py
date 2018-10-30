@@ -67,7 +67,7 @@ def gamma_y(x, y):
 # the righthand side
 def f(x, y):
     return (-16.0*np.pi**2*np.cos(2*np.pi*x)*np.cos(2*np.pi*y) -
-             16.0*np.pi**2 + 1.0)*np.sin(2*np.pi*x)*np.sin(2*np.pi*y)
+            16.0*np.pi**2 + 1.0)*np.sin(2*np.pi*x)*np.sin(2*np.pi*y)
 
 
 def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
