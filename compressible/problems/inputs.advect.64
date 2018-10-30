@@ -1,5 +1,5 @@
 [driver]
-max_steps = 500
+max_steps = 5
 tmax = 1.0
 
 init_tstep_factor = 1.0

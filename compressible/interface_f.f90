@@ -1,8 +1,8 @@
 subroutine states(idir, qx, qy, ng, dx, dt, &
-                  irho, iu, iv, ip, ix, nvar, nspec, &
-                  gamma, &
-                  qv, dqv, &
-                  q_l, q_r)
+     irho, iu, iv, ip, ix, nvar, nspec, &
+     gamma, &
+     qv, dqv, &
+     q_l, q_r)
 
   implicit none
 
@@ -19,10 +19,10 @@ subroutine states(idir, qx, qy, ng, dx, dt, &
   double precision, intent(  out) :: q_l(0:qx-1, 0:qy-1, 0:nvar-1)
   double precision, intent(  out) :: q_r(0:qx-1, 0:qy-1, 0:nvar-1)
 
-!f2py depend(qx, qy, nvar) :: qv, dqv
-!f2py depend(qx, qy, nvar) :: q_l, q_r
-!f2py intent(in) :: qv, dqv
-!f2py intent(out) :: q_l, q_r
+  !f2py depend(qx, qy, nvar) :: qv, dqv
+  !f2py depend(qx, qy, nvar) :: q_l, q_r
+  !f2py intent(in) :: qv, dqv
+  !f2py intent(out) :: q_l, q_r
 
   ! predict the cell-centered state to the edges in one-dimension
   ! using the reconstructed, limited slopes.
@@ -295,6 +295,8 @@ subroutine riemann_cgf(idir, qx, qy, ng, &
            un_l    = U_l(i,j,iymom)/rho_l
            ut_l    = U_l(i,j,ixmom)/rho_l
         endif
+
+        rhoe_l = U_l(i,j,iener) - 0.5*rho_r*(un_l**2 + ut_l**2)
 
         p_l   = rhoe_l*(gamma - 1.0d0)
         p_l = max(p_l, smallp)
@@ -615,7 +617,7 @@ subroutine riemann_prim(idir, qx, qy, ng, &
 
         ! primitive variable states
         rho_l  = q_l(i,j,irho)
-        
+
         ! un = normal velocity; ut = transverse velocity
         if (idir == 1) then
            un_l    = q_l(i,j,iu)
