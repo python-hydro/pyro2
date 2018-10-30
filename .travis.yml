@@ -22,7 +22,7 @@ before_script:
   - ./mk.sh
 
 script:
-  - flake8 .  --ignore=W504
+  - flake8 --ignore=W504 .
   - pytest -v --cov=. --cov-config .coveragerc --nbval --ignore=docs --ignore=./multigrid/variable_coeff_elliptic.ipynb --ignore=examples/mesh --ignore=examples/multigrid
 #   - travis-sphinx build
 
