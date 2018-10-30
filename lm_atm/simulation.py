@@ -5,7 +5,7 @@ import importlib
 import numpy as np
 import matplotlib.pyplot as plt
 
-import lm_atm.LM_atm_interface_f as lm_interface_f
+import lm_atm.LM_atm_interface as lm_interface_f
 import mesh.reconstruction as reconstruction
 import mesh.boundary as bnd
 import mesh.patch as patch

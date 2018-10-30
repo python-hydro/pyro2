@@ -1,6 +1,7 @@
 import numpy as np
 from numba import njit
 
+
 @njit(cache=True)
 def mac_vels(qx, qy, ng, dx, dy, dt,
              u, v,
@@ -225,11 +226,12 @@ def upwind(qx, qy, ng, q_l, q_r, s, q_int):
 # xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @njit(cache=True)
 def riemann(qx, qy, ng, q_l, q_r, s):
+    """
+    Solve the Burger's Riemann problem given the input left and right
+    states and return the state on the interface.
 
-    # Solve the Burger's Riemann problem given the input left and right
-    # states and return the state on the interface.
-    #
-    # This uses the expressions from Almgren, Bell, and Szymczak 1996.
+    This uses the expressions from Almgren, Bell, and Szymczak 1996.
+    """
 
     nx = qx - 2 * ng
     ny = qy - 2 * ng
@@ -252,13 +254,14 @@ def riemann(qx, qy, ng, q_l, q_r, s):
 # xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @njit(cache=True)
 def riemann_and_upwind(qx, qy, ng, q_l, q_r, q_int):
+    """
+    First solve the Riemann problem given q_l and q_r to give the
+    velocity on the interface and: use this velocity to upwind to
+    determine the state (q_l, q_r, or a mix) on the interface).
 
-    # First solve the Riemann problem given q_l and q_r to give the
-    # velocity on the interface and: use this velocity to upwind to
-    # determine the state (q_l, q_r, or a mix) on the interface).
-    #
-    # This differs from upwind, above, in that we don't take in a
-    # velocity to upwind with).
+    This differs from upwind, above, in that we don't take in a
+    velocity to upwind with).
+    """
 
     s = np.zeros((qx, qy))
 
