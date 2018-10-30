@@ -626,7 +626,7 @@ class Simulation(NullSimulation):
         """
         plt.clf()
 
-        #plt.rc("font", size=10)
+        # plt.rc("font", size=10)
 
         rho = self.cc_data.get_var("density")
         rho0 = self.base["rho0"]
