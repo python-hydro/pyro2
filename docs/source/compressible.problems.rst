@@ -9,8 +9,8 @@ compressible\.problems package
 Submodules
 ----------
 
-compressible\.problems.acoustic\_pulse module
----------------------------------------------
+compressible\.problems\.acoustic\_pulse module
+----------------------------------------------
 
 .. automodule:: compressible.problems.acoustic_pulse
     :members:
