@@ -264,7 +264,8 @@ def riemann_cgf(idir, qx, qy, ng,
     nspec : int
         The number of species
     idens, ixmom, iymom, iener, irhoX : int
-        The indices of the density, x-momentum, y-momentum, internal energy density and species partial densities in the conserved state vector.
+        The indices of the density, x-momentum, y-momentum, internal energy density
+        and species partial densities in the conserved state vector.
     lower_solid, upper_solid : int
         Are we at lower or upper solid boundaries?
     gamma : float
@@ -835,7 +836,8 @@ def riemann_hllc(idir, qx, qy, ng,
     nspec : int
         The number of species
     idens, ixmom, iymom, iener, irhoX : int
-        The indices of the density, x-momentum, y-momentum, internal energy density and species partial densities in the conserved state vector.
+        The indices of the density, x-momentum, y-momentum, internal energy density
+        and species partial densities in the conserved state vector.
     lower_solid, upper_solid : int
         Are we at lower or upper solid boundaries?
     gamma : float
@@ -1078,7 +1080,7 @@ def riemann_hllc(idir, qx, qy, ng,
 
 @njit(cache=True)
 def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nvar, nspec, U_state):
-    """
+    r"""
     Calculate the conservative flux.
 
     Parameters
@@ -1088,7 +1090,8 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nvar, nspec, U_stat
     gamma : float
         Adiabatic index
     idens, ixmom, iymom, iener, irhoX : int
-        The indices of the density, x-momentum, y-momentum, internal energy density and species partial densities in the conserved state vector.
+        The indices of the density, x-momentum, y-momentum, internal energy density
+        and species partial densities in the conserved state vector.
     nvar : int
         The number of variables in the state vector
     nspec : int
@@ -1107,8 +1110,7 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nvar, nspec, U_stat
     u = U_state[ixmom] / U_state[idens]
     v = U_state[iymom] / U_state[idens]
 
-    p = (U_state[iener] - 0.5 * U_state[idens]
-         * (u * u + v * v)) * (gamma - 1.0)
+    p = (U_state[iener] - 0.5 * U_state[idens]* (u * u + v * v)) * (gamma - 1.0)
 
     if (idir == 1):
         F[idens] = U_state[idens] * u
