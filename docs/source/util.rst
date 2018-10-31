@@ -9,40 +9,40 @@ util package
 Submodules
 ----------
 
-util.io module
---------------
+util\.io module
+---------------
 
 .. automodule:: util.io
     :members:
     :undoc-members:
     :show-inheritance:
 
-util.msg module
----------------
+util\.msg module
+----------------
 
 .. automodule:: util.msg
     :members:
     :undoc-members:
     :show-inheritance:
 
-util.plot\_tools module
------------------------
+util\.plot\_tools module
+------------------------
 
 .. automodule:: util.plot_tools
     :members:
     :undoc-members:
     :show-inheritance:
 
-util.profile module
--------------------
+util\.profile module
+--------------------
 
 .. automodule:: util.profile
     :members:
     :undoc-members:
     :show-inheritance:
 
-util.runparams module
----------------------
+util\.runparams module
+----------------------
 
 .. automodule:: util.runparams
     :members:
