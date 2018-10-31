@@ -11,7 +11,7 @@ Subpackages
 
 .. toctree::
 
-    advection_rk\.problems
+    advection_rk.problems
 
 Submodules
 ----------
