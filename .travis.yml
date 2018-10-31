@@ -31,7 +31,7 @@ before_script:
   - ./mk.sh $MK_ARGS
 
 script:
-  - flake8 --ignore=W504,F403,E226,E126,E127,E128,E129,E241,E741 .
+  - flake8 .
   - pytest -v --cov=. --cov-config .coveragerc --nbval --ignore=docs --ignore=./multigrid/variable_coeff_elliptic.ipynb --ignore=examples/mesh --ignore=examples/multigrid --ignore=$NB_IGNORE
 #   - travis-sphinx build
 
