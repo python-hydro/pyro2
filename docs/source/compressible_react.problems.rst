@@ -1,5 +1,5 @@
-compressible\_react.problems package
-====================================
+compressible\_react\.problems package
+=====================================
 
 .. automodule:: compressible_react.problems
     :members:
