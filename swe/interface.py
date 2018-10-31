@@ -91,13 +91,12 @@ def states(idir, qx, qy, ng, dx, dt,
 
     q_l = np.zeros((qx, qy, nvar))
     q_r = np.zeros((qx, qy, nvar))
-    dq = np.zeros(nvar)
-    q = np.zeros(nvar)
     lvec = np.zeros((nvar, nvar))
     rvec = np.zeros((nvar, nvar))
     e_val = np.zeros(nvar)
     betal = np.zeros(nvar)
     betar = np.zeros(nvar)
+
     nx = qx - 2 * ng
     ny = qy - 2 * ng
     ilo = ng
@@ -111,11 +110,11 @@ def states(idir, qx, qy, ng, dx, dt,
     dtdx3 = 0.33333 * dtdx
 
     # this is the loop over zones.  For zone i, we see q_l[i+1] and q_r[i]
-    for j in range(jlo - 2, jhi + 3):
-        for i in range(ilo - 2, ihi + 3):
+    for j in range(jlo - 2, jhi + 2):
+        for i in range(ilo - 2, ihi + 2):
 
-            dq[:] = dqv[i, j, :]
-            q[:] = qv[i, j, :]
+            dq = dqv[i, j, :]
+            q = qv[i, j, :]
 
             cs = np.sqrt(g * q[ih])
 
@@ -127,13 +126,13 @@ def states(idir, qx, qy, ng, dx, dt,
             if (idir == 1):
                 e_val[:ns] = [q[iu] - cs, q[iu], q[iu] + cs]
 
-                lvec[0, 0:ns] = [cs, -q[ih], 0.0]
-                lvec[1, 0:ns] = [0.0, 0.0, 1.0]
-                lvec[2, 0:ns] = [cs, q[ih], 0.0]
+                lvec[0, :ns] = [cs, -q[ih], 0.0]
+                lvec[1, :ns] = [0.0, 0.0, 1.0]
+                lvec[2, :ns] = [cs, q[ih], 0.0]
 
-                rvec[0, 0:ns] = [q[ih], -cs, 0.0]
-                rvec[1, 0:ns] = [0.0, 0.0, 1.0]
-                rvec[2, 0:ns] = [q[ih], cs, 0.0]
+                rvec[0, :ns] = [q[ih], -cs, 0.0]
+                rvec[1, :ns] = [0.0, 0.0, 1.0]
+                rvec[2, :ns] = [q[ih], cs, 0.0]
 
                 # now the species -- they only have a 1 in their corresponding slot
                 e_val[ns:] = q[iu]
@@ -145,7 +144,7 @@ def states(idir, qx, qy, ng, dx, dt,
                 lvec[0, :] = lvec[0, :] * 0.50 / (cs * q[ih])
                 lvec[2, :] = -lvec[2, :] * 0.50 / (cs * q[ih])
             else:
-                e_val[0:ns] = [q[iv] - cs, q[iv], q[iv] + cs]
+                e_val[:ns] = [q[iv] - cs, q[iv], q[iv] + cs]
 
                 lvec[0, :ns] = [cs, 0.0, -q[ih]]
                 lvec[1, :ns] = [0.0, 1.0, 0.0]
@@ -170,24 +169,24 @@ def states(idir, qx, qy, ng, dx, dt,
                 # this is one the right face of the current zone,
                 # so the fastest moving eigenvalue is e_val[2] = u + c
                 factor = 0.5 * (1.0 - dtdx * max(e_val[2], 0.0))
-                q_l[i + 1, j, :] = q[:] + factor * dq[:]
+                q_l[i + 1, j, :] = q + factor * dq
 
                 # left face of the current zone, so the fastest moving
                 # eigenvalue is e_val[3] = u - c
                 factor = 0.5 * (1.0 + dtdx * min(e_val[0], 0.0))
-                q_r[i,  j, :] = q[:] - factor * dq[:]
+                q_r[i,  j, :] = q - factor * dq
 
             else:
 
                 factor = 0.5 * (1.0 - dtdx * max(e_val[2], 0.0))
-                q_l[i, j + 1, :] = q[:] + factor * dq[:]
+                q_l[i, j + 1, :] = q + factor * dq
 
                 factor = 0.5 * (1.0 + dtdx * min(e_val[0], 0.0))
-                q_r[i, j, :] = q[:] - factor * dq[:]
+                q_r[i, j, :] = q - factor * dq
 
             # compute the Vhat functions
             for m in range(nvar):
-                sum = np.dot(lvec[m, :], dq[:])
+                sum = np.dot(lvec[m, :], dq)
 
                 betal[m] = dtdx3 * (e_val[2] - e_val[m]) * \
                                    (np.copysign(1.0, e_val[m]) + 1.0) * sum
@@ -196,8 +195,8 @@ def states(idir, qx, qy, ng, dx, dt,
 
             # construct the states
             for m in range(nvar):
-                sum_l = np.dot(betal[:], rvec[:, m])
-                sum_r = np.dot(betar[:], rvec[:, m])
+                sum_l = np.dot(betal, rvec[:, m])
+                sum_r = np.dot(betar, rvec[:, m])
 
                 if (idir == 1):
                     q_l[i + 1, j, m] = q_l[i + 1, j, m] + sum_l
@@ -252,12 +251,9 @@ def riemann_roe(idir, qx, qy, ng,
     # not passing dx/dt or cfl to this function. If this isn't the case, will need
     # to pass one of these to the function or else: things will go wrong.
 
-    U_roe = np.zeros(nvar)
     lambda_roe = np.zeros(nvar)
     K_roe = np.zeros((nvar, nvar))
     alpha_roe = np.zeros(nvar)
-    delta = np.zeros(nvar)
-    F_r = np.zeros(nvar)
 
     nx = qx - 2 * ng
     ny = qy - 2 * ng
@@ -267,8 +263,8 @@ def riemann_roe(idir, qx, qy, ng,
     jhi = ng + ny
     ns = nvar - nspec
 
-    for j in range(jlo - 1, jhi + 2):
-        for i in range(ilo - 1, ihi + 2):
+    for j in range(jlo - 1, jhi + 1):
+        for i in range(ilo - 1, ihi + 1):
 
             # primitive variable states
             h_l = U_l[i, j, ih]
@@ -297,7 +293,7 @@ def riemann_roe(idir, qx, qy, ng,
             U_roe[ih] = np.sqrt(h_l * h_r)
             c_roe = np.sqrt(0.5 * (c_l**2 + c_r**2))
 
-            delta[:] = U_r[i, j, :] / h_r - U_l[i, j, :] / h_l
+            delta = U_r[i, j, :] / h_r - U_l[i, j, :] / h_l
             delta[ih] = h_r - h_l
 
             # e_values and right evectors
@@ -410,8 +406,8 @@ def riemann_hllc(idir, qx, qy, ng,
     jlo = ng
     jhi = ng + ny
 
-    for j in range(jlo - 1, jhi + 2):
-        for i in range(ilo - 1, ihi + 2):
+    for j in range(jlo - 1, jhi + 1):
+        for i in range(ilo - 1, ihi + 1):
 
             # primitive variable states
             h_l = U_l[i, j, ih]
@@ -499,7 +495,7 @@ def riemann_hllc(idir, qx, qy, ng,
                                       U_r[i, j, :])
 
                 # correct the flux
-                F[i, j, :] = F[i, j, :] + S_r * (U_state[:] - U_r[i, j, :])
+                F[i, j, :] = F[i, j, :] + S_r * (U_state - U_r[i, j, :])
 
             elif (S_c > 0.0 and S_l < 0.0):
                 # L* region
@@ -524,7 +520,7 @@ def riemann_hllc(idir, qx, qy, ng,
                                       U_l[i, j, :])
 
                 # correct the flux
-                F[i, j, :] = F[i, j, :] + S_l * (U_state[:] - U_l[i, j, :])
+                F[i, j, :] = F[i, j, :] + S_l * (U_state - U_l[i, j, :])
 
             else:
                 # L region

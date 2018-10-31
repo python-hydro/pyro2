@@ -108,8 +108,6 @@ def states(idir, qx, qy, ng, dx, dt,
     dtdx = dt / dx
     dtdx4 = 0.25 * dtdx
 
-    dq = np.zeros(nvar)
-    q = np.zeros(nvar)
     lvec = np.zeros((nvar, nvar))
     rvec = np.zeros((nvar, nvar))
     e_val = np.zeros(nvar)
@@ -120,8 +118,8 @@ def states(idir, qx, qy, ng, dx, dt,
     for j in range(jlo - 2, jhi + 2):
         for i in range(ilo - 2, ihi + 2):
 
-            dq[:] = dqv[i, j, :]
-            q[:] = qv[i, j, :]
+            dq = dqv[i, j, :]
+            q = qv[i, j, :]
 
             cs = np.sqrt(gamma * q[ip] / q[irho])
 
@@ -133,18 +131,18 @@ def states(idir, qx, qy, ng, dx, dt,
             if (idir == 1):
                 e_val[:] = np.array([q[iu] - cs, q[iu], q[iu], q[iu] + cs])
 
-                lvec[0, 0:ns] = [0.0, -0.5 *
+                lvec[0, :ns] = [0.0, -0.5 *
                                  q[irho] / cs, 0.0, 0.5 / (cs * cs)]
-                lvec[1, 0:ns] = [1.0, 0.0,
+                lvec[1, :ns] = [1.0, 0.0,
                                  0.0, -1.0 / (cs * cs)]
-                lvec[2, 0:ns] = [0.0, 0.0,             1.0, 0.0]
-                lvec[3, 0:ns] = [0.0, 0.5 *
+                lvec[2, :ns] = [0.0, 0.0,             1.0, 0.0]
+                lvec[3, :ns] = [0.0, 0.5 *
                                  q[irho] / cs,  0.0, 0.5 / (cs * cs)]
 
-                rvec[0, 0:ns] = [1.0, -cs / q[irho], 0.0, cs * cs]
-                rvec[1, 0:ns] = [1.0, 0.0,       0.0, 0.0]
-                rvec[2, 0:ns] = [0.0, 0.0,       1.0, 0.0]
-                rvec[3, 0:ns] = [1.0, cs / q[irho],  0.0, cs * cs]
+                rvec[0, :ns] = [1.0, -cs / q[irho], 0.0, cs * cs]
+                rvec[1, :ns] = [1.0, 0.0,       0.0, 0.0]
+                rvec[2, :ns] = [0.0, 0.0,       1.0, 0.0]
+                rvec[3, :ns] = [1.0, cs / q[irho],  0.0, cs * cs]
 
                 # now the species -- they only have a 1 in their corresponding slot
                 e_val[ns:] = q[iu]
@@ -153,20 +151,20 @@ def states(idir, qx, qy, ng, dx, dt,
                     rvec[n, n] = 1.0
 
             else:
-                e_val = np.array([q[iv] - cs, q[iv], q[iv], q[iv] + cs])
+                e_val[:] = np.array([q[iv] - cs, q[iv], q[iv], q[iv] + cs])
 
-                lvec[0, 0:ns] = [0.0, 0.0, -0.5 *
+                lvec[0, :ns] = [0.0, 0.0, -0.5 *
                                  q[irho] / cs, 0.5 / (cs * cs)]
-                lvec[1, 0:ns] = [1.0, 0.0,
+                lvec[1, :ns] = [1.0, 0.0,
                                  0.0,             -1.0 / (cs * cs)]
-                lvec[2, 0:ns] = [0.0, 1.0, 0.0,             0.0]
-                lvec[3, 0:ns] = [0.0, 0.0, 0.5 *
+                lvec[2, :ns] = [0.0, 1.0, 0.0,             0.0]
+                lvec[3, :ns] = [0.0, 0.0, 0.5 *
                                  q[irho] / cs,  0.5 / (cs * cs)]
 
-                rvec[0, 0:ns] = [1.0, 0.0, -cs / q[irho], cs * cs]
-                rvec[1, 0:ns] = [1.0, 0.0, 0.0,       0.0]
-                rvec[2, 0:ns] = [0.0, 1.0, 0.0,       0.0]
-                rvec[3, 0:ns] = [1.0, 0.0, cs / q[irho],  cs * cs]
+                rvec[0, :ns] = [1.0, 0.0, -cs / q[irho], cs * cs]
+                rvec[1, :ns] = [1.0, 0.0, 0.0,       0.0]
+                rvec[2, :ns] = [0.0, 1.0, 0.0,       0.0]
+                rvec[3, :ns] = [1.0, 0.0, cs / q[irho],  cs * cs]
 
                 # now the species -- they only have a 1 in their corresponding slot
                 e_val[ns:] = q[iv]
@@ -179,20 +177,20 @@ def states(idir, qx, qy, ng, dx, dt,
                 # this is one the right face of the current zone,
                 # so the fastest moving eigenvalue is e_val[3] = u + c
                 factor = 0.5 * (1.0 - dtdx * max(e_val[3], 0.0))
-                q_l[i + 1, j, :] = q[:] + factor * dq[:]
+                q_l[i + 1, j, :] = q + factor * dq
 
                 # left face of the current zone, so the fastest moving
                 # eigenvalue is e_val[3] = u - c
                 factor = 0.5 * (1.0 + dtdx * min(e_val[0], 0.0))
-                q_r[i,  j, :] = q[:] - factor * dq[:]
+                q_r[i,  j, :] = q - factor * dq
 
             else:
 
                 factor = 0.5 * (1.0 - dtdx * max(e_val[3], 0.0))
-                q_l[i, j + 1, :] = q[:] + factor * dq[:]
+                q_l[i, j + 1, :] = q + factor * dq
 
                 factor = 0.5 * (1.0 + dtdx * min(e_val[0], 0.0))
-                q_r[i, j, :] = q[:] - factor * dq[:]
+                q_r[i, j, :] = q - factor * dq
 
             # compute the Vhat functions
             for m in range(nvar):
@@ -284,8 +282,6 @@ def riemann_cgf(idir, qx, qy, ng,
     smallc = 1.e-10
     smallrho = 1.e-10
     smallp = 1.e-10
-
-    xn = np.zeros(nspec)
 
     nx = qx - 2 * ng
     ny = qy - 2 * ng
@@ -483,12 +479,12 @@ def riemann_cgf(idir, qx, qy, ng,
             # species now
             if (nspec > 0):
                 if (ustar > 0.0):
-                    xn[:] = U_l[i, j, irhoX:irhoX + nspec] / U_l[i, j, idens]
+                    xn = U_l[i, j, irhoX:irhoX + nspec] / U_l[i, j, idens]
 
                 elif (ustar < 0.0):
-                    xn[:] = U_r[i, j, irhoX:irhoX + nspec] / U_r[i, j, idens]
+                    xn = U_r[i, j, irhoX:irhoX + nspec] / U_r[i, j, idens]
                 else:
-                    xn[:] = 0.5 * (U_l[i, j, irhoX:irhoX + nspec] / U_l[i, j, idens] +
+                    xn = 0.5 * (U_l[i, j, irhoX:irhoX + nspec] / U_l[i, j, idens] +
                                    U_r[i, j, irhoX:irhoX + nspec] / U_r[i, j, idens])
 
             # are we on a solid boundary?
@@ -521,7 +517,7 @@ def riemann_cgf(idir, qx, qy, ng,
                 p_state * un_state
 
             if (nspec > 0):
-                F[i, j, irhoX:irhoX + nspec] = xn[:] * rho_state * un_state
+                F[i, j, irhoX:irhoX + nspec] = xn * rho_state * un_state
 
     return F
 
@@ -595,8 +591,6 @@ def riemann_prim(idir, qx, qy, ng,
     smallc = 1.e-10
     smallrho = 1.e-10
     smallp = 1.e-10
-
-    xn = np.zeros(nspec)
 
     nx = qx - 2 * ng
     ny = qy - 2 * ng
@@ -774,12 +768,12 @@ def riemann_prim(idir, qx, qy, ng,
             # species now
             if (nspec > 0):
                 if (ustar > 0.0):
-                    xn[:] = q_l[i, j, iX:iX + nspec]
+                    xn = q_l[i, j, iX:iX + nspec]
 
                 elif (ustar < 0.0):
-                    xn[:] = q_r[i, j, iX:iX + nspec]
+                    xn = q_r[i, j, iX:iX + nspec]
                 else:
-                    xn[:] = 0.5 * (q_l[i, j, iX:iX + nspec] +
+                    xn = 0.5 * (q_l[i, j, iX:iX + nspec] +
                                    q_r[i, j, iX:iX + nspec])
 
             # are we on a solid boundary?
@@ -808,7 +802,7 @@ def riemann_prim(idir, qx, qy, ng,
             q_int[i, j, ip] = p_state
 
             if (nspec > 0):
-                q_int[i, j, iX:iX + nspec] = xn[:]
+                q_int[i, j, iX:iX + nspec] = xn
 
     return q_int
 

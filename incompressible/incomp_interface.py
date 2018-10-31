@@ -36,9 +36,6 @@ def mac_vels(qx, qy, ng, dx, dy, dt,
         MAC velocities in the x and y directions
     """
 
-    u_MAC = np.zeros((qx, qy))
-    v_MAC = np.zeros((qx, qy))
-
     # get the full u and v left and right states (including transverse
     # terms) on both the x- and y-interfaces
     u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = get_interface_states(qx, qy, ng, dx, dy, dt,
@@ -50,8 +47,8 @@ def mac_vels(qx, qy, ng, dx, dy, dt,
     # Riemann problem -- this follows Burger's equation.  We don't use
     # any input velocity for the upwinding.  Also, we only care about
     # the normal states here (u on x and v on y)
-    riemann_and_upwind(qx, qy, ng, u_xl, u_xr, u_MAC)
-    riemann_and_upwind(qx, qy, ng, v_yl, v_yr, v_MAC)
+    u_MAC = riemann_and_upwind(qx, qy, ng, u_xl, u_xr)
+    v_MAC = riemann_and_upwind(qx, qy, ng, v_yl, v_yr)
 
     return u_MAC, v_MAC
 
@@ -96,11 +93,6 @@ def states(qx, qy, ng, dx, dy, dt,
         x and y velocities predicted to the interfaces
     """
 
-    u_xint = np.zeros((qx, qy))
-    u_yint = np.zeros((qx, qy))
-    v_xint = np.zeros((qx, qy))
-    v_yint = np.zeros((qx, qy))
-
     # get the full u and v left and right states (including transverse
     # terms) on both the x- and y-interfaces
     u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = get_interface_states(qx, qy, ng, dx, dy, dt,
@@ -111,10 +103,10 @@ def states(qx, qy, ng, dx, dy, dt,
 
     # upwind using the MAC velocity to determine which state exists on
     # the interface
-    upwind(qx, qy, ng, u_xl, u_xr, u_MAC, u_xint)
-    upwind(qx, qy, ng, v_xl, v_xr, u_MAC, v_xint)
-    upwind(qx, qy, ng, u_yl, u_yr, v_MAC, u_yint)
-    upwind(qx, qy, ng, v_yl, v_yr, v_MAC, v_yint)
+    u_xint = upwind(qx, qy, ng, u_xl, u_xr, u_MAC)
+    v_xint = upwind(qx, qy, ng, v_xl, v_xr, u_MAC)
+    u_yint = upwind(qx, qy, ng, u_yl, u_yr, v_MAC)
+    v_yint = upwind(qx, qy, ng, v_yl, v_yr, v_MAC)
 
     return u_xint, u_yint, v_xint, v_yint
 
@@ -166,14 +158,6 @@ def get_interface_states(qx, qy, ng, dx, dy, dt,
     v_yl = np.zeros((qx, qy))
     v_yr = np.zeros((qx, qy))
 
-    uhat_adv = np.zeros((qx, qy))
-    vhat_adv = np.zeros((qx, qy))
-
-    u_xint = np.zeros((qx, qy))
-    u_yint = np.zeros((qx, qy))
-    v_xint = np.zeros((qx, qy))
-    v_yint = np.zeros((qx, qy))
-
     nx = qx - 2 * ng
     ny = qy - 2 * ng
     ilo = ng
@@ -216,19 +200,19 @@ def get_interface_states(qx, qy, ng, dx, dy, dt,
 
     # now get the normal advective velocities on the interfaces by solving
     # the Riemann problem.
-    riemann(qx, qy, ng, u_xl, u_xr, uhat_adv)
-    riemann(qx, qy, ng, v_yl, v_yr, vhat_adv)
+    uhat_adv = riemann(qx, qy, ng, u_xl, u_xr)
+    vhat_adv = riemann(qx, qy, ng, v_yl, v_yr)
 
     # now that we have the advective velocities, upwind the left and right
     # states using the appropriate advective velocity.
 
     # on the x-interfaces, we upwind based on uhat_adv
-    upwind(qx, qy, ng, u_xl, u_xr, uhat_adv, u_xint)
-    upwind(qx, qy, ng, v_xl, v_xr, uhat_adv, v_xint)
+    u_xint = upwind(qx, qy, ng, u_xl, u_xr, uhat_adv)
+    v_xint = upwind(qx, qy, ng, v_xl, v_xr, uhat_adv)
 
     # on the y-interfaces, we upwind based on vhat_adv
-    upwind(qx, qy, ng, u_yl, u_yr, vhat_adv, u_yint)
-    upwind(qx, qy, ng, v_yl, v_yr, vhat_adv, v_yint)
+    u_yint = upwind(qx, qy, ng, u_yl, u_yr, vhat_adv)
+    v_yint = upwind(qx, qy, ng, v_yl, v_yr, vhat_adv)
 
     # at this point, these states are the `hat' states -- they only
     # considered the normal to the interface portion of the predictor.
@@ -277,7 +261,7 @@ def get_interface_states(qx, qy, ng, dx, dy, dt,
 
 # xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @njit(cache=True)
-def upwind(qx, qy, ng, q_l, q_r, s, q_int):
+def upwind(qx, qy, ng, q_l, q_r, s):
     r"""
     upwind the left and right states based on the specified input
     velocity, s.  The resulting interface state is q_int
@@ -292,7 +276,10 @@ def upwind(qx, qy, ng, q_l, q_r, s, q_int):
         left and right states
     s : ndarray
         velocity
-    q_int : ndarray
+
+    Returns
+    -------
+    out : ndarray
         Upwinded state
     """
 
@@ -302,6 +289,8 @@ def upwind(qx, qy, ng, q_l, q_r, s, q_int):
     ihi = ng + nx
     jlo = ng
     jhi = ng + ny
+
+    q_int = np.zeros((qx, qy))
 
     for j in range(jlo - 1, jhi + 1):
         for i in range(ilo - 1, ihi + 1):
@@ -313,10 +302,12 @@ def upwind(qx, qy, ng, q_l, q_r, s, q_int):
             else:
                 q_int[i, j] = q_r[i, j]
 
+    return q_int
+
 
 # xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @njit(cache=True)
-def riemann(qx, qy, ng, q_l, q_r, s):
+def riemann(qx, qy, ng, q_l, q_r):
     """
     Solve the Burger's Riemann problem given the input left and right
     states and return the state on the interface.
@@ -331,7 +322,10 @@ def riemann(qx, qy, ng, q_l, q_r, s):
         The number of ghost cells
     q_l, q_r : ndarray
         left and right states
-    s : ndarray
+
+    Returns
+    -------
+    out : ndarray
         Interface state
     """
 
@@ -341,6 +335,8 @@ def riemann(qx, qy, ng, q_l, q_r, s):
     ihi = ng + nx
     jlo = ng
     jhi = ng + ny
+
+    s = np.zeros((qx, qy))
 
     for j in range(jlo - 1, jhi + 1):
         for i in range(ilo - 1, ihi + 1):
@@ -352,10 +348,12 @@ def riemann(qx, qy, ng, q_l, q_r, s):
             else:
                 s[i, j] = q_r[i, j]
 
+    return s
+
 
 # xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @njit(cache=True)
-def riemann_and_upwind(qx, qy, ng, q_l, q_r, q_int):
+def riemann_and_upwind(qx, qy, ng, q_l, q_r):
     r"""
     First solve the Riemann problem given q_l and q_r to give the
     velocity on the interface and: use this velocity to upwind to
@@ -372,11 +370,12 @@ def riemann_and_upwind(qx, qy, ng, q_l, q_r, q_int):
         The number of ghost cells
     q_l, q_r : ndarray
         left and right states
-    q_int : ndarray
+
+    Returns
+    -------
+    out : ndarray
         Upwinded state
     """
 
-    s = np.zeros((qx, qy))
-
-    riemann(qx, qy, ng, q_l, q_r, s)
-    upwind(qx, qy, ng, q_l, q_r, s, q_int)
+    s = riemann(qx, qy, ng, q_l, q_r)
+    return upwind(qx, qy, ng, q_l, q_r, s)
