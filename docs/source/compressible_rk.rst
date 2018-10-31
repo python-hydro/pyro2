@@ -16,20 +16,18 @@ Subpackages
 Submodules
 ----------
 
-compressible\_rk.fluxes module
-------------------------------
+compressible\_rk\.fluxes module
+-------------------------------
 
 .. automodule:: compressible_rk.fluxes
     :members:
     :undoc-members:
     :show-inheritance:
 
-compressible\_rk.simulation module
-----------------------------------
+compressible\_rk\.simulation module
+-----------------------------------
 
 .. automodule:: compressible_rk.simulation
     :members:
     :undoc-members:
     :show-inheritance:
-
-

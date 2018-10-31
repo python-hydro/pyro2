@@ -16,36 +16,34 @@ Subpackages
 Submodules
 ----------
 
-swe.derives module
-------------------
+swe\.derives module
+-------------------
 
 .. automodule:: swe.derives
     :members:
     :undoc-members:
     :show-inheritance:
 
-swe.interface module
---------------------
+swe\.interface module
+---------------------
 
 .. automodule:: swe.interface
     :members:
     :undoc-members:
     :show-inheritance:
 
-swe.simulation module
----------------------
+swe\.simulation module
+----------------------
 
 .. automodule:: swe.simulation
     :members:
     :undoc-members:
     :show-inheritance:
 
-swe.unsplit\_fluxes module
---------------------------
+swe\.unsplit\_fluxes module
+---------------------------
 
 .. automodule:: swe.unsplit_fluxes
     :members:
     :undoc-members:
     :show-inheritance:
-
-

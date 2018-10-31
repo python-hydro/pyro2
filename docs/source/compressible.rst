@@ -16,52 +16,50 @@ Subpackages
 Submodules
 ----------
 
-compressible.BC module
-----------------------
+compressible\.BC module
+-----------------------
 
 .. automodule:: compressible.BC
     :members:
     :undoc-members:
     :show-inheritance:
 
-compressible.derives module
----------------------------
+compressible\.derives module
+----------------------------
 
 .. automodule:: compressible.derives
     :members:
     :undoc-members:
     :show-inheritance:
 
-compressible.eos module
------------------------
+compressible\.eos module
+------------------------
 
 .. automodule:: compressible.eos
     :members:
     :undoc-members:
     :show-inheritance:
 
-compressible.interface module
------------------------------
+compressible\.interface module
+------------------------------
 
 .. automodule:: compressible.interface
     :members:
     :undoc-members:
     :show-inheritance:
 
-compressible.simulation module
-------------------------------
+compressible\.simulation module
+-------------------------------
 
 .. automodule:: compressible.simulation
     :members:
     :undoc-members:
     :show-inheritance:
 
-compressible.unsplit\_fluxes module
------------------------------------
+compressible\.unsplit\_fluxes module
+------------------------------------
 
 .. automodule:: compressible.unsplit_fluxes
     :members:
     :undoc-members:
     :show-inheritance:
-
-

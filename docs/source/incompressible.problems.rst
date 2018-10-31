@@ -1,5 +1,5 @@
-incompressible.problems package
-===============================
+incompressible\.problems package
+================================
 
 .. automodule:: incompressible.problems
     :members:
@@ -9,20 +9,18 @@ incompressible.problems package
 Submodules
 ----------
 
-incompressible.problems.converge module
----------------------------------------
+incompressible\.problems\.converge module
+-----------------------------------------
 
 .. automodule:: incompressible.problems.converge
     :members:
     :undoc-members:
     :show-inheritance:
 
-incompressible.problems.shear module
-------------------------------------
+incompressible\.problems\.shear module
+--------------------------------------
 
 .. automodule:: incompressible.problems.shear
     :members:
     :undoc-members:
     :show-inheritance:
-
-

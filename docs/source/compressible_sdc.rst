@@ -16,12 +16,10 @@ Subpackages
 Submodules
 ----------
 
-compressible\_sdc.simulation module
------------------------------------
+compressible\_sdc\.simulation module
+------------------------------------
 
 .. automodule:: compressible_sdc.simulation
     :members:
     :undoc-members:
     :show-inheritance:
-
-

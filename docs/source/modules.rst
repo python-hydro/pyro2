@@ -24,8 +24,6 @@ pyro2
    particles
    plot
    pyro
-   setup
-   setup_fortran
    simulation_null
    swe
    test

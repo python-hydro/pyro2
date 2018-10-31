@@ -16,8 +16,8 @@ Subpackages
 Submodules
 ----------
 
-compressible\_fv4.fluxes module
--------------------------------
+compressible\_fv4\.fluxes module
+--------------------------------
 
 .. automodule:: compressible_fv4.fluxes
     :members:
@@ -25,11 +25,9 @@ compressible\_fv4.fluxes module
     :show-inheritance:
 
 compressible\_fv4.simulation module
------------------------------------
+------------------------------------
 
 .. automodule:: compressible_fv4.simulation
     :members:
     :undoc-members:
     :show-inheritance:
-
-

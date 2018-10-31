@@ -1,5 +1,5 @@
-diffusion.problems package
-==========================
+diffusion\.problems package
+===========================
 
 .. automodule:: diffusion.problems
     :members:
@@ -9,20 +9,18 @@ diffusion.problems package
 Submodules
 ----------
 
-diffusion.problems.gaussian module
-----------------------------------
+diffusion\.problems\.gaussian module
+------------------------------------
 
 .. automodule:: diffusion.problems.gaussian
     :members:
     :undoc-members:
     :show-inheritance:
 
-diffusion.problems.test module
-------------------------------
+diffusion\.problems\.test module
+--------------------------------
 
 .. automodule:: diffusion.problems.test
     :members:
     :undoc-members:
     :show-inheritance:
-
-
