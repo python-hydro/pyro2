@@ -3,7 +3,7 @@ import mesh.array_indexer as ai
 
 
 def fluxes(my_data, rp, dt):
-    """Construct the fluxes through the interfaces for the linear advection
+    r"""Construct the fluxes through the interfaces for the linear advection
     equation:
 
     .. math::

@@ -143,8 +143,28 @@ are allowed. Each pyro module will have (at most) a single Fortran
 file and can be compiled into a library via a single f2py command line
 invocation.
 
-A single script, ``mk.sh``, in the top-level directory will compile
-all the Fortran source.
+A single script, ``mk.sh``, in the top-level directory run with the ``fortran``
+argument will compile all the Fortran source.
+
+
+Numba
+-----
+
+Instead of using Fortran to speed up performance-critical parts of the code,
+``pyro`` can also use python-only versions of these functions compiled with
+``numba``. Numba is a *just-in-time compiler* for python. When a call is first
+made to a function decorated with Numba's ``@njit`` decorator, it is compiled to
+machine code 'just-in-time' for it to be executed. Once compiled, it can then
+run at (near-to) native machine code speed.
+
+We also use Numba's ``cache=True`` option, which means that once the
+code is compiled, Numba will write the code into a file-based cache. The next
+time you run the same bit of code, Numba will use the saved version rather than
+compiling the code again, saving some compilation time at the start of the
+simulation.
+
+``pyro`` will use the ``numba`` functions (rather than the Fortran modules) by
+default.
 
 
 Main driver

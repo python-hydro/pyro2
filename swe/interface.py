@@ -11,42 +11,42 @@ def states(idir, qx, qy, ng, dx, dt,
     predict the cell-centered state to the edges in one-dimension
     using the reconstructed, limited slopes.
 
-    We follow the convection here that V_l[i] is the left state at the
-    i-1/2 interface and V_l[i+1] is the left state at the i+1/2
+    We follow the convection here that ``V_l[i]`` is the left state at the
+    i-1/2 interface and ``V_l[i+1]`` is the left state at the i+1/2
     interface.
 
 
     We need the left and right eigenvectors and the eigenvalues for
     the system projected along the x-direction
 
-    Taking our state vector as Q = (rho, u, v, p)^T, the eigenvalues
-    are u - c, u, u + c.
+    Taking our state vector as :math:`Q = (rho, u, v, p)^T`, the eigenvalues
+    are :math:`u - c`, :math:`u`, :math:`u + c`.
 
     We look at the equations of hydrodynamics in a split fashion --
     i.e., we only consider one dimension at a time.
 
     Considering advection in the x-direction, the Jacobian matrix for
     the primitive variable formulation of the Euler equations
-    projected in the x-direction is:
+    projected in the x-direction is::
 
            / u   0   0 \
            | g   u   0 |
        A = \ 0   0   u /
 
-    The right eigenvectors are
+    The right eigenvectors are::
 
            /  h  \       /  0  \      /  h  \
       r1 = | -c  |  r2 = |  0  | r3 = |  c  |
            \  0  /       \  1  /      \  0  /
 
-    The left eigenvectors are
+    The left eigenvectors are::
 
        l1 =     ( 1/(2h),  -h/(2hc),  0 )
        l2 =     ( 0,          0,  1 )
        l3 =     ( -1/(2h), -h/(2hc),  0 )
 
     The fluxes are going to be defined on the left edge of the
-    computational zones
+    computational zones::
 
               |             |             |             |
               |             |             |             |
@@ -55,7 +55,38 @@ def states(idir, qx, qy, ng, dx, dt,
                            ^ ^           ^
                        q_l,i q_r,i  q_l,i+1
 
-    q_r,i and q_l,i+1 are computed using the information in zone i,j.
+    ``q_r,i`` and ``q_l,i+1`` are computed using the information in zone i,j.
+
+    Parameters
+    ----------
+    idir : int
+        Are we predicting to the edges in the x-direction (1) or y-direction (2)?
+    qx, qy : int
+        The dimensions of the grid.
+    ng : int
+        The number of ghost cells
+    dx : float
+        The cell spacing
+    dt : float
+        The timestep
+    ih, iu, iv, ix : int
+        Indices of the height, x-velocity, y-velocity and species in the
+        state vector
+    nvar : int
+        The total number of variables in the state vector
+    nspec : int
+        The number of species
+    g : float
+        Gravitational acceleration
+    qv : ndarray
+        The primitive state vector
+    dqv : ndarray
+        Spatial derivitive of the state vector
+
+    Returns
+    -------
+    out : ndarray, ndarray
+        State vector predicted to the left and right edges
     """
 
     q_l = np.zeros((qx, qy, nvar))
@@ -186,6 +217,32 @@ def riemann_roe(idir, qx, qy, ng,
     r"""
     This is the Roe Riemann solver with entropy fix. The implementation
     follows Toro's SWE book and the clawpack 2d SWE Roe solver.
+
+    Parameters
+    ----------
+    idir : int
+        Are we predicting to the edges in the x-direction (1) or y-direction (2)?
+    qx, qy : int
+        The dimensions of the grid.
+    ng : int
+        The number of ghost cells
+    nvar : int
+        The number of variables in the state vector
+    ih, ixmom, iymom, ihX : int
+        The indices of the height, x-momentum, y-momentum and height*species fractions in the conserved state vector.
+    nspec : int
+        The number of species
+    lower_solid, upper_solid : int
+        Are we at lower or upper solid boundaries?
+    g : float
+        Gravitational acceleration
+    U_l, U_r : ndarray
+        Conserved state on the left and right cell edges.
+
+    Returns
+    -------
+    out : ndarray
+        Conserved flux
     """
     F = np.zeros((qx, qy, nvar))
 
@@ -313,6 +370,32 @@ def riemann_hllc(idir, qx, qy, ng,
     this is the HLLC Riemann solver.  The implementation follows
     directly out of Toro's book.  Note: this does not handle the
     transonic rarefaction.
+
+    Parameters
+    ----------
+    idir : int
+        Are we predicting to the edges in the x-direction (1) or y-direction (2)?
+    qx, qy : int
+        The dimensions of the grid.
+    ng : int
+        The number of ghost cells
+    nvar : int
+        The number of variables in the state vector
+    ih, ixmom, iymom, ihX : int
+        The indices of the height, x-momentum, y-momentum and height*species fractions in the conserved state vector.
+    nspec : int
+        The number of species
+    lower_solid, upper_solid : int
+        Are we at lower or upper solid boundaries?
+    g : float
+        Gravitational acceleration
+    U_l, U_r : ndarray
+        Conserved state on the left and right cell edges.
+
+    Returns
+    -------
+    out : ndarray
+        Conserved flux
     """
 
     F = np.zeros((qx, qy, nvar))
@@ -456,11 +539,31 @@ def riemann_hllc(idir, qx, qy, ng,
 def consFlux(idir, g, ih, ixmom, iymom, ihX, nvar, nspec, U_state):
     r"""
     Calculate the conserved flux for the shallow water equations. In the
-    x-direction, this is given by
+    x-direction, this is given by::
 
-        /      hu       \
-    F = | hu^2 + gh^2/2 |
-        \      huv      /
+            /      hu       \
+        F = | hu^2 + gh^2/2 |
+            \      huv      /
+
+    Parameters
+    ----------
+    idir : int
+        Are we predicting to the edges in the x-direction (1) or y-direction (2)?
+    g : float
+        Graviational acceleration
+    ih, ixmom, iymom, ihX : int
+        The indices of the height, x-momentum, y-momentum, height*species fraction in the conserved state vector.
+    nvar : int
+        The number of variables in the state vector
+    nspec : int
+        The number of species
+    U_state : ndarray
+        Conserved state vector.
+
+    Returns
+    -------
+    out : ndarray
+        Conserved flux
     """
 
     F = np.zeros(nvar)

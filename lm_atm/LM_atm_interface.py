@@ -4,6 +4,25 @@ from numba import njit
 
 @njit(cache=True)
 def is_symmetric_pair(qx, qy, ng, nodal, sl, sr):
+    r"""
+    Are sl and sr symmetric about an axis parallel with the y-axis in the center of domain the x-direction?
+
+    Parameters
+    ----------
+    qx, qy : int
+        The dimensions of the grid.
+    ng : int
+        The number of ghost cells
+    nodal: bool
+        Is the data nodal?
+    sl, sr : ndarray
+        The two arrays to be compared
+
+    Returns
+    -------
+    out : int
+        Are they symmetric? (1 = yes, 0 = no)
+    """
 
     nx = qx - 2 * ng
     ny = qy - 2 * ng
@@ -49,12 +68,50 @@ def is_symmetric_pair(qx, qy, ng, nodal, sl, sr):
 
 @njit(cache=True)
 def is_symmetric(qx, qy, ng, nodal, s):
+    r"""
+    Is the left half of s the mirror image of the right half?
+
+    Parameters
+    ----------
+    qx, qy : int
+        The dimensions of the grid.
+    ng : int
+        The number of ghost cells
+    nodal: bool
+        Is the data nodal?
+    s : ndarray
+        The array to be compared
+
+    Returns
+    -------
+    out : int
+        Is it symmetric? (1 = yes, 0 = no)
+    """
 
     return is_symmetric_pair(qx, qy, ng, nodal, s, s)
 
 
 @njit(cache=True)
 def is_asymmetric_pair(qx, qy, ng, nodal, sl, sr):
+    r"""
+    Are sl and sr asymmetric about an axis parallel with the y-axis in the center of domain the x-direction?
+
+    Parameters
+    ----------
+    qx, qy : int
+        The dimensions of the grid.
+    ng : int
+        The number of ghost cells
+    nodal: bool
+        Is the data nodal?
+    sl, sr : ndarray
+        The two arrays to be compared
+
+    Returns
+    -------
+    out : int
+        Are they asymmetric? (1 = yes, 0 = no)
+    """
 
     nx = qx - 2 * ng
     ny = qy - 2 * ng
@@ -101,6 +158,25 @@ def is_asymmetric_pair(qx, qy, ng, nodal, sl, sr):
 
 @njit(cache=True)
 def is_asymmetric(qx, qy, ng, nodal, s):
+    """
+    Is the left half of s asymmetric to the right half?
+
+    Parameters
+    ----------
+    qx, qy : int
+        The dimensions of the grid.
+    ng : int
+        The number of ghost cells
+    nodal: bool
+        Is the data nodal?
+    s : ndarray
+        The array to be compared
+
+    Returns
+    -------
+    out : int
+        Is it asymmetric? (1 = yes, 0 = no)
+    """
 
     return is_asymmetric_pair(qx, qy, ng, nodal, s, s)
 
@@ -112,6 +188,35 @@ def mac_vels(qx, qy, ng, dx, dy, dt,
              ldelta_uy, ldelta_vy,
              gradp_x, gradp_y,
              source):
+    r"""
+    Calculate the MAC velocities in the x and y directions.
+
+    Parameters
+    ----------
+    qx, qy : int
+        The dimensions of the grid.
+    ng : int
+        The number of ghost cells
+    dx, dy : float
+        The cell spacings
+    dt : float
+        The timestep
+    u, v : ndarray
+        x-velocity and y-velocity
+    ldelta_ux, ldelta_uy: ndarray
+        Limited slopes of the x-velocity in the x and y directions
+    ldelta_vx, ldelta_vy: ndarray
+        Limited slopes of the y-velocity in the x and y directions
+    gradp_x, gradp_y : ndarray
+        Pressure gradients in the x and y directions
+    source : ndarray
+        Source terms
+
+    Returns
+    -------
+    out : ndarray, ndarray
+        MAC velocities in the x and y directions
+    """
 
     u_MAC = np.zeros((qx, qy))
     v_MAC = np.zeros((qx, qy))
@@ -179,10 +284,39 @@ def states(qx, qy, ng, dx, dy, dt,
            gradp_x, gradp_y,
            source,
            u_MAC, v_MAC):
+    r"""
+    This is similar to ``mac_vels``, but it predicts the interface states
+    of both u and v on both interfaces, using the MAC velocities to
+    do the upwinding.
 
-    # this is similar to mac_vels, but it predicts the interface states
-    # of both u and v on both interfaces, using the MAC velocities to
-    # do the upwinding.
+    Parameters
+    ----------
+    qx, qy : int
+        The dimensions of the grid.
+    ng : int
+        The number of ghost cells
+    dx, dy : float
+        The cell spacings
+    dt : float
+        The timestep
+    u, v : ndarray
+        x-velocity and y-velocity
+    ldelta_ux, ldelta_uy: ndarray
+        Limited slopes of the x-velocity in the x and y directions
+    ldelta_vx, ldelta_vy: ndarray
+        Limited slopes of the y-velocity in the x and y directions
+    source : ndarray
+        Source terms
+    gradp_x, gradp_y : ndarray
+        Pressure gradients in the x and y directions
+    u_MAC, v_MAC : ndarray
+        MAC velocities in the x and y directions
+
+    Returns
+    -------
+    out : ndarray, ndarray, ndarray, ndarray
+        x and y velocities predicted to the interfaces
+    """
 
     u_xint = np.zeros((qx, qy))
     u_yint = np.zeros((qx, qy))
@@ -213,9 +347,30 @@ def states(qx, qy, ng, dx, dy, dt,
 def rho_states(qx, qy, ng, dx, dy, dt,
                rho, u_MAC, v_MAC,
                ldelta_rx, ldelta_ry):
+    r"""
+    This predicts rho to the interfaces.  We use the MAC velocities to do
+    the upwinding
 
-    # this predicts rho to the interfaces.  We use the MAC velocities to do
-    # the upwinding
+    Parameters
+    ----------
+    qx, qy : int
+        The dimensions of the grid.
+    ng : int
+        The number of ghost cells
+    dx, dy : float
+        The cell spacings
+    rho : ndarray
+        density
+    u_MAC, v_MAC : ndarray
+        MAC velocities in the x and y directions
+    ldelta_rx, ldelta_ry: ndarray
+        Limited slopes of the density in the x and y directions
+
+    Returns
+    -------
+    out : ndarray, ndarray
+        rho predicted to the interfaces
+    """
 
     rho_xint = np.zeros((qx, qy))
     rho_yint = np.zeros((qx, qy))
@@ -295,12 +450,40 @@ def get_interface_states(qx, qy, ng, dx, dy, dt,
                          ldelta_uy, ldelta_vy,
                          gradp_x, gradp_y,
                          source):
+    r"""
+    Compute the unsplit predictions of u and v on both the x- and
+    y-interfaces.  This includes the transverse terms.
 
-    # Compute the unsplit predictions of u and v on both the x- and
-    # y-interfaces.  This includes the transverse terms.
+    Note that the ``gradp_x``, ``gradp_y`` should have any coefficients
+    already included (e.g. :math:`\beta_0/\rho`)
 
-    # note that the gradp_x, gradp_y should have any coefficients
-    # already included (e.g. beta_0/rho)
+    Parameters
+    ----------
+    qx, qy : int
+        The dimensions of the grid.
+    ng : int
+        The number of ghost cells
+    dx, dy : float
+        The cell spacings
+    dt : float
+        The timestep
+    u, v : ndarray
+        x-velocity and y-velocity
+    ldelta_ux, ldelta_uy: ndarray
+        Limited slopes of the x-velocity in the x and y directions
+    ldelta_vx, ldelta_vy: ndarray
+        Limited slopes of the y-velocity in the x and y directions
+    gradp_x, gradp_y : ndarray
+        Pressure gradients in the x and y directions
+    source : ndarray
+        Source terms
+
+    Returns
+    -------
+    out : ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray
+        unsplit predictions of u and v on both the x- and
+        y-interfaces
+    """
 
     u_xl = np.zeros((qx, qy))
     u_xr = np.zeros((qx, qy))
@@ -429,9 +612,23 @@ def get_interface_states(qx, qy, ng, dx, dy, dt,
 # xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @njit(cache=True)
 def upwind(qx, qy, ng, q_l, q_r, s, q_int):
+    r"""
+    upwind the left and right states based on the specified input
+    velocity, s.  The resulting interface state is q_int
 
-    # upwind the left and right states based on the specified input
-    # velocity, s.  The resulting interface state is q_int
+    Parameters
+    ----------
+    qx, qy : int
+        The dimensions of the grid.
+    ng : int
+        The number of ghost cells
+    q_l, q_r : ndarray
+        left and right states
+    s : ndarray
+        velocity
+    q_int : ndarray
+        Upwinded state
+    """
 
     nx = qx - 2 * ng
     ny = qy - 2 * ng
@@ -454,11 +651,23 @@ def upwind(qx, qy, ng, q_l, q_r, s, q_int):
 # xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @njit(cache=True)
 def riemann(qx, qy, ng, q_l, q_r, s):
+    """
+    Solve the Burger's Riemann problem given the input left and right
+    states and return the state on the interface.
 
-    # Solve the Burger's Riemann problem given the input left and right
-    # states and return the state on the interface.
-    #
-    # This uses the expressions from Almgren, Bell, and Szymczak 1996.
+    This uses the expressions from Almgren, Bell, and Szymczak 1996.
+
+    Parameters
+    ----------
+    qx, qy : int
+        The dimensions of the grid.
+    ng : int
+        The number of ghost cells
+    q_l, q_r : ndarray
+        left and right states
+    s : ndarray
+        Interface state
+    """
 
     nx = qx - 2 * ng
     ny = qy - 2 * ng
@@ -481,13 +690,25 @@ def riemann(qx, qy, ng, q_l, q_r, s):
 # xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @njit(cache=True)
 def riemann_and_upwind(qx, qy, ng, q_l, q_r, q_int):
+    r"""
+    First solve the Riemann problem given q_l and q_r to give the
+    velocity on the interface and: use this velocity to upwind to
+    determine the state (q_l, q_r, or a mix) on the interface).
 
-    # First solve the Riemann problem given q_l and q_r to give the
-    # velocity on the interface and: use this velocity to upwind to
-    # determine the state (q_l, q_r, or a mix) on the interface).
-    #
-    # This differs from upwind, above, in that we don't take in a
-    # velocity to upwind with).
+    This differs from upwind, above, in that we don't take in a
+    velocity to upwind with).
+
+    Parameters
+    ----------
+    qx, qy : int
+        The dimensions of the grid.
+    ng : int
+        The number of ghost cells
+    q_l, q_r : ndarray
+        left and right states
+    q_int : ndarray
+        Upwinded state
+    """
 
     s = np.zeros((qx, qy))
 

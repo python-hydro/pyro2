@@ -1,5 +1,5 @@
-lm\_atm\.problems package
-=========================
+lm\_atm.problems package
+========================
 
 .. automodule:: lm_atm.problems
     :members:
@@ -9,8 +9,8 @@ lm\_atm\.problems package
 Submodules
 ----------
 
-lm\_atm\.problems\.bubble module
---------------------------------
+lm\_atm.problems.bubble module
+------------------------------
 
 .. automodule:: lm_atm.problems.bubble
     :members:

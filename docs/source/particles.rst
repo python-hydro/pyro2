@@ -9,8 +9,8 @@ particles package
 Submodules
 ----------
 
-particles\.particles module
----------------------------
+particles.particles module
+--------------------------
 
 .. automodule:: particles.particles
     :members:

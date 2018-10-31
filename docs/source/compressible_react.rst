@@ -16,8 +16,8 @@ Subpackages
 Submodules
 ----------
 
-compressible\_react\.simulation module
---------------------------------------
+compressible\_react.simulation module
+-------------------------------------
 
 .. automodule:: compressible_react.simulation
     :members:

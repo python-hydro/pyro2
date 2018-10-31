@@ -4,6 +4,32 @@ from numba import njit
 
 @njit(cache=True)
 def states(a, qx, qy, ng, idir):
+    r"""
+    Predict the cell-centered state to the edges in one-dimension using the
+    reconstructed, limited slopes. We use a fourth-order Godunov method.
+
+    Our convention here is that:
+
+        ``al[i,j]``   will be :math:`al_{i-1/2,j}`,
+
+        ``al[i+1,j]`` will be :math:`al_{i+1/2,j}`.
+
+    Parameters
+    ----------
+    a : ndarray
+        The cell-centered state.
+    qx, qy : int
+        The dimensions of `a`.
+    ng : int
+        The number of ghost cells
+    idir : int
+        Are we predicting to the edges in the x-direction (1) or y-direction (2)?
+
+    Returns
+    -------
+    out : ndarray, ndarray
+        The state predicted to the left and right edges.
+    """
 
     al = np.zeros((qx, qy))
     ar = np.zeros((qx, qy))
@@ -21,13 +47,9 @@ def states(a, qx, qy, ng, idir):
     nx = qx - 2 * ng
     ny = qy - 2 * ng
     ilo = ng
-    ihi = ng + nx - 1
+    ihi = ng + nx
     jlo = ng
-    jhi = ng + ny - 1
-
-    # our convention here is that:
-    #     al[i,j]   will be al_{i-1/2,j),
-    #     al[i+1,j] will be al_{i+1/2,j)
+    jhi = ng + ny
 
     # we need interface values on all faces of the domain
     if (idir == 1):
@@ -213,6 +235,33 @@ def states(a, qx, qy, ng, idir):
 
 @njit(cache=True)
 def states_nolimit(a, qx, qy, ng, idir):
+    r"""
+    Predict the cell-centered state to the edges in one-dimension using the
+    reconstructed slopes (and without slope limiting). We use a fourth-order
+    Godunov method.
+
+    Our convention here is that:
+
+        ``al[i,j]``   will be :math:`al_{i-1/2,j}`,
+
+        ``al[i+1,j]`` will be :math:`al_{i+1/2,j}`.
+
+    Parameters
+    ----------
+    a : ndarray
+        The cell-centered state.
+    qx, qy : int
+        The dimensions of `a`.
+    ng : int
+        The number of ghost cells
+    idir : int
+        Are we predicting to the edges in the x-direction (1) or y-direction (2)?
+
+    Returns
+    -------
+    out : ndarray, ndarray
+        The state predicted to the left and right edges.
+    """
 
     a_int = np.zeros((qx, qy))
     al = np.zeros((qx, qy))
@@ -221,13 +270,9 @@ def states_nolimit(a, qx, qy, ng, idir):
     nx = qx - 2 * ng
     ny = qy - 2 * ng
     ilo = ng
-    ihi = ng + nx - 1
+    ihi = ng + nx
     jlo = ng
-    jhi = ng + ny - 1
-
-    # our convention here is that:
-    #     al[i,j]   will be al_{i-1/2,j),
-    #     al[i+1,j] will be al_{i+1/2,j)
+    jhi = ng + ny
 
     # we need interface values on all faces of the domain
     if (idir == 1):

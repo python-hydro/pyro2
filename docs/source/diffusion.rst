@@ -16,8 +16,8 @@ Subpackages
 Submodules
 ----------
 
-diffusion\.simulation module
-----------------------------
+diffusion.simulation module
+---------------------------
 
 .. automodule:: diffusion.simulation
     :members:
