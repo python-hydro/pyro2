@@ -296,7 +296,7 @@ subroutine riemann_cgf(idir, qx, qy, ng, &
            ut_l    = U_l(i,j,ixmom)/rho_l
         endif
 
-        rhoe_l = U_l(i,j,iener) - 0.5*rho_r*(un_l**2 + ut_l**2)
+        rhoe_l = U_l(i,j,iener) - 0.5*rho_l*(un_l**2 + ut_l**2)
 
         p_l   = rhoe_l*(gamma - 1.0d0)
         p_l = max(p_l, smallp)
