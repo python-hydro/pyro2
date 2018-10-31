@@ -24,7 +24,7 @@ compressible\_fv4\.fluxes module
     :undoc-members:
     :show-inheritance:
 
-compressible\_fv4.simulation module
+compressible\_fv4\.simulation module
 ------------------------------------
 
 .. automodule:: compressible_fv4.simulation
