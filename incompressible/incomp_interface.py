@@ -108,7 +108,7 @@ def states(qx, qy, ng, dx, dy, dt,
     u_yint = upwind(qx, qy, ng, u_yl, u_yr, v_MAC)
     v_yint = upwind(qx, qy, ng, v_yl, v_yr, v_MAC)
 
-    return u_xint, u_yint, v_xint, v_yint
+    return u_xint, v_xint, u_yint, v_yint
 
 
 # xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -292,8 +292,8 @@ def upwind(qx, qy, ng, q_l, q_r, s):
 
     q_int = np.zeros((qx, qy))
 
-    for j in range(jlo - 1, jhi + 1):
-        for i in range(ilo - 1, ihi + 1):
+    for i in range(ilo - 1, ihi + 1):
+        for j in range(jlo - 1, jhi + 1):
 
             if (s[i, j] > 0.0):
                 q_int[i, j] = q_l[i, j]

@@ -36,11 +36,11 @@ def is_symmetric_pair(qx, qy, ng, nodal, sl, sr):
     if (not nodal):
         done = False
         for i in range(nx / 2):
-            for j in range(jlo, jhi):
-                il = ilo + i
-                ir = ihi - i
+            il = ilo + i
+            ir = ihi - i
 
-                if (not sl(il, j) == sr(ir, j)):
+            for j in range(jlo, jhi):
+                if (sl[il, j] != sr[ir, j]):
                     sym = 0
                     done = True
                     break
@@ -51,11 +51,11 @@ def is_symmetric_pair(qx, qy, ng, nodal, sl, sr):
         done = False
 
         for i in range(nx / 2):
-            for j in range(jlo, jhi):
-                il = ilo + i
-                ir = ihi - i + 1
+            il = ilo + i
+            ir = ihi - i + 1
 
-                if (not sl(il, j) == sr(ir, j)):
+            for j in range(jlo, jhi):
+                if (sl[il, j] != sr[ir, j]):
                     sym = 0
                     done = True
                     break
@@ -129,7 +129,7 @@ def is_asymmetric_pair(qx, qy, ng, nodal, sl, sr):
                 il = ilo + i
                 ir = ihi - i
 
-                if (not sl(il, j) == -sr(ir, j)):
+                if (not sl[il, j] == -sr[ir, j]):
                     asym = 0
                     done = True
                     break
@@ -145,7 +145,7 @@ def is_asymmetric_pair(qx, qy, ng, nodal, sl, sr):
                 ir = ihi - i + 1
 
                 # print *, il, ir, sl(il,j), -sr(ir,j)
-                if (not sl(il, j) == -sr(ir, j)):
+                if (not sl[il, j] == -sr[ir, j]):
                     asym = 0
                     done = True
                     break
@@ -331,7 +331,7 @@ def states(qx, qy, ng, dx, dy, dt,
     u_yint = upwind(qx, qy, ng, u_yl, u_yr, v_MAC)
     v_yint = upwind(qx, qy, ng, v_yl, v_yr, v_MAC)
 
-    return u_xint, u_yint, v_xint, v_yint
+    return u_xint, v_xint, u_yint, v_yint
 
 
 # xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -672,9 +672,9 @@ def riemann(qx, qy, ng, q_l, q_r):
     for i in range(ilo - 1, ihi + 2):
         for j in range(jlo - 1, jhi + 2):
 
-            if (q_l[i, j] > 0.0 and q_l[i, j] + q_r[i, j] > 0.0):
+            if ((q_l[i, j] > 0.0) and (q_l[i, j] + q_r[i, j] > 0.0)):
                 s[i, j] = q_l[i, j]
-            elif (q_l[i, j] <= 0.0 and q_r[i, j] >= 0.0):
+            elif ((q_l[i, j] <= 0.0) and (q_r[i, j] >= 0.0)):
                 s[i, j] = 0.0
             else:
                 s[i, j] = q_r[i, j]

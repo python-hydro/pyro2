@@ -7,10 +7,8 @@ matrix:
     include:
     - env:
         - MK_ARGS=""
-        - NB_IGNORE="solver-test-fortran.ipynb"
     - env:
         - MK_ARGS=fortran
-        - NB_IGNORE="solver-test.ipynb"
 
 before_install:
   - export PATH=$(echo $PATH | tr ':' "\n" | sed '/\/opt\/python/d' | tr "\n" ":" | sed "s|::|:|g")
@@ -32,7 +30,7 @@ before_script:
 
 script:
   - flake8 .
-  - pytest -v --cov=. --cov-config .coveragerc --nbval --ignore=docs --ignore=./multigrid/variable_coeff_elliptic.ipynb --ignore=examples/mesh --ignore=examples/multigrid --ignore=$NB_IGNORE
+  - pytest -v --cov=. --cov-config .coveragerc --nbval --ignore=docs --ignore=./multigrid/variable_coeff_elliptic.ipynb --ignore=examples/mesh --ignore=examples/multigrid
 #   - travis-sphinx build
 
 # after_success:
