@@ -110,8 +110,8 @@ def states(idir, qx, qy, ng, dx, dt,
     dtdx3 = 0.33333 * dtdx
 
     # this is the loop over zones.  For zone i, we see q_l[i+1] and q_r[i]
-    for j in range(jlo - 2, jhi + 2):
-        for i in range(ilo - 2, ihi + 2):
+    for i in range(ilo - 2, ihi + 2):
+        for j in range(jlo - 2, jhi + 2):
 
             dq = dqv[i, j, :]
             q = qv[i, j, :]
@@ -263,8 +263,8 @@ def riemann_roe(idir, qx, qy, ng,
     jhi = ng + ny
     ns = nvar - nspec
 
-    for j in range(jlo - 1, jhi + 1):
-        for i in range(ilo - 1, ihi + 1):
+    for i in range(ilo - 1, ihi + 1):
+        for j in range(jlo - 1, jhi + 1):
 
             # primitive variable states
             h_l = U_l[i, j, ih]
@@ -406,8 +406,8 @@ def riemann_hllc(idir, qx, qy, ng,
     jlo = ng
     jhi = ng + ny
 
-    for j in range(jlo - 1, jhi + 1):
-        for i in range(ilo - 1, ihi + 1):
+    for i in range(ilo - 1, ihi + 1):
+        for j in range(jlo - 1, jhi + 1):
 
             # primitive variable states
             h_l = U_l[i, j, ih]

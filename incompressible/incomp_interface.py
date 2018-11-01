@@ -171,8 +171,8 @@ def get_interface_states(qx, qy, ng, dx, dy, dt,
     dtdx = dt / dx
     dtdy = dt / dy
 
-    for j in range(jlo - 2, jhi + 2):
-        for i in range(ilo - 2, ihi + 2):
+    for i in range(ilo - 2, ihi + 2):
+        for j in range(jlo - 2, jhi + 2):
 
             # u on x-edges
             u_xl[i + 1, j] = u[i, j] + 0.5 * \
@@ -218,8 +218,8 @@ def get_interface_states(qx, qy, ng, dx, dy, dt,
     # considered the normal to the interface portion of the predictor.
 
     # add the transverse flux differences to the preliminary interface states
-    for j in range(jlo - 2, jhi + 2):
-        for i in range(ilo - 2, ihi + 2):
+    for i in range(ilo - 2, ihi + 2):
+        for j in range(jlo - 2, jhi + 2):
 
             ubar = 0.5 * (uhat_adv[i, j] + uhat_adv[i + 1, j])
             vbar = 0.5 * (vhat_adv[i, j] + vhat_adv[i, j + 1])
@@ -338,8 +338,8 @@ def riemann(qx, qy, ng, q_l, q_r):
 
     s = np.zeros((qx, qy))
 
-    for j in range(jlo - 1, jhi + 1):
-        for i in range(ilo - 1, ihi + 1):
+    for i in range(ilo - 1, ihi + 1):
+        for j in range(jlo - 1, jhi + 1):
 
             if (q_l[i, j] > 0.0 and q_l[i, j] + q_r[i, j] > 0.0):
                 s[i, j] = q_l[i, j]

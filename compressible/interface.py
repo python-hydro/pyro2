@@ -115,8 +115,8 @@ def states(idir, qx, qy, ng, dx, dt,
     betar = np.zeros(nvar)
 
     # this is the loop over zones.  For zone i, we see q_l[i+1] and q_r[i]
-    for j in range(jlo - 2, jhi + 2):
-        for i in range(ilo - 2, ihi + 2):
+    for i in range(ilo - 2, ihi + 2):
+        for j in range(jlo - 2, jhi + 2):
 
             dq = dqv[i, j, :]
             q = qv[i, j, :]
@@ -290,8 +290,8 @@ def riemann_cgf(idir, qx, qy, ng,
     jlo = ng
     jhi = ng + ny
 
-    for j in range(jlo - 1, jhi + 1):
-        for i in range(ilo - 1, ihi + 1):
+    for i in range(ilo - 1, ihi + 1):
+        for j in range(jlo - 1, jhi + 1):
 
             # primitive variable states
             rho_l = U_l[i, j, idens]
@@ -599,8 +599,8 @@ def riemann_prim(idir, qx, qy, ng,
     jlo = ng
     jhi = ng + ny
 
-    for j in range(jlo - 1, jhi + 1):
-        for i in range(ilo - 1, ihi + 1):
+    for i in range(ilo - 1, ihi + 1):
+        for j in range(jlo - 1, jhi + 1):
 
             # primitive variable states
             rho_l = q_l[i, j, irho]
@@ -859,8 +859,8 @@ def riemann_hllc(idir, qx, qy, ng,
     jlo = ng
     jhi = ng + ny
 
-    for j in range(jlo - 1, jhi + 1):
-        for i in range(ilo - 1, ihi + 1):
+    for i in range(ilo - 1, ihi + 1):
+        for j in range(jlo - 1, jhi + 1):
 
             # primitive variable states
             rho_l = U_l[i, j, idens]
@@ -1186,8 +1186,8 @@ def artificial_viscosity(qx, qy, ng, dx, dy,
     jlo = ng
     jhi = ng + ny
 
-    for j in range(jlo - 1, jhi + 1):
-        for i in range(ilo - 1, ihi + 1):
+    for i in range(ilo - 1, ihi + 1):
+        for j in range(jlo - 1, jhi + 1):
 
                 # start by computing the divergence on the x-interface.  The
                 # x-difference is simply the difference of the cell-centered
