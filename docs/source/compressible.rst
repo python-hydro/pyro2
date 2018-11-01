@@ -40,6 +40,14 @@ compressible\.eos module
     :undoc-members:
     :show-inheritance:
 
+compressible\.interface module
+------------------------------
+
+.. automodule:: compressible.interface
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 compressible\.simulation module
 -------------------------------
 
@@ -55,5 +63,3 @@ compressible\.unsplit\_fluxes module
     :members:
     :undoc-members:
     :show-inheritance:
-
-

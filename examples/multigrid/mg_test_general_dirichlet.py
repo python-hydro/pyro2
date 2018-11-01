@@ -216,8 +216,8 @@ if __name__ == "__main__":
     for nx in N:
         if nx == max(N):
             plot = True
-            #store = True
-            #do_compare = True
+            # store = True
+            # do_compare = True
 
         enorm = test_general_poisson_dirichlet(nx, make_plot=plot,
                                                store_bench=store, comp_bench=do_compare)

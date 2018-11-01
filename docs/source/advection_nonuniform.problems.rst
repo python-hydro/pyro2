@@ -25,6 +25,14 @@ advection\_nonuniform\.problems\.smooth module
     :undoc-members:
     :show-inheritance:
 
+advection\_nonuniform\.problems\.test module
+--------------------------------------------
+
+.. automodule:: advection_nonuniform.problems.test
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 advection\_nonuniform\.problems\.tophat module
 ----------------------------------------------
 

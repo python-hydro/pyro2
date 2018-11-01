@@ -24,5 +24,3 @@ incompressible\.problems\.shear module
     :members:
     :undoc-members:
     :show-inheritance:
-
-

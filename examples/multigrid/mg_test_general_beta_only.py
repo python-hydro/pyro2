@@ -124,7 +124,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     a.solve(rtol=1.e-11)
 
     # alternately, we can just use smoothing by uncommenting the following
-    #a.smooth(a.nlevels-1,50000)
+    # a.smooth(a.nlevels-1,50000)
 
     # get the solution
     v = a.get_solution()

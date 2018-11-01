@@ -3,6 +3,13 @@ language: python
 python:
   - "3.6"
 
+matrix:
+    include:
+    - env:
+        - MK_ARGS=""
+    - env:
+        - MK_ARGS=fortran
+
 before_install:
   - export PATH=$(echo $PATH | tr ':' "\n" | sed '/\/opt\/python/d' | tr "\n" ":" | sed "s|::|:|g")
 
@@ -19,7 +26,7 @@ install:
 before_script:
   - export PYTHONPATH=$PYTHONPATH:$(pwd)
   - export PYRO_HOME=$(pwd)
-  - ./mk.sh
+  - ./mk.sh $MK_ARGS
 
 script:
   - flake8 .

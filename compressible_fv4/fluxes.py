@@ -2,9 +2,9 @@
 
 import numpy as np
 
-import advection_fv4.interface_f as interface_f
+import advection_fv4.interface as interface_f
 import compressible as comp
-import compressible.interface_f as cf
+import compressible.interface as cf
 import mesh.reconstruction as reconstruction
 import mesh.array_indexer as ai
 

@@ -60,12 +60,12 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
     u = my_data.get_var("x-velocity")
     v = my_data.get_var("y-velocity")
 
-    cx = u*dt/myg.dx
-    cy = v*dt/myg.dy
+    cx = u * dt / myg.dx
+    cy = v * dt / myg.dy
 
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # monotonized central differences
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
 
     limiter = rp.get_param("advection.limiter")
 
@@ -79,12 +79,12 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
     for index, vel in np.ndenumerate(u.v(buf=1)):
         if vel < 0:
             a_x.v(buf=1)[index] = a.ip(shift_x.v(buf=1)[index], buf=1)[index] - \
-                                  0.5*(1.0 + cx.v(buf=1)[index]) * \
-                                  ldelta_ax.ip(shift_x.v(buf=1)[index], buf=1)[index]
+                0.5 * (1.0 + cx.v(buf=1)[index]) * \
+                ldelta_ax.ip(shift_x.v(buf=1)[index], buf=1)[index]
         else:
             a_x.v(buf=1)[index] = a.ip(shift_x.v(buf=1)[index], buf=1)[index] + \
-                                  0.5*(1.0 - cx.v(buf=1)[index]) * \
-                                  ldelta_ax.ip(shift_x.v(buf=1)[index], buf=1)[index]
+                0.5 * (1.0 - cx.v(buf=1)[index]) * \
+                ldelta_ax.ip(shift_x.v(buf=1)[index], buf=1)[index]
 
     # upwind in y-direction
     a_y = myg.scratch_array()
@@ -93,34 +93,34 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
     for index, vel in np.ndenumerate(v.v(buf=1)):
         if vel < 0:
             a_y.v(buf=1)[index] = a.jp(shift_y.v(buf=1)[index], buf=1)[index] - \
-                                  0.5*(1.0 + cy.v(buf=1)[index]) * \
-                                  ldelta_ay.jp(shift_y.v(buf=1)[index], buf=1)[index]
+                0.5 * (1.0 + cy.v(buf=1)[index]) * \
+                ldelta_ay.jp(shift_y.v(buf=1)[index], buf=1)[index]
         else:
             a_y.v(buf=1)[index] = a.jp(shift_y.v(buf=1)[index], buf=1)[index] + \
-                                  0.5*(1.0 - cy.v(buf=1)[index]) * \
-                                  ldelta_ay.jp(shift_y.v(buf=1)[index], buf=1)[index]
+                0.5 * (1.0 - cy.v(buf=1)[index]) * \
+                ldelta_ay.jp(shift_y.v(buf=1)[index], buf=1)[index]
 
     # compute the transverse flux differences.  The flux is just (u a)
     # HOTF
-    F_xt = u*a_x
-    F_yt = v*a_y
+    F_xt = u * a_x
+    F_yt = v * a_y
 
     F_x = myg.scratch_array()
     F_y = myg.scratch_array()
 
     # the zone where we grab the transverse flux derivative from
     # depends on the sign of the advective velocity
-    dtdx2 = 0.5*dt/myg.dx
-    dtdy2 = 0.5*dt/myg.dy
+    dtdx2 = 0.5 * dt / myg.dx
+    dtdy2 = 0.5 * dt / myg.dy
 
     for index, vel in np.ndenumerate(u.v(buf=1)):
-        F_x.v(buf=1)[index] = vel*(a_x.v(buf=1)[index] -
-                              dtdy2*(F_yt.ip_jp(shift_x.v(buf=1)[index], 1, buf=1)[index] -
-                                     F_yt.ip(shift_x.v(buf=1)[index], buf=1)[index]))
+        F_x.v(buf=1)[index] = vel * (a_x.v(buf=1)[index] -
+                                     dtdy2 * (F_yt.ip_jp(shift_x.v(buf=1)[index], 1, buf=1)[index] -
+                                              F_yt.ip(shift_x.v(buf=1)[index], buf=1)[index]))
 
     for index, vel in np.ndenumerate(v.v(buf=1)):
-        F_y.v(buf=1)[index] = vel*(a_y.v(buf=1)[index] -
-                              dtdx2*(F_xt.ip_jp(1, shift_y.v(buf=1)[index], buf=1)[index] -
-                                     F_xt.jp(shift_y.v(buf=1)[index], buf=1)[index]))
+        F_y.v(buf=1)[index] = vel * (a_y.v(buf=1)[index] -
+                                     dtdx2 * (F_xt.ip_jp(1, shift_y.v(buf=1)[index], buf=1)[index] -
+                                              F_xt.jp(shift_y.v(buf=1)[index], buf=1)[index]))
 
     return F_x, F_y

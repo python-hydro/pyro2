@@ -16,5 +16,3 @@ lm\_atm\.problems\.bubble module
     :members:
     :undoc-members:
     :show-inheritance:
-
-

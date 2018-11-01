@@ -334,7 +334,7 @@ class CellCenterMG2d(object):
                    interpolation="nearest", origin="lower",
                    extent=[self.xmin, self.xmax, self.ymin, self.ymax], cmap=cm)
 
-        #plt.xlabel("x")
+        # plt.xlabel("x")
         plt.ylabel("y")
 
         if self.current_level == self.nlevels-1:

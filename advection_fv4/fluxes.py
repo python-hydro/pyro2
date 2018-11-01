@@ -1,9 +1,9 @@
-import advection_fv4.interface_f as interface_f
+import advection_fv4.interface as interface_f
 import mesh.array_indexer as ai
 
 
 def fluxes(my_data, rp, dt):
-    """Construct the fluxes through the interfaces for the linear advection
+    r"""Construct the fluxes through the interfaces for the linear advection
     equation:
 
     .. math::

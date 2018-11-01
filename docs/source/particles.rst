@@ -16,5 +16,3 @@ particles\.particles module
     :members:
     :undoc-members:
     :show-inheritance:
-
-

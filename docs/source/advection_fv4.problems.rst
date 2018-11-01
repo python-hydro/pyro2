@@ -16,13 +16,3 @@ advection\_fv4\.problems\.smooth module
     :members:
     :undoc-members:
     :show-inheritance:
-
-advection\_fv4\.problems\.tophat module
----------------------------------------
-
-.. automodule:: advection_fv4.problems.tophat
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-

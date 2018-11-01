@@ -297,8 +297,8 @@ class PyroBenchmark(Pyro):
         try:
             sim_bench = io.read(compare_file)
         except IOError:
-            msg.warning("ERROR openning compare file")
-            return "ERROR openning compare file"
+            msg.warning("ERROR opening compare file")
+            return "ERROR opening compare file"
 
         result = compare.compare(self.sim.cc_data, sim_bench.cc_data)
 
