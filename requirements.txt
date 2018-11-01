@@ -10,3 +10,4 @@ nbval>=0.9.0
 pytest-cov>=2.5.1
 flake8>=3.5.0
 numba>=0.40.0
+numpydoc
