@@ -1,8 +1,9 @@
 [run]
 omit = examples/*
        test.py
-       incompressible/setup.py
-       compressible/setup.py
-       lm_atm/setup.py
-       advection_fv4/setup.py
+       plot.py
+
+[report]
+omit = examples/*
+       test.py
        plot.py

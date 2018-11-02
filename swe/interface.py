@@ -3,8 +3,8 @@ from numba import njit
 
 
 @njit(cache=True)
-def states(idir, qx, qy, ng, dx, dt,
-           ih, iu, iv, ix, nvar, nspec,
+def states(idir, ng, dx, dt,
+           ih, iu, iv, ix, nspec,
            g,
            qv, dqv):
     r"""
@@ -19,7 +19,7 @@ def states(idir, qx, qy, ng, dx, dt,
     We need the left and right eigenvectors and the eigenvalues for
     the system projected along the x-direction
 
-    Taking our state vector as :math:`Q = (rho, u, v, p)^T`, the eigenvalues
+    Taking our state vector as :math:`Q = (\rho, u, v, p)^T`, the eigenvalues
     are :math:`u - c`, :math:`u`, :math:`u + c`.
 
     We look at the equations of hydrodynamics in a split fashion --
@@ -61,8 +61,6 @@ def states(idir, qx, qy, ng, dx, dt,
     ----------
     idir : int
         Are we predicting to the edges in the x-direction (1) or y-direction (2)?
-    qx, qy : int
-        The dimensions of the grid.
     ng : int
         The number of ghost cells
     dx : float
@@ -72,8 +70,6 @@ def states(idir, qx, qy, ng, dx, dt,
     ih, iu, iv, ix : int
         Indices of the height, x-velocity, y-velocity and species in the
         state vector
-    nvar : int
-        The total number of variables in the state vector
     nspec : int
         The number of species
     g : float
@@ -89,8 +85,11 @@ def states(idir, qx, qy, ng, dx, dt,
         State vector predicted to the left and right edges
     """
 
-    q_l = np.zeros((qx, qy, nvar))
-    q_r = np.zeros((qx, qy, nvar))
+    qx, qy, nvar = qv.shape
+
+    q_l = np.zeros_like(qv)
+    q_r = np.zeros_like(qv)
+
     lvec = np.zeros((nvar, nvar))
     rvec = np.zeros((nvar, nvar))
     e_val = np.zeros(nvar)
@@ -209,8 +208,8 @@ def states(idir, qx, qy, ng, dx, dt,
 
 
 @njit(cache=True)
-def riemann_roe(idir, qx, qy, ng,
-                nvar, ih, ixmom, iymom, ihX, nspec,
+def riemann_roe(idir, ng,
+                ih, ixmom, iymom, ihX, nspec,
                 lower_solid, upper_solid,
                 g, U_l, U_r):
     r"""
@@ -221,12 +220,8 @@ def riemann_roe(idir, qx, qy, ng,
     ----------
     idir : int
         Are we predicting to the edges in the x-direction (1) or y-direction (2)?
-    qx, qy : int
-        The dimensions of the grid.
     ng : int
         The number of ghost cells
-    nvar : int
-        The number of variables in the state vector
     ih, ixmom, iymom, ihX : int
         The indices of the height, x-momentum, y-momentum and height*species fractions in the conserved state vector.
     nspec : int
@@ -243,6 +238,9 @@ def riemann_roe(idir, qx, qy, ng,
     out : ndarray
         Conserved flux
     """
+
+    qx, qy, nvar = U_l.shape
+
     F = np.zeros((qx, qy, nvar))
 
     smallc = 1.e-10
@@ -328,9 +326,9 @@ def riemann_roe(idir, qx, qy, ng,
                 K_roe[n, :] = 0.0
                 K_roe[n, n] = 1.0
 
-            F[i, j, :] = consFlux(idir, g, ih, ixmom, iymom, ihX, nvar, nspec,
+            F[i, j, :] = consFlux(idir, g, ih, ixmom, iymom, ihX, nspec,
                                   U_l[i, j, :])
-            F_r = consFlux(idir, g, ih, ixmom, iymom, ihX, nvar, nspec,
+            F_r = consFlux(idir, g, ih, ixmom, iymom, ihX, nspec,
                            U_r[i, j, :])
 
             F[i, j, :] = 0.5 * (F[i, j, :] + F_r)
@@ -358,8 +356,8 @@ def riemann_roe(idir, qx, qy, ng,
 
 
 @njit(cache=True)
-def riemann_hllc(idir, qx, qy, ng,
-                 nvar, ih, ixmom, iymom, ihX, nspec,
+def riemann_hllc(idir, ng,
+                 ih, ixmom, iymom, ihX, nspec,
                  lower_solid, upper_solid,
                  g, U_l, U_r):
     r"""
@@ -371,12 +369,8 @@ def riemann_hllc(idir, qx, qy, ng,
     ----------
     idir : int
         Are we predicting to the edges in the x-direction (1) or y-direction (2)?
-    qx, qy : int
-        The dimensions of the grid.
     ng : int
         The number of ghost cells
-    nvar : int
-        The number of variables in the state vector
     ih, ixmom, iymom, ihX : int
         The indices of the height, x-momentum, y-momentum and height*species fractions in the conserved state vector.
     nspec : int
@@ -393,6 +387,8 @@ def riemann_hllc(idir, qx, qy, ng,
     out : ndarray
         Conserved flux
     """
+
+    qx, qy, nvar = U_l.shape
 
     F = np.zeros((qx, qy, nvar))
 
@@ -469,7 +465,7 @@ def riemann_hllc(idir, qx, qy, ng,
                 # R region
                 U_state[:] = U_r[i, j, :]
 
-                F[i, j, :] = consFlux(idir, g, ih, ixmom, iymom, ihX, nvar, nspec,
+                F[i, j, :] = consFlux(idir, g, ih, ixmom, iymom, ihX, nspec,
                                       U_state)
 
             elif (S_r > 0.0 and S_c <= 0):
@@ -491,7 +487,7 @@ def riemann_hllc(idir, qx, qy, ng,
                         U_r[i, j, ihX:ihX + nspec] / h_r
 
                 # find the flux on the right interface
-                F[i, j, :] = consFlux(idir, g, ih, ixmom, iymom, ihX, nvar, nspec,
+                F[i, j, :] = consFlux(idir, g, ih, ixmom, iymom, ihX, nspec,
                                       U_r[i, j, :])
 
                 # correct the flux
@@ -516,7 +512,7 @@ def riemann_hllc(idir, qx, qy, ng,
                         U_l[i, j, ihX:ihX + nspec] / h_l
 
                 # find the flux on the left interface
-                F[i, j, :] = consFlux(idir, g, ih, ixmom, iymom, ihX, nvar, nspec,
+                F[i, j, :] = consFlux(idir, g, ih, ixmom, iymom, ihX, nspec,
                                       U_l[i, j, :])
 
                 # correct the flux
@@ -526,13 +522,13 @@ def riemann_hllc(idir, qx, qy, ng,
                 # L region
                 U_state[:] = U_l[i, j, :]
 
-                F[i, j, :] = consFlux(idir, g, ih, ixmom, iymom, ihX, nvar, nspec,
+                F[i, j, :] = consFlux(idir, g, ih, ixmom, iymom, ihX, nspec,
                                       U_state)
     return F
 
 
 @njit(cache=True)
-def consFlux(idir, g, ih, ixmom, iymom, ihX, nvar, nspec, U_state):
+def consFlux(idir, g, ih, ixmom, iymom, ihX, nspec, U_state):
     r"""
     Calculate the conserved flux for the shallow water equations. In the
     x-direction, this is given by::
@@ -549,8 +545,6 @@ def consFlux(idir, g, ih, ixmom, iymom, ihX, nvar, nspec, U_state):
         Graviational acceleration
     ih, ixmom, iymom, ihX : int
         The indices of the height, x-momentum, y-momentum, height*species fraction in the conserved state vector.
-    nvar : int
-        The number of variables in the state vector
     nspec : int
         The number of species
     U_state : ndarray
@@ -562,7 +556,7 @@ def consFlux(idir, g, ih, ixmom, iymom, ihX, nvar, nspec, U_state):
         Conserved flux
     """
 
-    F = np.zeros(nvar)
+    F = np.zeros_like(U_state)
 
     u = U_state[ixmom] / U_state[ih]
     v = U_state[iymom] / U_state[ih]

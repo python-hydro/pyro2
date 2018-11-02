@@ -4,6 +4,6 @@
 #
 # Note the setup.cfg directs the build to be done in-place.
 
-from numpy.distutils.core import setup
+from setuptools import setup
 
 setup(name='pyro')

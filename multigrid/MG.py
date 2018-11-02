@@ -1,16 +1,18 @@
-"""
+r"""
 The multigrid module provides a framework for solving elliptic
 problems.  A multigrid object is just a list of grids, from the finest
 mesh down (by factors of two) to a single interior zone (each grid has
 the same number of guardcells).
 
 The main multigrid class is setup to solve a constant-coefficient
-Helmholtz equation::
+Helmholtz equation
 
-   (alpha - beta L) phi = f
+.. math::
 
-where L is the Laplacian and alpha and beta are constants.  If alpha =
-0 and beta = -1, then this is the Poisson equation.
+   (\alpha - \beta L) \phi = f
+
+where :math:`L` is the Laplacian and :math:`\alpha` and :math:`\beta` are constants.  If :math:`\alpha =
+0` and :math:`\beta = -1`, then this is the Poisson equation.
 
 We support Dirichlet or Neumann BCs, or a periodic domain.
 
@@ -19,7 +21,7 @@ The general usage is as follows::
    a = multigrid.CellCenterMG2d(nx, ny, verbose=1, alpha=alpha, beta=beta)
 
 this creates the multigrid object a, with a finest grid of nx by ny
-zones and the default boundary condition types.  alpha and beta are
+zones and the default boundary condition types.  :math:`\alpha` and :math:`\beta` are
 the coefficients of the Helmholtz equation.  Setting verbose = 1
 causing debugging information to be output, so you can see the
 residual errors in each of the V-cycles.
@@ -502,9 +504,9 @@ class CellCenterMG2d(object):
         v[:, :] = 0.0
 
     def init_RHS(self, data):
-        """
+        r"""
         Initialize the right hand side, f, of the Helmholtz equation
-        (alpha - beta L) phi = f
+        :math:`(\alpha - \beta L) \phi = f`
 
         Parameters
         ----------

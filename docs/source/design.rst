@@ -1,12 +1,11 @@
 Design ideas
 ============
 
-pyro is written primarily in python (by default, we expect python 3),
-with a few low-level routines written in Fortran for performance. The
+pyro is written entirely in python (by default, we expect python 3),
+with a few low-level routines compiled *just-in-time* by `numba` for performance. The
 ``numpy`` package is used for representing arrays throughout the
 python code and the ``matplotlib`` library is used for
-visualization. We use ``f2py`` (part of NumPy) to interface with some
-Fortran code. Finally, ``pytest`` is used for unit testing of some
+visualization. Finally, ``pytest`` is used for unit testing of some
 components.
 
 All solvers are written for a 2-d grid.  This gives a good balance
@@ -128,31 +127,10 @@ The overall structure is:
   modes.
 
 
-Fortran
--------
-
-Fortran is used to speed up some critical portions of the code, and in
-many cases, provides more clarity than trying to write optimized
-python code using array operations in numpy. The Fortran code
-seemlessly integrates into python using f2py.
-
-Wherever Fortran is used, we enforce the following design rule: the
-Fortran functions must be completely self-contained, with all
-information coming through the interface. No external dependencies
-are allowed. Each pyro module will have (at most) a single Fortran
-file and can be compiled into a library via a single f2py command line
-invocation.
-
-A single script, ``mk.sh``, in the top-level directory run with the ``fortran``
-argument will compile all the Fortran source.
-
-
 Numba
 -----
 
-Instead of using Fortran to speed up performance-critical parts of the code,
-``pyro`` can also use python-only versions of these functions compiled with
-``numba``. Numba is a *just-in-time compiler* for python. When a call is first
+``numba`` is used to speed up some critical portions of the code. Numba is a *just-in-time compiler* for python. When a call is first
 made to a function decorated with Numba's ``@njit`` decorator, it is compiled to
 machine code 'just-in-time' for it to be executed. Once compiled, it can then
 run at (near-to) native machine code speed.
@@ -163,9 +141,9 @@ time you run the same bit of code, Numba will use the saved version rather than
 compiling the code again, saving some compilation time at the start of the
 simulation.
 
-``pyro`` will use the ``numba`` functions (rather than the Fortran modules) by
-default.
+.. note::
 
+    Because we have chosen to cache the compiled code, Numba will save it in the ``__pycache__`` directories. If you change the code, a new version will be compiled and saved, but the old version will not be deleted. Over time, you may end up with many unneeded files saved in the ``__pycache__`` directories. To clean up these files, you can run ``./mk.sh clean`` in the main ``pyro2`` directory. 
 
 Main driver
 -----------

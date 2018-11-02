@@ -1,17 +1,23 @@
-"""This is the pyro multigrid solver.  THere are several versions.
+r"""This is the pyro multigrid solver.  There are several versions.
 
 MG implements a second-order discretization of a constant-coefficient
-Helmholtz equation::
+Helmholtz equation:
 
-   (alpha - beta L) phi = f
+.. math::
 
-variable_coeff_MG implements a variable-coefficient Poisson equation::
+   (\alpha - \beta L) \phi = f
 
-   div { eta grad phi } = f
+variable_coeff_MG implements a variable-coefficient Poisson equation
 
-general_MG implements a more general elliptic equation::
+.. math::
 
-   alpha phi + div { beta grad phi } + gamma . grad phi = f
+   \nabla \cdot { \eta \nabla \phi } = f
+
+general_MG implements a more general elliptic equation
+
+.. math::
+
+   \alpha \phi + \nabla \cdot { \beta \nabla \phi } + \gamma \cdot \nabla \phi = f
 
 
 All use pure V-cycles to solve elliptic problems

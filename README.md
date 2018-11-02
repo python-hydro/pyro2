@@ -42,13 +42,13 @@ http://python-hydro.github.io/pyro2/
 	switch to python 3.x
 
   - There are a few steps to take to get things running. You need to
-    make sure you have `numpy`, `f2py`, `matplotlib`, and `h5py`
+    make sure you have `numpy`, `numba`, `matplotlib`, and `h5py`
     installed. On a Fedora system, this can be accomplished by doing:
 
-       `dnf install python3-numpy python3-numpy-f2py python3-matplotlib python3-matplotlib-tk python3-h5py`
+       `dnf install python3-numpy python3-numba python3-matplotlib python3-matplotlib-tk python3-h5py`
 
     (note, for older Fedora releases, replace `dnf` with `yum`.  For
-	python 2.x, leave off the `2` in the package names.)
+	python 2.x, leave off the `3` in the package names.)
 
   - You also need to make sure gfortran is present on you system. On a
     Fedora system, it can be installed as:
@@ -78,10 +78,6 @@ http://python-hydro.github.io/pyro2/
 
       * Define the environment variable `PYRO_HOME` to point to the
         `pyro2/` directory (only needed for regression testing)
-
-      * Build the Fortran source. In `pyro2/` type
-
-          `./mk.sh`
 
       * Run a quick test of the advection solver:
 
