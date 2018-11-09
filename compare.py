@@ -8,7 +8,10 @@ import sys
 from util import io
 
 usage = """
-      usage: ./compare.py file1 file2
+      usage: ./compare.py file1 file2 (rtol)
+
+      where rtol is an (optional) relative tolerance parameter to use when
+      comparing the data
 """
 
 errors = {"gridbad": "grids don't agree",
@@ -16,9 +19,17 @@ errors = {"gridbad": "grids don't agree",
           "varerr": "one or more variables don't agree"}
 
 
-def compare(data1, data2):
-    """given two CellCenterData2d objects, compare the data, zone-by-zone
+def compare(data1, data2, rtol=1.e-12):
+    """
+    given two CellCenterData2d objects, compare the data, zone-by-zone
     and output any errors
+
+    Parameters
+    ----------
+    data1, data2 : CellCenterData2d object
+        Two data grids to compare
+    rtol : float
+        relative tolerance to use to compare grids
 
     """
 
@@ -40,11 +51,15 @@ def compare(data1, data2):
         d1 = data1.get_var(name)
         d2 = data2.get_var(name)
 
-        err = np.max(np.abs(d1.v() - d2.v()))
+        abs_err = np.max(np.abs(d1.v() - d2.v()))
 
-        print("{:20s} error = {:20.10g}".format(name, err))
+        if not np.any(d2.v() == 0):
+            rel_err = np.max(np.abs(d1.v() - d2.v()) / np.abs(d2.v()))
+            print("{:20s} absolute error = {:10.10g}, relative error = {:10.10g}".format(name, abs_err, rel_err))
+        else:
+            print("{:20s} absolute error = {:10.10g}".format(name, abs_err))
 
-        if not err == 0:
+        if not np.allclose(d1.v(), d2.v(), rtol=rtol):
             result = "varerr"
 
     return result
@@ -52,7 +67,7 @@ def compare(data1, data2):
 
 if __name__ == "__main__":
 
-    if not len(sys.argv) == 3:
+    if not (len(sys.argv) == 3 or len(sys.argv) == 4):
         print(usage)
         sys.exit(2)
 
@@ -62,7 +77,10 @@ if __name__ == "__main__":
     s1 = io.read(file1)
     s2 = io.read(file2)
 
-    result = compare(s1.cc_data, s2.cc_data)
+    if len(sys.argv) == 3:
+        result = compare(s1.cc_data, s2.cc_data)
+    else:
+        result = compare(s1.cc_data, s2.cc_data, rtol=float(sys.argv[3]))
 
     if result == 0:
         print("SUCCESS: files agree")
