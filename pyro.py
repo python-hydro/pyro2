@@ -269,7 +269,7 @@ class PyroBenchmark(Pyro):
 
     def run_sim(self, rtol):
         """
-        Evolve entire simulation and benchmark at the end.
+        Evolve entire simulation and compare to benchmark at the end.
         """
 
         super().run_sim()
