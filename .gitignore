@@ -18,3 +18,8 @@ inputs.auto
 .cache
 
 .pytest_cache/
+__pycache__
+
+Untitled.ipynb
+
+.coverage
