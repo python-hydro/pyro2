@@ -260,8 +260,7 @@ class RuntimeParameters(object):
         inputs file, with all known parameters and values
         """
 
-        keys = list(self.params.keys())
-        keys.sort()
+        all_keys = list(self.params.keys())
 
         try:
             f = open('inputs.auto', 'w')
@@ -270,34 +269,63 @@ class RuntimeParameters(object):
 
         f.write('# automagically generated parameter file\n')
 
-        current_section = " "
+        # find all the sections
+        secs = set([q for (q, _) in [k.split(".") for k in all_keys]])
 
-        for key in keys:
-            parts = key.split('.')
-            section = parts[0]
-            option = parts[1]
+        for sec in sorted(secs):
+            keys = [q for q in all_keys if q.startswith("{}.".format(sec))]
 
-            if section != current_section:
-                current_section = section
-                f.write('\n')
-                f.write('[' + section + ']\n')
+            f.write("\n[{}]\n".format(sec))
 
-            if isinstance(self.params[key], int):
-                value = '%d' % self.params[key]
-            elif isinstance(self.params[key], float):
-                value = '%f' % self.params[key]
-            else:
+            for key in keys:
+                _, option = key.split('.')
+
                 value = self.params[key]
 
-            if self.param_comments[key] != '':
-                f.write(option + ' = ' + value + '       ; ' + self.param_comments[key] + '\n')
-            else:
-                f.write(option + ' = ' + value + '\n')
+                if self.param_comments[key] != '':
+                    f.write("{} = {}    ; {}\n".format(option, value, self.param_comments[key]))
+                else:
+                    f.write("{} = {}\n".format(option, value))
 
+        f.close()
+
+    def print_sphinx_tables(self, outfile="params-sphinx.inc"):
+        """Output Sphinx-formatted tables for inclusion in the documentation.
+        The table columns will be: param, default, description.
+
+        """
+
+        all_keys = list(self.params.keys())
+
+        try:
+            f = open(outfile, 'w')
+        except IOError:
+            msg.fail("ERROR: unable to open inputs.auto")
+
+        # find all the sections
+        secs = set([q for (q, _) in [k.split(".") for k in all_keys]])
+
+        heading = "+=" + 32*"=" + "=+=" + 10*"=" + "=+=" + 50*"=" + "=+" + "\n"
+        separator = "+-" + 32*"-" + "-+-" + 10*"-" + "-+-" + 50*"-" + "-+" + "\n"
+        entry = "| {:32} | {:10} | {:50} |\n"
+
+        for sec in sorted(secs):
+            keys = [q for q in all_keys if q.startswith("{}.".format(sec))]
+
+            f.write("\n**{}**\n\n".format(sec.strip()))
+
+            f.write(separator)
+            f.write(entry.format("option", "value", "description"))
+            f.write(heading)
+
+            for key in keys:
+                _, option = key.split('.')
+                f.write(entry.format(option, self.params[key], self.param_comments[key].strip()))
+                f.write(separator)
         f.close()
 
 
 if __name__ == "__main__":
     rp = RuntimeParameters()
     rp.load_params("inputs.test")
-    rp.print_paramfile()
+    rp.print_sphinx_tables()
