@@ -19,7 +19,7 @@ Taylor expanding *in space only* yields::
 
 """
 
-import compressible.interface as interface_f
+import compressible.interface as interface
 import compressible as comp
 import mesh.reconstruction as reconstruction
 import mesh.array_indexer as ai
@@ -168,19 +168,19 @@ def fluxes(my_data, rp, ivars, solid, tc):
     riemann = rp.get_param("compressible.riemann")
 
     if riemann == "HLLC":
-        riemannFunc = interface_f.riemann_hllc
+        riemannFunc = interface.riemann_hllc
     elif riemann == "CGF":
-        riemannFunc = interface_f.riemann_cgf
+        riemannFunc = interface.riemann_cgf
     else:
         msg.fail("ERROR: Riemann solver undefined")
 
-    _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
-                      ivars.nvar, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+    _fx = riemannFunc(1, myg.ng,
+                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
                       solid.xl, solid.xr,
                       gamma, U_xl, U_xr)
 
-    _fy = riemannFunc(2, myg.qx, myg.qy, myg.ng,
-                      ivars.nvar, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+    _fy = riemannFunc(2, myg.ng,
+                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
                       solid.yl, solid.yr,
                       gamma, U_yl, U_yr)
 
@@ -194,8 +194,7 @@ def fluxes(my_data, rp, ivars, solid, tc):
     # =========================================================================
     cvisc = rp.get_param("compressible.cvisc")
 
-    _ax, _ay = interface_f.artificial_viscosity(
-        myg.qx, myg.qy, myg.ng, myg.dx, myg.dy,
+    _ax, _ay = interface.artificial_viscosity(myg.ng, myg.dx, myg.dy,
         cvisc, q.v(n=ivars.iu, buf=myg.ng), q.v(n=ivars.iv, buf=myg.ng))
 
     avisco_x = ai.ArrayIndexer(d=_ax, grid=myg)

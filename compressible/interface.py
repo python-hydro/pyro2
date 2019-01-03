@@ -3,8 +3,8 @@ from numba import njit
 
 
 @njit(cache=True)
-def states(idir, qx, qy, ng, dx, dt,
-           irho, iu, iv, ip, ix, nvar, nspec,
+def states(idir, ng, dx, dt,
+           irho, iu, iv, ip, ix, nspec,
            gamma, qv, dqv):
     r"""
     predict the cell-centered state to the edges in one-dimension
@@ -65,8 +65,6 @@ def states(idir, qx, qy, ng, dx, dt,
     ----------
     idir : int
         Are we predicting to the edges in the x-direction (1) or y-direction (2)?
-    qx, qy : int
-        The dimensions of the grid.
     ng : int
         The number of ghost cells
     dx : float
@@ -76,8 +74,6 @@ def states(idir, qx, qy, ng, dx, dt,
     irho, iu, iv, ip, ix : int
         Indices of the density, x-velocity, y-velocity, pressure and species in the
         state vector
-    nvar : int
-        The total number of variables in the state vector
     nspec : int
         The number of species
     gamma : float
@@ -93,8 +89,10 @@ def states(idir, qx, qy, ng, dx, dt,
         State vector predicted to the left and right edges
     """
 
-    q_l = np.zeros((qx, qy, nvar))
-    q_r = np.zeros((qx, qy, nvar))
+    qx, qy, nvar = qv.shape
+
+    q_l = np.zeros_like(qv)
+    q_r = np.zeros_like(qv)
 
     nx = qx - 2 * ng
     ny = qy - 2 * ng
@@ -217,8 +215,8 @@ def states(idir, qx, qy, ng, dx, dt,
 
 
 @njit(cache=True)
-def riemann_cgf(idir, qx, qy, ng,
-                nvar, idens, ixmom, iymom, iener, irhoX, nspec,
+def riemann_cgf(idir, ng,
+                idens, ixmom, iymom, iener, irhoX, nspec,
                 lower_solid, upper_solid,
                 gamma, U_l, U_r):
     r"""
@@ -253,12 +251,8 @@ def riemann_cgf(idir, qx, qy, ng,
     ----------
     idir : int
         Are we predicting to the edges in the x-direction (1) or y-direction (2)?
-    qx, qy : int
-        The dimensions of the grid.
     ng : int
         The number of ghost cells
-    nvar : int
-        The number of variables in the state vector
     nspec : int
         The number of species
     idens, ixmom, iymom, iener, irhoX : int
@@ -276,6 +270,8 @@ def riemann_cgf(idir, qx, qy, ng,
     out : ndarray
         Conserved flux
     """
+
+    qx, qy, nvar = U_l.shape
 
     F = np.zeros((qx, qy, nvar))
 
@@ -523,8 +519,8 @@ def riemann_cgf(idir, qx, qy, ng,
 
 
 @njit(cache=True)
-def riemann_prim(idir, qx, qy, ng,
-                 nvar, irho, iu, iv, ip, iX, nspec,
+def riemann_prim(idir, ng,
+                 irho, iu, iv, ip, iX, nspec,
                  lower_solid, upper_solid,
                  gamma, q_l, q_r):
     r"""
@@ -563,12 +559,8 @@ def riemann_prim(idir, qx, qy, ng,
     ----------
     idir : int
         Are we predicting to the edges in the x-direction (1) or y-direction (2)?
-    qx, qy : int
-        The dimensions of the grid.
     ng : int
         The number of ghost cells
-    nvar : int
-        The number of variables in the state vector
     nspec : int
         The number of species
     irho, iu, iv, ip, iX : int
@@ -585,6 +577,8 @@ def riemann_prim(idir, qx, qy, ng,
     out : ndarray
         Primitive flux
     """
+
+    qx, qy, nvar = q_l.shape
 
     q_int = np.zeros((qx, qy, nvar))
 
@@ -808,8 +802,8 @@ def riemann_prim(idir, qx, qy, ng,
 
 
 @njit(cache=True)
-def riemann_hllc(idir, qx, qy, ng,
-                 nvar, idens, ixmom, iymom, iener, irhoX, nspec,
+def riemann_hllc(idir, ng,
+                 idens, ixmom, iymom, iener, irhoX, nspec,
                  lower_solid, upper_solid,
                  gamma, U_l, U_r):
     r"""
@@ -821,12 +815,8 @@ def riemann_hllc(idir, qx, qy, ng,
     ----------
     idir : int
         Are we predicting to the edges in the x-direction (1) or y-direction (2)?
-    qx, qy : int
-        The dimensions of the grid.
     ng : int
         The number of ghost cells
-    nvar : int
-        The number of variables in the state vector
     nspec : int
         The number of species
     idens, ixmom, iymom, iener, irhoX : int
@@ -844,6 +834,8 @@ def riemann_hllc(idir, qx, qy, ng,
     out : ndarray
         Conserved flux
     """
+
+    qx, qy, nvar = U_l.shape
 
     F = np.zeros((qx, qy, nvar))
 
@@ -1001,7 +993,7 @@ def riemann_hllc(idir, qx, qy, ng,
                 # R region
                 U_state[:] = U_r[i, j, :]
 
-                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nvar, nspec,
+                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec,
                                       U_state)
 
             elif (S_r > 0.0 and S_c <= 0):
@@ -1026,7 +1018,7 @@ def riemann_hllc(idir, qx, qy, ng,
                         U_r[i, j, irhoX:irhoX + nspec] / rho_r
 
                 # find the flux on the right interface
-                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nvar, nspec,
+                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec,
                                       U_r[i, j, :])
 
                 # correct the flux
@@ -1054,7 +1046,7 @@ def riemann_hllc(idir, qx, qy, ng,
                         U_l[i, j, irhoX:irhoX + nspec] / rho_l
 
                 # find the flux on the left interface
-                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nvar, nspec,
+                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec,
                                       U_l[i, j, :])
 
                 # correct the flux
@@ -1064,7 +1056,7 @@ def riemann_hllc(idir, qx, qy, ng,
                 # L region
                 U_state[:] = U_l[i, j, :]
 
-                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nvar, nspec,
+                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec,
                                       U_state)
 
             # we should deal with solid boundaries somehow here
@@ -1073,7 +1065,7 @@ def riemann_hllc(idir, qx, qy, ng,
 
 
 @njit(cache=True)
-def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nvar, nspec, U_state):
+def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec, U_state):
     r"""
     Calculate the conservative flux.
 
@@ -1086,8 +1078,6 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nvar, nspec, U_stat
     idens, ixmom, iymom, iener, irhoX : int
         The indices of the density, x-momentum, y-momentum, internal energy density
         and species partial densities in the conserved state vector.
-    nvar : int
-        The number of variables in the state vector
     nspec : int
         The number of species
     U_state : ndarray
@@ -1099,7 +1089,7 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nvar, nspec, U_stat
         Conserved flux
     """
 
-    F = np.zeros(nvar)
+    F = np.zeros_like(U_state)
 
     u = U_state[ixmom] / U_state[idens]
     v = U_state[iymom] / U_state[idens]
@@ -1128,7 +1118,7 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nvar, nspec, U_stat
 
 
 @njit(cache=True)
-def artificial_viscosity(qx, qy, ng, dx, dy,
+def artificial_viscosity(ng, dx, dy,
                          cvisc, u, v):
     r"""
     Compute the artifical viscosity.  Here, we compute edge-centered
@@ -1159,8 +1149,6 @@ def artificial_viscosity(qx, qy, ng, dx, dy,
 
     Parameters
     ----------
-    qx, qy : int
-        The dimensions of the grid.
     ng : int
         The number of ghost cells
     dx, dy : float
@@ -1175,6 +1163,8 @@ def artificial_viscosity(qx, qy, ng, dx, dy,
     out : ndarray, ndarray
         Artificial viscosity in the x- and y-directions
     """
+
+    qx, qy = u.shape
 
     avisco_x = np.zeros((qx, qy))
     avisco_y = np.zeros((qx, qy))

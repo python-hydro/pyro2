@@ -163,7 +163,7 @@ if __name__ == "__main__":
                    help="only do the unit tests",
                    action="store_true")
 
-    p.add_argument("-rtol",
+    p.add_argument("--rtol",
                    help="relative tolerance to use when comparing data to benchmarks",
                    type=float, nargs=1)
 

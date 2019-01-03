@@ -3,7 +3,7 @@ from numba import njit
 
 
 @njit(cache=True)
-def states(a, qx, qy, ng, idir):
+def states(a, ng, idir):
     r"""
     Predict the cell-centered state to the edges in one-dimension using the
     reconstructed, limited slopes. We use a fourth-order Godunov method.
@@ -18,8 +18,6 @@ def states(a, qx, qy, ng, idir):
     ----------
     a : ndarray
         The cell-centered state.
-    qx, qy : int
-        The dimensions of `a`.
     ng : int
         The number of ghost cells
     idir : int
@@ -30,6 +28,8 @@ def states(a, qx, qy, ng, idir):
     out : ndarray, ndarray
         The state predicted to the left and right edges.
     """
+
+    qx, qy = a.shape
 
     al = np.zeros((qx, qy))
     ar = np.zeros((qx, qy))
@@ -250,8 +250,6 @@ def states_nolimit(a, qx, qy, ng, idir):
     ----------
     a : ndarray
         The cell-centered state.
-    qx, qy : int
-        The dimensions of `a`.
     ng : int
         The number of ghost cells
     idir : int
