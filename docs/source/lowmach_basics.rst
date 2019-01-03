@@ -17,6 +17,10 @@ with :math:`\nabla p_0 = \rho_0 g` and :math:`\beta_0 = p_0^{1/\gamma}`.
 
 As with the incompressible solver, we implement a cell-centered approximate projection method.
 
+The main parameters that affect this solver are:
+
+.. include:: lm_atm_defaults.inc
+
 Examples
 --------
 

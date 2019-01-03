@@ -14,20 +14,7 @@ differencing (this makes the diffusion operator time-centered) and the
 implicit discretization forms a Helmholtz equation solved by the pyro
 multigrid class. The main parameters that affect this solver are:
 
-+---------------------------------------------------------------------------+
-| ``[driver]``                                                              |
-+===================+=======================================================+
-|``cfl``            | the "CFL" number for the diffusion equation. Since we |
-|                   | are doing an implicit discretization, this is the     |
-|                   | multiple of the explicit timestep to take.            |
-+-------------------+-------------------------------------------------------+
-
-+---------------------------------------------------------------------------+
-| ``[diffusion]``                                                           |
-+===================+=======================================================+
-|``k``              | the conductivity (constant)                           |
-+-------------------+-------------------------------------------------------+
-
+.. include:: diffusion_defaults.inc
 
 Examples
 --------

@@ -18,36 +18,7 @@ The implementation here has flattening at shocks and a choice of Riemann solvers
 
 The main parameters that affect this solver are:
 
-+-----------------------------------------------------------------------------+
-|``[driver]``                                                                 |
-+==================+==========================================================+
-|``cfl``           | the advective CFL number (what fraction of a zone can    |
-|                  | we cross in a single timestep)                           |
-+------------------+----------------------------------------------------------+
-
-+-------------------------------------------------------------------------------+
-|``[swe]``                                                                      |
-+====================+==========================================================+
-|``use_flattening``  | do we flatten the profiles at shocks? (0=no, 1=yes)      |
-+--------------------+----------------------------------------------------------+
-|``z0``              |                                                          |
-+--------------------+                                                          |
-|``z1``              | the parameters that affect the flattening algorithm      |
-+--------------------+                                                          |
-| ``delta``          |                                                          |
-+--------------------+----------------------------------------------------------+
-|``limiter``         | what type of limiting to use in reconstructing the       |
-|                    | slopes. 0 means use an unlimited second-order centered   |
-|                    | difference. 1 is the MC limiter, and 2 is the 4th-order  |
-|                    | MC limiter                                               |
-+--------------------+----------------------------------------------------------+
-|``riemann``         | which Riemann solver do we use? "HLLC" for the HLLC      |
-|                    | solver, or "Roe" for the Roe fix                         |
-|                    | solver                                                   |
-+--------------------+----------------------------------------------------------+
-|``grav``            | the gravitational acceleration (must be > 0)             |
-+--------------------+----------------------------------------------------------+
-
+.. include:: swe_defaults.inc
 
 Example problems
 ----------------
