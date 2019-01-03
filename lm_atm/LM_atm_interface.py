@@ -3,14 +3,12 @@ from numba import njit
 
 
 @njit(cache=True)
-def is_symmetric_pair(qx, qy, ng, nodal, sl, sr):
+def is_symmetric_pair(ng, nodal, sl, sr):
     r"""
     Are sl and sr symmetric about an axis parallel with the y-axis in the center of domain the x-direction?
 
     Parameters
     ----------
-    qx, qy : int
-        The dimensions of the grid.
     ng : int
         The number of ghost cells
     nodal: bool
@@ -23,6 +21,8 @@ def is_symmetric_pair(qx, qy, ng, nodal, sl, sr):
     out : int
         Are they symmetric? (1 = yes, 0 = no)
     """
+
+    qx, qy = sl.shape
 
     nx = qx - 2 * ng
     ny = qy - 2 * ng
@@ -67,14 +67,12 @@ def is_symmetric_pair(qx, qy, ng, nodal, sl, sr):
 
 
 @njit(cache=True)
-def is_symmetric(qx, qy, ng, nodal, s):
+def is_symmetric(ng, nodal, s):
     r"""
     Is the left half of s the mirror image of the right half?
 
     Parameters
     ----------
-    qx, qy : int
-        The dimensions of the grid.
     ng : int
         The number of ghost cells
     nodal: bool
@@ -88,18 +86,16 @@ def is_symmetric(qx, qy, ng, nodal, s):
         Is it symmetric? (1 = yes, 0 = no)
     """
 
-    return is_symmetric_pair(qx, qy, ng, nodal, s, s)
+    return is_symmetric_pair(ng, nodal, s, s)
 
 
 @njit(cache=True)
-def is_asymmetric_pair(qx, qy, ng, nodal, sl, sr):
+def is_asymmetric_pair(ng, nodal, sl, sr):
     r"""
     Are sl and sr asymmetric about an axis parallel with the y-axis in the center of domain the x-direction?
 
     Parameters
     ----------
-    qx, qy : int
-        The dimensions of the grid.
     ng : int
         The number of ghost cells
     nodal: bool
@@ -112,6 +108,8 @@ def is_asymmetric_pair(qx, qy, ng, nodal, sl, sr):
     out : int
         Are they asymmetric? (1 = yes, 0 = no)
     """
+
+    qx, qy = sl.shape
 
     nx = qx - 2 * ng
     ny = qy - 2 * ng
@@ -157,14 +155,12 @@ def is_asymmetric_pair(qx, qy, ng, nodal, sl, sr):
 
 
 @njit(cache=True)
-def is_asymmetric(qx, qy, ng, nodal, s):
+def is_asymmetric(ng, nodal, s):
     """
     Is the left half of s asymmetric to the right half?
 
     Parameters
     ----------
-    qx, qy : int
-        The dimensions of the grid.
     ng : int
         The number of ghost cells
     nodal: bool
@@ -178,11 +174,11 @@ def is_asymmetric(qx, qy, ng, nodal, s):
         Is it asymmetric? (1 = yes, 0 = no)
     """
 
-    return is_asymmetric_pair(qx, qy, ng, nodal, s, s)
+    return is_asymmetric_pair(ng, nodal, s, s)
 
 
 @njit(cache=True)
-def mac_vels(qx, qy, ng, dx, dy, dt,
+def mac_vels(ng, dx, dy, dt,
              u, v,
              ldelta_ux, ldelta_vx,
              ldelta_uy, ldelta_vy,
@@ -193,8 +189,6 @@ def mac_vels(qx, qy, ng, dx, dy, dt,
 
     Parameters
     ----------
-    qx, qy : int
-        The dimensions of the grid.
     ng : int
         The number of ghost cells
     dx, dy : float
@@ -246,7 +240,7 @@ def mac_vels(qx, qy, ng, dx, dy, dt,
 
     # get the full u and v left and right states (including transverse
     # terms) on both the x- and y-interfaces
-    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = get_interface_states(qx, qy, ng, dx, dy, dt,
+    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = get_interface_states(ng, dx, dy, dt,
                                                                           u, v,
                                                                           ldelta_ux, ldelta_vx,
                                                                           ldelta_uy, ldelta_vy,
@@ -261,8 +255,8 @@ def mac_vels(qx, qy, ng, dx, dy, dt,
     # Riemann problem -- this follows Burger's equation.  We don't use
     # any input velocity for the upwinding.  Also, we only care about
     # the normal states here (u on x and v on y)
-    u_MAC = riemann_and_upwind(qx, qy, ng, u_xl, u_xr)
-    v_MAC = riemann_and_upwind(qx, qy, ng, v_yl, v_yr)
+    u_MAC = riemann_and_upwind(ng, u_xl, u_xr)
+    v_MAC = riemann_and_upwind(ng, v_yl, v_yr)
 
     # print *, 'checking U_MAC'
     # if (not is_asymmetric(qx, qy, ng, .true., u_MAC) == 1):
@@ -274,7 +268,7 @@ def mac_vels(qx, qy, ng, dx, dy, dt,
 
 # xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @njit(cache=True)
-def states(qx, qy, ng, dx, dy, dt,
+def states(ng, dx, dy, dt,
            u, v,
            ldelta_ux, ldelta_vx,
            ldelta_uy, ldelta_vy,
@@ -288,8 +282,6 @@ def states(qx, qy, ng, dx, dy, dt,
 
     Parameters
     ----------
-    qx, qy : int
-        The dimensions of the grid.
     ng : int
         The number of ghost cells
     dx, dy : float
@@ -317,7 +309,7 @@ def states(qx, qy, ng, dx, dy, dt,
 
     # get the full u and v left and right states (including transverse
     # terms) on both the x- and y-interfaces
-    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = get_interface_states(qx, qy, ng, dx, dy, dt,
+    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = get_interface_states(ng, dx, dy, dt,
                                                                           u, v,
                                                                           ldelta_ux, ldelta_vx,
                                                                           ldelta_uy, ldelta_vy,
@@ -326,17 +318,17 @@ def states(qx, qy, ng, dx, dy, dt,
 
     # upwind using the MAC velocity to determine which state exists on
     # the interface
-    u_xint = upwind(qx, qy, ng, u_xl, u_xr, u_MAC)
-    v_xint = upwind(qx, qy, ng, v_xl, v_xr, u_MAC)
-    u_yint = upwind(qx, qy, ng, u_yl, u_yr, v_MAC)
-    v_yint = upwind(qx, qy, ng, v_yl, v_yr, v_MAC)
+    u_xint = upwind(ng, u_xl, u_xr, u_MAC)
+    v_xint = upwind(ng, v_xl, v_xr, u_MAC)
+    u_yint = upwind(ng, u_yl, u_yr, v_MAC)
+    v_yint = upwind(ng, v_yl, v_yr, v_MAC)
 
     return u_xint, v_xint, u_yint, v_yint
 
 
 # xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @njit(cache=True)
-def rho_states(qx, qy, ng, dx, dy, dt,
+def rho_states(ng, dx, dy, dt,
                rho, u_MAC, v_MAC,
                ldelta_rx, ldelta_ry):
     r"""
@@ -345,8 +337,6 @@ def rho_states(qx, qy, ng, dx, dy, dt,
 
     Parameters
     ----------
-    qx, qy : int
-        The dimensions of the grid.
     ng : int
         The number of ghost cells
     dx, dy : float
@@ -363,6 +353,8 @@ def rho_states(qx, qy, ng, dx, dy, dt,
     out : ndarray, ndarray
         rho predicted to the interfaces
     """
+
+    qx, qy = rho.shape
 
     rho_xl = np.zeros((qx, qy))
     rho_xr = np.zeros((qx, qy))
@@ -395,8 +387,8 @@ def rho_states(qx, qy, ng, dx, dy, dt,
                 (1.0 + dtdy * v_MAC[i, j]) * ldelta_ry[i, j]
 
     # we upwind based on the MAC velocities
-    rho_xint = upwind(qx, qy, ng, rho_xl, rho_xr, u_MAC)
-    rho_yint = upwind(qx, qy, ng, rho_yl, rho_yr, v_MAC)
+    rho_xint = upwind(ng, rho_xl, rho_xr, u_MAC)
+    rho_yint = upwind(ng, rho_yl, rho_yr, v_MAC)
 
     # now add the transverse term and the non-advective part of the normal
     # divergence
@@ -425,15 +417,15 @@ def rho_states(qx, qy, ng, dx, dy, dt,
             rho_yr[i, j] = rho_yr[i, j] - 0.5 * dt * (rhou_x + rho[i, j] * v_y)
 
     # finally upwind the full states
-    rho_xint = upwind(qx, qy, ng, rho_xl, rho_xr, u_MAC)
-    rho_yint = upwind(qx, qy, ng, rho_yl, rho_yr, v_MAC)
+    rho_xint = upwind(ng, rho_xl, rho_xr, u_MAC)
+    rho_yint = upwind(ng, rho_yl, rho_yr, v_MAC)
 
     return rho_xint, rho_yint
 
 
 # xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @njit(cache=True)
-def get_interface_states(qx, qy, ng, dx, dy, dt,
+def get_interface_states(ng, dx, dy, dt,
                          u, v,
                          ldelta_ux, ldelta_vx,
                          ldelta_uy, ldelta_vy,
@@ -448,8 +440,6 @@ def get_interface_states(qx, qy, ng, dx, dy, dt,
 
     Parameters
     ----------
-    qx, qy : int
-        The dimensions of the grid.
     ng : int
         The number of ghost cells
     dx, dy : float
@@ -473,6 +463,8 @@ def get_interface_states(qx, qy, ng, dx, dy, dt,
         unsplit predictions of u and v on both the x- and
         y-interfaces
     """
+
+    qx, qy = u.shape
 
     u_xl = np.zeros((qx, qy))
     u_xr = np.zeros((qx, qy))
@@ -531,19 +523,19 @@ def get_interface_states(qx, qy, ng, dx, dy, dt,
 
     # now get the normal advective velocities on the interfaces by solving
     # the Riemann problem.
-    uhat_adv = riemann(qx, qy, ng, u_xl, u_xr)
-    vhat_adv = riemann(qx, qy, ng, v_yl, v_yr)
+    uhat_adv = riemann(ng, u_xl, u_xr)
+    vhat_adv = riemann(ng, v_yl, v_yr)
 
     # now that we have the advective velocities, upwind the left and right
     # states using the appropriate advective velocity.
 
     # on the x-interfaces, we upwind based on uhat_adv
-    u_xint = upwind(qx, qy, ng, u_xl, u_xr, uhat_adv)
-    v_xint = upwind(qx, qy, ng, v_xl, v_xr, uhat_adv)
+    u_xint = upwind(ng, u_xl, u_xr, uhat_adv)
+    v_xint = upwind(ng, v_xl, v_xr, uhat_adv)
 
     # on the y-interfaces, we upwind based on vhat_adv
-    u_yint = upwind(qx, qy, ng, u_yl, u_yr, vhat_adv)
-    v_yint = upwind(qx, qy, ng, v_yl, v_yr, vhat_adv)
+    u_yint = upwind(ng, u_yl, u_yr, vhat_adv)
+    v_yint = upwind(ng, v_yl, v_yr, vhat_adv)
 
     # at this point, these states are the `hat' states -- they only
     # considered the normal to the interface portion of the predictor.
@@ -592,15 +584,13 @@ def get_interface_states(qx, qy, ng, dx, dy, dt,
 
 # xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @njit(cache=True)
-def upwind(qx, qy, ng, q_l, q_r, s):
+def upwind(ng, q_l, q_r, s):
     r"""
     upwind the left and right states based on the specified input
     velocity, s.  The resulting interface state is q_int
 
     Parameters
     ----------
-    qx, qy : int
-        The dimensions of the grid.
     ng : int
         The number of ghost cells
     q_l, q_r : ndarray
@@ -614,7 +604,9 @@ def upwind(qx, qy, ng, q_l, q_r, s):
         Upwinded state
     """
 
-    q_int = np.zeros((qx, qy))
+    qx, qy = s.shape
+
+    q_int = np.zeros_like(s)
 
     nx = qx - 2 * ng
     ny = qy - 2 * ng
@@ -638,7 +630,7 @@ def upwind(qx, qy, ng, q_l, q_r, s):
 
 # xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @njit(cache=True)
-def riemann(qx, qy, ng, q_l, q_r):
+def riemann(ng, q_l, q_r):
     """
     Solve the Burger's Riemann problem given the input left and right
     states and return the state on the interface.
@@ -647,8 +639,6 @@ def riemann(qx, qy, ng, q_l, q_r):
 
     Parameters
     ----------
-    qx, qy : int
-        The dimensions of the grid.
     ng : int
         The number of ghost cells
     q_l, q_r : ndarray
@@ -659,6 +649,8 @@ def riemann(qx, qy, ng, q_l, q_r):
     out : ndarray
         Interface state
     """
+
+    qx, qy = q_l.shape
 
     nx = qx - 2 * ng
     ny = qy - 2 * ng
@@ -684,7 +676,7 @@ def riemann(qx, qy, ng, q_l, q_r):
 
 # xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @njit(cache=True)
-def riemann_and_upwind(qx, qy, ng, q_l, q_r):
+def riemann_and_upwind(ng, q_l, q_r):
     r"""
     First solve the Riemann problem given q_l and q_r to give the
     velocity on the interface and: use this velocity to upwind to
@@ -695,8 +687,6 @@ def riemann_and_upwind(qx, qy, ng, q_l, q_r):
 
     Parameters
     ----------
-    qx, qy : int
-        The dimensions of the grid.
     ng : int
         The number of ghost cells
     q_l, q_r : ndarray
@@ -708,5 +698,5 @@ def riemann_and_upwind(qx, qy, ng, q_l, q_r):
         Upwinded state
     """
 
-    s = riemann(qx, qy, ng, q_l, q_r)
-    return upwind(qx, qy, ng, q_l, q_r, s)
+    s = riemann(ng, q_l, q_r)
+    return upwind(ng, q_l, q_r, s)

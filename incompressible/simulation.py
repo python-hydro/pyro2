@@ -5,7 +5,7 @@ import importlib
 import numpy as np
 import matplotlib.pyplot as plt
 
-import incompressible.incomp_interface as incomp_interface_f
+import incompressible.incomp_interface as incomp_interface
 import mesh.reconstruction as reconstruction
 import mesh.patch as patch
 import mesh.array_indexer as ai
@@ -222,8 +222,7 @@ class Simulation(NullSimulation):
         if self.verbose > 0:
             print("  making MAC velocities")
 
-        _um, _vm = incomp_interface_f.mac_vels(myg.qx, myg.qy, myg.ng,
-                                               myg.dx, myg.dy, self.dt,
+        _um, _vm = incomp_interface.mac_vels(myg.ng, myg.dx, myg.dy, self.dt,
                                                u, v,
                                                ldelta_ux, ldelta_vx,
                                                ldelta_uy, ldelta_vy,
@@ -288,8 +287,7 @@ class Simulation(NullSimulation):
             print("  making u, v edge states")
 
         _ux, _vx, _uy, _vy = \
-               incomp_interface_f.states(myg.qx, myg.qy, myg.ng,
-                                         myg.dx, myg.dy, self.dt,
+               incomp_interface.states(myg.ng, myg.dx, myg.dy, self.dt,
                                          u, v,
                                          ldelta_ux, ldelta_vx,
                                          ldelta_uy, ldelta_vy,

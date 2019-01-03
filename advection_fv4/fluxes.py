@@ -1,4 +1,4 @@
-import advection_fv4.interface as interface_f
+import advection_fv4.interface as interface
 import mesh.array_indexer as ai
 
 
@@ -77,13 +77,13 @@ def fluxes(my_data, rp, dt):
                              1./12.*(a.jp(-2, buf=1) + a.jp(1, buf=1))
 
     else:
-        a_l, a_r = interface_f.states(a, myg.qx, myg.qy, myg.ng, 1)
+        a_l, a_r = interface.states(a, myg.ng, 1)
         if u > 0:
             a_x = ai.ArrayIndexer(d=a_l, grid=myg)
         else:
             a_x = ai.ArrayIndexer(d=a_r, grid=myg)
 
-        a_l, a_r = interface_f.states(a, myg.qx, myg.qy, myg.ng, 2)
+        a_l, a_r = interface.states(a, myg.ng, 2)
         if v > 0:
             a_y = ai.ArrayIndexer(d=a_l, grid=myg)
         else:

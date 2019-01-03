@@ -44,7 +44,12 @@ and a number of new contributors.  pyro's functionality can now
 be accessed directly through a `Pyro()` class, in addition to the
 original commandline script interface.  This new interface in particular
 allows for easy use within Jupyter notebooks.  We also now use HDF5
-for output instead of python's `pickle()` function.
+for output instead of python's `pickle()` function.  Previously, we used Fortran
+to speed up some performance-critical portions of the code.  These routines
+could be called by the main python code by first compiling them using `f2py`.
+In the new version, we have replaced these Fortran routines by python functions
+that are compiled at runtime by `numba`.  Consequently, pyro is now written
+entirely in python.
 
 The original goal of pyro was to learn hydrodynamics methods through
 example, and it still serves this goal.  At Stony Brook, pyro is used

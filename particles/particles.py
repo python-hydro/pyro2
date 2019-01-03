@@ -210,13 +210,13 @@ class Particles(object):
                 self.particles[(ix, iy)] = Particle(x, y)
 
     def update_particles(self, dt, u=None, v=None):
-        """
+        r"""
         Update the particles on the grid. This is based off the
-        AdvectWithUcc function in AMReX, which used the midpoint
+        ``AdvectWithUcc`` function in AMReX, which used the midpoint
         method to advance particles using the cell-centered velocity.
 
         We will explicitly pass in u and v if they cannot be accessed from the
-        sim_data using get_var("velocity").
+        ``sim_data`` using ``get_var("velocity")``.
 
         Parameters
         ----------
