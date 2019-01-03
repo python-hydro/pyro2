@@ -1,7 +1,7 @@
 Compressible hydrodynamics solvers
 ==================================
 
-The equations of compressible hydrodynamics take the form:
+The Euler equations of compressible hydrodynamics take the form:
 
 .. math::
 
@@ -9,71 +9,68 @@ The equations of compressible hydrodynamics take the form:
    \frac{\partial (\rho U)}{\partial t} + \nabla \cdot (\rho U U) + \nabla p &= \rho g \\
    \frac{\partial (\rho E)}{\partial t} + \nabla \cdot [(\rho E + p ) U] &= \rho U \cdot g
 
-with :math:`\rho E = \rho e + \frac{1}{2} \rho |U|^2` and :math:`p = p(\rho, e)`.
+with :math:`\rho E = \rho e + \frac{1}{2} \rho |U|^2` and :math:`p =
+p(\rho, e)`.  Note these do not include any dissipation terms, since
+they are usually negligible in astrophysics.
 
-pyro has several compressible solvers:
-
-* :py:mod:`compressible` is based on a directionally unsplit (the
-  corner transport upwind algorithm) piecewise linear method for the
-  Euler equations
-
-* :py:mod:`compressible_rk` uses a method of lines time-integration
-  approach with piecewise linear spatial reconstruction for the Euler
-  equations
-
-* :py:mod:`compressible_fv4` uses a 4th order accurate method with RK4
-  time integration
-
-* :py:mod:`compressible_sdc` uses a 4th order accurate method
-  with spectral-deferred correction (SDC) for the time integration
-
+pyro has several compressible solvers to solve this equation set.
 The implementations here have flattening at shocks, artificial
 viscosity, a simple gamma-law equation of state, and (in some cases) a
 choice of Riemann solvers. Optional constant gravity in the vertical
 direction is allowed.
 
-The main parameters that affect this solver are:
+.. note::
 
-+-----------------------------------------------------------------------------+
-|``[driver]``                                                                 |
-+==================+==========================================================+
-|``cfl``           | the advective CFL number (what fraction of a zone can    |
-|                  | we cross in a single timestep)                           |
-+------------------+----------------------------------------------------------+
+   All the compressible solvers share the same ``problems/``
+   directory, which lives in ``compressible/problems/``.  For the
+   other compressible solvers, we simply use a symbolic-link to this
+   directory in the solver's directory.
 
-+-------------------------------------------------------------------------------+
-|``[compressible]``                                                             |
-+====================+==========================================================+
-|``use_flattening``  | do we flatten the profiles at shocks? (0=no, 1=yes)      |
-+--------------------+----------------------------------------------------------+
-|``z0``              |                                                          |
-+--------------------+                                                          |
-|``z1``              | the parameters that affect the flattening algorithm      |
-+--------------------+                                                          |
-| ``delta``          |                                                          |
-+--------------------+----------------------------------------------------------+
-|``cvisc``           | the coefficient for the artifical viscosity              |
-+--------------------+----------------------------------------------------------+
-|``limiter``         | what type of limiting to use in reconstructing the       |
-|                    | slopes. 0 means use an unlimited second-order centered   |
-|                    | difference. 1 is the MC limiter, and 2 is the 4th-order  |
-|                    | MC limiter                                               |
-+--------------------+----------------------------------------------------------+
-|``riemann``         | which Riemann solver do we use? "HLLE" for the HLLE      |
-|                    | solver, or "CGF" for the Colella, Glaz, and Ferguson     |
-|                    | solver                                                   |
-+--------------------+----------------------------------------------------------+
-|``grav``            | the gravitational acceleration (vertical/y direction)    |
-+--------------------+----------------------------------------------------------+
-|``temporal_method`` | the MOL integration method to use (RK2, TVD2, TVD3, RK4) |
-|                    | (``compressible_rk`` and ``compressible_fv4`` only)      |
-+--------------------+----------------------------------------------------------+
+``compressible`` solver
+-----------------------
 
-+-------------------------------------------------------------------------------+
-|``[eos]``                                                                      |
-+====================+==========================================================+
-|``gamma``           | the constant adiabatic index for the gas                 |
-+--------------------+----------------------------------------------------------+
+:py:mod:`compressible` is based on a directionally unsplit (the corner
+transport upwind algorithm) piecewise linear method for the Euler
+equations, following :cite:`colella:1990`.  This is overall second-order
+accurate.
+
+The parameters for this solver are:
+
+.. include:: compressible_defaults.inc
+
+``compressible_rk`` solver
+--------------------------
+
+:py:mod:`compressible_rk` uses a method of lines time-integration
+approach with piecewise linear spatial reconstruction for the Euler
+equations.  This is overall second-order accurate.
+
+The parameters for this solver are:
+
+.. include:: compressible_rk_defaults.inc
+
+``compressible_fv4`` solver
+---------------------------
+
+:py:mod:`compressible_fv4` uses a 4th order accurate method with RK4
+time integration, following :cite:`mccorquodalecolella`.
+
+The parameter for this solver are:
+
+.. include:: compressible_fv4_defaults.inc
+
+
+``compressible_sdc`` solver
+---------------------------
+
+:py:mod:`compressible_sdc` uses a 4th order accurate method with
+spectral-deferred correction (SDC) for the time integration.  This
+shares much in common with the ``compressible_fv4`` solver, aside from
+how the time-integration is handled.
+
+The parameters for this solver are:
+
+.. include:: compressible_sdc_defaults.inc
 
 
 Example problems
@@ -89,12 +86,6 @@ Example problems
    :func:`preevolve() <compressible_fv4.simulation.Simulation.preevolve>` method will convert
    these to cell-averages automatically after initialization.
 
-.. note::
-
-   All the compressible solvers share the same ``problems/``
-   directory, which lives in ``compressible/problems/``.  For the
-   other compressible solvers, we simply use a symbolic-link to this
-   directory in the solver's directory.
 
 Sod
 ^^^
