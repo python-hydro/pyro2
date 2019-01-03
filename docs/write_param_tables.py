@@ -3,7 +3,7 @@ import glob
 
 from util import runparams
 
-pfiles = []
+pfiles = ["../_defaults"]
 for path, dirs, files in os.walk("../"):
     for d in dirs:
         for f in glob.iglob(os.path.join(path, d, "_defaults")):
@@ -14,8 +14,7 @@ for f in pfiles:
     rp.load_params(f)
 
     pre, name = os.path.split(f)
-    outfile = "source/{}.{}.inc".format(pre.replace("../", ""), name)
-
+    outfile = "source/{}{}.inc".format(pre.replace(".", ""), name)
     rp.print_sphinx_tables(outfile=outfile.format(os.path.basename(f)))
 
 
