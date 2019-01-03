@@ -224,10 +224,7 @@ class RuntimeParameters(object):
         """
         Print out all runtime parameters and their values
         """
-        keys = list(self.params.keys())
-        keys.sort()
-
-        for key in keys:
+        for key in sorted(self.params.keys()):
             print(key, "=", self.params[key])
 
         print(" ")
@@ -246,10 +243,7 @@ class RuntimeParameters(object):
 
     def __str__(self):
         ostr = ""
-        keys = list(self.params.keys())
-        keys.sort()
-
-        for key in keys:
+        for key in sorted(self.params.keys()):
             ostr += "{} = {}\n".format(key, self.params[key])
 
         return ostr
@@ -333,4 +327,4 @@ class RuntimeParameters(object):
 if __name__ == "__main__":
     rp = RuntimeParameters()
     rp.load_params("inputs.test")
-    rp.print_sphinx_tables()
+    rp.print_all_params()
