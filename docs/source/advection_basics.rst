@@ -10,46 +10,86 @@ provides a good basis for understanding the methods used for
 compressible hydrodynamics. Chapter 4 of the notes summarizes the
 numerical methods for advection that we implement in pyro.
 
-pyro has several solvers for linear advection:
+pyro has several solvers for linear advection, which solve the equation
+with different spatial and temporal intergration schemes.
 
-* :py:mod:`advection` implements the directionally unsplit corner transport upwind
-  algorithm with piecewise linear reconstruction
+``advection`` solver
+--------------------
 
-* :py:mod:`advection_fv4` uses a fourth-order accurate finite-volume
-  method with RK4 time integration
+:py:mod:`advection` implements the directionally unsplit corner
+transport upwind algorithm :cite:`colella:1990` with piecewise linear reconstruction.
+This is an overall second-order accurate method, with timesteps restricted
+by 
 
-* :py:mod:`advection_nonuniform` models advection with a non-uniform velocity field.
-  This is used to implement
-  `Zalesak (1979) <https://doi.org/10.1016/0021-9991(79)90051-2>`_'s slotted disk problem.
+.. math::
 
-* :py:mod:`advection_rk` uses a method of lines time-integration
-  approach with piecewise linear spatial reconstruction for linear
-  advection
+  \Delta t < \min \left \{ \frac{\Delta x}{|u|}, \frac{\Delta y}{|v|} \right \}
 
-* :py:mod:`advection_weno` uses a WENO reconstruction and method of
-  lines time-integration
+The parameters for this solver are:
+
+.. include:: advection_defaults.inc
+
+
+``advection_fv4`` solver
+------------------------
+
+:py:mod:`advection_fv4` uses a fourth-order accurate finite-volume
+method with RK4 time integration, following the ideas in
+:cite:`mccorquodalecolella`.  It can be thought of as a
+method-of-lines integration, and as such has a slightly more restrictive
+timestep:
+
+.. math:: 
+ 
+  \Delta t \lesssim \left [ \frac{|u|}{\Delta x} + \frac{|v|}{\Delta y} \right ]^{-1}
+
+The main complexity comes from needing to average the flux over the
+faces of the zones to achieve 4th order accuracy spatially.
+
+The parameters for this solver are:
+
+.. include:: advection_fv4_defaults.inc
+
+``advection_nonuniform`` solver
+-------------------------------
+
+:py:mod:`advection_nonuniform` models advection with a non-uniform
+velocity field.  This is used to implement the slotted disk problem
+from :cite:`ZALESAK1979335`.  The basic method is similar to the
+algorithm used by the main ``advection`` solver.
+
+The paramters for this solver are:
+
+.. include:: advection_nonuniform_defaults.inc
+
+``advection_rk`` solver
+-----------------------
+
+:py:mod:`advection_rk` uses a method of lines time-integration
+approach with piecewise linear spatial reconstruction for linear
+advection.  This is overall second-order accurate, so it represents a
+simpler algorithm than the ``advection_fv4`` method (in particular, we
+can treat cell-centers and cell-averages as the same, to second
+order).
+
+The parameter for this solver are:
+
+.. include:: advection_rk_defaults.inc
+
+``advection_weno`` solver
+-------------------------
+
+:py:mod:`advection_weno` uses a WENO reconstruction and method of
+lines time-integration
 
 
 The main parameters that affect this solver are:
 
-+-------------------------------------------------------------------------------------------------------------------------------+
-| ``[driver]``                                                                                                                  |
-+=====================+=========================================================================================================+
-|``cfl``              | the advective CFL number (what fraction of a zone can we cross in a single timestep)                    |
-+---------------------+---------------------------------------------------------------------------------------------------------+
+.. include:: advection_weno_defaults.inc
 
-+-------------------------------------------------------------------------------------------------------------------------------+
-| ``[advection]``                                                                                                               |
-+=====================+=========================================================================================================+
-|``u``                | the advective velocity in the x direction                                                               |
-+---------------------+---------------------------------------------------------------------------------------------------------+
-|``v``                | the advective velocity in the y direction                                                               |
-+---------------------+---------------------------------------------------------------------------------------------------------+
-|``limiter``          | what type of limiting to use in reconstructing the slopes. 0 means use an unlimited second-order        |
-|                     | centered difference. 1 is the MC limiter, and 2 is the 4th-order MC limiter                             |
-+---------------------+---------------------------------------------------------------------------------------------------------+
-|``temporal_method``  | the MOL integration method to use (RK2, TVD2, TVD3, RK4) (advection_rk only)                            |
-+---------------------+---------------------------------------------------------------------------------------------------------+
+
+General ideas
+-------------
 
 The main use for the advection solver is to understand how Godunov
 techniques work for hyperbolic problems. These same ideas will be used

@@ -305,14 +305,16 @@ class RuntimeParameters(object):
         # find all the sections
         secs = set([q for (q, _) in [k.split(".") for k in all_keys]])
 
-        heading = "+=" + 32*"=" + "=+=" + 10*"=" + "=+=" + 50*"=" + "=+" + "\n"
-        separator = "+-" + 32*"-" + "-+-" + 10*"-" + "-+-" + 50*"-" + "-+" + "\n"
-        entry = "| {:32} | {:10} | {:50} |\n"
+        heading = "  +=" + 32*"=" + "=+=" + 14*"=" + "=+=" + 50*"=" + "=+" + "\n"
+        separator = "  +-" + 32*"-" + "-+-" + 14*"-" + "-+-" + 50*"-" + "-+" + "\n"
+        entry = "  | {:32} | {:14} | {:50} |\n"
 
         for sec in sorted(secs):
             keys = [q for q in all_keys if q.startswith("{}.".format(sec))]
 
-            f.write("\n**{}**\n\n".format(sec.strip()))
+            head = "* section: [{}]".format(sec.strip())
+            f.write("{}\n\n".format(head))
+            #f.write(len(head)*"^"+"\n\n")
 
             f.write(separator)
             f.write(entry.format("option", "value", "description"))
@@ -320,8 +322,10 @@ class RuntimeParameters(object):
 
             for key in keys:
                 _, option = key.split('.')
-                f.write(entry.format(option, self.params[key], self.param_comments[key].strip()))
+                f.write(entry.format(option, "``{}``".format(str(self.params[key]).strip()), self.param_comments[key].strip()))
                 f.write(separator)
+
+            f.write("\n")
         f.close()
 
 
