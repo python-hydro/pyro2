@@ -322,7 +322,8 @@ class RuntimeParameters(object):
 
             for key in keys:
                 _, option = key.split('.')
-                f.write(entry.format(option, "``{}``".format(str(self.params[key]).strip()), self.param_comments[key].strip()))
+                f.write(entry.format(option, "``{}``".format(str(self.params[key]).strip()),
+                                     self.param_comments[key].strip()))
                 f.write(separator)
 
             f.write("\n")
