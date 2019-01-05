@@ -51,11 +51,6 @@ https://pyro2.readthedocs.io/
     (note, for older Fedora releases, replace `dnf` with `yum`.  For
 	python 2.x, leave off the `3` in the package names.)
 
-  - You also need to make sure gfortran is present on you system. On a
-    Fedora system, it can be installed as:
-
-       `dnf install gcc-gfortran`
-
   - Not all matplotlib backends allow for the interactive plotting as
     pyro is run. One that does is the TkAgg backend. This can be made
     the default by creating a file `~/.matplotlib/matplotlibrc` with
