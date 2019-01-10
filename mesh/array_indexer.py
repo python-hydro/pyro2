@@ -26,9 +26,11 @@ def _buf_split(b):
 
 
 class ArrayIndexer(np.ndarray):
-    """ a class that wraps the data region of a single array (d)
-        and allows us to easily do array operations like d[i+1,j]
-        using the ip() method. """
+    """a class that wraps the data region of a single cell-centered data
+        array (d) and allows us to easily do array operations like
+        d[i+1,j] using the ip() method.
+
+    """
 
     def __new__(self, d, grid=None):
         obj = np.asarray(d).view(self)
@@ -309,6 +311,248 @@ class ArrayIndexer(np.ndarray):
                     gc = 1
                 else:
                     gc = 0
+
+                if self.c == 2:
+                    val = self[i, j]
+                else:
+                    val = self[i, j, n]
+
+                if gc:
+                    print("\033[31m" + fmt % (val) + "\033[0m", end="")
+                else:
+                    print(fmt % (val), end="")
+
+            print(" ")
+
+        leg = """
+         ^ y
+         |
+         +---> x
+        """
+        print(leg)
+
+
+class ArrayIndexerFC(ArrayIndexer):
+    """a class that wraps the data region of a single face-centered data
+        array (d) and allows us to easily do array operations like
+        d[i+1,j] using the ip() method.
+
+    """
+
+    def __new__(self, d, idir, grid=None):
+        obj = np.asarray(d).view(self)
+        obj.g = grid
+        obj.idir = idir
+        obj.c = len(d.shape)
+
+        return obj
+
+    def __array_finalize__(self, obj):
+        if obj is None:
+            return
+        self.g = getattr(obj, "g", None)
+        self.idir = getattr(obj, "idir", None)
+        self.c = getattr(obj, "c", None)
+
+    def __array_wrap__(self, out_arr, context=None):
+        return np.ndarray.__array_wrap__(self, out_arr, context)
+
+    def ip_jp(self, ishift, jshift, buf=0, n=0, s=1):
+        """return a view of the data shifted by ishift in the x direction and
+        jshift in the y direction.  By default the view is the same
+        size as the valid region, but the buf can specify how many
+        ghost cells on each side to include.  The component is n and s
+        is the stride
+
+        """
+        bxlo, bxhi, bylo, byhi = _buf_split(buf)
+        c = len(self.shape)
+
+        if self.idir == 1:
+            # face-centered in x
+            if c == 2:
+                return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+2+bxhi+ishift:s,
+                                       self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s])
+            else:
+                return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+2+bxhi+ishift:s,
+                                       self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s, n])
+        elif self.idir == 2:
+            # face-centered in y
+            if c == 2:
+                return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
+                                       self.g.jlo-bylo+jshift:self.g.jhi+2+byhi+jshift:s])
+            else:
+                return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
+                                       self.g.jlo-bylo+jshift:self.g.jhi+2+byhi+jshift:s, n])
+
+
+    def lap(self, n=0, buf=0):
+        raise NotImplementedError("lap not implemented for ArrayIndexerFC")
+
+    def norm(self, n=0):
+        """
+        find the norm of the quantity (index n) defined on the same grid,
+        in the domain's valid region
+
+        """
+        c = len(self.shape)
+        if self.idir == 1:
+            if c == 2:
+                return np.sqrt(self.g.dx * self.g.dy *
+                               np.sum((self[self.g.ilo:self.g.ihi+2, self.g.jlo:self.g.jhi+1]**2).flat))
+
+            else:
+                _tmp = self[:, :, n]
+                return np.sqrt(self.g.dx * self.g.dy *
+                               np.sum((_tmp[self.g.ilo:self.g.ihi+2, self.g.jlo:self.g.jhi+1]**2).flat))
+        elif self.idir == 2:
+            if c == 2:
+                return np.sqrt(self.g.dx * self.g.dy *
+                               np.sum((self[self.g.ilo:self.g.ihi+1, self.g.jlo:self.g.jhi+2]**2).flat))
+
+            else:
+                _tmp = self[:, :, n]
+                return np.sqrt(self.g.dx * self.g.dy *
+                               np.sum((_tmp[self.g.ilo:self.g.ihi+1, self.g.jlo:self.g.jhi+2]**2).flat))
+
+    def copy(self):
+        """make a copy of the array, defined on the same grid"""
+        return ArrayIndexer(np.asarray(self).copy(), self.idir, grid=self.g)
+
+    def is_symmetric(self, nodal=False, tol=1.e-14, asymmetric=False):
+        """return True is the data is left-right symmetric (to the tolerance
+        tol) For node-centered data, set nodal=True
+
+        """
+        raise NotImplementedError()
+
+    def is_asymmetric(self, nodal=False, tol=1.e-14):
+        """return True is the data is left-right asymmetric (to the tolerance
+        tol)---e.g, the sign flips. For node-centered data, set nodal=True
+
+        """
+        raise NotImplementedError()
+
+    def fill_ghost(self, n=0, bc=None):
+        """Fill the boundary conditions.  This operates on a single component,
+        n. We do periodic, reflect-even, reflect-odd, and outflow
+
+        We need a BC object to tell us what BC type on each boundary.
+        """
+
+        # there is only a single grid, so every boundary is on
+        # a physical boundary (except if we are periodic)
+
+        # Note: we piggy-back on outflow and reflect-odd for
+        # Neumann and Dirichlet homogeneous BCs respectively, but
+        # this only works for a single ghost cell
+
+        # -x boundary
+        if bc.xlb in ["outflow", "neumann", "reflect-even", "reflect-odd", "dirichlet"]:
+            raise NotImplementedError("boundary condition not implemented for -x")
+        elif bc.xlb == "periodic":
+            if self.idir == 1:
+                # face-centered in x
+                for i in range(self.g.ilo):
+                    self[i, :, n] = self[self.g.ihi-self.g.ng+i+1, :, n]
+            elif self.idir == 2:
+                # face-centered in y
+                for i in range(self.g.ilo):
+                    self[i, :, n] = self[self.g.ihi-self.g.ng+i+1, :, n]
+
+        # +x boundary
+        if bc.xrb in ["outflow", "neumann", "reflect-even", "reflect-odd", "dirichlet"]:
+            raise NotImplementedError("boundary condition not implemented for +x")
+        elif bc.xrb == "periodic":
+            if self.idir == 1:
+                # face-centered in x
+                for i in range(self.g.ihi+2, 2*self.g.ng + self.g.nx + 1):
+                    self[i, :, n] = self[i-self.g.ihi-1+self.g.ng, :, n]
+            elif self.idir == 2:
+                # face-centered in y
+                for i in range(self.g.ihi+1, 2*self.g.ng + self.g.nx):
+                    self[i, :, n] = self[i-self.g.ihi-1+self.g.ng, :, n]
+
+        # -y boundary
+        if bc.ylb in ["outflow", "neumann", "reflect-even", "reflect-odd", "dirichlet"]:
+            raise NotImplementedError("boundary condition not implemented for -y")
+        elif bc.ylb == "periodic":
+            if self.idir == 1:
+                # face-centered in x
+                for j in range(self.g.jlo):
+                    self[:, j, n] = self[:, self.g.jhi-self.g.ng+j+1, n]
+            elif self.idir == 2:
+                # face-centered in y
+                for j in range(self.g.jlo):
+                    self[:, j, n] = self[:, self.g.jhi-self.g.ng+j+1, n]
+
+        # +y boundary
+        if bc.yrb in ["outflow", "neumann", "reflect-even", "reflect-odd", "dirichlet"]:
+            raise NotImplementedError("boundary condition not implemented for +y")
+        elif bc.yrb == "periodic":
+            if self.idir == 1:
+                # face-centered in x
+                for j in range(self.g.jhi+1, 2*self.g.ng + self.g.ny):
+                    self[:, j, n] = self[:, j-self.g.jhi-1+self.g.ng, n]
+            elif self.idir == 2:
+                for j in range(self.g.jhi+2, 2*self.g.ng + self.g.ny + 1):
+                    self[:, j, n] = self[:, j-self.g.jhi-1+self.g.ng, n]
+
+    def pretty_print(self, n=0, fmt=None, show_ghost=True):
+        """
+        Print out a small dataset to the screen with the ghost cells
+        a different color, to make things stand out
+        """
+
+        if fmt is None:
+            if self.dtype == np.int:
+                fmt = "%4d"
+            elif self.dtype == np.float64:
+                fmt = "%10.5g"
+            else:
+                raise ValueError("ERROR: dtype not supported")
+
+        # print j descending, so it looks like a grid (y increasing
+        # with height)
+        if show_ghost:
+            if self.idir == 1:
+                ilo = 0
+                ihi = self.g.qx
+                jlo = 0
+                jhi = self.g.qy-1
+            elif self.idir == 2:
+                ilo = 0
+                ihi = self.g.qx-1
+                jlo = 0
+                jhi = self.g.qy
+
+        else:
+            if self.idir == 1:
+                ilo = self.g.ilo
+                ihi = self.g.ihi+1
+                jlo = self.g.jlo
+                jhi = self.g.jhi
+            elif self.idir == 2:
+                ilo = self.g.ilo
+                ihi = self.g.ihi
+                jlo = self.g.jlo
+                jhi = self.g.jhi+1
+
+        for j in reversed(range(jlo, jhi+1)):
+            for i in range(ilo, ihi+1):
+
+                if self.idir == 1:
+                    if (j < self.g.jlo or j > self.g.jhi or
+                        i < self.g.ilo or i > self.g.ihi+1):
+                        gc = 1
+                    else:
+                        gc = 0
+                elif self.idir == 2:
+                    if (j < self.g.jlo or j > self.g.jhi+1 or
+                        i < self.g.ilo or i > self.g.ihi):
+                        gc = 1
+                    else:
+                        gc = 0
 
                 if self.c == 2:
                     val = self[i, j]
