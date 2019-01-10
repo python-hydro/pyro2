@@ -335,9 +335,10 @@ class ArrayIndexerFC(ArrayIndexer):
 
     """
 
-    def __new__(self, d, grid=None):
+    def __new__(self, d, idir, grid=None):
         obj = np.asarray(d).view(self)
         obj.g = grid
+        obj.idir = idir
         obj.c = len(d.shape)
 
         return obj
@@ -346,6 +347,7 @@ class ArrayIndexerFC(ArrayIndexer):
         if obj is None:
             return
         self.g = getattr(obj, "g", None)
+        self.idir = getattr(obj, "idir", None)
         self.c = getattr(obj, "c", None)
 
     def __array_wrap__(self, out_arr, context=None):
@@ -362,12 +364,23 @@ class ArrayIndexerFC(ArrayIndexer):
         bxlo, bxhi, bylo, byhi = _buf_split(buf)
         c = len(self.shape)
 
-        if c == 2:
-            return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
-                                   self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s])
-        else:
-            return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
-                                   self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s, n])
+        if self.idir == 1:
+            # face-centered in x
+            if c == 2:
+                return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+2+bxhi+ishift:s,
+                                       self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s])
+            else:
+                return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+2+bxhi+ishift:s,
+                                       self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s, n])
+        elif self.idir == 2:
+            # face-centered in y
+            if c == 2:
+                return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
+                                       self.g.jlo-bylo+jshift:self.g.jhi+2+byhi+jshift:s])
+            else:
+                return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
+                                       self.g.jlo-bylo+jshift:self.g.jhi+2+byhi+jshift:s, n])
+
 
     def lap(self, n=0, buf=0):
         raise NotImplementedError("lap not implemented for ArrayIndexerFC")
@@ -386,40 +399,21 @@ class ArrayIndexerFC(ArrayIndexer):
 
     def copy(self):
         """make a copy of the array, defined on the same grid"""
-        return ArrayIndexer(np.asarray(self).copy(), grid=self.g)
+        return ArrayIndexer(np.asarray(self).copy(), self.idir, grid=self.g)
 
     def is_symmetric(self, nodal=False, tol=1.e-14, asymmetric=False):
         """return True is the data is left-right symmetric (to the tolerance
         tol) For node-centered data, set nodal=True
 
         """
-
-        # prefactor to convert from symmetric to asymmetric test
-        s = 1
-        if asymmetric:
-            s = -1
-
-        if not nodal:
-            L = self[self.g.ilo:self.g.ilo+self.g.nx//2,
-                     self.g.jlo:self.g.jhi+1]
-            R = self[self.g.ilo+self.g.nx//2:self.g.ihi+1,
-                     self.g.jlo:self.g.jhi+1]
-        else:
-            L = self[self.g.ilo:self.g.ilo+self.g.nx//2+1,
-                     self.g.jlo:self.g.jhi+1]
-            print(self.g.ilo+self.g.nx//2, self.g.ihi+2)
-            R = self[self.g.ilo+self.g.nx//2:self.g.ihi+2,
-                     self.g.jlo:self.g.jhi+1]
-
-        e = abs(L - s*np.flipud(R)).max()
-        return e < tol
+        raise NotImplementedError()
 
     def is_asymmetric(self, nodal=False, tol=1.e-14):
         """return True is the data is left-right asymmetric (to the tolerance
         tol)---e.g, the sign flips. For node-centered data, set nodal=True
 
         """
-        return self.is_symmetric(nodal=nodal, tol=tol, asymmetric=True)
+        raise NotImplementedError()
 
     def fill_ghost(self, n=0, bc=None):
         """Fill the boundary conditions.  This operates on a single component,
@@ -436,26 +430,8 @@ class ArrayIndexerFC(ArrayIndexer):
         # this only works for a single ghost cell
 
         # -x boundary
-        if bc.xlb in ["outflow", "neumann"]:
-            if bc.xl_value is None:
-                for i in range(self.g.ilo):
-                    self[i, :, n] = self[self.g.ilo, :, n]
-            else:
-                self[self.g.ilo-1, :, n] = \
-                    self[self.g.ilo, :, n] - self.g.dx*bc.xl_value[:]
-
-        elif bc.xlb == "reflect-even":
-            for i in range(self.g.ilo):
-                self[i, :, n] = self[2*self.g.ng-i-1, :, n]
-
-        elif bc.xlb in ["reflect-odd", "dirichlet"]:
-            if bc.xl_value is None:
-                for i in range(self.g.ilo):
-                    self[i, :, n] = -self[2*self.g.ng-i-1, :, n]
-            else:
-                self[self.g.ilo-1, :, n] = \
-                    2*bc.xl_value[:] - self[self.g.ilo, :, n]
-
+        if bc.xlb in ["outflow", "neumann", "reflect-even", "reflect-odd", "dirichlet"]:
+            raise NotImplementedError("boundary condition not implemented for -x")
         elif bc.xlb == "periodic":
             for i in range(self.g.ilo):
                 self[i, :, n] = self[self.g.ihi-self.g.ng+i+1, :, n]
