@@ -103,9 +103,13 @@ class ArrayIndexer(np.ndarray):
         """
         c = len(self.shape)
         if c == 2:
-            return self.g.norm(self)
+            return np.sqrt(self.g.dx * self.g.dy *
+                           np.sum((self[self.g.ilo:self.g.ihi+1, self.g.jlo:self.g.jhi+1]**2).flat))
+
         else:
-            return self.g.norm(self[:, :, n])
+            _tmp = self[:, :, n]
+            return np.sqrt(self.g.dx * self.g.dy *
+                           np.sum((_tmp[self.g.ilo:self.g.ihi+1, self.g.jlo:self.g.jhi+1]**2).flat))
 
     def copy(self):
         """make a copy of the array, defined on the same grid"""

@@ -672,7 +672,7 @@ class CellCenterMG2d(object):
             soln = self.grids[self.nlevels-1]
 
             diff = (soln.get_var("v") - old_phi)/(soln.get_var("v") + self.small)
-            relative_error = soln.grid.norm(diff)
+            relative_error = diff.norm()
 
             old_phi = soln.get_var("v").copy()
 
