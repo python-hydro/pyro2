@@ -541,11 +541,18 @@ class ArrayIndexerFC(ArrayIndexer):
         for j in reversed(range(jlo, jhi+1)):
             for i in range(ilo, ihi+1):
 
-                if (j < self.g.jlo or j > self.g.jhi or
-                    i < self.g.ilo or i > self.g.ihi):
-                    gc = 1
-                else:
-                    gc = 0
+                if self.idir == 1:
+                    if (j < self.g.jlo or j > self.g.jhi or
+                        i < self.g.ilo or i > self.g.ihi+1):
+                        gc = 1
+                    else:
+                        gc = 0
+                elif self.idir == 2:
+                    if (j < self.g.jlo or j > self.g.jhi+1 or
+                        i < self.g.ilo or i > self.g.ihi):
+                        gc = 1
+                    else:
+                        gc = 0
 
                 if self.c == 2:
                     val = self[i, j]
