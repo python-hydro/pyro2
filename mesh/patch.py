@@ -157,14 +157,6 @@ class Grid2d(object):
             _tmp = np.zeros((self.qx, self.qy, nvar), dtype=np.float64)
         return ai.ArrayIndexer(d=_tmp, grid=self)
 
-    def norm(self, d):
-        """
-        find the norm of the quantity d defined on the same grid, in the
-        domain's valid region
-        """
-        return np.sqrt(self.dx * self.dy *
-                       np.sum((d[self.ilo:self.ihi+1, self.jlo:self.jhi+1]**2).flat))
-
     def coarse_like(self, N):
         """
         return a new grid object coarsened by a factor n, but with
@@ -682,7 +674,6 @@ class FaceCenterData2d(CellCenterData2d):
 
     def add_derived(self, func):
         raise NotImplementedError("derived variables not yet supported for face-centered data")
-
 
     def create(self):
         """Called after all the variables are registered and allocates the
