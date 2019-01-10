@@ -20,6 +20,7 @@ class Variables(object):
     a container class for easy access to the different mhd
     variable by an integer key
     """
+
     def __init__(self, myd):
         self.nvar = len(myd.names)
 
@@ -29,8 +30,8 @@ class Variables(object):
         self.ixmom = myd.names.index("x-momentum")
         self.iymom = myd.names.index("y-momentum")
         self.iener = myd.names.index("energy")
-        self.imagx = myd.names.index("magnetic-field-x")
-        self.imagy = myd.names.index("magnetic-field-y")
+        self.ixmag = myd.names.index("x-magnetic-field")
+        self.iymag = myd.names.index("y-magnetic-field")
 
         # if there are any additional variable, we treat them as
         # passively advected scalars
@@ -62,19 +63,21 @@ def cons_to_prim(U, gamma, ivars, myg):
     q = myg.scratch_array(nvar=ivars.nq)
 
     q[:, :, ivars.irho] = U[:, :, ivars.idens]
-    q[:, :, ivars.iu] = U[:, :, ivars.ixmom]/U[:, :, ivars.idens]
-    q[:, :, ivars.iv] = U[:, :, ivars.iymom]/U[:, :, ivars.idens]
+    q[:, :, ivars.iu] = U[:, :, ivars.ixmom] / U[:, :, ivars.idens]
+    q[:, :, ivars.iv] = U[:, :, ivars.iymom] / U[:, :, ivars.idens]
+    q[:, :, ivars.ibx] = U[:, :, ivars.ixmag]
+    q[:, :, ivars.iby] = U[:, :, ivars.iymag]
 
     e = (U[:, :, ivars.iener] -
-         0.5*q[:, :, ivars.irho]*(q[:, :, ivars.iu]**2 +
-                                  q[:, :, ivars.iv]**2))/q[:, :, ivars.irho]
+         0.5 * q[:, :, ivars.irho] * (q[:, :, ivars.iu]**2 +
+                                      q[:, :, ivars.iv]**2)) / q[:, :, ivars.irho]
 
     q[:, :, ivars.ip] = eos.pres(gamma, q[:, :, ivars.irho], e)
 
     if ivars.naux > 0:
-        for nq, nu in zip(range(ivars.ix, ivars.ix+ivars.naux),
-                          range(ivars.irhox, ivars.irhox+ivars.naux)):
-            q[:, :, nq] = U[:, :, nu]/q[:, :, ivars.irho]
+        for nq, nu in zip(range(ivars.ix, ivars.ix + ivars.naux),
+                          range(ivars.irhox, ivars.irhox + ivars.naux)):
+            q[:, :, nq] = U[:, :, nu] / q[:, :, ivars.irho]
 
     return q
 
@@ -85,18 +88,20 @@ def prim_to_cons(q, gamma, ivars, myg):
     U = myg.scratch_array(nvar=ivars.nvar)
 
     U[:, :, ivars.idens] = q[:, :, ivars.irho]
-    U[:, :, ivars.ixmom] = q[:, :, ivars.iu]*U[:, :, ivars.idens]
-    U[:, :, ivars.iymom] = q[:, :, ivars.iv]*U[:, :, ivars.idens]
+    U[:, :, ivars.ixmom] = q[:, :, ivars.iu] * U[:, :, ivars.idens]
+    U[:, :, ivars.iymom] = q[:, :, ivars.iv] * U[:, :, ivars.idens]
+    U[:, :, ivars.ixmag] = q[:, :, ivars.ibx]
+    U[:, :, ivars.iymag] = q[:, :, ivars.iby]
 
     rhoe = eos.rhoe(gamma, q[:, :, ivars.ip])
 
-    U[:, :, ivars.iener] = rhoe + 0.5*q[:, :, ivars.irho]*(q[:, :, ivars.iu]**2 +
-                                                           q[:, :, ivars.iv]**2)
+    U[:, :, ivars.iener] = rhoe + 0.5 * q[:, :, ivars.irho] * (q[:, :, ivars.iu]**2 +
+                                                               q[:, :, ivars.iv]**2)
 
     if ivars.naux > 0:
-        for nq, nu in zip(range(ivars.ix, ivars.ix+ivars.naux),
-                          range(ivars.irhox, ivars.irhox+ivars.naux)):
-            U[:, :, nu] = q[:, :, nq]*q[:, :, ivars.irho]
+        for nq, nu in zip(range(ivars.ix, ivars.ix + ivars.naux),
+                          range(ivars.irhox, ivars.irhox + ivars.naux)):
+            U[:, :, nu] = q[:, :, nq] * q[:, :, ivars.irho]
 
     return U
 
@@ -117,7 +122,8 @@ class Simulation(NullSimulation):
 
         # define solver specific boundary condition routines
         bnd.define_bc("hse", BC.user, is_solid=False)
-        bnd.define_bc("ramp", BC.user, is_solid=False)  # for double mach reflection problem
+        # for double mach reflection problem
+        bnd.define_bc("ramp", BC.user, is_solid=False)
 
         bc, bc_xodd, bc_yodd = bc_setup(self.rp)
 
@@ -130,6 +136,8 @@ class Simulation(NullSimulation):
         my_data.register_var("energy", bc)
         my_data.register_var("x-momentum", bc_xodd)
         my_data.register_var("y-momentum", bc_yodd)
+        my_data.register_var("x-magnetic-field", bc_xodd)
+        my_data.register_var("y-magnetic-field", bc_yodd)
 
         # any extras?
         if extra_vars is not None:
@@ -186,10 +194,10 @@ class Simulation(NullSimulation):
         u, v, cs = self.cc_data.get_var(["velocity", "soundspeed"])
 
         # the timestep is min(dx/(|u| + cs), dy/(|v| + cs))
-        xtmp = self.cc_data.grid.dx/(abs(u) + cs)
-        ytmp = self.cc_data.grid.dy/(abs(v) + cs)
+        xtmp = self.cc_data.grid.dx / (abs(u) + cs)
+        ytmp = self.cc_data.grid.dy / (abs(v) + cs)
 
-        self.dt = cfl*float(min(xtmp.min(), ytmp.min()))
+        self.dt = cfl * float(min(xtmp.min(), ytmp.min()))
 
     def evolve(self):
         """
@@ -215,19 +223,19 @@ class Simulation(NullSimulation):
         old_ymom = ymom.copy()
 
         # conservative update
-        dtdx = self.dt/myg.dx
-        dtdy = self.dt/myg.dy
+        dtdx = self.dt / myg.dx
+        dtdy = self.dt / myg.dy
 
         for n in range(self.ivars.nvar):
             var = self.cc_data.get_var_by_index(n)
 
             var.v()[:, :] += \
-                dtdx*(Flux_x.v(n=n) - Flux_x.ip(1, n=n)) + \
-                dtdy*(Flux_y.v(n=n) - Flux_y.jp(1, n=n))
+                dtdx * (Flux_x.v(n=n) - Flux_x.ip(1, n=n)) + \
+                dtdy * (Flux_y.v(n=n) - Flux_y.jp(1, n=n))
 
         # gravitational source terms
-        ymom[:, :] += 0.5*self.dt*(dens[:, :] + old_dens[:, :])*grav
-        ener[:, :] += 0.5*self.dt*(ymom[:, :] + old_ymom[:, :])*grav
+        ymom[:, :] += 0.5 * self.dt * (dens[:, :] + old_dens[:, :]) * grav
+        ener[:, :] += 0.5 * self.dt * (ymom[:, :] + old_ymom[:, :]) * grav
 
         if self.particles is not None:
             self.particles.update_particles(self.dt)
@@ -261,14 +269,17 @@ class Simulation(NullSimulation):
         u = q[:, :, ivars.iu]
         v = q[:, :, ivars.iv]
         p = q[:, :, ivars.ip]
-        e = eos.rhoe(gamma, p)/rho
+        e = eos.rhoe(gamma, p) / rho
+        bx = q[:, :, ivars.bx]
+        by = q[:, :, ivars.by]
 
         magvel = np.sqrt(u**2 + v**2)
+        magb = np.sqrt(bx**2 + by**2)
 
         myg = self.cc_data.grid
 
-        fields = [rho, magvel, p, e]
-        field_names = [r"$\rho$", r"U", "p", "e"]
+        fields = [rho, magvel, p, magb]
+        field_names = [r"$\rho$", r"U", "p", "B"]
 
         _, axes, cbar_title = plot_tools.setup_axes(myg, len(fields))
 
@@ -301,7 +312,7 @@ class Simulation(NullSimulation):
 
             # plot particles
             ax.scatter(particle_positions[:, 0],
-                particle_positions[:, 1], s=5, c=colors, alpha=0.8, cmap="Greys")
+                       particle_positions[:, 1], s=5, c=colors, alpha=0.8, cmap="Greys")
             ax.set_xlim([myg.xmin, myg.xmax])
             ax.set_ylim([myg.ymin, myg.ymax])
 
