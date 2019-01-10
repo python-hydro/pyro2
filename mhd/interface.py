@@ -287,6 +287,99 @@ def consFlux(idir, gamma, ivars, U_state):
 
 
 @njit(cache=True)
+def emf(idir, ng, ivars, dx, U, Ux, Uy):
+    r"""
+    Calculate the EMF at cell corners
+    """
+
+    qx, qy, nvar = U.shape
+
+    E = np.zeros((qx, qy))
+    Ex = np.zeros((qx, qy))  # x-edges
+    Ey = np.zeros((qx, qy))  # y-edges
+
+    Ec = np.zeros((qx, qy))  # corner
+
+    dEdy_14 = np.zeros((qx, qy))
+    dEdx_14 = np.zeros((qx, qy))
+
+    dEdy_34 = np.zeros((qx, qy))
+    dEdx_34 = np.zeros((qx, qy))
+
+    nx = qx - 2 * ng
+    ny = qy - 2 * ng
+    ilo = ng
+    ihi = ng + nx
+    jlo = ng
+    jhi = ng + ny
+
+    for i in range(ilo - 2, ihi + 2):
+        for j in range(jlo - 2, jhi + 2):
+
+            u = U[i, j, ivars.ixmom] / U[i, j, ivars.idens]
+            v = U[i, j, ivars.iymom] / U[i, j, ivars.idens]
+            bx = U[i, j, ivars.ixmag]
+            by = U[i, j, ivars.iymag]
+
+            E[i, j] = -(u * by - v * bx)
+
+            u = Ux[i, j, ivars.ixmom] / Ux[i, j, ivars.idens]
+            v = Ux[i, j, ivars.iymom] / Ux[i, j, ivars.idens]
+            bx = Ux[i, j, ivars.ixmag]
+            by = Ux[i, j, ivars.iymag]
+
+            Ex[i, j] = -(u * by - v * bx)
+
+            u = Uy[i, j, ivars.ixmom] / Uy[i, j, ivars.idens]
+            v = Uy[i, j, ivars.iymom] / Uy[i, j, ivars.idens]
+            bx = Uy[i, j, ivars.ixmag]
+            by = Uy[i, j, ivars.iymag]
+
+            Ey[i, j] = -(u * by - v * bx)
+
+    for i in range(ilo - 1, ihi + 1):
+        for j in range(jlo - 1, jhi + 1):
+
+            # get the -1/4 states
+            dEdy_14[i, j] = 2 * (E[i, j] - Ey[i, j]) / dx
+
+            dEdx_14[i, j] = 2 * (E[i, j] - Ex[i, j]) / dx
+
+            # get the -3/4 states
+            dEdy_34[i, j] = 2 * (Ey[i, j] - E[i, j - 1]) / dx
+
+            dEdx_34[i, j] = 2 * (Ey[i, j] - Ex[i - 1, j]) / dx
+
+            # now get the corner states
+            u = Ux[i, j, ivars.ixmom] / Ux[i, j, ivars.idens]
+            if u > 0:
+                dEdyx_14 = dEdy_14[i - 1, j]
+                dEdyx_34 = dEdy_34[i - 1, j]
+            elif u < 0:
+                dEdyx_14 = dEdy_14[i, j]
+                dEdyx_34 = dEdy_34[i, j]
+            else:
+                dEdyx_14 = 0.5 * (dEdy_14[i - 1, j] + dEdy_14[i, j])
+                dEdyx_34 = 0.5 * (dEdy_34[i - 1, j] + dEdy_34[i, j])
+
+            v = Uy[i, j, ivars.iymom] / Uy[i, j, ivars.idens]
+            if u > 0:
+                dEdxy_14 = dEdx_14[i, j - 1]
+                dEdxy_34 = dEdx_34[i, j - 1]
+            elif u < 0:
+                dEdxy_14 = dEdx_14[i, j]
+                dEdxy_34 = dEdx_34[i, j]
+            else:
+                dEdxy_14 = 0.5 * (dEdx_14[i, j - 1] + dEdx_14[i, j])
+                dEdxy_34 = 0.5 * (dEdx_34[i, j - 1] + dEdx_34[i, j])
+
+            Ec[i, j] = 0.25 * (Ex[i, j] + Ex[i, j + 1] + Ey[i, j] + Ey[i + 1, j]) + \
+                0.125 / dx * (dEdyx_14 - dEdyx_34 + dEdxy_14 - dEdxy_34)
+
+    return Ec
+
+
+@njit(cache=True)
 def artificial_viscosity(ng, dx, dy,
                          cvisc, u, v):
     r"""

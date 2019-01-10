@@ -252,31 +252,31 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     # =========================================================================
     # apply source terms
     # =========================================================================
-    grav = rp.get_param("mhd.grav")
-
-    ymom_src = my_aux.get_var("ymom_src")
-    ymom_src.v()[:, :] = dens.v() * grav
-    my_aux.fill_BC("ymom_src")
-
-    E_src = my_aux.get_var("E_src")
-    E_src.v()[:, :] = ymom.v() * grav
-    my_aux.fill_BC("E_src")
-
-    # ymom_xl[i,j] += 0.5*dt*dens[i-1,j]*grav
-    U_xl.v(buf=1, n=ivars.iymom)[:, :] += 0.5 * dt * ymom_src.ip(-1, buf=1)
-    U_xl.v(buf=1, n=ivars.iener)[:, :] += 0.5 * dt * E_src.ip(-1, buf=1)
-
-    # ymom_xr[i,j] += 0.5*dt*dens[i,j]*grav
-    U_xr.v(buf=1, n=ivars.iymom)[:, :] += 0.5 * dt * ymom_src.v(buf=1)
-    U_xr.v(buf=1, n=ivars.iener)[:, :] += 0.5 * dt * E_src.v(buf=1)
-
-    # ymom_yl[i,j] += 0.5*dt*dens[i,j-1]*grav
-    U_yl.v(buf=1, n=ivars.iymom)[:, :] += 0.5 * dt * ymom_src.jp(-1, buf=1)
-    U_yl.v(buf=1, n=ivars.iener)[:, :] += 0.5 * dt * E_src.jp(-1, buf=1)
-
-    # ymom_yr[i,j] += 0.5*dt*dens[i,j]*grav
-    U_yr.v(buf=1, n=ivars.iymom)[:, :] += 0.5 * dt * ymom_src.v(buf=1)
-    U_yr.v(buf=1, n=ivars.iener)[:, :] += 0.5 * dt * E_src.v(buf=1)
+    # grav = rp.get_param("mhd.grav")
+    #
+    # ymom_src = my_aux.get_var("ymom_src")
+    # ymom_src.v()[:, :] = dens.v() * grav
+    # my_aux.fill_BC("ymom_src")
+    #
+    # E_src = my_aux.get_var("E_src")
+    # E_src.v()[:, :] = ymom.v() * grav
+    # my_aux.fill_BC("E_src")
+    #
+    # # ymom_xl[i,j] += 0.5*dt*dens[i-1,j]*grav
+    # U_xl.v(buf=1, n=ivars.iymom)[:, :] += 0.5 * dt * ymom_src.ip(-1, buf=1)
+    # U_xl.v(buf=1, n=ivars.iener)[:, :] += 0.5 * dt * E_src.ip(-1, buf=1)
+    #
+    # # ymom_xr[i,j] += 0.5*dt*dens[i,j]*grav
+    # U_xr.v(buf=1, n=ivars.iymom)[:, :] += 0.5 * dt * ymom_src.v(buf=1)
+    # U_xr.v(buf=1, n=ivars.iener)[:, :] += 0.5 * dt * E_src.v(buf=1)
+    #
+    # # ymom_yl[i,j] += 0.5*dt*dens[i,j-1]*grav
+    # U_yl.v(buf=1, n=ivars.iymom)[:, :] += 0.5 * dt * ymom_src.jp(-1, buf=1)
+    # U_yl.v(buf=1, n=ivars.iener)[:, :] += 0.5 * dt * E_src.jp(-1, buf=1)
+    #
+    # # ymom_yr[i,j] += 0.5*dt*dens[i,j]*grav
+    # U_yr.v(buf=1, n=ivars.iymom)[:, :] += 0.5 * dt * ymom_src.v(buf=1)
+    # U_yr.v(buf=1, n=ivars.iener)[:, :] += 0.5 * dt * E_src.v(buf=1)
 
     # =========================================================================
     # compute transverse fluxes
@@ -411,29 +411,29 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     tm_riem.end()
 
-    # =========================================================================
-    # apply artificial viscosity
-    # =========================================================================
-    cvisc = rp.get_param("mhd.cvisc")
-
-    _ax, _ay = ifc.artificial_viscosity(myg.ng, myg.dx, myg.dy,
-                                        cvisc, q.v(n=ivars.iu, buf=myg.ng), q.v(n=ivars.iv, buf=myg.ng))
-
-    avisco_x = ai.ArrayIndexer(d=_ax, grid=myg)
-    avisco_y = ai.ArrayIndexer(d=_ay, grid=myg)
-
-    b = (2, 1)
-
-    for n in range(ivars.nvar):
-        # F_x = F_x + avisco_x * (U(i-1,j) - U(i,j))
-        var = my_data.get_var_by_index(n)
-
-        F_x.v(buf=b, n=n)[:, :] += \
-            avisco_x.v(buf=b) * (var.ip(-1, buf=b) - var.v(buf=b))
-
-        # F_y = F_y + avisco_y * (U(i,j-1) - U(i,j))
-        F_y.v(buf=b, n=n)[:, :] += \
-            avisco_y.v(buf=b) * (var.jp(-1, buf=b) - var.v(buf=b))
+    # # =========================================================================
+    # # apply artificial viscosity
+    # # =========================================================================
+    # cvisc = rp.get_param("mhd.cvisc")
+    #
+    # _ax, _ay = ifc.artificial_viscosity(myg.ng, myg.dx, myg.dy,
+    #                                     cvisc, q.v(n=ivars.iu, buf=myg.ng), q.v(n=ivars.iv, buf=myg.ng))
+    #
+    # avisco_x = ai.ArrayIndexer(d=_ax, grid=myg)
+    # avisco_y = ai.ArrayIndexer(d=_ay, grid=myg)
+    #
+    # b = (2, 1)
+    #
+    # for n in range(ivars.nvar):
+    #     # F_x = F_x + avisco_x * (U(i-1,j) - U(i,j))
+    #     var = my_data.get_var_by_index(n)
+    #
+    #     F_x.v(buf=b, n=n)[:, :] += \
+    #         avisco_x.v(buf=b) * (var.ip(-1, buf=b) - var.v(buf=b))
+    #
+    #     # F_y = F_y + avisco_y * (U(i,j-1) - U(i,j))
+    #     F_y.v(buf=b, n=n)[:, :] += \
+    #         avisco_y.v(buf=b) * (var.jp(-1, buf=b) - var.v(buf=b))
 
     tm_flux.end()
 
