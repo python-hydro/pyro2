@@ -287,7 +287,7 @@ def consFlux(idir, gamma, ivars, U_state):
 
 
 @njit(cache=True)
-def emf(idir, ng, ivars, dx, dy, U, Ux, Uy):
+def emf(ng, ivars, dx, dy, U, Ux, Uy):
     r"""
     Calculate the EMF at cell corners
     """
@@ -379,9 +379,34 @@ def emf(idir, ng, ivars, dx, dy, U, Ux, Uy):
     return Ec
 
 @njit(cache=True)
-def sources(ng, dx):
+def sources(idir, ng, ivars, dx, U, Ux):
+    r"""
+    Calculate source terms on the idir-interface. U is the cell-centered state,
+    Ux should be a state on the idir-interface.
 
+    Assume Bz = vz = 0.
+    """
+    qx, qy, nvar = U.shape
 
+    S = np.zeros((qx, qy))
+
+    nx = qx - 2 * ng
+    ny = qy - 2 * ng
+    ilo = ng
+    ihi = ng + nx
+    jlo = ng
+    jhi = ng + ny
+
+    for i in range(ilo - 1, ihi + 1):
+        for j in range(jlo - 1, jhi + 1):
+            if idir == 1:
+                S[i,j,ivars.ixmom] = U[i,j,ivars.ixmag] * (Ux[i+1,j,ivars.ixmag] - Ux[i,j,ivars.ixmag]) / dx
+                S[i,j,ivars.iymom] = U[i,j,ivars.iymag] * (Ux[i+1,j,ivars.ixmag] - Ux[i,j,ivars.ixmag]) / dx
+            else:
+                S[i,j,ivars.ixmom] = U[i,j,ivars.ixmag] * (Ux[i,j+1,ivars.ixmag] - Ux[i,j,ivars.ixmag]) / dx
+                S[i,j,ivars.iymom] = U[i,j,ivars.iymag] * (Ux[i,j+1,ivars.ixmag] - Ux[i,j,ivars.ixmag]) / dx
+
+    return S
 
 @njit(cache=True)
 def artificial_viscosity(ng, dx, dy,

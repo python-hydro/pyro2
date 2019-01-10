@@ -33,8 +33,8 @@ class Variables(object):
         self.iymom = ccd.names.index("y-momentum")
         self.iener = ccd.names.index("energy")
 
-        self.imagx = fcd.names.index("x-magentic-field")
-        self.imagy = fcd.names.index("y-magentic-field")
+        self.imagx = fcd.names.index("x-magnetic-field")
+        self.imagy = fcd.names.index("y-magnetic-field")
 
         # if there are any additional variable, we treat them as
         # passively advected scalars
@@ -215,15 +215,15 @@ class Simulation(NullSimulation):
         ymom = self.cc_data.get_var("y-momentum")
         ener = self.cc_data.get_var("energy")
 
-        grav = self.rp.get_param("mhd.grav")
+        # grav = self.rp.get_param("mhd.grav")
 
         myg = self.cc_data.grid
 
         Flux_x, Flux_y = flx.unsplit_fluxes(self.cc_data, self.aux_data, self.rp,
                                             self.ivars, self.solid, self.tc, self.dt)
 
-        old_dens = dens.copy()
-        old_ymom = ymom.copy()
+        # old_dens = dens.copy()
+        # old_ymom = ymom.copy()
 
         # conservative update
         dtdx = self.dt / myg.dx
@@ -237,8 +237,8 @@ class Simulation(NullSimulation):
                 dtdy * (Flux_y.v(n=n) - Flux_y.jp(1, n=n))
 
         # gravitational source terms
-        ymom[:, :] += 0.5 * self.dt * (dens[:, :] + old_dens[:, :]) * grav
-        ener[:, :] += 0.5 * self.dt * (ymom[:, :] + old_ymom[:, :]) * grav
+        # ymom[:, :] += 0.5 * self.dt * (dens[:, :] + old_dens[:, :]) * grav
+        # ener[:, :] += 0.5 * self.dt * (ymom[:, :] + old_ymom[:, :]) * grav
 
         if self.particles is not None:
             self.particles.update_particles(self.dt)
