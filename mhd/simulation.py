@@ -10,6 +10,7 @@ import mhd.eos as eos
 import mhd.derives as derives
 import mhd.unsplit_fluxes as flx
 import mesh.boundary as bnd
+import mesh.patch as patch
 from simulation_null import NullSimulation, grid_setup, bc_setup
 import util.plot_tools as plot_tools
 import particles.particles as particles
@@ -21,20 +22,16 @@ class Variables(object):
     variable by an integer key
     """
 
-    def __init__(self, ccd, fcd):
+    def __init__(self, ccd):
         self.nvar = len(myd.names)
 
         # conserved variables -- we set these when we initialize for
-        # they match the CellCenterData2d object.  There are two
-        # two objects that we worry about here, the cell-centered state
-        # and the face-centered state
+        # they match the CellCenterData2d object.  Here, we only
+        # worry about the cell-centered data
         self.idens = ccd.names.index("density")
         self.ixmom = ccd.names.index("x-momentum")
         self.iymom = ccd.names.index("y-momentum")
         self.iener = ccd.names.index("energy")
-
-        self.imagx = fcd.names.index("x-magnetic-field")
-        self.imagy = fcd.names.index("y-magnetic-field")
 
         # if there are any additional variable, we treat them as
         # passively advected scalars
@@ -139,8 +136,6 @@ class Simulation(NullSimulation):
         my_data.register_var("energy", bc)
         my_data.register_var("x-momentum", bc_xodd)
         my_data.register_var("y-momentum", bc_yodd)
-        my_data.register_var("x-magnetic-field", bc_xodd)
-        my_data.register_var("y-magnetic-field", bc_yodd)
 
         # any extras?
         if extra_vars is not None:
@@ -151,11 +146,21 @@ class Simulation(NullSimulation):
         # self-contained object stored in output files to make plots.
         # store grav because we'll need that in some BCs
         my_data.set_aux("gamma", self.rp.get_param("eos.gamma"))
-        my_data.set_aux("grav", self.rp.get_param("mhd.grav"))
 
         my_data.create()
 
         self.cc_data = my_data
+
+        # we also need face-centered data for the magnetic fields
+        fcx = patch.FaceCenterData2d(mygrid, 1)
+        fcx.register_var("x-magnetic-field")
+        fcx.create()
+        self.fcx_data = fcx
+
+        fcy = patch.FaceCenterData2d(mygrid, 2)
+        fcy.register_var("y-magnetic-field")
+        fcy.create()
+        self.fcy_data = fcy
 
         if self.rp.get_param("particles.do_particles") == 1:
             self.particles = particles.Particles(self.cc_data, bc, self.rp)
@@ -169,9 +174,6 @@ class Simulation(NullSimulation):
         self.aux_data = aux_data
 
         self.ivars = Variables(my_data)
-
-        # derived variables
-        self.cc_data.add_derived(derives.derive_primitives)
 
         # initial conditions for the problem
         problem = importlib.import_module("{}.problems.{}".format(
