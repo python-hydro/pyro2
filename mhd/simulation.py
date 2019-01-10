@@ -21,27 +21,30 @@ class Variables(object):
     variable by an integer key
     """
 
-    def __init__(self, myd):
+    def __init__(self, ccd, fcd):
         self.nvar = len(myd.names)
 
         # conserved variables -- we set these when we initialize for
-        # they match the CellCenterData2d object
-        self.idens = myd.names.index("density")
-        self.ixmom = myd.names.index("x-momentum")
-        self.iymom = myd.names.index("y-momentum")
-        self.iener = myd.names.index("energy")
-        self.ixmag = myd.names.index("x-magnetic-field")
-        self.iymag = myd.names.index("y-magnetic-field")
+        # they match the CellCenterData2d object.  There are two
+        # two objects that we worry about here, the cell-centered state
+        # and the face-centered state
+        self.idens = ccd.names.index("density")
+        self.ixmom = ccd.names.index("x-momentum")
+        self.iymom = ccd.names.index("y-momentum")
+        self.iener = ccd.names.index("energy")
+
+        self.imagx = fcd.names.index("x-magentic-field")
+        self.imagy = fcd.names.index("y-magentic-field")
 
         # if there are any additional variable, we treat them as
         # passively advected scalars
-        self.naux = self.nvar - 6
+        self.naux = self.nvar - 4
         if self.naux > 0:
-            self.irhox = 6
+            self.irhox = 4
         else:
             self.irhox = -1
 
-        # primitive variables
+        # primitive variables -- these are all cell centered
         self.nq = 6 + self.naux
 
         self.irho = 0
