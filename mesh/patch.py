@@ -675,7 +675,6 @@ class FaceCenterData2d(CellCenterData2d):
     def add_derived(self, func):
         raise NotImplementedError("derived variables not yet supported for face-centered data")
 
-
     def create(self):
         """Called after all the variables are registered and allocates the
         storage for the state data.  For face-centered data, we have
