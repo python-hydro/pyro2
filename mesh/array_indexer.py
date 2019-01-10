@@ -103,13 +103,13 @@ class ArrayIndexer(np.ndarray):
         """
         c = len(self.shape)
         if c == 2:
-            return np.sqrt(self.dx * self.dy *
-                           np.sum((self[self.ilo:self.ihi+1, self.jlo:self.jhi+1]**2).flat))
+            return np.sqrt(self.g.dx * self.g.dy *
+                           np.sum((self[self.g.ilo:self.g.ihi+1, self.g.jlo:self.g.jhi+1]**2).flat))
 
         else:
             _tmp = self[:, :, n]
-            return np.sqrt(self.dx * self.dy *
-                           np.sum((_tmp[self.ilo:self.ihi+1, self.jlo:self.jhi+1]**2).flat))
+            return np.sqrt(self.g.dx * self.g.dy *
+                           np.sum((_tmp[self.g.ilo:self.g.ihi+1, self.g.jlo:self.g.jhi+1]**2).flat))
 
 
     def copy(self):
