@@ -454,7 +454,7 @@ class ArrayIndexerFC(ArrayIndexer):
             if self.idir == 1:
                 # face-centered in x
                 for i in range(self.g.ilo):
-                    self[i, :, n] = self[self.g.ihi-self.g.ng+i+2, :, n]
+                    self[i, :, n] = self[self.g.ihi-self.g.ng+i+1, :, n]
             elif self.idir == 2:
                 # face-centered in y
                 for i in range(self.g.ilo):
@@ -484,7 +484,7 @@ class ArrayIndexerFC(ArrayIndexer):
             elif self.idir == 2:
                 # face-centered in y
                 for j in range(self.g.jlo):
-                    self[:, j, n] = self[:, self.g.jhi-self.g.ng+j+2, n]
+                    self[:, j, n] = self[:, self.g.jhi-self.g.ng+j+1, n]
 
         # +y boundary
         if bc.yrb in ["outflow", "neumann", "reflect-even", "reflect-odd", "dirichlet"]:
