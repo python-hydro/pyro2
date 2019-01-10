@@ -287,7 +287,7 @@ def consFlux(idir, gamma, ivars, U_state):
 
 
 @njit(cache=True)
-def emf(idir, ng, ivars, dx, U, Ux, Uy):
+def emf(idir, ng, ivars, dx, dy, U, Ux, Uy):
     r"""
     Calculate the EMF at cell corners
     """
@@ -341,12 +341,12 @@ def emf(idir, ng, ivars, dx, U, Ux, Uy):
         for j in range(jlo - 1, jhi + 1):
 
             # get the -1/4 states
-            dEdy_14[i, j] = 2 * (E[i, j] - Ey[i, j]) / dx
+            dEdy_14[i, j] = 2 * (E[i, j] - Ey[i, j]) / dy
 
             dEdx_14[i, j] = 2 * (E[i, j] - Ex[i, j]) / dx
 
             # get the -3/4 states
-            dEdy_34[i, j] = 2 * (Ey[i, j] - E[i, j - 1]) / dx
+            dEdy_34[i, j] = 2 * (Ey[i, j] - E[i, j - 1]) / dy
 
             dEdx_34[i, j] = 2 * (Ey[i, j] - Ex[i - 1, j]) / dx
 
@@ -374,9 +374,13 @@ def emf(idir, ng, ivars, dx, U, Ux, Uy):
                 dEdxy_34 = 0.5 * (dEdx_34[i, j - 1] + dEdx_34[i, j])
 
             Ec[i, j] = 0.25 * (Ex[i, j] + Ex[i, j + 1] + Ey[i, j] + Ey[i + 1, j]) + \
-                0.125 / dx * (dEdyx_14 - dEdyx_34 + dEdxy_14 - dEdxy_34)
+                0.125 / dx * (dEdyx_14 - dEdyx_34) + 0.125 / dx * (dEdxy_14 - dEdxy_34)
 
     return Ec
+
+@njit(cache=True)
+def sources(ng, dx):
+
 
 
 @njit(cache=True)
