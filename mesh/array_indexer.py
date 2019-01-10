@@ -396,10 +396,24 @@ class ArrayIndexerFC(ArrayIndexer):
 
         """
         c = len(self.shape)
-        if c == 2:
-            return self.g.norm(self)
-        else:
-            return self.g.norm(self[:, :, n])
+        if self.idir == 1:
+            if c == 2:
+                return np.sqrt(self.g.dx * self.g.dy *
+                               np.sum((self[self.g.ilo:self.g.ihi+2, self.g.jlo:self.g.jhi+1]**2).flat))
+
+            else:
+                _tmp = self[:, :, n]
+                return np.sqrt(self.g.dx * self.g.dy *
+                               np.sum((_tmp[self.g.ilo:self.g.ihi+2, self.g.jlo:self.g.jhi+1]**2).flat))
+        elif self.idir == 2:
+            if c == 2:
+                return np.sqrt(self.g.dx * self.g.dy *
+                               np.sum((self[self.g.ilo:self.g.ihi+1, self.g.jlo:self.g.jhi+2]**2).flat))
+
+            else:
+                _tmp = self[:, :, n]
+                return np.sqrt(self.g.dx * self.g.dy *
+                               np.sum((_tmp[self.g.ilo:self.g.ihi+1, self.g.jlo:self.g.jhi+2]**2).flat))
 
     def copy(self):
         """make a copy of the array, defined on the same grid"""
@@ -437,95 +451,52 @@ class ArrayIndexerFC(ArrayIndexer):
         if bc.xlb in ["outflow", "neumann", "reflect-even", "reflect-odd", "dirichlet"]:
             raise NotImplementedError("boundary condition not implemented for -x")
         elif bc.xlb == "periodic":
-            for i in range(self.g.ilo):
-                self[i, :, n] = self[self.g.ihi-self.g.ng+i+1, :, n]
+            if self.idir == 1:
+                # face-centered in x
+                for i in range(self.g.ilo):
+                    self[i, :, n] = self[self.g.ihi-self.g.ng+i+2, :, n]
+            elif self.idir == 2:
+                # face-centered in y
+                for i in range(self.g.ilo):
+                    self[i, :, n] = self[self.g.ihi-self.g.ng+i+1, :, n]
 
         # +x boundary
-        if bc.xrb in ["outflow", "neumann"]:
-            if bc.xr_value is None:
-                for i in range(self.g.ihi+1, self.g.nx+2*self.g.ng):
-                    self[i, :, n] = self[self.g.ihi, :, n]
-            else:
-                self[self.g.ihi+1, :, n] = \
-                    self[self.g.ihi, :, n] + self.g.dx*bc.xr_value[:]
-
-        elif bc.xrb == "reflect-even":
-            for i in range(self.g.ng):
-                i_bnd = self.g.ihi+1+i
-                i_src = self.g.ihi-i
-
-                self[i_bnd, :, n] = self[i_src, :, n]
-
-        elif bc.xrb in ["reflect-odd", "dirichlet"]:
-            if bc.xr_value is None:
-                for i in range(self.g.ng):
-                    i_bnd = self.g.ihi+1+i
-                    i_src = self.g.ihi-i
-
-                    self[i_bnd, :, n] = -self[i_src, :, n]
-            else:
-                self[self.g.ihi+1, :, n] = \
-                    2*bc.xr_value[:] - self[self.g.ihi, :, n]
-
+        if bc.xrb in ["outflow", "neumann", "reflect-even", "reflect-odd", "dirichlet"]:
+            raise NotImplementedError("boundary condition not implemented for +x")
         elif bc.xrb == "periodic":
-            for i in range(self.g.ihi+1, 2*self.g.ng + self.g.nx):
-                self[i, :, n] = self[i-self.g.ihi-1+self.g.ng, :, n]
+            if self.idir == 1:
+                # face-centered in x
+                for i in range(self.g.ihi+2, 2*self.g.ng + self.g.nx + 1):
+                    self[i, :, n] = self[i-self.g.ihi-1+self.g.ng, :, n]
+            elif self.idir == 2:
+                # face-centered in y
+                for i in range(self.g.ihi+1, 2*self.g.ng + self.g.nx):
+                    self[i, :, n] = self[i-self.g.ihi-1+self.g.ng, :, n]
 
         # -y boundary
-        if bc.ylb in ["outflow", "neumann"]:
-            if bc.yl_value is None:
-                for j in range(self.g.jlo):
-                    self[:, j, n] = self[:, self.g.jlo, n]
-            else:
-                self[:, self.g.jlo-1, n] = \
-                    self[:, self.g.jlo, n] - self.g.dy*bc.yl_value[:]
-
-        elif bc.ylb == "reflect-even":
-            for j in range(self.g.jlo):
-                self[:, j, n] = self[:, 2*self.g.ng-j-1, n]
-
-        elif bc.ylb in ["reflect-odd", "dirichlet"]:
-            if bc.yl_value is None:
-                for j in range(self.g.jlo):
-                    self[:, j, n] = -self[:, 2*self.g.ng-j-1, n]
-            else:
-                self[:, self.g.jlo-1, n] = \
-                    2*bc.yl_value[:] - self[:, self.g.jlo, n]
-
+        if bc.ylb in ["outflow", "neumann", "reflect-even", "reflect-odd", "dirichlet"]:
+            raise NotImplementedError("boundary condition not implemented for -y")
         elif bc.ylb == "periodic":
-            for j in range(self.g.jlo):
-                self[:, j, n] = self[:, self.g.jhi-self.g.ng+j+1, n]
+            if self.idir == 1:
+                # face-centered in x
+                for j in range(self.g.jlo):
+                    self[:, j, n] = self[:, self.g.jhi-self.g.ng+j+1, n]
+            elif self.idir == 2:
+                # face-centered in y
+                for j in range(self.g.jlo):
+                    self[:, j, n] = self[:, self.g.jhi-self.g.ng+j+2, n]
 
         # +y boundary
-        if bc.yrb in ["outflow", "neumann"]:
-            if bc.yr_value is None:
-                for j in range(self.g.jhi+1, self.g.ny+2*self.g.ng):
-                    self[:, j, n] = self[:, self.g.jhi, n]
-            else:
-                self[:, self.g.jhi+1, n] = \
-                    self[:, self.g.jhi, n] + self.g.dy*bc.yr_value[:]
-
-        elif bc.yrb == "reflect-even":
-            for j in range(self.g.ng):
-                j_bnd = self.g.jhi+1+j
-                j_src = self.g.jhi-j
-
-                self[:, j_bnd, n] = self[:, j_src, n]
-
-        elif bc.yrb in ["reflect-odd", "dirichlet"]:
-            if bc.yr_value is None:
-                for j in range(self.g.ng):
-                    j_bnd = self.g.jhi+1+j
-                    j_src = self.g.jhi-j
-
-                    self[:, j_bnd, n] = -self[:, j_src, n]
-            else:
-                self[:, self.g.jhi+1, n] = \
-                    2*bc.yr_value[:] - self[:, self.g.jhi, n]
-
+        if bc.yrb in ["outflow", "neumann", "reflect-even", "reflect-odd", "dirichlet"]:
+            raise NotImplementedError("boundary condition not implemented for +y")
         elif bc.yrb == "periodic":
-            for j in range(self.g.jhi+1, 2*self.g.ng + self.g.ny):
-                self[:, j, n] = self[:, j-self.g.jhi-1+self.g.ng, n]
+            if self.idir == 1:
+                # face-centered in x
+                for j in range(self.g.jhi+1, 2*self.g.ng + self.g.ny):
+                    self[:, j, n] = self[:, j-self.g.jhi-1+self.g.ng, n]
+            elif self.idir == 2:
+                for j in range(self.g.jhi+2, 2*self.g.ng + self.g.ny + 1):
+                    self[:, j, n] = self[:, j-self.g.jhi-1+self.g.ng, n]
 
     def pretty_print(self, n=0, fmt=None, show_ghost=True):
         """
@@ -544,15 +515,28 @@ class ArrayIndexerFC(ArrayIndexer):
         # print j descending, so it looks like a grid (y increasing
         # with height)
         if show_ghost:
-            ilo = 0
-            ihi = self.g.qx-1
-            jlo = 0
-            jhi = self.g.qy-1
+            if self.idir == 1:
+                ilo = 0
+                ihi = self.g.qx
+                jlo = 0
+                jhi = self.g.qy-1
+            elif self.idir == 2:
+                ilo = 0
+                ihi = self.g.qx-1
+                jlo = 0
+                jhi = self.g.qy
+
         else:
-            ilo = self.g.ilo
-            ihi = self.g.ihi
-            jlo = self.g.jlo
-            jhi = self.g.jhi
+            if self.idir == 1:
+                ilo = self.g.ilo
+                ihi = self.g.ihi+1
+                jlo = self.g.jlo
+                jhi = self.g.jhi
+            elif self.idir == 2:
+                ilo = self.g.ilo
+                ihi = self.g.ihi
+                jlo = self.g.jlo
+                jhi = self.g.jhi+1
 
         for j in reversed(range(jlo, jhi+1)):
             for i in range(ilo, ihi+1):
