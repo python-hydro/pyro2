@@ -152,12 +152,12 @@ class Simulation(NullSimulation):
         self.cc_data = my_data
 
         # we also need face-centered data for the magnetic fields
-        fcx = patch.FaceCenterData2d(mygrid, 1)
+        fcx = patch.FaceCenterData2d(my_grid, 1)
         fcx.register_var("x-magnetic-field")
         fcx.create()
         self.fcx_data = fcx
 
-        fcy = patch.FaceCenterData2d(mygrid, 2)
+        fcy = patch.FaceCenterData2d(my_grid, 2)
         fcy.register_var("y-magnetic-field")
         fcy.create()
         self.fcy_data = fcy
@@ -196,11 +196,12 @@ class Simulation(NullSimulation):
         cfl = self.rp.get_param("driver.cfl")
 
         # get the variables we need
-        u, v, cs = self.cc_data.get_var(["velocity", "soundspeed"])
+        u, v = self.cc_data.get_var("velocity")
+        Cfx, _, Cfy, _ = self.cc_data.get_var(["x-magnetosonic", "y-magnetosonic"])
 
         # the timestep is min(dx/(|u| + cs), dy/(|v| + cs))
-        xtmp = self.cc_data.grid.dx / (abs(u) + cs)
-        ytmp = self.cc_data.grid.dy / (abs(v) + cs)
+        xtmp = self.cc_data.grid.dx / (abs(u) + Cfx)
+        ytmp = self.cc_data.grid.dy / (abs(v) + Cfy)
 
         self.dt = cfl * float(min(xtmp.min(), ytmp.min()))
 

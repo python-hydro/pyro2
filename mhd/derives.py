@@ -54,9 +54,11 @@ def derive_primitives(myd, varnames):
             derived_vars.append(np.sqrt(gamma*p/dens))
 
         elif var == "alfven":
+            # alfven velocity
             derived_vars.append(np.sqrt((bx**2 + by**2) / dens))
 
         elif var == "x-magnetosonic":
+            # returns fast, slow magnetosonic waves in x-direction
             c2 = gamma*p/dens
             cA2 = (bx**2 + by**2) / dens
             cAx2 = bx**2 / dens
@@ -68,6 +70,7 @@ def derive_primitives(myd, varnames):
             derived_vars.append(cs)
 
         elif var == "y-magnetosonic":
+            # returns fast, slow magnetosonic waves in y-direction
             c2 = gamma*p/dens
             cA2 = (bx**2 + by**2) / dens
             cAy2 = by**2 / dens
