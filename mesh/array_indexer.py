@@ -385,7 +385,6 @@ class ArrayIndexerFC(ArrayIndexer):
                 return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
                                        self.g.jlo-bylo+jshift:self.g.jhi+2+byhi+jshift:s, n])
 
-
     def lap(self, n=0, buf=0):
         raise NotImplementedError("lap not implemented for ArrayIndexerFC")
 
