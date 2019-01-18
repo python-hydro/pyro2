@@ -4,7 +4,7 @@ from numba import njit
 
 @njit(cache=True)
 def states(idir, ng, dx, dt,
-           ivars,
+           irho, iu, iv, ip, ix, nspec,
            gamma, qv, dqv):
     r"""
     predict the cell-centered state to the edges in one-dimension
@@ -71,10 +71,10 @@ def states(idir, ng, dx, dt,
         The cell spacing
     dt : float
         The timestep
-    ivars.irho, ivars.iu, ivars.iv, ivars.ip, ix : int
+    irho, iu, iv, ip, ix : int
         Indices of the density, x-velocity, y-velocity, pressure and species in the
         state vector
-    ivars.naux : int
+    naux : int
         The number of species
     gamma : float
         Adiabatic index
@@ -121,7 +121,7 @@ def states(idir, ng, dx, dt,
 
 @njit(cache=True)
 def riemann_adiabatic(idir, ng,
-                      ivars,
+                      idens, ixmom, iymom, iener, ixmag, iymag, irhoX, nspec,
                       lower_solid, upper_solid,
                       gamma, U_l, U_r):
 
@@ -143,39 +143,39 @@ def riemann_adiabatic(idir, ng,
     for i in range(ilo - 1, ihi + 1):
         for j in range(jlo - 1, jhi + 1):
             # primitive variable states
-            rho_l = U_l[i, j, ivars.idens]
+            rho_l = U_l[i, j, idens]
 
             # un = normal velocity; ut = transverse velocity
             if (idir == 1):
-                un_l = U_l[i, j, ivars.ixmom] / rho_l
-                ut_l = U_l[i, j, ivars.iymom] / rho_l
+                un_l = U_l[i, j, ixmom] / rho_l
+                ut_l = U_l[i, j, iymom] / rho_l
             else:
-                un_l = U_l[i, j, ivars.iymom] / rho_l
-                ut_l = U_l[i, j, ivars.ixmom] / rho_l
+                un_l = U_l[i, j, iymom] / rho_l
+                ut_l = U_l[i, j, ixmom] / rho_l
 
-            rhoe_l = U_l[i, j, ivars.iener] - 0.5 * rho_l * (un_l**2 + ut_l**2)
+            rhoe_l = U_l[i, j, iener] - 0.5 * rho_l * (un_l**2 + ut_l**2)
 
             p_l = rhoe_l * (gamma - 1.0)
             p_l = max(p_l, smallp)
 
-            rho_r = U_r[i, j, ivars.idens]
+            rho_r = U_r[i, j, idens]
 
             if (idir == 1):
-                un_r = U_r[i, j, ivars.ixmom] / rho_r
-                ut_r = U_r[i, j, ivars.iymom] / rho_r
+                un_r = U_r[i, j, ixmom] / rho_r
+                ut_r = U_r[i, j, iymom] / rho_r
             else:
-                un_r = U_r[i, j, ivars.iymom] / rho_r
-                ut_r = U_r[i, j, ivars.ixmom] / rho_r
+                un_r = U_r[i, j, iymom] / rho_r
+                ut_r = U_r[i, j, ixmom] / rho_r
 
-            rhoe_r = U_r[i, j, ivars.iener] - 0.5 * rho_r * (un_r**2 + ut_r**2)
+            rhoe_r = U_r[i, j, iener] - 0.5 * rho_r * (un_r**2 + ut_r**2)
 
             p_r = rhoe_r * (gamma - 1.0)
             p_r = max(p_r, smallp)
 
-            bx_l = U_l[i, j, ivars.ixmag]
-            by_l = U_l[i, j, ivars.iymag]
-            bx_r = U_r[i, j, ivars.ixmag]
-            by_r = U_r[i, j, ivars.iymag]
+            bx_l = U_l[i, j, ixmag]
+            by_l = U_l[i, j, iymag]
+            bx_r = U_r[i, j, ixmag]
+            by_r = U_r[i, j, iymag]
 
             # and the regular sound speeds
             c_l = max(smallc, np.sqrt(gamma * p_l / rho_l))
@@ -202,16 +202,16 @@ def riemann_adiabatic(idir, ng,
             cs_r = np.sqrt(
                 0.5 * (c_r**2 + cA2_r - np.sqrt((c_r**2 + cA2_r)**2 - 4 * c_r**2 * cAx2_r)))
 
-            evals_l = (un_l - cf_l, un_l - np.sqrt(cAx2_l), un_l -
-                       cs_l, un_l + cs_l, un_l + np.sqrt(cAx2_l), un_l + cf_l)
-            evals_r = (un_r - cf_r, un_r - np.sqrt(cAx2_r), un_r -
-                       cs_r, un_r + cs_r, un_r + np.sqrt(cAx2_r), un_r + cf_r)
+            evals_l = np.array([un_l - cf_l, un_l - np.sqrt(cAx2_l), un_l -
+                       cs_l, un_l + cs_l, un_l + np.sqrt(cAx2_l), un_l + cf_l])
+            evals_r = np.array([un_r - cf_r, un_r - np.sqrt(cAx2_r), un_r -
+                       cs_r, un_r + cs_r, un_r + np.sqrt(cAx2_r), un_r + cf_r])
 
-            bp = np.max(np.max(np.max(evals_r), un_r + cf_r), 0)
-            bm = np.min(np.min(np.min(evals_l), un_l - cf_l), 0)
+            bp = max(max(np.max(evals_r), un_r + cf_r), 0)
+            bm = min(min(np.min(evals_l), un_l - cf_l), 0)
 
-            f_l = consFlux(idir, gamma, ivars, U_l[i, j, :])
-            f_r = consFlux(idir, gamma, ivars, U_r[i, j, :])
+            f_l = consFlux(idir, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, nspec, U_l[i, j, :])
+            f_r = consFlux(idir, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, nspec, U_r[i, j, :])
 
             F[i, j, :] = (bp * f_l - bm * f_r) / (bp - bm) + bp * \
                 bm / (bp - bm) * (U_r[i, j, :] - U_l[i, j, :])
@@ -220,7 +220,7 @@ def riemann_adiabatic(idir, ng,
 
 
 @njit(cache=True)
-def consFlux(idir, gamma, ivars, U_state):
+def consFlux(idir, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, naux, U_state):
     r"""
     Calculate the conservative flux.
 
@@ -230,10 +230,10 @@ def consFlux(idir, gamma, ivars, U_state):
         Are we predicting to the edges in the x-direction (1) or y-direction (2)?
     gamma : float
         Adiabatic index
-    ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhoX : int
+    idens, ixmom, iymom, iener, irhoX : int
         The indices of the density, x-momentum, y-momentum, internal energy density
         and species partial densities in the conserved state vector.
-    ivars.naux : int
+    naux : int
         The number of species
     U_state : ndarray
         Conserved state vector.
@@ -246,48 +246,48 @@ def consFlux(idir, gamma, ivars, U_state):
 
     F = np.zeros_like(U_state)
 
-    u = U_state[ivars.ixmom] / U_state[ivars.idens]
-    v = U_state[ivars.iymom] / U_state[ivars.idens]
+    u = U_state[ixmom] / U_state[idens]
+    v = U_state[iymom] / U_state[idens]
 
-    p = (U_state[ivars.iener] - 0.5 * U_state[ivars.idens]
+    p = (U_state[iener] - 0.5 * U_state[idens]
          * (u * u + v * v)) * (gamma - 1.0)
 
-    bx = U_state[ivars.ixmag]
-    by = U_state[ivars.iymag]
+    bx = U_state[ixmag]
+    by = U_state[iymag]
 
     if (idir == 1):
-        F[ivars.idens] = U_state[ivars.idens] * u
-        F[ivars.ixmom] = U_state[ivars.ixmom] * \
+        F[idens] = U_state[idens] * u
+        F[ixmom] = U_state[ixmom] * \
             u + p + (bx**2 + by**2) * 0.5 - bx**2
-        F[ivars.iymom] = U_state[ivars.iymom] * u - bx * by
-        F[ivars.iener] = (U_state[ivars.iener] + p +
+        F[iymom] = U_state[iymom] * u - bx * by
+        F[iener] = (U_state[iener] + p +
                           (bx**2 + by**2) * 0.5) * u - bx * (bx * u + by * v)
-        F[ivars.ixmag] = 0
-        F[ivars.iymag] = by * u - bx * v
+        F[ixmag] = 0
+        F[iymag] = by * u - bx * v
 
-        if (ivars.naux > 0):
-            F[ivars.irhoX:ivars.irhoX +
-                ivars.naux] = U_state[ivars.irhoX:ivars.irhoX + ivars.naux] * u
+        if (naux > 0):
+            F[irhoX:irhoX +
+                naux] = U_state[irhoX:irhoX + naux] * u
 
     else:
-        F[ivars.idens] = U_state[ivars.idens] * v
-        F[ivars.ixmom] = U_state[ivars.ixmom] * v - bx * by
-        F[ivars.iymom] = U_state[ivars.iymom] * \
+        F[idens] = U_state[idens] * v
+        F[ixmom] = U_state[ixmom] * v - bx * by
+        F[iymom] = U_state[iymom] * \
             v + p + (bx**2 + by**2) * 0.5 - by**2
-        F[ivars.iener] = (U_state[ivars.iener] + p +
+        F[iener] = (U_state[iener] + p +
                           (bx**2 + by**2) * 0.5) * v - by * (bx * u + by * v)
-        F[ivars.ixmag] = bx * v - by * u
-        F[ivars.iymag] = 0
+        F[ixmag] = bx * v - by * u
+        F[iymag] = 0
 
-        if (ivars.naux > 0):
-            F[ivars.irhoX:ivars.irhoX +
-                ivars.naux] = U_state[ivars.irhoX:ivars.irhoX + ivars.naux] * v
+        if (naux > 0):
+            F[irhoX:irhoX +
+                naux] = U_state[irhoX:irhoX + naux] * v
 
     return F
 
 
 @njit(cache=True)
-def emf(ng, ivars, dx, dy, U, Ux, Uy):
+def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Ux, Uy):
     r"""
     Calculate the EMF at cell corners
     """
@@ -316,24 +316,24 @@ def emf(ng, ivars, dx, dy, U, Ux, Uy):
     for i in range(ilo - 2, ihi + 2):
         for j in range(jlo - 2, jhi + 2):
 
-            u = U[i, j, ivars.ixmom] / U[i, j, ivars.idens]
-            v = U[i, j, ivars.iymom] / U[i, j, ivars.idens]
-            bx = U[i, j, ivars.ixmag]
-            by = U[i, j, ivars.iymag]
+            u = U[i, j, ixmom] / U[i, j, idens]
+            v = U[i, j, iymom] / U[i, j, idens]
+            bx = U[i, j, ixmag]
+            by = U[i, j, iymag]
 
             E[i, j] = -(u * by - v * bx)
 
-            u = Ux[i, j, ivars.ixmom] / Ux[i, j, ivars.idens]
-            v = Ux[i, j, ivars.iymom] / Ux[i, j, ivars.idens]
-            bx = Ux[i, j, ivars.ixmag]
-            by = Ux[i, j, ivars.iymag]
+            u = Ux[i, j, ixmom] / Ux[i, j, idens]
+            v = Ux[i, j, iymom] / Ux[i, j, idens]
+            bx = Ux[i, j, ixmag]
+            by = Ux[i, j, iymag]
 
             Ex[i, j] = -(u * by - v * bx)
 
-            u = Uy[i, j, ivars.ixmom] / Uy[i, j, ivars.idens]
-            v = Uy[i, j, ivars.iymom] / Uy[i, j, ivars.idens]
-            bx = Uy[i, j, ivars.ixmag]
-            by = Uy[i, j, ivars.iymag]
+            u = Uy[i, j, ixmom] / Uy[i, j, idens]
+            v = Uy[i, j, iymom] / Uy[i, j, idens]
+            bx = Uy[i, j, ixmag]
+            by = Uy[i, j, iymag]
 
             Ey[i, j] = -(u * by - v * bx)
 
@@ -351,7 +351,7 @@ def emf(ng, ivars, dx, dy, U, Ux, Uy):
             dEdx_34[i, j] = 2 * (Ey[i, j] - Ex[i - 1, j]) / dx
 
             # now get the corner states
-            u = Ux[i, j, ivars.ixmom] / Ux[i, j, ivars.idens]
+            u = Ux[i, j, ixmom] / Ux[i, j, idens]
             if u > 0:
                 dEdyx_14 = dEdy_14[i - 1, j]
                 dEdyx_34 = dEdy_34[i - 1, j]
@@ -362,7 +362,7 @@ def emf(ng, ivars, dx, dy, U, Ux, Uy):
                 dEdyx_14 = 0.5 * (dEdy_14[i - 1, j] + dEdy_14[i, j])
                 dEdyx_34 = 0.5 * (dEdy_34[i - 1, j] + dEdy_34[i, j])
 
-            v = Uy[i, j, ivars.iymom] / Uy[i, j, ivars.idens]
+            v = Uy[i, j, iymom] / Uy[i, j, idens]
             if u > 0:
                 dEdxy_14 = dEdx_14[i, j - 1]
                 dEdxy_34 = dEdx_34[i, j - 1]
@@ -379,7 +379,7 @@ def emf(ng, ivars, dx, dy, U, Ux, Uy):
     return Ec
 
 @njit(cache=True)
-def sources(idir, ng, ivars, dx, U, Ux):
+def sources(idir, ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, U, Ux):
     r"""
     Calculate source terms on the idir-interface. U is the cell-centered state,
     Ux should be a state on the idir-interface.
@@ -400,92 +400,92 @@ def sources(idir, ng, ivars, dx, U, Ux):
     for i in range(ilo - 1, ihi + 1):
         for j in range(jlo - 1, jhi + 1):
             if idir == 1:
-                S[i,j,ivars.ixmom] = U[i,j,ivars.ixmag] * (Ux[i+1,j,ivars.ixmag] - Ux[i,j,ivars.ixmag]) / dx
-                S[i,j,ivars.iymom] = U[i,j,ivars.iymag] * (Ux[i+1,j,ivars.ixmag] - Ux[i,j,ivars.ixmag]) / dx
+                S[i,j,ixmom] = U[i,j,ixmag] * (Ux[i+1,j,ixmag] - Ux[i,j,ixmag]) / dx
+                S[i,j,iymom] = U[i,j,iymag] * (Ux[i+1,j,ixmag] - Ux[i,j,ixmag]) / dx
             else:
-                S[i,j,ivars.ixmom] = U[i,j,ivars.ixmag] * (Ux[i,j+1,ivars.ixmag] - Ux[i,j,ivars.ixmag]) / dx
-                S[i,j,ivars.iymom] = U[i,j,ivars.iymag] * (Ux[i,j+1,ivars.ixmag] - Ux[i,j,ivars.ixmag]) / dx
+                S[i,j,ixmom] = U[i,j,ixmag] * (Ux[i,j+1,ixmag] - Ux[i,j,ixmag]) / dx
+                S[i,j,iymom] = U[i,j,iymag] * (Ux[i,j+1,ixmag] - Ux[i,j,ixmag]) / dx
 
     return S
 
-@njit(cache=True)
-def artificial_viscosity(ng, dx, dy,
-                         cvisc, u, v):
-    r"""
-    Compute the artifical viscosity.  Here, we compute edge-centered
-    approximations to the divergence of the velocity.  This follows
-    directly Colella \ Woodward (1984) Eq. 4.5
-
-    data locations::
-
-        j+3/2--+---------+---------+---------+
-               |         |         |         |
-          j+1  +         |         |         |
-               |         |         |         |
-        j+1/2--+---------+---------+---------+
-               |         |         |         |
-             j +         X         |         |
-               |         |         |         |
-        j-1/2--+---------+----Y----+---------+
-               |         |         |         |
-           j-1 +         |         |         |
-               |         |         |         |
-        j-3/2--+---------+---------+---------+
-               |    |    |    |    |    |    |
-                   i-1        i        i+1
-             i-3/2     i-1/2     i+1/2     i+3/2
-
-    ``X`` is the location of ``avisco_x[i,j]``
-    ``Y`` is the location of ``avisco_y[i,j]``
-
-    Parameters
-    ----------
-    ng : int
-        The number of ghost cells
-    dx, dy : float
-        Cell spacings
-    cvisc : float
-        viscosity parameter
-    u, v : ndarray
-        x- and y-velocities
-
-    Returns
-    -------
-    out : ndarray, ndarray
-        Artificial viscosity in the x- and y-directions
-    """
-
-    qx, qy = u.shape
-
-    avisco_x = np.zeros((qx, qy))
-    avisco_y = np.zeros((qx, qy))
-
-    nx = qx - 2 * ng
-    ny = qy - 2 * ng
-    ilo = ng
-    ihi = ng + nx
-    jlo = ng
-    jhi = ng + ny
-
-    for i in range(ilo - 1, ihi + 1):
-        for j in range(jlo - 1, jhi + 1):
-
-                # start by computing the divergence on the x-interface.  The
-                # x-difference is simply the difference of the cell-centered
-                # x-velocities on either side of the x-interface.  For the
-                # y-difference, first average the four cells to the node on
-                # each end of the edge, and: difference these to find the
-                # edge centered y difference.
-            divU_x = (u[i, j] - u[i - 1, j]) / dx + \
-                0.25 * (v[i, j + 1] + v[i - 1, j + 1] -
-                        v[i, j - 1] - v[i - 1, j - 1]) / dy
-
-            avisco_x[i, j] = cvisc * max(-divU_x * dx, 0.0)
-
-            # now the y-interface value
-            divU_y = 0.25 * (u[i + 1, j] + u[i + 1, j - 1] - u[i - 1, j] - u[i - 1, j - 1]) / dx + \
-                (v[i, j] - v[i, j - 1]) / dy
-
-            avisco_y[i, j] = cvisc * max(-divU_y * dy, 0.0)
-
-    return avisco_x, avisco_y
+# @njit(cache=True)
+# def artificial_viscosity(ng, dx, dy,
+#                          cvisc, u, v):
+#     r"""
+#     Compute the artifical viscosity.  Here, we compute edge-centered
+#     approximations to the divergence of the velocity.  This follows
+#     directly Colella \ Woodward (1984) Eq. 4.5
+#
+#     data locations::
+#
+#         j+3/2--+---------+---------+---------+
+#                |         |         |         |
+#           j+1  +         |         |         |
+#                |         |         |         |
+#         j+1/2--+---------+---------+---------+
+#                |         |         |         |
+#              j +         X         |         |
+#                |         |         |         |
+#         j-1/2--+---------+----Y----+---------+
+#                |         |         |         |
+#            j-1 +         |         |         |
+#                |         |         |         |
+#         j-3/2--+---------+---------+---------+
+#                |    |    |    |    |    |    |
+#                    i-1        i        i+1
+#              i-3/2     i-1/2     i+1/2     i+3/2
+#
+#     ``X`` is the location of ``avisco_x[i,j]``
+#     ``Y`` is the location of ``avisco_y[i,j]``
+#
+#     Parameters
+#     ----------
+#     ng : int
+#         The number of ghost cells
+#     dx, dy : float
+#         Cell spacings
+#     cvisc : float
+#         viscosity parameter
+#     u, v : ndarray
+#         x- and y-velocities
+#
+#     Returns
+#     -------
+#     out : ndarray, ndarray
+#         Artificial viscosity in the x- and y-directions
+#     """
+#
+#     qx, qy = u.shape
+#
+#     avisco_x = np.zeros((qx, qy))
+#     avisco_y = np.zeros((qx, qy))
+#
+#     nx = qx - 2 * ng
+#     ny = qy - 2 * ng
+#     ilo = ng
+#     ihi = ng + nx
+#     jlo = ng
+#     jhi = ng + ny
+#
+#     for i in range(ilo - 1, ihi + 1):
+#         for j in range(jlo - 1, jhi + 1):
+#
+#                 # start by computing the divergence on the x-interface.  The
+#                 # x-difference is simply the difference of the cell-centered
+#                 # x-velocities on either side of the x-interface.  For the
+#                 # y-difference, first average the four cells to the node on
+#                 # each end of the edge, and: difference these to find the
+#                 # edge centered y difference.
+#             divU_x = (u[i, j] - u[i - 1, j]) / dx + \
+#                 0.25 * (v[i, j + 1] + v[i - 1, j + 1] -
+#                         v[i, j - 1] - v[i - 1, j - 1]) / dy
+#
+#             avisco_x[i, j] = cvisc * max(-divU_x * dx, 0.0)
+#
+#             # now the y-interface value
+#             divU_y = 0.25 * (u[i + 1, j] + u[i + 1, j - 1] - u[i - 1, j] - u[i - 1, j - 1]) / dx + \
+#                 (v[i, j] - v[i, j - 1]) / dy
+#
+#             avisco_y[i, j] = cvisc * max(-divU_y * dy, 0.0)
+#
+#     return avisco_x, avisco_y
