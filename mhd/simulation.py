@@ -15,6 +15,7 @@ from simulation_null import NullSimulation, grid_setup, bc_setup
 import util.plot_tools as plot_tools
 import particles.particles as particles
 
+
 class Variables(object):
     """
     a container class for easy access to the different mhd
@@ -71,7 +72,8 @@ def cons_to_prim(U, gamma, ivars, myg):
 
     e = (U[:, :, ivars.iener] -
          0.5 * q[:, :, ivars.irho] * (q[:, :, ivars.iu]**2 +
-                                      q[:, :, ivars.iv]**2)) / q[:, :, ivars.irho]
+                                      q[:, :, ivars.iv]**2) -
+         0.5 * (q[:, :, ivars.ibx]**2 + q[:, :, ivars.iby]**2)) / q[:, :, ivars.irho]
 
     q[:, :, ivars.ip] = eos.pres(gamma, q[:, :, ivars.irho], e)
 
@@ -96,8 +98,9 @@ def prim_to_cons(q, gamma, ivars, myg):
 
     rhoe = eos.rhoe(gamma, q[:, :, ivars.ip])
 
-    U[:, :, ivars.iener] = rhoe + 0.5 * q[:, :, ivars.irho] * (q[:, :, ivars.iu]**2 +
-                                                               q[:, :, ivars.iv]**2)
+    U[:, :, ivars.iener] = rhoe + 0.5 * q[:, :, ivars.irho] * \
+        (q[:, :, ivars.iu]**2 + q[:, :, ivars.iv]**2) + \
+        0.5 * (q[:, :, ivars.ibx]**2 + q[:, :, ivars.iby]**2)
 
     if ivars.naux > 0:
         for nq, nu in zip(range(ivars.ix, ivars.ix + ivars.naux),
@@ -200,7 +203,8 @@ class Simulation(NullSimulation):
 
         # get the variables we need
         u, v = self.cc_data.get_var("velocity")
-        Cfx, _, Cfy, _ = self.cc_data.get_var(["x-magnetosonic", "y-magnetosonic"])
+        Cfx, _, Cfy, _ = self.cc_data.get_var(
+            ["x-magnetosonic", "y-magnetosonic"])
 
         # the timestep is min(dx/(|u| + cs), dy/(|v| + cs))
         xtmp = self.cc_data.grid.dx / (abs(u) + Cfx)

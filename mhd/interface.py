@@ -124,6 +124,9 @@ def riemann_adiabatic(idir, ng,
                       idens, ixmom, iymom, iener, ixmag, iymag, irhoX, nspec,
                       lower_solid, upper_solid,
                       gamma, U_l, U_r):
+    r"""
+    HLLE solver for adiabatic magnetohydrodynamics.
+    """
 
     qx, qy, nvar = U_l.shape
 
@@ -181,38 +184,77 @@ def riemann_adiabatic(idir, ng,
             c_l = max(smallc, np.sqrt(gamma * p_l / rho_l))
             c_r = max(smallc, np.sqrt(gamma * p_r / rho_r))
 
-            # find alven wavespeeds and fast and slow magnetosonic wavespeeds
-            cA2_l = (bx_l**2 + by_l**2) / rho_l
-            cA2_r = (bx_r**2 + by_r**2) / rho_r
+            # find the Roe average stuff
+            rho_av = np.sqrt(rho_l * rho_r)
+
+            # h = e + p/rho
+            h_l = (rhoe_l + p_l) / rho_l
+            h_r = (rhoe_r + p_r) / rho_r
+            h_av = (np.sqrt(rho_l) * h_l + np.sqrt(rho_r) * h_r) / \
+                (np.sqrt(rho_l) + np.sqrt(rho_r))
+            # p = rho h (gamma-1)/gamma
+            p_av = rho_av * h_av * (gamma - 1.) / gamma
+
+            v_av = (np.sqrt(rho_l) * un_l + np.sqrt(rho_r) * un_r) / \
+                (np.sqrt(rho_l) + np.sqrt(rho_r))
+            bx_av = (np.sqrt(rho_l) * bx_l + np.sqrt(rho_r) *
+                     bx_r) / (np.sqrt(rho_l) + np.sqrt(rho_r))
+            by_av = (np.sqrt(rho_l) * by_l + np.sqrt(rho_r) *
+                     by_r) / (np.sqrt(rho_l) + np.sqrt(rho_r))
+
+            c_av = max(smallc, np.sqrt(gamma * p_av / rho_av))
+
+            # find alfven wavespeeds and fast and slow magnetosonic wavespeeds
+            cA2 = (bx_av**2 + by_av**2) / rho_av
 
             if idir == 1:
-                cAx2_l = bx_l**2 / rho_l
-                cAx2_r = bx_r**2 / rho_r
+                cAx2 = bx_av**2 / rho_av
             else:
-                cAx2_l = by_l**2 / rho_l
-                cAx2_r = by_r**2 / rho_r
+                cAx2 = by_av**2 / rho_av
+
+            cf = np.sqrt(
+                0.5 * (c_av**2 + cA2 + np.sqrt((c_av**2 + cA2)**2 - 4 * c_av**2 * cAx2)))
+
+            cs = np.sqrt(
+                0.5 * (c_av**2 + cA2 - np.sqrt((c_av**2 + cA2)**2 - 4 * c_av**2 * cAx2)))
+
+            # left and right eigenvalues of Roe's matrix
+            evals = np.array([v_av - cf, v_av - np.sqrt(cAx2), v_av -
+                              cs, v_av, v_av + cs, v_av + np.sqrt(cAx2), v_av + cf])
+
+            # now need to repeat all that stuff to find fast magnetosonic speed
+            # in left and right states
+            cA2 = (bx_l**2 + by_l**2) / rho_l
+
+            if idir == 1:
+                cAx2 = bx_l**2 / rho_l
+            else:
+                cAx2 = by_l**2 / rho_l
 
             cf_l = np.sqrt(
-                0.5 * (c_l**2 + cA2_l + np.sqrt((c_l**2 + cA2_l)**2 - 4 * c_l**2 * cAx2_l)))
+                0.5 * (c_l**2 + cA2 + np.sqrt((c_l**2 + cA2)**2 - 4 * c_l**2 * cAx2)))
+
+            cA2 = (bx_r**2 + by_r**2) / rho_r
+
+            if idir == 1:
+                cAx2 = bx_r**2 / rho_r
+            else:
+                cAx2 = by_r**2 / rho_r
+
             cf_r = np.sqrt(
-                0.5 * (c_r**2 + cA2_r + np.sqrt((c_r**2 + cA2_r)**2 - 4 * c_r**2 * cAx2_r)))
+                0.5 * (c_r**2 + cA2 + np.sqrt((c_r**2 + cA2)**2 - 4 * c_r**2 * cAx2)))
 
-            cs_l = np.sqrt(
-                0.5 * (c_l**2 + cA2_l - np.sqrt((c_l**2 + cA2_l)**2 - 4 * c_l**2 * cAx2_l)))
-            cs_r = np.sqrt(
-                0.5 * (c_r**2 + cA2_r - np.sqrt((c_r**2 + cA2_r)**2 - 4 * c_r**2 * cAx2_r)))
+            bp = max(max(np.max(evals), un_r + cf_r), 0)
+            bm = min(min(np.min(evals), un_l - cf_l), 0)
 
-            evals_l = np.array([un_l - cf_l, un_l - np.sqrt(cAx2_l), un_l -
-                       cs_l, un_l + cs_l, un_l + np.sqrt(cAx2_l), un_l + cf_l])
-            evals_r = np.array([un_r - cf_r, un_r - np.sqrt(cAx2_r), un_r -
-                       cs_r, un_r + cs_r, un_r + np.sqrt(cAx2_r), un_r + cf_r])
+            f_l = consFlux(idir, gamma, idens, ixmom, iymom, iener,
+                           ixmag, iymag, irhoX, nspec, U_l[i, j, :])
+            f_r = consFlux(idir, gamma, idens, ixmom, iymom, iener,
+                           ixmag, iymag, irhoX, nspec, U_r[i, j, :])
 
-            bp = max(max(np.max(evals_r), un_r + cf_r), 0)
-            bm = min(min(np.min(evals_l), un_l - cf_l), 0)
-
-            f_l = consFlux(idir, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, nspec, U_l[i, j, :])
-            f_r = consFlux(idir, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, nspec, U_r[i, j, :])
-
+            # FIXME: I think the * (U_r[i, j, :] - U_l[i, j, :]) is wrong -
+            # should multiply by difference between states in cell-centers
+            # rather than states predicted to interface, as have used here.
             F[i, j, :] = (bp * f_l - bm * f_r) / (bp - bm) + bp * \
                 bm / (bp - bm) * (U_r[i, j, :] - U_l[i, j, :])
 
@@ -248,20 +290,19 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, naux,
 
     u = U_state[ixmom] / U_state[idens]
     v = U_state[iymom] / U_state[idens]
-
-    p = (U_state[iener] - 0.5 * U_state[idens]
-         * (u * u + v * v)) * (gamma - 1.0)
-
     bx = U_state[ixmag]
     by = U_state[iymag]
+
+    p = (U_state[iener] - 0.5 * U_state[idens]
+         * (u * u + v * v) - 0.5 * (bx * bx + by * by)) * (gamma - 1.0)
 
     if (idir == 1):
         F[idens] = U_state[idens] * u
         F[ixmom] = U_state[ixmom] * \
-            u + p + (bx**2 + by**2) * 0.5 - bx**2
+            u + p + 0.5 * (bx**2 + by**2) - bx**2
         F[iymom] = U_state[iymom] * u - bx * by
         F[iener] = (U_state[iener] + p +
-                          (bx**2 + by**2) * 0.5) * u - bx * (bx * u + by * v)
+                    0.5 * (bx**2 + by**2)) * u - bx * (bx * u + by * v)
         F[ixmag] = 0
         F[iymag] = by * u - bx * v
 
@@ -273,9 +314,9 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, naux,
         F[idens] = U_state[idens] * v
         F[ixmom] = U_state[ixmom] * v - bx * by
         F[iymom] = U_state[iymom] * \
-            v + p + (bx**2 + by**2) * 0.5 - by**2
+            v + p + 0.5 * (bx**2 + by**2) - by**2
         F[iener] = (U_state[iener] + p +
-                          (bx**2 + by**2) * 0.5) * v - by * (bx * u + by * v)
+                    0.5 * (bx**2 + by**2)) * v - by * (bx * u + by * v)
         F[ixmag] = bx * v - by * u
         F[iymag] = 0
 
@@ -374,9 +415,11 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Ux, Uy):
                 dEdxy_34 = 0.5 * (dEdx_34[i, j - 1] + dEdx_34[i, j])
 
             Ec[i, j] = 0.25 * (Ex[i, j] + Ex[i, j + 1] + Ey[i, j] + Ey[i + 1, j]) + \
-                0.125 / dx * (dEdyx_14 - dEdyx_34) + 0.125 / dx * (dEdxy_14 - dEdxy_34)
+                0.125 / dx * (dEdyx_14 - dEdyx_34) + 0.125 / \
+                dx * (dEdxy_14 - dEdxy_34)
 
     return Ec
+
 
 @njit(cache=True)
 def sources(idir, ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, U, Ux):
@@ -400,11 +443,15 @@ def sources(idir, ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, U, Ux
     for i in range(ilo - 1, ihi + 1):
         for j in range(jlo - 1, jhi + 1):
             if idir == 1:
-                S[i,j,ixmom] = U[i,j,ixmag] * (Ux[i+1,j,ixmag] - Ux[i,j,ixmag]) / dx
-                S[i,j,iymom] = U[i,j,iymag] * (Ux[i+1,j,ixmag] - Ux[i,j,ixmag]) / dx
+                S[i, j, ixmom] = U[i, j, ixmag] * \
+                    (Ux[i + 1, j, ixmag] - Ux[i, j, ixmag]) / dx
+                S[i, j, iymom] = U[i, j, iymag] * \
+                    (Ux[i + 1, j, ixmag] - Ux[i, j, ixmag]) / dx
             else:
-                S[i,j,ixmom] = U[i,j,ixmag] * (Ux[i,j+1,ixmag] - Ux[i,j,ixmag]) / dx
-                S[i,j,iymom] = U[i,j,iymag] * (Ux[i,j+1,ixmag] - Ux[i,j,ixmag]) / dx
+                S[i, j, ixmom] = U[i, j, ixmag] * \
+                    (Ux[i, j + 1, ixmag] - Ux[i, j, ixmag]) / dx
+                S[i, j, iymom] = U[i, j, iymag] * \
+                    (Ux[i, j + 1, ixmag] - Ux[i, j, ixmag]) / dx
 
     return S
 
