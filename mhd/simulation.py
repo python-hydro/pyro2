@@ -23,7 +23,7 @@ class Variables(object):
     """
 
     def __init__(self, ccd):
-        self.nvar = len(myd.names)
+        self.nvar = len(ccd.names)
 
         # conserved variables -- we set these when we initialize for
         # they match the CellCenterData2d object.  Here, we only
