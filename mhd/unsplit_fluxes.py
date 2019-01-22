@@ -210,6 +210,11 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     tm_limit.end()
 
+    ############################################################################
+    # STEP 1. Compute and store the left and right states at cell interfaces in
+    # the x- and y-dirctions.
+    ############################################################################
+
     # =========================================================================
     # x-direction
     # =========================================================================
@@ -219,7 +224,8 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     tm_states.begin()
 
     V_l, V_r = ifc.states(1, myg.ng, myg.dx, dt,
-                          ivars,
+                          ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
+                          ivars.naux,
                           gamma,
                           q, ldx)
 
@@ -237,7 +243,8 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     tm_states.begin()
 
     _V_l, _V_r = ifc.states(2, myg.ng, myg.dy, dt,
-                            ivars,
+                            ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
+                            ivars.naux,
                             gamma,
                             q, ldy)
     V_l = ai.ArrayIndexer(d=_V_l, grid=myg)
@@ -249,15 +256,9 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     U_yl = comp.prim_to_cons(V_l, gamma, ivars, myg)
     U_yr = comp.prim_to_cons(V_r, gamma, ivars, myg)
 
-    # =========================================================================
-    # Calculate corner emfs
-    # =========================================================================
-
-    _El = ifc.emf(myg.ng, ivars, myg.dx, myg.dy, my_data.data, U_xl, U_yl)
-    _Er = ifc.emf(myg.ng, ivars, myg.dx, myg.dy, my_data.data, U_xr, U_yr)
-
-    El = ai.ArrayIndexer(d=_El, grid=myg)
-    Er = ai.ArrayIndexer(d=_Er, grid=myg)
+    ############################################################################
+    # STEP 2. Compute the 1d fluxes of the conserved variables.
+    ############################################################################
 
     # =========================================================================
     # compute transverse fluxes
@@ -277,12 +278,14 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     #     msg.fail("ERROR: Riemann solver undefined")
 
     _fx = riemannFunc(1, myg.ng,
-                      ivars,
+                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
+                      ivars.ixmag, ivars.iymag, ivars.irhox, ivars.naux,
                       solid.xl, solid.xr,
                       gamma, U_xl, U_xr)
 
     _fy = riemannFunc(2, myg.ng,
-                      ivars,
+                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
+                      ivars.ixmag, ivars.iymag, ivars.irhox, ivars.naux,
                       solid.yl, solid.yr,
                       gamma, U_yl, U_yr)
 
@@ -290,6 +293,32 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     F_y = ai.ArrayIndexer(d=_fy, grid=myg)
 
     tm_riem.end()
+
+    ############################################################################
+    # STEP 3. Compute the EMF at cell corners from the components of the
+    # face-centered fluxes returned by the Riemann solver in step 2, and the
+    # z-component of a cell center reference electric field calculated using the
+    # initial data at time level n.
+    ############################################################################
+
+    # =========================================================================
+    # Calculate corner emfs
+    # =========================================================================
+
+    _El = ifc.emf(myg.ng, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
+                  ivars.ixmag, ivars.iymag, ivars.irhox,
+                  myg.dx, myg.dy, my_data.data, U_xl, U_yl)
+    _Er = ifc.emf(myg.ng, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
+                  ivars.ixmag, ivars.iymag, ivars.irhox,
+                  myg.dx, myg.dy, my_data.data, U_xr, U_yr)
+
+    El = ai.ArrayIndexer(d=_El, grid=myg)
+    Er = ai.ArrayIndexer(d=_Er, grid=myg)
+
+    ############################################################################
+    # STEP 4. Evolve the left and right states at each interface by dt/2 using
+    # transverse flux gradients.
+    ############################################################################
 
     # =========================================================================
     # construct the interface values of U now
@@ -374,14 +403,22 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     # TODO: Fix indexing
 
-    Sx = ifc.sources(1, myg.ng, ivars, myg.dx, my_data.data, U_xl)
-    Sy = ifc.sources(2, myg.ng, ivars, myg.dy, my_data.data, U_yl)
+    Sx = ifc.sources(1, myg.ng, ivars.idens, ivars.ixmom, ivars.iymom,
+                     ivars.iener, ivars.ixmag, ivars.iymag, ivars.irhox,
+                     myg.dx, my_data.data, U_xl)
+    Sy = ifc.sources(2, myg.ng, ivars.idens, ivars.ixmom, ivars.iymom,
+                     ivars.iener, ivars.ixmag, ivars.iymag, ivars.irhox,
+                     myg.dy, my_data.data, U_yl)
 
     U_xl.v()[:, :, :] += Sx[:, :, :] * dt * 0.5
     U_yl.v()[:, :, :] += Sy[:, :, :] * dt * 0.5
 
-    Sx = ifc.sources(1, myg.ng, ivars, myg.dx, my_data.data, U_xr)
-    Sy = ifc.sources(2, myg.ng, ivars, myg.dy, my_data.data, U_yr)
+    Sx = ifc.sources(1, myg.ng, ivars.idens, ivars.ixmom, ivars.iymom,
+                     ivars.iener, ivars.ixmag, ivars.iymag, ivars.irhox,
+                     myg.dx, my_data.data, U_xr)
+    Sy = ifc.sources(2, myg.ng, ivars.idens, ivars.ixmom, ivars.iymom,
+                     ivars.iener, ivars.ixmag, ivars.iymag, ivars.irhox,
+                     myg.dy, my_data.data, U_yr)
 
     U_xr.v()[:, :, :] += Sx[:, :, :] * dt * 0.5
     U_yr.v()[:, :, :] += Sy[:, :, :] * dt * 0.5
@@ -405,11 +442,20 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     By_half = 0.25 * (U_xl.v(n=ivars.iymag) + U_xl.ip(1, n=ivars.iymag) +
                       U_yl.v(n=ivars.iymag) + U_yl.jp(1, n=ivars.iymag))
 
+    ############################################################################
+    # STEP 5. Calculate a cell-centered reference electric field at half time.
+    ############################################################################
+
     # we need the cell-centered velocities at half time here.... which 'come from a conservative finite-volume update of the initial mass and momentum density, using the fluxes f*_i-1/2, g*_j-1/2?
 
     # =========================================================================
     # Cell-centered reference EMF at half time?
     # =========================================================================
+
+    ############################################################################
+    # STEP 6. Compute new fluxes at cell interfaces using the corrected left and
+    # right states from step 4.
+    ############################################################################
 
     # =========================================================================
     # construct new fluxes
@@ -421,12 +467,14 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     tm_riem.begin()
 
     _fx = riemannFunc(1, myg.ng,
-                      ivars,
+                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
+                      ivars.ixmag, ivars.iymag, ivars.irhox, ivars.naux,
                       solid.xl, solid.xr,
                       gamma, U_xl, U_xr)
 
     _fy = riemannFunc(2, myg.ng,
-                      ivars,
+                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
+                      ivars.ixmag, ivars.iymag, ivars.irhox, ivars.naux,
                       solid.yl, solid.yr,
                       gamma, U_yl, U_yr)
 
@@ -435,12 +483,21 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     tm_riem.end()
 
+    ############################################################################
+    # STEP 7. Calculate the corner CMGs using numerical fluxes from step 6 and
+    # center reference electric field calculated in step 5.
+    ############################################################################
+
     # =========================================================================
     # Calculate corner emfs
     # =========================================================================
 
-    _El = ifc.emf(myg.ng, ivars, myg.dx, myg.dy, my_data.data, U_xl, U_yl)
-    _Er = ifc.emf(myg.ng, ivars, myg.dx, myg.dy, my_data.data, U_xr, U_yr)
+    _El = ifc.emf(myg.ng, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
+                  ivars.ixmag, ivars.iymag, ivars.irhox,
+                  myg.dx, myg.dy, my_data.data, U_xl, U_yl)
+    _Er = ifc.emf(myg.ng, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
+                  ivars.ixmag, ivars.iymag, ivars.irhox,
+                  myg.dx, myg.dy, my_data.data, U_xr, U_yr)
 
     El = ai.ArrayIndexer(d=_El, grid=myg)
     Er = ai.ArrayIndexer(d=_Er, grid=myg)

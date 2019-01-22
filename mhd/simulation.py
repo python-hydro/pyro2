@@ -32,12 +32,14 @@ class Variables(object):
         self.ixmom = ccd.names.index("x-momentum")
         self.iymom = ccd.names.index("y-momentum")
         self.iener = ccd.names.index("energy")
+        self.ixmag = ccd.names.index("x-magnetic-field")
+        self.iymag = ccd.names.index("y-magnetic-field")
 
         # if there are any additional variable, we treat them as
         # passively advected scalars
-        self.naux = self.nvar - 4
+        self.naux = self.nvar - 6
         if self.naux > 0:
-            self.irhox = 4
+            self.irhox = 6
         else:
             self.irhox = -1
 
@@ -70,7 +72,8 @@ def cons_to_prim(U, gamma, ivars, myg):
 
     e = (U[:, :, ivars.iener] -
          0.5 * q[:, :, ivars.irho] * (q[:, :, ivars.iu]**2 +
-                                      q[:, :, ivars.iv]**2)) / q[:, :, ivars.irho]
+                                      q[:, :, ivars.iv]**2) -
+         0.5 * (q[:, :, ivars.ibx]**2 + q[:, :, ivars.iby]**2)) / q[:, :, ivars.irho]
 
     q[:, :, ivars.ip] = eos.pres(gamma, q[:, :, ivars.irho], e)
 
@@ -95,8 +98,9 @@ def prim_to_cons(q, gamma, ivars, myg):
 
     rhoe = eos.rhoe(gamma, q[:, :, ivars.ip])
 
-    U[:, :, ivars.iener] = rhoe + 0.5 * q[:, :, ivars.irho] * (q[:, :, ivars.iu]**2 +
-                                                               q[:, :, ivars.iv]**2)
+    U[:, :, ivars.iener] = rhoe + 0.5 * q[:, :, ivars.irho] * \
+        (q[:, :, ivars.iu]**2 + q[:, :, ivars.iv]**2) + \
+        0.5 * (q[:, :, ivars.ibx]**2 + q[:, :, ivars.iby]**2)
 
     if ivars.naux > 0:
         for nq, nu in zip(range(ivars.ix, ivars.ix + ivars.naux),
@@ -136,6 +140,8 @@ class Simulation(NullSimulation):
         my_data.register_var("energy", bc)
         my_data.register_var("x-momentum", bc_xodd)
         my_data.register_var("y-momentum", bc_yodd)
+        my_data.register_var("x-magnetic-field", bc)
+        my_data.register_var("y-magnetic-field", bc)
 
         # any extras?
         if extra_vars is not None:
@@ -153,12 +159,12 @@ class Simulation(NullSimulation):
 
         # we also need face-centered data for the magnetic fields
         fcx = patch.FaceCenterData2d(my_grid, 1)
-        fcx.register_var("x-magnetic-field")
+        fcx.register_var("x-magnetic-field", bc)
         fcx.create()
         self.fcx_data = fcx
 
         fcy = patch.FaceCenterData2d(my_grid, 2)
-        fcy.register_var("y-magnetic-field")
+        fcy.register_var("y-magnetic-field", bc)
         fcy.create()
         self.fcy_data = fcy
 
@@ -197,7 +203,8 @@ class Simulation(NullSimulation):
 
         # get the variables we need
         u, v = self.cc_data.get_var("velocity")
-        Cfx, _, Cfy, _ = self.cc_data.get_var(["x-magnetosonic", "y-magnetosonic"])
+        Cfx, _, Cfy, _ = self.cc_data.get_var(
+            ["x-magnetosonic", "y-magnetosonic"])
 
         # the timestep is min(dx/(|u| + cs), dy/(|v| + cs))
         xtmp = self.cc_data.grid.dx / (abs(u) + Cfx)
@@ -232,6 +239,8 @@ class Simulation(NullSimulation):
         dtdx = self.dt / myg.dx
         dtdy = self.dt / myg.dy
 
+        # STEP 8. Update the solutioon from n to n+1
+
         for n in range(self.ivars.nvar):
             var = self.cc_data.get_var_by_index(n)
 
@@ -239,14 +248,13 @@ class Simulation(NullSimulation):
                 dtdx * (Flux_x.v(n=n) - Flux_x.ip(1, n=n)) + \
                 dtdy * (Flux_y.v(n=n) - Flux_y.jp(1, n=n))
 
-        # gravitational source terms
-        # ymom[:, :] += 0.5 * self.dt * (dens[:, :] + old_dens[:, :]) * grav
-        # ener[:, :] += 0.5 * self.dt * (ymom[:, :] + old_ymom[:, :]) * grav
+        # STEP 9. Compute the cell-centered components of the magnetic field
+        # from the updated face-centered values
 
         if self.particles is not None:
             self.particles.update_particles(self.dt)
 
-        # increment the time
+        # STEP 10. increment the time
         self.cc_data.t += self.dt
         self.n += 1
 
@@ -276,8 +284,8 @@ class Simulation(NullSimulation):
         v = q[:, :, ivars.iv]
         p = q[:, :, ivars.ip]
         e = eos.rhoe(gamma, p) / rho
-        bx = q[:, :, ivars.bx]
-        by = q[:, :, ivars.by]
+        bx = q[:, :, ivars.ibx]
+        by = q[:, :, ivars.iby]
 
         magvel = np.sqrt(u**2 + v**2)
         magb = np.sqrt(bx**2 + by**2)
