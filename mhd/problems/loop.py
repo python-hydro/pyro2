@@ -7,13 +7,13 @@ from util import msg
 
 
 def init_data(my_data, rp):
-    """ initialize a smooth advection problem for testing convergence """
+    """ initialize a weak magnetic field loop """
 
-    msg.bold("initializing the advect problem...")
+    msg.bold("initializing the loop problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):
-        print("ERROR: patch invalid in advect.py")
+        print("ERROR: patch invalid in loop.py")
         print(my_data.__class__)
         sys.exit()
 
@@ -42,24 +42,34 @@ def init_data(my_data, rp):
     ymin = rp.get_param("mesh.ymin")
     ymax = rp.get_param("mesh.ymax")
 
+    v0 = rp.get_param("loop.v0")
+    R = rp.get_param("loop.r")
+    A0 = rp.get_param("loop.a0")
+
     xctr = 0.5 * (xmin + xmax)
     yctr = 0.5 * (ymin + ymax)
 
-    # this is identical to the advection/smooth problem
-    dens[:, :] = 1.0 + np.exp(-60.0 * ((my_data.grid.x2d - xctr)**2 +
-                                       (my_data.grid.y2d - yctr)**2))
-
-    # velocity is diagonal
-    u = 1.0
-    v = 1.0
+    # velocity
+    u = v0 * 2 / np.sqrt(5)
+    v = v0 / np.sqrt(5)
     xmom[:, :] = dens[:, :] * u
     ymom[:, :] = dens[:, :] * v
 
+    # magnetic field
+    myg = my_data.grid
+    r = np.sqrt(myg.x2d**2 + myg.y2d**2)
+    # Az = np.zeros_like(bx)
+    # Az[r <= R] = A0 * (R - r)
+
+    # calculate Bx, By from magnetic vector potential Az
+    bx[r <= R] = -A0 * myg.y2d[r <= R] / r[r <= R]
+    by[r <= R] = A0 * myg.x2d[r <= R] / r[r <= R]
+
     # pressure is constant
     p = 1.0
-    ener[:, :] = p / (gamma - 1.0) + 0.5 * (xmom[:, :]
-                                            ** 2 + ymom[:, :]**2) / dens[:, :] + \
-                                            0.5 * (bx**2 + by**2)
+    ener[:, :] = p / (gamma - 1.0) + \
+        0.5 * (xmom ** 2 + ymom**2) / dens + \
+        0.5 * (bx**2 + by**2)
 
 
 def finalize():

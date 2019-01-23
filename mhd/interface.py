@@ -276,8 +276,9 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, naux,
         Are we predicting to the edges in the x-direction (1) or y-direction (2)?
     gamma : float
         Adiabatic index
-    idens, ixmom, iymom, iener, irhoX : int
-        The indices of the density, x-momentum, y-momentum, internal energy density
+    idens, ixmom, iymom, iener, ixmag, iymag, irhoX : int
+        The indices of the density, x-momentum, y-momentum, x-magnetic field,
+        y-magnetic field, internal energy density
         and species partial densities in the conserved state vector.
     naux : int
         The number of species
@@ -332,9 +333,15 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, naux,
 
 
 @njit(cache=True)
-def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy, Eref=np.zeros((1,1)), use_ref=False):
+def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy,
+        Eref=np.zeros((1, 1)), use_ref=False):
     r"""
-    Calculate the EMF at cell corners
+    Calculate the EMF at cell corners.
+
+    Note: the slightly messy keyword arguments are to keep numba happy - it
+    doesn't like it if a keyword argument is a different type (e.g. None) to
+    what it infers the variable to be from elsewhere within the function
+    (e.g. an array).
     """
 
     qx, qy, nvar = U.shape
@@ -375,7 +382,7 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy, 
             Ey[i, j] = Fy[i, j, ixmag]
 
     if use_ref:
-        Er[:,:] = Eref
+        Er[:, :] = Eref
 
     for i in range(ilo - 1, ihi + 1):
         for j in range(jlo - 1, jhi + 1):
