@@ -229,8 +229,9 @@ class Simulation(NullSimulation):
 
         myg = self.cc_data.grid
 
-        Flux_x, Flux_y = flx.unsplit_fluxes(self.cc_data, self.aux_data, self.rp,
-                                            self.ivars, self.solid, self.tc, self.dt)
+        Flux_x, Flux_y, emf = flx.unsplit_fluxes(self.cc_data, self.fcx_data, self.fcy_data,
+                                                 self.aux_data, self.rp,
+                                                 self.ivars, self.solid, self.tc, self.dt)
 
         # old_dens = dens.copy()
         # old_ymom = ymom.copy()
@@ -239,22 +240,51 @@ class Simulation(NullSimulation):
         dtdx = self.dt / myg.dx
         dtdy = self.dt / myg.dy
 
-        # STEP 8. Update the solutioon from n to n+1
+        ########################################################################
+        # STEP 8. Update the solution from n to n+1
+        ########################################################################
 
+        # ======================================================================
+        # use finite volume for all variables BUT the magnetic fields
+        # ======================================================================
         for n in range(self.ivars.nvar):
+            if n == self.ivars.ixmag or n == self.ivars.iymag:
+                continue
+
             var = self.cc_data.get_var_by_index(n)
 
             var.v()[:, :] += \
                 dtdx * (Flux_x.v(n=n) - Flux_x.ip(1, n=n)) + \
                 dtdy * (Flux_y.v(n=n) - Flux_y.jp(1, n=n))
 
+        # ======================================================================
+        # update the in-plane components of the magnetic field using CT
+        # ======================================================================
+        Bx = self.fcx_data.get_var("x-magnetic-field")
+        By = self.fcx_data.get_var("y-magnetic-field")
+
+        Bx.v()[:, :] -= dtdy * (emf.jp(1) - emf.v())
+        By.v()[:, :] += dtdx * (emf.ip(1) - emf.v())
+
+        ########################################################################
         # STEP 9. Compute the cell-centered components of the magnetic field
         # from the updated face-centered values
+        ########################################################################
+
+        self.cc_data.get_var(
+            "x-magnetic-field").v()[:, :] = 0.5 * (Bx.ip(1) + Bx.v())
+        self.cc_data.get_var(
+            "y-magnetic-field").v()[:, :] = 0.5 * (By.jp(1) + By.v())
+
+        # update the particles
 
         if self.particles is not None:
             self.particles.update_particles(self.dt)
 
+        ########################################################################
         # STEP 10. increment the time
+        ########################################################################
+        self.dt = self.method_compute_timestep()
         self.cc_data.t += self.dt
         self.n += 1
 

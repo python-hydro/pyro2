@@ -123,7 +123,7 @@ def states(idir, ng, dx, dt,
 def riemann_adiabatic(idir, ng,
                       idens, ixmom, iymom, iener, ixmag, iymag, irhoX, nspec,
                       lower_solid, upper_solid,
-                      gamma, U_l, U_r):
+                      gamma, U_l, U_r, Bx, By):
     r"""
     HLLE solver for adiabatic magnetohydrodynamics.
     """
@@ -175,10 +175,14 @@ def riemann_adiabatic(idir, ng,
             p_r = rhoe_r * (gamma - 1.0)
             p_r = max(p_r, smallp)
 
-            bx_l = U_l[i, j, ixmag]
-            by_l = U_l[i, j, iymag]
-            bx_r = U_r[i, j, ixmag]
-            by_r = U_r[i, j, iymag]
+            bx_l = Bx[i,j]
+            by_l = By[i,j]
+            if (idir == 1):
+                bx_r = Bx[i+1,j]
+                by_r = By[i,j]
+            else:
+                bx_r = Bx[i,j]
+                by_r = By[i,j+1]
 
             # and the regular sound speeds
             c_l = max(smallc, np.sqrt(gamma * p_l / rho_l))
@@ -328,14 +332,14 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, naux,
 
 
 @njit(cache=True)
-def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Ux, Uy):
+def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy, Eref=None):
     r"""
     Calculate the EMF at cell corners
     """
 
     qx, qy, nvar = U.shape
 
-    E = np.zeros((qx, qy))
+    Er = np.zeros((qx, qy))
     Ex = np.zeros((qx, qy))  # x-edges
     Ey = np.zeros((qx, qy))  # y-edges
 
@@ -362,52 +366,47 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Ux, Uy):
             bx = U[i, j, ixmag]
             by = U[i, j, iymag]
 
-            E[i, j] = -(u * by - v * bx)
+            if Eref is None:
+                Er[i, j] = -(u * by - v * bx)
+            else:
+                Er[i,j] = Eref[i,j]
 
-            u = Ux[i, j, ixmom] / Ux[i, j, idens]
-            v = Ux[i, j, iymom] / Ux[i, j, idens]
-            bx = Ux[i, j, ixmag]
-            by = Ux[i, j, iymag]
+            # GS05 section 4.1.1
+            Ex[i, j] = -Fx[i, j, iymag]
 
-            Ex[i, j] = -(u * by - v * bx)
-
-            u = Uy[i, j, ixmom] / Uy[i, j, idens]
-            v = Uy[i, j, iymom] / Uy[i, j, idens]
-            bx = Uy[i, j, ixmag]
-            by = Uy[i, j, iymag]
-
-            Ey[i, j] = -(u * by - v * bx)
+            Ey[i, j] = Fy[i, j, ixmag]
 
     for i in range(ilo - 1, ihi + 1):
         for j in range(jlo - 1, jhi + 1):
 
             # get the -1/4 states
-            dEdy_14[i, j] = 2 * (E[i, j] - Ey[i, j]) / dy
+            dEdy_14[i, j] = 2 * (Er[i, j] - Ey[i, j]) / dy
 
-            dEdx_14[i, j] = 2 * (E[i, j] - Ex[i, j]) / dx
+            dEdx_14[i, j] = 2 * (Er[i, j] - Ex[i, j]) / dx
 
             # get the -3/4 states
-            dEdy_34[i, j] = 2 * (Ey[i, j] - E[i, j - 1]) / dy
+            dEdy_34[i, j] = 2 * (Ey[i, j] - Er[i, j - 1]) / dy
 
-            dEdx_34[i, j] = 2 * (Ey[i, j] - Ex[i - 1, j]) / dx
+            dEdx_34[i, j] = 2 * (Ex[i, j] - Er[i - 1, j]) / dx
 
             # now get the corner states
-            u = Ux[i, j, ixmom] / Ux[i, j, idens]
-            if u > 0:
+            # this depends on the sign of the mass flux
+            ru = Fx[i, j, idens]
+            if ru > 0:
                 dEdyx_14 = dEdy_14[i - 1, j]
                 dEdyx_34 = dEdy_34[i - 1, j]
-            elif u < 0:
+            elif ru < 0:
                 dEdyx_14 = dEdy_14[i, j]
                 dEdyx_34 = dEdy_34[i, j]
             else:
                 dEdyx_14 = 0.5 * (dEdy_14[i - 1, j] + dEdy_14[i, j])
                 dEdyx_34 = 0.5 * (dEdy_34[i - 1, j] + dEdy_34[i, j])
 
-            v = Uy[i, j, iymom] / Uy[i, j, idens]
-            if u > 0:
+            rv = Fy[i, j, idens]
+            if rv > 0:
                 dEdxy_14 = dEdx_14[i, j - 1]
                 dEdxy_34 = dEdx_34[i, j - 1]
-            elif u < 0:
+            elif rv < 0:
                 dEdxy_14 = dEdx_14[i, j]
                 dEdxy_34 = dEdx_34[i, j]
             else:
@@ -415,7 +414,7 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Ux, Uy):
                 dEdxy_34 = 0.5 * (dEdx_34[i, j - 1] + dEdx_34[i, j])
 
             Ec[i, j] = 0.25 * (Ex[i, j] + Ex[i, j + 1] + Ey[i, j] + Ey[i + 1, j]) + \
-                0.125 / dx * (dEdyx_14 - dEdyx_34) + 0.125 / \
+                0.125 / dy * (dEdyx_14 - dEdyx_34) + 0.125 / \
                 dx * (dEdxy_14 - dEdxy_34)
 
     return Ec
@@ -427,7 +426,7 @@ def sources(idir, ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, U, Ux
     Calculate source terms on the idir-interface. U is the cell-centered state,
     Ux should be a state on the idir-interface.
 
-    Assume Bz = vz = 0.
+    Assume Bz = vz = 0 so that iener and iBz sources are 0.
     """
     qx, qy, nvar = U.shape
 

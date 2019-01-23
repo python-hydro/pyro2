@@ -130,7 +130,7 @@ import mesh.array_indexer as ai
 from util import msg
 
 
-def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
+def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt):
     """
     unsplitFluxes returns the fluxes through the x and y interfaces by
     doing an unsplit reconstruction of the interface values and then
@@ -143,7 +143,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     Parameters
     ----------
-    my_data : CellCenterData2d object
+    cc_data : CellCenterData2d object
         The data object containing the grid and advective scalar that
         we are advecting.
     rp : RuntimeParameters object
@@ -166,7 +166,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     tm_flux = tc.timer("unsplitFluxes")
     tm_flux.begin()
 
-    myg = my_data.grid
+    myg = cc_data.grid
 
     gamma = rp.get_param("eos.gamma")
 
@@ -175,10 +175,10 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     # =========================================================================
     # Q = (rho, u, v, p, {X})
 
-    dens = my_data.get_var("density")
-    ymom = my_data.get_var("y-momentum")
+    dens = cc_data.get_var("density")
+    ymom = cc_data.get_var("y-momentum")
 
-    q = comp.cons_to_prim(my_data.data, gamma, ivars, myg)
+    q = comp.cons_to_prim(cc_data.data, gamma, ivars, myg)
 
     # =========================================================================
     # compute the flattening coefficients
@@ -209,6 +209,10 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
         ldy[:, :, n] = xi * reconstruction.limit(q[:, :, n], myg, 2, limiter)
 
     tm_limit.end()
+
+    # get face-centered magnetic field components
+    Bx = fcx_data.get_var("x-magnetic-field")
+    By = fcy_data.get_var("y-magnetic-field")
 
     ############################################################################
     # STEP 1. Compute and store the left and right states at cell interfaces in
@@ -281,13 +285,13 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
                       ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
                       ivars.ixmag, ivars.iymag, ivars.irhox, ivars.naux,
                       solid.xl, solid.xr,
-                      gamma, U_xl, U_xr)
+                      gamma, U_xl, U_xr, Bx, By)
 
     _fy = riemannFunc(2, myg.ng,
                       ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
                       ivars.ixmag, ivars.iymag, ivars.irhox, ivars.naux,
                       solid.yl, solid.yr,
-                      gamma, U_yl, U_yr)
+                      gamma, U_yl, U_yr, Bx, By)
 
     F_x = ai.ArrayIndexer(d=_fx, grid=myg)
     F_y = ai.ArrayIndexer(d=_fy, grid=myg)
@@ -305,15 +309,11 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     # Calculate corner emfs
     # =========================================================================
 
-    _El = ifc.emf(myg.ng, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
-                  ivars.ixmag, ivars.iymag, ivars.irhox,
-                  myg.dx, myg.dy, my_data.data, U_xl, U_yl)
-    _Er = ifc.emf(myg.ng, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
-                  ivars.ixmag, ivars.iymag, ivars.irhox,
-                  myg.dx, myg.dy, my_data.data, U_xr, U_yr)
+    _emf = ifc.emf(myg.ng, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
+                   ivars.ixmag, ivars.iymag, ivars.irhox,
+                   myg.dx, myg.dy, cc_data.data, F_x, F_y)
 
-    El = ai.ArrayIndexer(d=_El, grid=myg)
-    Er = ai.ArrayIndexer(d=_Er, grid=myg)
+    emf = ai.ArrayIndexer(d=_emf, grid=myg)
 
     ############################################################################
     # STEP 4. Evolve the left and right states at each interface by dt/2 using
@@ -405,52 +405,81 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     Sx = ifc.sources(1, myg.ng, ivars.idens, ivars.ixmom, ivars.iymom,
                      ivars.iener, ivars.ixmag, ivars.iymag, ivars.irhox,
-                     myg.dx, my_data.data, U_xl)
+                     myg.dx, cc_data.data, U_xl)
     Sy = ifc.sources(2, myg.ng, ivars.idens, ivars.ixmom, ivars.iymom,
                      ivars.iener, ivars.ixmag, ivars.iymag, ivars.irhox,
-                     myg.dy, my_data.data, U_yl)
+                     myg.dy, cc_data.data, U_yl)
 
     U_xl.v()[:, :, :] += Sx[:, :, :] * dt * 0.5
     U_yl.v()[:, :, :] += Sy[:, :, :] * dt * 0.5
 
     Sx = ifc.sources(1, myg.ng, ivars.idens, ivars.ixmom, ivars.iymom,
                      ivars.iener, ivars.ixmag, ivars.iymag, ivars.irhox,
-                     myg.dx, my_data.data, U_xr)
+                     myg.dx, cc_data.data, U_xr)
     Sy = ifc.sources(2, myg.ng, ivars.idens, ivars.ixmom, ivars.iymom,
                      ivars.iener, ivars.ixmag, ivars.iymag, ivars.irhox,
-                     myg.dy, my_data.data, U_yr)
+                     myg.dy, cc_data.data, U_yr)
 
     U_xr.v()[:, :, :] += Sx[:, :, :] * dt * 0.5
     U_yr.v()[:, :, :] += Sy[:, :, :] * dt * 0.5
 
     # =========================================================================
-    # Add corner emfs
+    # Add corner emfs to in-plane components of the magnetic field to get
+    # the face-centered magnetic fields at half time.
     # =========================================================================
 
-    U_xl.v(n=ivars.ixmag)[:, :] -= 0.5 * dtdy * (El.jp(1) - El.v())
-    U_yl.v(n=ivars.iymag)[:, :] -= 0.5 * dtdx * (El.ip(1) - El.v())
+    # FIXME: check indexing on this
+    Bx.v()[:, :] -= dtdy * (emf.jp(1) - emf.v())
+    By.v()[:, :] += dtdx * (emf.ip(1) - emf.v())
 
-    U_xr.v(n=ivars.ixmag)[:, :] -= 0.5 * dtdy * (Er.jp(1) - Er.v())
-    U_yr.v(n=ivars.iymag)[:, :] -= 0.5 * dtdx * (Er.ip(1) - Er.v())
-
-    # =========================================================================
-    # Cell-centered magnetic field components at half time
-    # =========================================================================
-
-    Bx_half = 0.25 * (U_xl.v(n=ivars.ixmag) + U_xl.ip(1, n=ivars.ixmag) +
-                      U_yl.v(n=ivars.ixmag) + U_yl.jp(1, n=ivars.ixmag))
-    By_half = 0.25 * (U_xl.v(n=ivars.iymag) + U_xl.ip(1, n=ivars.iymag) +
-                      U_yl.v(n=ivars.iymag) + U_yl.jp(1, n=ivars.iymag))
+    # U_xl.v(n=ivars.ixmag)[:, :] -= 0.5 * dtdy * (emf.jp(1) - emf.v())
+    # U_yl.v(n=ivars.iymag)[:, :] -= 0.5 * dtdx * (emf.ip(1) - emf.v())
+    #
+    # U_xr.v(n=ivars.ixmag)[:, :] -= 0.5 * dtdy * (Er.jp(1) - Er.v())
+    # U_yr.v(n=ivars.iymag)[:, :] -= 0.5 * dtdx * (Er.ip(1) - Er.v())
 
     ############################################################################
     # STEP 5. Calculate a cell-centered reference electric field at half time.
     ############################################################################
 
-    # we need the cell-centered velocities at half time here.... which 'come from a conservative finite-volume update of the initial mass and momentum density, using the fluxes f*_i-1/2, g*_j-1/2?
+    # we need the cell-centered velocities at half time here....
+    # which 'come from a conservative finite-volume update of the initial mass
+    # and momentum density, using the fluxes f*_i-1/2, g*_j-1/2?
 
     # =========================================================================
-    # Cell-centered reference EMF at half time?
+    # Cell-centered magnetic field components at half time
     # =========================================================================
+    Bx_half = myg.scratch_array()
+    By_half = myg.scratch_array()
+
+    Bx_half.v()[:, :] = 0.5 * (Bx.v() + Bx.ip(1))
+    By_half.v()[:, :] = 0.5 * (By.v() + By.jp(1))
+
+    # =========================================================================
+    # Cell-centered reference EMF at half time
+    # =========================================================================
+
+    # conservative finite volume update of density and momenta
+    # note that I have assumed that we have been sensible here and that
+    # iymom > ixmom > idens
+    U_star = myg.scratch_array(nvar=ivars.iymom)
+    b = 2  # buffer
+    U_star.v(n=ivars.idens, buf=b)[:, :] = dens.v()
+    U_star.v(n=ivars.ixmom, buf=b)[:, :] = myg.cc_data.v(n=ivars.ixmom)
+    U_star.v(n=ivars.iymom, buf=b)[:, :] = myg.cc_data.v(n=ivars.iymom)
+
+    for n in range(ivars.iymom):
+        U_star.v(n=n, buf=b)[:, :] += \
+            dtdx * (F_x.v(n=n, buf=b) - F_x.ip(1, n=n, buf=b)) + \
+            dtdy * (F_y.v(n=n, buf=b) - F_y.jp(1, n=n, buf=b))
+
+    # cell-centered velocites at half time
+    u_half = U_star.v(n=ivars.ixmom, buf=b) / U_star.v(n=ivars.idens, buf=b)
+    v_half = U_star.v(n=ivars.iymom, buf=b) / U_star.v(n=ivars.idens, buf=b)
+
+    E_cc_half = myg.scratch_array()
+    E_cc_half.v(buf=b)[:, :] = - \
+        (u_half * By_half.v(buf=b) - v_half * Bx_half.v(buf=b))
 
     ############################################################################
     # STEP 6. Compute new fluxes at cell interfaces using the corrected left and
@@ -470,13 +499,13 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
                       ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
                       ivars.ixmag, ivars.iymag, ivars.irhox, ivars.naux,
                       solid.xl, solid.xr,
-                      gamma, U_xl, U_xr)
+                      gamma, U_xl, U_xr, Bx, By)
 
     _fy = riemannFunc(2, myg.ng,
                       ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
                       ivars.ixmag, ivars.iymag, ivars.irhox, ivars.naux,
                       solid.yl, solid.yr,
-                      gamma, U_yl, U_yr)
+                      gamma, U_yl, U_yr, Bx, By)
 
     F_x = ai.ArrayIndexer(d=_fx, grid=myg)
     F_y = ai.ArrayIndexer(d=_fy, grid=myg)
@@ -492,16 +521,12 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     # Calculate corner emfs
     # =========================================================================
 
-    _El = ifc.emf(myg.ng, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
+    _emf = ifc.emf(myg.ng, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
                   ivars.ixmag, ivars.iymag, ivars.irhox,
-                  myg.dx, myg.dy, my_data.data, U_xl, U_yl)
-    _Er = ifc.emf(myg.ng, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
-                  ivars.ixmag, ivars.iymag, ivars.irhox,
-                  myg.dx, myg.dy, my_data.data, U_xr, U_yr)
+                  myg.dx, myg.dy, cc_data.data, F_x, F_y, E_cc_half)
 
-    El = ai.ArrayIndexer(d=_El, grid=myg)
-    Er = ai.ArrayIndexer(d=_Er, grid=myg)
+    emf = ai.ArrayIndexer(d=_emf, grid=myg)
 
     tm_flux.end()
 
-    return F_x, F_y
+    return F_x, F_y, emf
