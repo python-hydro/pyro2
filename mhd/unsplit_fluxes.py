@@ -270,7 +270,7 @@ def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt
     tm_riem = tc.timer("riemann")
     tm_riem.begin()
 
-    riemann = rp.get_param("mhd.riemann")
+    # riemann = rp.get_param("mhd.riemann")
 
     riemannFunc = ifc.riemann_adiabatic
 
@@ -405,23 +405,23 @@ def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt
 
     Sx = ifc.sources(1, myg.ng, ivars.idens, ivars.ixmom, ivars.iymom,
                      ivars.iener, ivars.ixmag, ivars.iymag, ivars.irhox,
-                     myg.dx, cc_data.data, U_xl)
+                     myg.dx, cc_data.data, U_xl.data)
     Sy = ifc.sources(2, myg.ng, ivars.idens, ivars.ixmom, ivars.iymom,
                      ivars.iener, ivars.ixmag, ivars.iymag, ivars.irhox,
-                     myg.dy, cc_data.data, U_yl)
+                     myg.dy, cc_data.data, U_yl.data)
 
-    U_xl.v()[:, :, :] += Sx[:, :, :] * dt * 0.5
-    U_yl.v()[:, :, :] += Sy[:, :, :] * dt * 0.5
+    U_xl[:, :, :] += Sx[:, :, :] * dt * 0.5
+    U_yl[:, :, :] += Sy[:, :, :] * dt * 0.5
 
     Sx = ifc.sources(1, myg.ng, ivars.idens, ivars.ixmom, ivars.iymom,
                      ivars.iener, ivars.ixmag, ivars.iymag, ivars.irhox,
-                     myg.dx, cc_data.data, U_xr)
+                     myg.dx, cc_data.data, U_xr.data)
     Sy = ifc.sources(2, myg.ng, ivars.idens, ivars.ixmom, ivars.iymom,
                      ivars.iener, ivars.ixmag, ivars.iymag, ivars.irhox,
-                     myg.dy, cc_data.data, U_yr)
+                     myg.dy, cc_data.data, U_yr.data)
 
-    U_xr.v()[:, :, :] += Sx[:, :, :] * dt * 0.5
-    U_yr.v()[:, :, :] += Sy[:, :, :] * dt * 0.5
+    U_xr[:, :, :] += Sx[:, :, :] * dt * 0.5
+    U_yr[:, :, :] += Sy[:, :, :] * dt * 0.5
 
     # =========================================================================
     # Add corner emfs to in-plane components of the magnetic field to get
@@ -429,8 +429,10 @@ def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt
     # =========================================================================
 
     # FIXME: check indexing on this
-    Bx.v()[:, :] -= dtdy * (emf.jp(1) - emf.v())
-    By.v()[:, :] += dtdx * (emf.ip(1) - emf.v())
+    buf = [0, 1, 0, 0]
+    Bx.v()[:, :] -= dtdy * (emf.jp(1, buf=buf) - emf.v(buf=buf))
+    buf = [0, 0, 0, 1]
+    By.v()[:, :] += dtdx * (emf.ip(1, buf=buf) - emf.v(buf=buf))
 
     # U_xl.v(n=ivars.ixmag)[:, :] -= 0.5 * dtdy * (emf.jp(1) - emf.v())
     # U_yl.v(n=ivars.iymag)[:, :] -= 0.5 * dtdx * (emf.ip(1) - emf.v())
@@ -452,8 +454,10 @@ def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt
     Bx_half = myg.scratch_array()
     By_half = myg.scratch_array()
 
-    Bx_half.v()[:, :] = 0.5 * (Bx.v() + Bx.ip(1))
-    By_half.v()[:, :] = 0.5 * (By.v() + By.jp(1))
+    buf = [0, -1, 0, 0]
+    Bx_half.v()[:, :] = 0.5 * (Bx.v(buf=buf) + Bx.ip(1, buf=buf))
+    buf = [0, 0, 0, -1]
+    By_half.v()[:, :] = 0.5 * (By.v(buf=buf) + By.jp(1, buf=buf))
 
     # =========================================================================
     # Cell-centered reference EMF at half time
@@ -462,11 +466,14 @@ def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt
     # conservative finite volume update of density and momenta
     # note that I have assumed that we have been sensible here and that
     # iymom > ixmom > idens
-    U_star = myg.scratch_array(nvar=ivars.iymom)
-    b = 2  # buffer
-    U_star.v(n=ivars.idens, buf=b)[:, :] = dens.v()
-    U_star.v(n=ivars.ixmom, buf=b)[:, :] = myg.cc_data.v(n=ivars.ixmom)
-    U_star.v(n=ivars.iymom, buf=b)[:, :] = myg.cc_data.v(n=ivars.iymom)
+    xmom = cc_data.get_var("y-momentum")
+    ymom = cc_data.get_var("y-momentum")
+
+    U_star = myg.scratch_array(nvar=ivars.iymom+1)
+    b = 1  # buffer
+    U_star.v(n=ivars.idens, buf=b)[:, :] = dens.v(buf=b)
+    U_star.v(n=ivars.ixmom, buf=b)[:, :] = xmom.v(buf=b)
+    U_star.v(n=ivars.iymom, buf=b)[:, :] = ymom.v(buf=b)
 
     for n in range(ivars.iymom):
         U_star.v(n=n, buf=b)[:, :] += \
@@ -522,8 +529,8 @@ def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt
     # =========================================================================
 
     _emf = ifc.emf(myg.ng, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
-                  ivars.ixmag, ivars.iymag, ivars.irhox,
-                  myg.dx, myg.dy, cc_data.data, F_x, F_y, E_cc_half)
+                   ivars.ixmag, ivars.iymag, ivars.irhox,
+                   myg.dx, myg.dy, cc_data.data, F_x, F_y, E_cc_half, True)
 
     emf = ai.ArrayIndexer(d=_emf, grid=myg)
 

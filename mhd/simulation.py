@@ -181,6 +181,9 @@ class Simulation(NullSimulation):
 
         self.ivars = Variables(my_data)
 
+        # derived variables
+        self.cc_data.add_derived(derives.derive_primitives)
+
         # initial conditions for the problem
         problem = importlib.import_module("{}.problems.{}".format(
             self.solver_name, self.problem_name))
@@ -261,20 +264,24 @@ class Simulation(NullSimulation):
         # update the in-plane components of the magnetic field using CT
         # ======================================================================
         Bx = self.fcx_data.get_var("x-magnetic-field")
-        By = self.fcx_data.get_var("y-magnetic-field")
+        By = self.fcy_data.get_var("y-magnetic-field")
 
-        Bx.v()[:, :] -= dtdy * (emf.jp(1) - emf.v())
-        By.v()[:, :] += dtdx * (emf.ip(1) - emf.v())
+        buf = [0, 1, 0, 0]
+        Bx.v()[:, :] -= dtdy * (emf.jp(1, buf=buf) - emf.v(buf=buf))
+        buf = [0, 0, 0, 1]
+        By.v()[:, :] += dtdx * (emf.ip(1, buf=buf) - emf.v(buf=buf))
 
         ########################################################################
         # STEP 9. Compute the cell-centered components of the magnetic field
         # from the updated face-centered values
         ########################################################################
 
+        buf = [0, -1, 0, 0]
         self.cc_data.get_var(
-            "x-magnetic-field").v()[:, :] = 0.5 * (Bx.ip(1) + Bx.v())
+            "x-magnetic-field").v()[:, :] = 0.5 * (Bx.ip(1,buf=buf) + Bx.v(buf=buf))
+        buf = [0, 0, 0, -1]
         self.cc_data.get_var(
-            "y-magnetic-field").v()[:, :] = 0.5 * (By.jp(1) + By.v())
+            "y-magnetic-field").v()[:, :] = 0.5 * (By.jp(1,buf=buf,) + By.v(buf=buf))
 
         # update the particles
 
@@ -284,7 +291,7 @@ class Simulation(NullSimulation):
         ########################################################################
         # STEP 10. increment the time
         ########################################################################
-        self.dt = self.method_compute_timestep()
+        self.method_compute_timestep()
         self.cc_data.t += self.dt
         self.n += 1
 

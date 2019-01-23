@@ -175,14 +175,14 @@ def riemann_adiabatic(idir, ng,
             p_r = rhoe_r * (gamma - 1.0)
             p_r = max(p_r, smallp)
 
-            bx_l = Bx[i,j]
-            by_l = By[i,j]
+            bx_l = Bx[i, j]
+            by_l = By[i, j]
             if (idir == 1):
-                bx_r = Bx[i+1,j]
-                by_r = By[i,j]
+                bx_r = Bx[i + 1, j]
+                by_r = By[i, j]
             else:
-                bx_r = Bx[i,j]
-                by_r = By[i,j+1]
+                bx_r = Bx[i, j]
+                by_r = By[i, j + 1]
 
             # and the regular sound speeds
             c_l = max(smallc, np.sqrt(gamma * p_l / rho_l))
@@ -332,7 +332,7 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, naux,
 
 
 @njit(cache=True)
-def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy, Eref=None):
+def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy, Eref=np.zeros((1,1)), use_ref=False):
     r"""
     Calculate the EMF at cell corners
     """
@@ -366,15 +366,16 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy, 
             bx = U[i, j, ixmag]
             by = U[i, j, iymag]
 
-            if Eref is None:
+            if not use_ref:
                 Er[i, j] = -(u * by - v * bx)
-            else:
-                Er[i,j] = Eref[i,j]
 
             # GS05 section 4.1.1
             Ex[i, j] = -Fx[i, j, iymag]
 
             Ey[i, j] = Fy[i, j, ixmag]
+
+    if use_ref:
+        Er[:,:] = Eref
 
     for i in range(ilo - 1, ihi + 1):
         for j in range(jlo - 1, jhi + 1):
@@ -420,7 +421,7 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy, 
     return Ec
 
 
-@njit(cache=True)
+# @njit(cache=True)
 def sources(idir, ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, U, Ux):
     r"""
     Calculate source terms on the idir-interface. U is the cell-centered state,
@@ -430,7 +431,7 @@ def sources(idir, ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, U, Ux
     """
     qx, qy, nvar = U.shape
 
-    S = np.zeros((qx, qy))
+    S = np.zeros((qx, qy, nvar))
 
     nx = qx - 2 * ng
     ny = qy - 2 * ng
