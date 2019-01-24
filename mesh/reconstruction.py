@@ -62,6 +62,18 @@ def nolimit(a, myg, idir):
 
     return lda
 
+def fclimit(a, myg, idir):
+    """ just a centered difference without any limiting """
+
+    lda = myg.scratch_array()
+
+    if idir == 1:
+        lda.v(buf=2)[:, :] = a.v(buf=2) - a.ip(-1, buf=2)
+    elif idir == 2:
+        lda.v(buf=2)[:, :] = a.v(buf=2) - a.jp(-1, buf=2)
+
+    return lda
+
 
 def limit2(a, myg, idir):
     """ 2nd order monotonized central difference limiter """

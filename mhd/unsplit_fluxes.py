@@ -274,24 +274,23 @@ def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt
 
     riemannFunc = ifc.riemann_adiabatic
 
-    # if riemann == "HLLC":
-    #     riemannFunc = ifc.riemann_hllc
-    # elif riemann == "CGF":
-    #     riemannFunc = ifc.riemann_cgf
-    # else:
-    #     msg.fail("ERROR: Riemann solver undefined")
+    for n in range(ivars.nvar):
+        ldx[:, :, n] = xi * \
+            reconstruction.fclimit(cc_data.data[:, :, n], myg, 1)
+        ldy[:, :, n] = xi * \
+            reconstruction.fclimit(cc_data.data[:, :, n], myg, 2)
 
     _fx = riemannFunc(1, myg.ng,
                       ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
                       ivars.ixmag, ivars.iymag, ivars.irhox, ivars.naux,
                       solid.xl, solid.xr,
-                      gamma, U_xl, U_xr, Bx, By)
+                      gamma, U_xl, U_xr, ldx, Bx, By)
 
     _fy = riemannFunc(2, myg.ng,
                       ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
                       ivars.ixmag, ivars.iymag, ivars.irhox, ivars.naux,
                       solid.yl, solid.yr,
-                      gamma, U_yl, U_yr, Bx, By)
+                      gamma, U_yl, U_yr, ldy, Bx, By)
 
     F_x = ai.ArrayIndexer(d=_fx, grid=myg)
     F_y = ai.ArrayIndexer(d=_fy, grid=myg)
@@ -434,12 +433,6 @@ def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt
     buf = [0, 0, 0, 1]
     By.v()[:, :] += dtdx * (emf.ip(1, buf=buf) - emf.v(buf=buf))
 
-    # U_xl.v(n=ivars.ixmag)[:, :] -= 0.5 * dtdy * (emf.jp(1) - emf.v())
-    # U_yl.v(n=ivars.iymag)[:, :] -= 0.5 * dtdx * (emf.ip(1) - emf.v())
-    #
-    # U_xr.v(n=ivars.ixmag)[:, :] -= 0.5 * dtdy * (Er.jp(1) - Er.v())
-    # U_yr.v(n=ivars.iymag)[:, :] -= 0.5 * dtdx * (Er.ip(1) - Er.v())
-
     ############################################################################
     # STEP 5. Calculate a cell-centered reference electric field at half time.
     ############################################################################
@@ -466,17 +459,12 @@ def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt
     # conservative finite volume update of density and momenta
     # note that I have assumed that we have been sensible here and that
     # iymom > ixmom > idens
-    xmom = cc_data.get_var("y-momentum")
-    ymom = cc_data.get_var("y-momentum")
 
-    U_star = myg.scratch_array(nvar=ivars.iymom+1)
-    b = 1  # buffer
-    U_star.v(n=ivars.idens, buf=b)[:, :] = dens.v(buf=b)
-    U_star.v(n=ivars.ixmom, buf=b)[:, :] = xmom.v(buf=b)
-    U_star.v(n=ivars.iymom, buf=b)[:, :] = ymom.v(buf=b)
+    U_star = myg.scratch_array(nvar=ivars.nvar)
+    b = 2  # buffer
 
-    for n in range(ivars.iymom):
-        U_star.v(n=n, buf=b)[:, :] += \
+    for n in range(ivars.nvar):
+        U_star.v(n=n, buf=b)[:, :] = cc_data.data.v(n=n, buf=b) +\
             dtdx * (F_x.v(n=n, buf=b) - F_x.ip(1, n=n, buf=b)) + \
             dtdy * (F_y.v(n=n, buf=b) - F_y.jp(1, n=n, buf=b))
 
@@ -497,8 +485,20 @@ def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt
     # construct new fluxes
     # =========================================================================
 
-    # up until now, F_x and F_y stored the transverse fluxes, now we
-    # overwrite with the fluxes normal to the interfaces
+    # average face-centered things to cell centers to get conserved state there
+    b = 2
+
+    if use_flattening:
+        xi_x = reconstruction.flatten(myg, U_star, 1, ivars, rp)
+        xi_y = reconstruction.flatten(myg, U_star, 2, ivars, rp)
+
+        xi = reconstruction.flatten_multid(myg, U_star, xi_x, xi_y, ivars)
+    else:
+        xi = 1.0
+
+    for n in range(ivars.nvar):
+        ldx[:, :, n] = xi * reconstruction.fclimit(U_star[:, :, n], myg, 1)
+        ldy[:, :, n] = xi * reconstruction.fclimit(U_star[:, :, n], myg, 2)
 
     tm_riem.begin()
 
@@ -506,13 +506,13 @@ def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt
                       ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
                       ivars.ixmag, ivars.iymag, ivars.irhox, ivars.naux,
                       solid.xl, solid.xr,
-                      gamma, U_xl, U_xr, Bx, By)
+                      gamma, U_xl, U_xr, ldx, Bx, By)
 
     _fy = riemannFunc(2, myg.ng,
                       ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
                       ivars.ixmag, ivars.iymag, ivars.irhox, ivars.naux,
                       solid.yl, solid.yr,
-                      gamma, U_yl, U_yr, Bx, By)
+                      gamma, U_yl, U_yr, ldy, Bx, By)
 
     F_x = ai.ArrayIndexer(d=_fx, grid=myg)
     F_y = ai.ArrayIndexer(d=_fy, grid=myg)

@@ -157,8 +157,6 @@ class Simulation(NullSimulation):
 
         self.cc_data = my_data
 
-        print(f"bc = {bc}")
-
         # we also need face-centered data for the magnetic fields
         fcx = patch.FaceCenterData2d(my_grid, 1)
         fcx.register_var("x-magnetic-field", bc)

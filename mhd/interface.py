@@ -123,7 +123,7 @@ def states(idir, ng, dx, dt,
 def riemann_adiabatic(idir, ng,
                       idens, ixmom, iymom, iener, ixmag, iymag, irhoX, nspec,
                       lower_solid, upper_solid,
-                      gamma, U_l, U_r, Bx, By):
+                      gamma, U_l, U_r, dU, Bx, By):
     r"""
     HLLE solver for adiabatic magnetohydrodynamics.
     """
@@ -209,15 +209,14 @@ def riemann_adiabatic(idir, ng,
                 (np.sqrt(rho_l) + np.sqrt(rho_r))
 
             if idir == 1:
-                X = 0.5 * (by_l - by_r)**2 / \
-                    (np.sqrt(rho_l) + np.sqrt(rho_r))
+                X = 0.5 * (by_l - by_r)**2 / (np.sqrt(rho_l) + np.sqrt(rho_r))
             else:
-                X = 0.5 * (bx_l - bx_r)**2 / \
-                    (np.sqrt(rho_l) + np.sqrt(rho_r))
+                X = 0.5 * (bx_l - bx_r)**2 / (np.sqrt(rho_l) + np.sqrt(rho_r))
 
             Y = 0.5 * (rho_l + rho_r) / U_av[idens]
 
-            evals = calc_evals(idir, U_av, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, X, Y)
+            evals = calc_evals(idir, U_av, gamma, idens, ixmom, iymom, iener,
+                               ixmag, iymag, irhoX, X, Y)
 
             # rho_av = np.sqrt(rho_l * rho_r)
             #
@@ -296,8 +295,8 @@ def riemann_adiabatic(idir, ng,
             # FIXME: I think the * (U_r[i, j, :] - U_l[i, j, :]) is wrong -
             # should multiply by difference between states in cell-centers
             # rather than states predicted to interface, as have used here.
-            F[i, j, :] = (bp * f_l - bm * f_r) / (bp - bm) + bp * \
-                bm / (bp - bm) * (U_r[i, j, :] - U_l[i, j, :])
+            F[i, j, :] = (bp * f_l - bm * f_r) / (bp - bm) + \
+                bp * bm / (bp - bm) * dU[i, j, :]
 
     return F
 
@@ -317,11 +316,11 @@ def calc_evals(idir, U, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, 
     by = By / np.sqrt(4 * np.pi)
     B2 = Bx**2 + By**2
     b2 = bx**2 + by**2
-    rhoe = E - 0.5 * dens * (u**2 + v**2) - 0.5 * B2
+    rhoe = E - 0.5 * dens * (u**2 + v**2) - 0.5 * b2
     P = rhoe * (gamma - 1.0)
     H = (E + P + 0.5 * b2) / dens
 
-    gamma_d = (gamma - 1.0)
+    gamma_d = gamma - 1.0
     X_d = (gamma - 2.) * X
     Y_d = (gamma - 2.) * Y
 
@@ -384,36 +383,32 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, naux,
     by = U_state[iymag]
     b2 = bx**2 + by**2
 
-    p = (U_state[iener] - 0.5 * U_state[idens]
-         * (u * u + v * v) - 0.5 * b2) * (gamma - 1.0)
+    p = (U_state[iener] - 0.5 * U_state[idens] *
+         (u**2 + v**2) - 0.5 * b2) * (gamma - 1.0)
 
     if (idir == 1):
         F[idens] = U_state[idens] * u
-        F[ixmom] = U_state[ixmom] * \
-            u + p + 0.5 * b2 - bx**2
+        F[ixmom] = U_state[ixmom] * u + p + 0.5 * b2 - bx**2
         F[iymom] = U_state[iymom] * u - bx * by
-        F[iener] = (U_state[iener] + p +
-                    0.5 * b2) * u - bx * (bx * u + by * v)
+        F[iener] = (U_state[iener] + p + 0.5 * b2) * u - \
+            bx * (bx * u + by * v)
         F[ixmag] = 0
         F[iymag] = by * u - bx * v
 
         if (naux > 0):
-            F[irhoX:irhoX +
-                naux] = U_state[irhoX:irhoX + naux] * u
+            F[irhoX:irhoX + naux] = U_state[irhoX:irhoX + naux] * u
 
     else:
         F[idens] = U_state[idens] * v
         F[ixmom] = U_state[ixmom] * v - bx * by
-        F[iymom] = U_state[iymom] * \
-            v + p + 0.5 * b2 - by**2
-        F[iener] = (U_state[iener] + p +
-                    0.5 * b2) * v - by * (bx * u + by * v)
+        F[iymom] = U_state[iymom] * v + p + 0.5 * b2 - by**2
+        F[iener] = (U_state[iener] + p + 0.5 * b2) * v - \
+            by * (bx * u + by * v)
         F[ixmag] = bx * v - by * u
         F[iymag] = 0
 
         if (naux > 0):
-            F[irhoX:irhoX +
-                naux] = U_state[irhoX:irhoX + naux] * v
+            F[irhoX:irhoX + naux] = U_state[irhoX:irhoX + naux] * v
 
     return F
 
@@ -423,6 +418,10 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy,
         Eref=np.zeros((1, 1)), use_ref=False):
     r"""
     Calculate the EMF at cell corners.
+
+    Eref is the cell-centered reference value used in eq. 81. It can be passed
+    in or calculated from the cross product of the velocity and the magnetic
+    field in U.
 
     Note: the slightly messy keyword arguments are to keep numba happy - it
     doesn't like it if a keyword argument is a different type (e.g. None) to
@@ -436,13 +435,13 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy,
     Ex = np.zeros((qx, qy))  # x-edges
     Ey = np.zeros((qx, qy))  # y-edges
 
-    Ec = np.zeros((qx, qy))  # corner
+    Ec = np.zeros((qx, qy))  # corner, (i,j) -> i-1/2, j-1/2
 
-    dEdy_14 = np.zeros((qx, qy))
-    dEdx_14 = np.zeros((qx, qy))
+    dEdy_14 = np.zeros((qx, qy))  # (dE_z / dy)_(i, j-1/4)
+    dEdx_14 = np.zeros((qx, qy))  # (dE_z / dx)_(i-1/4, j)
 
-    dEdy_34 = np.zeros((qx, qy))
-    dEdx_34 = np.zeros((qx, qy))
+    dEdy_34 = np.zeros((qx, qy))  # (dE_z / dy)_(i, j-3/4)
+    dEdx_34 = np.zeros((qx, qy))  # (dE_z / dx)_(i-3/4, j)
 
     nx = qx - 2 * ng
     ny = qy - 2 * ng
@@ -485,10 +484,10 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy,
 
             # now get the corner states
             # this depends on the sign of the mass flux
-            ru = Fx[i, j, idens]
+            ru = Fx[i, j, idens]  # as Fx(i,j,idens) = (rho * vx)_i-1/2,j
             if ru > 0:
-                dEdyx_14 = dEdy_14[i - 1, j]
-                dEdyx_34 = dEdy_34[i - 1, j]
+                dEdyx_14 = dEdy_14[i - 1, j]  # dEz/dy_(i-1/2,j-1/4)
+                dEdyx_34 = dEdy_34[i - 1, j]  # dEz/dy_(i-1/2,j-3/4)
             elif ru < 0:
                 dEdyx_14 = dEdy_14[i, j]
                 dEdyx_34 = dEdy_34[i, j]
@@ -508,8 +507,8 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy,
                 dEdxy_34 = 0.5 * (dEdx_34[i, j - 1] + dEdx_34[i, j])
 
             Ec[i, j] = 0.25 * (Ex[i, j] + Ex[i, j + 1] + Ey[i, j] + Ey[i + 1, j]) + \
-                0.125 / dy * (dEdyx_14 - dEdyx_34) + 0.125 / \
-                dx * (dEdxy_14 - dEdxy_34)
+                0.125 * dy * (dEdyx_14 - dEdyx_34) + \
+                0.125 * dx * (dEdxy_14 - dEdxy_34)
 
     return Ec
 
