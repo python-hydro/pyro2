@@ -448,6 +448,7 @@ class ArrayIndexerFC(ArrayIndexer):
         # this only works for a single ghost cell
 
         # -x boundary
+        print(f"bc = {bc.xlb}")
         if bc.xlb in ["outflow", "neumann", "reflect-even", "reflect-odd", "dirichlet"]:
             raise NotImplementedError("boundary condition not implemented for -x")
         elif bc.xlb == "periodic":

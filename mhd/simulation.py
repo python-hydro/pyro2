@@ -126,8 +126,6 @@ class Simulation(NullSimulation):
 
         # define solver specific boundary condition routines
         bnd.define_bc("hse", BC.user, is_solid=False)
-        # for double mach reflection problem
-        bnd.define_bc("ramp", BC.user, is_solid=False)
 
         bc, bc_xodd, bc_yodd = bc_setup(self.rp)
 
@@ -155,7 +153,11 @@ class Simulation(NullSimulation):
 
         my_data.create()
 
+        my_data.fill_BC_all()
+
         self.cc_data = my_data
+
+        print(f"bc = {bc}")
 
         # we also need face-centered data for the magnetic fields
         fcx = patch.FaceCenterData2d(my_grid, 1)
@@ -203,6 +205,7 @@ class Simulation(NullSimulation):
         """
 
         cfl = self.rp.get_param("driver.cfl")
+        fix_dt = self.rp.get_param("driver.fix_dt")
 
         # get the variables we need
         u, v = self.cc_data.get_var("velocity")
@@ -213,7 +216,7 @@ class Simulation(NullSimulation):
         xtmp = self.cc_data.grid.dx / (abs(u) + Cfx)
         ytmp = self.cc_data.grid.dy / (abs(v) + Cfy)
 
-        self.dt = cfl * float(min(xtmp.min(), ytmp.min()))
+        self.dt = cfl * float(min(xtmp.min(), ytmp.min(), fix_dt))
 
     def evolve(self):
         """
@@ -224,20 +227,12 @@ class Simulation(NullSimulation):
         tm_evolve = self.tc.timer("evolve")
         tm_evolve.begin()
 
-        dens = self.cc_data.get_var("density")
-        ymom = self.cc_data.get_var("y-momentum")
-        ener = self.cc_data.get_var("energy")
-
-        # grav = self.rp.get_param("mhd.grav")
-
         myg = self.cc_data.grid
 
         Flux_x, Flux_y, emf = flx.unsplit_fluxes(self.cc_data, self.fcx_data, self.fcy_data,
                                                  self.aux_data, self.rp,
                                                  self.ivars, self.solid, self.tc, self.dt)
 
-        # old_dens = dens.copy()
-        # old_ymom = ymom.copy()
 
         # conservative update
         dtdx = self.dt / myg.dx
@@ -266,10 +261,10 @@ class Simulation(NullSimulation):
         Bx = self.fcx_data.get_var("x-magnetic-field")
         By = self.fcy_data.get_var("y-magnetic-field")
 
-        buf = [0, 1, 0, 0]
-        Bx.v()[:, :] -= dtdy * (emf.jp(1, buf=buf) - emf.v(buf=buf))
-        buf = [0, 0, 0, 1]
-        By.v()[:, :] += dtdx * (emf.ip(1, buf=buf) - emf.v(buf=buf))
+        buf = [1, 2, 1, 1]
+        Bx.v(buf=1)[:, :] -= dtdy * (emf.jp(1, buf=buf) - emf.v(buf=buf))
+        buf = [1, 1, 1, 2]
+        By.v(buf=1)[:, :] += dtdx * (emf.ip(1, buf=buf) - emf.v(buf=buf))
 
         ########################################################################
         # STEP 9. Compute the cell-centered components of the magnetic field
@@ -291,6 +286,9 @@ class Simulation(NullSimulation):
         ########################################################################
         # STEP 10. increment the time
         ########################################################################
+        self.cc_data.fill_BC_all()
+        self.fcx_data.fill_BC_all()
+        self.fcy_data.fill_BC_all()
         self.method_compute_timestep()
         self.cc_data.t += self.dt
         self.n += 1

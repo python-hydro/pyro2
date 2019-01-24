@@ -102,8 +102,8 @@ def states(idir, ng, dx, dt,
     jhi = ng + ny
 
     # this is the loop over zones.  For zone i, we see q_l[i+1] and q_r[i]
-    for i in range(ilo - 2, ihi + 2):
-        for j in range(jlo - 2, jhi + 2):
+    for i in range(ilo - 3, ihi + 3):
+        for j in range(jlo - 3, jhi + 3):
 
             dq = dqv[i, j, :]
             q = qv[i, j, :]
@@ -143,8 +143,8 @@ def riemann_adiabatic(idir, ng,
     jlo = ng
     jhi = ng + ny
 
-    for i in range(ilo - 1, ihi + 1):
-        for j in range(jlo - 1, jhi + 1):
+    for i in range(ilo - 2, ihi + 2):
+        for j in range(jlo - 2, jhi + 2):
             # primitive variable states
             rho_l = U_l[i, j, idens]
 
@@ -365,8 +365,8 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy,
     jlo = ng
     jhi = ng + ny
 
-    for i in range(ilo - 2, ihi + 2):
-        for j in range(jlo - 2, jhi + 2):
+    for i in range(ilo - ng, ihi + ng):
+        for j in range(jlo - ng, jhi + ng):
 
             u = U[i, j, ixmom] / U[i, j, idens]
             v = U[i, j, iymom] / U[i, j, idens]
@@ -384,8 +384,8 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy,
     if use_ref:
         Er[:, :] = Eref
 
-    for i in range(ilo - 1, ihi + 1):
-        for j in range(jlo - 1, jhi + 1):
+    for i in range(ilo - 2, ihi + 2):
+        for j in range(jlo - 2, jhi + 2):
 
             # get the -1/4 states
             dEdy_14[i, j] = 2 * (Er[i, j] - Ey[i, j]) / dy
@@ -447,8 +447,8 @@ def sources(idir, ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, U, Ux
     jlo = ng
     jhi = ng + ny
 
-    for i in range(ilo - 1, ihi + 1):
-        for j in range(jlo - 1, jhi + 1):
+    for i in range(ilo - ng + 1, ihi + ng - 1):
+        for j in range(jlo - ng + 1, jhi + ng - 1):
             if idir == 1:
                 S[i, j, ixmom] = U[i, j, ixmag] * \
                     (Ux[i + 1, j, ixmag] - Ux[i, j, ixmag]) / dx

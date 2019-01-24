@@ -46,9 +46,6 @@ def init_data(my_data, rp):
     R = rp.get_param("loop.r")
     A0 = rp.get_param("loop.a0")
 
-    xctr = 0.5 * (xmin + xmax)
-    yctr = 0.5 * (ymin + ymax)
-
     # velocity
     u = v0 * 2 / np.sqrt(5)
     v = v0 / np.sqrt(5)
