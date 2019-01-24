@@ -1,7 +1,6 @@
 [driver]
 cfl = 0.8
 
-
 [eos]
 gamma = 1.4    ; pres = rho ener (gamma - 1)
 

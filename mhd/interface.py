@@ -156,7 +156,25 @@ def riemann_adiabatic(idir, ng,
                 un_l = U_l[i, j, iymom] / rho_l
                 ut_l = U_l[i, j, ixmom] / rho_l
 
-            rhoe_l = U_l[i, j, iener] - 0.5 * rho_l * (un_l**2 + ut_l**2)
+            if (idir == 1):
+                # if we're looking at flux in x-direction, can use x-face centered
+                # Bx, but need to get By from U as it's y-face centered
+                Bx_l = Bx[i, j]
+                Bx_r = Bx[i + 1, j]
+                By_l = U_l[i, j, iymag]
+                By_r = U_r[i, j, iymag]
+            else:
+                # the reverse is true for flux in the y-direction
+                By_l = By[i, j]
+                By_r = By[i, j + 1]
+                Bx_l = U_l[i, j, ixmag]
+                Bx_r = U_r[i, j, ixmag]
+
+            B2_l = Bx_l**2 + By_l**2
+            B2_r = Bx_r**2 + By_r**2
+
+            rhoe_l = U_l[i, j, iener] - 0.5 * rho_l * (un_l**2 + ut_l**2) - \
+                0.5 * B2_l
 
             p_l = rhoe_l * (gamma - 1.0)
             p_l = max(p_l, smallp)
@@ -170,61 +188,80 @@ def riemann_adiabatic(idir, ng,
                 un_r = U_r[i, j, iymom] / rho_r
                 ut_r = U_r[i, j, ixmom] / rho_r
 
-            rhoe_r = U_r[i, j, iener] - 0.5 * rho_r * (un_r**2 + ut_r**2)
+            rhoe_r = U_r[i, j, iener] - 0.5 * rho_r * (un_r**2 + ut_r**2) - \
+                0.5 * B2_r
 
             p_r = rhoe_r * (gamma - 1.0)
             p_r = max(p_r, smallp)
-
-            bx_l = Bx[i, j]
-            by_l = By[i, j]
-            if (idir == 1):
-                bx_r = Bx[i + 1, j]
-                by_r = By[i, j]
-            else:
-                bx_r = Bx[i, j]
-                by_r = By[i, j + 1]
 
             # and the regular sound speeds
             c_l = max(smallc, np.sqrt(gamma * p_l / rho_l))
             c_r = max(smallc, np.sqrt(gamma * p_r / rho_r))
 
+            bx_l = Bx_l / np.sqrt(4 * np.pi)
+            bx_r = Bx_r / np.sqrt(4 * np.pi)
+            by_l = By_l / np.sqrt(4 * np.pi)
+            by_r = By_r / np.sqrt(4 * np.pi)
+
             # find the Roe average stuff
-            rho_av = np.sqrt(rho_l * rho_r)
 
-            # h = e + p/rho
-            h_l = (rhoe_l + p_l) / rho_l
-            h_r = (rhoe_r + p_r) / rho_r
-            h_av = (np.sqrt(rho_l) * h_l + np.sqrt(rho_r) * h_r) / \
+            U_av = (U_l[i, j, :] * np.sqrt(rho_l) + U_r[i, j, :] * np.sqrt(rho_r)) / \
                 (np.sqrt(rho_l) + np.sqrt(rho_r))
-            # p = rho h (gamma-1)/gamma
-            p_av = rho_av * h_av * (gamma - 1.) / gamma
-
-            v_av = (np.sqrt(rho_l) * un_l + np.sqrt(rho_r) * un_r) / \
-                (np.sqrt(rho_l) + np.sqrt(rho_r))
-            bx_av = (np.sqrt(rho_l) * bx_l + np.sqrt(rho_r) *
-                     bx_r) / (np.sqrt(rho_l) + np.sqrt(rho_r))
-            by_av = (np.sqrt(rho_l) * by_l + np.sqrt(rho_r) *
-                     by_r) / (np.sqrt(rho_l) + np.sqrt(rho_r))
-
-            c_av = max(smallc, np.sqrt(gamma * p_av / rho_av))
-
-            # find alfven wavespeeds and fast and slow magnetosonic wavespeeds
-            cA2 = (bx_av**2 + by_av**2) / rho_av
 
             if idir == 1:
-                cAx2 = bx_av**2 / rho_av
+                X = 0.5 * (by_l - by_r)**2 / \
+                    (np.sqrt(rho_l) + np.sqrt(rho_r))
             else:
-                cAx2 = by_av**2 / rho_av
+                X = 0.5 * (bx_l - bx_r)**2 / \
+                    (np.sqrt(rho_l) + np.sqrt(rho_r))
 
-            cf = np.sqrt(
-                0.5 * (c_av**2 + cA2 + np.sqrt((c_av**2 + cA2)**2 - 4 * c_av**2 * cAx2)))
+            Y = 0.5 * (rho_l + rho_r) / U_av[idens]
 
-            cs = np.sqrt(
-                0.5 * (c_av**2 + cA2 - np.sqrt((c_av**2 + cA2)**2 - 4 * c_av**2 * cAx2)))
+            evals = calc_evals(idir, U_av, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, X, Y)
 
-            # left and right eigenvalues of Roe's matrix
-            evals = np.array([v_av - cf, v_av - np.sqrt(cAx2), v_av -
-                              cs, v_av, v_av + cs, v_av + np.sqrt(cAx2), v_av + cf])
+            # rho_av = np.sqrt(rho_l * rho_r)
+            #
+            # # h = e + p/rho
+            # h_l = (rhoe_l + p_l + 0.5 * B2_l) / rho_l
+            # h_r = (rhoe_r + p_r + 0.5 * B2_r) / rho_r
+            # h_av = (np.sqrt(rho_l) * h_l + np.sqrt(rho_r) * h_r) / \
+            #     (np.sqrt(rho_l) + np.sqrt(rho_r))
+            #
+            # bx_l = Bx_l / np.sqrt(4 * np.pi)
+            # bx_r = Bx_r / np.sqrt(4 * np.pi)
+            # by_l = By_l / np.sqrt(4 * np.pi)
+            # by_r = By_r / np.sqrt(4 * np.pi)
+            #
+            # v_av = (np.sqrt(rho_l) * un_l + np.sqrt(rho_r) * un_r) / \
+            #     (np.sqrt(rho_l) + np.sqrt(rho_r))
+            # bx_av = (np.sqrt(rho_l) * bx_l + np.sqrt(rho_r) *
+            #          bx_r) / (np.sqrt(rho_l) + np.sqrt(rho_r))
+            # by_av = (np.sqrt(rho_l) * by_l + np.sqrt(rho_r) *
+            #          by_r) / (np.sqrt(rho_l) + np.sqrt(rho_r))
+            #
+            # # p = rho h (gamma-1)/gamma
+            # p_av = rho_av * h_av * (gamma - 1.) / \
+            #     gamma - 0.5 * (bx_av**2 + by_av**2)
+            #
+            # c_av = max(smallc, np.sqrt(gamma * p_av / rho_av))
+            #
+            # # find alfven wavespeeds and fast and slow magnetosonic wavespeeds
+            # cA2 = (bx_av**2 + by_av**2) / rho_av
+            #
+            # if idir == 1:
+            #     cAx2 = bx_av**2 / rho_av
+            # else:
+            #     cAx2 = by_av**2 / rho_av
+            #
+            # cf = np.sqrt(
+            #     0.5 * (c_av**2 + cA2 + np.sqrt((c_av**2 + cA2)**2 - 4 * c_av**2 * cAx2)))
+            #
+            # cs = np.sqrt(
+            #     0.5 * (c_av**2 + cA2 - np.sqrt((c_av**2 + cA2)**2 - 4 * c_av**2 * cAx2)))
+            #
+            # # left and right eigenvalues of Roe's matrix
+            # evals = np.array([v_av - cf, v_av - np.sqrt(cAx2), v_av -
+            #                   cs, v_av, v_av + cs, v_av + np.sqrt(cAx2), v_av + cf])
 
             # now need to repeat all that stuff to find fast magnetosonic speed
             # in left and right states
@@ -266,6 +303,54 @@ def riemann_adiabatic(idir, ng,
 
 
 @njit(cache=True)
+def calc_evals(idir, U, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, X, Y):
+    r"""
+    Calculate the eigenvalues using section B.3 in Stone, Gardiner et. al 08
+    """
+    dens = U[idens]
+    u = U[ixmom] / U[idens]
+    v = U[iymom] / U[idens]
+    E = U[iener]
+    Bx = U[ixmag]
+    By = U[iymag]
+    bx = Bx / np.sqrt(4 * np.pi)
+    by = By / np.sqrt(4 * np.pi)
+    B2 = Bx**2 + By**2
+    b2 = bx**2 + by**2
+    rhoe = E - 0.5 * dens * (u**2 + v**2) - 0.5 * B2
+    P = rhoe * (gamma - 1.0)
+    H = (E + P + 0.5 * b2) / dens
+
+    gamma_d = (gamma - 1.0)
+    X_d = (gamma - 2.) * X
+    Y_d = (gamma - 2.) * Y
+
+    a2 = gamma_d * (H - 0.5 * (u**2 + v**2) - b2 / dens) - X_d
+
+    if idir == 1:
+        CAx2 = bx**2 / dens
+        b_norm2 = (gamma_d - Y_d) * by**2
+    else:
+        CAx2 = by**2 / dens
+        b_norm2 = (gamma_d - Y_d) * bx**2
+
+    CA2 = CAx2 + b_norm2 / dens
+
+    Cf2 = 0.5 * ((a2 + CA2) + np.sqrt((a2 + CA2)**2 - 4 * a2 * CAx2))
+    Cs2 = 0.5 * ((a2 + CA2) - np.sqrt((a2 + CA2)**2 - 4 * a2 * CAx2))
+
+    if idir == 1:
+        vx = u
+    else:
+        vx = v
+
+    evals = np.array([vx - np.sqrt(Cf2), vx - np.sqrt(CAx2), vx - np.sqrt(Cs2),
+                      vx, vx + np.sqrt(Cs2), vx + np.sqrt(CAx2), vx + np.sqrt(Cf2)])
+
+    return evals
+
+
+@njit(cache=True)
 def consFlux(idir, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, naux, U_state):
     r"""
     Calculate the conservative flux.
@@ -297,17 +382,18 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, naux,
     v = U_state[iymom] / U_state[idens]
     bx = U_state[ixmag]
     by = U_state[iymag]
+    b2 = bx**2 + by**2
 
     p = (U_state[iener] - 0.5 * U_state[idens]
-         * (u * u + v * v) - 0.5 * (bx * bx + by * by)) * (gamma - 1.0)
+         * (u * u + v * v) - 0.5 * b2) * (gamma - 1.0)
 
     if (idir == 1):
         F[idens] = U_state[idens] * u
         F[ixmom] = U_state[ixmom] * \
-            u + p + 0.5 * (bx**2 + by**2) - bx**2
+            u + p + 0.5 * b2 - bx**2
         F[iymom] = U_state[iymom] * u - bx * by
         F[iener] = (U_state[iener] + p +
-                    0.5 * (bx**2 + by**2)) * u - bx * (bx * u + by * v)
+                    0.5 * b2) * u - bx * (bx * u + by * v)
         F[ixmag] = 0
         F[iymag] = by * u - bx * v
 
@@ -319,9 +405,9 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, naux,
         F[idens] = U_state[idens] * v
         F[ixmom] = U_state[ixmom] * v - bx * by
         F[iymom] = U_state[iymom] * \
-            v + p + 0.5 * (bx**2 + by**2) - by**2
+            v + p + 0.5 * b2 - by**2
         F[iener] = (U_state[iener] + p +
-                    0.5 * (bx**2 + by**2)) * v - by * (bx * u + by * v)
+                    0.5 * b2) * v - by * (bx * u + by * v)
         F[ixmag] = bx * v - by * u
         F[iymag] = 0
 

@@ -57,9 +57,9 @@ def init_data(my_data, rp):
 
     # pressure is constant
     p = 1.0
-    ener[:, :] = p / (gamma - 1.0) + 0.5 * (xmom[:, :]
-                                            ** 2 + ymom[:, :]**2) / dens[:, :] + \
-                                            0.5 * (bx**2 + by**2)
+    ener[:, :] = p / (gamma - 1.0) + \
+        0.5 * (xmom[:, :] ** 2 + ymom[:, :]**2) / dens[:, :] + \
+        0.5 * (bx**2 + by**2)
 
 
 def finalize():

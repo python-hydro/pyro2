@@ -5,6 +5,7 @@ tmax = 1.0
 
 init_tstep_factor = 1.0
 fix_dt = 0.005
+cfl = 0.4
 
 
 [compressible]

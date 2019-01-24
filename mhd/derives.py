@@ -19,10 +19,10 @@ def derive_primitives(myd, varnames):
 
     derived_vars = []
 
-    u = xmom/dens
-    v = ymom/dens
+    u = xmom / dens
+    v = ymom / dens
 
-    e = (ener - 0.5*dens*(u*u + v*v))/dens
+    e = (ener - 0.5 * dens * (u * u + v * v) - 0.5 * (bx**2 + by**2)) / dens
 
     gamma = myd.get_aux("gamma")
     p = eos.pres(gamma, dens, e)
@@ -51,17 +51,17 @@ def derive_primitives(myd, varnames):
             derived_vars.append(p)
 
         elif var == "soundspeed":
-            derived_vars.append(np.sqrt(gamma*p/dens))
+            derived_vars.append(np.sqrt(gamma * p / dens))
 
         elif var == "alfven":
             # alfven velocity
-            derived_vars.append(np.sqrt((bx**2 + by**2) / dens))
+            derived_vars.append(np.sqrt((bx**2 + by**2) / (dens * 4 * np.pi)))
 
         elif var == "x-magnetosonic":
             # returns fast, slow magnetosonic waves in x-direction
-            c2 = gamma*p/dens
-            cA2 = (bx**2 + by**2) / dens
-            cAx2 = bx**2 / dens
+            c2 = gamma * p / dens
+            cA2 = (bx**2 + by**2) / (dens * 4 * np.pi)
+            cAx2 = bx**2 / (dens * 4 * np.pi)
 
             cf = np.sqrt(
                 0.5 * (c2 + cA2 + np.sqrt((c2 + cA2)**2 - 4 * c2 * cAx2)))
@@ -74,9 +74,9 @@ def derive_primitives(myd, varnames):
         elif var == "y-magnetosonic":
 
             # returns fast, slow magnetosonic waves in y-direction
-            c2 = gamma*p/dens
-            cA2 = (bx**2 + by**2) / dens
-            cAy2 = by**2 / dens
+            c2 = gamma * p / dens
+            cA2 = (bx**2 + by**2) / (dens * 4 * np.pi)
+            cAy2 = by**2 / (dens * 4 * np.pi)
             cf = np.sqrt(
                 0.5 * (c2 + cA2 + np.sqrt((c2 + cA2)**2 - 4 * c2 * cAy2)))
             cs = np.sqrt(
