@@ -175,9 +175,6 @@ def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt
     # =========================================================================
     # Q = (rho, u, v, p, {X})
 
-    dens = cc_data.get_var("density")
-    ymom = cc_data.get_var("y-momentum")
-
     q = comp.cons_to_prim(cc_data.data, gamma, ivars, myg)
 
     # =========================================================================
@@ -228,10 +225,11 @@ def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt
     tm_states.begin()
 
     V_l, V_r = ifc.states(1, myg.ng, myg.dx, dt,
-                          ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
+                          ivars.irho, ivars.iu, ivars.iv, ivars.ip,
+                          ivars.ibx, ivars.iby, ivars.ix,
                           ivars.naux,
                           gamma,
-                          q, ldx)
+                          q, ldx, Bx, By)
 
     tm_states.end()
 
@@ -247,10 +245,12 @@ def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt
     tm_states.begin()
 
     _V_l, _V_r = ifc.states(2, myg.ng, myg.dy, dt,
-                            ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
+                            ivars.irho, ivars.iu, ivars.iv, ivars.ip,
+                            ivars.ibx, ivars.iby, ivars.ix,
                             ivars.naux,
                             gamma,
-                            q, ldy)
+                            q, ldy, Bx, By)
+
     V_l = ai.ArrayIndexer(d=_V_l, grid=myg)
     V_r = ai.ArrayIndexer(d=_V_r, grid=myg)
 
@@ -319,53 +319,6 @@ def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt
     # transverse flux gradients.
     ############################################################################
 
-    # =========================================================================
-    # construct the interface values of U now
-    # =========================================================================
-
-    """
-    finally, we can construct the state perpendicular to the interface
-    by adding the central difference part to the trasverse flux
-    difference.
-
-    The states that we represent by indices i,j are shown below
-    (1,2,3,4):
-
-
-      j+3/2--+----------+----------+----------+
-             |          |          |          |
-             |          |          |          |
-        j+1 -+          |          |          |
-             |          |          |          |
-             |          |          |          |    1: U_xl[i,j,:] = U
-      j+1/2--+----------XXXXXXXXXXXX----------+                      i-1/2,j,L
-             |          X          X          |
-             |          X          X          |
-          j -+        1 X 2        X          |    2: U_xr[i,j,:] = U
-             |          X          X          |                      i-1/2,j,R
-             |          X    4     X          |
-      j-1/2--+----------XXXXXXXXXXXX----------+
-             |          |    3     |          |    3: U_yl[i,j,:] = U
-             |          |          |          |                      i,j-1/2,L
-        j-1 -+          |          |          |
-             |          |          |          |
-             |          |          |          |    4: U_yr[i,j,:] = U
-      j-3/2--+----------+----------+----------+                      i,j-1/2,R
-             |    |     |    |     |    |     |
-                 i-1         i         i+1
-           i-3/2      i-1/2      i+1/2      i+3/2
-
-
-    remember that the fluxes are stored on the left edge, so
-
-    F_x[i,j,:] = F_x
-                    i-1/2, j
-
-    F_y[i,j,:] = F_y
-                    i, j-1/2
-
-    """
-
     tm_transverse = tc.timer("transverse flux addition")
     tm_transverse.begin()
 
@@ -376,31 +329,32 @@ def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt
 
     for n in range(ivars.nvar):
 
+        if n == ivars.ixmag or n == ivars.iymag:
+            continue
+
         # U_xl[i,j,:] = U_xl[i,j,:] - 0.5*dt/dy * (F_y[i-1,j+1,:] - F_y[i-1,j,:])
         U_xl.v(buf=b, n=n)[:, :] += \
-            - 0.5 * dtdy * (F_y.ip_jp(-1, 1, buf=b, n=n) -
+            0.5 * dtdy * (F_y.ip_jp(-1, 1, buf=b, n=n) -
                             F_y.ip(-1, buf=b, n=n))
 
         # U_xr[i,j,:] = U_xr[i,j,:] - 0.5*dt/dy * (F_y[i,j+1,:] - F_y[i,j,:])
         U_xr.v(buf=b, n=n)[:, :] += \
-            - 0.5 * dtdy * (F_y.jp(1, buf=b, n=n) - F_y.v(buf=b, n=n))
+            0.5 * dtdy * (F_y.jp(1, buf=b, n=n) - F_y.v(buf=b, n=n))
 
         # U_yl[i,j,:] = U_yl[i,j,:] - 0.5*dt/dx * (F_x[i+1,j-1,:] - F_x[i,j-1,:])
         U_yl.v(buf=b, n=n)[:, :] += \
-            - 0.5 * dtdx * (F_x.ip_jp(1, -1, buf=b, n=n) -
+            0.5 * dtdx * (F_x.ip_jp(1, -1, buf=b, n=n) -
                             F_x.jp(-1, buf=b, n=n))
 
         # U_yr[i,j,:] = U_yr[i,j,:] - 0.5*dt/dx * (F_x[i+1,j,:] - F_x[i,j,:])
         U_yr.v(buf=b, n=n)[:, :] += \
-            - 0.5 * dtdx * (F_x.ip(1, buf=b, n=n) - F_x.v(buf=b, n=n))
+            0.5 * dtdx * (F_x.ip(1, buf=b, n=n) - F_x.v(buf=b, n=n))
 
     tm_transverse.end()
 
     # =========================================================================
     # Add source terms
     # =========================================================================
-
-    # TODO: Fix indexing
 
     Sx = ifc.sources(1, myg.ng, ivars.idens, ivars.ixmom, ivars.iymom,
                      ivars.iener, ivars.ixmag, ivars.iymag, ivars.irhox,
@@ -409,8 +363,8 @@ def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt
                      ivars.iener, ivars.ixmag, ivars.iymag, ivars.irhox,
                      myg.dy, cc_data.data, U_yl.data)
 
-    U_xl[:, :, :] += Sx[:, :, :] * dt * 0.5
-    U_yl[:, :, :] += Sy[:, :, :] * dt * 0.5
+    U_xl[1:, :, :] += Sx[:-1, :, :] * dt * 0.5
+    U_yl[:, 1:, :] += Sy[:, :-1, :] * dt * 0.5
 
     Sx = ifc.sources(1, myg.ng, ivars.idens, ivars.ixmom, ivars.iymom,
                      ivars.iener, ivars.ixmag, ivars.iymag, ivars.irhox,
@@ -428,10 +382,10 @@ def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt
     # =========================================================================
 
     # FIXME: check indexing on this
-    buf = [0, 1, 0, 0]
-    Bx.v()[:, :] -= dtdy * (emf.jp(1, buf=buf) - emf.v(buf=buf))
-    buf = [0, 0, 0, 1]
-    By.v()[:, :] += dtdx * (emf.ip(1, buf=buf) - emf.v(buf=buf))
+    buf = [1, 2, 1, 1]
+    Bx.v(buf=1)[:, :] -= 0.5 * dtdy * (emf.jp(1, buf=buf) - emf.v(buf=buf))
+    buf = [1, 1, 1, 2]
+    By.v(buf=1)[:, :] += 0.5 * dtdx * (emf.ip(1, buf=buf) - emf.v(buf=buf))
 
     ############################################################################
     # STEP 5. Calculate a cell-centered reference electric field at half time.
@@ -465,8 +419,8 @@ def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt
 
     for n in range(ivars.nvar):
         U_star.v(n=n, buf=b)[:, :] = cc_data.data.v(n=n, buf=b) +\
-            dtdx * (F_x.v(n=n, buf=b) - F_x.ip(1, n=n, buf=b)) + \
-            dtdy * (F_y.v(n=n, buf=b) - F_y.jp(1, n=n, buf=b))
+            0.5 * dtdx * (F_x.v(n=n, buf=b) - F_x.ip(1, n=n, buf=b)) + \
+            0.5 * dtdy * (F_y.v(n=n, buf=b) - F_y.jp(1, n=n, buf=b))
 
     # cell-centered velocites at half time
     u_half = U_star.v(n=ivars.ixmom, buf=b) / U_star.v(n=ivars.idens, buf=b)
@@ -487,12 +441,13 @@ def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt
 
     # average face-centered things to cell centers to get conserved state there
     b = 2
+    q_star = comp.cons_to_prim(U_star, gamma, ivars, myg)
 
     if use_flattening:
-        xi_x = reconstruction.flatten(myg, U_star, 1, ivars, rp)
-        xi_y = reconstruction.flatten(myg, U_star, 2, ivars, rp)
+        xi_x = reconstruction.flatten(myg, q_star, 1, ivars, rp)
+        xi_y = reconstruction.flatten(myg, q_star, 2, ivars, rp)
 
-        xi = reconstruction.flatten_multid(myg, U_star, xi_x, xi_y, ivars)
+        xi = reconstruction.flatten_multid(myg, q_star, xi_x, xi_y, ivars)
     else:
         xi = 1.0
 

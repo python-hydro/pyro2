@@ -231,7 +231,6 @@ class Simulation(NullSimulation):
                                                  self.aux_data, self.rp,
                                                  self.ivars, self.solid, self.tc, self.dt)
 
-
         # conservative update
         dtdx = self.dt / myg.dx
         dtdy = self.dt / myg.dy
@@ -271,10 +270,10 @@ class Simulation(NullSimulation):
 
         buf = [0, -1, 0, 0]
         self.cc_data.get_var(
-            "x-magnetic-field").v()[:, :] = 0.5 * (Bx.ip(1,buf=buf) + Bx.v(buf=buf))
+            "x-magnetic-field").v()[:, :] = 0.5 * (Bx.ip(1, buf=buf) + Bx.v(buf=buf))
         buf = [0, 0, 0, -1]
         self.cc_data.get_var(
-            "y-magnetic-field").v()[:, :] = 0.5 * (By.jp(1,buf=buf,) + By.v(buf=buf))
+            "y-magnetic-field").v()[:, :] = 0.5 * (By.jp(1, buf=buf) + By.v(buf=buf))
 
         # update the particles
 
@@ -284,9 +283,11 @@ class Simulation(NullSimulation):
         ########################################################################
         # STEP 10. increment the time
         ########################################################################
+        # fill the ghost cells
         self.cc_data.fill_BC_all()
         self.fcx_data.fill_BC_all()
         self.fcy_data.fill_BC_all()
+
         self.method_compute_timestep()
         self.cc_data.t += self.dt
         self.n += 1

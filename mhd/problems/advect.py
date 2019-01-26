@@ -31,8 +31,8 @@ def init_data(my_data, rp):
     dens[:, :] = 1.0
     xmom[:, :] = 0.0
     ymom[:, :] = 0.0
-    bx[:, :] = 0.1
-    by[:, :] = 0.0
+    bx[:, :] = 0.001
+    by[:, :] = 0.001
 
     gamma = rp.get_param("eos.gamma")
 

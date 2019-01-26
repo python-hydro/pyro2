@@ -4,8 +4,8 @@ from numba import njit
 
 @njit(cache=True)
 def states(idir, ng, dx, dt,
-           irho, iu, iv, ip, ix, nspec,
-           gamma, qv, dqv):
+           irho, iu, iv, ip, ibx, iby, ix, nspec,
+           gamma, qv, dqv, Bx, By):
     r"""
     predict the cell-centered state to the edges in one-dimension
     using the reconstructed, limited slopes.
@@ -109,12 +109,28 @@ def states(idir, ng, dx, dt,
             q = qv[i, j, :]
 
             if (idir == 1):
+
+                # need to add on change due to transverse fields. I have no idea
+                # if this is correct as GS05 and GS08 are very confusing.
+                delta_by = 0.5 * dt / dx * qv[i, j, iv] * \
+                    (Bx[i + 1, j] - Bx[i, j])
+
                 q_l[i + 1, j, :] = q + 0.5 * dq
                 q_r[i,  j, :] = q - 0.5 * dq
 
+                q_l[i + 1, j, iby] += delta_by
+                q_r[i, j, iby] += delta_by
+
             else:
+
+                delta_bx = 0.5 * dt / dx * qv[i, j, iu] * \
+                    (By[i, j + 1] - By[i, j])
+
                 q_l[i, j + 1, :] = q + 0.5 * dq
                 q_r[i, j, :] = q - 0.5 * dq
+
+                q_l[i, j + 1, iby] += delta_bx
+                q_r[i, j, iby] += delta_bx
 
     return q_l, q_r
 
@@ -159,16 +175,21 @@ def riemann_adiabatic(idir, ng,
             if (idir == 1):
                 # if we're looking at flux in x-direction, can use x-face centered
                 # Bx, but need to get By from U as it's y-face centered
-                Bx_l = Bx[i, j]
-                Bx_r = Bx[i + 1, j]
+                # Bx_l = Bx[i, j]
+                # Bx_r = Bx[i, j]
+
+                Bx_l = U_l[i, j, ixmag]
+                Bx_r = U_r[i, j, ixmag]
                 By_l = U_l[i, j, iymag]
                 By_r = U_r[i, j, iymag]
             else:
                 # the reverse is true for flux in the y-direction
-                By_l = By[i, j]
-                By_r = By[i, j + 1]
+                # By_l = By[i, j]
+                # By_r = By[i, j]
                 Bx_l = U_l[i, j, ixmag]
                 Bx_r = U_r[i, j, ixmag]
+                By_l = U_l[i, j, iymag]
+                By_r = U_r[i, j, iymag]
 
             B2_l = Bx_l**2 + By_l**2
             B2_r = Bx_r**2 + By_r**2
@@ -204,9 +225,48 @@ def riemann_adiabatic(idir, ng,
             by_r = By_r / np.sqrt(4 * np.pi)
 
             # find the Roe average stuff
+            # we have to annoyingly do this for the primitive variables then convert back.
 
-            U_av = (U_l[i, j, :] * np.sqrt(rho_l) + U_r[i, j, :] * np.sqrt(rho_r)) / \
+            # U_av = (U_l[i, j, :] * np.sqrt(rho_l) + U_r[i, j, :] * np.sqrt(rho_r)) / \
+            #     (np.sqrt(rho_l) + np.sqrt(rho_r))
+
+            q_av = np.zeros_like(U_l[i, j, :])
+            q_av[idens] = np.sqrt(rho_l * rho_r)
+            # these are actually the primitive velocities
+            q_av[ixmom] = (U_l[i, j, ixmom] / np.sqrt(rho_l) + U_r[i, j, ixmom] / np.sqrt(rho_r)) / \
                 (np.sqrt(rho_l) + np.sqrt(rho_r))
+            q_av[iymom] = (U_l[i, j, iymom] / np.sqrt(rho_l) + U_r[i, j, iymom] / np.sqrt(rho_r)) / \
+                (np.sqrt(rho_l) + np.sqrt(rho_r))
+
+            # this is the enthalpy
+
+            h_l = (gamma * U_l[i, j, iener] -
+                   (gamma - 1.0) * (U_l[i, j, ixmom]**2 + U_l[i, j, iymom]**2) / rho_l +
+                   0.5 * gamma * B2_l) / rho_l
+
+            h_r = (gamma * U_r[i, j, iener] -
+                   (gamma - 1.0) * (U_r[i, j, ixmom]**2 + U_r[i, j, iymom]**2) / rho_r +
+                   0.5 * gamma * B2_r) / rho_r
+
+            q_av[iener] = (h_l * np.sqrt(rho_l) + h_r * np.sqrt(rho_r)) / \
+                (np.sqrt(rho_l) + np.sqrt(rho_r))
+
+            q_av[ixmag:iymag + 1] = (U_l[i, j, ixmag:iymag + 1] * np.sqrt(rho_l) +
+                                     U_r[i, j, ixmag:iymag + 1] * np.sqrt(rho_r)) / (np.sqrt(rho_l) + np.sqrt(rho_r))
+
+            q_av[irhoX:] = (U_l[i, j, irhoX:] / np.sqrt(rho_l) +
+                            U_r[i, j, irhoX:] / np.sqrt(rho_r)) / (np.sqrt(rho_l) + np.sqrt(rho_r))
+
+            U_av = np.zeros_like(q_av)
+
+            U_av[idens] = q_av[idens]
+            U_av[ixmom] = q_av[idens] * q_av[ixmom]
+            U_av[iymom] = q_av[idens] * q_av[iymom]
+            U_av[iener] = (q_av[iener] * q_av[idens] +
+                           (gamma - 1) * q_av[idens] * (q_av[ixmom]**2 + q_av[iymom]**2) -
+                           0.5 * gamma * (q_av[ixmag]**2 + q_av[iymag]**2)) / gamma
+            U_av[ixmag:iymag + 1] = q_av[ixmag:iymag + 1]
+            U_av[irhoX:] = q_av[idens] * q_av[irhoX:]
 
             if idir == 1:
                 X = 0.5 * (by_l - by_r)**2 / (np.sqrt(rho_l) + np.sqrt(rho_r))
@@ -217,50 +277,6 @@ def riemann_adiabatic(idir, ng,
 
             evals = calc_evals(idir, U_av, gamma, idens, ixmom, iymom, iener,
                                ixmag, iymag, irhoX, X, Y)
-
-            # rho_av = np.sqrt(rho_l * rho_r)
-            #
-            # # h = e + p/rho
-            # h_l = (rhoe_l + p_l + 0.5 * B2_l) / rho_l
-            # h_r = (rhoe_r + p_r + 0.5 * B2_r) / rho_r
-            # h_av = (np.sqrt(rho_l) * h_l + np.sqrt(rho_r) * h_r) / \
-            #     (np.sqrt(rho_l) + np.sqrt(rho_r))
-            #
-            # bx_l = Bx_l / np.sqrt(4 * np.pi)
-            # bx_r = Bx_r / np.sqrt(4 * np.pi)
-            # by_l = By_l / np.sqrt(4 * np.pi)
-            # by_r = By_r / np.sqrt(4 * np.pi)
-            #
-            # v_av = (np.sqrt(rho_l) * un_l + np.sqrt(rho_r) * un_r) / \
-            #     (np.sqrt(rho_l) + np.sqrt(rho_r))
-            # bx_av = (np.sqrt(rho_l) * bx_l + np.sqrt(rho_r) *
-            #          bx_r) / (np.sqrt(rho_l) + np.sqrt(rho_r))
-            # by_av = (np.sqrt(rho_l) * by_l + np.sqrt(rho_r) *
-            #          by_r) / (np.sqrt(rho_l) + np.sqrt(rho_r))
-            #
-            # # p = rho h (gamma-1)/gamma
-            # p_av = rho_av * h_av * (gamma - 1.) / \
-            #     gamma - 0.5 * (bx_av**2 + by_av**2)
-            #
-            # c_av = max(smallc, np.sqrt(gamma * p_av / rho_av))
-            #
-            # # find alfven wavespeeds and fast and slow magnetosonic wavespeeds
-            # cA2 = (bx_av**2 + by_av**2) / rho_av
-            #
-            # if idir == 1:
-            #     cAx2 = bx_av**2 / rho_av
-            # else:
-            #     cAx2 = by_av**2 / rho_av
-            #
-            # cf = np.sqrt(
-            #     0.5 * (c_av**2 + cA2 + np.sqrt((c_av**2 + cA2)**2 - 4 * c_av**2 * cAx2)))
-            #
-            # cs = np.sqrt(
-            #     0.5 * (c_av**2 + cA2 - np.sqrt((c_av**2 + cA2)**2 - 4 * c_av**2 * cAx2)))
-            #
-            # # left and right eigenvalues of Roe's matrix
-            # evals = np.array([v_av - cf, v_av - np.sqrt(cAx2), v_av -
-            #                   cs, v_av, v_av + cs, v_av + np.sqrt(cAx2), v_av + cf])
 
             # now need to repeat all that stuff to find fast magnetosonic speed
             # in left and right states
@@ -450,27 +466,21 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy,
     jlo = ng
     jhi = ng + ny
 
-    for i in range(ilo - ng, ihi + ng):
-        for j in range(jlo - ng, jhi + ng):
-
-            u = U[i, j, ixmom] / U[i, j, idens]
-            v = U[i, j, iymom] / U[i, j, idens]
-            bx = U[i, j, ixmag]
-            by = U[i, j, iymag]
-
-            if not use_ref:
-                Er[i, j] = -(u * by - v * bx)
-
-            # GS05 section 4.1.1
-            Ex[i, j] = -Fx[i, j, iymag]
-
-            Ey[i, j] = Fy[i, j, ixmag]
-
-    if use_ref:
+    if not use_ref:
+        u = U[:, :, ixmom] / U[:, :, idens]
+        v = U[:, :, iymom] / U[:, :, idens]
+        bx = U[:, :, ixmag]
+        by = U[:, :, iymag]
+        Er[:, :] = -(u * by - v * bx)
+    else:
         Er[:, :] = Eref
 
-    for i in range(ilo - 2, ihi + 2):
-        for j in range(jlo - 2, jhi + 2):
+    # GS05 section 4.1.1
+    Ex[:, :] = -Fx[:, :, iymag]
+    Ey[:, :] = Fy[:, :, ixmag]
+
+    for i in range(ilo - 3, ihi + 3):
+        for j in range(jlo - 3, jhi + 3):
 
             # get the -1/4 states
             dEdy_14[i, j] = 2 * (Er[i, j] - Ey[i, j]) / dy
@@ -482,28 +492,41 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy,
 
             dEdx_34[i, j] = 2 * (Ex[i, j] - Er[i - 1, j]) / dx
 
+    for i in range(ilo - 2, ihi + 2):
+        for j in range(jlo - 2, jhi + 2):
+
             # now get the corner states
             # this depends on the sign of the mass flux
             ru = Fx[i, j, idens]  # as Fx(i,j,idens) = (rho * vx)_i-1/2,j
             if ru > 0:
                 dEdyx_14 = dEdy_14[i - 1, j]  # dEz/dy_(i-1/2,j-1/4)
-                dEdyx_34 = dEdy_34[i - 1, j]  # dEz/dy_(i-1/2,j-3/4)
             elif ru < 0:
                 dEdyx_14 = dEdy_14[i, j]
-                dEdyx_34 = dEdy_34[i, j]
             else:
                 dEdyx_14 = 0.5 * (dEdy_14[i - 1, j] + dEdy_14[i, j])
+
+            ru = Fx[i, j-1, idens]  # as Fx(i,j,idens) = (rho * vx)_i-1/2,j-1
+            if ru > 0:
+                dEdyx_34 = dEdy_34[i - 1, j]  # dEz/dy_(i-1/2,j-3/4)
+            elif ru < 0:
+                dEdyx_34 = dEdy_34[i, j]
+            else:
                 dEdyx_34 = 0.5 * (dEdy_34[i - 1, j] + dEdy_34[i, j])
 
             rv = Fy[i, j, idens]
             if rv > 0:
-                dEdxy_14 = dEdx_14[i, j - 1]
-                dEdxy_34 = dEdx_34[i, j - 1]
+                dEdxy_14 = dEdx_14[i, j - 1]  # dEz/dx_(i-1/4,j-1/2)
             elif rv < 0:
                 dEdxy_14 = dEdx_14[i, j]
-                dEdxy_34 = dEdx_34[i, j]
             else:
                 dEdxy_14 = 0.5 * (dEdx_14[i, j - 1] + dEdx_14[i, j])
+
+            rv = Fy[i-1, j, idens]
+            if rv > 0:
+                dEdxy_34 = dEdx_34[i, j - 1]  # dEz/dx_(i-3/4,j-1/2)
+            elif rv < 0:
+                dEdxy_34 = dEdx_34[i, j]
+            else:
                 dEdxy_34 = 0.5 * (dEdx_34[i, j - 1] + dEdx_34[i, j])
 
             Ec[i, j] = 0.25 * (Ex[i, j] + Ex[i, j + 1] + Ey[i, j] + Ey[i + 1, j]) + \
@@ -517,7 +540,7 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy,
 def sources(idir, ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, U, Ux):
     r"""
     Calculate source terms on the idir-interface. U is the cell-centered state,
-    Ux should be a state on the idir-interface.
+    Ux should be a state on the idir-interface, where i,j -> i-1/2 ,j (for idir==1).
 
     Assume Bz = vz = 0 so that iener and iBz sources are 0.
     """
@@ -541,9 +564,9 @@ def sources(idir, ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, U, Ux
                     (Ux[i + 1, j, ixmag] - Ux[i, j, ixmag]) / dx
             else:
                 S[i, j, ixmom] = U[i, j, ixmag] * \
-                    (Ux[i, j + 1, ixmag] - Ux[i, j, ixmag]) / dx
+                    (Ux[i, j + 1, iymag] - Ux[i, j, iymag]) / dx
                 S[i, j, iymom] = U[i, j, iymag] * \
-                    (Ux[i, j + 1, ixmag] - Ux[i, j, ixmag]) / dx
+                    (Ux[i, j + 1, iymag] - Ux[i, j, iymag]) / dx
 
     return S
 
