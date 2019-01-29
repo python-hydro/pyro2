@@ -5,7 +5,6 @@ import importlib
 import numpy as np
 import matplotlib.pyplot as plt
 
-import mhd.BC as BC
 import mhd.eos as eos
 import mhd.derives as derives
 import mhd.unsplit_fluxes as flx
@@ -124,9 +123,6 @@ class Simulation(NullSimulation):
         my_grid = grid_setup(self.rp, ng=ng)
         my_data = self.data_class(my_grid)
 
-        # define solver specific boundary condition routines
-        bnd.define_bc("hse", BC.user, is_solid=False)
-
         bc, bc_xodd, bc_yodd = bc_setup(self.rp)
 
         # are we dealing with solid boundaries? we'll use these for
@@ -135,9 +131,9 @@ class Simulation(NullSimulation):
 
         # density and energy
         my_data.register_var("density", bc)
-        my_data.register_var("energy", bc)
         my_data.register_var("x-momentum", bc_xodd)
         my_data.register_var("y-momentum", bc_yodd)
+        my_data.register_var("energy", bc)
         my_data.register_var("x-magnetic-field", bc)
         my_data.register_var("y-magnetic-field", bc)
 
@@ -171,14 +167,6 @@ class Simulation(NullSimulation):
         if self.rp.get_param("particles.do_particles") == 1:
             self.particles = particles.Particles(self.cc_data, bc, self.rp)
 
-        # some auxillary data that we'll need to fill GC in, but isn't
-        # really part of the main solution
-        aux_data = self.data_class(my_grid)
-        aux_data.register_var("ymom_src", bc_yodd)
-        aux_data.register_var("E_src", bc)
-        aux_data.create()
-        self.aux_data = aux_data
-
         self.ivars = Variables(my_data)
 
         # derived variables
@@ -189,8 +177,25 @@ class Simulation(NullSimulation):
             self.solver_name, self.problem_name))
         problem.init_data(self.cc_data, self.rp)
 
+        # put the magnetic field on the faces by averaging
+        self.init_magnetic_faces()
+
         if self.verbose > 0:
             print(my_data)
+
+    def init_magnetic_faces(self):
+        """
+        Initialize face-centered magnetic field
+        """
+
+        Bx = self.fcx_data.get_var("x-magnetic-field")
+        By = self.fcy_data.get_var("y-magnetic-field")
+
+        bx_cc = self.cc_data.get_var("x-magnetic-field")
+        by_cc = self.cc_data.get_var("y-magnetic-field")
+
+        Bx[1:-1, :] = 0.5 * (bx_cc[:-1, :] + bx_cc[1:, :])
+        By[:, 1:-1] = 0.5 * (by_cc[:, :-1] + by_cc[:, 1:])
 
     def method_compute_timestep(self):
         """
@@ -209,6 +214,8 @@ class Simulation(NullSimulation):
         u, v = self.cc_data.get_var("velocity")
         Cfx, _, Cfy, _ = self.cc_data.get_var(
             ["x-magnetosonic", "y-magnetosonic"])
+
+        # a = self.cc_data.get_var("soundspeed")
 
         # print(f"fast magnetosonic speeds = {Cfx.max()}, {Cfy.max()}")
         # print(f"u, v = {abs(u).max(), abs(v).max()}")
@@ -229,7 +236,7 @@ class Simulation(NullSimulation):
         tm_evolve.begin()
 
         flx.timestep(self.cc_data, self.fcx_data, self.fcy_data,
-                     self.aux_data, self.rp,
+                     self.rp,
                      self.ivars, self.solid, self.tc, self.dt)
 
         # update the particles
@@ -281,6 +288,8 @@ class Simulation(NullSimulation):
 
         magvel = np.sqrt(u**2 + v**2)
         magb = np.sqrt(bx**2 + by**2)
+
+        # print(magb[magb > 0])
 
         myg = self.cc_data.grid
 

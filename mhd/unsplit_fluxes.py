@@ -123,12 +123,13 @@ Updating U_{i,j}:
 """
 
 import mhd.interface as ifc
-import mhd as comp
+import mhd
+import mesh.reconstruction as reconstruction
 import mesh.array_indexer as ai
 import numpy as np
 
 
-def timestep(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt):
+def timestep(cc_data, fcx_data, fcy_data, rp, ivars, solid, tc, dt):
     """
     timestep evolves the *_data through a single timestep dt
 
@@ -181,17 +182,18 @@ def timestep(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt):
     Bx = fcx_data.get_var("x-magnetic-field")
     By = fcy_data.get_var("y-magnetic-field")
 
-    Bx_old = np.zeros_like(Bx.v(buf=buf))
-    By_old = np.zeros_like(By.v(buf=buf))
+    Bx_old = np.zeros_like(Bx.v())
+    By_old = np.zeros_like(By.v())
 
-    Bx_old[:, :] = Bx.v(buf=buf)
-    By_old[:, :] = By.v(buf=buf)
+    Bx_old[:, :] = Bx.v()
+    By_old[:, :] = By.v()
 
     ############################################################################
     # STEP 1. Using a Riemann solver, construct first order upwind fluxes.
     ############################################################################
 
     riemannFunc = ifc.riemann_adiabatic
+    # riemannFunc = ifc.riemann_hllc
 
     U_xl = myg.scratch_array(nvar=ivars.nvar)
     U_xr = myg.scratch_array(nvar=ivars.nvar)
@@ -202,7 +204,8 @@ def timestep(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt):
     # =========================================================================
     # x-direction
     # =========================================================================
-    U_xl[1:-1, :, :] = U[:-2, :, :]
+    for n in range(ivars.nvar):
+        U_xl.v(buf=3, n=n)[:, :] = U.ip(-1, buf=3, n=n)
     U_xl[:, :, ivars.ixmag] = Bx[:-1, :]
     U_xr[:, :, :] = U
     U_xr[:, :, ivars.ixmag] = Bx[:-1, :]
@@ -216,7 +219,8 @@ def timestep(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt):
     # =========================================================================
     # y-direction
     # =========================================================================
-    U_yl[:, 1:-1, :] = U[:, :-2, :]
+    for n in range(ivars.nvar):
+        U_yl.v(buf=3, n=n)[:, :] = U.jp(-1, buf=3, n=n)
     U_yl[:, :, ivars.iymag] = By[:, :-1]
     U_yr[:, :, :] = U
     U_yr[:, :, ivars.iymag] = By[:, :-1]
@@ -278,7 +282,37 @@ def timestep(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt):
     ############################################################################
 
     # calculate primitive variables at half time step from updated U
-    q = comp.cons_to_prim(U, gamma, ivars, myg)
+    q = mhd.cons_to_prim(U, gamma, ivars, myg)
+
+    # =========================================================================
+    # compute the flattening coefficients
+    # =========================================================================
+
+    # there is a single flattening coefficient (xi) for all directions
+    use_flattening = rp.get_param("mhd.use_flattening")
+
+    if use_flattening:
+        xi_x = reconstruction.flatten(myg, q, 1, ivars, rp)
+        xi_y = reconstruction.flatten(myg, q, 2, ivars, rp)
+
+        xi = reconstruction.flatten_multid(myg, q, xi_x, xi_y, ivars)
+    else:
+        xi = 1.0
+
+    # monotonized central differences
+    tm_limit = tc.timer("limiting")
+    tm_limit.begin()
+
+    limiter = rp.get_param("mhd.limiter")
+
+    ldx = myg.scratch_array(nvar=ivars.nvar)
+    ldy = myg.scratch_array(nvar=ivars.nvar)
+
+    for n in range(ivars.nvar):
+        ldx[:, :, n] = xi * reconstruction.limit(q[:, :, n], myg, 1, limiter)
+        ldy[:, :, n] = xi * reconstruction.limit(q[:, :, n], myg, 2, limiter)
+
+    tm_limit.end()
 
     # =========================================================================
     # x-direction
@@ -289,17 +323,13 @@ def timestep(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt):
     tm_states.begin()
 
     V_l, V_r = ifc.states(1, myg.ng, myg.dx, dt,
-                          ivars.irho, ivars.iu, ivars.iv, ivars.ip,
-                          ivars.ibx, ivars.iby, ivars.ix,
-                          ivars.naux,
-                          gamma,
-                          q, Bx, By)
+                          ivars.ibx, ivars.iby, q, ldx, Bx, By)
 
     tm_states.end()
 
     # transform interface states back into conserved variables
-    U_xl = comp.prim_to_cons(V_l, gamma, ivars, myg)
-    U_xr = comp.prim_to_cons(V_r, gamma, ivars, myg)
+    U_xl = mhd.prim_to_cons(V_l, gamma, ivars, myg)
+    U_xr = mhd.prim_to_cons(V_r, gamma, ivars, myg)
 
     # =========================================================================
     # y-direction
@@ -309,11 +339,7 @@ def timestep(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt):
     tm_states.begin()
 
     _V_l, _V_r = ifc.states(2, myg.ng, myg.dy, dt,
-                            ivars.irho, ivars.iu, ivars.iv, ivars.ip,
-                            ivars.ibx, ivars.iby, ivars.ix,
-                            ivars.naux,
-                            gamma,
-                            q, Bx, By)
+                            ivars.ibx, ivars.iby, q, ldy, Bx, By)
 
     V_l = ai.ArrayIndexer(d=_V_l, grid=myg)
     V_r = ai.ArrayIndexer(d=_V_r, grid=myg)
@@ -321,11 +347,11 @@ def timestep(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt):
     tm_states.end()
 
     # transform interface states back into conserved variables
-    U_yl = comp.prim_to_cons(V_l, gamma, ivars, myg)
-    U_yr = comp.prim_to_cons(V_r, gamma, ivars, myg)
+    U_yl = mhd.prim_to_cons(V_l, gamma, ivars, myg)
+    U_yr = mhd.prim_to_cons(V_r, gamma, ivars, myg)
 
     ############################################################################
-    # STEP 6. Using a Riemann solver, construct 1d fluces at interfaces.
+    # STEP 6. Using a Riemann solver, construct 1d fluxes at interfaces.
     ############################################################################
 
     _fx = riemannFunc(1, myg.ng,
@@ -375,21 +401,17 @@ def timestep(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt):
         if n == ivars.ixmag or n == ivars.iymag:
             continue
 
-        U.v(buf=buf, n=n)[:, :] = U_old.v(buf=buf, n=n) - \
-            dtdx * (F_x.ip(1, buf=buf, n=n) - F_x.v(buf=buf, n=n)) - \
-            dtdy * (F_y.jp(1, buf=buf, n=n) - F_y.v(buf=buf, n=n))
+        U.v(n=n)[:, :] = U_old.v(n=n) - \
+            dtdx * (F_x.ip(1, n=n) - F_x.v(n=n)) - \
+            dtdy * (F_y.jp(1, n=n) - F_y.v(n=n))
 
-    Bx.v(buf=buf)[:-1, :] = Bx_old[:-1, :] - \
-        dtdy * (emf.jp(1, buf=buf) - emf.v(buf=buf))
-    By.v(buf=buf)[:, :-1] = By_old[:, :-1] + \
-        dtdx * (emf.ip(1, buf=buf) - emf.v(buf=buf))
+    Bx.v()[:-1, :] = Bx_old[:-1, :] - dtdy * (emf.jp(1) - emf.v())
+    By.v()[:, :-1] = By_old[:, :-1] + dtdx * (emf.ip(1) - emf.v())
 
     ############################################################################
     # STEP 9. Compute the cell-centered magnetic field from the updated
-    # face-centrered values.
+    # face-centered values.
     ############################################################################
 
-    U.v(buf=buf, n=ivars.ixmag)[:, :] = 0.5 * \
-        (Bx.ip(1, buf=buf)[:-1, :] + Bx.v(buf=buf)[:-1, :])
-    U.v(buf=buf, n=ivars.iymag)[:, :] = 0.5 * \
-        (By.jp(1, buf=buf)[:, :-1] + By.v(buf=buf)[:, :-1])
+    U.v(n=ivars.ixmag)[:, :] = 0.5 * (Bx.ip(1)[:-1, :] + Bx.v()[:-1, :])
+    U.v(n=ivars.iymag)[:, :] = 0.5 * (By.jp(1)[:, :-1] + By.v()[:, :-1])

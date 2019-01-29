@@ -17,6 +17,8 @@ def init_data(my_data, rp):
         print(my_data.__class__)
         sys.exit()
 
+    my_data.data[:,:,:] = 0.0
+
     # get the density, momenta, and energy as separate variables
     dens = my_data.get_var("density")
     xmom = my_data.get_var("x-momentum")
@@ -57,8 +59,7 @@ def init_data(my_data, rp):
 
     # pressure is constant
     p = 1.0
-    ener[:, :] = p / (gamma - 1.0) + \
-        0.5 * (xmom[:, :] ** 2 + ymom[:, :]**2) / dens[:, :] + \
+    ener[:, :] = p / (gamma - 1.0) + 0.5 * (u** 2 + v**2) * dens + \
         0.5 * (bx**2 + by**2)
 
 

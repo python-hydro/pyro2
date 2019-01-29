@@ -4,8 +4,7 @@ from numba import njit
 
 @njit(cache=True)
 def states(idir, ng, dx, dt,
-           irho, iu, iv, ip, ibx, iby, ix, nspec,
-           gamma, qv, Bx, By):
+           ibx, iby, qv, dqv, Bx, By):
     r"""
     predict the cell-centered state to the edges in one-dimension
     using the reconstructed, limited slopes.
@@ -100,40 +99,26 @@ def states(idir, ng, dx, dt,
     jhi = ng + ny
 
     # Going to use the simpler method from Stone & Gardiner 09, section 4.2 here
-    dq_l = np.zeros_like(qv)
-    dq_r = np.zeros_like(qv)
-    dq_c = np.zeros_like(qv)
-
-    # compute left-, right- and centered-differences of primitive variables
-    if idir == 1:
-        dq_l[1:-1, :, :] = qv[1:-1, :, :] - qv[:-2, :, :]
-        dq_r[1:-1, :, :] = qv[2:, :, :] - qv[1:-1, :, :]
-        dq_c[1:-1, :, :] = 0.5 * (qv[2:, :, :] - qv[:-2, :, :])
-    else:
-        dq_l[:, 1:-1, :] = qv[:, 1:-1, :] - qv[:, :-2, :]
-        dq_r[:, 1:-1, :] = qv[:, 2:, :] - qv[:, 1:-1, :]
-        dq_c[:, 1:-1, :] = 0.5 * (qv[:, 2:, :] - qv[:, :-2, :])
-
-    # apply monotonicity constraints
-
-    dq = np.sign(dq_c) * np.minimum(2. * np.abs(dq_l),
-                                    np.minimum(2. * np.abs(dq_r), np.abs(dq_c)))
-
-    # set longitudinal component of the magnetic field to be 0
-    if idir == 1:
-        dq[:, :, ibx] = 0
-    else:
-        dq[:, :, iby] = 0
 
     # compute left- and right-interface states using the monotonized difference in the primitive variables
     for i in range(ilo - 3, ihi + 3):
         for j in range(jlo - 3, jhi + 3):
+
+            q = qv[i, j]
+            dq = dqv[i, j]
+
+            # set longitudinal component of the magnetic field to be 0
+            # if idir == 1:
+            #     dq[ibx] = 0
+            # else:
+            #     dq[iby] = 0
+
             if idir == 1:
-                q_l[i + 1, j, :] = qv[i, j] + 0.5 * dq[i, j]
-                q_r[i, j] = qv[i, j] - 0.5 * dq[i, j]
+                q_l[i + 1, j, :] = q + 0.5 * dq
+                q_r[i, j, :] = q - 0.5 * dq
             else:
-                q_l[i, j + 1] = qv[i, j] + 0.5 * dq[i, j]
-                q_r[i, j] = qv[i, j] - 0.5 * dq[i, j]
+                q_l[i, j + 1, :] = q + 0.5 * dq
+                q_r[i, j, :] = q - 0.5 * dq
 
     return q_l, q_r
 
@@ -218,10 +203,10 @@ def riemann_adiabatic(idir, ng,
             c_l = max(smallc, np.sqrt(gamma * p_l / rho_l))
             c_r = max(smallc, np.sqrt(gamma * p_r / rho_r))
 
-            bx_l = Bx_l / np.sqrt(4 * np.pi)
-            bx_r = Bx_r / np.sqrt(4 * np.pi)
-            by_l = By_l / np.sqrt(4 * np.pi)
-            by_r = By_r / np.sqrt(4 * np.pi)
+            bx_l = Bx_l  # / np.sqrt(4 * np.pi)
+            bx_r = Bx_r  # / np.sqrt(4 * np.pi)
+            by_l = By_l  # / np.sqrt(4 * np.pi)
+            by_r = By_r  # / np.sqrt(4 * np.pi)
 
             # find the Roe average stuff
             # we have to annoyingly do this for the primitive variables then convert back.
@@ -299,8 +284,13 @@ def riemann_adiabatic(idir, ng,
             cf_r = np.sqrt(
                 0.5 * (c_r**2 + cA2 + np.sqrt((c_r**2 + cA2)**2 - 4 * c_r**2 * cAx2)))
 
-            bp = max(max(np.max(evals), un_r + cf_r), 0)
-            bm = min(min(np.min(evals), un_l - cf_l), 0)
+            bp = max(np.max(evals), un_r + cf_r, 0)
+            bm = min(np.min(evals), un_l - cf_l, 0)
+
+            # bp = max(un_l + cf_l, un_r + cf_r, 0)
+            # bm = min(un_l - cf_l, un_r - cf_r, 0)
+            #
+            # print("bp, bm = ", bp, bm, min(un_l - cf_l, np.min(evals), 0))
 
             f_l = consFlux(idir, gamma, idens, ixmom, iymom, iener,
                            ixmag, iymag, irhoX, nspec, U_l[i, j, :])
@@ -309,6 +299,259 @@ def riemann_adiabatic(idir, ng,
 
             F[i, j, :] = (bp * f_l - bm * f_r) / (bp - bm) + \
                 bp * bm / (bp - bm) * (U_r[i, j, :] - U_l[i, j, :])
+
+    return F
+
+
+@njit(cache=True)
+def riemann_hllc(idir, ng,
+                 idens, ixmom, iymom, iener, ixmag, iymag, irhoX, nspec,
+                 lower_solid, upper_solid,
+                 gamma, U_l, U_r, Bx, By):
+    r"""
+    This is the HLLC Riemann solver.  The implementation follows
+    directly out of Toro's book.  Note: this does not handle the
+    transonic rarefaction.
+
+    Parameters
+    ----------
+    idir : int
+        Are we predicting to the edges in the x-direction (1) or y-direction (2)?
+    ng : int
+        The number of ghost cells
+    nspec : int
+        The number of species
+    idens, ixmom, iymom, iener, irhoX : int
+        The indices of the density, x-momentum, y-momentum, internal energy density
+        and species partial densities in the conserved state vector.
+    lower_solid, upper_solid : int
+        Are we at lower or upper solid boundaries?
+    gamma : float
+        Adiabatic index
+    U_l, U_r : ndarray
+        Conserved state on the left and right cell edges.
+
+    Returns
+    -------
+    out : ndarray
+        Conserved flux
+    """
+
+    qx, qy, nvar = U_l.shape
+
+    F = np.zeros((qx, qy, nvar))
+
+    smallc = 1.e-10
+    smallp = 1.e-10
+
+    U_state = np.zeros(nvar)
+
+    nx = qx - 2 * ng
+    ny = qy - 2 * ng
+    ilo = ng
+    ihi = ng + nx
+    jlo = ng
+    jhi = ng + ny
+
+    for i in range(ilo - 2, ihi + 2):
+        for j in range(jlo - 2, jhi + 2):
+
+            # primitive variable states
+            rho_l = U_l[i, j, idens]
+
+            # un = normal velocity; ut = transverse velocity
+            if (idir == 1):
+                un_l = U_l[i, j, ixmom] / rho_l
+                ut_l = U_l[i, j, iymom] / rho_l
+            else:
+                un_l = U_l[i, j, iymom] / rho_l
+                ut_l = U_l[i, j, ixmom] / rho_l
+
+            rhoe_l = U_l[i, j, iener] - 0.5 * rho_l * (un_l**2 + ut_l**2)
+
+            p_l = rhoe_l * (gamma - 1.0)
+            p_l = max(p_l, smallp)
+
+            rho_r = U_r[i, j, idens]
+
+            if (idir == 1):
+                un_r = U_r[i, j, ixmom] / rho_r
+                ut_r = U_r[i, j, iymom] / rho_r
+            else:
+                un_r = U_r[i, j, iymom] / rho_r
+                ut_r = U_r[i, j, ixmom] / rho_r
+
+            rhoe_r = U_r[i, j, iener] - 0.5 * rho_r * (un_r**2 + ut_r**2)
+
+            p_r = rhoe_r * (gamma - 1.0)
+            p_r = max(p_r, smallp)
+
+            # compute the sound speeds
+            c_l = max(smallc, np.sqrt(gamma * p_l / rho_l))
+            c_r = max(smallc, np.sqrt(gamma * p_r / rho_r))
+
+            # Estimate the star quantities -- use one of three methods to
+            # do this -- the primitive variable Riemann solver, the two
+            # shock approximation, or the two rarefaction approximation.
+            # Pick the method based on the pressure states at the
+            # interface.
+
+            p_max = max(p_l, p_r)
+            p_min = min(p_l, p_r)
+
+            Q = p_max / p_min
+
+            rho_avg = 0.5 * (rho_l + rho_r)
+            c_avg = 0.5 * (c_l + c_r)
+
+            # primitive variable Riemann solver (Toro, 9.3)
+            factor = rho_avg * c_avg
+            # factor2 = rho_avg / c_avg
+
+            pstar = 0.5 * (p_l + p_r) + 0.5 * (un_l - un_r) * factor
+            ustar = 0.5 * (un_l + un_r) + 0.5 * (p_l - p_r) / factor
+
+            if (Q > 2 and (pstar < p_min or pstar > p_max)):
+
+                # use a more accurate Riemann solver for the estimate here
+
+                if (pstar < p_min):
+
+                    # 2-rarefaction Riemann solver
+                    z = (gamma - 1.0) / (2.0 * gamma)
+                    p_lr = (p_l / p_r)**z
+
+                    ustar = (p_lr * un_l / c_l + un_r / c_r +
+                             2.0 * (p_lr - 1.0) / (gamma - 1.0)) / \
+                            (p_lr / c_l + 1.0 / c_r)
+
+                    pstar = 0.5 * (p_l * (1.0 + (gamma - 1.0) * (un_l - ustar) /
+                                          (2.0 * c_l))**(1.0 / z) +
+                                   p_r * (1.0 + (gamma - 1.0) * (ustar - un_r) /
+                                          (2.0 * c_r))**(1.0 / z))
+
+                else:
+
+                    # 2-shock Riemann solver
+                    A_r = 2.0 / ((gamma + 1.0) * rho_r)
+                    B_r = p_r * (gamma - 1.0) / (gamma + 1.0)
+
+                    A_l = 2.0 / ((gamma + 1.0) * rho_l)
+                    B_l = p_l * (gamma - 1.0) / (gamma + 1.0)
+
+                    # guess of the pressure
+                    p_guess = max(0.0, pstar)
+
+                    g_l = np.sqrt(A_l / (p_guess + B_l))
+                    g_r = np.sqrt(A_r / (p_guess + B_r))
+
+                    pstar = (g_l * p_l + g_r * p_r -
+                             (un_r - un_l)) / (g_l + g_r)
+
+                    ustar = 0.5 * (un_l + un_r) + \
+                        0.5 * ((pstar - p_r) * g_r - (pstar - p_l) * g_l)
+
+            # estimate the nonlinear wave speeds
+
+            if (pstar <= p_l):
+                # rarefaction
+                S_l = un_l - c_l
+            else:
+                # shock
+                S_l = un_l - c_l * np.sqrt(1.0 + ((gamma + 1.0) / (2.0 * gamma)) *
+                                           (pstar / p_l - 1.0))
+
+            if (pstar <= p_r):
+                # rarefaction
+                S_r = un_r + c_r
+            else:
+                # shock
+                S_r = un_r + c_r * np.sqrt(1.0 + ((gamma + 1.0) / (2.0 / gamma)) *
+                                           (pstar / p_r - 1.0))
+
+            #  We could just take S_c = u_star as the estimate for the
+            #  contact speed, but we can actually do this more accurately
+            #  by using the Rankine-Hugonoit jump conditions across each
+            #  of the waves (see Toro 10.58, Batten et al. SIAM
+            #  J. Sci. and Stat. Comp., 18:1553 (1997)
+            S_c = (p_r - p_l + rho_l * un_l * (S_l - un_l) - rho_r * un_r * (S_r - un_r)) / \
+                (rho_l * (S_l - un_l) - rho_r * (S_r - un_r))
+
+            # figure out which region we are in and compute the state and
+            # the interface fluxes using the HLLC Riemann solver
+            if (S_r <= 0.0):
+                # R region
+                U_state[:] = U_r[i, j, :]
+
+                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener,
+                                      ixmag, iymag, irhoX, nspec,
+                                      U_state)
+
+            elif (S_r > 0.0 and S_c <= 0):
+                # R* region
+                HLLCfactor = rho_r * (S_r - un_r) / (S_r - S_c)
+
+                U_state[idens] = HLLCfactor
+
+                if (idir == 1):
+                    U_state[ixmom] = HLLCfactor * S_c
+                    U_state[iymom] = HLLCfactor * ut_r
+                else:
+                    U_state[ixmom] = HLLCfactor * ut_r
+                    U_state[iymom] = HLLCfactor * S_c
+
+                U_state[iener] = HLLCfactor * (U_r[i, j, iener] / rho_r +
+                                               (S_c - un_r) * (S_c + p_r / (rho_r * (S_r - un_r))))
+
+                # species
+                if (nspec > 0):
+                    U_state[irhoX:irhoX + nspec] = HLLCfactor * \
+                        U_r[i, j, irhoX:irhoX + nspec] / rho_r
+
+                # find the flux on the right interface
+                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener,
+                                      ixmag, iymag, irhoX, nspec,
+                                      U_r[i, j, :])
+
+                # correct the flux
+                F[i, j, :] = F[i, j, :] + S_r * (U_state[:] - U_r[i, j, :])
+
+            elif (S_c > 0.0 and S_l < 0.0):
+                # L* region
+                HLLCfactor = rho_l * (S_l - un_l) / (S_l - S_c)
+
+                U_state[idens] = HLLCfactor
+
+                if (idir == 1):
+                    U_state[ixmom] = HLLCfactor * S_c
+                    U_state[iymom] = HLLCfactor * ut_l
+                else:
+                    U_state[ixmom] = HLLCfactor * ut_l
+                    U_state[iymom] = HLLCfactor * S_c
+
+                U_state[iener] = HLLCfactor * (U_l[i, j, iener] / rho_l +
+                                               (S_c - un_l) * (S_c + p_l / (rho_l * (S_l - un_l))))
+
+                # species
+                if (nspec > 0):
+                    U_state[irhoX:irhoX + nspec] = HLLCfactor * \
+                        U_l[i, j, irhoX:irhoX + nspec] / rho_l
+
+                # find the flux on the left interface
+                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener,
+                                      ixmag, iymag, irhoX, nspec,
+                                      U_l[i, j, :])
+
+                # correct the flux
+                F[i, j, :] = F[i, j, :] + S_l * (U_state[:] - U_l[i, j, :])
+
+            else:
+                # L region
+                U_state[:] = U_l[i, j, :]
+
+                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener,
+                                      ixmag, iymag, irhoX, nspec,
+                                      U_state)
 
     return F
 
@@ -346,6 +589,9 @@ def calc_evals(idir, U, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, 
         b_norm2 = (gamma_d - Y_d) * bx**2
 
     CA2 = CAx2 + b_norm2 / dens
+
+    # if  4 * a2 * CAx2 > (a2 + CA2)**2:
+    #     print("help")
 
     Cf2 = 0.5 * ((a2 + CA2) + np.sqrt((a2 + CA2)**2 - 4 * a2 * CAx2))
     Cs2 = 0.5 * ((a2 + CA2) - np.sqrt((a2 + CA2)**2 - 4 * a2 * CAx2))

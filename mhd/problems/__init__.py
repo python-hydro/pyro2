@@ -1,1 +1,1 @@
-__all__ = ['advect']
+__all__ = ['advect', 'loop']

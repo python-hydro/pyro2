@@ -6,24 +6,24 @@ import numpy as np
 from util import msg
 
 
-def init_data(my_data, rp):
+def init_data(cc_data, rp):
     """ initialize a weak magnetic field loop """
 
     msg.bold("initializing the loop problem...")
 
     # make sure that we are passed a valid patch object
-    if not isinstance(my_data, patch.CellCenterData2d):
+    if not isinstance(cc_data, patch.CellCenterData2d):
         print("ERROR: patch invalid in loop.py")
-        print(my_data.__class__)
+        print(cc_data.__class__)
         sys.exit()
 
     # get the density, momenta, and energy as separate variables
-    dens = my_data.get_var("density")
-    xmom = my_data.get_var("x-momentum")
-    ymom = my_data.get_var("y-momentum")
-    ener = my_data.get_var("energy")
-    bx = my_data.get_var("x-magnetic-field")
-    by = my_data.get_var("y-magnetic-field")
+    dens = cc_data.get_var("density")
+    xmom = cc_data.get_var("x-momentum")
+    ymom = cc_data.get_var("y-momentum")
+    ener = cc_data.get_var("energy")
+    bx = cc_data.get_var("x-magnetic-field")
+    by = cc_data.get_var("y-magnetic-field")
 
     # initialize the components, remember, that ener here is rho*eint
     # + 0.5*rho*v**2, where eint is the specific internal energy
@@ -53,14 +53,17 @@ def init_data(my_data, rp):
     ymom[:, :] = dens[:, :] * v
 
     # magnetic field
-    myg = my_data.grid
+    myg = cc_data.grid
     r = np.sqrt(myg.x2d**2 + myg.y2d**2)
     # Az = np.zeros_like(bx)
     # Az[r <= R] = A0 * (R - r)
 
     # calculate Bx, By from magnetic vector potential Az
-    bx[r <= R] = -A0 * myg.y2d[r <= R] / r[r <= R]
-    by[r <= R] = A0 * myg.x2d[r <= R] / r[r <= R]
+    bx[:,:] = -A0 * myg.y2d / r
+    by[:,:] = A0 * myg.x2d / r
+
+    bx[r > R] = 0.0
+    by[r > R] = 0.0
 
     # pressure is constant
     p = 1.0
