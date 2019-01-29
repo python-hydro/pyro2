@@ -210,11 +210,14 @@ class Simulation(NullSimulation):
         Cfx, _, Cfy, _ = self.cc_data.get_var(
             ["x-magnetosonic", "y-magnetosonic"])
 
+        # print(f"fast magnetosonic speeds = {Cfx.max()}, {Cfy.max()}")
+        # print(f"u, v = {abs(u).max(), abs(v).max()}")
+
         # the timestep is min(dx/(|u| + cs), dy/(|v| + cs))
         xtmp = self.cc_data.grid.dx / (abs(u) + Cfx)
         ytmp = self.cc_data.grid.dy / (abs(v) + Cfy)
 
-        self.dt = cfl * float(min(xtmp.min(), ytmp.min(), fix_dt))
+        self.dt = cfl * min(xtmp.min(), ytmp.min(), fix_dt)
 
     def evolve(self):
         """
@@ -225,55 +228,9 @@ class Simulation(NullSimulation):
         tm_evolve = self.tc.timer("evolve")
         tm_evolve.begin()
 
-        myg = self.cc_data.grid
-
-        Flux_x, Flux_y, emf = flx.unsplit_fluxes(self.cc_data, self.fcx_data, self.fcy_data,
-                                                 self.aux_data, self.rp,
-                                                 self.ivars, self.solid, self.tc, self.dt)
-
-        # conservative update
-        dtdx = self.dt / myg.dx
-        dtdy = self.dt / myg.dy
-
-        ########################################################################
-        # STEP 8. Update the solution from n to n+1
-        ########################################################################
-
-        # ======================================================================
-        # use finite volume for all variables BUT the magnetic fields
-        # ======================================================================
-        for n in range(self.ivars.nvar):
-            if n == self.ivars.ixmag or n == self.ivars.iymag:
-                continue
-
-            var = self.cc_data.get_var_by_index(n)
-
-            var.v()[:, :] += \
-                dtdx * (Flux_x.v(n=n) - Flux_x.ip(1, n=n)) + \
-                dtdy * (Flux_y.v(n=n) - Flux_y.jp(1, n=n))
-
-        # ======================================================================
-        # update the in-plane components of the magnetic field using CT
-        # ======================================================================
-        Bx = self.fcx_data.get_var("x-magnetic-field")
-        By = self.fcy_data.get_var("y-magnetic-field")
-
-        buf = [1, 2, 1, 1]
-        Bx.v(buf=1)[:, :] -= dtdy * (emf.jp(1, buf=buf) - emf.v(buf=buf))
-        buf = [1, 1, 1, 2]
-        By.v(buf=1)[:, :] += dtdx * (emf.ip(1, buf=buf) - emf.v(buf=buf))
-
-        ########################################################################
-        # STEP 9. Compute the cell-centered components of the magnetic field
-        # from the updated face-centered values
-        ########################################################################
-
-        buf = [0, -1, 0, 0]
-        self.cc_data.get_var(
-            "x-magnetic-field").v()[:, :] = 0.5 * (Bx.ip(1, buf=buf) + Bx.v(buf=buf))
-        buf = [0, 0, 0, -1]
-        self.cc_data.get_var(
-            "y-magnetic-field").v()[:, :] = 0.5 * (By.jp(1, buf=buf) + By.v(buf=buf))
+        flx.timestep(self.cc_data, self.fcx_data, self.fcy_data,
+                     self.aux_data, self.rp,
+                     self.ivars, self.solid, self.tc, self.dt)
 
         # update the particles
 
@@ -283,6 +240,7 @@ class Simulation(NullSimulation):
         ########################################################################
         # STEP 10. increment the time
         ########################################################################
+
         # fill the ghost cells
         self.cc_data.fill_BC_all()
         self.fcx_data.fill_BC_all()

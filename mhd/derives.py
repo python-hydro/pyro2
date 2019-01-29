@@ -59,14 +59,14 @@ def derive_primitives(myd, varnames):
 
         elif var == "x-magnetosonic":
             # returns fast, slow magnetosonic waves in x-direction
-            c2 = gamma * p / dens
+            a2 = gamma * p / dens
             cA2 = (bx**2 + by**2) / (dens * 4 * np.pi)
             cAx2 = bx**2 / (dens * 4 * np.pi)
 
             cf = np.sqrt(
-                0.5 * (c2 + cA2 + np.sqrt((c2 + cA2)**2 - 4 * c2 * cAx2)))
+                0.5 * (a2 + cA2 + np.sqrt((a2 + cA2)**2 - 4. * a2 * cAx2)))
             cs = np.sqrt(
-                0.5 * (c2 + cA2 - np.sqrt((c2 + cA2)**2 - 4 * c2 * cAx2)))
+                0.5 * (a2 + cA2 - np.sqrt((a2 + cA2)**2 - 4. * a2 * cAx2)))
 
             derived_vars.append(cf)
             derived_vars.append(cs)
@@ -74,13 +74,13 @@ def derive_primitives(myd, varnames):
         elif var == "y-magnetosonic":
 
             # returns fast, slow magnetosonic waves in y-direction
-            c2 = gamma * p / dens
+            a2 = gamma * p / dens
             cA2 = (bx**2 + by**2) / (dens * 4 * np.pi)
             cAy2 = by**2 / (dens * 4 * np.pi)
             cf = np.sqrt(
-                0.5 * (c2 + cA2 + np.sqrt((c2 + cA2)**2 - 4 * c2 * cAy2)))
+                0.5 * (a2 + cA2 + np.sqrt((a2 + cA2)**2 - 4. * a2 * cAy2)))
             cs = np.sqrt(
-                0.5 * (c2 + cA2 - np.sqrt((c2 + cA2)**2 - 4 * c2 * cAy2)))
+                0.5 * (a2 + cA2 - np.sqrt((a2 + cA2)**2 - 4. * a2 * cAy2)))
             derived_vars.append(cf)
             derived_vars.append(cs)
 

@@ -5,7 +5,7 @@ from numba import njit
 @njit(cache=True)
 def states(idir, ng, dx, dt,
            irho, iu, iv, ip, ibx, iby, ix, nspec,
-           gamma, qv, dqv, Bx, By):
+           gamma, qv, Bx, By):
     r"""
     predict the cell-centered state to the edges in one-dimension
     using the reconstructed, limited slopes.
@@ -80,8 +80,6 @@ def states(idir, ng, dx, dt,
         Adiabatic index
     qv : ndarray
         The primitive state vector
-    dqv : ndarray
-        Spatial derivative of the state vector
 
     Returns
     -------
@@ -101,36 +99,41 @@ def states(idir, ng, dx, dt,
     jlo = ng
     jhi = ng + ny
 
-    # this is the loop over zones.  For zone i, we see q_l[i+1] and q_r[i]
+    # Going to use the simpler method from Stone & Gardiner 09, section 4.2 here
+    dq_l = np.zeros_like(qv)
+    dq_r = np.zeros_like(qv)
+    dq_c = np.zeros_like(qv)
+
+    # compute left-, right- and centered-differences of primitive variables
+    if idir == 1:
+        dq_l[1:-1, :, :] = qv[1:-1, :, :] - qv[:-2, :, :]
+        dq_r[1:-1, :, :] = qv[2:, :, :] - qv[1:-1, :, :]
+        dq_c[1:-1, :, :] = 0.5 * (qv[2:, :, :] - qv[:-2, :, :])
+    else:
+        dq_l[:, 1:-1, :] = qv[:, 1:-1, :] - qv[:, :-2, :]
+        dq_r[:, 1:-1, :] = qv[:, 2:, :] - qv[:, 1:-1, :]
+        dq_c[:, 1:-1, :] = 0.5 * (qv[:, 2:, :] - qv[:, :-2, :])
+
+    # apply monotonicity constraints
+
+    dq = np.sign(dq_c) * np.minimum(2. * np.abs(dq_l),
+                                    np.minimum(2. * np.abs(dq_r), np.abs(dq_c)))
+
+    # set longitudinal component of the magnetic field to be 0
+    if idir == 1:
+        dq[:, :, ibx] = 0
+    else:
+        dq[:, :, iby] = 0
+
+    # compute left- and right-interface states using the monotonized difference in the primitive variables
     for i in range(ilo - 3, ihi + 3):
         for j in range(jlo - 3, jhi + 3):
-
-            dq = dqv[i, j, :]
-            q = qv[i, j, :]
-
-            if (idir == 1):
-
-                # need to add on change due to transverse fields. I have no idea
-                # if this is correct as GS05 and GS08 are very confusing.
-                delta_by = 0.5 * dt / dx * qv[i, j, iv] * \
-                    (Bx[i + 1, j] - Bx[i, j])
-
-                q_l[i + 1, j, :] = q + 0.5 * dq
-                q_r[i,  j, :] = q - 0.5 * dq
-
-                q_l[i + 1, j, iby] += delta_by
-                q_r[i, j, iby] += delta_by
-
+            if idir == 1:
+                q_l[i + 1, j, :] = qv[i, j] + 0.5 * dq[i, j]
+                q_r[i, j] = qv[i, j] - 0.5 * dq[i, j]
             else:
-
-                delta_bx = 0.5 * dt / dx * qv[i, j, iu] * \
-                    (By[i, j + 1] - By[i, j])
-
-                q_l[i, j + 1, :] = q + 0.5 * dq
-                q_r[i, j, :] = q - 0.5 * dq
-
-                q_l[i, j + 1, iby] += delta_bx
-                q_r[i, j, iby] += delta_bx
+                q_l[i, j + 1] = qv[i, j] + 0.5 * dq[i, j]
+                q_r[i, j] = qv[i, j] - 0.5 * dq[i, j]
 
     return q_l, q_r
 
@@ -139,14 +142,14 @@ def states(idir, ng, dx, dt,
 def riemann_adiabatic(idir, ng,
                       idens, ixmom, iymom, iener, ixmag, iymag, irhoX, nspec,
                       lower_solid, upper_solid,
-                      gamma, U_l, U_r, dU, Bx, By):
+                      gamma, U_l, U_r, Bx, By):
     r"""
     HLLE solver for adiabatic magnetohydrodynamics.
     """
 
     qx, qy, nvar = U_l.shape
 
-    F = np.zeros((qx, qy, nvar))
+    F = np.zeros_like(U_l)
 
     smallc = 1.e-10
     # smallrho = 1.e-10
@@ -175,21 +178,17 @@ def riemann_adiabatic(idir, ng,
             if (idir == 1):
                 # if we're looking at flux in x-direction, can use x-face centered
                 # Bx, but need to get By from U as it's y-face centered
-                # Bx_l = Bx[i, j]
-                # Bx_r = Bx[i, j]
+                Bx_l = Bx[i, j]
+                Bx_r = Bx[i, j]
 
-                Bx_l = U_l[i, j, ixmag]
-                Bx_r = U_r[i, j, ixmag]
                 By_l = U_l[i, j, iymag]
                 By_r = U_r[i, j, iymag]
             else:
                 # the reverse is true for flux in the y-direction
-                # By_l = By[i, j]
-                # By_r = By[i, j]
+                By_l = By[i, j]
+                By_r = By[i, j]
                 Bx_l = U_l[i, j, ixmag]
                 Bx_r = U_r[i, j, ixmag]
-                By_l = U_l[i, j, iymag]
-                By_r = U_r[i, j, iymag]
 
             B2_l = Bx_l**2 + By_l**2
             B2_r = Bx_r**2 + By_r**2
@@ -308,11 +307,8 @@ def riemann_adiabatic(idir, ng,
             f_r = consFlux(idir, gamma, idens, ixmom, iymom, iener,
                            ixmag, iymag, irhoX, nspec, U_r[i, j, :])
 
-            # FIXME: I think the * (U_r[i, j, :] - U_l[i, j, :]) is wrong -
-            # should multiply by difference between states in cell-centers
-            # rather than states predicted to interface, as have used here.
             F[i, j, :] = (bp * f_l - bm * f_r) / (bp - bm) + \
-                bp * bm / (bp - bm) * dU[i, j, :]
+                bp * bm / (bp - bm) * (U_r[i, j, :] - U_l[i, j, :])
 
     return F
 
@@ -505,7 +501,7 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy,
             else:
                 dEdyx_14 = 0.5 * (dEdy_14[i - 1, j] + dEdy_14[i, j])
 
-            ru = Fx[i, j-1, idens]  # as Fx(i,j,idens) = (rho * vx)_i-1/2,j-1
+            ru = Fx[i, j - 1, idens]  # as Fx(i,j,idens) = (rho * vx)_i-1/2,j-1
             if ru > 0:
                 dEdyx_34 = dEdy_34[i - 1, j]  # dEz/dy_(i-1/2,j-3/4)
             elif ru < 0:
@@ -521,7 +517,7 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy,
             else:
                 dEdxy_14 = 0.5 * (dEdx_14[i, j - 1] + dEdx_14[i, j])
 
-            rv = Fy[i-1, j, idens]
+            rv = Fy[i - 1, j, idens]
             if rv > 0:
                 dEdxy_34 = dEdx_34[i, j - 1]  # dEz/dx_(i-3/4,j-1/2)
             elif rv < 0:

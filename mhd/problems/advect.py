@@ -31,8 +31,8 @@ def init_data(my_data, rp):
     dens[:, :] = 1.0
     xmom[:, :] = 0.0
     ymom[:, :] = 0.0
-    bx[:, :] = 0.001
-    by[:, :] = 0.001
+    bx[:, :] = 0.00
+    by[:, :] = 0.00
 
     gamma = rp.get_param("eos.gamma")
 
@@ -50,10 +50,10 @@ def init_data(my_data, rp):
                                        (my_data.grid.y2d - yctr)**2))
 
     # velocity is diagonal
-    # u = 1.0
-    # v = 1.0
-    # xmom[:, :] = dens[:, :] * u
-    # ymom[:, :] = dens[:, :] * v
+    u = 1.0
+    v = 1.0
+    xmom[:, :] = dens[:, :] * u
+    ymom[:, :] = dens[:, :] * v
 
     # pressure is constant
     p = 1.0

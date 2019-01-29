@@ -124,17 +124,13 @@ Updating U_{i,j}:
 
 import mhd.interface as ifc
 import mhd as comp
-import mesh.reconstruction as reconstruction
 import mesh.array_indexer as ai
+import numpy as np
 
-from util import msg
 
-
-def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt):
+def timestep(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt):
     """
-    unsplitFluxes returns the fluxes through the x and y interfaces by
-    doing an unsplit reconstruction of the interface values and then
-    solving the Riemann problem through all the interfaces at once
+    timestep evolves the *_data through a single timestep dt
 
     currently we assume a gamma-law EOS
 
@@ -170,51 +166,119 @@ def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt
 
     gamma = rp.get_param("eos.gamma")
 
+    buf = 2
+
     # =========================================================================
     # compute the primitive variables
     # =========================================================================
     # Q = (rho, u, v, p, {X})
+    U = cc_data.data
 
-    q = comp.cons_to_prim(cc_data.data, gamma, ivars, myg)
-
-    # =========================================================================
-    # compute the flattening coefficients
-    # =========================================================================
-
-    # there is a single flattening coefficient (xi) for all directions
-    use_flattening = rp.get_param("mhd.use_flattening")
-
-    if use_flattening:
-        xi_x = reconstruction.flatten(myg, q, 1, ivars, rp)
-        xi_y = reconstruction.flatten(myg, q, 2, ivars, rp)
-
-        xi = reconstruction.flatten_multid(myg, q, xi_x, xi_y, ivars)
-    else:
-        xi = 1.0
-
-    # monotonized central differences
-    tm_limit = tc.timer("limiting")
-    tm_limit.begin()
-
-    limiter = rp.get_param("mhd.limiter")
-
-    ldx = myg.scratch_array(nvar=ivars.nvar)
-    ldy = myg.scratch_array(nvar=ivars.nvar)
-
-    for n in range(ivars.nvar):
-        ldx[:, :, n] = xi * reconstruction.limit(q[:, :, n], myg, 1, limiter)
-        ldy[:, :, n] = xi * reconstruction.limit(q[:, :, n], myg, 2, limiter)
-
-    tm_limit.end()
+    U_old = myg.scratch_array(nvar=ivars.nvar)
+    U_old[:, :, :] = U
 
     # get face-centered magnetic field components
     Bx = fcx_data.get_var("x-magnetic-field")
     By = fcy_data.get_var("y-magnetic-field")
 
+    Bx_old = np.zeros_like(Bx.v(buf=buf))
+    By_old = np.zeros_like(By.v(buf=buf))
+
+    Bx_old[:, :] = Bx.v(buf=buf)
+    By_old[:, :] = By.v(buf=buf)
+
     ############################################################################
-    # STEP 1. Compute and store the left and right states at cell interfaces in
-    # the x- and y-dirctions.
+    # STEP 1. Using a Riemann solver, construct first order upwind fluxes.
     ############################################################################
+
+    riemannFunc = ifc.riemann_adiabatic
+
+    U_xl = myg.scratch_array(nvar=ivars.nvar)
+    U_xr = myg.scratch_array(nvar=ivars.nvar)
+
+    U_yl = myg.scratch_array(nvar=ivars.nvar)
+    U_yr = myg.scratch_array(nvar=ivars.nvar)
+
+    # =========================================================================
+    # x-direction
+    # =========================================================================
+    U_xl[1:-1, :, :] = U[:-2, :, :]
+    U_xl[:, :, ivars.ixmag] = Bx[:-1, :]
+    U_xr[:, :, :] = U
+    U_xr[:, :, ivars.ixmag] = Bx[:-1, :]
+
+    _fx = riemannFunc(1, myg.ng,
+                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
+                      ivars.ixmag, ivars.iymag, ivars.irhox, ivars.naux,
+                      solid.xl, solid.xr,
+                      gamma, U_xl, U_xr, Bx, By)
+
+    # =========================================================================
+    # y-direction
+    # =========================================================================
+    U_yl[:, 1:-1, :] = U[:, :-2, :]
+    U_yl[:, :, ivars.iymag] = By[:, :-1]
+    U_yr[:, :, :] = U
+    U_yr[:, :, ivars.iymag] = By[:, :-1]
+
+    _fy = riemannFunc(2, myg.ng,
+                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
+                      ivars.ixmag, ivars.iymag, ivars.irhox, ivars.naux,
+                      solid.yl, solid.yr,
+                      gamma, U_yl, U_yr, Bx, By)
+
+    F_x = ai.ArrayIndexer(d=_fx, grid=myg)
+    F_y = ai.ArrayIndexer(d=_fy, grid=myg)
+
+    ############################################################################
+    # STEP 2. Calculate the CT electric fields at cell corners
+    ############################################################################
+
+    _emf = ifc.emf(myg.ng, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
+                   ivars.ixmag, ivars.iymag, ivars.irhox,
+                   myg.dx, myg.dy, U, F_x, F_y)
+
+    emf = ai.ArrayIndexer(d=_emf, grid=myg)
+
+    ############################################################################
+    # STEP 3. Update the cell-centered hydrodynamical variables for one half
+    # time step using flux differences in all direcitons. Update the
+    # face-centered components of the magnetic field for one half time step
+    # using CT.
+    ############################################################################
+
+    dtdx = dt / myg.dx
+    dtdy = dt / myg.dy
+
+    for n in range(ivars.nvar):
+
+        if n == ivars.ixmag or n == ivars.iymag:
+            continue
+
+        U.v(buf=buf, n=n)[:, :] += -0.5 * dtdx * (F_x.ip(1, buf=buf, n=n) -
+                                                  F_x.v(buf=buf, n=n)) - \
+            0.5 * dtdy * (F_y.jp(1, buf=buf, n=n) - F_y.v(buf=buf, n=n))
+
+    Bx.v(buf=buf)[:-1, :] -= 0.5 * dtdy * (emf.jp(1, buf=buf) - emf.v(buf=buf))
+    By.v(buf=buf)[:, :-1] += 0.5 * dtdx * (emf.ip(1, buf=buf) - emf.v(buf=buf))
+
+    ############################################################################
+    # STEP 4. Compute the cell-centered magnetic field at the half time step
+    # from the average of the face-centered field computed in step 3.
+    ############################################################################
+
+    U.v(buf=buf, n=ivars.ixmag)[:, :] = 0.5 * \
+        (Bx.ip(1, buf=buf)[:-1, :] + Bx.v(buf=buf)[:-1, :])
+    U.v(buf=buf, n=ivars.iymag)[:, :] = 0.5 * \
+        (By.jp(1, buf=buf)[:, :-1] + By.v(buf=buf)[:, :-1])
+
+    ############################################################################
+    # STEP 5. Compute the left- and right-state quantities at the half time step
+    # at cell interfaces
+    ############################################################################
+
+    # calculate primitive variables at half time step from updated U
+    q = comp.cons_to_prim(U, gamma, ivars, myg)
 
     # =========================================================================
     # x-direction
@@ -229,7 +293,7 @@ def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt
                           ivars.ibx, ivars.iby, ivars.ix,
                           ivars.naux,
                           gamma,
-                          q, ldx, Bx, By)
+                          q, Bx, By)
 
     tm_states.end()
 
@@ -249,7 +313,7 @@ def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt
                             ivars.ibx, ivars.iby, ivars.ix,
                             ivars.naux,
                             gamma,
-                            q, ldy, Bx, By)
+                            q, Bx, By)
 
     V_l = ai.ArrayIndexer(d=_V_l, grid=myg)
     V_r = ai.ArrayIndexer(d=_V_r, grid=myg)
@@ -261,234 +325,71 @@ def unsplit_fluxes(cc_data, fcx_data, fcy_data, my_aux, rp, ivars, solid, tc, dt
     U_yr = comp.prim_to_cons(V_r, gamma, ivars, myg)
 
     ############################################################################
-    # STEP 2. Compute the 1d fluxes of the conserved variables.
+    # STEP 6. Using a Riemann solver, construct 1d fluces at interfaces.
     ############################################################################
-
-    # =========================================================================
-    # compute transverse fluxes
-    # =========================================================================
-    tm_riem = tc.timer("riemann")
-    tm_riem.begin()
-
-    # riemann = rp.get_param("mhd.riemann")
-
-    riemannFunc = ifc.riemann_adiabatic
-
-    for n in range(ivars.nvar):
-        ldx[:, :, n] = xi * \
-            reconstruction.fclimit(cc_data.data[:, :, n], myg, 1)
-        ldy[:, :, n] = xi * \
-            reconstruction.fclimit(cc_data.data[:, :, n], myg, 2)
 
     _fx = riemannFunc(1, myg.ng,
                       ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
                       ivars.ixmag, ivars.iymag, ivars.irhox, ivars.naux,
                       solid.xl, solid.xr,
-                      gamma, U_xl, U_xr, ldx, Bx, By)
+                      gamma, U_xl, U_xr, Bx, By)
 
     _fy = riemannFunc(2, myg.ng,
                       ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
                       ivars.ixmag, ivars.iymag, ivars.irhox, ivars.naux,
                       solid.yl, solid.yr,
-                      gamma, U_yl, U_yr, ldy, Bx, By)
+                      gamma, U_yl, U_yr, Bx, By)
 
     F_x = ai.ArrayIndexer(d=_fx, grid=myg)
     F_y = ai.ArrayIndexer(d=_fy, grid=myg)
 
-    tm_riem.end()
-
     ############################################################################
-    # STEP 3. Compute the EMF at cell corners from the components of the
-    # face-centered fluxes returned by the Riemann solver in step 2, and the
-    # z-component of a cell center reference electric field calculated using the
-    # initial data at time level n.
+    # STEP 7. Compute cell-centered reference EMF at half time step using cell-
+    # centered velocities and magnetic field computed in steps 3 and 4. Then
+    # calculated the CT emf at cell corners from components of face-centered
+    # fluxes found in step 6 and the reference field.
     ############################################################################
 
-    # =========================================================================
-    # Calculate corner emfs
-    # =========================================================================
+    # cell-centered velocites at half time
+    u_half = U.v(n=ivars.ixmom, buf=buf) / U.v(n=ivars.idens, buf=buf)
+    v_half = U.v(n=ivars.iymom, buf=buf) / U.v(n=ivars.idens, buf=buf)
+
+    E_cc_half = myg.scratch_array()
+    E_cc_half.v(buf=buf)[:, :] = - \
+        (u_half * By.v(buf=buf)[:, :-1] - v_half * Bx.v(buf=buf)[:-1, :])
 
     _emf = ifc.emf(myg.ng, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
                    ivars.ixmag, ivars.iymag, ivars.irhox,
-                   myg.dx, myg.dy, cc_data.data, F_x, F_y)
+                   myg.dx, myg.dy, U, F_x, F_y, E_cc_half, True)
 
     emf = ai.ArrayIndexer(d=_emf, grid=myg)
 
     ############################################################################
-    # STEP 4. Evolve the left and right states at each interface by dt/2 using
-    # transverse flux gradients.
+    # STEP 8. Update the cell-centered hydodynamical variables for a full
+    # timestep. Update the face-centered components of the magnetic field for a
+    # full timestep using CT and the emfs from step 7.
     ############################################################################
-
-    tm_transverse = tc.timer("transverse flux addition")
-    tm_transverse.begin()
-
-    dtdx = dt / myg.dx
-    dtdy = dt / myg.dy
-
-    b = (2, 1)
 
     for n in range(ivars.nvar):
 
         if n == ivars.ixmag or n == ivars.iymag:
             continue
 
-        # U_xl[i,j,:] = U_xl[i,j,:] - 0.5*dt/dy * (F_y[i-1,j+1,:] - F_y[i-1,j,:])
-        U_xl.v(buf=b, n=n)[:, :] += \
-            0.5 * dtdy * (F_y.ip_jp(-1, 1, buf=b, n=n) -
-                            F_y.ip(-1, buf=b, n=n))
+        U.v(buf=buf, n=n)[:, :] = U_old.v(buf=buf, n=n) - \
+            dtdx * (F_x.ip(1, buf=buf, n=n) - F_x.v(buf=buf, n=n)) - \
+            dtdy * (F_y.jp(1, buf=buf, n=n) - F_y.v(buf=buf, n=n))
 
-        # U_xr[i,j,:] = U_xr[i,j,:] - 0.5*dt/dy * (F_y[i,j+1,:] - F_y[i,j,:])
-        U_xr.v(buf=b, n=n)[:, :] += \
-            0.5 * dtdy * (F_y.jp(1, buf=b, n=n) - F_y.v(buf=b, n=n))
-
-        # U_yl[i,j,:] = U_yl[i,j,:] - 0.5*dt/dx * (F_x[i+1,j-1,:] - F_x[i,j-1,:])
-        U_yl.v(buf=b, n=n)[:, :] += \
-            0.5 * dtdx * (F_x.ip_jp(1, -1, buf=b, n=n) -
-                            F_x.jp(-1, buf=b, n=n))
-
-        # U_yr[i,j,:] = U_yr[i,j,:] - 0.5*dt/dx * (F_x[i+1,j,:] - F_x[i,j,:])
-        U_yr.v(buf=b, n=n)[:, :] += \
-            0.5 * dtdx * (F_x.ip(1, buf=b, n=n) - F_x.v(buf=b, n=n))
-
-    tm_transverse.end()
-
-    # =========================================================================
-    # Add source terms
-    # =========================================================================
-
-    Sx = ifc.sources(1, myg.ng, ivars.idens, ivars.ixmom, ivars.iymom,
-                     ivars.iener, ivars.ixmag, ivars.iymag, ivars.irhox,
-                     myg.dx, cc_data.data, U_xl.data)
-    Sy = ifc.sources(2, myg.ng, ivars.idens, ivars.ixmom, ivars.iymom,
-                     ivars.iener, ivars.ixmag, ivars.iymag, ivars.irhox,
-                     myg.dy, cc_data.data, U_yl.data)
-
-    U_xl[1:, :, :] += Sx[:-1, :, :] * dt * 0.5
-    U_yl[:, 1:, :] += Sy[:, :-1, :] * dt * 0.5
-
-    Sx = ifc.sources(1, myg.ng, ivars.idens, ivars.ixmom, ivars.iymom,
-                     ivars.iener, ivars.ixmag, ivars.iymag, ivars.irhox,
-                     myg.dx, cc_data.data, U_xr.data)
-    Sy = ifc.sources(2, myg.ng, ivars.idens, ivars.ixmom, ivars.iymom,
-                     ivars.iener, ivars.ixmag, ivars.iymag, ivars.irhox,
-                     myg.dy, cc_data.data, U_yr.data)
-
-    U_xr[:, :, :] += Sx[:, :, :] * dt * 0.5
-    U_yr[:, :, :] += Sy[:, :, :] * dt * 0.5
-
-    # =========================================================================
-    # Add corner emfs to in-plane components of the magnetic field to get
-    # the face-centered magnetic fields at half time.
-    # =========================================================================
-
-    # FIXME: check indexing on this
-    buf = [1, 2, 1, 1]
-    Bx.v(buf=1)[:, :] -= 0.5 * dtdy * (emf.jp(1, buf=buf) - emf.v(buf=buf))
-    buf = [1, 1, 1, 2]
-    By.v(buf=1)[:, :] += 0.5 * dtdx * (emf.ip(1, buf=buf) - emf.v(buf=buf))
+    Bx.v(buf=buf)[:-1, :] = Bx_old[:-1, :] - \
+        dtdy * (emf.jp(1, buf=buf) - emf.v(buf=buf))
+    By.v(buf=buf)[:, :-1] = By_old[:, :-1] + \
+        dtdx * (emf.ip(1, buf=buf) - emf.v(buf=buf))
 
     ############################################################################
-    # STEP 5. Calculate a cell-centered reference electric field at half time.
+    # STEP 9. Compute the cell-centered magnetic field from the updated
+    # face-centrered values.
     ############################################################################
 
-    # we need the cell-centered velocities at half time here....
-    # which 'come from a conservative finite-volume update of the initial mass
-    # and momentum density, using the fluxes f*_i-1/2, g*_j-1/2?
-
-    # =========================================================================
-    # Cell-centered magnetic field components at half time
-    # =========================================================================
-    Bx_half = myg.scratch_array()
-    By_half = myg.scratch_array()
-
-    buf = [0, -1, 0, 0]
-    Bx_half.v()[:, :] = 0.5 * (Bx.v(buf=buf) + Bx.ip(1, buf=buf))
-    buf = [0, 0, 0, -1]
-    By_half.v()[:, :] = 0.5 * (By.v(buf=buf) + By.jp(1, buf=buf))
-
-    # =========================================================================
-    # Cell-centered reference EMF at half time
-    # =========================================================================
-
-    # conservative finite volume update of density and momenta
-    # note that I have assumed that we have been sensible here and that
-    # iymom > ixmom > idens
-
-    U_star = myg.scratch_array(nvar=ivars.nvar)
-    b = 2  # buffer
-
-    for n in range(ivars.nvar):
-        U_star.v(n=n, buf=b)[:, :] = cc_data.data.v(n=n, buf=b) +\
-            0.5 * dtdx * (F_x.v(n=n, buf=b) - F_x.ip(1, n=n, buf=b)) + \
-            0.5 * dtdy * (F_y.v(n=n, buf=b) - F_y.jp(1, n=n, buf=b))
-
-    # cell-centered velocites at half time
-    u_half = U_star.v(n=ivars.ixmom, buf=b) / U_star.v(n=ivars.idens, buf=b)
-    v_half = U_star.v(n=ivars.iymom, buf=b) / U_star.v(n=ivars.idens, buf=b)
-
-    E_cc_half = myg.scratch_array()
-    E_cc_half.v(buf=b)[:, :] = - \
-        (u_half * By_half.v(buf=b) - v_half * Bx_half.v(buf=b))
-
-    ############################################################################
-    # STEP 6. Compute new fluxes at cell interfaces using the corrected left and
-    # right states from step 4.
-    ############################################################################
-
-    # =========================================================================
-    # construct new fluxes
-    # =========================================================================
-
-    # average face-centered things to cell centers to get conserved state there
-    b = 2
-    q_star = comp.cons_to_prim(U_star, gamma, ivars, myg)
-
-    if use_flattening:
-        xi_x = reconstruction.flatten(myg, q_star, 1, ivars, rp)
-        xi_y = reconstruction.flatten(myg, q_star, 2, ivars, rp)
-
-        xi = reconstruction.flatten_multid(myg, q_star, xi_x, xi_y, ivars)
-    else:
-        xi = 1.0
-
-    for n in range(ivars.nvar):
-        ldx[:, :, n] = xi * reconstruction.fclimit(U_star[:, :, n], myg, 1)
-        ldy[:, :, n] = xi * reconstruction.fclimit(U_star[:, :, n], myg, 2)
-
-    tm_riem.begin()
-
-    _fx = riemannFunc(1, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
-                      ivars.ixmag, ivars.iymag, ivars.irhox, ivars.naux,
-                      solid.xl, solid.xr,
-                      gamma, U_xl, U_xr, ldx, Bx, By)
-
-    _fy = riemannFunc(2, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
-                      ivars.ixmag, ivars.iymag, ivars.irhox, ivars.naux,
-                      solid.yl, solid.yr,
-                      gamma, U_yl, U_yr, ldy, Bx, By)
-
-    F_x = ai.ArrayIndexer(d=_fx, grid=myg)
-    F_y = ai.ArrayIndexer(d=_fy, grid=myg)
-
-    tm_riem.end()
-
-    ############################################################################
-    # STEP 7. Calculate the corner CMGs using numerical fluxes from step 6 and
-    # center reference electric field calculated in step 5.
-    ############################################################################
-
-    # =========================================================================
-    # Calculate corner emfs
-    # =========================================================================
-
-    _emf = ifc.emf(myg.ng, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
-                   ivars.ixmag, ivars.iymag, ivars.irhox,
-                   myg.dx, myg.dy, cc_data.data, F_x, F_y, E_cc_half, True)
-
-    emf = ai.ArrayIndexer(d=_emf, grid=myg)
-
-    tm_flux.end()
-
-    return F_x, F_y, emf
+    U.v(buf=buf, n=ivars.ixmag)[:, :] = 0.5 * \
+        (Bx.ip(1, buf=buf)[:-1, :] + Bx.v(buf=buf)[:-1, :])
+    U.v(buf=buf, n=ivars.iymag)[:, :] = 0.5 * \
+        (By.jp(1, buf=buf)[:, :-1] + By.v(buf=buf)[:, :-1])
