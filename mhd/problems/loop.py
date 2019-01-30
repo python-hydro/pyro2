@@ -6,7 +6,7 @@ import numpy as np
 from util import msg
 
 
-def init_data(cc_data, rp):
+def init_data(cc_data, fcx_data, fcy_data, rp):
     """ initialize a weak magnetic field loop """
 
     msg.bold("initializing the loop problem...")
@@ -24,6 +24,9 @@ def init_data(cc_data, rp):
     ener = cc_data.get_var("energy")
     bx = cc_data.get_var("x-magnetic-field")
     by = cc_data.get_var("y-magnetic-field")
+
+    bx_fc = fcx_data.get_var("x-magnetic-field")
+    by_fc = fcy_data.get_var("y-magnetic-field")
 
     # initialize the components, remember, that ener here is rho*eint
     # + 0.5*rho*v**2, where eint is the specific internal energy
@@ -65,11 +68,29 @@ def init_data(cc_data, rp):
     bx[r > R] = 0.0
     by[r > R] = 0.0
 
+    # repeat but for face-centered
+    x_fc = np.append(myg.xl, myg.xr[-1])[:,np.newaxis]
+    y2d_padded = np.transpose(np.repeat(myg.y, myg.qx+1).reshape((myg.qy, myg.qx+1)))
+    r_fcx = np.sqrt(x_fc**2 + y2d_padded**2)
+
+    y_fc = np.append(myg.yl, myg.yr[-1])[np.newaxis,:]
+    x2d_padded = np.repeat(myg.x, myg.qy+1).reshape((myg.qx, myg.qy+1))
+    r_fcy = np.sqrt(x2d_padded**2 + y_fc**2)
+
+    bx_fc[:,:] = -A0 * y2d_padded / r_fcx
+    by_fc[:,:] = A0 * x2d_padded / r_fcy
+
+    bx_fc[r_fcx > R] = 0.0
+    by_fc[r_fcy > R] = 0.0
+
     # pressure is constant
     p = 1.0
     ener[:, :] = p / (gamma - 1.0) + \
         0.5 * (xmom ** 2 + ymom**2) / dens + \
         0.5 * (bx**2 + by**2)
+
+    # bx[:,:] = 0.0
+    # by[:,:] = 0.0
 
 
 def finalize():

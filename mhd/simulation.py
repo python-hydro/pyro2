@@ -175,27 +175,14 @@ class Simulation(NullSimulation):
         # initial conditions for the problem
         problem = importlib.import_module("{}.problems.{}".format(
             self.solver_name, self.problem_name))
-        problem.init_data(self.cc_data, self.rp)
+        problem.init_data(self.cc_data, self.fcx_data, self.fcy_data, self.rp)
 
-        # put the magnetic field on the faces by averaging
-        self.init_magnetic_faces()
+        self.cc_data.fill_BC_all()
+        self.fcx_data.fill_BC_all()
+        self.fcy_data.fill_BC_all()
 
         if self.verbose > 0:
             print(my_data)
-
-    def init_magnetic_faces(self):
-        """
-        Initialize face-centered magnetic field
-        """
-
-        Bx = self.fcx_data.get_var("x-magnetic-field")
-        By = self.fcy_data.get_var("y-magnetic-field")
-
-        bx_cc = self.cc_data.get_var("x-magnetic-field")
-        by_cc = self.cc_data.get_var("y-magnetic-field")
-
-        Bx[1:-1, :] = 0.5 * (bx_cc[:-1, :] + bx_cc[1:, :])
-        By[:, 1:-1] = 0.5 * (by_cc[:, :-1] + by_cc[:, 1:])
 
     def method_compute_timestep(self):
         """

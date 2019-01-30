@@ -376,17 +376,9 @@ def timestep(cc_data, fcx_data, fcy_data, rp, ivars, solid, tc, dt):
     # fluxes found in step 6 and the reference field.
     ############################################################################
 
-    # cell-centered velocites at half time
-    u_half = U.v(n=ivars.ixmom, buf=buf) / U.v(n=ivars.idens, buf=buf)
-    v_half = U.v(n=ivars.iymom, buf=buf) / U.v(n=ivars.idens, buf=buf)
-
-    E_cc_half = myg.scratch_array()
-    E_cc_half.v(buf=buf)[:, :] = - \
-        (u_half * By.v(buf=buf)[:, :-1] - v_half * Bx.v(buf=buf)[:-1, :])
-
     _emf = ifc.emf(myg.ng, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
                    ivars.ixmag, ivars.iymag, ivars.irhox,
-                   myg.dx, myg.dy, U, F_x, F_y, E_cc_half, True)
+                   myg.dx, myg.dy, U, F_x, F_y)
 
     emf = ai.ArrayIndexer(d=_emf, grid=myg)
 

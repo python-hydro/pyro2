@@ -200,13 +200,13 @@ def riemann_adiabatic(idir, ng,
             p_r = max(p_r, smallp)
 
             # and the regular sound speeds
-            c_l = max(smallc, np.sqrt(gamma * p_l / rho_l))
-            c_r = max(smallc, np.sqrt(gamma * p_r / rho_r))
+            a_l = max(smallc, np.sqrt(gamma * p_l / rho_l))
+            a_r = max(smallc, np.sqrt(gamma * p_r / rho_r))
 
-            bx_l = Bx_l  # / np.sqrt(4 * np.pi)
-            bx_r = Bx_r  # / np.sqrt(4 * np.pi)
-            by_l = By_l  # / np.sqrt(4 * np.pi)
-            by_r = By_r  # / np.sqrt(4 * np.pi)
+            bx_l = Bx_l / np.sqrt(4 * np.pi)
+            bx_r = Bx_r / np.sqrt(4 * np.pi)
+            by_l = By_l / np.sqrt(4 * np.pi)
+            by_r = By_r / np.sqrt(4 * np.pi)
 
             # find the Roe average stuff
             # we have to annoyingly do this for the primitive variables then convert back.
@@ -226,11 +226,11 @@ def riemann_adiabatic(idir, ng,
 
             h_l = (gamma * U_l[i, j, iener] -
                    (gamma - 1.0) * (U_l[i, j, ixmom]**2 + U_l[i, j, iymom]**2) / rho_l +
-                   0.5 * gamma * B2_l) / rho_l
+                   0.5 * (2. - gamma) * B2_l) / rho_l
 
             h_r = (gamma * U_r[i, j, iener] -
                    (gamma - 1.0) * (U_r[i, j, ixmom]**2 + U_r[i, j, iymom]**2) / rho_r +
-                   0.5 * gamma * B2_r) / rho_r
+                   0.5 * (2. - gamma) * B2_r) / rho_r
 
             q_av[iener] = (h_l * np.sqrt(rho_l) + h_r * np.sqrt(rho_r)) / \
                 (np.sqrt(rho_l) + np.sqrt(rho_r))
@@ -247,8 +247,8 @@ def riemann_adiabatic(idir, ng,
             U_av[ixmom] = q_av[idens] * q_av[ixmom]
             U_av[iymom] = q_av[idens] * q_av[iymom]
             U_av[iener] = (q_av[iener] * q_av[idens] +
-                           (gamma - 1) * q_av[idens] * (q_av[ixmom]**2 + q_av[iymom]**2) -
-                           0.5 * gamma * (q_av[ixmag]**2 + q_av[iymag]**2)) / gamma
+                           (gamma - 1) * q_av[idens] * (q_av[ixmom]**2 + q_av[iymom]**2) +
+                           0.5 * (gamma - 2.) * (q_av[ixmag]**2 + q_av[iymag]**2)) / gamma
             U_av[ixmag:iymag + 1] = q_av[ixmag:iymag + 1]
             U_av[irhoX:] = q_av[idens] * q_av[irhoX:]
 
@@ -272,7 +272,7 @@ def riemann_adiabatic(idir, ng,
                 cAx2 = by_l**2 / rho_l
 
             cf_l = np.sqrt(
-                0.5 * (c_l**2 + cA2 + np.sqrt((c_l**2 + cA2)**2 - 4 * c_l**2 * cAx2)))
+                0.5 * (a_l**2 + cA2 + np.sqrt((a_l**2 + cA2)**2 - 4 * a_l**2 * cAx2)))
 
             cA2 = (bx_r**2 + by_r**2) / rho_r
 
@@ -282,7 +282,7 @@ def riemann_adiabatic(idir, ng,
                 cAx2 = by_r**2 / rho_r
 
             cf_r = np.sqrt(
-                0.5 * (c_r**2 + cA2 + np.sqrt((c_r**2 + cA2)**2 - 4 * c_r**2 * cAx2)))
+                0.5 * (a_r**2 + cA2 + np.sqrt((a_r**2 + cA2)**2 - 4 * a_r**2 * cAx2)))
 
             bp = max(np.max(evals), un_r + cf_r, 0)
             bm = min(np.min(evals), un_l - cf_l, 0)
@@ -387,8 +387,8 @@ def riemann_hllc(idir, ng,
             p_r = max(p_r, smallp)
 
             # compute the sound speeds
-            c_l = max(smallc, np.sqrt(gamma * p_l / rho_l))
-            c_r = max(smallc, np.sqrt(gamma * p_r / rho_r))
+            a_l = max(smallc, np.sqrt(gamma * p_l / rho_l))
+            a_r = max(smallc, np.sqrt(gamma * p_r / rho_r))
 
             # Estimate the star quantities -- use one of three methods to
             # do this -- the primitive variable Riemann solver, the two
@@ -402,7 +402,7 @@ def riemann_hllc(idir, ng,
             Q = p_max / p_min
 
             rho_avg = 0.5 * (rho_l + rho_r)
-            c_avg = 0.5 * (c_l + c_r)
+            c_avg = 0.5 * (a_l + a_r)
 
             # primitive variable Riemann solver (Toro, 9.3)
             factor = rho_avg * c_avg
@@ -421,14 +421,14 @@ def riemann_hllc(idir, ng,
                     z = (gamma - 1.0) / (2.0 * gamma)
                     p_lr = (p_l / p_r)**z
 
-                    ustar = (p_lr * un_l / c_l + un_r / c_r +
+                    ustar = (p_lr * un_l / a_l + un_r / a_r +
                              2.0 * (p_lr - 1.0) / (gamma - 1.0)) / \
-                            (p_lr / c_l + 1.0 / c_r)
+                            (p_lr / a_l + 1.0 / a_r)
 
                     pstar = 0.5 * (p_l * (1.0 + (gamma - 1.0) * (un_l - ustar) /
-                                          (2.0 * c_l))**(1.0 / z) +
+                                          (2.0 * a_l))**(1.0 / z) +
                                    p_r * (1.0 + (gamma - 1.0) * (ustar - un_r) /
-                                          (2.0 * c_r))**(1.0 / z))
+                                          (2.0 * a_r))**(1.0 / z))
 
                 else:
 
@@ -455,18 +455,18 @@ def riemann_hllc(idir, ng,
 
             if (pstar <= p_l):
                 # rarefaction
-                S_l = un_l - c_l
+                S_l = un_l - a_l
             else:
                 # shock
-                S_l = un_l - c_l * np.sqrt(1.0 + ((gamma + 1.0) / (2.0 * gamma)) *
+                S_l = un_l - a_l * np.sqrt(1.0 + ((gamma + 1.0) / (2.0 * gamma)) *
                                            (pstar / p_l - 1.0))
 
             if (pstar <= p_r):
                 # rarefaction
-                S_r = un_r + c_r
+                S_r = un_r + a_r
             else:
                 # shock
-                S_r = un_r + c_r * np.sqrt(1.0 + ((gamma + 1.0) / (2.0 / gamma)) *
+                S_r = un_r + a_r * np.sqrt(1.0 + ((gamma + 1.0) / (2.0 / gamma)) *
                                            (pstar / p_r - 1.0))
 
             #  We could just take S_c = u_star as the estimate for the
@@ -672,8 +672,7 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, naux,
 
 
 @njit(cache=True)
-def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy,
-        Eref=np.zeros((1, 1)), use_ref=False):
+def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy):
     r"""
     Calculate the EMF at cell corners.
 
@@ -689,9 +688,9 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy,
 
     qx, qy, nvar = U.shape
 
-    Er = np.zeros((qx, qy))
-    Ex = np.zeros((qx, qy))  # x-edges
-    Ey = np.zeros((qx, qy))  # y-edges
+    Er = np.zeros((qx, qy))  # cell-centered reference emf
+    Ex = np.zeros((qx, qy))  # x-edges, (i,j) -> i-1/2, j
+    Ey = np.zeros((qx, qy))  # y-edges, (i,j) -> i, j-1/2
 
     Ec = np.zeros((qx, qy))  # corner, (i,j) -> i-1/2, j-1/2
 
@@ -708,14 +707,11 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy,
     jlo = ng
     jhi = ng + ny
 
-    if not use_ref:
-        u = U[:, :, ixmom] / U[:, :, idens]
-        v = U[:, :, iymom] / U[:, :, idens]
-        bx = U[:, :, ixmag]
-        by = U[:, :, iymag]
-        Er[:, :] = -(u * by - v * bx)
-    else:
-        Er[:, :] = Eref
+    u = U[:, :, ixmom] / U[:, :, idens]
+    v = U[:, :, iymom] / U[:, :, idens]
+    bx = U[:, :, ixmag]
+    by = U[:, :, iymag]
+    Er[:, :] = -(u * by - v * bx)
 
     # GS05 section 4.1.1
     Ex[:, :] = -Fx[:, :, iymag]
@@ -747,7 +743,7 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy,
             else:
                 dEdyx_14 = 0.5 * (dEdy_14[i - 1, j] + dEdy_14[i, j])
 
-            ru = Fx[i, j - 1, idens]  # as Fx(i,j,idens) = (rho * vx)_i-1/2,j-1
+            ru = Fx[i, j - 1, idens]  # as Fx(i,j-1,idens) = (rho * vx)_i-1/2,j-1
             if ru > 0:
                 dEdyx_34 = dEdy_34[i - 1, j]  # dEz/dy_(i-1/2,j-3/4)
             elif ru < 0:
@@ -755,7 +751,7 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy,
             else:
                 dEdyx_34 = 0.5 * (dEdy_34[i - 1, j] + dEdy_34[i, j])
 
-            rv = Fy[i, j, idens]
+            rv = Fy[i, j, idens]  # as Fy(i,j,idens) = (rho * vy)_i,j-1/2
             if rv > 0:
                 dEdxy_14 = dEdx_14[i, j - 1]  # dEz/dx_(i-1/4,j-1/2)
             elif rv < 0:
@@ -763,7 +759,7 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy,
             else:
                 dEdxy_14 = 0.5 * (dEdx_14[i, j - 1] + dEdx_14[i, j])
 
-            rv = Fy[i - 1, j, idens]
+            rv = Fy[i - 1, j, idens]  # as Fy(i-1,j,idens) = (rho * vy)_i-1,j-1/2
             if rv > 0:
                 dEdxy_34 = dEdx_34[i, j - 1]  # dEz/dx_(i-3/4,j-1/2)
             elif rv < 0:
@@ -771,7 +767,7 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy,
             else:
                 dEdxy_34 = 0.5 * (dEdx_34[i, j - 1] + dEdx_34[i, j])
 
-            Ec[i, j] = 0.25 * (Ex[i, j] + Ex[i, j + 1] + Ey[i, j] + Ey[i + 1, j]) + \
+            Ec[i, j] = 0.25 * (Ex[i, j] + Ex[i, j - 1] + Ey[i, j] + Ey[i - 1, j]) + \
                 0.125 * dy * (dEdyx_14 - dEdyx_34) + \
                 0.125 * dx * (dEdxy_14 - dEdxy_34)
 
