@@ -130,12 +130,12 @@ def states(idir, ng, dx, dt,
                 e_val[:] = np.array([q[iu] - cs, q[iu], q[iu], q[iu] + cs])
 
                 lvec[0, :ns] = [0.0, -0.5 *
-                                 q[irho] / cs, 0.0, 0.5 / (cs * cs)]
+                                q[irho] / cs, 0.0, 0.5 / (cs * cs)]
                 lvec[1, :ns] = [1.0, 0.0,
-                                 0.0, -1.0 / (cs * cs)]
+                                0.0, -1.0 / (cs * cs)]
                 lvec[2, :ns] = [0.0, 0.0,             1.0, 0.0]
                 lvec[3, :ns] = [0.0, 0.5 *
-                                 q[irho] / cs,  0.0, 0.5 / (cs * cs)]
+                                q[irho] / cs,  0.0, 0.5 / (cs * cs)]
 
                 rvec[0, :ns] = [1.0, -cs / q[irho], 0.0, cs * cs]
                 rvec[1, :ns] = [1.0, 0.0,       0.0, 0.0]
@@ -152,12 +152,12 @@ def states(idir, ng, dx, dt,
                 e_val[:] = np.array([q[iv] - cs, q[iv], q[iv], q[iv] + cs])
 
                 lvec[0, :ns] = [0.0, 0.0, -0.5 *
-                                 q[irho] / cs, 0.5 / (cs * cs)]
+                                q[irho] / cs, 0.5 / (cs * cs)]
                 lvec[1, :ns] = [1.0, 0.0,
-                                 0.0,             -1.0 / (cs * cs)]
+                                0.0,             -1.0 / (cs * cs)]
                 lvec[2, :ns] = [0.0, 1.0, 0.0,             0.0]
                 lvec[3, :ns] = [0.0, 0.0, 0.5 *
-                                 q[irho] / cs,  0.5 / (cs * cs)]
+                                q[irho] / cs,  0.5 / (cs * cs)]
 
                 rvec[0, :ns] = [1.0, 0.0, -cs / q[irho], cs * cs]
                 rvec[1, :ns] = [1.0, 0.0, 0.0,       0.0]
@@ -481,7 +481,7 @@ def riemann_cgf(idir, ng,
                     xn = U_r[i, j, irhoX:irhoX + nspec] / U_r[i, j, idens]
                 else:
                     xn = 0.5 * (U_l[i, j, irhoX:irhoX + nspec] / U_l[i, j, idens] +
-                                   U_r[i, j, irhoX:irhoX + nspec] / U_r[i, j, idens])
+                                U_r[i, j, irhoX:irhoX + nspec] / U_r[i, j, idens])
 
             # are we on a solid boundary?
             if (idir == 1):
@@ -768,7 +768,7 @@ def riemann_prim(idir, ng,
                     xn = q_r[i, j, iX:iX + nspec]
                 else:
                     xn = 0.5 * (q_l[i, j, iX:iX + nspec] +
-                                   q_r[i, j, iX:iX + nspec])
+                                q_r[i, j, iX:iX + nspec])
 
             # are we on a solid boundary?
             if (idir == 1):
@@ -1094,7 +1094,8 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec, U_state):
     u = U_state[ixmom] / U_state[idens]
     v = U_state[iymom] / U_state[idens]
 
-    p = (U_state[iener] - 0.5 * U_state[idens] * (u * u + v * v)) * (gamma - 1.0)
+    p = (U_state[iener] - 0.5 * U_state[idens]
+         * (u * u + v * v)) * (gamma - 1.0)
 
     if (idir == 1):
         F[idens] = U_state[idens] * u
@@ -1179,12 +1180,12 @@ def artificial_viscosity(ng, dx, dy,
     for i in range(ilo - 1, ihi + 1):
         for j in range(jlo - 1, jhi + 1):
 
-                # start by computing the divergence on the x-interface.  The
-                # x-difference is simply the difference of the cell-centered
-                # x-velocities on either side of the x-interface.  For the
-                # y-difference, first average the four cells to the node on
-                # each end of the edge, and: difference these to find the
-                # edge centered y difference.
+            # start by computing the divergence on the x-interface.  The
+            # x-difference is simply the difference of the cell-centered
+            # x-velocities on either side of the x-interface.  For the
+            # y-difference, first average the four cells to the node on
+            # each end of the edge, and: difference these to find the
+            # edge centered y difference.
             divU_x = (u[i, j] - u[i - 1, j]) / dx + \
                 0.25 * (v[i, j + 1] + v[i - 1, j + 1] -
                         v[i, j - 1] - v[i - 1, j - 1]) / dy

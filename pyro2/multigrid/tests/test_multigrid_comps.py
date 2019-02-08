@@ -6,6 +6,8 @@ import numpy as np
 from numpy.testing import assert_array_equal
 
 # utilities
+
+
 def test_edge_coeffs():
     # make dx = dy = 1 so the normalization is trivial
     g = patch.Grid2d(4, 6, ng=2, xmax=4, ymax=6)
@@ -39,12 +41,12 @@ def test_mg_gradient():
 
     s = a.soln_grid.scratch_array()
 
-    s.v()[:, :] = np.fromfunction(lambda i, j: i*(s.g.nx-i-1)*j*(s.g.ny-j-1),
-                                 (s.g.nx, s.g.ny))
+    s.v()[:, :] = np.fromfunction(lambda i, j: i * (s.g.nx - i - 1) * j * (s.g.ny - j - 1),
+                                  (s.g.nx, s.g.ny))
 
     a.init_solution(s)
 
-    a.grids[a.nlevels-1].fill_BC("v")
+    a.grids[a.nlevels - 1].fill_BC("v")
 
     gx, gy = a.get_solution_gradient()
 
