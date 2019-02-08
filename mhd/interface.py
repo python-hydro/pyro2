@@ -13,41 +13,6 @@ def states(idir, ng, dx, dt,
     i-1/2 interface and ``V_l[i+1]`` is the left state at the i+1/2
     interface.
 
-    We need the left and right eigenvectors and the eigenvalues for
-    the system projected along the x-direction.
-
-    Taking our state vector as :math:`Q = (\rho, u, v, p, bx, by)^T`, the eigenvalues
-    are :math:`u - c`, :math:`u`, :math:`u + c`.
-
-    We look at the equations of hydrodynamics in a split fashion --
-    i.e., we only consider one dimension at a time.
-
-    Considering advection in the x-direction, the Jacobian matrix for
-    the primitive variable formulation of the Euler equations
-    projected in the x-direction is::
-
-             / u   r   0   0 \
-             | 0   u   0  1/r |
-         A = | 0   0   u   0  |
-             \ 0  rc^2 0   u  /
-
-    The right eigenvectors are::
-
-             /  1  \        / 1 \        / 0 \        /  1  \
-             |-c/r |        | 0 |        | 0 |        | c/r |
-        r1 = |  0  |   r2 = | 0 |   r3 = | 1 |   r4 = |  0  |
-             \ c^2 /        \ 0 /        \ 0 /        \ c^2 /
-
-    In particular, we see from r3 that the transverse velocity (v in
-    this case) is simply advected at a speed u in the x-direction.
-
-    The left eigenvectors are::
-
-         l1 =     ( 0,  -r/(2c),  0, 1/(2c^2) )
-         l2 =     ( 1,     0,     0,  -1/c^2  )
-         l3 =     ( 0,     0,     1,     0    )
-         l4 =     ( 0,   r/(2c),  0, 1/(2c^2) )
-
     The fluxes are going to be defined on the left edge of the
     computational zones::
 
@@ -107,18 +72,16 @@ def states(idir, ng, dx, dt,
             q = qv[i, j]
             dq = dqv[i, j]
 
-            # set longitudinal component of the magnetic field to be 0
-            # if idir == 1:
-            #     dq[ibx] = 0
-            # else:
-            #     dq[iby] = 0
-
             if idir == 1:
                 q_l[i + 1, j, :] = q + 0.5 * dq
                 q_r[i, j, :] = q - 0.5 * dq
+                q_l[i + 1, j, ibx] = Bx[i + 1, j]
+                q_r[i, j, ibx] = Bx[i, j]
             else:
                 q_l[i, j + 1, :] = q + 0.5 * dq
                 q_r[i, j, :] = q - 0.5 * dq
+                q_l[i, j + 1, iby] = By[i, j + 1]
+                q_r[i, j, iby] = By[i, j]
 
     return q_l, q_r
 
@@ -211,9 +174,6 @@ def riemann_adiabatic(idir, ng,
             # find the Roe average stuff
             # we have to annoyingly do this for the primitive variables then convert back.
 
-            # U_av = (U_l[i, j, :] * np.sqrt(rho_l) + U_r[i, j, :] * np.sqrt(rho_r)) / \
-            #     (np.sqrt(rho_l) + np.sqrt(rho_r))
-
             q_av = np.zeros_like(U_l[i, j, :])
             q_av[idens] = np.sqrt(rho_l * rho_r)
             # these are actually the primitive velocities
@@ -297,8 +257,8 @@ def riemann_adiabatic(idir, ng,
             f_r = consFlux(idir, gamma, idens, ixmom, iymom, iener,
                            ixmag, iymag, irhoX, nspec, U_r[i, j, :])
 
-            F[i, j, :] = (bp * f_l - bm * f_r) / (bp - bm) + \
-                bp * bm / (bp - bm) * (U_r[i, j, :] - U_l[i, j, :])
+            F[i, j, :] = (bp * f_l - bm * f_r +
+                          bp * bm * (U_r[i, j, :] - U_l[i, j, :])) / (bp - bm)
 
     return F
 
@@ -743,7 +703,8 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy):
             else:
                 dEdyx_14 = 0.5 * (dEdy_14[i - 1, j] + dEdy_14[i, j])
 
-            ru = Fx[i, j - 1, idens]  # as Fx(i,j-1,idens) = (rho * vx)_i-1/2,j-1
+            # as Fx(i,j-1,idens) = (rho * vx)_i-1/2,j-1
+            ru = Fx[i, j - 1, idens]
             if ru > 0:
                 dEdyx_34 = dEdy_34[i - 1, j]  # dEz/dy_(i-1/2,j-3/4)
             elif ru < 0:
@@ -759,7 +720,8 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy):
             else:
                 dEdxy_14 = 0.5 * (dEdx_14[i, j - 1] + dEdx_14[i, j])
 
-            rv = Fy[i - 1, j, idens]  # as Fy(i-1,j,idens) = (rho * vy)_i-1,j-1/2
+            # as Fy(i-1,j,idens) = (rho * vy)_i-1,j-1/2
+            rv = Fy[i - 1, j, idens]
             if rv > 0:
                 dEdxy_34 = dEdx_34[i, j - 1]  # dEz/dx_(i-3/4,j-1/2)
             elif rv < 0:
