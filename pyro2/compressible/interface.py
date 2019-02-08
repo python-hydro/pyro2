@@ -1094,8 +1094,7 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec, U_state):
     u = U_state[ixmom] / U_state[idens]
     v = U_state[iymom] / U_state[idens]
 
-    p = (U_state[iener] - 0.5 * U_state[idens]
-         * (u * u + v * v)) * (gamma - 1.0)
+    p = (U_state[iener] - 0.5 * U_state[idens] * (u * u + v * v)) * (gamma - 1.0)
 
     if (idir == 1):
         F[idens] = U_state[idens] * u

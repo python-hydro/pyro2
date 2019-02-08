@@ -3,7 +3,7 @@
 from __future__ import print_function
 
 import numpy as np
-import pyro2.mesh.patch as patch 
+import pyro2.mesh.patch as patch
 import pyro2.mesh.boundary as bnd
 
 
@@ -33,9 +33,9 @@ def doit():
 
     a = mydata.get_var("outflow")
 
-    for i in range(myg.ilo, myg.ihi+1):
-        for j in range(myg.jlo, myg.jhi+1):
-            a[i, j] = (i-myg.ilo) + 10*(j-myg.jlo) + 1
+    for i in range(myg.ilo, myg.ihi + 1):
+        for j in range(myg.jlo, myg.jhi + 1):
+            a[i, j] = (i - myg.ilo) + 10 * (j - myg.jlo) + 1
 
     b = mydata.get_var("periodic")
     c = mydata.get_var("reflect-even")
