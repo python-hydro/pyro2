@@ -1,7 +1,7 @@
 import os
 import glob
 
-from util import runparams
+from pyro2.util import runparams
 
 pfiles = ["../_defaults"]
 for path, dirs, files in os.walk("../"):
@@ -16,5 +16,3 @@ for f in pfiles:
     pre, name = os.path.split(f)
     outfile = "source/{}{}.inc".format(pre.replace(".", ""), name)
     rp.print_sphinx_tables(outfile=outfile.format(os.path.basename(f)))
-
-

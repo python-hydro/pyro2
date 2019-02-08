@@ -1,4 +1,4 @@
-from pyro import Pyro
+from pyro2 import Pyro
 from numpy.testing import assert_array_equal
 import numpy as np
 

@@ -1,7 +1,7 @@
-import simulation_null as sn
-from util import runparams
-import mesh.patch as patch
-import mesh.boundary as bnd
+import pyro2.simulation_null as sn
+from pyro2.util import runparams
+import pyro2.mesh.patch as patch
+import pyro2.mesh.boundary as bnd
 
 
 class TestSimulation(object):
