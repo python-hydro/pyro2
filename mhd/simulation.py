@@ -13,7 +13,7 @@ import mesh.patch as patch
 from simulation_null import NullSimulation, grid_setup, bc_setup
 import util.plot_tools as plot_tools
 import particles.particles as particles
-import mesh.integration as integration
+import mhd.mhd_integration as integration
 
 
 class Variables(object):

@@ -144,8 +144,8 @@ def riemann_adiabatic(idir, ng,
             # By_l = U_l[i, j, iymag]
             # By_r = U_r[i, j, iymag]
 
-            B2_l = Bx_l**2 + By_l**2
-            B2_r = Bx_r**2 + By_r**2
+            B2_l = (Bx_l**2 + By_l**2) #/ (4 * np.pi)
+            B2_r = (Bx_r**2 + By_r**2) #/ (4 * np.pi)
 
             rhoe_l = U_l[i, j, iener] - 0.5 * rho_l * (un_l**2 + ut_l**2) - \
                 0.5 * B2_l
@@ -556,9 +556,6 @@ def calc_evals(idir, U, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, 
 
     CA2 = CAx2 + b_norm2 / dens
 
-    # if  4 * a2 * CAx2 > (a2 + CA2)**2:
-    #     print("help")
-
     Cf2 = 0.5 * ((a2 + CA2) + np.sqrt((a2 + CA2)**2 - 4 * a2 * CAx2))
     Cs2 = 0.5 * ((a2 + CA2) - np.sqrt((a2 + CA2)**2 - 4 * a2 * CAx2))
 
@@ -603,8 +600,8 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, naux,
 
     u = U_state[ixmom] / U_state[idens]
     v = U_state[iymom] / U_state[idens]
-    bx = U_state[ixmag] / np.sqrt(4 * np.pi)
-    by = U_state[iymag] / np.sqrt(4 * np.pi)
+    bx = U_state[ixmag]
+    by = U_state[iymag]
     b2 = bx**2 + by**2
 
     p = (U_state[iener] - 0.5 * U_state[idens] *
@@ -617,7 +614,7 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, naux,
         F[iener] = (U_state[iener] + p + 0.5 * b2) * u - \
             bx * (bx * u + by * v)
         F[ixmag] = 0
-        F[iymag] = by * u - bx * v
+        F[iymag] = (by * u - bx * v)
 
         if (naux > 0):
             F[irhoX:irhoX + naux] = U_state[irhoX:irhoX + naux] * u
@@ -628,7 +625,7 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, naux,
         F[iymom] = U_state[iymom] * v + p + 0.5 * b2 - by**2
         F[iener] = (U_state[iener] + p + 0.5 * b2) * v - \
             by * (bx * u + by * v)
-        F[ixmag] = bx * v - by * u
+        F[ixmag] = (bx * v - by * u)
         F[iymag] = 0
 
         if (naux > 0):
