@@ -100,7 +100,7 @@ def riemann_adiabatic(idir, ng,
     F = np.zeros_like(U_l)
 
     smallc = 1.e-10
-    # smallrho = 1.e-10
+    smallrho = 1.e-10
     smallp = 1.e-10
 
     nx = qx - 2 * ng
@@ -137,6 +137,12 @@ def riemann_adiabatic(idir, ng,
                 By_r = By[i, j]
                 Bx_l = U_l[i, j, ixmag]
                 Bx_r = U_r[i, j, ixmag]
+
+            # Bx_l = U_l[i, j, ixmag]
+            # Bx_r = U_r[i, j, ixmag]
+            #
+            # By_l = U_l[i, j, iymag]
+            # By_r = U_r[i, j, iymag]
 
             B2_l = Bx_l**2 + By_l**2
             B2_r = Bx_r**2 + By_r**2
@@ -175,7 +181,7 @@ def riemann_adiabatic(idir, ng,
             # we have to annoyingly do this for the primitive variables then convert back.
 
             q_av = np.zeros_like(U_l[i, j, :])
-            q_av[idens] = np.sqrt(rho_l * rho_r)
+            q_av[idens] = max(np.sqrt(rho_l * rho_r), smallrho)
             # these are actually the primitive velocities
             q_av[ixmom] = (U_l[i, j, ixmom] / np.sqrt(rho_l) + U_r[i, j, ixmom] / np.sqrt(rho_r)) / \
                 (np.sqrt(rho_l) + np.sqrt(rho_r))
@@ -529,7 +535,7 @@ def calc_evals(idir, U, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, 
     By = U[iymag]
     bx = Bx / np.sqrt(4 * np.pi)
     by = By / np.sqrt(4 * np.pi)
-    B2 = Bx**2 + By**2
+    # B2 = Bx**2 + By**2
     b2 = bx**2 + by**2
     rhoe = E - 0.5 * dens * (u**2 + v**2) - 0.5 * b2
     P = rhoe * (gamma - 1.0)
@@ -597,8 +603,8 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, naux,
 
     u = U_state[ixmom] / U_state[idens]
     v = U_state[iymom] / U_state[idens]
-    bx = U_state[ixmag]
-    by = U_state[iymag]
+    bx = U_state[ixmag] / np.sqrt(4 * np.pi)
+    by = U_state[iymag] / np.sqrt(4 * np.pi)
     b2 = bx**2 + by**2
 
     p = (U_state[iener] - 0.5 * U_state[idens] *
@@ -639,11 +645,6 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy):
     Eref is the cell-centered reference value used in eq. 81. It can be passed
     in or calculated from the cross product of the velocity and the magnetic
     field in U.
-
-    Note: the slightly messy keyword arguments are to keep numba happy - it
-    doesn't like it if a keyword argument is a different type (e.g. None) to
-    what it infers the variable to be from elsewhere within the function
-    (e.g. an array).
     """
 
     qx, qy, nvar = U.shape
@@ -734,41 +735,6 @@ def emf(ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, dy, U, Fx, Fy):
                 0.125 * dx * (dEdxy_14 - dEdxy_34)
 
     return Ec
-
-
-# @njit(cache=True)
-def sources(idir, ng, idens, ixmom, iymom, iener, ixmag, iymag, irhoX, dx, U, Ux):
-    r"""
-    Calculate source terms on the idir-interface. U is the cell-centered state,
-    Ux should be a state on the idir-interface, where i,j -> i-1/2 ,j (for idir==1).
-
-    Assume Bz = vz = 0 so that iener and iBz sources are 0.
-    """
-    qx, qy, nvar = U.shape
-
-    S = np.zeros((qx, qy, nvar))
-
-    nx = qx - 2 * ng
-    ny = qy - 2 * ng
-    ilo = ng
-    ihi = ng + nx
-    jlo = ng
-    jhi = ng + ny
-
-    for i in range(ilo - ng + 1, ihi + ng - 1):
-        for j in range(jlo - ng + 1, jhi + ng - 1):
-            if idir == 1:
-                S[i, j, ixmom] = U[i, j, ixmag] * \
-                    (Ux[i + 1, j, ixmag] - Ux[i, j, ixmag]) / dx
-                S[i, j, iymom] = U[i, j, iymag] * \
-                    (Ux[i + 1, j, ixmag] - Ux[i, j, ixmag]) / dx
-            else:
-                S[i, j, ixmom] = U[i, j, ixmag] * \
-                    (Ux[i, j + 1, iymag] - Ux[i, j, iymag]) / dx
-                S[i, j, iymom] = U[i, j, iymag] * \
-                    (Ux[i, j + 1, iymag] - Ux[i, j, iymag]) / dx
-
-    return S
 
 # @njit(cache=True)
 # def artificial_viscosity(ng, dx, dy,

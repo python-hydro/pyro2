@@ -13,7 +13,7 @@ limiter = 2
 
 
 [io]
-basename = advect_
+basename = loop_
 
 
 [eos]
@@ -40,7 +40,7 @@ dovis = 1
 
 
 [loop]
-#v0 = 2.235067977
-v0 = 0.0
+v0 = 2.235067977
+#v0 = 0.0
 r = 0.3
 a0 = 1.e-3

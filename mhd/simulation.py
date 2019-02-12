@@ -13,6 +13,7 @@ import mesh.patch as patch
 from simulation_null import NullSimulation, grid_setup, bc_setup
 import util.plot_tools as plot_tools
 import particles.particles as particles
+import mesh.integration as integration
 
 
 class Variables(object):
@@ -61,11 +62,16 @@ class Variables(object):
 def cons_to_prim(U, gamma, ivars, myg):
     """ convert an input vector of conserved variables to primitive variables """
 
+    smallrho = 1.e-10
+    smallp = 1.e-10
+
     q = myg.scratch_array(nvar=ivars.nq)
 
-    q[:, :, ivars.irho] = U[:, :, ivars.idens]
-    q[:, :, ivars.iu] = U[:, :, ivars.ixmom] / U[:, :, ivars.idens]
-    q[:, :, ivars.iv] = U[:, :, ivars.iymom] / U[:, :, ivars.idens]
+    U[:, :, ivars.idens] = np.maximum(U[:, :, ivars.idens], smallrho)
+
+    q[:, :, ivars.irho] = np.maximum(U[:, :, ivars.idens], smallrho)
+    q[:, :, ivars.iu] = U[:, :, ivars.ixmom] / q[:, :, ivars.irho]
+    q[:, :, ivars.iv] = U[:, :, ivars.iymom] / q[:, :, ivars.irho]
     q[:, :, ivars.ibx] = U[:, :, ivars.ixmag]
     q[:, :, ivars.iby] = U[:, :, ivars.iymag]
 
@@ -74,7 +80,8 @@ def cons_to_prim(U, gamma, ivars, myg):
                                       q[:, :, ivars.iv]**2) -
          0.5 * (q[:, :, ivars.ibx]**2 + q[:, :, ivars.iby]**2)) / q[:, :, ivars.irho]
 
-    q[:, :, ivars.ip] = eos.pres(gamma, q[:, :, ivars.irho], e)
+    q[:, :, ivars.ip] = np.maximum(
+        smallp, eos.pres(gamma, q[:, :, ivars.irho], e))
 
     if ivars.naux > 0:
         for nq, nu in zip(range(ivars.ix, ivars.ix + ivars.naux),
@@ -87,15 +94,18 @@ def cons_to_prim(U, gamma, ivars, myg):
 def prim_to_cons(q, gamma, ivars, myg):
     """ convert an input vector of primitive variables to conserved variables """
 
+    smallrho = 1.e-10
+    smallp = 1.e-10
+
     U = myg.scratch_array(nvar=ivars.nvar)
 
-    U[:, :, ivars.idens] = q[:, :, ivars.irho]
+    U[:, :, ivars.idens] = np.maximum(q[:, :, ivars.irho], smallrho)
     U[:, :, ivars.ixmom] = q[:, :, ivars.iu] * U[:, :, ivars.idens]
     U[:, :, ivars.iymom] = q[:, :, ivars.iv] * U[:, :, ivars.idens]
     U[:, :, ivars.ixmag] = q[:, :, ivars.ibx]
     U[:, :, ivars.iymag] = q[:, :, ivars.iby]
 
-    rhoe = eos.rhoe(gamma, q[:, :, ivars.ip])
+    rhoe = eos.rhoe(gamma, np.maximum(smallp, q[:, :, ivars.ip]))
 
     U[:, :, ivars.iener] = rhoe + 0.5 * q[:, :, ivars.irho] * \
         (q[:, :, ivars.iu]**2 + q[:, :, ivars.iv]**2) + \
@@ -213,6 +223,12 @@ class Simulation(NullSimulation):
 
         self.dt = cfl * min(xtmp.min(), ytmp.min(), fix_dt)
 
+    def substep(self, cc_data, fcx_data, fcy_data):
+
+        return flx.timestep(cc_data, fcx_data, fcy_data,
+                            self.rp,
+                            self.ivars, self.solid, self.tc, self.dt)
+
     def evolve(self):
         """
         Evolve the equations of mhd hydrodynamics through a
@@ -222,9 +238,21 @@ class Simulation(NullSimulation):
         tm_evolve = self.tc.timer("evolve")
         tm_evolve.begin()
 
-        flx.timestep(self.cc_data, self.fcx_data, self.fcy_data,
-                     self.rp,
-                     self.ivars, self.solid, self.tc, self.dt)
+        myd = self.cc_data
+        method = self.rp.get_param("mhd.temporal_method")
+
+        rk = integration.RKIntegratorMHD(myd.t, self.dt, method=method)
+        rk.set_start((myd, self.fcx_data, self.fcy_data))
+
+        for s in range(rk.nstages()):
+            ytmp, fxtmp, fytmp = rk.get_stage_start(s)
+            ytmp.fill_BC_all()
+            fxtmp.fill_BC_all()
+            fytmp.fill_BC_all()
+            k, kx, ky = self.substep(ytmp, fxtmp, fytmp)
+            rk.store_increment(s, k, kx, ky)
+
+        rk.compute_final_update()
 
         # update the particles
 

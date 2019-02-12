@@ -6,26 +6,29 @@ import numpy as np
 from util import msg
 
 
-def init_data(my_data, rp):
+def init_data(cc_data, fcx_data, fcy_data, rp):
     """ initialize a smooth advection problem for testing convergence """
 
     msg.bold("initializing the advect problem...")
 
     # make sure that we are passed a valid patch object
-    if not isinstance(my_data, patch.CellCenterData2d):
+    if not isinstance(cc_data, patch.CellCenterData2d):
         print("ERROR: patch invalid in advect.py")
-        print(my_data.__class__)
+        print(cc_data.__class__)
         sys.exit()
 
-    my_data.data[:,:,:] = 0.0
+    cc_data.data[:,:,:] = 0.0
 
     # get the density, momenta, and energy as separate variables
-    dens = my_data.get_var("density")
-    xmom = my_data.get_var("x-momentum")
-    ymom = my_data.get_var("y-momentum")
-    ener = my_data.get_var("energy")
-    bx = my_data.get_var("x-magnetic-field")
-    by = my_data.get_var("y-magnetic-field")
+    dens = cc_data.get_var("density")
+    xmom = cc_data.get_var("x-momentum")
+    ymom = cc_data.get_var("y-momentum")
+    ener = cc_data.get_var("energy")
+    bx = cc_data.get_var("x-magnetic-field")
+    by = cc_data.get_var("y-magnetic-field")
+
+    bx_fc = fcx_data.get_var("x-magnetic-field")
+    by_fc = fcy_data.get_var("y-magnetic-field")
 
     # initialize the components, remember, that ener here is rho*eint
     # + 0.5*rho*v**2, where eint is the specific internal energy
@@ -48,8 +51,8 @@ def init_data(my_data, rp):
     yctr = 0.5 * (ymin + ymax)
 
     # this is identical to the advection/smooth problem
-    dens[:, :] = 1.0 + np.exp(-60.0 * ((my_data.grid.x2d - xctr)**2 +
-                                       (my_data.grid.y2d - yctr)**2))
+    dens[:, :] = 1.0 + np.exp(-60.0 * ((cc_data.grid.x2d - xctr)**2 +
+                                       (cc_data.grid.y2d - yctr)**2))
 
     # velocity is diagonal
     u = 1.0
@@ -61,6 +64,10 @@ def init_data(my_data, rp):
     p = 1.0
     ener[:, :] = p / (gamma - 1.0) + 0.5 * (u** 2 + v**2) * dens + \
         0.5 * (bx**2 + by**2)
+
+    # make sure face centered-data is zero'd
+    bx_fc[:,:] = 0
+    by_fc[:,:] = 0
 
 
 def finalize():

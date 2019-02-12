@@ -8,11 +8,17 @@ def derive_primitives(myd, varnames):
     derive desired primitive variables from conserved state
     """
 
+    smallc = 1.e-10
+    smallrho = 1.e-10
+    smallp = 1.e-10
+
     # get the variables we need
     dens = myd.get_var("density")
     xmom = myd.get_var("x-momentum")
     ymom = myd.get_var("y-momentum")
     ener = myd.get_var("energy")
+
+    dens[:, :] = np.maximum(dens, smallrho)
 
     bx = myd.get_var("x-magnetic-field")
     by = myd.get_var("y-magnetic-field")
@@ -26,6 +32,8 @@ def derive_primitives(myd, varnames):
 
     gamma = myd.get_aux("gamma")
     p = eos.pres(gamma, dens, e)
+
+    p[:, :] = np.maximum(p, smallp)
 
     if isinstance(varnames, str):
         wanted = [varnames]
@@ -64,15 +72,10 @@ def derive_primitives(myd, varnames):
             cA2 = (bx**2 + by**2) / (dens * 4 * np.pi)
             cAx2 = bx**2 / (dens * 4 * np.pi)
 
-            # mask =  4. * a2 * cAx2 > (a2 + cA2)**2
-
             cf = np.sqrt(
                 0.5 * (a2 + cA2 + np.sqrt((a2 + cA2)**2 - 4. * a2 * cAx2)))
             cs = np.sqrt(
                 0.5 * (a2 + cA2 - np.sqrt((a2 + cA2)**2 - 4. * a2 * cAx2)))
-
-            # cf[mask] = np.sqrt(a2[mask])
-            # cs[mask] = np.sqrt(a2[mask])
 
             derived_vars.append(cf)
             derived_vars.append(cs)
@@ -84,15 +87,10 @@ def derive_primitives(myd, varnames):
             cA2 = (bx**2 + by**2) / (dens * 4 * np.pi)
             cAy2 = by**2 / (dens * 4 * np.pi)
 
-            # mask = 4. * a2 * cAy2 > (a2 + cA2)**2
-
             cf = np.sqrt(
                 0.5 * (a2 + cA2 + np.sqrt((a2 + cA2)**2 - 4. * a2 * cAy2)))
             cs = np.sqrt(
                 0.5 * (a2 + cA2 - np.sqrt((a2 + cA2)**2 - 4. * a2 * cAy2)))
-
-            # cf[mask] = np.sqrt(a2[mask])
-            # cs[mask] = np.sqrt(a2[mask])
 
             derived_vars.append(cf)
             derived_vars.append(cs)

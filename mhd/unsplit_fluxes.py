@@ -167,33 +167,27 @@ def timestep(cc_data, fcx_data, fcy_data, rp, ivars, solid, tc, dt):
 
     gamma = rp.get_param("eos.gamma")
 
-    buf = 2
-
     # =========================================================================
     # compute the primitive variables
     # =========================================================================
     # Q = (rho, u, v, p, {X})
     U = cc_data.data
 
-    U_old = myg.scratch_array(nvar=ivars.nvar)
-    U_old[:, :, :] = U
-
     # get face-centered magnetic field components
     Bx = fcx_data.get_var("x-magnetic-field")
     By = fcy_data.get_var("y-magnetic-field")
 
-    Bx_old = np.zeros_like(Bx.v())
-    By_old = np.zeros_like(By.v())
-
-    Bx_old[:, :] = Bx.v()
-    By_old[:, :] = By.v()
+    # Bx_old = myg.fc_scratch_array(idir=1)
+    # By_old = myg.fc_scratch_array(idir=2)
+    #
+    # Bx_old.v(buf=myg.ng)[:, :] = Bx.v(buf=myg.ng)
+    # By_old.v(buf=myg.ng)[:, :] = By.v(buf=myg.ng)
 
     ############################################################################
     # STEP 1. Using a Riemann solver, construct first order upwind fluxes.
     ############################################################################
-
+    #
     riemannFunc = ifc.riemann_adiabatic
-    # riemannFunc = ifc.riemann_hllc
 
     U_xl = myg.scratch_array(nvar=ivars.nvar)
     U_xr = myg.scratch_array(nvar=ivars.nvar)
@@ -204,45 +198,46 @@ def timestep(cc_data, fcx_data, fcy_data, rp, ivars, solid, tc, dt):
     # =========================================================================
     # x-direction
     # =========================================================================
-    for n in range(ivars.nvar):
-        U_xl.v(buf=3, n=n)[:, :] = U.ip(-1, buf=3, n=n)
-    U_xl[:, :, ivars.ixmag] = Bx[:-1, :]
-    U_xr[:, :, :] = U
-    U_xr[:, :, ivars.ixmag] = Bx[:-1, :]
-
-    _fx = riemannFunc(1, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
-                      ivars.ixmag, ivars.iymag, ivars.irhox, ivars.naux,
-                      solid.xl, solid.xr,
-                      gamma, U_xl, U_xr, Bx, By)
+    buf = 3
+    # for n in range(ivars.nvar):
+    #     U_xl.v(buf=buf, n=n)[:, :] = U.ip(-1, buf=buf, n=n)
+    # U_xl[:, :, ivars.ixmag] = Bx[:-1, :]
+    # U_xr[:, :, :] = U
+    # U_xr[:, :, ivars.ixmag] = Bx[:-1, :]
+    #
+    # _fx = riemannFunc(1, myg.ng,
+    #                   ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
+    #                   ivars.ixmag, ivars.iymag, ivars.irhox, ivars.naux,
+    #                   solid.xl, solid.xr,
+    #                   gamma, U_xl, U_xr, Bx, By)
 
     # =========================================================================
     # y-direction
     # =========================================================================
-    for n in range(ivars.nvar):
-        U_yl.v(buf=3, n=n)[:, :] = U.jp(-1, buf=3, n=n)
-    U_yl[:, :, ivars.iymag] = By[:, :-1]
-    U_yr[:, :, :] = U
-    U_yr[:, :, ivars.iymag] = By[:, :-1]
-
-    _fy = riemannFunc(2, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
-                      ivars.ixmag, ivars.iymag, ivars.irhox, ivars.naux,
-                      solid.yl, solid.yr,
-                      gamma, U_yl, U_yr, Bx, By)
-
-    F_x = ai.ArrayIndexer(d=_fx, grid=myg)
-    F_y = ai.ArrayIndexer(d=_fy, grid=myg)
+    # for n in range(ivars.nvar):
+    #     U_yl.v(buf=buf, n=n)[:, :] = U.jp(-1, buf=buf, n=n)
+    # U_yl[:, :, ivars.iymag] = By[:, :-1]
+    # U_yr[:, :, :] = U
+    # U_yr[:, :, ivars.iymag] = By[:, :-1]
+    #
+    # _fy = riemannFunc(2, myg.ng,
+    #                   ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
+    #                   ivars.ixmag, ivars.iymag, ivars.irhox, ivars.naux,
+    #                   solid.yl, solid.yr,
+    #                   gamma, U_yl, U_yr, Bx, By)
+    #
+    # F_x = ai.ArrayIndexer(d=_fx, grid=myg)
+    # F_y = ai.ArrayIndexer(d=_fy, grid=myg)
 
     ############################################################################
     # STEP 2. Calculate the CT electric fields at cell corners
     ############################################################################
 
-    _emf = ifc.emf(myg.ng, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
-                   ivars.ixmag, ivars.iymag, ivars.irhox,
-                   myg.dx, myg.dy, U, F_x, F_y)
-
-    emf = ai.ArrayIndexer(d=_emf, grid=myg)
+    # _emf = ifc.emf(myg.ng, ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
+    #                ivars.ixmag, ivars.iymag, ivars.irhox,
+    #                myg.dx, myg.dy, U, F_x, F_y)
+    #
+    # emf = ai.ArrayIndexer(d=_emf, grid=myg)
 
     ############################################################################
     # STEP 3. Update the cell-centered hydrodynamical variables for one half
@@ -250,31 +245,34 @@ def timestep(cc_data, fcx_data, fcy_data, rp, ivars, solid, tc, dt):
     # face-centered components of the magnetic field for one half time step
     # using CT.
     ############################################################################
+    #
+    # dtdx = dt / myg.dx
+    # dtdy = dt / myg.dy
+    #
+    # U_half = myg.scratch_array(nvar=ivars.nvar)
+    #
+    # for n in range(ivars.nvar):
+    #
+    #     if n == ivars.ixmag or n == ivars.iymag:
+    #         continue
+    #
+    #     U_half.v(buf=buf, n=n)[:, :] = U.v(buf=buf, n=n) - \
+    #         0.5 * dtdx * (F_x.ip(1, buf=buf, n=n) -
+    #                       F_x.v(buf=buf, n=n)) - \
+    #         0.5 * dtdy * (F_y.jp(1, buf=buf, n=n) - F_y.v(buf=buf, n=n))
 
-    dtdx = dt / myg.dx
-    dtdy = dt / myg.dy
-
-    for n in range(ivars.nvar):
-
-        if n == ivars.ixmag or n == ivars.iymag:
-            continue
-
-        U.v(buf=buf, n=n)[:, :] += -0.5 * dtdx * (F_x.ip(1, buf=buf, n=n) -
-                                                  F_x.v(buf=buf, n=n)) - \
-            0.5 * dtdy * (F_y.jp(1, buf=buf, n=n) - F_y.v(buf=buf, n=n))
-
-    Bx.v(buf=buf)[:-1, :] -= 0.5 * dtdy * (emf.jp(1, buf=buf) - emf.v(buf=buf))
-    By.v(buf=buf)[:, :-1] += 0.5 * dtdx * (emf.ip(1, buf=buf) - emf.v(buf=buf))
+    # Bx.v(buf=buf)[:-1, :] -= 0.5 * dtdy * (emf.jp(1, buf=buf) - emf.v(buf=buf))
+    # By.v(buf=buf)[:, :-1] += 0.5 * dtdx * (emf.ip(1, buf=buf) - emf.v(buf=buf))
 
     ############################################################################
     # STEP 4. Compute the cell-centered magnetic field at the half time step
     # from the average of the face-centered field computed in step 3.
     ############################################################################
 
-    U.v(buf=buf, n=ivars.ixmag)[:, :] = 0.5 * \
-        (Bx.ip(1, buf=buf)[:-1, :] + Bx.v(buf=buf)[:-1, :])
-    U.v(buf=buf, n=ivars.iymag)[:, :] = 0.5 * \
-        (By.jp(1, buf=buf)[:, :-1] + By.v(buf=buf)[:, :-1])
+    # U_half.v(buf=buf, n=ivars.ixmag)[:, :] = 0.5 * \
+    #     (Bx.ip(1, buf=buf)[:-1, :] + Bx.v(buf=buf)[:-1, :])
+    # U_half.v(buf=buf, n=ivars.iymag)[:, :] = 0.5 * \
+    #     (By.jp(1, buf=buf)[:, :-1] + By.v(buf=buf)[:, :-1])
 
     ############################################################################
     # STEP 5. Compute the left- and right-state quantities at the half time step
@@ -282,6 +280,7 @@ def timestep(cc_data, fcx_data, fcy_data, rp, ivars, solid, tc, dt):
     ############################################################################
 
     # calculate primitive variables at half time step from updated U
+    # q = mhd.cons_to_prim(U_half, gamma, ivars, myg)
     q = mhd.cons_to_prim(U, gamma, ivars, myg)
 
     # =========================================================================
@@ -388,22 +387,36 @@ def timestep(cc_data, fcx_data, fcy_data, rp, ivars, solid, tc, dt):
     # full timestep using CT and the emfs from step 7.
     ############################################################################
 
+    k = myg.scratch_array(nvar=ivars.nvar)
+
     for n in range(ivars.nvar):
 
         if n == ivars.ixmag or n == ivars.iymag:
             continue
 
-        U.v(n=n)[:, :] = U_old.v(n=n) - \
-            dtdx * (F_x.ip(1, n=n) - F_x.v(n=n)) - \
-            dtdy * (F_y.jp(1, n=n) - F_y.v(n=n))
+        # U.v(n=n)[:, :] += -dtdx * (F_x.ip(1, n=n) - F_x.v(n=n)) - \
+        #     dtdy * (F_y.jp(1, n=n) - F_y.v(n=n))
+        k.v(n=n)[:, :] = -(F_x.ip(1, n=n) - F_x.v(n=n)) / myg.dx - \
+            (F_y.jp(1, n=n) - F_y.v(n=n)) / myg.dy
 
-    Bx.v()[:-1, :] = Bx_old[:-1, :] - dtdy * (emf.jp(1) - emf.v())
-    By.v()[:, :-1] = By_old[:, :-1] + dtdx * (emf.ip(1) - emf.v())
+    # Bx.v()[:-1, :] = Bx_old[:-1, :] - dtdy * (emf.jp(1) - emf.v())
+    # By.v()[:, :-1] = By_old[:, :-1] + dtdx * (emf.ip(1) - emf.v())
 
     ############################################################################
     # STEP 9. Compute the cell-centered magnetic field from the updated
     # face-centered values.
     ############################################################################
 
-    U.v(n=ivars.ixmag)[:, :] = 0.5 * (Bx.ip(1)[:-1, :] + Bx.v()[:-1, :])
-    U.v(n=ivars.iymag)[:, :] = 0.5 * (By.jp(1)[:, :-1] + By.v()[:, :-1])
+    # U.v(n=ivars.ixmag)[:, :] = 0.5 * (Bx.ip(1)[:-1, :] + Bx.v()[:-1, :])
+    # U.v(n=ivars.iymag)[:, :] = 0.5 * (By.jp(1)[:, :-1] + By.v()[:, :-1])
+
+    # k.v(n=ivars.ixmag)[:, :] = 0.5 * (Bx.ip(1)[:-1, :] + Bx.v()[:-1, :]) - U.v(n=ivars.ixmag)[:, :]
+    # k.v(n=ivars.iymag)[:, :] = 0.5 * (By.jp(1)[:, :-1] + By.v()[:, :-1]) - U.v(n=ivars.iymag)[:, :]
+
+    kx = myg.fc_scratch_array(idir=1)
+    ky = myg.fc_scratch_array(idir=2)
+
+    kx.v()[:-1,:] = -(emf.jp(1) - emf.v()) / myg.dy
+    ky.v()[:,:-1] = (emf.ip(1) - emf.v()) / myg.dx
+
+    return k, kx, ky

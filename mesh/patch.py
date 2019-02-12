@@ -157,6 +157,26 @@ class Grid2d(object):
             _tmp = np.zeros((self.qx, self.qy, nvar), dtype=np.float64)
         return ai.ArrayIndexer(d=_tmp, grid=self)
 
+    def fc_scratch_array(self, idir, nvar=1):
+        """
+        return a standard numpy array dimensioned to have the size
+        and number of ghostcells as the parent grid
+        """
+
+        if idir == 1:
+            qx = self.qx + 1
+            qy = self.qy
+        else:
+            qx = self.qx
+            qy = self.qy+1
+
+        if nvar == 1:
+            _tmp = np.zeros((qx, qy), dtype=np.float64)
+        else:
+            _tmp = np.zeros((qx, qy, nvar), dtype=np.float64)
+
+        return ai.ArrayIndexerFC(d=_tmp, idir=idir, grid=self)
+
     def coarse_like(self, N):
         """
         return a new grid object coarsened by a factor n, but with
