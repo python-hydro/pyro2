@@ -114,13 +114,13 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
     dtdy2 = 0.5 * dt / myg.dy
 
     for index, vel in np.ndenumerate(u.v(buf=1)):
-        F_x.v(buf=1)[index] = vel * (a_x.v(buf=1)[index] - dtdy2
-               * (F_yt.ip_jp(shift_x.v(buf=1)[index], 1, buf=1)[index]
-               - F_yt.ip(shift_x.v(buf=1)[index], buf=1)[index]))
+        F_x.v(buf=1)[index] = vel * (a_x.v(buf=1)[index] - dtdy2 *
+                (F_yt.ip_jp(shift_x.v(buf=1)[index], 1, buf=1)[index] -
+                F_yt.ip(shift_x.v(buf=1)[index], buf=1)[index]))
 
     for index, vel in np.ndenumerate(v.v(buf=1)):
-        F_y.v(buf=1)[index] = vel * (a_y.v(buf=1)[index] - dtdx2
-               * (F_xt.ip_jp(1, shift_y.v(buf=1)[index], buf=1)[index]
-               - F_xt.jp(shift_y.v(buf=1)[index], buf=1)[index]))
+        F_y.v(buf=1)[index] = vel * (a_y.v(buf=1)[index] - dtdx2 *
+                (F_xt.ip_jp(1, shift_y.v(buf=1)[index], buf=1)[index] -
+                F_xt.jp(shift_y.v(buf=1)[index], buf=1)[index]))
 
     return F_x, F_y
