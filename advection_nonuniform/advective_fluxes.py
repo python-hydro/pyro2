@@ -60,12 +60,12 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
     u = my_data.get_var("x-velocity")
     v = my_data.get_var("y-velocity")
 
-    cx = u*dt/myg.dx
-    cy = v*dt/myg.dy
+    cx = u * dt / myg.dx
+    cy = v * dt / myg.dy
 
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # monotonized central differences
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
 
     limiter = rp.get_param("advection.limiter")
 
@@ -102,8 +102,8 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
 
     # compute the transverse flux differences.  The flux is just (u a)
     # HOTF
-    F_xt = u*a_x
-    F_yt = v*a_y
+    F_xt = u * a_x
+    F_yt = v * a_y
 
     F_x = myg.scratch_array()
     F_y = myg.scratch_array()
