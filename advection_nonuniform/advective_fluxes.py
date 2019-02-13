@@ -110,8 +110,8 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
 
     # the zone where we grab the transverse flux derivative from
     # depends on the sign of the advective velocity
-    dtdx2 = 0.5*dt/myg.dx
-    dtdy2 = 0.5*dt/myg.dy
+    dtdx2 = 0.5 * dt / myg.dx
+    dtdy2 = 0.5 * dt / myg.dy
 
     for index, vel in np.ndenumerate(u.v(buf=1)):
         F_x.v(buf=1)[index] = vel * (a_x.v(buf=1)[index] - dtdy2
@@ -124,4 +124,3 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
                - F_xt.jp(shift_y.v(buf=1)[index], buf=1)[index]))
 
     return F_x, F_y
-
