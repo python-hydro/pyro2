@@ -18,12 +18,16 @@ authors:
 - name: Ian Hawke
   orcid: 0000-0003-4805-0309
   affiliation: 2
-
+- name: Taher Chegini
+  orcid: 0000-0002-5430-6000
+  affiliation: 3
 affiliations:
 - name: Department of Physics and Astronomy, Stony Brook University
   index: 1
 - name: University of Southampton
   index: 2
+- name: University of Houston
+  index: 3
 
 date: 10 August 2018
 
