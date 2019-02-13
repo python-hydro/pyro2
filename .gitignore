@@ -16,3 +16,5 @@ inputs.auto
 !/*/tests/*.h5
 
 .cache
+
+.pytest_cache/

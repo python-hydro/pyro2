@@ -1,6 +1,0 @@
-{
-  "compressible/tests/test_compressible.py": true,
-  "compressible/tests/test_eos.py": true,
-  "compressible_rk/tests/test_compressible_rk.py": true,
-  "swe/tests/test_swe.py": true
-}
