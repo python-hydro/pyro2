@@ -2,9 +2,9 @@
 
 import numpy as np
 
-import advection_fv4.interface_f as interface_f
+import advection_fv4.interface as interface
 import compressible as comp
-import compressible.interface_f as cf
+import compressible.interface as cf
 import mesh.reconstruction as reconstruction
 import mesh.array_indexer as ai
 
@@ -102,7 +102,7 @@ def fluxes(myd, rp, ivars, solid, tc):
 
         else:
             for n in range(ivars.nq):
-                q_l[:, :, n], q_r[:, :, n] = interface_f.states(q_avg[:, :, n], myg.qx, myg.qy, myg.ng, idir)
+                q_l[:, :, n], q_r[:, :, n] = interface.states(q_avg[:, :, n], myg.ng, idir)
 
             # apply flattening
             for n in range(ivars.nq):
@@ -117,8 +117,8 @@ def fluxes(myd, rp, ivars, solid, tc):
                     q_r.v(n=n, buf=2)[:, :] = xi.v(buf=2)*q_r.v(n=n, buf=2) + \
                         (1.0 - xi.v(buf=2))*q_avg.v(n=n, buf=2)
 
-        _q = cf.riemann_prim(idir, myg.qx, myg.qy, myg.ng,
-                             ivars.nq, ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix, ivars.naux,
+        _q = cf.riemann_prim(idir, myg.ng,
+                             ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix, ivars.naux,
                              0, 0,
                              gamma, q_l, q_r)
 

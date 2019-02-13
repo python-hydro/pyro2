@@ -36,6 +36,7 @@ extensions = ['sphinx.ext.autodoc',
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
+    'sphinxcontrib.bibtex',
     'sphinx.ext.autosummary',
     'nbsphinx',
     'numpydoc',
@@ -61,7 +62,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'pyro'
-copyright = '2018, pyro development tem'
+copyright = '2018, pyro development team'
 author = 'pyro development team'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -185,6 +186,3 @@ texinfo_documents = [
      author, 'pyro', 'One line description of project.',
      'Miscellaneous'),
 ]
-
-
-

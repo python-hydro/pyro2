@@ -24,5 +24,3 @@ compressible\_react\.problems\.rt module
     :members:
     :undoc-members:
     :show-inheritance:
-
-

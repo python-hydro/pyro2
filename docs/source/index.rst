@@ -37,8 +37,8 @@ pyro: a python hydro code
    diffusion_basics
    incompressible_basics
    lowmach_basics
-   particles_basics
    swe_basics
+   particles_basics
 
 .. toctree::
    :maxdepth: 1
@@ -56,9 +56,14 @@ pyro: a python hydro code
 
 .. toctree::
    :maxdepth: 1
-   :caption: Reference
+   :caption: Software Reference
 
    API <modules>
+
+.. toctree::
+   :caption: Bibliography
+
+   references
 
 
 Indices and tables

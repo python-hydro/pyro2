@@ -31,5 +31,3 @@ compressible\_fv4\.simulation module
     :members:
     :undoc-members:
     :show-inheritance:
-
-

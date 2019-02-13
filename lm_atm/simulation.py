@@ -5,7 +5,7 @@ import importlib
 import numpy as np
 import matplotlib.pyplot as plt
 
-import lm_atm.LM_atm_interface_f as lm_interface_f
+import lm_atm.LM_atm_interface as lm_interface
 import mesh.reconstruction as reconstruction
 import mesh.boundary as bnd
 import mesh.patch as patch
@@ -305,9 +305,9 @@ class Simulation(NullSimulation):
 
         myg = self.cc_data.grid
 
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # create the limited slopes of rho, u and v (in both directions)
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         limiter = self.rp.get_param("lm-atmosphere.limiter")
 
         ldelta_rx = reconstruction.limit(rho, myg, 1, limiter)
@@ -318,9 +318,9 @@ class Simulation(NullSimulation):
         ldelta_uy = reconstruction.limit(u, myg, 2, limiter)
         ldelta_vy = reconstruction.limit(v, myg, 2, limiter)
 
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # get the advective velocities
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         """
         the advective velocities are the normal velocity through each cell
@@ -362,8 +362,7 @@ class Simulation(NullSimulation):
         source.v()[:, :] = rhoprime.v()*g/rho.v()
         self.aux_data.fill_BC("source_y")
 
-        _um, _vm = lm_interface_f.mac_vels(myg.qx, myg.qy, myg.ng,
-                                           myg.dx, myg.dy, self.dt,
+        _um, _vm = lm_interface.mac_vels(myg.ng, myg.dx, myg.dy, self.dt,
                                            u, v,
                                            ldelta_ux, ldelta_vx,
                                            ldelta_uy, ldelta_vy,
@@ -373,10 +372,10 @@ class Simulation(NullSimulation):
         u_MAC = ai.ArrayIndexer(d=_um, grid=myg)
         v_MAC = ai.ArrayIndexer(d=_vm, grid=myg)
 
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # do a MAC projection to make the advective velocities divergence
         # free
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         # we will solve D (beta_0^2/rho) G phi = D (beta_0 U^MAC), where
         # phi is cell centered, and U^MAC is the MAC-type staggered
@@ -444,11 +443,10 @@ class Simulation(NullSimulation):
         v_MAC.v(buf=b)[:, :] -= \
                 coeff_y.v(buf=b)*(phi_MAC.v(buf=b) - phi_MAC.jp(-1, buf=b))/myg.dy
 
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # predict rho to the edges and do its conservative update
-        #---------------------------------------------------------------------
-        _rx, _ry = lm_interface_f.rho_states(myg.qx, myg.qy, myg.ng,
-                                             myg.dx, myg.dy, self.dt,
+        # ---------------------------------------------------------------------
+        _rx, _ry = lm_interface.rho_states(myg.ng, myg.dx, myg.dy, self.dt,
                                              rho, u_MAC, v_MAC,
                                              ldelta_rx, ldelta_ry)
 
@@ -470,10 +468,10 @@ class Simulation(NullSimulation):
         gamma = self.rp.get_param("eos.gamma")
         eint.v()[:, :] = self.base["p0"].v2d()/(gamma - 1.0)/rho.v()
 
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # recompute the interface states, using the advective velocity
         # from above
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         if self.verbose > 0:
             print("  making u, v edge states")
 
@@ -483,8 +481,7 @@ class Simulation(NullSimulation):
         self.aux_data.fill_BC("coeff")
 
         _ux, _vx, _uy, _vy = \
-               lm_interface_f.states(myg.qx, myg.qy, myg.ng,
-                                     myg.dx, myg.dy, self.dt,
+               lm_interface.states(myg.ng, myg.dx, myg.dy, self.dt,
                                      u, v,
                                      ldelta_ux, ldelta_vx,
                                      ldelta_uy, ldelta_vy,
@@ -497,9 +494,9 @@ class Simulation(NullSimulation):
         u_yint = ai.ArrayIndexer(d=_uy, grid=myg)
         v_yint = ai.ArrayIndexer(d=_vy, grid=myg)
 
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # update U to get the provisional velocity field
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         if self.verbose > 0:
             print("  doing provisional update of u, v")
 
@@ -543,9 +540,9 @@ class Simulation(NullSimulation):
             print("min/max u   = {}, {}".format(self.cc_data.min("x-velocity"), self.cc_data.max("x-velocity")))
             print("min/max v   = {}, {}".format(self.cc_data.min("y-velocity"), self.cc_data.max("y-velocity")))
 
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # project the final velocity
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         # now we solve L phi = D (U* /dt)
         if self.verbose > 0:
@@ -626,7 +623,7 @@ class Simulation(NullSimulation):
         """
         plt.clf()
 
-        #plt.rc("font", size=10)
+        # plt.rc("font", size=10)
 
         rho = self.cc_data.get_var("density")
         rho0 = self.base["rho0"]

@@ -14,21 +14,9 @@
 
 if [ "$1" == "clean" ]; then
 
-    rm -rf mesh/*.so
-    rm -rf incompressible/*.so
-    rm -rf compressible/*.so
-    rm -rf lm_atm/*.so
-    find . -name "*.pyc" -exec rm -f {} \;
     find . -type d -name "__pycache__" -exec rm -rf {} \;
-    find . -type d -name "build" -exec rm -rf {} \;
-
 else
-    if [ "$1" == "debug" ]; then
-	FFLAGS="-fbounds-check -fbacktrace -Wuninitialized -Wunused -ffpe-trap=invalid -finit-real=snan"
-    else
-	FFLAGS="-C"
-    fi
 
-    ${PYTHON} setup.py config_fc --f90flags "${FFLAGS}" build_ext
+    ${PYTHON} setup.py build
 
 fi

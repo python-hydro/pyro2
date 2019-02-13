@@ -16,6 +16,14 @@ Subpackages
 Submodules
 ----------
 
+incompressible\.incomp\_interface module
+----------------------------------------
+
+.. automodule:: incompressible.incomp_interface
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 incompressible\.simulation module
 ---------------------------------
 
@@ -23,5 +31,3 @@ incompressible\.simulation module
     :members:
     :undoc-members:
     :show-inheritance:
-
-

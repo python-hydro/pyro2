@@ -13,35 +13,24 @@ The following python packages are required:
 
 * ``numpy``
 * ``matplotlib``
-* ``f2py`` (part of NumPy)
+* ``numba``
 * ``pytest`` (for unit tests)
-
-Additionally, you will need ``gfortran`` installed on your computer, for
-``f2py`` to be able to compile the code.
 
 The following steps are needed before running pyro:
 
 * add ``pyro/`` to your ``PYTHONPATH`` environment variable.  For
   the bash shell, this is done as:
 
-.. code-block:: none
+    .. code-block:: none
 
-   export PYTHONPATH="/path/to/pyro/:${PYTHONPATH}"
-
-* build the Fortran modules, by running the ``mk.sh`` script. It
-  should be sufficient to just do:
-
-.. code-block:: none
-
-   ./mk.sh
+       export PYTHONPATH="/path/to/pyro/:${PYTHONPATH}"
 
 * define the environment variable ``PYRO_HOME`` to point to
   the ``pyro2/`` directory
 
-.. code-block:: none
+    .. code-block:: none
 
-   export PYRO_HOME="/path/to/pyro/"
-
+       export PYRO_HOME="/path/to/pyro/"
 
 Quick test
 ----------

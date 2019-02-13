@@ -224,8 +224,19 @@ class Pyro(object):
             s += "Simulation step number = {}\n".format(self.sim.n)
         s += "\nRuntime Parameters"
         s += "\n------------------\n"
-        s += str(self.sim.rp)
+        s += str(self.rp)
         return s
+
+    def get_var(self, v):
+        """
+        Alias for cc_data's get_var routine, returns the cell-centered data
+        given the variable name v.
+        """
+
+        if not self.is_initialized:
+            msg.fail("ERROR: problem has not been initialized")
+
+        return self.sim.cc_data.get_var(v)
 
 
 class PyroBenchmark(Pyro):
@@ -256,9 +267,9 @@ class PyroBenchmark(Pyro):
         self.reset_bench_on_fail = reset_bench_on_fail
         self.make_bench = make_bench
 
-    def run_sim(self):
+    def run_sim(self, rtol):
         """
-        Evolve entire simulation and benchmark at the end.
+        Evolve entire simulation and compare to benchmark at the end.
         """
 
         super().run_sim()
@@ -266,7 +277,7 @@ class PyroBenchmark(Pyro):
         result = 0
 
         if self.comp_bench:
-            result = self.compare_to_benchmark()
+            result = self.compare_to_benchmark(rtol)
 
         if self.make_bench or (result != 0 and self.reset_bench_on_fail):
             self.store_as_benchmark()
@@ -276,7 +287,7 @@ class PyroBenchmark(Pyro):
         else:
             return self.sim
 
-    def compare_to_benchmark(self):
+    def compare_to_benchmark(self, rtol):
         """ Are we comparing to a benchmark? """
 
         basename = self.rp.get_param("io.basename")
@@ -286,13 +297,13 @@ class PyroBenchmark(Pyro):
         try:
             sim_bench = io.read(compare_file)
         except IOError:
-            msg.warning("ERROR openning compare file")
-            return "ERROR openning compare file"
+            msg.warning("ERROR opening compare file")
+            return "ERROR opening compare file"
 
-        result = compare.compare(self.sim.cc_data, sim_bench.cc_data)
+        result = compare.compare(self.sim.cc_data, sim_bench.cc_data, rtol)
 
         if result == 0:
-            msg.success("results match benchmark\n")
+            msg.success("results match benchmark to within relative tolerance of {}\n".format(rtol))
         else:
             msg.warning("ERROR: " + compare.errors[result] + "\n")
 

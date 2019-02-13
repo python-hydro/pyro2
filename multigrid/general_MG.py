@@ -1,8 +1,10 @@
-"""
+r"""
 This multigrid solver is build from multigrid/MG.py
-and implements a more general solver for an equation of the form::
+and implements a more general solver for an equation of the form
 
-   alpha phi + div { beta grad phi } + gamma . grad phi = f
+.. math::
+
+   \alpha \phi + \nabla\cdot { \beta \nabla \phi } + \gamma \cdot \nabla \phi = f
 
 where alpha, beta, and gamma are defined on the same grid as phi.
 These should all come in as cell-centered quantities.  The solver
@@ -24,18 +26,18 @@ np.set_printoptions(precision=3, linewidth=128)
 
 
 class GeneralMG2d(MG.CellCenterMG2d):
-    """
+    r"""
     this is a multigrid solver that supports our general elliptic
     equation.
 
-    we need to accept a coefficient CellCenterData2d object with
-    fields defined for alpha, beta, gamma_x, and gamma_y on the
+    we need to accept a coefficient ``CellCenterData2d`` object with
+    fields defined for ``alpha``, ``beta``, ``gamma_x``, and ``gamma_y`` on the
     fine level.
 
     We then restrict this data through the MG hierarchy (and
     average beta to the edges).
 
-    we need a new compute_residual() and smooth() function, that
+    we need a ``new compute_residual()`` and ``smooth()`` function, that
     understands these coeffs.
     """
 

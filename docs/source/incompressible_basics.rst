@@ -16,6 +16,10 @@ Here we implement a cell-centered approximate projection method for
 solving the incompressible equations. At the moment, only periodic BCs
 are supported.
 
+The main parameters that affect this solver are:
+
+.. include:: incompressible_defaults.inc
+
 Examples
 --------
 

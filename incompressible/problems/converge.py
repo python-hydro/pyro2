@@ -1,15 +1,22 @@
-"""
+r"""
 Initialize a smooth incompressible convergence test.  Here, the
 velocities are initialized as
 
-u(x,y) = 1 - 2 cos(2 pi x) sin(2 pi y)
-v(x,y) = 1 + 2 sin(2 pi x) cos(2 pi y)
+.. math::
+
+    u(x,y) = 1 - 2 \cos(2 \pi x) \sin(2 \pi y)
+
+    v(x,y) = 1 + 2 \sin(2 \pi x) \cos(2 \pi y)
 
 and the exact solution at some later time t is then
 
-u(x,y,t) = 1 - 2 cos(2 pi (x - t)) sin(2 pi (y - t))
-v(x,y,t) = 1 + 2 sin(2 pi (x - t)) cos(2 pi (y - t))
-p(x,y,t) = -cos(4 pi (x - t)) - cos(4 pi (y - t))
+.. math::
+
+    u(x,y,t) = 1 - 2 \cos(2 \pi (x - t)) \sin(2 \pi (y - t))
+
+    v(x,y,t) = 1 + 2 \sin(2 \pi (x - t)) \cos(2 \pi (y - t))
+
+    p(x,y,t) = -\cos(4 \pi (x - t)) - \cos(4 \pi (y - t))
 
 The numerical solution can be compared to the exact solution to
 measure the convergence rate of the algorithm.

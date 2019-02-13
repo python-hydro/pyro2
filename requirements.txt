@@ -1,11 +1,14 @@
 numpy>=1.13.3
 matplotlib>=2.0.0
 h5py>=2.7
+scipy>=0.16
 travis-sphinx
 sphinx_rtd_theme
 nbsphinx>=0.3.1
-pytest>=3.2.1
+pytest>=3.6
 nbval>=0.9.0
-pytest-cov>=2.5.1
+pytest-cov>=2.6.0
 flake8>=3.5.0
-
+numba>=0.40.0
+numpydoc
+sphinxcontrib_bibtex

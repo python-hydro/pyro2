@@ -1,12 +1,11 @@
 Design ideas
 ============
 
-pyro is written primarily in python (by default, we expect python 3),
-with a few low-level routines written in Fortran for performance. The
+pyro is written entirely in python (by default, we expect python 3),
+with a few low-level routines compiled *just-in-time* by `numba` for performance. The
 ``numpy`` package is used for representing arrays throughout the
 python code and the ``matplotlib`` library is used for
-visualization. We use ``f2py`` (part of NumPy) to interface with some
-Fortran code. Finally, ``pytest`` is used for unit testing of some
+visualization. Finally, ``pytest`` is used for unit testing of some
 components.
 
 All solvers are written for a 2-d grid.  This gives a good balance
@@ -40,21 +39,50 @@ The overall structure is:
   * ``problems/``: The problem setups for the advection solver.
   * ``tests/``: Reference advection output files for comparison and regression testing.
 
+* ``advection_fv4/``: The fourth-order accurate finite-volume advection
+  solver that uses RK4 time integration.
+
+  * ``problems/``: The problem setups for the fourth-order advection solver.
+  * ``tests/``: Reference advection output files for comparison and regression testing.
+
+* ``advection_nonuniform/``: The solver for advection with a non-uniform velocity field.
+
+  * ``problems/``: The problem setups for the non-uniform advection solver.
+  * ``tests/``: Reference advection output files for comparison and regression testing.
+
 * ``advection_rk/``: The linear advection equation solver using the
   method-of-lines approach.
 
   * ``problems/``: This is a symbolic link to the advection/problems/ directory.
   * ``tests/``: Reference advection output files for comparison and regression testing.
 
+* ``advection_weno/``: The method-of-lines WENO solver for linear
+  advection.
+
+  * ``problems/``: This is a symbolic link to the advection/problems/ directory.
+
 * ``analysis/``: Various analysis scripts for processing pyro output files.
 
-* ``compressible/``: The compressible hydrodynamics solver using the
+* ``compressible/``: The fourth-order accurate finite-volume compressible
+  hydro solver that uses RK4 time integration.  This is built from the
+  method of McCourquodale and Colella (2011).
+
+  * ``problems/``: The problem setups for the fourth-order compressible hydrodynamics solver.
+  * ``tests/``: Reference compressible hydro output for regression testing.
+
+* ``compressible_fv4/``: The compressible hydrodynamics solver using the
   CTU method. All source files specific to this solver live here.
 
-  * ``problems/``: The problem setups for the compressible hydrodynamics solver.
+  * ``problems/``: This is a symbolic link to the compressible/problems/ directory.
   * ``tests/``: Reference compressible hydro output for regression testing.
 
 * ``compressible_rk/``: The compressible hydrodynamics solver using method of lines integration.
+
+  * ``problems/``: This is a symbolic link to the compressible/problems/ directory.
+  * ``tests/``: Reference compressible hydro output for regression testing.
+
+* ``compressible_sdc/``: The fourth-order compressible solver,
+  using spectral-deferred correction (SDC) for the time integration.
 
   * ``problems/``: This is a symbolic link to the compressible/problems/ directory.
   * ``tests/``: Reference compressible hydro output for regression testing.
@@ -85,6 +113,10 @@ The overall structure is:
   * ``problems/``: The problem setups for when the multigrid solver is used in a stand-alone fashion.
   * ``tests/``: Reference multigrid solver solutions (from when the multigrid solver is used stand-alone) for regression testing.
 
+* ``particles/``: The solver for Lagrangian tracer particles.
+
+  * ``tests/``: Particle solver testing.
+
 * ``swe/``: The shallow water solver.
 
   * ``problems/``: The problem setups for the shallow water solver.
@@ -95,24 +127,23 @@ The overall structure is:
   modes.
 
 
-Fortran
--------
+Numba
+-----
 
-Fortran is used to speed up some critical portions of the code, and in
-many cases, provides more clarity than trying to write optimized
-python code using array operations in numpy. The Fortran code
-seemlessly integrates into python using f2py.
+``numba`` is used to speed up some critical portions of the code. Numba is a *just-in-time compiler* for python. When a call is first
+made to a function decorated with Numba's ``@njit`` decorator, it is compiled to
+machine code 'just-in-time' for it to be executed. Once compiled, it can then
+run at (near-to) native machine code speed.
 
-Wherever Fortran is used, we enforce the following design rule: the
-Fortran functions must be completely self-contained, with all
-information coming through the interface. No external dependencies
-are allowed. Each pyro module will have (at most) a single Fortran
-file and can be compiled into a library via a single f2py command line
-invocation.
+We also use Numba's ``cache=True`` option, which means that once the
+code is compiled, Numba will write the code into a file-based cache. The next
+time you run the same bit of code, Numba will use the saved version rather than
+compiling the code again, saving some compilation time at the start of the
+simulation.
 
-A single script, ``mk.sh``, in the top-level directory will compile
-all the Fortran source.
+.. note::
 
+    Because we have chosen to cache the compiled code, Numba will save it in the ``__pycache__`` directories. If you change the code, a new version will be compiled and saved, but the old version will not be deleted. Over time, you may end up with many unneeded files saved in the ``__pycache__`` directories. To clean up these files, you can run ``./mk.sh clean`` in the main ``pyro2`` directory. 
 
 Main driver
 -----------

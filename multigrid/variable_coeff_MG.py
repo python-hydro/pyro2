@@ -1,10 +1,12 @@
-"""
+r"""
 This multigrid solver is build from multigrid/MG.py and implements
-a variable coefficient solver for an equation of the form::
+a variable coefficient solver for an equation of the form
 
-   div { eta grad phi } = f
+.. math::
 
-where eta is defined on the same grid as phi.
+   \nabla\cdot { \eta \nabla \phi } = f
+
+where :math:`\eta` is defined on the same grid as :math:`\phi`.
 
 A cell-centered discretization is used throughout.
 """
@@ -21,14 +23,14 @@ np.set_printoptions(precision=3, linewidth=128)
 
 
 class VarCoeffCCMG2d(MG.CellCenterMG2d):
-    """
+    r"""
     this is a multigrid solver that supports variable coefficients
 
     we need to accept a coefficient array, coeffs, defined at each
     level.  We can do this at the fine level and restrict it
     down the MG grids once.
 
-    we need a new compute_residual() and smooth() function, that
+    we need a new ``compute_residual()`` and ``smooth()`` function, that
     understands coeffs.
     """
 

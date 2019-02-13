@@ -16,6 +16,14 @@ Subpackages
 Submodules
 ----------
 
+lm\_atm\.LM\_atm\_interface module
+----------------------------------
+
+.. automodule:: lm_atm.LM_atm_interface
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 lm\_atm\.simulation module
 --------------------------
 
@@ -23,5 +31,3 @@ lm\_atm\.simulation module
     :members:
     :undoc-members:
     :show-inheritance:
-
-

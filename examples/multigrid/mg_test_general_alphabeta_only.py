@@ -67,11 +67,11 @@ def gamma_y(x, y):
 # the righthand side
 def f(x, y):
     return (-16.0*np.pi**2*np.cos(2*np.pi*x)*np.cos(2*np.pi*y) -
-             16.0*np.pi**2 + 1.0)*np.sin(2*np.pi*x)*np.sin(2*np.pi*y)
+            16.0*np.pi**2 + 1.0)*np.sin(2*np.pi*x)*np.sin(2*np.pi*y)
 
 
 def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
-                                   make_plot=False, verbose=1):
+                                   make_plot=False, verbose=1, rtol=1.e-12):
     """
     test the general MG solver.  The return value
     here is the error compared to the exact solution, UNLESS
@@ -186,10 +186,10 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
         msg.warning("comparing to: %s " % (compare_file))
         bench = io.read(compare_file)
 
-        result = compare.compare(my_data, bench)
+        result = compare.compare(my_data, bench, rtol)
 
         if result == 0:
-            msg.success("results match benchmark\n")
+            msg.success("results match benchmark to within relative tolerance of {}\n".format(rtol))
         else:
             msg.warning("ERROR: " + compare.errors[result] + "\n")
 

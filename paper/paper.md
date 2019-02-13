@@ -18,12 +18,16 @@ authors:
 - name: Ian Hawke
   orcid: 0000-0003-4805-0309
   affiliation: 2
-
+- name: Taher Chegini
+  orcid: 0000-0002-5430-6000
+  affiliation: 3
 affiliations:
 - name: Department of Physics and Astronomy, Stony Brook University
   index: 1
 - name: University of Southampton
   index: 2
+- name: University of Houston
+  index: 3
 
 date: 10 August 2018
 
@@ -44,7 +48,12 @@ and a number of new contributors.  pyro's functionality can now
 be accessed directly through a `Pyro()` class, in addition to the
 original commandline script interface.  This new interface in particular
 allows for easy use within Jupyter notebooks.  We also now use HDF5
-for output instead of python's `pickle()` function.
+for output instead of python's `pickle()` function.  Previously, we used Fortran
+to speed up some performance-critical portions of the code.  These routines
+could be called by the main python code by first compiling them using `f2py`.
+In the new version, we have replaced these Fortran routines by python functions
+that are compiled at runtime by `numba`.  Consequently, pyro is now written
+entirely in python.
 
 The original goal of pyro was to learn hydrodynamics methods through
 example, and it still serves this goal.  At Stony Brook, pyro is used
@@ -63,30 +72,29 @@ to science codes.
 
 The current pyro solvers are:
 
-  * linear advection (including a second-order unsplit CTU scheme, a
-    method-of-lines piecewise linear solver$^\star$, a 4th-order
-    finite-volume scheme$^\star$, and a WENO method$^\star$)
+-   linear advection (including a second-order unsplit CTU scheme, a
+    method-of-lines piecewise linear solver$^\\star$, a 4th-order
+    finite-volume scheme$^\\star$, a WENO method$^\\star$, and
+    advection with a non-uniform velocity field$^\\star$)
 
-  * compressible hydrodynamics (including a second-order unsplit CTU
-    scheme, a method-of-lines piecewise linear solver$^\star$, and two
+-   compressible hydrodynamics (including a second-order unsplit CTU
+    scheme, a method-of-lines piecewise linear solver$^\\star$, and two
     4th-order finite-volume schemes, one with Runge-Kutta integration
     and the other using a spectral deferred corrections
-    method$^\star$)
+    method$^\\star$)
 
-  * diffusion using a second-order implicit discretization
+-   diffusion using a second-order implicit discretization
 
-  * incompressible hydrodynamics using a second-order approximate
+-   incompressible hydrodynamics using a second-order approximate
     projection method.
 
-  * low Mach number atmospheric solver$^\star$, using an approximate
+-   low Mach number atmospheric solver$^\\star$, using an approximate
     projection method.
 
-  * shallow water equations solver$^\star$
+-   shallow water equations solver$^\\star$
 
-(solvers since the first pyro paper are marked with a $^\star$).  Also
+(solvers since the first pyro paper are marked with a $^\\star$).  Also
 new is support for Lagrangian tracer particles, which can be added to
 any solver that has a velocity field.
-
-
 
 # References

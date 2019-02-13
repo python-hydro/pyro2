@@ -29,7 +29,7 @@ class PyroTest(object):
 
 def do_tests(build, out_file, do_standalone=True, do_main=True,
              reset_fails=False, store_all_benchmarks=False,
-             single=None, solver=None):
+             single=None, solver=None, rtol=1e-12):
 
     # make sure we've built stuff
     print("build = ", build)
@@ -74,7 +74,7 @@ def do_tests(build, out_file, do_standalone=True, do_main=True,
             p = pyro.PyroBenchmark(t.solver, comp_bench=True,
                                    reset_bench_on_fail=reset_fails, make_bench=store_all_benchmarks)
             p.initialize_problem(t.problem, t.inputs, t.options)
-            err = p.run_sim()
+            err = p.run_sim(rtol)
 
             results[str(t)] = err
 
@@ -163,12 +163,21 @@ if __name__ == "__main__":
                    help="only do the unit tests",
                    action="store_true")
 
+    p.add_argument("--rtol",
+                   help="relative tolerance to use when comparing data to benchmarks",
+                   type=float, nargs=1)
+
     args = p.parse_args()
 
     try:
         outfile = args.o[0]
     except TypeError:
         outfile = None
+
+    try:
+        rtol = args.rtol[0]
+    except TypeError:
+        rtol = 1.e-12
 
     build = args.build
 
@@ -184,7 +193,7 @@ if __name__ == "__main__":
         do_tests(build, outfile, do_standalone=do_standalone, do_main=do_main,
                  reset_fails=args.reset_failures,
                  store_all_benchmarks=args.store_all_benchmarks,
-                 single=args.single, solver=args.solver)
+                 single=args.single, solver=args.solver, rtol=rtol)
 
     # unit tests
     if args.single is None:

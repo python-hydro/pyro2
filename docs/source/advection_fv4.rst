@@ -24,6 +24,14 @@ advection\_fv4\.fluxes module
     :undoc-members:
     :show-inheritance:
 
+advection\_fv4\.interface module
+--------------------------------
+
+.. automodule:: advection_fv4.interface
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 advection\_fv4\.simulation module
 ---------------------------------
 
@@ -31,5 +39,3 @@ advection\_fv4\.simulation module
     :members:
     :undoc-members:
     :show-inheritance:
-
-

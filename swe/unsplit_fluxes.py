@@ -122,7 +122,7 @@ Updating U_{i,j}:
 
 """
 
-import swe.interface_f as ifc
+import swe.interface as ifc
 import swe as comp
 import mesh.reconstruction as reconstruction
 import mesh.array_indexer as ai
@@ -167,16 +167,16 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     g = rp.get_param("swe.grav")
 
-    #=========================================================================
+    # =========================================================================
     # compute the primitive variables
-    #=========================================================================
+    # =========================================================================
     # Q = (h, u, v, {X})
 
     q = comp.cons_to_prim(my_data.data, g, ivars, myg)
 
-    #=========================================================================
+    # =========================================================================
     # compute the flattening coefficients
-    #=========================================================================
+    # =========================================================================
 
     # there is a single flattening coefficient (xi) for all directions
     use_flattening = rp.get_param("swe.use_flattening")
@@ -204,17 +204,17 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     tm_limit.end()
 
-    #=========================================================================
+    # =========================================================================
     # x-direction
-    #=========================================================================
+    # =========================================================================
 
     # left and right primitive variable states
     tm_states = tc.timer("interfaceStates")
     tm_states.begin()
 
-    V_l, V_r = ifc.states(1, myg.qx, myg.qy, myg.ng, myg.dx, dt,
+    V_l, V_r = ifc.states(1, myg.ng, myg.dx, dt,
                           ivars.ih, ivars.iu, ivars.iv, ivars.ix,
-                          ivars.nvar, ivars.naux,
+                          ivars.naux,
                           g,
                           q, ldx)
 
@@ -224,16 +224,16 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     U_xl = comp.prim_to_cons(V_l, g, ivars, myg)
     U_xr = comp.prim_to_cons(V_r, g, ivars, myg)
 
-    #=========================================================================
+    # =========================================================================
     # y-direction
-    #=========================================================================
+    # =========================================================================
 
     # left and right primitive variable states
     tm_states.begin()
 
-    _V_l, _V_r = ifc.states(2, myg.qx, myg.qy, myg.ng, myg.dy, dt,
+    _V_l, _V_r = ifc.states(2, myg.ng, myg.dy, dt,
                             ivars.ih, ivars.iu, ivars.iv, ivars.ix,
-                            ivars.nvar, ivars.naux,
+                            ivars.naux,
                             g,
                             q, ldy)
     V_l = ai.ArrayIndexer(d=_V_l, grid=myg)
@@ -245,9 +245,9 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     U_yl = comp.prim_to_cons(V_l, g, ivars, myg)
     U_yr = comp.prim_to_cons(V_r, g, ivars, myg)
 
-    #=========================================================================
+    # =========================================================================
     # compute transverse fluxes
-    #=========================================================================
+    # =========================================================================
     tm_riem = tc.timer("riemann")
     tm_riem.begin()
 
@@ -260,13 +260,13 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     else:
         msg.fail("ERROR: Riemann solver undefined")
 
-    _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
-                      ivars.nvar, ivars.ih, ivars.ixmom, ivars.iymom, ivars.ihx, ivars.naux,
+    _fx = riemannFunc(1, myg.ng,
+                      ivars.ih, ivars.ixmom, ivars.iymom, ivars.ihx, ivars.naux,
                       solid.xl, solid.xr,
                       g, U_xl, U_xr)
 
-    _fy = riemannFunc(2, myg.qx, myg.qy, myg.ng,
-                      ivars.nvar, ivars.ih, ivars.ixmom, ivars.iymom, ivars.ihx, ivars.naux,
+    _fy = riemannFunc(2, myg.ng,
+                      ivars.ih, ivars.ixmom, ivars.iymom, ivars.ihx, ivars.naux,
                       solid.yl, solid.yr,
                       g, U_yl, U_yr)
 
@@ -275,9 +275,9 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     tm_riem.end()
 
-    #=========================================================================
+    # =========================================================================
     # construct the interface values of U now
-    #=========================================================================
+    # =========================================================================
 
     """
     finally, we can construct the state perpendicular to the interface
@@ -350,22 +350,22 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     tm_transverse.end()
 
-    #=========================================================================
+    # =========================================================================
     # construct the fluxes normal to the interfaces
-    #=========================================================================
+    # =========================================================================
 
     # up until now, F_x and F_y stored the transverse fluxes, now we
     # overwrite with the fluxes normal to the interfaces
 
     tm_riem.begin()
 
-    _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
-                      ivars.nvar, ivars.ih, ivars.ixmom, ivars.iymom, ivars.ihx, ivars.naux,
+    _fx = riemannFunc(1, myg.ng,
+                      ivars.ih, ivars.ixmom, ivars.iymom, ivars.ihx, ivars.naux,
                       solid.xl, solid.xr,
                       g, U_xl, U_xr)
 
-    _fy = riemannFunc(2, myg.qx, myg.qy, myg.ng,
-                      ivars.nvar, ivars.ih, ivars.ixmom, ivars.iymom, ivars.ihx, ivars.naux,
+    _fy = riemannFunc(2, myg.ng,
+                      ivars.ih, ivars.ixmom, ivars.iymom, ivars.ihx, ivars.naux,
                       solid.yl, solid.yr,
                       g, U_yl, U_yr)
 

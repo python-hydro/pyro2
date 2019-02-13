@@ -2,7 +2,7 @@ import mesh.reconstruction as reconstruction
 
 
 def unsplit_fluxes(my_data, rp, dt, scalar_name):
-    """
+    r"""
     Construct the fluxes through the interfaces for the linear advection
     equation:
 
@@ -63,9 +63,9 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
     cx = u*dt/myg.dx
     cy = v*dt/myg.dy
 
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # monotonized central differences
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
 
     limiter = rp.get_param("advection.limiter")
 

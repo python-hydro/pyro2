@@ -23,5 +23,3 @@ compressible\_react\.simulation module
     :members:
     :undoc-members:
     :show-inheritance:
-
-

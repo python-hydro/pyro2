@@ -50,7 +50,7 @@ Pyro class
 ----------
 
 Alternatively, pyro can be run using the :func:`Pyro <pyro.Pyro>` class. This provides
-an interface that enables simulations to be set up and run in a Jupyter notebook - see
+an interface that enables simulations to be set up and run in a Jupyter notebook -- see
 ``examples/examples.ipynb`` for an example notebook. A simulation can be set up and run
 by carrying out the following steps:
 
@@ -72,8 +72,8 @@ Instead of using an inputs file to define the problem parameters, we can define 
 dictionary of parameters and pass them into the :func:`initialize_problem
 <pyro.Pyro.initialize_problem>` function using the keyword argument ``inputs_dict``.
 If an inputs file is also passed into the function, the parameters in the dictionary
- will override any parameters in the file. For example, if we wished to turn off
- visualization for the previous example, we would do:
+will override any parameters in the file. For example, if we wished to turn off
+visualization for the previous example, we would do:
 
 .. code-block:: python
 
@@ -138,58 +138,4 @@ given simulation.
 
 All solvers use the following parameters:
 
-+-------------------------------------------------------------------------------------------------------------------------------+
-| ``[driver]``                                                                                                                  |
-+=====================+=========================================================================================================+
-|``max_steps``        | the maximum number of steps in the simulation                                                           |
-+---------------------+---------------------------------------------------------------------------------------------------------+
-|``tmax``             | the simulation time to evolve to                                                                        |
-+---------------------+---------------------------------------------------------------------------------------------------------+
-|``init_tstep_factor``| the amount by which to shrink the first timestep. This lets the code ramp up to the CFL timestep slowly |
-+---------------------+---------------------------------------------------------------------------------------------------------+
-|``max_dt_change``    | the maximum factor by which the timestep can increase from one step to the next                         |
-+---------------------+---------------------------------------------------------------------------------------------------------+
-
-+-------------------------------------------------------------------------------------------------------------------------------+
-| ``[io]``                                                                                                                      |
-+=====================+=========================================================================================================+
-|``basename``         | the descriptive prefix to use for output files                                                          |
-+---------------------+---------------------------------------------------------------------------------------------------------+
-|``dt_out``           | the interval in simulation time between writing output files                                            |
-+---------------------+---------------------------------------------------------------------------------------------------------+
-|``n_out``            | the number of timesteps between writing output files                                                    |
-+---------------------+---------------------------------------------------------------------------------------------------------+
-
-+-------------------------------------------------------------------------------------------------------------------------------+
-| ``[vis]``                                                                                                                     |
-+=====================+=========================================================================================================+
-|``dovis``            | enable (1) or disable (0) runtime visualization                                                         |
-+---------------------+---------------------------------------------------------------------------------------------------------+
-|``store_images``     | if 1, write out PNG files as we do the runtime visualization                                            |
-+---------------------+---------------------------------------------------------------------------------------------------------+
-|``n_out``            | the number of timesteps between writing output files                                                    |
-+---------------------+---------------------------------------------------------------------------------------------------------+
-
-+-------------------------------------------------------------------------------------------------------------------------------+
-| ``[mesh]``                                                                                                                    |
-+=====================+=========================================================================================================+
-|``xmin``             | the physical coordinate of the lower x face of the domain                                               |
-+---------------------+---------------------------------------------------------------------------------------------------------+
-|``xmax``             | the physical coordinate of the upper x face of the domain                                               |
-+---------------------+---------------------------------------------------------------------------------------------------------+
-|``ymin``             | the physical coordinate of the lower y face of the domain                                               |
-+---------------------+---------------------------------------------------------------------------------------------------------+
-|``ymax``             | the physical coordinate of the upper y face of the domain                                               |
-+---------------------+---------------------------------------------------------------------------------------------------------+
-|``xlboundary``       | the physical description for the type of boundary at the lower x face of the domain                     |
-+---------------------+---------------------------------------------------------------------------------------------------------+
-|``xrboundary``       | the physical description for the type of boundary at the upper x face of the domain                     |
-+---------------------+---------------------------------------------------------------------------------------------------------+
-|``ylboundary``       | the physical description for the type of boundary at the lower y face of the domain                     |
-+---------------------+---------------------------------------------------------------------------------------------------------+
-|``yrboundary``       | the physical description for the type of boundary at the upper y face of the domain                     |
-+---------------------+---------------------------------------------------------------------------------------------------------+
-|``nx``               | the number zones in the x-direction                                                                     |
-+---------------------+---------------------------------------------------------------------------------------------------------+
-|``ny``               | the number zones in the y-direction                                                                     |
-+---------------------+---------------------------------------------------------------------------------------------------------+
+.. include:: _defaults.inc

@@ -24,6 +24,14 @@ swe\.derives module
     :undoc-members:
     :show-inheritance:
 
+swe\.interface module
+---------------------
+
+.. automodule:: swe.interface
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 swe\.simulation module
 ----------------------
 
@@ -39,5 +47,3 @@ swe\.unsplit\_fluxes module
     :members:
     :undoc-members:
     :show-inheritance:
-
-

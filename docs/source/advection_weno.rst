@@ -31,5 +31,3 @@ advection\_weno\.simulation module
     :members:
     :undoc-members:
     :show-inheritance:
-
-

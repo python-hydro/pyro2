@@ -57,7 +57,7 @@ def f(x, y):
 
 
 def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
-                                   make_plot=False, verbose=1):
+                                   make_plot=False, verbose=1, rtol=1.e-12):
     """
     test the general MG solver.  The return value
     here is the error compared to the exact solution, UNLESS
@@ -110,7 +110,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     a.solve(rtol=1.e-11)
 
     # alternately, we can just use smoothing by uncommenting the following
-    #a.smooth(a.nlevels-1,50000)
+    # a.smooth(a.nlevels-1,50000)
 
     # get the solution
     v = a.get_solution()
@@ -175,7 +175,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
         result = compare.compare(my_data, bench)
 
         if result == 0:
-            msg.success("results match benchmark\n")
+            msg.success("results match benchmark to within relative tolerance of {}\n".format(rtol))
         else:
             msg.warning("ERROR: " + compare.errors[result] + "\n")
 

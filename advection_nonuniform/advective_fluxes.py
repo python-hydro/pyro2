@@ -78,11 +78,11 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
 
     for index, vel in np.ndenumerate(u.v(buf=1)):
         if vel < 0:
-            a_x.v(buf=1)[index] = a.ip(shift_x.v(buf=1)[index], buf=1)[index]\
+            a_x.v(buf=1)[index] = a.ip(shift_x.v(buf=1)[index], buf=1)[index] \
                 - 0.5*(1.0 + cx.v(buf=1)[index]) \
                 * ldelta_ax.ip(shift_x.v(buf=1)[index], buf=1)[index]
         else:
-            a_x.v(buf=1)[index] = a.ip(shift_x.v(buf=1)[index], buf=1)[index]\
+            a_x.v(buf=1)[index] = a.ip(shift_x.v(buf=1)[index], buf=1)[index] \
                 + 0.5*(1.0 - cx.v(buf=1)[index]) \
                 * ldelta_ax.ip(shift_x.v(buf=1)[index], buf=1)[index]
 
@@ -92,11 +92,11 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
 
     for index, vel in np.ndenumerate(v.v(buf=1)):
         if vel < 0:
-            a_y.v(buf=1)[index] = a.jp(shift_y.v(buf=1)[index], buf=1)[index]\
+            a_y.v(buf=1)[index] = a.jp(shift_y.v(buf=1)[index], buf=1)[index] \
                 - 0.5*(1.0 + cy.v(buf=1)[index]) \
                 * ldelta_ay.jp(shift_y.v(buf=1)[index], buf=1)[index]
         else:
-            a_y.v(buf=1)[index] = a.jp(shift_y.v(buf=1)[index], buf=1)[index]\
+            a_y.v(buf=1)[index] = a.jp(shift_y.v(buf=1)[index], buf=1)[index] \
                 + 0.5*(1.0 - cy.v(buf=1)[index]) \
                 * ldelta_ay.jp(shift_y.v(buf=1)[index], buf=1)[index]
 

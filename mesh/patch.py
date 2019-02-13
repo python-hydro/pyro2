@@ -157,14 +157,6 @@ class Grid2d(object):
             _tmp = np.zeros((self.qx, self.qy, nvar), dtype=np.float64)
         return ai.ArrayIndexer(d=_tmp, grid=self)
 
-    def norm(self, d):
-        """
-        find the norm of the quantity d defined on the same grid, in the
-        domain's valid region
-        """
-        return np.sqrt(self.dx * self.dy *
-                       np.sum((d[self.ilo:self.ihi+1, self.jlo:self.jhi+1]**2).flat))
-
     def coarse_like(self, N):
         """
         return a new grid object coarsened by a factor n, but with
@@ -245,9 +237,6 @@ class CellCenterData2d(object):
         dtype : NumPy data type, optional
             The datatype of the data we wish to create (defaults to
             np.float64
-        runtime_parameters : RuntimeParameters object, optional
-            The runtime parameters that go along with this data
-
         """
 
         self.grid = grid
@@ -657,6 +646,107 @@ class CellCenterData2d(object):
         indicating where ghost cells are."""
         a = self.get_var(var)
         a.pretty_print(fmt=fmt)
+
+
+class FaceCenterData2d(CellCenterData2d):
+    """
+    A class to define face-centered data that lives on a grid.  Data
+    can be face-centered in x or y.  This is built in the same multistep
+    process  as a CellCenterData2d object"""
+
+    def __init__(self, grid, idir, dtype=np.float64):
+        """
+        Initialize the FaceCenterData2d object
+
+        Parameters
+        ----------
+        grid : Grid2d object
+            The grid upon which the data will live
+        idir : the direction in which we are face-centered (this will be
+               1 for x or 2 for y)
+        dtype : NumPy data type, optional
+            The datatype of the data we wish to create (defaults to
+            np.float64
+        """
+
+        super().__init__(grid, dtype=dtype)
+        self.idir = idir
+
+    def add_derived(self, func):
+        raise NotImplementedError("derived variables not yet supported for face-centered data")
+
+    def create(self):
+        """Called after all the variables are registered and allocates the
+        storage for the state data.  For face-centered data, we have
+        one more zone in the face-centered direction.
+
+        """
+
+        if self.initialized == 1:
+            msg.fail("ERROR: grid already initialized")
+
+        if self.idir == 1:
+            _tmp = np.zeros((self.grid.qx+1, self.grid.qy, self.nvar),
+                            dtype=self.dtype)
+        elif self.idir == 2:
+            _tmp = np.zeros((self.grid.qx, self.grid.qy+1, self.nvar),
+                            dtype=self.dtype)
+
+        self.data = ai.ArrayIndexerFC(_tmp, idir=self.idir, grid=self.grid)
+
+        self.initialized = 1
+
+    def fill_BC(self, name):
+        """
+        Fill the boundary conditions.  This operates on a single state
+        variable at a time, to allow for maximum flexibility.
+
+        We do periodic, reflect-even, reflect-odd, and outflow
+
+        Each variable name has a corresponding BC stored in the
+        CellCenterData2d object -- we refer to this to figure out the
+        action to take at each boundary.
+
+        Parameters
+        ----------
+        name : str
+            The name of the variable for which to fill the BCs.
+
+        """
+
+        n = self.names.index(name)
+        self.data.fill_ghost(n=n, bc=self.BCs[name])
+
+        if self.BCs[name].xlb in bnd.ext_bcs.keys() or \
+           self.BCs[name].xrb in bnd.ext_bcs.keys() or \
+           self.BCs[name].ylb in bnd.ext_bcs.keys() or \
+           self.BCs[name].yrb in bnd.ext_bcs.keys():
+            raise NotImplementedError("custom boundary conditions not supported for FaceCenterData2d")
+
+    def restrict(self, varname, N=2):
+        raise NotImplementedError("restriction not implemented for FaceCenterData2d")
+
+    def prolong(self, varname):
+        raise NotImplementedError("prolongation not implemented for FaceCenterData2d")
+
+    def write_data(self, f):
+        """
+        write the data out to an hdf5 file -- here, f is an h5py
+        File pbject
+
+        """
+
+        # data
+        gstate = f.create_group("face-centered-state")
+
+        for n in range(self.nvar):
+            gvar = gstate.create_group(self.names[n])
+            gvar.create_dataset("data",
+                                data=self.get_var_by_index(n).v())
+            gvar.attrs["xlb"] = self.BCs[self.names[n]].xlb
+            gvar.attrs["xrb"] = self.BCs[self.names[n]].xrb
+            gvar.attrs["ylb"] = self.BCs[self.names[n]].ylb
+            gvar.attrs["yrb"] = self.BCs[self.names[n]].yrb
 
 
 def cell_center_data_clone(old):

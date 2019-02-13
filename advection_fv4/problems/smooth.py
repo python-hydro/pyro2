@@ -11,7 +11,7 @@ def init_data(my_data, rp):
     msg.bold("initializing the smooth FV advection problem...")
 
     # make sure that we are passed a valid patch object
-    #if not isinstance(my_data, patch.FV2d):
+    # if not isinstance(my_data, patch.FV2d):
     #    print("ERROR: patch invalid in smooth.py")
     #    print(my_data.__class__)
     #    sys.exit()

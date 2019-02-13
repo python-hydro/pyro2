@@ -31,5 +31,3 @@ compressible\_rk\.simulation module
     :members:
     :undoc-members:
     :show-inheritance:
-
-

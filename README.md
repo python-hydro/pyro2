@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.com/python-hydro/pyro2.svg?branch=master)](https://travis-ci.com/python-hydro/pyro2)
+[![Build Status](https://travis-ci.com/python-hydro/pyro2.svg?branch=master)](https://travis-ci.com/python-hydro/pyro2) [![Documentation Status](https://readthedocs.org/projects/pyro2/badge/?version=latest)](https://pyro2.readthedocs.io/en/latest/?badge=latest) [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/python-hydro/pyro2/master?filepath=examples%2Fexamples.ipynb)
+
 
 ![pyro logo](www/logo.gif)
 
@@ -19,7 +20,7 @@ https://github.com/python-hydro/pyro2
 The project webpage, where you'll find documentation, plots, notes,
 etc. is here:
 
-http://python-hydro.github.io/pyro2/
+https://pyro2.readthedocs.io/
 
 
 ## Table of Contents
@@ -42,18 +43,13 @@ http://python-hydro.github.io/pyro2/
 	switch to python 3.x
 
   - There are a few steps to take to get things running. You need to
-    make sure you have `numpy`, `f2py`, `matplotlib`, and `h5py`
+    make sure you have `numpy`, `numba`, `matplotlib`, and `h5py`
     installed. On a Fedora system, this can be accomplished by doing:
 
-       `dnf install python3-numpy python3-numpy-f2py python3-matplotlib python3-matplotlib-tk python3-h5py`
+       `dnf install python3-numpy python3-numba python3-matplotlib python3-matplotlib-tk python3-h5py`
 
     (note, for older Fedora releases, replace `dnf` with `yum`.  For
-	python 2.x, leave off the `2` in the package names.)
-
-  - You also need to make sure gfortran is present on you system. On a
-    Fedora system, it can be installed as:
-
-       `dnf install gcc-gfortran`
+	python 2.x, leave off the `3` in the package names.)
 
   - Not all matplotlib backends allow for the interactive plotting as
     pyro is run. One that does is the TkAgg backend. This can be made
@@ -78,10 +74,6 @@ http://python-hydro.github.io/pyro2/
 
       * Define the environment variable `PYRO_HOME` to point to the
         `pyro2/` directory (only needed for regression testing)
-
-      * Build the Fortran source. In `pyro2/` type
-
-          `./mk.sh`
 
       * Run a quick test of the advection solver:
 
@@ -116,6 +108,8 @@ pyro provides the following solvers (all in 2-d):
   - `advection_fv4`: a fourth-order accurate finite-volume advection
     solver that uses RK4 time integration.
 
+  - `advection_nonuniform`: a solver for advection with a non-uniform velocity field.
+
   - `advection_rk`: a second-order unsplit solver for linear advection
     that uses Runge-Kutta integration instead of characteristic
     tracing.
@@ -136,12 +130,15 @@ pyro provides the following solvers (all in 2-d):
      equations that uses Runge-Kutta integration instead of
 	 characteristic tracing.
 
-  - `incompressible`: a second-order cell-centered approximate
-    projection method for the incompressible equations of
-    hydrodynamics.
+  - `compressible_sdc`: a fourth-order compressible solver,
+  using spectral-deferred correction (SDC) for the time integration.
 
   - `diffusion`: a Crank-Nicolson time-discretized solver for the
     constant-coefficient diffusion equation.
+
+  - `incompressible`: a second-order cell-centered approximate
+    projection method for the incompressible equations of
+    hydrodynamics.
 
   - `lm_atm`: a solver for the equations of low Mach number
     hydrodynamics for atmospheric flows.
@@ -153,6 +150,8 @@ pyro provides the following solvers (all in 2-d):
     constant-coefficient Helmholtz equation, as well as a
     variable-coefficient Poisson equation (which inherits from the
     constant-coefficient solver).
+
+  - `particles`: a solver for Lagrangian tracer particles.
 
   - `swe`: a solver for the shallow water equations.
 

@@ -23,5 +23,3 @@ diffusion\.simulation module
     :members:
     :undoc-members:
     :show-inheritance:
-
-
