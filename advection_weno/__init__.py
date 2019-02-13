@@ -28,4 +28,4 @@ The general flow of the solver when invoked through pyro.py is:
 """
 
 __all__ = ['simulation']
-from .simulation import *
+from .simulation import Simulation

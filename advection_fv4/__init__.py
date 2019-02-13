@@ -6,4 +6,4 @@ time integration.
 """
 
 __all__ = ['simulation']
-from .simulation import *
+from .simulation import Simulation
