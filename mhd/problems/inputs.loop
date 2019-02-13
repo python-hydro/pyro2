@@ -3,13 +3,14 @@ max_steps = 165
 tmax = 1.0
 
 init_tstep_factor = 1.0
-fix_dt = 0.005
+fix_dt = 0.004
 
-cfl = 0.4
+cfl = 0.1
 
 [mhd]
 use_flattening = 1        ; apply flattening at shocks (1)
 limiter = 2
+temporal_method = RK4
 
 
 [io]

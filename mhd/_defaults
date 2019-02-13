@@ -20,7 +20,7 @@ grav = 0.0                ; gravitational acceleration (in y-direction)
 
 riemann = HLLC            ; HLLC or CGF
 
-temporal_method = RK4
+temporal_method = TVD3
 
 [compressible]
 z0 = 0.75                 ; flattening z0 parameter

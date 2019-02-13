@@ -126,7 +126,7 @@ import mhd.interface as ifc
 import mhd
 import mesh.reconstruction as reconstruction
 import mesh.array_indexer as ai
-import numpy as np
+# import numpy as np
 
 
 def timestep(cc_data, fcx_data, fcy_data, rp, ivars, solid, tc, dt):
@@ -189,11 +189,11 @@ def timestep(cc_data, fcx_data, fcy_data, rp, ivars, solid, tc, dt):
     #
     riemannFunc = ifc.riemann_adiabatic
 
-    U_xl = myg.scratch_array(nvar=ivars.nvar)
-    U_xr = myg.scratch_array(nvar=ivars.nvar)
-
-    U_yl = myg.scratch_array(nvar=ivars.nvar)
-    U_yr = myg.scratch_array(nvar=ivars.nvar)
+    # U_xl = myg.scratch_array(nvar=ivars.nvar)
+    # U_xr = myg.scratch_array(nvar=ivars.nvar)
+    #
+    # U_yl = myg.scratch_array(nvar=ivars.nvar)
+    # U_yr = myg.scratch_array(nvar=ivars.nvar)
 
     # =========================================================================
     # x-direction
@@ -321,8 +321,11 @@ def timestep(cc_data, fcx_data, fcy_data, rp, ivars, solid, tc, dt):
     tm_states = tc.timer("interfaceStates")
     tm_states.begin()
 
-    V_l, V_r = ifc.states(1, myg.ng, myg.dx, dt,
-                          ivars.ibx, ivars.iby, q, ldx, Bx, By)
+    _V_l, _V_r = ifc.states(1, myg.ng, myg.dx, dt,
+                            ivars.ibx, ivars.iby, q, ldx, Bx, By)
+
+    V_l = ai.ArrayIndexer(d=_V_l, grid=myg)
+    V_r = ai.ArrayIndexer(d=_V_r, grid=myg)
 
     tm_states.end()
 
@@ -382,7 +385,7 @@ def timestep(cc_data, fcx_data, fcy_data, rp, ivars, solid, tc, dt):
     emf = ai.ArrayIndexer(d=_emf, grid=myg)
 
     ############################################################################
-    # STEP 8. Update the cell-centered hydodynamical variables for a full
+    # STEP 8. Update the cell-centered hydrodynamical variables for a full
     # timestep. Update the face-centered components of the magnetic field for a
     # full timestep using CT and the emfs from step 7.
     ############################################################################
@@ -416,7 +419,7 @@ def timestep(cc_data, fcx_data, fcy_data, rp, ivars, solid, tc, dt):
     kx = myg.fc_scratch_array(idir=1)
     ky = myg.fc_scratch_array(idir=2)
 
-    kx.v()[:-1,:] = -(emf.jp(1) - emf.v()) / myg.dy
-    ky.v()[:,:-1] = (emf.ip(1) - emf.v()) / myg.dx
+    kx.v()[:-1, :] = -(emf.jp(1) - emf.v()) / myg.dy
+    ky.v()[:, :-1] = (emf.ip(1) - emf.v()) / myg.dx
 
     return k, kx, ky

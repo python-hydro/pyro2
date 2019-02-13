@@ -159,8 +159,6 @@ class Simulation(NullSimulation):
 
         my_data.create()
 
-        my_data.fill_BC_all()
-
         self.cc_data = my_data
 
         # we also need face-centered data for the magnetic fields
@@ -213,8 +211,8 @@ class Simulation(NullSimulation):
             ["x-magnetosonic", "y-magnetosonic"])
 
         # a = self.cc_data.get_var("soundspeed")
-
         # print(f"fast magnetosonic speeds = {Cfx.max()}, {Cfy.max()}")
+        # print(f"a = {a.max()}")
         # print(f"u, v = {abs(u).max(), abs(v).max()}")
 
         # the timestep is min(dx/(|u| + cs), dy/(|v| + cs))
@@ -308,8 +306,8 @@ class Simulation(NullSimulation):
 
         myg = self.cc_data.grid
 
-        fields = [rho, magvel, p, magb]
-        field_names = [r"$\rho$", r"U", "p", "B"]
+        fields = [rho, magvel, e, magb]
+        field_names = [r"$\rho$", r"|U|", "e", "|B|"]
 
         _, axes, cbar_title = plot_tools.setup_axes(myg, len(fields))
 

@@ -50,7 +50,7 @@ def init_data(cc_data, fcx_data, fcy_data, rp):
     A0 = rp.get_param("loop.a0")
 
     # velocity
-    u = v0 / np.sqrt(5)
+    u = v0 / np.sqrt(5) 
     v = v0 / np.sqrt(5)
     xmom[:, :] = dens[:, :] * u
     ymom[:, :] = dens[:, :] * v

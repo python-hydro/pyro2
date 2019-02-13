@@ -1,4 +1,7 @@
-from mesh.integration import *
+from copy import deepcopy
+import mesh.patch as patch
+from mesh.integration import RKIntegrator, a, b, c
+
 
 class RKIntegratorMHD(RKIntegrator):
     """the integration class for CellCenterData2d, supporting RK
@@ -9,9 +12,8 @@ class RKIntegratorMHD(RKIntegrator):
         = {2,4} is the temporal method"""
         super(RKIntegratorMHD, self).__init__(t, dt, method=method)
 
-        self.kx = [None]*len(b[self.method])
-        self.ky = [None]*len(b[self.method])
-
+        self.kx = [None] * len(b[self.method])
+        self.ky = [None] * len(b[self.method])
 
     def store_increment(self, istage, k_stage, kx_stage, ky_stage):
         """store the increment for stage istage -- this should not have a dt
@@ -34,18 +36,23 @@ class RKIntegratorMHD(RKIntegrator):
             for n in range(ytmp.nvar):
                 var = ytmp.get_var_by_index(n)
                 for s in range(istage):
-                    var.v()[:, :] += self.dt*a[self.method][istage, s]*self.k[s].v(n=n)[:, :]
+                    var.v()[:, :] += self.dt * \
+                        a[self.method][istage, s] * self.k[s].v(n=n)[:, :]
 
             bx = fxtmp.get_var("x-magnetic-field")
             by = fytmp.get_var("y-magnetic-field")
             for s in range(istage):
-                bx.v()[:,:] += self.dt*a[self.method][istage, s]*self.kx[s].v()[:, :]
-                by.v()[:,:] += self.dt*a[self.method][istage, s]*self.ky[s].v()[:, :]
+                bx.v()[:, :] += self.dt * \
+                    a[self.method][istage, s] * self.kx[s].v()[:, :]
+                by.v()[:, :] += self.dt * \
+                    a[self.method][istage, s] * self.ky[s].v()[:, :]
 
-            ytmp.get_var("x-magnetic-field").v()[:, :] = 0.5 * (bx.ip(1)[:-1, :] + bx.v()[:-1, :])
-            ytmp.get_var("y-magnetic-field").v()[:, :] = 0.5 * (by.jp(1)[:, :-1] + by.v()[:, :-1])
+            ytmp.get_var(
+                "x-magnetic-field").v()[:, :] = 0.5 * (bx.ip(1)[:-1, :] + bx.v()[:-1, :])
+            ytmp.get_var(
+                "y-magnetic-field").v()[:, :] = 0.5 * (by.jp(1)[:, :-1] + by.v()[:, :-1])
 
-            ytmp.t = self.t + c[self.method][istage]*self.dt
+            ytmp.t = self.t + c[self.method][istage] * self.dt
 
         return ytmp, fxtmp, fytmp
 
@@ -55,17 +62,20 @@ class RKIntegratorMHD(RKIntegrator):
         for n in range(ytmp.nvar):
             var = ytmp.get_var_by_index(n)
             for s in range(self.nstages()):
-                var.v()[:, :] += self.dt*b[self.method][s]*self.k[s].v(n=n)[:, :]
+                var.v()[:, :] += self.dt * \
+                    b[self.method][s] * self.k[s].v(n=n)[:, :]
 
         bx = fxtmp.get_var("x-magnetic-field")
         by = fytmp.get_var("y-magnetic-field")
 
         for s in range(self.nstages()):
-            bx.v()[:, :] += self.dt*b[self.method][s]*self.kx[s].v()[:, :]
-            by.v()[:, :] += self.dt*b[self.method][s]*self.ky[s].v()[:, :]
+            bx.v()[:, :] += self.dt * b[self.method][s] * self.kx[s].v()[:, :]
+            by.v()[:, :] += self.dt * b[self.method][s] * self.ky[s].v()[:, :]
 
-        ytmp.get_var("x-magnetic-field").v()[:, :] = 0.5 * (bx.ip(1)[:-1, :] + bx.v()[:-1, :])
-        ytmp.get_var("y-magnetic-field").v()[:, :] = 0.5 * (by.jp(1)[:, :-1] + by.v()[:, :-1])
+        ytmp.get_var(
+            "x-magnetic-field").v()[:, :] = 0.5 * (bx.ip(1)[:-1, :] + bx.v()[:-1, :])
+        ytmp.get_var(
+            "y-magnetic-field").v()[:, :] = 0.5 * (by.jp(1)[:, :-1] + by.v()[:, :-1])
 
         return ytmp, fxtmp, fytmp
 
