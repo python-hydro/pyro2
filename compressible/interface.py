@@ -1179,12 +1179,12 @@ def artificial_viscosity(ng, dx, dy,
     for i in range(ilo - 1, ihi + 1):
         for j in range(jlo - 1, jhi + 1):
 
-                # start by computing the divergence on the x-interface.  The
-                # x-difference is simply the difference of the cell-centered
-                # x-velocities on either side of the x-interface.  For the
-                # y-difference, first average the four cells to the node on
-                # each end of the edge, and: difference these to find the
-                # edge centered y difference.
+            # start by computing the divergence on the x-interface.  The
+            # x-difference is simply the difference of the cell-centered
+            # x-velocities on either side of the x-interface.  For the
+            # y-difference, first average the four cells to the node on
+            # each end of the edge, and: difference these to find the
+            # edge centered y difference.
             divU_x = (u[i, j] - u[i - 1, j]) / dx + \
                 0.25 * (v[i, j + 1] + v[i - 1, j + 1] -
                         v[i, j - 1] - v[i - 1, j - 1]) / dy
