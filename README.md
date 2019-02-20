@@ -70,7 +70,9 @@ https://pyro2.readthedocs.io/
   - The remaining steps are:
 
       * Set the `PYTHONPATH` environment variable to point to the `pyro2/`
-        directory.
+        directory (note this is only needed if you wish to use pyro as a python
+        module - this step is not necessary if you only run pyro via the
+        commandline using the `pyro.py` script).
 
       * Define the environment variable `PYRO_HOME` to point to the
         `pyro2/` directory (only needed for regression testing)
