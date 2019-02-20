@@ -84,6 +84,8 @@ def test_poisson_dirichlet(N, store_bench=False, comp_bench=False,
         plt.xlabel("x")
         plt.ylabel("y")
 
+        print("Saving figure to mg_test.png")
+
         plt.savefig("mg_test.png")
 
     # store the output for later comparison
@@ -114,4 +116,4 @@ def test_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
 
 if __name__ == "__main__":
-    test_poisson_dirichlet(256, comp_bench=True)
+    test_poisson_dirichlet(256, comp_bench=True, make_plot=True)
