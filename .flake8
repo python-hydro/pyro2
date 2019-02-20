@@ -1,4 +1,4 @@
 [flake8]
 max-line-length = 120
-ignore = E126, E127, E128, E129, E226, E241, E265, E741, F403, W504
+ignore = E126, E127, E128, E129, E226, E241, E265, E741, F401, F403, W504
 exclude = docs/,lm_combustion,radhydro

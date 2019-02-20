@@ -181,7 +181,7 @@ escape the domain. It is run as:
 
 .. code-block:: none
 
-   ./pyro.py compressible er inputs.rt
+   ./pyro.py compressible rt inputs.rt
 
 .. raw:: html
 

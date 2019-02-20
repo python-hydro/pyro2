@@ -224,7 +224,7 @@ class Pyro(object):
             s += "Simulation step number = {}\n".format(self.sim.n)
         s += "\nRuntime Parameters"
         s += "\n------------------\n"
-        s += str(self.sim.rp)
+        s += str(self.rp)
         return s
 
     def get_var(self, v):

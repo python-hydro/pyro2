@@ -6,4 +6,4 @@ Colella 1990, and incorporates reactions via Strang splitting.
 """
 __all__ = ["simulation"]
 
-from .simulation import *
+from .simulation import Simulation

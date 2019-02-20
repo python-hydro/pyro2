@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/python-hydro/pyro2.svg?branch=master)](https://travis-ci.com/python-hydro/pyro2) [![Documentation Status](https://readthedocs.org/projects/pyro2/badge/?version=latest)](https://pyro2.readthedocs.io/en/latest/?badge=latest) [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/python-hydro/pyro2/master?filepath=examples%2Fexamples.ipynb)
+[![Build Status](https://travis-ci.com/python-hydro/pyro2.svg?branch=master)](https://travis-ci.com/python-hydro/pyro2) [![Documentation Status](https://readthedocs.org/projects/pyro2/badge/?version=latest)](https://pyro2.readthedocs.io/en/latest/?badge=latest) [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/python-hydro/pyro2/master?filepath=examples%2Fexamples.ipynb) [![JOSS status](http://joss.theoj.org/papers/6d8b2f94e6d08a7b5d65e98a948dcad7/status.svg)](http://joss.theoj.org/papers/6d8b2f94e6d08a7b5d65e98a948dcad7)
 
 
 ![pyro logo](www/logo.gif)
@@ -70,7 +70,9 @@ https://pyro2.readthedocs.io/
   - The remaining steps are:
 
       * Set the `PYTHONPATH` environment variable to point to the `pyro2/`
-        directory.
+        directory (note this is only needed if you wish to use pyro as a python
+        module - this step is not necessary if you only run pyro via the
+        commandline using the `pyro.py` script).
 
       * Define the environment variable `PYRO_HOME` to point to the
         `pyro2/` directory (only needed for regression testing)

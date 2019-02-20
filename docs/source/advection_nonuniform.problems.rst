@@ -16,27 +16,3 @@ advection\_nonuniform\.problems\.slotted module
     :members:
     :undoc-members:
     :show-inheritance:
-
-advection\_nonuniform\.problems\.smooth module
-----------------------------------------------
-
-.. automodule:: advection_nonuniform.problems.smooth
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-advection\_nonuniform\.problems\.test module
---------------------------------------------
-
-.. automodule:: advection_nonuniform.problems.test
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-advection\_nonuniform\.problems\.tophat module
-----------------------------------------------
-
-.. automodule:: advection_nonuniform.problems.tophat
-    :members:
-    :undoc-members:
-    :show-inheritance:

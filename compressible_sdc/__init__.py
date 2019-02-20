@@ -5,4 +5,4 @@ implementing the spatial reconstruction from McCorquodale & Colella
 """
 __all__ = ["simulation"]
 
-from .simulation import *
+from .simulation import Simulation
