@@ -63,6 +63,7 @@ Kelvin-Helmholtz problem ``kh``, we would do the following:
 
 .. code-block:: python
 
+    from pyro import Pyro
     pyro = Pyro("compressible")
     pyro.initialize_problem(problem_name="kh",
                             inputs_file="inputs.kh")
