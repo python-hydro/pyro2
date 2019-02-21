@@ -9,7 +9,7 @@ script in the root directory.
 Unit tests
 ----------
 
-pyro implements unit tests using py.test.  These can be run via::
+pyro implements unit tests using ``py.test``.  These can be run via::
 
    ./test.py -u
 
@@ -36,5 +36,3 @@ We can compare to the stored benchmarks simply by running::
    may mean that we do not pass the regression tests.  In this case, one would
    need to create a new set of benchmarks for that machine and use those for
    future tests.
-
-

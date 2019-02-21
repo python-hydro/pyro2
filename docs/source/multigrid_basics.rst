@@ -17,7 +17,7 @@ There are three solvers:
 * The class :func:`general_MG.GeneralMG2d <multigrid.general_MG.GeneralMG2d>` solves a general elliptic
   equation of the form :math:`\alpha \phi + \nabla \cdot ( \beta
   \nabla \phi) + \gamma \cdot \nabla \phi = f`.  This class inherits
-  the core functionality from ``MG.CellCenterMG2d``.
+  the core functionality from :func:`MG.CellCenterMG2d <multigrid.MG.CellCenterMG2d>`.
 
   This solver is the only one to support inhomogeneous boundary
   conditions.
