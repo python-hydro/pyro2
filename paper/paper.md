@@ -97,4 +97,9 @@ The current pyro solvers are:
 new is support for Lagrangian tracer particles, which can be added to
 any solver that has a velocity field.
 
+# Acknowledgements
+
+The work at Stony Brook was supported by DOE/Office of Nuclear Physics
+grant DE-FG02-87ER40317 and DOE grant DE-SC0017955.
+
 # References
