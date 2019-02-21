@@ -5,7 +5,7 @@ Contributing
 ------------
 
 Contributions are welcomed from anyone, including posting issues or
-submitting pull requests to the [pyro github](https://github.com/python-hydro/pyro).
+submitting pull requests to the `pyro github <https://github.com/python-hydro/pyro>`_.
 
 Users who make significant contributions will be listed as developers
 in the pyro acknowledgements and be included in any future code
