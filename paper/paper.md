@@ -2,7 +2,7 @@
 title: 'pyro: a framework for hydrodynamics explorations and prototyping'
 
 tags:
-- python
+- Python
 - hydrodynamics
 - astrophysics
 - physics
@@ -36,41 +36,41 @@ bibliography: paper.bib
 
 # Summary
 
-pyro is a python-based simulation framework designed for ease of
+`pyro` is a Python-based simulation framework designed for ease of
 implementation and exploration of hydrodynamics methods.  It is
 built in a object-oriented fashion, allowing for the reuse of
 the core components and fast prototyping of new methods.
 
-The original goal of pyro was to learn hydrodynamics methods through
-example, and it still serves this goal.  At Stony Brook, pyro is used
+The original goal of `pyro` was to learn hydrodynamics methods through
+example, and it still serves this goal.  At Stony Brook, `pyro` is used
 with new undergraduate researchers in our group to introduce them to
 the ideas of computational hydrodynamics.  But the current framework
-has evolved to the point where pyro is used for prototyping
+has evolved to the point where `pyro` is used for prototyping
 hydrodynamics solvers before implementing them into science codes.  An
 example of this is the 4th-order compressible solver built on the
 ideas of spectral deferred corrections (the `compressible_sdc`
 solver).  This implementation was used as the model for the
 development of higher-order schemes in the Castro hydrodynamics code
 [@castro].  The low Mach number atmospheric solver (`lm_atm`) is based
-on the Maestro code [@maestro] and the pyro implementation will be
+on the Maestro code [@maestro] and the `pyro` implementation will be
 used to prototype new low Mach number algorithms before porting them
 to science codes.
 
-In the time since the first pyro paper [@pyroI], the code has
+In the time since the first `pyro` paper [@pyroI], the code has
 undergone considerable development, gained a large number of solvers,
 adopted unit testing through pytest and documentation through sphinx,
-and a number of new contributors.  pyro's functionality can now
+and a number of new contributors.  `pyro`'s functionality can now
 be accessed directly through a `Pyro()` class, in addition to the
 original commandline script interface.  This new interface in particular
 allows for easy use within Jupyter notebooks.  We also now use HDF5
-for output instead of python's `pickle()` function.  Previously, we used Fortran
+for output instead of Python's `pickle()` function.  Previously, we used Fortran
 to speed up some performance-critical portions of the code.  These routines
-could be called by the main python code by first compiling them using `f2py`.
-In the new version, we have replaced these Fortran routines by python functions
-that are compiled at runtime by `numba`.  Consequently, pyro is now written
-entirely in python.
+could be called by the main Python code by first compiling them using `f2py`.
+In the new version, we have replaced these Fortran routines by Python functions
+that are compiled at runtime by `numba`.  Consequently, `pyro` is now written
+entirely in Python.
 
-The current pyro solvers are:
+The current `pyro` solvers are:
 
 -   linear advection (including a second-order unsplit CTU scheme, a
     method-of-lines piecewise linear solver$^\star$, a 4th-order
@@ -93,7 +93,7 @@ The current pyro solvers are:
 
 -   shallow water equations solver$^\star$
 
-(solvers since the first pyro paper are marked with a $^\star$).  Also
+(solvers since the first `pyro` paper are marked with a $^\star$).  Also,
 new is support for Lagrangian tracer particles, which can be added to
 any solver that has a velocity field.
 
