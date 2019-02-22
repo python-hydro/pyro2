@@ -1,4 +1,6 @@
-[![Build Status](https://travis-ci.com/python-hydro/pyro2.svg?branch=master)](https://travis-ci.com/python-hydro/pyro2) [![Documentation Status](https://readthedocs.org/projects/pyro2/badge/?version=latest)](https://pyro2.readthedocs.io/en/latest/?badge=latest) [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/python-hydro/pyro2/master?filepath=examples%2Fexamples.ipynb) [![JOSS status](http://joss.theoj.org/papers/6d8b2f94e6d08a7b5d65e98a948dcad7/status.svg)](http://joss.theoj.org/papers/6d8b2f94e6d08a7b5d65e98a948dcad7)
+[![Build Status](https://travis-ci.com/python-hydro/pyro2.svg?branch=master)](https://travis-ci.com/python-hydro/pyro2) [![Documentation Status](https://readthedocs.org/projects/pyro2/badge/?version=latest)](https://pyro2.readthedocs.io/en/latest/?badge=latest) [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/python-hydro/pyro2/master?filepath=examples%2Fexamples.ipynb) [![JOSS status](http://joss.theoj.org/papers/6d8b2f94e6d08a7b5d65e98a948dcad7/status.svg)](http://joss.theoj.org/papers/6d8b2f94e6d08a7b5d65e98a948dcad7) [![DOI](https://zenodo.org/badge/20570861.svg)](https://zenodo.org/badge/latestdoi/20570861)
+
+
 
 
 ![pyro logo](www/logo.gif)
