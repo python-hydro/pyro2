@@ -1,18 +1,17 @@
-If you find pyro useful, please cite this paper:
+If you use pyro, we appreciate you citing the latest code paper:
 
-@ARTICLE{pyro:2014,
-   author = {{Zingale}, M.},
-    title = "{pyro: A teaching code for computational astrophysical hydrodynamics}",
-  journal = {Astronomy and Computing},
-archivePrefix = "arXiv",
-   eprint = {1306.6883},
- primaryClass = "astro-ph.IM",
- keywords = {Hydrodynamics, Methods: numerical},
-     year = 2014,
-    month = oct,
-   volume = 6,
-    pages = {52--62},
-      doi = {10.1016/j.ascom.2014.07.003},
-   adsurl = {http://adsabs.harvard.edu/abs/2014A%26C.....6...52Z},
-  adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+@article{pyro:2019,
+author = {Harpole, Alice and Zingale, Michael and Hawke, Ian and Chegini, Taher},
+doi = {10.21105/joss.01265},
+journal = {The Journal of Open Source Software},
+number = {34},
+pages = {1265},
+title = {pyro : a framework for hydrodynamics explorations and prototyping},
+volume = {4},
+year = {2019}
 }
+
+You should also cite the Zenodo DOI for the code release.  A bibtex
+entry for the latest release can be found here:
+
+https://doi.org/10.5281/zenodo.2575565
