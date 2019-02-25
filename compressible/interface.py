@@ -419,7 +419,7 @@ def riemann_cgf(idir, ng,
                 lambdastar_r = ustar + cstar_r
 
                 if (pstar > p_r):
-                    # the wave if a shock -- find the shock speed
+                    # the wave is a shock -- find the shock speed
                     sigma = (lambda_r + lambdastar_r) / 2.0
 
                     if (sigma > 0.0):
@@ -713,7 +713,7 @@ def riemann_prim(idir, ng,
                 lambdastar_r = ustar + cstar_r
 
                 if (pstar > p_r):
-                    # the wave if a shock -- find the shock speed
+                    # the wave is a shock -- find the shock speed
                     sigma = (lambda_r + lambdastar_r) / 2.0
 
                     if (sigma > 0.0):
