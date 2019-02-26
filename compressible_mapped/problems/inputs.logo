@@ -1,0 +1,34 @@
+[driver]
+max_steps = 5000
+tmax = 30.0
+
+
+[compressible]
+limiter = 2
+cvisc = 0.1
+
+
+[io]
+basename = logo_
+dt_out = 0.02
+
+
+[eos]
+gamma = 1.4
+
+
+[mesh]
+nx = 64
+ny = 64
+xmax = 1.0
+ymax = 1.0
+
+xlboundary = outflow
+xrboundary = outflow
+
+ylboundary = outflow
+yrboundary = outflow
+
+
+[vis]
+dovis = 1

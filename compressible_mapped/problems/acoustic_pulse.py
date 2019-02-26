@@ -41,11 +41,13 @@ def init_data(myd, rp):
     ymin = rp.get_param("mesh.ymin")
     ymax = rp.get_param("mesh.ymax")
 
-    xctr = 0.5 * (xmin + xmax)
-    yctr = 0.5 * (ymin + ymax)
+    myg = myd.grid
 
-    dist = np.sqrt((myd.grid.x2d - xctr)**2 +
-                   (myd.grid.y2d - yctr)**2)
+    xctr = 0.5 * (xmin + xmax) * myg.gamma_fcy
+    yctr = 0.5 * (ymin + ymax) * myg.gamma_fcx
+
+    dist = np.sqrt((myd.grid.x2d * myg.gamma_fcy - xctr)**2 +
+                   (myd.grid.y2d * myg.gamma_fcx - yctr)**2)
 
     dens[:, :] = rho0
     idx = dist <= 0.5
@@ -54,6 +56,29 @@ def init_data(myd, rp):
 
     p = (dens / rho0)**gamma
     ener[:, :] = p / (gamma - 1)
+
+
+def area(myg):
+    return 2 * myg.dx * myg.dy + myg.scratch_array()
+
+
+def h(idir, myg):
+    if idir == 1:
+        return myg.dy + myg.scratch_array()
+    else:
+        return 2 * myg.dx + myg.scratch_array()
+
+
+def R(iface, myg, nvar, ixmom, iymom):
+    R_fc = myg.scratch_array(nvar=(nvar, nvar))
+
+    R_mat = np.eye(nvar)
+
+    for i in range(myg.qx):
+        for j in range(myg.qy):
+            R_fc[i, j, :, :] = R_mat
+
+    return R_fc
 
 
 def finalize():

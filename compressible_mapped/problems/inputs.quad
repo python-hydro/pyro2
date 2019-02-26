@@ -1,0 +1,52 @@
+# simple inputs files for the four-corner problem.
+
+[driver]
+max_steps = 1000
+tmax = 0.8
+
+
+[compressible]
+limiter = 2
+cvisc = 0.1
+
+[io]
+basename = quad_unsplit_
+dt_out = 0.1
+
+
+[mesh]
+nx = 256
+ny = 256
+xmax = 1.0
+ymax = 1.0
+
+xlboundary = outflow
+xrboundary = outflow
+
+ylboundary = outflow
+yrboundary = outflow
+
+
+[quadrant]
+rho1 = 1.4
+u1 = 0.0
+v1 = 0.0
+p1 = 1.5
+
+rho2 = 0.532258064516129
+u2 = 1.206045378311055
+v2 = 0.0
+p2 = 0.3
+
+rho3 = 0.137992831541219
+u3 = 1.206045378311055
+v3 = 1.206045378311055
+p3 = 0.029032258064516
+
+rho4 = 0.532258064516129
+u4 = 0.0
+v4 = 1.206045378311055
+p4 = 0.3
+
+cx = 0.8
+cy = 0.8

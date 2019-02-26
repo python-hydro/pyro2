@@ -91,7 +91,7 @@ class ArrayIndexer(np.ndarray):
                                        self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s, n])
             else:
                 return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
-                                       self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s,])
+                                       self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s])
 
     def lap(self, n=0, buf=0):
         """return the 5-point Laplacian"""

@@ -1,0 +1,4 @@
+[sedov]
+r_init = 0.1   ; radius for the initial perturbation
+nsub = 4
+

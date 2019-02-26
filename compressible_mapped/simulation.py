@@ -2,20 +2,23 @@ from __future__ import print_function
 
 import numpy as np
 import importlib
+import matplotlib.pyplot as plt
 
 import mesh.integration as integration
 import compressible
+import compressible_rk
 import compressible_mapped.fluxes as flx
-from util import msg
+from util import msg, plot_tools
 import mesh.mapped as mapped
 import mesh.boundary as bnd
 import compressible.BC as BC
+import compressible.eos as eos
 from simulation_null import bc_setup
 import particles.particles as particles
 import compressible.derives as derives
 
 
-def mapped_grid_setup(rp, ng=1):
+def mapped_grid_setup(rp, area, h, R, ng=1):
     nx = rp.get_param("mesh.nx")
     ny = rp.get_param("mesh.ny")
 
@@ -43,48 +46,32 @@ def mapped_grid_setup(rp, ng=1):
         ymax = 1.0
         msg.warning("mesh.ynax not set, defaulting to 1.0")
 
-    def area(myg):
-        return myg.dx * myg.dy + myg.scratch_array()
-
-    def h(idir, myg):
-        if idir == 1:
-            return myg.dy + myg.scratch_array()
-        else:
-            return myg.dx + myg.scratch_array()
-
-    def R(iface, myg, nvar, ixmom, iymom):
-        R_fc = myg.scratch_array(nvar=(nvar, nvar))
-
-        R_mat = np.eye(nvar)
-
-        for i in range(myg.qx):
-            for j in range(myg.qy):
-                R_fc[i,j,:,:] = R_mat
-
-        return R_fc
-
     my_grid = mapped.MappedGrid2d(nx, ny,
-                           xmin=xmin, xmax=xmax,
-                           ymin=ymin, ymax=ymax, ng=ng,
-                           area_func=area, h_func=h, R_func=R)
+                                  xmin=xmin, xmax=xmax,
+                                  ymin=ymin, ymax=ymax, ng=ng,
+                                  area_func=area, h_func=h, R_func=R)
     return my_grid
 
 
-class Simulation(compressible.Simulation):
+class Simulation(compressible_rk.Simulation):
     """The main simulation class for the method of lines compressible
     hydrodynamics solver"""
 
     def __init__(self, solver_name, problem_name, rp, timers=None):
 
         super().__init__(solver_name, problem_name, rp, timers=timers,
-        data_class=mapped.MappedCellCenterData2d)
+                         data_class=mapped.MappedCellCenterData2d)
 
     def initialize(self, extra_vars=None, ng=4):
         """
         Initialize the grid and variables for compressible flow and set
         the initial conditions for the chosen problem.
         """
-        my_grid = mapped_grid_setup(self.rp, ng=ng)
+        problem = importlib.import_module("{}.problems.{}".format(
+            self.solver_name, self.problem_name))
+
+        my_grid = mapped_grid_setup(
+            self.rp, problem.area, problem.h, problem.R, ng=ng)
         my_data = self.data_class(my_grid)
 
         # define solver specific boundary condition routines
@@ -139,8 +126,6 @@ class Simulation(compressible.Simulation):
         self.cc_data.add_derived(derives.derive_primitives)
 
         # initial conditions for the problem
-        problem = importlib.import_module("{}.problems.{}".format(
-            self.solver_name, self.problem_name))
         problem.init_data(self.cc_data, self.rp)
 
         if self.verbose > 0:
@@ -165,27 +150,6 @@ class Simulation(compressible.Simulation):
 
         return -k
 
-    def method_compute_timestep(self):
-        """
-        The timestep function computes the advective timestep (CFL)
-        constraint.  The CFL constraint says that information cannot
-        propagate further than one zone per timestep.
-
-        We use the driver.cfl parameter to control what fraction of the
-        CFL step we actually take.
-        """
-
-        cfl = self.rp.get_param("driver.cfl")
-
-        # get the variables we need
-        u, v, cs = self.cc_data.get_var(["velocity", "soundspeed"])
-
-        # the timestep is min(dx/(|u| + cs), dy/(|v| + cs))
-        xtmp = (abs(u) + cs) / self.cc_data.grid.dx
-        ytmp = (abs(v) + cs) / self.cc_data.grid.dy
-
-        self.dt = cfl * float(np.min(1.0 / (xtmp + ytmp)))
-
     def evolve(self):
         """
         Evolve the equations of compressible hydrodynamics through a
@@ -203,7 +167,8 @@ class Simulation(compressible.Simulation):
         rk.set_start(myd)
 
         for s in range(rk.nstages()):
-            ytmp = rk.get_stage_start(s, clone_function=mapped.mapped_cell_center_data_clone)
+            ytmp = rk.get_stage_start(
+                s, clone_function=mapped.mapped_cell_center_data_clone)
             ytmp.fill_BC_all()
             k = self.substep(ytmp)
             rk.store_increment(s, k)
@@ -218,3 +183,76 @@ class Simulation(compressible.Simulation):
         self.n += 1
 
         tm_evolve.end()
+
+    def dovis(self):
+        """
+        Do runtime visualization.
+        """
+
+        plt.clf()
+
+        plt.rc("font", size=10)
+
+        # we do this even though ivars is in self, so this works when
+        # we are plotting from a file
+        ivars = compressible.Variables(self.cc_data)
+
+        # access gamma from the cc_data object so we can use dovis
+        # outside of a running simulation.
+        gamma = self.cc_data.get_aux("gamma")
+
+        q = compressible.cons_to_prim(
+            self.cc_data.data, gamma, ivars, self.cc_data.grid)
+
+        rho = q[:, :, ivars.irho]
+        u = q[:, :, ivars.iu]
+        v = q[:, :, ivars.iv]
+        p = q[:, :, ivars.ip]
+        e = eos.rhoe(gamma, p) / rho
+
+        magvel = np.sqrt(u**2 + v**2)
+
+        myg = self.cc_data.grid
+
+        fields = [rho, magvel, p, e]
+        field_names = [r"$\rho$", r"U", "p", "e"]
+
+        _, axes, cbar_title = plot_tools.setup_axes(myg, len(fields))
+
+        for n, ax in enumerate(axes):
+            v = fields[n]
+
+            X = myg.x2d[myg.ng:-myg.ng, myg.ng:-myg.ng] * myg.gamma_fcy.v()
+            Y = myg.y2d[myg.ng:-myg.ng, myg.ng:-myg.ng] * myg.gamma_fcx.v()
+
+            img = ax.pcolormesh(X, Y, v.v(), cmap=self.cm)
+
+            ax.set_xlabel("x")
+            ax.set_ylabel("y")
+
+            # needed for PDF rendering
+            cb = axes.cbar_axes[n].colorbar(img)
+            cb.solids.set_rasterized(True)
+            cb.solids.set_edgecolor("face")
+
+            if cbar_title:
+                cb.ax.set_title(field_names[n])
+            else:
+                ax.set_title(field_names[n])
+
+        if self.particles is not None:
+            ax = axes[0]
+            particle_positions = self.particles.get_positions()
+            # dye particles
+            colors = self.particles.get_init_positions()[:, 0]
+
+            # plot particles
+            ax.scatter(particle_positions[:, 0],
+                       particle_positions[:, 1], s=5, c=colors, alpha=0.8, cmap="Greys")
+            ax.set_xlim([myg.xmin, myg.xmax])
+            ax.set_ylim([myg.ymin, myg.ymax])
+
+        plt.figtext(0.05, 0.0125, "t = {:10.5g}".format(self.cc_data.t))
+
+        plt.pause(0.001)
+        plt.draw()
