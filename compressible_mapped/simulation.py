@@ -71,7 +71,7 @@ class Simulation(compressible_rk.Simulation):
             self.solver_name, self.problem_name))
 
         my_grid = mapped_grid_setup(
-            self.rp, problem.area, problem.h, problem.R, problem.map, ng=ng)
+            self.rp, problem.area, problem.h, problem.R, problem.sym_map, ng=ng)
         my_data = self.data_class(my_grid)
 
         # define solver specific boundary condition routines
@@ -222,12 +222,12 @@ class Simulation(compressible_rk.Simulation):
         for n, ax in enumerate(axes):
             v = fields[n]
 
-            # X = myg.x2d[myg.ng:-myg.ng, myg.ng:-myg.ng] * myg.gamma_fcy.v()
-            # Y = myg.y2d[myg.ng:-myg.ng, myg.ng:-myg.ng] * myg.gamma_fcx.v()
+            X = myg.x2d[myg.ng:-myg.ng, myg.ng:-myg.ng] * myg.gamma_fcy.v()
+            Y = myg.y2d[myg.ng:-myg.ng, myg.ng:-myg.ng] * myg.gamma_fcx.v()
 
-            X, Y = myg.map
-            X = X[myg.ng:-myg.ng, myg.ng:-myg.ng]
-            Y = Y[myg.ng:-myg.ng, myg.ng:-myg.ng]
+            # X, Y = myg.map
+            # X = X[myg.ng:-myg.ng, myg.ng:-myg.ng]
+            # Y = Y[myg.ng:-myg.ng, myg.ng:-myg.ng]
 
             img = ax.pcolormesh(X, Y, v.v(), cmap=self.cm)
 

@@ -129,10 +129,21 @@ class MappedGrid2d(Grid2d):
         Use sympy to calculate the line elements
         """
 
-        l1 = sympy.simplify(sympy.norm(self.map.diff(y)))
-        l2 = sympy.simplify(sympy.norm(self.map.diff(x)))
+        l1 = sympy.simplify(sympy.Abs(self.map.diff(y)))
+        l2 = sympy.simplify(sympy.Abs(self.map.diff(x)))
 
         return l1, l2
+
+    def sym_rotation_matrix(self):
+        """
+        Use sympy to calculate the rotation matrix (which is just the Jacobian??)
+        """
+
+        J = sympy.Matrix(self.map[:-1]).jacobian((x, y))
+        J[0,:] /= J[0,:].norm()
+        J[1,:] /= J[1,:].norm()
+
+        return J
 
     def calculate_metric_elements(self, area, h):
         """
@@ -147,17 +158,16 @@ class MappedGrid2d(Grid2d):
         if isinstance(self.map, sympy.Matrix):
             # calculate sympy formula on grid
             sym_dA = self.sym_area_element()
-            dA = sympy.lambdify((x, y), sym_dA)
 
             sym_hx, sym_hy = self.sym_line_elements()
-            _hx = sympy.lambdify((x, y), sym_hx)
-            _hy = sympy.lambdify((x, y), sym_hy)
 
             for i in range(self.qx):
                 for j in range(self.qy):
-                    kappa[i, j] = dA(self.x2d[i, j], self.y2d[i, j])
-                    hx[i,j] = _hx(self.x2d[i,j] - 0.5*self.dx, self.y2d[i,j])
-                    hy[i,j] = _hy(self.x2d[i,j], self.y2d[i,j] - 0.5*self.dy)
+                    kappa[i, j] = sym_dA.subs((x, self.x2d[i, j]), (y, self.y2d[i, j]))
+                    hx[i, j] = sym_hx.subs((x, self.x2d[i, j] - 0.5 *
+                                   self.dx), (y, self.y2d[i, j]))[1]
+                    hy[i, j] = sym_hy.subs(
+                        (x, self.x2d[i, j]), (y, self.y2d[i, j] - 0.5 * self.dy))[0]
 
         else:
             kappa[:, :] = area(self) / (self.dx * self.dy)
@@ -172,8 +182,45 @@ class MappedGrid2d(Grid2d):
         the variables.
         """
 
-        R_fcx = partial(R, 1, self)
-        R_fcy = partial(R, 2, self)
+        if isinstance(self.map, sympy.Matrix):
+            sym_R = self.sym_rotation_matrix()
+            R = sympy.lambdify((x, y), sym_R)
+
+            def R_fcx(nvar, ixmom, iymom):
+                R_fc = self.scratch_array(nvar=(nvar, nvar))
+
+                R_mat = np.eye(nvar)
+
+                for i in range(self.qx):
+                    for j in range(self.qy):
+                        R_fc[i, j, :, :] = R_mat
+
+                        R_fc[i, j, ixmom:iymom + 1, ixmom:iymom +
+                             1] = R(self.x2d[i, j] - 0.5 * self.dx, self.y2d[i, j])
+
+                return R_fc
+
+            # print(R_fcx(4, 2, 3))
+
+            def R_fcy(nvar, ixmom, iymom):
+                R_fc = self.scratch_array(nvar=(nvar, nvar))
+
+                R_mat = np.eye(nvar)
+
+                for i in range(self.qx):
+                    for j in range(self.qy):
+                        R_fc[i, j, :, :] = R_mat
+
+                        R_fc[i, j, ixmom:iymom + 1, ixmom:iymom +
+                             1] = R(self.x2d[i, j], self.y2d[i, j] - 0.5 * self.dy)
+                return R_fc
+
+            # print(R_fcy(4, 2, 3))
+        else:
+            R_fcx = partial(R, 1, self)
+            R_fcy = partial(R, 2, self)
+
+            # print(R_fcx(4, 2, 3))
 
         return R_fcx, R_fcy
 

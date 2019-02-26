@@ -5,7 +5,7 @@ from __future__ import print_function
 import numpy as np
 from util import msg
 import sympy
-from sympy.abs import x, y, z
+from sympy.abc import x, y, z
 
 
 def init_data(myd, rp):
@@ -89,6 +89,7 @@ def map(myg):
     ys_t = myg.y2d
 
     return xs_t, ys_t
+
 
 def sym_map(myg):
 
