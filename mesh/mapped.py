@@ -144,11 +144,8 @@ class MappedGrid2d(Grid2d):
         and number of ghostcells as the parent grid
         """
 
-        def isTuple(x):
-            return isinstance(x, tuple)
-
         def flatten(t):
-            if not isTuple(t):
+            if not isinstance(t, tuple):
                 return (t, )
             elif len(t) == 0:
                 return ()
@@ -158,8 +155,10 @@ class MappedGrid2d(Grid2d):
         if nvar == 1:
             _tmp = np.zeros((self.qx, self.qy), dtype=np.float64)
         else:
-            _tmp = np.zeros((self.qx, self.qy) + flatten(nvar), dtype=np.float64)
+            _tmp = np.zeros((self.qx, self.qy) +
+                            flatten(nvar), dtype=np.float64)
         return ai.ArrayIndexer(d=_tmp, grid=self)
+
 
 class MappedCellCenterData2d(CellCenterData2d):
 
@@ -179,6 +178,7 @@ class MappedCellCenterData2d(CellCenterData2d):
 
         self.R_fcx = self.grid.R_fcx(ivars.nvar, ivars.ixmom, ivars.iymom)
         self.R_fcy = self.grid.R_fcy(ivars.nvar, ivars.ixmom, ivars.iymom)
+
 
 def mapped_cell_center_data_clone(old):
     """
@@ -215,5 +215,5 @@ def mapped_cell_center_data_clone(old):
 
     new.R_fcx = old.R_fcx.copy()
     new.R_fcy = old.R_fcy.copy()
-    
+
     return new

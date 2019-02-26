@@ -81,13 +81,13 @@ def fluxes(my_data, rp, ivars, solid, tc):
 
     for i in range(nx):
         for j in range(ny):
-            U_xl.v(buf=b)[i, j] = (my_data.R_fcy.v(buf=b)[i, j] @
+            U_xl.v(buf=b)[i, j] = (my_data.R_fcx.v(buf=b)[i, j] @
                                    U.ip(-1, buf=b)[i, j])
-            U_xr.v(buf=b)[i, j] = (my_data.R_fcy.v(buf=b)[i, j] @
+            U_xr.v(buf=b)[i, j] = (my_data.R_fcx.v(buf=b)[i, j] @
                                    U.v(buf=b)[i, j])
-            U_yl.v(buf=b)[i, j] = (my_data.R_fcx.v(buf=b)[i, j] @
+            U_yl.v(buf=b)[i, j] = (my_data.R_fcy.v(buf=b)[i, j] @
                                    U.jp(-1, buf=b)[i, j])
-            U_yr.v(buf=b)[i, j] = (my_data.R_fcx.v(buf=b)[i, j] @
+            U_yr.v(buf=b)[i, j] = (my_data.R_fcy.v(buf=b)[i, j] @
                                    U.v(buf=b)[i, j])
 
     gamma = rp.get_param("eos.gamma")
@@ -141,25 +141,25 @@ def fluxes(my_data, rp, ivars, solid, tc):
     for i in range(ilo - 1, ihi + 1):
         for j in range(jlo - 1, jhi + 1):
 
-            A_plus_delta_q_x[i, j, :] = myg.gamma_fcy[i, j] * \
-                (my_data.R_fcy[i, j]).T  @ \
+            A_plus_delta_q_x[i, j, :] = myg.gamma_fcx[i, j] * \
+                (my_data.R_fcx[i, j]).T  @ \
                 (interface.consFlux(1, gamma, ivars.idens, ivars.ixmom, ivars.iymom,
                                     ivars.iener, ivars.irhox, ivars.naux,
                                     U_xr[i, j, :]) - F_x[i, j, :])
-            A_minus_delta_q_x[i, j, :] = myg.gamma_fcy[i, j] * \
-                (my_data.R_fcy[i, j]).T @ \
+            A_minus_delta_q_x[i, j, :] = myg.gamma_fcx[i, j] * \
+                (my_data.R_fcx[i, j]).T @ \
                 (F_x[i, j, :] - interface.consFlux(1, gamma, ivars.idens, ivars.ixmom,
                                                    ivars.iymom, ivars.iener,
                                                    ivars.irhox, ivars.naux,
                                                    U_xl[i, j, :]))
 
-            A_plus_delta_q_y[i, j, :] = myg.gamma_fcx[i, j] * \
-                (my_data.R_fcx[i, j]).T @ \
+            A_plus_delta_q_y[i, j, :] = myg.gamma_fcy[i, j] * \
+                (my_data.R_fcy[i, j]).T @ \
                 (interface.consFlux(2, gamma, ivars.idens, ivars.ixmom, ivars.iymom,
                                     ivars.iener, ivars.irhox, ivars.naux,
                                     U_yr[i, j, :]) - F_y[i, j, :])
-            A_minus_delta_q_y[i, j, :] = myg.gamma_fcx[i, j] * \
-                (my_data.R_fcx[i, j]).T @ \
+            A_minus_delta_q_y[i, j, :] = myg.gamma_fcy[i, j] * \
+                (my_data.R_fcy[i, j]).T @ \
                 (F_y[i, j, :] - interface.consFlux(2, gamma, ivars.idens, ivars.ixmom,
                                                    ivars.iymom, ivars.iener,
                                                    ivars.irhox, ivars.naux,
