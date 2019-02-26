@@ -18,7 +18,7 @@ import particles.particles as particles
 import compressible.derives as derives
 
 
-def mapped_grid_setup(rp, area, h, R, ng=1):
+def mapped_grid_setup(rp, area, h, R, map, ng=1):
     nx = rp.get_param("mesh.nx")
     ny = rp.get_param("mesh.ny")
 
@@ -49,7 +49,7 @@ def mapped_grid_setup(rp, area, h, R, ng=1):
     my_grid = mapped.MappedGrid2d(nx, ny,
                                   xmin=xmin, xmax=xmax,
                                   ymin=ymin, ymax=ymax, ng=ng,
-                                  area_func=area, h_func=h, R_func=R)
+                                  area_func=area, h_func=h, R_func=R, map_func=map)
     return my_grid
 
 
@@ -71,7 +71,7 @@ class Simulation(compressible_rk.Simulation):
             self.solver_name, self.problem_name))
 
         my_grid = mapped_grid_setup(
-            self.rp, problem.area, problem.h, problem.R, ng=ng)
+            self.rp, problem.area, problem.h, problem.R, problem.map, ng=ng)
         my_data = self.data_class(my_grid)
 
         # define solver specific boundary condition routines
@@ -222,8 +222,12 @@ class Simulation(compressible_rk.Simulation):
         for n, ax in enumerate(axes):
             v = fields[n]
 
-            X = myg.x2d[myg.ng:-myg.ng, myg.ng:-myg.ng] * myg.gamma_fcy.v()
-            Y = myg.y2d[myg.ng:-myg.ng, myg.ng:-myg.ng] * myg.gamma_fcx.v()
+            # X = myg.x2d[myg.ng:-myg.ng, myg.ng:-myg.ng] * myg.gamma_fcy.v()
+            # Y = myg.y2d[myg.ng:-myg.ng, myg.ng:-myg.ng] * myg.gamma_fcx.v()
+
+            X, Y = myg.map
+            X = X[myg.ng:-myg.ng, myg.ng:-myg.ng]
+            Y = Y[myg.ng:-myg.ng, myg.ng:-myg.ng]
 
             img = ax.pcolormesh(X, Y, v.v(), cmap=self.cm)
 

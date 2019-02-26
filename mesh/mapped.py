@@ -33,12 +33,9 @@ Typical usage:
 from __future__ import print_function
 
 import numpy as np
-#
-# import h5py
-#
+import sympy
+from sympy.abc import x, y
 from util import msg
-#
-# import mesh.boundary as bnd
 import mesh.array_indexer as ai
 from functools import partial
 from mesh.patch import Grid2d, CellCenterData2d
@@ -66,7 +63,7 @@ class MappedGrid2d(Grid2d):
 
     def __init__(self, nx, ny, ng=1,
                  xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0,
-                 area_func=None, h_func=None, R_func=None):
+                 area_func=None, h_func=None, R_func=None, map_func=None):
         """
         Create a Grid2d object.
 
@@ -99,15 +96,29 @@ class MappedGrid2d(Grid2d):
 
         super().__init__(nx, ny, ng, xmin, xmax, ymin, ymax)
 
+        self.map = map_func(self)
+
         self.kappa, self.gamma_fcx, self.gamma_fcy = self.calculate_metric_elements(
             area_func, h_func)
 
         self.R_fcx, self.R_fcy = self.calculate_rotation_matrices(R_func)
 
-        # self.R_fcx = self.scratch_array() + 1.0
-        # self.R_fcy = self.scratch_array() + 1.0
-        # self.R_T_fcx = self.scratch_array() + 1.0
-        # self.R_T_fcy = self.scratch_array() + 1.0
+    def sym_area_element(p, u, v):
+        """
+        Use sympy to calculate area element using https://mzucker.github.io/2018/04/12/sympy-part-3-moar-derivatives.html
+        """
+
+        def norm(z):
+            return sympy.sqrt(z.dot(z))
+
+        p1 = sympy.simplify(p.diff(u))
+        p2 = sympy.simplify(p.diff(v))
+
+        p1_cross_p2 = sympy.simplify(p1.cross(p2))
+
+        dA = sympy.simplify(norm(p1_cross_p2))
+
+        return dA
 
     def calculate_metric_elements(self, area, h):
         """
@@ -117,7 +128,16 @@ class MappedGrid2d(Grid2d):
 
         kappa = self.scratch_array()
 
-        kappa[:, :] = area(self) / (self.dx * self.dy)
+        if isinstance(self.map, sympy.Matrix):
+            # calculate sympy formula on grid
+            sym_dA = self.sym_area_element(self.map, x, y)
+            dA = sympy.lambdify((x, y), sym_dA)
+
+            for i in range(self.qx):
+                for j in range(self.qy):
+                    kappa[i, j] = dA(self.x2d[i, j], self.y2d[i, j])
+        else:
+            kappa[:, :] = area(self) / (self.dx * self.dy)
 
         hx = self.scratch_array()
         hy = self.scratch_array()

@@ -81,6 +81,14 @@ def R(iface, myg, nvar, ixmom, iymom):
     return R_fc
 
 
+def map(myg):
+
+    xs_t = myg.x2d * 2
+    ys_t = myg.y2d
+
+    return xs_t, ys_t
+
+
 def finalize():
     """ print out any information to the user at the end of the run """
     pass
