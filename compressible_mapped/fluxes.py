@@ -19,6 +19,8 @@ Taylor expanding *in space only* yields::
 
 """
 
+import numpy as np
+
 import compressible.interface as interface
 import compressible as comp
 import mesh.reconstruction as reconstruction
@@ -65,11 +67,19 @@ def fluxes(my_data, rp, ivars, solid, tc):
     # transform by rotating the velocity components
     # =========================================================================
 
-    U_xl = myg.R_fcy * U.ip(-1)
-    U_xr = myg.R_fcy * U.v()
+    U_xl = myg.scratch_array(nvar=ivars.nvar)
+    U_xr = myg.scratch_array(nvar=ivars.nvar)
 
-    U_yl = myg.R_fcx * U.jp(-1)
-    U_yr = myg.R_fcx * U.v()
+    U_yl = myg.scratch_array(nvar=ivars.nvar)
+    U_yr = myg.scratch_array(nvar=ivars.nvar)
+
+    b = 3
+
+    for n in range(ivars.nvar):
+        U_xl.v(n=n, buf=b)[:, :] = myg.R_fcy.v(buf=b) * U.ip(-1, n=n, buf=b)
+        U_xr.v(n=n, buf=b)[:, :] = myg.R_fcy.v(buf=b) * U.v(n=n, buf=b)
+        U_yl.v(n=n, buf=b)[:, :] = myg.R_fcx.v(buf=b) * U.jp(-1, n=n, buf=b)
+        U_yr.v(n=n, buf=b)[:, :] = myg.R_fcx.v(buf=b) * U.v(n=n, buf=b)
 
     gamma = rp.get_param("eos.gamma")
     #
@@ -182,19 +192,56 @@ def fluxes(my_data, rp, ivars, solid, tc):
     # transform back
     # =========================================================================
 
-    q_star_x = U_xl[:, :, :] + F_x[:, :, :]
+    nx = myg.qx - 2 * myg.ng
+    ny = myg.qy - 2 * myg.ng
+    ilo = myg.ng
+    ihi = myg.ng + nx
+    jlo = myg.ng
+    jhi = myg.ng + ny
 
-    A_plus_delta_q_x = myg.gamma_fcy * myg.R_T_fcy * \
-        (interface.consFlux(U_xr) - interface.consFlux(q_star_x))
-    A_minus_delta_q_x = myg.gamma_fcy * myg.R_T_fcy * \
-        (interface.consFlux(q_star_x) - interface.consFlux(U_xl))
+    A_plus_delta_q_x = myg.scratch_array(nvar=ivars.nvar)
+    A_minus_delta_q_x = myg.scratch_array(nvar=ivars.nvar)
+    A_plus_delta_q_y = myg.scratch_array(nvar=ivars.nvar)
+    A_minus_delta_q_y = myg.scratch_array(nvar=ivars.nvar)
 
-    q_star_y = U_yl[:, :, :] + F_y[:, :, :]
+    for i in range(ilo - 1, ihi + 1):
+        for j in range(jlo - 1, jhi + 1):
 
-    A_plus_delta_q_y = myg.gamma_fcx * myg.R_T_fcx * \
-        (interface.consFlux(U_yr) - interface.consFlux(q_star_y))
-    A_minus_delta_q_y = myg.gamma_fcx * myg.R_T_fcx * \
-        (interface.consFlux(q_star_y) - interface.consFlux(U_yl))
+            A_plus_delta_q_x[i, j, :] = myg.gamma_fcy[i,j] * myg.R_T_fcy[i,j] * (interface.consFlux(1, gamma, ivars.idens,
+                                                            ivars.ixmom, ivars.iymom,
+                                                            ivars.iener, ivars.irhox,
+                                                            ivars.naux, U_xr[i, j, :])
+                                         - F_x[i, j, :])
+            A_minus_delta_q_x[i, j, :] = myg.gamma_fcy[i,j] * myg.R_T_fcy[i,j] * (F_x[i, j, :] -
+                                          interface.consFlux(1, gamma, ivars.idens,
+                                                             ivars.ixmom, ivars.iymom, ivars.iener,
+                                                             ivars.irhox, ivars.naux,
+                                                             U_xl[i, j, :]))
+
+            A_plus_delta_q_y[i, j, :] = myg.gamma_fcx[i,j] * myg.R_T_fcx[i,j] * (interface.consFlux(2, gamma, ivars.idens,
+                                                            ivars.ixmom, ivars.iymom,
+                                                            ivars.iener, ivars.irhox,
+                                                            ivars.naux, U_yr[i, j, :])
+                                         - F_y[i, j, :])
+            A_minus_delta_q_y[i, j, :] = myg.gamma_fcx[i,j] * myg.R_T_fcx[i,j] * (F_y[i, j, :] -
+                                          interface.consFlux(2, gamma, ivars.idens,
+                                                             ivars.ixmom, ivars.iymom,
+                                                             ivars.iener, ivars.irhox,
+                                                             ivars.naux, U_yl[i, j, :]))
+
+    # q_star_x = U_xl[:, :, :] + F_x[:, :, :]
+    #
+    # A_plus_delta_q_x = myg.gamma_fcy * myg.R_T_fcy * \
+    #     (interface.consFlux(U_xr) - interface.consFlux(q_star_x))
+    # A_minus_delta_q_x = myg.gamma_fcy * myg.R_T_fcy * \
+    #     (interface.consFlux(q_star_x) - interface.consFlux(U_xl))
+    #
+    # q_star_y = U_yl[:, :, :] + F_y[:, :, :]
+    #
+    # A_plus_delta_q_y = myg.gamma_fcx * myg.R_T_fcx * \
+    #     (interface.consFlux(U_yr) - interface.consFlux(q_star_y))
+    # A_minus_delta_q_y = myg.gamma_fcx * myg.R_T_fcx * \
+    #     (interface.consFlux(q_star_y) - interface.consFlux(U_yl))
 
     tm_flux.end()
 
