@@ -103,7 +103,11 @@ class MappedGrid2d(Grid2d):
 
         self.R_fcx, self.R_fcy = self.calculate_rotation_matrices(R_func)
 
-    def sym_area_element(p, u, v):
+    @staticmethod
+    def norm(z):
+        return sympy.sqrt(z.dot(z))
+
+    def sym_area_element(self):
         """
         Use sympy to calculate area element using https://mzucker.github.io/2018/04/12/sympy-part-3-moar-derivatives.html
         """
@@ -111,14 +115,24 @@ class MappedGrid2d(Grid2d):
         def norm(z):
             return sympy.sqrt(z.dot(z))
 
-        p1 = sympy.simplify(p.diff(u))
-        p2 = sympy.simplify(p.diff(v))
+        p1 = sympy.simplify(self.map.diff(x))
+        p2 = sympy.simplify(self.map.diff(y))
 
         p1_cross_p2 = sympy.simplify(p1.cross(p2))
 
-        dA = sympy.simplify(norm(p1_cross_p2))
+        dA = sympy.simplify(self.norm(p1_cross_p2))
 
         return dA
+
+    def sym_line_elements(self):
+        """
+        Use sympy to calculate the line elements
+        """
+
+        l1 = sympy.simplify(sympy.norm(self.map.diff(y)))
+        l2 = sympy.simplify(sympy.norm(self.map.diff(x)))
+
+        return l1, l2
 
     def calculate_metric_elements(self, area, h):
         """
@@ -127,25 +141,30 @@ class MappedGrid2d(Grid2d):
         """
 
         kappa = self.scratch_array()
+        hx = self.scratch_array()
+        hy = self.scratch_array()
 
         if isinstance(self.map, sympy.Matrix):
             # calculate sympy formula on grid
-            sym_dA = self.sym_area_element(self.map, x, y)
+            sym_dA = self.sym_area_element()
             dA = sympy.lambdify((x, y), sym_dA)
+
+            sym_hx, sym_hy = self.sym_line_elements()
+            _hx = sympy.lambdify((x, y), sym_hx)
+            _hy = sympy.lambdify((x, y), sym_hy)
 
             for i in range(self.qx):
                 for j in range(self.qy):
                     kappa[i, j] = dA(self.x2d[i, j], self.y2d[i, j])
+                    hx[i,j] = _hx(self.x2d[i,j] - 0.5*self.dx, self.y2d[i,j])
+                    hy[i,j] = _hy(self.x2d[i,j], self.y2d[i,j] - 0.5*self.dy)
+
         else:
             kappa[:, :] = area(self) / (self.dx * self.dy)
+            hx[:, :] = h(1, self) / self.dy
+            hy[:, :] = h(2, self) / self.dx
 
-        hx = self.scratch_array()
-        hy = self.scratch_array()
-
-        hx[:, :] = h(1, self)
-        hy[:, :] = h(2, self)
-
-        return kappa, hx / self.dy, hy / self.dx
+        return kappa, hx, hy
 
     def calculate_rotation_matrices(self, R):
         """

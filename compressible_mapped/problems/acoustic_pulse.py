@@ -1,9 +1,11 @@
 from __future__ import print_function
 
-import sys
-import mesh.fv as fv
+# import sys
+# import mesh.fv as fv
 import numpy as np
 from util import msg
+import sympy
+from sympy.abs import x, y, z
 
 
 def init_data(myd, rp):
@@ -87,6 +89,10 @@ def map(myg):
     ys_t = myg.y2d
 
     return xs_t, ys_t
+
+def sym_map(myg):
+
+    return sympy.Matrix([2 * x, y, z])
 
 
 def finalize():
