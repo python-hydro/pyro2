@@ -7,7 +7,7 @@ import mesh.integration as integration
 import compressible
 import compressible_mapped.fluxes as flx
 from util import msg
-from mesh.mapped import MappedGrid2d
+import mesh.mapped as mapped
 import mesh.boundary as bnd
 import compressible.BC as BC
 from simulation_null import bc_setup
@@ -43,15 +43,41 @@ def mapped_grid_setup(rp, ng=1):
         ymax = 1.0
         msg.warning("mesh.ynax not set, defaulting to 1.0")
 
-    my_grid = MappedGrid2d(nx, ny,
+    def area(myg):
+        return myg.dx * myg.dy + myg.scratch_array()
+
+    def h(idir, myg):
+        if idir == 1:
+            return myg.dy + myg.scratch_array()
+        else:
+            return myg.dx + myg.scratch_array()
+
+    def R(iface, myg, nvar, ixmom, iymom):
+        R_fc = myg.scratch_array(nvar=(nvar, nvar))
+
+        R_mat = np.eye(nvar)
+
+        for i in range(myg.qx):
+            for j in range(myg.qy):
+                R_fc[i,j,:,:] = R_mat
+
+        return R_fc
+
+    my_grid = mapped.MappedGrid2d(nx, ny,
                            xmin=xmin, xmax=xmax,
-                           ymin=ymin, ymax=ymax, ng=ng)
+                           ymin=ymin, ymax=ymax, ng=ng,
+                           area_func=area, h_func=h, R_func=R)
     return my_grid
 
 
 class Simulation(compressible.Simulation):
     """The main simulation class for the method of lines compressible
     hydrodynamics solver"""
+
+    def __init__(self, solver_name, problem_name, rp, timers=None):
+
+        super().__init__(solver_name, problem_name, rp, timers=timers,
+        data_class=mapped.MappedCellCenterData2d)
 
     def initialize(self, extra_vars=None, ng=4):
         """
@@ -106,6 +132,9 @@ class Simulation(compressible.Simulation):
 
         self.ivars = compressible.Variables(my_data)
 
+        # make rotation matrices
+        my_data.make_rotation_matrices(self.ivars)
+
         # derived variables
         self.cc_data.add_derived(derives.derive_primitives)
 
@@ -128,14 +157,6 @@ class Simulation(compressible.Simulation):
 
         flux_xp, flux_xm, flux_yp, flux_ym = flx.fluxes(myd, self.rp,
                                                         self.ivars, self.solid, self.tc)
-
-        # flux_x, _, flux_y, _ = flx.fluxes(myd, self.rp,
-        #                             self.ivars, self.solid, self.tc)
-
-        # for n in range(self.ivars.nvar):
-        #     k.v(n=n)[:, :] = \
-        #        (flux_x.v(n=n) - flux_x.ip(1, n=n))/(myg.dx * myg.kappa) + \
-        #        (flux_y.v(n=n) - flux_y.jp(1, n=n))/(myg.dy * myg.kappa)
 
         for n in range(self.ivars.nvar):
             k.v(n=n)[:, :] = \
@@ -176,18 +197,13 @@ class Simulation(compressible.Simulation):
 
         myd = self.cc_data
 
-        # k = self.substep(myd)
-
-        # for n in range(self.ivars.nvar):
-        #     myd.data.v(n=n)[:, :] -= k.v(n=n) * self.dt
-
         method = self.rp.get_param("compressible.temporal_method")
 
         rk = integration.RKIntegrator(myd.t, self.dt, method=method)
         rk.set_start(myd)
 
         for s in range(rk.nstages()):
-            ytmp = rk.get_stage_start(s)
+            ytmp = rk.get_stage_start(s, clone_function=mapped.mapped_cell_center_data_clone)
             ytmp.fill_BC_all()
             k = self.substep(ytmp)
             rk.store_increment(s, k)

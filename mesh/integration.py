@@ -101,13 +101,13 @@ class RKIntegrator(object):
         weighting"""
         self.k[istage] = k_stage
 
-    def get_stage_start(self, istage):
+    def get_stage_start(self, istage, clone_function=patch.cell_center_data_clone):
         """get the starting conditions (a CellCenterData2d object) for stage
         istage"""
         if istage == 0:
             ytmp = self.start
         else:
-            ytmp = patch.cell_center_data_clone(self.start)
+            ytmp = clone_function(self.start)
             for n in range(ytmp.nvar):
                 var = ytmp.get_var_by_index(n)
                 for s in range(istage):
