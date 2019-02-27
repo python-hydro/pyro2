@@ -82,6 +82,20 @@ def bc_setup(rp):
     return bc, bc_xodd, bc_yodd
 
 
+class NullVariables(object):
+    """
+    a container class for easy access to the different variables by an integer key
+    """
+
+    def __init__(self, myd):
+        self.nvar = len(myd.names)
+
+        self.initialize(myd)
+
+    def initialize(self, myd):
+        pass
+
+
 class NullSimulation(object):
 
     def __init__(self, solver_name, problem_name, rp, timers=None, data_class=patch.CellCenterData2d):
@@ -153,7 +167,8 @@ class NullSimulation(object):
         n_out = self.rp.get_param("io.n_out")
         do_io = self.rp.get_param("io.do_io")
 
-        is_time = self.cc_data.t >= (self.n_num_out + 1)*dt_out or self.n % n_out == 0
+        is_time = self.cc_data.t >= (
+            self.n_num_out + 1) * dt_out or self.n % n_out == 0
         if is_time and do_io == 1:
             self.n_num_out += 1
             return True
@@ -185,9 +200,9 @@ class NullSimulation(object):
         else:
             self.method_compute_timestep()
             if self.n == 0:
-                self.dt = init_tstep_factor*self.dt
+                self.dt = init_tstep_factor * self.dt
             else:
-                self.dt = min(max_dt_change*self.dt_old, self.dt)
+                self.dt = min(max_dt_change * self.dt_old, self.dt)
             self.dt_old = self.dt
 
         if self.cc_data.t + self.dt > self.tmax:
@@ -215,7 +230,8 @@ class NullSimulation(object):
         finalize() method.
         """
         # there should be a cleaner way of doing this
-        problem = importlib.import_module("{}.problems.{}".format(self.solver_name, self.problem_name))
+        problem = importlib.import_module(
+            "{}.problems.{}".format(self.solver_name, self.problem_name))
 
         problem.finalize()
 

@@ -5,7 +5,7 @@ from __future__ import print_function
 import numpy as np
 from util import msg
 import sympy
-from sympy.abc import x, y, z
+from sympy.abc import x, y
 
 
 def init_data(myd, rp):
@@ -93,7 +93,7 @@ def map(myg):
 
 def sym_map(myg):
 
-    return sympy.Matrix([2 * x, y, z])
+    return sympy.Matrix([2 * x, y-1])
 
 
 def finalize():

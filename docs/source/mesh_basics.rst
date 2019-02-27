@@ -27,7 +27,7 @@ We import the basic mesh functionality as:
    import mesh.boundary as bnd
    import mesh.array_indexer as ai
 
-There are several main objects in the patch class that we interact with:
+There are several main classes in the patch module that we interact with:
 
 * :func:`patch.Grid2d <mesh.patch.Grid2d>`: this is the main grid
   object. It is basically a container that holds the number of zones
@@ -95,6 +95,8 @@ variables is allocated and we can no longer add variables to the grid.
 Note that each variable needs to specify a BC—this allows us to do
 different actions for each variable (for example, some may do even
 reflection while others may do odd reflection).
+
+.. include:: mapped_basics.rst
 
 Jupyter notebook
 ----------------

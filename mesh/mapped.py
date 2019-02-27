@@ -34,10 +34,9 @@ from __future__ import print_function
 
 import numpy as np
 import sympy
-from sympy.abc import x, y
+from sympy.abc import x, y, z
 from util import msg
 import mesh.array_indexer as ai
-from functools import partial
 from mesh.patch import Grid2d, CellCenterData2d
 
 
@@ -59,13 +58,10 @@ class MappedGrid2d(Grid2d):
     The '*' marks the data locations.
     """
 
-    # pylint: disable=too-many-instance-attributes
-
-    def __init__(self, nx, ny, ng=1,
-                 xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0,
-                 area_func=None, h_func=None, R_func=None, map_func=None):
+    def __init__(self, map_func, nx, ny, ng=1,
+                 xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0):
         """
-        Create a Grid2d object.
+        Create a MappedGrid2d object.
 
         The only data that we require is the number of points that
         make up the mesh in each direction.  Optionally we take the
@@ -78,6 +74,7 @@ class MappedGrid2d(Grid2d):
 
         Parameters
         ----------
+        map_func : sympy.Matrix
         nx : int
             Number of zones in the x-direction
         ny : int
@@ -85,23 +82,24 @@ class MappedGrid2d(Grid2d):
         ng : int, optional
             Number of ghost cells
         xmin : float, optional
-            Physical coordinate at the lower x boundary
+            Mapped coordinate at the lower x boundary
         xmax : float, optional
-            Physical coordinate at the upper x boundary
+            Mapped coordinate at the upper x boundary
         ymin : float, optional
-            Physical coordinate at the lower y boundary
+            Mapped coordinate at the lower y boundary
         ymax : float, optional
-            Physical coordinate at the upper y boundary
+            Mapped coordinate at the upper y boundary
         """
 
         super().__init__(nx, ny, ng, xmin, xmax, ymin, ymax)
 
-        self.map = map_func(self)
+        # we need to add a z-direction so that we can calculate the cross product
+        # of the basis vectors
+        self.map = map_func(self).col_join(sympy.Matrix([z]))
 
-        self.kappa, self.gamma_fcx, self.gamma_fcy = self.calculate_metric_elements(
-            area_func, h_func)
+        self.kappa, self.gamma_fcx, self.gamma_fcy = self.calculate_metric_elements()
 
-        self.R_fcx, self.R_fcy = self.calculate_rotation_matrices(R_func)
+        self.R_fcx, self.R_fcy = self.calculate_rotation_matrices()
 
     @staticmethod
     def norm(z):
@@ -109,7 +107,8 @@ class MappedGrid2d(Grid2d):
 
     def sym_area_element(self):
         """
-        Use sympy to calculate area element using https://mzucker.github.io/2018/04/12/sympy-part-3-moar-derivatives.html
+        Use sympy to calculate area element using
+        https://mzucker.github.io/2018/04/12/sympy-part-3-moar-derivatives.html
         """
 
         def norm(z):
@@ -136,16 +135,16 @@ class MappedGrid2d(Grid2d):
 
     def sym_rotation_matrix(self):
         """
-        Use sympy to calculate the rotation matrix (which is just the Jacobian??)
+        Use sympy to calculate the rotation matrix
         """
 
         J = sympy.Matrix(self.map[:-1]).jacobian((x, y))
-        J[0,:] /= J[0,:].norm()
-        J[1,:] /= J[1,:].norm()
+        J[0, :] /= J[0, :].norm()
+        J[1, :] /= J[1, :].norm()
 
         return J
 
-    def calculate_metric_elements(self, area, h):
+    def calculate_metric_elements(self):
         """
         Given the functions for the area and line elements, calculate them on
         the grid.
@@ -155,70 +154,73 @@ class MappedGrid2d(Grid2d):
         hx = self.scratch_array()
         hy = self.scratch_array()
 
-        if isinstance(self.map, sympy.Matrix):
-            # calculate sympy formula on grid
-            sym_dA = self.sym_area_element()
+        # if isinstance(self.map, sympy.Matrix):
+        # calculate sympy formula on grid
+        sym_dA = self.sym_area_element()
 
-            sym_hx, sym_hy = self.sym_line_elements()
+        sym_hx, sym_hy = self.sym_line_elements()
 
-            for i in range(self.qx):
-                for j in range(self.qy):
-                    kappa[i, j] = sym_dA.subs((x, self.x2d[i, j]), (y, self.y2d[i, j]))
-                    hx[i, j] = sym_hx.subs((x, self.x2d[i, j] - 0.5 *
-                                   self.dx), (y, self.y2d[i, j]))[1]
-                    hy[i, j] = sym_hy.subs(
-                        (x, self.x2d[i, j]), (y, self.y2d[i, j] - 0.5 * self.dy))[0]
+        for i in range(self.qx):
+            for j in range(self.qy):
+                kappa[i, j] = sym_dA.subs(
+                    (x, self.x2d[i, j]), (y, self.y2d[i, j]))
+                hx[i, j] = sym_hx.subs((x, self.x2d[i, j] - 0.5 *
+                                        self.dx), (y, self.y2d[i, j]))[1]
+                hy[i, j] = sym_hy.subs(
+                    (x, self.x2d[i, j]), (y, self.y2d[i, j] - 0.5 * self.dy))[0]
 
-        else:
-            kappa[:, :] = area(self) / (self.dx * self.dy)
-            hx[:, :] = h(1, self) / self.dy
-            hy[:, :] = h(2, self) / self.dx
+        # else:
+        #     kappa[:, :] = area(self) / (self.dx * self.dy)
+        #     hx[:, :] = h(1, self) / self.dy
+        #     hy[:, :] = h(2, self) / self.dx
 
         return kappa, hx, hy
 
-    def calculate_rotation_matrices(self, R):
+    def calculate_rotation_matrices(self):
         """
-        We're going to use partial functions here as the grid knows nothing of
-        the variables.
+        Calculate the rotation matrices on the cell interfaces.
+        It will return this as functions of nvar, ixmom and iymom - the grid
+        itself knows nothing of the variables, so these must be specified
+        by the MappedCellCenterData2d object.
         """
 
-        if isinstance(self.map, sympy.Matrix):
-            sym_R = self.sym_rotation_matrix()
-            R = sympy.lambdify((x, y), sym_R)
+        # if isinstance(self.map, sympy.Matrix):
+        sym_R = self.sym_rotation_matrix()
+        R = sympy.lambdify((x, y), sym_R)
 
-            def R_fcx(nvar, ixmom, iymom):
-                R_fc = self.scratch_array(nvar=(nvar, nvar))
+        def R_fcx(nvar, ixmom, iymom):
+            R_fc = self.scratch_array(nvar=(nvar, nvar))
 
-                R_mat = np.eye(nvar)
+            R_mat = np.eye(nvar)
 
-                for i in range(self.qx):
-                    for j in range(self.qy):
-                        R_fc[i, j, :, :] = R_mat
+            for i in range(self.qx):
+                for j in range(self.qy):
+                    R_fc[i, j, :, :] = R_mat
 
-                        R_fc[i, j, ixmom:iymom + 1, ixmom:iymom +
-                             1] = R(self.x2d[i, j] - 0.5 * self.dx, self.y2d[i, j])
+                    R_fc[i, j, ixmom:iymom + 1, ixmom:iymom +
+                         1] = R(self.x2d[i, j] - 0.5 * self.dx, self.y2d[i, j])
 
-                return R_fc
+            return R_fc
 
-            # print(R_fcx(4, 2, 3))
+        # print(R_fcx(4, 2, 3))
 
-            def R_fcy(nvar, ixmom, iymom):
-                R_fc = self.scratch_array(nvar=(nvar, nvar))
+        def R_fcy(nvar, ixmom, iymom):
+            R_fc = self.scratch_array(nvar=(nvar, nvar))
 
-                R_mat = np.eye(nvar)
+            R_mat = np.eye(nvar)
 
-                for i in range(self.qx):
-                    for j in range(self.qy):
-                        R_fc[i, j, :, :] = R_mat
+            for i in range(self.qx):
+                for j in range(self.qy):
+                    R_fc[i, j, :, :] = R_mat
 
-                        R_fc[i, j, ixmom:iymom + 1, ixmom:iymom +
-                             1] = R(self.x2d[i, j], self.y2d[i, j] - 0.5 * self.dy)
-                return R_fc
+                    R_fc[i, j, ixmom:iymom + 1, ixmom:iymom +
+                         1] = R(self.x2d[i, j], self.y2d[i, j] - 0.5 * self.dy)
+            return R_fc
 
             # print(R_fcy(4, 2, 3))
-        else:
-            R_fcx = partial(R, 1, self)
-            R_fcy = partial(R, 2, self)
+        # else:
+        #     R_fcx = partial(R, 1, self)
+        #     R_fcy = partial(R, 2, self)
 
             # print(R_fcx(4, 2, 3))
 
@@ -227,7 +229,10 @@ class MappedGrid2d(Grid2d):
     def scratch_array(self, nvar=1):
         """
         return a standard numpy array dimensioned to have the size
-        and number of ghostcells as the parent grid
+        and number of ghostcells as the parent grid.
+
+        Here I've generalized the version in Grid2d so that we can define
+        tensors (not just scalars and vectors) e.g. the rotation matrices
         """
 
         def flatten(t):
@@ -252,8 +257,8 @@ class MappedCellCenterData2d(CellCenterData2d):
 
         super().__init__(grid, dtype=dtype)
 
-        # self.R_fcx = []
-        # self.R_fcy = []
+        self.R_fcx = []
+        self.R_fcy = []
 
     def make_rotation_matrices(self, ivars):
         """

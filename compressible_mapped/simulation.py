@@ -18,7 +18,7 @@ import particles.particles as particles
 import compressible.derives as derives
 
 
-def mapped_grid_setup(rp, area, h, R, map, ng=1):
+def mapped_grid_setup(rp, map, ng=1):
     nx = rp.get_param("mesh.nx")
     ny = rp.get_param("mesh.ny")
 
@@ -46,10 +46,9 @@ def mapped_grid_setup(rp, area, h, R, map, ng=1):
         ymax = 1.0
         msg.warning("mesh.ynax not set, defaulting to 1.0")
 
-    my_grid = mapped.MappedGrid2d(nx, ny,
+    my_grid = mapped.MappedGrid2d(map, nx, ny,
                                   xmin=xmin, xmax=xmax,
-                                  ymin=ymin, ymax=ymax, ng=ng,
-                                  area_func=area, h_func=h, R_func=R, map_func=map)
+                                  ymin=ymin, ymax=ymax, ng=ng)
     return my_grid
 
 
@@ -70,8 +69,7 @@ class Simulation(compressible_rk.Simulation):
         problem = importlib.import_module("{}.problems.{}".format(
             self.solver_name, self.problem_name))
 
-        my_grid = mapped_grid_setup(
-            self.rp, problem.area, problem.h, problem.R, problem.sym_map, ng=ng)
+        my_grid = mapped_grid_setup(self.rp, problem.sym_map, ng=ng)
         my_data = self.data_class(my_grid)
 
         # define solver specific boundary condition routines
