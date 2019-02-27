@@ -41,7 +41,8 @@ follows:
     import mesh.boundary as bnd
     import compressible
 
-    mapping = sympy.Matrix([2 * x + 3, y**2])
+    def mapping(myg):
+        return sympy.Matrix([2 * x + 3, y**2])
 
     myg = mapped.MappedGrid2d(mapping, 16, 32, xmax=1.0, ymax=2.0)
 
@@ -49,7 +50,7 @@ This creates a 2-d mapped grid object ``myg`` with 16 zones in the x-direction
 and 32 zones in the y-direction on the coordinate grid. It also specifies the
 extent of the coordinate grid in the x- and y-directions. The mapping is defined
 using a ``sympy.Matrix`` object as a function of the cartesian coordinates
-``x`` and ``y``.
+``x`` and ``y``. The mapping itself is a function of the mapped grid object.
 
 .. note::
 

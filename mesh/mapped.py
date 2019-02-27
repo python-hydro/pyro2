@@ -128,8 +128,10 @@ class MappedGrid2d(Grid2d):
         Use sympy to calculate the line elements
         """
 
-        l1 = sympy.simplify(sympy.Abs(self.map.diff(y)))
-        l2 = sympy.simplify(sympy.Abs(self.map.diff(x)))
+        l1 = sympy.simplify(sympy.sqrt(
+            self.map[1].diff(x)**2 + self.map[1].diff(y)**2))
+        l2 = sympy.simplify(sympy.sqrt(
+            self.map[0].diff(x)**2 + self.map[0].diff(y)**2))
 
         return l1, l2
 
@@ -139,8 +141,10 @@ class MappedGrid2d(Grid2d):
         """
 
         J = sympy.Matrix(self.map[:-1]).jacobian((x, y))
-        J[0, :] /= J[0, :].norm()
-        J[1, :] /= J[1, :].norm()
+        if J[0, :].norm() != 0:
+            J[0, :] /= J[0, :].norm()
+        if J[1, :].norm() != 0:
+            J[1, :] /= J[1, :].norm()
 
         return J
 
@@ -158,16 +162,18 @@ class MappedGrid2d(Grid2d):
         # calculate sympy formula on grid
         sym_dA = self.sym_area_element()
 
+        _dA = sympy.lambdify((x, y), sym_dA, modules="sympy")
+
         sym_hx, sym_hy = self.sym_line_elements()
+
+        _hx = sympy.lambdify((x, y), sym_hx, modules="sympy")
+        _hy = sympy.lambdify((x, y), sym_hy, modules="sympy")
 
         for i in range(self.qx):
             for j in range(self.qy):
-                kappa[i, j] = sym_dA.subs(
-                    (x, self.x2d[i, j]), (y, self.y2d[i, j]))
-                hx[i, j] = sym_hx.subs((x, self.x2d[i, j] - 0.5 *
-                                        self.dx), (y, self.y2d[i, j]))[1]
-                hy[i, j] = sym_hy.subs(
-                    (x, self.x2d[i, j]), (y, self.y2d[i, j] - 0.5 * self.dy))[0]
+                kappa[i, j] = _dA(self.x2d[i, j], self.y2d[i, j])
+                hx[i, j] = _hx(self.x2d[i, j] - 0.5 * self.dx, self.y2d[i, j])
+                hy[i, j] = _hy(self.x2d[i, j], self.y2d[i, j] - 0.5 * self.dy)
 
         # else:
         #     kappa[:, :] = area(self) / (self.dx * self.dy)
