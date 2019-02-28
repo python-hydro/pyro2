@@ -5,7 +5,7 @@ from __future__ import print_function
 import numpy as np
 from util import msg
 import sympy
-from sympy.abc import x, y
+from sympy.abc import x, y, p, q
 
 
 def init_data(myd, rp):
@@ -45,11 +45,14 @@ def init_data(myd, rp):
 
     myg = myd.grid
 
-    xctr = 0.5 * (xmin + xmax) * myg.gamma_fcy
-    yctr = 0.5 * (ymin + ymax) * myg.gamma_fcx
+    xctr = 0.5 * (xmin + xmax)
+    yctr = 0.5 * (ymin + ymax)
 
-    dist = np.sqrt((myd.grid.x2d * myg.gamma_fcy - xctr)**2 +
-                   (myd.grid.y2d * myg.gamma_fcx - yctr)**2)
+    X, Y = myg.physical_coords()
+
+    xctr_t, yctr_t = myg.physical_coords(xctr, yctr)
+
+    dist = np.sqrt((X - xctr_t)**2 + (Y - yctr_t)**2)
 
     dens[:, :] = rho0
     idx = dist <= 0.5
@@ -60,40 +63,13 @@ def init_data(myd, rp):
     ener[:, :] = p / (gamma - 1)
 
 
-def area(myg):
-    return 2 * myg.dx * myg.dy + myg.scratch_array()
-
-
-def h(idir, myg):
-    if idir == 1:
-        return myg.dy + myg.scratch_array()
-    else:
-        return 2 * myg.dx + myg.scratch_array()
-
-
-def R(iface, myg, nvar, ixmom, iymom):
-    R_fc = myg.scratch_array(nvar=(nvar, nvar))
-
-    R_mat = np.eye(nvar)
-
-    for i in range(myg.qx):
-        for j in range(myg.qy):
-            R_fc[i, j, :, :] = R_mat
-
-    return R_fc
-
-
-def map(myg):
-
-    xs_t = myg.x2d * 2
-    ys_t = myg.y2d
-
-    return xs_t, ys_t
-
-
 def sym_map(myg):
 
-    return sympy.Matrix([2 * x, y-1])
+    return sympy.Matrix([x+3 + y, -2*y])
+
+def inverse_map(myg):
+
+    return sympy.Matrix([])
 
 
 def finalize():

@@ -137,16 +137,27 @@ class MappedGrid2d(Grid2d):
 
     def sym_rotation_matrix(self):
         """
-        Use sympy to calculate the rotation matrix
+        Use sympy to calculate the rotation matrices
         """
 
         J = sympy.Matrix(self.map[:-1]).jacobian((x, y))
-        if J[0, :].norm() != 0:
-            J[0, :] /= J[0, :].norm()
-        if J[1, :].norm() != 0:
-            J[1, :] /= J[1, :].norm()
 
-        return J
+        # normalize
+        J[0,:] /= J[0,:].norm()
+        J[1,:] /= J[1,:].norm()
+
+        Rx = sympy.zeros(2)
+        Ry = sympy.zeros(2)
+
+        Rx[1,:] = J[1,:]
+        Rx[0,0] = J[1,1]
+        Rx[0,1] = -J[1,0]
+
+        Ry[1,:] = J[0,::-1]
+        Ry[0,0] = J[0,0]
+        Ry[0,1] = -J[0,1]
+
+        return Rx, Ry
 
     def calculate_metric_elements(self):
         """
@@ -180,6 +191,10 @@ class MappedGrid2d(Grid2d):
         #     hx[:, :] = h(1, self) / self.dy
         #     hy[:, :] = h(2, self) / self.dx
 
+        print('dA = ', sym_dA)
+        print('hx = ', sym_hx)
+        print('hy = ', sym_hy)
+
         return kappa, hx, hy
 
     def calculate_rotation_matrices(self):
@@ -191,44 +206,46 @@ class MappedGrid2d(Grid2d):
         """
 
         # if isinstance(self.map, sympy.Matrix):
-        sym_R = self.sym_rotation_matrix()
-        R = sympy.lambdify((x, y), sym_R)
+        sym_Rx, sym_Ry = self.sym_rotation_matrix()
+        print('Rx = ', sym_Rx)
+        print('Ry = ', sym_Ry)
+
+        # R = sympy.lambdify((x, y), sym_R, modules="sympy")
+
+        # print(sympy.limit(sym_R, x, 0))
 
         def R_fcx(nvar, ixmom, iymom):
             R_fc = self.scratch_array(nvar=(nvar, nvar))
 
             R_mat = np.eye(nvar)
 
+            xs = self.x2d - 0.5 * self.dx
+            ys = self.y2d
+
             for i in range(self.qx):
                 for j in range(self.qy):
                     R_fc[i, j, :, :] = R_mat
 
                     R_fc[i, j, ixmom:iymom + 1, ixmom:iymom +
-                         1] = R(self.x2d[i, j] - 0.5 * self.dx, self.y2d[i, j])
+                         1] = np.array(sym_Rx.subs({x: xs[i, j], y: ys[i, j]}))
 
             return R_fc
-
-        # print(R_fcx(4, 2, 3))
 
         def R_fcy(nvar, ixmom, iymom):
             R_fc = self.scratch_array(nvar=(nvar, nvar))
 
             R_mat = np.eye(nvar)
 
+            xs = self.x2d
+            ys = self.y2d - 0.5 * self.dy
+
             for i in range(self.qx):
                 for j in range(self.qy):
                     R_fc[i, j, :, :] = R_mat
 
                     R_fc[i, j, ixmom:iymom + 1, ixmom:iymom +
-                         1] = R(self.x2d[i, j], self.y2d[i, j] - 0.5 * self.dy)
+                         1] = np.array(sym_Ry.subs({x: xs[i, j], y: ys[i, j]}))
             return R_fc
-
-            # print(R_fcy(4, 2, 3))
-        # else:
-        #     R_fcx = partial(R, 1, self)
-        #     R_fcy = partial(R, 2, self)
-
-            # print(R_fcx(4, 2, 3))
 
         return R_fcx, R_fcy
 
@@ -256,6 +273,18 @@ class MappedGrid2d(Grid2d):
                             flatten(nvar), dtype=np.float64)
         return ai.ArrayIndexer(d=_tmp, grid=self)
 
+    def physical_coords(self, xs=None, ys=None):
+
+        if xs is None:
+            xs = self.x2d
+        if ys is None:
+            ys = self.y2d
+
+        xs_t = sympy.lambdify((x, y), self.map[0])
+        ys_t = sympy.lambdify((x, y), self.map[1])
+
+        return xs_t(xs, ys), ys_t(xs, ys)
+
 
 class MappedCellCenterData2d(CellCenterData2d):
 
@@ -275,6 +304,8 @@ class MappedCellCenterData2d(CellCenterData2d):
 
         self.R_fcx = self.grid.R_fcx(ivars.nvar, ivars.ixmom, ivars.iymom)
         self.R_fcy = self.grid.R_fcy(ivars.nvar, ivars.ixmom, ivars.iymom)
+
+        # print('Rx contains nan?', np.isnan(self.R_fcx).any())
 
 
 def mapped_cell_center_data_clone(old):

@@ -12,11 +12,11 @@ def init_data(myd, rp):
 
     msg.bold("initializing the acoustic pulse problem...")
 
-    # # make sure that we are passed a valid patch object
-    # if not isinstance(myd, fv.FV2d):
-    #     print("ERROR: patch invalid in acoustic_pulse.py")
-    #     print(myd.__class__)
-    #     sys.exit()
+    # make sure that we are passed a valid patch object
+    if not isinstance(myd, fv.FV2d):
+        print("ERROR: patch invalid in acoustic_pulse.py")
+        print(myd.__class__)
+        sys.exit()
 
     # get the density, momenta, and energy as separate variables
     dens = myd.get_var("density")

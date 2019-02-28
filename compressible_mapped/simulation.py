@@ -217,15 +217,12 @@ class Simulation(compressible_rk.Simulation):
 
         _, axes, cbar_title = plot_tools.setup_axes(myg, len(fields))
 
+        X, Y = myg.physical_coords()
+        X = X[myg.ng:-myg.ng, myg.ng:-myg.ng]
+        Y = Y[myg.ng:-myg.ng, myg.ng:-myg.ng]
+
         for n, ax in enumerate(axes):
             v = fields[n]
-
-            X = myg.x2d[myg.ng:-myg.ng, myg.ng:-myg.ng] * myg.gamma_fcy.v()
-            Y = myg.y2d[myg.ng:-myg.ng, myg.ng:-myg.ng] * myg.gamma_fcx.v()
-
-            # X, Y = myg.map
-            # X = X[myg.ng:-myg.ng, myg.ng:-myg.ng]
-            # Y = Y[myg.ng:-myg.ng, myg.ng:-myg.ng]
 
             img = ax.pcolormesh(X, Y, v.v(), cmap=self.cm)
 
