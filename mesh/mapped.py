@@ -35,6 +35,9 @@ from __future__ import print_function
 import numpy as np
 import sympy
 from sympy.abc import x, y, z
+from random import random
+from numpy.testing import assert_array_almost_equal
+
 from util import msg
 import mesh.array_indexer as ai
 from mesh.patch import Grid2d, CellCenterData2d
@@ -139,36 +142,32 @@ class MappedGrid2d(Grid2d):
 
         Rx = sympy.zeros(2)
         Ry = sympy.zeros(2)
-        #
-        # Rx[0,0] = sympy.simplify(self.map[1].diff(y))
-        # Rx[0,1] = sympy.simplify(self.map[1].diff(x))
-        # Rx[1,0] = -sympy.simplify(self.map[1].diff(x))
-        # Rx[1,1] = sympy.simplify(self.map[1].diff(y))
-        #
-        # Ry[0,0] = sympy.simplify(self.map[0].diff(x))
-        # Ry[0,1] = -sympy.simplify(self.map[0].diff(y))
-        # Ry[1,0] = sympy.simplify(self.map[0].diff(y))
-        # Ry[1,1] = sympy.simplify(self.map[0].diff(x))
 
-        Rx[0,0] = sympy.simplify(self.map[1].diff(y))
-        Rx[0,1] = sympy.simplify(self.map[0].diff(y))
-        Rx[1,0] = -sympy.simplify(self.map[0].diff(y))
-        Rx[1,1] = sympy.simplify(self.map[1].diff(y))
+        Rx[0, 0] = sympy.simplify(self.map[1].diff(y))
+        Rx[0, 1] = sympy.simplify(self.map[0].diff(y))
+        Rx[1, 0] = -sympy.simplify(self.map[0].diff(y))
+        Rx[1, 1] = sympy.simplify(self.map[1].diff(y))
 
-        Ry[0,0] = sympy.simplify(self.map[0].diff(x))
-        Ry[0,1] = sympy.simplify(self.map[1].diff(x))
-        Ry[1,0] = -sympy.simplify(self.map[1].diff(x))
-        Ry[1,1] = sympy.simplify(self.map[0].diff(x))
+        Ry[0, 0] = sympy.simplify(self.map[0].diff(x))
+        Ry[0, 1] = sympy.simplify(self.map[1].diff(x))
+        Ry[1, 0] = -sympy.simplify(self.map[1].diff(x))
+        Ry[1, 1] = sympy.simplify(self.map[0].diff(x))
 
         # normalize
-        Rx[0,:] /= self.norm(Rx[0,:])
-        Rx[1,:] /= self.norm(Rx[1,:])
-        Ry[0,:] /= self.norm(Ry[0,:])
-        Ry[1,:] /= self.norm(Ry[1,:])
+        Rx[0, :] /= self.norm(Rx[0, :])
+        Rx[1, :] /= self.norm(Rx[1, :])
+        Ry[0, :] /= self.norm(Ry[0, :])
+        Ry[1, :] /= self.norm(Ry[1, :])
 
-        # check rotation matrices
-        assert Rx @ Rx.T == sympy.eye(2)
-        assert Ry @ Ry.T == sympy.eye(2)
+        Rx = sympy.simplify(Rx)
+        Ry = sympy.simplify(Ry)
+
+        # check rotation matrices - do this by substituting in random (non-zero)
+        # numbers as sympy is not great at cancelling things
+        assert_array_almost_equal((Rx @ Rx.T).subs(
+            {x: random() + 0.01, y: random() + 0.01}), np.eye(2))
+        assert_array_almost_equal((Ry @ Ry.T).subs(
+            {x: random() + 0.01, y: random() + 0.01}), np.eye(2))
 
         return sympy.simplify(Rx), sympy.simplify(Ry)
 
