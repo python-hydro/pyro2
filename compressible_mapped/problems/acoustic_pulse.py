@@ -65,11 +65,10 @@ def init_data(myd, rp):
 
 def sym_map(myg):
 
-    return sympy.Matrix([x+3 + y, -2*y])
+    return sympy.Matrix([2*y-x, 2*y+x])
 
-def inverse_map(myg):
+    # return sympy.Matrix([sympy.sqrt(x**2+y**2), sympy.atan(y/x)])
 
-    return sympy.Matrix([])
 
 
 def finalize():

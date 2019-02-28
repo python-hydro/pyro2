@@ -140,11 +140,11 @@ class Simulation(compressible_rk.Simulation):
 
         flux_xp, flux_xm, flux_yp, flux_ym = flx.fluxes(myd, self.rp,
                                                         self.ivars, self.solid, self.tc)
-
+        b=3
         for n in range(self.ivars.nvar):
-            k.v(n=n)[:, :] = \
-               (flux_xp.v(n=n) + flux_xm.ip(1, n=n)) / (myg.dx * myg.kappa.v()) + \
-               (flux_yp.v(n=n) + flux_ym.jp(1, n=n)) / (myg.dy * myg.kappa.v())
+            k.v(n=n,buf=b)[:, :] = \
+               (flux_xp.v(n=n,buf=b) + flux_xm.ip(1, n=n,buf=b)) / (myg.dx * myg.kappa.v(buf=b)) + \
+               (flux_yp.v(n=n,buf=b) + flux_ym.jp(1, n=n,buf=b)) / (myg.dy * myg.kappa.v(buf=b))
 
         return -k
 

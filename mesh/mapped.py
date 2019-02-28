@@ -111,9 +111,6 @@ class MappedGrid2d(Grid2d):
         https://mzucker.github.io/2018/04/12/sympy-part-3-moar-derivatives.html
         """
 
-        def norm(z):
-            return sympy.sqrt(z.dot(z))
-
         p1 = sympy.simplify(self.map.diff(x))
         p2 = sympy.simplify(self.map.diff(y))
 
@@ -129,9 +126,9 @@ class MappedGrid2d(Grid2d):
         """
 
         l1 = sympy.simplify(sympy.sqrt(
-            self.map[1].diff(x)**2 + self.map[1].diff(y)**2))
+            self.map[0].diff(y)**2 + self.map[1].diff(y)**2))
         l2 = sympy.simplify(sympy.sqrt(
-            self.map[0].diff(x)**2 + self.map[0].diff(y)**2))
+            self.map[0].diff(x)**2 + self.map[1].diff(x)**2))
 
         return l1, l2
 
@@ -140,24 +137,40 @@ class MappedGrid2d(Grid2d):
         Use sympy to calculate the rotation matrices
         """
 
-        J = sympy.Matrix(self.map[:-1]).jacobian((x, y))
-
-        # normalize
-        J[0,:] /= J[0,:].norm()
-        J[1,:] /= J[1,:].norm()
-
         Rx = sympy.zeros(2)
         Ry = sympy.zeros(2)
+        #
+        # Rx[0,0] = sympy.simplify(self.map[1].diff(y))
+        # Rx[0,1] = sympy.simplify(self.map[1].diff(x))
+        # Rx[1,0] = -sympy.simplify(self.map[1].diff(x))
+        # Rx[1,1] = sympy.simplify(self.map[1].diff(y))
+        #
+        # Ry[0,0] = sympy.simplify(self.map[0].diff(x))
+        # Ry[0,1] = -sympy.simplify(self.map[0].diff(y))
+        # Ry[1,0] = sympy.simplify(self.map[0].diff(y))
+        # Ry[1,1] = sympy.simplify(self.map[0].diff(x))
 
-        Rx[1,:] = J[1,:]
-        Rx[0,0] = J[1,1]
-        Rx[0,1] = -J[1,0]
+        Rx[0,0] = sympy.simplify(self.map[1].diff(y))
+        Rx[0,1] = sympy.simplify(self.map[0].diff(y))
+        Rx[1,0] = -sympy.simplify(self.map[0].diff(y))
+        Rx[1,1] = sympy.simplify(self.map[1].diff(y))
 
-        Ry[1,:] = J[0,::-1]
-        Ry[0,0] = J[0,0]
-        Ry[0,1] = -J[0,1]
+        Ry[0,0] = sympy.simplify(self.map[0].diff(x))
+        Ry[0,1] = -sympy.simplify(self.map[1].diff(x))
+        Ry[1,0] = sympy.simplify(self.map[1].diff(x))
+        Ry[1,1] = sympy.simplify(self.map[0].diff(x))
 
-        return Rx, Ry
+        # normalize
+        Rx[0,:] /= self.norm(Rx[0,:])
+        Rx[1,:] /= self.norm(Rx[1,:])
+        Ry[0,:] /= self.norm(Ry[0,:])
+        Ry[1,:] /= self.norm(Ry[1,:])
+
+        # check rotation matrices
+        assert Rx @ Rx.T == sympy.eye(2)
+        assert Ry @ Ry.T == sympy.eye(2)
+
+        return sympy.simplify(Rx), sympy.simplify(Ry)
 
     def calculate_metric_elements(self):
         """
