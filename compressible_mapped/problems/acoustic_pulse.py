@@ -65,7 +65,7 @@ def init_data(myd, rp):
 
 def sym_map(myg):
 
-    return sympy.Matrix([2*y-x, 2*y+x])
+    return sympy.Matrix([2*y, y+2*x])
 
     # return sympy.Matrix([sympy.sqrt(x**2+y**2), sympy.atan(y/x)])
 

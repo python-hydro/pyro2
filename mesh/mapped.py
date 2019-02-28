@@ -156,8 +156,8 @@ class MappedGrid2d(Grid2d):
         Rx[1,1] = sympy.simplify(self.map[1].diff(y))
 
         Ry[0,0] = sympy.simplify(self.map[0].diff(x))
-        Ry[0,1] = -sympy.simplify(self.map[1].diff(x))
-        Ry[1,0] = sympy.simplify(self.map[1].diff(x))
+        Ry[0,1] = sympy.simplify(self.map[1].diff(x))
+        Ry[1,0] = -sympy.simplify(self.map[1].diff(x))
         Ry[1,1] = sympy.simplify(self.map[0].diff(x))
 
         # normalize
