@@ -39,6 +39,7 @@ from random import random
 from numpy.testing import assert_array_almost_equal
 
 from util import msg
+import mesh.boundary as bnd
 import mesh.array_indexer as ai
 from mesh.patch import Grid2d, CellCenterData2d
 
@@ -199,14 +200,10 @@ class MappedGrid2d(Grid2d):
 
         def mapped_area(i, j):
             # c1-4 are the corners
-            c1 = np.array([self.x2d[i, j] - 0.5 * self.dx,
-                           self.y2d[i, j] - 0.5 * self.dy])
-            c2 = np.array([self.x2d[i, j] - 0.5 * self.dx,
-                           self.y2d[i, j] + 0.5 * self.dy])
-            c3 = np.array([self.x2d[i, j] + 0.5 * self.dx,
-                           self.y2d[i, j] + 0.5 * self.dy])
-            c4 = np.array([self.x2d[i, j] + 0.5 * self.dx,
-                           self.y2d[i, j] - 0.5 * self.dy])
+            c1 = [self.xl[i], self.yl[j]]
+            c2 = [self.xl[i], self.yr[j]]
+            c3 = [self.xr[i], self.yr[j]]
+            c4 = [self.xr[i], self.yl[j]]
 
             m1 = self.physical_coords(c1[0], c1[1])
             m2 = self.physical_coords(c2[0], c2[1])
@@ -214,8 +211,8 @@ class MappedGrid2d(Grid2d):
             m4 = self.physical_coords(c4[0], c4[1])
 
             # find vectors of diagonals (and pad out z-direction with a zero)
-            p = np.append(c3 - c1, 0)
-            q = np.append(c4 - c2, 0)
+            p = np.append(m3 - m1, 0)
+            q = np.append(m4 - m2, 0)
 
             # area is half the cross product
             return 0.5 * np.abs(np.cross(p, q)[-1])
@@ -223,10 +220,10 @@ class MappedGrid2d(Grid2d):
         for i in range(self.qx):
             for j in range(self.qy):
                 # kappa[i, j] = _dA(self.x2d[i, j], self.y2d[i, j])
-                hx[i, j] = mapped_distance([self.x2d[i, j] - 0.5 * self.dx, self.y2d[i, j] - 0.5 * self.dy], [
-                                           self.x2d[i, j] - 0.5 * self.dx, self.y2d[i, j] + 0.5 * self.dy])
-                hy[i, j] = mapped_distance([self.x2d[i, j] - 0.5 * self.dx, self.y2d[i, j] - 0.5 * self.dy], [
-                                           self.x2d[i, j] + 0.5 * self.dx, self.y2d[i, j] - 0.5 * self.dy])
+                hx[i, j] = mapped_distance([self.xl[i], self.yl[j]],
+                                           [self.xl[i], self.yr[j]])
+                hy[i, j] = mapped_distance([self.xl[i], self.yl[j]],
+                                           [self.xr[i], self.yl[j]])
                 kappa[i, j] = mapped_area(i, j)
                 # hx[i, j] = _hx(self.x2d[i, j] + 0.5 * self.dx, self.y2d[i, j]) - _hx(self.x2d[i, j] - 0.5 * self.dx, self.y2d[i, j])
                 # hy[i, j] = _hy(self.x2d[i, j], self.y2d[i, j] + 0.5 * self.dy) - _hy(self.x2d[i, j], self.y2d[i, j] - 0.5 * self.dy)
@@ -240,7 +237,7 @@ class MappedGrid2d(Grid2d):
         # print('hx = ', sym_hx)
         # print('hy = ', sym_hy)
 
-        print(hx[2, 2], self.dy * self.x2d[2, 2])
+        # print(hx[2, 2], self.dy * self.x2d[2, 2])
 
         return kappa / (self.dx * self.dy), hx / self.dy, hy / self.dx
 
@@ -330,7 +327,7 @@ class MappedGrid2d(Grid2d):
         xs_t = sympy.lambdify((x, y), self.map[0])
         ys_t = sympy.lambdify((x, y), self.map[1])
 
-        return xs_t(xs, ys), ys_t(xs, ys)
+        return np.array([xs_t(xs, ys), ys_t(xs, ys)])
 
 
 class MappedCellCenterData2d(CellCenterData2d):
@@ -353,6 +350,104 @@ class MappedCellCenterData2d(CellCenterData2d):
         self.R_fcy = self.grid.R_fcy(ivars.nvar, ivars.ixmom, ivars.iymom)
 
         # print('Rx contains nan?', np.isnan(self.R_fcx).any())
+
+    def fill_BC(self, name):
+        n = self.names.index(name)
+        self.fill_mapped_ghost(name, n=n, bc=self.BCs[name])
+
+        # that will handle the standard type of BCs, but if we asked
+        # for a custom BC, we handle it here
+        if self.BCs[name].xlb in bnd.ext_bcs.keys():
+            bnd.ext_bcs[self.BCs[name].xlb](self.BCs[name].xlb, "xlb", name, self)
+        if self.BCs[name].xrb in bnd.ext_bcs.keys():
+            bnd.ext_bcs[self.BCs[name].xrb](self.BCs[name].xrb, "xrb", name, self)
+        if self.BCs[name].ylb in bnd.ext_bcs.keys():
+            bnd.ext_bcs[self.BCs[name].ylb](self.BCs[name].ylb, "ylb", name, self)
+        if self.BCs[name].yrb in bnd.ext_bcs.keys():
+            bnd.ext_bcs[self.BCs[name].yrb](self.BCs[name].yrb, "yrb", name, self)
+
+    def fill_mapped_ghost(self, name, n=0, bc=None):
+        """
+        This replaces the fill_ghost routine in array_indexer to add some
+        scaling factors for mapped grids.
+
+        We'll call fill_ghost then go back and fix the reflect-odd boundaries.
+
+        It would be great if we could pass the variables object in here as we
+        actually only need to do this rotation if n == ixmom or iymom.
+        """
+        myd = self.data
+
+        myd.fill_ghost(n=n, bc=bc)
+
+        if name == 'x-momentum' or name == 'y-momentum':
+            
+            # -x boundary
+            if bc.xlb in ["reflect-odd", "dirichlet"]:
+                if bc.xl_value is None:
+                    for i in range(myd.g.ilo):
+                        for j in range(myd.g.qy):
+                            q_rot = self.R_fcy[myd.g.ilo, j] @ myd[2*myd.g.ng-i-1, j, :]
+                            q_rot[n] = -q_rot[n]
+                            myd[i, j, n] = (self.R_fcy[myd.g.ilo, j].T @ q_rot)[n]
+                else:
+                    for j in range(myd.g.qy):
+                        q_rot = self.R_fcy[myd.g.ilo, j] @ myd[myd.g.ilo, j, :]
+                        q_rot[n] = 2*bc.xl_value - q_rot[n]
+                        myd[myd.g.ilo-1, j, n] = (self.R_fcy[myd.g.ilo, j].T @ q_rot)[n]
+
+            # +x boundary
+            if bc.xrb in ["reflect-odd", "dirichlet"]:
+                if bc.xr_value is None:
+                    for i in range(myd.g.ng):
+                        for j in range(myd.g.qy):
+                            i_bnd = myd.g.ihi+1+i
+                            i_src = myd.g.ihi-i
+
+                            q_rot = self.R_fcy[myd.g.ihi+1, j] @ myd[i_src, j, :]
+                            q_rot[n] = -q_rot[n]
+
+                            myd[i_bnd, j, n] = (self.R_fcy[myd.g.ihi+1, j].T @ q_rot)[n]
+                else:
+                    for j in range(myd.g.qy):
+                        q_rot = self.R_fcy[myd.g.ihi+1, j] @ myd[myd.g.ihi, j, :]
+                        q_rot[n] = 2*bc.xr_value - q_rot[n]
+
+                        myd[myd.g.ihi+1, j, n] = (self.R_fcy[myd.g.ihi+1, j].T @ q_rot)[n]
+
+            # -y boundary
+            if bc.ylb in ["reflect-odd", "dirichlet"]:
+                if bc.yl_value is None:
+                    for i in range(myd.g.qx):
+                        for j in range(myd.g.jlo):
+                            q_rot = self.R_fcx[i, myd.g.jlo] @ myd[i, 2*myd.g.ng-j-1, :]
+                            q_rot[n] = -q_rot[n]
+                            myd[i, j, n] = (self.R_fcx[i, myd.g.jlo].T @ q_rot)[n]
+                else:
+                    for i in range(myd.g.qx):
+                        q_rot = self.R_fcx[i, myd.g.jlo] @ myd[i, myd.g.jlo, :]
+                        q_rot[n] = 2*bc.yl_value - q_rot[n]
+                        myd[i, myd.g.jlo-1, n] = (self.R_fcx[i, myd.g.jlo].T @ q_rot)[n]
+
+            # +y boundary
+            if bc.yrb in ["reflect-odd", "dirichlet"]:
+                if bc.yr_value is None:
+                    for i in range(myd.g.qx):
+                        for j in range(myd.g.ng):
+                            j_bnd = myd.g.jhi+1+j
+                            j_src = myd.g.jhi-j
+
+                            q_rot = self.R_fcx[i, myd.g.jhi+1] @ myd[i, j_src, n]
+                            q_rot[n] = -q_rot[n]
+
+                            myd[i, j_bnd, n] = (self.R_fcx[i, myd.g.jhi+1].T @ q_rot)[n]
+                else:
+                    for i in range(myd.g.qx):
+
+                        q_rot = self.R_fcx[i, myd.g.jhi+1] @ myd[i, myd.g.jhi, n]
+                        q_rot[n] = 2*bc.yr_value - q_rot[n]
+
+                        myd[:, myd.g.jhi+1, n] = (self.R_fcx[i, myd.g.jhi+1].T @ q_rot)[n]
 
 
 def mapped_cell_center_data_clone(old):

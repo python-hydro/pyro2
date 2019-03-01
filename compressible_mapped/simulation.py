@@ -51,6 +51,56 @@ def mapped_grid_setup(rp, map, ng=1):
                                   ymin=ymin, ymax=ymax, ng=ng)
     return my_grid
 
+def mapped_bc_setup(rp):
+
+    bnd.define_bc("mapped_periodic", BC.user, is_solid=False)
+    bnd.define_bc("mapped_outflow", BC.user, is_solid=False)
+    bnd.define_bc("mapped_neumann", BC.user, is_solid=False)
+    bnd.define_bc("mapped_reflect", BC.user, is_solid=True)
+    bnd.define_bc("mapped_reflect-even", BC.user, is_solid=True)
+    bnd.define_bc("mapped_reflect-odd", BC.user, is_solid=True)
+    bnd.define_bc("mapped_dirichlet", BC.user, is_solid=True)
+
+    # first figure out the BCs
+    try:
+        xlb_type = "mapped_" + rp.get_param("mesh.xlboundary")
+    except KeyError:
+        xlb_type = "mapped_periodic"
+        msg.warning("mesh.xlboundary is not set, defaulting to mapped_periodic")
+
+    try:
+        xrb_type = "mapped_" + rp.get_param("mesh.xrboundary")
+    except KeyError:
+        xrb_type = "mapped_periodic"
+        msg.warning("mesh.xrboundary is not set, defaulting to mapped_periodic")
+
+    try:
+        ylb_type = "mapped_" + rp.get_param("mesh.ylboundary")
+    except KeyError:
+        ylb_type = "mapped_periodic"
+        msg.warning("mesh.ylboundary is not set, defaulting to mapped_periodic")
+
+    try:
+        yrb_type = "mapped_" + rp.get_param("mesh.yrboundary")
+    except KeyError:
+        yrb_type = "mapped_periodic"
+        msg.warning("mesh.yrboundary is not set, defaulting to mapped_periodic")
+
+    bc = bnd.BC(xlb=xlb_type, xrb=xrb_type,
+                ylb=ylb_type, yrb=yrb_type)
+
+    # if we are reflecting, we need odd reflection in the normal
+    # directions for the velocity
+    bc_xodd = bnd.BC(xlb=xlb_type, xrb=xrb_type,
+                     ylb=ylb_type, yrb=yrb_type,
+                     odd_reflect_dir="x")
+
+    bc_yodd = bnd.BC(xlb=xlb_type, xrb=xrb_type,
+                     ylb=ylb_type, yrb=yrb_type,
+                     odd_reflect_dir="y")
+
+    return bc, bc_xodd, bc_yodd
+
 
 class Simulation(compressible_rk.Simulation):
     """The main simulation class for the method of lines compressible
@@ -72,10 +122,10 @@ class Simulation(compressible_rk.Simulation):
         my_grid = mapped_grid_setup(self.rp, problem.sym_map, ng=ng)
         my_data = self.data_class(my_grid)
 
-        # define solver specific boundary condition routines
-        bnd.define_bc("hse", BC.user, is_solid=False)
-        # for double mach reflection problem
-        bnd.define_bc("ramp", BC.user, is_solid=False)
+        # # define solver specific boundary condition routines
+        # bnd.define_bc("hse", BC.user, is_solid=False)
+        # # for double mach reflection problem
+        # bnd.define_bc("ramp", BC.user, is_solid=False)
 
         bc, bc_xodd, bc_yodd = bc_setup(self.rp)
 

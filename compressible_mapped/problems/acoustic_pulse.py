@@ -5,7 +5,7 @@ from __future__ import print_function
 import numpy as np
 from util import msg
 import sympy
-from sympy.abc import x, y, p, q
+from sympy.abc import x, y
 
 
 def init_data(myd, rp):
@@ -65,7 +65,7 @@ def init_data(myd, rp):
 
 def sym_map(myg):
 
-    return sympy.Matrix([y**2, -2*x-y])
+    return sympy.Matrix([y**2, -2*x**2-y])
 
     # return sympy.Matrix([x * sympy.cos(y), x * sympy.sin(y)])
 
