@@ -123,17 +123,17 @@ class MappedGrid2d(Grid2d):
 
         return dA
 
-    def sym_line_elements(self):
-        """
-        Use sympy to calculate the line elements
-        """
-
-        l1 = sympy.simplify(sympy.sqrt(
-            self.map[0].diff(y)**2 + self.map[1].diff(y)**2))
-        l2 = sympy.simplify(sympy.sqrt(
-            self.map[0].diff(x)**2 + self.map[1].diff(x)**2))
-
-        return l1, l2
+    # def sym_line_elements(self):
+    #     """
+    #     Use sympy to calculate the line elements
+    #     """
+    #
+    #     l1 = sympy.simplify(sympy.sqrt(
+    #         self.map[0].diff(y)**2 + self.map[1].diff(y)**2))
+    #     l2 = sympy.simplify(sympy.sqrt(
+    #         self.map[0].diff(x)**2 + self.map[1].diff(x)**2))
+    #
+    #     return l1, l2
 
     def sym_rotation_matrix(self):
         """
@@ -183,31 +183,66 @@ class MappedGrid2d(Grid2d):
 
         # if isinstance(self.map, sympy.Matrix):
         # calculate sympy formula on grid
-        sym_dA = self.sym_area_element()
+        # sym_dA = self.sym_area_element()
+        #
+        # _dA = sympy.lambdify((x, y), sym_dA, modules="sympy")
 
-        _dA = sympy.lambdify((x, y), sym_dA, modules="sympy")
+        # sym_hx, sym_hy = self.sym_line_elements()
+        #
+        # _hx = sympy.lambdify((x, y), sym_hx, modules="sympy")
+        # _hy = sympy.lambdify((x, y), sym_hy, modules="sympy")
 
-        sym_hx, sym_hy = self.sym_line_elements()
+        def mapped_distance(v1, v2):
+            m1 = self.physical_coords(v1[0], v1[1])
+            m2 = self.physical_coords(v2[0], v2[1])
+            return np.sqrt((m1[0] - m2[0])**2 + (m1[1] - m2[1])**2)
 
-        _hx = sympy.lambdify((x, y), sym_hx, modules="sympy")
-        _hy = sympy.lambdify((x, y), sym_hy, modules="sympy")
+        def mapped_area(i, j):
+            # c1-4 are the corners
+            c1 = np.array([self.x2d[i, j] - 0.5 * self.dx,
+                           self.y2d[i, j] - 0.5 * self.dy])
+            c2 = np.array([self.x2d[i, j] - 0.5 * self.dx,
+                           self.y2d[i, j] + 0.5 * self.dy])
+            c3 = np.array([self.x2d[i, j] + 0.5 * self.dx,
+                           self.y2d[i, j] + 0.5 * self.dy])
+            c4 = np.array([self.x2d[i, j] + 0.5 * self.dx,
+                           self.y2d[i, j] - 0.5 * self.dy])
+
+            m1 = self.physical_coords(c1[0], c1[1])
+            m2 = self.physical_coords(c2[0], c2[1])
+            m3 = self.physical_coords(c3[0], c3[1])
+            m4 = self.physical_coords(c4[0], c4[1])
+
+            # find vectors of diagonals (and pad out z-direction with a zero)
+            p = np.append(c3 - c1, 0)
+            q = np.append(c4 - c2, 0)
+
+            # area is half the cross product
+            return 0.5 * np.abs(np.cross(p, q)[-1])
 
         for i in range(self.qx):
             for j in range(self.qy):
-                kappa[i, j] = _dA(self.x2d[i, j], self.y2d[i, j])
-                hx[i, j] = _hx(self.x2d[i, j] - 0.5 * self.dx, self.y2d[i, j])
-                hy[i, j] = _hy(self.x2d[i, j], self.y2d[i, j] - 0.5 * self.dy)
+                # kappa[i, j] = _dA(self.x2d[i, j], self.y2d[i, j])
+                hx[i, j] = mapped_distance([self.x2d[i, j] - 0.5 * self.dx, self.y2d[i, j] - 0.5 * self.dy], [
+                                           self.x2d[i, j] - 0.5 * self.dx, self.y2d[i, j] + 0.5 * self.dy])
+                hy[i, j] = mapped_distance([self.x2d[i, j] - 0.5 * self.dx, self.y2d[i, j] - 0.5 * self.dy], [
+                                           self.x2d[i, j] + 0.5 * self.dx, self.y2d[i, j] - 0.5 * self.dy])
+                kappa[i, j] = mapped_area(i, j)
+                # hx[i, j] = _hx(self.x2d[i, j] + 0.5 * self.dx, self.y2d[i, j]) - _hx(self.x2d[i, j] - 0.5 * self.dx, self.y2d[i, j])
+                # hy[i, j] = _hy(self.x2d[i, j], self.y2d[i, j] + 0.5 * self.dy) - _hy(self.x2d[i, j], self.y2d[i, j] - 0.5 * self.dy)
 
         # else:
         #     kappa[:, :] = area(self) / (self.dx * self.dy)
         #     hx[:, :] = h(1, self) / self.dy
         #     hy[:, :] = h(2, self) / self.dx
 
-        print('dA = ', sym_dA)
-        print('hx = ', sym_hx)
-        print('hy = ', sym_hy)
+        # print('dA = ', sym_dA)
+        # print('hx = ', sym_hx)
+        # print('hy = ', sym_hy)
 
-        return kappa, hx, hy
+        print(hx[2, 2], self.dy * self.x2d[2, 2])
+
+        return kappa / (self.dx * self.dy), hx / self.dy, hy / self.dx
 
     def calculate_rotation_matrices(self):
         """
