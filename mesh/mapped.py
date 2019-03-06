@@ -37,6 +37,7 @@ import sympy
 from sympy.abc import x, y, z
 from random import random
 from numpy.testing import assert_array_almost_equal
+from numba import njit
 
 from util import msg
 import mesh.boundary as bnd
@@ -101,40 +102,15 @@ class MappedGrid2d(Grid2d):
         # of the basis vectors
         self.map = map_func(self).col_join(sympy.Matrix([z]))
 
+        print("Calculating scaling factors...")
         self.kappa, self.gamma_fcx, self.gamma_fcy = self.calculate_metric_elements()
 
+        print("Calculating rotation matrices...")
         self.R_fcx, self.R_fcy = self.calculate_rotation_matrices()
 
     @staticmethod
     def norm(z):
         return sympy.sqrt(z.dot(z))
-
-    def sym_area_element(self):
-        """
-        Use sympy to calculate area element using
-        https://mzucker.github.io/2018/04/12/sympy-part-3-moar-derivatives.html
-        """
-
-        p1 = sympy.simplify(self.map.diff(x))
-        p2 = sympy.simplify(self.map.diff(y))
-
-        p1_cross_p2 = sympy.simplify(p1.cross(p2))
-
-        dA = sympy.simplify(self.norm(p1_cross_p2))
-
-        return dA
-
-    # def sym_line_elements(self):
-    #     """
-    #     Use sympy to calculate the line elements
-    #     """
-    #
-    #     l1 = sympy.simplify(sympy.sqrt(
-    #         self.map[0].diff(y)**2 + self.map[1].diff(y)**2))
-    #     l2 = sympy.simplify(sympy.sqrt(
-    #         self.map[0].diff(x)**2 + self.map[1].diff(x)**2))
-    #
-    #     return l1, l2
 
     def sym_rotation_matrix(self):
         """
@@ -182,62 +158,28 @@ class MappedGrid2d(Grid2d):
         hx = self.scratch_array()
         hy = self.scratch_array()
 
-        # if isinstance(self.map, sympy.Matrix):
-        # calculate sympy formula on grid
-        # sym_dA = self.sym_area_element()
-        #
-        # _dA = sympy.lambdify((x, y), sym_dA, modules="sympy")
+        # calculate physical coordinates of corners
+        c1 = self.physical_coords(self.xl, self.yl)
+        c2 = self.physical_coords(self.xl, self.yr)
+        c3 = self.physical_coords(self.xr, self.yr)
+        c4 = self.physical_coords(self.xr, self.yl)
 
-        # sym_hx, sym_hy = self.sym_line_elements()
-        #
-        # _hx = sympy.lambdify((x, y), sym_hx, modules="sympy")
-        # _hy = sympy.lambdify((x, y), sym_hy, modules="sympy")
-
-        def mapped_distance(v1, v2):
-            m1 = self.physical_coords(v1[0], v1[1])
-            m2 = self.physical_coords(v2[0], v2[1])
+        def mapped_distance(m1, m2):
             return np.sqrt((m1[0] - m2[0])**2 + (m1[1] - m2[1])**2)
 
-        def mapped_area(i, j):
-            # c1-4 are the corners
-            c1 = [self.xl[i], self.yl[j]]
-            c2 = [self.xl[i], self.yr[j]]
-            c3 = [self.xr[i], self.yr[j]]
-            c4 = [self.xr[i], self.yl[j]]
-
-            m1 = self.physical_coords(c1[0], c1[1])
-            m2 = self.physical_coords(c2[0], c2[1])
-            m3 = self.physical_coords(c3[0], c3[1])
-            m4 = self.physical_coords(c4[0], c4[1])
-
+        def mapped_area(i,j):
             # find vectors of diagonals (and pad out z-direction with a zero)
-            p = np.append(m3 - m1, 0)
-            q = np.append(m4 - m2, 0)
+            p = np.append(c3[:,i,j] - c1[:,i,j], 0)
+            q = np.append(c4[:,i,j] - c2[:,i,j], 0)
 
             # area is half the cross product
             return 0.5 * np.abs(np.cross(p, q)[-1])
 
         for i in range(self.qx):
             for j in range(self.qy):
-                # kappa[i, j] = _dA(self.x2d[i, j], self.y2d[i, j])
-                hx[i, j] = mapped_distance([self.xl[i], self.yl[j]],
-                                           [self.xl[i], self.yr[j]])
-                hy[i, j] = mapped_distance([self.xl[i], self.yl[j]],
-                                           [self.xr[i], self.yl[j]])
+                hx[i, j] = mapped_distance(c1[:,i,j], c2[:,i,j])
+                hy[i, j] = mapped_distance(c1[:,i,j], c4[:,i,j])
                 kappa[i, j] = mapped_area(i, j)
-                # hx[i, j] = _hx(self.x2d[i, j] + 0.5 * self.dx, self.y2d[i, j]) - _hx(self.x2d[i, j] - 0.5 * self.dx, self.y2d[i, j])
-                # hy[i, j] = _hy(self.x2d[i, j], self.y2d[i, j] + 0.5 * self.dy) - _hy(self.x2d[i, j], self.y2d[i, j] - 0.5 * self.dy)
-
-        # else:
-        #     kappa[:, :] = area(self) / (self.dx * self.dy)
-        #     hx[:, :] = h(1, self) / self.dy
-        #     hy[:, :] = h(2, self) / self.dx
-
-        # print('dA = ', sym_dA)
-        # print('hx = ', sym_hx)
-        # print('hy = ', sym_hy)
-
-        # print(hx[2, 2], self.dy * self.x2d[2, 2])
 
         return kappa / (self.dx * self.dy), hx / self.dy, hy / self.dx
 
@@ -254,24 +196,20 @@ class MappedGrid2d(Grid2d):
         print('Rx = ', sym_Rx)
         print('Ry = ', sym_Ry)
 
-        # R = sympy.lambdify((x, y), sym_R, modules="sympy")
-
-        # print(sympy.limit(sym_R, x, 0))
+        Rx = sympy.lambdify((x, y), sym_Rx, modules="sympy")
+        Ry = sympy.lambdify((x, y), sym_Ry, modules="sympy")
 
         def R_fcx(nvar, ixmom, iymom):
             R_fc = self.scratch_array(nvar=(nvar, nvar))
 
             R_mat = np.eye(nvar)
 
-            xs = self.x2d - 0.5 * self.dx
-            ys = self.y2d
-
             for i in range(self.qx):
                 for j in range(self.qy):
                     R_fc[i, j, :, :] = R_mat
 
                     R_fc[i, j, ixmom:iymom + 1, ixmom:iymom +
-                         1] = np.array(sym_Rx.subs({x: xs[i, j], y: ys[i, j]}))
+                         1] = np.array(Rx(self.xl[i], self.y[j]))
 
             return R_fc
 
@@ -280,15 +218,12 @@ class MappedGrid2d(Grid2d):
 
             R_mat = np.eye(nvar)
 
-            xs = self.x2d
-            ys = self.y2d - 0.5 * self.dy
-
             for i in range(self.qx):
                 for j in range(self.qy):
                     R_fc[i, j, :, :] = R_mat
 
                     R_fc[i, j, ixmom:iymom + 1, ixmom:iymom +
-                         1] = np.array(sym_Ry.subs({x: xs[i, j], y: ys[i, j]}))
+                         1] = np.array(Ry(self.x[i], self.yl[j]))
             return R_fc
 
         return R_fcx, R_fcy
@@ -317,12 +252,24 @@ class MappedGrid2d(Grid2d):
                             flatten(nvar), dtype=np.float64)
         return ai.ArrayIndexer(d=_tmp, grid=self)
 
-    def physical_coords(self, xs=None, ys=None):
+    def physical_coords(self, xx=None, yy=None):
 
-        if xs is None:
+        if xx is None:
             xs = self.x2d
-        if ys is None:
+        elif not np.isscalar(xx) and len(xx.shape) == 1:
+            xs = np.repeat(xx, len(yy))
+            xs.shape = (len(xx), len(yy))
+        else:
+            xs = xx
+
+        if yy is None:
             ys = self.y2d
+        elif not np.isscalar(yy) and len(yy.shape) == 1:
+            ys = np.repeat(yy, len(xx))
+            ys.shape = (len(yy), len(xx))
+            ys = np.transpose(ys)
+        else:
+            ys = yy
 
         xs_t = sympy.lambdify((x, y), self.map[0])
         ys_t = sympy.lambdify((x, y), self.map[1])
@@ -381,7 +328,7 @@ class MappedCellCenterData2d(CellCenterData2d):
         myd.fill_ghost(n=n, bc=bc)
 
         if name == 'x-momentum' or name == 'y-momentum':
-            
+
             # -x boundary
             if bc.xlb in ["reflect-odd", "dirichlet"]:
                 if bc.xl_value is None:
