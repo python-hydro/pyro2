@@ -1,16 +1,19 @@
 from __future__ import print_function
 
 import sys
-import mesh.patch as patch
 import numpy as np
+import sympy
+from sympy.abc import x, y
+
+import mesh.mapped as mapped
 
 
 def init_data(my_data, rp):
     """ an init routine for unit testing """
 
     # make sure that we are passed a valid patch object
-    if not isinstance(my_data, patch.CellCenterData2d):
-        print("ERROR: patch invalid in sedov.py")
+    if not isinstance(my_data, mapped.MappedCellCenterData2d):
+        print("ERROR: patch invalid in test.py")
         print(my_data.__class__)
         sys.exit()
 
@@ -50,6 +53,11 @@ def R(iface, myg, nvar, ixmom, iymom):
             R_fc[i, j, :, :] = R_mat
 
     return R_fc
+
+
+def sym_map(myg):
+
+    return sympy.Matrix([-2*y, x+4])
 
 
 def finalize():

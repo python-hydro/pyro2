@@ -1,11 +1,12 @@
 from __future__ import print_function
 
 # import sys
-# import mesh.fv as fv
 import numpy as np
-from util import msg
 import sympy
 from sympy.abc import x, y
+
+from util import msg
+# import mesh.fv as fv
 
 
 def init_data(myd, rp):
@@ -45,12 +46,12 @@ def init_data(myd, rp):
 
     myg = myd.grid
 
-    xctr = 0.5 * (xmin + xmax)
-    yctr = 0.5 * (ymin + ymax)
-
     X, Y = myg.physical_coords()
 
-    xctr_t, yctr_t = myg.physical_coords(xctr, yctr)
+    # rather than map the center of the coordinate grid, find the center by
+    # locating the center of a diagonal across the physical domain
+    xctr_t, yctr_t = 0.5 * \
+        (myg.physical_coords(xmin, ymin) + myg.physical_coords(xmax, ymax))
 
     dist = np.sqrt((X - xctr_t)**2 + (Y - yctr_t)**2)
 
@@ -65,7 +66,7 @@ def init_data(myd, rp):
 
 def sym_map(myg):
 
-    return sympy.Matrix([y**2, -2*x**2-y])
+    return sympy.Matrix([y**2, -2 * x**2 - y])
 
     # return sympy.Matrix([x * sympy.cos(y), x * sympy.sin(y)])
 

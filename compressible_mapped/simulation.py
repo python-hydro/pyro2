@@ -148,7 +148,6 @@ class Simulation(compressible_rk.Simulation):
         # self-contained object stored in output files to make plots.
         # store grav because we'll need that in some BCs
         my_data.set_aux("gamma", self.rp.get_param("eos.gamma"))
-        my_data.set_aux("grav", self.rp.get_param("compressible.grav"))
 
         my_data.create()
 

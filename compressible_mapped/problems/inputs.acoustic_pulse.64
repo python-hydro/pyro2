@@ -6,6 +6,7 @@ fix_dt = 3.0e-3
 
 [compressible]
 cvisc = 0.1
+limiter = 0
 
 
 [io]

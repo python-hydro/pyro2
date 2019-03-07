@@ -296,8 +296,6 @@ class MappedCellCenterData2d(CellCenterData2d):
         self.R_fcx = self.grid.R_fcx(ivars.nvar, ivars.ixmom, ivars.iymom)
         self.R_fcy = self.grid.R_fcy(ivars.nvar, ivars.ixmom, ivars.iymom)
 
-        # print('Rx contains nan?', np.isnan(self.R_fcx).any())
-
     def fill_BC(self, name):
         n = self.names.index(name)
         self.fill_mapped_ghost(name, n=n, bc=self.BCs[name])

@@ -1,9 +1,10 @@
 import numpy as np
 from numpy.testing import assert_array_equal
+import pytest
+import sympy
 
 from util import runparams
 import compressible_mapped.simulation as sn
-import pytest
 
 
 class TestSimulation(object):
@@ -35,24 +36,28 @@ class TestSimulation(object):
         self.rp = None
         self.sim = None
 
-    def test_initializationst(self):
+    def test_initialization_state(self):
         dens = self.sim.cc_data.get_var("density")
         assert dens.min() == 1.0 and dens.max() == 1.0
 
         ener = self.sim.cc_data.get_var("energy")
         assert ener.min() == 2.5 and ener.max() == 2.5
 
-        # test the mapped grids stuff has been initialized properly
+    def test_mapped_grid(self):
 
-    def test_prim(self):
+        myg = self.sim.cc_data.grid
 
-        # U -> q
-        gamma = self.sim.cc_data.get_aux("gamma")
-        q = sn.cons_to_prim(self.sim.cc_data.data, gamma, self.sim.ivars, self.sim.cc_data.grid)
+        kappa = myg.scratch_array() + 2
+        assert_array_equal(kappa, myg.kappa)
 
-        assert q[:, :, self.sim.ivars.ip].min() == pytest.approx(1.0) and \
-               q[:, :, self.sim.ivars.ip].max() == pytest.approx(1.0)
+        gamma_fcx = np.ones_like(kappa) * 2
+        assert_array_equal(gamma_fcx, myg.gamma_fcx)
 
-        # q -> U
-        U = sn.prim_to_cons(q, gamma, self.sim.ivars, self.sim.cc_data.grid)
-        assert_array_equal(U, self.sim.cc_data.data)
+        gamma_fcy = np.ones_like(kappa)
+        assert_array_equal(gamma_fcy, myg.gamma_fcy)
+
+        R_x = sympy.Matrix([[0, -1], [1, 0]])
+        R_y = sympy.Matrix([[0, 1], [-1, 0]])
+
+        assert_array_equal(myg.R_fcx(2, 0, 1)[3, 5], R_x)
+        assert_array_equal(myg.R_fcy(2, 0, 1)[6, 0], R_y)

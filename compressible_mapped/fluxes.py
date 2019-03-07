@@ -22,8 +22,8 @@ Taylor expanding *in space only* yields::
 import numpy as np
 
 import compressible.interface as interface
-# import compressible as comp
-# import mesh.reconstruction as reconstruction
+import compressible as comp
+import mesh.reconstruction as reconstruction
 import mesh.array_indexer as ai
 
 from util import msg
@@ -64,6 +64,7 @@ def fluxes(my_data, rp, ivars, solid, tc):
 
     myg = my_data.grid
     U = my_data.data
+    gamma = rp.get_param("eos.gamma")
 
     # =========================================================================
     # transform by rotating the velocity components
@@ -89,8 +90,6 @@ def fluxes(my_data, rp, ivars, solid, tc):
                                    U.jp(-1, buf=b)[i, j])
             U_yr.v(buf=b)[i, j] = (my_data.R_fcy.v(buf=b)[i, j] @
                                    U.v(buf=b)[i, j])
-
-    gamma = rp.get_param("eos.gamma")
 
     # =========================================================================
     # construct the fluxes normal to the interfaces
