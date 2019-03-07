@@ -382,14 +382,14 @@ class MappedCellCenterData2d(CellCenterData2d):
                             j_bnd = myd.g.jhi+1+j
                             j_src = myd.g.jhi-j
 
-                            q_rot = self.R_fcx[i, myd.g.jhi+1] @ myd[i, j_src, n]
+                            q_rot = self.R_fcx[i, myd.g.jhi+1] @ myd[i, j_src, :]
                             q_rot[n] = -q_rot[n]
 
                             myd[i, j_bnd, n] = (self.R_fcx[i, myd.g.jhi+1].T @ q_rot)[n]
                 else:
                     for i in range(myd.g.qx):
 
-                        q_rot = self.R_fcx[i, myd.g.jhi+1] @ myd[i, myd.g.jhi, n]
+                        q_rot = self.R_fcx[i, myd.g.jhi+1] @ myd[i, myd.g.jhi, :]
                         q_rot[n] = 2*bc.yr_value - q_rot[n]
 
                         myd[:, myd.g.jhi+1, n] = (self.R_fcx[i, myd.g.jhi+1].T @ q_rot)[n]

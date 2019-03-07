@@ -70,7 +70,7 @@ using a ``sympy.Matrix`` object as a function of the cartesian coordinates
 
     mydata.make_rotation_matrices(ivars)
 
-This create the mapped cell-centered data object, ``mydata``, that lives on the
+This creates the mapped cell-centered data object, ``mydata``, that lives on the
 mapped grid we just defined. Just as we would for the non-mapped grid, we next
 create a boundary condition object to specify the boundary conditions on each edge,
 register variables and call the ``create()`` function to allocate storage for the

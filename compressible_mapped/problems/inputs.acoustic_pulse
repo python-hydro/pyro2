@@ -22,11 +22,11 @@ ny = 128
 xmax = 1.0
 ymax = 1.0
 
-xlboundary = periodic
-xrboundary = periodic
+xlboundary = outflow
+xrboundary = outflow
 
-ylboundary = periodic
-yrboundary = periodic
+ylboundary = outflow
+yrboundary = outflow
 
 
 [acoustic_pulse]

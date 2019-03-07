@@ -1,8 +1,11 @@
 from __future__ import print_function
 
 import sys
-import mesh.patch as patch
 import numpy as np
+import sympy
+from sympy.abc import x, y
+
+import mesh.mapped as mapped
 from util import msg
 
 
@@ -12,7 +15,7 @@ def init_data(my_data, rp):
     msg.bold("initializing the advect problem...")
 
     # make sure that we are passed a valid patch object
-    if not isinstance(my_data, patch.CellCenterData2d):
+    if not isinstance(my_data, mapped.MappedCellCenterData2d):
         print("ERROR: patch invalid in advect.py")
         print(my_data.__class__)
         sys.exit()
@@ -38,45 +41,32 @@ def init_data(my_data, rp):
     ymin = rp.get_param("mesh.ymin")
     ymax = rp.get_param("mesh.ymax")
 
-    xctr = 0.5*(xmin + xmax)
-    yctr = 0.5*(ymin + ymax)
+    myg = my_data.grid
+
+    X, Y = myg.physical_coords()
+
+    xctr, yctr = 0.5 * \
+        (myg.physical_coords(xmin, ymin) + myg.physical_coords(xmax, ymax))
 
     # this is identical to the advection/smooth problem
-    dens[:, :] = 1.0 + np.exp(-60.0*((my_data.grid.x2d-xctr)**2 +
-                                    (my_data.grid.y2d-yctr)**2))
+    dens[:, :] = 1.0 + np.exp(-60.0 * ((X - xctr)**2 +
+                                       (Y - yctr)**2))
 
     # velocity is diagonal
     u = 1.0
     v = 1.0
-    xmom[:, :] = dens[:, :]*u
-    ymom[:, :] = dens[:, :]*v
+    xmom[:, :] = dens[:, :] * u
+    ymom[:, :] = dens[:, :] * v
 
     # pressure is constant
     p = 1.0
-    ener[:, :] = p/(gamma - 1.0) + 0.5*(xmom[:, :]**2 + ymom[:, :]**2)/dens[:, :]
+    ener[:, :] = p / (gamma - 1.0) + 0.5 * (xmom[:, :]
+                                            ** 2 + ymom[:, :]**2) / dens[:, :]
 
 
-def area(myg):
-    return myg.dx * myg.dy + myg.scratch_array()
+def sym_map(myg):
 
-
-def h(idir, myg):
-    if idir == 1:
-        return myg.dy + myg.scratch_array()
-    else:
-        return myg.dx + myg.scratch_array()
-
-
-def R(iface, myg, nvar, ixmom, iymom):
-    R_fc = myg.scratch_array(nvar=(nvar, nvar))
-
-    R_mat = np.eye(nvar)
-
-    for i in range(myg.qx):
-        for j in range(myg.qy):
-            R_fc[i, j, :, :] = R_mat
-
-    return R_fc
+    return sympy.Matrix([0.5*x + y, -x + 3])
 
 
 def finalize():

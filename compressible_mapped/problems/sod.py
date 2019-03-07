@@ -1,9 +1,10 @@
 from __future__ import print_function
 
 import sys
-import numpy as np
+import sympy
+from sympy.abc import x, y
 
-import mesh.patch as patch
+import mesh.mapped as mapped
 from util import msg
 
 
@@ -13,7 +14,7 @@ def init_data(my_data, rp):
     msg.bold("initializing the sod problem...")
 
     # make sure that we are passed a valid patch object
-    if not isinstance(my_data, patch.CellCenterData2d):
+    if not isinstance(my_data, mapped.MappedCellCenterData2d):
         print("ERROR: patch invalid in sod.py")
         print(my_data.__class__)
         sys.exit()
@@ -47,15 +48,17 @@ def init_data(my_data, rp):
 
     direction = rp.get_param("sod.direction")
 
-    xctr = 0.5 * (xmin + xmax)
-    yctr = 0.5 * (ymin + ymax)
-
     myg = my_data.grid
+
+    X, Y = myg.physical_coords()
+
+    xctr, yctr = 0.5 * \
+        (myg.physical_coords(xmin, ymin) + myg.physical_coords(xmax, ymax))
 
     if direction == "x":
 
         # left
-        idxl = myg.x2d <= xctr
+        idxl = X <= xctr
 
         dens[idxl] = dens_left
         xmom[idxl] = dens_left * u_left
@@ -63,7 +66,7 @@ def init_data(my_data, rp):
         ener[idxl] = p_left / (gamma - 1.0) + 0.5 * xmom[idxl] * u_left
 
         # right
-        idxr = myg.x2d > xctr
+        idxr = X > xctr
 
         dens[idxr] = dens_right
         xmom[idxr] = dens_right * u_right
@@ -73,7 +76,7 @@ def init_data(my_data, rp):
     else:
 
         # bottom
-        idxb = myg.y2d <= yctr
+        idxb = Y <= yctr
 
         dens[idxb] = dens_left
         xmom[idxb] = 0.0
@@ -81,7 +84,7 @@ def init_data(my_data, rp):
         ener[idxb] = p_left / (gamma - 1.0) + 0.5 * ymom[idxb] * u_left
 
         # top
-        idxt = myg.y2d > yctr
+        idxt = Y > yctr
 
         dens[idxt] = dens_right
         xmom[idxt] = 0.0
@@ -89,27 +92,9 @@ def init_data(my_data, rp):
         ener[idxt] = p_right / (gamma - 1.0) + 0.5 * ymom[idxt] * u_right
 
 
-def area(myg):
-    return myg.dx * myg.dy + myg.scratch_array()
+def sym_map(myg):
 
-
-def h(idir, myg):
-    if idir == 1:
-        return myg.dy + myg.scratch_array()
-    else:
-        return myg.dx + myg.scratch_array()
-
-
-def R(iface, myg, nvar, ixmom, iymom):
-    R_fc = myg.scratch_array(nvar=(nvar, nvar))
-
-    R_mat = np.eye(nvar)
-
-    for i in range(myg.qx):
-        for j in range(myg.qy):
-            R_fc[i, j, :, :] = R_mat
-
-    return R_fc
+    return sympy.Matrix([x - y, x + y + 3])
 
 
 def finalize():

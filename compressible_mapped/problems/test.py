@@ -1,7 +1,6 @@
 from __future__ import print_function
 
 import sys
-import numpy as np
 import sympy
 from sympy.abc import x, y
 
@@ -32,32 +31,9 @@ def init_data(my_data, rp):
     ener[:, :] = 2.5
 
 
-def area(myg):
-    return myg.dx * myg.dy + myg.scratch_array()
-
-
-def h(idir, myg):
-    if idir == 1:
-        return myg.dy + myg.scratch_array()
-    else:
-        return myg.dx + myg.scratch_array()
-
-
-def R(iface, myg, nvar, ixmom, iymom):
-    R_fc = myg.scratch_array(nvar=(nvar, nvar))
-
-    R_mat = np.eye(nvar)
-
-    for i in range(myg.qx):
-        for j in range(myg.qy):
-            R_fc[i, j, :, :] = R_mat
-
-    return R_fc
-
-
 def sym_map(myg):
 
-    return sympy.Matrix([-2*y, x+4])
+    return sympy.Matrix([-2 * y, x + 4])
 
 
 def finalize():
