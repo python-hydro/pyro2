@@ -37,6 +37,9 @@ class TestSimulation(object):
         self.sim = None
 
     def test_initialization_state(self):
+        """
+        Test state initialized properly
+        """
         dens = self.sim.cc_data.get_var("density")
         assert dens.min() == 1.0 and dens.max() == 1.0
 
