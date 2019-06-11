@@ -279,6 +279,6 @@ with their data.
 
 ## Getting help
 
-  Join the mailing list to say up-to-date:
+  Join the mailing list to stay up-to-date:
 
   https://groups.google.com/forum/#!forum/pyro-code
