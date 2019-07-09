@@ -1,0 +1,12 @@
+[driver]
+cfl = 0.8
+
+
+[sph]
+np = 100
+grav = -9.8
+particle_size = 5.e-2
+rho0 = 1.e3
+k = 1.e3
+mu = 0.1
+dt = 1.e-4
