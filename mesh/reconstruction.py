@@ -33,7 +33,7 @@ def well_balance(q, myg, limiter, iv, grav):
     p1_jm1.v(buf=3)[:, :] = q.jp(-1, buf=3, n=iv.ip) - (q.v(buf=3, n=iv.ip) -
             0.5*myg.dy*(q.v(buf=3, n=iv.irho) + q.jp(-1, buf=3, n=iv.irho))*grav)
 
-    # now limit p1 using these -- this is the 4th order MC limiter
+    # now limit p1 using these -- this is the 2nd order MC limiter
     lda_tmp = myg.scratch_array()
     dc = myg.scratch_array()
     dl = myg.scratch_array()
