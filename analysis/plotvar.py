@@ -30,12 +30,12 @@ def makeplot(plotfile, variable, outfile,
     if log:
         var = np.log10(var)
 
-    plt.imshow(np.transpose(var.v()),
+    img = plt.imshow(np.transpose(var.v()),
                interpolation="nearest", origin="lower",
                extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
     if not compact:
-        plt.colorbar()
+        plt.colorbar(img)
 
         plt.xlabel("x")
         plt.ylabel("y")
