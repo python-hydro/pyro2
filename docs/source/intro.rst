@@ -35,7 +35,5 @@ equations. In particular, the following solvers are developed:
 
 * low Mach number atmospheric hydrodynamics
 
-* shallow water hydrodynamics
-
 Runtime visualization shows the evolution as the equations are solved.
 
