@@ -64,7 +64,7 @@ def test_vc_constant(N):
 
     plt.figure(num=1, figsize=(5.0, 5.0), dpi=100, facecolor='w')
 
-    plt.imshow(np.transpose(c[g.ilo:g.ihi+1, g.jlo:g.jhi+1]),
+    img1 = plt.imshow(np.transpose(c[g.ilo:g.ihi+1, g.jlo:g.jhi+1]),
                interpolation="nearest", origin="lower",
                extent=[g.xmin, g.xmax, g.ymin, g.ymax])
 
@@ -72,7 +72,7 @@ def test_vc_constant(N):
     plt.ylabel("y")
     plt.title("nx = {}".format(nx))
 
-    plt.colorbar()
+    plt.colorbar(img1)
 
     plt.savefig("mg_alpha.png")
 
@@ -117,7 +117,7 @@ def test_vc_constant(N):
 
     plt.subplot(121)
 
-    plt.imshow(np.transpose(v[a.ilo:a.ihi+1, a.jlo:a.jhi+1]),
+    img2 = plt.imshow(np.transpose(v[a.ilo:a.ihi+1, a.jlo:a.jhi+1]),
                interpolation="nearest", origin="lower",
                extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
@@ -125,11 +125,11 @@ def test_vc_constant(N):
     plt.ylabel("y")
     plt.title("nx = {}".format(nx))
 
-    plt.colorbar()
+    plt.colorbar(img2)
 
     plt.subplot(122)
 
-    plt.imshow(np.transpose(e[a.ilo:a.ihi+1, a.jlo:a.jhi+1]),
+    img3 = plt.imshow(np.transpose(e[a.ilo:a.ihi+1, a.jlo:a.jhi+1]),
                interpolation="nearest", origin="lower",
                extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
@@ -137,7 +137,7 @@ def test_vc_constant(N):
     plt.ylabel("y")
     plt.title("error")
 
-    plt.colorbar()
+    plt.colorbar(img3)
 
     plt.tight_layout()
 

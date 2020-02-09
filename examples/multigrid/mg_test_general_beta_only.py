@@ -145,7 +145,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
         plt.subplot(121)
 
-        plt.imshow(np.transpose(v.v()),
+        img1 = plt.imshow(np.transpose(v.v()),
                    interpolation="nearest", origin="lower",
                    extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
@@ -153,11 +153,11 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
         plt.ylabel("y")
         plt.title("nx = {}".format(nx))
 
-        plt.colorbar()
+        plt.colorbar(img1)
 
         plt.subplot(122)
 
-        plt.imshow(np.transpose(e.v()),
+        img2 = plt.imshow(np.transpose(e.v()),
                    interpolation="nearest", origin="lower",
                    extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
@@ -165,7 +165,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
         plt.ylabel("y")
         plt.title("error")
 
-        plt.colorbar()
+        plt.colorbar(img2)
 
         plt.tight_layout()
 

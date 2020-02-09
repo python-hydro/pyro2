@@ -1,5 +1,6 @@
 import importlib
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 
 import advection.advective_fluxes as flx
@@ -118,6 +119,7 @@ class Simulation(NullSimulation):
 
         # needed for PDF rendering
         cb = axes.cbar_axes[0].colorbar(img)
+        cb.formatter = matplotlib.ticker.FormatStrFormatter("")
         cb.solids.set_rasterized(True)
         cb.solids.set_edgecolor("face")
 
