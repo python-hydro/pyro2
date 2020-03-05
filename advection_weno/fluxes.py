@@ -41,12 +41,13 @@ def fvs(q, order, u, alpha):
 
 
 def fluxes(my_data, rp, dt):
-    """
+    r"""
     Construct the fluxes through the interfaces for the linear advection
-    equation:
+    equation
 
-      a  + u a  + v a  = 0
-       t      x      y
+    .. math::
+
+      a_t  + u a_x  + v a_y  = 0
 
     We use a high-order flux split WENO method to construct the interface
     fluxes. No Riemann problems are solved. The Lax-Friedrichs flux split
@@ -84,9 +85,9 @@ def fluxes(my_data, rp, dt):
     qx = myg.qx
     qy = myg.qy
 
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # WENO fvs
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
 
     weno_order = rp.get_param("advection.weno_order")
     assert(weno_order in (2, 3)), "Currently only implemented weno_order=2, 3"

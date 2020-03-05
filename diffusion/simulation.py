@@ -3,6 +3,7 @@
 import importlib
 import math
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 
 import mesh.patch as patch
@@ -115,7 +116,7 @@ class Simulation(NullSimulation):
 
         # solve the MG problem for the updated phi
         mg.solve(rtol=1.e-10)
-        #mg.smooth(mg.nlevels-1,100)
+        # mg.smooth(mg.nlevels-1,100)
 
         # update the solution
         phi.v()[:, :] = mg.get_solution().v()
@@ -135,7 +136,7 @@ class Simulation(NullSimulation):
 
         myg = self.cc_data.grid
 
-        plt.imshow(np.transpose(phi.v()),
+        img = plt.imshow(np.transpose(phi.v()),
                    interpolation="nearest", origin="lower",
                    extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax],
                    cmap=self.cm)
@@ -144,7 +145,8 @@ class Simulation(NullSimulation):
         plt.ylabel("y")
         plt.title("phi")
 
-        plt.colorbar()
+        cb = plt.colorbar(img)
+        cb.formatter = matplotlib.ticker.FormatStrFormatter("")
 
         plt.figtext(0.05, 0.0125, "t = {:10.5f}".format(self.cc_data.t))
 

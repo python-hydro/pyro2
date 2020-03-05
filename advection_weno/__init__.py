@@ -9,23 +9,23 @@ Most of the code is taken from advection_rk and toy-conslaw.
 
 The general flow of the solver when invoked through pyro.py is:
 
-  create grid
+-  create grid
 
-  initial conditions
+-  initial conditions
 
-  main loop
+-  main loop
 
-     fill ghost cells
+     * fill ghost cells
 
-     compute dt
+     * compute dt
 
-     compute fluxes
+     * compute fluxes
 
-     conservative update
+     * conservative update
 
-     output
+     * output
 
 """
 
 __all__ = ['simulation']
-from .simulation import *
+from .simulation import Simulation

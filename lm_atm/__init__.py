@@ -24,4 +24,4 @@ The projections are done using multigrid
 
 __all__ = ["simulation"]
 
-from .simulation import *
+from .simulation import Basestate, Simulation

@@ -15,8 +15,8 @@ discretization. The basic theory of such methods is discussed in
    methods for converting between the two data centerings.
 
 
-``mesh.patch`` implementation and use
--------------------------------------
+:mod:`mesh.patch <mesh.patch>` implementation and use
+-----------------------------------------------------
 
 We import the basic mesh functionality as:
 
@@ -36,14 +36,16 @@ There are several main objects in the patch class that we interact with:
 
 * :func:`patch.CellCenterData2d <mesh.patch.CellCenterData2d>`: this
   is the main data object—it holds cell-centered data on a grid.  To
-  build a ``CellCenterData2d`` object you need to pass in the ``Grid2d``
-  object that defines the mesh. The ``CellCenterData2d`` object then
+  build a :func:`patch.CellCenterData2d <mesh.patch.CellCenterData2d>`
+  object you need to pass in the :func:`patch.Grid2d <mesh.patch.Grid2d>`
+  object that defines the mesh. The
+  :func:`patch.CellCenterData2d <mesh.patch.CellCenterData2d>` object then
   allocates storage for the unknowns that live on the grid. This class
   also provides methods to fill boundary conditions, retrieve the data
   in different fashions, and read and write the object from/to disk.
 
 * :func:`fv.FV2d <mesh.fv.FV2d>`: this is a special class derived from
-  ``patch.CellCenterData2d`` that implements some extra functions
+  :func:`patch.CellCenterData2d <mesh.patch.CellCenterData2d>` that implements some extra functions
   needed to convert between cell-center data and averages with
   fourth-order accuracy.
 
@@ -99,14 +101,14 @@ Jupyter notebook
 
 A Jupyter notebook that illustrates some of the basics of working with
 the grid is provided as :ref:`mesh-examples.ipynb`. This will
-demonstrate, for example, how to use the ``ArrayIndexer`` methods to
+demonstrate, for example, how to use the :func:`ArrayIndexer <mesh.array_indexer.ArrayIndexer>` methods to
 construct differences.
 
 
 Tests
 -----
 
-The actual filling of the boundary conditions is done by the ``fill_BC()``
+The actual filling of the boundary conditions is done by the :func:`fill_BC <mesh.patch.CellCenterData2d.fill_BC>`
 method. The script ``bc_demo.py`` tests the various types of boundary
 conditions by initializing a small grid with sequential data, filling
 the BCs, and printing out the results.

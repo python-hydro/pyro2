@@ -5,13 +5,14 @@ import importlib
 import numpy as np
 import matplotlib.pyplot as plt
 
-import incompressible.incomp_interface_f as incomp_interface_f
+import incompressible.incomp_interface as incomp_interface
 import mesh.reconstruction as reconstruction
 import mesh.patch as patch
 import mesh.array_indexer as ai
 
 from simulation_null import NullSimulation, grid_setup, bc_setup
 import multigrid.MG as MG
+import particles.particles as particles
 
 
 class Simulation(NullSimulation):
@@ -42,6 +43,11 @@ class Simulation(NullSimulation):
         my_data.create()
 
         self.cc_data = my_data
+
+        if self.rp.get_param("particles.do_particles") == 1:
+            n_particles = self.rp.get_param("particles.n_particles")
+            particle_generator = self.rp.get_param("particles.particle_generator")
+            self.particles = particles.Particles(self.cc_data, bc, n_particles, particle_generator)
 
         # now set the initial conditions for the problem
         problem = importlib.import_module("incompressible.problems.{}".format(self.problem_name))
@@ -175,9 +181,9 @@ class Simulation(NullSimulation):
 
         myg = self.cc_data.grid
 
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # create the limited slopes of u and v (in both directions)
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         limiter = self.rp.get_param("incompressible.limiter")
 
         ldelta_ux = reconstruction.limit(u, myg, 1, limiter)
@@ -186,9 +192,9 @@ class Simulation(NullSimulation):
         ldelta_uy = reconstruction.limit(u, myg, 2, limiter)
         ldelta_vy = reconstruction.limit(v, myg, 2, limiter)
 
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # get the advective velocities
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         """
         the advective velocities are the normal velocity through each cell
@@ -216,8 +222,7 @@ class Simulation(NullSimulation):
         if self.verbose > 0:
             print("  making MAC velocities")
 
-        _um, _vm = incomp_interface_f.mac_vels(myg.qx, myg.qy, myg.ng,
-                                               myg.dx, myg.dy, self.dt,
+        _um, _vm = incomp_interface.mac_vels(myg.ng, myg.dx, myg.dy, self.dt,
                                                u, v,
                                                ldelta_ux, ldelta_vx,
                                                ldelta_uy, ldelta_vy,
@@ -226,10 +231,10 @@ class Simulation(NullSimulation):
         u_MAC = ai.ArrayIndexer(d=_um, grid=myg)
         v_MAC = ai.ArrayIndexer(d=_vm, grid=myg)
 
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # do a MAC projection ot make the advective velocities divergence
         # free
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         # we will solve L phi = D U^MAC, where phi is cell centered, and
         # U^MAC is the MAC-type staggered grid of the advective
@@ -274,16 +279,15 @@ class Simulation(NullSimulation):
         b = (0, 0, 0, 1)
         v_MAC.v(buf=b)[:, :] -= (phi_MAC.v(buf=b) - phi_MAC.jp(-1, buf=b))/myg.dy
 
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # recompute the interface states, using the advective velocity
         # from above
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         if self.verbose > 0:
             print("  making u, v edge states")
 
         _ux, _vx, _uy, _vy = \
-               incomp_interface_f.states(myg.qx, myg.qy, myg.ng,
-                                         myg.dx, myg.dy, self.dt,
+               incomp_interface.states(myg.ng, myg.dx, myg.dy, self.dt,
                                          u, v,
                                          ldelta_ux, ldelta_vx,
                                          ldelta_uy, ldelta_vy,
@@ -295,9 +299,9 @@ class Simulation(NullSimulation):
         u_yint = ai.ArrayIndexer(d=_uy, grid=myg)
         v_yint = ai.ArrayIndexer(d=_vy, grid=myg)
 
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # update U to get the provisional velocity field
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         if self.verbose > 0:
             print("  doing provisional update of u, v")
@@ -331,9 +335,9 @@ class Simulation(NullSimulation):
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")
 
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         # project the final velocity
-        #---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
 
         # now we solve L phi = D (U* /dt)
         if self.verbose > 0:
@@ -388,6 +392,9 @@ class Simulation(NullSimulation):
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")
 
+        if self.particles is not None:
+            self.particles.update_particles(self.dt)
+
         # increment the time
         if not self.in_preevolve:
             self.cc_data.t += self.dt
@@ -436,6 +443,18 @@ class Simulation(NullSimulation):
             ax.set_title(field_names[n])
 
             plt.colorbar(img, ax=ax)
+
+        if self.particles is not None:
+            ax = axes.flat[0]
+            particle_positions = self.particles.get_positions()
+            # dye particles
+            colors = self.particles.get_init_positions()[:, 0]
+
+            # plot particles
+            ax.scatter(particle_positions[:, 0],
+                particle_positions[:, 1], s=5, c=colors, alpha=0.8, cmap="Greys")
+            ax.set_xlim([myg.xmin, myg.xmax])
+            ax.set_ylim([myg.ymin, myg.ymax])
 
         plt.figtext(0.05, 0.0125, "t = {:10.5f}".format(self.cc_data.t))
 

@@ -5,4 +5,4 @@ integration is used to advance the solutiion.
 """
 __all__ = ["simulation"]
 
-from .simulation import *
+from .simulation import Simulation

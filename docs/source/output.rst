@@ -39,7 +39,7 @@ Several simply utilities exist to operate on output files
 Reading and plotting manually
 -----------------------------
 
-pyro data can be read using the ``patch.read`` method. The following
+pyro output data can be read using the :func:`util.io.read <util.io.read>` method. The following
 sequence (done in a python session) reads in stored data (from the
 compressible Sedov problem) and plots data falling on a line in the x
 direction through the y-center of the domain (note: this will include

@@ -1,5 +1,8 @@
 pyro version history, with major changes noted
 
+2.2 : added shallow water solver
+      added particles support
+
 2.1 : documentation switched to Sphinx
       extensive flake8 clean-ups
       travis-ci for unit test (with 79% coverage)

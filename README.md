@@ -1,4 +1,7 @@
-[![Build Status](https://travis-ci.org/zingale/pyro2.svg?branch=master)](https://travis-ci.org/zingale/pyro2)
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause) [![Build Status](https://travis-ci.com/python-hydro/pyro2.svg?branch=master)](https://travis-ci.com/python-hydro/pyro2) [![Documentation Status](https://readthedocs.org/projects/pyro2/badge/?version=latest)](https://pyro2.readthedocs.io/en/latest/?badge=latest) [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/python-hydro/pyro2/master?filepath=examples%2Fexamples.ipynb) [![JOSS status](http://joss.theoj.org/papers/6d8b2f94e6d08a7b5d65e98a948dcad7/status.svg)](http://joss.theoj.org/papers/6d8b2f94e6d08a7b5d65e98a948dcad7) [![DOI](https://zenodo.org/badge/20570861.svg)](https://zenodo.org/badge/latestdoi/20570861)
+
+
+
 
 ![pyro logo](www/logo.gif)
 
@@ -14,12 +17,12 @@ methods.
 
 The latest version of pyro is always available at:
 
-https://github.com/zingale/pyro2
+https://github.com/python-hydro/pyro2
 
 The project webpage, where you'll find documentation, plots, notes,
 etc. is here:
 
-http://zingale.github.io/pyro2/
+https://pyro2.readthedocs.io/
 
 
 ## Table of Contents
@@ -42,18 +45,13 @@ http://zingale.github.io/pyro2/
 	switch to python 3.x
 
   - There are a few steps to take to get things running. You need to
-    make sure you have `numpy`, `f2py`, `matplotlib`, and `h5py`
+    make sure you have `numpy`, `numba`, `matplotlib`, and `h5py`
     installed. On a Fedora system, this can be accomplished by doing:
 
-       `dnf install python3-numpy python3-numpy-f2py python3-matplotlib python3-matplotlib-tk python3-h5py`
+       `dnf install python3-numpy python3-numba python3-matplotlib python3-matplotlib-tk python3-h5py`
 
     (note, for older Fedora releases, replace `dnf` with `yum`.  For
-	python 2.x, leave off the `2` in the package names.)
-
-  - You also need to make sure gfortran is present on you system. On a
-    Fedora system, it can be installed as:
-
-       `dnf install gcc-gfortran`
+	python 2.x, leave off the `3` in the package names.)
 
   - Not all matplotlib backends allow for the interactive plotting as
     pyro is run. One that does is the TkAgg backend. This can be made
@@ -74,14 +72,12 @@ http://zingale.github.io/pyro2/
   - The remaining steps are:
 
       * Set the `PYTHONPATH` environment variable to point to the `pyro2/`
-        directory.
+        directory (note this is only needed if you wish to use pyro as a python
+        module - this step is not necessary if you only run pyro via the
+        commandline using the `pyro.py` script).
 
       * Define the environment variable `PYRO_HOME` to point to the
-        `pyro2/` directory (only needed to regression testing)
-
-      * Build the Fortran source. In `pyro2/` type
-
-          `./mk.sh`
+        `pyro2/` directory (only needed for regression testing)
 
       * Run a quick test of the advection solver:
 
@@ -96,12 +92,12 @@ http://zingale.github.io/pyro2/
 The main data structures that describe the grid and the data the lives
 on the grid are described in a jupyter notebook:
 
-https://github.com/zingale/pyro2/blob/master/mesh/mesh-examples.ipynb
+https://github.com/python-hydro/pyro2/blob/master/mesh/mesh-examples.ipynb
 
 Many of the methods here rely on multigrid.  The multigrid solver is
 demonstrated in the juputer notebook:
 
-https://github.com/zingale/pyro2/blob/master/multigrid/multigrid-examples.ipynb
+https://github.com/python-hydro/pyro2/blob/master/multigrid/multigrid-examples.ipynb
 
 
 ## Solvers
@@ -115,6 +111,8 @@ pyro provides the following solvers (all in 2-d):
 
   - `advection_fv4`: a fourth-order accurate finite-volume advection
     solver that uses RK4 time integration.
+
+  - `advection_nonuniform`: a solver for advection with a non-uniform velocity field.
 
   - `advection_rk`: a second-order unsplit solver for linear advection
     that uses Runge-Kutta integration instead of characteristic
@@ -136,12 +134,15 @@ pyro provides the following solvers (all in 2-d):
      equations that uses Runge-Kutta integration instead of
 	 characteristic tracing.
 
-  - `incompressible`: a second-order cell-centered approximate
-    projection method for the incompressible equations of
-    hydrodynamics.
+  - `compressible_sdc`: a fourth-order compressible solver,
+  using spectral-deferred correction (SDC) for the time integration.
 
   - `diffusion`: a Crank-Nicolson time-discretized solver for the
     constant-coefficient diffusion equation.
+
+  - `incompressible`: a second-order cell-centered approximate
+    projection method for the incompressible equations of
+    hydrodynamics.
 
   - `lm_atm`: a solver for the equations of low Mach number
     hydrodynamics for atmospheric flows.
@@ -153,6 +154,8 @@ pyro provides the following solvers (all in 2-d):
     constant-coefficient Helmholtz equation, as well as a
     variable-coefficient Poisson equation (which inherits from the
     constant-coefficient solver).
+
+  - `particles`: a solver for Lagrangian tracer particles.
 
   - `swe`: a solver for the shallow water equations.
 
@@ -276,6 +279,6 @@ with their data.
 
 ## Getting help
 
-  Join the mailing list to say up-to-date:
+  Join the mailing list to stay up-to-date:
 
   https://groups.google.com/forum/#!forum/pyro-code

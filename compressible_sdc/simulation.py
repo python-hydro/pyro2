@@ -17,20 +17,20 @@ class Simulation(compressible_fv4.Simulation):
         """Compute the integral over the sources from m to m+1 with a
         Simpson's rule"""
 
-        I = self.cc_data.grid.scratch_array(nvar=self.ivars.nvar)
+        integral = self.cc_data.grid.scratch_array(nvar=self.ivars.nvar)
 
         if m_start == 0 and m_end == 1:
             for n in range(self.ivars.nvar):
-                I.v(n=n)[:, :] = self.dt/24.0 * (5.0*As[0].v(n=n) + 8.0*As[1].v(n=n) - As[2].v(n=n))
+                integral.v(n=n)[:, :] = self.dt/24.0 * (5.0*As[0].v(n=n) + 8.0*As[1].v(n=n) - As[2].v(n=n))
 
         elif m_start == 1 and m_end == 2:
             for n in range(self.ivars.nvar):
-                I.v(n=n)[:, :] = self.dt/24.0 * (-As[0].v(n=n) + 8.0*As[1].v(n=n) + 5.0*As[2].v(n=n))
+                integral.v(n=n)[:, :] = self.dt/24.0 * (-As[0].v(n=n) + 8.0*As[1].v(n=n) + 5.0*As[2].v(n=n))
 
         else:
             msg.fail("invalid quadrature range")
 
-        return I
+        return integral
 
     def evolve(self):
 
@@ -78,12 +78,12 @@ class Simulation(compressible_fv4.Simulation):
                 A_knew = self.substep(U_knew[m])
 
                 # compute the integral over A at the old iteration
-                I = self.sdc_integral(m, m+1, A_kold)
+                integral = self.sdc_integral(m, m+1, A_kold)
 
                 # and the final update
                 for n in range(self.ivars.nvar):
                     U_knew[m+1].data.v(n=n)[:, :] = U_knew[m].data.v(n=n) + \
-                        0.5*self.dt * (A_knew.v(n=n) - A_kold[m].v(n=n)) + I.v(n=n)
+                        0.5*self.dt * (A_knew.v(n=n) - A_kold[m].v(n=n)) + integral.v(n=n)
 
                 # fill ghost cells
                 U_knew[m+1].fill_BC_all()
@@ -94,6 +94,9 @@ class Simulation(compressible_fv4.Simulation):
 
         # store the new solution
         self.cc_data.data[:, :, :] = U_knew[-1].data[:, :, :]
+
+        if self.particles is not None:
+            self.particles.update_particles(self.dt)
 
         # increment the time
         myd.t += self.dt

@@ -29,7 +29,7 @@ class PyroTest(object):
 
 def do_tests(build, out_file, do_standalone=True, do_main=True,
              reset_fails=False, store_all_benchmarks=False,
-             single=None, solver=None):
+             single=None, solver=None, rtol=1e-12):
 
     # make sure we've built stuff
     print("build = ", build)
@@ -37,22 +37,28 @@ def do_tests(build, out_file, do_standalone=True, do_main=True,
     if build:
         os.system("./mk.sh")
 
-    opts = "driver.verbose=0 vis.dovis=0 io.do_io=0".split()
+    opts = {"driver.verbose": 0, "vis.dovis": 0, "io.do_io": 0}
 
     results = {}
 
     if do_main:
         tests = []
         tests.append(PyroTest("advection", "smooth", "inputs.smooth", opts))
+        tests.append(PyroTest("advection_nonuniform",
+                              "slotted", "inputs.slotted", opts))
         tests.append(PyroTest("advection_rk", "smooth", "inputs.smooth", opts))
-        tests.append(PyroTest("advection_fv4", "smooth", "inputs.smooth", opts))
+        tests.append(PyroTest("advection_fv4",
+                              "smooth", "inputs.smooth", opts))
         tests.append(PyroTest("compressible", "quad", "inputs.quad", opts))
         tests.append(PyroTest("compressible", "sod", "inputs.sod.x", opts))
         tests.append(PyroTest("compressible", "rt", "inputs.rt", opts))
         tests.append(PyroTest("compressible_rk", "rt", "inputs.rt", opts))
-        tests.append(PyroTest("compressible_fv4", "acoustic_pulse", "inputs.acoustic_pulse", opts))
-        tests.append(PyroTest("compressible_sdc", "acoustic_pulse", "inputs.acoustic_pulse", opts))
-        tests.append(PyroTest("diffusion", "gaussian", "inputs.gaussian", opts))
+        tests.append(PyroTest("compressible_fv4", "acoustic_pulse",
+                              "inputs.acoustic_pulse", opts))
+        tests.append(PyroTest("compressible_sdc", "acoustic_pulse",
+                              "inputs.acoustic_pulse", opts))
+        tests.append(PyroTest("diffusion", "gaussian",
+                              "inputs.gaussian", opts))
         tests.append(PyroTest("incompressible", "shear", "inputs.shear", opts))
         tests.append(PyroTest("lm_atm", "bubble", "inputs.bubble", opts))
         tests.append(PyroTest("swe", "dam", "inputs.dam.x", opts))
@@ -65,9 +71,11 @@ def do_tests(build, out_file, do_standalone=True, do_main=True,
             tests_to_run = tests
 
         for t in tests_to_run:
-            err = pyro.doit(t.solver, t.problem, t.inputs,
-                            other_commands=t.options, comp_bench=True,
-                            reset_bench_on_fail=reset_fails, make_bench=store_all_benchmarks)
+            p = pyro.PyroBenchmark(t.solver, comp_bench=True,
+                                   reset_bench_on_fail=reset_fails, make_bench=store_all_benchmarks)
+            p.initialize_problem(t.problem, t.inputs, t.options)
+            err = p.run_sim(rtol)
+
             results[str(t)] = err
 
     # standalone tests
@@ -99,7 +107,8 @@ def do_tests(build, out_file, do_standalone=True, do_main=True,
         out.append(open(out_file, "w"))
 
     for f in out:
-        f.write("pyro tests run: {}\n\n".format(str(datetime.datetime.now().replace(microsecond=0))))
+        f.write("pyro tests run: {}\n\n".format(
+            str(datetime.datetime.now().replace(microsecond=0))))
 
         for s, r in sorted(results.items()):
             if not r == 0:
@@ -154,12 +163,21 @@ if __name__ == "__main__":
                    help="only do the unit tests",
                    action="store_true")
 
+    p.add_argument("--rtol",
+                   help="relative tolerance to use when comparing data to benchmarks",
+                   type=float, nargs=1)
+
     args = p.parse_args()
 
     try:
         outfile = args.o[0]
     except TypeError:
         outfile = None
+
+    try:
+        rtol = args.rtol[0]
+    except TypeError:
+        rtol = 1.e-12
 
     build = args.build
 
@@ -175,7 +193,7 @@ if __name__ == "__main__":
         do_tests(build, outfile, do_standalone=do_standalone, do_main=do_main,
                  reset_fails=args.reset_failures,
                  store_all_benchmarks=args.store_all_benchmarks,
-                 single=args.single, solver=args.solver)
+                 single=args.single, solver=args.solver, rtol=rtol)
 
     # unit tests
     if args.single is None:

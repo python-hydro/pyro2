@@ -1,7 +1,10 @@
+dist: bionic
+
 language: python
 
 python:
   - "3.6"
+  - "3.7"
 
 before_install:
   - export PATH=$(echo $PATH | tr ':' "\n" | sed '/\/opt\/python/d' | tr "\n" ":" | sed "s|::|:|g")
@@ -18,16 +21,17 @@ install:
 
 before_script:
   - export PYTHONPATH=$PYTHONPATH:$(pwd)
-  - ./mk.sh
+  - export PYRO_HOME=$(pwd)
 
 script:
   - flake8 .
-  - pytest -v --cov=. --cov-config .coveragerc --nbval --ignore=docs --ignore=./multigrid/variable_coeff_elliptic.ipynb --ignore=examples
+  - pytest -v --cov=. --cov-config .coveragerc --nbval --ignore=docs --ignore=./multigrid/variable_coeff_elliptic.ipynb --ignore=examples/mesh --ignore=examples/multigrid
 
 after_success:
     - codecov
 after_failure:
    - codecov
+   
 #   - travis-sphinx build
 
 # after_success:

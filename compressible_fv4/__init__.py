@@ -5,4 +5,4 @@ implementing the algorithm from McCorquodale & Colella (2011).
 
 __all__ = ["simulation"]
 
-from .simulation import *
+from .simulation import Simulation

@@ -23,5 +23,3 @@ compressible\_sdc\.simulation module
     :members:
     :undoc-members:
     :show-inheritance:
-
-

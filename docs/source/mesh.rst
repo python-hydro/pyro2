@@ -56,5 +56,3 @@ mesh\.reconstruction module
     :members:
     :undoc-members:
     :show-inheritance:
-
-

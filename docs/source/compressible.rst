@@ -40,10 +40,10 @@ compressible\.eos module
     :undoc-members:
     :show-inheritance:
 
-compressible\.setup module
---------------------------
+compressible\.interface module
+------------------------------
 
-.. automodule:: compressible.setup
+.. automodule:: compressible.interface
     :members:
     :undoc-members:
     :show-inheritance:
@@ -63,5 +63,3 @@ compressible\.unsplit\_fluxes module
     :members:
     :undoc-members:
     :show-inheritance:
-
-

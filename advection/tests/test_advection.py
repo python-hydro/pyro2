@@ -19,6 +19,7 @@ class TestSimulation(object):
 
         self.rp.params["mesh.nx"] = 8
         self.rp.params["mesh.ny"] = 8
+        self.rp.params["particles.do_particles"] = 0
 
         self.sim = sn.Simulation("advection", "test", self.rp)
         self.sim.initialize()

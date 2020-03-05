@@ -16,5 +16,3 @@ advection\_fv4\.problems\.smooth module
     :members:
     :undoc-members:
     :show-inheritance:
-
-

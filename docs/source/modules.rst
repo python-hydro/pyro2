@@ -6,6 +6,7 @@ pyro2
 
    advection
    advection_fv4
+   advection_nonuniform
    advection_rk
    advection_weno
    compare
@@ -21,6 +22,7 @@ pyro2
    lm_atm
    mesh
    multigrid
+   particles
    plot
    pyro
    simulation_null

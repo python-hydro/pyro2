@@ -1,5 +1,5 @@
 swe\.problems package
-==============================
+=====================
 
 .. automodule:: swe.problems
     :members:
@@ -10,7 +10,7 @@ Submodules
 ----------
 
 swe\.problems\.acoustic\_pulse module
-----------------------------------------------
+-------------------------------------
 
 .. automodule:: swe.problems.acoustic_pulse
     :members:
@@ -18,7 +18,7 @@ swe\.problems\.acoustic\_pulse module
     :show-inheritance:
 
 swe\.problems\.advect module
--------------------------------------
+----------------------------
 
 .. automodule:: swe.problems.advect
     :members:
@@ -26,7 +26,7 @@ swe\.problems\.advect module
     :show-inheritance:
 
 swe\.problems\.dam module
-----------------------------------
+-------------------------
 
 .. automodule:: swe.problems.dam
     :members:
@@ -34,15 +34,23 @@ swe\.problems\.dam module
     :show-inheritance:
 
 swe\.problems\.kh module
----------------------------------
+------------------------
 
 .. automodule:: swe.problems.kh
     :members:
     :undoc-members:
     :show-inheritance:
 
+swe\.problems\.logo module
+--------------------------
+
+.. automodule:: swe.problems.logo
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 swe\.problems\.quad module
------------------------------------
+--------------------------
 
 .. automodule:: swe.problems.quad
     :members:
@@ -50,7 +58,7 @@ swe\.problems\.quad module
     :show-inheritance:
 
 swe\.problems\.test module
------------------------------------
+--------------------------
 
 .. automodule:: swe.problems.test
     :members:

@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -49,8 +50,14 @@ class Simulation(compressible.Simulation):
 
         self.diffuse(self.dt/2)
 
+        if self.particles is not None:
+            self.particles.update_particles(self.dt/2)
+
         # note: this will do the time increment and n increment
         super().evolve()
+
+        if self.particles is not None:
+            self.particles.update_particles(self.dt/2)
 
         self.diffuse(self.dt/2)
 
@@ -105,6 +112,7 @@ class Simulation(compressible.Simulation):
 
             # needed for PDF rendering
             cb = axes.cbar_axes[n].colorbar(img)
+            cb.formatter = matplotlib.ticker.FormatStrFormatter("")
             cb.solids.set_rasterized(True)
             cb.solids.set_edgecolor("face")
 

@@ -1,7 +1,7 @@
 Setting up pyro
 ===============
 
-You can clone pyro from github: `http://github.com/zingale/pyro2 <http://github.com/zingale/pyro2>`_
+You can clone pyro from github: `http://github.com/python-hydro/pyro2 <http://github.com/python-hydro/pyro2>`_
 
 .. note::
 
@@ -13,35 +13,27 @@ The following python packages are required:
 
 * ``numpy``
 * ``matplotlib``
-* ``f2py`` (part of NumPy)
+* ``numba``
 * ``pytest`` (for unit tests)
-
-Additionally, you will need ``gfortran`` installed on your computer, for
-``f2py`` to be able to compile the code.
 
 The following steps are needed before running pyro:
 
-* add ``pyro/`` to your ``PYTHONPATH`` environment variable.  For
+* add ``pyro/`` to your ``PYTHONPATH`` environment variable (note this is only
+needed if you wish to use pyro as a python
+module - this step is not necessary if you only run pyro via the
+commandline using the ``pyro.py`` script).  For
   the bash shell, this is done as:
 
-.. code-block:: none
+    .. code-block:: none
 
-   export PYTHONPATH="/path/to/pyro/:${PYTHONPATH}"
-
-* build the Fortran modules, by running the ``mk.sh`` script. It
-  should be sufficient to just do:
-
-.. code-block:: none
-
-   ./mk.sh
+       export PYTHONPATH="/path/to/pyro/:${PYTHONPATH}"
 
 * define the environment variable ``PYRO_HOME`` to point to
   the ``pyro2/`` directory (only needed for regression testing)
 
-.. code-block:: none
+    .. code-block:: none
 
-   export PYRO_HOME="/path/to/pyro/"
-
+       export PYRO_HOME="/path/to/pyro/"
 
 Quick test
 ----------

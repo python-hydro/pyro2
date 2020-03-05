@@ -71,7 +71,7 @@ def f(x, y):
 
 
 def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
-                                   make_plot=False, verbose=1):
+                                   make_plot=False, verbose=1, rtol=1.e-12):
     """
     test the general MG solver.  The return value
     here is the error compared to the exact solution, UNLESS
@@ -124,7 +124,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     a.solve(rtol=1.e-11)
 
     # alternately, we can just use smoothing by uncommenting the following
-    #a.smooth(a.nlevels-1,50000)
+    # a.smooth(a.nlevels-1,50000)
 
     # get the solution
     v = a.get_solution()
@@ -145,7 +145,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
         plt.subplot(121)
 
-        plt.imshow(np.transpose(v.v()),
+        img1 = plt.imshow(np.transpose(v.v()),
                    interpolation="nearest", origin="lower",
                    extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
@@ -153,11 +153,11 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
         plt.ylabel("y")
         plt.title("nx = {}".format(nx))
 
-        plt.colorbar()
+        plt.colorbar(img1)
 
         plt.subplot(122)
 
-        plt.imshow(np.transpose(e.v()),
+        img2 = plt.imshow(np.transpose(e.v()),
                    interpolation="nearest", origin="lower",
                    extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
@@ -165,7 +165,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
         plt.ylabel("y")
         plt.title("error")
 
-        plt.colorbar()
+        plt.colorbar(img2)
 
         plt.tight_layout()
 
@@ -186,10 +186,10 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
         msg.warning("comparing to: %s " % (compare_file))
         bench = io.read(compare_file)
 
-        result = compare.compare(my_data, bench)
+        result = compare.compare(my_data, bench, rtol)
 
         if result == 0:
-            msg.success("results match benchmark\n")
+            msg.success("results match benchmark to within relative tolerance of {}\n".format(rtol))
         else:
             msg.warning("ERROR: " + compare.errors[result] + "\n")
 

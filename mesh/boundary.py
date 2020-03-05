@@ -45,6 +45,7 @@ class BCProp(object):
     """
     A simple container to hold properties of the boundary conditions.
     """
+
     def __init__(self, xl_prop, xr_prop, yl_prop, yr_prop):
         self.xl = xl_prop
         self.xr = xr_prop
@@ -186,11 +187,11 @@ class BC(object):
 
         # periodic checks
         if ((xlb == "periodic" and xrb != "periodic") or
-            (xrb == "periodic" and xlb != "periodic")):
+                (xrb == "periodic" and xlb != "periodic")):
             msg.fail("ERROR: both xlb and xrb must be periodic")
 
         if ((ylb == "periodic" and yrb != "periodic") or
-            (yrb == "periodic" and ylb != "periodic")):
+                (yrb == "periodic" and ylb != "periodic")):
             msg.fail("ERROR: both ylb and yrb must be periodic")
 
         # inhomogeneous functions for Dirichlet or Neumann

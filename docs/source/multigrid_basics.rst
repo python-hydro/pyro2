@@ -4,7 +4,7 @@ Multigrid solvers
 pyro solves elliptic problems (like Laplace's equation or Poisson's
 equation) through multigrid. This accelerates the convergence of
 simple relaxation by moving the solution down and up through a series
-of grids. Chapter 9 of the `pdf notes<http://bender.astro.sunysb.edu/hydro_by_example/CompHydroTutorial.pdf>`_ gives an introduction to solving elliptic equations, including multigrid.
+of grids. Chapter 9 of the `pdf notes <http://bender.astro.sunysb.edu/hydro_by_example/CompHydroTutorial.pdf>`_ gives an introduction to solving elliptic equations, including multigrid.
 
 There are three solvers:
 
@@ -17,7 +17,7 @@ There are three solvers:
 * The class :func:`general_MG.GeneralMG2d <multigrid.general_MG.GeneralMG2d>` solves a general elliptic
   equation of the form :math:`\alpha \phi + \nabla \cdot ( \beta
   \nabla \phi) + \gamma \cdot \nabla \phi = f`.  This class inherits
-  the core functionality from ``MG.CellCenterMG2d``.
+  the core functionality from :func:`MG.CellCenterMG2d <multigrid.MG.CellCenterMG2d>`.
 
   This solver is the only one to support inhomogeneous boundary
   conditions.
@@ -32,11 +32,13 @@ Examples
 
 multigrid test
 ^^^^^^^^^^^^^^
-A basic multigrid test is run as:
+
+A basic multigrid test is run as (using a path relative to the root of the
+``pyro2`` repository):
 
 .. code-block:: none
 
-   ./mg_test_simple.py
+   ./examples/multigrid/mg_test_simple.py
 
 The ``mg_test_simple.py`` script solves a Poisson equation with a
 known analytic solution. This particular example comes from the text
@@ -77,17 +79,21 @@ The movie below shows the smoothing at each level to realize this solution:
         <iframe src="https://www.youtube.com/embed/h9MUgwJvr-g?rel=0" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
     </div><br>
 
+You can run this example locally by running the ``mg_vis.py`` script:
+
+.. code-block:: none
+
+   ./examples/multigrid/mg_vis.py
 
 projection
 ^^^^^^^^^^
 
-Another example (``examples/multigrid/project_periodic.py``) uses
-multigrid to extract the divergence free part of a velocity field.
-This is run as:
+Another example uses multigrid to extract the divergence free part of a velocity
+field.  This is run as:
 
 .. code-block:: none
 
-   ./project-periodic.py
+   ./examples/multigrid/project_periodic.py
 
 Given a vector field, :math:`U`, we can decompose it into a divergence free part, :math:`U_d`, and the gradient of a scalar, :math:`\phi`:
 

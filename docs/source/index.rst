@@ -7,7 +7,7 @@
 pyro: a python hydro code
 *************************
 
-`http://github.com/zingale/pyro2 <http://github.com/zingale/pyro2>`_
+`http://github.com/python-hydro/pyro2 <http://github.com/python-hydro/pyro2>`_
 
 .. image:: pyro_plots.png
 
@@ -39,6 +39,7 @@ pyro: a python hydro code
    incompressible_basics
    lowmach_basics
    swe_basics
+   particles_basics
 
 .. toctree::
    :maxdepth: 1
@@ -56,9 +57,14 @@ pyro: a python hydro code
 
 .. toctree::
    :maxdepth: 1
-   :caption: Reference
+   :caption: Software Reference
 
    API <modules>
+
+.. toctree::
+   :caption: Bibliography
+
+   references
 
 
 Indices and tables

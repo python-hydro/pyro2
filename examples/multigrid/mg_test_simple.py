@@ -38,7 +38,7 @@ def f(x, y):
 
 
 def test_poisson_dirichlet(N, store_bench=False, comp_bench=False,
-                           make_plot=False, verbose=1):
+                           make_plot=False, verbose=1, rtol=1e-12):
 
     # test the multigrid solver
     nx = N
@@ -84,6 +84,8 @@ def test_poisson_dirichlet(N, store_bench=False, comp_bench=False,
         plt.xlabel("x")
         plt.ylabel("y")
 
+        print("Saving figure to mg_test.png")
+
         plt.savefig("mg_test.png")
 
     # store the output for later comparison
@@ -101,10 +103,10 @@ def test_poisson_dirichlet(N, store_bench=False, comp_bench=False,
         msg.warning("comparing to: %s " % (compare_file))
         bench_data = io.read(compare_file)
 
-        result = compare.compare(my_data, bench_data)
+        result = compare.compare(my_data, bench_data, rtol)
 
         if result == 0:
-            msg.success("results match benchmark\n")
+            msg.success("results match benchmark to within relative tolerance of {}\n".format(rtol))
         else:
             msg.warning("ERROR: " + compare.errors[result] + "\n")
 
@@ -114,4 +116,4 @@ def test_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
 
 if __name__ == "__main__":
-    test_poisson_dirichlet(256, comp_bench=True)
+    test_poisson_dirichlet(256, comp_bench=True, make_plot=True)

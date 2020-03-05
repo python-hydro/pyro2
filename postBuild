@@ -1,0 +1,5 @@
+#!/bin/bash
+
+python3 setup.py build
+export PYTHONPATH=`pwd`:${PYTHONPATH}
+

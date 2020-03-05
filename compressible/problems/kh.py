@@ -9,12 +9,12 @@ from util import msg
 def init_data(my_data, rp):
     """ initialize the Kelvin-Helmholtz problem """
 
-    msg.bold("initializing the sedov problem...")
+    msg.bold("initializing the Kelvin-Helmholtz problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):
         print(my_data.__class__)
-        msg.fail("ERROR: patch invalid in sedov.py")
+        msg.fail("ERROR: patch invalid in kh.py")
 
     # get the density, momenta, and energy as separate variables
     dens = my_data.get_var("density")

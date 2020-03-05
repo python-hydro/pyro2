@@ -32,5 +32,3 @@ advection\.problems\.tophat module
     :members:
     :undoc-members:
     :show-inheritance:
-
-

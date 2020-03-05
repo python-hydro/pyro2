@@ -89,6 +89,9 @@ class Simulation(compressible_rk.Simulation):
 
         rk.compute_final_update()
 
+        if self.particles is not None:
+            self.particles.update_particles(self.dt)
+
         # increment the time
         myd.t += self.dt
         self.n += 1

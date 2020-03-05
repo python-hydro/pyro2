@@ -1,17 +1,17 @@
 Acknowledgments
 ===============
 
-The original pyro code was written in 2003-4 to help understand this
-methods for myself. It was originally written using the Numeric array
-package and handwritten C extensions for the compute-intensive
-kernels.  It was ported to numarray when that replaced Numeric, and
-continued to use C extensions.  This version "pyro2" was resurrected
-beginning in 2012 and rewritten for numpy using f2py, and brought up
-to date.
+Pyro developed by (in alphabetical order):
 
-You are free to use this code and notes in your classes. Please credit
-Michael Zingale (SBU).  *Please send me a note describing how you use
-it, so I can keep track of it (and help justify the development
+  * Alice Harpole
+  * Ian Hawke
+  * Michael Zingale
+
+
+You are free to use this code and the accompanying notes in your
+classes. Please credit "pyro development team" for the code, and
+*please send a note to the pyro-help e-mail list describing how you
+use it, so we can keep track of it (and help justify the development
 effort).*
 
 If you use pyro in a publication, please cite it using this bibtex
@@ -36,4 +36,17 @@ citation::
 
 pyro benefited from numerous useful discussions with Ann Almgren, John
 Bell, and Andy Nonaka.
+
+
+History
+=======
+
+The original pyro code was written in 2003-4 to help developmer
+Zingale understand these methods for himself. It was originally written
+using the Numeric array package and handwritten C extensions for the
+compute-intensive kernels.  It was ported to numarray when that
+replaced Numeric, and continued to use C extensions.  This version
+"pyro2" was resurrected beginning in 2012 and rewritten for numpy
+using f2py, and brought up to date.  Most recently we've dropped
+f2py and are using numba for the compute-intensive kernels.
 
