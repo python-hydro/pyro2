@@ -21,10 +21,10 @@ valid_solvers = ["advection",
                  "compressible_fv4",
                  "compressible_sdc",
                  "compressible_react",
+                 "compressible_sr",
                  "diffusion",
                  "incompressible",
                  "lm_atm",
-                 "sr_compressible",
                  "swe"]
 
 
