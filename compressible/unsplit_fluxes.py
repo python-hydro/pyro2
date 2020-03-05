@@ -316,7 +316,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     """
     finally, we can construct the state perpendicular to the interface
-    by adding the central difference part to the trasverse flux
+    by adding the central difference part to the transverse flux
     difference.
 
     The states that we represent by indices i,j are shown below

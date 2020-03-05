@@ -122,8 +122,8 @@ Updating U_{i,j}:
 
 """
 
-import compressible_sr.interface_f as ifc
-import compressible_sr.c2p_f as c2p
+import compressible_sr.interface as ifc
+import compressible_sr.c2p as c2p
 import mesh.reconstruction as reconstruction
 import mesh.array_indexer as ai
 
@@ -290,16 +290,16 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     # print("before transverse fluxes")
     # print(f'rho = {q_xl.jp(0, n=ivars.irho, buf=2)}')
 
-    _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
-                      ivars.nvar, ivars.idens, ivars.ixmom,
+    _fx = riemannFunc(1, myg.ng,
+                      ivars.idens, ivars.ixmom,
                       ivars.iymom, ivars.iener, ivars.irhox,
                       ivars.irho, ivars.iu, ivars.iv, ivars.ip,
                       ivars.ix, ivars.naux,
                       solid.xl, solid.xr,
                       gamma, U_xl, U_xr, q_xl, q_xr)
 
-    _fy = riemannFunc(2, myg.qx, myg.qy, myg.ng,
-                      ivars.nvar, ivars.idens, ivars.ixmom,
+    _fy = riemannFunc(2, myg.ng,
+                      ivars.idens, ivars.ixmom,
                       ivars.iymom, ivars.iener, ivars.irhox,
                       ivars.irho, ivars.iu, ivars.iv, ivars.ip,
                       ivars.ix, ivars.naux,
@@ -317,7 +317,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     """
     finally, we can construct the state perpendicular to the interface
-    by adding the central difference part to the trasverse flux
+    by adding the central difference part to the transverse flux
     difference.
 
     The states that we represent by indices i,j are shown below
@@ -399,16 +399,16 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     # print("before normal fluxes")
     # print(f'F_rho = {F_x.jp(0, n=ivars.ixmom, buf=2)}')
 
-    _fx = riemannFunc(1, myg.qx, myg.qy, myg.ng,
-                      ivars.nvar, ivars.idens, ivars.ixmom,
+    _fx = riemannFunc(1, myg.ng,
+                      ivars.idens, ivars.ixmom,
                       ivars.iymom, ivars.iener, ivars.irhox,
                       ivars.irho, ivars.iu, ivars.iv, ivars.ip,
                       ivars.ix, ivars.naux,
                       solid.xl, solid.xr,
                       gamma, U_xl, U_xr, q_xl, q_xr)
 
-    _fy = riemannFunc(2, myg.qx, myg.qy, myg.ng,
-                      ivars.nvar, ivars.idens, ivars.ixmom,
+    _fy = riemannFunc(2, myg.ng,
+                      ivars.idens, ivars.ixmom,
                       ivars.iymom, ivars.iener, ivars.irhox,
                       ivars.irho, ivars.iu, ivars.iv, ivars.ip,
                       ivars.ix, ivars.naux,
@@ -457,11 +457,10 @@ def cons_to_prim_wrapper(U, gamma, ivars, myg):
 
     q = myg.scratch_array(nvar=ivars.nq)
 
-    q[:, :, :] = c2p.cons_to_prim(U, myg.qx, myg.qy,
-                         ivars.irho, ivars.iu, ivars.iv,
-                         ivars.ip, ivars.ix, ivars.irhox,
-                         ivars.idens, ivars.ixmom, ivars.iymom,
-                         ivars.iener, ivars.nvar, ivars.naux,
-                         gamma)
-
+    c2p.cons_to_prim(U, ivars.irho, 
+                     ivars.iu, ivars.iv,
+                     ivars.ip, ivars.ix, ivars.irhox,
+                     ivars.idens, ivars.ixmom, ivars.iymom,
+                     ivars.iener, ivars.naux,
+                     gamma, q)
     return q

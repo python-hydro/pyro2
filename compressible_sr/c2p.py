@@ -117,13 +117,15 @@ def brentq(x1, b, U, gamma, idens, ixmom, iymom, iener,
     return x1 
 
 @njit(cache=True)
-def cons_to_prim(U, qx, qy,
+def cons_to_prim(U, 
                  irho, iu, iv, ip, ix, irhox, 
-                 idens, ixmom, iymom, iener, nvar, 
+                 idens, ixmom, iymom, iener, 
                  naux, gamma, q, smallp=1.e-6):
     """
     convert an input vector of conserved variables to primitive variables 
     """
+
+    qx, qy, nvar = U.shape
     
     for j in range(qy):
         for i in range(qx):
