@@ -4,8 +4,9 @@ from numba import njit
 
 @njit(cache=True)
 def states(idir, ng, dx, dt,
-           irho, iu, iv, ip, ix, nspec,
-           gamma, qv, dqv):
+           irho, iu, iv, ip, iX, 
+           idens, ixmom, iymom, iener, irhoX, nspec,
+           gamma, qv, Uv, dUv):
     r"""
     predict the cell-centered state to the edges in one-dimension
     using the reconstructed, limited slopes.
@@ -91,8 +92,8 @@ def states(idir, ng, dx, dt,
 
     qx, qy, nvar = qv.shape
 
-    q_l = np.zeros_like(qv)
-    q_r = np.zeros_like(qv)
+    U_l = np.zeros_like(Uv)
+    U_r = np.zeros_like(Uv)
 
     nx = qx - 2 * ng
     ny = qy - 2 * ng
@@ -116,10 +117,15 @@ def states(idir, ng, dx, dt,
     for i in range(ilo - 2, ihi + 2):
         for j in range(jlo - 2, jhi + 2):
 
-            dq = dqv[i, j, :]
+            dU = dUv[i, j, :]
             q = qv[i, j, :]
+            U = Uv[i, j, :]
 
-            cs = np.sqrt(gamma * q[ip] / q[irho])
+            cs2 = gamma * q[ip] / q[irho]
+            v2 = np.sum(q[iu:iv+1]**2)
+            h = 1.0 + gamma / (gamma - 1.0) * q[ip] / q[irho]
+
+            W = 1.0 / np.sqrt(1.0 - v2)
 
             lvec[:, :] = 0.0
             rvec[:, :] = 0.0
@@ -127,46 +133,112 @@ def states(idir, ng, dx, dt,
 
             # compute the eigenvalues and eigenvectors
             if (idir == 1):
-                e_val[:] = np.array([q[iu] - cs, q[iu], q[iu], q[iu] + cs])
+                e_val[1:3] = np.array([q[iu], q[iu]])
 
-                lvec[0, :ns] = [0.0, -0.5 *
-                                 q[irho] / cs, 0.0, 0.5 / (cs * cs)]
-                lvec[1, :ns] = [1.0, 0.0,
-                                 0.0, -1.0 / (cs * cs)]
-                lvec[2, :ns] = [0.0, 0.0,             1.0, 0.0]
-                lvec[3, :ns] = [0.0, 0.5 *
-                                 q[irho] / cs,  0.0, 0.5 / (cs * cs)]
+                e_val[0] = 1.0 / (1.0 - v2 * cs2) *
+                (q[iu]*(1.0-cs2) - np.sqrt(cs2) * np.sqrt((1.0-v2) *
+                (1.0-v2*cs2 - q[iu]**2*(1.0-cs2))))
 
-                rvec[0, :ns] = [1.0, -cs / q[irho], 0.0, cs * cs]
-                rvec[1, :ns] = [1.0, 0.0,       0.0, 0.0]
-                rvec[2, :ns] = [0.0, 0.0,       1.0, 0.0]
-                rvec[3, :ns] = [1.0, cs / q[irho],  0.0, cs * cs]
+                e_val[3] = 1.0 / (1.0 - v2 * cs2) * 
+                (q[iu]*(1.0-cs2) + np.sqrt(cs2) * np.sqrt((1.0-v2) *
+                (1.0-v2*cs2 - q[iu]**2*(1.0-cs2))))
+
+                Am = (1.0 - q[iu]**2) / (1.0 - q[iu]*e_val[0])
+                Ap = (1.0 - q[iu]**2) / (1.0 - q[iu]*e_val[3])
+
+                Delta = h**3*W *(h-1.0) * (1.0-q[iu]**2) * (Ap*e_val[3] - Am*e_val[0])
+
+                lvec[0, :ns] = [h*W*Ap*(q[iu]-e_val[3]) - q[iu] - W**2*(v2-q[iu]**2)*
+                    (2.0*h-1.0)*(q[iu]-Ap*e_val[3]) + h*Ap*e_val[3],
+                    1.0+W**2*(v2-q[iu]**2)*(2.0*h-1.0) * (1.0-Ap) - h*Ap,
+                    W**2*q(iv)*(2.0*h-1.0)*Ap * (q[iu]-e_val[3]),
+                    -q[iu] - W**2*(v2-q[iu]**2) *
+                    (2.0*h-1.0)*(q[iu]-Ap*e_val[3]) + h * Ap*e_val[3]]
+                lvec[0, :ns] *= h**2 / Delta
+
+                lvec[1, :ns] = [h-W, W*q[iu], W*q[iv], -W]
+                lvec[1, :ns] *= W / (h - 1.0)
+
+                lvec[2, :ns] = [-q[iv], q[iu]*q[iv], 1.0-q[iu], -q[iv]]
+                lvec[2, :ns] /= h * (1.0 - q[iu])**2
+
+                lvec[3, :ns] = [h*W*Am*(q[iu]-e_val[0]) - q[iu] -
+                    W**2 * (v2-q[iu]**2)*(2.0*h-1.0)*
+                    (q[iu]-Am*e_val[0]) + h*Am*e_val[0],
+                    1.0+W**2*(v2-q[iu]**2)*(2.0*h-1.0) *
+                    (1.0-Am) - h*Am,
+                    W**2*q[iu]*(2.0*h-1.0)*Am * (q[iu]-e_val[0]),
+                    -q[iu] - W**2*(v2-q[iu]**2) *
+                    (2.0*h-1.0)*(q[iu]-Am*e_val[0]) + h * Am*e_val[0]]
+                lvec[3, :ns] = -lvec[3, :ns] * h**2 / Delta
+
+                rvec[0, :ns] = [1.0, h*W*Am*e_val[0], h*W*q[iv],
+                                h*W*Am-1.0]
+                rvec[1, :ns] = [1.0/W, q[iu], q[iv], 1.0-1.0/W]
+                rvec[2, :ns] = [W*q[iv], 2.0*h*W**2*q[iu]*q[iv],
+                h*(1.0 + 2.0*W**2*q[iv]**2),
+                2*h*W**2*q[iv]-W*q[iv]]
+                rvec[3, :ns] = [1.0, h*W*Ap*e_val[3], h*W*q[iv], 
+                                h*W*Ap-1.0]
 
                 # now the species -- they only have a 1 in their corresponding slot
                 e_val[ns:] = q[iu]
-                for n in range(ix, ix + nspec):
+                for n in range(iX, iX + nspec):
                     lvec[n, n] = 1.0
                     rvec[n, n] = 1.0
 
             else:
-                e_val[:] = np.array([q[iv] - cs, q[iv], q[iv], q[iv] + cs])
+                e_val[1:3] = np.array([q[iv], q[iv]])
 
-                lvec[0, :ns] = [0.0, 0.0, -0.5 *
-                                 q[irho] / cs, 0.5 / (cs * cs)]
-                lvec[1, :ns] = [1.0, 0.0,
-                                 0.0,             -1.0 / (cs * cs)]
-                lvec[2, :ns] = [0.0, 1.0, 0.0,             0.0]
-                lvec[3, :ns] = [0.0, 0.0, 0.5 *
-                                 q[irho] / cs,  0.5 / (cs * cs)]
+                e_val[0] = 1.0 / (1.0 - v2 * cs2) *
+                (q[iv]*(1.0-cs2) - np.sqrt(cs2) * np.sqrt((1.0-v2) *
+                (1.0-v2*cs2 - q[iv]**2*(1.0-cs2))))
 
-                rvec[0, :ns] = [1.0, 0.0, -cs / q[irho], cs * cs]
-                rvec[1, :ns] = [1.0, 0.0, 0.0,       0.0]
-                rvec[2, :ns] = [0.0, 1.0, 0.0,       0.0]
-                rvec[3, :ns] = [1.0, 0.0, cs / q[irho],  cs * cs]
+                e_val[3] = 1.0 / (1.0 - v2 * cs2) * 
+                (q[iv]*(1.0-cs2) + np.sqrt(cs2) * np.sqrt((1.0-v2) *
+                (1.0-v2*cs2 - q[iv]**2*(1.0-cs2))))
+
+                Am = (1.0 - q[iv]**2) / (1.0 - q[iv]*e_val[0])
+                Ap = (1.0 - q[iv]**2) / (1.0 - q[iv]*e_val[3])
+
+                Delta = h**3*W *(h-1.0) * (1.0-q[iv]**2) * (Ap*e_val[3] - Am*e_val[0])
+
+                lvec[0, :ns] = [h*W*Ap*(q[iv]-e_val[3]) - q[iv] - W**2*(v2-q[iv]**2)*
+                    (2.0*h-1.0)*(q[iv]-Ap*e_val[3]) + h*Ap*e_val[3],
+                    W**2*q(iu)*(2.0*h-1.0)*Ap * (q[iv]-e_val[3]),
+                    1.0+W**2*(v2-q[iv]**2)*(2.0*h-1.0) * (1.0-Ap) - h*Ap,
+                    -q[iv] - W**2*(v2-q[iv]**2) *
+                    (2.0*h-1.0)*(q[iv]-Ap*e_val[3]) + h * Ap*e_val[3]]
+                lvec[0, :ns] *= h**2 / Delta
+
+                lvec[1, :ns] = [-q[iu], 1.0-q[iv], q[iu]*q[iv], -q[iu]]
+                lvec[1, :ns] /= h * (1.0 - q[iv])**2
+
+                lvec[2, :ns] = [h-W, W*q[iu], W*q[iv], -W]
+                lvec[2, :ns] *= W / (h - 1.0)
+
+                lvec[3, :ns] = [h*W*Am*(q[iv]-e_val[0]) - q[iv] -
+                    W**2 * (v2-q[iv]**2)*(2.0*h-1.0)*
+                    (q[iv]-Am*e_val[0]) + h*Am*e_val[0],
+                    W**2*q[iu]*(2.0*h-1.0)*Am * (q[iv]-e_val[0]),
+                    1.0+W**2*(v2-q[iv]**2)*(2.0*h-1.0) *
+                    (1.0-Am) - h*Am,
+                    -q[iv] - W**2*(v2-q[iv]**2) *
+                    (2.0*h-1.0)*(q[iv]-Am*e_val[0]) + h * Am*e_val[0]]
+                lvec[3, :ns] = -lvec[3, :ns] * h**2 / Delta
+
+                rvec[0, :ns] = [1.0, h*W*q[iu], h*W*Am*e_val[0], 
+                                h*W*Am-1.0]
+                rvec[1, :ns] = [W*q[iu], 
+                    h*(1.0 + 2.0*W**2*q[iu]**2), 2.0*h*W**2*q[iu]*q[iv],
+                2*h*W**2*q[iu]-W*q[iu]]
+                rvec[2, :ns] = [1.0/W, q[iu], q[iv], 1.0-1.0/W]
+                rvec[3, :ns] = [1.0, h*W*q[iu], h*W*Ap*e_val[3], 
+                                h*W*Ap-1.0]
 
                 # now the species -- they only have a 1 in their corresponding slot
                 e_val[ns:] = q[iv]
-                for n in range(ix, ix + nspec):
+                for n in range(iX, iX + nspec):
                     lvec[n, n] = 1.0
                     rvec[n, n] = 1.0
 
@@ -175,29 +247,28 @@ def states(idir, ng, dx, dt,
                 # this is one the right face of the current zone,
                 # so the fastest moving eigenvalue is e_val[3] = u + c
                 factor = 0.5 * (1.0 - dtdx * max(e_val[3], 0.0))
-                q_l[i + 1, j, :] = q + factor * dq
+                U_l[i + 1, j, :] = U + factor * dU
 
                 # left face of the current zone, so the fastest moving
                 # eigenvalue is e_val[3] = u - c
                 factor = 0.5 * (1.0 + dtdx * min(e_val[0], 0.0))
-                q_r[i,  j, :] = q - factor * dq
+                U_r[i,  j, :] = U - factor * dU
 
             else:
-
                 factor = 0.5 * (1.0 - dtdx * max(e_val[3], 0.0))
-                q_l[i, j + 1, :] = q + factor * dq
+                U_l[i, j + 1, :] = U + factor * dU
 
                 factor = 0.5 * (1.0 + dtdx * min(e_val[0], 0.0))
-                q_r[i, j, :] = q - factor * dq
+                U_r[i, j, :] = U - factor * dU
 
             # compute the Vhat functions
             for m in range(nvar):
-                sum = np.dot(lvec[m, :], dq)
+                summ = np.dot(lvec[m, :], dU)
 
                 betal[m] = dtdx4 * (e_val[3] - e_val[m]) * \
-                    (np.copysign(1.0, e_val[m]) + 1.0) * sum
+                    (np.copysign(1.0, e_val[m]) + 1.0) * summ
                 betar[m] = dtdx4 * (e_val[0] - e_val[m]) * \
-                    (1.0 - np.copysign(1.0, e_val[m])) * sum
+                    (1.0 - np.copysign(1.0, e_val[m])) * summ
 
             # construct the states
             for m in range(nvar):
@@ -205,20 +276,21 @@ def states(idir, ng, dx, dt,
                 sum_r = np.dot(betar, rvec[:, m])
 
                 if (idir == 1):
-                    q_l[i + 1, j, m] = q_l[i + 1, j, m] + sum_l
-                    q_r[i,  j, m] = q_r[i,  j, m] + sum_r
+                    U_l[i + 1, j, m] += sum_l
+                    U_r[i,  j, m] += sum_r
                 else:
-                    q_l[i, j + 1, m] = q_l[i, j + 1, m] + sum_l
-                    q_r[i, j,  m] = q_r[i, j,  m] + sum_r
+                    U_l[i, j + 1, m] += sum_l
+                    U_r[i, j,  m] += sum_r
 
-    return q_l, q_r
+    return U_l, U_r
 
 
 @njit(cache=True)
 def riemann_cgf(idir, ng,
-                idens, ixmom, iymom, iener, irhoX, nspec,
+                idens, ixmom, iymom, iener, irhoX, 
+                irho, iu, iv, ip, iX, nspec,
                 lower_solid, upper_solid,
-                gamma, U_l, U_r):
+                gamma, U_l, U_r, q_l, q_r):
     r"""
     Solve riemann shock tube problem for a general equation of
     state using the method of Colella, Glaz, and Ferguson.  See
@@ -271,7 +343,7 @@ def riemann_cgf(idir, ng,
         Conserved flux
     """
 
-    qx, qy, nvar = U_l.shape
+    qx, qy, nvar = q_l.shape
 
     F = np.zeros((qx, qy, nvar))
 
@@ -290,34 +362,32 @@ def riemann_cgf(idir, ng,
         for j in range(jlo - 1, jhi + 1):
 
             # primitive variable states
-            rho_l = U_l[i, j, idens]
+            rho_l = q_l[i, j, irho]
 
             # un = normal velocity; ut = transverse velocity
             if (idir == 1):
-                un_l = U_l[i, j, ixmom] / rho_l
-                ut_l = U_l[i, j, iymom] / rho_l
+                un_l = q_l[i, j, iu] 
+                ut_l = q_l[i, j, iv] 
             else:
-                un_l = U_l[i, j, iymom] / rho_l
-                ut_l = U_l[i, j, ixmom] / rho_l
+                un_l = q_l[i, j, iv] 
+                ut_l = q_l[i, j, iu] 
 
-            rhoe_l = U_l[i, j, iener] - 0.5 * rho_l * (un_l**2 + ut_l**2)
-
-            p_l = rhoe_l * (gamma - 1.0)
+            p_l = q_l[i, j, ip]
             p_l = max(p_l, smallp)
+            rhoe_l = p_l / (gamma - 1.0)
 
-            rho_r = U_r[i, j, idens]
+            rho_r = q_r[i, j, irho]
 
             if (idir == 1):
-                un_r = U_r[i, j, ixmom] / rho_r
-                ut_r = U_r[i, j, iymom] / rho_r
+                un_r = q_r[i, j, iu] 
+                ut_r = q_r[i, j, iv] 
             else:
-                un_r = U_r[i, j, iymom] / rho_r
-                ut_r = U_r[i, j, ixmom] / rho_r
+                un_r = q_r[i, j, iv]
+                ut_r = q_r[i, j, iu] 
 
-            rhoe_r = U_r[i, j, iener] - 0.5 * rho_r * (un_r**2 + ut_r**2)
-
-            p_r = rhoe_r * (gamma - 1.0)
+            p_r = q_r[i, j, ip]
             p_r = max(p_r, smallp)
+            rhoe_r = p_r / (gamma - 1.0)
 
             # define the Lagrangian sound speed
             W_l = max(smallrho * smallc, np.sqrt(gamma * p_l * rho_l))
@@ -357,8 +427,13 @@ def riemann_cgf(idir, ng,
                 ut_state = ut_l
 
                 # define eigenvalues
-                lambda_l = un_l - c_l
-                lambdastar_l = ustar - cstar_l
+                v2 = un_l**2 + ut_l**2
+                lambda_l = 1.0 / (1.0 - v2 * c_l**2) * 
+                    (un_l * (1.0 - c_l**2) - c_l * np.sqrt((1.0 - v2) * (1.0 - v2*c_l**2 - un_l**2*(1.0-c_l**2))))
+
+                v2 = ustar**2 + ut_l**2
+                lambdastar_l = 1.0 / (1.0 - v2 * cstar_l**2) * 
+                    (ustar_l * (1.0 - cstar_l**2) - cstar_l * np.sqrt((1.0 - v2) * (1.0 - v2*cstar_l**2 - ustar_l**2*(1.0-cstar_l**2))))
 
                 if (pstar > p_l):
                     # the wave is a shock -- find the shock speed
@@ -406,7 +481,7 @@ def riemann_cgf(idir, ng,
                         rhoe_state = alpha * rhoestar_l + \
                             (1.0 - alpha) * rhoe_l
 
-            elif (ustar < 0):
+            elif ustar < 0:
 
                 # contact moving left, we need to understand the R and *R
                 # states
@@ -415,14 +490,17 @@ def riemann_cgf(idir, ng,
                 ut_state = ut_r
 
                 # define eigenvalues
-                lambda_r = un_r + c_r
-                lambdastar_r = ustar + cstar_r
+                v2 = un_r**2 + ut_r**2
+                lambda_r = 1.0 / (1.0 - v2*c_r**2) * (un_r*(1.0-c_r**2) + c_r*np.sqrt((1.0-v2) * (1.0 - v2*c_r**2 - un_r**2*(1.0-c_r**2))))
 
-                if (pstar > p_r):
+                v2 = ustar**2 + ut_r**2
+                lambdastar_r = 1.0 / (1.0 - v2*cstar_r**2) * (ustar*(1.0-cstar_r**2) + cstar_r*np.sqrt((1.0-v2) * (1.0 - v2*cstar_r**2 - ustar**2*(1.0-cstar_r**2))))
+
+                if pstar > p_r:
                     # the wave if a shock -- find the shock speed
                     sigma = (lambda_r + lambdastar_r) / 2.0
 
-                    if (sigma > 0.0):
+                    if sigma > 0.0:
                         # shock is moving to the right -- solution is *R state
                         rho_state = rhostar_r
                         un_state = ustar
@@ -473,15 +551,15 @@ def riemann_cgf(idir, ng,
                 rhoe_state = 0.5 * (rhoestar_l + rhoestar_r)
 
             # species now
-            if (nspec > 0):
+            if nspec > 0:
                 if (ustar > 0.0):
-                    xn = U_l[i, j, irhoX:irhoX + nspec] / U_l[i, j, idens]
+                    xn = q_l[i, j, iX:iX + nspec] 
 
-                elif (ustar < 0.0):
-                    xn = U_r[i, j, irhoX:irhoX + nspec] / U_r[i, j, idens]
+                elif ustar < 0.0:
+                    xn = q_r[i, j, iX:iX + nspec] 
                 else:
-                    xn = 0.5 * (U_l[i, j, irhoX:irhoX + nspec] / U_l[i, j, idens] +
-                                   U_r[i, j, irhoX:irhoX + nspec] / U_r[i, j, idens])
+                    xn = 0.5 * (q_l[i, j, iX:iX + nspec]  +
+                                q_r[i, j, iX:iX + nspec])
 
             # are we on a solid boundary?
             if (idir == 1):
@@ -498,22 +576,30 @@ def riemann_cgf(idir, ng,
                 if (j == jhi + 1 and upper_solid == 1):
                     un_state = 0.0
 
-            # compute the fluxes
-            F[i, j, idens] = rho_state * un_state
-
+            # Make primitive state 
+            q[irho] = rho_state 
             if (idir == 1):
-                F[i, j, ixmom] = rho_state * un_state**2 + p_state
-                F[i, j, iymom] = rho_state * ut_state * un_state
+                q[iu] = un_state 
+                q[iv] = ut_state
             else:
-                F[i, j, ixmom] = rho_state * ut_state * un_state
-                F[i, j, iymom] = rho_state * un_state**2 + p_state
+                q[iu] = ut_state 
+                q[iv] = un_state 
+            
+            q[ip] = p_state 
 
-            F[i, j, iener] = rhoe_state * un_state + \
-                0.5 * rho_state * (un_state**2 + ut_state**2) * un_state + \
-                p_state * un_state
+            # Make conservative state 
+            W = 1.0 / np.sqrt(1.0 - q[iu]**2 - q[iv]**2)
+            U[idens] = rho_state * W 
+            U[ixmom] = (rho_state + p_state * gamma / (gamma - 1.0)) * q[iu] * W**2
+            U[iymom] = (rho_state + p_state * gamma / (gamma - 1.0)) * q[iv] * W**2
+            U[iener] = (rho_state + p_state * gamma / (gamma - 1.0)) * W**2 - p_state - U[idens]
 
-            if (nspec > 0):
-                F[i, j, irhoX:irhoX + nspec] = xn * rho_state * un_state
+            if nspec > 0:
+                q[iX:iX+nspec] = xn 
+                U[irhoX:irhoX+nspec] = xn * U[idens]
+
+            # compute the fluxes
+            F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nspec, U, q)
 
     return F
 
@@ -657,14 +743,17 @@ def riemann_prim(idir, ng,
                 ut_state = ut_l
 
                 # define eigenvalues
-                lambda_l = un_l - c_l
-                lambdastar_l = ustar - cstar_l
+                v2 = un_l**2 + ut_l**2
+                lambda_l = 1.0 / (1.0 - v2*c_l**2) * (un_l*(1.0-c_l**2) - c_l * np.sqrt((1.0-v2) * (1.0-v2*c_l**2 - un_l**2*(1.0-c_l**2)))
 
-                if (pstar > p_l):
+                v2 = ustar**2 + ut_l**2
+                lambdastar_l = 1.0 / (1.0 - v2*cstar_l**2) * (ustar*(1.0-cstar_l**2) - cstar_l * np.sqrt((1.0-v2) * (1.0-v2*cstar_l**2 - ustar**2*(1.0-cstar_l**2)))
+
+                if pstar > p_l:
                     # the wave is a shock -- find the shock speed
                     sigma = (lambda_l + lambdastar_l) / 2.0
 
-                    if (sigma > 0.0):
+                    if sigma > 0.0:
                         # shock is moving to the right -- solution is L state
                         rho_state = rho_l
                         un_state = un_l
@@ -700,7 +789,7 @@ def riemann_prim(idir, ng,
                         un_state = alpha * ustar + (1.0 - alpha) * un_l
                         p_state = alpha * pstar + (1.0 - alpha) * p_l
 
-            elif (ustar < 0):
+            elif ustar < 0:
 
                 # contact moving left, we need to understand the R and *R
                 # states
@@ -709,10 +798,13 @@ def riemann_prim(idir, ng,
                 ut_state = ut_r
 
                 # define eigenvalues
-                lambda_r = un_r + c_r
-                lambdastar_r = ustar + cstar_r
+                v2 = un_r**2 + ut_r**2
+                lambda_r = 1.0 / (1.0 - v2*c_r**2) * (un_r*(1.0-c_r**2) + c_r * np.sqrt((1.0-v2) * (1.0-v2*c_r**2 - un_r**2*(1.0-c_r**2)))
 
-                if (pstar > p_r):
+                v2 = ustar**2 + ut_r**2
+                lambdastar_r = 1.0 / (1.0 - v2*cstar_r**2) * (ustar*(1.0-cstar_r**2) + cstar_r * np.sqrt((1.0-v2) * (1.0-v2*cstar_r**2 - ustar**2*(1.0-cstar_r**2)))
+
+                if pstar > p_r:
                     # the wave if a shock -- find the shock speed
                     sigma = (lambda_r + lambdastar_r) / 2.0
 
@@ -760,7 +852,7 @@ def riemann_prim(idir, ng,
                 p_state = pstar
 
             # species now
-            if (nspec > 0):
+            if nspec > 0:
                 if (ustar > 0.0):
                     xn = q_l[i, j, iX:iX + nspec]
 
@@ -795,7 +887,7 @@ def riemann_prim(idir, ng,
 
             q_int[i, j, ip] = p_state
 
-            if (nspec > 0):
+            if nspec > 0:
                 q_int[i, j, iX:iX + nspec] = xn
 
     return q_int
@@ -803,9 +895,10 @@ def riemann_prim(idir, ng,
 
 @njit(cache=True)
 def riemann_hllc(idir, ng,
-                 idens, ixmom, iymom, iener, irhoX, nspec,
+                 idens, ixmom, iymom, iener, irhoX, 
+                 irho, iu, iv, ip, iX, nspec,
                  lower_solid, upper_solid,
-                 gamma, U_l, U_r):
+                 gamma, U_l, U_r, q_l, q_r):
     r"""
     This is the HLLC Riemann solver.  The implementation follows
     directly out of Toro's book.  Note: this does not handle the
@@ -854,218 +947,144 @@ def riemann_hllc(idir, ng,
     for i in range(ilo - 1, ihi + 1):
         for j in range(jlo - 1, jhi + 1):
 
-            # primitive variable states
-            rho_l = U_l[i, j, idens]
-
             # un = normal velocity; ut = transverse velocity
             if (idir == 1):
-                un_l = U_l[i, j, ixmom] / rho_l
-                ut_l = U_l[i, j, iymom] / rho_l
+                un_l = q_l[i, j, iu]
+                ut_l = q_l[i, j, iv] 
             else:
-                un_l = U_l[i, j, iymom] / rho_l
-                ut_l = U_l[i, j, ixmom] / rho_l
+                un_l = q_l[i, j, iv]
+                ut_l = q_l[i, j, iu] 
 
-            rhoe_l = U_l[i, j, iener] - 0.5 * rho_l * (un_l**2 + ut_l**2)
-
-            p_l = rhoe_l * (gamma - 1.0)
+            p_l = q_l[i, j, ip]
             p_l = max(p_l, smallp)
 
-            rho_r = U_r[i, j, idens]
-
             if (idir == 1):
-                un_r = U_r[i, j, ixmom] / rho_r
-                ut_r = U_r[i, j, iymom] / rho_r
+                un_r = q_r[i, j, iu] 
+                ut_r = q_r[i, j, iv]
             else:
-                un_r = U_r[i, j, iymom] / rho_r
-                ut_r = U_r[i, j, ixmom] / rho_r
+                un_r = q_r[i, j, iv] 
+                ut_r = q_r[i, j, iu]
 
-            rhoe_r = U_r[i, j, iener] - 0.5 * rho_r * (un_r**2 + ut_r**2)
-
-            p_r = rhoe_r * (gamma - 1.0)
+            p_r = q_r[i, j, ip]
             p_r = max(p_r, smallp)
 
             # compute the sound speeds
             c_l = max(smallc, np.sqrt(gamma * p_l / rho_l))
             c_r = max(smallc, np.sqrt(gamma * p_r / rho_r))
 
-            # Estimate the star quantities -- use one of three methods to
-            # do this -- the primitive variable Riemann solver, the two
-            # shock approximation, or the two rarefaction approximation.
-            # Pick the method based on the pressure states at the
-            # interface.
+            # a_l = 0.5 * (un_l+un_r - c_l-c_r) / (1.0-0.25*(un_l+un_r)*(c_l+c_r))
+            # a_r = 0.5 * (un_l+un_r + c_l+c_r) / (1.0+0.25*(un_l+un_r)*(c_l+c_r))
 
-            p_max = max(p_l, p_r)
-            p_min = min(p_l, p_r)
+            a_l = -1.0
+            a_r = 1.0
 
-            Q = p_max / p_min
+            F_l = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nspec, U_l[i,j,:], q_l[i,j,:])
+            F_r = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nspec, U_r[i,j,:], q_r[i,j,:])
 
-            rho_avg = 0.5 * (rho_l + rho_r)
-            c_avg = 0.5 * (c_l + c_r)
+            F_HLLE = (a_r*F_l - a_l*F_r + a_r*a_l*(U_r[i,j,:] - U_l[i,j,:])) / (a_r - a_l)
 
-            # primitive variable Riemann solver (Toro, 9.3)
-            factor = rho_avg * c_avg
-            # factor2 = rho_avg / c_avg
-
-            pstar = 0.5 * (p_l + p_r) + 0.5 * (un_l - un_r) * factor
-            ustar = 0.5 * (un_l + un_r) + 0.5 * (p_l - p_r) / factor
-
-            # rhostar_l = rho_l + (un_l - ustar) * factor2
-            # rhostar_r = rho_r + (ustar - un_r) * factor2
-
-            if (Q > 2 and (pstar < p_min or pstar > p_max)):
-
-                # use a more accurate Riemann solver for the estimate here
-
-                if (pstar < p_min):
-
-                    # 2-rarefaction Riemann solver
-                    z = (gamma - 1.0) / (2.0 * gamma)
-                    p_lr = (p_l / p_r)**z
-
-                    ustar = (p_lr * un_l / c_l + un_r / c_r +
-                             2.0 * (p_lr - 1.0) / (gamma - 1.0)) / \
-                            (p_lr / c_l + 1.0 / c_r)
-
-                    pstar = 0.5 * (p_l * (1.0 + (gamma - 1.0) * (un_l - ustar) /
-                                          (2.0 * c_l))**(1.0 / z) +
-                                   p_r * (1.0 + (gamma - 1.0) * (ustar - un_r) /
-                                          (2.0 * c_r))**(1.0 / z))
-
-                    # rhostar_l = rho_l * (pstar / p_l)**(1.0 / gamma)
-                    # rhostar_r = rho_r * (pstar / p_r)**(1.0 / gamma)
-
-                else:
-
-                    # 2-shock Riemann solver
-                    A_r = 2.0 / ((gamma + 1.0) * rho_r)
-                    B_r = p_r * (gamma - 1.0) / (gamma + 1.0)
-
-                    A_l = 2.0 / ((gamma + 1.0) * rho_l)
-                    B_l = p_l * (gamma - 1.0) / (gamma + 1.0)
-
-                    # guess of the pressure
-                    p_guess = max(0.0, pstar)
-
-                    g_l = np.sqrt(A_l / (p_guess + B_l))
-                    g_r = np.sqrt(A_r / (p_guess + B_r))
-
-                    pstar = (g_l * p_l + g_r * p_r -
-                             (un_r - un_l)) / (g_l + g_r)
-
-                    ustar = 0.5 * (un_l + un_r) + \
-                        0.5 * ((pstar - p_r) * g_r - (pstar - p_l) * g_l)
-
-                    # rhostar_l = rho_l * (pstar / p_l + (gamma - 1.0) / (gamma + 1.0)) / \
-                    #     ((gamma - 1.0) / (gamma + 1.0) * (pstar / p_l) + 1.0)
-                    #
-                    # rhostar_r = rho_r * (pstar / p_r + (gamma - 1.0) / (gamma + 1.0)) / \
-                    #     ((gamma - 1.0) / (gamma + 1.0) * (pstar / p_r) + 1.0)
-
-            # estimate the nonlinear wave speeds
-
-            if (pstar <= p_l):
-                # rarefaction
-                S_l = un_l - c_l
+            if a_r <= 0.0: # right state 
+                U_HLLE = -U_r[i,j,:]
+            elif a_l < 0.0: # middle 
+                U_HLLE = (a_r*U_r[i,j,:] - a_l*U_l[i,j,:] - F_r+F_l) / (a_r - a_l)
+            else: # left 
+                U_HLLE = U_l[i,j,:]
+            
+            if idir == 1:
+                S_HLLE = U_HLLE[ixmom]
+                F_S = F_HLLE[ixmom]
             else:
-                # shock
-                S_l = un_l - c_l * np.sqrt(1.0 + ((gamma + 1.0) / (2.0 * gamma)) *
-                                           (pstar / p_l - 1.0))
+                S_HLLE = UHLLE[iymom]
+                F_S = F_HLLE[iymom]
 
-            if (pstar <= p_r):
-                # rarefaction
-                S_r = un_r + c_r
+            E_HLLE = U_HLLE[iener] + U_HLLE[idens]
+
+            if abs(F_HLLE[iener]) < 1.e-9:
+                a_star = S_HLLE / (E_HLLE + F_S)
             else:
-                # shock
-                S_r = un_r + c_r * np.sqrt(1.0 + ((gamma + 1.0) / (2.0 / gamma)) *
-                                           (pstar / p_r - 1.0))
+                a_star = (E_HLLE + F_S - np.sqrt((E_HLLE + F_S)**2 - S_HLLE * 2.0 * F_HLLE[iener])) / (2.0 * F_HLLE[iener])
 
-            #  We could just take S_c = u_star as the estimate for the
-            #  contact speed, but we can actually do this more accurately
-            #  by using the Rankine-Hugonoit jump conditions across each
-            #  of the waves (see Toro 10.58, Batten et al. SIAM
-            #  J. Sci. and Stat. Comp., 18:1553 (1997)
-            S_c = (p_r - p_l + rho_l * un_l * (S_l - un_l) - rho_r * un_r * (S_r - un_r)) / \
-                (rho_l * (S_l - un_l) - rho_r * (S_r - un_r))
+            # NOTE: this shouldn't happen but just in case?
+            if a_star != a_star:
+                a_star = 0.0
 
-            # figure out which region we are in and compute the state and
-            # the interface fluxes using the HLLC Riemann solver
-            if (S_r <= 0.0):
-                # R region
-                U_state[:] = U_r[i, j, :]
-
-                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec,
-                                      U_state)
-
-            elif (S_r > 0.0 and S_c <= 0):
-                # R* region
-                HLLCfactor = rho_r * (S_r - un_r) / (S_r - S_c)
-
-                U_state[idens] = HLLCfactor
-
-                if (idir == 1):
-                    U_state[ixmom] = HLLCfactor * S_c
-                    U_state[iymom] = HLLCfactor * ut_r
-                else:
-                    U_state[ixmom] = HLLCfactor * ut_r
-                    U_state[iymom] = HLLCfactor * S_c
-
-                U_state[iener] = HLLCfactor * (U_r[i, j, iener] / rho_r +
-                                               (S_c - un_r) * (S_c + p_r / (rho_r * (S_r - un_r))))
-
-                # species
-                if (nspec > 0):
-                    U_state[irhoX:irhoX + nspec] = HLLCfactor * \
-                        U_r[i, j, irhoX:irhoX + nspec] / rho_r
-
-                # find the flux on the right interface
-                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec,
-                                      U_r[i, j, :])
-
-                # correct the flux
-                F[i, j, :] = F[i, j, :] + S_r * (U_state[:] - U_r[i, j, :])
-
-            elif (S_c > 0.0 and S_l < 0.0):
-                # L* region
-                HLLCfactor = rho_l * (S_l - un_l) / (S_l - S_c)
-
-                U_state[idens] = HLLCfactor
-
-                if (idir == 1):
-                    U_state[ixmom] = HLLCfactor * S_c
-                    U_state[iymom] = HLLCfactor * ut_l
-                else:
-                    U_state[ixmom] = HLLCfactor * ut_l
-                    U_state[iymom] = HLLCfactor * S_c
-
-                U_state[iener] = HLLCfactor * (U_l[i, j, iener] / rho_l +
-                                               (S_c - un_l) * (S_c + p_l / (rho_l * (S_l - un_l))))
-
-                # species
-                if (nspec > 0):
-                    U_state[irhoX:irhoX + nspec] = HLLCfactor * \
-                        U_l[i, j, irhoX:irhoX + nspec] / rho_l
-
-                # find the flux on the left interface
-                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec,
-                                      U_l[i, j, :])
-
-                # correct the flux
-                F[i, j, :] = F[i, j, :] + S_l * (U_state[:] - U_l[i, j, :])
-
+            # left 
+            if idir == 1:
+                A = (U_l[i,j,iener] + U_l[i,j,idens]) * a_l - U_l[i,j,ixmom]
+                B = U_l[i,j,ixmom] * (a_l - un_l) - p_l 
             else:
-                # L region
-                U_state[:] = U_l[i, j, :]
+                A = (U_l[i,j,iener] + U_l[i,j,idens]) * a_l - U_l[i,j,iymom]
+                B = U_l[i,j,iymom] * (a_l - un_l) - p_l
 
-                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec,
-                                      U_state)
+            p_lstar = ((A * a_star) - B) / (1.0 - a_l * a_star)
 
-            # we should deal with solid boundaries somehow here
+            U_lstar[idens] = U_l[i,j,idens] * (a_l - un_l) / (a_l - a_star)
+
+            if idir == 1:
+                U_lstar[ixmom] = (U_l[i,j,ixmom] * (a_l-un_l) + p_lstar - p_l) / (a_l - a_star)
+                U_lstar[iymom] = U_l[i,j,iymom] * (a_l - un_l) / (a_l - a_star)
+            else:
+                U_lstar[ixmom] = U_l[i,j,ixmom] * (a_l - un_l) / (a_l - a_star)
+                U_lstar[iymom] = (U_l[i,j,iymom] * (a_l-un_l) + p_lstar - p_l) / (a_l - a_star)
+
+            # species 
+            if nspec > 0:
+                U_lstar[irhoX:irhoX+nspec] = U_l[i,j,irhoX:irhoX+nspec] * (a_l - un_l) / (a_l - a_star)
+
+            # right
+            if idir == 1:
+                A = (U_r[i,j,iener] + U_r[i,j,idens]) * a_r - U_r[i,j,ixmom]
+                B = U_r[i,j,ixmom] * (a_r - un_r) - p_r
+            else:
+                A = (U_r[i,j,iener] + U_r[i,j,idens]) * a_r - U_r[i,j,iymom]
+                B = U_r[i,j,iymom] * (a_r - un_r) - p_r
+
+            p_rstar = ((A * a_star) - B) / (1.0 - a_r * a_star)
+
+            U_rstar[idens] = U_r[i,j,idens] * (a_r - un_r) / (a_r - a_star)
+
+            if idir == 1:
+                U_rstar[ixmom] = (U_r[i,j,ixmom] * (a_r-un_r) + p_rstar - p_r) / (a_r - a_star)
+                U_rstar[iymom] = U_r[i,j,iymom] * (a_r - un_r) / (a_r - a_star)
+            else:
+                U_rstar[ixmom] = U_r[i,j,ixmom] * (a_r - un_r) / (a_r - a_star)
+                U_rstar[iymom] = (U_r[i,j,iymom] * (a_r-un_r) + p_rstar - p_r / (a_r - a_star)
+
+            # species 
+            if nspec > 0:
+                U_rstar[irhoX:irhoX+nspec] = U_r[i,j,irhoX:irhoX+nspec] * (a_r - un_r) / (a_r - a_star)
+
+            if a_r <= 0.0: # right state 
+                F[i,j,:] = F_r 
+
+            elif a_star <= 0.0: # right star
+                F[i,j,:] = U_rstar * a_star 
+
+                if idir == 1:
+                    F[i,j,ixmom] += p_rstar 
+                    F[i,j,iener] = U_rstar[ixmom] - F[i,j,idens]
+                else:
+                    F[i,j,iymom] += p_rstar
+                    F[i,j,iener] = U_rstar[iymom] - F[i,j,idens]
+
+            elif a_l < 0.0: # left star 
+                F[i,j,:] = U_lstar * a_star 
+
+                if idir == 1:
+                    F[i,j,ixmom] += p_lstar 
+                    F[i,j,iener] = U_lstar[ixmom] - F[i,j,idens]
+                else:
+                    F[i,j,iymom] += p_lstar
+                    F[i,j,iener] = U_lstar[iymom] - F[i,j,idens]
+
+            else: # left 
+                F[i,j,:] = F_l
 
     return F
 
 
 @njit(cache=True)
-def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec, U_state):
+def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nspec, U_state, q_state):
     r"""
     Calculate the conservative flux.
 
@@ -1091,10 +1110,10 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec, U_state):
 
     F = np.zeros_like(U_state)
 
-    u = U_state[ixmom] / U_state[idens]
-    v = U_state[iymom] / U_state[idens]
+    u = q_state[iu]
+    v = q_state[iv]
 
-    p = (U_state[iener] - 0.5 * U_state[idens] * (u * u + v * v)) * (gamma - 1.0)
+    p = q_state[ip]
 
     if (idir == 1):
         F[idens] = U_state[idens] * u
@@ -1102,16 +1121,15 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec, U_state):
         F[iymom] = U_state[iymom] * u
         F[iener] = (U_state[iener] + p) * u
 
-        if (nspec > 0):
+        if nspec > 0:
             F[irhoX:irhoX + nspec] = U_state[irhoX:irhoX + nspec] * u
-
     else:
         F[idens] = U_state[idens] * v
         F[ixmom] = U_state[ixmom] * v
         F[iymom] = U_state[iymom] * v + p
         F[iener] = (U_state[iener] + p) * v
 
-        if (nspec > 0):
+        if nspec > 0:
             F[irhoX:irhoX + nspec] = U_state[irhoX:irhoX + nspec] * v
 
     return F
