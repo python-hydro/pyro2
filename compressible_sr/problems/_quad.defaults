@@ -1,0 +1,33 @@
+# these defaults seem to be equivalent to Configuration 3 from
+# Shulz-Rinne et al. SIAM J. Sci. Comput., 14, 6, 1394-1414, 1993
+#
+# Also, with the numbers written out, this is Configuration 3 from
+# Lax and Liu, SIAM J. Sci. Comput., 19, 2, 319-340, 1998
+#
+# See also LeVeque JCP 131, 327-353, 1997
+
+[quadrant]
+rho1 = 1.5                 ; quadrant 1 initial density
+u1 = 0.0                   ; quadrant 1 initial x-velocity
+v1 = 0.0                   ; quadrant 1 initial y-velocity
+p1 = 1.5                   ; quadrant 1 initial pressure
+ 
+rho2 = 0.532258064516129   ; quadrant 2 initial density
+u2 = 1.206045378311055     ; quadrant 2 initial x-velocity
+v2 = 0.0                   ; quadrant 2 initial y-velocity
+p2 = 0.3                   ; quadrant 2 initial pressure
+ 
+rho3 = 0.137992831541219   ; quadrant 3 initial density
+u3 = 1.206045378311055     ; quadrant 3 initial x-velocity
+v3 = 1.206045378311055     ; quadrant 3 initial y-velocity
+p3 = 0.029032258064516     ; quadrant 3 initial pressure
+ 
+rho4 = 0.532258064516129   ; quadrant 4 initial density
+u4 = 0.0                   ; quadrant 4 initial x-velocity
+v4 = 1.206045378311055     ; quadrant 4 initial y-velocity
+p4 = 0.3                   ; quadrant 4 initial pressure
+
+cx = 0.5                   ; corner x position
+cy = 0.5                   ; corner y position
+
+ 

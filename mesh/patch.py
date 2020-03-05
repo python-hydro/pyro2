@@ -247,6 +247,7 @@ class CellCenterData2d(object):
         self.names = []
         self.vars = self.names  # backwards compatibility hack
         self.nvar = 0
+        self.ivars = []
 
         self.aux = {}
 
@@ -308,6 +309,13 @@ class CellCenterData2d(object):
         """
         self.derives.append(func)
 
+    def add_ivars(self, ivars):
+        """
+        Add ivars
+        """
+
+        self.ivars = ivars
+
     def create(self):
         """
         Called after all the variables are registered and allocates
@@ -367,11 +375,15 @@ class CellCenterData2d(object):
             The array of data corresponding to the variable name
 
         """
+        # ns = [self.names.index(name) for name in self.names]
         try:
             n = self.names.index(name)
         except ValueError:
             for f in self.derives:
-                var = f(self, name)
+                try:
+                    var = f(self, name)
+                except TypeError:
+                    var = f(self, name, self.ivars, self.grid)
                 if len(var) > 0:
                     return var
             raise KeyError("name {} is not valid".format(name))
@@ -474,13 +486,25 @@ class CellCenterData2d(object):
         # that will handle the standard type of BCs, but if we asked
         # for a custom BC, we handle it here
         if self.BCs[name].xlb in bnd.ext_bcs.keys():
-            bnd.ext_bcs[self.BCs[name].xlb](self.BCs[name].xlb, "xlb", name, self)
+            try:
+                bnd.ext_bcs[self.BCs[name].xlb](self.BCs[name].xlb, "xlb", name, self, self.ivars)
+            except TypeError:
+                bnd.ext_bcs[self.BCs[name].xlb](self.BCs[name].xlb, "xlb", name, self)
         if self.BCs[name].xrb in bnd.ext_bcs.keys():
-            bnd.ext_bcs[self.BCs[name].xrb](self.BCs[name].xrb, "xrb", name, self)
+            try:
+                bnd.ext_bcs[self.BCs[name].xrb](self.BCs[name].xrb, "xrb", name, self)
+            except TypeError:
+                bnd.ext_bcs[self.BCs[name].xrb](self.BCs[name].xrb, "xrb", name, self, self.ivars)
         if self.BCs[name].ylb in bnd.ext_bcs.keys():
-            bnd.ext_bcs[self.BCs[name].ylb](self.BCs[name].ylb, "ylb", name, self)
+            try:
+                bnd.ext_bcs[self.BCs[name].ylb](self.BCs[name].ylb, "ylb", name, self)
+            except TypeError:
+                bnd.ext_bcs[self.BCs[name].ylb](self.BCs[name].ylb, "ylb", name, self, self.ivars)
         if self.BCs[name].yrb in bnd.ext_bcs.keys():
-            bnd.ext_bcs[self.BCs[name].yrb](self.BCs[name].yrb, "yrb", name, self)
+            try:
+                bnd.ext_bcs[self.BCs[name].yrb](self.BCs[name].yrb, "yrb", name, self)
+            except TypeError:
+                bnd.ext_bcs[self.BCs[name].yrb](self.BCs[name].yrb, "yrb", name, self, self.ivars)
 
     def min(self, name, ng=0):
         """
@@ -641,7 +665,7 @@ class CellCenterData2d(object):
             gvar.attrs["ylb"] = self.BCs[self.names[n]].ylb
             gvar.attrs["yrb"] = self.BCs[self.names[n]].yrb
 
-    def pretty_print(self, var, fmt=None):
+    def pretty_print(self, var, ivars, fmt=None):
         """print out the contents of the data array with pretty formatting
         indicating where ghost cells are."""
         a = self.get_var(var)
