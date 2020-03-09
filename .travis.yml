@@ -26,6 +26,12 @@ before_script:
 script:
   - flake8 .
   - pytest -v --cov=. --cov-config .coveragerc --nbval --ignore=docs --ignore=./multigrid/variable_coeff_elliptic.ipynb --ignore=examples/mesh --ignore=examples/multigrid
+
+after_success:
+    - codecov
+after_failure:
+   - codecov
+   
 #   - travis-sphinx build
 
 # after_success:

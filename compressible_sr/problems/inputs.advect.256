@@ -1,0 +1,36 @@
+[driver]
+max_steps = 1000
+tmax = 1.0
+
+init_tstep_factor = 1.0
+fix_dt = 0.00125
+
+
+[compressible]
+limiter = 0
+cvisc = 0.1
+
+
+[io]
+basename = advect_
+
+
+[eos]
+gamma = 1.4
+
+
+[mesh]
+nx = 256
+ny = 256
+xmax = 1.0
+ymax = 1.0
+
+xlboundary = periodic
+xrboundary = periodic
+
+ylboundary = periodic
+yrboundary = periodic
+
+
+[vis]
+dovis = 1

@@ -1,0 +1,8 @@
+[gresho]
+dens_base = 10.0            ; density at the base of the atmosphere
+
+r = 1.0
+u0 = 1.0
+p0 = 1.0
+
+dens_cutoff  = 0.01

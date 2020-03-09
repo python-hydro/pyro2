@@ -122,8 +122,8 @@ Updating U_{i,j}:
 
 """
 
-import compressible.interface as ifc
-import compressible as comp
+import compressible_sr.interface as ifc
+import compressible_sr.c2p as c2p
 import mesh.reconstruction as reconstruction
 import mesh.array_indexer as ai
 
@@ -170,30 +170,25 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     gamma = rp.get_param("eos.gamma")
 
-    # =========================================================================
+    #=========================================================================
     # compute the primitive variables
-    # =========================================================================
+    #=========================================================================
     # Q = (rho, u, v, p, {X})
 
     dens = my_data.get_var("density")
     ymom = my_data.get_var("y-momentum")
 
-    q = comp.cons_to_prim(my_data.data, gamma, ivars, myg)
+    q = cons_to_prim_wrapper(my_data.data, gamma, ivars, myg)
 
-    # =========================================================================
+    #=========================================================================
     # compute the flattening coefficients
-    # =========================================================================
+    #=========================================================================
 
     # there is a single flattening coefficient (xi) for all directions
     use_flattening = rp.get_param("compressible.use_flattening")
 
     if use_flattening:
-        xi_x = reconstruction.flatten(myg, q, 1, ivars, rp)
-        xi_y = reconstruction.flatten(myg, q, 2, ivars, rp)
-
-        xi = reconstruction.flatten_multid(myg, q, xi_x, xi_y, ivars)
-    else:
-        xi = 1.0
+        msg.fail("ERROR: Flattening is not allowed for the sr compressible problem")
 
     # monotonized central differences
     tm_limit = tc.timer("limiting")
@@ -205,55 +200,51 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     ldy = myg.scratch_array(nvar=ivars.nvar)
 
     for n in range(ivars.nvar):
-        ldx[:, :, n] = xi*reconstruction.limit(q[:, :, n], myg, 1, limiter)
-        ldy[:, :, n] = xi*reconstruction.limit(q[:, :, n], myg, 2, limiter)
+        ldx[:, :, n] = reconstruction.limit(my_data.data[:, :, n], myg, 1, limiter)
+        ldy[:, :, n] = reconstruction.limit(my_data.data[:, :, n], myg, 2, limiter)
 
     tm_limit.end()
 
-    # =========================================================================
+    #=========================================================================
     # x-direction
-    # =========================================================================
+    #=========================================================================
 
     # left and right primitive variable states
     tm_states = tc.timer("interfaceStates")
     tm_states.begin()
 
-    V_l, V_r = ifc.states(1, myg.ng, myg.dx, dt,
+    _U_l, _U_r = ifc.states(1, myg.ng, myg.dx, dt,
                           ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
-                          ivars.naux,
-                          gamma,
-                          q, ldx)
+                          ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
+                          ivars.irhox, ivars.naux,
+                          gamma, q, my_data.data, ldx)
+
+    U_xl = ai.ArrayIndexer(d=_U_l, grid=myg)
+    U_xr = ai.ArrayIndexer(d=_U_r, grid=myg)
 
     tm_states.end()
 
-    # transform interface states back into conserved variables
-    U_xl = comp.prim_to_cons(V_l, gamma, ivars, myg)
-    U_xr = comp.prim_to_cons(V_r, gamma, ivars, myg)
-
-    # =========================================================================
+    #=========================================================================
     # y-direction
-    # =========================================================================
+    #=========================================================================
 
     # left and right primitive variable states
     tm_states.begin()
 
-    _V_l, _V_r = ifc.states(2, myg.ng, myg.dy, dt,
+    _U_l, _U_r = ifc.states(2, myg.ng, myg.dy, dt,
                             ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
-                            ivars.naux,
-                            gamma,
-                            q, ldy)
-    V_l = ai.ArrayIndexer(d=_V_l, grid=myg)
-    V_r = ai.ArrayIndexer(d=_V_r, grid=myg)
+                            ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
+                            ivars.irhox, ivars.naux,
+                            gamma, q, my_data.data, ldy)
+
+    U_yl = ai.ArrayIndexer(d=_U_l, grid=myg)
+    U_yr = ai.ArrayIndexer(d=_U_r, grid=myg)
 
     tm_states.end()
 
-    # transform interface states back into conserved variables
-    U_yl = comp.prim_to_cons(V_l, gamma, ivars, myg)
-    U_yr = comp.prim_to_cons(V_r, gamma, ivars, myg)
-
-    # =========================================================================
+    #=========================================================================
     # apply source terms
-    # =========================================================================
+    #=========================================================================
     grav = rp.get_param("compressible.grav")
 
     ymom_src = my_aux.get_var("ymom_src")
@@ -264,25 +255,21 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     E_src.v()[:, :] = ymom.v()*grav
     my_aux.fill_BC("E_src")
 
-    # ymom_xl[i,j] += 0.5*dt*dens[i-1,j]*grav
     U_xl.v(buf=1, n=ivars.iymom)[:, :] += 0.5*dt*ymom_src.ip(-1, buf=1)
     U_xl.v(buf=1, n=ivars.iener)[:, :] += 0.5*dt*E_src.ip(-1, buf=1)
 
-    # ymom_xr[i,j] += 0.5*dt*dens[i,j]*grav
     U_xr.v(buf=1, n=ivars.iymom)[:, :] += 0.5*dt*ymom_src.v(buf=1)
     U_xr.v(buf=1, n=ivars.iener)[:, :] += 0.5*dt*E_src.v(buf=1)
 
-    # ymom_yl[i,j] += 0.5*dt*dens[i,j-1]*grav
     U_yl.v(buf=1, n=ivars.iymom)[:, :] += 0.5*dt*ymom_src.jp(-1, buf=1)
     U_yl.v(buf=1, n=ivars.iener)[:, :] += 0.5*dt*E_src.jp(-1, buf=1)
 
-    # ymom_yr[i,j] += 0.5*dt*dens[i,j]*grav
     U_yr.v(buf=1, n=ivars.iymom)[:, :] += 0.5*dt*ymom_src.v(buf=1)
     U_yr.v(buf=1, n=ivars.iener)[:, :] += 0.5*dt*E_src.v(buf=1)
 
-    # =========================================================================
+    #=========================================================================
     # compute transverse fluxes
-    # =========================================================================
+    #=========================================================================
     tm_riem = tc.timer("riemann")
     tm_riem.begin()
 
@@ -295,24 +282,38 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     else:
         msg.fail("ERROR: Riemann solver undefined")
 
+    q_xl = cons_to_prim_wrapper(U_xl, gamma, ivars, myg)
+    q_xr = cons_to_prim_wrapper(U_xr, gamma, ivars, myg)
+    q_yl = cons_to_prim_wrapper(U_yl, gamma, ivars, myg)
+    q_yr = cons_to_prim_wrapper(U_yr, gamma, ivars, myg)
+
+    # print("before transverse fluxes")
+    # print(f'rho = {q_xl.jp(0, n=ivars.irho, buf=2)}')
+
     _fx = riemannFunc(1, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+                      ivars.idens, ivars.ixmom,
+                      ivars.iymom, ivars.iener, ivars.irhox,
+                      ivars.irho, ivars.iu, ivars.iv, ivars.ip,
+                      ivars.ix, ivars.naux,
                       solid.xl, solid.xr,
-                      gamma, U_xl, U_xr)
+                      gamma, U_xl, U_xr, q_xl, q_xr)
 
     _fy = riemannFunc(2, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+                      ivars.idens, ivars.ixmom,
+                      ivars.iymom, ivars.iener, ivars.irhox,
+                      ivars.irho, ivars.iu, ivars.iv, ivars.ip,
+                      ivars.ix, ivars.naux,
                       solid.yl, solid.yr,
-                      gamma, U_yl, U_yr)
+                      gamma, U_yl, U_yr, q_yl, q_yr)
 
     F_x = ai.ArrayIndexer(d=_fx, grid=myg)
     F_y = ai.ArrayIndexer(d=_fy, grid=myg)
 
     tm_riem.end()
 
-    # =========================================================================
+    #=========================================================================
     # construct the interface values of U now
-    # =========================================================================
+    #=========================================================================
 
     """
     finally, we can construct the state perpendicular to the interface
@@ -328,19 +329,19 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
              |          |          |          |
         j+1 -+          |          |          |
              |          |          |          |
-             |          |          |          |    1: U_xl[i,j,:] = U
+             |          |          |          |    1: U_xl[i,j, :] = U
       j+1/2--+----------XXXXXXXXXXXX----------+                      i-1/2,j,L
              |          X          X          |
              |          X          X          |
-          j -+        1 X 2        X          |    2: U_xr[i,j,:] = U
+          j -+        1 X 2        X          |    2: U_xr[i,j, :] = U
              |          X          X          |                      i-1/2,j,R
              |          X    4     X          |
       j-1/2--+----------XXXXXXXXXXXX----------+
-             |          |    3     |          |    3: U_yl[i,j,:] = U
+             |          |    3     |          |    3: U_yl[i,j, :] = U
              |          |          |          |                      i,j-1/2,L
         j-1 -+          |          |          |
              |          |          |          |
-             |          |          |          |    4: U_yr[i,j,:] = U
+             |          |          |          |    4: U_yr[i,j, :] = U
       j-3/2--+----------+----------+----------+                      i,j-1/2,R
              |    |     |    |     |    |     |
                  i-1         i         i+1
@@ -349,10 +350,10 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     remember that the fluxes are stored on the left edge, so
 
-    F_x[i,j,:] = F_x
+    F_x[i,j, :] = F_x
                     i-1/2, j
 
-    F_y[i,j,:] = F_y
+    F_y[i,j, :] = F_y
                     i, j-1/2
 
     """
@@ -367,54 +368,65 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     for n in range(ivars.nvar):
 
-        # U_xl[i,j,:] = U_xl[i,j,:] - 0.5*dt/dy * (F_y[i-1,j+1,:] - F_y[i-1,j,:])
         U_xl.v(buf=b, n=n)[:, :] += \
             - 0.5*dtdy*(F_y.ip_jp(-1, 1, buf=b, n=n) - F_y.ip(-1, buf=b, n=n))
 
-        # U_xr[i,j,:] = U_xr[i,j,:] - 0.5*dt/dy * (F_y[i,j+1,:] - F_y[i,j,:])
         U_xr.v(buf=b, n=n)[:, :] += \
             - 0.5*dtdy*(F_y.jp(1, buf=b, n=n) - F_y.v(buf=b, n=n))
 
-        # U_yl[i,j,:] = U_yl[i,j,:] - 0.5*dt/dx * (F_x[i+1,j-1,:] - F_x[i,j-1,:])
         U_yl.v(buf=b, n=n)[:, :] += \
             - 0.5*dtdx*(F_x.ip_jp(1, -1, buf=b, n=n) - F_x.jp(-1, buf=b, n=n))
 
-        # U_yr[i,j,:] = U_yr[i,j,:] - 0.5*dt/dx * (F_x[i+1,j,:] - F_x[i,j,:])
         U_yr.v(buf=b, n=n)[:, :] += \
             - 0.5*dtdx*(F_x.ip(1, buf=b, n=n) - F_x.v(buf=b, n=n))
 
     tm_transverse.end()
 
-    # =========================================================================
+    #=========================================================================
     # construct the fluxes normal to the interfaces
-    # =========================================================================
+    #=========================================================================
 
     # up until now, F_x and F_y stored the transverse fluxes, now we
     # overwrite with the fluxes normal to the interfaces
 
     tm_riem.begin()
 
+    q_xl = cons_to_prim_wrapper(U_xl, gamma, ivars, myg)
+    q_xr = cons_to_prim_wrapper(U_xr, gamma, ivars, myg)
+    q_yl = cons_to_prim_wrapper(U_yl, gamma, ivars, myg)
+    q_yr = cons_to_prim_wrapper(U_yr, gamma, ivars, myg)
+
+    # print("before normal fluxes")
+    # print(f'F_rho = {F_x.jp(0, n=ivars.ixmom, buf=2)}')
+
     _fx = riemannFunc(1, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+                      ivars.idens, ivars.ixmom,
+                      ivars.iymom, ivars.iener, ivars.irhox,
+                      ivars.irho, ivars.iu, ivars.iv, ivars.ip,
+                      ivars.ix, ivars.naux,
                       solid.xl, solid.xr,
-                      gamma, U_xl, U_xr)
+                      gamma, U_xl, U_xr, q_xl, q_xr)
 
     _fy = riemannFunc(2, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+                      ivars.idens, ivars.ixmom,
+                      ivars.iymom, ivars.iener, ivars.irhox,
+                      ivars.irho, ivars.iu, ivars.iv, ivars.ip,
+                      ivars.ix, ivars.naux,
                       solid.yl, solid.yr,
-                      gamma, U_yl, U_yr)
+                      gamma, U_yl, U_yr, q_yl, q_yr)
 
     F_x = ai.ArrayIndexer(d=_fx, grid=myg)
     F_y = ai.ArrayIndexer(d=_fy, grid=myg)
 
     tm_riem.end()
 
-    # =========================================================================
+    #=========================================================================
     # apply artificial viscosity
-    # =========================================================================
+    #=========================================================================
     cvisc = rp.get_param("compressible.cvisc")
 
-    _ax, _ay = ifc.artificial_viscosity(myg.ng, myg.dx, myg.dy,
+    _ax, _ay = ifc.artificial_viscosity(
+        myg.ng, myg.dx, myg.dy,
         cvisc, q.v(n=ivars.iu, buf=myg.ng), q.v(n=ivars.iv, buf=myg.ng))
 
     avisco_x = ai.ArrayIndexer(d=_ax, grid=myg)
@@ -436,3 +448,19 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     tm_flux.end()
 
     return F_x, F_y
+
+
+def cons_to_prim_wrapper(U, gamma, ivars, myg):
+    """
+    wrapper for fortran cons to prim routine
+    """
+
+    q = myg.scratch_array(nvar=ivars.nq)
+
+    c2p.cons_to_prim(U, ivars.irho, 
+                     ivars.iu, ivars.iv,
+                     ivars.ip, ivars.ix, ivars.irhox,
+                     ivars.idens, ivars.ixmom, ivars.iymom,
+                     ivars.iener, ivars.naux,
+                     gamma, q)
+    return q

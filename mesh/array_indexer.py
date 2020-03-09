@@ -313,7 +313,10 @@ class ArrayIndexer(np.ndarray):
                 if self.c == 2:
                     val = self[i, j]
                 else:
-                    val = self[i, j, n]
+                    try:
+                        val = self[i, j, n]
+                    except IndexError:
+                        val = self[i, j]
 
                 if gc:
                     print("\033[31m" + fmt % (val) + "\033[0m", end="")
