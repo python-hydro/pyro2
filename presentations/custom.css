@@ -4,6 +4,11 @@ font-size: 80%;
 }
 
 
+em {
+color: blue;
+}
+
+
 .reveal p {
 margin-bottom: 0.25em;
 margin-top: 0.5em;
@@ -20,5 +25,5 @@ font-family: carlito;
 }
 
 div.output pre {
-    font-size: 60%;
+    font-size: 65%;
 }
