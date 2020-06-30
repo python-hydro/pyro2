@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 import matplotlib
+matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
 import matplotlib.pyplot as plt
 import numpy as np
 

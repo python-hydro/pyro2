@@ -3,6 +3,8 @@ from __future__ import print_function
 import importlib
 
 import numpy as np
+import matplotlib
+matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
 import matplotlib.pyplot as plt
 
 import incompressible.incomp_interface as incomp_interface

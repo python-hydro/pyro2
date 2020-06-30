@@ -4,6 +4,7 @@ import importlib
 
 import numpy as np
 import matplotlib
+matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
 import matplotlib.pyplot as plt
 
 import compressible.BC as BC
