@@ -29,7 +29,7 @@ Pull Requests
 
 *Any contributions that have the potential to change answers should be
 done via pull requests.* A pull request should be generated from your
-fork of pyro and target the `master` branch.
+fork of pyro and target the `main` branch.
 
 The unit and regression tests will run automatically once the PR is
 submitted, and then one of the pyro developers will review the PR and
