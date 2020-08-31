@@ -14,6 +14,7 @@ The following python packages are required:
 * ``numpy``
 * ``matplotlib``
 * ``numba``
+* ``h5py``
 * ``pytest`` (for unit tests)
 
 The following steps are needed before running pyro:
