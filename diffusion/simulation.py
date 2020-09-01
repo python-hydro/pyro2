@@ -4,7 +4,10 @@ import importlib
 import math
 import numpy as np
 import matplotlib
-matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
+try:
+    matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
+except KeyError:
+    pass
 import matplotlib.pyplot as plt
 
 import mesh.patch as patch

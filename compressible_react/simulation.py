@@ -1,7 +1,10 @@
 from __future__ import print_function
 
 import matplotlib
-matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
+try:
+    matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
+except KeyError:
+    pass
 import matplotlib.pyplot as plt
 import numpy as np
 
