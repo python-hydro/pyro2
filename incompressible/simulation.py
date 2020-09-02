@@ -4,7 +4,10 @@ import importlib
 
 import numpy as np
 import matplotlib
-matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
+try:
+    matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
+except KeyError:
+    pass
 import matplotlib.pyplot as plt
 
 import incompressible.incomp_interface as incomp_interface

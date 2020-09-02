@@ -3,7 +3,10 @@ from __future__ import print_function
 import importlib
 import numpy as np
 import matplotlib
-matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
+try:
+    matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
+except KeyError:
+    pass
 import matplotlib.pyplot as plt
 
 import advection_nonuniform.advective_fluxes as flx
