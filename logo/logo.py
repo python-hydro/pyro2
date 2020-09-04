@@ -11,6 +11,7 @@ logo_text = """
  X      X            
 """
 
+
 class LogoGrid:
     def __init__(self, mask):
 
@@ -43,7 +44,7 @@ class LogoGrid:
         for i in range(1, self.nx):
             for j in range(1, self.ny-1):
                 if logo_lines[j][i] == "X":
-                    self.logo[i,j] = 1.0
+                    self.logo[i, j] = 1.0
 
     def draw_grid(self):
         # vertical lines
@@ -64,18 +65,17 @@ class LogoGrid:
                  [self.yr[0], self.yr[0]],
                  color="C0", lw=3)
 
-        
     def fill_in_logo(self):
         for j in range(self.ny):
             for i in range(self.nx):
-                if self.logo[i,j] == 0.0:
+                if self.logo[i, j] == 0.0:
                     continue
                 plt.fill([self.xl[i], self.xl[i], self.xr[i], self.xr[i], self.xl[i]],
-                         [self.yl[j], self.yr[j], self.yr[j], self.yl[j], self.yl[j]], 
+                         [self.yl[j], self.yr[j], self.yr[j], self.yl[j], self.yl[j]],
                          color="k", alpha=0.8)
 
     def fill_in_background(self):
-        xx = np.linspace(self.xmin, self.xmax, 200, endpoint=True) 
+        xx = np.linspace(self.xmin, self.xmax, 200, endpoint=True)
         yy = np.linspace(self.ymin, self.ymax, 200, endpoint=True)
 
         x, y = np.meshgrid(xx, yy)
@@ -85,9 +85,9 @@ class LogoGrid:
 
         plt.imshow(ff, extent=[self.xmin, self.xmax, self.ymin, self.ymax], alpha=0.25, cmap="plasma")
 
-
     def _func(self, x, y):
         return (1 + 0.5*(1.0 + np.tanh(y - 0.5*(self.ymin + self.ymax)))) * np.cos(3*np.pi*x/(self.xmax-self.xmin))
+
 
 lg = LogoGrid(logo_text)
 lg.draw_grid()
@@ -108,13 +108,3 @@ fig.set_size_inches(int(lg.nx+1), int(lg.ny+1))
 plt.margins(0.0)
 #plt.tight_layout()
 plt.savefig("pyro_logo.svg", bbox_inches="tight", pad_inches=0)
-
-
-
-
-
-
-
-
-
-

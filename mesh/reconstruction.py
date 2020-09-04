@@ -4,6 +4,7 @@ of slopes in constructing interface states."""
 import numpy as np
 import sys
 
+
 def limit(data, myg, idir, limiter):
     """ a single driver that calls the different limiters based on the value
     of the limiter input variable."""
@@ -20,7 +21,6 @@ def well_balance(q, myg, limiter, iv, grav):
     only considers the y direction."""
     if limiter != 1:
         sys.exit("well-balanced only works for limiter == 1")
-
 
     p1 = myg.scratch_array()
     p1_jp1 = myg.scratch_array()

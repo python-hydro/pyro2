@@ -23,6 +23,7 @@ def f(p, U_ij, gamma, idens, ixmom, iymom, iener):
 
     return (gamma - 1.0) * (tau + D*(1.0-W) + p*(1.0-W**2)) / W**2 - p
 
+
 @njit(cache=True)
 def brentq(x1, b, U, gamma, idens, ixmom, iymom, iener, 
            TOL=1.e-6, ITMAX=100):
@@ -41,13 +42,13 @@ def brentq(x1, b, U, gamma, idens, ixmom, iymom, iener,
     # root found
     if fa * fb >= 0.0:
         return x1 
-    
+
     # switch variables 
     if abs(fa) < abs(fb):
         d = a
         a = b 
         b = d 
-    
+
         d = fa 
         fa = fb
         fb = d 
@@ -70,7 +71,7 @@ def brentq(x1, b, U, gamma, idens, ixmom, iymom, iener,
         if 0.25 * (3.0 * a + b) < b:
             if s < 0.25 * (3.0 * a + b) or s > b:
                 con1 = True 
-        elif s < b or s > 0.25  * (3.0 * a + b):
+        elif s < b or s > 0.25 * (3.0 * a + b):
             con1 = True 
 
         con2 = mflag and abs(s-b) >= 0.5 * abs(b-c)
@@ -116,6 +117,7 @@ def brentq(x1, b, U, gamma, idens, ixmom, iymom, iener,
 
     return x1 
 
+
 @njit(cache=True)
 def cons_to_prim(U, 
                  irho, iu, iv, ip, ix, irhox, 
@@ -126,33 +128,34 @@ def cons_to_prim(U,
     """
 
     qx, qy, _ = U.shape
-    
+
     for j in range(qy):
         for i in range(qx):
             pmax = max((gamma-1.0)*U[i, j, iener]*1.0000000001, smallp)
 
-            pmin = max(min(1.0e-6*pmax, smallp), np.sqrt(U[i, j, ixmom]**2+U[i, j, iymom]**2) - U[i, j, iener] - U[i, j, idens])
+            pmin = max(min(1.0e-6*pmax, smallp), np.sqrt(U[i, j, ixmom] **
+                       2+U[i, j, iymom]**2) - U[i, j, iener] - U[i, j, idens])
 
-            fmin = f(pmin, U[i,j,:], gamma, idens, ixmom, iymom, iener)
-            fmax = f(pmax, U[i,j,:], gamma, idens, ixmom, iymom, iener)
+            fmin = f(pmin, U[i, j, :], gamma, idens, ixmom, iymom, iener)
+            fmax = f(pmax, U[i, j, :], gamma, idens, ixmom, iymom, iener)
 
             if fmin * fmax > 0.0:
                 pmin = pmin * 1.0e-2
-                fmin = f(pmin, U[i,j,:], gamma, idens, ixmom, iymom, iener)    
+                fmin = f(pmin, U[i, j, :], gamma, idens, ixmom, iymom, iener)    
 
             if fmin * fmax > 0.0:
                 pmax = min(pmax*1.0e2, 1.0)
-            
+
             if fmin * fmax > 0.0:
                 q[i, j, ip] = max((gamma-1.0)*U[i, j, iener], smallp)
             else:
-                q[i, j, ip] = brentq(pmin, pmax, U[i,j,:], gamma, idens, ixmom, iymom, iener)
-            
+                q[i, j, ip] = brentq(pmin, pmax, U[i, j, :], gamma, idens, ixmom, iymom, iener)
+
             if (q[i, j, ip] != q[i, j, ip]) or \
                 (q[i, j, ip]-1.0 == q[i, j, ip]) or \
-                (abs(q[i, j, ip]) > 1.0e10): # nan or infty alert
+                (abs(q[i, j, ip]) > 1.0e10):  # nan or infty alert
                 q[i, j, ip] = max((gamma-1.0)*U[i, j, iener], smallp)
-            
+
             q[i, j, ip] = max(q[i, j, ip], smallp)
             if abs(U[i, j, iener] + U[i, j, idens] + q[i, j, ip]) < 1.0e-5:
                 q[i, j, iu] = U[i, j, ixmom]
@@ -160,19 +163,17 @@ def cons_to_prim(U,
             else:
                 q[i, j, iu] = U[i, j, ixmom]/(U[i, j, iener] + U[i, j, idens] + q[i, j, ip])
                 q[i, j, iv] = U[i, j, iymom]/(U[i, j, iener] + U[i, j, idens] + q[i, j, ip])
-            
+
             # nan check
             if (q[i, j, iu] != q[i, j, iu]):
                 q[i, j, iu] = 0.0
-            
+
             if (q[i, j, iv] != q[i, j, iv]):
                 q[i, j, iv] = 0.0
-            
+
     W = 1.0/np.sqrt(1.0 - q[:, :, iu]**2 - q[:, :, iv]**2)
 
     q[:, :, irho] = U[:, :, idens] / W
     if naux > 0:
         for i in range(naux):
             q[:, :, ix+i] = U[:, :, irhox+i]/(q[:, :, irho] * W)
-        
-    
