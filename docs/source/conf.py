@@ -58,7 +58,7 @@ source_suffix = '.rst'
 numpydoc_show_class_members = False
 
 # The main toctree document.
-main_doc = 'index'
+master_doc = 'index'
 
 # General information about the project.
 project = 'pyro'
@@ -161,7 +161,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (main_doc, 'pyro.tex', 'pyro Documentation',
+    (master_doc, 'pyro.tex', 'pyro Documentation',
      'pyro development team', 'manual'),
 ]
 
@@ -171,7 +171,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (main_doc, 'pyro', 'pyro Documentation',
+    (master_doc, 'pyro', 'pyro Documentation',
      [author], 1)
 ]
 
@@ -182,7 +182,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (main_doc, 'pyro', 'pyro Documentation',
+    (master_doc, 'pyro', 'pyro Documentation',
      author, 'pyro', 'One line description of project.',
      'Miscellaneous'),
 ]
