@@ -58,7 +58,7 @@ source_suffix = '.rst'
 numpydoc_show_class_members = False
 
 # The main toctree document.
-main_doc = 'index'
+master_doc = 'index'
 
 # General information about the project.
 project = 'pyro'
