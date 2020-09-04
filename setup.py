@@ -6,4 +6,9 @@
 
 from setuptools import setup
 
-setup(name='pyro')
+setup(name='pyro',
+      version='2.2.0',
+      url='https://github.com/python-hydro/pyro2',
+      license='BSD',
+      install_requires=['numpy', 'numba', 'matplotlib', 'h5py'])
+
