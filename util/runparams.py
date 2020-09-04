@@ -52,6 +52,8 @@ import textwrap
 
 # some utility functions to automagically determine what the data
 # types are
+
+
 def is_int(string):
     """ is the given string an interger? """
     try:

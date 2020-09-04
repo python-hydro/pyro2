@@ -11,4 +11,3 @@ setup(name='pyro',
       url='https://github.com/python-hydro/pyro2',
       license='BSD',
       install_requires=['numpy', 'numba', 'matplotlib', 'h5py'])
-

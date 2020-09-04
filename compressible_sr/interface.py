@@ -499,7 +499,8 @@ def riemann_cgf(idir, ng,
 
                 v2 = ustar**2 + ut_r**2
                 lambdastar_r = 1.0 / (1.0 - v2*cstar_r**2) * (ustar*(1.0-cstar_r**2) + cstar_r *
-                                      np.sqrt((1.0-v2) * (1.0 - v2*cstar_r**2 - ustar**2*(1.0-cstar_r**2))))
+                                      np.sqrt((1.0-v2) * 
+                                      (1.0 - v2*cstar_r**2 - ustar**2*(1.0-cstar_r**2))))
 
                 if pstar > p_r:
                     # the wave if a shock -- find the shock speed
@@ -749,11 +750,13 @@ def riemann_prim(idir, ng,
                 # define eigenvalues
                 v2 = un_l**2 + ut_l**2
                 lambda_l = 1.0 / (1.0 - v2*c_l**2) * (un_l*(1.0-c_l**2) - c_l *
-                                  np.sqrt((1.0-v2) * (1.0-v2*c_l**2 - un_l**2*(1.0-c_l**2))))
+                                  np.sqrt((1.0-v2) * 
+                                  (1.0-v2*c_l**2 - un_l**2*(1.0-c_l**2))))
 
                 v2 = ustar**2 + ut_l**2
                 lambdastar_l = 1.0 / (1.0 - v2*cstar_l**2) * \
-                    (ustar*(1.0-cstar_l**2) - cstar_l * np.sqrt((1.0-v2) * (1.0-v2*cstar_l**2 - ustar**2*(1.0-cstar_l**2))))
+                    (ustar*(1.0-cstar_l**2) - cstar_l * np.sqrt((1.0-v2) * 
+                    (1.0-v2*cstar_l**2 - ustar**2*(1.0-cstar_l**2))))
 
                 if pstar > p_l:
                     # the wave is a shock -- find the shock speed
