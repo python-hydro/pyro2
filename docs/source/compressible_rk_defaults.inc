@@ -21,7 +21,8 @@
   +----------------------------------+----------------+----------------------------------------------------+
   | riemann                          | ``HLLC``       | HLLC or CGF                                        |
   +----------------------------------+----------------+----------------------------------------------------+
-  | well_balanced                    | ``0``          | use a well-balanced scheme to keep the model in hydrostatic equilibrium |
+  | well_balanced                    | ``0``          | use a well-balanced scheme to keep the model in    |
+  |                                  |                | hydrostatic equilibrium                            |
   +----------------------------------+----------------+----------------------------------------------------+
 
 * section: [driver]
