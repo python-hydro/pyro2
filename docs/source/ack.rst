@@ -17,22 +17,18 @@ effort).*
 If you use pyro in a publication, please cite it using this bibtex
 citation::
 
-  @ARTICLE{pyro:2014,
-     author = {{Zingale}, M.},
-      title = "{pyro: A teaching code for computational astrophysical hydrodynamics}",
-    journal = {Astronomy and Computing},
-  archivePrefix = "arXiv",
-     eprint = {1306.6883},
-   primaryClass = "astro-ph.IM",
-   keywords = {Hydrodynamics, Methods: numerical},
-       year = 2014,
-      month = oct,
-     volume = 6,
-      pages = {52--62},
-        doi = {10.1016/j.ascom.2014.07.003},
-     adsurl = {http://adsabs.harvard.edu/abs/2014A%26C.....6...52Z},
-    adsnote = {Provided by the SAO/NASA Astrophysics Data System}
-  }
+    @article{pyro,
+      doi = {10.21105/joss.01265},
+      url = {https://doi.org/10.21105/joss.01265},
+      year = {2019},
+      publisher = {The Open Journal},
+      volume = {4},
+      number = {34},
+      pages = {1265},
+      author = {Alice Harpole and Michael Zingale and Ian Hawke and Taher Chegini},
+      title = {pyro: a framework for hydrodynamics explorations and prototyping},
+      journal = {Journal of Open Source Software}
+    }
 
 pyro benefited from numerous useful discussions with Ann Almgren, John
 Bell, and Andy Nonaka.
