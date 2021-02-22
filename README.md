@@ -279,6 +279,6 @@ with their data.
 
 ## Getting help
 
-  Join the mailing list to stay up-to-date:
+  We use github discussions as a way to ask about the code:
 
-  https://groups.google.com/forum/#!forum/pyro-code
+  https://github.com/python-hydro/pyro2/discussions
