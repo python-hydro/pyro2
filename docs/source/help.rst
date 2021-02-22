@@ -40,10 +40,11 @@ to squash commits upon merge to have a clean history.  *Please ensure
 that your PR title and first post are descriptive, since these will be
 used for a squashed commit message.*
 
-Mailing list
-------------
+Discussions
+-----------
 
-There is a public mailing list for discussing pyro. Visit the
-`pyro-code@googlegroups.com
-<https://groups.google.com/forum/#!forum/pyro-code>`_ and
-subscribe. You can then send questions to that list.
+We us github discussions:
+https://github.com/python-hydro/pyro2/discussions
+for support.  You are encouraged to post in the discussions
+to ask questions.
+
