@@ -45,9 +45,6 @@ jobs:
   pytest:
     runs-on: ubuntu-latest
 
-    env:
-       PYTHONPATH: $GITHUB_WORKSPACE
-
     strategy:
       matrix:
         python-version: [3.7, 3.8, 3.9]
@@ -78,4 +75,4 @@ jobs:
         run: python setup.py install --user
 
       - name: Run tests with pytest
-        run: pytest -v --cov=. --cov-config .coveragerc --nbval --ignore=docs --ignore=./multigrid/variable_coeff_elliptic.ipynb --ignore=examples/mesh --ignore=examples/multigrid --ignore=presentations
+        run: PYTHONPATH=$GITHUB_WORKSPACE pytest -v --cov=. --cov-config .coveragerc --nbval --ignore=docs --ignore=./multigrid/variable_coeff_elliptic.ipynb --ignore=examples/mesh --ignore=examples/multigrid --ignore=presentations
