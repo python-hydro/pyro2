@@ -15,18 +15,18 @@ import compressible.eos as eos
 import compressible.derives as derives
 import compressible.unsplit_fluxes as flx
 import mesh.boundary as bnd
-from simulation_null import NullSimulation, grid_setup, bc_setup
+from simulation_null import NullSimulation, NullVariables, grid_setup, bc_setup
 import util.plot_tools as plot_tools
 import particles.particles as particles
 
 
-class Variables(object):
+class Variables(NullVariables):
     """
     a container class for easy access to the different compressible
     variable by an integer key
     """
-    def __init__(self, myd):
-        self.nvar = len(myd.names)
+
+    def initialize(self, myd):
 
         # conserved variables -- we set these when we initialize for
         # they match the CellCenterData2d object
@@ -63,19 +63,19 @@ def cons_to_prim(U, gamma, ivars, myg):
     q = myg.scratch_array(nvar=ivars.nq)
 
     q[:, :, ivars.irho] = U[:, :, ivars.idens]
-    q[:, :, ivars.iu] = U[:, :, ivars.ixmom]/U[:, :, ivars.idens]
-    q[:, :, ivars.iv] = U[:, :, ivars.iymom]/U[:, :, ivars.idens]
+    q[:, :, ivars.iu] = U[:, :, ivars.ixmom] / U[:, :, ivars.idens]
+    q[:, :, ivars.iv] = U[:, :, ivars.iymom] / U[:, :, ivars.idens]
 
     e = (U[:, :, ivars.iener] -
-         0.5*q[:, :, ivars.irho]*(q[:, :, ivars.iu]**2 +
-                                  q[:, :, ivars.iv]**2))/q[:, :, ivars.irho]
+         0.5 * q[:, :, ivars.irho] * (q[:, :, ivars.iu]**2 +
+                                      q[:, :, ivars.iv]**2)) / q[:, :, ivars.irho]
 
     q[:, :, ivars.ip] = eos.pres(gamma, q[:, :, ivars.irho], e)
 
     if ivars.naux > 0:
-        for nq, nu in zip(range(ivars.ix, ivars.ix+ivars.naux),
-                          range(ivars.irhox, ivars.irhox+ivars.naux)):
-            q[:, :, nq] = U[:, :, nu]/q[:, :, ivars.irho]
+        for nq, nu in zip(range(ivars.ix, ivars.ix + ivars.naux),
+                          range(ivars.irhox, ivars.irhox + ivars.naux)):
+            q[:, :, nq] = U[:, :, nu] / q[:, :, ivars.irho]
 
     return q
 
@@ -86,18 +86,18 @@ def prim_to_cons(q, gamma, ivars, myg):
     U = myg.scratch_array(nvar=ivars.nvar)
 
     U[:, :, ivars.idens] = q[:, :, ivars.irho]
-    U[:, :, ivars.ixmom] = q[:, :, ivars.iu]*U[:, :, ivars.idens]
-    U[:, :, ivars.iymom] = q[:, :, ivars.iv]*U[:, :, ivars.idens]
+    U[:, :, ivars.ixmom] = q[:, :, ivars.iu] * U[:, :, ivars.idens]
+    U[:, :, ivars.iymom] = q[:, :, ivars.iv] * U[:, :, ivars.idens]
 
     rhoe = eos.rhoe(gamma, q[:, :, ivars.ip])
 
-    U[:, :, ivars.iener] = rhoe + 0.5*q[:, :, ivars.irho]*(q[:, :, ivars.iu]**2 +
-                                                           q[:, :, ivars.iv]**2)
+    U[:, :, ivars.iener] = rhoe + 0.5 * q[:, :, ivars.irho] * (q[:, :, ivars.iu]**2 +
+                                                               q[:, :, ivars.iv]**2)
 
     if ivars.naux > 0:
-        for nq, nu in zip(range(ivars.ix, ivars.ix+ivars.naux),
-                          range(ivars.irhox, ivars.irhox+ivars.naux)):
-            U[:, :, nu] = q[:, :, nq]*q[:, :, ivars.irho]
+        for nq, nu in zip(range(ivars.ix, ivars.ix + ivars.naux),
+                          range(ivars.irhox, ivars.irhox + ivars.naux)):
+            U[:, :, nu] = q[:, :, nq] * q[:, :, ivars.irho]
 
     return U
 
@@ -118,7 +118,8 @@ class Simulation(NullSimulation):
 
         # define solver specific boundary condition routines
         bnd.define_bc("hse", BC.user, is_solid=False)
-        bnd.define_bc("ramp", BC.user, is_solid=False)  # for double mach reflection problem
+        # for double mach reflection problem
+        bnd.define_bc("ramp", BC.user, is_solid=False)
 
         bc, bc_xodd, bc_yodd = bc_setup(self.rp)
 
@@ -187,10 +188,10 @@ class Simulation(NullSimulation):
         u, v, cs = self.cc_data.get_var(["velocity", "soundspeed"])
 
         # the timestep is min(dx/(|u| + cs), dy/(|v| + cs))
-        xtmp = self.cc_data.grid.dx/(abs(u) + cs)
-        ytmp = self.cc_data.grid.dy/(abs(v) + cs)
+        xtmp = self.cc_data.grid.dx / (abs(u) + cs)
+        ytmp = self.cc_data.grid.dy / (abs(v) + cs)
 
-        self.dt = cfl*float(min(xtmp.min(), ytmp.min()))
+        self.dt = cfl * float(min(xtmp.min(), ytmp.min()))
 
     def evolve(self):
         """
@@ -216,19 +217,19 @@ class Simulation(NullSimulation):
         old_ymom = ymom.copy()
 
         # conservative update
-        dtdx = self.dt/myg.dx
-        dtdy = self.dt/myg.dy
+        dtdx = self.dt / myg.dx
+        dtdy = self.dt / myg.dy
 
         for n in range(self.ivars.nvar):
             var = self.cc_data.get_var_by_index(n)
 
             var.v()[:, :] += \
-                dtdx*(Flux_x.v(n=n) - Flux_x.ip(1, n=n)) + \
-                dtdy*(Flux_y.v(n=n) - Flux_y.jp(1, n=n))
+                dtdx * (Flux_x.v(n=n) - Flux_x.ip(1, n=n)) + \
+                dtdy * (Flux_y.v(n=n) - Flux_y.jp(1, n=n))
 
         # gravitational source terms
-        ymom[:, :] += 0.5*self.dt*(dens[:, :] + old_dens[:, :])*grav
-        ener[:, :] += 0.5*self.dt*(ymom[:, :] + old_ymom[:, :])*grav
+        ymom[:, :] += 0.5 * self.dt * (dens[:, :] + old_dens[:, :]) * grav
+        ener[:, :] += 0.5 * self.dt * (ymom[:, :] + old_ymom[:, :]) * grav
 
         if self.particles is not None:
             self.particles.update_particles(self.dt)
@@ -262,7 +263,7 @@ class Simulation(NullSimulation):
         u = q[:, :, ivars.iu]
         v = q[:, :, ivars.iv]
         p = q[:, :, ivars.ip]
-        e = eos.rhoe(gamma, p)/rho
+        e = eos.rhoe(gamma, p) / rho
 
         magvel = np.sqrt(u**2 + v**2)
 
@@ -303,7 +304,7 @@ class Simulation(NullSimulation):
 
             # plot particles
             ax.scatter(particle_positions[:, 0],
-                particle_positions[:, 1], s=5, c=colors, alpha=0.8, cmap="Greys")
+                       particle_positions[:, 1], s=5, c=colors, alpha=0.8, cmap="Greys")
             ax.set_xlim([myg.xmin, myg.xmax])
             ax.set_ylim([myg.ymin, myg.ymax])
 

@@ -419,7 +419,7 @@ def riemann_cgf(idir, ng,
                 lambdastar_r = ustar + cstar_r
 
                 if (pstar > p_r):
-                    # the wave if a shock -- find the shock speed
+                    # the wave is a shock -- find the shock speed
                     sigma = (lambda_r + lambdastar_r) / 2.0
 
                     if (sigma > 0.0):
@@ -713,7 +713,7 @@ def riemann_prim(idir, ng,
                 lambdastar_r = ustar + cstar_r
 
                 if (pstar > p_r):
-                    # the wave if a shock -- find the shock speed
+                    # the wave is a shock -- find the shock speed
                     sigma = (lambda_r + lambdastar_r) / 2.0
 
                     if (sigma > 0.0):
@@ -801,7 +801,7 @@ def riemann_prim(idir, ng,
     return q_int
 
 
-@njit(cache=True)
+# @njit(cache=True)
 def riemann_hllc(idir, ng,
                  idens, ixmom, iymom, iener, irhoX, nspec,
                  lower_solid, upper_solid,
@@ -856,6 +856,9 @@ def riemann_hllc(idir, ng,
 
             # primitive variable states
             rho_l = U_l[i, j, idens]
+
+            if (rho_l <= 0):
+                print(f"-ve density {rho_l} at i,j = ({i},{j})")
 
             # un = normal velocity; ut = transverse velocity
             if (idir == 1):

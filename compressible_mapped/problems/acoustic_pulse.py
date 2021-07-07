@@ -1,9 +1,12 @@
 from __future__ import print_function
 
 import sys
-import mesh.fv as fv
 import numpy as np
+import sympy
+from sympy.abc import x, y
+
 from util import msg
+import mesh.mapped as mapped
 
 
 def init_data(myd, rp):
@@ -13,7 +16,7 @@ def init_data(myd, rp):
     msg.bold("initializing the acoustic pulse problem...")
 
     # make sure that we are passed a valid patch object
-    if not isinstance(myd, fv.FV2d):
+    if not isinstance(myd, mapped.MappedCellCenterData2d):
         print("ERROR: patch invalid in acoustic_pulse.py")
         print(myd.__class__)
         sys.exit()
@@ -41,11 +44,16 @@ def init_data(myd, rp):
     ymin = rp.get_param("mesh.ymin")
     ymax = rp.get_param("mesh.ymax")
 
-    xctr = 0.5 * (xmin + xmax)
-    yctr = 0.5 * (ymin + ymax)
+    myg = myd.grid
 
-    dist = np.sqrt((myd.grid.x2d - xctr)**2 +
-                   (myd.grid.y2d - yctr)**2)
+    X, Y = myg.physical_coords()
+
+    # rather than map the center of the coordinate grid, find the center by
+    # locating the center of a diagonal across the physical domain
+    xctr_t, yctr_t = 0.5 * \
+        (myg.physical_coords(xmin, ymin) + myg.physical_coords(xmax, ymax))
+
+    dist = np.sqrt((X - xctr_t)**2 + (Y - yctr_t)**2)
 
     dens[:, :] = rho0
     idx = dist <= 0.5
@@ -54,6 +62,13 @@ def init_data(myd, rp):
 
     p = (dens / rho0)**gamma
     ener[:, :] = p / (gamma - 1)
+
+
+def sym_map(myg):
+
+    return sympy.Matrix([y**2, -2 * x**2 - y])
+
+    # return sympy.Matrix([x * sympy.cos(y), x * sympy.sin(y)])
 
 
 def finalize():

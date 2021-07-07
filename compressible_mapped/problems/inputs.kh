@@ -1,0 +1,43 @@
+[driver]
+max_steps = 5000
+tmax = 2.0
+splitting = unsplit
+
+
+[compressible]
+limiter = 2
+cvisc = 0.1
+
+
+[io]
+basename = kh_
+tplot = 0.01
+
+
+[eos]
+gamma = 1.4
+
+
+[mesh]
+nx = 64
+ny = 64
+xmax = 1.0
+ymax = 1.0
+
+xlboundary = periodic
+xrboundary = periodic
+
+ylboundary = periodic
+yrboundary = periodic
+
+
+[kh]
+rho_1 = 1
+v_1 = -0.5
+
+rho_2 = 2
+v_2 = 0.5
+
+
+[vis]
+dovis = 1

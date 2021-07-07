@@ -41,6 +41,14 @@ mesh\.integration module
     :undoc-members:
     :show-inheritance:
 
+mesh\.mapped module
+------------------------
+
+.. automodule:: mesh.mapped
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 mesh\.patch module
 ------------------
 

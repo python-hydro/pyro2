@@ -46,14 +46,14 @@ class ArrayIndexer(np.ndarray):
     def __array_wrap__(self, out_arr, context=None):
         return np.ndarray.__array_wrap__(self, out_arr, context)
 
-    def v(self, buf=0, n=0, s=1):
+    def v(self, buf=0, n=None, s=1):
         """return a view of the valid data region for component n, with stride
         s, and a buffer of ghost cells given by buf
 
         """
         return self.ip_jp(0, 0, buf=buf, n=n, s=s)
 
-    def ip(self, shift, buf=0, n=0, s=1):
+    def ip(self, shift, buf=0, n=None, s=1):
         """return a view of the data shifted by shift in the x direction.  By
         default the view is the same size as the valid region, but the
         buf can specify how many ghost cells on each side to include.
@@ -62,7 +62,7 @@ class ArrayIndexer(np.ndarray):
         """
         return self.ip_jp(shift, 0, buf=buf, n=n, s=s)
 
-    def jp(self, shift, buf=0, n=0, s=1):
+    def jp(self, shift, buf=0, n=None, s=1):
         """return a view of the data shifted by shift in the y direction.  By
         default the view is the same size as the valid region, but the
         buf can specify how many ghost cells on each side to include.
@@ -71,7 +71,7 @@ class ArrayIndexer(np.ndarray):
         """
         return self.ip_jp(0, shift, buf=buf, n=n, s=s)
 
-    def ip_jp(self, ishift, jshift, buf=0, n=0, s=1):
+    def ip_jp(self, ishift, jshift, buf=0, n=None, s=1):
         """return a view of the data shifted by ishift in the x direction and
         jshift in the y direction.  By default the view is the same
         size as the valid region, but the buf can specify how many
@@ -86,8 +86,12 @@ class ArrayIndexer(np.ndarray):
             return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
                                    self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s])
         else:
-            return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
-                                   self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s, n])
+            if n is not None:
+                return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
+                                       self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s, n])
+            else:
+                return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
+                                       self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s])
 
     def lap(self, n=0, buf=0):
         """return the 5-point Laplacian"""
