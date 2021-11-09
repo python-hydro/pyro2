@@ -20,7 +20,7 @@ jobs:
       - name: Install Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.x'
+          python-version: '3.9'
 
       - name: Cache pip
         uses: actions/cache@v2
@@ -75,4 +75,4 @@ jobs:
         run: python setup.py install --user
 
       - name: Run tests with pytest
-        run: PYTHONPATH=$GITHUB_WORKSPACE pytest -v --cov=. --cov-config .coveragerc --nbval --ignore=docs --ignore=./multigrid/variable_coeff_elliptic.ipynb --ignore=examples/mesh --ignore=examples/multigrid --ignore=presentations
+        run: PYTHONPATH=$GITHUB_WORKSPACE/pyro2 pytest -v --cov=. --cov-config .coveragerc --nbval --ignore=docs --ignore=./multigrid/variable_coeff_elliptic.ipynb --ignore=examples/mesh --ignore=examples/multigrid --ignore=presentations
