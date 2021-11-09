@@ -13,7 +13,7 @@ inputs.auto
 *.pdf
 
 *.h5
-!/*/tests/*.h5
+!pyro2/*/tests/*.h5
 
 .cache
 
