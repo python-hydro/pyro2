@@ -8,7 +8,7 @@ import os
 
 import matplotlib.pyplot as plt
 
-import compare
+import analysis.compare as compare
 from util import msg, profile, runparams, io
 
 valid_solvers = ["advection",
