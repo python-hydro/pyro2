@@ -90,8 +90,8 @@ def fluxes(my_data, rp, dt):
     # --------------------------------------------------------------------------
 
     weno_order = rp.get_param("advection.weno_order")
-    assert(weno_order in (2, 3)), "Currently only implemented weno_order=2, 3"
-    assert(myg.ng > weno_order), "Need more ghosts than the weno_order"
+    assert weno_order in (2, 3), "Currently only implemented weno_order=2, 3"
+    assert myg.ng > weno_order, "Need more ghosts than the weno_order"
 
     q = a.v(buf=myg.ng)[:, :]
     F_x = myg.scratch_array()
