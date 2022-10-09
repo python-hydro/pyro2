@@ -2,7 +2,7 @@
 runtime visualization"""
 
 import matplotlib.pyplot as plt
-from mpl_toolkits.axes_grid1 import AxesGrid
+from mpl_toolkits.axes_grid1 import ImageGrid
 import math
 
 
@@ -19,7 +19,7 @@ def setup_axes(myg, num):
 
     if L_x > 2*L_y:
         # we want num rows:
-        axes = AxesGrid(f, 111,
+        axes = ImageGrid(f, 111,
                         nrows_ncols=(num, 1),
                         share_all=True,
                         cbar_mode="each",
@@ -27,12 +27,12 @@ def setup_axes(myg, num):
                         cbar_pad="10%",
                         cbar_size="25%",
                         axes_pad=(0.25, 0.65),
-                        add_all=True, label_mode="L")
+                        label_mode="L")
         cbar_title = True
 
     elif L_y > 2*L_x:
         # we want num columns:  rho  |U|  p  e
-        axes = AxesGrid(f, 111,
+        axes = ImageGrid(f, 111,
                         nrows_ncols=(1, num),
                         share_all=True,
                         cbar_mode="each",
@@ -40,20 +40,20 @@ def setup_axes(myg, num):
                         cbar_pad="10%",
                         cbar_size="25%",
                         axes_pad=(0.65, 0.25),
-                        add_all=True, label_mode="L")
+                        label_mode="L")
 
     else:
         # 2-d grid of plots
         ny = int(math.sqrt(num))
         nx = num//ny
 
-        axes = AxesGrid(f, 111,
+        axes = ImageGrid(f, 111,
                         nrows_ncols=(nx, ny),
                         share_all=True,
                         cbar_mode="each",
                         cbar_location="right",
                         cbar_pad="2%",
                         axes_pad=(0.65, 0.25),
-                        add_all=True, label_mode="L")
+                        label_mode="L")
 
     return f, axes, cbar_title
