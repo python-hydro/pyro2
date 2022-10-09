@@ -41,4 +41,12 @@ jobs:
         run: python setup.py install --user
 
       - name: Validate
-        run: pylint --errors-only .
+        run: pylint --errors-only pyro.py ./advection ./advection_fv4 ./advection_nonuniform ./advection_rk ./advection_weno ./analysis \
+                                          ./compressible ./compressible_fv4 ./compressible_react ./compressible_rk ./compressible_sdc ./compressible_sr \
+                                          ./diffusion \
+                                          ./incompressible \
+                                          ./lm_atm \
+                                          ./mesh ./multigrid ./particles \
+                                          ./swe \
+                                          ./util
+

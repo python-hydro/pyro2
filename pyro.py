@@ -268,7 +268,7 @@ class PyroBenchmark(Pyro):
         self.reset_bench_on_fail = reset_bench_on_fail
         self.make_bench = make_bench
 
-    def run_sim(self, rtol):
+    def run_sim(self, rtol=1.e-12):
         """
         Evolve entire simulation and compare to benchmark at the end.
         """
