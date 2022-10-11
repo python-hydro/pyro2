@@ -43,4 +43,4 @@ jobs:
       - name: Build docs
         run: |
           cd docs/
-          make SPHINXOPTS=-v html
+          PYTHONPATH=$GITHUB_WORKSPACE make SPHINXOPTS=-v html
