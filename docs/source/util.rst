@@ -9,10 +9,10 @@ util package
 Submodules
 ----------
 
-util\.io module
----------------
+util\.io_pyro module
+--------------------
 
-.. automodule:: util.io
+.. automodule:: util.io_pyro
     :members:
     :undoc-members:
     :show-inheritance:
@@ -33,10 +33,10 @@ util\.plot\_tools module
     :undoc-members:
     :show-inheritance:
 
-util\.profile module
---------------------
+util\.profile_pyro module
+-------------------------
 
-.. automodule:: util.profile
+.. automodule:: util.profile_pyro
     :members:
     :undoc-members:
     :show-inheritance:

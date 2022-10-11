@@ -867,7 +867,7 @@ def cell_center_data_clone(old):
 def do_demo():
     """ show examples of the patch methods / classes """
 
-    import util.io as io
+    import util.io_pyro as io
 
     # illustrate basic mesh operations
 

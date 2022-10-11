@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
-import util.io as io
+import util.io_pyro as io
 import numpy as np
 
 # read in two files -- one twice the resolution of the other, and
