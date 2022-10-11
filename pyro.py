@@ -8,7 +8,8 @@ import os
 import matplotlib.pyplot as plt
 
 import compare
-from util import msg, runparams, io_pyro
+from util import msg, runparams
+import util.io_pyro as io
 import util.profile_pyro as profile
 
 valid_solvers = ["advection",
