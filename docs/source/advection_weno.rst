@@ -6,14 +6,6 @@ advection\_weno package
    :undoc-members:
    :show-inheritance:
 
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 4
-
-   advection_weno.problems
-
 Submodules
 ----------
 

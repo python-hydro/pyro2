@@ -171,7 +171,7 @@ class RuntimeParameters:
         already exist.
 
         we expect things in the string in the form:
-         ["sec.opt=value",  "sec.opt=value"]
+        ["sec.opt=value",  "sec.opt=value"]
         with each opt an element in the list
 
         Parameters

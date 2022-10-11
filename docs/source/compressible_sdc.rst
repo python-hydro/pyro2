@@ -6,14 +6,6 @@ compressible\_sdc package
    :undoc-members:
    :show-inheritance:
 
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 4
-
-   compressible_sdc.problems
-
 Submodules
 ----------
 

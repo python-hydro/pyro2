@@ -6,14 +6,6 @@ advection\_rk package
    :undoc-members:
    :show-inheritance:
 
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 4
-
-   advection_rk.problems
-
 Submodules
 ----------
 
