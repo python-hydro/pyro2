@@ -16,7 +16,6 @@
 # to ensure that it is just a view and no copy is done.  Some experiment
 # on this is in mesh-exmaples.ipynb
 
-from __future__ import print_function
 
 import mesh.patch as patch
 import numpy as np

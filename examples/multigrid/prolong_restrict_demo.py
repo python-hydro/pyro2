@@ -1,6 +1,5 @@
 # test the prolongation and restriction operations from the patch stuff
 
-from __future__ import print_function
 
 import mesh.boundary as bnd
 import mesh.patch as patch

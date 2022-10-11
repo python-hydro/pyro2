@@ -26,7 +26,6 @@ force it to 0 on the boundary, which is not correct here)
 
 """
 
-from __future__ import print_function
 
 import os
 
@@ -82,7 +81,7 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
 
     # check whether the RHS sums to zero (necessary for periodic data)
     rhs = f(g.x2d, g.y2d)
-    print("rhs sum: {}".format(np.sum(rhs[g.ilo:g.ihi+1, g.jlo:g.jhi+1])))
+    print(f"rhs sum: {np.sum(rhs[g.ilo:g.ihi+1, g.jlo:g.jhi+1])}")
 
     # create the multigrid object
     a = MG.VarCoeffCCMG2d(nx, ny,
@@ -135,7 +134,7 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
 
         plt.xlabel("x")
         plt.ylabel("y")
-        plt.title("nx = {}".format(nx))
+        plt.title(f"nx = {nx}")
 
         plt.colorbar(img1)
 
@@ -162,20 +161,20 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
     my_data = a.get_solution_object()
 
     if store_bench:
-        my_data.write("{}/{}".format(bench_dir, bench))
+        my_data.write(f"{bench_dir}/{bench}")
 
     # do we do a comparison?
     if comp_bench:
-        compare_file = "{}/{}".format(bench_dir, bench)
-        msg.warning("comparing to {}".format(compare_file))
+        compare_file = f"{bench_dir}/{bench}"
+        msg.warning(f"comparing to {compare_file}")
         bench = io.read(compare_file)
 
         result = compare.compare(my_data, bench, rtol)
 
         if result == 0:
-            msg.success("results match benchmark to within relative tolerance of {}\n".format(rtol))
+            msg.success(f"results match benchmark to within relative tolerance of {rtol}\n")
         else:
-            msg.warning("ERROR: {}\n".format(compare.errors[result]))
+            msg.warning(f"ERROR: {compare.errors[result]}\n")
 
         return result
 

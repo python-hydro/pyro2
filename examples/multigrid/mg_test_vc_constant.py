@@ -17,7 +17,6 @@ The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)
 
 """
 
-from __future__ import print_function
 
 import numpy as np
 import mesh.boundary as bnd
@@ -70,7 +69,7 @@ def test_vc_constant(N):
 
     plt.xlabel("x")
     plt.ylabel("y")
-    plt.title("nx = {}".format(nx))
+    plt.title(f"nx = {nx}")
 
     plt.colorbar(img1)
 
@@ -78,7 +77,7 @@ def test_vc_constant(N):
 
     # check whether the RHS sums to zero (necessary for periodic data)
     rhs = f(g.x2d, g.y2d)
-    print("rhs sum: {}".format(np.sum(rhs[g.ilo:g.ihi+1, g.jlo:g.jhi+1])))
+    print(f"rhs sum: {np.sum(rhs[g.ilo:g.ihi+1, g.jlo:g.jhi+1])}")
 
     # create the multigrid object
     a = MG.VarCoeffCCMG2d(nx, ny,
@@ -123,7 +122,7 @@ def test_vc_constant(N):
 
     plt.xlabel("x")
     plt.ylabel("y")
-    plt.title("nx = {}".format(nx))
+    plt.title(f"nx = {nx}")
 
     plt.colorbar(img2)
 

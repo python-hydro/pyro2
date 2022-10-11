@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from __future__ import print_function
 
 import numpy as np
 import sys
@@ -55,9 +54,9 @@ def compare(data1, data2, rtol=1.e-12):
 
         if not np.any(d2.v() == 0):
             rel_err = np.max(np.abs(d1.v() - d2.v()) / np.abs(d2.v()))
-            print("{:20s} absolute error = {:10.10g}, relative error = {:10.10g}".format(name, abs_err, rel_err))
+            print(f"{name:20s} absolute error = {abs_err:10.10g}, relative error = {rel_err:10.10g}")
         else:
-            print("{:20s} absolute error = {:10.10g}".format(name, abs_err))
+            print(f"{name:20s} absolute error = {abs_err:10.10g}")
 
         if not np.allclose(d1.v(), d2.v(), rtol=rtol):
             result = "varerr"
