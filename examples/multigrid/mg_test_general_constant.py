@@ -15,7 +15,6 @@ The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)
 
 """
 
-from __future__ import print_function
 
 import os
 
@@ -137,7 +136,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
         plt.xlabel("x")
         plt.ylabel("y")
-        plt.title("nx = {}".format(nx))
+        plt.title(f"nx = {nx}")
 
         plt.colorbar(img1)
 
@@ -164,18 +163,18 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
     my_data = a.get_solution_object()
 
     if store_bench:
-        my_data.write("{}/{}".format(bench_dir, bench))
+        my_data.write(f"{bench_dir}/{bench}")
 
     # do we do a comparison?
     if comp_bench:
-        compare_file = "{}/{}".format(bench_dir, bench)
+        compare_file = f"{bench_dir}/{bench}"
         msg.warning("comparing to: %s " % (compare_file))
         bench = io.read(compare_file)
 
         result = compare.compare(my_data, bench)
 
         if result == 0:
-            msg.success("results match benchmark to within relative tolerance of {}\n".format(rtol))
+            msg.success(f"results match benchmark to within relative tolerance of {rtol}\n")
         else:
             msg.warning("ERROR: " + compare.errors[result] + "\n")
 

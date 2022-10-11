@@ -3,7 +3,6 @@ left and long wavelenght on the right.  This allows one to see
 how the growth rate depends on wavenumber.
 """
 
-from __future__ import print_function
 
 import numpy as np
 
