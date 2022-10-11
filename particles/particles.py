@@ -7,7 +7,7 @@ import numpy as np
 from util import msg
 
 
-class Particle(object):
+class Particle:
     """
     Class to hold properties of a single (massless) particle.
 
@@ -85,7 +85,7 @@ class Particle(object):
         return u_vel, v_vel
 
 
-class Particles(object):
+class Particles:
     """
     Class to hold multiple particles.
     """
@@ -173,7 +173,7 @@ class Particles(object):
         sq_n_particles = int(round(np.sqrt(n_particles)))
 
         if sq_n_particles**2 != n_particles:
-            msg.warning("WARNING: Changing number of particles from {} to {}".format(n_particles, sq_n_particles**2))
+            msg.warning(f"WARNING: Changing number of particles from {n_particles} to {sq_n_particles**2}")
 
         myg = self.sim_data.grid
 

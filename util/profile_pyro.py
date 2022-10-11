@@ -8,12 +8,11 @@ nesting.
 
 """
 
-from __future__ import print_function
 
 import time
 
 
-class TimerCollection(object):
+class TimerCollection:
     """A timer collection---this manages the timers and has methods to
     start and stop them.  Nesting of timers is tracked so we can
     pretty print the profiling information.
@@ -95,7 +94,7 @@ class TimerCollection(object):
             print(t.stack_count*spacing + t.name + ': ', t.elapsed_time)
 
 
-class Timer(object):
+class Timer:
     """A single timer -- this simply stores the accumulated time for
     a single named region"""
 

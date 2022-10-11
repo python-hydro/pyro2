@@ -2,14 +2,13 @@
 support output in highlighted colors
 """
 
-from __future__ import print_function
 import sys
 
 
 # inspiration from
 # http://stackoverflow.com/questions/287871/print-in-terminal-with-colors-using-python
 # which in-turn cites the blender build scripts
-class _TermColors(object):
+class _TermColors:
     WARNING = '\033[33m'
     SUCCESS = '\033[32m'
     FAIL = '\033[31m'

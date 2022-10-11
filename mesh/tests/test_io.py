@@ -1,7 +1,7 @@
 import mesh.boundary as bnd
 import mesh.patch as patch
 import numpy as np
-import util.io as io
+import util.io_pyro as io
 
 from numpy.testing import assert_array_equal
 

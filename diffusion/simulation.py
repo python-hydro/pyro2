@@ -54,7 +54,7 @@ class Simulation(NullSimulation):
         self.cc_data = my_data
 
         # now set the initial conditions for the problem
-        problem = importlib.import_module("diffusion.problems.{}".format(self.problem_name))
+        problem = importlib.import_module(f"diffusion.problems.{self.problem_name}")
         problem.init_data(self.cc_data, self.rp)
 
     def method_compute_timestep(self):
@@ -152,7 +152,7 @@ class Simulation(NullSimulation):
         cb = plt.colorbar(img)
         cb.formatter = matplotlib.ticker.FormatStrFormatter("")
 
-        plt.figtext(0.05, 0.0125, "t = {:10.5f}".format(self.cc_data.t))
+        plt.figtext(0.05, 0.0125, f"t = {self.cc_data.t:10.5f}")
 
         plt.pause(0.001)
         plt.draw()

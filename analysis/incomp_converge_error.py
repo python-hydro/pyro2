@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
-from __future__ import print_function
 
 import numpy as np
 import sys
 import math
-from util import io
+import util.io_pyro as io
 
 usage = """
       compare the output in file from the incompressible converge problem to

@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import importlib
 import matplotlib 
 try:
@@ -20,7 +18,7 @@ import util.plot_tools as plot_tools
 # np.seterr(all='raise')
 
 
-class Variables(object):
+class Variables:
     """
     a container class for easy access to the different compressible
     variable by an integer key
@@ -291,7 +289,7 @@ class Simulation(NullSimulation):
             else:
                 ax.set_title(field_names[n])
 
-        plt.figtext(0.05, 0.0125, "t = {:10.5g}".format(self.cc_data.t))
+        plt.figtext(0.05, 0.0125, f"t = {self.cc_data.t:10.5g}")
 
         plt.pause(0.001)
         plt.draw()

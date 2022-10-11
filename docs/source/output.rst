@@ -39,7 +39,7 @@ Several simply utilities exist to operate on output files
 Reading and plotting manually
 -----------------------------
 
-pyro output data can be read using the :func:`util.io.read <util.io.read>` method. The following
+pyro output data can be read using the :func:`util.io_pyro.read <util.io_pyro.read>` method. The following
 sequence (done in a python session) reads in stored data (from the
 compressible Sedov problem) and plots data falling on a line in the x
 direction through the y-center of the domain (note: this will include
@@ -48,7 +48,7 @@ the ghost cells).
 .. code-block:: python
 
    import matplotlib.pyplot as plt
-   import util.io as io
+   import util_pyro.io as io
    sim = io.read("sedov_unsplit_0000.h5")
    dens = sim.cc_data.get_var("density")
    plt.plot(dens.g.x, dens[:,dens.g.ny//2])

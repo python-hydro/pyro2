@@ -14,7 +14,6 @@ x- and y-components.
 A cell-centered discretization for phi is used throughout.
 """
 
-from __future__ import print_function
 
 import numpy as np
 import matplotlib.pyplot as plt

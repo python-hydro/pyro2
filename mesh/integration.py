@@ -70,7 +70,7 @@ b["RK4"] = np.array([1./6., 1./3., 1./3., 1./6.])
 c["RK4"] = np.array([0.0, 0.5, 0.5, 1.0])
 
 
-class RKIntegrator(object):
+class RKIntegrator:
     """the integration class for CellCenterData2d, supporting RK
     integration"""
 
@@ -128,4 +128,4 @@ class RKIntegrator(object):
         return ytmp
 
     def __str__(self):
-        return "integration method: {}; number of stages: {}".format(self.method, self.nstages())
+        return f"integration method: {self.method}; number of stages: {self.nstages()}"

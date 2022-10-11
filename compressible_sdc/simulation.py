@@ -3,7 +3,6 @@ using SDC time integration
 
 """
 
-from __future__ import print_function
 
 import mesh.patch as patch
 import compressible_fv4
