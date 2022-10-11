@@ -1,6 +1,7 @@
+import sys
+
 import numpy as np
 
-import sys
 import mesh.patch as patch
 from util import msg
 

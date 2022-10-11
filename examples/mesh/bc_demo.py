@@ -2,8 +2,9 @@
 
 
 import numpy as np
-import mesh.patch
+
 import mesh.boundary as bnd
+import mesh.patch
 
 
 def doit():

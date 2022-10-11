@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
-from mesh import patch
-import mesh.boundary as bnd
+import time
 
 import numpy as np
-import time
+
+import mesh.boundary as bnd
+from mesh import patch
 
 
 class Mask(object):

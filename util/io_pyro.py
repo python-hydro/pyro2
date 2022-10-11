@@ -4,8 +4,9 @@
 import importlib
 
 import h5py
-import mesh.patch as patch
+
 import mesh.boundary as bnd
+import mesh.patch as patch
 import particles.particles as particles
 
 

@@ -12,11 +12,11 @@ A cell-centered discretization is used throughout.
 """
 
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
-import multigrid.MG as MG
 import multigrid.edge_coeffs as ec
+import multigrid.MG as MG
 
 np.set_printoptions(precision=3, linewidth=128)
 

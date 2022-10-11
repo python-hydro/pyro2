@@ -25,6 +25,7 @@ measure the convergence rate of the algorithm.
 
 
 import math
+
 import numpy as np
 
 import mesh.patch as patch

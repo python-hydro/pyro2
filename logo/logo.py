@@ -1,6 +1,5 @@
-import numpy as np
 import matplotlib.pyplot as plt
-
+import numpy as np
 
 logo_text = """
  XXX  X  X X XX  XX  

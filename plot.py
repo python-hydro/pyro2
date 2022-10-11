@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
+import argparse
+
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-import argparse
+
 import util.io_pyro as io
 
 mpl.rcParams["text.usetex"] = True

@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
-import numpy as np
-import matplotlib.pyplot as plt
 import argparse
-import util.io_pyro as io
 
+import matplotlib.pyplot as plt
+import numpy as np
+
+import util.io_pyro as io
 
 # plot an output file using the solver's dovis script
 

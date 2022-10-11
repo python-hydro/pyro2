@@ -18,14 +18,14 @@ The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)
 
 import os
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 import compare
 import mesh.boundary as bnd
 import mesh.patch as patch
 import multigrid.general_MG as MG
-from util import msg, io
+from util import io, msg
 
 
 # the analytic solution

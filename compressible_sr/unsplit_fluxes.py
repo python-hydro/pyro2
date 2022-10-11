@@ -122,11 +122,10 @@ Updating U_{i,j}:
 
 """
 
-import compressible_sr.interface as ifc
 import compressible_sr.c2p as c2p
-import mesh.reconstruction as reconstruction
+import compressible_sr.interface as ifc
 import mesh.array_indexer as ai
-
+import mesh.reconstruction as reconstruction
 from util import msg
 
 

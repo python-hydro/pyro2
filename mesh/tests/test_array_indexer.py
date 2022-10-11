@@ -1,8 +1,8 @@
-import mesh.patch as patch
-import mesh.array_indexer as ai
-
 import numpy as np
 from numpy.testing import assert_array_equal
+
+import mesh.array_indexer as ai
+import mesh.patch as patch
 
 
 # utilities

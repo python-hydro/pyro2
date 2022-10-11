@@ -1,7 +1,7 @@
 import advection
 import advection_weno.fluxes as flx
-import mesh.integration as integration
 import mesh.array_indexer as ai
+import mesh.integration as integration
 
 
 class Simulation(advection.Simulation):

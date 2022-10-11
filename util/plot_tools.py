@@ -1,9 +1,10 @@
 """Some basic support routines for configuring the plots during
 runtime visualization"""
 
+import math
+
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import ImageGrid
-import math
 
 
 def setup_axes(myg, num):

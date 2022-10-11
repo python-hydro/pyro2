@@ -1,7 +1,7 @@
+import math
 import sys
 
 import numpy as np
-import math
 
 import mesh.patch as patch
 from util import msg

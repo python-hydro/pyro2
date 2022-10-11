@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
 
-import numpy as np
-import util.io_pyro as io
 import sys
+
 import matplotlib.pyplot as plt
+import numpy as np
+
+import util.io_pyro as io
 
 usage = """
       compare the output for a Sod problem with the exact solution contained

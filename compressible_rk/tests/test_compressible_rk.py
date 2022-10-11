@@ -1,5 +1,5 @@
-from util import runparams
 import compressible_rk.simulation as sn
+from util import runparams
 
 
 class TestSimulation(object):

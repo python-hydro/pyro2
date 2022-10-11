@@ -1,8 +1,9 @@
 """Support for computing limited differences needed in reconstruction
 of slopes in constructing interface states."""
 
-import numpy as np
 import sys
+
+import numpy as np
 
 
 def limit(data, myg, idir, limiter):
