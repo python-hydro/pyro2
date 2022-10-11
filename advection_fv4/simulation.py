@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import importlib
 import advection_rk
 import advection_fv4.fluxes as flx
@@ -33,7 +31,7 @@ class Simulation(advection_rk.Simulation):
             self.particles = particles.Particles(self.cc_data, bc, n_particles, particle_generator)
 
         # now set the initial conditions for the problem
-        problem = importlib.import_module("advection_fv4.problems.{}".format(self.problem_name))
+        problem = importlib.import_module(f"advection_fv4.problems.{self.problem_name}")
         problem.init_data(self.cc_data, self.rp)
 
     def substep(self, myd):

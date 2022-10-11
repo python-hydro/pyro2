@@ -43,7 +43,6 @@ read default values.
 
 """
 
-from __future__ import print_function
 
 import os
 import re
@@ -83,7 +82,7 @@ def _get_val(value):
         return value.strip()
 
 
-class RuntimeParameters(object):
+class RuntimeParameters:
 
     def __init__(self):
         """
@@ -121,9 +120,9 @@ class RuntimeParameters(object):
             pfile = "{}/{}".format(os.environ["PYRO_HOME"], pfile)
 
         try:
-            f = open(pfile, 'r')
-        except IOError:
-            msg.fail("ERROR: parameter file does not exist: {}".format(pfile))
+            f = open(pfile)
+        except OSError:
+            msg.fail(f"ERROR: parameter file does not exist: {pfile}")
 
         # we could use the ConfigParser, but we actually want to
         # have our configuration files be self-documenting, of the
@@ -212,7 +211,7 @@ class RuntimeParameters(object):
         if key in self.params.keys():
             return self.params[key]
         else:
-            raise KeyError("ERROR: runtime parameter {} not found".format(key))
+            raise KeyError(f"ERROR: runtime parameter {key} not found")
 
     def print_unused_params(self):
         """
@@ -246,7 +245,7 @@ class RuntimeParameters(object):
     def __str__(self):
         ostr = ""
         for key in sorted(self.params.keys()):
-            ostr += "{} = {}\n".format(key, self.params[key])
+            ostr += f"{key} = {self.params[key]}\n"
 
         return ostr
 
@@ -260,18 +259,18 @@ class RuntimeParameters(object):
 
         try:
             f = open('inputs.auto', 'w')
-        except IOError:
+        except OSError:
             msg.fail("ERROR: unable to open inputs.auto")
 
         f.write('# automagically generated parameter file\n')
 
         # find all the sections
-        secs = set([q for (q, _) in [k.split(".") for k in all_keys]])
+        secs = {q for (q, _) in [k.split(".") for k in all_keys]}
 
         for sec in sorted(secs):
-            keys = [q for q in all_keys if q.startswith("{}.".format(sec))]
+            keys = [q for q in all_keys if q.startswith(f"{sec}.")]
 
-            f.write("\n[{}]\n".format(sec))
+            f.write(f"\n[{sec}]\n")
 
             for key in keys:
                 _, option = key.split('.')
@@ -279,9 +278,9 @@ class RuntimeParameters(object):
                 value = self.params[key]
 
                 if self.param_comments[key] != '':
-                    f.write("{} = {}    ; {}\n".format(option, value, self.param_comments[key]))
+                    f.write(f"{option} = {value}    ; {self.param_comments[key]}\n")
                 else:
-                    f.write("{} = {}\n".format(option, value))
+                    f.write(f"{option} = {value}\n")
 
         f.close()
 
@@ -295,21 +294,21 @@ class RuntimeParameters(object):
 
         try:
             f = open(outfile, 'w')
-        except IOError:
+        except OSError:
             msg.fail("ERROR: unable to open inputs.auto")
 
         # find all the sections
-        secs = set([q for (q, _) in [k.split(".") for k in all_keys]])
+        secs = {q for (q, _) in [k.split(".") for k in all_keys]}
 
         heading = "  +=" + 32*"=" + "=+=" + 14*"=" + "=+=" + 50*"=" + "=+" + "\n"
         separator = "  +-" + 32*"-" + "-+-" + 14*"-" + "-+-" + 50*"-" + "-+" + "\n"
         entry = "  | {:32} | {:14} | {:50} |\n"
 
         for sec in sorted(secs):
-            keys = [q for q in all_keys if q.startswith("{}.".format(sec))]
+            keys = [q for q in all_keys if q.startswith(f"{sec}.")]
 
-            head = "* section: [{}]".format(sec.strip())
-            f.write("{}\n\n".format(head))
+            head = f"* section: [{sec.strip()}]"
+            f.write(f"{head}\n\n")
             #f.write(len(head)*"^"+"\n\n")
 
             f.write(separator)
@@ -322,7 +321,7 @@ class RuntimeParameters(object):
                 if len(descr) == 0:
                     descr = [" "]
 
-                f.write(entry.format(option, "``{}``".format(str(self.params[key]).strip()),
+                f.write(entry.format(option, f"``{str(self.params[key]).strip()}``",
                                      descr[0]))
                 if len(descr) > 1:
                     for line in descr[1:]:

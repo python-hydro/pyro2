@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from __future__ import print_function
 
 import argparse
 import importlib
@@ -9,7 +8,9 @@ import os
 import matplotlib.pyplot as plt
 
 import compare
-from util import msg, profile, runparams, io
+from util import msg, runparams
+import util.io_pyro as io
+import util.profile_pyro as profile
 
 valid_solvers = ["advection",
                  "advection_nonuniform",
@@ -28,7 +29,7 @@ valid_solvers = ["advection",
                  "swe"]
 
 
-class Pyro(object):
+class Pyro:
     """
     The main driver to run pyro.
     """
@@ -147,7 +148,7 @@ class Pyro(object):
 
         # output the 0th data
         basename = self.rp.get_param("io.basename")
-        self.sim.write("{}{:04d}".format(basename, self.sim.n))
+        self.sim.write(f"{basename}{self.sim.n:04d}")
 
         if self.dovis:
             plt.figure(num=1, figsize=(8, 6), dpi=100, facecolor='w')
@@ -160,7 +161,7 @@ class Pyro(object):
         if self.verbose > 0:
             msg.warning("outputting...")
         basename = self.rp.get_param("io.basename")
-        self.sim.write("{}{:04d}".format(basename, self.sim.n))
+        self.sim.write(f"{basename}{self.sim.n:04d}")
 
         tm_main.end()
         # -------------------------------------------------------------------------
@@ -200,7 +201,7 @@ class Pyro(object):
             if self.verbose > 0:
                 msg.warning("outputting...")
             basename = self.rp.get_param("io.basename")
-            self.sim.write("{}{:04d}".format(basename, self.sim.n))
+            self.sim.write(f"{basename}{self.sim.n:04d}")
 
         # visualization
         if self.dovis:
@@ -212,17 +213,17 @@ class Pyro(object):
 
             if store == 1:
                 basename = self.rp.get_param("io.basename")
-                plt.savefig("{}{:04d}.png".format(basename, self.sim.n))
+                plt.savefig(f"{basename}{self.sim.n:04d}.png")
 
             tm_vis.end()
 
     def __repr__(self):
         """ Return a representation of the Pyro object """
-        s = "Solver = {}\n".format(self.solver_name)
+        s = f"Solver = {self.solver_name}\n"
         if self.is_initialized:
-            s += "Problem = {}\n".format(self.sim.problem_name)
-            s += "Simulation time = {}\n".format(self.sim.cc_data.t)
-            s += "Simulation step number = {}\n".format(self.sim.n)
+            s += f"Problem = {self.sim.problem_name}\n"
+            s += f"Simulation time = {self.sim.cc_data.t}\n"
+            s += f"Simulation step number = {self.sim.n}\n"
         s += "\nRuntime Parameters"
         s += "\n------------------\n"
         s += str(self.rp)
@@ -294,17 +295,17 @@ class PyroBenchmark(Pyro):
         basename = self.rp.get_param("io.basename")
         compare_file = "{}/tests/{}{:04d}".format(
             self.solver_name, basename, self.sim.n)
-        msg.warning("comparing to: {} ".format(compare_file))
+        msg.warning(f"comparing to: {compare_file} ")
         try:
             sim_bench = io.read(compare_file)
-        except IOError:
+        except OSError:
             msg.warning("ERROR opening compare file")
             return "ERROR opening compare file"
 
         result = compare.compare(self.sim.cc_data, sim_bench.cc_data, rtol)
 
         if result == 0:
-            msg.success("results match benchmark to within relative tolerance of {}\n".format(rtol))
+            msg.success(f"results match benchmark to within relative tolerance of {rtol}\n")
         else:
             msg.warning("ERROR: " + compare.errors[result] + "\n")
 
@@ -323,7 +324,7 @@ class PyroBenchmark(Pyro):
         basename = self.rp.get_param("io.basename")
         bench_file = self.pyro_home + self.solver_name + "/tests/" + \
             basename + "%4.4d" % (self.sim.n)
-        msg.warning("storing new benchmark: {}\n".format(bench_file))
+        msg.warning(f"storing new benchmark: {bench_file}\n")
         self.sim.write(bench_file)
 
 

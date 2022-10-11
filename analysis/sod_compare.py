@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
-from __future__ import print_function
 
 import numpy as np
-from util import io
+import util.io_pyro as io
 import sys
 import matplotlib.pyplot as plt
 
