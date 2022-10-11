@@ -2,7 +2,7 @@ import h5py
 import importlib
 import mesh.boundary as bnd
 import mesh.patch as patch
-from util import msg, profile
+from util import msg, profile_pyro
 
 
 def grid_setup(rp, ng=1):

@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import importlib
 
 import numpy as np
@@ -18,7 +16,7 @@ import util.plot_tools as plot_tools
 import particles.particles as particles
 
 
-class Variables(object):
+class Variables:
     """
     a container class for easy access to the different swe
     variables by an integer key
@@ -289,7 +287,7 @@ class Simulation(NullSimulation):
             ax.set_xlim([myg.xmin, myg.xmax])
             ax.set_ylim([myg.ymin, myg.ymax])
 
-        plt.figtext(0.05, 0.0125, "t = {:10.5g}".format(self.cc_data.t))
+        plt.figtext(0.05, 0.0125, f"t = {self.cc_data.t:10.5g}")
 
         plt.pause(0.001)
         plt.draw()

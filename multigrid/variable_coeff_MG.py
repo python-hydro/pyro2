@@ -11,7 +11,6 @@ where :math:`\eta` is defined on the same grid as :math:`\phi`.
 A cell-centered discretization is used throughout.
 """
 
-from __future__ import print_function
 
 import numpy as np
 import matplotlib.pyplot as plt

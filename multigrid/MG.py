@@ -62,7 +62,6 @@ a.dx and a.dy are the grid spacings
 
 """
 
-from __future__ import print_function
 
 import math
 
@@ -75,7 +74,7 @@ import mesh.patch as patch
 from util import msg
 
 
-class CellCenterMG2d(object):
+class CellCenterMG2d:
     """
     The main multigrid class for cell-centered data.
 
@@ -660,7 +659,7 @@ class CellCenterMG2d(object):
                 self.grids[level].zero("v")
 
             if self.verbose:
-                print("<<< beginning V-cycle (cycle {}) >>>\n".format(cycle))
+                print(f"<<< beginning V-cycle (cycle {cycle}) >>>\n")
 
             # do V-cycles through the entire hierarchy
             level = self.nlevels-1

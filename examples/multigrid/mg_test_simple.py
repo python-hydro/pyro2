@@ -24,7 +24,7 @@ import matplotlib.pyplot as plt
 import compare
 import multigrid.MG as MG
 from util import msg
-from util import io
+from util import io_pyro
 
 
 # the analytic solution

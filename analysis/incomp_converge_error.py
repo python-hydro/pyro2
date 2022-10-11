@@ -4,7 +4,7 @@
 import numpy as np
 import sys
 import math
-from util import io
+from util import io_pyro
 
 usage = """
       compare the output in file from the incompressible converge problem to

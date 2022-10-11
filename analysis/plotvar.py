@@ -3,7 +3,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import argparse
-from util import io
+from util import io_pyro
 import mesh.patch as patch
 
 # plot a single variable from an output file

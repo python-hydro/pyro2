@@ -5,7 +5,7 @@ from __future__ import print_function
 import numpy as np
 import sys
 
-from util import io
+from util import io_pyro
 
 usage = """
       usage: ./compare.py file1 file2 (rtol)
