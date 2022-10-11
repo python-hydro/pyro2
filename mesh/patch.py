@@ -665,7 +665,7 @@ class CellCenterData2d(object):
             gvar.attrs["ylb"] = self.BCs[self.names[n]].ylb
             gvar.attrs["yrb"] = self.BCs[self.names[n]].yrb
 
-    def pretty_print(self, var, ivars, fmt=None):
+    def pretty_print(self, var, fmt=None):
         """print out the contents of the data array with pretty formatting
         indicating where ghost cells are."""
         a = self.get_var(var)

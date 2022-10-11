@@ -46,7 +46,7 @@ class ArrayIndexer(np.ndarray):
         self.c = getattr(obj, "c", None)
 
     def __array_wrap__(self, out_arr, context=None):
-        return np.ndarray.__array_wrap__(self, out_arr, context)
+        return np.ndarray.__array_wrap__(self, out_arr, context)  # pylint: disable=E1121
 
     def v(self, buf=0, n=0, s=1):
         """return a view of the valid data region for component n, with stride
@@ -358,7 +358,7 @@ class ArrayIndexerFC(ArrayIndexer):
         self.c = getattr(obj, "c", None)
 
     def __array_wrap__(self, out_arr, context=None):
-        return np.ndarray.__array_wrap__(self, out_arr, context)
+        return np.ndarray.__array_wrap__(self, out_arr, context)  # pylint: disable=E1121
 
     def ip_jp(self, ishift, jshift, buf=0, n=0, s=1):
         """return a view of the data shifted by ishift in the x direction and
@@ -419,7 +419,7 @@ class ArrayIndexerFC(ArrayIndexer):
 
     def copy(self):
         """make a copy of the array, defined on the same grid"""
-        return ArrayIndexer(np.asarray(self).copy(), self.idir, grid=self.g)
+        return ArrayIndexerFC(np.asarray(self).copy(), self.idir, grid=self.g)
 
     def is_symmetric(self, nodal=False, tol=1.e-14, asymmetric=False):
         """return True is the data is left-right symmetric (to the tolerance
