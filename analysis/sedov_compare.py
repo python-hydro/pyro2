@@ -4,7 +4,7 @@
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-from util import io_pyro
+import util.io_pyro as io
 import argparse
 
 mpl.rcParams["text.usetex"] = True

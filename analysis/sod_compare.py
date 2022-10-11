@@ -2,7 +2,7 @@
 
 
 import numpy as np
-from util import io_pyro
+import util.io_pyro as io
 import sys
 import matplotlib.pyplot as plt
 

@@ -5,7 +5,7 @@ import numpy as np
 import sys
 import matplotlib.pyplot as plt
 import diffusion.problems.gaussian as gaussian
-from util import io_pyro
+import util.io_pyro as io
 import matplotlib as mpl
 
 mpl.rcParams["text.usetex"] = True

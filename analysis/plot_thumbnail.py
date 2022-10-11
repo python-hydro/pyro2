@@ -3,7 +3,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
-from util import io_pyro
+import utilio_pyro as io
 
 # plot an output file using the solver's dovis script
 
