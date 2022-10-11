@@ -1,9 +1,10 @@
 # test the prolongation and restriction operations from the patch stuff
 
 
+import numpy as np
+
 import mesh.boundary as bnd
 import mesh.patch as patch
-import numpy as np
 
 
 def doit():

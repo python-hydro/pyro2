@@ -24,10 +24,10 @@ Note: the output file created stores the original field, the poluted
 field, and the recovered field.
 """
 
-import mesh.boundary as bnd
-import mesh.patch as patch
 import numpy as np
 
+import mesh.boundary as bnd
+import mesh.patch as patch
 import multigrid.MG as MG
 
 

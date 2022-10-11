@@ -31,12 +31,12 @@ import os
 
 import compare
 import matplotlib.pyplot as plt
-import mesh.boundary as bnd
-import mesh.patch as patch
 import numpy as np
 import util.io_pyro as io
 from util import msg
 
+import mesh.boundary as bnd
+import mesh.patch as patch
 import multigrid.variable_coeff_MG as MG
 
 
