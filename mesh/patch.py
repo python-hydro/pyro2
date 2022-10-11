@@ -388,7 +388,7 @@ class CellCenterData2d(object):
                     return var
             raise KeyError("name {} is not valid".format(name))
         else:
-            return ai.ArrayIndexer(d=self.data[:, :, n], grid=self.grid)
+            return self.get_var_by_index(n)
 
     def get_var_by_index(self, n):
         """
@@ -719,6 +719,62 @@ class FaceCenterData2d(CellCenterData2d):
         self.data = ai.ArrayIndexerFC(_tmp, idir=self.idir, grid=self.grid)
 
         self.initialized = 1
+
+    def __str__(self):
+        """ print out some basic information about the FaceCenterData2d
+            object """
+
+        if self.initialized == 0:
+            my_str = "FaceCenterData2d object not yet initialized"
+            return my_str
+
+        my_str = "fc data: idir = {}, nx = {}, ny = {}, ng = {}\n".format(
+            self.idir, self.grid.nx, self.grid.ny, self.grid.ng)
+        my_str += "         nvars = {}\n".format(self.nvar)
+        my_str += "         variables:\n"
+
+        for n in range(self.nvar):
+            my_str += "%16s: min: %15.10f    max: %15.10f\n" % \
+                (self.names[n], self.min(self.names[n]), self.max(self.names[n]))
+            my_str += "%16s  BCs: -x: %-12s +x: %-12s -y: %-12s +y: %-12s\n" %\
+                (" ", self.BCs[self.names[n]].xlb,
+                      self.BCs[self.names[n]].xrb,
+                      self.BCs[self.names[n]].ylb,
+                      self.BCs[self.names[n]].yrb)
+
+        return my_str
+
+    def get_var_by_index(self, n):
+        """
+        Return a data array for the variable with index n in the
+        data array.  Any changes made to this are automatically
+        reflected in the CellCenterData2d object.
+
+        Parameters
+        ----------
+        n : int
+            The index of the variable to access
+
+        Returns
+        -------
+        out : ndarray
+            The array of data corresponding to the index
+
+        """
+        return ai.ArrayIndexerFC(d=self.data[:, :, n], idir=self.idir, grid=self.grid)
+
+    def get_vars(self):
+        """
+        Return the entire data array.  Any changes made to this
+        are automatically reflected in the CellCenterData2d object.
+
+        Returns
+        -------
+        out : ndarray
+            The array of data
+
+        """
+        return ai.ArrayIndexerFC(d=self.data, idir=self.idir, grid=self.grid)
 
     def fill_BC(self, name):
         """
