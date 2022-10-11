@@ -1,6 +1,8 @@
 import importlib
-import numpy as np
+
 import matplotlib
+import numpy as np
+
 try:
     matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
 except KeyError:
@@ -9,9 +11,9 @@ import matplotlib.pyplot as plt
 
 import advection_nonuniform.advective_fluxes as flx
 import mesh.patch as patch
-from simulation_null import NullSimulation, grid_setup, bc_setup
 import particles.particles as particles
 import util.plot_tools as plot_tools
+from simulation_null import NullSimulation, bc_setup, grid_setup
 
 
 class Simulation(NullSimulation):

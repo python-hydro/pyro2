@@ -1,4 +1,5 @@
 import matplotlib
+
 try:
     matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
 except KeyError:
@@ -8,7 +9,6 @@ import numpy as np
 
 import compressible
 import compressible.eos as eos
-
 import util.plot_tools as plot_tools
 
 

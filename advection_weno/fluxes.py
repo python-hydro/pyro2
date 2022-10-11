@@ -1,5 +1,6 @@
-import mesh.reconstruction as reconstruction
 import numpy as np
+
+import mesh.reconstruction as reconstruction
 
 
 def fvs(q, order, u, alpha):

@@ -23,6 +23,7 @@ and the s increment is::
 """
 
 import numpy as np
+
 import mesh.patch as patch
 
 a = {}

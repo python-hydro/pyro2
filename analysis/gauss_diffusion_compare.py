@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 
 
-import numpy as np
 import sys
+
+import matplotlib as mpl
 import matplotlib.pyplot as plt
+import numpy as np
+
 import diffusion.problems.gaussian as gaussian
 import util.io_pyro as io
-import matplotlib as mpl
 
 mpl.rcParams["text.usetex"] = True
 mpl.rcParams['mathtext.fontset'] = 'cm'

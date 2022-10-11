@@ -2,8 +2,8 @@ import sys
 
 import numpy as np
 
-import mesh.patch as patch
 import compressible_sr.eos as eos
+import mesh.patch as patch
 from util import msg
 
 

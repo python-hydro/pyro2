@@ -1,9 +1,10 @@
 import sys
-import mesh.patch as patch
+
 import numpy as np
-from util import msg
 
 import compressible_sr.eos as eos
+import mesh.patch as patch
+from util import msg
 
 
 def init_data(my_data, rp):

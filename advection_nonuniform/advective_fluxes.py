@@ -1,5 +1,6 @@
-import mesh.reconstruction as reconstruction
 import numpy as np
+
+import mesh.reconstruction as reconstruction
 
 
 def unsplit_fluxes(my_data, rp, dt, scalar_name):

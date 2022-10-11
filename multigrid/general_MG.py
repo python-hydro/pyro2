@@ -15,8 +15,8 @@ A cell-centered discretization for phi is used throughout.
 """
 
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 import multigrid.edge_coeffs as ec
 import multigrid.MG as MG

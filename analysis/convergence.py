@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
 import sys
-import util.io_pyro as io
+
 import numpy as np
+
+import util.io_pyro as io
 
 # read in two files -- one twice the resolution of the other, and
 # compute the error by averaging down

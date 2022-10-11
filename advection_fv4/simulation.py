@@ -1,10 +1,11 @@
 import importlib
-import advection_rk
+
 import advection_fv4.fluxes as flx
+import advection_rk
 import mesh.array_indexer as ai
 import mesh.fv as fv
-from simulation_null import grid_setup, bc_setup
 import particles.particles as particles
+from simulation_null import bc_setup, grid_setup
 
 
 class Simulation(advection_rk.Simulation):

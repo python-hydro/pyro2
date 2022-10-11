@@ -1,8 +1,8 @@
 import numpy as np
 from numpy.testing import assert_array_equal
 
-from util import runparams
 import swe.simulation as sn
+from util import runparams
 
 
 class TestSimulation(object):

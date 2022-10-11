@@ -26,9 +26,9 @@ field, and the recovered field.
 
 import numpy as np
 
-import multigrid.MG as MG
 import mesh.boundary as bnd
 import mesh.patch as patch
+import multigrid.MG as MG
 
 
 def doit(nx, ny):

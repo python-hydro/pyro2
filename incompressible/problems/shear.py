@@ -15,6 +15,7 @@ initial velocity is::
 
 
 import math
+
 import numpy as np
 
 import mesh.patch as patch

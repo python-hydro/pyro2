@@ -1,9 +1,9 @@
 # unit tests for the patch
+import numpy as np
+from numpy.testing import assert_array_equal
+
 import mesh.boundary as bnd
 import mesh.patch as patch
-import numpy as np
-
-from numpy.testing import assert_array_equal
 
 
 # Grid2d tests
