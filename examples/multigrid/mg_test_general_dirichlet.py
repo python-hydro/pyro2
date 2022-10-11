@@ -35,15 +35,15 @@ on the boundary, which is not correct here)
 
 import os
 
-import compare
 import matplotlib.pyplot as plt
 import numpy as np
-import util.io_pyro as io
-from util import msg
 
+import compare
 import mesh.boundary as bnd
 import mesh.patch as patch
 import multigrid.general_MG as MG
+import util.io_pyro as io
+from util import msg
 
 
 # the analytic solution
