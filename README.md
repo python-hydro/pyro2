@@ -1,7 +1,12 @@
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause) 
-[![pytest-all](https://github.com/python-hydro/pyro2/actions/workflows/pytest-flake8.yml/badge.svg)](https://github.com/python-hydro/pyro2/actions/workflows/pytest-flake8.yml)
+[![pylint](https://github.com/python-hydro/pyro2/actions/workflows/pylint.yml/badge.svg)](https://github.com/python-hydro/pyro2/actions/workflows/pylint.yml)
+[![flake8](https://github.com/python-hydro/pyro2/actions/workflows/flake8.yml/badge.svg)](https://github.com/python-hydro/pyro2/actions/workflows/flake8.yml)
+[![pytest-all](https://github.com/python-hydro/pyro2/actions/workflows/pytest.yml/badge.svg)](https://github.com/python-hydro/pyro2/actions/workflows/pytest.yml)
+
 [![Documentation Status](https://readthedocs.org/projects/pyro2/badge/?version=latest)](https://pyro2.readthedocs.io/en/latest/?badge=latest) 
+
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/python-hydro/pyro2/main?filepath=examples%2Fexamples.ipynb) 
+
 [![JOSS status](http://joss.theoj.org/papers/6d8b2f94e6d08a7b5d65e98a948dcad7/status.svg)](http://joss.theoj.org/papers/6d8b2f94e6d08a7b5d65e98a948dcad7) 
 [![DOI](https://zenodo.org/badge/20570861.svg)](https://zenodo.org/badge/latestdoi/20570861)
 
