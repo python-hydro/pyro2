@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import mesh.fv as fv
 import numpy
 from util import msg

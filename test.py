@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from __future__ import print_function
 
 import argparse
 import datetime
@@ -16,7 +15,7 @@ import examples.multigrid.mg_test_vc_periodic as mg_test_vc_periodic
 import examples.multigrid.mg_test_general_inhomogeneous as mg_test_general_inhomogeneous
 
 
-class PyroTest(object):
+class PyroTest:
     def __init__(self, solver, problem, inputs, options):
         self.solver = solver
         self.problem = problem
@@ -24,7 +23,7 @@ class PyroTest(object):
         self.options = options
 
     def __str__(self):
-        return "{}-{}".format(self.solver, self.problem)
+        return f"{self.solver}-{self.problem}"
 
 
 def do_tests(build, out_file, do_standalone=True, do_main=True,
@@ -112,12 +111,12 @@ def do_tests(build, out_file, do_standalone=True, do_main=True,
 
         for s, r in sorted(results.items()):
             if not r == 0:
-                f.write("{:42} failed\n".format(s))
+                f.write(f"{s:42} failed\n")
                 failed += 1
             else:
-                f.write("{:42} passed\n".format(s))
+                f.write(f"{s:42} passed\n")
 
-        f.write("\n{} test(s) failed\n".format(failed))
+        f.write(f"\n{failed} test(s) failed\n")
 
         if not f == sys.stdout:
             f.close()

@@ -1,6 +1,5 @@
 # some simple tests of the ArrayIndexer
 
-from __future__ import print_function
 
 import mesh.patch as patch
 import numpy as np

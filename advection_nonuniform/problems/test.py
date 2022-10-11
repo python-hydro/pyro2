@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import mesh.patch as patch
 from util import msg
 
