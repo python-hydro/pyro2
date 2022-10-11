@@ -2,32 +2,33 @@ compressible\_rk package
 ========================
 
 .. automodule:: compressible_rk
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Subpackages
 -----------
 
 .. toctree::
+   :maxdepth: 4
 
-    compressible_rk.problems
+   compressible_rk.problems
 
 Submodules
 ----------
 
-compressible\_rk\.fluxes module
--------------------------------
+compressible\_rk.fluxes module
+------------------------------
 
 .. automodule:: compressible_rk.fluxes
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
-compressible\_rk\.simulation module
------------------------------------
+compressible\_rk.simulation module
+----------------------------------
 
 .. automodule:: compressible_rk.simulation
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

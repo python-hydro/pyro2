@@ -1,66 +1,66 @@
-swe\.problems package
-=====================
+swe.problems package
+====================
 
 .. automodule:: swe.problems
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Submodules
 ----------
 
-swe\.problems\.acoustic\_pulse module
--------------------------------------
+swe.problems.acoustic\_pulse module
+-----------------------------------
 
 .. automodule:: swe.problems.acoustic_pulse
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
-swe\.problems\.advect module
-----------------------------
+swe.problems.advect module
+--------------------------
 
 .. automodule:: swe.problems.advect
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
-swe\.problems\.dam module
--------------------------
+swe.problems.dam module
+-----------------------
 
 .. automodule:: swe.problems.dam
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
-swe\.problems\.kh module
-------------------------
+swe.problems.kh module
+----------------------
 
 .. automodule:: swe.problems.kh
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
-swe\.problems\.logo module
---------------------------
+swe.problems.logo module
+------------------------
 
 .. automodule:: swe.problems.logo
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
-swe\.problems\.quad module
---------------------------
+swe.problems.quad module
+------------------------
 
 .. automodule:: swe.problems.quad
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
-swe\.problems\.test module
---------------------------
+swe.problems.test module
+------------------------
 
 .. automodule:: swe.problems.test
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

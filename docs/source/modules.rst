@@ -25,6 +25,7 @@ pyro2
    particles
    plot
    pyro
+   setup
    simulation_null
    swe
    test

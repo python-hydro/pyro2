@@ -2,32 +2,33 @@ advection\_weno package
 =======================
 
 .. automodule:: advection_weno
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Subpackages
 -----------
 
 .. toctree::
+   :maxdepth: 4
 
-    advection_weno.problems
+   advection_weno.problems
 
 Submodules
 ----------
 
-advection\_weno\.fluxes module
-------------------------------
+advection\_weno.fluxes module
+-----------------------------
 
 .. automodule:: advection_weno.fluxes
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
-advection\_weno\.simulation module
-----------------------------------
+advection\_weno.simulation module
+---------------------------------
 
 .. automodule:: advection_weno.simulation
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
