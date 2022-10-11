@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import advection
 import advection_rk.fluxes as flx
 import mesh.integration as integration

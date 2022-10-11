@@ -38,7 +38,7 @@ class Simulation(NullSimulation):
             self.particles = particles.Particles(self.cc_data, bc, n_particles, particle_generator)
 
         # now set the initial conditions for the problem
-        problem = importlib.import_module("advection.problems.{}".format(self.problem_name))
+        problem = importlib.import_module(f"advection.problems.{self.problem_name}")
         problem.init_data(self.cc_data, self.rp)
 
     def method_compute_timestep(self):
@@ -141,7 +141,7 @@ class Simulation(NullSimulation):
             ax.set_xlim([myg.xmin, myg.xmax])
             ax.set_ylim([myg.ymin, myg.ymax])
 
-        plt.figtext(0.05, 0.0125, "t = {:10.5f}".format(self.cc_data.t))
+        plt.figtext(0.05, 0.0125, f"t = {self.cc_data.t:10.5f}")
 
         plt.pause(0.001)
         plt.draw()

@@ -30,7 +30,6 @@ Typical usage:
    data.fill_BC("density")
 
 """
-from __future__ import print_function
 
 import numpy as np
 
@@ -42,7 +41,7 @@ import mesh.boundary as bnd
 import mesh.array_indexer as ai
 
 
-class Grid2d(object):
+class Grid2d:
     """
     the 2-d grid class.  The grid object will contain the coordinate
     information (at various centerings).
@@ -190,7 +189,7 @@ class Grid2d(object):
         return result
 
 
-class CellCenterData2d(object):
+class CellCenterData2d:
     """
     A class to define cell-centered data that lives on a grid.  A
     CellCenterData2d object is built in a multi-step process before
@@ -341,7 +340,7 @@ class CellCenterData2d(object):
 
         my_str = "cc data: nx = {}, ny = {}, ng = {}\n".format(
             self.grid.nx, self.grid.ny, self.grid.ng)
-        my_str += "         nvars = {}\n".format(self.nvar)
+        my_str += f"         nvars = {self.nvar}\n"
         my_str += "         variables:\n"
 
         for n in range(self.nvar):
@@ -386,7 +385,7 @@ class CellCenterData2d(object):
                     var = f(self, name, self.ivars, self.grid)
                 if len(var) > 0:
                     return var
-            raise KeyError("name {} is not valid".format(name))
+            raise KeyError(f"name {name} is not valid")
         else:
             return self.get_var_by_index(n)
 
@@ -730,7 +729,7 @@ class FaceCenterData2d(CellCenterData2d):
 
         my_str = "fc data: idir = {}, nx = {}, ny = {}, ng = {}\n".format(
             self.idir, self.grid.nx, self.grid.ny, self.grid.ng)
-        my_str += "         nvars = {}\n".format(self.nvar)
+        my_str += f"         nvars = {self.nvar}\n"
         my_str += "         variables:\n"
 
         for n in range(self.nvar):

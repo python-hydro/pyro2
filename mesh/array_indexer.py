@@ -3,7 +3,6 @@ operations we see in finite-difference methods, like i+1, i-1, etc.
 
 """
 
-from __future__ import print_function
 
 import numpy as np
 

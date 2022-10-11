@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import importlib
 
 import numpy as np
@@ -20,7 +18,7 @@ from simulation_null import NullSimulation, grid_setup, bc_setup
 import multigrid.variable_coeff_MG as vcMG
 
 
-class Basestate(object):
+class Basestate:
     def __init__(self, ny, ng=0):
         self.ny = ny
         self.ng = ng
@@ -121,7 +119,7 @@ class Simulation(NullSimulation):
         self.base["p0"] = Basestate(myg.ny, ng=myg.ng)
 
         # now set the initial conditions for the problem
-        problem = importlib.import_module("lm_atm.problems.{}".format(self.problem_name))
+        problem = importlib.import_module(f"lm_atm.problems.{self.problem_name}")
         problem.init_data(self.cc_data, self.base, self.rp)
 
         # Construct beta_0
@@ -180,7 +178,7 @@ class Simulation(NullSimulation):
 
         self.dt = min(dt, dt_buoy)
         if self.verbose > 0:
-            print("timestep is {}".format(dt))
+            print(f"timestep is {dt}")
 
     def preevolve(self):
         """
@@ -669,7 +667,7 @@ class Simulation(NullSimulation):
 
             plt.colorbar(img, ax=ax)
 
-        plt.figtext(0.05, 0.0125, "t = {:10.5f}".format(self.cc_data.t))
+        plt.figtext(0.05, 0.0125, f"t = {self.cc_data.t:10.5f}")
 
         plt.pause(0.001)
         plt.draw()

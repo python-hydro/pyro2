@@ -2,7 +2,6 @@
 Methods to manage boundary conditions
 """
 
-from __future__ import print_function
 
 from util import msg
 
@@ -41,7 +40,7 @@ def _set_reflect(odd_reflect_dir, dir_string):
         return "reflect-even"
 
 
-class BCProp(object):
+class BCProp:
     """
     A simple container to hold properties of the boundary conditions.
     """
@@ -64,7 +63,7 @@ def bc_is_solid(bc):
     return solid
 
 
-class BC(object):
+class BC:
     """Boundary condition container -- hold the BCs on each boundary
     for a single variable.
 

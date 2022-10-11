@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import matplotlib
 try:
     matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
@@ -125,7 +123,7 @@ class Simulation(compressible.Simulation):
             else:
                 ax.set_title(field_names[n])
 
-        plt.figtext(0.05, 0.0125, "t = {:10.5g}".format(self.cc_data.t))
+        plt.figtext(0.05, 0.0125, f"t = {self.cc_data.t:10.5g}")
 
         plt.pause(0.001)
         plt.draw()

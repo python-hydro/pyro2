@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from __future__ import print_function
 
 import importlib
 import numpy as np
@@ -38,7 +37,7 @@ analytic.register_var("density", bco)
 analytic.create()
 
 # use the original initialization routine to set the analytic solution
-problem = importlib.import_module("{}.problems.{}".format(sim.solver_name, sim.problem_name))
+problem = importlib.import_module(f"{sim.solver_name}.problems.{sim.problem_name}")
 problem.init_data(analytic, None)
 
 # compare the error
