@@ -1,10 +1,10 @@
 import numpy as np
+import pytest
 from numpy.testing import assert_array_almost_equal
 
-from util import runparams
 import compressible_sr.simulation as sn
 import compressible_sr.unsplit_fluxes as flx
-import pytest
+from util import runparams
 
 
 class TestSimulation(object):

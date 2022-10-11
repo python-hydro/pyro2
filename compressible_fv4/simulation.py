@@ -1,7 +1,7 @@
-import mesh.integration as integration
-import mesh.fv as fv
-import compressible_rk
 import compressible_fv4.fluxes as flx
+import compressible_rk
+import mesh.fv as fv
+import mesh.integration as integration
 
 
 class Simulation(compressible_rk.Simulation):

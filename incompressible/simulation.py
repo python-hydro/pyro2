@@ -1,7 +1,8 @@
 import importlib
 
-import numpy as np
 import matplotlib
+import numpy as np
+
 try:
     matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
 except KeyError:
@@ -9,13 +10,12 @@ except KeyError:
 import matplotlib.pyplot as plt
 
 import incompressible.incomp_interface as incomp_interface
-import mesh.reconstruction as reconstruction
-import mesh.patch as patch
 import mesh.array_indexer as ai
-
-from simulation_null import NullSimulation, grid_setup, bc_setup
+import mesh.patch as patch
+import mesh.reconstruction as reconstruction
 import multigrid.MG as MG
 import particles.particles as particles
+from simulation_null import NullSimulation, bc_setup, grid_setup
 
 
 class Simulation(NullSimulation):

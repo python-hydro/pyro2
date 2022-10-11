@@ -2,9 +2,11 @@
 
 
 import importlib
-import numpy as np
-import mesh.patch as patch
 import sys
+
+import numpy as np
+
+import mesh.patch as patch
 import util.io_pyro as io
 
 usage = """

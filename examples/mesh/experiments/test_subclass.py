@@ -17,12 +17,12 @@
 # on this is in mesh-exmaples.ipynb
 
 
-import mesh.patch as patch
 import numpy as np
 
+import mesh.array_indexer as ai
+import mesh.patch as patch
 from util import msg
 
-import mesh.array_indexer as ai
 _buf_split = ai._buf_split
 
 

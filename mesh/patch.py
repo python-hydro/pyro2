@@ -31,14 +31,12 @@ Typical usage:
 
 """
 
+import h5py
 import numpy as np
 
-import h5py
-
-from util import msg
-
-import mesh.boundary as bnd
 import mesh.array_indexer as ai
+import mesh.boundary as bnd
+from util import msg
 
 
 class Grid2d:

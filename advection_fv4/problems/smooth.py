@@ -1,5 +1,6 @@
-import mesh.fv as fv
 import numpy
+
+import mesh.fv as fv
 from util import msg
 
 

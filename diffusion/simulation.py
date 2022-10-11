@@ -2,8 +2,10 @@
 
 import importlib
 import math
-import numpy as np
+
 import matplotlib
+import numpy as np
+
 try:
     matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
 except KeyError:
@@ -11,8 +13,8 @@ except KeyError:
 import matplotlib.pyplot as plt
 
 import mesh.patch as patch
-from simulation_null import NullSimulation, grid_setup, bc_setup
 import multigrid.MG as MG
+from simulation_null import NullSimulation, bc_setup, grid_setup
 from util import msg
 
 

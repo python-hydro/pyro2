@@ -4,6 +4,7 @@ on the velocity on the grid.
 """
 
 import numpy as np
+
 from util import msg
 
 

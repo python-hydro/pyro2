@@ -1,7 +1,7 @@
 import numpy as np
-from util import msg
 
 import compressible_sr.eos as eos
+from util import msg
 
 
 def init_data(myd, rp):

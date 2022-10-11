@@ -1,19 +1,20 @@
 import importlib
 
-import numpy as np
 import matplotlib
+import numpy as np
+
 try:
     matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
 except KeyError:
     pass
 import matplotlib.pyplot as plt
 
+import mesh.boundary as bnd
+import particles.particles as particles
 import swe.derives as derives
 import swe.unsplit_fluxes as flx
-import mesh.boundary as bnd
-from simulation_null import NullSimulation, grid_setup, bc_setup
 import util.plot_tools as plot_tools
-import particles.particles as particles
+from simulation_null import NullSimulation, bc_setup, grid_setup
 
 
 class Variables:

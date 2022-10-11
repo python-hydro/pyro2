@@ -1,5 +1,5 @@
-import os
 import glob
+import os
 
 from util import runparams
 

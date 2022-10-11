@@ -1,7 +1,7 @@
+import mesh.boundary as bnd
+import mesh.patch as patch
 import simulation_null as sn
 from util import runparams
-import mesh.patch as patch
-import mesh.boundary as bnd
 
 
 class TestSimulation(object):

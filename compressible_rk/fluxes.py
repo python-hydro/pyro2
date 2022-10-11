@@ -19,11 +19,10 @@ Taylor expanding *in space only* yields::
 
 """
 
-import compressible.interface as interface
 import compressible as comp
-import mesh.reconstruction as reconstruction
+import compressible.interface as interface
 import mesh.array_indexer as ai
-
+import mesh.reconstruction as reconstruction
 from util import msg
 
 

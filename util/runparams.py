@@ -46,8 +46,9 @@ read default values.
 
 import os
 import re
-from util import msg
 import textwrap
+
+from util import msg
 
 # some utility functions to automagically determine what the data
 # types are

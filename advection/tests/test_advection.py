@@ -1,5 +1,5 @@
-from util import runparams
 import advection.simulation as sn
+from util import runparams
 
 
 class TestSimulation(object):

@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
 
-import numpy as np
+import argparse
+
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import numpy as np
+
 import util.io_pyro as io
-import argparse
 
 mpl.rcParams["text.usetex"] = True
 mpl.rcParams['mathtext.fontset'] = 'cm'

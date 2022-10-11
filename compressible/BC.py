@@ -10,11 +10,12 @@ we'll do a special case for them
 
 """
 
+import math
+
+import numpy as np
+
 import compressible.eos as eos
 from util import msg
-
-import math
-import numpy as np
 
 
 def user(bc_name, bc_edge, variable, ccdata):

@@ -8,9 +8,9 @@ import os
 import matplotlib.pyplot as plt
 
 import compare
-from util import msg, runparams
 import util.io_pyro as io
 import util.profile_pyro as profile
+from util import msg, runparams
 
 valid_solvers = ["advection",
                  "advection_nonuniform",

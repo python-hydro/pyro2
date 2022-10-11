@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 
-import numpy as np
-import matplotlib.pyplot as plt
 import argparse
+
+import matplotlib.pyplot as plt
+import numpy as np
+
 import util.io_pyro as io
 
 
-# plot an output file using the solver's dovis script
-
 def makeplot(plotfile, variable, outfile, vmin=None, vmax=None):
+    """plot an output file using the solver's dovis script"""
 
     sim = io.read(plotfile)
     myd = sim.cc_data

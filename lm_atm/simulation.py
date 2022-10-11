@@ -1,7 +1,8 @@
 import importlib
 
-import numpy as np
 import matplotlib
+import numpy as np
+
 try:
     matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
 except KeyError:
@@ -9,13 +10,12 @@ except KeyError:
 import matplotlib.pyplot as plt
 
 import lm_atm.LM_atm_interface as lm_interface
-import mesh.reconstruction as reconstruction
+import mesh.array_indexer as ai
 import mesh.boundary as bnd
 import mesh.patch as patch
-import mesh.array_indexer as ai
-
-from simulation_null import NullSimulation, grid_setup, bc_setup
+import mesh.reconstruction as reconstruction
 import multigrid.variable_coeff_MG as vcMG
+from simulation_null import NullSimulation, bc_setup, grid_setup
 
 
 class Basestate:

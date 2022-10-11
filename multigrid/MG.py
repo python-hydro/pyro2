@@ -65,9 +65,9 @@ a.dx and a.dy are the grid spacings
 
 import math
 
-import numpy as np
-import matplotlib.pyplot as plt
 import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
 
 import mesh.boundary as bnd
 import mesh.patch as patch
