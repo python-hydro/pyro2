@@ -27,5 +27,4 @@ pyro2
    pyro
    simulation_null
    swe
-   test
    util
