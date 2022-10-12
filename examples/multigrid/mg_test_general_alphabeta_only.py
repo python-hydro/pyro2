@@ -70,7 +70,7 @@ def f(x, y):
             16.0*np.pi**2 + 1.0)*np.sin(2*np.pi*x)*np.sin(2*np.pi*y)
 
 
-def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
+def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False, bench_dir="tests/",
                                    make_plot=False, verbose=1, rtol=1.e-12):
     """
     test the general MG solver.  The return value
@@ -173,7 +173,6 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
     # store the output for later comparison
     bench = "mg_general_poisson_dirichlet"
-    bench_dir = os.environ["PYRO_HOME"] + "/multigrid/tests/"
 
     my_data = a.get_solution_object()
 
