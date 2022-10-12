@@ -85,7 +85,8 @@ def do_tests(out_file,
         results["mg_vc_poisson_periodic"] = err
 
         err = mg_test_general_inhomogeneous.test_general_poisson_inhomogeneous(512,
-                                                                               comp_bench=True, bench_dir="multigrid/tests/",
+                                                                               comp_bench=True,
+                                                                               bench_dir="multigrid/tests/",
                                                                                store_bench=store_all_benchmarks,
                                                                                verbose=0)
         results["mg_general_poisson_inhomogeneous"] = err
