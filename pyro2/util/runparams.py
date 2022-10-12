@@ -48,7 +48,7 @@ import os
 import re
 import textwrap
 
-from util import msg
+from pyro2.util import msg
 
 # some utility functions to automagically determine what the data
 # types are

@@ -5,9 +5,9 @@ import importlib
 
 import h5py
 
-import mesh.boundary as bnd
-import mesh.patch as patch
-import particles.particles as particles
+import pyro2.mesh.boundary as bnd
+from pyro2.mesh.patch import Grid2d, CellCenterData2d
+import pyro2.particles.particles as particles
 
 
 def read_bcs(f):
@@ -48,9 +48,9 @@ def read(filename):
         # read in the grid info and create our grid
         grid = f["grid"].attrs
 
-        myg = patch.Grid2d(grid["nx"], grid["ny"], ng=grid["ng"],
-                           xmin=grid["xmin"], xmax=grid["xmax"],
-                           ymin=grid["ymin"], ymax=grid["ymax"])
+        myg = Grid2d(grid["nx"], grid["ny"], ng=grid["ng"],
+                     xmin=grid["xmin"], xmax=grid["xmax"],
+                     ymin=grid["ymin"], ymax=grid["ymax"])
 
         # sometimes problems define custom BCs -- at the moment, we
         # are going to assume that these always map to BC.user.  We
@@ -73,7 +73,7 @@ def read(filename):
             names.append(n)
 
         # create the CellCenterData2d object
-        myd = patch.CellCenterData2d(myg)
+        myd = CellCenterData2d(myg)
 
         for n in names:
             grp = gs[n]

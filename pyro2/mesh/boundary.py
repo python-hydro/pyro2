@@ -3,7 +3,7 @@ Methods to manage boundary conditions
 """
 
 
-from util import msg
+from pyro2.util import msg
 
 # keep track of whether the BCs are solid walls (passed into the
 # Riemann solver).

@@ -34,9 +34,9 @@ Typical usage:
 import h5py
 import numpy as np
 
-import mesh.array_indexer as ai
-import mesh.boundary as bnd
-from util import msg
+from pyro2.mesh.array_indexer import ArrayIndexer, ArrayIndexerFC
+import pyro2.mesh.boundary as bnd
+from pyro2.util import msg
 
 
 class Grid2d:
@@ -152,7 +152,7 @@ class Grid2d:
             _tmp = np.zeros((self.qx, self.qy), dtype=np.float64)
         else:
             _tmp = np.zeros((self.qx, self.qy, nvar), dtype=np.float64)
-        return ai.ArrayIndexer(d=_tmp, grid=self)
+        return ArrayIndexer(d=_tmp, grid=self)
 
     def coarse_like(self, N):
         """
@@ -324,7 +324,7 @@ class CellCenterData2d:
 
         _tmp = np.zeros((self.grid.qx, self.grid.qy, self.nvar),
                         dtype=self.dtype)
-        self.data = ai.ArrayIndexer(_tmp, grid=self.grid)
+        self.data = ArrayIndexer(_tmp, grid=self.grid)
 
         self.initialized = 1
 
@@ -404,7 +404,7 @@ class CellCenterData2d:
             The array of data corresponding to the index
 
         """
-        return ai.ArrayIndexer(d=self.data[:, :, n], grid=self.grid)
+        return ArrayIndexer(d=self.data[:, :, n], grid=self.grid)
 
     def get_vars(self):
         """
@@ -417,7 +417,7 @@ class CellCenterData2d:
             The array of data
 
         """
-        return ai.ArrayIndexer(d=self.data, grid=self.grid)
+        return ArrayIndexer(d=self.data, grid=self.grid)
 
     def get_aux(self, keyword):
         """
@@ -713,7 +713,7 @@ class FaceCenterData2d(CellCenterData2d):
             _tmp = np.zeros((self.grid.qx, self.grid.qy+1, self.nvar),
                             dtype=self.dtype)
 
-        self.data = ai.ArrayIndexerFC(_tmp, idir=self.idir, grid=self.grid)
+        self.data = ArrayIndexerFC(_tmp, idir=self.idir, grid=self.grid)
 
         self.initialized = 1
 
@@ -758,7 +758,7 @@ class FaceCenterData2d(CellCenterData2d):
             The array of data corresponding to the index
 
         """
-        return ai.ArrayIndexerFC(d=self.data[:, :, n], idir=self.idir, grid=self.grid)
+        return ArrayIndexerFC(d=self.data[:, :, n], idir=self.idir, grid=self.grid)
 
     def get_vars(self):
         """
@@ -771,7 +771,7 @@ class FaceCenterData2d(CellCenterData2d):
             The array of data
 
         """
-        return ai.ArrayIndexerFC(d=self.data, idir=self.idir, grid=self.grid)
+        return ArrayIndexerFC(d=self.data, idir=self.idir, grid=self.grid)
 
     def fill_BC(self, name):
         """
@@ -865,7 +865,7 @@ def cell_center_data_clone(old):
 def do_demo():
     """ show examples of the patch methods / classes """
 
-    import util.io_pyro as io
+    import pyro2.util.io_pyro as io
 
     # illustrate basic mesh operations
 
