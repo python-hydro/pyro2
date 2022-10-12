@@ -36,7 +36,7 @@ def f(x, y):
     return -2.0*((1.0-6.0*x**2)*y**2*(1.0-y**2) + (1.0-6.0*y**2)*x**2*(1.0-x**2))
 
 
-def test_poisson_dirichlet(N, store_bench=False, comp_bench=False,
+def test_poisson_dirichlet(N, store_bench=False, comp_bench=False, bench_dir="tests/",
                            make_plot=False, verbose=1, rtol=1e-12):
 
     # test the multigrid solver
@@ -89,7 +89,6 @@ def test_poisson_dirichlet(N, store_bench=False, comp_bench=False,
 
     # store the output for later comparison
     bench = "mg_poisson_dirichlet"
-    bench_dir = os.environ["PYRO_HOME"] + "/multigrid/tests/"
 
     my_data = a.get_solution_object()
 

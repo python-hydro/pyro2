@@ -1,13 +1,13 @@
-[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause) 
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![pylint](https://github.com/python-hydro/pyro2/actions/workflows/pylint.yml/badge.svg)](https://github.com/python-hydro/pyro2/actions/workflows/pylint.yml)
 [![flake8](https://github.com/python-hydro/pyro2/actions/workflows/flake8.yml/badge.svg)](https://github.com/python-hydro/pyro2/actions/workflows/flake8.yml)
 [![pytest-all](https://github.com/python-hydro/pyro2/actions/workflows/pytest.yml/badge.svg)](https://github.com/python-hydro/pyro2/actions/workflows/pytest.yml)
 
-[![Documentation Status](https://readthedocs.org/projects/pyro2/badge/?version=latest)](https://pyro2.readthedocs.io/en/latest/?badge=latest) 
+[![Documentation Status](https://readthedocs.org/projects/pyro2/badge/?version=latest)](https://pyro2.readthedocs.io/en/latest/?badge=latest)
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/python-hydro/pyro2/main?filepath=examples%2Fexamples.ipynb) 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/python-hydro/pyro2/main?filepath=examples%2Fexamples.ipynb)
 
-[![JOSS status](http://joss.theoj.org/papers/6d8b2f94e6d08a7b5d65e98a948dcad7/status.svg)](http://joss.theoj.org/papers/6d8b2f94e6d08a7b5d65e98a948dcad7) 
+[![JOSS status](http://joss.theoj.org/papers/6d8b2f94e6d08a7b5d65e98a948dcad7/status.svg)](http://joss.theoj.org/papers/6d8b2f94e6d08a7b5d65e98a948dcad7)
 [![DOI](https://zenodo.org/badge/20570861.svg)](https://zenodo.org/badge/latestdoi/20570861)
 
 
@@ -246,15 +246,14 @@ with their data.
 
   The `test.py` script will run several of the problems (as well as some
   stand-alone multigrid tests) and compare the solution to stored
-  benchmarks (in each solver's `tests/` subdirectory).
+  benchmarks (in each solver's `tests/` subdirectory).  The return value
+  of the script is the number of tests that failed.
 
-  It will also invoke the python `pytest` module to run the unit tests
-  for the different modules in pyro.
+  Unit tests are controlled by pytest and can be run simply via
 
-  Tests are run nightly and reported here:
-
-  http://bender.astro.sunysb.edu/hydro_by_example/download/_stage/pyro2/tests.out
-
+  ```
+  pytest .
+  ```
 
 ## Acknowledgements
 
