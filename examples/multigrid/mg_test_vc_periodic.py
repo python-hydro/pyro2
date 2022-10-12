@@ -56,7 +56,7 @@ def f(x, y):
         np.sin(2*np.pi*x)*np.sin(2*np.pi*y)
 
 
-def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
+def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False, bench_dir="tests/",
                              make_plot=False, verbose=1, rtol=1.e-12):
     """
     test the variable-coefficient MG solver.  The return value
@@ -157,7 +157,6 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False,
 
     # store the output for later comparison
     bench = "mg_vc_poisson_periodic"
-    bench_dir = os.environ["PYRO_HOME"] + "/multigrid/tests/"
 
     my_data = a.get_solution_object()
 
