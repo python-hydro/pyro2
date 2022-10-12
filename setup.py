@@ -1,13 +1,28 @@
-# this works for python 2 or 3 directly.  To build, do:
-#
-# python setup.py build_ext
-#
-# Note the setup.cfg directs the build to be done in-place.
+from setuptools import setup, find_packages
 
-from setuptools import setup
-
-setup(name='pyro',
-      version='2.2.0',
+setup(name='pyro2',
+      description='A python hydrodynamics code for teaching and prototyping',
       url='https://github.com/python-hydro/pyro2',
       license='BSD',
-      install_requires=['numpy', 'numba', 'matplotlib', 'h5py'])
+      packages=find_packages(),
+      scripts=["pyro2/pyro.py"],
+      package_data={"pyro2": ["advection/tests/*.h5",
+                              "advection_fv4/tests/*.h5",
+                              "advection_nonuniform/tests/*.h5",
+                              "advection_rk/tests/*.h5",
+                              "compressible/tests/*.h5",
+                              "compressible/tests/*.h5",
+                              "compressible/tests/*.h5",
+                              "compressible_fv4/tests/*.h5",
+                              "compressible_rk/tests/*.h5",
+                              "compressible_sdc/tests/*.h5",
+                              "diffusion/tests/*.h5",
+                              "incompressible/tests/*.h5",
+                              "lm_atm/tests/*.h5",
+                              "multigrid/tests/*.h5",
+                              "swe/tests/*.h5"]},
+      install_requires=['numpy', 'numba', 'matplotlib', 'h5py'],
+      use_scm_version={"version_scheme": "post-release",
+                       "write_to": "pyro2/_version.py"},
+      setup_requires=["setuptools_scm"],
+      zip_safe=False)
