@@ -32,12 +32,12 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
-import compare
-import mesh.boundary as bnd
-import mesh.patch as patch
-import multigrid.variable_coeff_MG as MG
-import util.io_pyro as io
-from util import msg
+from pyro.util import compare
+import pyro.mesh.boundary as bnd
+import pyro.mesh.patch as patch
+import pyro.multigrid.variable_coeff_MG as MG
+import pyro.util.io_pyro as io
+import pyro.util.msg as msg
 
 
 # the analytic solution

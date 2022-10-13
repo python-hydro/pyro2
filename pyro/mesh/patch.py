@@ -34,9 +34,9 @@ Typical usage:
 import h5py
 import numpy as np
 
-from pyro2.mesh.array_indexer import ArrayIndexer, ArrayIndexerFC
-import pyro2.mesh.boundary as bnd
-from pyro2.util import msg
+from pyro.mesh.array_indexer import ArrayIndexer, ArrayIndexerFC
+import pyro.mesh.boundary as bnd
+from pyro.util import msg
 
 
 class Grid2d:
@@ -865,7 +865,7 @@ def cell_center_data_clone(old):
 def do_demo():
     """ show examples of the patch methods / classes """
 
-    import pyro2.util.io_pyro as io
+    import pyro.util.io_pyro as io
 
     # illustrate basic mesh operations
 

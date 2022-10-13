@@ -69,9 +69,9 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
-import mesh.boundary as bnd
-import mesh.patch as patch
-from util import msg
+import pyro.mesh.boundary as bnd
+import pyro.mesh.patch as patch
+from pyro.util import msg
 
 
 class CellCenterMG2d:

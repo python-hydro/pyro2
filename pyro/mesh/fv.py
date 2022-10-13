@@ -3,7 +3,7 @@ by adding support for converting between cell averages and centers.
 
 """
 
-from  pyro2.mesh.patch import CellCenterData2d
+from pyro.mesh.patch import CellCenterData2d
 
 
 class FV2d(CellCenterData2d):

@@ -24,7 +24,7 @@ and the s increment is::
 
 import numpy as np
 
-import pyro2.mesh.patch as patch
+import pyro.mesh.patch as patch
 
 a = {}
 b = {}

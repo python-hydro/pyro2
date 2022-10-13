@@ -18,7 +18,7 @@ The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)
 import matplotlib.pyplot as plt
 import numpy as np
 
-import multigrid.MG as MG
+import pyro.multigrid.MG as MG
 
 
 # the analytic solution

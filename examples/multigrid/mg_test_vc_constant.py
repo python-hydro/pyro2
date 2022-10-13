@@ -21,9 +21,9 @@ The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)
 import matplotlib.pyplot as plt
 import numpy as np
 
-import mesh.boundary as bnd
-import mesh.patch as patch
-import multigrid.variable_coeff_MG as MG
+import pyro.mesh.boundary as bnd
+import pyro.mesh.patch as patch
+import pyro.multigrid.variable_coeff_MG as MG
 
 
 # the analytic solution
@@ -108,7 +108,7 @@ def test_vc_constant(N):
     e = v - b
 
     print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" %
-          (a.soln_grid.norm(e), a.relative_error, a.num_cycles))
+          (e.norm(), a.relative_error, a.num_cycles))
 
     # plot it
     plt.clf()

@@ -5,9 +5,9 @@ import importlib
 
 import h5py
 
-import pyro2.mesh.boundary as bnd
-from pyro2.mesh.patch import Grid2d, CellCenterData2d
-import pyro2.particles.particles as particles
+import pyro.mesh.boundary as bnd
+from pyro.mesh.patch import Grid2d, CellCenterData2d
+import pyro.particles.particles as particles
 
 
 def read_bcs(f):

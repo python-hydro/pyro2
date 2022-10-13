@@ -5,7 +5,7 @@ import sys
 
 import numpy as np
 
-import util.io_pyro as io
+import pyro.util.io_pyro as io
 
 usage = """
       usage: ./compare.py file1 file2 (rtol)

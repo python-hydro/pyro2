@@ -5,7 +5,7 @@ on the velocity on the grid.
 
 import numpy as np
 
-from pyro2.util import msg
+from pyro.util import msg
 
 
 class Particle:
