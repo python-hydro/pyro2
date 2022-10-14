@@ -1,8 +1,8 @@
 import numpy as np
 from numpy.testing import assert_array_equal
 
-import mesh.array_indexer as ai
-import mesh.patch as patch
+import pyro.mesh.array_indexer as ai
+import pyro.mesh.patch as patch
 
 
 # utilities

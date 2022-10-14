@@ -1,7 +1,7 @@
 import numpy
 
-import mesh.fv as fv
-from util import msg
+import pyro.mesh.fv as fv
+from pyro.util import msg
 
 
 def init_data(my_data, rp):

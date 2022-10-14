@@ -4,9 +4,9 @@ using SDC time integration
 """
 
 
-import compressible_fv4
-import mesh.patch as patch
-from util import msg
+import pyro.compressible_fv4 as compressible_fv4
+import pyro.mesh.patch as patch
+from pyro.util import msg
 
 
 class Simulation(compressible_fv4.Simulation):

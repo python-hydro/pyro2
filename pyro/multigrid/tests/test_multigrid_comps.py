@@ -3,9 +3,9 @@
 import numpy as np
 from numpy.testing import assert_array_equal
 
-import mesh.patch as patch
-import multigrid.edge_coeffs as edge_coeffs
-import multigrid.MG as MG
+import pyro.mesh.patch as patch
+import pyro.multigrid.edge_coeffs as edge_coeffs
+import pyro.multigrid.MG as MG
 
 
 # utilities

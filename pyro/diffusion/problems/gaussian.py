@@ -2,8 +2,8 @@ import sys
 
 import numpy
 
-import mesh.patch as patch
-from util import msg
+import pyro.mesh.patch as patch
+from pyro.util import msg
 
 
 def phi_analytic(dist, t, t_0, k, phi_1, phi_2):

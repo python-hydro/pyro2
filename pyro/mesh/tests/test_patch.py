@@ -2,8 +2,8 @@
 import numpy as np
 from numpy.testing import assert_array_equal
 
-import mesh.boundary as bnd
-import mesh.patch as patch
+import pyro.mesh.boundary as bnd
+import pyro.mesh.patch as patch
 
 
 # Grid2d tests

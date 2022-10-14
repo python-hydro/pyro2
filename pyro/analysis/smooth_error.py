@@ -6,8 +6,8 @@ import sys
 
 import numpy as np
 
-import mesh.patch as patch
-import util.io_pyro as io
+import pyro.mesh.patch as patch
+import pyro.util.io_pyro as io
 
 usage = """
       compare the output in file from the smooth advection problem to

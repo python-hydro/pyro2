@@ -3,9 +3,9 @@ import sys
 import matplotlib.pyplot as plt
 import numpy as np
 
-import compressible_sr.eos as eos
-import mesh.patch as patch
-from util import msg
+import pyro.compressible_sr.eos as eos
+import pyro.mesh.patch as patch
+from pyro.util import msg
 
 
 def init_data(my_data, rp):

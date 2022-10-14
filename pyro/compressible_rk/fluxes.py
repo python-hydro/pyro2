@@ -19,11 +19,11 @@ Taylor expanding *in space only* yields::
 
 """
 
-import compressible as comp
-import compressible.interface as interface
-import mesh.array_indexer as ai
-import mesh.reconstruction as reconstruction
-from util import msg
+import pyro.compressible as comp
+import pyro.compressible.interface as interface
+import pyro.mesh.array_indexer as ai
+import pyro.mesh.reconstruction as reconstruction
+from pyro.util import msg
 
 
 def fluxes(my_data, rp, ivars, solid, tc):

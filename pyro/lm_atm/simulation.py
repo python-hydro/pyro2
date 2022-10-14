@@ -9,13 +9,13 @@ except KeyError:
     pass
 import matplotlib.pyplot as plt
 
-import lm_atm.LM_atm_interface as lm_interface
-import mesh.array_indexer as ai
-import mesh.boundary as bnd
-import mesh.patch as patch
-import mesh.reconstruction as reconstruction
-import multigrid.variable_coeff_MG as vcMG
-from simulation_null import NullSimulation, bc_setup, grid_setup
+import pyro.lm_atm.LM_atm_interface as lm_interface
+import pyro.mesh.array_indexer as ai
+import pyro.mesh.boundary as bnd
+import pyro.mesh.patch as patch
+import pyro.mesh.reconstruction as reconstruction
+import pyro.multigrid.variable_coeff_MG as vcMG
+from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
 
 
 class Basestate:

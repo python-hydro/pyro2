@@ -1,10 +1,10 @@
 import numpy as np
 from numpy.testing import assert_array_equal
 
-import mesh.patch as patch
-import particles.particles as particles
-from simulation_null import NullSimulation, bc_setup, grid_setup
-from util import runparams
+import pyro.mesh.patch as patch
+import pyro.particles.particles as particles
+from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
+from pyro.util import runparams
 
 
 def test_particle():

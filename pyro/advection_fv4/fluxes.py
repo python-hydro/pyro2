@@ -1,5 +1,5 @@
-import advection_fv4.interface as interface
-import mesh.array_indexer as ai
+import pyro.advection_fv4.interface as interface
+import pyro.mesh.array_indexer as ai
 
 
 def fluxes(my_data, rp, dt):

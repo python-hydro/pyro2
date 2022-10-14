@@ -12,10 +12,10 @@ except KeyError:
     pass
 import matplotlib.pyplot as plt
 
-import mesh.patch as patch
-import multigrid.MG as MG
-from simulation_null import NullSimulation, bc_setup, grid_setup
-from util import msg
+import pyro.mesh.patch as patch
+import pyro.multigrid.MG as MG
+from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
+from pyro.util import msg
 
 
 class Simulation(NullSimulation):
