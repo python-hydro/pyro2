@@ -4,11 +4,10 @@ try:
     matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
 except KeyError:
     pass
-import matplotlib.pyplot as plt
-import numpy as np
-
 import compressible
 import compressible.eos as eos
+import matplotlib.pyplot as plt
+import numpy as np
 import util.plot_tools as plot_tools
 
 

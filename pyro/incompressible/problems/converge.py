@@ -29,7 +29,7 @@ import math
 import numpy as np
 
 import pyro.mesh.patch as patch
-from pyrp/util import msg
+from pyro.util import msg
 
 
 def init_data(my_data, rp):

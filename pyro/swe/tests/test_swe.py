@@ -1,7 +1,6 @@
 import numpy as np
-from numpy.testing import assert_array_equal
-
 import swe.simulation as sn
+from numpy.testing import assert_array_equal
 from util import runparams
 
 

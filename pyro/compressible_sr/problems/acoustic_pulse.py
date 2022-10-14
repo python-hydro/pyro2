@@ -1,6 +1,5 @@
-import numpy as np
-
 import compressible_sr.eos as eos
+import numpy as np
 from util import msg
 
 

@@ -5,7 +5,6 @@ import math
 import sys
 
 import numpy as np
-
 import util.io_pyro as io
 
 usage = """

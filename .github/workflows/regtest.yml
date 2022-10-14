@@ -44,5 +44,7 @@ jobs:
         run: python setup.py install --user
 
       - name: Run tests via test.py
-        run: PYTHONPATH=$GITHUB_WORKSPACE ./test.py
+        run: |
+          cd pyro
+          PYTHONPATH=$GITHUB_WORKSPACE/pyro ./test.py
 

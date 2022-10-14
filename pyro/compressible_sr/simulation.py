@@ -6,14 +6,13 @@ try:
     matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
 except KeyError:
     pass
-import matplotlib.pyplot as plt
-import numpy as np
-
 import compressible_sr.BC as BC
 import compressible_sr.derives as derives
 import compressible_sr.eos as eos
 import compressible_sr.unsplit_fluxes as flx
+import matplotlib.pyplot as plt
 import mesh.boundary as bnd
+import numpy as np
 import util.plot_tools as plot_tools
 from simulation_null import NullSimulation, bc_setup, grid_setup
 

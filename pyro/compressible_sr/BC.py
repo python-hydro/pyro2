@@ -12,10 +12,9 @@ we'll do a special case for them
 
 import math
 
-import numpy as np
-
 import compressible_sr.eos as eos
 import compressible_sr.unsplit_fluxes as flx
+import numpy as np
 from util import msg
 
 

@@ -1,7 +1,6 @@
-import numpy as np
-
 import compressible_sr.eos as eos
 import compressible_sr.unsplit_fluxes as flx
+import numpy as np
 
 
 def derive_primitives(myd, varnames, ivars, myg):

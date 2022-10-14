@@ -1,8 +1,7 @@
+import compressible.simulation as sn
 import numpy as np
 import pytest
 from numpy.testing import assert_array_equal
-
-import compressible.simulation as sn
 from util import runparams
 
 

@@ -6,9 +6,8 @@ import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.optimize import brentq
-
 import util.io_pyro as io
+from scipy.optimize import brentq
 from util import msg, runparams
 
 usage = """

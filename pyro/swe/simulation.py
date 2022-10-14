@@ -8,7 +8,6 @@ try:
 except KeyError:
     pass
 import matplotlib.pyplot as plt
-
 import mesh.boundary as bnd
 import particles.particles as particles
 import swe.derives as derives
