@@ -1,7 +1,7 @@
-import advection
-import advection_rk.fluxes as flx
-import mesh.array_indexer as ai
-import mesh.integration as integration
+import pyro.advection as advection
+import pyro.advection_rk.fluxes as flx
+import pyro.mesh.array_indexer as ai
+import pyro.mesh.integration as integration
 
 
 class Simulation(advection.Simulation):
