@@ -8,6 +8,12 @@ for path in Path("pyro").rglob("_default*"):
     defaults.append(str(path.relative_to("./pyro")))
 print(defaults)
 
+# find all of the "inputs" files
+inputs = []
+for path in Path("pyro").rglob("inputs*"):
+    if path.name != "inputs.auto":
+        inputs.append(str(path.relative_to("./pyro")))
+
 benchmarks = ["advection/tests/*.h5",
               "advection_fv4/tests/*.h5",
               "advection_nonuniform/tests/*.h5",
@@ -30,7 +36,7 @@ setup(name='pyro',
       license='BSD',
       packages=find_packages(),
       scripts=["pyro/pyro_sim.py"],
-      package_data={"pyro": benchmarks + defaults},
+      package_data={"pyro": benchmarks + defaults + inputs},
       install_requires=['numpy', 'numba', 'matplotlib', 'h5py'],
       use_scm_version={"version_scheme": "post-release",
                        "write_to": "pyro/_version.py"},
