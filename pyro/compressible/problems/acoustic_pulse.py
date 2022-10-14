@@ -2,8 +2,8 @@ import sys
 
 import numpy as np
 
-import mesh.fv as fv
-from util import msg
+import pyro.mesh.fv as fv
+from pyro.util import msg
 
 
 def init_data(myd, rp):

@@ -1,6 +1,6 @@
 import sys
 
-import mesh.patch as patch
+import pyro.mesh.patch as patch
 
 
 def init_data(my_data, rp):

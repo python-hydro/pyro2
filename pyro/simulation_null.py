@@ -3,9 +3,9 @@ import importlib
 import h5py
 
 import pyro.mesh.boundary as bnd
-import mesh.patch as patch
-import util.profile_pyro as profile
-from util import msg
+import pyro.mesh.patch as patch
+import pyro.util.profile_pyro as profile
+from pyro.util import msg
 
 
 def grid_setup(rp, ng=1):
