@@ -218,7 +218,7 @@ class NullSimulation(object):
         finalize() method.
         """
         # there should be a cleaner way of doing this
-        problem = importlib.import_module("{}.problems.{}".format(self.solver_name, self.problem_name))
+        problem = importlib.import_module("pyro.{}.problems.{}".format(self.solver_name, self.problem_name))
 
         problem.finalize()
 

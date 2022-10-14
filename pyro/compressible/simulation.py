@@ -163,7 +163,7 @@ class Simulation(NullSimulation):
         self.cc_data.add_derived(derives.derive_primitives)
 
         # initial conditions for the problem
-        problem = importlib.import_module("{}.problems.{}".format(
+        problem = importlib.import_module("pyro.{}.problems.{}".format(
             self.solver_name, self.problem_name))
         problem.init_data(self.cc_data, self.rp)
 

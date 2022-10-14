@@ -40,7 +40,7 @@ class Simulation(NullSimulation):
             self.particles = particles.Particles(self.cc_data, bc, n_particles, particle_generator)
 
         # now set the initial conditions for the problem
-        problem = importlib.import_module(f"advection.problems.{self.problem_name}")
+        problem = importlib.import_module(f"pyro.advection.problems.{self.problem_name}")
         problem.init_data(self.cc_data, self.rp)
 
     def method_compute_timestep(self):

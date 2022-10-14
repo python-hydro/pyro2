@@ -119,7 +119,7 @@ class Simulation(NullSimulation):
         self.base["p0"] = Basestate(myg.ny, ng=myg.ng)
 
         # now set the initial conditions for the problem
-        problem = importlib.import_module(f"lm_atm.problems.{self.problem_name}")
+        problem = importlib.import_module(f"pyro.lm_atm.problems.{self.problem_name}")
         problem.init_data(self.cc_data, self.base, self.rp)
 
         # Construct beta_0

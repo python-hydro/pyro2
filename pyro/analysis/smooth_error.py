@@ -39,7 +39,7 @@ analytic.register_var("density", bco)
 analytic.create()
 
 # use the original initialization routine to set the analytic solution
-problem = importlib.import_module(f"{sim.solver_name}.problems.{sim.problem_name}")
+problem = importlib.import_module(f"pyro.{sim.solver_name}.problems.{sim.problem_name}")
 problem.init_data(analytic, None)
 
 # compare the error

@@ -61,7 +61,7 @@ class Simulation(NullSimulation):
             self.particles = particles.Particles(self.cc_data, bc, n_particles, particle_generator)
 
         # now set the initial conditions for the problem
-        problem = importlib.import_module(f"advection_nonuniform.problems.{self.problem_name}")
+        problem = importlib.import_module(f"pyro.advection_nonuniform.problems.{self.problem_name}")
         problem.init_data(self.cc_data, self.rp)
 
         # compute the required shift for each node using corresponding velocity at the node

@@ -46,7 +46,7 @@ class Pyro:
         msg.bold('pyro ...')
 
         if solver_name not in valid_solvers:
-            msg.fail("ERROR: %s is not a valid solver" % solver_name)
+            msg.fail(f"ERROR: {solver_name} is not a valid solver")
 
         self.pyro_home = os.path.dirname(os.path.realpath(__file__)) + '/'
         if not solver_name.startswith("pyro."):
@@ -62,10 +62,14 @@ class Pyro:
         # runtime parameters
         # -------------------------------------------------------------------------
 
+        print("trying to load")
+        print(self.pyro_home)
+        print(self.solver_name)
+
         # parameter defaults
         self.rp = runparams.RuntimeParameters()
         self.rp.load_params(self.pyro_home + "_defaults")
-        self.rp.load_params(self.pyro_home + solver_name + "/_defaults")
+        self.rp.load_params(self.pyro_home + self.solver_name + "/_defaults")
 
         self.tc = profile.TimerCollection()
 
