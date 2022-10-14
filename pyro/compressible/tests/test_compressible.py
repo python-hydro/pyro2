@@ -1,8 +1,8 @@
-import compressible.simulation as sn
+import pyro.compressible.simulation as sn
 import numpy as np
 import pytest
 from numpy.testing import assert_array_equal
-from util import runparams
+from pyro.util import runparams
 
 
 class TestSimulation(object):

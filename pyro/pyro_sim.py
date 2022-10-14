@@ -49,9 +49,13 @@ class Pyro:
             msg.fail("ERROR: %s is not a valid solver" % solver_name)
 
         self.pyro_home = os.path.dirname(os.path.realpath(__file__)) + '/'
+        if not solver_name.startswith("pyro."):
+            solver_import = "pyro." + solver_name
+        else:
+            solver_import = solver_name
 
         # import desired solver under "solver" namespace
-        self.solver = importlib.import_module(solver_name)
+        self.solver = importlib.import_module(solver_import)
         self.solver_name = solver_name
 
         # -------------------------------------------------------------------------

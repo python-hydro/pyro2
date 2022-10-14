@@ -1,5 +1,5 @@
-import diffusion.simulation as sn
-from util import runparams
+import pyro.diffusion.simulation as sn
+from pyro.util import runparams
 
 
 class TestSimulation(object):

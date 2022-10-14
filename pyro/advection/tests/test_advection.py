@@ -1,5 +1,5 @@
-import advection.simulation as sn
-from util import runparams
+import pyro.advection.simulation as sn
+from pyro.util import runparams
 
 
 class TestSimulation(object):

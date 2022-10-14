@@ -1,5 +1,5 @@
-import compressible_rk.simulation as sn
-from util import runparams
+import pyro.compressible_rk.simulation as sn
+from pyro.util import runparams
 
 
 class TestSimulation(object):

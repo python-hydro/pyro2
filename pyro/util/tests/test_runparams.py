@@ -1,4 +1,4 @@
-import util.runparams as rp
+import pyro.util.runparams as rp
 
 # test the utilities
 
