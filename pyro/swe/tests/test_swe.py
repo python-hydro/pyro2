@@ -1,6 +1,7 @@
 import numpy as np
-import pyro.swe.simulation as sn
 from numpy.testing import assert_array_equal
+
+import pyro.swe.simulation as sn
 from pyro.util import runparams
 
 
