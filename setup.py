@@ -1,4 +1,5 @@
 from pathlib import Path
+import glob
 
 from setuptools import setup, find_packages
 
@@ -8,14 +9,15 @@ for path in Path("pyro").rglob("_default*"):
     defaults.append(str(path.relative_to("./pyro")))
 
 # find all of the problem "_pname.defaults" files
-for path in Path("pyro").rglob("_*.defaults"):
-    defaults.append(str(path.relative_to("./pyro")))
+# note: pathlib doesn't work here, because of symlinks
+for f in glob.glob("pyro/**/_*.defaults", recursive=True):
+    defaults.append(f.replace("pyro/", ""))
 
 # find all of the "inputs" files
 inputs = []
-for path in Path("pyro").rglob("inputs*"):
-    if path.name != "inputs.auto":
-        inputs.append(str(path.relative_to("./pyro")))
+for f in glob.glob("pyro/**/inputs*", recursive=True):
+    if not f.endswith("inputs.auto"):
+        inputs.append(f.replace("pyro/", ""))
 
 benchmarks = ["advection/tests/*.h5",
               "advection_fv4/tests/*.h5",
