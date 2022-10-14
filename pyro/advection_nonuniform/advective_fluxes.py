@@ -1,4 +1,4 @@
-import mesh.reconstruction as reconstruction
+import pyro.mesh.reconstruction as reconstruction
 import numpy as np
 
 

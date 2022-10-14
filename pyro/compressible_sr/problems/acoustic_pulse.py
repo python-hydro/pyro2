@@ -1,6 +1,6 @@
-import compressible_sr.eos as eos
+import pyro.compressible_sr.eos as eos
 import numpy as np
-from util import msg
+from pyro.util import msg
 
 
 def init_data(myd, rp):

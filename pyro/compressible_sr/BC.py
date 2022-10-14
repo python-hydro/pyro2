@@ -12,10 +12,10 @@ we'll do a special case for them
 
 import math
 
-import compressible_sr.eos as eos
-import compressible_sr.unsplit_fluxes as flx
+import pyro.compressible_sr.eos as eos
+import pyro.compressible_sr.unsplit_fluxes as flx
 import numpy as np
-from util import msg
+from pyro.util import msg
 
 
 def user(bc_name, bc_edge, variable, ccdata, ivars):

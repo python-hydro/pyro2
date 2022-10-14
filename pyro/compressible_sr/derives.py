@@ -1,5 +1,5 @@
-import compressible_sr.eos as eos
-import compressible_sr.unsplit_fluxes as flx
+import pyro.compressible_sr.eos as eos
+import pyro.compressible_sr.unsplit_fluxes as flx
 import numpy as np
 
 

@@ -8,12 +8,12 @@ try:
 except KeyError:
     pass
 import matplotlib.pyplot as plt
-import mesh.boundary as bnd
-import particles.particles as particles
-import swe.derives as derives
-import swe.unsplit_fluxes as flx
-import util.plot_tools as plot_tools
-from simulation_null import NullSimulation, bc_setup, grid_setup
+import pyro.mesh.boundary as bnd
+import pyro.particles.particles as particles
+import pyro.swe.derives as derives
+import pyro.swe.unsplit_fluxes as flx
+import pyro.util.plot_tools as plot_tools
+from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
 
 
 class Variables:

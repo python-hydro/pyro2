@@ -6,7 +6,7 @@ import datetime
 import os
 import sys
 
-import pyro_sim as pyro
+import pyro.pyro_sim as pyro
 
 import examples.multigrid.mg_test_general_inhomogeneous as mg_test_general_inhomogeneous
 import examples.multigrid.mg_test_simple as mg_test_simple

@@ -104,7 +104,7 @@ class NullSimulation(object):
 
         self.n = 0
         self.dt = -1.e33
-        self.old_dt = -1.e33
+        self.dt_old = -1.e33
 
         self.data_class = data_class
 

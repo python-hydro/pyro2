@@ -122,11 +122,11 @@ Updating U_{i,j}:
 
 """
 
-import mesh.array_indexer as ai
-import mesh.reconstruction as reconstruction
-import swe as comp
-import swe.interface as ifc
-from util import msg
+import pyro.mesh.array_indexer as ai
+import pyro.mesh.reconstruction as reconstruction
+import pyro.swe as comp
+import pyro.swe.interface as ifc
+from pyro.util import msg
 
 
 def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):

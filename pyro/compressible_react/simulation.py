@@ -4,11 +4,11 @@ try:
     matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
 except KeyError:
     pass
-import compressible
-import compressible.eos as eos
+import pyro.compressible as compressible
+import pyro.compressible.eos as eos
 import matplotlib.pyplot as plt
 import numpy as np
-import util.plot_tools as plot_tools
+import pyro.util.plot_tools as plot_tools
 
 
 class Simulation(compressible.Simulation):
