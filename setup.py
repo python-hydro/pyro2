@@ -6,7 +6,10 @@ from setuptools import setup, find_packages
 defaults = []
 for path in Path("pyro").rglob("_default*"):
     defaults.append(str(path.relative_to("./pyro")))
-print(defaults)
+
+# find all of the problem "_pname.defaults" files
+for path in Path("pyro").rglob("_*.defaults"):
+    defaults.append(str(path.relative_to("./pyro")))
 
 # find all of the "inputs" files
 inputs = []
