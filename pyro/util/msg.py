@@ -30,7 +30,7 @@ def fail(string):
     if hasattr(sys, 'ps1'):
         return
     else:
-        sys.exit()
+        sys.exit(1)
 
 
 def warning(string):
