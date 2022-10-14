@@ -46,5 +46,5 @@ jobs:
       - name: Run tests via test.py
         run: |
           cd pyro
-          PYTHONPATH=$GITHUB_WORKSPACE/pyro ./test.py
+          ./test.py
 
