@@ -1,7 +1,7 @@
 import numpy as np
 from numpy.testing import assert_array_equal
 
-from pyro import Pyro
+from pyro_sim import Pyro
 
 
 class TestSimulation(object):

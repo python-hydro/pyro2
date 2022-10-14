@@ -3,6 +3,7 @@ support output in highlighted colors
 """
 
 import sys
+import traceback
 
 
 # inspiration from
@@ -23,7 +24,7 @@ def fail(string):
     failure
     """
     print(_TermColors.FAIL + string + _TermColors.ENDC)
-
+    traceback.print_stack()
     # only exit if we are not running in interactive mode.  sys.ps1 is
     # only defined in interactive mode.
     if hasattr(sys, 'ps1'):

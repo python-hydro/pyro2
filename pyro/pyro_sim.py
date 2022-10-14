@@ -7,7 +7,7 @@ import os
 
 import matplotlib.pyplot as plt
 
-import pyro.util.compare as compare
+from pyro.util import compare
 import pyro.util.io_pyro as io
 import pyro.util.profile_pyro as profile
 from pyro.util import msg, runparams
