@@ -7,10 +7,10 @@ import os
 
 import matplotlib.pyplot as plt
 
-import compare
-import util.io_pyro as io
-import util.profile_pyro as profile
-from util import msg, runparams
+import pyro.util.compare as compare
+import pyro.util.io_pyro as io
+import pyro.util.profile_pyro as profile
+from pyro.util import msg, runparams
 
 valid_solvers = ["advection",
                  "advection_nonuniform",
