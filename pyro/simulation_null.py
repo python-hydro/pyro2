@@ -2,7 +2,7 @@ import importlib
 
 import h5py
 
-import mesh.boundary as bnd
+import pyro.mesh.boundary as bnd
 import mesh.patch as patch
 import util.profile_pyro as profile
 from util import msg

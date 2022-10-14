@@ -14,8 +14,8 @@ import math
 
 import numpy as np
 
-import compressible.eos as eos
-from util import msg
+import pyro.compressible.eos as eos
+from pyro.util import msg
 
 
 def user(bc_name, bc_edge, variable, ccdata):

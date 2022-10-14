@@ -9,14 +9,14 @@ except KeyError:
     pass
 import matplotlib.pyplot as plt
 
-import compressible.BC as BC
-import compressible.derives as derives
-import compressible.eos as eos
-import compressible.unsplit_fluxes as flx
-import mesh.boundary as bnd
-import particles.particles as particles
-import util.plot_tools as plot_tools
-from simulation_null import NullSimulation, bc_setup, grid_setup
+import pyro.compressible.BC as BC
+import pyro.compressible.derives as derives
+import pyro.compressible.eos as eos
+import pyro.compressible.unsplit_fluxes as flx
+import pyro.mesh.boundary as bnd
+import pyro.particles.particles as particles
+import pyro.util.plot_tools as plot_tools
+from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
 
 
 class Variables:

@@ -1,6 +1,6 @@
 import numpy as np
 
-import compressible.eos as eos
+import pyro.compressible.eos as eos
 
 
 def derive_primitives(myd, varnames):
