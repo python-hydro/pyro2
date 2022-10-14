@@ -1,6 +1,7 @@
+import numpy as np
+
 import pyro.compressible_sr.eos as eos
 import pyro.compressible_sr.unsplit_fluxes as flx
-import numpy as np
 
 
 def derive_primitives(myd, varnames, ivars, myg):

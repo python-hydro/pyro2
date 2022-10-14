@@ -1,5 +1,6 @@
-import pyro.compressible_sr.eos as eos
 import numpy as np
+
+import pyro.compressible_sr.eos as eos
 from pyro.util import msg
 
 

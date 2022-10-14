@@ -4,6 +4,7 @@ import argparse
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+
 import pyro.util.io_pyro as io
 
 mpl.rcParams["text.usetex"] = True

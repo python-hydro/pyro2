@@ -6,13 +6,14 @@ try:
     matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
 except KeyError:
     pass
+import matplotlib.pyplot as plt
+import numpy as np
+
 import pyro.compressible_sr.BC as BC
 import pyro.compressible_sr.derives as derives
 import pyro.compressible_sr.eos as eos
 import pyro.compressible_sr.unsplit_fluxes as flx
-import matplotlib.pyplot as plt
 import pyro.mesh.boundary as bnd
-import numpy as np
 import pyro.util.plot_tools as plot_tools
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
 

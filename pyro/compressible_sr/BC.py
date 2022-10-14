@@ -12,9 +12,10 @@ we'll do a special case for them
 
 import math
 
+import numpy as np
+
 import pyro.compressible_sr.eos as eos
 import pyro.compressible_sr.unsplit_fluxes as flx
-import numpy as np
 from pyro.util import msg
 
 
