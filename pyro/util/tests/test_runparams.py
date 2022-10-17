@@ -1,3 +1,5 @@
+import os
+
 import pyro.util.runparams as rp
 
 # test the utilities
@@ -35,7 +37,8 @@ class TestRunParams(object):
     def setup_method(self):
         """ this is run before each test """
         self.rp = rp.RuntimeParameters()
-        self.rp.load_params("util/tests/test.ini")
+        tests_dir = os.path.dirname(os.path.realpath(__file__))
+        self.rp.load_params(os.path.join(tests_dir, "test.ini"))
 
     def teardown_method(self):
         """ this is run after each test """
