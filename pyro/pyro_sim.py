@@ -62,10 +62,6 @@ class Pyro:
         # runtime parameters
         # -------------------------------------------------------------------------
 
-        print("trying to load")
-        print(self.pyro_home)
-        print(self.solver_name)
-
         # parameter defaults
         self.rp = runparams.RuntimeParameters()
         self.rp.load_params(self.pyro_home + "_defaults")
