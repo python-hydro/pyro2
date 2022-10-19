@@ -3,7 +3,8 @@
 import sys
 
 import numpy as np
-import util.io_pyro as io
+
+import pyro.util.io_pyro as io
 
 # read in two files -- one twice the resolution of the other, and
 # compute the error by averaging down
