@@ -3,7 +3,6 @@
 
 import sys
 
-import diffusion.problems.gaussian as gaussian
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
