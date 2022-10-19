@@ -11,10 +11,11 @@ def limit(data, myg, idir, limiter):
     of the limiter input variable."""
     if limiter == 0:
         return nolimit(data, myg, idir)
-    elif limiter == 1:
+
+    if limiter == 1:
         return limit2(data, myg, idir)
-    else:
-        return limit4(data, myg, idir)
+
+    return limit4(data, myg, idir)
 
 
 def well_balance(q, myg, limiter, iv, grav):
