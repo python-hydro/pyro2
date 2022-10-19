@@ -20,10 +20,10 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
-import compare
-import multigrid.MG as MG
-import util.io_pyro as io
-from util import msg
+from pyro.util import compare
+import pyro.multigrid.MG as MG
+import pyro.util.io_pyro as io
+import pyro.util.msg as msg
 
 
 # the analytic solution

@@ -3,8 +3,8 @@
 
 import numpy as np
 
-import mesh.boundary as bnd
-import mesh.patch as patch
+import pyro.mesh.boundary as bnd
+import pyro.mesh.patch as patch
 
 
 def doit():

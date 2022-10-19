@@ -20,3 +20,8 @@ inputs.auto
 .pytest_cache/
 
 __pycache__/
+
+
+pyro/_version.py
+pyro.egg-info/
+.eggs/

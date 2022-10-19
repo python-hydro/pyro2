@@ -41,5 +41,5 @@ jobs:
         run: python setup.py install --user
 
       - name: Validate
-        run: isort -c .
+        run: isort -c pyro
 
