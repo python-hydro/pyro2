@@ -6,7 +6,8 @@ import argparse
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
-import util.io_pyro as io
+
+import pyro.util.io_pyro as io
 
 mpl.rcParams["text.usetex"] = True
 mpl.rcParams['mathtext.fontset'] = 'cm'
