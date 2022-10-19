@@ -4,7 +4,8 @@ import argparse
 
 import matplotlib.pyplot as plt
 import numpy as np
-import util.io_pyro as io
+
+import pyro.util.io_pyro as io
 
 
 def makeplot(plotfile, variable, outfile, vmin=None, vmax=None):
