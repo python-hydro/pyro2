@@ -4,7 +4,8 @@ import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
-import util.io_pyro as io
+
+import pyro.util.io_pyro as io
 
 # plot an output file using the solver's dovis script
 
