@@ -41,5 +41,5 @@ jobs:
         run: python setup.py install --user
 
       - name: Validate
-        run: pylint --errors-only pyro
+        run: pylint --errors-only pyro pyro/analysis
 
