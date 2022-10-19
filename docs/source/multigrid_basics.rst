@@ -25,7 +25,10 @@ There are three solvers:
 We simply use V-cycles in our implementation, and restrict ourselves
 to square grids with zoning a power of 2.
 
-The multigrid solver is not controlled through pyro.py since there is no time-dependence in pure elliptic problems. Instead, there are a few scripts in the multigrid/ subdirectory that demonstrate its use.
+The multigrid solver is not controlled through ``pyro_sim.py`` since
+there is no time-dependence in pure elliptic problems. Instead, there
+are a few scripts in the multigrid/ subdirectory that demonstrate its
+use.
 
 Examples
 --------

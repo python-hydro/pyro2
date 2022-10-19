@@ -39,8 +39,8 @@ y-directions. It can be run as:
 
 .. code-block:: none
 
-   ./pyro.py swe dam inputs.dam.x
-   ./pyro.py swe dam inputs.dam.y
+   ./pyro_sim.py swe dam inputs.dam.x
+   ./pyro_sim.py swe dam inputs.dam.y
 
 A simple script, ``dam_compare.py`` in ``analysis/`` will read a pyro output
 file and plot the solution over the exact dam break solution (as given by
@@ -70,7 +70,7 @@ online by Pawel Artymowicz). It is run as:
 
 .. code-block:: none
 
-   ./pyro.py swe quad inputs.quad
+   ./pyro_sim.py swe quad inputs.quad
 
 
 kh
@@ -84,7 +84,7 @@ is seen in the standard compressible problem. It is run as:
 
 .. code-block:: none
 
-   ./pyro.py swe kh inputs.kh
+   ./pyro_sim.py swe kh inputs.kh
 
 
 Exercises

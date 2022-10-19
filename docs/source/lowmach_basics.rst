@@ -33,5 +33,5 @@ rises. This is run as:
 
 .. code-block:: none
 
-   ./pyro.py lm_atm bubble inputs.bubble
+   ./pyro_sim.py lm_atm bubble inputs.bubble
 
