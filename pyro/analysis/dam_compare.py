@@ -6,9 +6,10 @@ import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
-import util.io_pyro as io
 from scipy.optimize import brentq
-from util import msg, runparams
+
+import pyro.util.io_pyro as io
+from pyro.util import msg, runparams
 
 usage = """
       compare the output for a dam problem with the exact solution contained
