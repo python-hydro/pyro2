@@ -1,7 +1,7 @@
-from pathlib import Path
 import glob
+from pathlib import Path
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 # find all of the "_default" files
 defaults = []
@@ -40,7 +40,11 @@ setup(name='pyro',
       url='https://github.com/python-hydro/pyro2',
       license='BSD',
       packages=find_packages(),
-      scripts=["pyro/pyro_sim.py"],
+      entry_points={
+          "console_scripts": [
+              "pyro_sim.py = pyro.pyro_sim:main",
+          ]
+      },
       package_data={"pyro": benchmarks + defaults + inputs},
       install_requires=['numpy', 'numba', 'matplotlib', 'h5py'],
       use_scm_version={"version_scheme": "post-release",

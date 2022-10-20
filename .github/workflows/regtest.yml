@@ -44,7 +44,5 @@ jobs:
         run: python setup.py install --user
 
       - name: Run tests via test.py
-        run: |
-          cd pyro
-          ./test.py
+        run: ./pyro/test.py
 

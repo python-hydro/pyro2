@@ -10,6 +10,7 @@ import examples.multigrid.mg_test_general_inhomogeneous as mg_test_general_inhom
 import examples.multigrid.mg_test_simple as mg_test_simple
 import examples.multigrid.mg_test_vc_dirichlet as mg_test_vc_dirichlet
 import examples.multigrid.mg_test_vc_periodic as mg_test_vc_periodic
+
 import pyro.pyro_sim as pyro
 
 
@@ -70,23 +71,24 @@ def do_tests(out_file,
 
     # standalone tests
     if single is None:
-        err = mg_test_simple.test_poisson_dirichlet(256, comp_bench=True, bench_dir="multigrid/tests/",
+        bench_dir = os.path.dirname(os.path.realpath(__file__)) + "/multigrid/tests/"
+        err = mg_test_simple.test_poisson_dirichlet(256, comp_bench=True, bench_dir=bench_dir,
                                                     store_bench=store_all_benchmarks, verbose=0)
         results["mg_poisson_dirichlet"] = err
 
         err = mg_test_vc_dirichlet.test_vc_poisson_dirichlet(512,
-                                                             comp_bench=True, bench_dir="multigrid/tests/",
+                                                             comp_bench=True, bench_dir=bench_dir,
                                                              store_bench=store_all_benchmarks, verbose=0)
         results["mg_vc_poisson_dirichlet"] = err
 
-        err = mg_test_vc_periodic.test_vc_poisson_periodic(512, comp_bench=True, bench_dir="multigrid/tests/",
+        err = mg_test_vc_periodic.test_vc_poisson_periodic(512, comp_bench=True, bench_dir=bench_dir,
                                                            store_bench=store_all_benchmarks,
                                                            verbose=0)
         results["mg_vc_poisson_periodic"] = err
 
         err = mg_test_general_inhomogeneous.test_general_poisson_inhomogeneous(512,
                                                                                comp_bench=True,
-                                                                               bench_dir="multigrid/tests/",
+                                                                               bench_dir=bench_dir,
                                                                                store_bench=store_all_benchmarks,
                                                                                verbose=0)
         results["mg_general_poisson_inhomogeneous"] = err

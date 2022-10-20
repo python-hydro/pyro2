@@ -296,8 +296,8 @@ class PyroBenchmark(Pyro):
         """ Are we comparing to a benchmark? """
 
         basename = self.rp.get_param("io.basename")
-        compare_file = "{}/tests/{}{:04d}".format(
-            self.solver_name, basename, self.sim.n)
+        compare_file = "{}{}/tests/{}{:04d}".format(
+            self.pyro_home, self.solver_name, basename, self.sim.n)
         msg.warning(f"comparing to: {compare_file} ")
         try:
             sim_bench = io.read(compare_file)
@@ -317,9 +317,9 @@ class PyroBenchmark(Pyro):
     def store_as_benchmark(self):
         """ Are we storing a benchmark? """
 
-        if not os.path.isdir(self.solver_name + "/tests/"):
+        if not os.path.isdir(self.pyro_home + self.solver_name + "/tests/"):
             try:
-                os.mkdir(self.solver_name + "/tests/")
+                os.mkdir(self.pyro_home + self.solver_name + "/tests/")
             except (FileNotFoundError, PermissionError):
                 msg.fail(
                     "ERROR: unable to create the solver's tests/ directory")
@@ -357,7 +357,7 @@ def parse_args():
     return p.parse_args()
 
 
-if __name__ == "__main__":
+def main():
     args = parse_args()
 
     if args.compare_benchmark or args.make_benchmark:
@@ -371,3 +371,7 @@ if __name__ == "__main__":
                             inputs_file=args.param[0],
                             other_commands=args.other)
     pyro.run_sim()
+
+
+if __name__ == "__main__":
+    main()
