@@ -340,9 +340,10 @@ class CellCenterData2d:
         my_str += "         variables:\n"
 
         for n in range(self.nvar):
-            my_str += f"{self.names[n]:16s}: min: {self.min(self.names[n]):15.10f}    max: {self.max(self.names[n]):15.10f}\n"
-            my_str += f"{' ':16s}  BCs: -x: {self.BCs[self.names[n]].xlb:-12s} +x: {self.BCs[self.names[n]].xrb:-12s}"
-            my_str += f" -y: {self.BCs[self.names[n]].ylb:-12s} +y: {self.BCs[self.names[n]].yrb:-12s}\n"
+            name = self.names[n]
+            my_str += f"{name:>16s}: min: {self.min(name):15.10f}    max: {self.max(name):15.10f}\n"
+            my_str += f"{' ':>16s}  BCs: -x: {self.BCs[name].xlb:12s} +x: {self.BCs[name].xrb:12s}"
+            my_str += f" -y: {self.BCs[name].ylb:12s} +y: {self.BCs[name].yrb:12s}\n"
 
         return my_str
 
