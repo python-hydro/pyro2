@@ -31,8 +31,8 @@ class ArrayIndexer(np.ndarray):
 
     """
 
-    def __new__(self, d, grid=None):
-        obj = np.asarray(d).view(self)
+    def __new__(cls, d, grid=None):
+        obj = np.asarray(d).view(cls)
         obj.g = grid
         obj.c = len(d.shape)
 
@@ -86,9 +86,9 @@ class ArrayIndexer(np.ndarray):
         if c == 2:
             return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
                                    self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s])
-        else:
-            return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
-                                   self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s, n])
+
+        return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
+                               self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s, n])
 
     def lap(self, n=0, buf=0):
         """return the 5-point Laplacian"""
@@ -107,10 +107,9 @@ class ArrayIndexer(np.ndarray):
             return np.sqrt(self.g.dx * self.g.dy *
                            np.sum((self[self.g.ilo:self.g.ihi+1, self.g.jlo:self.g.jhi+1]**2).flat))
 
-        else:
-            _tmp = self[:, :, n]
-            return np.sqrt(self.g.dx * self.g.dy *
-                           np.sum((_tmp[self.g.ilo:self.g.ihi+1, self.g.jlo:self.g.jhi+1]**2).flat))
+        _tmp = self[:, :, n]
+        return np.sqrt(self.g.dx * self.g.dy *
+                       np.sum((_tmp[self.g.ilo:self.g.ihi+1, self.g.jlo:self.g.jhi+1]**2).flat))
 
     def copy(self):
         """make a copy of the array, defined on the same grid"""
@@ -341,8 +340,8 @@ class ArrayIndexerFC(ArrayIndexer):
 
     """
 
-    def __new__(self, d, idir, grid=None):
-        obj = np.asarray(d).view(self)
+    def __new__(cls, d, idir, grid=None):
+        obj = np.asarray(d).view(cls)
         obj.g = grid
         obj.idir = idir
         obj.c = len(d.shape)
@@ -375,17 +374,15 @@ class ArrayIndexerFC(ArrayIndexer):
             if c == 2:
                 return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+2+bxhi+ishift:s,
                                        self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s])
-            else:
-                return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+2+bxhi+ishift:s,
-                                       self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s, n])
-        elif self.idir == 2:
+            return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+2+bxhi+ishift:s,
+                                   self.g.jlo-bylo+jshift:self.g.jhi+1+byhi+jshift:s, n])
+        else:  # idir == 2
             # face-centered in y
             if c == 2:
                 return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
                                        self.g.jlo-bylo+jshift:self.g.jhi+2+byhi+jshift:s])
-            else:
-                return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
-                                       self.g.jlo-bylo+jshift:self.g.jhi+2+byhi+jshift:s, n])
+            return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+1+bxhi+ishift:s,
+                                   self.g.jlo-bylo+jshift:self.g.jhi+2+byhi+jshift:s, n])
 
     def lap(self, n=0, buf=0):
         raise NotImplementedError("lap not implemented for ArrayIndexerFC")
@@ -402,19 +399,18 @@ class ArrayIndexerFC(ArrayIndexer):
                 return np.sqrt(self.g.dx * self.g.dy *
                                np.sum((self[self.g.ilo:self.g.ihi+2, self.g.jlo:self.g.jhi+1]**2).flat))
 
-            else:
-                _tmp = self[:, :, n]
-                return np.sqrt(self.g.dx * self.g.dy *
-                               np.sum((_tmp[self.g.ilo:self.g.ihi+2, self.g.jlo:self.g.jhi+1]**2).flat))
-        elif self.idir == 2:
-            if c == 2:
-                return np.sqrt(self.g.dx * self.g.dy *
-                               np.sum((self[self.g.ilo:self.g.ihi+1, self.g.jlo:self.g.jhi+2]**2).flat))
+            _tmp = self[:, :, n]
+            return np.sqrt(self.g.dx * self.g.dy *
+                           np.sum((_tmp[self.g.ilo:self.g.ihi+2, self.g.jlo:self.g.jhi+1]**2).flat))
 
-            else:
-                _tmp = self[:, :, n]
-                return np.sqrt(self.g.dx * self.g.dy *
-                               np.sum((_tmp[self.g.ilo:self.g.ihi+1, self.g.jlo:self.g.jhi+2]**2).flat))
+        # idir == 2
+        if c == 2:
+            return np.sqrt(self.g.dx * self.g.dy *
+                           np.sum((self[self.g.ilo:self.g.ihi+1, self.g.jlo:self.g.jhi+2]**2).flat))
+
+        _tmp = self[:, :, n]
+        return np.sqrt(self.g.dx * self.g.dy *
+                       np.sum((_tmp[self.g.ilo:self.g.ihi+1, self.g.jlo:self.g.jhi+2]**2).flat))
 
     def copy(self):
         """make a copy of the array, defined on the same grid"""

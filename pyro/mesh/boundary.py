@@ -35,8 +35,7 @@ def define_bc(bc_type, function, is_solid=False):
 def _set_reflect(odd_reflect_dir, dir_string):
     if odd_reflect_dir == dir_string:
         return "reflect-odd"
-    else:
-        return "reflect-even"
+    return "reflect-even"
 
 
 class BCProp:
@@ -157,7 +156,7 @@ class BC:
             if self.xlb == "reflect":
                 self.xlb = _set_reflect(odd_reflect_dir, "x")
         else:
-            msg.fail("ERROR: xlb = %s invalid BC" % (xlb))
+            msg.fail(f"ERROR: xlb = {xlb} invalid BC")
 
         # +x boundary
         if xrb in valid:
@@ -165,7 +164,7 @@ class BC:
             if self.xrb == "reflect":
                 self.xrb = _set_reflect(odd_reflect_dir, "x")
         else:
-            msg.fail("ERROR: xrb = %s invalid BC" % (xrb))
+            msg.fail(f"ERROR: xrb = {xrb} invalid BC")
 
         # -y boundary
         if ylb in valid:
@@ -173,7 +172,7 @@ class BC:
             if self.ylb == "reflect":
                 self.ylb = _set_reflect(odd_reflect_dir, "y")
         else:
-            msg.fail("ERROR: ylb = %s invalid BC" % (ylb))
+            msg.fail(f"ERROR: ylb = {ylb} invalid BC")
 
         # +y boundary
         if yrb in valid:
@@ -181,7 +180,7 @@ class BC:
             if self.yrb == "reflect":
                 self.yrb = _set_reflect(odd_reflect_dir, "y")
         else:
-            msg.fail("ERROR: yrb = %s invalid BC" % (yrb))
+            msg.fail(f"ERROR: yrb = {yrb} invalid BC")
 
         # periodic checks
         if ((xlb == "periodic" and xrb != "periodic") or
@@ -207,7 +206,6 @@ class BC:
     def __str__(self):
         """ print out some basic information about the BC object """
 
-        string = "BCs: -x: %s  +x: %s  -y: %s  +y: %s" % \
-            (self.xlb, self.xrb, self.ylb, self.yrb)
+        string = f"BCs: -x: {self.xlb}  +x: {self.xrb}  -y: {self.ylb}  +y: {self.yrb}"
 
         return string
