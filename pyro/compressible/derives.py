@@ -1,6 +1,6 @@
 import numpy as np
 
-import pyro.compressible.eos as eos
+from pyro.compressible import eos
 
 
 def derive_primitives(myd, varnames):
@@ -52,5 +52,5 @@ def derive_primitives(myd, varnames):
 
     if len(derived_vars) > 1:
         return derived_vars
-    else:
-        return derived_vars[0]
+
+    return derived_vars[0]
