@@ -35,7 +35,7 @@ benchmarks = ["advection/tests/*.h5",
               "multigrid/tests/*.h5",
               "swe/tests/*.h5"]
 
-setup(name='pyro',
+setup(name='pyro-hydro',
       description='A python hydrodynamics code for teaching and prototyping',
       long_description=open('README.md', 'r').read(),
       long_description_content_type='text/markdown',
