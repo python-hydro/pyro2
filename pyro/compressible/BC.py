@@ -14,7 +14,7 @@ import math
 
 import numpy as np
 
-import pyro.compressible.eos as eos
+from pyro.compressible import eos
 from pyro.util import msg
 
 
@@ -211,7 +211,7 @@ def user(bc_name, bc_edge, variable, ccdata):
                 v[:, :] = 0.0   # no source term
 
     else:
-        msg.fail("error: bc type %s not supported" % (bc_name))
+        msg.fail(f"error: bc type {bc_name} not supported")
 
 
 def inflow_post_bc(var, g):
