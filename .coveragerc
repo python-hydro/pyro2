@@ -1,9 +1,0 @@
-[run]
-omit = examples/*
-       test.py
-       plot.py
-
-[report]
-omit = examples/*
-       test.py
-       plot.py
