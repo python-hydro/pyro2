@@ -32,7 +32,9 @@ https://github.com/python-hydro/pyro2
 The project webpage, where you'll find documentation, plots, notes,
 etc. is here:
 
-https://pyro2.readthedocs.io/
+https://python-hydro.github.io/pyro2
+
+(Note: there is an outdated page at readthedocs.org that is no longer updated)
 
 
 ## Table of Contents
