@@ -79,7 +79,7 @@ author = 'pyro development team'
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
-release = importlib_version("pyro")
+release = importlib_version("pyro-hydro")
 
 # The short X.Y version.
 version = '.'.join(release.split('.')[:2])
