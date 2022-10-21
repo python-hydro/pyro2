@@ -174,8 +174,7 @@ class Grid2d:
 
     def __str__(self):
         """ print out some basic information about the grid object """
-        return "2-d grid: nx = {}, ny = {}, ng = {}".format(
-            self.nx, self.ny, self.ng)
+        return f"2-d grid: nx = {self.nx}, ny = {self.ny}, ng = {self.ng}"
 
     def __eq__(self, other):
         """ are two grids equivalent? """
@@ -336,19 +335,15 @@ class CellCenterData2d:
             my_str = "CellCenterData2d object not yet initialized"
             return my_str
 
-        my_str = "cc data: nx = {}, ny = {}, ng = {}\n".format(
-            self.grid.nx, self.grid.ny, self.grid.ng)
+        my_str = f"cc data: nx = {self.grid.nx}, ny = {self.grid.ny}, ng = {self.grid.ng}\n"
         my_str += f"         nvars = {self.nvar}\n"
         my_str += "         variables:\n"
 
         for n in range(self.nvar):
-            my_str += "%16s: min: %15.10f    max: %15.10f\n" % \
-                (self.names[n], self.min(self.names[n]), self.max(self.names[n]))
-            my_str += "%16s  BCs: -x: %-12s +x: %-12s -y: %-12s +y: %-12s\n" %\
-                (" ", self.BCs[self.names[n]].xlb,
-                      self.BCs[self.names[n]].xrb,
-                      self.BCs[self.names[n]].ylb,
-                      self.BCs[self.names[n]].yrb)
+            name = self.names[n]
+            my_str += f"{name:>16s}: min: {self.min(name):15.10f}    max: {self.max(name):15.10f}\n"
+            my_str += f"{' ':>16s}  BCs: -x: {self.BCs[name].xlb:12s} +x: {self.BCs[name].xrb:12s}"
+            my_str += f" -y: {self.BCs[name].ylb:12s} +y: {self.BCs[name].yrb:12s}\n"
 
         return my_str
 
@@ -434,7 +429,7 @@ class CellCenterData2d:
             The value corresponding to the keyword
 
         """
-        if keyword in self.aux.keys():
+        if keyword in self.aux:
             return self.aux[keyword]
 
         return None
@@ -482,22 +477,22 @@ class CellCenterData2d:
 
         # that will handle the standard type of BCs, but if we asked
         # for a custom BC, we handle it here
-        if self.BCs[name].xlb in bnd.ext_bcs.keys():
+        if self.BCs[name].xlb in bnd.ext_bcs:
             try:
                 bnd.ext_bcs[self.BCs[name].xlb](self.BCs[name].xlb, "xlb", name, self, self.ivars)
             except TypeError:
                 bnd.ext_bcs[self.BCs[name].xlb](self.BCs[name].xlb, "xlb", name, self)
-        if self.BCs[name].xrb in bnd.ext_bcs.keys():
+        if self.BCs[name].xrb in bnd.ext_bcs:
             try:
                 bnd.ext_bcs[self.BCs[name].xrb](self.BCs[name].xrb, "xrb", name, self)
             except TypeError:
                 bnd.ext_bcs[self.BCs[name].xrb](self.BCs[name].xrb, "xrb", name, self, self.ivars)
-        if self.BCs[name].ylb in bnd.ext_bcs.keys():
+        if self.BCs[name].ylb in bnd.ext_bcs:
             try:
                 bnd.ext_bcs[self.BCs[name].ylb](self.BCs[name].ylb, "ylb", name, self)
             except TypeError:
                 bnd.ext_bcs[self.BCs[name].ylb](self.BCs[name].ylb, "ylb", name, self, self.ivars)
-        if self.BCs[name].yrb in bnd.ext_bcs.keys():
+        if self.BCs[name].yrb in bnd.ext_bcs:
             try:
                 bnd.ext_bcs[self.BCs[name].yrb](self.BCs[name].yrb, "yrb", name, self)
             except TypeError:
@@ -725,19 +720,15 @@ class FaceCenterData2d(CellCenterData2d):
             my_str = "FaceCenterData2d object not yet initialized"
             return my_str
 
-        my_str = "fc data: idir = {}, nx = {}, ny = {}, ng = {}\n".format(
-            self.idir, self.grid.nx, self.grid.ny, self.grid.ng)
+        my_str = f"fc data: idir = {self.idir}, nx = {self.grid.nx}, ny = {self.grid.ny}, ng = {self.grid.ng}\n"
         my_str += f"         nvars = {self.nvar}\n"
         my_str += "         variables:\n"
 
         for n in range(self.nvar):
-            my_str += "%16s: min: %15.10f    max: %15.10f\n" % \
-                (self.names[n], self.min(self.names[n]), self.max(self.names[n]))
-            my_str += "%16s  BCs: -x: %-12s +x: %-12s -y: %-12s +y: %-12s\n" %\
-                (" ", self.BCs[self.names[n]].xlb,
-                      self.BCs[self.names[n]].xrb,
-                      self.BCs[self.names[n]].ylb,
-                      self.BCs[self.names[n]].yrb)
+            name = self.names[n]
+            my_str += f"{name:>16s}: min: {self.min(name):15.10f}    max: {self.max(name):15.10f}\n"
+            my_str += f"{' ':>16s}  BCs: -x: {self.BCs[name].xlb:12s} +x: {self.BCs[name].xrb:12s}"
+            my_str += f" -y: {self.BCs[name].ylb:12s} +y: {self.BCs[name].yrb:12s}\n"
 
         return my_str
 
@@ -794,10 +785,10 @@ class FaceCenterData2d(CellCenterData2d):
         n = self.names.index(name)
         self.data.fill_ghost(n=n, bc=self.BCs[name])
 
-        if self.BCs[name].xlb in bnd.ext_bcs.keys() or \
-           self.BCs[name].xrb in bnd.ext_bcs.keys() or \
-           self.BCs[name].ylb in bnd.ext_bcs.keys() or \
-           self.BCs[name].yrb in bnd.ext_bcs.keys():
+        if self.BCs[name].xlb in bnd.ext_bcs or \
+           self.BCs[name].xrb in bnd.ext_bcs or \
+           self.BCs[name].ylb in bnd.ext_bcs or \
+           self.BCs[name].yrb in bnd.ext_bcs:
             raise NotImplementedError("custom boundary conditions not supported for FaceCenterData2d")
 
     def restrict(self, varname, N=2):

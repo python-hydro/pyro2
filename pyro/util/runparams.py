@@ -47,6 +47,7 @@ read default values.
 import os
 import re
 import textwrap
+from pathlib import Path
 
 from pyro.util import msg
 
@@ -118,7 +119,7 @@ class RuntimeParameters:
 
         # check to see whether the file exists
         if not os.path.isfile(pfile):
-            pfile = "{}/{}".format(os.environ["PYRO_HOME"], pfile)
+            pfile = str(Path(__file__).resolve().parents[1] / pfile)
 
         try:
             f = open(pfile)
