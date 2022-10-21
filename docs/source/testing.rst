@@ -17,7 +17,7 @@ pyro implements unit tests using ``py.test``.  These can be run via::
 Regression tests
 ----------------
 
-The main driver, ``pyro.py`` has the ability to create benchmarks and
+The main driver, ``pyro_sim.py`` has the ability to create benchmarks and
 compare output to stored benchmarks at the end of a simulation.
 Benchmark output is stored in each solver's ``tests/`` directory.
 When testing, we compare zone-by-zone for each variable to see if we

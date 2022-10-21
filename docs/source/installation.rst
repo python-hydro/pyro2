@@ -22,7 +22,7 @@ The following steps are needed before running pyro:
 * add ``pyro/`` to your ``PYTHONPATH`` environment variable (note this
   is only needed if you wish to use pyro as a python module - this
   step is not necessary if you only run pyro via the commandline using
-  the ``pyro.py`` script).  For the bash shell, this is done as:
+  the ``pyro_sim.py`` script).  For the bash shell, this is done as:
 
     .. code-block:: none
 
@@ -42,7 +42,7 @@ Run the advection solver to quickly test if things are setup correctly:
 
 .. code-block:: none
 
-   ./pyro.py advection smooth inputs.smooth
+   ./pyro_sim.py advection smooth inputs.smooth
 
 You should see a plot window pop up with a smooth pulse advecting
 diagonally through the periodic domain.

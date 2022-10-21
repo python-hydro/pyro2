@@ -1,14 +1,14 @@
 Running
 =======
 
-Pyro can be run in two ways: either from the commandline, using the ``pyro.py``
+Pyro can be run in two ways: either from the commandline, using the ``pyro_sim.py``
 script and passing in the solver, problem and inputs as arguments, or by using
-the :func:`Pyro <pyro.Pyro>` class.
+the :func:`Pyro <pyro_sim.pyro>` class.
 
 Commandline
 ------------
 
-The ``pyro.py`` script takes 3
+The ``pyro_sim.py`` script takes 3
 arguments: the solver name, the problem setup to run with that solver
 (this is defined in the solver's ``problems/`` sub-directory), and the
 inputs file (again, usually from the solver's ``problems/``
@@ -18,7 +18,7 @@ For example, to run the Sedov problem with the compressible solver we would do:
 
 .. code-block:: none
 
-   ./pyro.py compressible sedov inputs.sedov
+   ./pyro_sim.py compressible sedov inputs.sedov
 
 This knows to look for ``inputs.sedov`` in ``compressible/problems/``
 (alternately, you can specify the full path for the inputs file).
@@ -27,7 +27,7 @@ To run the smooth Gaussian advection problem with the advection solver, we would
 
 .. code-block:: none
 
-   ./pyro.py advection smooth inputs.smooth
+   ./pyro_sim.py advection smooth inputs.smooth
 
 Any runtime parameter can also be specified on the command line, after
 the inputs file. For example, to disable runtime visualization for the
@@ -35,7 +35,7 @@ above run, we could do:
 
 .. code-block:: none
 
-   ./pyro.py advection smooth inputs.smooth vis.dovis=0
+   ./pyro_sim.py advection smooth inputs.smooth vis.dovis=0
 
 
 .. note::
@@ -49,12 +49,12 @@ above run, we could do:
 Pyro class
 ----------
 
-Alternatively, pyro can be run using the :func:`Pyro <pyro.Pyro>` class. This provides
+Alternatively, pyro can be run using the :func:`Pyro <pyro_sim.pyro>` class. This provides
 an interface that enables simulations to be set up and run in a Jupyter notebook -- see
 ``examples/examples.ipynb`` for an example notebook. A simulation can be set up and run
 by carrying out the following steps:
 
-* create a :func:`Pyro <pyro.Pyro>` object, initializing it with a specific solver
+* create a :func:`Pyro <pyro_sim.pyro>` object, initializing it with a specific solver
 * initialize the problem, passing in runtime parameters and inputs
 * run the simulation
 
@@ -71,7 +71,7 @@ Kelvin-Helmholtz problem ``kh``, we would do the following:
 
 Instead of using an inputs file to define the problem parameters, we can define a
 dictionary of parameters and pass them into the :func:`initialize_problem
-<pyro.Pyro.initialize_problem>` function using the keyword argument ``inputs_dict``.
+<pyro_sim.pyro.initialize_problem>` function using the keyword argument ``inputs_dict``.
 If an inputs file is also passed into the function, the parameters in the dictionary
 will override any parameters in the file. For example, if we wished to turn off
 visualization for the previous example, we would do:
@@ -84,8 +84,8 @@ visualization for the previous example, we would do:
                             inputs_dict=parameters)
 
 It's possible to evolve the simulation forward timestep by timestep manually using
-the :func:`single_step <pyro.Pyro.single_step>` function (rather than allowing
-:func:`run_sim <pyro.Pyro.run_sim>` to do this for us). To evolve our example
+the :func:`single_step <pyro_sim.pyro.single_step>` function (rather than allowing
+:func:`run_sim <pyro_sim.pyro.run_sim>` to do this for us). To evolve our example
 simulation forward by a single step, we'd run
 
 .. code-block:: python

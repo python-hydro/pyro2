@@ -30,7 +30,7 @@ top-level ``pyro2/`` directory.
 The overall structure is:
 
 * ``pyro2/``: This is the top-level directory.  The main driver,
-  ``pyro.py``, is here, and all pyro simulations should be run from
+  ``pyro_sim.py``, is here, and all pyro simulations should be run from
   this directory.
 
 * ``advection/``: The linear advection equation solver using the CTU
@@ -148,7 +148,7 @@ simulation.
 Main driver
 -----------
 
-All the solvers use the same driver, the main ``pyro.py`` script. The
+All the solvers use the same driver, the main ``pyro_sim.py`` script. The
 flowchart for the driver is:
 
 * parse runtime parameters
