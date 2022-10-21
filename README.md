@@ -49,13 +49,22 @@ https://pyro2.readthedocs.io/
 
 ## Getting started
 
-  - By default, we assume python 3.6 or later.
+  - By default, we assume python 3.8 or later.
 
-  - There are a few steps to take to get things running. You need to
-    make sure you have `numpy`, `numba`, `matplotlib`, and `h5py`
-    installed. On a Fedora system, this can be accomplished by doing:
+  - We require `numpy`, `numba`, `matplotlib`, and `h5py` for running pyro
+    and `setuptools_scm` for the install.
 
-       `dnf install python3-numpy python3-numba python3-matplotlib python3-matplotlib-tk python3-h5py`
+  - We recommend that pyro be installed so that it is found in your python search
+    path, and can work more easily with Jupyter notebooks.
+
+    pyro can be installed on your system via:
+
+    ```
+    python setup.py install --user
+    ```
+
+    alternately, you can use `develop` instead of `install` if you are
+    planning on developing pyro solvers directly.
 
   - Not all matplotlib backends allow for the interactive plotting as
     pyro is run. One that does is the TkAgg backend. This can be made
@@ -64,31 +73,23 @@ https://pyro2.readthedocs.io/
 
        `backend: TkAgg`
 
-     You can check what backend is your current default in python via:
+    You can check what backend is your current default in python via:
 
-       ```python
-       import matplotlib.pyplot
-       print matplotlib.pyplot.get_backend()
+      ```python
+      import matplotlib.pyplot
+      print matplotlib.pyplot.get_backend()
        ```
 
-  - If you want to run the unit tests, you need to have `pytest` installed.
+ - If you want to run the unit tests, you need to have `pytest` installed.
 
-  - The remaining steps are:
+ - Finally, you can run a quick test of the advection solver:
 
-      * Set the `PYTHONPATH` environment variable to point to the `pyro2/`
-        directory (note this is only needed if you wish to use pyro as a python
-        module - this step is not necessary if you only run pyro via the
-        commandline using the `pyro.py` script).
+   ```
+   ./pyro-sim.py advection smooth inputs.smooth
+   ```
 
-      * Define the environment variable `PYRO_HOME` to point to the
-        `pyro2/` directory (only needed for regression testing)
-
-      * Run a quick test of the advection solver:
-
-          `./pyro.py advection smooth inputs.smooth`
-
-        you should see a graphing window pop up with a smooth pulse
-        advecting diagonally through the periodic domain.
+   you should see a graphing window pop up with a smooth pulse
+   advecting diagonally through the periodic domain.
 
 
 ## Core Data Structures
@@ -97,6 +98,7 @@ The main data structures that describe the grid and the data the lives
 on the grid are described in a jupyter notebook:
 
 https://github.com/python-hydro/pyro2/blob/main/mesh/mesh-examples.ipynb
+
 
 Many of the methods here rely on multigrid.  The multigrid solver is
 demonstrated in the juputer notebook:
@@ -139,7 +141,7 @@ pyro provides the following solvers (all in 2-d):
 	 characteristic tracing.
 
   - `compressible_sdc`: a fourth-order compressible solver,
-  using spectral-deferred correction (SDC) for the time integration.
+     using spectral-deferred correction (SDC) for the time integration.
 
   - `diffusion`: a Crank-Nicolson time-discretized solver for the
     constant-coefficient diffusion equation.
