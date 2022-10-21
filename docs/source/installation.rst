@@ -3,12 +3,6 @@ Setting up pyro
 
 You can clone pyro from github: `http://github.com/python-hydro/pyro2 <http://github.com/python-hydro/pyro2>`_
 
-.. note::
-
-   It is strongly recommended that you use python 3.x.  While python 2.x might
-   still work, we do not test pyro under python 2, so it may break at any time
-   in the future.
-
 The following python packages are required:
 
 * ``numpy``
@@ -17,23 +11,25 @@ The following python packages are required:
 * ``h5py``
 * ``pytest`` (for unit tests)
 
-The following steps are needed before running pyro:
+The easiest way to install python is to use the ``setup.py``.  From
+the ``pyro2/`` directory, we do:
 
-* add ``pyro/`` to your ``PYTHONPATH`` environment variable (note this
-  is only needed if you wish to use pyro as a python module - this
-  step is not necessary if you only run pyro via the commandline using
-  the ``pyro.py`` script).  For the bash shell, this is done as:
+.. prompt:: bash
 
-    .. code-block:: none
+   python setup.py install --user
 
-       export PYTHONPATH="/path/to/pyro/:${PYTHONPATH}"
+This will put the main driver, ``pyro_sim.py``, in your path, and
+allow you to run pyro from anywhere.
 
-* define the environment variable ``PYRO_HOME`` to point to
-  the ``pyro2/`` directory (only needed for regression testing)
+If you intend on directly developing the solvers, you can instead do:
 
-    .. code-block:: none
+.. prompt:: bash
 
-       export PYRO_HOME="/path/to/pyro/"
+   python setup.py develop --user
+
+This will allow you to modify the python source without having to
+reinstall each time something changes.
+
 
 Quick test
 ----------
