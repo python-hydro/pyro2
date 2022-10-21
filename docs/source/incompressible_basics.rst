@@ -34,7 +34,7 @@ number of papers, for example, Bell, Colella, & Glaz (1989) and Martin
 
 .. code-block:: none
 
-   ./pyro.py incompressible shear inputs.shear
+   ./pyro_sim.py incompressible shear inputs.shear
 
 
 .. image:: shear.png
@@ -57,9 +57,9 @@ shown below are run as:
 
 .. code-block:: none
 
-   ./pyro.py incompressible converge inputs.converge.32 vis.dovis=0
-   ./pyro.py incompressible converge inputs.converge.64 vis.dovis=0
-   ./pyro.py incompressible converge inputs.converge.128 vis.dovis=0
+   ./pyro_sim.py incompressible converge inputs.converge.32 vis.dovis=0
+   ./pyro_sim.py incompressible converge inputs.converge.64 vis.dovis=0
+   ./pyro_sim.py incompressible converge inputs.converge.128 vis.dovis=0
 
 The error is measured by comparing with the analytic solution using
 the routine ``incomp_converge_error.py`` in ``analysis/``.
