@@ -118,7 +118,7 @@ The smooth problem initializes a Gaussian profile and advects it with
 the final state should be identical to the initial state—any
 disagreement is our numerical error. This is run as:
 
-.. code-block:: none
+.. prompt:: bash
 
    ./pyro_sim.py advection smooth inputs.smooth
 

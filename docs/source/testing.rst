@@ -9,7 +9,9 @@ script in the root directory.
 Unit tests
 ----------
 
-pyro implements unit tests using ``py.test``.  These can be run via::
+pyro implements unit tests using ``py.test``.  These can be run via:
+
+.. prompt:: bash
 
    ./test.py -u
 
@@ -25,7 +27,9 @@ agree exactly.  If there is any disagreement, this means that we've
 made a change to the code that we need to understand (if may be a bug
 or may be a fix or optimization).
 
-We can compare to the stored benchmarks simply by running::
+We can compare to the stored benchmarks simply by running:
+
+.. prompt:: bash
 
    ./test.py
 

@@ -27,7 +27,7 @@ in the domain. The analytic solution for this shows that the profile
 remains a Gaussian, with a changing width and peak. This allows us to
 compare our solver to the analytic solution. This is run as:
 
-.. code-block:: none
+.. prompt:: bash
 
    ./pyro_sim.py diffusion gaussian inputs.gaussian
 
