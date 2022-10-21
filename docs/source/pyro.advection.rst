@@ -1,7 +1,7 @@
-incompressible package
+pyro.advection package
 ======================
 
-.. automodule:: incompressible
+.. automodule:: pyro.advection
    :members:
    :undoc-members:
    :show-inheritance:
@@ -12,23 +12,23 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   incompressible.problems
+   pyro.advection.problems
 
 Submodules
 ----------
 
-incompressible.incomp\_interface module
+pyro.advection.advective\_fluxes module
 ---------------------------------------
 
-.. automodule:: incompressible.incomp_interface
+.. automodule:: pyro.advection.advective_fluxes
    :members:
    :undoc-members:
    :show-inheritance:
 
-incompressible.simulation module
+pyro.advection.simulation module
 --------------------------------
 
-.. automodule:: incompressible.simulation
+.. automodule:: pyro.advection.simulation
    :members:
    :undoc-members:
    :show-inheritance:
