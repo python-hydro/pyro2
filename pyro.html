@@ -1,80 +1,41 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>pyro module &mdash; pyro 2.2 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyro package &mdash; pyro 4.0.1.post4+gc829962 documentation</title>
+      <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-  
-
-  
-
-  
-  
-    
-
-  
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyro 2.2 documentation" href="index.html"/>
-        <link rel="up" title="pyro2" href="modules.html"/>
-        <link rel="next" title="setup module" href="setup.html"/>
-        <link rel="prev" title="plotvar module" href="plotvar.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pyro.advection package" href="pyro.advection.html" />
+    <link rel="prev" title="pyro" href="modules.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
+        <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> pyro
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
-                2.2
+                4.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -82,18 +43,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">pyro basics</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">pyro basics</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Setting up pyro</a></li>
@@ -105,7 +56,7 @@
 <li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Solvers</span></p>
+<p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
@@ -115,304 +66,1111 @@
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solvers</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Utilities</span></p>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Community</span></p>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Contributing and getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html#history">History</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Reference</span></p>
+<p class="caption" role="heading"><span class="caption-text">Software Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">API</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="advection.html">advection package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="advection_fv4.html">advection_fv4 package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="advection_rk.html">advection_rk package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="advection_weno.html">advection_weno package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compare.html">compare module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compressible.html">compressible package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compressible_fv4.html">compressible_fv4 package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compressible_react.html">compressible_react package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compressible_rk.html">compressible_rk package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compressible_sdc.html">compressible_sdc package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="diffusion.html">diffusion package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html">examples package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="incompressible.html">incompressible package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lm_atm.html">lm_atm package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mesh.html">mesh package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="multigrid.html">multigrid package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="particles.html">particles package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot.html">plot module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plotvar.html">plotvar module</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">pyro module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simulation_null.html">simulation_null module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="swe.html">swe package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="test.html">test module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.html">util package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pyro package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection.html">pyro.advection package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_fv4.html">pyro.advection_fv4 package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_nonuniform.html">pyro.advection_nonuniform package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_rk.html">pyro.advection_rk package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_weno.html">pyro.advection_weno package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.html">pyro.compressible package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_fv4.html">pyro.compressible_fv4 package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_react.html">pyro.compressible_react package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_rk.html">pyro.compressible_rk package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sdc.html">pyro.compressible_sdc package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.html">pyro.compressible_sr package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.diffusion.html">pyro.diffusion package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible.html">pyro.incompressible package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.lm_atm.html">pyro.lm_atm package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html">pyro.mesh package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.html">pyro.multigrid package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.particles.html">pyro.particles package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.swe.html">pyro.swe package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.util.html">pyro.util package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyro.plot">pyro.plot module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyro.plot.get_args"><code class="docutils literal notranslate"><span class="pre">get_args()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyro.plot.makeplot"><code class="docutils literal notranslate"><span class="pre">makeplot()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyro.pyro_sim">pyro.pyro_sim module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyro.pyro_sim.Pyro"><code class="docutils literal notranslate"><span class="pre">Pyro</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyro.pyro_sim.PyroBenchmark"><code class="docutils literal notranslate"><span class="pre">PyroBenchmark</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyro.pyro_sim.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyro.pyro_sim.parse_args"><code class="docutils literal notranslate"><span class="pre">parse_args()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyro.simulation_null">pyro.simulation_null module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyro.simulation_null.NullSimulation"><code class="docutils literal notranslate"><span class="pre">NullSimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyro.simulation_null.bc_setup"><code class="docutils literal notranslate"><span class="pre">bc_setup()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyro.simulation_null.grid_setup"><code class="docutils literal notranslate"><span class="pre">grid_setup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyro.test">pyro.test module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyro.test.PyroTest"><code class="docutils literal notranslate"><span class="pre">PyroTest</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyro.test.do_tests"><code class="docutils literal notranslate"><span class="pre">do_tests()</span></code></a></li>
 </ul>
 </li>
 </ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">pyro</a>
-        
       </nav>
 
-
-      
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
-          <li><a href="modules.html">pyro2</a> &raquo;</li>
-        
-      <li>pyro module</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">pyro</a> &raquo;</li>
+      <li>pyro package</li>
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/pyro.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   
 <style>
 /* CSS overrides for sphinx_rtd_theme */
 
 /* 24px margin */
-.nbinput.nblast,
-.nboutput.nblast {
+.nbinput.nblast.container,
+.nboutput.nblast.container {
     margin-bottom: 19px;  /* padding has already 5px */
 }
 
 /* ... except between code cells! */
-.nblast + .nbinput {
+.nblast.container + .nbinput.container {
     margin-top: -19px;
 }
 
-/* nice headers on first paragraph of info/warning boxes */
-.admonition .first {
-    margin: -12px;
-    padding: 6px 12px;
-    margin-bottom: 12px;
-    color: #fff;
-    line-height: 1;
-    display: block;
-}
-.admonition.warning .first {
-    background: #f0b37e;
-}
-.admonition.note .first {
-    background: #6ab0de;
-}
 .admonition > p:before {
     margin-right: 4px;  /* make room for the exclamation icon */
 }
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
 </style>
-<div class="section" id="module-pyro">
-<span id="pyro-module"></span><h1>pyro module<a class="headerlink" href="#module-pyro" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="pyro.Pyro">
-<em class="property">class </em><code class="descclassname">pyro.</code><code class="descname">Pyro</code><span class="sig-paren">(</span><em>solver_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro.html#Pyro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyro.Pyro" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>The main driver to run pyro.</p>
-<dl class="method">
-<dt id="pyro.Pyro.initialize_problem">
-<code class="descname">initialize_problem</code><span class="sig-paren">(</span><em>problem_name</em>, <em>inputs_file=None</em>, <em>inputs_dict=None</em>, <em>other_commands=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro.html#Pyro.initialize_problem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyro.Pyro.initialize_problem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize the specific problem</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>problem_name</strong> : str</p>
-<blockquote>
-<div><p>Name of the problem</p>
-</div></blockquote>
-<p><strong>inputs_file</strong> : str</p>
-<blockquote>
-<div><p>Filename containing problem’s runtime parameters</p>
-</div></blockquote>
-<p><strong>inputs_dict</strong> : dict</p>
-<blockquote>
-<div><p>Dictionary containing extra runtime parameters</p>
-</div></blockquote>
-<p><strong>other_commands</strong> : str</p>
-<blockquote class="last">
-<div><p>Other command line parameter options</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<section id="module-pyro">
+<span id="pyro-package"></span><h1>pyro package<a class="headerlink" href="#module-pyro" title="Permalink to this heading">¶</a></h1>
+<p>pyro is a python hydrodynamics code designed for teaching and prototyping new
+methods.</p>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pyro.advection.html">pyro.advection package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyro.advection.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.advection.problems.html">pyro.advection.problems package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection.problems.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection.problems.html#module-pyro.advection.problems.smooth">pyro.advection.problems.smooth module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection.problems.html#module-pyro.advection.problems.test">pyro.advection.problems.test module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection.problems.html#module-pyro.advection.problems.tophat">pyro.advection.problems.tophat module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.advection.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.advection.html#module-pyro.advection.advective_fluxes">pyro.advection.advective_fluxes module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.advection.html#pyro.advection.advective_fluxes.unsplit_fluxes"><code class="docutils literal notranslate"><span class="pre">unsplit_fluxes()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.advection.html#module-pyro.advection.simulation">pyro.advection.simulation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.advection.html#pyro.advection.simulation.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection.html#pyro.advection.simulation.Simulation.dovis"><code class="docutils literal notranslate"><span class="pre">Simulation.dovis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection.html#pyro.advection.simulation.Simulation.evolve"><code class="docutils literal notranslate"><span class="pre">Simulation.evolve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection.html#pyro.advection.simulation.Simulation.initialize"><code class="docutils literal notranslate"><span class="pre">Simulation.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection.html#pyro.advection.simulation.Simulation.method_compute_timestep"><code class="docutils literal notranslate"><span class="pre">Simulation.method_compute_timestep()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyro.advection_fv4.html">pyro.advection_fv4 package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyro.advection_fv4.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.advection_fv4.problems.html">pyro.advection_fv4.problems package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_fv4.problems.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_fv4.problems.html#module-pyro.advection_fv4.problems.smooth">pyro.advection_fv4.problems.smooth module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.advection_fv4.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.advection_fv4.html#module-pyro.advection_fv4.fluxes">pyro.advection_fv4.fluxes module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.advection_fv4.html#pyro.advection_fv4.fluxes.fluxes"><code class="docutils literal notranslate"><span class="pre">fluxes()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.advection_fv4.html#module-pyro.advection_fv4.interface">pyro.advection_fv4.interface module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.advection_fv4.html#pyro.advection_fv4.interface.states"><code class="docutils literal notranslate"><span class="pre">states()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.advection_fv4.html#pyro.advection_fv4.interface.states_nolimit"><code class="docutils literal notranslate"><span class="pre">states_nolimit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.advection_fv4.html#module-pyro.advection_fv4.simulation">pyro.advection_fv4.simulation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.advection_fv4.html#pyro.advection_fv4.simulation.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_fv4.html#pyro.advection_fv4.simulation.Simulation.initialize"><code class="docutils literal notranslate"><span class="pre">Simulation.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_fv4.html#pyro.advection_fv4.simulation.Simulation.substep"><code class="docutils literal notranslate"><span class="pre">Simulation.substep()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyro.advection_nonuniform.html">pyro.advection_nonuniform package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyro.advection_nonuniform.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.advection_nonuniform.problems.html">pyro.advection_nonuniform.problems package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_nonuniform.problems.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_nonuniform.problems.html#module-pyro.advection_nonuniform.problems.slotted">pyro.advection_nonuniform.problems.slotted module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_nonuniform.problems.html#module-pyro.advection_nonuniform.problems.test">pyro.advection_nonuniform.problems.test module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.advection_nonuniform.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.advection_nonuniform.html#module-pyro.advection_nonuniform.advective_fluxes">pyro.advection_nonuniform.advective_fluxes module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.advection_nonuniform.html#pyro.advection_nonuniform.advective_fluxes.unsplit_fluxes"><code class="docutils literal notranslate"><span class="pre">unsplit_fluxes()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.advection_nonuniform.html#module-pyro.advection_nonuniform.simulation">pyro.advection_nonuniform.simulation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.advection_nonuniform.html#pyro.advection_nonuniform.simulation.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_nonuniform.html#pyro.advection_nonuniform.simulation.Simulation.dovis"><code class="docutils literal notranslate"><span class="pre">Simulation.dovis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_nonuniform.html#pyro.advection_nonuniform.simulation.Simulation.evolve"><code class="docutils literal notranslate"><span class="pre">Simulation.evolve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_nonuniform.html#pyro.advection_nonuniform.simulation.Simulation.initialize"><code class="docutils literal notranslate"><span class="pre">Simulation.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_nonuniform.html#pyro.advection_nonuniform.simulation.Simulation.method_compute_timestep"><code class="docutils literal notranslate"><span class="pre">Simulation.method_compute_timestep()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyro.advection_rk.html">pyro.advection_rk package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyro.advection_rk.html#subpackages">Subpackages</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.advection_rk.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.advection_rk.html#module-pyro.advection_rk.fluxes">pyro.advection_rk.fluxes module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.advection_rk.html#pyro.advection_rk.fluxes.fluxes"><code class="docutils literal notranslate"><span class="pre">fluxes()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.advection_rk.html#module-pyro.advection_rk.simulation">pyro.advection_rk.simulation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.advection_rk.html#pyro.advection_rk.simulation.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_rk.html#pyro.advection_rk.simulation.Simulation.evolve"><code class="docutils literal notranslate"><span class="pre">Simulation.evolve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_rk.html#pyro.advection_rk.simulation.Simulation.method_compute_timestep"><code class="docutils literal notranslate"><span class="pre">Simulation.method_compute_timestep()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_rk.html#pyro.advection_rk.simulation.Simulation.substep"><code class="docutils literal notranslate"><span class="pre">Simulation.substep()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyro.advection_weno.html">pyro.advection_weno package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyro.advection_weno.html#subpackages">Subpackages</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.advection_weno.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.advection_weno.html#module-pyro.advection_weno.fluxes">pyro.advection_weno.fluxes module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.advection_weno.html#pyro.advection_weno.fluxes.fluxes"><code class="docutils literal notranslate"><span class="pre">fluxes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.advection_weno.html#pyro.advection_weno.fluxes.fvs"><code class="docutils literal notranslate"><span class="pre">fvs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.advection_weno.html#module-pyro.advection_weno.simulation">pyro.advection_weno.simulation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.advection_weno.html#pyro.advection_weno.simulation.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_weno.html#pyro.advection_weno.simulation.Simulation.evolve"><code class="docutils literal notranslate"><span class="pre">Simulation.evolve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_weno.html#pyro.advection_weno.simulation.Simulation.method_compute_timestep"><code class="docutils literal notranslate"><span class="pre">Simulation.method_compute_timestep()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_weno.html#pyro.advection_weno.simulation.Simulation.substep"><code class="docutils literal notranslate"><span class="pre">Simulation.substep()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyro.compressible.html">pyro.compressible package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible.problems.html">pyro.compressible.problems package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.problems.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.problems.html#module-pyro.compressible.problems.acoustic_pulse">pyro.compressible.problems.acoustic_pulse module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.problems.html#module-pyro.compressible.problems.advect">pyro.compressible.problems.advect module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.problems.html#module-pyro.compressible.problems.bubble">pyro.compressible.problems.bubble module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.problems.html#module-pyro.compressible.problems.gresho">pyro.compressible.problems.gresho module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.problems.html#module-pyro.compressible.problems.hse">pyro.compressible.problems.hse module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.problems.html#module-pyro.compressible.problems.kh">pyro.compressible.problems.kh module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.problems.html#module-pyro.compressible.problems.logo">pyro.compressible.problems.logo module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.problems.html#module-pyro.compressible.problems.quad">pyro.compressible.problems.quad module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.problems.html#module-pyro.compressible.problems.ramp">pyro.compressible.problems.ramp module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.problems.html#module-pyro.compressible.problems.rt">pyro.compressible.problems.rt module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.problems.html#module-pyro.compressible.problems.rt2">pyro.compressible.problems.rt2 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.problems.html#module-pyro.compressible.problems.sedov">pyro.compressible.problems.sedov module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.problems.html#module-pyro.compressible.problems.sod">pyro.compressible.problems.sod module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.problems.html#module-pyro.compressible.problems.test">pyro.compressible.problems.test module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible.html#module-pyro.compressible.BC">pyro.compressible.BC module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible.html#pyro.compressible.BC.inflow_post_bc"><code class="docutils literal notranslate"><span class="pre">inflow_post_bc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible.html#pyro.compressible.BC.inflow_pre_bc"><code class="docutils literal notranslate"><span class="pre">inflow_pre_bc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible.html#pyro.compressible.BC.user"><code class="docutils literal notranslate"><span class="pre">user()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible.html#module-pyro.compressible.derives">pyro.compressible.derives module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible.html#pyro.compressible.derives.derive_primitives"><code class="docutils literal notranslate"><span class="pre">derive_primitives()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible.html#module-pyro.compressible.eos">pyro.compressible.eos module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible.html#pyro.compressible.eos.dens"><code class="docutils literal notranslate"><span class="pre">dens()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible.html#pyro.compressible.eos.pres"><code class="docutils literal notranslate"><span class="pre">pres()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible.html#pyro.compressible.eos.rhoe"><code class="docutils literal notranslate"><span class="pre">rhoe()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible.html#pyro-compressible-flycheck-eos-module">pyro.compressible.flycheck_eos module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible.html#module-pyro.compressible.interface">pyro.compressible.interface module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible.html#pyro.compressible.interface.artificial_viscosity"><code class="docutils literal notranslate"><span class="pre">artificial_viscosity()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible.html#pyro.compressible.interface.consFlux"><code class="docutils literal notranslate"><span class="pre">consFlux()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible.html#pyro.compressible.interface.riemann_cgf"><code class="docutils literal notranslate"><span class="pre">riemann_cgf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible.html#pyro.compressible.interface.riemann_hllc"><code class="docutils literal notranslate"><span class="pre">riemann_hllc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible.html#pyro.compressible.interface.riemann_prim"><code class="docutils literal notranslate"><span class="pre">riemann_prim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible.html#pyro.compressible.interface.states"><code class="docutils literal notranslate"><span class="pre">states()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible.html#module-pyro.compressible.simulation">pyro.compressible.simulation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible.html#pyro.compressible.simulation.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.html#pyro.compressible.simulation.Simulation.dovis"><code class="docutils literal notranslate"><span class="pre">Simulation.dovis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.html#pyro.compressible.simulation.Simulation.evolve"><code class="docutils literal notranslate"><span class="pre">Simulation.evolve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.html#pyro.compressible.simulation.Simulation.initialize"><code class="docutils literal notranslate"><span class="pre">Simulation.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.html#pyro.compressible.simulation.Simulation.method_compute_timestep"><code class="docutils literal notranslate"><span class="pre">Simulation.method_compute_timestep()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.html#pyro.compressible.simulation.Simulation.write_extras"><code class="docutils literal notranslate"><span class="pre">Simulation.write_extras()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible.html#pyro.compressible.simulation.Variables"><code class="docutils literal notranslate"><span class="pre">Variables</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible.html#pyro.compressible.simulation.cons_to_prim"><code class="docutils literal notranslate"><span class="pre">cons_to_prim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible.html#pyro.compressible.simulation.prim_to_cons"><code class="docutils literal notranslate"><span class="pre">prim_to_cons()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible.html#module-pyro.compressible.unsplit_fluxes">pyro.compressible.unsplit_fluxes module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible.html#pyro.compressible.unsplit_fluxes.unsplit_fluxes"><code class="docutils literal notranslate"><span class="pre">unsplit_fluxes()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyro.compressible_fv4.html">pyro.compressible_fv4 package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_fv4.html#subpackages">Subpackages</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_fv4.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_fv4.html#module-pyro.compressible_fv4.fluxes">pyro.compressible_fv4.fluxes module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_fv4.html#pyro.compressible_fv4.fluxes.flux_cons"><code class="docutils literal notranslate"><span class="pre">flux_cons()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_fv4.html#pyro.compressible_fv4.fluxes.fluxes"><code class="docutils literal notranslate"><span class="pre">fluxes()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_fv4.html#module-pyro.compressible_fv4.simulation">pyro.compressible_fv4.simulation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_fv4.html#pyro.compressible_fv4.simulation.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_fv4.html#pyro.compressible_fv4.simulation.Simulation.evolve"><code class="docutils literal notranslate"><span class="pre">Simulation.evolve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_fv4.html#pyro.compressible_fv4.simulation.Simulation.initialize"><code class="docutils literal notranslate"><span class="pre">Simulation.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_fv4.html#pyro.compressible_fv4.simulation.Simulation.preevolve"><code class="docutils literal notranslate"><span class="pre">Simulation.preevolve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_fv4.html#pyro.compressible_fv4.simulation.Simulation.substep"><code class="docutils literal notranslate"><span class="pre">Simulation.substep()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyro.compressible_react.html">pyro.compressible_react package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_react.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_react.problems.html">pyro.compressible_react.problems package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_react.problems.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_react.problems.html#module-pyro.compressible_react.problems.flame">pyro.compressible_react.problems.flame module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_react.problems.html#module-pyro.compressible_react.problems.rt">pyro.compressible_react.problems.rt module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_react.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_react.html#module-pyro.compressible_react.simulation">pyro.compressible_react.simulation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_react.html#pyro.compressible_react.simulation.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_react.html#pyro.compressible_react.simulation.Simulation.burn"><code class="docutils literal notranslate"><span class="pre">Simulation.burn()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_react.html#pyro.compressible_react.simulation.Simulation.diffuse"><code class="docutils literal notranslate"><span class="pre">Simulation.diffuse()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_react.html#pyro.compressible_react.simulation.Simulation.dovis"><code class="docutils literal notranslate"><span class="pre">Simulation.dovis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_react.html#pyro.compressible_react.simulation.Simulation.evolve"><code class="docutils literal notranslate"><span class="pre">Simulation.evolve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_react.html#pyro.compressible_react.simulation.Simulation.initialize"><code class="docutils literal notranslate"><span class="pre">Simulation.initialize()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyro.compressible_rk.html">pyro.compressible_rk package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_rk.html#subpackages">Subpackages</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_rk.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_rk.html#module-pyro.compressible_rk.fluxes">pyro.compressible_rk.fluxes module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_rk.html#pyro.compressible_rk.fluxes.fluxes"><code class="docutils literal notranslate"><span class="pre">fluxes()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_rk.html#module-pyro.compressible_rk.simulation">pyro.compressible_rk.simulation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_rk.html#pyro.compressible_rk.simulation.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_rk.html#pyro.compressible_rk.simulation.Simulation.evolve"><code class="docutils literal notranslate"><span class="pre">Simulation.evolve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_rk.html#pyro.compressible_rk.simulation.Simulation.method_compute_timestep"><code class="docutils literal notranslate"><span class="pre">Simulation.method_compute_timestep()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_rk.html#pyro.compressible_rk.simulation.Simulation.substep"><code class="docutils literal notranslate"><span class="pre">Simulation.substep()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyro.compressible_sdc.html">pyro.compressible_sdc package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_sdc.html#subpackages">Subpackages</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_sdc.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_sdc.html#module-pyro.compressible_sdc.simulation">pyro.compressible_sdc.simulation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sdc.html#pyro.compressible_sdc.simulation.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sdc.html#pyro.compressible_sdc.simulation.Simulation.evolve"><code class="docutils literal notranslate"><span class="pre">Simulation.evolve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sdc.html#pyro.compressible_sdc.simulation.Simulation.sdc_integral"><code class="docutils literal notranslate"><span class="pre">Simulation.sdc_integral()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyro.compressible_sr.html">pyro.compressible_sr package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_sr.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sr.problems.html">pyro.compressible_sr.problems package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.problems.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.problems.html#module-pyro.compressible_sr.problems.acoustic_pulse">pyro.compressible_sr.problems.acoustic_pulse module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.problems.html#module-pyro.compressible_sr.problems.advect">pyro.compressible_sr.problems.advect module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.problems.html#module-pyro.compressible_sr.problems.bubble">pyro.compressible_sr.problems.bubble module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.problems.html#module-pyro.compressible_sr.problems.gresho">pyro.compressible_sr.problems.gresho module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.problems.html#module-pyro.compressible_sr.problems.hse">pyro.compressible_sr.problems.hse module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.problems.html#module-pyro.compressible_sr.problems.kh">pyro.compressible_sr.problems.kh module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.problems.html#module-pyro.compressible_sr.problems.logo">pyro.compressible_sr.problems.logo module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.problems.html#module-pyro.compressible_sr.problems.quad">pyro.compressible_sr.problems.quad module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.problems.html#module-pyro.compressible_sr.problems.rt">pyro.compressible_sr.problems.rt module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.problems.html#module-pyro.compressible_sr.problems.rt2">pyro.compressible_sr.problems.rt2 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.problems.html#module-pyro.compressible_sr.problems.sedov">pyro.compressible_sr.problems.sedov module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.problems.html#module-pyro.compressible_sr.problems.sod">pyro.compressible_sr.problems.sod module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.problems.html#module-pyro.compressible_sr.problems.test">pyro.compressible_sr.problems.test module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_sr.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_sr.html#module-pyro.compressible_sr.BC">pyro.compressible_sr.BC module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.BC.inflow_post_bc"><code class="docutils literal notranslate"><span class="pre">inflow_post_bc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.BC.inflow_pre_bc"><code class="docutils literal notranslate"><span class="pre">inflow_pre_bc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.BC.user"><code class="docutils literal notranslate"><span class="pre">user()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_sr.html#module-pyro.compressible_sr.c2p">pyro.compressible_sr.c2p module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.c2p.brentq"><code class="docutils literal notranslate"><span class="pre">brentq()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.c2p.cons_to_prim"><code class="docutils literal notranslate"><span class="pre">cons_to_prim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.c2p.f"><code class="docutils literal notranslate"><span class="pre">f()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_sr.html#module-pyro.compressible_sr.derives">pyro.compressible_sr.derives module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.derives.derive_primitives"><code class="docutils literal notranslate"><span class="pre">derive_primitives()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_sr.html#module-pyro.compressible_sr.eos">pyro.compressible_sr.eos module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.eos.dens"><code class="docutils literal notranslate"><span class="pre">dens()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.eos.h_from_eps"><code class="docutils literal notranslate"><span class="pre">h_from_eps()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.eos.pres"><code class="docutils literal notranslate"><span class="pre">pres()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.eos.rhoe"><code class="docutils literal notranslate"><span class="pre">rhoe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.eos.rhoh_from_rho_p"><code class="docutils literal notranslate"><span class="pre">rhoh_from_rho_p()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_sr.html#module-pyro.compressible_sr.interface">pyro.compressible_sr.interface module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.interface.artificial_viscosity"><code class="docutils literal notranslate"><span class="pre">artificial_viscosity()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.interface.consFlux"><code class="docutils literal notranslate"><span class="pre">consFlux()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.interface.riemann_cgf"><code class="docutils literal notranslate"><span class="pre">riemann_cgf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.interface.riemann_hllc"><code class="docutils literal notranslate"><span class="pre">riemann_hllc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.interface.riemann_prim"><code class="docutils literal notranslate"><span class="pre">riemann_prim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.interface.states"><code class="docutils literal notranslate"><span class="pre">states()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_sr.html#module-pyro.compressible_sr.simulation">pyro.compressible_sr.simulation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.simulation.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.simulation.Simulation.dovis"><code class="docutils literal notranslate"><span class="pre">Simulation.dovis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.simulation.Simulation.evolve"><code class="docutils literal notranslate"><span class="pre">Simulation.evolve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.simulation.Simulation.initialize"><code class="docutils literal notranslate"><span class="pre">Simulation.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.simulation.Simulation.method_compute_timestep"><code class="docutils literal notranslate"><span class="pre">Simulation.method_compute_timestep()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.simulation.Simulation.write_extras"><code class="docutils literal notranslate"><span class="pre">Simulation.write_extras()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.simulation.Variables"><code class="docutils literal notranslate"><span class="pre">Variables</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.simulation.prim_to_cons"><code class="docutils literal notranslate"><span class="pre">prim_to_cons()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_sr.html#module-pyro.compressible_sr.unsplit_fluxes">pyro.compressible_sr.unsplit_fluxes module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.unsplit_fluxes.cons_to_prim_wrapper"><code class="docutils literal notranslate"><span class="pre">cons_to_prim_wrapper()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_sr.html#pyro.compressible_sr.unsplit_fluxes.unsplit_fluxes"><code class="docutils literal notranslate"><span class="pre">unsplit_fluxes()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyro.diffusion.html">pyro.diffusion package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyro.diffusion.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.diffusion.problems.html">pyro.diffusion.problems package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.diffusion.problems.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.diffusion.problems.html#module-pyro.diffusion.problems.gaussian">pyro.diffusion.problems.gaussian module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.diffusion.problems.html#module-pyro.diffusion.problems.test">pyro.diffusion.problems.test module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.diffusion.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.diffusion.html#module-pyro.diffusion.simulation">pyro.diffusion.simulation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.diffusion.html#pyro.diffusion.simulation.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.diffusion.html#pyro.diffusion.simulation.Simulation.dovis"><code class="docutils literal notranslate"><span class="pre">Simulation.dovis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.diffusion.html#pyro.diffusion.simulation.Simulation.evolve"><code class="docutils literal notranslate"><span class="pre">Simulation.evolve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.diffusion.html#pyro.diffusion.simulation.Simulation.initialize"><code class="docutils literal notranslate"><span class="pre">Simulation.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.diffusion.html#pyro.diffusion.simulation.Simulation.method_compute_timestep"><code class="docutils literal notranslate"><span class="pre">Simulation.method_compute_timestep()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyro.incompressible.html">pyro.incompressible package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyro.incompressible.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.incompressible.problems.html">pyro.incompressible.problems package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible.problems.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible.problems.html#module-pyro.incompressible.problems.converge">pyro.incompressible.problems.converge module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible.problems.html#module-pyro.incompressible.problems.shear">pyro.incompressible.problems.shear module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.incompressible.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.incompressible.html#module-pyro.incompressible.incomp_interface">pyro.incompressible.incomp_interface module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.incomp_interface.get_interface_states"><code class="docutils literal notranslate"><span class="pre">get_interface_states()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.incomp_interface.mac_vels"><code class="docutils literal notranslate"><span class="pre">mac_vels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.incomp_interface.riemann"><code class="docutils literal notranslate"><span class="pre">riemann()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.incomp_interface.riemann_and_upwind"><code class="docutils literal notranslate"><span class="pre">riemann_and_upwind()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.incomp_interface.states"><code class="docutils literal notranslate"><span class="pre">states()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.incomp_interface.upwind"><code class="docutils literal notranslate"><span class="pre">upwind()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.incompressible.html#module-pyro.incompressible.simulation">pyro.incompressible.simulation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.simulation.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.simulation.Simulation.dovis"><code class="docutils literal notranslate"><span class="pre">Simulation.dovis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.simulation.Simulation.evolve"><code class="docutils literal notranslate"><span class="pre">Simulation.evolve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.simulation.Simulation.initialize"><code class="docutils literal notranslate"><span class="pre">Simulation.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.simulation.Simulation.method_compute_timestep"><code class="docutils literal notranslate"><span class="pre">Simulation.method_compute_timestep()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.simulation.Simulation.preevolve"><code class="docutils literal notranslate"><span class="pre">Simulation.preevolve()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyro.lm_atm.html">pyro.lm_atm package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyro.lm_atm.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.lm_atm.problems.html">pyro.lm_atm.problems package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.lm_atm.problems.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.lm_atm.problems.html#module-pyro.lm_atm.problems.bubble">pyro.lm_atm.problems.bubble module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.lm_atm.problems.html#module-pyro.lm_atm.problems.gresho">pyro.lm_atm.problems.gresho module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.lm_atm.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.lm_atm.html#module-pyro.lm_atm.LM_atm_interface">pyro.lm_atm.LM_atm_interface module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.get_interface_states"><code class="docutils literal notranslate"><span class="pre">get_interface_states()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.is_asymmetric"><code class="docutils literal notranslate"><span class="pre">is_asymmetric()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.is_asymmetric_pair"><code class="docutils literal notranslate"><span class="pre">is_asymmetric_pair()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.is_symmetric"><code class="docutils literal notranslate"><span class="pre">is_symmetric()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.is_symmetric_pair"><code class="docutils literal notranslate"><span class="pre">is_symmetric_pair()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.mac_vels"><code class="docutils literal notranslate"><span class="pre">mac_vels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.rho_states"><code class="docutils literal notranslate"><span class="pre">rho_states()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.riemann"><code class="docutils literal notranslate"><span class="pre">riemann()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.riemann_and_upwind"><code class="docutils literal notranslate"><span class="pre">riemann_and_upwind()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.states"><code class="docutils literal notranslate"><span class="pre">states()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.upwind"><code class="docutils literal notranslate"><span class="pre">upwind()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.lm_atm.html#module-pyro.lm_atm.simulation">pyro.lm_atm.simulation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.simulation.Basestate"><code class="docutils literal notranslate"><span class="pre">Basestate</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.simulation.Basestate.jp"><code class="docutils literal notranslate"><span class="pre">Basestate.jp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.simulation.Basestate.v"><code class="docutils literal notranslate"><span class="pre">Basestate.v()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.simulation.Basestate.v2d"><code class="docutils literal notranslate"><span class="pre">Basestate.v2d()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.simulation.Basestate.v2dp"><code class="docutils literal notranslate"><span class="pre">Basestate.v2dp()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.simulation.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.simulation.Simulation.dovis"><code class="docutils literal notranslate"><span class="pre">Simulation.dovis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.simulation.Simulation.evolve"><code class="docutils literal notranslate"><span class="pre">Simulation.evolve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.simulation.Simulation.initialize"><code class="docutils literal notranslate"><span class="pre">Simulation.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.simulation.Simulation.make_prime"><code class="docutils literal notranslate"><span class="pre">Simulation.make_prime()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.simulation.Simulation.method_compute_timestep"><code class="docutils literal notranslate"><span class="pre">Simulation.method_compute_timestep()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.simulation.Simulation.preevolve"><code class="docutils literal notranslate"><span class="pre">Simulation.preevolve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.simulation.Simulation.read_extras"><code class="docutils literal notranslate"><span class="pre">Simulation.read_extras()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.lm_atm.html#pyro.lm_atm.simulation.Simulation.write_extras"><code class="docutils literal notranslate"><span class="pre">Simulation.write_extras()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyro.mesh.html">pyro.mesh package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyro.mesh.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.mesh.html#module-pyro.mesh.array_indexer">pyro.mesh.array_indexer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer"><code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.copy"><code class="docutils literal notranslate"><span class="pre">ArrayIndexer.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.fill_ghost"><code class="docutils literal notranslate"><span class="pre">ArrayIndexer.fill_ghost()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.ip"><code class="docutils literal notranslate"><span class="pre">ArrayIndexer.ip()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.ip_jp"><code class="docutils literal notranslate"><span class="pre">ArrayIndexer.ip_jp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.is_asymmetric"><code class="docutils literal notranslate"><span class="pre">ArrayIndexer.is_asymmetric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.is_symmetric"><code class="docutils literal notranslate"><span class="pre">ArrayIndexer.is_symmetric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.jp"><code class="docutils literal notranslate"><span class="pre">ArrayIndexer.jp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.lap"><code class="docutils literal notranslate"><span class="pre">ArrayIndexer.lap()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.norm"><code class="docutils literal notranslate"><span class="pre">ArrayIndexer.norm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.pretty_print"><code class="docutils literal notranslate"><span class="pre">ArrayIndexer.pretty_print()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.v"><code class="docutils literal notranslate"><span class="pre">ArrayIndexer.v()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC"><code class="docutils literal notranslate"><span class="pre">ArrayIndexerFC</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC.copy"><code class="docutils literal notranslate"><span class="pre">ArrayIndexerFC.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC.fill_ghost"><code class="docutils literal notranslate"><span class="pre">ArrayIndexerFC.fill_ghost()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC.ip_jp"><code class="docutils literal notranslate"><span class="pre">ArrayIndexerFC.ip_jp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC.is_asymmetric"><code class="docutils literal notranslate"><span class="pre">ArrayIndexerFC.is_asymmetric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC.is_symmetric"><code class="docutils literal notranslate"><span class="pre">ArrayIndexerFC.is_symmetric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC.lap"><code class="docutils literal notranslate"><span class="pre">ArrayIndexerFC.lap()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC.norm"><code class="docutils literal notranslate"><span class="pre">ArrayIndexerFC.norm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC.pretty_print"><code class="docutils literal notranslate"><span class="pre">ArrayIndexerFC.pretty_print()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.mesh.html#module-pyro.mesh.boundary">pyro.mesh.boundary module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.boundary.BC"><code class="docutils literal notranslate"><span class="pre">BC</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.boundary.BCProp"><code class="docutils literal notranslate"><span class="pre">BCProp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.boundary.bc_is_solid"><code class="docutils literal notranslate"><span class="pre">bc_is_solid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.boundary.define_bc"><code class="docutils literal notranslate"><span class="pre">define_bc()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.mesh.html#module-pyro.mesh.fv">pyro.mesh.fv module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.fv.FV2d"><code class="docutils literal notranslate"><span class="pre">FV2d</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.fv.FV2d.from_centers"><code class="docutils literal notranslate"><span class="pre">FV2d.from_centers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.fv.FV2d.to_centers"><code class="docutils literal notranslate"><span class="pre">FV2d.to_centers()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.mesh.html#module-pyro.mesh.integration">pyro.mesh.integration module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.integration.RKIntegrator"><code class="docutils literal notranslate"><span class="pre">RKIntegrator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.integration.RKIntegrator.compute_final_update"><code class="docutils literal notranslate"><span class="pre">RKIntegrator.compute_final_update()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.integration.RKIntegrator.get_stage_start"><code class="docutils literal notranslate"><span class="pre">RKIntegrator.get_stage_start()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.integration.RKIntegrator.nstages"><code class="docutils literal notranslate"><span class="pre">RKIntegrator.nstages()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.integration.RKIntegrator.set_start"><code class="docutils literal notranslate"><span class="pre">RKIntegrator.set_start()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.integration.RKIntegrator.store_increment"><code class="docutils literal notranslate"><span class="pre">RKIntegrator.store_increment()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.mesh.html#module-pyro.mesh.patch">pyro.mesh.patch module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d"><code class="docutils literal notranslate"><span class="pre">CellCenterData2d</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.add_derived"><code class="docutils literal notranslate"><span class="pre">CellCenterData2d.add_derived()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.add_ivars"><code class="docutils literal notranslate"><span class="pre">CellCenterData2d.add_ivars()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.create"><code class="docutils literal notranslate"><span class="pre">CellCenterData2d.create()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.fill_BC"><code class="docutils literal notranslate"><span class="pre">CellCenterData2d.fill_BC()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.fill_BC_all"><code class="docutils literal notranslate"><span class="pre">CellCenterData2d.fill_BC_all()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.get_aux"><code class="docutils literal notranslate"><span class="pre">CellCenterData2d.get_aux()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.get_var"><code class="docutils literal notranslate"><span class="pre">CellCenterData2d.get_var()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.get_var_by_index"><code class="docutils literal notranslate"><span class="pre">CellCenterData2d.get_var_by_index()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.get_vars"><code class="docutils literal notranslate"><span class="pre">CellCenterData2d.get_vars()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.max"><code class="docutils literal notranslate"><span class="pre">CellCenterData2d.max()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.min"><code class="docutils literal notranslate"><span class="pre">CellCenterData2d.min()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.pretty_print"><code class="docutils literal notranslate"><span class="pre">CellCenterData2d.pretty_print()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.prolong"><code class="docutils literal notranslate"><span class="pre">CellCenterData2d.prolong()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.register_var"><code class="docutils literal notranslate"><span class="pre">CellCenterData2d.register_var()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.restrict"><code class="docutils literal notranslate"><span class="pre">CellCenterData2d.restrict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.set_aux"><code class="docutils literal notranslate"><span class="pre">CellCenterData2d.set_aux()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.write"><code class="docutils literal notranslate"><span class="pre">CellCenterData2d.write()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.write_data"><code class="docutils literal notranslate"><span class="pre">CellCenterData2d.write_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.zero"><code class="docutils literal notranslate"><span class="pre">CellCenterData2d.zero()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.FaceCenterData2d"><code class="docutils literal notranslate"><span class="pre">FaceCenterData2d</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.FaceCenterData2d.add_derived"><code class="docutils literal notranslate"><span class="pre">FaceCenterData2d.add_derived()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.FaceCenterData2d.create"><code class="docutils literal notranslate"><span class="pre">FaceCenterData2d.create()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.FaceCenterData2d.fill_BC"><code class="docutils literal notranslate"><span class="pre">FaceCenterData2d.fill_BC()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.FaceCenterData2d.get_var_by_index"><code class="docutils literal notranslate"><span class="pre">FaceCenterData2d.get_var_by_index()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.FaceCenterData2d.get_vars"><code class="docutils literal notranslate"><span class="pre">FaceCenterData2d.get_vars()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.FaceCenterData2d.prolong"><code class="docutils literal notranslate"><span class="pre">FaceCenterData2d.prolong()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.FaceCenterData2d.restrict"><code class="docutils literal notranslate"><span class="pre">FaceCenterData2d.restrict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.FaceCenterData2d.write_data"><code class="docutils literal notranslate"><span class="pre">FaceCenterData2d.write_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.Grid2d"><code class="docutils literal notranslate"><span class="pre">Grid2d</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.Grid2d.coarse_like"><code class="docutils literal notranslate"><span class="pre">Grid2d.coarse_like()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.Grid2d.fine_like"><code class="docutils literal notranslate"><span class="pre">Grid2d.fine_like()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.Grid2d.scratch_array"><code class="docutils literal notranslate"><span class="pre">Grid2d.scratch_array()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.cell_center_data_clone"><code class="docutils literal notranslate"><span class="pre">cell_center_data_clone()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.do_demo"><code class="docutils literal notranslate"><span class="pre">do_demo()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.mesh.html#module-pyro.mesh.reconstruction">pyro.mesh.reconstruction module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.reconstruction.flatten"><code class="docutils literal notranslate"><span class="pre">flatten()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.reconstruction.flatten_multid"><code class="docutils literal notranslate"><span class="pre">flatten_multid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.reconstruction.limit"><code class="docutils literal notranslate"><span class="pre">limit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.reconstruction.limit2"><code class="docutils literal notranslate"><span class="pre">limit2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.reconstruction.limit4"><code class="docutils literal notranslate"><span class="pre">limit4()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.reconstruction.nolimit"><code class="docutils literal notranslate"><span class="pre">nolimit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.reconstruction.well_balance"><code class="docutils literal notranslate"><span class="pre">well_balance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.reconstruction.weno"><code class="docutils literal notranslate"><span class="pre">weno()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html#pyro.mesh.reconstruction.weno_upwind"><code class="docutils literal notranslate"><span class="pre">weno_upwind()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyro.multigrid.html">pyro.multigrid package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyro.multigrid.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.multigrid.html#module-pyro.multigrid.MG">pyro.multigrid.MG module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d"><code class="docutils literal notranslate"><span class="pre">CellCenterMG2d</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d.get_solution"><code class="docutils literal notranslate"><span class="pre">CellCenterMG2d.get_solution()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d.get_solution_gradient"><code class="docutils literal notranslate"><span class="pre">CellCenterMG2d.get_solution_gradient()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d.get_solution_object"><code class="docutils literal notranslate"><span class="pre">CellCenterMG2d.get_solution_object()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d.grid_info"><code class="docutils literal notranslate"><span class="pre">CellCenterMG2d.grid_info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d.init_RHS"><code class="docutils literal notranslate"><span class="pre">CellCenterMG2d.init_RHS()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d.init_solution"><code class="docutils literal notranslate"><span class="pre">CellCenterMG2d.init_solution()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d.init_zeros"><code class="docutils literal notranslate"><span class="pre">CellCenterMG2d.init_zeros()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d.smooth"><code class="docutils literal notranslate"><span class="pre">CellCenterMG2d.smooth()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d.solve"><code class="docutils literal notranslate"><span class="pre">CellCenterMG2d.solve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d.v_cycle"><code class="docutils literal notranslate"><span class="pre">CellCenterMG2d.v_cycle()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.multigrid.html#module-pyro.multigrid.edge_coeffs">pyro.multigrid.edge_coeffs module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.edge_coeffs.EdgeCoeffs"><code class="docutils literal notranslate"><span class="pre">EdgeCoeffs</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.edge_coeffs.EdgeCoeffs.restrict"><code class="docutils literal notranslate"><span class="pre">EdgeCoeffs.restrict()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.multigrid.html#module-pyro.multigrid.general_MG">pyro.multigrid.general_MG module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.general_MG.GeneralMG2d"><code class="docutils literal notranslate"><span class="pre">GeneralMG2d</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.general_MG.GeneralMG2d.smooth"><code class="docutils literal notranslate"><span class="pre">GeneralMG2d.smooth()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.multigrid.html#module-pyro.multigrid.variable_coeff_MG">pyro.multigrid.variable_coeff_MG module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.variable_coeff_MG.VarCoeffCCMG2d"><code class="docutils literal notranslate"><span class="pre">VarCoeffCCMG2d</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.variable_coeff_MG.VarCoeffCCMG2d.smooth"><code class="docutils literal notranslate"><span class="pre">VarCoeffCCMG2d.smooth()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyro.particles.html">pyro.particles package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyro.particles.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.particles.html#module-pyro.particles.particles">pyro.particles.particles module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.particles.html#pyro.particles.particles.Particle"><code class="docutils literal notranslate"><span class="pre">Particle</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.particles.html#pyro.particles.particles.Particle.interpolate_velocity"><code class="docutils literal notranslate"><span class="pre">Particle.interpolate_velocity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.particles.html#pyro.particles.particles.Particle.pos"><code class="docutils literal notranslate"><span class="pre">Particle.pos()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.particles.html#pyro.particles.particles.Particle.update"><code class="docutils literal notranslate"><span class="pre">Particle.update()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.particles.html#pyro.particles.particles.Particle.velocity"><code class="docutils literal notranslate"><span class="pre">Particle.velocity()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.particles.html#pyro.particles.particles.Particles"><code class="docutils literal notranslate"><span class="pre">Particles</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.particles.html#pyro.particles.particles.Particles.array_generate_particles"><code class="docutils literal notranslate"><span class="pre">Particles.array_generate_particles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.particles.html#pyro.particles.particles.Particles.enforce_particle_boundaries"><code class="docutils literal notranslate"><span class="pre">Particles.enforce_particle_boundaries()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.particles.html#pyro.particles.particles.Particles.get_init_positions"><code class="docutils literal notranslate"><span class="pre">Particles.get_init_positions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.particles.html#pyro.particles.particles.Particles.get_positions"><code class="docutils literal notranslate"><span class="pre">Particles.get_positions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.particles.html#pyro.particles.particles.Particles.grid_generate_particles"><code class="docutils literal notranslate"><span class="pre">Particles.grid_generate_particles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.particles.html#pyro.particles.particles.Particles.randomly_generate_particles"><code class="docutils literal notranslate"><span class="pre">Particles.randomly_generate_particles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.particles.html#pyro.particles.particles.Particles.update_particles"><code class="docutils literal notranslate"><span class="pre">Particles.update_particles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.particles.html#pyro.particles.particles.Particles.write_particles"><code class="docutils literal notranslate"><span class="pre">Particles.write_particles()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyro.swe.html">pyro.swe package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyro.swe.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.swe.problems.html">pyro.swe.problems package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.swe.problems.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.swe.problems.html#module-pyro.swe.problems.acoustic_pulse">pyro.swe.problems.acoustic_pulse module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.swe.problems.html#module-pyro.swe.problems.advect">pyro.swe.problems.advect module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.swe.problems.html#module-pyro.swe.problems.dam">pyro.swe.problems.dam module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.swe.problems.html#module-pyro.swe.problems.kh">pyro.swe.problems.kh module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.swe.problems.html#module-pyro.swe.problems.logo">pyro.swe.problems.logo module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.swe.problems.html#module-pyro.swe.problems.quad">pyro.swe.problems.quad module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.swe.problems.html#module-pyro.swe.problems.test">pyro.swe.problems.test module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.swe.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.swe.html#module-pyro.swe.derives">pyro.swe.derives module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.swe.html#pyro.swe.derives.derive_primitives"><code class="docutils literal notranslate"><span class="pre">derive_primitives()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.swe.html#module-pyro.swe.interface">pyro.swe.interface module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.swe.html#pyro.swe.interface.consFlux"><code class="docutils literal notranslate"><span class="pre">consFlux()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.swe.html#pyro.swe.interface.riemann_hllc"><code class="docutils literal notranslate"><span class="pre">riemann_hllc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.swe.html#pyro.swe.interface.riemann_roe"><code class="docutils literal notranslate"><span class="pre">riemann_roe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.swe.html#pyro.swe.interface.states"><code class="docutils literal notranslate"><span class="pre">states()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.swe.html#module-pyro.swe.simulation">pyro.swe.simulation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.swe.html#pyro.swe.simulation.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.swe.html#pyro.swe.simulation.Simulation.dovis"><code class="docutils literal notranslate"><span class="pre">Simulation.dovis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.swe.html#pyro.swe.simulation.Simulation.evolve"><code class="docutils literal notranslate"><span class="pre">Simulation.evolve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.swe.html#pyro.swe.simulation.Simulation.initialize"><code class="docutils literal notranslate"><span class="pre">Simulation.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.swe.html#pyro.swe.simulation.Simulation.method_compute_timestep"><code class="docutils literal notranslate"><span class="pre">Simulation.method_compute_timestep()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.swe.html#pyro.swe.simulation.Variables"><code class="docutils literal notranslate"><span class="pre">Variables</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.swe.html#pyro.swe.simulation.cons_to_prim"><code class="docutils literal notranslate"><span class="pre">cons_to_prim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.swe.html#pyro.swe.simulation.prim_to_cons"><code class="docutils literal notranslate"><span class="pre">prim_to_cons()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.swe.html#module-pyro.swe.unsplit_fluxes">pyro.swe.unsplit_fluxes module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.swe.html#pyro.swe.unsplit_fluxes.unsplit_fluxes"><code class="docutils literal notranslate"><span class="pre">unsplit_fluxes()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyro.util.html">pyro.util package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyro.util.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.util.html#module-pyro.util.compare">pyro.util.compare module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.util.html#pyro.util.compare.compare"><code class="docutils literal notranslate"><span class="pre">compare()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.util.html#module-pyro.util.io_pyro">pyro.util.io_pyro module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.util.html#pyro.util.io_pyro.read"><code class="docutils literal notranslate"><span class="pre">read()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.util.html#pyro.util.io_pyro.read_bcs"><code class="docutils literal notranslate"><span class="pre">read_bcs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.util.html#module-pyro.util.msg">pyro.util.msg module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.util.html#pyro.util.msg.bold"><code class="docutils literal notranslate"><span class="pre">bold()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.util.html#pyro.util.msg.fail"><code class="docutils literal notranslate"><span class="pre">fail()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.util.html#pyro.util.msg.success"><code class="docutils literal notranslate"><span class="pre">success()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.util.html#pyro.util.msg.warning"><code class="docutils literal notranslate"><span class="pre">warning()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.util.html#module-pyro.util.plot_tools">pyro.util.plot_tools module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.util.html#pyro.util.plot_tools.setup_axes"><code class="docutils literal notranslate"><span class="pre">setup_axes()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.util.html#module-pyro.util.profile_pyro">pyro.util.profile_pyro module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.util.html#pyro.util.profile_pyro.Timer"><code class="docutils literal notranslate"><span class="pre">Timer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.util.html#pyro.util.profile_pyro.Timer.begin"><code class="docutils literal notranslate"><span class="pre">Timer.begin()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.util.html#pyro.util.profile_pyro.Timer.end"><code class="docutils literal notranslate"><span class="pre">Timer.end()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.util.html#pyro.util.profile_pyro.TimerCollection"><code class="docutils literal notranslate"><span class="pre">TimerCollection</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.util.html#pyro.util.profile_pyro.TimerCollection.report"><code class="docutils literal notranslate"><span class="pre">TimerCollection.report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.util.html#pyro.util.profile_pyro.TimerCollection.timer"><code class="docutils literal notranslate"><span class="pre">TimerCollection.timer()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.util.html#module-pyro.util.runparams">pyro.util.runparams module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.util.html#pyro.util.runparams.RuntimeParameters"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.util.html#pyro.util.runparams.RuntimeParameters.command_line_params"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.command_line_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.util.html#pyro.util.runparams.RuntimeParameters.get_param"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.get_param()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.util.html#pyro.util.runparams.RuntimeParameters.load_params"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.load_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.util.html#pyro.util.runparams.RuntimeParameters.print_all_params"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.print_all_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.util.html#pyro.util.runparams.RuntimeParameters.print_paramfile"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.print_paramfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.util.html#pyro.util.runparams.RuntimeParameters.print_sphinx_tables"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.print_sphinx_tables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.util.html#pyro.util.runparams.RuntimeParameters.print_unused_params"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.print_unused_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.util.html#pyro.util.runparams.RuntimeParameters.write_params"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.write_params()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.util.html#pyro.util.runparams.is_float"><code class="docutils literal notranslate"><span class="pre">is_float()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.util.html#pyro.util.runparams.is_int"><code class="docutils literal notranslate"><span class="pre">is_int()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-pyro.plot">
+<span id="pyro-plot-module"></span><h2>pyro.plot module<a class="headerlink" href="#module-pyro.plot" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.plot.get_args">
+<span class="sig-prename descclassname"><span class="pre">pyro.plot.</span></span><span class="sig-name descname"><span class="pre">get_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/plot.html#get_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.plot.get_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.plot.makeplot">
+<span class="sig-prename descclassname"><span class="pre">pyro.plot.</span></span><span class="sig-name descname"><span class="pre">makeplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plotfile_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/plot.html#makeplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.plot.makeplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot the data in a plotfile using the solver’s vis() method</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyro.Pyro.run_sim">
-<code class="descname">run_sim</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro.html#Pyro.run_sim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyro.Pyro.run_sim" title="Permalink to this definition">¶</a></dt>
+</section>
+<section id="module-pyro.pyro_sim">
+<span id="pyro-pyro-sim-module"></span><h2>pyro.pyro_sim module<a class="headerlink" href="#module-pyro.pyro_sim" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyro.pyro_sim.Pyro">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.pyro_sim.</span></span><span class="sig-name descname"><span class="pre">Pyro</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/pyro_sim.html#Pyro"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.pyro_sim.Pyro" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The main driver to run pyro.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.pyro_sim.Pyro.get_var">
+<span class="sig-name descname"><span class="pre">get_var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/pyro_sim.html#Pyro.get_var"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.pyro_sim.Pyro.get_var" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for cc_data’s get_var routine, returns the cell-centered data
+given the variable name v.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.pyro_sim.Pyro.initialize_problem">
+<span class="sig-name descname"><span class="pre">initialize_problem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other_commands</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/pyro_sim.html#Pyro.initialize_problem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.pyro_sim.Pyro.initialize_problem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the specific problem</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>problem_name</strong><span class="classifier">str</span></dt><dd><p>Name of the problem</p>
+</dd>
+<dt><strong>inputs_file</strong><span class="classifier">str</span></dt><dd><p>Filename containing problem’s runtime parameters</p>
+</dd>
+<dt><strong>inputs_dict</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing extra runtime parameters</p>
+</dd>
+<dt><strong>other_commands</strong><span class="classifier">str</span></dt><dd><p>Other command line parameter options</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.pyro_sim.Pyro.run_sim">
+<span class="sig-name descname"><span class="pre">run_sim</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/pyro_sim.html#Pyro.run_sim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.pyro_sim.Pyro.run_sim" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evolve entire simulation</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyro.Pyro.single_step">
-<code class="descname">single_step</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro.html#Pyro.single_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyro.Pyro.single_step" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.pyro_sim.Pyro.single_step">
+<span class="sig-name descname"><span class="pre">single_step</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/pyro_sim.html#Pyro.single_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.pyro_sim.Pyro.single_step" title="Permalink to this definition">¶</a></dt>
 <dd><p>Do a single step</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
-<dt id="pyro.PyroBenchmark">
-<em class="property">class </em><code class="descclassname">pyro.</code><code class="descname">PyroBenchmark</code><span class="sig-paren">(</span><em>solver_name</em>, <em>comp_bench=False</em>, <em>reset_bench_on_fail=False</em>, <em>make_bench=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro.html#PyroBenchmark"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyro.PyroBenchmark" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#pyro.Pyro" title="pyro.Pyro"><code class="xref py py-class docutils literal"><span class="pre">pyro.Pyro</span></code></a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyro.pyro_sim.PyroBenchmark">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.pyro_sim.</span></span><span class="sig-name descname"><span class="pre">PyroBenchmark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp_bench</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset_bench_on_fail</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">make_bench</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/pyro_sim.html#PyroBenchmark"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.pyro_sim.PyroBenchmark" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyro.pyro_sim.Pyro" title="pyro.pyro_sim.Pyro"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pyro</span></code></a></p>
 <p>A subclass of Pyro for benchmarking. Inherits everything from pyro, but adds benchmarking routines.</p>
-<dl class="method">
-<dt id="pyro.PyroBenchmark.compare_to_benchmark">
-<code class="descname">compare_to_benchmark</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro.html#PyroBenchmark.compare_to_benchmark"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyro.PyroBenchmark.compare_to_benchmark" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.pyro_sim.PyroBenchmark.compare_to_benchmark">
+<span class="sig-name descname"><span class="pre">compare_to_benchmark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rtol</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/pyro_sim.html#PyroBenchmark.compare_to_benchmark"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.pyro_sim.PyroBenchmark.compare_to_benchmark" title="Permalink to this definition">¶</a></dt>
 <dd><p>Are we comparing to a benchmark?</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyro.PyroBenchmark.run_sim">
-<code class="descname">run_sim</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro.html#PyroBenchmark.run_sim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyro.PyroBenchmark.run_sim" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evolve entire simulation and benchmark at the end.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.pyro_sim.PyroBenchmark.run_sim">
+<span class="sig-name descname"><span class="pre">run_sim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-12</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/pyro_sim.html#PyroBenchmark.run_sim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.pyro_sim.PyroBenchmark.run_sim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evolve entire simulation and compare to benchmark at the end.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyro.PyroBenchmark.store_as_benchmark">
-<code class="descname">store_as_benchmark</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro.html#PyroBenchmark.store_as_benchmark"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyro.PyroBenchmark.store_as_benchmark" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.pyro_sim.PyroBenchmark.store_as_benchmark">
+<span class="sig-name descname"><span class="pre">store_as_benchmark</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/pyro_sim.html#PyroBenchmark.store_as_benchmark"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.pyro_sim.PyroBenchmark.store_as_benchmark" title="Permalink to this definition">¶</a></dt>
 <dd><p>Are we storing a benchmark?</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="function">
-<dt id="pyro.parse_args">
-<code class="descclassname">pyro.</code><code class="descname">parse_args</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro.html#parse_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyro.parse_args" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.pyro_sim.main">
+<span class="sig-prename descclassname"><span class="pre">pyro.pyro_sim.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/pyro_sim.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.pyro_sim.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.pyro_sim.parse_args">
+<span class="sig-prename descclassname"><span class="pre">pyro.pyro_sim.</span></span><span class="sig-name descname"><span class="pre">parse_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/pyro_sim.html#parse_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.pyro_sim.parse_args" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse the runtime parameters</p>
 </dd></dl>
 
-</div>
+</section>
+<section id="module-pyro.simulation_null">
+<span id="pyro-simulation-null-module"></span><h2>pyro.simulation_null module<a class="headerlink" href="#module-pyro.simulation_null" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyro.simulation_null.NullSimulation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.simulation_null.</span></span><span class="sig-name descname"><span class="pre">NullSimulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timers=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_class=&lt;class</span> <span class="pre">'pyro.mesh.patch.CellCenterData2d'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/simulation_null.html#NullSimulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.simulation_null.NullSimulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.simulation_null.NullSimulation.compute_timestep">
+<span class="sig-name descname"><span class="pre">compute_timestep</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/simulation_null.html#NullSimulation.compute_timestep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.simulation_null.NullSimulation.compute_timestep" title="Permalink to this definition">¶</a></dt>
+<dd><p>a generic wrapper for computing the timestep that respects the
+driver parameters on timestepping</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.simulation_null.NullSimulation.do_output">
+<span class="sig-name descname"><span class="pre">do_output</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/simulation_null.html#NullSimulation.do_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.simulation_null.NullSimulation.do_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>is it time to output?</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.simulation_null.NullSimulation.dovis">
+<span class="sig-name descname"><span class="pre">dovis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/simulation_null.html#NullSimulation.dovis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.simulation_null.NullSimulation.dovis" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.simulation_null.NullSimulation.evolve">
+<span class="sig-name descname"><span class="pre">evolve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/simulation_null.html#NullSimulation.evolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.simulation_null.NullSimulation.evolve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.simulation_null.NullSimulation.finalize">
+<span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/simulation_null.html#NullSimulation.finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.simulation_null.NullSimulation.finalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do any final clean-ups for the simulation and call the problem’s
+finalize() method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.simulation_null.NullSimulation.finished">
+<span class="sig-name descname"><span class="pre">finished</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/simulation_null.html#NullSimulation.finished"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.simulation_null.NullSimulation.finished" title="Permalink to this definition">¶</a></dt>
+<dd><p>is the simulation finished based on time or the number of steps</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.simulation_null.NullSimulation.initialize">
+<span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/simulation_null.html#NullSimulation.initialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.simulation_null.NullSimulation.initialize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.simulation_null.NullSimulation.method_compute_timestep">
+<span class="sig-name descname"><span class="pre">method_compute_timestep</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/simulation_null.html#NullSimulation.method_compute_timestep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.simulation_null.NullSimulation.method_compute_timestep" title="Permalink to this definition">¶</a></dt>
+<dd><p>the method-specific timestep code</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.simulation_null.NullSimulation.preevolve">
+<span class="sig-name descname"><span class="pre">preevolve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/simulation_null.html#NullSimulation.preevolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.simulation_null.NullSimulation.preevolve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do any necessary evolution before the main evolve loop.  This
+is not needed for advection</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.simulation_null.NullSimulation.read_extras">
+<span class="sig-name descname"><span class="pre">read_extras</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/simulation_null.html#NullSimulation.read_extras"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.simulation_null.NullSimulation.read_extras" title="Permalink to this definition">¶</a></dt>
+<dd><p>read in any simulation-specific data from an h5py file object f</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.simulation_null.NullSimulation.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/simulation_null.html#NullSimulation.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.simulation_null.NullSimulation.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Output the state of the simulation to an HDF5 file for plotting</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.simulation_null.NullSimulation.write_extras">
+<span class="sig-name descname"><span class="pre">write_extras</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/simulation_null.html#NullSimulation.write_extras"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.simulation_null.NullSimulation.write_extras" title="Permalink to this definition">¶</a></dt>
+<dd><p>write out any extra simulation-specific stuff</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.simulation_null.bc_setup">
+<span class="sig-prename descclassname"><span class="pre">pyro.simulation_null.</span></span><span class="sig-name descname"><span class="pre">bc_setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/simulation_null.html#bc_setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.simulation_null.bc_setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.simulation_null.grid_setup">
+<span class="sig-prename descclassname"><span class="pre">pyro.simulation_null.</span></span><span class="sig-name descname"><span class="pre">grid_setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ng</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/simulation_null.html#grid_setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.simulation_null.grid_setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pyro.test">
+<span id="pyro-test-module"></span><h2>pyro.test module<a class="headerlink" href="#module-pyro.test" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyro.test.PyroTest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.test.</span></span><span class="sig-name descname"><span class="pre">PyroTest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/test.html#PyroTest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.test.PyroTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.test.do_tests">
+<span class="sig-prename descclassname"><span class="pre">pyro.test.</span></span><span class="sig-name descname"><span class="pre">do_tests</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset_fails</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store_all_benchmarks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">single</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-12</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/test.html#do_tests"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.test.do_tests" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
 
 
-           </div>
-           <div class="articleComments">
-            
            </div>
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="setup.html" class="btn btn-neutral float-right" title="setup module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="plotvar.html" class="btn btn-neutral" title="plotvar module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="pyro" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pyro.advection.html" class="btn btn-neutral float-right" title="pyro.advection package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2018, pyro development tem.
-
-    </p>
+    <p>&#169; Copyright 2022, pyro development team.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'2.2',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

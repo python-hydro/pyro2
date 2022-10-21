@@ -1,79 +1,43 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Incompressible hydrodynamics solver &mdash; pyro 2.2 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Incompressible hydrodynamics solver &mdash; pyro 4.0.1.post4+gc829962 documentation</title>
+      <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-  
-
-  
-
-  
-  
-    
-
-  
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyro 2.2 documentation" href="index.html"/>
-        <link rel="next" title="Low Mach number hydrodynamics solver" href="lowmach_basics.html"/>
-        <link rel="prev" title="Diffusion" href="diffusion_basics.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Low Mach number hydrodynamics solver" href="lowmach_basics.html" />
+    <link rel="prev" title="Diffusion" href="diffusion_basics.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
+        <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> pyro
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
-                2.2
+                4.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -81,18 +45,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">pyro basics</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">pyro basics</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Setting up pyro</a></li>
@@ -104,7 +58,7 @@
 <li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Solvers</span></p>
+<p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
@@ -127,124 +81,81 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solvers</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Utilities</span></p>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Community</span></p>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Contributing and getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html#history">History</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Reference</span></p>
+<p class="caption" role="heading"><span class="caption-text">Software Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">pyro</a>
-        
       </nav>
 
-
-      
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
       <li>Incompressible hydrodynamics solver</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/incompressible_basics.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   
 <style>
 /* CSS overrides for sphinx_rtd_theme */
 
 /* 24px margin */
-.nbinput.nblast,
-.nboutput.nblast {
+.nbinput.nblast.container,
+.nboutput.nblast.container {
     margin-bottom: 19px;  /* padding has already 5px */
 }
 
 /* ... except between code cells! */
-.nblast + .nbinput {
+.nblast.container + .nbinput.container {
     margin-top: -19px;
 }
 
-/* nice headers on first paragraph of info/warning boxes */
-.admonition .first {
-    margin: -12px;
-    padding: 6px 12px;
-    margin-bottom: 12px;
-    color: #fff;
-    line-height: 1;
-    display: block;
-}
-.admonition.warning .first {
-    background: #f0b37e;
-}
-.admonition.note .first {
-    background: #6ab0de;
-}
 .admonition > p:before {
     margin-right: 4px;  /* make room for the exclamation icon */
 }
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
 </style>
-<div class="section" id="incompressible-hydrodynamics-solver">
-<h1>Incompressible hydrodynamics solver<a class="headerlink" href="#incompressible-hydrodynamics-solver" title="Permalink to this headline">¶</a></h1>
+<section id="incompressible-hydrodynamics-solver">
+<h1>Incompressible hydrodynamics solver<a class="headerlink" href="#incompressible-hydrodynamics-solver" title="Permalink to this heading">¶</a></h1>
 <p>pyro’s incompressible solver solves:</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\begin{split}\frac{\partial U}{\partial t} + U \cdot \nabla U + \nabla p &amp;= 0 \\
 \nabla \cdot U &amp;= 0\end{split}\]</div>
 <p>The algorithm combines the Godunov/advection features
@@ -253,153 +164,185 @@ to enforce the divergence constraint on the velocities.</p>
 <p>Here we implement a cell-centered approximate projection method for
 solving the incompressible equations. At the moment, only periodic BCs
 are supported.</p>
-<div class="section" id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="shear">
-<h3>shear<a class="headerlink" href="#shear" title="Permalink to this headline">¶</a></h3>
+<p>The main parameters that affect this solver are:</p>
+<ul>
+<li><p>section: [driver]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 16%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>cfl</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.8</span></code></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>section: [incompressible]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 16%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>limiter</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p>limiter (0 = none, 1 = 2nd order, 2 = 4th order)</p></td>
+</tr>
+<tr class="row-odd"><td><p>proj_type</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p>what are we projecting? 1 includes -Gp term in U*</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>section: [particles]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 16%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>do_particles</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>particle_generator</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">grid</span></code></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">¶</a></h2>
+<section id="shear">
+<h3>shear<a class="headerlink" href="#shear" title="Permalink to this heading">¶</a></h3>
 <p>The shear problem initializes a shear layer in a domain with
 doubly-periodic boundaries and looks at the development of two
 vortices as the shear layer rolls up. This problem was explored in a
 number of papers, for example, Bell, Colella, &amp; Glaz (1989) and Martin
 &amp; Colella (2000). This is run as:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py incompressible shear inputs.shear
-</pre></div>
-</div>
-<img alt="_images/shear.png" class="align-center" src="_images/shear.png" />
+<div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
+span.prompt1:before {
+  content: "$ ";
+}
+</style><span class="prompt1">./pyro_sim.py incompressible shear inputs.shear</span>
+</pre></div></div><img alt="_images/shear.png" class="align-center" src="_images/shear.png" />
 <p>The vorticity panel (lower left) is what is usually shown in
 papers. Note that the velocity divergence is not zero—this is because
 we are using an approximate projection.</p>
-</div>
-<div class="section" id="convergence">
-<h3>convergence<a class="headerlink" href="#convergence" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="convergence">
+<h3>convergence<a class="headerlink" href="#convergence" title="Permalink to this heading">¶</a></h3>
 <p>The convergence test initializes a simple velocity field on a periodic
 unit square with known analytic solution. By evolving at a variety of
 resolutions and comparing to the analytic solution, we can measure the
 convergence rate of the algorithm. The particular set of initial
 conditions is from Minion (1996). Limiting can be disabled by adding
-<code class="docutils literal"><span class="pre">incompressible.limiter=0</span></code> to the run command. The basic set of tests
+<code class="docutils literal notranslate"><span class="pre">incompressible.limiter=0</span></code> to the run command. The basic set of tests
 shown below are run as:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py incompressible converge inputs.converge.32 vis.dovis=0
-./pyro.py incompressible converge inputs.converge.64 vis.dovis=0
-./pyro.py incompressible converge inputs.converge.128 vis.dovis=0
-</pre></div>
-</div>
-<p>The error is measured by comparing with the analytic solution using
-the routine <code class="docutils literal"><span class="pre">incomp_converge_error.py</span></code> in <code class="docutils literal"><span class="pre">analysis/</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./pyro_sim.py incompressible converge inputs.converge.32 vis.dovis<span class="o">=</span><span class="m">0</span></span>
+<span class="prompt1">./pyro_sim.py incompressible converge inputs.converge.64 vis.dovis<span class="o">=</span><span class="m">0</span></span>
+<span class="prompt1">./pyro_sim.py incompressible converge inputs.converge.128 vis.dovis<span class="o">=</span><span class="m">0</span></span>
+</pre></div></div><p>The error is measured by comparing with the analytic solution using
+the routine <code class="docutils literal notranslate"><span class="pre">incomp_converge_error.py</span></code> in <code class="docutils literal notranslate"><span class="pre">analysis/</span></code>.</p>
 <img alt="_images/incomp_converge.png" class="align-center" src="_images/incomp_converge.png" />
 <p>The dashed line is second order convergence. We see almost second
 order behavior with the limiters enabled and slightly better than
 second order with no limiting.</p>
-</div>
-</div>
-<div class="section" id="exercises">
-<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="explorations">
-<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">¶</a></h2>
+<section id="explorations">
+<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
-<li>Disable the MAC projection and run the converge problem—is the method still 2nd order?</li>
-<li>Disable all projections—does the solution still even try to preserve <span class="math">\(\nabla \cdot U = 0\)</span>?</li>
-<li>Experiment with what is projected. Try projecting <span class="math">\(U_t\)</span> to see if that makes a difference.</li>
+<li><p>Disable the MAC projection and run the converge problem—is the method still 2nd order?</p></li>
+<li><p>Disable all projections—does the solution still even try to preserve <span class="math notranslate nohighlight">\(\nabla \cdot U = 0\)</span>?</p></li>
+<li><p>Experiment with what is projected. Try projecting <span class="math notranslate nohighlight">\(U_t\)</span> to see if that makes a difference.</p></li>
 </ul>
-</div>
-<div class="section" id="extensions">
-<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="extensions">
+<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
-<li>Switch the final projection from a cell-centered approximate
+<li><p>Switch the final projection from a cell-centered approximate
 projection to a nodal projection. This will require writing a new
-multigrid solver that operates on nodal data.</li>
-<li>Add viscosity to the system. This will require doing 2 parabolic
+multigrid solver that operates on nodal data.</p></li>
+<li><p>Add viscosity to the system. This will require doing 2 parabolic
 solves (one for each velocity component). These solves will look
 like the diffusion operation, and will update the provisional
-velocity field.</li>
-<li>Switch to a variable density system. This will require adding a mass
+velocity field.</p></li>
+<li><p>Switch to a variable density system. This will require adding a mass
 continuity equation that is advected and switching the projections
-to a variable-coeffient form (since ρ now enters).</li>
+to a variable-coeffient form (since ρ now enters).</p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="going-further">
-<h2>Going further<a class="headerlink" href="#going-further" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="going-further">
+<h2>Going further<a class="headerlink" href="#going-further" title="Permalink to this heading">¶</a></h2>
 <p>The incompressible algorithm presented here is a simplified version of
 the projection methods used in the <a class="reference external" href="http://amrex-astro.github.io/MAESTRO/">Maestro low Mach number
 hydrodynamics code</a>. Maestro
 can do variable-density incompressible, anelastic, and low Mach number
 stratified flows in stellar (and terrestrial) environments in close
 hydrostatic equilibrium.</p>
-</div>
-</div>
+</section>
+</section>
 
 
-           </div>
-           <div class="articleComments">
-            
            </div>
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="lowmach_basics.html" class="btn btn-neutral float-right" title="Low Mach number hydrodynamics solver" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="diffusion_basics.html" class="btn btn-neutral" title="Diffusion" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="diffusion_basics.html" class="btn btn-neutral float-left" title="Diffusion" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="lowmach_basics.html" class="btn btn-neutral float-right" title="Low Mach number hydrodynamics solver" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2018, pyro development tem.
-
-    </p>
+    <p>&#169; Copyright 2022, pyro development team.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'2.2',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

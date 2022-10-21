@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyro.multigrid package &mdash; pyro 4.0.1.post4+gc829962 documentation</title>
+      <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pyro.particles package" href="pyro.particles.html" />
+    <link rel="prev" title="pyro.mesh package" href="pyro.mesh.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> pyro
+          </a>
+              <div class="version">
+                4.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">pyro basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Setting up pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_compare.html">Compressible solver comparisons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Contributing and getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html#history">History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Software Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pyro.html">pyro package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pyro.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection.html">pyro.advection package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_fv4.html">pyro.advection_fv4 package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_nonuniform.html">pyro.advection_nonuniform package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_rk.html">pyro.advection_rk package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_weno.html">pyro.advection_weno package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.html">pyro.compressible package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_fv4.html">pyro.compressible_fv4 package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_react.html">pyro.compressible_react package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_rk.html">pyro.compressible_rk package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sdc.html">pyro.compressible_sdc package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.html">pyro.compressible_sr package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.diffusion.html">pyro.diffusion package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible.html">pyro.incompressible package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.lm_atm.html">pyro.lm_atm package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html">pyro.mesh package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pyro.multigrid package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.particles.html">pyro.particles package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.swe.html">pyro.swe package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.util.html">pyro.util package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.html#module-pyro.plot">pyro.plot module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.html#module-pyro.pyro_sim">pyro.pyro_sim module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.html#module-pyro.simulation_null">pyro.simulation_null module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.html#module-pyro.test">pyro.test module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">pyro</a> &raquo;</li>
+          <li><a href="pyro.html">pyro package</a> &raquo;</li>
+      <li>pyro.multigrid package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pyro.multigrid.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="module-pyro.multigrid">
+<span id="pyro-multigrid-package"></span><h1>pyro.multigrid package<a class="headerlink" href="#module-pyro.multigrid" title="Permalink to this heading">¶</a></h1>
+<p>This is the pyro multigrid solver.  There are several versions.</p>
+<p>MG implements a second-order discretization of a constant-coefficient
+Helmholtz equation:</p>
+<div class="math notranslate nohighlight">
+\[(\alpha - \beta L) \phi = f\]</div>
+<p>variable_coeff_MG implements a variable-coefficient Poisson equation</p>
+<div class="math notranslate nohighlight">
+\[\nabla \cdot { \eta \nabla \phi } = f\]</div>
+<p>general_MG implements a more general elliptic equation</p>
+<div class="math notranslate nohighlight">
+\[\alpha \phi + \nabla \cdot { \beta \nabla \phi } + \gamma \cdot \nabla \phi = f\]</div>
+<p>All use pure V-cycles to solve elliptic problems</p>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-pyro.multigrid.MG">
+<span id="pyro-multigrid-mg-module"></span><h2>pyro.multigrid.MG module<a class="headerlink" href="#module-pyro.multigrid.MG" title="Permalink to this heading">¶</a></h2>
+<p>The multigrid module provides a framework for solving elliptic
+problems.  A multigrid object is just a list of grids, from the finest
+mesh down (by factors of two) to a single interior zone (each grid has
+the same number of guardcells).</p>
+<p>The main multigrid class is setup to solve a constant-coefficient
+Helmholtz equation</p>
+<div class="math notranslate nohighlight">
+\[(\alpha - \beta L) \phi = f\]</div>
+<p>where <span class="math notranslate nohighlight">\(L\)</span> is the Laplacian and <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> are constants.  If <span class="math notranslate nohighlight">\(\alpha =
+0\)</span> and <span class="math notranslate nohighlight">\(\beta = -1\)</span>, then this is the Poisson equation.</p>
+<p>We support Dirichlet or Neumann BCs, or a periodic domain.</p>
+<p>The general usage is as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">multigrid</span><span class="o">.</span><span class="n">CellCenterMG2d</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>this creates the multigrid object a, with a finest grid of nx by ny
+zones and the default boundary condition types.  <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> are
+the coefficients of the Helmholtz equation.  Setting verbose = 1
+causing debugging information to be output, so you can see the
+residual errors in each of the V-cycles.</p>
+<p>Initialization is done as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">init_zeros</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>this initializes the solution vector with zeros (this is not necessary
+if you just created the multigrid object, but it can be used to reset
+the solution between runs on the same object).</p>
+<p>Next:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">init_RHS</span><span class="p">(</span><span class="n">zeros</span><span class="p">((</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">),</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>this initializes the RHS on the finest grid to 0 (Laplace’s equation).
+Any RHS can be set by passing through an array of (nx, ny) values here.</p>
+<p>Then to solve, you just do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">rtol</span> <span class="o">=</span> <span class="mf">1.e-10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where rtol is the desired tolerance (residual norm / source norm)</p>
+<p>to access the final solution, use the get_solution method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">v</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">get_solution</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For convenience, the grid information on the solution level is available as
+attributes to the class,</p>
+<p>a.ilo, a.ihi, a.jlo, a.jhi are the indices bounding the interior
+of the solution array (i.e. excluding the ghost cells).</p>
+<p>a.x and a.y are the coordinate arrays
+a.dx and a.dy are the grid spacings</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyro.multigrid.MG.CellCenterMG2d">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.multigrid.MG.</span></span><span class="sig-name descname"><span class="pre">CellCenterMG2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ng</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xl_BC_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dirichlet'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xr_BC_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dirichlet'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yl_BC_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dirichlet'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yr_BC_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dirichlet'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xl_BC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xr_BC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yl_BC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yr_BC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsmooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsmooth_bottom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aux_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aux_bc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vis_title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/multigrid/MG.html#CellCenterMG2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.multigrid.MG.CellCenterMG2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The main multigrid class for cell-centered data.</p>
+<p>We require that nx = ny be a power of 2 and dx = dy, for
+simplicity</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.multigrid.MG.CellCenterMG2d.get_solution">
+<span class="sig-name descname"><span class="pre">get_solution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/multigrid/MG.html#CellCenterMG2d.get_solution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.multigrid.MG.CellCenterMG2d.get_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the solution after doing the MG solve</p>
+<p>If a grid object is passed in, then the solution is put on that
+grid – not the passed in grid must have the same dx and dy</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.multigrid.MG.CellCenterMG2d.get_solution_gradient">
+<span class="sig-name descname"><span class="pre">get_solution_gradient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/multigrid/MG.html#CellCenterMG2d.get_solution_gradient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.multigrid.MG.CellCenterMG2d.get_solution_gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the gradient of the solution after doing the MG solve.  The
+x- and y-components are returned in separate arrays.</p>
+<p>If a grid object is passed in, then the gradient is computed on that
+grid.  Note: the passed-in grid must have the same dx, dy</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">ndarray, ndarray</span></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.multigrid.MG.CellCenterMG2d.get_solution_object">
+<span class="sig-name descname"><span class="pre">get_solution_object</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/multigrid/MG.html#CellCenterMG2d.get_solution_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.multigrid.MG.CellCenterMG2d.get_solution_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the full solution data object at the finest resolution
+after doing the MG solve</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">CellCenterData2d object</span></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.multigrid.MG.CellCenterMG2d.grid_info">
+<span class="sig-name descname"><span class="pre">grid_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/multigrid/MG.html#CellCenterMG2d.grid_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.multigrid.MG.CellCenterMG2d.grid_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Report simple grid information</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.multigrid.MG.CellCenterMG2d.init_RHS">
+<span class="sig-name descname"><span class="pre">init_RHS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/multigrid/MG.html#CellCenterMG2d.init_RHS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.multigrid.MG.CellCenterMG2d.init_RHS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the right hand side, f, of the Helmholtz equation
+<span class="math notranslate nohighlight">\((\alpha - \beta L) \phi = f\)</span></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data</strong><span class="classifier">ndarray</span></dt><dd><p>An array (of the same size as the finest MG level) with the
+values to initialize the solution to the elliptic problem.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.multigrid.MG.CellCenterMG2d.init_solution">
+<span class="sig-name descname"><span class="pre">init_solution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/multigrid/MG.html#CellCenterMG2d.init_solution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.multigrid.MG.CellCenterMG2d.init_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the solution to the elliptic problem by passing in
+a value for all defined zones</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data</strong><span class="classifier">ndarray</span></dt><dd><p>An array (of the same size as the finest MG level) with the
+values to initialize the solution to the elliptic problem.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.multigrid.MG.CellCenterMG2d.init_zeros">
+<span class="sig-name descname"><span class="pre">init_zeros</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/multigrid/MG.html#CellCenterMG2d.init_zeros"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.multigrid.MG.CellCenterMG2d.init_zeros" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the initial solution to zero</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.multigrid.MG.CellCenterMG2d.smooth">
+<span class="sig-name descname"><span class="pre">smooth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsmooth</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/multigrid/MG.html#CellCenterMG2d.smooth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.multigrid.MG.CellCenterMG2d.smooth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use red-black Gauss-Seidel iterations to smooth the solution
+at a given level.  This is used at each stage of the V-cycle
+(up and down) in the MG solution, but it can also be called
+directly to solve the elliptic problem (although it will take
+many more iterations).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>level</strong><span class="classifier">int</span></dt><dd><p>The level in the MG hierarchy to smooth the solution</p>
+</dd>
+<dt><strong>nsmooth</strong><span class="classifier">int</span></dt><dd><p>The number of r-b Gauss-Seidel smoothing iterations to perform</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.multigrid.MG.CellCenterMG2d.solve">
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-11</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/multigrid/MG.html#CellCenterMG2d.solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.multigrid.MG.CellCenterMG2d.solve" title="Permalink to this definition">¶</a></dt>
+<dd><p>The main driver for the multigrid solution of the Helmholtz
+equation.  This controls the V-cycles, smoothing at each
+step of the way and uses simple smoothing at the coarsest
+level to perform the bottom solve.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>rtol</strong><span class="classifier">float</span></dt><dd><p>The relative tolerance (residual norm / source norm) to
+solve to.  Note that if the source norm is 0 (e.g. the
+righthand side of our equation is 0), then we just use
+the norm of the residual.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.multigrid.MG.CellCenterMG2d.v_cycle">
+<span class="sig-name descname"><span class="pre">v_cycle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/multigrid/MG.html#CellCenterMG2d.v_cycle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.multigrid.MG.CellCenterMG2d.v_cycle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a V-cycle for a single 2-level solve.  This is applied
+recursively do V-cycle through the entire hierarchy.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pyro.multigrid.edge_coeffs">
+<span id="pyro-multigrid-edge-coeffs-module"></span><h2>pyro.multigrid.edge_coeffs module<a class="headerlink" href="#module-pyro.multigrid.edge_coeffs" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyro.multigrid.edge_coeffs.EdgeCoeffs">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.multigrid.edge_coeffs.</span></span><span class="sig-name descname"><span class="pre">EdgeCoeffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/multigrid/edge_coeffs.html#EdgeCoeffs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.multigrid.edge_coeffs.EdgeCoeffs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>a simple container class to hold edge-centered coefficients
+and restrict them to coarse levels</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.multigrid.edge_coeffs.EdgeCoeffs.restrict">
+<span class="sig-name descname"><span class="pre">restrict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/multigrid/edge_coeffs.html#EdgeCoeffs.restrict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.multigrid.edge_coeffs.EdgeCoeffs.restrict" title="Permalink to this definition">¶</a></dt>
+<dd><p>restrict the edge values to a coarser grid.  Return a new
+EdgeCoeffs object</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pyro.multigrid.general_MG">
+<span id="pyro-multigrid-general-mg-module"></span><h2>pyro.multigrid.general_MG module<a class="headerlink" href="#module-pyro.multigrid.general_MG" title="Permalink to this heading">¶</a></h2>
+<p>This multigrid solver is build from multigrid/MG.py
+and implements a more general solver for an equation of the form</p>
+<div class="math notranslate nohighlight">
+\[\alpha \phi + \nabla\cdot { \beta \nabla \phi } + \gamma \cdot \nabla \phi = f\]</div>
+<p>where alpha, beta, and gamma are defined on the same grid as phi.
+These should all come in as cell-centered quantities.  The solver
+will put beta on edges.  Note that gamma is a vector here, with
+x- and y-components.</p>
+<p>A cell-centered discretization for phi is used throughout.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyro.multigrid.general_MG.GeneralMG2d">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.multigrid.general_MG.</span></span><span class="sig-name descname"><span class="pre">GeneralMG2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xl_BC_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dirichlet'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xr_BC_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dirichlet'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yl_BC_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dirichlet'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yr_BC_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dirichlet'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xl_BC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xr_BC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yl_BC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yr_BC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsmooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsmooth_bottom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeffs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vis_title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/multigrid/general_MG.html#GeneralMG2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.multigrid.general_MG.GeneralMG2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyro.multigrid.MG.CellCenterMG2d" title="pyro.multigrid.MG.CellCenterMG2d"><code class="xref py py-class docutils literal notranslate"><span class="pre">CellCenterMG2d</span></code></a></p>
+<p>this is a multigrid solver that supports our general elliptic
+equation.</p>
+<p>we need to accept a coefficient <code class="docutils literal notranslate"><span class="pre">CellCenterData2d</span></code> object with
+fields defined for <code class="docutils literal notranslate"><span class="pre">alpha</span></code>, <code class="docutils literal notranslate"><span class="pre">beta</span></code>, <code class="docutils literal notranslate"><span class="pre">gamma_x</span></code>, and <code class="docutils literal notranslate"><span class="pre">gamma_y</span></code> on the
+fine level.</p>
+<p>We then restrict this data through the MG hierarchy (and
+average beta to the edges).</p>
+<p>we need a <code class="docutils literal notranslate"><span class="pre">new</span> <span class="pre">compute_residual()</span></code> and <code class="docutils literal notranslate"><span class="pre">smooth()</span></code> function, that
+understands these coeffs.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.multigrid.general_MG.GeneralMG2d.smooth">
+<span class="sig-name descname"><span class="pre">smooth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsmooth</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/multigrid/general_MG.html#GeneralMG2d.smooth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.multigrid.general_MG.GeneralMG2d.smooth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use red-black Gauss-Seidel iterations to smooth the solution
+at a given level.  This is used at each stage of the V-cycle
+(up and down) in the MG solution, but it can also be called
+directly to solve the elliptic problem (although it will take
+many more iterations).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>level</strong><span class="classifier">int</span></dt><dd><p>The level in the MG hierarchy to smooth the solution</p>
+</dd>
+<dt><strong>nsmooth</strong><span class="classifier">int</span></dt><dd><p>The number of r-b Gauss-Seidel smoothing iterations to perform</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pyro.multigrid.variable_coeff_MG">
+<span id="pyro-multigrid-variable-coeff-mg-module"></span><h2>pyro.multigrid.variable_coeff_MG module<a class="headerlink" href="#module-pyro.multigrid.variable_coeff_MG" title="Permalink to this heading">¶</a></h2>
+<p>This multigrid solver is build from multigrid/MG.py and implements
+a variable coefficient solver for an equation of the form</p>
+<div class="math notranslate nohighlight">
+\[\nabla\cdot { \eta \nabla \phi } = f\]</div>
+<p>where <span class="math notranslate nohighlight">\(\eta\)</span> is defined on the same grid as <span class="math notranslate nohighlight">\(\phi\)</span>.</p>
+<p>A cell-centered discretization is used throughout.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyro.multigrid.variable_coeff_MG.VarCoeffCCMG2d">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.multigrid.variable_coeff_MG.</span></span><span class="sig-name descname"><span class="pre">VarCoeffCCMG2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xl_BC_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dirichlet'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xr_BC_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dirichlet'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yl_BC_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dirichlet'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yr_BC_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dirichlet'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsmooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsmooth_bottom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeffs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeffs_bc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vis_title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/multigrid/variable_coeff_MG.html#VarCoeffCCMG2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.multigrid.variable_coeff_MG.VarCoeffCCMG2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyro.multigrid.MG.CellCenterMG2d" title="pyro.multigrid.MG.CellCenterMG2d"><code class="xref py py-class docutils literal notranslate"><span class="pre">CellCenterMG2d</span></code></a></p>
+<p>this is a multigrid solver that supports variable coefficients</p>
+<p>we need to accept a coefficient array, coeffs, defined at each
+level.  We can do this at the fine level and restrict it
+down the MG grids once.</p>
+<p>we need a new <code class="docutils literal notranslate"><span class="pre">compute_residual()</span></code> and <code class="docutils literal notranslate"><span class="pre">smooth()</span></code> function, that
+understands coeffs.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.multigrid.variable_coeff_MG.VarCoeffCCMG2d.smooth">
+<span class="sig-name descname"><span class="pre">smooth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsmooth</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/multigrid/variable_coeff_MG.html#VarCoeffCCMG2d.smooth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.multigrid.variable_coeff_MG.VarCoeffCCMG2d.smooth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use red-black Gauss-Seidel iterations to smooth the solution
+at a given level.  This is used at each stage of the V-cycle
+(up and down) in the MG solution, but it can also be called
+directly to solve the elliptic problem (although it will take
+many more iterations).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>level</strong><span class="classifier">int</span></dt><dd><p>The level in the MG hierarchy to smooth the solution</p>
+</dd>
+<dt><strong>nsmooth</strong><span class="classifier">int</span></dt><dd><p>The number of r-b Gauss-Seidel smoothing iterations to perform</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pyro.mesh.html" class="btn btn-neutral float-left" title="pyro.mesh package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pyro.particles.html" class="btn btn-neutral float-right" title="pyro.particles package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, pyro development team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

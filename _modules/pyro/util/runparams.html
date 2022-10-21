@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyro.util.runparams &mdash; pyro 4.0.1.post4+gc829962 documentation</title>
+      <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/clipboard.min.js"></script>
+        <script src="../../../_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> pyro
+          </a>
+              <div class="version">
+                4.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">pyro basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Setting up pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible_compare.html">Compressible solver comparisons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../swe_basics.html">Shallow water solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../particles_basics.html">Particles</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../testing.html">Testing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../help.html">Contributing and getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ack.html#history">History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Software Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>pyro.util.runparams</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pyro.util.runparams</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;basic syntax of the parameter file is::</span>
+
+<span class="sd">   # simple parameter file</span>
+
+<span class="sd">   [driver]</span>
+<span class="sd">   nsteps = 100         ; comment</span>
+<span class="sd">   max_time = 0.25</span>
+
+<span class="sd">   [riemann]</span>
+<span class="sd">   tol = 1.e-10</span>
+<span class="sd">   max_iter = 10</span>
+
+<span class="sd">   [io]</span>
+<span class="sd">   basename = myfile_</span>
+
+
+<span class="sd">The recommended way to use this is for the code to have a master list</span>
+<span class="sd">of parameters and their defaults (e.g. _defaults), and then the user</span>
+<span class="sd">can override these defaults at runtime through an inputs file.  These</span>
+<span class="sd">two files have the same format.</span>
+
+<span class="sd">The calling sequence would then be::</span>
+
+<span class="sd">   rp = RuntimeParameters()</span>
+<span class="sd">   rp.load_params(&quot;_defaults&quot;)</span>
+<span class="sd">   rp.load_params(&quot;inputs&quot;)</span>
+
+<span class="sd">The parser will determine what datatype the parameter is (string,</span>
+<span class="sd">integer, float), and store it in a RuntimeParameters object.  If a</span>
+<span class="sd">parameter that already exists is encountered a second time (e.g.,</span>
+<span class="sd">there is a default value in _defaults and the user specifies a new</span>
+<span class="sd">value in inputs), then the second instance replaces the first.</span>
+
+<span class="sd">Runtime parameters can then be accessed via any module through the</span>
+<span class="sd">get_param method::</span>
+
+<span class="sd">   tol = rp.get_param(&#39;riemann.tol&#39;)</span>
+
+<span class="sd">If the optional flag no_new=1 is set, then the load_params function</span>
+<span class="sd">will not define any new parameters, but only overwrite existing ones.</span>
+<span class="sd">This is useful for reading in an inputs file that overrides previously</span>
+<span class="sd">read default values.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">textwrap</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span> <span class="nn">pyro.util</span> <span class="kn">import</span> <span class="n">msg</span>
+
+<span class="c1"># some utility functions to automagically determine what the data</span>
+<span class="c1"># types are</span>
+
+
+<div class="viewcode-block" id="is_int"><a class="viewcode-back" href="../../../pyro.util.html#pyro.util.runparams.is_int">[docs]</a><span class="k">def</span> <span class="nf">is_int</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; is the given string an interger? &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="nb">int</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="is_float"><a class="viewcode-back" href="../../../pyro.util.html#pyro.util.runparams.is_float">[docs]</a><span class="k">def</span> <span class="nf">is_float</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; is the given string a float? &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="nb">float</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<span class="k">def</span> <span class="nf">_get_val</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">is_int</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">is_float</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="RuntimeParameters"><a class="viewcode-back" href="../../../pyro.util.html#pyro.util.runparams.RuntimeParameters">[docs]</a><span class="k">class</span> <span class="nc">RuntimeParameters</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize a collection of runtime parameters.  This class</span>
+<span class="sd">        holds a dictionary of the parameters, their comments, and keeps</span>
+<span class="sd">        track of which parameters were actually used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># keep track of the parameters and their comments</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_comments</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># for debugging -- keep track of which parameters were</span>
+        <span class="c1"># actually looked- up</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">used_params</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="RuntimeParameters.load_params"><a class="viewcode-back" href="../../../pyro.util.html#pyro.util.runparams.RuntimeParameters.load_params">[docs]</a>    <span class="k">def</span> <span class="nf">load_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pfile</span><span class="p">,</span> <span class="n">no_new</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reads line from file and makes dictionary pairs from the data</span>
+<span class="sd">        to store.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file : str</span>
+<span class="sd">            The name of the file to parse</span>
+<span class="sd">        no_new : int, optional</span>
+<span class="sd">            If no_new = 1, then we don&#39;t add any new paramters to the</span>
+<span class="sd">            dictionary of runtime parameters, but instead just override</span>
+<span class="sd">            the values of existing ones.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># check to see whether the file exists</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">pfile</span><span class="p">):</span>
+            <span class="n">pfile</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">pfile</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">pfile</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ERROR: parameter file does not exist: </span><span class="si">{</span><span class="n">pfile</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># we could use the ConfigParser, but we actually want to</span>
+        <span class="c1"># have our configuration files be self-documenting, of the</span>
+        <span class="c1"># format key = value ; comment</span>
+        <span class="n">sec</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^\[(.*)\]&#39;</span><span class="p">)</span>
+        <span class="n">eq</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^([^=#]+)=([^;]+);{0,1}(.*)&#39;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+
+            <span class="k">if</span> <span class="n">sec</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                <span class="n">section</span> <span class="o">=</span> <span class="n">section</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+            <span class="k">elif</span> <span class="n">eq</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">comment</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">eq</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                <span class="n">item</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+                <span class="c1"># define the key</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="n">section</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">item</span>
+
+                <span class="c1"># if we have no_new = 1, then we only want to override existing</span>
+                <span class="c1"># key/values</span>
+                <span class="k">if</span> <span class="n">no_new</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;warning, key: </span><span class="si">%s</span><span class="s2"> not defined&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span>
+                        <span class="k">continue</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">_get_val</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+                <span class="c1"># if the comment already exists (i.e. from reading in</span>
+                <span class="c1"># _defaults) and we are just resetting the value of</span>
+                <span class="c1"># the parameter (i.e.  from reading in inputs), then</span>
+                <span class="c1"># we don&#39;t want to destroy the comment</span>
+                <span class="k">if</span> <span class="n">comment</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">comment</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_comments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                        <span class="n">comment</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">param_comments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">comment</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="RuntimeParameters.command_line_params"><a class="viewcode-back" href="../../../pyro.util.html#pyro.util.runparams.RuntimeParameters.command_line_params">[docs]</a>    <span class="k">def</span> <span class="nf">command_line_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd_strings</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        finds dictionary pairs from a string that came from the</span>
+<span class="sd">        commandline.  Stores the parameters in only if they</span>
+<span class="sd">        already exist.</span>
+
+<span class="sd">        we expect things in the string in the form:</span>
+<span class="sd">        [&quot;sec.opt=value&quot;,  &quot;sec.opt=value&quot;]</span>
+<span class="sd">        with each opt an element in the list</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cmd_strings : list</span>
+<span class="sd">            The list of strings containing runtime parameter pairs</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">cmd_strings</span><span class="p">:</span>
+
+            <span class="c1"># break it apart</span>
+            <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span>
+
+            <span class="c1"># we only want to override existing keys/values</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;warning, key: </span><span class="si">%s</span><span class="s2"> not defined&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># check in turn whether this is an interger, float, or string</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">_get_val</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RuntimeParameters.get_param"><a class="viewcode-back" href="../../../pyro.util.html#pyro.util.runparams.RuntimeParameters.get_param">[docs]</a>    <span class="k">def</span> <span class="nf">get_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        returns the value of the runtime parameter corresponding to the</span>
+<span class="sd">        input key</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">==</span> <span class="p">{}:</span>
+            <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;WARNING: runtime parameters not yet initialized&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">load_params</span><span class="p">(</span><span class="s2">&quot;_defaults&quot;</span><span class="p">)</span>
+
+        <span class="c1"># debugging</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">used_params</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">used_params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ERROR: runtime parameter </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> not found&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RuntimeParameters.print_unused_params"><a class="viewcode-back" href="../../../pyro.util.html#pyro.util.runparams.RuntimeParameters.print_unused_params">[docs]</a>    <span class="k">def</span> <span class="nf">print_unused_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Print out the list of parameters that were defined by never used</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">used_params</span><span class="p">:</span>
+                <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;parameter </span><span class="si">%s</span><span class="s2"> never used&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="RuntimeParameters.print_all_params"><a class="viewcode-back" href="../../../pyro.util.html#pyro.util.runparams.RuntimeParameters.print_all_params">[docs]</a>    <span class="k">def</span> <span class="nf">print_all_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Print out all runtime parameters and their values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RuntimeParameters.write_params"><a class="viewcode-back" href="../../../pyro.util.html#pyro.util.runparams.RuntimeParameters.write_params">[docs]</a>    <span class="k">def</span> <span class="nf">write_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write the runtime parameters to an HDF5 file.  Here, f is the</span>
+<span class="sd">        h5py file object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">grp</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s2">&quot;runtime parameters&quot;</span><span class="p">)</span>
+
+        <span class="n">keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">keys</span><span class="p">):</span>
+            <span class="n">grp</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ostr</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">ostr</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="k">return</span> <span class="n">ostr</span>
+
+<div class="viewcode-block" id="RuntimeParameters.print_paramfile"><a class="viewcode-back" href="../../../pyro.util.html#pyro.util.runparams.RuntimeParameters.print_paramfile">[docs]</a>    <span class="k">def</span> <span class="nf">print_paramfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a file, inputs.auto, that has the structure of a pyro</span>
+<span class="sd">        inputs file, with all known parameters and values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">all_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;inputs.auto&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ERROR: unable to open inputs.auto&quot;</span><span class="p">)</span>
+
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;# automagically generated parameter file</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="c1"># find all the sections</span>
+        <span class="n">secs</span> <span class="o">=</span> <span class="p">{</span><span class="n">q</span> <span class="k">for</span> <span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">all_keys</span><span class="p">]}</span>
+
+        <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">secs</span><span class="p">):</span>
+            <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">all_keys</span> <span class="k">if</span> <span class="n">q</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sec</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)]</span>
+
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">[</span><span class="si">{</span><span class="n">sec</span><span class="si">}</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">option</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+
+                <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_comments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">option</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">    ; </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">param_comments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">option</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="RuntimeParameters.print_sphinx_tables"><a class="viewcode-back" href="../../../pyro.util.html#pyro.util.runparams.RuntimeParameters.print_sphinx_tables">[docs]</a>    <span class="k">def</span> <span class="nf">print_sphinx_tables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outfile</span><span class="o">=</span><span class="s2">&quot;params-sphinx.inc&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Output Sphinx-formatted tables for inclusion in the documentation.</span>
+<span class="sd">        The table columns will be: param, default, description.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">all_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ERROR: unable to open inputs.auto&quot;</span><span class="p">)</span>
+
+        <span class="c1"># find all the sections</span>
+        <span class="n">secs</span> <span class="o">=</span> <span class="p">{</span><span class="n">q</span> <span class="k">for</span> <span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">all_keys</span><span class="p">]}</span>
+
+        <span class="n">heading</span> <span class="o">=</span> <span class="s2">&quot;  +=&quot;</span> <span class="o">+</span> <span class="mi">32</span><span class="o">*</span><span class="s2">&quot;=&quot;</span> <span class="o">+</span> <span class="s2">&quot;=+=&quot;</span> <span class="o">+</span> <span class="mi">14</span><span class="o">*</span><span class="s2">&quot;=&quot;</span> <span class="o">+</span> <span class="s2">&quot;=+=&quot;</span> <span class="o">+</span> <span class="mi">50</span><span class="o">*</span><span class="s2">&quot;=&quot;</span> <span class="o">+</span> <span class="s2">&quot;=+&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">separator</span> <span class="o">=</span> <span class="s2">&quot;  +-&quot;</span> <span class="o">+</span> <span class="mi">32</span><span class="o">*</span><span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="s2">&quot;-+-&quot;</span> <span class="o">+</span> <span class="mi">14</span><span class="o">*</span><span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="s2">&quot;-+-&quot;</span> <span class="o">+</span> <span class="mi">50</span><span class="o">*</span><span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="s2">&quot;-+&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="s2">&quot;  | </span><span class="si">{:32}</span><span class="s2"> | </span><span class="si">{:14}</span><span class="s2"> | </span><span class="si">{:50}</span><span class="s2"> |</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">secs</span><span class="p">):</span>
+            <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">all_keys</span> <span class="k">if</span> <span class="n">q</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sec</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)]</span>
+
+            <span class="n">head</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;* section: [</span><span class="si">{</span><span class="n">sec</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="si">}</span><span class="s2">]&quot;</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">head</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1">#f.write(len(head)*&quot;^&quot;+&quot;\n\n&quot;)</span>
+
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">separator</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;option&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">))</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">heading</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">option</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+                <span class="n">descr</span> <span class="o">=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_comments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="mi">50</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">descr</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">descr</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot; &quot;</span><span class="p">]</span>
+
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">option</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;``</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="si">}</span><span class="s2">``&quot;</span><span class="p">,</span>
+                                     <span class="n">descr</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">descr</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">descr</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+                        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">))</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">separator</span><span class="p">)</span>
+
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">rp</span> <span class="o">=</span> <span class="n">RuntimeParameters</span><span class="p">()</span>
+    <span class="n">rp</span><span class="o">.</span><span class="n">load_params</span><span class="p">(</span><span class="s2">&quot;inputs.test&quot;</span><span class="p">)</span>
+    <span class="n">rp</span><span class="o">.</span><span class="n">print_all_params</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, pyro development team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

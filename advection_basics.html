@@ -1,79 +1,43 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Advection solvers &mdash; pyro 2.2 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advection solvers &mdash; pyro 4.0.1.post4+gc829962 documentation</title>
+      <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-  
-
-  
-
-  
-  
-    
-
-  
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyro 2.2 documentation" href="index.html"/>
-        <link rel="next" title="Compressible hydrodynamics solvers" href="compressible_basics.html"/>
-        <link rel="prev" title="Mesh examples" href="mesh-examples.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Compressible hydrodynamics solvers" href="compressible_basics.html" />
+    <link rel="prev" title="Mesh examples" href="mesh-examples.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
+        <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> pyro
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
-                2.2
+                4.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -81,18 +45,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">pyro basics</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">pyro basics</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Setting up pyro</a></li>
@@ -104,9 +58,15 @@
 <li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Solvers</span></p>
+<p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Advection solvers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#advection-solver"><code class="docutils literal notranslate"><span class="pre">advection</span></code> solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advection-fv4-solver"><code class="docutils literal notranslate"><span class="pre">advection_fv4</span></code> solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advection-nonuniform-solver"><code class="docutils literal notranslate"><span class="pre">advection_nonuniform</span></code> solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advection-rk-solver"><code class="docutils literal notranslate"><span class="pre">advection_rk</span></code> solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advection-weno-solver"><code class="docutils literal notranslate"><span class="pre">advection_weno</span></code> solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#general-ideas">General ideas</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#smooth">smooth</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tophat">tophat</a></li>
@@ -126,180 +86,463 @@
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solvers</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Utilities</span></p>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Community</span></p>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Contributing and getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html#history">History</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Reference</span></p>
+<p class="caption" role="heading"><span class="caption-text">Software Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">pyro</a>
-        
       </nav>
 
-
-      
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
       <li>Advection solvers</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/advection_basics.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   
 <style>
 /* CSS overrides for sphinx_rtd_theme */
 
 /* 24px margin */
-.nbinput.nblast,
-.nboutput.nblast {
+.nbinput.nblast.container,
+.nboutput.nblast.container {
     margin-bottom: 19px;  /* padding has already 5px */
 }
 
 /* ... except between code cells! */
-.nblast + .nbinput {
+.nblast.container + .nbinput.container {
     margin-top: -19px;
 }
 
-/* nice headers on first paragraph of info/warning boxes */
-.admonition .first {
-    margin: -12px;
-    padding: 6px 12px;
-    margin-bottom: 12px;
-    color: #fff;
-    line-height: 1;
-    display: block;
-}
-.admonition.warning .first {
-    background: #f0b37e;
-}
-.admonition.note .first {
-    background: #6ab0de;
-}
 .admonition > p:before {
     margin-right: 4px;  /* make room for the exclamation icon */
 }
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
 </style>
-<div class="section" id="advection-solvers">
-<h1>Advection solvers<a class="headerlink" href="#advection-solvers" title="Permalink to this headline">¶</a></h1>
+<section id="advection-solvers">
+<h1>Advection solvers<a class="headerlink" href="#advection-solvers" title="Permalink to this heading">¶</a></h1>
 <p>The linear advection equation:</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[a_t + u a_x + v a_y = 0\]</div>
 <p>provides a good basis for understanding the methods used for
 compressible hydrodynamics. Chapter 4 of the notes summarizes the
 numerical methods for advection that we implement in pyro.</p>
-<p>pyro has several solvers for linear advection:</p>
-<ul class="simple">
-<li><a class="reference internal" href="advection.html#module-advection" title="advection"><code class="xref py py-mod docutils literal"><span class="pre">advection</span></code></a> implements the directionally unsplit corner transport upwind algorithm with piecewise linear reconstruction</li>
-<li><a class="reference internal" href="advection_fv4.html#module-advection_fv4" title="advection_fv4"><code class="xref py py-mod docutils literal"><span class="pre">advection_fv4</span></code></a> uses a fourth-order accurate finite-volume
-method with RK4 time integration</li>
-<li><a class="reference internal" href="advection_rk.html#module-advection_rk" title="advection_rk"><code class="xref py py-mod docutils literal"><span class="pre">advection_rk</span></code></a> uses a method of lines time-integration
-approach with piecewise linear spatial reconstruction for linear
-advection</li>
-<li><a class="reference internal" href="advection_weno.html#module-advection_weno" title="advection_weno"><code class="xref py py-mod docutils literal"><span class="pre">advection_weno</span></code></a> uses a WENO reconstruction and method of
-lines time-integration</li>
+<p>pyro has several solvers for linear advection, which solve the equation
+with different spatial and temporal intergration schemes.</p>
+<section id="advection-solver">
+<h2><code class="docutils literal notranslate"><span class="pre">advection</span></code> solver<a class="headerlink" href="#advection-solver" title="Permalink to this heading">¶</a></h2>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">advection</span></code> implements the directionally unsplit corner
+transport upwind algorithm <span id="id1">[<a class="reference internal" href="references.html#id2" title="P. Colella. Multidimensional upwind methods for hyperbolic conservation laws. Journal of Computational Physics, 87:171-200, March 1990. doi:10.1016/0021-9991(90)90233-Q.">Colella90</a>]</span> with piecewise linear reconstruction.
+This is an overall second-order accurate method, with timesteps restricted
+by</p>
+<div class="math notranslate nohighlight">
+\[\Delta t &lt; \min \left \{ \frac{\Delta x}{|u|}, \frac{\Delta y}{|v|} \right \}\]</div>
+<p>The parameters for this solver are:</p>
+<ul>
+<li><p>section: [advection]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 16%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>u</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>advective velocity in x-direction</p></td>
+</tr>
+<tr class="row-odd"><td><p>v</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>advective velocity in y-direction</p></td>
+</tr>
+<tr class="row-even"><td><p>limiter</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p>limiter (0 = none, 1 = 2nd order, 2 = 4th order)</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>section: [driver]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 16%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>cfl</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.8</span></code></p></td>
+<td><p>advective CFL number</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>section: [particles]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 16%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>do_particles</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>particle_generator</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">grid</span></code></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</li>
 </ul>
+</section>
+<section id="advection-fv4-solver">
+<h2><code class="docutils literal notranslate"><span class="pre">advection_fv4</span></code> solver<a class="headerlink" href="#advection-fv4-solver" title="Permalink to this heading">¶</a></h2>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">advection_fv4</span></code> uses a fourth-order accurate finite-volume
+method with RK4 time integration, following the ideas in
+<span id="id2">[<a class="reference internal" href="references.html#id3" title="P. McCorquodale and P. Colella. A high-order finite-volume method for conservation laws on locally refined grids. Communication in Applied Mathematics and Computational Science, 6(1):1–25, 2011.">McCorquodaleColella11</a>]</span>.  It can be thought of as a
+method-of-lines integration, and as such has a slightly more restrictive
+timestep:</p>
+<div class="math notranslate nohighlight">
+\[\Delta t \lesssim \left [ \frac{|u|}{\Delta x} + \frac{|v|}{\Delta y} \right ]^{-1}\]</div>
+<p>The main complexity comes from needing to average the flux over the
+faces of the zones to achieve 4th order accuracy spatially.</p>
+<p>The parameters for this solver are:</p>
+<ul>
+<li><p>section: [advection]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 16%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>u</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>advective velocity in x-direction</p></td>
+</tr>
+<tr class="row-odd"><td><p>v</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>advective velocity in y-direction</p></td>
+</tr>
+<tr class="row-even"><td><p>limiter</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>limiter (0 = none, 1 = ppm)</p></td>
+</tr>
+<tr class="row-odd"><td><p>temporal_method</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">RK4</span></code></p></td>
+<td><p>integration method (see mesh/integrators.py)</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>section: [driver]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 16%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>cfl</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.8</span></code></p></td>
+<td><p>advective CFL number</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</section>
+<section id="advection-nonuniform-solver">
+<h2><code class="docutils literal notranslate"><span class="pre">advection_nonuniform</span></code> solver<a class="headerlink" href="#advection-nonuniform-solver" title="Permalink to this heading">¶</a></h2>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">advection_nonuniform</span></code> models advection with a non-uniform
+velocity field.  This is used to implement the slotted disk problem
+from <span id="id3">[<a class="reference internal" href="references.html#id4" title="Steven T Zalesak. Fully multidimensional flux-corrected transport algorithms for fluids. Journal of Computational Physics, 31(3):335 - 362, 1979. URL: http://www.sciencedirect.com/science/article/pii/0021999179900512, doi:https://doi.org/10.1016/0021-9991(79)90051-2.">Zal79</a>]</span>.  The basic method is similar to the
+algorithm used by the main <code class="docutils literal notranslate"><span class="pre">advection</span></code> solver.</p>
+<p>The paramters for this solver are:</p>
+<ul>
+<li><p>section: [advection]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 16%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>u</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>advective velocity in x-direction</p></td>
+</tr>
+<tr class="row-odd"><td><p>v</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>advective velocity in y-direction</p></td>
+</tr>
+<tr class="row-even"><td><p>limiter</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p>limiter (0 = none, 1 = 2nd order, 2 = 4th order)</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>section: [driver]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 16%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>cfl</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.8</span></code></p></td>
+<td><p>advective CFL number</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>section: [particles]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 16%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>do_particles</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>particle_generator</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">grid</span></code></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</section>
+<section id="advection-rk-solver">
+<h2><code class="docutils literal notranslate"><span class="pre">advection_rk</span></code> solver<a class="headerlink" href="#advection-rk-solver" title="Permalink to this heading">¶</a></h2>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">advection_rk</span></code> uses a method of lines time-integration
+approach with piecewise linear spatial reconstruction for linear
+advection.  This is overall second-order accurate, so it represents a
+simpler algorithm than the <code class="docutils literal notranslate"><span class="pre">advection_fv4</span></code> method (in particular, we
+can treat cell-centers and cell-averages as the same, to second
+order).</p>
+<p>The parameter for this solver are:</p>
+<ul>
+<li><p>section: [advection]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 16%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>u</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>advective velocity in x-direction</p></td>
+</tr>
+<tr class="row-odd"><td><p>v</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>advective velocity in y-direction</p></td>
+</tr>
+<tr class="row-even"><td><p>limiter</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p>limiter (0 = none, 1 = 2nd order, 2 = 4th order)</p></td>
+</tr>
+<tr class="row-odd"><td><p>temporal_method</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">RK4</span></code></p></td>
+<td><p>integration method (see mesh/integrators/.py)</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>section: [driver]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 16%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>cfl</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.8</span></code></p></td>
+<td><p>advective CFL number</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</section>
+<section id="advection-weno-solver">
+<h2><code class="docutils literal notranslate"><span class="pre">advection_weno</span></code> solver<a class="headerlink" href="#advection-weno-solver" title="Permalink to this heading">¶</a></h2>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">advection_weno</span></code> uses a WENO reconstruction and method of
+lines time-integration</p>
 <p>The main parameters that affect this solver are:</p>
-<table border="1" class="docutils">
+<ul>
+<li><p>section: [advection]</p>
+<table class="docutils align-default">
 <colgroup>
-<col width="17%" />
-<col width="83%" />
+<col style="width: 33%" />
+<col style="width: 16%" />
+<col style="width: 51%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal"><span class="pre">[driver]</span></code></th>
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">cfl</span></code></td>
-<td>the advective CFL number (what fraction of a zone can we cross in a single timestep)</td>
+<tbody>
+<tr class="row-even"><td><p>u</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>advective velocity in x-direction</p></td>
+</tr>
+<tr class="row-odd"><td><p>v</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>advective velocity in y-direction</p></td>
+</tr>
+<tr class="row-even"><td><p>limiter</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>Unused here, but needed to inherit from advection
+base class</p></td>
+</tr>
+<tr class="row-odd"><td><p>weno_order</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">3</span></code></p></td>
+<td><p>k in WENO scheme</p></td>
+</tr>
+<tr class="row-even"><td><p>temporal_method</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">RK4</span></code></p></td>
+<td><p>integration method (see mesh/integrators/.py)</p></td>
 </tr>
 </tbody>
 </table>
-<table border="1" class="docutils">
+</li>
+<li><p>section: [driver]</p>
+<table class="docutils align-default">
 <colgroup>
-<col width="17%" />
-<col width="83%" />
+<col style="width: 33%" />
+<col style="width: 16%" />
+<col style="width: 51%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal"><span class="pre">[advection]</span></code></th>
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">u</span></code></td>
-<td>the advective velocity in the x direction</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">v</span></code></td>
-<td>the advective velocity in the y direction</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">limiter</span></code></td>
-<td>what type of limiting to use in reconstructing the slopes. 0 means use an unlimited second-order
-centered difference. 1 is the MC limiter, and 2 is the 4th-order MC limiter</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">temporal_method</span></code></td>
-<td>the MOL integration method to use (RK2, TVD2, TVD3, RK4) (advection_rk only)</td>
+<tbody>
+<tr class="row-even"><td><p>cfl</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.5</span></code></p></td>
+<td><p>advective CFL number</p></td>
 </tr>
 </tbody>
 </table>
+</li>
+</ul>
+</section>
+<section id="general-ideas">
+<h2>General ideas<a class="headerlink" href="#general-ideas" title="Permalink to this heading">¶</a></h2>
 <p>The main use for the advection solver is to understand how Godunov
 techniques work for hyperbolic problems. These same ideas will be used
 in the compressible and incompressible solvers. This video shows
@@ -307,66 +550,68 @@ graphically how the basic advection algorithm works, consisting of
 reconstruction, evolution, and averaging steps:</p>
 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
     <iframe src="https://www.youtube.com/embed/Z_yFd5HqOqc?rel=0" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
-</div><br><div class="section" id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="smooth">
-<h3>smooth<a class="headerlink" href="#smooth" title="Permalink to this headline">¶</a></h3>
+</div><br></section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">¶</a></h2>
+<section id="smooth">
+<h3>smooth<a class="headerlink" href="#smooth" title="Permalink to this heading">¶</a></h3>
 <p>The smooth problem initializes a Gaussian profile and advects it with
-<span class="math">\(u = v = 1\)</span> through periodic boundaries for a period. The result is that
+<span class="math notranslate nohighlight">\(u = v = 1\)</span> through periodic boundaries for a period. The result is that
 the final state should be identical to the initial state—any
 disagreement is our numerical error. This is run as:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py advection smooth inputs.smooth
-</pre></div>
-</div>
-<div style="position: relative; padding-bottom: 75%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
+<div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
+span.prompt1:before {
+  content: "$ ";
+}
+</style><span class="prompt1">./pyro_sim.py advection smooth inputs.smooth</span>
+</pre></div></div><div style="position: relative; padding-bottom: 75%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
     <iframe src="https://www.youtube.com/embed/712Y0ocuz2M?rel=0" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
 </div><br><p>By varying the resolution and comparing to the analytic solution, we
-can measure the convergence rate of the method. The <code class="docutils literal"><span class="pre">smooth_error.py</span></code>
-script in <code class="docutils literal"><span class="pre">analysis/</span></code> will compare an output file to the analytic
+can measure the convergence rate of the method. The <code class="docutils literal notranslate"><span class="pre">smooth_error.py</span></code>
+script in <code class="docutils literal notranslate"><span class="pre">analysis/</span></code> will compare an output file to the analytic
 solution for this problem.</p>
 <img alt="_images/smooth_converge.png" class="align-center" src="_images/smooth_converge.png" />
 <p>The points above are the L2-norm of the absolute error for the smooth
-advection problem after 1 period with <code class="docutils literal"><span class="pre">CFL=0.8</span></code>, for both the
-<code class="docutils literal"><span class="pre">advection</span></code> and <code class="docutils literal"><span class="pre">advection_fv4</span></code> solvers.  The dashed and dotted
+advection problem after 1 period with <code class="docutils literal notranslate"><span class="pre">CFL=0.8</span></code>, for both the
+<code class="docutils literal notranslate"><span class="pre">advection</span></code> and <code class="docutils literal notranslate"><span class="pre">advection_fv4</span></code> solvers.  The dashed and dotted
 lines show ideal scaling.  We see that we achieve nearly 2nd order
-convergence for the <code class="docutils literal"><span class="pre">advection</span></code> solver and 4th order convergence
-with the <code class="docutils literal"><span class="pre">advection_fv4</span></code> solver.  Departures from perfect scaling
+convergence for the <code class="docutils literal notranslate"><span class="pre">advection</span></code> solver and 4th order convergence
+with the <code class="docutils literal notranslate"><span class="pre">advection_fv4</span></code> solver.  Departures from perfect scaling
 are likely due to the use of limiters.</p>
-</div>
-<div class="section" id="tophat">
-<h3>tophat<a class="headerlink" href="#tophat" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="tophat">
+<h3>tophat<a class="headerlink" href="#tophat" title="Permalink to this heading">¶</a></h3>
 <p>The tophat problem initializes a circle in the center of the domain
 with value 1, and 0 outside. This has very steep jumps, and the
 limiters will kick in strongly here.</p>
-</div>
-</div>
-<div class="section" id="exercises">
-<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">¶</a></h2>
 <p>The best way to learn these methods is to play with them yourself. The
 exercises below are suggestions for explorations and features to add
 to the advection solver.</p>
-<div class="section" id="explorations">
-<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this headline">¶</a></h3>
+<section id="explorations">
+<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
-<li>Test the convergence of the solver for a variety of initial
+<li><p>Test the convergence of the solver for a variety of initial
 conditions (tophat hat will differ from the smooth case because of
 limiting). Test with limiting on and off, and also test with the
 slopes set to 0 (this will reduce it down to a piecewise constant
-reconstruction method).</li>
-<li>Run without any limiting and look for oscillations and under and
+reconstruction method).</p></li>
+<li><p>Run without any limiting and look for oscillations and under and
 overshoots (does the advected quantity go negative in the tophat
-problem?)</li>
+problem?)</p></li>
 </ul>
-</div>
-<div class="section" id="extensions">
-<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="extensions">
+<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading">¶</a></h3>
 <ul>
-<li><p class="first">Implement a dimensionally split version of the advection
+<li><p>Implement a dimensionally split version of the advection
 algorithm. How does the solution compare between the unsplit and
 split versions? Look at the amount of overshoot and undershoot, for
-example.</p>
-</li>
-<li><p class="first">Research the inviscid Burger’s equation—this looks like the
+example.</p></li>
+<li><p>Research the inviscid Burger’s equation—this looks like the
 advection equation, but now the quantity being advected is the
 velocity itself, so this is a non-linear equation. It is very
 straightforward to modify this solver to solve Burger’s equation
@@ -376,81 +621,39 @@ fluxes, and the computation of the timestep).</p>
 rarefactions, so some very interesting flow problems can be setup.</p>
 </li>
 </ul>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
-           </div>
-           <div class="articleComments">
-            
            </div>
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="compressible_basics.html" class="btn btn-neutral float-right" title="Compressible hydrodynamics solvers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="mesh-examples.html" class="btn btn-neutral" title="Mesh examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mesh-examples.html" class="btn btn-neutral float-left" title="Mesh examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="compressible_basics.html" class="btn btn-neutral float-right" title="Compressible hydrodynamics solvers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2018, pyro development tem.
-
-    </p>
+    <p>&#169; Copyright 2022, pyro development team.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'2.2',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

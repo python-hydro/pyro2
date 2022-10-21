@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyro.compressible_sr.eos &mdash; pyro 4.0.1.post4+gc829962 documentation</title>
+      <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/clipboard.min.js"></script>
+        <script src="../../../_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> pyro
+          </a>
+              <div class="version">
+                4.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">pyro basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Setting up pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible_compare.html">Compressible solver comparisons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../swe_basics.html">Shallow water solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../particles_basics.html">Particles</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../testing.html">Testing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../help.html">Contributing and getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ack.html#history">History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Software Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>pyro.compressible_sr.eos</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pyro.compressible_sr.eos</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This is a gamma-law equation of state: p = rho e (gamma - 1), where</span>
+<span class="sd">gamma is the constant ratio of specific heats.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="pres"><a class="viewcode-back" href="../../../pyro.compressible_sr.html#pyro.compressible_sr.eos.pres">[docs]</a><span class="k">def</span> <span class="nf">pres</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">dens</span><span class="p">,</span> <span class="n">eint</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given the density and the specific internal energy, return the</span>
+<span class="sd">    pressure</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gamma : float</span>
+<span class="sd">        The ratio of specific heats</span>
+<span class="sd">    dens : float</span>
+<span class="sd">        The density</span>
+<span class="sd">    eint : float</span>
+<span class="sd">        The specific internal energy</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : float</span>
+<span class="sd">       The pressure</span>
+
+<span class="sd">     &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">dens</span><span class="o">*</span><span class="n">eint</span><span class="o">*</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="dens"><a class="viewcode-back" href="../../../pyro.compressible_sr.html#pyro.compressible_sr.eos.dens">[docs]</a><span class="k">def</span> <span class="nf">dens</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">pres</span><span class="p">,</span> <span class="n">eint</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given the pressure and the specific internal energy, return</span>
+<span class="sd">    the density</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gamma : float</span>
+<span class="sd">        The ratio of specific heats</span>
+<span class="sd">    pres : float</span>
+<span class="sd">        The pressure</span>
+<span class="sd">    eint : float</span>
+<span class="sd">        The specific internal energy</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : float</span>
+<span class="sd">       The density</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">pres</span><span class="o">/</span><span class="p">(</span><span class="n">eint</span><span class="o">*</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="rhoe"><a class="viewcode-back" href="../../../pyro.compressible_sr.html#pyro.compressible_sr.eos.rhoe">[docs]</a><span class="k">def</span> <span class="nf">rhoe</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">pres</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given the pressure, return (rho * e)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gamma : float</span>
+<span class="sd">        The ratio of specific heats</span>
+<span class="sd">    pres : float</span>
+<span class="sd">        The pressure</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : float</span>
+<span class="sd">       The internal energy density, rho e</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">pres</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="h_from_eps"><a class="viewcode-back" href="../../../pyro.compressible_sr.html#pyro.compressible_sr.eos.h_from_eps">[docs]</a><span class="k">def</span> <span class="nf">h_from_eps</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">eint</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given rho and internal energy, return h</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">gamma</span> <span class="o">*</span> <span class="n">eint</span></div>
+
+
+<div class="viewcode-block" id="rhoh_from_rho_p"><a class="viewcode-back" href="../../../pyro.compressible_sr.html#pyro.compressible_sr.eos.rhoh_from_rho_p">[docs]</a><span class="k">def</span> <span class="nf">rhoh_from_rho_p</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given rho and p, return h</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">rho</span> <span class="o">+</span> <span class="n">gamma</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">p</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, pyro development team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

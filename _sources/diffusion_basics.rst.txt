@@ -14,20 +14,7 @@ differencing (this makes the diffusion operator time-centered) and the
 implicit discretization forms a Helmholtz equation solved by the pyro
 multigrid class. The main parameters that affect this solver are:
 
-+---------------------------------------------------------------------------+
-| ``[driver]``                                                              |
-+===================+=======================================================+
-|``cfl``            | the "CFL" number for the diffusion equation. Since we |
-|                   | are doing an implicit discretization, this is the     |
-|                   | multiple of the explicit timestep to take.            |
-+-------------------+-------------------------------------------------------+
-
-+---------------------------------------------------------------------------+
-| ``[diffusion]``                                                           |
-+===================+=======================================================+
-|``k``              | the conductivity (constant)                           |
-+-------------------+-------------------------------------------------------+
-
+.. include:: diffusion_defaults.inc
 
 Examples
 --------
@@ -40,9 +27,9 @@ in the domain. The analytic solution for this shows that the profile
 remains a Gaussian, with a changing width and peak. This allows us to
 compare our solver to the analytic solution. This is run as:
 
-.. code-block:: none
+.. prompt:: bash
 
-   ./pyro.py diffusion gaussian inputs.gaussian
+   ./pyro_sim.py diffusion gaussian inputs.gaussian
 
 .. image:: gauss_diffusion.png
    :align: center

@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyro.swe.interface &mdash; pyro 4.0.1.post4+gc829962 documentation</title>
+      <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/clipboard.min.js"></script>
+        <script src="../../../_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> pyro
+          </a>
+              <div class="version">
+                4.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">pyro basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Setting up pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible_compare.html">Compressible solver comparisons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../swe_basics.html">Shallow water solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../particles_basics.html">Particles</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../testing.html">Testing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../help.html">Contributing and getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ack.html#history">History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Software Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>pyro.swe.interface</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pyro.swe.interface</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">njit</span>
+
+
+<div class="viewcode-block" id="states"><a class="viewcode-back" href="../../../pyro.swe.html#pyro.swe.interface.states">[docs]</a><span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">states</span><span class="p">(</span><span class="n">idir</span><span class="p">,</span> <span class="n">ng</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
+           <span class="n">ih</span><span class="p">,</span> <span class="n">iu</span><span class="p">,</span> <span class="n">iv</span><span class="p">,</span> <span class="n">ix</span><span class="p">,</span> <span class="n">nspec</span><span class="p">,</span>
+           <span class="n">g</span><span class="p">,</span>
+           <span class="n">qv</span><span class="p">,</span> <span class="n">dqv</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    predict the cell-centered state to the edges in one-dimension</span>
+<span class="sd">    using the reconstructed, limited slopes.</span>
+
+<span class="sd">    We follow the convection here that ``V_l[i]`` is the left state at the</span>
+<span class="sd">    i-1/2 interface and ``V_l[i+1]`` is the left state at the i+1/2</span>
+<span class="sd">    interface.</span>
+
+
+<span class="sd">    We need the left and right eigenvectors and the eigenvalues for</span>
+<span class="sd">    the system projected along the x-direction</span>
+
+<span class="sd">    Taking our state vector as :math:`Q = (\rho, u, v, p)^T`, the eigenvalues</span>
+<span class="sd">    are :math:`u - c`, :math:`u`, :math:`u + c`.</span>
+
+<span class="sd">    We look at the equations of hydrodynamics in a split fashion --</span>
+<span class="sd">    i.e., we only consider one dimension at a time.</span>
+
+<span class="sd">    Considering advection in the x-direction, the Jacobian matrix for</span>
+<span class="sd">    the primitive variable formulation of the Euler equations</span>
+<span class="sd">    projected in the x-direction is::</span>
+
+<span class="sd">           / u   0   0 \</span>
+<span class="sd">           | g   u   0 |</span>
+<span class="sd">       A = \ 0   0   u /</span>
+
+<span class="sd">    The right eigenvectors are::</span>
+
+<span class="sd">           /  h  \       /  0  \      /  h  \</span>
+<span class="sd">      r1 = | -c  |  r2 = |  0  | r3 = |  c  |</span>
+<span class="sd">           \  0  /       \  1  /      \  0  /</span>
+
+<span class="sd">    The left eigenvectors are::</span>
+
+<span class="sd">       l1 =     ( 1/(2h),  -h/(2hc),  0 )</span>
+<span class="sd">       l2 =     ( 0,          0,  1 )</span>
+<span class="sd">       l3 =     ( -1/(2h), -h/(2hc),  0 )</span>
+
+<span class="sd">    The fluxes are going to be defined on the left edge of the</span>
+<span class="sd">    computational zones::</span>
+
+<span class="sd">              |             |             |             |</span>
+<span class="sd">              |             |             |             |</span>
+<span class="sd">             -+------+------+------+------+------+------+--</span>
+<span class="sd">              |     i-1     |      i      |     i+1     |</span>
+<span class="sd">                           ^ ^           ^</span>
+<span class="sd">                       q_l,i q_r,i  q_l,i+1</span>
+
+<span class="sd">    ``q_r,i`` and ``q_l,i+1`` are computed using the information in zone i,j.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    idir : int</span>
+<span class="sd">        Are we predicting to the edges in the x-direction (1) or y-direction (2)?</span>
+<span class="sd">    ng : int</span>
+<span class="sd">        The number of ghost cells</span>
+<span class="sd">    dx : float</span>
+<span class="sd">        The cell spacing</span>
+<span class="sd">    dt : float</span>
+<span class="sd">        The timestep</span>
+<span class="sd">    ih, iu, iv, ix : int</span>
+<span class="sd">        Indices of the height, x-velocity, y-velocity and species in the</span>
+<span class="sd">        state vector</span>
+<span class="sd">    nspec : int</span>
+<span class="sd">        The number of species</span>
+<span class="sd">    g : float</span>
+<span class="sd">        Gravitational acceleration</span>
+<span class="sd">    qv : ndarray</span>
+<span class="sd">        The primitive state vector</span>
+<span class="sd">    dqv : ndarray</span>
+<span class="sd">        Spatial derivitive of the state vector</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : ndarray, ndarray</span>
+<span class="sd">        State vector predicted to the left and right edges</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">,</span> <span class="n">nvar</span> <span class="o">=</span> <span class="n">qv</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">q_l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">qv</span><span class="p">)</span>
+    <span class="n">q_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">qv</span><span class="p">)</span>
+
+    <span class="n">lvec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nvar</span><span class="p">,</span> <span class="n">nvar</span><span class="p">))</span>
+    <span class="n">rvec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nvar</span><span class="p">,</span> <span class="n">nvar</span><span class="p">))</span>
+    <span class="n">e_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nvar</span><span class="p">)</span>
+    <span class="n">betal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nvar</span><span class="p">)</span>
+    <span class="n">betar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nvar</span><span class="p">)</span>
+
+    <span class="n">nx</span> <span class="o">=</span> <span class="n">qx</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
+    <span class="n">ny</span> <span class="o">=</span> <span class="n">qy</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
+    <span class="n">ilo</span> <span class="o">=</span> <span class="n">ng</span>
+    <span class="n">ihi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">nx</span>
+    <span class="n">jlo</span> <span class="o">=</span> <span class="n">ng</span>
+    <span class="n">jhi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">ny</span>
+
+    <span class="n">ns</span> <span class="o">=</span> <span class="n">nvar</span> <span class="o">-</span> <span class="n">nspec</span>
+
+    <span class="n">dtdx</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">/</span> <span class="n">dx</span>
+    <span class="n">dtdx3</span> <span class="o">=</span> <span class="mf">0.33333</span> <span class="o">*</span> <span class="n">dtdx</span>
+
+    <span class="c1"># this is the loop over zones.  For zone i, we see q_l[i+1] and q_r[i]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ilo</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="n">ihi</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">jlo</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="n">jhi</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):</span>
+
+            <span class="n">dq</span> <span class="o">=</span> <span class="n">dqv</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">qv</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+
+            <span class="n">cs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">g</span> <span class="o">*</span> <span class="n">q</span><span class="p">[</span><span class="n">ih</span><span class="p">])</span>
+
+            <span class="n">lvec</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">rvec</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">e_val</span><span class="p">[:]</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+            <span class="c1"># compute the eigenvalues and eigenvectors</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">e_val</span><span class="p">[:</span><span class="n">ns</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span><span class="p">[</span><span class="n">iu</span><span class="p">]</span> <span class="o">-</span> <span class="n">cs</span><span class="p">,</span> <span class="n">q</span><span class="p">[</span><span class="n">iu</span><span class="p">],</span> <span class="n">q</span><span class="p">[</span><span class="n">iu</span><span class="p">]</span> <span class="o">+</span> <span class="n">cs</span><span class="p">]</span>
+
+                <span class="n">lvec</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="n">ns</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">cs</span><span class="p">,</span> <span class="o">-</span><span class="n">q</span><span class="p">[</span><span class="n">ih</span><span class="p">],</span> <span class="mf">0.0</span><span class="p">]</span>
+                <span class="n">lvec</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="n">ns</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+                <span class="n">lvec</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="n">ns</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">cs</span><span class="p">,</span> <span class="n">q</span><span class="p">[</span><span class="n">ih</span><span class="p">],</span> <span class="mf">0.0</span><span class="p">]</span>
+
+                <span class="n">rvec</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="n">ns</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span><span class="p">[</span><span class="n">ih</span><span class="p">],</span> <span class="o">-</span><span class="n">cs</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+                <span class="n">rvec</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="n">ns</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+                <span class="n">rvec</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="n">ns</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span><span class="p">[</span><span class="n">ih</span><span class="p">],</span> <span class="n">cs</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+
+                <span class="c1"># now the species -- they only have a 1 in their corresponding slot</span>
+                <span class="n">e_val</span><span class="p">[</span><span class="n">ns</span><span class="p">:]</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="n">iu</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">ix</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">):</span>
+                    <span class="n">lvec</span><span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+                    <span class="n">rvec</span><span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+                <span class="c1"># multiply by scaling factors</span>
+                <span class="n">lvec</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">lvec</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="mf">0.50</span> <span class="o">/</span> <span class="p">(</span><span class="n">cs</span> <span class="o">*</span> <span class="n">q</span><span class="p">[</span><span class="n">ih</span><span class="p">])</span>
+                <span class="n">lvec</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="o">-</span><span class="n">lvec</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="mf">0.50</span> <span class="o">/</span> <span class="p">(</span><span class="n">cs</span> <span class="o">*</span> <span class="n">q</span><span class="p">[</span><span class="n">ih</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">e_val</span><span class="p">[:</span><span class="n">ns</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span><span class="p">[</span><span class="n">iv</span><span class="p">]</span> <span class="o">-</span> <span class="n">cs</span><span class="p">,</span> <span class="n">q</span><span class="p">[</span><span class="n">iv</span><span class="p">],</span> <span class="n">q</span><span class="p">[</span><span class="n">iv</span><span class="p">]</span> <span class="o">+</span> <span class="n">cs</span><span class="p">]</span>
+
+                <span class="n">lvec</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="n">ns</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">cs</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="n">q</span><span class="p">[</span><span class="n">ih</span><span class="p">]]</span>
+                <span class="n">lvec</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="n">ns</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+                <span class="n">lvec</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="n">ns</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">cs</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">q</span><span class="p">[</span><span class="n">ih</span><span class="p">]]</span>
+
+                <span class="n">rvec</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="n">ns</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span><span class="p">[</span><span class="n">ih</span><span class="p">],</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="n">cs</span><span class="p">]</span>
+                <span class="n">rvec</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="n">ns</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+                <span class="n">rvec</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="n">ns</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span><span class="p">[</span><span class="n">ih</span><span class="p">],</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">cs</span><span class="p">]</span>
+
+                <span class="c1"># now the species -- they only have a 1 in their corresponding slot</span>
+                <span class="n">e_val</span><span class="p">[</span><span class="n">ns</span><span class="p">:]</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="n">iv</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">ix</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">):</span>
+                    <span class="n">lvec</span><span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+                    <span class="n">rvec</span><span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+                <span class="c1"># multiply by scaling factors</span>
+                <span class="n">lvec</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">lvec</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="mf">0.50</span> <span class="o">/</span> <span class="p">(</span><span class="n">cs</span> <span class="o">*</span> <span class="n">q</span><span class="p">[</span><span class="n">ih</span><span class="p">])</span>
+                <span class="n">lvec</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="o">-</span><span class="n">lvec</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="mf">0.50</span> <span class="o">/</span> <span class="p">(</span><span class="n">cs</span> <span class="o">*</span> <span class="n">q</span><span class="p">[</span><span class="n">ih</span><span class="p">])</span>
+
+            <span class="c1"># define the reference states</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="c1"># this is one the right face of the current zone,</span>
+                <span class="c1"># so the fastest moving eigenvalue is e_val[2] = u + c</span>
+                <span class="n">factor</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">dtdx</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">e_val</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">0.0</span><span class="p">))</span>
+                <span class="n">q_l</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">q</span> <span class="o">+</span> <span class="n">factor</span> <span class="o">*</span> <span class="n">dq</span>
+
+                <span class="c1"># left face of the current zone, so the fastest moving</span>
+                <span class="c1"># eigenvalue is e_val[3] = u - c</span>
+                <span class="n">factor</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">dtdx</span> <span class="o">*</span> <span class="nb">min</span><span class="p">(</span><span class="n">e_val</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">0.0</span><span class="p">))</span>
+                <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span>  <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">q</span> <span class="o">-</span> <span class="n">factor</span> <span class="o">*</span> <span class="n">dq</span>
+
+            <span class="k">else</span><span class="p">:</span>
+
+                <span class="n">factor</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">dtdx</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">e_val</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">0.0</span><span class="p">))</span>
+                <span class="n">q_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">q</span> <span class="o">+</span> <span class="n">factor</span> <span class="o">*</span> <span class="n">dq</span>
+
+                <span class="n">factor</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">dtdx</span> <span class="o">*</span> <span class="nb">min</span><span class="p">(</span><span class="n">e_val</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">0.0</span><span class="p">))</span>
+                <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">q</span> <span class="o">-</span> <span class="n">factor</span> <span class="o">*</span> <span class="n">dq</span>
+
+            <span class="c1"># compute the Vhat functions</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nvar</span><span class="p">):</span>
+                <span class="nb">sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">lvec</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="p">:],</span> <span class="n">dq</span><span class="p">)</span>
+
+                <span class="n">betal</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">dtdx3</span> <span class="o">*</span> <span class="p">(</span><span class="n">e_val</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">e_val</span><span class="p">[</span><span class="n">m</span><span class="p">])</span> <span class="o">*</span> \
+                                   <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">copysign</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">e_val</span><span class="p">[</span><span class="n">m</span><span class="p">])</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="nb">sum</span>
+                <span class="n">betar</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">dtdx3</span> <span class="o">*</span> <span class="p">(</span><span class="n">e_val</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">e_val</span><span class="p">[</span><span class="n">m</span><span class="p">])</span> <span class="o">*</span> \
+                                   <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">copysign</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">e_val</span><span class="p">[</span><span class="n">m</span><span class="p">]))</span> <span class="o">*</span> <span class="nb">sum</span>
+
+            <span class="c1"># construct the states</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nvar</span><span class="p">):</span>
+                <span class="n">sum_l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">betal</span><span class="p">,</span> <span class="n">rvec</span><span class="p">[:,</span> <span class="n">m</span><span class="p">])</span>
+                <span class="n">sum_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">betar</span><span class="p">,</span> <span class="n">rvec</span><span class="p">[:,</span> <span class="n">m</span><span class="p">])</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">q_l</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">q_l</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">m</span><span class="p">]</span> <span class="o">+</span> <span class="n">sum_l</span>
+                    <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span>  <span class="n">j</span><span class="p">,</span> <span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span>  <span class="n">j</span><span class="p">,</span> <span class="n">m</span><span class="p">]</span> <span class="o">+</span> <span class="n">sum_r</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">q_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">q_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="p">]</span> <span class="o">+</span> <span class="n">sum_l</span>
+                    <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span>  <span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span>  <span class="n">m</span><span class="p">]</span> <span class="o">+</span> <span class="n">sum_r</span>
+
+    <span class="k">return</span> <span class="n">q_l</span><span class="p">,</span> <span class="n">q_r</span></div>
+
+
+<div class="viewcode-block" id="riemann_roe"><a class="viewcode-back" href="../../../pyro.swe.html#pyro.swe.interface.riemann_roe">[docs]</a><span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">riemann_roe</span><span class="p">(</span><span class="n">idir</span><span class="p">,</span> <span class="n">ng</span><span class="p">,</span>
+                <span class="n">ih</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">,</span> <span class="n">iymom</span><span class="p">,</span> <span class="n">ihX</span><span class="p">,</span> <span class="n">nspec</span><span class="p">,</span>
+                <span class="n">lower_solid</span><span class="p">,</span> <span class="n">upper_solid</span><span class="p">,</span>
+                <span class="n">g</span><span class="p">,</span> <span class="n">U_l</span><span class="p">,</span> <span class="n">U_r</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is the Roe Riemann solver with entropy fix. The implementation</span>
+<span class="sd">    follows Toro&#39;s SWE book and the clawpack 2d SWE Roe solver.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    idir : int</span>
+<span class="sd">        Are we predicting to the edges in the x-direction (1) or y-direction (2)?</span>
+<span class="sd">    ng : int</span>
+<span class="sd">        The number of ghost cells</span>
+<span class="sd">    ih, ixmom, iymom, ihX : int</span>
+<span class="sd">        The indices of the height, x-momentum, y-momentum and height*species fractions in the conserved state vector.</span>
+<span class="sd">    nspec : int</span>
+<span class="sd">        The number of species</span>
+<span class="sd">    lower_solid, upper_solid : int</span>
+<span class="sd">        Are we at lower or upper solid boundaries?</span>
+<span class="sd">    g : float</span>
+<span class="sd">        Gravitational acceleration</span>
+<span class="sd">    U_l, U_r : ndarray</span>
+<span class="sd">        Conserved state on the left and right cell edges.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : ndarray</span>
+<span class="sd">        Conserved flux</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">,</span> <span class="n">nvar</span> <span class="o">=</span> <span class="n">U_l</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">,</span> <span class="n">nvar</span><span class="p">))</span>
+
+    <span class="n">smallc</span> <span class="o">=</span> <span class="mf">1.e-10</span>
+    <span class="n">tol</span> <span class="o">=</span> <span class="mf">0.1e-1</span>  <span class="c1"># entropy fix parameter</span>
+    <span class="c1"># Note that I&#39;ve basically assumed that cfl = 0.1 here to get away with</span>
+    <span class="c1"># not passing dx/dt or cfl to this function. If this isn&#39;t the case, will need</span>
+    <span class="c1"># to pass one of these to the function or else: things will go wrong.</span>
+
+    <span class="n">lambda_roe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nvar</span><span class="p">)</span>
+    <span class="n">K_roe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nvar</span><span class="p">,</span> <span class="n">nvar</span><span class="p">))</span>
+    <span class="n">alpha_roe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nvar</span><span class="p">)</span>
+
+    <span class="n">nx</span> <span class="o">=</span> <span class="n">qx</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
+    <span class="n">ny</span> <span class="o">=</span> <span class="n">qy</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
+    <span class="n">ilo</span> <span class="o">=</span> <span class="n">ng</span>
+    <span class="n">ihi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">nx</span>
+    <span class="n">jlo</span> <span class="o">=</span> <span class="n">ng</span>
+    <span class="n">jhi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">ny</span>
+    <span class="n">ns</span> <span class="o">=</span> <span class="n">nvar</span> <span class="o">-</span> <span class="n">nspec</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ilo</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ihi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">jlo</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">jhi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+
+            <span class="c1"># primitive variable states</span>
+            <span class="n">h_l</span> <span class="o">=</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ih</span><span class="p">]</span>
+
+            <span class="c1"># un = normal velocity; ut = transverse velocity</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">un_l</span> <span class="o">=</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">]</span> <span class="o">/</span> <span class="n">h_l</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">un_l</span> <span class="o">=</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iymom</span><span class="p">]</span> <span class="o">/</span> <span class="n">h_l</span>
+
+            <span class="n">h_r</span> <span class="o">=</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ih</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">un_r</span> <span class="o">=</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">]</span> <span class="o">/</span> <span class="n">h_r</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">un_r</span> <span class="o">=</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iymom</span><span class="p">]</span> <span class="o">/</span> <span class="n">h_r</span>
+
+            <span class="c1"># compute the sound speeds</span>
+            <span class="n">c_l</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">g</span> <span class="o">*</span> <span class="n">h_l</span><span class="p">))</span>
+            <span class="n">c_r</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">g</span> <span class="o">*</span> <span class="n">h_r</span><span class="p">))</span>
+
+            <span class="c1"># Calculate the Roe averages</span>
+            <span class="n">U_roe</span> <span class="o">=</span> <span class="p">(</span><span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">h_l</span><span class="p">)</span> <span class="o">+</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">h_r</span><span class="p">))</span> <span class="o">/</span> \
+                <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">h_l</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">h_r</span><span class="p">))</span>
+
+            <span class="n">U_roe</span><span class="p">[</span><span class="n">ih</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">h_l</span> <span class="o">*</span> <span class="n">h_r</span><span class="p">)</span>
+            <span class="n">c_roe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">c_l</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">c_r</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+
+            <span class="n">delta</span> <span class="o">=</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">/</span> <span class="n">h_r</span> <span class="o">-</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">/</span> <span class="n">h_l</span>
+            <span class="n">delta</span><span class="p">[</span><span class="n">ih</span><span class="p">]</span> <span class="o">=</span> <span class="n">h_r</span> <span class="o">-</span> <span class="n">h_l</span>
+
+            <span class="c1"># e_values and right evectors</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">un_roe</span> <span class="o">=</span> <span class="n">U_roe</span><span class="p">[</span><span class="n">ixmom</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">un_roe</span> <span class="o">=</span> <span class="n">U_roe</span><span class="p">[</span><span class="n">iymom</span><span class="p">]</span>
+
+            <span class="n">K_roe</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+            <span class="n">lambda_roe</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">un_roe</span> <span class="o">-</span> <span class="n">c_roe</span><span class="p">,</span> <span class="n">un_roe</span><span class="p">,</span> <span class="n">un_roe</span> <span class="o">+</span> <span class="n">c_roe</span><span class="p">])</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">alpha_roe</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">delta</span><span class="p">[</span><span class="n">ih</span><span class="p">]</span> <span class="o">-</span> <span class="n">U_roe</span><span class="p">[</span><span class="n">ih</span><span class="p">]</span> <span class="o">/</span> <span class="n">c_roe</span> <span class="o">*</span> <span class="n">delta</span><span class="p">[</span><span class="n">ixmom</span><span class="p">]),</span>
+                                 <span class="n">U_roe</span><span class="p">[</span><span class="n">ih</span><span class="p">]</span> <span class="o">*</span> <span class="n">delta</span><span class="p">[</span><span class="n">iymom</span><span class="p">],</span>
+                                 <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">delta</span><span class="p">[</span><span class="n">ih</span><span class="p">]</span> <span class="o">+</span> <span class="n">U_roe</span><span class="p">[</span><span class="n">ih</span><span class="p">]</span> <span class="o">/</span> <span class="n">c_roe</span> <span class="o">*</span> <span class="n">delta</span><span class="p">[</span><span class="n">ixmom</span><span class="p">])]</span>
+
+                <span class="n">K_roe</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">un_roe</span> <span class="o">-</span> <span class="n">c_roe</span><span class="p">,</span> <span class="n">U_roe</span><span class="p">[</span><span class="n">iymom</span><span class="p">]]</span>
+                <span class="n">K_roe</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+                <span class="n">K_roe</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">un_roe</span> <span class="o">+</span> <span class="n">c_roe</span><span class="p">,</span> <span class="n">U_roe</span><span class="p">[</span><span class="n">iymom</span><span class="p">]]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">alpha_roe</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">delta</span><span class="p">[</span><span class="n">ih</span><span class="p">]</span> <span class="o">-</span> <span class="n">U_roe</span><span class="p">[</span><span class="n">ih</span><span class="p">]</span> <span class="o">/</span> <span class="n">c_roe</span> <span class="o">*</span> <span class="n">delta</span><span class="p">[</span><span class="n">iymom</span><span class="p">]),</span>
+                                 <span class="n">U_roe</span><span class="p">[</span><span class="n">ih</span><span class="p">]</span> <span class="o">*</span> <span class="n">delta</span><span class="p">[</span><span class="n">ixmom</span><span class="p">],</span>
+                                 <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">delta</span><span class="p">[</span><span class="n">ih</span><span class="p">]</span> <span class="o">+</span> <span class="n">U_roe</span><span class="p">[</span><span class="n">ih</span><span class="p">]</span> <span class="o">/</span> <span class="n">c_roe</span> <span class="o">*</span> <span class="n">delta</span><span class="p">[</span><span class="n">iymom</span><span class="p">])]</span>
+
+                <span class="n">K_roe</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">U_roe</span><span class="p">[</span><span class="n">ixmom</span><span class="p">],</span> <span class="n">un_roe</span> <span class="o">-</span> <span class="n">c_roe</span><span class="p">]</span>
+                <span class="n">K_roe</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+                <span class="n">K_roe</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">U_roe</span><span class="p">[</span><span class="n">ixmom</span><span class="p">],</span> <span class="n">un_roe</span> <span class="o">+</span> <span class="n">c_roe</span><span class="p">]</span>
+
+            <span class="n">lambda_roe</span><span class="p">[</span><span class="n">ns</span><span class="p">:]</span> <span class="o">=</span> <span class="n">un_roe</span>
+            <span class="n">alpha_roe</span><span class="p">[</span><span class="n">ns</span><span class="p">:]</span> <span class="o">=</span> <span class="n">U_roe</span><span class="p">[</span><span class="n">ih</span><span class="p">]</span> <span class="o">*</span> <span class="n">delta</span><span class="p">[</span><span class="n">ns</span><span class="p">:]</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ns</span><span class="p">,</span> <span class="n">nvar</span><span class="p">):</span>
+                <span class="n">K_roe</span><span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="n">K_roe</span><span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+            <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">consFlux</span><span class="p">(</span><span class="n">idir</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">ih</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">,</span> <span class="n">iymom</span><span class="p">,</span> <span class="n">ihX</span><span class="p">,</span> <span class="n">nspec</span><span class="p">,</span>
+                                  <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:])</span>
+            <span class="n">F_r</span> <span class="o">=</span> <span class="n">consFlux</span><span class="p">(</span><span class="n">idir</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">ih</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">,</span> <span class="n">iymom</span><span class="p">,</span> <span class="n">ihX</span><span class="p">,</span> <span class="n">nspec</span><span class="p">,</span>
+                           <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:])</span>
+
+            <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">F_r</span><span class="p">)</span>
+
+            <span class="n">h_star</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">g</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">c_l</span> <span class="o">+</span> <span class="n">c_r</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="p">(</span><span class="n">un_l</span> <span class="o">-</span> <span class="n">un_r</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>
+            <span class="n">u_star</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">un_l</span> <span class="o">+</span> <span class="n">un_r</span><span class="p">)</span> <span class="o">+</span> <span class="n">c_l</span> <span class="o">-</span> <span class="n">c_r</span>
+
+            <span class="n">c_star</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">g</span> <span class="o">*</span> <span class="n">h_star</span><span class="p">)</span>
+
+            <span class="c1"># modified e_values for entropy fix</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">lambda_roe</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">):</span>
+                <span class="n">lambda_roe</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">lambda_roe</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">u_star</span> <span class="o">-</span> <span class="n">c_star</span> <span class="o">-</span> <span class="n">lambda_roe</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> \
+                    <span class="p">(</span><span class="n">u_star</span> <span class="o">-</span> <span class="n">c_star</span> <span class="o">-</span> <span class="p">(</span><span class="n">un_l</span> <span class="o">-</span> <span class="n">c_l</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">lambda_roe</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">):</span>
+                <span class="n">lambda_roe</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">lambda_roe</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">u_star</span> <span class="o">+</span> <span class="n">c_star</span> <span class="o">-</span> <span class="n">lambda_roe</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> \
+                    <span class="p">(</span><span class="n">u_star</span> <span class="o">+</span> <span class="n">c_star</span> <span class="o">-</span> <span class="p">(</span><span class="n">un_r</span> <span class="o">+</span> <span class="n">c_r</span><span class="p">))</span>
+
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nvar</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nvar</span><span class="p">):</span>
+                    <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">-=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">alpha_roe</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">*</span> \
+                        <span class="nb">abs</span><span class="p">(</span><span class="n">lambda_roe</span><span class="p">[</span><span class="n">m</span><span class="p">])</span> <span class="o">*</span> <span class="n">K_roe</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">F</span></div>
+
+
+<div class="viewcode-block" id="riemann_hllc"><a class="viewcode-back" href="../../../pyro.swe.html#pyro.swe.interface.riemann_hllc">[docs]</a><span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">riemann_hllc</span><span class="p">(</span><span class="n">idir</span><span class="p">,</span> <span class="n">ng</span><span class="p">,</span>
+                 <span class="n">ih</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">,</span> <span class="n">iymom</span><span class="p">,</span> <span class="n">ihX</span><span class="p">,</span> <span class="n">nspec</span><span class="p">,</span>
+                 <span class="n">lower_solid</span><span class="p">,</span> <span class="n">upper_solid</span><span class="p">,</span>
+                 <span class="n">g</span><span class="p">,</span> <span class="n">U_l</span><span class="p">,</span> <span class="n">U_r</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    this is the HLLC Riemann solver.  The implementation follows</span>
+<span class="sd">    directly out of Toro&#39;s book.  Note: this does not handle the</span>
+<span class="sd">    transonic rarefaction.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    idir : int</span>
+<span class="sd">        Are we predicting to the edges in the x-direction (1) or y-direction (2)?</span>
+<span class="sd">    ng : int</span>
+<span class="sd">        The number of ghost cells</span>
+<span class="sd">    ih, ixmom, iymom, ihX : int</span>
+<span class="sd">        The indices of the height, x-momentum, y-momentum and height*species fractions in the conserved state vector.</span>
+<span class="sd">    nspec : int</span>
+<span class="sd">        The number of species</span>
+<span class="sd">    lower_solid, upper_solid : int</span>
+<span class="sd">        Are we at lower or upper solid boundaries?</span>
+<span class="sd">    g : float</span>
+<span class="sd">        Gravitational acceleration</span>
+<span class="sd">    U_l, U_r : ndarray</span>
+<span class="sd">        Conserved state on the left and right cell edges.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : ndarray</span>
+<span class="sd">        Conserved flux</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">,</span> <span class="n">nvar</span> <span class="o">=</span> <span class="n">U_l</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">,</span> <span class="n">nvar</span><span class="p">))</span>
+
+    <span class="n">smallc</span> <span class="o">=</span> <span class="mf">1.e-10</span>
+    <span class="n">U_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nvar</span><span class="p">)</span>
+
+    <span class="n">nx</span> <span class="o">=</span> <span class="n">qx</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
+    <span class="n">ny</span> <span class="o">=</span> <span class="n">qy</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
+    <span class="n">ilo</span> <span class="o">=</span> <span class="n">ng</span>
+    <span class="n">ihi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">nx</span>
+    <span class="n">jlo</span> <span class="o">=</span> <span class="n">ng</span>
+    <span class="n">jhi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">ny</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ilo</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ihi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">jlo</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">jhi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+
+            <span class="c1"># primitive variable states</span>
+            <span class="n">h_l</span> <span class="o">=</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ih</span><span class="p">]</span>
+
+            <span class="c1"># un = normal velocity; ut = transverse velocity</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">un_l</span> <span class="o">=</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">]</span> <span class="o">/</span> <span class="n">h_l</span>
+                <span class="n">ut_l</span> <span class="o">=</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iymom</span><span class="p">]</span> <span class="o">/</span> <span class="n">h_l</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">un_l</span> <span class="o">=</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iymom</span><span class="p">]</span> <span class="o">/</span> <span class="n">h_l</span>
+                <span class="n">ut_l</span> <span class="o">=</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">]</span> <span class="o">/</span> <span class="n">h_l</span>
+
+            <span class="n">h_r</span> <span class="o">=</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ih</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">un_r</span> <span class="o">=</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">]</span> <span class="o">/</span> <span class="n">h_r</span>
+                <span class="n">ut_r</span> <span class="o">=</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iymom</span><span class="p">]</span> <span class="o">/</span> <span class="n">h_r</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">un_r</span> <span class="o">=</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iymom</span><span class="p">]</span> <span class="o">/</span> <span class="n">h_r</span>
+                <span class="n">ut_r</span> <span class="o">=</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">]</span> <span class="o">/</span> <span class="n">h_r</span>
+
+            <span class="c1"># compute the sound speeds</span>
+            <span class="n">c_l</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">g</span> <span class="o">*</span> <span class="n">h_l</span><span class="p">))</span>
+            <span class="n">c_r</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">g</span> <span class="o">*</span> <span class="n">h_r</span><span class="p">))</span>
+
+            <span class="c1"># Estimate the star quantities -- use one of three methods to</span>
+            <span class="c1"># do this -- the primitive variable Riemann solver, the two</span>
+            <span class="c1"># shock approximation, or the two rarefaction approximation.</span>
+            <span class="c1"># Pick the method based on the pressure states at the</span>
+            <span class="c1"># interface.</span>
+
+            <span class="n">h_avg</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">h_l</span> <span class="o">+</span> <span class="n">h_r</span><span class="p">)</span>
+            <span class="n">c_avg</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">c_l</span> <span class="o">+</span> <span class="n">c_r</span><span class="p">)</span>
+
+            <span class="n">hstar</span> <span class="o">=</span> <span class="n">h_avg</span> <span class="o">-</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="p">(</span><span class="n">un_r</span> <span class="o">-</span> <span class="n">un_l</span><span class="p">)</span> <span class="o">*</span> <span class="n">h_avg</span> <span class="o">/</span> <span class="n">c_avg</span>
+
+            <span class="c1"># estimate the nonlinear wave speeds</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">hstar</span> <span class="o">&lt;=</span> <span class="n">h_l</span><span class="p">):</span>
+                <span class="c1"># rarefaction</span>
+                <span class="n">S_l</span> <span class="o">=</span> <span class="n">un_l</span> <span class="o">-</span> <span class="n">c_l</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># shock</span>
+                <span class="n">S_l</span> <span class="o">=</span> <span class="n">un_l</span> <span class="o">-</span> <span class="n">c_l</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">hstar</span> <span class="o">+</span> <span class="n">h_l</span><span class="p">)</span> <span class="o">*</span> <span class="n">hstar</span><span class="p">)</span> <span class="o">/</span> <span class="n">h_l</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">hstar</span> <span class="o">&lt;=</span> <span class="n">h_r</span><span class="p">):</span>
+                <span class="c1"># rarefaction</span>
+                <span class="n">S_r</span> <span class="o">=</span> <span class="n">un_r</span> <span class="o">+</span> <span class="n">c_r</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># shock</span>
+                <span class="n">S_r</span> <span class="o">=</span> <span class="n">un_r</span> <span class="o">+</span> <span class="n">c_r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">hstar</span> <span class="o">+</span> <span class="n">h_r</span><span class="p">)</span> <span class="o">*</span> <span class="n">hstar</span><span class="p">)</span> <span class="o">/</span> <span class="n">h_r</span>
+
+            <span class="n">S_c</span> <span class="o">=</span> <span class="p">(</span><span class="n">S_l</span> <span class="o">*</span> <span class="n">h_r</span> <span class="o">*</span> <span class="p">(</span><span class="n">un_r</span> <span class="o">-</span> <span class="n">S_r</span><span class="p">)</span> <span class="o">-</span> <span class="n">S_r</span> <span class="o">*</span> <span class="n">h_l</span> <span class="o">*</span> <span class="p">(</span><span class="n">un_l</span> <span class="o">-</span> <span class="n">S_l</span><span class="p">))</span> <span class="o">/</span> \
+                <span class="p">(</span><span class="n">h_r</span> <span class="o">*</span> <span class="p">(</span><span class="n">un_r</span> <span class="o">-</span> <span class="n">S_r</span><span class="p">)</span> <span class="o">-</span> <span class="n">h_l</span> <span class="o">*</span> <span class="p">(</span><span class="n">un_l</span> <span class="o">-</span> <span class="n">S_l</span><span class="p">))</span>
+
+            <span class="c1"># figure out which region we are in and compute the state and</span>
+            <span class="c1"># the interface fluxes using the HLLC Riemann solver</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">S_r</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">):</span>
+                <span class="c1"># R region</span>
+                <span class="n">U_state</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+
+                <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">consFlux</span><span class="p">(</span><span class="n">idir</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">ih</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">,</span> <span class="n">iymom</span><span class="p">,</span> <span class="n">ihX</span><span class="p">,</span> <span class="n">nspec</span><span class="p">,</span>
+                                      <span class="n">U_state</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="p">(</span><span class="n">S_r</span> <span class="o">&gt;</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">S_c</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="c1"># R* region</span>
+                <span class="n">HLLCfactor</span> <span class="o">=</span> <span class="n">h_r</span> <span class="o">*</span> <span class="p">(</span><span class="n">S_r</span> <span class="o">-</span> <span class="n">un_r</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">S_r</span> <span class="o">-</span> <span class="n">S_c</span><span class="p">)</span>
+
+                <span class="n">U_state</span><span class="p">[</span><span class="n">ih</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">U_state</span><span class="p">[</span><span class="n">ixmom</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span> <span class="o">*</span> <span class="n">S_c</span>
+                    <span class="n">U_state</span><span class="p">[</span><span class="n">iymom</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span> <span class="o">*</span> <span class="n">ut_r</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">U_state</span><span class="p">[</span><span class="n">ixmom</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span> <span class="o">*</span> <span class="n">ut_r</span>
+                    <span class="n">U_state</span><span class="p">[</span><span class="n">iymom</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span> <span class="o">*</span> <span class="n">S_c</span>
+
+                <span class="c1"># species</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">nspec</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="n">U_state</span><span class="p">[</span><span class="n">ihX</span><span class="p">:</span><span class="n">ihX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span> <span class="o">*</span> \
+                        <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ihX</span><span class="p">:</span><span class="n">ihX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span> <span class="o">/</span> <span class="n">h_r</span>
+
+                <span class="c1"># find the flux on the right interface</span>
+                <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">consFlux</span><span class="p">(</span><span class="n">idir</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">ih</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">,</span> <span class="n">iymom</span><span class="p">,</span> <span class="n">ihX</span><span class="p">,</span> <span class="n">nspec</span><span class="p">,</span>
+                                      <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:])</span>
+
+                <span class="c1"># correct the flux</span>
+                <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">S_r</span> <span class="o">*</span> <span class="p">(</span><span class="n">U_state</span> <span class="o">-</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:])</span>
+
+            <span class="k">elif</span> <span class="p">(</span><span class="n">S_c</span> <span class="o">&gt;</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">S_l</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">):</span>
+                <span class="c1"># L* region</span>
+                <span class="n">HLLCfactor</span> <span class="o">=</span> <span class="n">h_l</span> <span class="o">*</span> <span class="p">(</span><span class="n">S_l</span> <span class="o">-</span> <span class="n">un_l</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">S_l</span> <span class="o">-</span> <span class="n">S_c</span><span class="p">)</span>
+
+                <span class="n">U_state</span><span class="p">[</span><span class="n">ih</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">U_state</span><span class="p">[</span><span class="n">ixmom</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span> <span class="o">*</span> <span class="n">S_c</span>
+                    <span class="n">U_state</span><span class="p">[</span><span class="n">iymom</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span> <span class="o">*</span> <span class="n">ut_l</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">U_state</span><span class="p">[</span><span class="n">ixmom</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span> <span class="o">*</span> <span class="n">ut_l</span>
+                    <span class="n">U_state</span><span class="p">[</span><span class="n">iymom</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span> <span class="o">*</span> <span class="n">S_c</span>
+
+                <span class="c1"># species</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">nspec</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="n">U_state</span><span class="p">[</span><span class="n">ihX</span><span class="p">:</span><span class="n">ihX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span> <span class="o">*</span> \
+                        <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ihX</span><span class="p">:</span><span class="n">ihX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span> <span class="o">/</span> <span class="n">h_l</span>
+
+                <span class="c1"># find the flux on the left interface</span>
+                <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">consFlux</span><span class="p">(</span><span class="n">idir</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">ih</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">,</span> <span class="n">iymom</span><span class="p">,</span> <span class="n">ihX</span><span class="p">,</span> <span class="n">nspec</span><span class="p">,</span>
+                                      <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:])</span>
+
+                <span class="c1"># correct the flux</span>
+                <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">S_l</span> <span class="o">*</span> <span class="p">(</span><span class="n">U_state</span> <span class="o">-</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:])</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># L region</span>
+                <span class="n">U_state</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+
+                <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">consFlux</span><span class="p">(</span><span class="n">idir</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">ih</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">,</span> <span class="n">iymom</span><span class="p">,</span> <span class="n">ihX</span><span class="p">,</span> <span class="n">nspec</span><span class="p">,</span>
+                                      <span class="n">U_state</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">F</span></div>
+
+
+<div class="viewcode-block" id="consFlux"><a class="viewcode-back" href="../../../pyro.swe.html#pyro.swe.interface.consFlux">[docs]</a><span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">consFlux</span><span class="p">(</span><span class="n">idir</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">ih</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">,</span> <span class="n">iymom</span><span class="p">,</span> <span class="n">ihX</span><span class="p">,</span> <span class="n">nspec</span><span class="p">,</span> <span class="n">U_state</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the conserved flux for the shallow water equations. In the</span>
+<span class="sd">    x-direction, this is given by::</span>
+
+<span class="sd">            /      hu       \</span>
+<span class="sd">        F = | hu^2 + gh^2/2 |</span>
+<span class="sd">            \      huv      /</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    idir : int</span>
+<span class="sd">        Are we predicting to the edges in the x-direction (1) or y-direction (2)?</span>
+<span class="sd">    g : float</span>
+<span class="sd">        Graviational acceleration</span>
+<span class="sd">    ih, ixmom, iymom, ihX : int</span>
+<span class="sd">        The indices of the height, x-momentum, y-momentum, height*species fraction in the conserved state vector.</span>
+<span class="sd">    nspec : int</span>
+<span class="sd">        The number of species</span>
+<span class="sd">    U_state : ndarray</span>
+<span class="sd">        Conserved state vector.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : ndarray</span>
+<span class="sd">        Conserved flux</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">U_state</span><span class="p">)</span>
+
+    <span class="n">u</span> <span class="o">=</span> <span class="n">U_state</span><span class="p">[</span><span class="n">ixmom</span><span class="p">]</span> <span class="o">/</span> <span class="n">U_state</span><span class="p">[</span><span class="n">ih</span><span class="p">]</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">U_state</span><span class="p">[</span><span class="n">iymom</span><span class="p">]</span> <span class="o">/</span> <span class="n">U_state</span><span class="p">[</span><span class="n">ih</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">F</span><span class="p">[</span><span class="n">ih</span><span class="p">]</span> <span class="o">=</span> <span class="n">U_state</span><span class="p">[</span><span class="n">ih</span><span class="p">]</span> <span class="o">*</span> <span class="n">u</span>
+        <span class="n">F</span><span class="p">[</span><span class="n">ixmom</span><span class="p">]</span> <span class="o">=</span> <span class="n">U_state</span><span class="p">[</span><span class="n">ixmom</span><span class="p">]</span> <span class="o">*</span> <span class="n">u</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">g</span> <span class="o">*</span> <span class="n">U_state</span><span class="p">[</span><span class="n">ih</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span>
+        <span class="n">F</span><span class="p">[</span><span class="n">iymom</span><span class="p">]</span> <span class="o">=</span> <span class="n">U_state</span><span class="p">[</span><span class="n">iymom</span><span class="p">]</span> <span class="o">*</span> <span class="n">u</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">nspec</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">F</span><span class="p">[</span><span class="n">ihX</span><span class="p">:</span><span class="n">ihX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span> <span class="o">=</span> <span class="n">U_state</span><span class="p">[</span><span class="n">ihX</span><span class="p">:</span><span class="n">ihX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span> <span class="o">*</span> <span class="n">u</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">F</span><span class="p">[</span><span class="n">ih</span><span class="p">]</span> <span class="o">=</span> <span class="n">U_state</span><span class="p">[</span><span class="n">ih</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span>
+        <span class="n">F</span><span class="p">[</span><span class="n">ixmom</span><span class="p">]</span> <span class="o">=</span> <span class="n">U_state</span><span class="p">[</span><span class="n">ixmom</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span>
+        <span class="n">F</span><span class="p">[</span><span class="n">iymom</span><span class="p">]</span> <span class="o">=</span> <span class="n">U_state</span><span class="p">[</span><span class="n">iymom</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">g</span> <span class="o">*</span> <span class="n">U_state</span><span class="p">[</span><span class="n">ih</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">nspec</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">F</span><span class="p">[</span><span class="n">ihX</span><span class="p">:</span><span class="n">ihX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span> <span class="o">=</span> <span class="n">U_state</span><span class="p">[</span><span class="n">ihX</span><span class="p">:</span><span class="n">ihX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span>
+
+    <span class="k">return</span> <span class="n">F</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, pyro development team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

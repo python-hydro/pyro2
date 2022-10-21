@@ -1,79 +1,43 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Mesh examples &mdash; pyro 2.2 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mesh examples &mdash; pyro 4.0.1.post4+gc829962 documentation</title>
+      <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-  
-
-  
-
-  
-  
-    
-
-  
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyro 2.2 documentation" href="index.html"/>
-        <link rel="next" title="Advection solvers" href="advection_basics.html"/>
-        <link rel="prev" title="Mesh overview" href="mesh_basics.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Advection solvers" href="advection_basics.html" />
+    <link rel="prev" title="Mesh overview" href="mesh_basics.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
+        <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> pyro
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
-                2.2
+                4.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -81,18 +45,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">pyro basics</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">pyro basics</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Setting up pyro</a></li>
@@ -105,13 +59,13 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Mesh examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#Setup-a-Grid-with-Variables">Setup a Grid with Variables</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#Working-with-the-data">Working with the data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#ArrayIndexer"><code class="docutils literal"><span class="pre">ArrayIndexer</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ArrayIndexer"><code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#Differencing">Differencing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#Coarsening-and-prolonging">Coarsening and prolonging</a></li>
 </ul>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">Solvers</span></p>
+<p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
@@ -121,116 +75,97 @@
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solvers</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Utilities</span></p>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Community</span></p>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Contributing and getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html#history">History</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Reference</span></p>
+<p class="caption" role="heading"><span class="caption-text">Software Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">pyro</a>
-        
       </nav>
 
-
-      
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
       <li>Mesh examples</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/mesh-examples.ipynb.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   
 <style>
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput,
-div.nbinput div.prompt,
-div.nbinput div.input_area,
-div.nbinput div[class*=highlight],
-div.nbinput div[class*=highlight] pre,
-div.nboutput,
-div.nbinput div.prompt,
-div.nbinput div.output_area,
-div.nboutput div[class*=highlight],
-div.nboutput div[class*=highlight] pre {
-    background: none;
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
     border: none;
-    padding: 0 0;
+    padding: 0;
     margin: 0;
     box-shadow: none;
 }
 
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
 /* avoid gaps between output lines */
-div.nboutput div[class*=highlight] pre {
+div.nboutput.container div[class*=highlight] pre {
     line-height: normal;
 }
 
 /* input/output containers */
-div.nbinput,
-div.nboutput {
+div.nbinput.container,
+div.nboutput.container {
     display: -webkit-flex;
     display: flex;
     align-items: flex-start;
@@ -238,92 +173,104 @@ div.nboutput {
     width: 100%;
 }
 @media (max-width: 540px) {
-    div.nbinput,
-    div.nboutput {
+    div.nbinput.container,
+    div.nboutput.container {
         flex-direction: column;
     }
 }
 
 /* input container */
-div.nbinput {
+div.nbinput.container {
     padding-top: 5px;
 }
 
 /* last container */
-div.nblast {
+div.nblast.container {
     padding-bottom: 5px;
 }
 
 /* input prompt */
-div.nbinput div.prompt pre {
-    color: #303F9F;
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
 }
 
 /* output prompt */
-div.nboutput div.prompt pre {
-    color: #D84315;
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
 }
 
 /* all prompts */
-div.nbinput div.prompt,
-div.nboutput div.prompt {
-    min-width: 8ex;
-    padding-top: 0.4em;
-    padding-right: 0.4em;
-    text-align: right;
-    flex: 0;
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
 }
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
 @media (max-width: 540px) {
-    div.nbinput div.prompt,
-    div.nboutput div.prompt {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
         text-align: left;
         padding: 0.4em;
     }
-    div.nboutput div.prompt.empty {
+    div.nboutput.container div.prompt.empty {
         padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
     }
 }
 
 /* disable scrollbars on prompts */
-div.nbinput div.prompt pre,
-div.nboutput div.prompt pre {
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
     overflow: hidden;
 }
 
 /* input/output area */
-div.nbinput div.input_area,
-div.nboutput div.output_area {
-    padding: 0.4em;
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
     -webkit-flex: 1;
     flex: 1;
     overflow: auto;
 }
 @media (max-width: 540px) {
-    div.nbinput div.input_area,
-    div.nboutput div.output_area {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
         width: 100%;
     }
 }
 
 /* input area */
-div.nbinput div.input_area {
-    border: 1px solid #cfcfcf;
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
     border-radius: 2px;
-    background: #f7f7f7;
+    /*background: #f5f5f5;*/
 }
 
 /* override MathJax center alignment in output cells */
-div.nboutput div[class*=MathJax] {
+div.nboutput.container div[class*=MathJax] {
     text-align: left !important;
 }
 
-/* override sphinx.ext.pngmath center alignment in output cells */
-div.nboutput div.math p {
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
     text-align: left;
 }
 
 /* standard error */
-div.nboutput div.output_area.stderr {
+div.nboutput.container div.output_area.stderr {
     background: #fdd;
 }
 
@@ -367,55 +314,104 @@ div.nboutput div.output_area.stderr {
 .ansi-bold { font-weight: bold; }
 .ansi-underline { text-decoration: underline; }
 
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.jp-RenderedHTMLCommon thead,
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+.jp-RenderedHTMLCommon th,
+div.rendered_html th {
+  font-weight: bold;
+}
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.jp-RenderedHTMLCommon tbody tr:hover,
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
 /* CSS overrides for sphinx_rtd_theme */
 
 /* 24px margin */
-.nbinput.nblast,
-.nboutput.nblast {
+.nbinput.nblast.container,
+.nboutput.nblast.container {
     margin-bottom: 19px;  /* padding has already 5px */
 }
 
 /* ... except between code cells! */
-.nblast + .nbinput {
+.nblast.container + .nbinput.container {
     margin-top: -19px;
 }
 
-/* nice headers on first paragraph of info/warning boxes */
-.admonition .first {
-    margin: -12px;
-    padding: 6px 12px;
-    margin-bottom: 12px;
-    color: #fff;
-    line-height: 1;
-    display: block;
-}
-.admonition.warning .first {
-    background: #f0b37e;
-}
-.admonition.note .first {
-    background: #6ab0de;
-}
 .admonition > p:before {
     margin-right: 4px;  /* make room for the exclamation icon */
 }
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
 </style>
-<div class="section" id="Mesh-examples">
-<h1>Mesh examples<a class="headerlink" href="#Mesh-examples" title="Permalink to this headline">¶</a></h1>
-<p>this notebook illustrates the basic ways of interacting with the pyro2
-mesh module. We create some data that lives on a grid and show how to
-fill the ghost cells. The pretty_print() function shows us that they
-work as expected.</p>
+<section id="Mesh-examples">
+<h1>Mesh examples<a class="headerlink" href="#Mesh-examples" title="Permalink to this heading">¶</a></h1>
+<p>this notebook illustrates the basic ways of interacting with the pyro2 mesh module. We create some data that lives on a grid and show how to fill the ghost cells. The pretty_print() function shows us that they work as expected.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">mesh.boundary</span> <span class="kn">as</span> <span class="nn">bnd</span>
-<span class="kn">import</span> <span class="nn">mesh.patch</span> <span class="kn">as</span> <span class="nn">patch</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pyro.mesh.boundary</span> <span class="k">as</span> <span class="nn">bnd</span>
+<span class="kn">import</span> <span class="nn">pyro.mesh.patch</span> <span class="k">as</span> <span class="nn">patch</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="o">%</span><span class="k">matplotlib</span> inline
 
 <span class="c1"># for unit testing, we want to ensure the same random numbers</span>
@@ -423,33 +419,22 @@ work as expected.</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="Setup-a-Grid-with-Variables">
-<h2>Setup a Grid with Variables<a class="headerlink" href="#Setup-a-Grid-with-Variables" title="Permalink to this headline">¶</a></h2>
-<p>There are a few core classes that we deal with when creating a grid with
-associated variables:</p>
+<section id="Setup-a-Grid-with-Variables">
+<h2>Setup a Grid with Variables<a class="headerlink" href="#Setup-a-Grid-with-Variables" title="Permalink to this heading">¶</a></h2>
+<p>There are a few core classes that we deal with when creating a grid with associated variables:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">Grid2d</span></code> : this holds the size of the grid (in zones) and the
-physical coordinate information, including coordinates of cell edges
-and centers</li>
-<li><code class="docutils literal"><span class="pre">BC</span></code> : this is a container class that simply holds the type of
-boundary condition on each domain edge.</li>
-<li><code class="docutils literal"><span class="pre">ArrayIndexer</span></code> : this is an array of data along with methods that
-know how to access it with different offsets into the data that
-usually arise in stencils (like {i+1, j})</li>
-<li><code class="docutils literal"><span class="pre">CellCenterData2d</span></code> : this holds the data that lives on a grid. Each
-variable that is part of this class has its own boundary condition
-type.</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Grid2d</span></code> : this holds the size of the grid (in zones) and the physical coordinate information, including coordinates of cell edges and centers</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BC</span></code> : this is a container class that simply holds the type of boundary condition on each domain edge.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> : this is an array of data along with methods that know how to access it with different offsets into the data that usually arise in stencils (like {i+1, j})</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CellCenterData2d</span></code> : this holds the data that lives on a grid. Each variable that is part of this class has its own boundary condition type.</p></li>
 </ul>
-<p>We start by creating a <code class="docutils literal"><span class="pre">Grid2d</span></code> object with 4 x 6 cells and 2 ghost
-cells</p>
+<p>We start by creating a <code class="docutils literal notranslate"><span class="pre">Grid2d</span></code> object with 4 x 6 cells and 2 ghost cells</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">g</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">Grid2d</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">Grid2d</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -462,12 +447,10 @@ cells</p>
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">help</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -476,9 +459,11 @@ cells</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Help on Grid2d in module mesh.patch object:
+Help on Grid2d in module pyro.mesh.patch object:
 
 class Grid2d(builtins.object)
+ |  Grid2d(nx, ny, ng=1, xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0)
+ |
  |  the 2-d grid class.  The grid object will contain the coordinate
  |  information (at various centerings).
  |
@@ -539,10 +524,6 @@ class Grid2d(builtins.object)
  |      return a new grid object finer by a factor n, but with
  |      all the other properties the same
  |
- |  norm(self, d)
- |      find the norm of the quantity d defined on the same grid, in the
- |      domain&#39;s valid region
- |
  |  scratch_array(self, nvar=1)
  |      return a standard numpy array dimensioned to have the size
  |      and number of ghostcells as the parent grid
@@ -563,17 +544,13 @@ class Grid2d(builtins.object)
 
 </pre></div></div>
 </div>
-<p>Then create a dataset that lives on this grid and add a variable name.
-For each variable that lives on the grid, we need to define the boundary
-conditions – this is done through the BC object.</p>
+<p>Then create a dataset that lives on this grid and add a variable name. For each variable that lives on the grid, we need to define the boundary conditions – this is done through the BC object.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">bc</span> <span class="o">=</span> <span class="n">bnd</span><span class="o">.</span><span class="n">BC</span><span class="p">(</span><span class="n">xlb</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span> <span class="n">xrb</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span> <span class="n">ylb</span><span class="o">=</span><span class="s2">&quot;reflect&quot;</span><span class="p">,</span> <span class="n">yrb</span><span class="o">=</span><span class="s2">&quot;outflow&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">bc</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bc</span> <span class="o">=</span> <span class="n">bnd</span><span class="o">.</span><span class="n">BC</span><span class="p">(</span><span class="n">xlb</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span> <span class="n">xrb</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span> <span class="n">ylb</span><span class="o">=</span><span class="s2">&quot;reflect&quot;</span><span class="p">,</span> <span class="n">yrb</span><span class="o">=</span><span class="s2">&quot;outflow&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bc</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -586,15 +563,13 @@ BCs: -x: periodic  +x: periodic  -y: reflect-even  +y: outflow
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">d</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">CellCenterData2d</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">CellCenterData2d</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
 <span class="n">d</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
 <span class="n">d</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
-<span class="k">print</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -611,33 +586,25 @@ cc data: nx = 4, ny = 6, ng = 2
 
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="Working-with-the-data">
-<h2>Working with the data<a class="headerlink" href="#Working-with-the-data" title="Permalink to this headline">¶</a></h2>
-<p>Now we fill the grid with random data. <code class="docutils literal"><span class="pre">get_var()</span></code> returns an
-<code class="docutils literal"><span class="pre">ArrayIndexer</span></code> object that has methods for accessing views into the
-data. Here we use <code class="docutils literal"><span class="pre">a.v()</span></code> to get the “valid” region, i.e.&nbsp;excluding
-ghost cells.</p>
+</section>
+<section id="Working-with-the-data">
+<h2>Working with the data<a class="headerlink" href="#Working-with-the-data" title="Permalink to this heading">¶</a></h2>
+<p>Now we fill the grid with random data. <code class="docutils literal notranslate"><span class="pre">get_var()</span></code> returns an <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> object that has methods for accessing views into the data. Here we use <code class="docutils literal notranslate"><span class="pre">a.v()</span></code> to get the “valid” region, i.e. excluding ghost cells.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">a</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
 <span class="n">a</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">ny</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<p>when we pretty_print() the variable, we see the ghost cells colored red.
-Note that we just filled the interior above.</p>
+<p>when we pretty_print() the variable, we see the ghost cells colored red. Note that we just filled the interior above.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">a</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -663,15 +630,12 @@ Note that we just filled the interior above.</p>
 
 </pre></div></div>
 </div>
-<p><code class="docutils literal"><span class="pre">pretty_print()</span></code> can also take an argumet, specifying the format
-string to be used for the output.</p>
+<p><code class="docutils literal notranslate"><span class="pre">pretty_print()</span></code> can also take an argumet, specifying the format string to be used for the output.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">a</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%7.3g</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%7.3g</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -697,16 +661,12 @@ string to be used for the output.</p>
 
 </pre></div></div>
 </div>
-<p>now fill the ghost cells – notice that the left and right are periodic,
-the upper is outflow, and the lower is reflect, as specified when we
-registered the data above.</p>
+<p>now fill the ghost cells – notice that the left and right are periodic, the upper is outflow, and the lower is reflect, as specified when we registered the data above.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">d</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">d</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
 <span class="n">a</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -735,33 +695,28 @@ registered the data above.</p>
 </div>
 <p>We can find the L2 norm of the data easily</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">a</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>Out[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="output_area highlight-none"><div class="highlight"><pre>
-<span></span>0.5749769043407793
-</pre></div>
-</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.5749769043407793
+</pre></div></div>
 </div>
 <p>and the min and max</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">a</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">a</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -773,82 +728,59 @@ registered the data above.</p>
 0.004718856190972565 0.9786237847073697
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="ArrayIndexer">
-<h2><code class="docutils literal"><span class="pre">ArrayIndexer</span></code><a class="headerlink" href="#ArrayIndexer" title="Permalink to this headline">¶</a></h2>
-<p>We we access the data, an <code class="docutils literal"><span class="pre">ArrayIndexer</span></code> object is returned. The
-<code class="docutils literal"><span class="pre">ArrayIndexer</span></code> sub-classes the NumPy <code class="docutils literal"><span class="pre">ndarray</span></code>, so it can do all of
-the methods that a NumPy array can, but in addition, we can use the
-<code class="docutils literal"><span class="pre">ip()</span></code>, <code class="docutils literal"><span class="pre">jp()</span></code>, or <code class="docutils literal"><span class="pre">ipjp()</span></code> methods to the <code class="docutils literal"><span class="pre">ArrayIndexer</span></code> object
-shift our view in the x, y, or x &amp; y directions.</p>
-<p>To make this clearer, we’ll change our data set to be nicely ordered
-numbers. We index the <code class="docutils literal"><span class="pre">ArrayIndex</span></code> the same way we would a NumPy
-array. The index space includes ghost cells, so the <code class="docutils literal"><span class="pre">ilo</span></code> and <code class="docutils literal"><span class="pre">ihi</span></code>
-attributes from the grid object are useful to index just the valid
-region. The <code class="docutils literal"><span class="pre">.v()</span></code> method is a shortcut that also gives a view into
-just the valid data.</p>
-<p>Note: when we use one of the <code class="docutils literal"><span class="pre">ip()</span></code>, <code class="docutils literal"><span class="pre">jp()</span></code>, <code class="docutils literal"><span class="pre">ipjp()</span></code>, or <code class="docutils literal"><span class="pre">v()</span></code>
-methods, the result is a regular NumPy <code class="docutils literal"><span class="pre">ndarray</span></code>, not an
-<code class="docutils literal"><span class="pre">ArrayIndexer</span></code> object. This is because it only spans part of the
-domain (e.g., no ghost cells), and therefore cannot be associated with
-the <code class="docutils literal"><span class="pre">Grid2d</span></code> object that the <code class="docutils literal"><span class="pre">ArrayIndexer</span></code> is built from.</p>
+</section>
+<section id="ArrayIndexer">
+<h2><code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code><a class="headerlink" href="#ArrayIndexer" title="Permalink to this heading">¶</a></h2>
+<p>We we access the data, an <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> object is returned. The <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> sub-classes the NumPy <code class="docutils literal notranslate"><span class="pre">ndarray</span></code>, so it can do all of the methods that a NumPy array can, but in addition, we can use the <code class="docutils literal notranslate"><span class="pre">ip()</span></code>, <code class="docutils literal notranslate"><span class="pre">jp()</span></code>, or <code class="docutils literal notranslate"><span class="pre">ip_jp()</span></code> methods to the <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> object shift our view in the x, y, or x &amp; y directions.</p>
+<p>To make this clearer, we’ll change our data set to be nicely ordered numbers. We index the <code class="docutils literal notranslate"><span class="pre">ArrayIndex</span></code> the same way we would a NumPy array. The index space includes ghost cells, so the <code class="docutils literal notranslate"><span class="pre">ilo</span></code> and <code class="docutils literal notranslate"><span class="pre">ihi</span></code> attributes from the grid object are useful to index just the valid region. The <code class="docutils literal notranslate"><span class="pre">.v()</span></code> method is a shortcut that also gives a view into just the valid data.</p>
+<p>Note: when we use one of the <code class="docutils literal notranslate"><span class="pre">ip()</span></code>, <code class="docutils literal notranslate"><span class="pre">jp()</span></code>, <code class="docutils literal notranslate"><span class="pre">ip_jp()</span></code>, or <code class="docutils literal notranslate"><span class="pre">v()</span></code> methods, the result is a regular NumPy <code class="docutils literal notranslate"><span class="pre">ndarray</span></code>, not an <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> object. This is because it only spans part of the domain (e.g., no ghost cells), and therefore cannot be associated with the <code class="docutils literal notranslate"><span class="pre">Grid2d</span></code> object that the <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> is built from.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>Out[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="output_area highlight-none"><div class="highlight"><pre>
-<span></span>mesh.array_indexer.ArrayIndexer
-</pre></div>
-</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+pyro.mesh.array_indexer.ArrayIndexer
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">v</span><span class="p">())</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">v</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>Out[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="output_area highlight-none"><div class="highlight"><pre>
-<span></span>numpy.ndarray
-</pre></div>
-</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+numpy.ndarray
+</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">a</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">qx</span><span class="o">*</span><span class="n">g</span><span class="o">.</span><span class="n">qy</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">qx</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">qy</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">qx</span><span class="o">*</span><span class="n">g</span><span class="o">.</span><span class="n">qy</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">qx</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">qy</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">a</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -874,77 +806,57 @@ the <code class="docutils literal"><span class="pre">Grid2d</span></code> object
 
 </pre></div></div>
 </div>
-<p>We index our arrays as {i,j}, so x (indexed by i) is the row and y
-(indexed by j) is the column in the NumPy array. Note that python arrays
-are stored in row-major order, which means that all of the entries in
-the same row are adjacent in memory. This means that when we simply
-print out the <code class="docutils literal"><span class="pre">ndarray</span></code>, we see constant-x horizontally, which is the
-transpose of what we are used to.</p>
+<p>We index our arrays as {i,j}, so x (indexed by i) is the row and y (indexed by j) is the column in the NumPy array. Note that python arrays are stored in row-major order, which means that all of the entries in the same row are adjacent in memory. This means that when we simply print out the <code class="docutils literal notranslate"><span class="pre">ndarray</span></code>, we see constant-x horizontally, which is the transpose of what we are used to.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">a</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>Out[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="output_area highlight-none"><div class="highlight"><pre>
-<span></span>array([[ 22.,  23.,  24.,  25.,  26.,  27.],
-       [ 32.,  33.,  34.,  35.,  36.,  37.],
-       [ 42.,  43.,  44.,  45.,  46.,  47.],
-       [ 52.,  53.,  54.,  55.,  56.,  57.]])
-</pre></div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([[22., 23., 24., 25., 26., 27.],
+       [32., 33., 34., 35., 36., 37.],
+       [42., 43., 44., 45., 46., 47.],
+       [52., 53., 54., 55., 56., 57.]])
+</pre></div></div>
 </div>
-</div>
-<p>We can offset our view into the array by one in x – this would be like
-{i+1, j} when we loop over data. The <code class="docutils literal"><span class="pre">ip()</span></code> method is used here, and
-takes an argument which is the (positive) shift in the x (i) direction.
-So here’s a shift by 1</p>
+<p>We can offset our view into the array by one in x – this would be like {i+1, j} when we loop over data. The <code class="docutils literal notranslate"><span class="pre">ip()</span></code> method is used here, and takes an argument which is the (positive) shift in the x (i) direction. So here’s a shift by 1</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">a</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>Out[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="output_area highlight-none"><div class="highlight"><pre>
-<span></span>array([[  1.,   2.,   3.,   4.,   5.,   6.,   7.,   8.],
-       [ 11.,  12.,  13.,  14.,  15.,  16.,  17.,  18.],
-       [ 21.,  22.,  23.,  24.,  25.,  26.,  27.,  28.],
-       [ 31.,  32.,  33.,  34.,  35.,  36.,  37.,  38.],
-       [ 41.,  42.,  43.,  44.,  45.,  46.,  47.,  48.],
-       [ 51.,  52.,  53.,  54.,  55.,  56.,  57.,  58.]])
-</pre></div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([[ 1.,  2.,  3.,  4.,  5.,  6.,  7.,  8.],
+       [11., 12., 13., 14., 15., 16., 17., 18.],
+       [21., 22., 23., 24., 25., 26., 27., 28.],
+       [31., 32., 33., 34., 35., 36., 37., 38.],
+       [41., 42., 43., 44., 45., 46., 47., 48.],
+       [51., 52., 53., 54., 55., 56., 57., 58.]])
+</pre></div></div>
 </div>
-</div>
-<p>A shifted view is necessarily smaller than the original array, and
-relies on ghost cells to bring new data into view. Because of this, the
-underlying data is no longer the same size as the original data, so we
-return it as an <code class="docutils literal"><span class="pre">ndarray</span></code> (which is actually just a view into the data
-in the <code class="docutils literal"><span class="pre">ArrayIndexer</span></code> object, so no copy is made.</p>
+<p>A shifted view is necessarily smaller than the original array, and relies on ghost cells to bring new data into view. Because of this, the underlying data is no longer the same size as the original data, so we return it as an <code class="docutils literal notranslate"><span class="pre">ndarray</span></code> (which is actually just a view into the data in the <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> object, so no copy is made.</p>
 <p>To see that it is simply a view, lets shift and edit the data</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">d</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
 <span class="n">a</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
 </pre></div>
@@ -972,24 +884,17 @@ in the <code class="docutils literal"><span class="pre">ArrayIndexer</span></cod
 
 </pre></div></div>
 </div>
-<p>Here, since d was really a view into <span class="math">\(a_{i+1,j}\)</span>, and we accessed
-element (1,1) into that view (with 0,0 as the origin), we were really
-accessing the element (2,1) in the valid region</p>
-</div>
-<div class="section" id="Differencing">
-<h2>Differencing<a class="headerlink" href="#Differencing" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal"><span class="pre">ArrayIndexer</span></code> objects are easy to use to construct differences, like
-those that appear in a stencil for a finite-difference, without having
-to explicitly loop over the elements of the array.</p>
-<p>Here’s we’ll create a new dataset that is initialized with a sine
-function</p>
+<p>Here, since d was really a view into <span class="math notranslate nohighlight">\(a_{i+1,j}\)</span>, and we accessed element (1,1) into that view (with 0,0 as the origin), we were really accessing the element (2,1) in the valid region</p>
+</section>
+<section id="Differencing">
+<h2>Differencing<a class="headerlink" href="#Differencing" title="Permalink to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> objects are easy to use to construct differences, like those that appear in a stencil for a finite-difference, without having to explicitly loop over the elements of the array.</p>
+<p>Here’s we’ll create a new dataset that is initialized with a sine function</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">g</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">Grid2d</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">Grid2d</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">d</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">CellCenterData2d</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
 <span class="n">bc</span> <span class="o">=</span> <span class="n">bnd</span><span class="o">.</span><span class="n">BC</span><span class="p">(</span><span class="n">xlb</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span> <span class="n">xrb</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span> <span class="n">ylb</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span> <span class="n">yrb</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">)</span>
 <span class="n">d</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
@@ -1001,58 +906,44 @@ function</p>
 </pre></div>
 </div>
 </div>
-<p>Our grid object can provide us with a scratch array (an <code class="docutils literal"><span class="pre">ArrayIndexer</span></code>
-object) define on the same grid</p>
+<p>Our grid object can provide us with a scratch array (an <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> object) define on the same grid</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">b</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">b</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
 <span class="nb">type</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>Out[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="output_area highlight-none"><div class="highlight"><pre>
-<span></span>mesh.array_indexer.ArrayIndexer
-</pre></div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+pyro.mesh.array_indexer.ArrayIndexer
+</pre></div></div>
 </div>
-</div>
-<p>We can then fill the data in this array with differenced data from our
-original array – since <code class="docutils literal"><span class="pre">b</span></code> has a separate data region in memory, its
-elements are independent of <code class="docutils literal"><span class="pre">a</span></code>. We do need to make sure that we have
-the same number of elements on the left and right of the <code class="docutils literal"><span class="pre">=</span></code>. Since by
-default, <code class="docutils literal"><span class="pre">ip()</span></code> will return a view with the same size as the valid
-region, we can use <code class="docutils literal"><span class="pre">.v()</span></code> on the left to accept the differences.</p>
-<p>Here we compute a centered-difference approximation to the first
-derivative</p>
+<p>We can then fill the data in this array with differenced data from our original array – since <code class="docutils literal notranslate"><span class="pre">b</span></code> has a separate data region in memory, its elements are independent of <code class="docutils literal notranslate"><span class="pre">a</span></code>. We do need to make sure that we have the same number of elements on the left and right of the <code class="docutils literal notranslate"><span class="pre">=</span></code>. Since by default, <code class="docutils literal notranslate"><span class="pre">ip()</span></code> will return a view with the same size as the valid region, we can use <code class="docutils literal notranslate"><span class="pre">.v()</span></code> on the left to accept the differences.</p>
+<p>Here we compute a centered-difference approximation to the first derivative</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">b</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">a</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">a</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">dx</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">b</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,:]</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">a</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">a</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">dx</span><span class="p">)</span>
 <span class="c1"># normalization was 2.0*pi</span>
 <span class="n">b</span><span class="p">[:,:]</span> <span class="o">/=</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">a</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jc</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">a</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jc</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">b</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jc</span><span class="p">])</span>
-<span class="k">print</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">dx</span><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">dx</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1071,28 +962,23 @@ derivative</p>
 <img alt="_images/mesh-examples_44_1.png" src="_images/mesh-examples_44_1.png" />
 </div>
 </div>
-</div>
-<div class="section" id="Coarsening-and-prolonging">
-<h2>Coarsening and prolonging<a class="headerlink" href="#Coarsening-and-prolonging" title="Permalink to this headline">¶</a></h2>
-<p>we can get a new <code class="docutils literal"><span class="pre">ArrayIndexer</span></code> object on a coarser grid for one of
-our variables</p>
+</section>
+<section id="Coarsening-and-prolonging">
+<h2>Coarsening and prolonging<a class="headerlink" href="#Coarsening-and-prolonging" title="Permalink to this heading">¶</a></h2>
+<p>we can get a new <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> object on a coarser grid for one of our variables</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">c</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">restrict</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">c</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">restrict</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">c</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1118,22 +1004,18 @@ our variables</p>
 </div>
 <p>or a finer grid</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">f</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">prolong</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">prolong</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">f</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%6.2g</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%6.2g</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1169,80 +1051,54 @@ our variables</p>
 
 </pre></div></div>
 </div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
 </div>
 </div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
 
 
-           </div>
-           <div class="articleComments">
-            
            </div>
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="advection_basics.html" class="btn btn-neutral float-right" title="Advection solvers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="mesh_basics.html" class="btn btn-neutral" title="Mesh overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mesh_basics.html" class="btn btn-neutral float-left" title="Mesh overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="advection_basics.html" class="btn btn-neutral float-right" title="Advection solvers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2018, pyro development tem.
-
-    </p>
+    <p>&#169; Copyright 2022, pyro development team.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'2.2',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyro.compressible.problems.ramp &mdash; pyro 4.0.1.post4+gc829962 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../../_static/clipboard.min.js"></script>
+        <script src="../../../../_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../index.html" class="icon icon-home"> pyro
+          </a>
+              <div class="version">
+                4.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">pyro basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Setting up pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../compressible_compare.html">Compressible solver comparisons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../swe_basics.html">Shallow water solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../particles_basics.html">Particles</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../testing.html">Testing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../help.html">Contributing and getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ack.html#history">History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Software Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+      <li>pyro.compressible.problems.ramp</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pyro.compressible.problems.ramp</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">pyro.mesh.patch</span> <span class="k">as</span> <span class="nn">patch</span>
+<span class="kn">from</span> <span class="nn">pyro.util</span> <span class="kn">import</span> <span class="n">msg</span>
+
+
+<div class="viewcode-block" id="init_data"><a class="viewcode-back" href="../../../../pyro.compressible.problems.html#pyro.compressible.problems.ramp.init_data">[docs]</a><span class="k">def</span> <span class="nf">init_data</span><span class="p">(</span><span class="n">my_data</span><span class="p">,</span> <span class="n">rp</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; initialize the double Mach reflection problem &quot;&quot;&quot;</span>
+
+    <span class="n">msg</span><span class="o">.</span><span class="n">bold</span><span class="p">(</span><span class="s2">&quot;initializing the double Mach reflection problem...&quot;</span><span class="p">)</span>
+
+    <span class="c1"># make sure that we are passed a valid patch object</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">my_data</span><span class="p">,</span> <span class="n">patch</span><span class="o">.</span><span class="n">CellCenterData2d</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: patch invalid in ramp.py&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">my_data</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+
+    <span class="c1"># get the density, momenta, and energy as separate variables</span>
+    <span class="n">dens</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
+    <span class="n">xmom</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;x-momentum&quot;</span><span class="p">)</span>
+    <span class="n">ymom</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;y-momentum&quot;</span><span class="p">)</span>
+    <span class="n">ener</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;energy&quot;</span><span class="p">)</span>
+
+    <span class="c1"># initialize the components, remember, that ener here is</span>
+    <span class="c1"># rho*eint + 0.5*rho*v**2, where eint is the specific</span>
+    <span class="c1"># internal energy (erg/g)</span>
+
+    <span class="n">r_l</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;ramp.rhol&quot;</span><span class="p">)</span>
+    <span class="n">u_l</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;ramp.ul&quot;</span><span class="p">)</span>
+    <span class="n">v_l</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;ramp.vl&quot;</span><span class="p">)</span>
+    <span class="n">p_l</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;ramp.pl&quot;</span><span class="p">)</span>
+
+    <span class="n">r_r</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;ramp.rhor&quot;</span><span class="p">)</span>
+    <span class="n">u_r</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;ramp.ur&quot;</span><span class="p">)</span>
+    <span class="n">v_r</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;ramp.vr&quot;</span><span class="p">)</span>
+    <span class="n">p_r</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;ramp.pr&quot;</span><span class="p">)</span>
+
+    <span class="n">gamma</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;eos.gamma&quot;</span><span class="p">)</span>
+
+    <span class="n">energy_l</span> <span class="o">=</span> <span class="n">p_l</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">r_l</span><span class="o">*</span><span class="p">(</span><span class="n">u_l</span><span class="o">*</span><span class="n">u_l</span> <span class="o">+</span> <span class="n">v_l</span><span class="o">*</span><span class="n">v_l</span><span class="p">)</span>
+    <span class="n">energy_r</span> <span class="o">=</span> <span class="n">p_r</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">r_r</span><span class="o">*</span><span class="p">(</span><span class="n">u_r</span><span class="o">*</span><span class="n">u_r</span> <span class="o">+</span> <span class="n">v_r</span><span class="o">*</span><span class="n">v_r</span><span class="p">)</span>
+
+    <span class="c1"># there is probably an easier way to do this, but for now, we</span>
+    <span class="c1"># will just do an explicit loop.  Also, we really want to set</span>
+    <span class="c1"># the pressue and get the internal energy from that, and then</span>
+    <span class="c1"># compute the total energy (which is what we store).  For now</span>
+    <span class="c1"># we will just fake this</span>
+
+    <span class="n">myg</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span>
+    <span class="n">dens</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">1.4</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">cy_up</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">cy_down</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">cy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">cy_down</span><span class="p">,</span> <span class="n">cy_up</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">ilo</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">dens</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">xmom</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">ymom</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">ener</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+            <span class="n">sf_up</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">3.0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">-</span><span class="mf">1.0</span><span class="o">/</span><span class="mf">6.0</span><span class="p">)</span>
+            <span class="n">sf_down</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">3.0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">-</span><span class="mf">1.0</span><span class="o">/</span><span class="mf">6.0</span><span class="p">)</span>
+            <span class="n">sf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">sf_down</span><span class="p">,</span> <span class="n">sf_up</span><span class="p">])</span>   <span class="c1"># initial shock front</span>
+
+            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">cy</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">shockfront</span> <span class="ow">in</span> <span class="n">sf</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="n">shockfront</span><span class="p">:</span>
+                        <span class="n">dens</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dens</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">r_l</span>
+                        <span class="n">xmom</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">xmom</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">r_l</span><span class="o">*</span><span class="n">u_l</span>
+                        <span class="n">ymom</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">ymom</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">r_l</span><span class="o">*</span><span class="n">v_l</span>
+                        <span class="n">ener</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">ener</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">energy_l</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">dens</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dens</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">r_r</span>
+                        <span class="n">xmom</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">xmom</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">r_r</span><span class="o">*</span><span class="n">u_r</span>
+                        <span class="n">ymom</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">ymom</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">r_r</span><span class="o">*</span><span class="n">v_r</span>
+                        <span class="n">ener</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">ener</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">energy_r</span></div>
+
+
+<div class="viewcode-block" id="finalize"><a class="viewcode-back" href="../../../../pyro.compressible.problems.html#pyro.compressible.problems.ramp.finalize">[docs]</a><span class="k">def</span> <span class="nf">finalize</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; print out any information to the user at the end of the run &quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, pyro development team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

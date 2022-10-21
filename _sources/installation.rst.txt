@@ -3,44 +3,32 @@ Setting up pyro
 
 You can clone pyro from github: `http://github.com/python-hydro/pyro2 <http://github.com/python-hydro/pyro2>`_
 
-.. note::
-
-   It is strongly recommended that you use python 3.x.  While python 2.x might
-   still work, we do not test pyro under python 2, so it may break at any time
-   in the future.
-
 The following python packages are required:
 
 * ``numpy``
 * ``matplotlib``
-* ``f2py`` (part of NumPy)
+* ``numba``
+* ``h5py``
 * ``pytest`` (for unit tests)
 
-Additionally, you will need ``gfortran`` installed on your computer, for
-``f2py`` to be able to compile the code.
+The easiest way to install python is to use the ``setup.py``.  From
+the ``pyro2/`` directory, we do:
 
-The following steps are needed before running pyro:
+.. prompt:: bash
 
-* add ``pyro/`` to your ``PYTHONPATH`` environment variable.  For
-  the bash shell, this is done as:
+   python setup.py install --user
 
-.. code-block:: none
+This will put the main driver, ``pyro_sim.py``, in your path, and
+allow you to run pyro from anywhere.
 
-   export PYTHONPATH="/path/to/pyro/:${PYTHONPATH}"
+If you intend on directly developing the solvers, you can instead do:
 
-* build the Fortran modules, by running the ``mk.sh`` script. It
-  should be sufficient to just do:
+.. prompt:: bash
 
-.. code-block:: none
+   python setup.py develop --user
 
-   ./mk.sh
-
-* define the environment variable ``PYRO_HOME`` to point to
-  the ``pyro2/`` directory (only needed for regression testing)
-
-.. code-block:: none
-
-   export PYRO_HOME="/path/to/pyro/"
+This will allow you to modify the python source without having to
+reinstall each time something changes.
 
 
 Quick test
@@ -48,9 +36,9 @@ Quick test
 
 Run the advection solver to quickly test if things are setup correctly:
 
-.. code-block:: none
+.. prompt:: bash
 
-   ./pyro.py advection smooth inputs.smooth
+   ./pyro_sim.py advection smooth inputs.smooth
 
 You should see a plot window pop up with a smooth pulse advecting
 diagonally through the periodic domain.

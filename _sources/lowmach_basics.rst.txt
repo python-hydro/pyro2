@@ -17,6 +17,10 @@ with :math:`\nabla p_0 = \rho_0 g` and :math:`\beta_0 = p_0^{1/\gamma}`.
 
 As with the incompressible solver, we implement a cell-centered approximate projection method.
 
+The main parameters that affect this solver are:
+
+.. include:: lm_atm_defaults.inc
+
 Examples
 --------
 
@@ -27,7 +31,7 @@ The bubble problem places a buoyant bubble in a stratified atmosphere
 and watches the development of the roll-up due to shear as it
 rises. This is run as:
 
-.. code-block:: none
+.. prompt:: bash
 
-   ./pyro.py lm_atm bubble inputs.bubble
+   ./pyro_sim.py lm_atm bubble inputs.bubble
 

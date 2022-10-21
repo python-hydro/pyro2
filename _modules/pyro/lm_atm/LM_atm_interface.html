@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyro.lm_atm.LM_atm_interface &mdash; pyro 4.0.1.post4+gc829962 documentation</title>
+      <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/clipboard.min.js"></script>
+        <script src="../../../_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> pyro
+          </a>
+              <div class="version">
+                4.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">pyro basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Setting up pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible_compare.html">Compressible solver comparisons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../swe_basics.html">Shallow water solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../particles_basics.html">Particles</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../testing.html">Testing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../help.html">Contributing and getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ack.html#history">History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Software Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>pyro.lm_atm.LM_atm_interface</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pyro.lm_atm.LM_atm_interface</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">njit</span>
+
+
+<div class="viewcode-block" id="is_symmetric_pair"><a class="viewcode-back" href="../../../pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.is_symmetric_pair">[docs]</a><span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">is_symmetric_pair</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">nodal</span><span class="p">,</span> <span class="n">sl</span><span class="p">,</span> <span class="n">sr</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Are sl and sr symmetric about an axis parallel with the y-axis in the center of domain the x-direction?</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ng : int</span>
+<span class="sd">        The number of ghost cells</span>
+<span class="sd">    nodal: bool</span>
+<span class="sd">        Is the data nodal?</span>
+<span class="sd">    sl, sr : ndarray</span>
+<span class="sd">        The two arrays to be compared</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : int</span>
+<span class="sd">        Are they symmetric? (1 = yes, 0 = no)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">qx</span><span class="p">,</span> <span class="n">qy</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">nx</span> <span class="o">=</span> <span class="n">qx</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
+    <span class="n">ny</span> <span class="o">=</span> <span class="n">qy</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
+    <span class="n">ilo</span> <span class="o">=</span> <span class="n">ng</span>
+    <span class="n">ihi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">nx</span>
+    <span class="n">jlo</span> <span class="o">=</span> <span class="n">ng</span>
+    <span class="n">jhi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">ny</span>
+
+    <span class="n">sym</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">nodal</span><span class="p">):</span>
+        <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nx</span> <span class="o">/</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="n">il</span> <span class="o">=</span> <span class="n">ilo</span> <span class="o">+</span> <span class="n">i</span>
+            <span class="n">ir</span> <span class="o">=</span> <span class="n">ihi</span> <span class="o">-</span> <span class="n">i</span>
+
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">jlo</span><span class="p">,</span> <span class="n">jhi</span><span class="p">):</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">sl</span><span class="p">[</span><span class="n">il</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="n">sr</span><span class="p">[</span><span class="n">ir</span><span class="p">,</span> <span class="n">j</span><span class="p">]):</span>
+                    <span class="n">sym</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="n">done</span><span class="p">:</span>
+                <span class="k">break</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nx</span> <span class="o">/</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="n">il</span> <span class="o">=</span> <span class="n">ilo</span> <span class="o">+</span> <span class="n">i</span>
+            <span class="n">ir</span> <span class="o">=</span> <span class="n">ihi</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">jlo</span><span class="p">,</span> <span class="n">jhi</span><span class="p">):</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">sl</span><span class="p">[</span><span class="n">il</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="n">sr</span><span class="p">[</span><span class="n">ir</span><span class="p">,</span> <span class="n">j</span><span class="p">]):</span>
+                    <span class="n">sym</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">break</span>
+
+            <span class="k">if</span> <span class="n">done</span><span class="p">:</span>
+                <span class="k">break</span>
+
+    <span class="k">return</span> <span class="n">sym</span></div>
+
+
+<div class="viewcode-block" id="is_symmetric"><a class="viewcode-back" href="../../../pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.is_symmetric">[docs]</a><span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">is_symmetric</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">nodal</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Is the left half of s the mirror image of the right half?</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ng : int</span>
+<span class="sd">        The number of ghost cells</span>
+<span class="sd">    nodal: bool</span>
+<span class="sd">        Is the data nodal?</span>
+<span class="sd">    s : ndarray</span>
+<span class="sd">        The array to be compared</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : int</span>
+<span class="sd">        Is it symmetric? (1 = yes, 0 = no)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">is_symmetric_pair</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">nodal</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="is_asymmetric_pair"><a class="viewcode-back" href="../../../pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.is_asymmetric_pair">[docs]</a><span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">is_asymmetric_pair</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">nodal</span><span class="p">,</span> <span class="n">sl</span><span class="p">,</span> <span class="n">sr</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Are sl and sr asymmetric about an axis parallel with the y-axis in the center of domain the x-direction?</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ng : int</span>
+<span class="sd">        The number of ghost cells</span>
+<span class="sd">    nodal: bool</span>
+<span class="sd">        Is the data nodal?</span>
+<span class="sd">    sl, sr : ndarray</span>
+<span class="sd">        The two arrays to be compared</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : int</span>
+<span class="sd">        Are they asymmetric? (1 = yes, 0 = no)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">qx</span><span class="p">,</span> <span class="n">qy</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">nx</span> <span class="o">=</span> <span class="n">qx</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
+    <span class="n">ny</span> <span class="o">=</span> <span class="n">qy</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
+    <span class="n">ilo</span> <span class="o">=</span> <span class="n">ng</span>
+    <span class="n">ihi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">nx</span>
+    <span class="n">jlo</span> <span class="o">=</span> <span class="n">ng</span>
+    <span class="n">jhi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">ny</span>
+
+    <span class="n">asym</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">nodal</span><span class="p">):</span>
+        <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nx</span> <span class="o">/</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">jlo</span><span class="p">,</span> <span class="n">jhi</span><span class="p">):</span>
+                <span class="n">il</span> <span class="o">=</span> <span class="n">ilo</span> <span class="o">+</span> <span class="n">i</span>
+                <span class="n">ir</span> <span class="o">=</span> <span class="n">ihi</span> <span class="o">-</span> <span class="n">i</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">sl</span><span class="p">[</span><span class="n">il</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="n">sr</span><span class="p">[</span><span class="n">ir</span><span class="p">,</span> <span class="n">j</span><span class="p">]):</span>
+                    <span class="n">asym</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="n">done</span><span class="p">:</span>
+                <span class="k">break</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nx</span> <span class="o">/</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">jlo</span><span class="p">,</span> <span class="n">jhi</span><span class="p">):</span>
+                <span class="n">il</span> <span class="o">=</span> <span class="n">ilo</span> <span class="o">+</span> <span class="n">i</span>
+                <span class="n">ir</span> <span class="o">=</span> <span class="n">ihi</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+
+                <span class="c1"># print *, il, ir, sl(il,j), -sr(ir,j)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">sl</span><span class="p">[</span><span class="n">il</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="n">sr</span><span class="p">[</span><span class="n">ir</span><span class="p">,</span> <span class="n">j</span><span class="p">]):</span>
+                    <span class="n">asym</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">break</span>
+
+            <span class="k">if</span> <span class="n">done</span><span class="p">:</span>
+                <span class="k">break</span>
+
+    <span class="k">return</span> <span class="n">asym</span></div>
+
+
+<div class="viewcode-block" id="is_asymmetric"><a class="viewcode-back" href="../../../pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.is_asymmetric">[docs]</a><span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">is_asymmetric</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">nodal</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Is the left half of s asymmetric to the right half?</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ng : int</span>
+<span class="sd">        The number of ghost cells</span>
+<span class="sd">    nodal: bool</span>
+<span class="sd">        Is the data nodal?</span>
+<span class="sd">    s : ndarray</span>
+<span class="sd">        The array to be compared</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : int</span>
+<span class="sd">        Is it asymmetric? (1 = yes, 0 = no)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">is_asymmetric_pair</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">nodal</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="mac_vels"><a class="viewcode-back" href="../../../pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.mac_vels">[docs]</a><span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">mac_vels</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
+             <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span>
+             <span class="n">ldelta_ux</span><span class="p">,</span> <span class="n">ldelta_vx</span><span class="p">,</span>
+             <span class="n">ldelta_uy</span><span class="p">,</span> <span class="n">ldelta_vy</span><span class="p">,</span>
+             <span class="n">gradp_x</span><span class="p">,</span> <span class="n">gradp_y</span><span class="p">,</span>
+             <span class="n">source</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the MAC velocities in the x and y directions.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ng : int</span>
+<span class="sd">        The number of ghost cells</span>
+<span class="sd">    dx, dy : float</span>
+<span class="sd">        The cell spacings</span>
+<span class="sd">    dt : float</span>
+<span class="sd">        The timestep</span>
+<span class="sd">    u, v : ndarray</span>
+<span class="sd">        x-velocity and y-velocity</span>
+<span class="sd">    ldelta_ux, ldelta_uy: ndarray</span>
+<span class="sd">        Limited slopes of the x-velocity in the x and y directions</span>
+<span class="sd">    ldelta_vx, ldelta_vy: ndarray</span>
+<span class="sd">        Limited slopes of the y-velocity in the x and y directions</span>
+<span class="sd">    gradp_x, gradp_y : ndarray</span>
+<span class="sd">        Pressure gradients in the x and y directions</span>
+<span class="sd">    source : ndarray</span>
+<span class="sd">        Source terms</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : ndarray, ndarray</span>
+<span class="sd">        MAC velocities in the x and y directions</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># assertions</span>
+    <span class="c1"># print *, &quot;checking ldelta_ux&quot;</span>
+    <span class="c1"># if (not is_asymmetric(qx, qy, ng, .false., ldelta_ux) == 1):</span>
+    <span class="c1">#    stop &#39;ldelta_ux not asymmetric&#39;</span>
+    <span class="c1">#</span>
+
+    <span class="c1"># print *, &quot;checking ldelta_uy&quot;</span>
+    <span class="c1"># if (not is_symmetric(qx, qy, ng, .false., ldelta_uy) == 1):</span>
+    <span class="c1">#    stop &#39;ldelta_uy not symmetric&#39;</span>
+    <span class="c1">#</span>
+
+    <span class="c1"># print *, &quot;checking ldelta_vx&quot;</span>
+    <span class="c1"># if (not is_symmetric(qx, qy, ng, .false., ldelta_vx) == 1):</span>
+    <span class="c1">#    stop &#39;ldelta_vx not symmetric&#39;</span>
+    <span class="c1">#</span>
+
+    <span class="c1"># print *, &quot;checking ldelta_vy&quot;</span>
+    <span class="c1"># if (not is_symmetric(qx, qy, ng, .false., ldelta_vy) == 1):</span>
+    <span class="c1">#    stop &#39;ldelta_vy not symmetric&#39;</span>
+    <span class="c1">#</span>
+
+    <span class="c1"># print *, &quot;checking gradp_x&quot;</span>
+    <span class="c1"># if (not is_asymmetric(qx, qy, ng, .false., gradp_x) == 1):</span>
+    <span class="c1">#    stop &#39;gradp_x not asymmetric&#39;</span>
+    <span class="c1">#</span>
+
+    <span class="c1"># get the full u and v left and right states (including transverse</span>
+    <span class="c1"># terms) on both the x- and y-interfaces</span>
+    <span class="n">u_xl</span><span class="p">,</span> <span class="n">u_xr</span><span class="p">,</span> <span class="n">u_yl</span><span class="p">,</span> <span class="n">u_yr</span><span class="p">,</span> <span class="n">v_xl</span><span class="p">,</span> <span class="n">v_xr</span><span class="p">,</span> <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span> <span class="o">=</span> <span class="n">get_interface_states</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
+                                                                          <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span>
+                                                                          <span class="n">ldelta_ux</span><span class="p">,</span> <span class="n">ldelta_vx</span><span class="p">,</span>
+                                                                          <span class="n">ldelta_uy</span><span class="p">,</span> <span class="n">ldelta_vy</span><span class="p">,</span>
+                                                                          <span class="n">gradp_x</span><span class="p">,</span> <span class="n">gradp_y</span><span class="p">,</span>
+                                                                          <span class="n">source</span><span class="p">)</span>
+
+    <span class="c1"># print *, &#39;checking u_xl&#39;</span>
+    <span class="c1"># if (not is_asymmetric_pair(qx, qy, ng, .true., u_xl, u_xr) == 1):</span>
+    <span class="c1">#    stop &#39;u_xl/r not asymmetric&#39;</span>
+    <span class="c1">#</span>
+
+    <span class="c1"># Riemann problem -- this follows Burger&#39;s equation.  We don&#39;t use</span>
+    <span class="c1"># any input velocity for the upwinding.  Also, we only care about</span>
+    <span class="c1"># the normal states here (u on x and v on y)</span>
+    <span class="n">u_MAC</span> <span class="o">=</span> <span class="n">riemann_and_upwind</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">u_xl</span><span class="p">,</span> <span class="n">u_xr</span><span class="p">)</span>
+    <span class="n">v_MAC</span> <span class="o">=</span> <span class="n">riemann_and_upwind</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span><span class="p">)</span>
+
+    <span class="c1"># print *, &#39;checking U_MAC&#39;</span>
+    <span class="c1"># if (not is_asymmetric(qx, qy, ng, .true., u_MAC) == 1):</span>
+    <span class="c1">#    stop &#39;u_MAC not asymmetric&#39;</span>
+    <span class="c1">#</span>
+
+    <span class="k">return</span> <span class="n">u_MAC</span><span class="p">,</span> <span class="n">v_MAC</span></div>
+
+
+<span class="c1"># xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
+<div class="viewcode-block" id="states"><a class="viewcode-back" href="../../../pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.states">[docs]</a><span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">states</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
+           <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span>
+           <span class="n">ldelta_ux</span><span class="p">,</span> <span class="n">ldelta_vx</span><span class="p">,</span>
+           <span class="n">ldelta_uy</span><span class="p">,</span> <span class="n">ldelta_vy</span><span class="p">,</span>
+           <span class="n">gradp_x</span><span class="p">,</span> <span class="n">gradp_y</span><span class="p">,</span>
+           <span class="n">source</span><span class="p">,</span>
+           <span class="n">u_MAC</span><span class="p">,</span> <span class="n">v_MAC</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is similar to ``mac_vels``, but it predicts the interface states</span>
+<span class="sd">    of both u and v on both interfaces, using the MAC velocities to</span>
+<span class="sd">    do the upwinding.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ng : int</span>
+<span class="sd">        The number of ghost cells</span>
+<span class="sd">    dx, dy : float</span>
+<span class="sd">        The cell spacings</span>
+<span class="sd">    dt : float</span>
+<span class="sd">        The timestep</span>
+<span class="sd">    u, v : ndarray</span>
+<span class="sd">        x-velocity and y-velocity</span>
+<span class="sd">    ldelta_ux, ldelta_uy: ndarray</span>
+<span class="sd">        Limited slopes of the x-velocity in the x and y directions</span>
+<span class="sd">    ldelta_vx, ldelta_vy: ndarray</span>
+<span class="sd">        Limited slopes of the y-velocity in the x and y directions</span>
+<span class="sd">    source : ndarray</span>
+<span class="sd">        Source terms</span>
+<span class="sd">    gradp_x, gradp_y : ndarray</span>
+<span class="sd">        Pressure gradients in the x and y directions</span>
+<span class="sd">    u_MAC, v_MAC : ndarray</span>
+<span class="sd">        MAC velocities in the x and y directions</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : ndarray, ndarray, ndarray, ndarray</span>
+<span class="sd">        x and y velocities predicted to the interfaces</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># get the full u and v left and right states (including transverse</span>
+    <span class="c1"># terms) on both the x- and y-interfaces</span>
+    <span class="n">u_xl</span><span class="p">,</span> <span class="n">u_xr</span><span class="p">,</span> <span class="n">u_yl</span><span class="p">,</span> <span class="n">u_yr</span><span class="p">,</span> <span class="n">v_xl</span><span class="p">,</span> <span class="n">v_xr</span><span class="p">,</span> <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span> <span class="o">=</span> <span class="n">get_interface_states</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
+                                                                          <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span>
+                                                                          <span class="n">ldelta_ux</span><span class="p">,</span> <span class="n">ldelta_vx</span><span class="p">,</span>
+                                                                          <span class="n">ldelta_uy</span><span class="p">,</span> <span class="n">ldelta_vy</span><span class="p">,</span>
+                                                                          <span class="n">gradp_x</span><span class="p">,</span> <span class="n">gradp_y</span><span class="p">,</span>
+                                                                          <span class="n">source</span><span class="p">)</span>
+
+    <span class="c1"># upwind using the MAC velocity to determine which state exists on</span>
+    <span class="c1"># the interface</span>
+    <span class="n">u_xint</span> <span class="o">=</span> <span class="n">upwind</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">u_xl</span><span class="p">,</span> <span class="n">u_xr</span><span class="p">,</span> <span class="n">u_MAC</span><span class="p">)</span>
+    <span class="n">v_xint</span> <span class="o">=</span> <span class="n">upwind</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">v_xl</span><span class="p">,</span> <span class="n">v_xr</span><span class="p">,</span> <span class="n">u_MAC</span><span class="p">)</span>
+    <span class="n">u_yint</span> <span class="o">=</span> <span class="n">upwind</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">u_yl</span><span class="p">,</span> <span class="n">u_yr</span><span class="p">,</span> <span class="n">v_MAC</span><span class="p">)</span>
+    <span class="n">v_yint</span> <span class="o">=</span> <span class="n">upwind</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span><span class="p">,</span> <span class="n">v_MAC</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">u_xint</span><span class="p">,</span> <span class="n">v_xint</span><span class="p">,</span> <span class="n">u_yint</span><span class="p">,</span> <span class="n">v_yint</span></div>
+
+
+<span class="c1"># xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
+<div class="viewcode-block" id="rho_states"><a class="viewcode-back" href="../../../pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.rho_states">[docs]</a><span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">rho_states</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
+               <span class="n">rho</span><span class="p">,</span> <span class="n">u_MAC</span><span class="p">,</span> <span class="n">v_MAC</span><span class="p">,</span>
+               <span class="n">ldelta_rx</span><span class="p">,</span> <span class="n">ldelta_ry</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This predicts rho to the interfaces.  We use the MAC velocities to do</span>
+<span class="sd">    the upwinding</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ng : int</span>
+<span class="sd">        The number of ghost cells</span>
+<span class="sd">    dx, dy : float</span>
+<span class="sd">        The cell spacings</span>
+<span class="sd">    rho : ndarray</span>
+<span class="sd">        density</span>
+<span class="sd">    u_MAC, v_MAC : ndarray</span>
+<span class="sd">        MAC velocities in the x and y directions</span>
+<span class="sd">    ldelta_rx, ldelta_ry: ndarray</span>
+<span class="sd">        Limited slopes of the density in the x and y directions</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : ndarray, ndarray</span>
+<span class="sd">        rho predicted to the interfaces</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">qx</span><span class="p">,</span> <span class="n">qy</span> <span class="o">=</span> <span class="n">rho</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">rho_xl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">))</span>
+    <span class="n">rho_xr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">))</span>
+    <span class="n">rho_yl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">))</span>
+    <span class="n">rho_yr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">))</span>
+
+    <span class="n">nx</span> <span class="o">=</span> <span class="n">qx</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
+    <span class="n">ny</span> <span class="o">=</span> <span class="n">qy</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
+    <span class="n">ilo</span> <span class="o">=</span> <span class="n">ng</span>
+    <span class="n">ihi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">nx</span>
+    <span class="n">jlo</span> <span class="o">=</span> <span class="n">ng</span>
+    <span class="n">jhi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">ny</span>
+
+    <span class="n">dtdx</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">/</span> <span class="n">dx</span>
+    <span class="n">dtdy</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">/</span> <span class="n">dy</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ilo</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="n">ihi</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">jlo</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="n">jhi</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):</span>
+
+            <span class="c1"># u on x-edges</span>
+            <span class="n">rho_xl</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> \
+                <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">dtdx</span> <span class="o">*</span> <span class="n">u_MAC</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="n">ldelta_rx</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+            <span class="n">rho_xr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> \
+                <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">dtdx</span> <span class="o">*</span> <span class="n">u_MAC</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="n">ldelta_rx</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+
+            <span class="c1"># u on y-edges</span>
+            <span class="n">rho_yl</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> \
+                <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">dtdy</span> <span class="o">*</span> <span class="n">v_MAC</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="n">ldelta_ry</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+            <span class="n">rho_yr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> \
+                <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">dtdy</span> <span class="o">*</span> <span class="n">v_MAC</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="n">ldelta_ry</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+
+    <span class="c1"># we upwind based on the MAC velocities</span>
+    <span class="n">rho_xint</span> <span class="o">=</span> <span class="n">upwind</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">rho_xl</span><span class="p">,</span> <span class="n">rho_xr</span><span class="p">,</span> <span class="n">u_MAC</span><span class="p">)</span>
+    <span class="n">rho_yint</span> <span class="o">=</span> <span class="n">upwind</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">rho_yl</span><span class="p">,</span> <span class="n">rho_yr</span><span class="p">,</span> <span class="n">v_MAC</span><span class="p">)</span>
+
+    <span class="c1"># now add the transverse term and the non-advective part of the normal</span>
+    <span class="c1"># divergence</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ilo</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="n">ihi</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">jlo</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="n">jhi</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):</span>
+
+            <span class="n">u_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">u_MAC</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">u_MAC</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="o">/</span> <span class="n">dx</span>
+            <span class="n">v_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_MAC</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">v_MAC</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="o">/</span> <span class="n">dy</span>
+
+            <span class="c1"># (rho v)_y is the transverse term for the x-interfaces</span>
+            <span class="c1"># rho u_x is the non-advective piece for the x-interfaces</span>
+            <span class="n">rhov_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">rho_yint</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">v_MAC</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span>
+                      <span class="n">rho_yint</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">v_MAC</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="o">/</span> <span class="n">dy</span>
+
+            <span class="n">rho_xl</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho_xl</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> \
+                <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">rhov_y</span> <span class="o">+</span> <span class="n">rho</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">u_x</span><span class="p">)</span>
+            <span class="n">rho_xr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho_xr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">rhov_y</span> <span class="o">+</span> <span class="n">rho</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">u_x</span><span class="p">)</span>
+
+            <span class="c1"># (rho u)_x is the transverse term for the y-interfaces</span>
+            <span class="c1"># rho v_y is the non-advective piece for the y-interfaces</span>
+            <span class="n">rhou_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">rho_xint</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">u_MAC</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span>
+                      <span class="n">rho_xint</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">u_MAC</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="o">/</span> <span class="n">dx</span>
+
+            <span class="n">rho_yl</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho_yl</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> \
+                <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">rhou_x</span> <span class="o">+</span> <span class="n">rho</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">v_y</span><span class="p">)</span>
+            <span class="n">rho_yr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho_yr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">rhou_x</span> <span class="o">+</span> <span class="n">rho</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">v_y</span><span class="p">)</span>
+
+    <span class="c1"># finally upwind the full states</span>
+    <span class="n">rho_xint</span> <span class="o">=</span> <span class="n">upwind</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">rho_xl</span><span class="p">,</span> <span class="n">rho_xr</span><span class="p">,</span> <span class="n">u_MAC</span><span class="p">)</span>
+    <span class="n">rho_yint</span> <span class="o">=</span> <span class="n">upwind</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">rho_yl</span><span class="p">,</span> <span class="n">rho_yr</span><span class="p">,</span> <span class="n">v_MAC</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">rho_xint</span><span class="p">,</span> <span class="n">rho_yint</span></div>
+
+
+<span class="c1"># xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
+<div class="viewcode-block" id="get_interface_states"><a class="viewcode-back" href="../../../pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.get_interface_states">[docs]</a><span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get_interface_states</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
+                         <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span>
+                         <span class="n">ldelta_ux</span><span class="p">,</span> <span class="n">ldelta_vx</span><span class="p">,</span>
+                         <span class="n">ldelta_uy</span><span class="p">,</span> <span class="n">ldelta_vy</span><span class="p">,</span>
+                         <span class="n">gradp_x</span><span class="p">,</span> <span class="n">gradp_y</span><span class="p">,</span>
+                         <span class="n">source</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the unsplit predictions of u and v on both the x- and</span>
+<span class="sd">    y-interfaces.  This includes the transverse terms.</span>
+
+<span class="sd">    Note that the ``gradp_x``, ``gradp_y`` should have any coefficients</span>
+<span class="sd">    already included (e.g. :math:`\beta_0/\rho`)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ng : int</span>
+<span class="sd">        The number of ghost cells</span>
+<span class="sd">    dx, dy : float</span>
+<span class="sd">        The cell spacings</span>
+<span class="sd">    dt : float</span>
+<span class="sd">        The timestep</span>
+<span class="sd">    u, v : ndarray</span>
+<span class="sd">        x-velocity and y-velocity</span>
+<span class="sd">    ldelta_ux, ldelta_uy: ndarray</span>
+<span class="sd">        Limited slopes of the x-velocity in the x and y directions</span>
+<span class="sd">    ldelta_vx, ldelta_vy: ndarray</span>
+<span class="sd">        Limited slopes of the y-velocity in the x and y directions</span>
+<span class="sd">    gradp_x, gradp_y : ndarray</span>
+<span class="sd">        Pressure gradients in the x and y directions</span>
+<span class="sd">    source : ndarray</span>
+<span class="sd">        Source terms</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray</span>
+<span class="sd">        unsplit predictions of u and v on both the x- and</span>
+<span class="sd">        y-interfaces</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">qx</span><span class="p">,</span> <span class="n">qy</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">u_xl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">))</span>
+    <span class="n">u_xr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">))</span>
+    <span class="n">u_yl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">))</span>
+    <span class="n">u_yr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">))</span>
+
+    <span class="n">v_xl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">))</span>
+    <span class="n">v_xr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">))</span>
+    <span class="n">v_yl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">))</span>
+    <span class="n">v_yr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">))</span>
+
+    <span class="n">nx</span> <span class="o">=</span> <span class="n">qx</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
+    <span class="n">ny</span> <span class="o">=</span> <span class="n">qy</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
+    <span class="n">ilo</span> <span class="o">=</span> <span class="n">ng</span>
+    <span class="n">ihi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">nx</span>
+    <span class="n">jlo</span> <span class="o">=</span> <span class="n">ng</span>
+    <span class="n">jhi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">ny</span>
+
+    <span class="c1"># first predict u and v to both interfaces, considering only the normal</span>
+    <span class="c1"># part of the predictor.  These are the &#39;hat&#39; states.</span>
+
+    <span class="n">dtdx</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">/</span> <span class="n">dx</span>
+    <span class="n">dtdy</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">/</span> <span class="n">dy</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ilo</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="n">ihi</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">jlo</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="n">jhi</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):</span>
+
+            <span class="c1"># u on x-edges</span>
+            <span class="n">u_xl</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> \
+                <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">dtdx</span> <span class="o">*</span> <span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="n">ldelta_ux</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+            <span class="n">u_xr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> \
+                <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">dtdx</span> <span class="o">*</span> <span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="n">ldelta_ux</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+
+            <span class="c1"># v on x-edges</span>
+            <span class="n">v_xl</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> \
+                <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">dtdx</span> <span class="o">*</span> <span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="n">ldelta_vx</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+            <span class="n">v_xr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> \
+                <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">dtdx</span> <span class="o">*</span> <span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="n">ldelta_vx</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+
+            <span class="c1"># u on y-edges</span>
+            <span class="n">u_yl</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> \
+                <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">dtdy</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="n">ldelta_uy</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+            <span class="n">u_yr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> \
+                <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">dtdy</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="n">ldelta_uy</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+
+            <span class="c1"># v on y-edges</span>
+            <span class="n">v_yl</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> \
+                <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">dtdy</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="n">ldelta_vy</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+            <span class="n">v_yr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> \
+                <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">dtdy</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="n">ldelta_vy</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+
+    <span class="c1"># print *, &#39;checking u_xl in states&#39;</span>
+    <span class="c1"># if (not is_asymmetric_pair(qx, qy, ng, .true., u_xl, u_xr) == 1):</span>
+    <span class="c1">#    stop &#39;u_xl/r not asymmetric&#39;</span>
+    <span class="c1">#</span>
+
+    <span class="c1"># now get the normal advective velocities on the interfaces by solving</span>
+    <span class="c1"># the Riemann problem.</span>
+    <span class="n">uhat_adv</span> <span class="o">=</span> <span class="n">riemann</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">u_xl</span><span class="p">,</span> <span class="n">u_xr</span><span class="p">)</span>
+    <span class="n">vhat_adv</span> <span class="o">=</span> <span class="n">riemann</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span><span class="p">)</span>
+
+    <span class="c1"># now that we have the advective velocities, upwind the left and right</span>
+    <span class="c1"># states using the appropriate advective velocity.</span>
+
+    <span class="c1"># on the x-interfaces, we upwind based on uhat_adv</span>
+    <span class="n">u_xint</span> <span class="o">=</span> <span class="n">upwind</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">u_xl</span><span class="p">,</span> <span class="n">u_xr</span><span class="p">,</span> <span class="n">uhat_adv</span><span class="p">)</span>
+    <span class="n">v_xint</span> <span class="o">=</span> <span class="n">upwind</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">v_xl</span><span class="p">,</span> <span class="n">v_xr</span><span class="p">,</span> <span class="n">uhat_adv</span><span class="p">)</span>
+
+    <span class="c1"># on the y-interfaces, we upwind based on vhat_adv</span>
+    <span class="n">u_yint</span> <span class="o">=</span> <span class="n">upwind</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">u_yl</span><span class="p">,</span> <span class="n">u_yr</span><span class="p">,</span> <span class="n">vhat_adv</span><span class="p">)</span>
+    <span class="n">v_yint</span> <span class="o">=</span> <span class="n">upwind</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span><span class="p">,</span> <span class="n">vhat_adv</span><span class="p">)</span>
+
+    <span class="c1"># at this point, these states are the `hat&#39; states -- they only</span>
+    <span class="c1"># considered the normal to the interface portion of the predictor.</span>
+
+    <span class="c1"># add the transverse flux differences to the preliminary interface states</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ilo</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ihi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">jlo</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">jhi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+
+            <span class="n">ubar</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">uhat_adv</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">uhat_adv</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+            <span class="n">vbar</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">vhat_adv</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">vhat_adv</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+
+            <span class="c1"># v du/dy is the transerse term for the u states on x-interfaces</span>
+            <span class="n">vu_y</span> <span class="o">=</span> <span class="n">vbar</span> <span class="o">*</span> <span class="p">(</span><span class="n">u_yint</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">u_yint</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+
+            <span class="n">u_xl</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">u_xl</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> \
+                <span class="n">dtdy</span> <span class="o">*</span> <span class="n">vu_y</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">gradp_x</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+            <span class="n">u_xr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">u_xr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dtdy</span> <span class="o">*</span> \
+                <span class="n">vu_y</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">gradp_x</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+
+            <span class="c1"># v dv/dy is the transverse term for the v states on x-interfaces</span>
+            <span class="n">vv_y</span> <span class="o">=</span> <span class="n">vbar</span> <span class="o">*</span> <span class="p">(</span><span class="n">v_yint</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">v_yint</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+
+            <span class="n">v_xl</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_xl</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dtdy</span> <span class="o">*</span> <span class="n">vv_y</span> <span class="o">-</span> \
+                <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">gradp_y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">source</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+            <span class="n">v_xr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_xr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dtdy</span> <span class="o">*</span> <span class="n">vv_y</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> \
+                <span class="n">dt</span> <span class="o">*</span> <span class="n">gradp_y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">source</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+
+            <span class="c1"># u dv/dx is the transverse term for the v states on y-interfaces</span>
+            <span class="n">uv_x</span> <span class="o">=</span> <span class="n">ubar</span> <span class="o">*</span> <span class="p">(</span><span class="n">v_xint</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">v_xint</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+
+            <span class="n">v_yl</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_yl</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dtdx</span> <span class="o">*</span> <span class="n">uv_x</span> <span class="o">-</span> \
+                <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">gradp_y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">source</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+            <span class="n">v_yr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_yr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dtdx</span> <span class="o">*</span> <span class="n">uv_x</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> \
+                <span class="n">dt</span> <span class="o">*</span> <span class="n">gradp_y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">source</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+
+            <span class="c1"># u du/dx is the transverse term for the u states on y-interfaces</span>
+            <span class="n">uu_x</span> <span class="o">=</span> <span class="n">ubar</span> <span class="o">*</span> <span class="p">(</span><span class="n">u_xint</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">u_xint</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+
+            <span class="n">u_yl</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">u_yl</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> \
+                <span class="n">dtdx</span> <span class="o">*</span> <span class="n">uu_x</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">gradp_x</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+            <span class="n">u_yr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">u_yr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dtdx</span> <span class="o">*</span> \
+                <span class="n">uu_x</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">gradp_x</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">u_xl</span><span class="p">,</span> <span class="n">u_xr</span><span class="p">,</span> <span class="n">u_yl</span><span class="p">,</span> <span class="n">u_yr</span><span class="p">,</span> <span class="n">v_xl</span><span class="p">,</span> <span class="n">v_xr</span><span class="p">,</span> <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span></div>
+
+
+<span class="c1"># xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
+<div class="viewcode-block" id="upwind"><a class="viewcode-back" href="../../../pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.upwind">[docs]</a><span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">upwind</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">q_l</span><span class="p">,</span> <span class="n">q_r</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    upwind the left and right states based on the specified input</span>
+<span class="sd">    velocity, s.  The resulting interface state is q_int</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ng : int</span>
+<span class="sd">        The number of ghost cells</span>
+<span class="sd">    q_l, q_r : ndarray</span>
+<span class="sd">        left and right states</span>
+<span class="sd">    s : ndarray</span>
+<span class="sd">        velocity</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    q_int : ndarray</span>
+<span class="sd">        Upwinded state</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">qx</span><span class="p">,</span> <span class="n">qy</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">q_int</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+    <span class="n">nx</span> <span class="o">=</span> <span class="n">qx</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
+    <span class="n">ny</span> <span class="o">=</span> <span class="n">qy</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
+    <span class="n">ilo</span> <span class="o">=</span> <span class="n">ng</span>
+    <span class="n">ihi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">nx</span>
+    <span class="n">jlo</span> <span class="o">=</span> <span class="n">ng</span>
+    <span class="n">jhi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">ny</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ilo</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ihi</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">jlo</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">jhi</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">):</span>
+                <span class="n">q_int</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">q_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">):</span>
+                <span class="n">q_int</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">q_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">q_int</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">q_int</span></div>
+
+
+<span class="c1"># xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
+<div class="viewcode-block" id="riemann"><a class="viewcode-back" href="../../../pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.riemann">[docs]</a><span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">riemann</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">q_l</span><span class="p">,</span> <span class="n">q_r</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Solve the Burger&#39;s Riemann problem given the input left and right</span>
+<span class="sd">    states and return the state on the interface.</span>
+
+<span class="sd">    This uses the expressions from Almgren, Bell, and Szymczak 1996.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ng : int</span>
+<span class="sd">        The number of ghost cells</span>
+<span class="sd">    q_l, q_r : ndarray</span>
+<span class="sd">        left and right states</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : ndarray</span>
+<span class="sd">        Interface state</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">qx</span><span class="p">,</span> <span class="n">qy</span> <span class="o">=</span> <span class="n">q_l</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">nx</span> <span class="o">=</span> <span class="n">qx</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
+    <span class="n">ny</span> <span class="o">=</span> <span class="n">qy</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
+    <span class="n">ilo</span> <span class="o">=</span> <span class="n">ng</span>
+    <span class="n">ihi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">nx</span>
+    <span class="n">jlo</span> <span class="o">=</span> <span class="n">ng</span>
+    <span class="n">jhi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">ny</span>
+
+    <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ilo</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ihi</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">jlo</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">jhi</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):</span>
+
+            <span class="k">if</span> <span class="p">((</span><span class="n">q_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">q_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)):</span>
+                <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">q_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="p">((</span><span class="n">q_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">0.0</span><span class="p">)):</span>
+                <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">s</span></div>
+
+
+<span class="c1"># xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
+<div class="viewcode-block" id="riemann_and_upwind"><a class="viewcode-back" href="../../../pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.riemann_and_upwind">[docs]</a><span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">riemann_and_upwind</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">q_l</span><span class="p">,</span> <span class="n">q_r</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    First solve the Riemann problem given q_l and q_r to give the</span>
+<span class="sd">    velocity on the interface and: use this velocity to upwind to</span>
+<span class="sd">    determine the state (q_l, q_r, or a mix) on the interface).</span>
+
+<span class="sd">    This differs from upwind, above, in that we don&#39;t take in a</span>
+<span class="sd">    velocity to upwind with).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ng : int</span>
+<span class="sd">        The number of ghost cells</span>
+<span class="sd">    q_l, q_r : ndarray</span>
+<span class="sd">        left and right states</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : ndarray</span>
+<span class="sd">        Upwinded state</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">s</span> <span class="o">=</span> <span class="n">riemann</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">q_l</span><span class="p">,</span> <span class="n">q_r</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">upwind</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">q_l</span><span class="p">,</span> <span class="n">q_r</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, pyro development team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

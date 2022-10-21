@@ -3,8 +3,8 @@ Particles
 
 A solver for modelling particles.
 
-``particles.particles`` implementation and use
-----------------------------------------------
+:mod:`particles.particles <particles.particles>` implementation and use
+-----------------------------------------------------------------------
 
 We import the basic particles module functionality as:
 
@@ -39,8 +39,8 @@ The particles can be initialized in a number of ways:
   which generates particles based on array of particle positions passed to the
   constructor.
 * The user can define their own ``particle_generator`` function and pass this into the
-  ``Particles`` constructor. This function takes the number of particles to be
-  generated and returns a dictionary of ``Particle`` objects.
+  :func:`Particles <particles.particles.Particles>` constructor. This function takes the number of particles to be
+  generated and returns a dictionary of :func:`Particle <particles.particles.Particle>` objects.
 
 We can turn on/off the particles solver using the following runtime paramters:
 
@@ -95,7 +95,7 @@ in as arguments to this function as they cannot be accessed using the standard
 Plotting particles
 ------------------
 
-Given the ``Particles`` object ``particles``, we can plot the particles by getting
+Given the :func:`Particles <particles.particles.Particles>` object ``particles``, we can plot the particles by getting
 their positions using
 
 .. code-block:: python
@@ -128,7 +128,7 @@ x-position, we can plot them on the figure axis ``ax`` using the following code:
       ax.set_xlim([myg.xmin, myg.xmax])
       ax.set_ylim([myg.ymin, myg.ymax])
 
-Applying this to the Kelvin-Helmholtz problem with the ``compressible`` solver,
+Applying this to the Kelvin-Helmholtz problem with the :mod:`compressible <compressible>` solver,
 we can produce a plot such as the one below, where the particles have been
 plotted on top of the fluid density.
 

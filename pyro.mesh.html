@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyro.mesh package &mdash; pyro 4.0.1.post4+gc829962 documentation</title>
+      <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pyro.multigrid package" href="pyro.multigrid.html" />
+    <link rel="prev" title="pyro.lm_atm.problems package" href="pyro.lm_atm.problems.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> pyro
+          </a>
+              <div class="version">
+                4.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">pyro basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Setting up pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_compare.html">Compressible solver comparisons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Contributing and getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html#history">History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Software Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pyro.html">pyro package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pyro.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection.html">pyro.advection package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_fv4.html">pyro.advection_fv4 package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_nonuniform.html">pyro.advection_nonuniform package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_rk.html">pyro.advection_rk package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_weno.html">pyro.advection_weno package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.html">pyro.compressible package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_fv4.html">pyro.compressible_fv4 package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_react.html">pyro.compressible_react package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_rk.html">pyro.compressible_rk package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sdc.html">pyro.compressible_sdc package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.html">pyro.compressible_sr package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.diffusion.html">pyro.diffusion package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible.html">pyro.incompressible package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.lm_atm.html">pyro.lm_atm package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pyro.mesh package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.html">pyro.multigrid package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.particles.html">pyro.particles package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.swe.html">pyro.swe package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.util.html">pyro.util package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.html#module-pyro.plot">pyro.plot module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.html#module-pyro.pyro_sim">pyro.pyro_sim module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.html#module-pyro.simulation_null">pyro.simulation_null module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.html#module-pyro.test">pyro.test module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">pyro</a> &raquo;</li>
+          <li><a href="pyro.html">pyro package</a> &raquo;</li>
+      <li>pyro.mesh package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pyro.mesh.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="module-pyro.mesh">
+<span id="pyro-mesh-package"></span><h1>pyro.mesh package<a class="headerlink" href="#module-pyro.mesh" title="Permalink to this heading">¶</a></h1>
+<p>This is the general mesh module for pyro.  It implements everything
+necessary to work with finite-volume data.</p>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-pyro.mesh.array_indexer">
+<span id="pyro-mesh-array-indexer-module"></span><h2>pyro.mesh.array_indexer module<a class="headerlink" href="#module-pyro.mesh.array_indexer" title="Permalink to this heading">¶</a></h2>
+<p>An array class that has methods supporting the type of stencil
+operations we see in finite-difference methods, like i+1, i-1, etc.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyro.mesh.array_indexer.ArrayIndexer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.mesh.array_indexer.</span></span><span class="sig-name descname"><span class="pre">ArrayIndexer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/array_indexer.html#ArrayIndexer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.array_indexer.ArrayIndexer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+<p>a class that wraps the data region of a single cell-centered data
+array (d) and allows us to easily do array operations like
+d[i+1,j] using the ip() method.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.array_indexer.ArrayIndexer.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/array_indexer.html#ArrayIndexer.copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.array_indexer.ArrayIndexer.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>make a copy of the array, defined on the same grid</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.array_indexer.ArrayIndexer.fill_ghost">
+<span class="sig-name descname"><span class="pre">fill_ghost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/array_indexer.html#ArrayIndexer.fill_ghost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.array_indexer.ArrayIndexer.fill_ghost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill the boundary conditions.  This operates on a single component,
+n. We do periodic, reflect-even, reflect-odd, and outflow</p>
+<p>We need a BC object to tell us what BC type on each boundary.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.array_indexer.ArrayIndexer.ip">
+<span class="sig-name descname"><span class="pre">ip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shift</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/array_indexer.html#ArrayIndexer.ip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.array_indexer.ArrayIndexer.ip" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a view of the data shifted by shift in the x direction.  By
+default the view is the same size as the valid region, but the
+buf can specify how many ghost cells on each side to include.
+The component is n and s is the stride</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.array_indexer.ArrayIndexer.ip_jp">
+<span class="sig-name descname"><span class="pre">ip_jp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ishift</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jshift</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/array_indexer.html#ArrayIndexer.ip_jp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.array_indexer.ArrayIndexer.ip_jp" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a view of the data shifted by ishift in the x direction and
+jshift in the y direction.  By default the view is the same
+size as the valid region, but the buf can specify how many
+ghost cells on each side to include.  The component is n and s
+is the stride</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.array_indexer.ArrayIndexer.is_asymmetric">
+<span class="sig-name descname"><span class="pre">is_asymmetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-14</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/array_indexer.html#ArrayIndexer.is_asymmetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.array_indexer.ArrayIndexer.is_asymmetric" title="Permalink to this definition">¶</a></dt>
+<dd><p>return True is the data is left-right asymmetric (to the tolerance
+tol)—e.g, the sign flips. For node-centered data, set nodal=True</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.array_indexer.ArrayIndexer.is_symmetric">
+<span class="sig-name descname"><span class="pre">is_symmetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-14</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asymmetric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/array_indexer.html#ArrayIndexer.is_symmetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.array_indexer.ArrayIndexer.is_symmetric" title="Permalink to this definition">¶</a></dt>
+<dd><p>return True is the data is left-right symmetric (to the tolerance
+tol) For node-centered data, set nodal=True</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.array_indexer.ArrayIndexer.jp">
+<span class="sig-name descname"><span class="pre">jp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shift</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/array_indexer.html#ArrayIndexer.jp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.array_indexer.ArrayIndexer.jp" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a view of the data shifted by shift in the y direction.  By
+default the view is the same size as the valid region, but the
+buf can specify how many ghost cells on each side to include.
+The component is n and s is the stride</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.array_indexer.ArrayIndexer.lap">
+<span class="sig-name descname"><span class="pre">lap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/array_indexer.html#ArrayIndexer.lap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.array_indexer.ArrayIndexer.lap" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the 5-point Laplacian</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.array_indexer.ArrayIndexer.norm">
+<span class="sig-name descname"><span class="pre">norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/array_indexer.html#ArrayIndexer.norm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.array_indexer.ArrayIndexer.norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>find the norm of the quantity (index n) defined on the same grid,
+in the domain’s valid region</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.array_indexer.ArrayIndexer.pretty_print">
+<span class="sig-name descname"><span class="pre">pretty_print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_ghost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/array_indexer.html#ArrayIndexer.pretty_print"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.array_indexer.ArrayIndexer.pretty_print" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print out a small dataset to the screen with the ghost cells
+a different color, to make things stand out</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.array_indexer.ArrayIndexer.v">
+<span class="sig-name descname"><span class="pre">v</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/array_indexer.html#ArrayIndexer.v"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.array_indexer.ArrayIndexer.v" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a view of the valid data region for component n, with stride
+s, and a buffer of ghost cells given by buf</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyro.mesh.array_indexer.ArrayIndexerFC">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.mesh.array_indexer.</span></span><span class="sig-name descname"><span class="pre">ArrayIndexerFC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/array_indexer.html#ArrayIndexerFC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.array_indexer.ArrayIndexerFC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyro.mesh.array_indexer.ArrayIndexer" title="pyro.mesh.array_indexer.ArrayIndexer"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArrayIndexer</span></code></a></p>
+<p>a class that wraps the data region of a single face-centered data
+array (d) and allows us to easily do array operations like
+d[i+1,j] using the ip() method.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.array_indexer.ArrayIndexerFC.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/array_indexer.html#ArrayIndexerFC.copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.array_indexer.ArrayIndexerFC.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>make a copy of the array, defined on the same grid</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.array_indexer.ArrayIndexerFC.fill_ghost">
+<span class="sig-name descname"><span class="pre">fill_ghost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/array_indexer.html#ArrayIndexerFC.fill_ghost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.array_indexer.ArrayIndexerFC.fill_ghost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill the boundary conditions.  This operates on a single component,
+n. We do periodic, reflect-even, reflect-odd, and outflow</p>
+<p>We need a BC object to tell us what BC type on each boundary.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.array_indexer.ArrayIndexerFC.ip_jp">
+<span class="sig-name descname"><span class="pre">ip_jp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ishift</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jshift</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/array_indexer.html#ArrayIndexerFC.ip_jp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.array_indexer.ArrayIndexerFC.ip_jp" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a view of the data shifted by ishift in the x direction and
+jshift in the y direction.  By default the view is the same
+size as the valid region, but the buf can specify how many
+ghost cells on each side to include.  The component is n and s
+is the stride</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.array_indexer.ArrayIndexerFC.is_asymmetric">
+<span class="sig-name descname"><span class="pre">is_asymmetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-14</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/array_indexer.html#ArrayIndexerFC.is_asymmetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.array_indexer.ArrayIndexerFC.is_asymmetric" title="Permalink to this definition">¶</a></dt>
+<dd><p>return True is the data is left-right asymmetric (to the tolerance
+tol)—e.g, the sign flips. For node-centered data, set nodal=True</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.array_indexer.ArrayIndexerFC.is_symmetric">
+<span class="sig-name descname"><span class="pre">is_symmetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-14</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asymmetric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/array_indexer.html#ArrayIndexerFC.is_symmetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.array_indexer.ArrayIndexerFC.is_symmetric" title="Permalink to this definition">¶</a></dt>
+<dd><p>return True is the data is left-right symmetric (to the tolerance
+tol) For node-centered data, set nodal=True</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.array_indexer.ArrayIndexerFC.lap">
+<span class="sig-name descname"><span class="pre">lap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/array_indexer.html#ArrayIndexerFC.lap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.array_indexer.ArrayIndexerFC.lap" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the 5-point Laplacian</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.array_indexer.ArrayIndexerFC.norm">
+<span class="sig-name descname"><span class="pre">norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/array_indexer.html#ArrayIndexerFC.norm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.array_indexer.ArrayIndexerFC.norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>find the norm of the quantity (index n) defined on the same grid,
+in the domain’s valid region</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.array_indexer.ArrayIndexerFC.pretty_print">
+<span class="sig-name descname"><span class="pre">pretty_print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_ghost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/array_indexer.html#ArrayIndexerFC.pretty_print"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.array_indexer.ArrayIndexerFC.pretty_print" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print out a small dataset to the screen with the ghost cells
+a different color, to make things stand out</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pyro.mesh.boundary">
+<span id="pyro-mesh-boundary-module"></span><h2>pyro.mesh.boundary module<a class="headerlink" href="#module-pyro.mesh.boundary" title="Permalink to this heading">¶</a></h2>
+<p>Methods to manage boundary conditions</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyro.mesh.boundary.BC">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.mesh.boundary.</span></span><span class="sig-name descname"><span class="pre">BC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xlb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'outflow'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xrb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'outflow'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'outflow'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yrb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'outflow'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xl_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xr_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yl_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yr_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">odd_reflect_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/boundary.html#BC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.boundary.BC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Boundary condition container – hold the BCs on each boundary
+for a single variable.</p>
+<p>For Neumann and Dirichlet BCs, a function callback can be stored
+for inhomogeous BCs.  This function should provide the value on
+the physical boundary (not cell center).  This is evaluated on the
+relevant edge when the __init__ routine is called.  For this
+reason, you need to pass in a grid object.  Note: this only
+ensures that the first ghost cells is consistent with the BC
+value.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyro.mesh.boundary.BCProp">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.mesh.boundary.</span></span><span class="sig-name descname"><span class="pre">BCProp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xl_prop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xr_prop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yl_prop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yr_prop</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/boundary.html#BCProp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.boundary.BCProp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A simple container to hold properties of the boundary conditions.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.mesh.boundary.bc_is_solid">
+<span class="sig-prename descclassname"><span class="pre">pyro.mesh.boundary.</span></span><span class="sig-name descname"><span class="pre">bc_is_solid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/boundary.html#bc_is_solid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.boundary.bc_is_solid" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a container class indicating which boundaries are solid walls</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.mesh.boundary.define_bc">
+<span class="sig-prename descclassname"><span class="pre">pyro.mesh.boundary.</span></span><span class="sig-name descname"><span class="pre">define_bc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bc_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_solid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/boundary.html#define_bc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.boundary.define_bc" title="Permalink to this definition">¶</a></dt>
+<dd><p>use this to extend the types of boundary conditions supported
+on a solver-by-solver basis.  Here we pass in the reference to
+a function that can be called with the data that needs to be
+filled.  is_solid indicates whether it should be interpreted as
+a solid wall (no flux through the BC)”</p>
+</dd></dl>
+
+</section>
+<section id="module-pyro.mesh.fv">
+<span id="pyro-mesh-fv-module"></span><h2>pyro.mesh.fv module<a class="headerlink" href="#module-pyro.mesh.fv" title="Permalink to this heading">¶</a></h2>
+<p>This implements support for 4th-order accurate finite-volume data
+by adding support for converting between cell averages and centers.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyro.mesh.fv.FV2d">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.mesh.fv.</span></span><span class="sig-name descname"><span class="pre">FV2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=&lt;class</span> <span class="pre">'numpy.float64'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/fv.html#FV2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.fv.FV2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyro.mesh.patch.CellCenterData2d" title="pyro.mesh.patch.CellCenterData2d"><code class="xref py py-class docutils literal notranslate"><span class="pre">CellCenterData2d</span></code></a></p>
+<p>this is a finite-volume grid.  We expect the data to represent
+cell-averages, and do operations to 4th order.  This assumes dx =
+dy</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.fv.FV2d.from_centers">
+<span class="sig-name descname"><span class="pre">from_centers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/fv.html#FV2d.from_centers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.fv.FV2d.from_centers" title="Permalink to this definition">¶</a></dt>
+<dd><p>treat the stored data as if it lives at cell-centers and convert
+it to an average</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.fv.FV2d.to_centers">
+<span class="sig-name descname"><span class="pre">to_centers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/fv.html#FV2d.to_centers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.fv.FV2d.to_centers" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert variable name from an average to cell-centers</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pyro.mesh.integration">
+<span id="pyro-mesh-integration-module"></span><h2>pyro.mesh.integration module<a class="headerlink" href="#module-pyro.mesh.integration" title="Permalink to this heading">¶</a></h2>
+<p>A generic Runge-Kutta type integrator for integrating CellCenterData2d.
+We support a generic Butcher tableau for explicit the Runge-Kutta update:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span>   <span class="o">|</span>
+<span class="n">c_2</span> <span class="o">|</span> <span class="n">a_21</span>
+<span class="n">c_3</span> <span class="o">|</span> <span class="n">a_31</span> <span class="n">a_32</span>
+<span class="p">:</span>   <span class="o">|</span>  <span class="p">:</span>        <span class="o">.</span>
+<span class="p">:</span>   <span class="o">|</span>  <span class="p">:</span>          <span class="o">.</span>
+<span class="n">c_s</span> <span class="o">|</span> <span class="n">a_s1</span> <span class="n">a_s2</span> <span class="o">...</span> <span class="n">a_s</span><span class="p">,</span><span class="n">s</span><span class="o">-</span><span class="mi">1</span>
+<span class="o">----+---------------------------</span>
+    <span class="o">|</span> <span class="n">b_1</span>  <span class="n">b_2</span>  <span class="o">...</span> <span class="n">b_</span><span class="p">{</span><span class="n">s</span><span class="o">-</span><span class="mi">1</span><span class="p">}</span>  <span class="n">b_s</span>
+</pre></div>
+</div>
+<p>the update is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">y_</span><span class="p">{</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span> <span class="o">=</span> <span class="n">y_n</span> <span class="o">+</span> <span class="n">dt</span> <span class="n">sum_</span><span class="p">{</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">}</span><span class="o">^</span><span class="n">s</span> <span class="p">{</span><span class="n">b_i</span> <span class="n">k_i</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>and the s increment is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">k_s</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">c_s</span> <span class="n">dt</span><span class="p">,</span> <span class="n">y_n</span> <span class="o">+</span> <span class="n">dt</span> <span class="p">(</span><span class="n">a_s1</span> <span class="n">k1</span> <span class="o">+</span> <span class="n">a_s2</span> <span class="n">k2</span> <span class="o">+</span> <span class="o">...</span> <span class="o">+</span> <span class="n">a_s</span><span class="p">,</span><span class="n">s</span><span class="o">-</span><span class="mi">1</span> <span class="n">k_</span><span class="p">{</span><span class="n">s</span><span class="o">-</span><span class="mi">1</span><span class="p">})</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyro.mesh.integration.RKIntegrator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.mesh.integration.</span></span><span class="sig-name descname"><span class="pre">RKIntegrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RK4'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/integration.html#RKIntegrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.integration.RKIntegrator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>the integration class for CellCenterData2d, supporting RK
+integration</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.integration.RKIntegrator.compute_final_update">
+<span class="sig-name descname"><span class="pre">compute_final_update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/integration.html#RKIntegrator.compute_final_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.integration.RKIntegrator.compute_final_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>this constructs the final t + dt update, overwriting the inital data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.integration.RKIntegrator.get_stage_start">
+<span class="sig-name descname"><span class="pre">get_stage_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">istage</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/integration.html#RKIntegrator.get_stage_start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.integration.RKIntegrator.get_stage_start" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the starting conditions (a CellCenterData2d object) for stage
+istage</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.integration.RKIntegrator.nstages">
+<span class="sig-name descname"><span class="pre">nstages</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/integration.html#RKIntegrator.nstages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.integration.RKIntegrator.nstages" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the number of stages</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.integration.RKIntegrator.set_start">
+<span class="sig-name descname"><span class="pre">set_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/integration.html#RKIntegrator.set_start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.integration.RKIntegrator.set_start" title="Permalink to this definition">¶</a></dt>
+<dd><p>store the starting conditions (should be a CellCenterData2d
+object)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.integration.RKIntegrator.store_increment">
+<span class="sig-name descname"><span class="pre">store_increment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">istage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_stage</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/integration.html#RKIntegrator.store_increment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.integration.RKIntegrator.store_increment" title="Permalink to this definition">¶</a></dt>
+<dd><p>store the increment for stage istage – this should not have a dt
+weighting</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pyro.mesh.patch">
+<span id="pyro-mesh-patch-module"></span><h2>pyro.mesh.patch module<a class="headerlink" href="#module-pyro.mesh.patch" title="Permalink to this heading">¶</a></h2>
+<p>The patch module defines the classes necessary to describe finite-volume
+data and the grid that it lives on.</p>
+<p>Typical usage:</p>
+<ul>
+<li><p>create the grid:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">grid</span> <span class="o">=</span> <span class="n">Grid2d</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>create the data that lives on that grid:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">CellCenterData2d</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+
+<span class="n">bc</span> <span class="o">=</span> <span class="n">BC</span><span class="p">(</span><span class="n">xlb</span><span class="o">=</span><span class="s2">&quot;reflect&quot;</span><span class="p">,</span> <span class="n">xrb</span><span class="o">=</span><span class="s2">&quot;reflect&quot;</span><span class="p">,</span>
+       <span class="n">ylb</span><span class="o">=</span><span class="s2">&quot;outflow&quot;</span><span class="p">,</span> <span class="n">yrb</span><span class="o">=</span><span class="s2">&quot;outflow&quot;</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+<span class="o">...</span>
+
+<span class="n">data</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+</pre></div>
+</div>
+</li>
+<li><p>initialize some data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dens</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
+<span class="n">dens</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="o">...</span>
+</pre></div>
+</div>
+</li>
+<li><p>fill the ghost cells:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyro.mesh.patch.CellCenterData2d">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.mesh.patch.</span></span><span class="sig-name descname"><span class="pre">CellCenterData2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=&lt;class</span> <span class="pre">'numpy.float64'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class to define cell-centered data that lives on a grid.  A
+CellCenterData2d object is built in a multi-step process before
+it can be used.</p>
+<ul>
+<li><p>Create the object.  We pass in a grid object to describe where
+the data lives:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_data</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">CellCenterData2d</span><span class="p">(</span><span class="n">myGrid</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>Register any variables that we expect to live on this patch.
+Here BC describes the boundary conditions for that variable:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s1">&#39;density&#39;</span><span class="p">,</span> <span class="n">BC</span><span class="p">)</span>
+<span class="n">my_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s1">&#39;x-momentum&#39;</span><span class="p">,</span> <span class="n">BC</span><span class="p">)</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+</li>
+<li><p>Register any auxillary data – these are any parameters that are
+needed to interpret the data outside of the simulation (for
+example, the gamma for the equation of state):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_data</span><span class="o">.</span><span class="n">set_aux</span><span class="p">(</span><span class="n">keyword</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>Finish the initialization of the patch:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_data</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>This last step actually allocates the storage for the state
+variables.  Once this is done, the patch is considered to be
+locked.  New variables cannot be added.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.CellCenterData2d.add_derived">
+<span class="sig-name descname"><span class="pre">add_derived</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.add_derived"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.add_derived" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a function to compute derived variable</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>func</strong><span class="classifier">function</span></dt><dd><p>A function to call to derive the variable.  This function
+should take two arguments, a CellCenterData2d object and a
+string variable name (or list of variables)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.CellCenterData2d.add_ivars">
+<span class="sig-name descname"><span class="pre">add_ivars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ivars</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.add_ivars"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.add_ivars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add ivars</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.CellCenterData2d.create">
+<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called after all the variables are registered and allocates
+the storage for the state data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.CellCenterData2d.fill_BC">
+<span class="sig-name descname"><span class="pre">fill_BC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.fill_BC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.fill_BC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill the boundary conditions.  This operates on a single state
+variable at a time, to allow for maximum flexibility.</p>
+<p>We do periodic, reflect-even, reflect-odd, and outflow</p>
+<p>Each variable name has a corresponding BC stored in the
+CellCenterData2d object – we refer to this to figure out the
+action to take at each boundary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>The name of the variable for which to fill the BCs.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.CellCenterData2d.fill_BC_all">
+<span class="sig-name descname"><span class="pre">fill_BC_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.fill_BC_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.fill_BC_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill boundary conditions on all variables.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.CellCenterData2d.get_aux">
+<span class="sig-name descname"><span class="pre">get_aux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keyword</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.get_aux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.get_aux" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the auxillary data associated with keyword</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>keyword</strong><span class="classifier">str</span></dt><dd><p>The name of the auxillary data to access</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">variable type</span></dt><dd><p>The value corresponding to the keyword</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.CellCenterData2d.get_var">
+<span class="sig-name descname"><span class="pre">get_var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.get_var"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.get_var" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a data array for the variable described by name.  Stored
+variables will be checked first, and then any derived variables
+will be checked.</p>
+<p>For a stored variable, changes made to this are automatically
+reflected in the CellCenterData2d object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>The name of the variable to access</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>The array of data corresponding to the variable name</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.CellCenterData2d.get_var_by_index">
+<span class="sig-name descname"><span class="pre">get_var_by_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.get_var_by_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.get_var_by_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a data array for the variable with index n in the
+data array.  Any changes made to this are automatically
+reflected in the CellCenterData2d object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n</strong><span class="classifier">int</span></dt><dd><p>The index of the variable to access</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>The array of data corresponding to the index</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.CellCenterData2d.get_vars">
+<span class="sig-name descname"><span class="pre">get_vars</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.get_vars"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.get_vars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the entire data array.  Any changes made to this
+are automatically reflected in the CellCenterData2d object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>The array of data</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.CellCenterData2d.max">
+<span class="sig-name descname"><span class="pre">max</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ng</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.max"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.max" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the maximum of the variable name in the domain’s valid region</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.CellCenterData2d.min">
+<span class="sig-name descname"><span class="pre">min</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ng</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.min"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.min" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the minimum of the variable name in the domain’s valid region</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.CellCenterData2d.pretty_print">
+<span class="sig-name descname"><span class="pre">pretty_print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.pretty_print"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.pretty_print" title="Permalink to this definition">¶</a></dt>
+<dd><p>print out the contents of the data array with pretty formatting
+indicating where ghost cells are.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.CellCenterData2d.prolong">
+<span class="sig-name descname"><span class="pre">prolong</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">varname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.prolong"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.prolong" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prolong the data in the current (coarse) grid to a finer
+(factor of 2 finer) grid.  Return an array with the resulting
+data (and same number of ghostcells).  Only the data for the
+variable varname will be operated upon.</p>
+<p>We will reconstruct the data in the zone from the
+zone-averaged variables using the same limited slopes as in
+the advection routine.  Getting a good multidimensional
+reconstruction polynomial is hard – we want it to be bilinear
+and monotonic – we settle for having each slope be
+independently monotonic:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>          <span class="p">(</span><span class="n">x</span><span class="p">)</span>         <span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span> <span class="o">=</span> <span class="n">m</span>    <span class="n">x</span><span class="o">/</span><span class="n">dx</span> <span class="o">+</span> <span class="n">m</span>    <span class="n">y</span><span class="o">/</span><span class="n">dy</span> <span class="o">+</span> <span class="o">&lt;</span><span class="n">f</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>where the m’s are the limited differences in each direction.
+When averaged over the parent cell, this reproduces &lt;f&gt;.</p>
+<p>Each zone’s reconstrution will be averaged over 4 children:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">+-----------+</span>     <span class="o">+-----+-----+</span>
+<span class="o">|</span>           <span class="o">|</span>     <span class="o">|</span>     <span class="o">|</span>     <span class="o">|</span>
+<span class="o">|</span>           <span class="o">|</span>     <span class="o">|</span>  <span class="mi">3</span>  <span class="o">|</span>  <span class="mi">4</span>  <span class="o">|</span>
+<span class="o">|</span>    <span class="o">&lt;</span><span class="n">f</span><span class="o">&gt;</span>    <span class="o">|</span> <span class="o">--&gt;</span> <span class="o">+-----+-----+</span>
+<span class="o">|</span>           <span class="o">|</span>     <span class="o">|</span>     <span class="o">|</span>     <span class="o">|</span>
+<span class="o">|</span>           <span class="o">|</span>     <span class="o">|</span>  <span class="mi">1</span>  <span class="o">|</span>  <span class="mi">2</span>  <span class="o">|</span>
+<span class="o">+-----------+</span>     <span class="o">+-----+-----+</span>
+</pre></div>
+</div>
+<p>We will fill each of the finer resolution zones by filling all
+the 1’s together, using a stride 2 into the fine array.  Then
+the 2’s and …, this allows us to operate in a vector
+fashion.  All operations will use the same slopes for their
+respective parents.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.CellCenterData2d.register_var">
+<span class="sig-name descname"><span class="pre">register_var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.register_var"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.register_var" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a variable with CellCenterData2d object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>The variable name</p>
+</dd>
+<dt><strong>bc</strong><span class="classifier">BC object</span></dt><dd><p>The boundary conditions that describe the actions to take
+for this variable at the physical domain boundaries.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.CellCenterData2d.restrict">
+<span class="sig-name descname"><span class="pre">restrict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">varname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.restrict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.restrict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restrict the variable varname to a coarser grid (factor of 2
+coarser) and return an array with the resulting data (and same
+number of ghostcells)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.CellCenterData2d.set_aux">
+<span class="sig-name descname"><span class="pre">set_aux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keyword</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.set_aux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.set_aux" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set any auxillary (scalar) data.  This data is simply carried
+along with the CellCenterData2d object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>keyword</strong><span class="classifier">str</span></dt><dd><p>The name of the datum</p>
+</dd>
+<dt><strong>value</strong><span class="classifier">any time</span></dt><dd><p>The value to associate with the keyword</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.CellCenterData2d.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>create an output file in HDF5 format and write out our data and
+grid.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.CellCenterData2d.write_data">
+<span class="sig-name descname"><span class="pre">write_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.write_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.write_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>write the data out to an hdf5 file – here, f is an h5py
+File pbject</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.CellCenterData2d.zero">
+<span class="sig-name descname"><span class="pre">zero</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.zero"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.zero" title="Permalink to this definition">¶</a></dt>
+<dd><p>Zero out the data array associated with variable name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>The name of the variable to zero</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyro.mesh.patch.FaceCenterData2d">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.mesh.patch.</span></span><span class="sig-name descname"><span class="pre">FaceCenterData2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=&lt;class</span> <span class="pre">'numpy.float64'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#FaceCenterData2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.FaceCenterData2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyro.mesh.patch.CellCenterData2d" title="pyro.mesh.patch.CellCenterData2d"><code class="xref py py-class docutils literal notranslate"><span class="pre">CellCenterData2d</span></code></a></p>
+<p>A class to define face-centered data that lives on a grid.  Data
+can be face-centered in x or y.  This is built in the same multistep
+process  as a CellCenterData2d object</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.FaceCenterData2d.add_derived">
+<span class="sig-name descname"><span class="pre">add_derived</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#FaceCenterData2d.add_derived"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.FaceCenterData2d.add_derived" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a function to compute derived variable</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>func</strong><span class="classifier">function</span></dt><dd><p>A function to call to derive the variable.  This function
+should take two arguments, a CellCenterData2d object and a
+string variable name (or list of variables)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.FaceCenterData2d.create">
+<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#FaceCenterData2d.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.FaceCenterData2d.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called after all the variables are registered and allocates the
+storage for the state data.  For face-centered data, we have
+one more zone in the face-centered direction.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.FaceCenterData2d.fill_BC">
+<span class="sig-name descname"><span class="pre">fill_BC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#FaceCenterData2d.fill_BC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.FaceCenterData2d.fill_BC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill the boundary conditions.  This operates on a single state
+variable at a time, to allow for maximum flexibility.</p>
+<p>We do periodic, reflect-even, reflect-odd, and outflow</p>
+<p>Each variable name has a corresponding BC stored in the
+CellCenterData2d object – we refer to this to figure out the
+action to take at each boundary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>The name of the variable for which to fill the BCs.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.FaceCenterData2d.get_var_by_index">
+<span class="sig-name descname"><span class="pre">get_var_by_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#FaceCenterData2d.get_var_by_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.FaceCenterData2d.get_var_by_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a data array for the variable with index n in the
+data array.  Any changes made to this are automatically
+reflected in the CellCenterData2d object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n</strong><span class="classifier">int</span></dt><dd><p>The index of the variable to access</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>The array of data corresponding to the index</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.FaceCenterData2d.get_vars">
+<span class="sig-name descname"><span class="pre">get_vars</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#FaceCenterData2d.get_vars"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.FaceCenterData2d.get_vars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the entire data array.  Any changes made to this
+are automatically reflected in the CellCenterData2d object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>The array of data</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.FaceCenterData2d.prolong">
+<span class="sig-name descname"><span class="pre">prolong</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">varname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#FaceCenterData2d.prolong"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.FaceCenterData2d.prolong" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prolong the data in the current (coarse) grid to a finer
+(factor of 2 finer) grid.  Return an array with the resulting
+data (and same number of ghostcells).  Only the data for the
+variable varname will be operated upon.</p>
+<p>We will reconstruct the data in the zone from the
+zone-averaged variables using the same limited slopes as in
+the advection routine.  Getting a good multidimensional
+reconstruction polynomial is hard – we want it to be bilinear
+and monotonic – we settle for having each slope be
+independently monotonic:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>          <span class="p">(</span><span class="n">x</span><span class="p">)</span>         <span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span> <span class="o">=</span> <span class="n">m</span>    <span class="n">x</span><span class="o">/</span><span class="n">dx</span> <span class="o">+</span> <span class="n">m</span>    <span class="n">y</span><span class="o">/</span><span class="n">dy</span> <span class="o">+</span> <span class="o">&lt;</span><span class="n">f</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>where the m’s are the limited differences in each direction.
+When averaged over the parent cell, this reproduces &lt;f&gt;.</p>
+<p>Each zone’s reconstrution will be averaged over 4 children:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">+-----------+</span>     <span class="o">+-----+-----+</span>
+<span class="o">|</span>           <span class="o">|</span>     <span class="o">|</span>     <span class="o">|</span>     <span class="o">|</span>
+<span class="o">|</span>           <span class="o">|</span>     <span class="o">|</span>  <span class="mi">3</span>  <span class="o">|</span>  <span class="mi">4</span>  <span class="o">|</span>
+<span class="o">|</span>    <span class="o">&lt;</span><span class="n">f</span><span class="o">&gt;</span>    <span class="o">|</span> <span class="o">--&gt;</span> <span class="o">+-----+-----+</span>
+<span class="o">|</span>           <span class="o">|</span>     <span class="o">|</span>     <span class="o">|</span>     <span class="o">|</span>
+<span class="o">|</span>           <span class="o">|</span>     <span class="o">|</span>  <span class="mi">1</span>  <span class="o">|</span>  <span class="mi">2</span>  <span class="o">|</span>
+<span class="o">+-----------+</span>     <span class="o">+-----+-----+</span>
+</pre></div>
+</div>
+<p>We will fill each of the finer resolution zones by filling all
+the 1’s together, using a stride 2 into the fine array.  Then
+the 2’s and …, this allows us to operate in a vector
+fashion.  All operations will use the same slopes for their
+respective parents.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.FaceCenterData2d.restrict">
+<span class="sig-name descname"><span class="pre">restrict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">varname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#FaceCenterData2d.restrict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.FaceCenterData2d.restrict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restrict the variable varname to a coarser grid (factor of 2
+coarser) and return an array with the resulting data (and same
+number of ghostcells)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.FaceCenterData2d.write_data">
+<span class="sig-name descname"><span class="pre">write_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#FaceCenterData2d.write_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.FaceCenterData2d.write_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>write the data out to an hdf5 file – here, f is an h5py
+File pbject</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyro.mesh.patch.Grid2d">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.mesh.patch.</span></span><span class="sig-name descname"><span class="pre">Grid2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ng</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#Grid2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.Grid2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>the 2-d grid class.  The grid object will contain the coordinate
+information (at various centerings).</p>
+<p>A basic (1-d) representation of the layout is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">|</span>     <span class="o">|</span>      <span class="o">|</span>     <span class="n">X</span>     <span class="o">|</span>     <span class="o">|</span>      <span class="o">|</span>     <span class="o">|</span>     <span class="n">X</span>     <span class="o">|</span>      <span class="o">|</span>     <span class="o">|</span>
+<span class="o">+--*--+-</span> <span class="o">//</span> <span class="o">-+--*--</span><span class="n">X</span><span class="o">--*--+--*--+-</span> <span class="o">//</span> <span class="o">-+--*--+--*--</span><span class="n">X</span><span class="o">--*--+-</span> <span class="o">//</span> <span class="o">-+--*--+</span>
+   <span class="mi">0</span>          <span class="n">ng</span><span class="o">-</span><span class="mi">1</span>    <span class="n">ng</span>   <span class="n">ng</span><span class="o">+</span><span class="mi">1</span>         <span class="o">...</span> <span class="n">ng</span><span class="o">+</span><span class="n">nx</span><span class="o">-</span><span class="mi">1</span> <span class="n">ng</span><span class="o">+</span><span class="n">nx</span>      <span class="mi">2</span><span class="n">ng</span><span class="o">+</span><span class="n">nx</span><span class="o">-</span><span class="mi">1</span>
+
+                     <span class="n">ilo</span>                      <span class="n">ihi</span>
+
+<span class="o">|&lt;-</span> <span class="n">ng</span> <span class="n">guardcells</span><span class="o">-&gt;|&lt;----</span> <span class="n">nx</span> <span class="n">interior</span> <span class="n">zones</span> <span class="o">-----&gt;|&lt;-</span> <span class="n">ng</span> <span class="n">guardcells</span><span class="o">-&gt;|</span>
+</pre></div>
+</div>
+<p>The ‘*’ marks the data locations.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.Grid2d.coarse_like">
+<span class="sig-name descname"><span class="pre">coarse_like</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#Grid2d.coarse_like"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.Grid2d.coarse_like" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a new grid object coarsened by a factor n, but with
+all the other properties the same</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.Grid2d.fine_like">
+<span class="sig-name descname"><span class="pre">fine_like</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#Grid2d.fine_like"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.Grid2d.fine_like" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a new grid object finer by a factor n, but with
+all the other properties the same</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.mesh.patch.Grid2d.scratch_array">
+<span class="sig-name descname"><span class="pre">scratch_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nvar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#Grid2d.scratch_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.Grid2d.scratch_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a standard numpy array dimensioned to have the size
+and number of ghostcells as the parent grid</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.mesh.patch.cell_center_data_clone">
+<span class="sig-prename descclassname"><span class="pre">pyro.mesh.patch.</span></span><span class="sig-name descname"><span class="pre">cell_center_data_clone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#cell_center_data_clone"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.cell_center_data_clone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new CellCenterData2d object that is a copy of an existing
+one</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>old</strong><span class="classifier">CellCenterData2d object</span></dt><dd><p>The CellCenterData2d object we wish to copy</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.mesh.patch.do_demo">
+<span class="sig-prename descclassname"><span class="pre">pyro.mesh.patch.</span></span><span class="sig-name descname"><span class="pre">do_demo</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#do_demo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.do_demo" title="Permalink to this definition">¶</a></dt>
+<dd><p>show examples of the patch methods / classes</p>
+</dd></dl>
+
+</section>
+<section id="module-pyro.mesh.reconstruction">
+<span id="pyro-mesh-reconstruction-module"></span><h2>pyro.mesh.reconstruction module<a class="headerlink" href="#module-pyro.mesh.reconstruction" title="Permalink to this heading">¶</a></h2>
+<p>Support for computing limited differences needed in reconstruction
+of slopes in constructing interface states.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.mesh.reconstruction.flatten">
+<span class="sig-prename descclassname"><span class="pre">pyro.mesh.reconstruction.</span></span><span class="sig-name descname"><span class="pre">flatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">myg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/reconstruction.html#flatten"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.reconstruction.flatten" title="Permalink to this definition">¶</a></dt>
+<dd><p>compute the 1-d flattening coefficients</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.mesh.reconstruction.flatten_multid">
+<span class="sig-prename descclassname"><span class="pre">pyro.mesh.reconstruction.</span></span><span class="sig-name descname"><span class="pre">flatten_multid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">myg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xi_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xi_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivars</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/reconstruction.html#flatten_multid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.reconstruction.flatten_multid" title="Permalink to this definition">¶</a></dt>
+<dd><p>compute the multidimensional flattening coefficient</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.mesh.reconstruction.limit">
+<span class="sig-prename descclassname"><span class="pre">pyro.mesh.reconstruction.</span></span><span class="sig-name descname"><span class="pre">limit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">myg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limiter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/reconstruction.html#limit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.reconstruction.limit" title="Permalink to this definition">¶</a></dt>
+<dd><p>a single driver that calls the different limiters based on the value
+of the limiter input variable.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.mesh.reconstruction.limit2">
+<span class="sig-prename descclassname"><span class="pre">pyro.mesh.reconstruction.</span></span><span class="sig-name descname"><span class="pre">limit2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">myg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/reconstruction.html#limit2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.reconstruction.limit2" title="Permalink to this definition">¶</a></dt>
+<dd><p>2nd order monotonized central difference limiter</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.mesh.reconstruction.limit4">
+<span class="sig-prename descclassname"><span class="pre">pyro.mesh.reconstruction.</span></span><span class="sig-name descname"><span class="pre">limit4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">myg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/reconstruction.html#limit4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.reconstruction.limit4" title="Permalink to this definition">¶</a></dt>
+<dd><p>4th order monotonized central difference limiter</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.mesh.reconstruction.nolimit">
+<span class="sig-prename descclassname"><span class="pre">pyro.mesh.reconstruction.</span></span><span class="sig-name descname"><span class="pre">nolimit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">myg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/reconstruction.html#nolimit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.reconstruction.nolimit" title="Permalink to this definition">¶</a></dt>
+<dd><p>just a centered difference without any limiting</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.mesh.reconstruction.well_balance">
+<span class="sig-prename descclassname"><span class="pre">pyro.mesh.reconstruction.</span></span><span class="sig-name descname"><span class="pre">well_balance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">myg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limiter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grav</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/reconstruction.html#well_balance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.reconstruction.well_balance" title="Permalink to this definition">¶</a></dt>
+<dd><p>subtract off the hydrostatic pressure before limiting.  Note, this
+only considers the y direction.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.mesh.reconstruction.weno">
+<span class="sig-prename descclassname"><span class="pre">pyro.mesh.reconstruction.</span></span><span class="sig-name descname"><span class="pre">weno</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/reconstruction.html#weno"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.reconstruction.weno" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform WENO reconstruction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>q</strong><span class="classifier">np array</span></dt><dd><p>input data with 3 ghost zones</p>
+</dd>
+<dt><strong>order</strong><span class="classifier">int</span></dt><dd><p>WENO order (k)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>q_plus, q_minus</strong><span class="classifier">np array</span></dt><dd><p>data reconstructed to the right / left respectively</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.mesh.reconstruction.weno_upwind">
+<span class="sig-prename descclassname"><span class="pre">pyro.mesh.reconstruction.</span></span><span class="sig-name descname"><span class="pre">weno_upwind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/reconstruction.html#weno_upwind"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.reconstruction.weno_upwind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform upwinded (left biased) WENO reconstruction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>q</strong><span class="classifier">np array</span></dt><dd><p>input data</p>
+</dd>
+<dt><strong>order</strong><span class="classifier">int</span></dt><dd><p>WENO order (k)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>q_plus</strong><span class="classifier">np array</span></dt><dd><p>data reconstructed to the right</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pyro.lm_atm.problems.html" class="btn btn-neutral float-left" title="pyro.lm_atm.problems package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pyro.multigrid.html" class="btn btn-neutral float-right" title="pyro.multigrid package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, pyro development team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

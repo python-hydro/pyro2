@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyro.multigrid.edge_coeffs &mdash; pyro 4.0.1.post4+gc829962 documentation</title>
+      <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/clipboard.min.js"></script>
+        <script src="../../../_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> pyro
+          </a>
+              <div class="version">
+                4.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">pyro basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Setting up pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible_compare.html">Compressible solver comparisons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../swe_basics.html">Shallow water solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../particles_basics.html">Particles</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../testing.html">Testing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../help.html">Contributing and getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ack.html#history">History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Software Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>pyro.multigrid.edge_coeffs</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pyro.multigrid.edge_coeffs</h1><div class="highlight"><pre>
+<div class="viewcode-block" id="EdgeCoeffs"><a class="viewcode-back" href="../../../pyro.multigrid.html#pyro.multigrid.edge_coeffs.EdgeCoeffs">[docs]</a><span></span><span class="k">class</span> <span class="nc">EdgeCoeffs</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    a simple container class to hold edge-centered coefficients</span>
+<span class="sd">    and restrict them to coarse levels</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">eta</span><span class="p">,</span> <span class="n">empty</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span> <span class="n">g</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">empty</span><span class="p">:</span>
+            <span class="n">eta_x</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+            <span class="n">eta_y</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+
+            <span class="c1"># the eta&#39;s are defined on the interfaces, so</span>
+            <span class="c1"># eta_x[i,j] will be eta_{i-1/2,j} and</span>
+            <span class="c1"># eta_y[i,j] will be eta_{i,j-1/2}</span>
+
+            <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="n">eta_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">eta</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="n">eta</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">))</span>
+            <span class="n">eta_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">eta</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="n">eta</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">))</span>
+
+            <span class="n">eta_x</span> <span class="o">/=</span> <span class="n">g</span><span class="o">.</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span>
+            <span class="n">eta_y</span> <span class="o">/=</span> <span class="n">g</span><span class="o">.</span><span class="n">dy</span><span class="o">**</span><span class="mi">2</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">eta_x</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">eta_y</span>
+
+<div class="viewcode-block" id="EdgeCoeffs.restrict"><a class="viewcode-back" href="../../../pyro.multigrid.html#pyro.multigrid.edge_coeffs.EdgeCoeffs.restrict">[docs]</a>    <span class="k">def</span> <span class="nf">restrict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        restrict the edge values to a coarser grid.  Return a new</span>
+<span class="sd">        EdgeCoeffs object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">cg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">coarse_like</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">c_edge_coeffs</span> <span class="o">=</span> <span class="n">EdgeCoeffs</span><span class="p">(</span><span class="n">cg</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">empty</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">c_eta_x</span> <span class="o">=</span> <span class="n">cg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+        <span class="n">c_eta_y</span> <span class="o">=</span> <span class="n">cg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+
+        <span class="n">fg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span>
+
+        <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">c_eta_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+
+        <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">c_eta_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+
+        <span class="c1"># redo the normalization</span>
+        <span class="n">c_edge_coeffs</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">c_eta_x</span><span class="o">*</span><span class="n">fg</span><span class="o">.</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">cg</span><span class="o">.</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span>
+        <span class="n">c_edge_coeffs</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">c_eta_y</span><span class="o">*</span><span class="n">fg</span><span class="o">.</span><span class="n">dy</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">cg</span><span class="o">.</span><span class="n">dy</span><span class="o">**</span><span class="mi">2</span>
+
+        <span class="k">return</span> <span class="n">c_edge_coeffs</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, pyro development team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

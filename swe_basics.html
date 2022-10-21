@@ -1,79 +1,43 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Shallow water solvers &mdash; pyro 2.2 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shallow water solver &mdash; pyro 4.0.1.post4+gc829962 documentation</title>
+      <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-  
-
-  
-
-  
-  
-    
-
-  
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyro 2.2 documentation" href="index.html"/>
-        <link rel="next" title="Analysis routines" href="analysis.html"/>
-        <link rel="prev" title="Particles" href="particles_basics.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Particles" href="particles_basics.html" />
+    <link rel="prev" title="Low Mach number hydrodynamics solver" href="lowmach_basics.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
+        <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> pyro
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
-                2.2
+                4.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -81,18 +45,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">pyro basics</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">pyro basics</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Setting up pyro</a></li>
@@ -104,7 +58,7 @@
 <li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Solvers</span></p>
+<p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
@@ -114,8 +68,7 @@
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Shallow water solvers</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Shallow water solver</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#example-problems">Example problems</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#dam">dam</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#quad">quad</a></li>
@@ -129,186 +82,177 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Utilities</span></p>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Community</span></p>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Contributing and getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html#history">History</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Reference</span></p>
+<p class="caption" role="heading"><span class="caption-text">Software Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">pyro</a>
-        
       </nav>
 
-
-      
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
-      <li>Shallow water solvers</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Shallow water solver</li>
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/swe_basics.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   
 <style>
 /* CSS overrides for sphinx_rtd_theme */
 
 /* 24px margin */
-.nbinput.nblast,
-.nboutput.nblast {
+.nbinput.nblast.container,
+.nboutput.nblast.container {
     margin-bottom: 19px;  /* padding has already 5px */
 }
 
 /* ... except between code cells! */
-.nblast + .nbinput {
+.nblast.container + .nbinput.container {
     margin-top: -19px;
 }
 
-/* nice headers on first paragraph of info/warning boxes */
-.admonition .first {
-    margin: -12px;
-    padding: 6px 12px;
-    margin-bottom: 12px;
-    color: #fff;
-    line-height: 1;
-    display: block;
-}
-.admonition.warning .first {
-    background: #f0b37e;
-}
-.admonition.note .first {
-    background: #6ab0de;
-}
 .admonition > p:before {
     margin-right: 4px;  /* make room for the exclamation icon */
 }
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
 </style>
-<div class="section" id="shallow-water-solvers">
-<h1>Shallow water solvers<a class="headerlink" href="#shallow-water-solvers" title="Permalink to this headline">¶</a></h1>
+<section id="shallow-water-solver">
+<h1>Shallow water solver<a class="headerlink" href="#shallow-water-solver" title="Permalink to this heading">¶</a></h1>
 <p>The (augmented) shallow water equations take the form:</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\begin{split}\frac{\partial h}{\partial t} + \nabla \cdot (h U) &amp;= 0 \\
 \frac{\partial (h U)}{\partial t} + \nabla \cdot (h U U) + \frac{1}{2}g\nabla h^2 &amp;= 0 \\
 \frac{\partial (h \psi)}{\partial t} + \nabla \cdot (h U \psi) &amp;= 0\end{split}\]</div>
-<p>with <span class="math">\(h\)</span> is the fluid height, <span class="math">\(U\)</span> the fluid velocity, <span class="math">\(g\)</span> the
-gravitational acceleration and <span class="math">\(\psi = \psi(x, t)\)</span> represents some
+<p>with <span class="math notranslate nohighlight">\(h\)</span> is the fluid height, <span class="math notranslate nohighlight">\(U\)</span> the fluid velocity, <span class="math notranslate nohighlight">\(g\)</span> the
+gravitational acceleration and <span class="math notranslate nohighlight">\(\psi = \psi(x, t)\)</span> represents some
 passive scalar.</p>
 <p>The implementation here has flattening at shocks and a choice of Riemann solvers.</p>
 <p>The main parameters that affect this solver are:</p>
-<table border="1" class="docutils">
+<ul>
+<li><p>section: [driver]</p>
+<table class="docutils align-default">
 <colgroup>
-<col width="24%" />
-<col width="76%" />
+<col style="width: 33%" />
+<col style="width: 16%" />
+<col style="width: 51%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal"><span class="pre">[driver]</span></code></th>
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">cfl</span></code></td>
-<td>the advective CFL number (what fraction of a zone can
-we cross in a single timestep)</td>
+<tbody>
+<tr class="row-even"><td><p>cfl</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.8</span></code></p></td>
+<td></td>
 </tr>
 </tbody>
 </table>
-<table border="1" class="docutils">
+</li>
+<li><p>section: [particles]</p>
+<table class="docutils align-default">
 <colgroup>
-<col width="26%" />
-<col width="74%" />
+<col style="width: 33%" />
+<col style="width: 16%" />
+<col style="width: 51%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal"><span class="pre">[swe]</span></code></th>
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">use_flattening</span></code></td>
-<td>do we flatten the profiles at shocks? (0=no, 1=yes)</td>
+<tbody>
+<tr class="row-even"><td><p>do_particles</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">z0</span></code></td>
-<td rowspan="3">the parameters that affect the flattening algorithm</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">z1</span></code></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">delta</span></code></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">limiter</span></code></td>
-<td>what type of limiting to use in reconstructing the
-slopes. 0 means use an unlimited second-order centered
-difference. 1 is the MC limiter, and 2 is the 4th-order
-MC limiter</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">riemann</span></code></td>
-<td>which Riemann solver do we use? “HLLC” for the HLLC
-solver, or “Roe” for the Roe fix
-solver</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">grav</span></code></td>
-<td>the gravitational acceleration (must be &gt; 0)</td>
+<tr class="row-odd"><td><p>particle_generator</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">grid</span></code></p></td>
+<td></td>
 </tr>
 </tbody>
 </table>
-<div class="section" id="example-problems">
-<h2>Example problems<a class="headerlink" href="#example-problems" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="dam">
-<h3>dam<a class="headerlink" href="#dam" title="Permalink to this headline">¶</a></h3>
+</li>
+<li><p>section: [swe]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 16%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>use_flattening</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>apply flattening at shocks (1)</p></td>
+</tr>
+<tr class="row-odd"><td><p>cvisc</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.1</span></code></p></td>
+<td><p>artifical viscosity coefficient</p></td>
+</tr>
+<tr class="row-even"><td><p>limiter</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p>limiter (0 = none, 1 = 2nd order, 2 = 4th order)</p></td>
+</tr>
+<tr class="row-odd"><td><p>grav</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>gravitational acceleration (in y-direction)</p></td>
+</tr>
+<tr class="row-even"><td><p>riemann</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Roe</span></code></p></td>
+<td><p>HLLC or Roe</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<section id="example-problems">
+<h2>Example problems<a class="headerlink" href="#example-problems" title="Permalink to this heading">¶</a></h2>
+<section id="dam">
+<h3>dam<a class="headerlink" href="#dam" title="Permalink to this heading">¶</a></h3>
 <p>The dam break problem is a standard hydrodynamics problem, analagous to the Sod
 shock tube problem in compressible hydrodynamics. It considers a one-multidimensional
 problem of two regions of fluid at different heights, initially separated by a dam.
@@ -318,11 +262,13 @@ so we can check our solution against the exact solutions. See Toro’s shallow w
 equations book for details on this problem and the exact Riemann solver.</p>
 <p>Because it is one-dimensional, we run it in narrow domains in the x- or
 y-directions. It can be run as:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py swe dam inputs.dam.x
-./pyro.py swe dam inputs.dam.y
-</pre></div>
-</div>
-<p>A simple script, <code class="docutils literal"><span class="pre">dam_compare.py</span></code> in <code class="docutils literal"><span class="pre">analysis/</span></code> will read a pyro output
+<div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
+span.prompt1:before {
+  content: "$ ";
+}
+</style><span class="prompt1">./pyro_sim.py swe dam inputs.dam.x</span>
+<span class="prompt1">./pyro_sim.py swe dam inputs.dam.y</span>
+</pre></div></div><p>A simple script, <code class="docutils literal notranslate"><span class="pre">dam_compare.py</span></code> in <code class="docutils literal notranslate"><span class="pre">analysis/</span></code> will read a pyro output
 file and plot the solution over the exact dam break solution (as given by
 <a class="reference external" href="https://doi.org/10.1063/1.3062689">Stoker (1958)</a> and
 <a class="reference external" href="https://doi.org/10.1061/(ASCE)0733-9429(1999)125:11(1210)">Wu, Huang &amp; Zheng (1999)</a>). Below we see
@@ -333,125 +279,79 @@ until t = 0.3 s.</p>
 steep, as expected. For this problem, the Roe-fix solver performs
 slightly better than the HLLC solver, with less smearing at the shock
 and head/tail of the rarefaction.</p>
-</div>
-<div class="section" id="quad">
-<h3>quad<a class="headerlink" href="#quad" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="quad">
+<h3>quad<a class="headerlink" href="#quad" title="Permalink to this heading">¶</a></h3>
 <p>The quad problem sets up different states in four regions of the
 domain and watches the complex interfaces that develop as shocks
 interact. This problem has appeared in several places (and a <a class="reference external" href="http://planets.utsc.utoronto.ca/~pawel/Riemann.hydro.html">detailed
 investigation</a> is
 online by Pawel Artymowicz). It is run as:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py swe quad inputs.quad
-</pre></div>
-</div>
-</div>
-<div class="section" id="kh">
-<h3>kh<a class="headerlink" href="#kh" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./pyro_sim.py swe quad inputs.quad</span>
+</pre></div></div></section>
+<section id="kh">
+<h3>kh<a class="headerlink" href="#kh" title="Permalink to this heading">¶</a></h3>
 <p>The Kelvin-Helmholtz problem models three layers of fluid: two at the top and
 bottom of the domain travelling in one direction, one in the central part of the
 domain travelling in the opposite direction. At the interface of the layers,
 shearing produces the characteristic Kelvin-Helmholtz instabilities, just as
 is seen in the standard compressible problem. It is run as:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py swe kh inputs.kh
-</pre></div>
-</div>
-</div>
-</div>
-<div class="section" id="exercises">
-<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="explorations">
-<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./pyro_sim.py swe kh inputs.kh</span>
+</pre></div></div></section>
+</section>
+<section id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">¶</a></h2>
+<section id="explorations">
+<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
-<li>There are multiple Riemann solvers in the swe
+<li><p>There are multiple Riemann solvers in the swe
 algorithm. Run the same problem with the different Riemann solvers
 and look at the differences. Toro’s shallow water text is a good book to help
-understand what is happening.</li>
-<li>Run the problems with and without limiting—do you notice any overshoots?</li>
+understand what is happening.</p></li>
+<li><p>Run the problems with and without limiting—do you notice any overshoots?</p></li>
 </ul>
-</div>
-<div class="section" id="extensions">
-<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="extensions">
+<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
-<li>Limit on the characteristic variables instead of the primitive
+<li><p>Limit on the characteristic variables instead of the primitive
 variables. What changes do you see? (the notes show how to implement
-this change.)</li>
-<li>Add a source term to model a non-flat sea floor (bathymetry).</li>
+this change.)</p></li>
+<li><p>Add a source term to model a non-flat sea floor (bathymetry).</p></li>
 </ul>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
-           </div>
-           <div class="articleComments">
-            
            </div>
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="analysis.html" class="btn btn-neutral float-right" title="Analysis routines" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="particles_basics.html" class="btn btn-neutral" title="Particles" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="lowmach_basics.html" class="btn btn-neutral float-left" title="Low Mach number hydrodynamics solver" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="particles_basics.html" class="btn btn-neutral float-right" title="Particles" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2018, pyro development tem.
-
-    </p>
+    <p>&#169; Copyright 2022, pyro development team.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'2.2',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

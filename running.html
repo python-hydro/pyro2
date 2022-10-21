@@ -1,79 +1,41 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Running &mdash; pyro 2.2 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Running &mdash; pyro 4.0.1.post4+gc829962 documentation</title>
+      <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-  
-
-  
-
-  
-  
-    
-
-  
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyro 2.2 documentation" href="index.html"/>
-        <link rel="next" title="Working with output" href="output.html"/>
-        <link rel="prev" title="Design ideas" href="design.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Working with output" href="output.html" />
+    <link rel="prev" title="Design ideas" href="design.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
+        <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> pyro
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
-                2.2
+                4.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -81,18 +43,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">pyro basics</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">pyro basics</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Setting up pyro</a></li>
@@ -109,7 +61,7 @@
 <li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Solvers</span></p>
+<p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
@@ -119,194 +71,165 @@
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solvers</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Utilities</span></p>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Community</span></p>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Contributing and getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html#history">History</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Reference</span></p>
+<p class="caption" role="heading"><span class="caption-text">Software Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">pyro</a>
-        
       </nav>
 
-
-      
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
       <li>Running</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/running.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   
 <style>
 /* CSS overrides for sphinx_rtd_theme */
 
 /* 24px margin */
-.nbinput.nblast,
-.nboutput.nblast {
+.nbinput.nblast.container,
+.nboutput.nblast.container {
     margin-bottom: 19px;  /* padding has already 5px */
 }
 
 /* ... except between code cells! */
-.nblast + .nbinput {
+.nblast.container + .nbinput.container {
     margin-top: -19px;
 }
 
-/* nice headers on first paragraph of info/warning boxes */
-.admonition .first {
-    margin: -12px;
-    padding: 6px 12px;
-    margin-bottom: 12px;
-    color: #fff;
-    line-height: 1;
-    display: block;
-}
-.admonition.warning .first {
-    background: #f0b37e;
-}
-.admonition.note .first {
-    background: #6ab0de;
-}
 .admonition > p:before {
     margin-right: 4px;  /* make room for the exclamation icon */
 }
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
 </style>
-<div class="section" id="running">
-<h1>Running<a class="headerlink" href="#running" title="Permalink to this headline">¶</a></h1>
-<p>Pyro can be run in two ways: either from the commandline, using the <code class="docutils literal"><span class="pre">pyro.py</span></code> script and passing in the solver, problem and inputs as arguments, or by using the <a class="reference internal" href="pyro.html#pyro.Pyro" title="pyro.Pyro"><code class="xref py py-func docutils literal"><span class="pre">Pyro</span></code></a> class.</p>
-<div class="section" id="commandline">
-<h2>Commandline<a class="headerlink" href="#commandline" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal"><span class="pre">pyro.py</span></code> script takes 3
+<section id="running">
+<h1>Running<a class="headerlink" href="#running" title="Permalink to this heading">¶</a></h1>
+<p>Pyro can be run in two ways: either from the commandline, using the <code class="docutils literal notranslate"><span class="pre">pyro_sim.py</span></code>
+script and passing in the solver, problem and inputs as arguments, or by using
+the <code class="xref py py-func docutils literal notranslate"><span class="pre">Pyro</span></code> class.</p>
+<section id="commandline">
+<h2>Commandline<a class="headerlink" href="#commandline" title="Permalink to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">pyro_sim.py</span></code> script takes 3
 arguments: the solver name, the problem setup to run with that solver
-(this is defined in the solver’s <code class="docutils literal"><span class="pre">problems/</span></code> sub-directory), and the
-inputs file (again, usually from the solver’s <code class="docutils literal"><span class="pre">problems/</span></code>
+(this is defined in the solver’s <code class="docutils literal notranslate"><span class="pre">problems/</span></code> sub-directory), and the
+inputs file (again, usually from the solver’s <code class="docutils literal notranslate"><span class="pre">problems/</span></code>
 directory).</p>
 <p>For example, to run the Sedov problem with the compressible solver we would do:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py compressible sedov inputs.sedov
-</pre></div>
-</div>
-<p>This knows to look for <code class="docutils literal"><span class="pre">inputs.sedov</span></code> in <code class="docutils literal"><span class="pre">compressible/problems/</span></code>
+<div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
+span.prompt1:before {
+  content: "$ ";
+}
+</style><span class="prompt1">./pyro_sim.py compressible sedov inputs.sedov</span>
+</pre></div></div><p>This knows to look for <code class="docutils literal notranslate"><span class="pre">inputs.sedov</span></code> in <code class="docutils literal notranslate"><span class="pre">compressible/problems/</span></code>
 (alternately, you can specify the full path for the inputs file).</p>
 <p>To run the smooth Gaussian advection problem with the advection solver, we would do:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py advection smooth inputs.smooth
-</pre></div>
-</div>
-<p>Any runtime parameter can also be specified on the command line, after
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./pyro_sim.py advection smooth inputs.smooth</span>
+</pre></div></div><p>Any runtime parameter can also be specified on the command line, after
 the inputs file. For example, to disable runtime visualization for the
 above run, we could do:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>./pyro.py advection smooth inputs.smooth vis.dovis=0
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Quite often, the slowest part of the runtime is the visualization, so disabling
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./pyro_sim.py advection smooth inputs.smooth vis.dovis<span class="o">=</span><span class="m">0</span></span>
+</pre></div></div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Quite often, the slowest part of the runtime is the visualization, so disabling
 vis as shown above can dramatically speed up the execution.  You can always
-plot the results after the fact using the <code class="docutils literal"><span class="pre">plot.py</span></code> script, as discussed
+plot the results after the fact using the <code class="docutils literal notranslate"><span class="pre">plot.py</span></code> script, as discussed
 in  <a class="reference internal" href="analysis.html#analysis"><span class="std std-ref">Analysis routines</span></a>.</p>
 </div>
-</div>
-<div class="section" id="pyro-class">
-<h2>Pyro class<a class="headerlink" href="#pyro-class" title="Permalink to this headline">¶</a></h2>
-<p>Alternatively, pyro can be run using the <a class="reference internal" href="pyro.html#pyro.Pyro" title="pyro.Pyro"><code class="xref py py-func docutils literal"><span class="pre">Pyro</span></code></a> class. This is done by the following steps:</p>
+</section>
+<section id="pyro-class">
+<h2>Pyro class<a class="headerlink" href="#pyro-class" title="Permalink to this heading">¶</a></h2>
+<p>Alternatively, pyro can be run using the <code class="xref py py-func docutils literal notranslate"><span class="pre">Pyro</span></code> class. This provides
+an interface that enables simulations to be set up and run in a Jupyter notebook – see
+<code class="docutils literal notranslate"><span class="pre">examples/examples.ipynb</span></code> for an example notebook. A simulation can be set up and run
+by carrying out the following steps:</p>
 <ul class="simple">
-<li>create a <code class="docutils literal"><span class="pre">Pyro</span></code> object, initializing it with a specific solver</li>
-<li>initialize the problem, passing in runtime parameters and inputs</li>
-<li>run the simulation</li>
+<li><p>create a <code class="xref py py-func docutils literal notranslate"><span class="pre">Pyro</span></code> object, initializing it with a specific solver</p></li>
+<li><p>initialize the problem, passing in runtime parameters and inputs</p></li>
+<li><p>run the simulation</p></li>
 </ul>
-<p>For example, if we wished to use the <code class="docutils literal"><span class="pre">compressible</span></code> solver to run the Kelvin-Helmholtz problem <code class="docutils literal"><span class="pre">kh</span></code>, we would do the following:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">pyro</span> <span class="o">=</span> <span class="n">Pyro</span><span class="p">(</span><span class="s2">&quot;compressible&quot;</span><span class="p">)</span>
+<p>For example, if we wished to use the <code class="xref py py-mod docutils literal notranslate"><span class="pre">compressible</span></code> solver to run the
+Kelvin-Helmholtz problem <code class="docutils literal notranslate"><span class="pre">kh</span></code>, we would do the following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyro</span> <span class="kn">import</span> <span class="n">Pyro</span>
+<span class="n">pyro</span> <span class="o">=</span> <span class="n">Pyro</span><span class="p">(</span><span class="s2">&quot;compressible&quot;</span><span class="p">)</span>
 <span class="n">pyro</span><span class="o">.</span><span class="n">initialize_problem</span><span class="p">(</span><span class="n">problem_name</span><span class="o">=</span><span class="s2">&quot;kh&quot;</span><span class="p">,</span>
                         <span class="n">inputs_file</span><span class="o">=</span><span class="s2">&quot;inputs.kh&quot;</span><span class="p">)</span>
 <span class="n">pyro</span><span class="o">.</span><span class="n">run_sim</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Instead of using an inputs file to define the problem parameters, we can define a dictionary of parameters and pass them into the <a class="reference internal" href="pyro.html#pyro.Pyro.initialize_problem" title="pyro.Pyro.initialize_problem"><code class="xref py py-func docutils literal"><span class="pre">initialize_problem</span></code></a> function using the keyword argument <code class="docutils literal"><span class="pre">inputs_dict</span></code>. If an inputs file is also passed into the function, the parameters in the dictionary will override any parameters in the file. For example, if we wished to turn off visualization for the previous example, we would do:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;vis.dovis&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">}</span>
+<p>Instead of using an inputs file to define the problem parameters, we can define a
+dictionary of parameters and pass them into the <code class="xref py py-func docutils literal notranslate"><span class="pre">initialize_problem</span></code> function using the keyword argument <code class="docutils literal notranslate"><span class="pre">inputs_dict</span></code>.
+If an inputs file is also passed into the function, the parameters in the dictionary
+will override any parameters in the file. For example, if we wished to turn off
+visualization for the previous example, we would do:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;vis.dovis&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">}</span>
 <span class="n">pyro</span><span class="o">.</span><span class="n">initialize_problem</span><span class="p">(</span><span class="n">problem_name</span><span class="o">=</span><span class="s2">&quot;kh&quot;</span><span class="p">,</span>
                         <span class="n">inputs_file</span><span class="o">=</span><span class="s2">&quot;inputs.kh&quot;</span><span class="p">,</span>
                         <span class="n">inputs_dict</span><span class="o">=</span><span class="n">parameters</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>It’s possible to evolve the simulation forward timestep by timestep manually using the <a class="reference internal" href="pyro.html#pyro.Pyro.single_step" title="pyro.Pyro.single_step"><code class="xref py py-func docutils literal"><span class="pre">single_step</span></code></a> function (rather than allowing <a class="reference internal" href="pyro.html#pyro.Pyro.run_sim" title="pyro.Pyro.run_sim"><code class="xref py py-func docutils literal"><span class="pre">run_sim</span></code></a> to do this for us). To evolve our example simulation forward by a single step, we’d run</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">pyro</span><span class="o">.</span><span class="n">single_step</span><span class="p">()</span>
+<p>It’s possible to evolve the simulation forward timestep by timestep manually using
+the <code class="xref py py-func docutils literal notranslate"><span class="pre">single_step</span></code> function (rather than allowing
+<code class="xref py py-func docutils literal notranslate"><span class="pre">run_sim</span></code> to do this for us). To evolve our example
+simulation forward by a single step, we’d run</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyro</span><span class="o">.</span><span class="n">single_step</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>This will fill the boundary conditions, compute the timestep <code class="docutils literal"><span class="pre">dt</span></code>, evolve a single timestep and do output/visualization (if required).</p>
-</div>
-<div class="section" id="runtime-options">
-<h2>Runtime options<a class="headerlink" href="#runtime-options" title="Permalink to this headline">¶</a></h2>
+<p>This will fill the boundary conditions, compute the timestep <code class="docutils literal notranslate"><span class="pre">dt</span></code>, evolve a
+single timestep and do output/visualization (if required).</p>
+</section>
+<section id="runtime-options">
+<h2>Runtime options<a class="headerlink" href="#runtime-options" title="Permalink to this heading">¶</a></h2>
 <p>The behavior of the main driver, the solver, and the problem setup can
 be controlled by runtime parameters specified in the inputs file (or
-via the command line or passed into the <code class="docutils literal"><span class="pre">initialize_problem</span></code> function). Runtime parameters are grouped into sections,
-with the heading of that section enclosed in <code class="docutils literal"><span class="pre">[</span> <span class="pre">..</span> <span class="pre">]</span></code>. The list of
+via the command line or passed into the <code class="docutils literal notranslate"><span class="pre">initialize_problem</span></code> function).
+Runtime parameters are grouped into sections,
+with the heading of that section enclosed in <code class="docutils literal notranslate"><span class="pre">[</span> <span class="pre">..</span> <span class="pre">]</span></code>. The list of
 parameters are stored in three places:</p>
 <ul class="simple">
-<li>the <code class="docutils literal"><span class="pre">pyro/_defaults</span></code> file</li>
-<li>the solver’s <code class="docutils literal"><span class="pre">_defaults</span></code> file</li>
-<li>problem’s <code class="docutils literal"><span class="pre">_defaults</span></code> file (named <code class="docutils literal"><span class="pre">_problem-name.defaults</span></code> in the
-solver’s <code class="docutils literal"><span class="pre">problem/</span></code> sub-directory).</li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">pyro/_defaults</span></code> file</p></li>
+<li><p>the solver’s <code class="docutils literal notranslate"><span class="pre">_defaults</span></code> file</p></li>
+<li><p>problem’s <code class="docutils literal notranslate"><span class="pre">_defaults</span></code> file (named <code class="docutils literal notranslate"><span class="pre">_problem-name.defaults</span></code> in the
+solver’s <code class="docutils literal notranslate"><span class="pre">problem/</span></code> sub-directory).</p></li>
 </ul>
 <p>These three files are parsed at runtime to define the list of valid
 parameters. The inputs file is read next and used to override the
@@ -314,205 +237,242 @@ default value of any of these previously defined
 parameters. Additionally, any parameter can be specified at the end of
 the commandline, and these will be used to override the defaults. The
 collection of runtime parameters is stored in a
-<a class="reference internal" href="util.html#util.runparams.RuntimeParameters" title="util.runparams.RuntimeParameters"><code class="xref py py-func docutils literal"><span class="pre">RuntimeParameters</span></code></a> object.</p>
-<p>The <code class="docutils literal"><span class="pre">runparams.py</span></code> module in <code class="docutils literal"><span class="pre">util/</span></code> controls access to the runtime
+<code class="xref py py-func docutils literal notranslate"><span class="pre">RuntimeParameters</span></code> object.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">runparams.py</span></code> module in <code class="docutils literal notranslate"><span class="pre">util/</span></code> controls access to the runtime
 parameters. You can setup the runtime parameters, parse an inputs
-file, and access the value of a parameter (<code class="docutils literal"><span class="pre">hydro.cfl</span></code> in this example)
+file, and access the value of a parameter (<code class="docutils literal notranslate"><span class="pre">hydro.cfl</span></code> in this example)
 as:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">rp</span> <span class="o">=</span> <span class="n">RuntimeParameters</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rp</span> <span class="o">=</span> <span class="n">RuntimeParameters</span><span class="p">()</span>
 <span class="n">rp</span><span class="o">.</span><span class="n">load_params</span><span class="p">(</span><span class="s2">&quot;inputs.test&quot;</span><span class="p">)</span>
 <span class="o">...</span>
 <span class="n">cfl</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;hydro.cfl&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>When pyro is run, the file <code class="docutils literal"><span class="pre">inputs.auto</span></code> is output containing the
+<p>When pyro is run, the file <code class="docutils literal notranslate"><span class="pre">inputs.auto</span></code> is output containing the
 full list of runtime parameters, their value for the simulation, and
-the comment that was associated with them from the <code class="docutils literal"><span class="pre">_defaults</span></code>
+the comment that was associated with them from the <code class="docutils literal notranslate"><span class="pre">_defaults</span></code>
 files. This is a useful way to see what parameters are in play for a
 given simulation.</p>
 <p>All solvers use the following parameters:</p>
-<table border="1" class="docutils">
+<ul>
+<li><p>section: [driver]</p>
+<table class="docutils align-default">
 <colgroup>
-<col width="17%" />
-<col width="83%" />
+<col style="width: 33%" />
+<col style="width: 16%" />
+<col style="width: 51%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal"><span class="pre">[driver]</span></code></th>
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">max_steps</span></code></td>
-<td>the maximum number of steps in the simulation</td>
+<tbody>
+<tr class="row-even"><td><p>tmax</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>maximum simulation time to evolve</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">tmax</span></code></td>
-<td>the simulation time to evolve to</td>
+<tr class="row-odd"><td><p>max_steps</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10000</span></code></p></td>
+<td><p>maximum number of steps to take</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">init_tstep_factor</span></code></td>
-<td>the amount by which to shrink the first timestep. This lets the code ramp up to the CFL timestep slowly</td>
+<tr class="row-even"><td><p>fix_dt</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-1.0</span></code></p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">max_dt_change</span></code></td>
-<td>the maximum factor by which the timestep can increase from one step to the next</td>
+<tr class="row-odd"><td><p>init_tstep_factor</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.01</span></code></p></td>
+<td><p>first timestep = init_tstep_factor * CFL timestep</p></td>
+</tr>
+<tr class="row-even"><td><p>max_dt_change</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2.0</span></code></p></td>
+<td><p>max amount the timestep can change between steps</p></td>
+</tr>
+<tr class="row-odd"><td><p>verbose</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>verbosity</p></td>
 </tr>
 </tbody>
 </table>
-<table border="1" class="docutils">
+</li>
+<li><p>section: [io]</p>
+<table class="docutils align-default">
 <colgroup>
-<col width="17%" />
-<col width="83%" />
+<col style="width: 33%" />
+<col style="width: 16%" />
+<col style="width: 51%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal"><span class="pre">[io]</span></code></th>
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">basename</span></code></td>
-<td>the descriptive prefix to use for output files</td>
+<tbody>
+<tr class="row-even"><td><p>basename</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pyro_</span></code></p></td>
+<td><p>basename for output files</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">dt_out</span></code></td>
-<td>the interval in simulation time between writing output files</td>
+<tr class="row-odd"><td><p>dt_out</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.1</span></code></p></td>
+<td><p>simulation time between writing output files</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">n_out</span></code></td>
-<td>the number of timesteps between writing output files</td>
+<tr class="row-even"><td><p>n_out</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10000</span></code></p></td>
+<td><p>number of timesteps between writing output files</p></td>
+</tr>
+<tr class="row-odd"><td><p>do_io</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>do we output at all?</p></td>
 </tr>
 </tbody>
 </table>
-<table border="1" class="docutils">
+</li>
+<li><p>section: [mesh]</p>
+<table class="docutils align-default">
 <colgroup>
-<col width="17%" />
-<col width="83%" />
+<col style="width: 33%" />
+<col style="width: 16%" />
+<col style="width: 51%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal"><span class="pre">[vis]</span></code></th>
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">dovis</span></code></td>
-<td>enable (1) or disable (0) runtime visualization</td>
+<tbody>
+<tr class="row-even"><td><p>xmin</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.0</span></code></p></td>
+<td><p>domain minumum x-coordinate</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">store_images</span></code></td>
-<td>if 1, write out PNG files as we do the runtime visualization</td>
+<tr class="row-odd"><td><p>xmax</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>domain maximum x-coordinate</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">n_out</span></code></td>
-<td>the number of timesteps between writing output files</td>
+<tr class="row-even"><td><p>ymin</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.0</span></code></p></td>
+<td><p>domain minimum y-coordinate</p></td>
+</tr>
+<tr class="row-odd"><td><p>ymax</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>domain maximum y-coordinate</p></td>
+</tr>
+<tr class="row-even"><td><p>xlboundary</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">reflect</span></code></p></td>
+<td><p>minimum x BC (‘reflect’, ‘outflow’, or ‘periodic’)</p></td>
+</tr>
+<tr class="row-odd"><td><p>xrboundary</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">reflect</span></code></p></td>
+<td><p>maximum x BC (‘reflect’, ‘outflow’, or ‘periodic’)</p></td>
+</tr>
+<tr class="row-even"><td><p>ylboundary</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">reflect</span></code></p></td>
+<td><p>minimum y BC (‘reflect’, ‘outflow’, or ‘periodic’)</p></td>
+</tr>
+<tr class="row-odd"><td><p>yrboundary</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">reflect</span></code></p></td>
+<td><p>maximum y BC (‘reflect’, ‘outflow’, or ‘periodic’)</p></td>
+</tr>
+<tr class="row-even"><td><p>nx</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">25</span></code></p></td>
+<td><p>number of zones in the x-direction</p></td>
+</tr>
+<tr class="row-odd"><td><p>ny</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">25</span></code></p></td>
+<td><p>number of zones in the y-direction</p></td>
 </tr>
 </tbody>
 </table>
-<table border="1" class="docutils">
+</li>
+<li><p>section: [particles]</p>
+<table class="docutils align-default">
 <colgroup>
-<col width="17%" />
-<col width="83%" />
+<col style="width: 33%" />
+<col style="width: 16%" />
+<col style="width: 51%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head" colspan="2"><code class="docutils literal"><span class="pre">[mesh]</span></code></th>
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">xmin</span></code></td>
-<td>the physical coordinate of the lower x face of the domain</td>
+<tbody>
+<tr class="row-even"><td><p>do_particles</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>include particles? (1=yes, 0=no)</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">xmax</span></code></td>
-<td>the physical coordinate of the upper x face of the domain</td>
+<tr class="row-odd"><td><p>n_particles</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">100</span></code></p></td>
+<td><p>number of particles</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">ymin</span></code></td>
-<td>the physical coordinate of the lower y face of the domain</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">ymax</span></code></td>
-<td>the physical coordinate of the upper y face of the domain</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">xlboundary</span></code></td>
-<td>the physical description for the type of boundary at the lower x face of the domain</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">xrboundary</span></code></td>
-<td>the physical description for the type of boundary at the upper x face of the domain</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">ylboundary</span></code></td>
-<td>the physical description for the type of boundary at the lower y face of the domain</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">yrboundary</span></code></td>
-<td>the physical description for the type of boundary at the upper y face of the domain</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">nx</span></code></td>
-<td>the number zones in the x-direction</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">ny</span></code></td>
-<td>the number zones in the y-direction</td>
+<tr class="row-even"><td><p>particle_generator</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">random</span></code></p></td>
+<td><p>how do we generate particles? (random, grid)</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-</div>
+</li>
+<li><p>section: [vis]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 16%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>dovis</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>runtime visualization? (1=yes, 0=no)</p></td>
+</tr>
+<tr class="row-odd"><td><p>store_images</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>store vis images to files (1=yes, 0=no)</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</section>
+</section>
 
 
-           </div>
-           <div class="articleComments">
-            
            </div>
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="output.html" class="btn btn-neutral float-right" title="Working with output" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="design.html" class="btn btn-neutral" title="Design ideas" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="design.html" class="btn btn-neutral float-left" title="Design ideas" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="output.html" class="btn btn-neutral float-right" title="Working with output" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2018, pyro development tem.
-
-    </p>
+    <p>&#169; Copyright 2022, pyro development team.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'2.2',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

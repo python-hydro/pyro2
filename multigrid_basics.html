@@ -1,79 +1,43 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Multigrid solvers &mdash; pyro 2.2 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multigrid solvers &mdash; pyro 4.0.1.post4+gc829962 documentation</title>
+      <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-  
-
-  
-
-  
-  
-    
-
-  
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyro 2.2 documentation" href="index.html"/>
-        <link rel="next" title="Multigrid examples" href="multigrid-examples.html"/>
-        <link rel="prev" title="Compressible solver comparisons" href="compressible_compare.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Multigrid examples" href="multigrid-examples.html" />
+    <link rel="prev" title="Compressible solver comparisons" href="compressible_compare.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
+        <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> pyro
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
-                2.2
+                4.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -81,18 +45,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">pyro basics</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">pyro basics</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Setting up pyro</a></li>
@@ -104,7 +58,7 @@
 <li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Solvers</span></p>
+<p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
@@ -126,163 +80,124 @@
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solvers</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Utilities</span></p>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Community</span></p>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Contributing and getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html#history">History</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Reference</span></p>
+<p class="caption" role="heading"><span class="caption-text">Software Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">pyro</a>
-        
       </nav>
 
-
-      
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
       <li>Multigrid solvers</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/multigrid_basics.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   
 <style>
 /* CSS overrides for sphinx_rtd_theme */
 
 /* 24px margin */
-.nbinput.nblast,
-.nboutput.nblast {
+.nbinput.nblast.container,
+.nboutput.nblast.container {
     margin-bottom: 19px;  /* padding has already 5px */
 }
 
 /* ... except between code cells! */
-.nblast + .nbinput {
+.nblast.container + .nbinput.container {
     margin-top: -19px;
 }
 
-/* nice headers on first paragraph of info/warning boxes */
-.admonition .first {
-    margin: -12px;
-    padding: 6px 12px;
-    margin-bottom: 12px;
-    color: #fff;
-    line-height: 1;
-    display: block;
-}
-.admonition.warning .first {
-    background: #f0b37e;
-}
-.admonition.note .first {
-    background: #6ab0de;
-}
 .admonition > p:before {
     margin-right: 4px;  /* make room for the exclamation icon */
 }
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
 </style>
-<div class="section" id="multigrid-solvers">
-<h1>Multigrid solvers<a class="headerlink" href="#multigrid-solvers" title="Permalink to this headline">¶</a></h1>
+<section id="multigrid-solvers">
+<h1>Multigrid solvers<a class="headerlink" href="#multigrid-solvers" title="Permalink to this heading">¶</a></h1>
 <p>pyro solves elliptic problems (like Laplace’s equation or Poisson’s
 equation) through multigrid. This accelerates the convergence of
 simple relaxation by moving the solution down and up through a series
 of grids. Chapter 9 of the <a class="reference external" href="http://bender.astro.sunysb.edu/hydro_by_example/CompHydroTutorial.pdf">pdf notes</a> gives an introduction to solving elliptic equations, including multigrid.</p>
 <p>There are three solvers:</p>
 <ul>
-<li><p class="first">The core solver, provided in the class <a class="reference internal" href="multigrid.html#multigrid.MG.CellCenterMG2d" title="multigrid.MG.CellCenterMG2d"><code class="xref py py-func docutils literal"><span class="pre">MG.CellCenterMG2d</span></code></a> solves constant-coefficient Helmholtz problems of the form
-<span class="math">\((\alpha - \beta \nabla^2) \phi = f\)</span></p>
-</li>
-<li><p class="first">The class <a class="reference internal" href="multigrid.html#multigrid.variable_coeff_MG.VarCoeffCCMG2d" title="multigrid.variable_coeff_MG.VarCoeffCCMG2d"><code class="xref py py-func docutils literal"><span class="pre">variable_coeff_MG.VarCoeffCCMG2d</span></code></a> solves variable coefficient Poisson problems of the form
-<span class="math">\(\nabla \cdot (\eta \nabla \phi ) = f\)</span>.  This class inherits the core functionality from <code class="docutils literal"><span class="pre">MG.CellCenterMG2d</span></code>.</p>
-</li>
-<li><p class="first">The class <a class="reference internal" href="multigrid.html#multigrid.general_MG.GeneralMG2d" title="multigrid.general_MG.GeneralMG2d"><code class="xref py py-func docutils literal"><span class="pre">general_MG.GeneralMG2d</span></code></a> solves a general elliptic
-equation of the form <span class="math">\(\alpha \phi + \nabla \cdot ( \beta
+<li><p>The core solver, provided in the class <code class="xref py py-func docutils literal notranslate"><span class="pre">MG.CellCenterMG2d</span></code> solves constant-coefficient Helmholtz problems of the form
+<span class="math notranslate nohighlight">\((\alpha - \beta \nabla^2) \phi = f\)</span></p></li>
+<li><p>The class <code class="xref py py-func docutils literal notranslate"><span class="pre">variable_coeff_MG.VarCoeffCCMG2d</span></code> solves variable coefficient Poisson problems of the form
+<span class="math notranslate nohighlight">\(\nabla \cdot (\eta \nabla \phi ) = f\)</span>.  This class inherits the core functionality from <code class="docutils literal notranslate"><span class="pre">MG.CellCenterMG2d</span></code>.</p></li>
+<li><p>The class <code class="xref py py-func docutils literal notranslate"><span class="pre">general_MG.GeneralMG2d</span></code> solves a general elliptic
+equation of the form <span class="math notranslate nohighlight">\(\alpha \phi + \nabla \cdot ( \beta
 \nabla \phi) + \gamma \cdot \nabla \phi = f\)</span>.  This class inherits
-the core functionality from <code class="docutils literal"><span class="pre">MG.CellCenterMG2d</span></code>.</p>
+the core functionality from <code class="xref py py-func docutils literal notranslate"><span class="pre">MG.CellCenterMG2d</span></code>.</p>
 <p>This solver is the only one to support inhomogeneous boundary
 conditions.</p>
 </li>
 </ul>
 <p>We simply use V-cycles in our implementation, and restrict ourselves
 to square grids with zoning a power of 2.</p>
-<p>The multigrid solver is not controlled through pyro.py since there is no time-dependence in pure elliptic problems. Instead, there are a few scripts in the multigrid/ subdirectory that demonstrate its use.</p>
-<div class="section" id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="multigrid-test">
-<h3>multigrid test<a class="headerlink" href="#multigrid-test" title="Permalink to this headline">¶</a></h3>
-<p>A basic multigrid test is run as:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>./mg_test_simple.py
-</pre></div>
-</div>
-<p>The <code class="docutils literal"><span class="pre">mg_test_simple.py</span></code> script solves a Poisson equation with a
+<p>The multigrid solver is not controlled through <code class="docutils literal notranslate"><span class="pre">pyro_sim.py</span></code> since
+there is no time-dependence in pure elliptic problems. Instead, there
+are a few scripts in the multigrid/ subdirectory that demonstrate its
+use.</p>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">¶</a></h2>
+<section id="multigrid-test">
+<h3>multigrid test<a class="headerlink" href="#multigrid-test" title="Permalink to this heading">¶</a></h3>
+<p>A basic multigrid test is run as (using a path relative to the root of the
+<code class="docutils literal notranslate"><span class="pre">pyro2</span></code> repository):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
+span.prompt1:before {
+  content: "$ ";
+}
+</style><span class="prompt1">./examples/multigrid/mg_test_simple.py</span>
+</pre></div></div><p>The <code class="docutils literal notranslate"><span class="pre">mg_test_simple.py</span></code> script solves a Poisson equation with a
 known analytic solution. This particular example comes from the text
 <cite>A Multigrid Tutorial, 2nd Ed.</cite>, by Briggs. The example is:</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[u_{xx} + u_{yy} = -2 \left [(1-6x^2)y^2(1-y^2) + (1-6y^2)x^2(1-x^2)\right ]\]</div>
-<p>on <span class="math">\([0,1] \times [0,1]\)</span> with <span class="math">\(u = 0\)</span> on the boundary.</p>
+<p>on <span class="math notranslate nohighlight">\([0,1] \times [0,1]\)</span> with <span class="math notranslate nohighlight">\(u = 0\)</span> on the boundary.</p>
 <p>The solution to this is shown below.</p>
 <img alt="_images/mg_test.png" class="align-center" src="_images/mg_test.png" />
 <p>Since this has a known analytic solution:</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[u(x,y) = (x^2 - x^4)(y^4 - y^2)\]</div>
 <p>We can assess the convergence of our solver by running at a variety of
 resolutions and computing the norm of the error with respect to the
@@ -292,122 +207,79 @@ analytic solution. This is shown below:</p>
 <p>The movie below shows the smoothing at each level to realize this solution:</p>
 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
     <iframe src="https://www.youtube.com/embed/h9MUgwJvr-g?rel=0" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
-</div><br></div>
-<div class="section" id="projection">
-<h3>projection<a class="headerlink" href="#projection" title="Permalink to this headline">¶</a></h3>
-<p>Another example (<code class="docutils literal"><span class="pre">examples/multigrid/project_periodic.py</span></code>) uses
-multigrid to extract the divergence free part of a velocity field.
-This is run as:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>./project-periodic.py
-</pre></div>
-</div>
-<p>Given a vector field, <span class="math">\(U\)</span>, we can decompose it into a divergence free part, <span class="math">\(U_d\)</span>, and the gradient of a scalar, <span class="math">\(\phi\)</span>:</p>
-<div class="math">
+</div><br><p>You can run this example locally by running the <code class="docutils literal notranslate"><span class="pre">mg_vis.py</span></code> script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./examples/multigrid/mg_vis.py</span>
+</pre></div></div></section>
+<section id="projection">
+<h3>projection<a class="headerlink" href="#projection" title="Permalink to this heading">¶</a></h3>
+<p>Another example uses multigrid to extract the divergence free part of a velocity
+field.  This is run as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./examples/multigrid/project_periodic.py</span>
+</pre></div></div><p>Given a vector field, <span class="math notranslate nohighlight">\(U\)</span>, we can decompose it into a divergence free part, <span class="math notranslate nohighlight">\(U_d\)</span>, and the gradient of a scalar, <span class="math notranslate nohighlight">\(\phi\)</span>:</p>
+<div class="math notranslate nohighlight">
 \[U = U_d + \nabla \phi\]</div>
 <p>We can project out the divergence free part by taking the divergence, leading to an elliptic equation:</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\nabla^2 \phi = \nabla \cdot U\]</div>
-<p>The <code class="docutils literal"><span class="pre">project-periodic.py</span></code> script starts with a divergence free
+<p>The <code class="docutils literal notranslate"><span class="pre">project-periodic.py</span></code> script starts with a divergence free
 velocity field, adds to it the gradient of a scalar, and then projects
 it to recover the divergence free part. The error can found by
 comparing the original velocity field to the recovered field. The
 results are shown below:</p>
 <img alt="_images/project.png" class="align-center" src="_images/project.png" />
 <p>Left is the original u velocity, middle is the modified field after adding the gradient of the scalar, and right is the recovered field.</p>
-</div>
-</div>
-<div class="section" id="exercises">
-<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="explorations">
-<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">¶</a></h2>
+<section id="explorations">
+<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
-<li>Try doing just smoothing, no multigrid. Show that it still converges
+<li><p>Try doing just smoothing, no multigrid. Show that it still converges
 second order if you use enough iterations, but that the amount of
-time needed to get a solution is much greater.</li>
+time needed to get a solution is much greater.</p></li>
 </ul>
-</div>
-<div class="section" id="extensions">
-<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="extensions">
+<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
-<li>Implement inhomogeneous dirichlet boundary conditions</li>
-<li>Add a different bottom solver to the multigrid algorithm</li>
-<li>Make the multigrid solver work for non-square domains</li>
+<li><p>Implement inhomogeneous dirichlet boundary conditions</p></li>
+<li><p>Add a different bottom solver to the multigrid algorithm</p></li>
+<li><p>Make the multigrid solver work for non-square domains</p></li>
 </ul>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
-           </div>
-           <div class="articleComments">
-            
            </div>
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="multigrid-examples.html" class="btn btn-neutral float-right" title="Multigrid examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="compressible_compare.html" class="btn btn-neutral" title="Compressible solver comparisons" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="compressible_compare.html" class="btn btn-neutral float-left" title="Compressible solver comparisons" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="multigrid-examples.html" class="btn btn-neutral float-right" title="Multigrid examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2018, pyro development tem.
-
-    </p>
+    <p>&#169; Copyright 2022, pyro development team.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'2.2',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

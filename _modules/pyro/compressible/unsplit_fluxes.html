@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyro.compressible.unsplit_fluxes &mdash; pyro 4.0.1.post4+gc829962 documentation</title>
+      <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/clipboard.min.js"></script>
+        <script src="../../../_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> pyro
+          </a>
+              <div class="version">
+                4.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">pyro basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Setting up pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible_compare.html">Compressible solver comparisons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../swe_basics.html">Shallow water solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../particles_basics.html">Particles</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../testing.html">Testing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../help.html">Contributing and getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ack.html#history">History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Software Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>pyro.compressible.unsplit_fluxes</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pyro.compressible.unsplit_fluxes</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Implementation of the Colella 2nd order unsplit Godunov scheme.  This</span>
+<span class="sd">is a 2-dimensional implementation only.  We assume that the grid is</span>
+<span class="sd">uniform, but it is relatively straightforward to relax this</span>
+<span class="sd">assumption.</span>
+
+<span class="sd">There are several different options for this solver (they are all</span>
+<span class="sd">discussed in the Colella paper).</span>
+
+<span class="sd">* limiter: 0 = no limiting; 1 = 2nd order MC limiter; 2 = 4th order MC limiter</span>
+
+<span class="sd">* riemann: HLLC or CGF (for Colella, Glaz, and Freguson solver)</span>
+
+<span class="sd">* use_flattening: set to 1 to use the multidimensional flattening at shocks</span>
+
+<span class="sd">* delta, z0, z1: flattening parameters (we use Colella 1990 defaults)</span>
+
+<span class="sd">The grid indices look like::</span>
+
+<span class="sd">   j+3/2--+---------+---------+---------+</span>
+<span class="sd">          |         |         |         |</span>
+<span class="sd">     j+1 _|         |         |         |</span>
+<span class="sd">          |         |         |         |</span>
+<span class="sd">          |         |         |         |</span>
+<span class="sd">   j+1/2--+---------XXXXXXXXXXX---------+</span>
+<span class="sd">          |         X         X         |</span>
+<span class="sd">       j _|         X         X         |</span>
+<span class="sd">          |         X         X         |</span>
+<span class="sd">          |         X         X         |</span>
+<span class="sd">   j-1/2--+---------XXXXXXXXXXX---------+</span>
+<span class="sd">          |         |         |         |</span>
+<span class="sd">     j-1 _|         |         |         |</span>
+<span class="sd">          |         |         |         |</span>
+<span class="sd">          |         |         |         |</span>
+<span class="sd">   j-3/2--+---------+---------+---------+</span>
+<span class="sd">          |    |    |    |    |    |    |</span>
+<span class="sd">              i-1        i        i+1</span>
+<span class="sd">        i-3/2     i-1/2     i+1/2     i+3/2</span>
+
+<span class="sd">We wish to solve</span>
+
+<span class="sd">.. math::</span>
+
+<span class="sd">   U_t + F^x_x + F^y_y = H</span>
+
+<span class="sd">we want U_{i+1/2}^{n+1/2} -- the interface values that are input to</span>
+<span class="sd">the Riemann problem through the faces for each zone.</span>
+
+<span class="sd">Taylor expanding yields::</span>
+
+<span class="sd">    n+1/2                     dU           dU</span>
+<span class="sd">   U          = U   + 0.5 dx  --  + 0.5 dt --</span>
+<span class="sd">    i+1/2,j,L    i,j          dx           dt</span>
+
+
+<span class="sd">                              dU             dF^x   dF^y</span>
+<span class="sd">              = U   + 0.5 dx  --  - 0.5 dt ( ---- + ---- - H )</span>
+<span class="sd">                 i,j          dx              dx     dy</span>
+
+
+<span class="sd">                               dU      dF^x            dF^y</span>
+<span class="sd">              = U   + 0.5 ( dx -- - dt ---- ) - 0.5 dt ---- + 0.5 dt H</span>
+<span class="sd">                 i,j           dx       dx              dy</span>
+
+
+<span class="sd">                                   dt       dU           dF^y</span>
+<span class="sd">              = U   + 0.5 dx ( 1 - -- A^x ) --  - 0.5 dt ---- + 0.5 dt H</span>
+<span class="sd">                 i,j               dx       dx            dy</span>
+
+
+<span class="sd">                                 dt       _            dF^y</span>
+<span class="sd">              = U   + 0.5  ( 1 - -- A^x ) DU  - 0.5 dt ---- + 0.5 dt H</span>
+<span class="sd">                 i,j             dx                     dy</span>
+
+<span class="sd">                      +----------+-----------+  +----+----+   +---+---+</span>
+<span class="sd">                                 |                   |            |</span>
+
+<span class="sd">                     this is the monotonized   this is the   source term</span>
+<span class="sd">                     central difference term   transverse</span>
+<span class="sd">                                               flux term</span>
+
+<span class="sd">There are two components, the central difference in the normal to the</span>
+<span class="sd">interface, and the transverse flux difference.  This is done for the</span>
+<span class="sd">left and right sides of all 4 interfaces in a zone, which are then</span>
+<span class="sd">used as input to the Riemann problem, yielding the 1/2 time interface</span>
+<span class="sd">values::</span>
+
+<span class="sd">    n+1/2</span>
+<span class="sd">   U</span>
+<span class="sd">    i+1/2,j</span>
+
+<span class="sd">Then, the zone average values are updated in the usual finite-volume</span>
+<span class="sd">way::</span>
+
+<span class="sd">    n+1    n     dt    x  n+1/2       x  n+1/2</span>
+<span class="sd">   U    = U    + -- { F (U       ) - F (U       ) }</span>
+<span class="sd">    i,j    i,j   dx       i-1/2,j        i+1/2,j</span>
+
+
+<span class="sd">                 dt    y  n+1/2       y  n+1/2</span>
+<span class="sd">               + -- { F (U       ) - F (U       ) }</span>
+<span class="sd">                 dy       i,j-1/2        i,j+1/2</span>
+
+<span class="sd">Updating U_{i,j}:</span>
+
+<span class="sd">* We want to find the state to the left and right (or top and bottom)</span>
+<span class="sd">  of each interface, ex. U_{i+1/2,j,[lr]}^{n+1/2}, and use them to</span>
+<span class="sd">  solve a Riemann problem across each of the four interfaces.</span>
+
+<span class="sd">* U_{i+1/2,j,[lr]}^{n+1/2} is comprised of two parts, the computation</span>
+<span class="sd">  of the monotonized central differences in the normal direction</span>
+<span class="sd">  (eqs. 2.8, 2.10) and the computation of the transverse derivatives,</span>
+<span class="sd">  which requires the solution of a Riemann problem in the transverse</span>
+<span class="sd">  direction (eqs. 2.9, 2.14).</span>
+
+<span class="sd">  * the monotonized central difference part is computed using the</span>
+<span class="sd">    primitive variables.</span>
+
+<span class="sd">  * We compute the central difference part in both directions before</span>
+<span class="sd">    doing the transverse flux differencing, since for the high-order</span>
+<span class="sd">    transverse flux implementation, we use these as the input to the</span>
+<span class="sd">    transverse Riemann problem.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">pyro.compressible</span> <span class="k">as</span> <span class="nn">comp</span>
+<span class="kn">import</span> <span class="nn">pyro.compressible.interface</span> <span class="k">as</span> <span class="nn">ifc</span>
+<span class="kn">import</span> <span class="nn">pyro.mesh.array_indexer</span> <span class="k">as</span> <span class="nn">ai</span>
+<span class="kn">import</span> <span class="nn">pyro.mesh.reconstruction</span> <span class="k">as</span> <span class="nn">reconstruction</span>
+<span class="kn">from</span> <span class="nn">pyro.util</span> <span class="kn">import</span> <span class="n">msg</span>
+
+
+<div class="viewcode-block" id="unsplit_fluxes"><a class="viewcode-back" href="../../../pyro.compressible.html#pyro.compressible.unsplit_fluxes.unsplit_fluxes">[docs]</a><span class="k">def</span> <span class="nf">unsplit_fluxes</span><span class="p">(</span><span class="n">my_data</span><span class="p">,</span> <span class="n">my_aux</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span> <span class="n">solid</span><span class="p">,</span> <span class="n">tc</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    unsplitFluxes returns the fluxes through the x and y interfaces by</span>
+<span class="sd">    doing an unsplit reconstruction of the interface values and then</span>
+<span class="sd">    solving the Riemann problem through all the interfaces at once</span>
+
+<span class="sd">    currently we assume a gamma-law EOS</span>
+
+<span class="sd">    The runtime parameter grav is assumed to be the gravitational</span>
+<span class="sd">    acceleration in the y-direction</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    my_data : CellCenterData2d object</span>
+<span class="sd">        The data object containing the grid and advective scalar that</span>
+<span class="sd">        we are advecting.</span>
+<span class="sd">    rp : RuntimeParameters object</span>
+<span class="sd">        The runtime parameters for the simulation</span>
+<span class="sd">    vars : Variables object</span>
+<span class="sd">        The Variables object that tells us which indices refer to which</span>
+<span class="sd">        variables</span>
+<span class="sd">    tc : TimerCollection object</span>
+<span class="sd">        The timers we are using to profile</span>
+<span class="sd">    dt : float</span>
+<span class="sd">        The timestep we are advancing through.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : ndarray, ndarray</span>
+<span class="sd">        The fluxes on the x- and y-interfaces</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">tm_flux</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">timer</span><span class="p">(</span><span class="s2">&quot;unsplitFluxes&quot;</span><span class="p">)</span>
+    <span class="n">tm_flux</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span>
+
+    <span class="n">myg</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span>
+
+    <span class="n">gamma</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;eos.gamma&quot;</span><span class="p">)</span>
+
+    <span class="c1"># =========================================================================</span>
+    <span class="c1"># compute the primitive variables</span>
+    <span class="c1"># =========================================================================</span>
+    <span class="c1"># Q = (rho, u, v, p, {X})</span>
+
+    <span class="n">dens</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
+    <span class="n">ymom</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;y-momentum&quot;</span><span class="p">)</span>
+
+    <span class="n">q</span> <span class="o">=</span> <span class="n">comp</span><span class="o">.</span><span class="n">cons_to_prim</span><span class="p">(</span><span class="n">my_data</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span> <span class="n">myg</span><span class="p">)</span>
+
+    <span class="c1"># =========================================================================</span>
+    <span class="c1"># compute the flattening coefficients</span>
+    <span class="c1"># =========================================================================</span>
+
+    <span class="c1"># there is a single flattening coefficient (xi) for all directions</span>
+    <span class="n">use_flattening</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;compressible.use_flattening&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">use_flattening</span><span class="p">:</span>
+        <span class="n">xi_x</span> <span class="o">=</span> <span class="n">reconstruction</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span> <span class="n">rp</span><span class="p">)</span>
+        <span class="n">xi_y</span> <span class="o">=</span> <span class="n">reconstruction</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span> <span class="n">rp</span><span class="p">)</span>
+
+        <span class="n">xi</span> <span class="o">=</span> <span class="n">reconstruction</span><span class="o">.</span><span class="n">flatten_multid</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">xi_x</span><span class="p">,</span> <span class="n">xi_y</span><span class="p">,</span> <span class="n">ivars</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">xi</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+    <span class="c1"># monotonized central differences</span>
+    <span class="n">tm_limit</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">timer</span><span class="p">(</span><span class="s2">&quot;limiting&quot;</span><span class="p">)</span>
+    <span class="n">tm_limit</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span>
+
+    <span class="n">limiter</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;compressible.limiter&quot;</span><span class="p">)</span>
+
+    <span class="n">ldx</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">(</span><span class="n">nvar</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">)</span>
+    <span class="n">ldy</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">(</span><span class="n">nvar</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">):</span>
+        <span class="n">ldx</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">xi</span><span class="o">*</span><span class="n">reconstruction</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">],</span> <span class="n">myg</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">limiter</span><span class="p">)</span>
+        <span class="n">ldy</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">xi</span><span class="o">*</span><span class="n">reconstruction</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">],</span> <span class="n">myg</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">limiter</span><span class="p">)</span>
+
+    <span class="n">tm_limit</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+
+    <span class="c1"># =========================================================================</span>
+    <span class="c1"># x-direction</span>
+    <span class="c1"># =========================================================================</span>
+
+    <span class="c1"># left and right primitive variable states</span>
+    <span class="n">tm_states</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">timer</span><span class="p">(</span><span class="s2">&quot;interfaceStates&quot;</span><span class="p">)</span>
+    <span class="n">tm_states</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span>
+
+    <span class="n">V_l</span><span class="p">,</span> <span class="n">V_r</span> <span class="o">=</span> <span class="n">ifc</span><span class="o">.</span><span class="n">states</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
+                          <span class="n">ivars</span><span class="o">.</span><span class="n">irho</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iu</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iv</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ip</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ix</span><span class="p">,</span>
+                          <span class="n">ivars</span><span class="o">.</span><span class="n">naux</span><span class="p">,</span>
+                          <span class="n">gamma</span><span class="p">,</span>
+                          <span class="n">q</span><span class="p">,</span> <span class="n">ldx</span><span class="p">)</span>
+
+    <span class="n">tm_states</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+
+    <span class="c1"># transform interface states back into conserved variables</span>
+    <span class="n">U_xl</span> <span class="o">=</span> <span class="n">comp</span><span class="o">.</span><span class="n">prim_to_cons</span><span class="p">(</span><span class="n">V_l</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span> <span class="n">myg</span><span class="p">)</span>
+    <span class="n">U_xr</span> <span class="o">=</span> <span class="n">comp</span><span class="o">.</span><span class="n">prim_to_cons</span><span class="p">(</span><span class="n">V_r</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span> <span class="n">myg</span><span class="p">)</span>
+
+    <span class="c1"># =========================================================================</span>
+    <span class="c1"># y-direction</span>
+    <span class="c1"># =========================================================================</span>
+
+    <span class="c1"># left and right primitive variable states</span>
+    <span class="n">tm_states</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span>
+
+    <span class="n">_V_l</span><span class="p">,</span> <span class="n">_V_r</span> <span class="o">=</span> <span class="n">ifc</span><span class="o">.</span><span class="n">states</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
+                            <span class="n">ivars</span><span class="o">.</span><span class="n">irho</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iu</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iv</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ip</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ix</span><span class="p">,</span>
+                            <span class="n">ivars</span><span class="o">.</span><span class="n">naux</span><span class="p">,</span>
+                            <span class="n">gamma</span><span class="p">,</span>
+                            <span class="n">q</span><span class="p">,</span> <span class="n">ldy</span><span class="p">)</span>
+    <span class="n">V_l</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_V_l</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
+    <span class="n">V_r</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_V_r</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
+
+    <span class="n">tm_states</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+
+    <span class="c1"># transform interface states back into conserved variables</span>
+    <span class="n">U_yl</span> <span class="o">=</span> <span class="n">comp</span><span class="o">.</span><span class="n">prim_to_cons</span><span class="p">(</span><span class="n">V_l</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span> <span class="n">myg</span><span class="p">)</span>
+    <span class="n">U_yr</span> <span class="o">=</span> <span class="n">comp</span><span class="o">.</span><span class="n">prim_to_cons</span><span class="p">(</span><span class="n">V_r</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span> <span class="n">myg</span><span class="p">)</span>
+
+    <span class="c1"># =========================================================================</span>
+    <span class="c1"># apply source terms</span>
+    <span class="c1"># =========================================================================</span>
+    <span class="n">grav</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;compressible.grav&quot;</span><span class="p">)</span>
+
+    <span class="n">ymom_src</span> <span class="o">=</span> <span class="n">my_aux</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;ymom_src&quot;</span><span class="p">)</span>
+    <span class="n">ymom_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">dens</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">grav</span>
+    <span class="n">my_aux</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;ymom_src&quot;</span><span class="p">)</span>
+
+    <span class="n">E_src</span> <span class="o">=</span> <span class="n">my_aux</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;E_src&quot;</span><span class="p">)</span>
+    <span class="n">E_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">ymom</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">grav</span>
+    <span class="n">my_aux</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;E_src&quot;</span><span class="p">)</span>
+
+    <span class="c1"># ymom_xl[i,j] += 0.5*dt*dens[i-1,j]*grav</span>
+    <span class="n">U_xl</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dt</span><span class="o">*</span><span class="n">ymom_src</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">U_xl</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">iener</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dt</span><span class="o">*</span><span class="n">E_src</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># ymom_xr[i,j] += 0.5*dt*dens[i,j]*grav</span>
+    <span class="n">U_xr</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dt</span><span class="o">*</span><span class="n">ymom_src</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">U_xr</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">iener</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dt</span><span class="o">*</span><span class="n">E_src</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># ymom_yl[i,j] += 0.5*dt*dens[i,j-1]*grav</span>
+    <span class="n">U_yl</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dt</span><span class="o">*</span><span class="n">ymom_src</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">U_yl</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">iener</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dt</span><span class="o">*</span><span class="n">E_src</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># ymom_yr[i,j] += 0.5*dt*dens[i,j]*grav</span>
+    <span class="n">U_yr</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dt</span><span class="o">*</span><span class="n">ymom_src</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">U_yr</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">iener</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dt</span><span class="o">*</span><span class="n">E_src</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># =========================================================================</span>
+    <span class="c1"># compute transverse fluxes</span>
+    <span class="c1"># =========================================================================</span>
+    <span class="n">tm_riem</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">timer</span><span class="p">(</span><span class="s2">&quot;riemann&quot;</span><span class="p">)</span>
+    <span class="n">tm_riem</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span>
+
+    <span class="n">riemann</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;compressible.riemann&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">riemann</span> <span class="o">==</span> <span class="s2">&quot;HLLC&quot;</span><span class="p">:</span>
+        <span class="n">riemannFunc</span> <span class="o">=</span> <span class="n">ifc</span><span class="o">.</span><span class="n">riemann_hllc</span>
+    <span class="k">elif</span> <span class="n">riemann</span> <span class="o">==</span> <span class="s2">&quot;CGF&quot;</span><span class="p">:</span>
+        <span class="n">riemannFunc</span> <span class="o">=</span> <span class="n">ifc</span><span class="o">.</span><span class="n">riemann_cgf</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ERROR: Riemann solver undefined&quot;</span><span class="p">)</span>
+
+    <span class="n">_fx</span> <span class="o">=</span> <span class="n">riemannFunc</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span>
+                      <span class="n">ivars</span><span class="o">.</span><span class="n">idens</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ixmom</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iener</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">irhox</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">naux</span><span class="p">,</span>
+                      <span class="n">solid</span><span class="o">.</span><span class="n">xl</span><span class="p">,</span> <span class="n">solid</span><span class="o">.</span><span class="n">xr</span><span class="p">,</span>
+                      <span class="n">gamma</span><span class="p">,</span> <span class="n">U_xl</span><span class="p">,</span> <span class="n">U_xr</span><span class="p">)</span>
+
+    <span class="n">_fy</span> <span class="o">=</span> <span class="n">riemannFunc</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span>
+                      <span class="n">ivars</span><span class="o">.</span><span class="n">idens</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ixmom</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iener</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">irhox</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">naux</span><span class="p">,</span>
+                      <span class="n">solid</span><span class="o">.</span><span class="n">yl</span><span class="p">,</span> <span class="n">solid</span><span class="o">.</span><span class="n">yr</span><span class="p">,</span>
+                      <span class="n">gamma</span><span class="p">,</span> <span class="n">U_yl</span><span class="p">,</span> <span class="n">U_yr</span><span class="p">)</span>
+
+    <span class="n">F_x</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_fx</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
+    <span class="n">F_y</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_fy</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
+
+    <span class="n">tm_riem</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+
+    <span class="c1"># =========================================================================</span>
+    <span class="c1"># construct the interface values of U now</span>
+    <span class="c1"># =========================================================================</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    finally, we can construct the state perpendicular to the interface</span>
+<span class="sd">    by adding the central difference part to the transverse flux</span>
+<span class="sd">    difference.</span>
+
+<span class="sd">    The states that we represent by indices i,j are shown below</span>
+<span class="sd">    (1,2,3,4):</span>
+
+
+<span class="sd">      j+3/2--+----------+----------+----------+</span>
+<span class="sd">             |          |          |          |</span>
+<span class="sd">             |          |          |          |</span>
+<span class="sd">        j+1 -+          |          |          |</span>
+<span class="sd">             |          |          |          |</span>
+<span class="sd">             |          |          |          |    1: U_xl[i,j,:] = U</span>
+<span class="sd">      j+1/2--+----------XXXXXXXXXXXX----------+                      i-1/2,j,L</span>
+<span class="sd">             |          X          X          |</span>
+<span class="sd">             |          X          X          |</span>
+<span class="sd">          j -+        1 X 2        X          |    2: U_xr[i,j,:] = U</span>
+<span class="sd">             |          X          X          |                      i-1/2,j,R</span>
+<span class="sd">             |          X    4     X          |</span>
+<span class="sd">      j-1/2--+----------XXXXXXXXXXXX----------+</span>
+<span class="sd">             |          |    3     |          |    3: U_yl[i,j,:] = U</span>
+<span class="sd">             |          |          |          |                      i,j-1/2,L</span>
+<span class="sd">        j-1 -+          |          |          |</span>
+<span class="sd">             |          |          |          |</span>
+<span class="sd">             |          |          |          |    4: U_yr[i,j,:] = U</span>
+<span class="sd">      j-3/2--+----------+----------+----------+                      i,j-1/2,R</span>
+<span class="sd">             |    |     |    |     |    |     |</span>
+<span class="sd">                 i-1         i         i+1</span>
+<span class="sd">           i-3/2      i-1/2      i+1/2      i+3/2</span>
+
+
+<span class="sd">    remember that the fluxes are stored on the left edge, so</span>
+
+<span class="sd">    F_x[i,j,:] = F_x</span>
+<span class="sd">                    i-1/2, j</span>
+
+<span class="sd">    F_y[i,j,:] = F_y</span>
+<span class="sd">                    i, j-1/2</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">tm_transverse</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">timer</span><span class="p">(</span><span class="s2">&quot;transverse flux addition&quot;</span><span class="p">)</span>
+    <span class="n">tm_transverse</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span>
+
+    <span class="n">dtdx</span> <span class="o">=</span> <span class="n">dt</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span>
+    <span class="n">dtdy</span> <span class="o">=</span> <span class="n">dt</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
+
+    <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">):</span>
+
+        <span class="c1"># U_xl[i,j,:] = U_xl[i,j,:] - 0.5*dt/dy * (F_y[i-1,j+1,:] - F_y[i-1,j,:])</span>
+        <span class="n">U_xl</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> \
+            <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dtdy</span><span class="o">*</span><span class="p">(</span><span class="n">F_y</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="n">F_y</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">))</span>
+
+        <span class="c1"># U_xr[i,j,:] = U_xr[i,j,:] - 0.5*dt/dy * (F_y[i,j+1,:] - F_y[i,j,:])</span>
+        <span class="n">U_xr</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> \
+            <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dtdy</span><span class="o">*</span><span class="p">(</span><span class="n">F_y</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="n">F_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">))</span>
+
+        <span class="c1"># U_yl[i,j,:] = U_yl[i,j,:] - 0.5*dt/dx * (F_x[i+1,j-1,:] - F_x[i,j-1,:])</span>
+        <span class="n">U_yl</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> \
+            <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dtdx</span><span class="o">*</span><span class="p">(</span><span class="n">F_x</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="n">F_x</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">))</span>
+
+        <span class="c1"># U_yr[i,j,:] = U_yr[i,j,:] - 0.5*dt/dx * (F_x[i+1,j,:] - F_x[i,j,:])</span>
+        <span class="n">U_yr</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> \
+            <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dtdx</span><span class="o">*</span><span class="p">(</span><span class="n">F_x</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="n">F_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">))</span>
+
+    <span class="n">tm_transverse</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+
+    <span class="c1"># =========================================================================</span>
+    <span class="c1"># construct the fluxes normal to the interfaces</span>
+    <span class="c1"># =========================================================================</span>
+
+    <span class="c1"># up until now, F_x and F_y stored the transverse fluxes, now we</span>
+    <span class="c1"># overwrite with the fluxes normal to the interfaces</span>
+
+    <span class="n">tm_riem</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span>
+
+    <span class="n">_fx</span> <span class="o">=</span> <span class="n">riemannFunc</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span>
+                      <span class="n">ivars</span><span class="o">.</span><span class="n">idens</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ixmom</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iener</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">irhox</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">naux</span><span class="p">,</span>
+                      <span class="n">solid</span><span class="o">.</span><span class="n">xl</span><span class="p">,</span> <span class="n">solid</span><span class="o">.</span><span class="n">xr</span><span class="p">,</span>
+                      <span class="n">gamma</span><span class="p">,</span> <span class="n">U_xl</span><span class="p">,</span> <span class="n">U_xr</span><span class="p">)</span>
+
+    <span class="n">_fy</span> <span class="o">=</span> <span class="n">riemannFunc</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span>
+                      <span class="n">ivars</span><span class="o">.</span><span class="n">idens</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ixmom</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iener</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">irhox</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">naux</span><span class="p">,</span>
+                      <span class="n">solid</span><span class="o">.</span><span class="n">yl</span><span class="p">,</span> <span class="n">solid</span><span class="o">.</span><span class="n">yr</span><span class="p">,</span>
+                      <span class="n">gamma</span><span class="p">,</span> <span class="n">U_yl</span><span class="p">,</span> <span class="n">U_yr</span><span class="p">)</span>
+
+    <span class="n">F_x</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_fx</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
+    <span class="n">F_y</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_fy</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
+
+    <span class="n">tm_riem</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+
+    <span class="c1"># =========================================================================</span>
+    <span class="c1"># apply artificial viscosity</span>
+    <span class="c1"># =========================================================================</span>
+    <span class="n">cvisc</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;compressible.cvisc&quot;</span><span class="p">)</span>
+
+    <span class="n">_ax</span><span class="p">,</span> <span class="n">_ay</span> <span class="o">=</span> <span class="n">ifc</span><span class="o">.</span><span class="n">artificial_viscosity</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
+        <span class="n">cvisc</span><span class="p">,</span> <span class="n">q</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">iu</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">),</span> <span class="n">q</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">iv</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">))</span>
+
+    <span class="n">avisco_x</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_ax</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
+    <span class="n">avisco_y</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_ay</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
+
+    <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">):</span>
+        <span class="c1"># F_x = F_x + avisco_x * (U(i-1,j) - U(i,j))</span>
+        <span class="n">var</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var_by_index</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+        <span class="n">F_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> \
+            <span class="n">avisco_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">var</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)</span> <span class="o">-</span> <span class="n">var</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">))</span>
+
+        <span class="c1"># F_y = F_y + avisco_y * (U(i,j-1) - U(i,j))</span>
+        <span class="n">F_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> \
+            <span class="n">avisco_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">var</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)</span> <span class="o">-</span> <span class="n">var</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">))</span>
+
+    <span class="n">tm_flux</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">F_x</span><span class="p">,</span> <span class="n">F_y</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, pyro development team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
