@@ -37,6 +37,8 @@ benchmarks = ["advection/tests/*.h5",
 
 setup(name='pyro',
       description='A python hydrodynamics code for teaching and prototyping',
+      long_description=open('README.md', 'r').read(),
+      long_description_content_type='text/markdown',
       url='https://github.com/python-hydro/pyro2',
       license='BSD',
       packages=find_packages(),
