@@ -14,3 +14,4 @@ numpydoc
 sphinxcontrib_bibtex
 sphinx-copybutton
 sphinx-prompt
+importlib-metadata
