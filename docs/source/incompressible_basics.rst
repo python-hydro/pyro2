@@ -32,7 +32,7 @@ vortices as the shear layer rolls up. This problem was explored in a
 number of papers, for example, Bell, Colella, & Glaz (1989) and Martin
 & Colella (2000). This is run as:
 
-.. code-block:: none
+.. prompt:: bash
 
    ./pyro_sim.py incompressible shear inputs.shear
 
@@ -55,7 +55,7 @@ conditions is from Minion (1996). Limiting can be disabled by adding
 ``incompressible.limiter=0`` to the run command. The basic set of tests
 shown below are run as:
 
-.. code-block:: none
+.. prompt:: bash
 
    ./pyro_sim.py incompressible converge inputs.converge.32 vis.dovis=0
    ./pyro_sim.py incompressible converge inputs.converge.64 vis.dovis=0

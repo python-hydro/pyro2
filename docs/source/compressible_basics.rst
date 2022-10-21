@@ -100,7 +100,7 @@ Riemann solver.
 
 Because it is one-dimensional, we run it in narrow domains in the x- or y-directions. It can be run as:
 
-.. code-block:: none
+.. prompt:: bash
 
    ./pyro_sim.py compressible sod inputs.sod.x
    ./pyro_sim.py compressible sod inputs.sod.y
@@ -126,7 +126,7 @@ solution (Sedov 1959). A lot of energy is point into a point in a
 uniform medium and a blast wave propagates outward. The Sedov problem
 is run as:
 
-.. code-block:: none
+.. prompt:: bash
 
    ./pyro_sim.py compressible sedov inputs.sedov
 
@@ -163,7 +163,7 @@ investigation
 <http://planets.utsc.utoronto.ca/~pawel/Riemann.hydro.html>`_ is
 online by Pawel Artymowicz). It is run as:
 
-.. code-block:: none
+.. prompt:: bash
 
    ./pyro_sim.py compressible quad inputs.quad
 
@@ -179,7 +179,7 @@ perturbs the interface with a sinusoidal velocity. Hydrostatic
 boundary conditions are used to ensure any initial pressure waves can
 escape the domain. It is run as:
 
-.. code-block:: none
+.. prompt:: bash
 
    ./pyro_sim.py compressible rt inputs.rt
 
@@ -197,7 +197,7 @@ bubble
 The bubble problem initializes a hot spot in a stratified domain and
 watches it buoyantly rise and roll up. This is run as:
 
-.. code-block:: none
+.. prompt:: bash
 
    ./pyro_sim.py compressible bubble inputs.bubble
 

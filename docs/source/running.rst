@@ -16,7 +16,7 @@ directory).
 
 For example, to run the Sedov problem with the compressible solver we would do:
 
-.. code-block:: none
+.. prompt:: bash
 
    ./pyro_sim.py compressible sedov inputs.sedov
 
@@ -25,7 +25,7 @@ This knows to look for ``inputs.sedov`` in ``compressible/problems/``
 
 To run the smooth Gaussian advection problem with the advection solver, we would do:
 
-.. code-block:: none
+.. prompt:: bash
 
    ./pyro_sim.py advection smooth inputs.smooth
 
@@ -33,7 +33,7 @@ Any runtime parameter can also be specified on the command line, after
 the inputs file. For example, to disable runtime visualization for the
 above run, we could do:
 
-.. code-block:: none
+.. prompt:: bash
 
    ./pyro_sim.py advection smooth inputs.smooth vis.dovis=0
 

@@ -31,7 +31,7 @@ The bubble problem places a buoyant bubble in a stratified atmosphere
 and watches the development of the roll-up due to shear as it
 rises. This is run as:
 
-.. code-block:: none
+.. prompt:: bash
 
    ./pyro_sim.py lm_atm bubble inputs.bubble
 

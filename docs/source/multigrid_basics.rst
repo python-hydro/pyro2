@@ -39,7 +39,7 @@ multigrid test
 A basic multigrid test is run as (using a path relative to the root of the
 ``pyro2`` repository):
 
-.. code-block:: none
+.. prompt:: bash
 
    ./examples/multigrid/mg_test_simple.py
 
@@ -84,7 +84,7 @@ The movie below shows the smoothing at each level to realize this solution:
 
 You can run this example locally by running the ``mg_vis.py`` script:
 
-.. code-block:: none
+.. prompt:: bash
 
    ./examples/multigrid/mg_vis.py
 
@@ -94,7 +94,7 @@ projection
 Another example uses multigrid to extract the divergence free part of a velocity
 field.  This is run as:
 
-.. code-block:: none
+.. prompt:: bash
 
    ./examples/multigrid/project_periodic.py
 

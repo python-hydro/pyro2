@@ -37,7 +37,7 @@ equations book for details on this problem and the exact Riemann solver.
 Because it is one-dimensional, we run it in narrow domains in the x- or
 y-directions. It can be run as:
 
-.. code-block:: none
+.. prompt:: bash
 
    ./pyro_sim.py swe dam inputs.dam.x
    ./pyro_sim.py swe dam inputs.dam.y
@@ -68,7 +68,7 @@ investigation
 <http://planets.utsc.utoronto.ca/~pawel/Riemann.hydro.html>`_ is
 online by Pawel Artymowicz). It is run as:
 
-.. code-block:: none
+.. prompt:: bash
 
    ./pyro_sim.py swe quad inputs.quad
 
@@ -82,7 +82,7 @@ domain travelling in the opposite direction. At the interface of the layers,
 shearing produces the characteristic Kelvin-Helmholtz instabilities, just as
 is seen in the standard compressible problem. It is run as:
 
-.. code-block:: none
+.. prompt:: bash
 
    ./pyro_sim.py swe kh inputs.kh
 
