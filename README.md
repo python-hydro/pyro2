@@ -58,7 +58,7 @@ https://python-hydro.github.io/pyro2
 
   - There are several ways to install pyro.  The simplest way is via PyPI/pip:
 
-```
+    ```
     pip install pyro-hydro
     ```
 
