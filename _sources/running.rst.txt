@@ -1,9 +1,10 @@
 Running
 =======
 
-Pyro can be run in two ways: either from the commandline, using the ``pyro_sim.py``
-script and passing in the solver, problem and inputs as arguments, or by using
-the :func:`Pyro <pyro.pyro_sim.pyro>` class.
+Pyro can be run in two ways: either from the commandline, using the
+``pyro_sim.py`` script (this will be installed into your search path)
+and passing in the solver, problem and inputs as arguments, or by
+using the :func:`Pyro <pyro.pyro_sim.Pyro>` class.
 
 Commandline
 ------------
@@ -18,7 +19,7 @@ For example, to run the Sedov problem with the compressible solver we would do:
 
 .. prompt:: bash
 
-   ./pyro_sim.py compressible sedov inputs.sedov
+   pyro_sim.py compressible sedov inputs.sedov
 
 This knows to look for ``inputs.sedov`` in ``compressible/problems/``
 (alternately, you can specify the full path for the inputs file).
@@ -27,7 +28,7 @@ To run the smooth Gaussian advection problem with the advection solver, we would
 
 .. prompt:: bash
 
-   ./pyro_sim.py advection smooth inputs.smooth
+   pyro_sim.py advection smooth inputs.smooth
 
 Any runtime parameter can also be specified on the command line, after
 the inputs file. For example, to disable runtime visualization for the
@@ -35,7 +36,7 @@ above run, we could do:
 
 .. prompt:: bash
 
-   ./pyro_sim.py advection smooth inputs.smooth vis.dovis=0
+   pyro_sim.py advection smooth inputs.smooth vis.dovis=0
 
 
 .. note::
@@ -63,11 +64,11 @@ Kelvin-Helmholtz problem ``kh``, we would do the following:
 
 .. code-block:: python
 
-    from pyro import Pyro
-    pyro = Pyro("compressible")
-    pyro.initialize_problem(problem_name="kh",
-                            inputs_file="inputs.kh")
-    pyro.run_sim()
+    from pyro.pyro_sim import Pyro
+    p = Pyro("compressible")
+    p.initialize_problem(problem_name="kh",
+                         inputs_file="inputs.kh")
+    p.run_sim()
 
 Instead of using an inputs file to define the problem parameters, we can define a
 dictionary of parameters and pass them into the :func:`initialize_problem
@@ -79,9 +80,9 @@ visualization for the previous example, we would do:
 .. code-block:: python
 
     parameters = {"vis.dovis":0}
-    pyro.initialize_problem(problem_name="kh",
-                            inputs_file="inputs.kh",
-                            inputs_dict=parameters)
+    p.initialize_problem(problem_name="kh",
+                         inputs_file="inputs.kh",
+                         inputs_dict=parameters)
 
 It's possible to evolve the simulation forward timestep by timestep manually using
 the :func:`single_step <pyro.pyro_sim.Pyro.single_step>` function (rather than allowing
@@ -90,7 +91,7 @@ simulation forward by a single step, we'd run
 
 .. code-block:: python
 
-    pyro.single_step()
+    p.single_step()
 
 This will fill the boundary conditions, compute the timestep ``dt``, evolve a
 single timestep and do output/visualization (if required).

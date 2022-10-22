@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.util.io_pyro &mdash; pyro 4.0.1.post12+gbfed02d documentation</title>
+  <title>pyro.util.io_pyro &mdash; pyro 4.0.1.post13+g9a8ca26 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -180,7 +180,7 @@
                 <span class="n">bc_solver</span> <span class="o">=</span> <span class="s2">&quot;compressible&quot;</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">bc_solver</span> <span class="o">=</span> <span class="n">solver_name</span>
-            <span class="n">bcmod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bc_solver</span><span class="p">,</span> <span class="s2">&quot;BC&quot;</span><span class="p">))</span>
+            <span class="n">bcmod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;pyro.</span><span class="si">{</span><span class="n">bc_solver</span><span class="si">}</span><span class="s2">.BC&quot;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">custom_bcs</span><span class="p">:</span>
                 <span class="n">bnd</span><span class="o">.</span><span class="n">define_bc</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">bcmod</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">is_solid</span><span class="o">=</span><span class="n">custom_bcs</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
 
@@ -225,7 +225,7 @@
             <span class="n">my_particles</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="n">solver_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">solver</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">solver_name</span><span class="p">)</span>
+            <span class="n">solver</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;pyro.</span><span class="si">{</span><span class="n">solver_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
             <span class="n">sim</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">Simulation</span><span class="p">(</span><span class="n">solver_name</span><span class="p">,</span> <span class="n">problem_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="n">sim</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">n</span>
