@@ -1,7 +1,7 @@
 Setting up pyro
 ===============
 
-You can clone pyro from github: `http://github.com/python-hydro/pyro2 <http://github.com/python-hydro/pyro2>`_
+You can clone pyro from github: `https://github.com/python-hydro/pyro2 <https://github.com/python-hydro/pyro2>`_
 
 The following python packages are required:
 
@@ -11,8 +11,14 @@ The following python packages are required:
 * ``h5py``
 * ``pytest`` (for unit tests)
 
-The easiest way to install python is to use the ``setup.py``.  From
-the ``pyro2/`` directory, we do:
+The easiest way to install python is via PyPI using pip:
+
+.. prompt:: bash
+
+   pip install pyro-hydro
+
+Alternately, you can install from source, using the ``setup.py``.
+From the ``pyro2/`` directory, we do:
 
 .. prompt:: bash
 

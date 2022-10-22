@@ -56,16 +56,19 @@ https://python-hydro.github.io/pyro2
   - We require `numpy`, `numba`, `matplotlib`, and `h5py` for running pyro
     and `setuptools_scm` for the install.
 
-  - We recommend that pyro be installed so that it is found in your python search
-    path, and can work more easily with Jupyter notebooks.
+  - There are several ways to install pyro.  The simplest way is via PyPI/pip:
 
-    pyro can be installed on your system via:
+```
+    pip install pyro-hydro
+    ```
+
+    Alternately, you can install directly from source, via
 
     ```
     python setup.py install --user
     ```
 
-    alternately, you can use `develop` instead of `install` if you are
+    or you can use `develop` instead of `install` if you are
     planning on developing pyro solvers directly.
 
   - Not all matplotlib backends allow for the interactive plotting as
