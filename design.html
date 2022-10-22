@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Design ideas &mdash; pyro 4.0.1.post11+g643ce55 documentation</title>
+  <title>Design ideas &mdash; pyro 4.0.1.post12+gbfed02d documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -55,7 +55,10 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Setting up pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notes.html">Notes on the numerical methods</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Design ideas</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#directory-structure">Directory structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#directory-structure">Directory structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pyro"><code class="docutils literal notranslate"><span class="pre">pyro/</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#numba">Numba</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#main-driver">Main driver</a></li>
 </ul>
@@ -161,18 +164,27 @@ between complexity and speed.</p>
 Astronomy &amp; Computing <a class="reference external" href="http://adsabs.harvard.edu/abs/2013arXiv1306.6883Z">[paper link]</a>.</p>
 <section id="directory-structure">
 <h2>Directory structure<a class="headerlink" href="#directory-structure" title="Permalink to this heading">¶</a></h2>
+<p>pyro follows a standard python package structure.  The main directory
+(called <code class="docutils literal notranslate"><span class="pre">pyro2/</span></code> for historical reasons) contains:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">docs/</span></code> : The documentation in Sphinx format</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">examples/</span></code> : Some example notebooks</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">paper/</span></code> : the original JOSS paper</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">presentations/</span></code> : some presentations given on pyro in the past</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pyro/</span></code> : the main source directory</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">www/</span></code> : the logo used in the website</p></li>
+</ul>
+<p>It is at this level (<code class="docutils literal notranslate"><span class="pre">pyro2/</span></code>) that the installation of pyro is done (via <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>).</p>
+<section id="pyro">
+<h3><code class="docutils literal notranslate"><span class="pre">pyro/</span></code><a class="headerlink" href="#pyro" title="Permalink to this heading">¶</a></h3>
+<p>The main code is all contained in the <code class="docutils literal notranslate"><span class="pre">pyro/</span></code> subdirectory.  Here we discuss that.</p>
 <p>The files for each solver are in their own sub-directory, with
 additional sub-directories for the mesh and utilities. Each solver has
 two sub-directories: <code class="docutils literal notranslate"><span class="pre">problems/</span></code> and <code class="docutils literal notranslate"><span class="pre">tests/</span></code>. These store the
 different problem setups for the solver and reference output for
 testing.</p>
-<p>Your <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> environment variable should be set to include the
-top-level <code class="docutils literal notranslate"><span class="pre">pyro2/</span></code> directory.</p>
 <p>The overall structure is:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">pyro2/</span></code>: This is the top-level directory.  The main driver,
-<code class="docutils literal notranslate"><span class="pre">pyro_sim.py</span></code>, is here, and all pyro simulations should be run from
-this directory.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">advection/</span></code>: The linear advection equation solver using the CTU
 method. All advection-specific routines live here.</p>
 <ul>
@@ -280,12 +292,14 @@ including runtime parameters, I/O, profiling, and pretty output
 modes.</p></li>
 </ul>
 </section>
+</section>
 <section id="numba">
 <h2>Numba<a class="headerlink" href="#numba" title="Permalink to this heading">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">numba</span></code> is used to speed up some critical portions of the code. Numba is a <em>just-in-time compiler</em> for python. When a call is first
-made to a function decorated with Numba’s <code class="docutils literal notranslate"><span class="pre">&#64;njit</span></code> decorator, it is compiled to
-machine code ‘just-in-time’ for it to be executed. Once compiled, it can then
-run at (near-to) native machine code speed.</p>
+<p>Numba is used to speed up some critical portions of the code. Numba is
+a <em>just-in-time compiler</em> for python. When a call is first made to a
+function decorated with Numba’s <code class="docutils literal notranslate"><span class="pre">&#64;njit</span></code> decorator, it is compiled to
+machine code ‘just-in-time’ for it to be executed. Once compiled, it
+can then run at (near-to) native machine code speed.</p>
 <p>We also use Numba’s <code class="docutils literal notranslate"><span class="pre">cache=True</span></code> option, which means that once the
 code is compiled, Numba will write the code into a file-based cache. The next
 time you run the same bit of code, Numba will use the saved version rather than
@@ -294,8 +308,8 @@ simulation.</p>
 </section>
 <section id="main-driver">
 <h2>Main driver<a class="headerlink" href="#main-driver" title="Permalink to this heading">¶</a></h2>
-<p>All the solvers use the same driver, the main <code class="docutils literal notranslate"><span class="pre">pyro_sim.py</span></code> script. The
-flowchart for the driver is:</p>
+<p>All the solvers use the same driver, the main <code class="docutils literal notranslate"><span class="pre">pyro_sim.py</span></code> script,
+contained in <code class="docutils literal notranslate"><span class="pre">pyro2/pyro/</span></code>. The flowchart for the driver is:</p>
 <ul class="simple">
 <li><p>parse runtime parameters</p></li>
 <li><p>setup the grid (<code class="docutils literal notranslate"><span class="pre">initialize()</span></code> function from the solver)</p>

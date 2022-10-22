@@ -18,20 +18,35 @@ Astronomy & Computing `[paper link] <http://adsabs.harvard.edu/abs/2013arXiv1306
 Directory structure
 -------------------
 
+pyro follows a standard python package structure.  The main directory
+(called ``pyro2/`` for historical reasons) contains:
+
+* ``docs/`` : The documentation in Sphinx format
+
+* ``examples/`` : Some example notebooks
+
+* ``paper/`` : the original JOSS paper
+
+* ``presentations/`` : some presentations given on pyro in the past
+
+* ``pyro/`` : the main source directory
+
+* ``www/`` : the logo used in the website
+
+It is at this level (``pyro2/``) that the installation of pyro is done (via ``setup.py``).
+
+``pyro/``
+^^^^^^^^^
+
+The main code is all contained in the ``pyro/`` subdirectory.  Here we discuss that.
+
 The files for each solver are in their own sub-directory, with
 additional sub-directories for the mesh and utilities. Each solver has
 two sub-directories: ``problems/`` and ``tests/``. These store the
 different problem setups for the solver and reference output for
 testing.
 
-Your ``PYTHONPATH`` environment variable should be set to include the
-top-level ``pyro2/`` directory.
-
 The overall structure is:
-
-* ``pyro2/``: This is the top-level directory.  The main driver,
-  ``pyro_sim.py``, is here, and all pyro simulations should be run from
-  this directory.
 
 * ``advection/``: The linear advection equation solver using the CTU
   method. All advection-specific routines live here.
@@ -127,13 +142,16 @@ The overall structure is:
   modes.
 
 
+
+
 Numba
 -----
 
-``numba`` is used to speed up some critical portions of the code. Numba is a *just-in-time compiler* for python. When a call is first
-made to a function decorated with Numba's ``@njit`` decorator, it is compiled to
-machine code 'just-in-time' for it to be executed. Once compiled, it can then
-run at (near-to) native machine code speed.
+Numba is used to speed up some critical portions of the code. Numba is
+a *just-in-time compiler* for python. When a call is first made to a
+function decorated with Numba's ``@njit`` decorator, it is compiled to
+machine code 'just-in-time' for it to be executed. Once compiled, it
+can then run at (near-to) native machine code speed.
 
 We also use Numba's ``cache=True`` option, which means that once the
 code is compiled, Numba will write the code into a file-based cache. The next
@@ -145,8 +163,8 @@ simulation.
 Main driver
 -----------
 
-All the solvers use the same driver, the main ``pyro_sim.py`` script. The
-flowchart for the driver is:
+All the solvers use the same driver, the main ``pyro_sim.py`` script,
+contained in ``pyro2/pyro/``. The flowchart for the driver is:
 
 * parse runtime parameters
 
