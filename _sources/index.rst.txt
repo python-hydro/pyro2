@@ -7,7 +7,7 @@
 pyro: a python hydro code
 *************************
 
-`http://github.com/python-hydro/pyro2 <http://github.com/python-hydro/pyro2>`_
+`https://github.com/python-hydro/pyro2 <https://github.com/python-hydro/pyro2>`_
 
 .. image:: pyro_plots.png
 

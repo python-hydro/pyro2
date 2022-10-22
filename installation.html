@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Setting up pyro &mdash; pyro 4.0.1.post8+ga35d9e2 documentation</title>
+  <title>Setting up pyro &mdash; pyro 4.0.1.post9+g6b1a81b documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -147,7 +147,7 @@
 </style>
 <section id="setting-up-pyro">
 <h1>Setting up pyro<a class="headerlink" href="#setting-up-pyro" title="Permalink to this heading">¶</a></h1>
-<p>You can clone pyro from github: <a class="reference external" href="http://github.com/python-hydro/pyro2">http://github.com/python-hydro/pyro2</a></p>
+<p>You can clone pyro from github: <a class="reference external" href="https://github.com/python-hydro/pyro2">https://github.com/python-hydro/pyro2</a></p>
 <p>The following python packages are required:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">numpy</span></code></p></li>
@@ -156,13 +156,15 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">h5py</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">pytest</span></code> (for unit tests)</p></li>
 </ul>
-<p>The easiest way to install python is to use the <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>.  From
-the <code class="docutils literal notranslate"><span class="pre">pyro2/</span></code> directory, we do:</p>
+<p>The easiest way to install python is via PyPI using pip:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
 span.prompt1:before {
   content: "$ ";
 }
-</style><span class="prompt1">python setup.py install --user</span>
+</style><span class="prompt1">pip install pyro-hydro</span>
+</pre></div></div><p>Alternately, you can install from source, using the <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>.
+From the <code class="docutils literal notranslate"><span class="pre">pyro2/</span></code> directory, we do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">python setup.py install --user</span>
 </pre></div></div><p>This will put the main driver, <code class="docutils literal notranslate"><span class="pre">pyro_sim.py</span></code>, in your path, and
 allow you to run pyro from anywhere.</p>
 <p>If you intend on directly developing the solvers, you can instead do:</p>
