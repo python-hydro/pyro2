@@ -62,7 +62,7 @@ def read(filename):
                 bc_solver = "compressible"
             else:
                 bc_solver = solver_name
-            bcmod = importlib.import_module("{}.{}".format(bc_solver, "BC"))
+            bcmod = importlib.import_module(f"pyro.{bc_solver}.BC")
             for name in custom_bcs:
                 bnd.define_bc(name, bcmod.user, is_solid=custom_bcs[name])
 
@@ -107,7 +107,7 @@ def read(filename):
             my_particles = None
 
         if solver_name is not None:
-            solver = importlib.import_module(solver_name)
+            solver = importlib.import_module(f"pyro.{solver_name}")
 
             sim = solver.Simulation(solver_name, problem_name, None)
             sim.n = n

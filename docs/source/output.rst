@@ -48,7 +48,7 @@ the ghost cells).
 .. code-block:: python
 
    import matplotlib.pyplot as plt
-   import util_pyro.io as io
+   import pyro.util.io_pyro as io
    sim = io.read("sedov_unsplit_0000.h5")
    dens = sim.cc_data.get_var("density")
    plt.plot(dens.g.x, dens[:,dens.g.ny//2])
