@@ -22,10 +22,10 @@ We import the basic mesh functionality as:
 
 .. code-block:: python
 
-   import mesh.patch as patch
-   import mesh.fv as fv
-   import mesh.boundary as bnd
-   import mesh.array_indexer as ai
+   import pyro.mesh.patch as patch
+   import pyro.mesh.fv as fv
+   import pyro.mesh.boundary as bnd
+   import pyro.mesh.array_indexer as ai
 
 There are several main objects in the patch class that we interact with:
 
