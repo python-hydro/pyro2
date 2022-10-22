@@ -16,7 +16,7 @@ with different spatial and temporal intergration schemes.
 ``advection`` solver
 --------------------
 
-:py:mod:`advection` implements the directionally unsplit corner
+:py:mod:`pyro.advection` implements the directionally unsplit corner
 transport upwind algorithm :cite:`colella:1990` with piecewise linear reconstruction.
 This is an overall second-order accurate method, with timesteps restricted
 by 
@@ -33,7 +33,7 @@ The parameters for this solver are:
 ``advection_fv4`` solver
 ------------------------
 
-:py:mod:`advection_fv4` uses a fourth-order accurate finite-volume
+:py:mod:`pyro.advection_fv4` uses a fourth-order accurate finite-volume
 method with RK4 time integration, following the ideas in
 :cite:`mccorquodalecolella`.  It can be thought of as a
 method-of-lines integration, and as such has a slightly more restrictive
@@ -53,7 +53,7 @@ The parameters for this solver are:
 ``advection_nonuniform`` solver
 -------------------------------
 
-:py:mod:`advection_nonuniform` models advection with a non-uniform
+:py:mod:`pyro.advection_nonuniform` models advection with a non-uniform
 velocity field.  This is used to implement the slotted disk problem
 from :cite:`ZALESAK1979335`.  The basic method is similar to the
 algorithm used by the main ``advection`` solver.
@@ -65,7 +65,7 @@ The paramters for this solver are:
 ``advection_rk`` solver
 -----------------------
 
-:py:mod:`advection_rk` uses a method of lines time-integration
+:py:mod:`pyro.advection_rk` uses a method of lines time-integration
 approach with piecewise linear spatial reconstruction for linear
 advection.  This is overall second-order accurate, so it represents a
 simpler algorithm than the ``advection_fv4`` method (in particular, we
@@ -79,7 +79,7 @@ The parameter for this solver are:
 ``advection_weno`` solver
 -------------------------
 
-:py:mod:`advection_weno` uses a WENO reconstruction and method of
+:py:mod:`pyro.advection_weno` uses a WENO reconstruction and method of
 lines time-integration
 
 

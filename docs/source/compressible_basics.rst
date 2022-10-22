@@ -29,7 +29,7 @@ direction is allowed.
 ``compressible`` solver
 -----------------------
 
-:py:mod:`compressible` is based on a directionally unsplit (the corner
+:py:mod:`pyro.compressible` is based on a directionally unsplit (the corner
 transport upwind algorithm) piecewise linear method for the Euler
 equations, following :cite:`colella:1990`.  This is overall second-order
 accurate.
@@ -41,7 +41,7 @@ The parameters for this solver are:
 ``compressible_rk`` solver
 --------------------------
 
-:py:mod:`compressible_rk` uses a method of lines time-integration
+:py:mod:`pyro.compressible_rk` uses a method of lines time-integration
 approach with piecewise linear spatial reconstruction for the Euler
 equations.  This is overall second-order accurate.
 
@@ -52,7 +52,7 @@ The parameters for this solver are:
 ``compressible_fv4`` solver
 ---------------------------
 
-:py:mod:`compressible_fv4` uses a 4th order accurate method with RK4
+:py:mod:`pyro.compressible_fv4` uses a 4th order accurate method with RK4
 time integration, following :cite:`mccorquodalecolella`.
 
 The parameter for this solver are:
@@ -63,9 +63,9 @@ The parameter for this solver are:
 ``compressible_sdc`` solver
 ---------------------------
 
-:py:mod:`compressible_sdc` uses a 4th order accurate method with
+:py:mod:`pyro.compressible_sdc` uses a 4th order accurate method with
 spectral-deferred correction (SDC) for the time integration.  This
-shares much in common with the :py:mod:`compressible_fv4` solver, aside from
+shares much in common with the :py:mod:`pyro.compressible_fv4` solver, aside from
 how the time-integration is handled.
 
 The parameters for this solver are:
@@ -78,12 +78,12 @@ Example problems
 
 .. note::
 
-   The 4th-order accurate solver (:py:mod:`compressible_fv4`) requires that
+   The 4th-order accurate solver (:py:mod:`pyro.compressible_fv4`) requires that
    the initialization create cell-averages accurate to 4th-order.  To
    allow for all the solvers to use the same problem setups, we assume
    that the initialization routines initialize cell-centers (which is
    fine for 2nd-order accuracy), and the
-   :func:`preevolve() <compressible_fv4.simulation.Simulation.preevolve>` method will convert
+   :func:`preevolve() <pyro.compressible_fv4.simulation.Simulation.preevolve>` method will convert
    these to cell-averages automatically after initialization.
 
 
