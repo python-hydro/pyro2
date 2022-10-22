@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Running &mdash; pyro 4.0.1.post10+g430b1d3 documentation</title>
+  <title>Running &mdash; pyro 4.0.1.post11+g643ce55 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -183,16 +183,16 @@ in  <a class="reference internal" href="analysis.html#analysis"><span class="std
 </section>
 <section id="pyro-class">
 <h2>Pyro class<a class="headerlink" href="#pyro-class" title="Permalink to this heading">¶</a></h2>
-<p>Alternatively, pyro can be run using the <code class="xref py py-func docutils literal notranslate"><span class="pre">Pyro</span></code> class. This provides
+<p>Alternatively, pyro can be run using the <a class="reference internal" href="pyro.html#pyro.pyro_sim.Pyro" title="pyro.pyro_sim.Pyro"><code class="xref py py-func docutils literal notranslate"><span class="pre">Pyro</span></code></a> class. This provides
 an interface that enables simulations to be set up and run in a Jupyter notebook – see
 <code class="docutils literal notranslate"><span class="pre">examples/examples.ipynb</span></code> for an example notebook. A simulation can be set up and run
 by carrying out the following steps:</p>
 <ul class="simple">
-<li><p>create a <code class="xref py py-func docutils literal notranslate"><span class="pre">Pyro</span></code> object, initializing it with a specific solver</p></li>
+<li><p>create a <a class="reference internal" href="pyro.html#pyro.pyro_sim.Pyro" title="pyro.pyro_sim.Pyro"><code class="xref py py-func docutils literal notranslate"><span class="pre">Pyro</span></code></a> object, initializing it with a specific solver</p></li>
 <li><p>initialize the problem, passing in runtime parameters and inputs</p></li>
 <li><p>run the simulation</p></li>
 </ul>
-<p>For example, if we wished to use the <code class="xref py py-mod docutils literal notranslate"><span class="pre">compressible</span></code> solver to run the
+<p>For example, if we wished to use the <a class="reference internal" href="pyro.compressible.html#module-pyro.compressible" title="pyro.compressible"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compressible</span></code></a> solver to run the
 Kelvin-Helmholtz problem <code class="docutils literal notranslate"><span class="pre">kh</span></code>, we would do the following:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyro</span> <span class="kn">import</span> <span class="n">Pyro</span>
 <span class="n">pyro</span> <span class="o">=</span> <span class="n">Pyro</span><span class="p">(</span><span class="s2">&quot;compressible&quot;</span><span class="p">)</span>
@@ -202,7 +202,7 @@ Kelvin-Helmholtz problem <code class="docutils literal notranslate"><span class=
 </pre></div>
 </div>
 <p>Instead of using an inputs file to define the problem parameters, we can define a
-dictionary of parameters and pass them into the <code class="xref py py-func docutils literal notranslate"><span class="pre">initialize_problem</span></code> function using the keyword argument <code class="docutils literal notranslate"><span class="pre">inputs_dict</span></code>.
+dictionary of parameters and pass them into the <a class="reference internal" href="pyro.html#pyro.pyro_sim.Pyro.initialize_problem" title="pyro.pyro_sim.Pyro.initialize_problem"><code class="xref py py-func docutils literal notranslate"><span class="pre">initialize_problem</span></code></a> function using the keyword argument <code class="docutils literal notranslate"><span class="pre">inputs_dict</span></code>.
 If an inputs file is also passed into the function, the parameters in the dictionary
 will override any parameters in the file. For example, if we wished to turn off
 visualization for the previous example, we would do:</p>
@@ -213,8 +213,8 @@ visualization for the previous example, we would do:</p>
 </pre></div>
 </div>
 <p>It’s possible to evolve the simulation forward timestep by timestep manually using
-the <code class="xref py py-func docutils literal notranslate"><span class="pre">single_step</span></code> function (rather than allowing
-<code class="xref py py-func docutils literal notranslate"><span class="pre">run_sim</span></code> to do this for us). To evolve our example
+the <a class="reference internal" href="pyro.html#pyro.pyro_sim.Pyro.single_step" title="pyro.pyro_sim.Pyro.single_step"><code class="xref py py-func docutils literal notranslate"><span class="pre">single_step</span></code></a> function (rather than allowing
+<a class="reference internal" href="pyro.html#pyro.pyro_sim.Pyro.run_sim" title="pyro.pyro_sim.Pyro.run_sim"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_sim</span></code></a> to do this for us). To evolve our example
 simulation forward by a single step, we’d run</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyro</span><span class="o">.</span><span class="n">single_step</span><span class="p">()</span>
 </pre></div>
@@ -242,7 +242,7 @@ default value of any of these previously defined
 parameters. Additionally, any parameter can be specified at the end of
 the commandline, and these will be used to override the defaults. The
 collection of runtime parameters is stored in a
-<code class="xref py py-func docutils literal notranslate"><span class="pre">RuntimeParameters</span></code> object.</p>
+<a class="reference internal" href="pyro.util.html#pyro.util.runparams.RuntimeParameters" title="pyro.util.runparams.RuntimeParameters"><code class="xref py py-func docutils literal notranslate"><span class="pre">RuntimeParameters</span></code></a> object.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">runparams.py</span></code> module in <code class="docutils literal notranslate"><span class="pre">util/</span></code> controls access to the runtime
 parameters. You can setup the runtime parameters, parse an inputs
 file, and access the value of a parameter (<code class="docutils literal notranslate"><span class="pre">hydro.cfl</span></code> in this example)

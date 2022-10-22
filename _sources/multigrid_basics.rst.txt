@@ -8,16 +8,16 @@ of grids. Chapter 9 of the `pdf notes <http://bender.astro.sunysb.edu/hydro_by_e
 
 There are three solvers:
 
-* The core solver, provided in the class :func:`MG.CellCenterMG2d <multigrid.MG.CellCenterMG2d>` solves constant-coefficient Helmholtz problems of the form
+* The core solver, provided in the class :func:`MG.CellCenterMG2d <pyro.multigrid.MG.CellCenterMG2d>` solves constant-coefficient Helmholtz problems of the form
   :math:`(\alpha - \beta \nabla^2) \phi = f`
 
-* The class :func:`variable_coeff_MG.VarCoeffCCMG2d <multigrid.variable_coeff_MG.VarCoeffCCMG2d>` solves variable coefficient Poisson problems of the form
+* The class :func:`variable_coeff_MG.VarCoeffCCMG2d <pyro.multigrid.variable_coeff_MG.VarCoeffCCMG2d>` solves variable coefficient Poisson problems of the form
   :math:`\nabla \cdot (\eta \nabla \phi ) = f`.  This class inherits the core functionality from ``MG.CellCenterMG2d``.
 
-* The class :func:`general_MG.GeneralMG2d <multigrid.general_MG.GeneralMG2d>` solves a general elliptic
+* The class :func:`general_MG.GeneralMG2d <pyro.multigrid.general_MG.GeneralMG2d>` solves a general elliptic
   equation of the form :math:`\alpha \phi + \nabla \cdot ( \beta
   \nabla \phi) + \gamma \cdot \nabla \phi = f`.  This class inherits
-  the core functionality from :func:`MG.CellCenterMG2d <multigrid.MG.CellCenterMG2d>`.
+  the core functionality from :func:`MG.CellCenterMG2d <pyro.multigrid.MG.CellCenterMG2d>`.
 
   This solver is the only one to support inhomogeneous boundary
   conditions.

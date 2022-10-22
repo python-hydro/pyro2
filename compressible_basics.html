@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Compressible hydrodynamics solvers &mdash; pyro 4.0.1.post10+g430b1d3 documentation</title>
+  <title>Compressible hydrodynamics solvers &mdash; pyro 4.0.1.post11+g643ce55 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -188,7 +188,7 @@ directory in the solver’s directory.</p>
 </div>
 <section id="compressible-solver">
 <h2><code class="docutils literal notranslate"><span class="pre">compressible</span></code> solver<a class="headerlink" href="#compressible-solver" title="Permalink to this heading">¶</a></h2>
-<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">compressible</span></code> is based on a directionally unsplit (the corner
+<p><a class="reference internal" href="pyro.compressible.html#module-pyro.compressible" title="pyro.compressible"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.compressible</span></code></a> is based on a directionally unsplit (the corner
 transport upwind algorithm) piecewise linear method for the Euler
 equations, following <span id="id1">[<a class="reference internal" href="references.html#id2" title="P. Colella. Multidimensional upwind methods for hyperbolic conservation laws. Journal of Computational Physics, 87:171-200, March 1990. doi:10.1016/0021-9991(90)90233-Q.">Colella90</a>]</span>.  This is overall second-order
 accurate.</p>
@@ -314,7 +314,7 @@ accurate.</p>
 </section>
 <section id="compressible-rk-solver">
 <h2><code class="docutils literal notranslate"><span class="pre">compressible_rk</span></code> solver<a class="headerlink" href="#compressible-rk-solver" title="Permalink to this heading">¶</a></h2>
-<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">compressible_rk</span></code> uses a method of lines time-integration
+<p><a class="reference internal" href="pyro.compressible_rk.html#module-pyro.compressible_rk" title="pyro.compressible_rk"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.compressible_rk</span></code></a> uses a method of lines time-integration
 approach with piecewise linear spatial reconstruction for the Euler
 equations.  This is overall second-order accurate.</p>
 <p>The parameters for this solver are:</p>
@@ -423,7 +423,7 @@ hydrostatic equilibrium</p></td>
 </section>
 <section id="compressible-fv4-solver">
 <h2><code class="docutils literal notranslate"><span class="pre">compressible_fv4</span></code> solver<a class="headerlink" href="#compressible-fv4-solver" title="Permalink to this heading">¶</a></h2>
-<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">compressible_fv4</span></code> uses a 4th order accurate method with RK4
+<p><a class="reference internal" href="pyro.compressible_fv4.html#module-pyro.compressible_fv4" title="pyro.compressible_fv4"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.compressible_fv4</span></code></a> uses a 4th order accurate method with RK4
 time integration, following <span id="id2">[<a class="reference internal" href="references.html#id3" title="P. McCorquodale and P. Colella. A high-order finite-volume method for conservation laws on locally refined grids. Communication in Applied Mathematics and Computational Science, 6(1):1–25, 2011.">McCorquodaleColella11</a>]</span>.</p>
 <p>The parameter for this solver are:</p>
 <ul>
@@ -522,9 +522,9 @@ time integration, following <span id="id2">[<a class="reference internal" href="
 </section>
 <section id="compressible-sdc-solver">
 <h2><code class="docutils literal notranslate"><span class="pre">compressible_sdc</span></code> solver<a class="headerlink" href="#compressible-sdc-solver" title="Permalink to this heading">¶</a></h2>
-<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">compressible_sdc</span></code> uses a 4th order accurate method with
+<p><a class="reference internal" href="pyro.compressible_sdc.html#module-pyro.compressible_sdc" title="pyro.compressible_sdc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.compressible_sdc</span></code></a> uses a 4th order accurate method with
 spectral-deferred correction (SDC) for the time integration.  This
-shares much in common with the <code class="xref py py-mod docutils literal notranslate"><span class="pre">compressible_fv4</span></code> solver, aside from
+shares much in common with the <a class="reference internal" href="pyro.compressible_fv4.html#module-pyro.compressible_fv4" title="pyro.compressible_fv4"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.compressible_fv4</span></code></a> solver, aside from
 how the time-integration is handled.</p>
 <p>The parameters for this solver are:</p>
 <ul>
@@ -625,12 +625,12 @@ how the time-integration is handled.</p>
 <h2>Example problems<a class="headerlink" href="#example-problems" title="Permalink to this heading">¶</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The 4th-order accurate solver (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compressible_fv4</span></code>) requires that
+<p>The 4th-order accurate solver (<a class="reference internal" href="pyro.compressible_fv4.html#module-pyro.compressible_fv4" title="pyro.compressible_fv4"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.compressible_fv4</span></code></a>) requires that
 the initialization create cell-averages accurate to 4th-order.  To
 allow for all the solvers to use the same problem setups, we assume
 that the initialization routines initialize cell-centers (which is
 fine for 2nd-order accuracy), and the
-<code class="xref py py-func docutils literal notranslate"><span class="pre">preevolve()</span></code> method will convert
+<a class="reference internal" href="pyro.compressible_fv4.html#pyro.compressible_fv4.simulation.Simulation.preevolve" title="pyro.compressible_fv4.simulation.Simulation.preevolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">preevolve()</span></code></a> method will convert
 these to cell-averages automatically after initialization.</p>
 </div>
 <section id="sod">

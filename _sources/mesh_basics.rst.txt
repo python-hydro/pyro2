@@ -8,15 +8,15 @@ discretization. The basic theory of such methods is discussed in
 .. note::
 
    The core data structure that holds data on the grid is
-   :func:`CellCenterData2d <mesh.patch.CellCenterData2d>`.  This does
+   :func:`CellCenterData2d <pyro.mesh.patch.CellCenterData2d>`.  This does
    not distinguish between cell-centered data and cell-averages.  This
    is fine for methods that are second-order accurate, but for
-   higher-order methods, the :func:`FV2d <mesh.fv.FV2d>` class has
+   higher-order methods, the :func:`FV2d <pyro.mesh.fv.FV2d>` class has
    methods for converting between the two data centerings.
 
 
-:mod:`mesh.patch <mesh.patch>` implementation and use
------------------------------------------------------
+:mod:`mesh.patch <pyro.mesh.patch>` implementation and use
+----------------------------------------------------------
 
 We import the basic mesh functionality as:
 
@@ -29,38 +29,38 @@ We import the basic mesh functionality as:
 
 There are several main objects in the patch class that we interact with:
 
-* :func:`patch.Grid2d <mesh.patch.Grid2d>`: this is the main grid
+* :func:`patch.Grid2d <pyro.mesh.patch.Grid2d>`: this is the main grid
   object. It is basically a container that holds the number of zones
   in each coordinate direction, the domain extrema, and the
   coordinates of the zones themselves (both at the edges and center).
 
-* :func:`patch.CellCenterData2d <mesh.patch.CellCenterData2d>`: this
+* :func:`patch.CellCenterData2d <pyro.mesh.patch.CellCenterData2d>`: this
   is the main data object—it holds cell-centered data on a grid.  To
-  build a :func:`patch.CellCenterData2d <mesh.patch.CellCenterData2d>`
-  object you need to pass in the :func:`patch.Grid2d <mesh.patch.Grid2d>`
+  build a :func:`patch.CellCenterData2d <pyro.mesh.patch.CellCenterData2d>`
+  object you need to pass in the :func:`patch.Grid2d <pyro.mesh.patch.Grid2d>`
   object that defines the mesh. The
-  :func:`patch.CellCenterData2d <mesh.patch.CellCenterData2d>` object then
+  :func:`patch.CellCenterData2d <pyro.mesh.patch.CellCenterData2d>` object then
   allocates storage for the unknowns that live on the grid. This class
   also provides methods to fill boundary conditions, retrieve the data
   in different fashions, and read and write the object from/to disk.
 
-* :func:`fv.FV2d <mesh.fv.FV2d>`: this is a special class derived from
-  :func:`patch.CellCenterData2d <mesh.patch.CellCenterData2d>` that implements some extra functions
+* :func:`fv.FV2d <pyro.mesh.fv.FV2d>`: this is a special class derived from
+  :func:`patch.CellCenterData2d <pyro.mesh.patch.CellCenterData2d>` that implements some extra functions
   needed to convert between cell-center data and averages with
   fourth-order accuracy.
 
-* :func:`bnd.BC <mesh.boundary.BC>`: This is simply a container that
+* :func:`bnd.BC <pyro.mesh.boundary.BC>`: This is simply a container that
   holds the names of the boundary conditions on each edge of the
   domain.
 
-* :func:`ai.ArrayIndexer <mesh.array_indexer.ArrayIndexer>`: This is a
+* :func:`ai.ArrayIndexer <pyro.mesh.array_indexer.ArrayIndexer>`: This is a
   class that subclasses the NumPy ndarray and makes the data in the
   array know about the details of the grid it is defined on. In
   particular, it knows which cells are valid and which are the ghost
   cells, and it has methods to do the :math:`a_{i+1,j}` operations that are
   common in difference methods.
 
-* :func:`integration.RKIntegrator <mesh.integration.RKIntegrator>`:
+* :func:`integration.RKIntegrator <pyro.mesh.integration.RKIntegrator>`:
   This class implements Runge-Kutta integration in time by managing a
   hierarchy of grids at different time-levels.  A Butcher tableau
   provides the weights and evaluation points for the different stages
@@ -101,14 +101,14 @@ Jupyter notebook
 
 A Jupyter notebook that illustrates some of the basics of working with
 the grid is provided as `mesh-examples.ipynb <https://github.com/python-hydro/pyro2/blob/main/mesh/mesh-examples.ipynb>`_. This will
-demonstrate, for example, how to use the :func:`ArrayIndexer <mesh.array_indexer.ArrayIndexer>` methods to
+demonstrate, for example, how to use the :func:`ArrayIndexer <pyro.mesh.array_indexer.ArrayIndexer>` methods to
 construct differences.
 
 
 Tests
 -----
 
-The actual filling of the boundary conditions is done by the :func:`fill_BC <mesh.patch.CellCenterData2d.fill_BC>`
+The actual filling of the boundary conditions is done by the :func:`fill_BC <pyro.mesh.patch.CellCenterData2d.fill_BC>`
 method. The script ``bc_demo.py`` tests the various types of boundary
 conditions by initializing a small grid with sequential data, filling
 the BCs, and printing out the results.

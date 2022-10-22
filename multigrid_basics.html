@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Multigrid solvers &mdash; pyro 4.0.1.post10+g430b1d3 documentation</title>
+  <title>Multigrid solvers &mdash; pyro 4.0.1.post11+g643ce55 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -164,14 +164,14 @@ simple relaxation by moving the solution down and up through a series
 of grids. Chapter 9 of the <a class="reference external" href="http://bender.astro.sunysb.edu/hydro_by_example/CompHydroTutorial.pdf">pdf notes</a> gives an introduction to solving elliptic equations, including multigrid.</p>
 <p>There are three solvers:</p>
 <ul>
-<li><p>The core solver, provided in the class <code class="xref py py-func docutils literal notranslate"><span class="pre">MG.CellCenterMG2d</span></code> solves constant-coefficient Helmholtz problems of the form
+<li><p>The core solver, provided in the class <a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d" title="pyro.multigrid.MG.CellCenterMG2d"><code class="xref py py-func docutils literal notranslate"><span class="pre">MG.CellCenterMG2d</span></code></a> solves constant-coefficient Helmholtz problems of the form
 <span class="math notranslate nohighlight">\((\alpha - \beta \nabla^2) \phi = f\)</span></p></li>
-<li><p>The class <code class="xref py py-func docutils literal notranslate"><span class="pre">variable_coeff_MG.VarCoeffCCMG2d</span></code> solves variable coefficient Poisson problems of the form
+<li><p>The class <a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.variable_coeff_MG.VarCoeffCCMG2d" title="pyro.multigrid.variable_coeff_MG.VarCoeffCCMG2d"><code class="xref py py-func docutils literal notranslate"><span class="pre">variable_coeff_MG.VarCoeffCCMG2d</span></code></a> solves variable coefficient Poisson problems of the form
 <span class="math notranslate nohighlight">\(\nabla \cdot (\eta \nabla \phi ) = f\)</span>.  This class inherits the core functionality from <code class="docutils literal notranslate"><span class="pre">MG.CellCenterMG2d</span></code>.</p></li>
-<li><p>The class <code class="xref py py-func docutils literal notranslate"><span class="pre">general_MG.GeneralMG2d</span></code> solves a general elliptic
+<li><p>The class <a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.general_MG.GeneralMG2d" title="pyro.multigrid.general_MG.GeneralMG2d"><code class="xref py py-func docutils literal notranslate"><span class="pre">general_MG.GeneralMG2d</span></code></a> solves a general elliptic
 equation of the form <span class="math notranslate nohighlight">\(\alpha \phi + \nabla \cdot ( \beta
 \nabla \phi) + \gamma \cdot \nabla \phi = f\)</span>.  This class inherits
-the core functionality from <code class="xref py py-func docutils literal notranslate"><span class="pre">MG.CellCenterMG2d</span></code>.</p>
+the core functionality from <a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d" title="pyro.multigrid.MG.CellCenterMG2d"><code class="xref py py-func docutils literal notranslate"><span class="pre">MG.CellCenterMG2d</span></code></a>.</p>
 <p>This solver is the only one to support inhomogeneous boundary
 conditions.</p>
 </li>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Particles &mdash; pyro 4.0.1.post10+g430b1d3 documentation</title>
+  <title>Particles &mdash; pyro 4.0.1.post11+g643ce55 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -150,16 +150,16 @@
 <h1>Particles<a class="headerlink" href="#particles" title="Permalink to this heading">¶</a></h1>
 <p>A solver for modelling particles.</p>
 <section id="particles-particles-implementation-and-use">
-<h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">particles.particles</span></code> implementation and use<a class="headerlink" href="#particles-particles-implementation-and-use" title="Permalink to this heading">¶</a></h2>
+<h2><a class="reference internal" href="pyro.particles.html#module-pyro.particles.particles" title="pyro.particles.particles"><code class="xref py py-mod docutils literal notranslate"><span class="pre">particles.particles</span></code></a> implementation and use<a class="headerlink" href="#particles-particles-implementation-and-use" title="Permalink to this heading">¶</a></h2>
 <p>We import the basic particles module functionality as:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">particles.particles</span> <span class="k">as</span> <span class="nn">particles</span>
 </pre></div>
 </div>
 <p>The particles solver is made up of two classes:</p>
 <ul class="simple">
-<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">Particle</span></code>, which holds
+<li><p><a class="reference internal" href="pyro.particles.html#pyro.particles.particles.Particle" title="pyro.particles.particles.Particle"><code class="xref py py-func docutils literal notranslate"><span class="pre">Particle</span></code></a>, which holds
 the data about a single particle (its position and velocity);</p></li>
-<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">Particles</span></code>, which holds the data
+<li><p><a class="reference internal" href="pyro.particles.html#pyro.particles.particles.Particles" title="pyro.particles.particles.Particles"><code class="xref py py-func docutils literal notranslate"><span class="pre">Particles</span></code></a>, which holds the data
 about a collection of particles.</p></li>
 </ul>
 <p>The particles are stored as a dictionary, and their positions are updated
@@ -169,20 +169,20 @@ in the module, so this could be altered using e.g. a custom <code class="docutil
 function without otherwise affecting the behaviour of the module).</p>
 <p>The particles can be initialized in a number of ways:</p>
 <ul class="simple">
-<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">randomly_generate_particles</span></code>,
+<li><p><a class="reference internal" href="pyro.particles.html#pyro.particles.particles.Particles.randomly_generate_particles" title="pyro.particles.particles.Particles.randomly_generate_particles"><code class="xref py py-func docutils literal notranslate"><span class="pre">randomly_generate_particles</span></code></a>,
 which randomly generates <code class="docutils literal notranslate"><span class="pre">n_particles</span></code> within the domain.</p></li>
-<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">grid_generate_particles</span></code>,
+<li><p><a class="reference internal" href="pyro.particles.html#pyro.particles.particles.Particles.grid_generate_particles" title="pyro.particles.particles.Particles.grid_generate_particles"><code class="xref py py-func docutils literal notranslate"><span class="pre">grid_generate_particles</span></code></a>,
 which will generate approximately <code class="docutils literal notranslate"><span class="pre">n_particles</span></code> equally spaced in the
 x-direction and y-direction (note that it uses the same number of particles in
 each direction, so the spacing will be different in each direction if the
 domain is not square). The number of particles will be increased/decreased
 in order to fill the whole domain.</p></li>
-<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">array_generate_particles</span></code>,
+<li><p><a class="reference internal" href="pyro.particles.html#pyro.particles.particles.Particles.array_generate_particles" title="pyro.particles.particles.Particles.array_generate_particles"><code class="xref py py-func docutils literal notranslate"><span class="pre">array_generate_particles</span></code></a>,
 which generates particles based on array of particle positions passed to the
 constructor.</p></li>
 <li><p>The user can define their own <code class="docutils literal notranslate"><span class="pre">particle_generator</span></code> function and pass this into the
-<code class="xref py py-func docutils literal notranslate"><span class="pre">Particles</span></code> constructor. This function takes the number of particles to be
-generated and returns a dictionary of <code class="xref py py-func docutils literal notranslate"><span class="pre">Particle</span></code> objects.</p></li>
+<a class="reference internal" href="pyro.particles.html#pyro.particles.particles.Particles" title="pyro.particles.particles.Particles"><code class="xref py py-func docutils literal notranslate"><span class="pre">Particles</span></code></a> constructor. This function takes the number of particles to be
+generated and returns a dictionary of <a class="reference internal" href="pyro.particles.html#pyro.particles.particles.Particle" title="pyro.particles.particles.Particle"><code class="xref py py-func docutils literal notranslate"><span class="pre">Particle</span></code></a> objects.</p></li>
 </ul>
 <p>We can turn on/off the particles solver using the following runtime paramters:</p>
 <table class="docutils align-default">
@@ -238,7 +238,7 @@ in as arguments to this function as they cannot be accessed using the standard
 </section>
 <section id="plotting-particles">
 <h2>Plotting particles<a class="headerlink" href="#plotting-particles" title="Permalink to this heading">¶</a></h2>
-<p>Given the <code class="xref py py-func docutils literal notranslate"><span class="pre">Particles</span></code> object <code class="docutils literal notranslate"><span class="pre">particles</span></code>, we can plot the particles by getting
+<p>Given the <a class="reference internal" href="pyro.particles.html#pyro.particles.particles.Particles" title="pyro.particles.particles.Particles"><code class="xref py py-func docutils literal notranslate"><span class="pre">Particles</span></code></a> object <code class="docutils literal notranslate"><span class="pre">particles</span></code>, we can plot the particles by getting
 their positions using</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">particle_positions</span> <span class="o">=</span> <span class="n">particles</span><span class="o">.</span><span class="n">get_positions</span><span class="p">()</span>
 </pre></div>
@@ -265,7 +265,7 @@ x-position, we can plot them on the figure axis <code class="docutils literal no
 <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="n">myg</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymax</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>Applying this to the Kelvin-Helmholtz problem with the <code class="xref py py-mod docutils literal notranslate"><span class="pre">compressible</span></code> solver,
+<p>Applying this to the Kelvin-Helmholtz problem with the <a class="reference internal" href="pyro.compressible.html#module-pyro.compressible" title="pyro.compressible"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compressible</span></code></a> solver,
 we can produce a plot such as the one below, where the particles have been
 plotted on top of the fluid density.</p>
 <img alt="_images/particles_kh_compressible.png" class="align-center" src="_images/particles_kh_compressible.png" />

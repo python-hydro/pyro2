@@ -3,8 +3,8 @@ Particles
 
 A solver for modelling particles.
 
-:mod:`particles.particles <particles.particles>` implementation and use
------------------------------------------------------------------------
+:mod:`particles.particles <pyro.particles.particles>` implementation and use
+----------------------------------------------------------------------------
 
 We import the basic particles module functionality as:
 
@@ -14,9 +14,9 @@ We import the basic particles module functionality as:
 
 The particles solver is made up of two classes:
 
-* :func:`Particle <particles.particles.Particle>`, which holds
+* :func:`Particle <pyro.particles.particles.Particle>`, which holds
   the data about a single particle (its position and velocity);
-* :func:`Particles <particles.particles.Particles>`, which holds the data
+* :func:`Particles <pyro.particles.particles.Particles>`, which holds the data
   about a collection of particles.
 
 The particles are stored as a dictionary, and their positions are updated
@@ -27,20 +27,20 @@ function without otherwise affecting the behaviour of the module).
 
 The particles can be initialized in a number of ways:
 
-* :func:`randomly_generate_particles <particles.particles.Particles.randomly_generate_particles>`,
+* :func:`randomly_generate_particles <pyro.particles.particles.Particles.randomly_generate_particles>`,
   which randomly generates ``n_particles`` within the domain.
-* :func:`grid_generate_particles <particles.particles.Particles.grid_generate_particles>`,
+* :func:`grid_generate_particles <pyro.particles.particles.Particles.grid_generate_particles>`,
   which will generate approximately ``n_particles`` equally spaced in the
   x-direction and y-direction (note that it uses the same number of particles in
   each direction, so the spacing will be different in each direction if the
   domain is not square). The number of particles will be increased/decreased
   in order to fill the whole domain.
-* :func:`array_generate_particles <particles.particles.Particles.array_generate_particles>`,
+* :func:`array_generate_particles <pyro.particles.particles.Particles.array_generate_particles>`,
   which generates particles based on array of particle positions passed to the
   constructor.
 * The user can define their own ``particle_generator`` function and pass this into the
-  :func:`Particles <particles.particles.Particles>` constructor. This function takes the number of particles to be
-  generated and returns a dictionary of :func:`Particle <particles.particles.Particle>` objects.
+  :func:`Particles <pyro.particles.particles.Particles>` constructor. This function takes the number of particles to be
+  generated and returns a dictionary of :func:`Particle <pyro.particles.particles.Particle>` objects.
 
 We can turn on/off the particles solver using the following runtime paramters:
 
@@ -95,7 +95,7 @@ in as arguments to this function as they cannot be accessed using the standard
 Plotting particles
 ------------------
 
-Given the :func:`Particles <particles.particles.Particles>` object ``particles``, we can plot the particles by getting
+Given the :func:`Particles <pyro.particles.particles.Particles>` object ``particles``, we can plot the particles by getting
 their positions using
 
 .. code-block:: python
@@ -128,7 +128,7 @@ x-position, we can plot them on the figure axis ``ax`` using the following code:
       ax.set_xlim([myg.xmin, myg.xmax])
       ax.set_ylim([myg.ymin, myg.ymax])
 
-Applying this to the Kelvin-Helmholtz problem with the :mod:`compressible <compressible>` solver,
+Applying this to the Kelvin-Helmholtz problem with the :mod:`compressible <pyro.compressible>` solver,
 we can produce a plot such as the one below, where the particles have been
 plotted on top of the fluid density.
 

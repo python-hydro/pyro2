@@ -141,9 +141,6 @@ time you run the same bit of code, Numba will use the saved version rather than
 compiling the code again, saving some compilation time at the start of the
 simulation.
 
-.. note::
-
-    Because we have chosen to cache the compiled code, Numba will save it in the ``__pycache__`` directories. If you change the code, a new version will be compiled and saved, but the old version will not be deleted. Over time, you may end up with many unneeded files saved in the ``__pycache__`` directories. To clean up these files, you can run ``./mk.sh clean`` in the main ``pyro2`` directory. 
 
 Main driver
 -----------

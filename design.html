@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Design ideas &mdash; pyro 4.0.1.post10+g430b1d3 documentation</title>
+  <title>Design ideas &mdash; pyro 4.0.1.post11+g643ce55 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -291,10 +291,6 @@ code is compiled, Numba will write the code into a file-based cache. The next
 time you run the same bit of code, Numba will use the saved version rather than
 compiling the code again, saving some compilation time at the start of the
 simulation.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Because we have chosen to cache the compiled code, Numba will save it in the <code class="docutils literal notranslate"><span class="pre">__pycache__</span></code> directories. If you change the code, a new version will be compiled and saved, but the old version will not be deleted. Over time, you may end up with many unneeded files saved in the <code class="docutils literal notranslate"><span class="pre">__pycache__</span></code> directories. To clean up these files, you can run <code class="docutils literal notranslate"><span class="pre">./mk.sh</span> <span class="pre">clean</span></code> in the main <code class="docutils literal notranslate"><span class="pre">pyro2</span></code> directory.</p>
-</div>
 </section>
 <section id="main-driver">
 <h2>Main driver<a class="headerlink" href="#main-driver" title="Permalink to this heading">¶</a></h2>

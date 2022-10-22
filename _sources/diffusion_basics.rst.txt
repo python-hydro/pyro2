@@ -7,7 +7,7 @@ pyro solves the constant-conductivity diffusion equation:
 
    \frac{\partial \phi}{\partial t} = k \nabla^2 \phi
 
-This is done implicitly using multigrid, using the solver :py:mod:`diffusion`.
+This is done implicitly using multigrid, using the solver :py:mod:`pyro.diffusion`.
 
 The diffusion equation is discretized using Crank-Nicolson
 differencing (this makes the diffusion operator time-centered) and the

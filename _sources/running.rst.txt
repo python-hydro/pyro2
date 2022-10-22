@@ -3,7 +3,7 @@ Running
 
 Pyro can be run in two ways: either from the commandline, using the ``pyro_sim.py``
 script and passing in the solver, problem and inputs as arguments, or by using
-the :func:`Pyro <pyro_sim.pyro>` class.
+the :func:`Pyro <pyro.pyro_sim.pyro>` class.
 
 Commandline
 ------------
@@ -49,16 +49,16 @@ above run, we could do:
 Pyro class
 ----------
 
-Alternatively, pyro can be run using the :func:`Pyro <pyro_sim.pyro>` class. This provides
+Alternatively, pyro can be run using the :func:`Pyro <pyro.pyro_sim.Pyro>` class. This provides
 an interface that enables simulations to be set up and run in a Jupyter notebook -- see
 ``examples/examples.ipynb`` for an example notebook. A simulation can be set up and run
 by carrying out the following steps:
 
-* create a :func:`Pyro <pyro_sim.pyro>` object, initializing it with a specific solver
+* create a :func:`Pyro <pyro.pyro_sim.Pyro>` object, initializing it with a specific solver
 * initialize the problem, passing in runtime parameters and inputs
 * run the simulation
 
-For example, if we wished to use the :mod:`compressible <compressible>` solver to run the
+For example, if we wished to use the :mod:`compressible <pyro.compressible>` solver to run the
 Kelvin-Helmholtz problem ``kh``, we would do the following:
 
 .. code-block:: python
@@ -71,7 +71,7 @@ Kelvin-Helmholtz problem ``kh``, we would do the following:
 
 Instead of using an inputs file to define the problem parameters, we can define a
 dictionary of parameters and pass them into the :func:`initialize_problem
-<pyro_sim.pyro.initialize_problem>` function using the keyword argument ``inputs_dict``.
+<pyro.pyro_sim.Pyro.initialize_problem>` function using the keyword argument ``inputs_dict``.
 If an inputs file is also passed into the function, the parameters in the dictionary
 will override any parameters in the file. For example, if we wished to turn off
 visualization for the previous example, we would do:
@@ -84,8 +84,8 @@ visualization for the previous example, we would do:
                             inputs_dict=parameters)
 
 It's possible to evolve the simulation forward timestep by timestep manually using
-the :func:`single_step <pyro_sim.pyro.single_step>` function (rather than allowing
-:func:`run_sim <pyro_sim.pyro.run_sim>` to do this for us). To evolve our example
+the :func:`single_step <pyro.pyro_sim.Pyro.single_step>` function (rather than allowing
+:func:`run_sim <pyro.pyro_sim.Pyro.run_sim>` to do this for us). To evolve our example
 simulation forward by a single step, we'd run
 
 .. code-block:: python
@@ -117,7 +117,7 @@ default value of any of these previously defined
 parameters. Additionally, any parameter can be specified at the end of
 the commandline, and these will be used to override the defaults. The
 collection of runtime parameters is stored in a
-:func:`RuntimeParameters <util.runparams.RuntimeParameters>` object.
+:func:`RuntimeParameters <pyro.util.runparams.RuntimeParameters>` object.
 
 The ``runparams.py`` module in ``util/`` controls access to the runtime
 parameters. You can setup the runtime parameters, parse an inputs
