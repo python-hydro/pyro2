@@ -1,11 +1,5 @@
 import importlib
 
-import matplotlib
-
-try:
-    matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
-except KeyError:
-    pass
 import matplotlib.pyplot as plt
 import numpy as np
 

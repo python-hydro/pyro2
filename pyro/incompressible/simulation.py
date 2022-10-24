@@ -1,13 +1,7 @@
 import importlib
 
-import matplotlib
-import numpy as np
-
-try:
-    matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
-except KeyError:
-    pass
 import matplotlib.pyplot as plt
+import numpy as np
 
 import pyro.incompressible.incomp_interface as incomp_interface
 import pyro.mesh.array_indexer as ai

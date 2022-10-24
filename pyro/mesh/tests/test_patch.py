@@ -87,7 +87,7 @@ class TestCellCenterData2d(object):
         nx = 8
         ny = 8
         self.g = patch.Grid2d(nx, ny, ng=2, xmax=1.0, ymax=1.0)
-        self.d = patch.CellCenterData2d(self.g, dtype=np.int)
+        self.d = patch.CellCenterData2d(self.g, dtype=int)
 
         bco = bnd.BC(xlb="outflow", xrb="outflow",
                      ylb="outflow", yrb="outflow")
@@ -158,7 +158,7 @@ class TestCellCenterData2d(object):
 def test_bcs():
 
     myg = patch.Grid2d(4, 4, ng=2, xmax=1.0, ymax=1.0)
-    myd = patch.CellCenterData2d(myg, dtype=np.int)
+    myd = patch.CellCenterData2d(myg, dtype=int)
 
     bco = bnd.BC(xlb="outflow", xrb="outflow",
                  ylb="outflow", yrb="outflow")
