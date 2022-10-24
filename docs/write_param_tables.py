@@ -1,20 +1,13 @@
 import glob
 import os
 
-from util import runparams
+from pyro.util import runparams
 
-pfiles = ["../_defaults"]
-for path, dirs, files in os.walk("../"):
-    for d in dirs:
-        for f in glob.iglob(os.path.join(path, d, "_defaults")):
-            pfiles.append(f)
-
-for f in pfiles:
+for f in glob.iglob("../pyro/**/_defaults", recursive=True):
     rp = runparams.RuntimeParameters()
     rp.load_params(f)
 
-    pre, name = os.path.split(f)
-    outfile = "source/{}{}.inc".format(pre.replace(".", ""), name)
-    rp.print_sphinx_tables(outfile=outfile.format(os.path.basename(f)))
-
-
+    # strip initial "../pyro/"
+    pre, name = os.path.split(os.path.relpath(f, "../pyro/"))
+    outfile = "source/{}{}.inc".format(pre, name)
+    rp.print_sphinx_tables(outfile=outfile)

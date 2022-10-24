@@ -1,13 +1,13 @@
-To build the webpages:
+To build the webpages (run from docs/):
 
    make html
 
 
-To automatically generate the API docs:
+To automatically generate the API docs (run from repository root):
 
-   sphinx-apidoc -f -M -o docs/source/ . lm_combustion radhydro
+   sphinx-apidoc -l -f -M -o docs/source/ pyro/
 
-  (-M puts the module before submodule in the API pages; the directories after . are excludes))
+  (-M puts the module before submodule in the API pages; any files/directories after pyro/ are excludes)
 
 
 To support notebooks:
