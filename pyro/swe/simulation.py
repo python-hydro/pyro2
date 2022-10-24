@@ -1,13 +1,8 @@
 import importlib
 
 import matplotlib
-import numpy as np
-
-try:
-    matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
-except KeyError:
-    pass
 import matplotlib.pyplot as plt
+import numpy as np
 
 import pyro.mesh.boundary as bnd
 import pyro.particles.particles as particles

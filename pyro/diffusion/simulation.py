@@ -4,13 +4,8 @@ import importlib
 import math
 
 import matplotlib
-import numpy as np
-
-try:
-    matplotlib.rcParams['mpl_toolkits.legacy_colorbar'] = False
-except KeyError:
-    pass
 import matplotlib.pyplot as plt
+import numpy as np
 
 import pyro.mesh.patch as patch
 import pyro.multigrid.MG as MG
