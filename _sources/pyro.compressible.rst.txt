@@ -41,14 +41,6 @@ pyro.compressible.eos module
    :undoc-members:
    :show-inheritance:
 
-pyro.compressible.flycheck\_eos module
---------------------------------------
-
-.. automodule:: pyro.compressible.flycheck_eos
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 pyro.compressible.interface module
 ----------------------------------
 
