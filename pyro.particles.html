@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.particles package &mdash; pyro 4.0.1.post15+g7552cee documentation</title>
+  <title>pyro.particles package &mdash; pyro 4.0.1.post16+ge1edb58 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -15,9 +15,6 @@
   <![endif]-->
   
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
@@ -35,15 +32,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> pyro
-            <img src="_static/logo.gif" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyro
+              <img src="_static/logo.gif" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 4.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -139,10 +140,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="modules.html">pyro</a> &raquo;</li>
-          <li><a href="pyro.html">pyro package</a> &raquo;</li>
-      <li>pyro.particles package</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pyro</a></li>
+          <li class="breadcrumb-item"><a href="pyro.html">pyro package</a></li>
+      <li class="breadcrumb-item active">pyro.particles package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/pyro.particles.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -199,7 +200,7 @@ model e.g. massive/charged particles.</p>
 <dd><p>Interpolate the x- and y-velocities defined on grid myg to the
 particle’s position.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>myg</strong><span class="classifier">Grid2d</span></dt><dd><p>grid which the velocities are defined on</p>
 </dd>
@@ -243,7 +244,7 @@ particle’s position.</p>
 <dd><p>Generate particles based on array of their positions. This is used
 when reading particle data from file.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>pos_array</strong><span class="classifier">float array</span></dt><dd><p>Array of particle positions.</p>
 </dd>
@@ -304,7 +305,7 @@ method to advance particles using the cell-centered velocity.</p>
 <p>We will explicitly pass in u and v if they cannot be accessed from the
 <code class="docutils literal notranslate"><span class="pre">sim_data</span></code> using <code class="docutils literal notranslate"><span class="pre">get_var(&quot;velocity&quot;)</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>dt</strong><span class="classifier">float</span></dt><dd><p>timestep</p>
 </dd>
@@ -322,7 +323,7 @@ method to advance particles using the cell-centered velocity.</p>
 <span class="sig-name descname"><span class="pre">write_particles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particles.write_particles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particles.write_particles" title="Permalink to this definition">¶</a></dt>
 <dd><p>Output the particles’ positions (and initial positions) to an HDF5 file.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>f</strong><span class="classifier">h5py object</span></dt><dd><p>HDF5 file to write to</p>
 </dd>

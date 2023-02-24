@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.incompressible package &mdash; pyro 4.0.1.post15+g7552cee documentation</title>
+  <title>pyro.incompressible package &mdash; pyro 4.0.1.post16+ge1edb58 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -15,9 +15,6 @@
   <![endif]-->
   
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
@@ -35,15 +32,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> pyro
-            <img src="_static/logo.gif" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyro
+              <img src="_static/logo.gif" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 4.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -139,10 +140,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="modules.html">pyro</a> &raquo;</li>
-          <li><a href="pyro.html">pyro package</a> &raquo;</li>
-      <li>pyro.incompressible package</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pyro</a></li>
+          <li class="breadcrumb-item"><a href="pyro.html">pyro package</a></li>
+      <li class="breadcrumb-item active">pyro.incompressible package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/pyro.incompressible.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -223,7 +224,7 @@ projection (the MAC projection)</p></li>
 <dd><p>Compute the unsplit predictions of u and v on both the x- and
 y-interfaces.  This includes the transverse terms.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>ng</strong><span class="classifier">int</span></dt><dd><p>The number of ghost cells</p>
 </dd>
@@ -241,7 +242,7 @@ y-interfaces.  This includes the transverse terms.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray</span></dt><dd><p>unsplit predictions of u and v on both the x- and
 y-interfaces</p>
@@ -256,7 +257,7 @@ y-interfaces</p>
 <span class="sig-prename descclassname"><span class="pre">pyro.incompressible.incomp_interface.</span></span><span class="sig-name descname"><span class="pre">mac_vels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_ux</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_vx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_uy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_vy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradp_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradp_y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/incomp_interface.html#mac_vels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.incomp_interface.mac_vels" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the MAC velocities in the x and y directions.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>ng</strong><span class="classifier">int</span></dt><dd><p>The number of ghost cells</p>
 </dd>
@@ -274,7 +275,7 @@ y-interfaces</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">ndarray, ndarray</span></dt><dd><p>MAC velocities in the x and y directions</p>
 </dd>
@@ -290,7 +291,7 @@ y-interfaces</p>
 states and return the state on the interface.</p>
 <p>This uses the expressions from Almgren, Bell, and Szymczak 1996.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>ng</strong><span class="classifier">int</span></dt><dd><p>The number of ghost cells</p>
 </dd>
@@ -298,7 +299,7 @@ states and return the state on the interface.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>Interface state</p>
 </dd>
@@ -316,7 +317,7 @@ determine the state (q_l, q_r, or a mix) on the interface).</p>
 <p>This differs from upwind, above, in that we don’t take in a
 velocity to upwind with).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>ng</strong><span class="classifier">int</span></dt><dd><p>The number of ghost cells</p>
 </dd>
@@ -324,7 +325,7 @@ velocity to upwind with).</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>Upwinded state</p>
 </dd>
@@ -340,7 +341,7 @@ velocity to upwind with).</p>
 of both u and v on both interfaces, using the MAC velocities to
 do the upwinding.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>ng</strong><span class="classifier">int</span></dt><dd><p>The number of ghost cells</p>
 </dd>
@@ -360,7 +361,7 @@ do the upwinding.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">ndarray, ndarray, ndarray, ndarray</span></dt><dd><p>x and y velocities predicted to the interfaces</p>
 </dd>
@@ -375,7 +376,7 @@ do the upwinding.</p>
 <dd><p>upwind the left and right states based on the specified input
 velocity, s.  The resulting interface state is q_int</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>ng</strong><span class="classifier">int</span></dt><dd><p>The number of ghost cells</p>
 </dd>
@@ -385,7 +386,7 @@ velocity, s.  The resulting interface state is q_int</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>Upwinded state</p>
 </dd>

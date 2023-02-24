@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible_sr.eos &mdash; pyro 4.0.1.post15+g7552cee documentation</title>
+  <title>pyro.compressible_sr.eos &mdash; pyro 4.0.1.post16+ge1edb58 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -14,9 +14,6 @@
   <![endif]-->
   
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/sphinx_highlight.js"></script>
         <script src="../../../_static/clipboard.min.js"></script>
@@ -32,15 +29,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> pyro
-            <img src="../../../_static/logo.gif" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pyro
+              <img src="../../../_static/logo.gif" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 4.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -104,9 +105,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-      <li>pyro.compressible_sr.eos</li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pyro.compressible_sr.eos</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -123,7 +124,7 @@
 
 
 <div class="viewcode-block" id="pres"><a class="viewcode-back" href="../../../pyro.compressible_sr.html#pyro.compressible_sr.eos.pres">[docs]</a><span class="k">def</span> <span class="nf">pres</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">dens</span><span class="p">,</span> <span class="n">eint</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given the density and the specific internal energy, return the</span>
 <span class="sd">    pressure</span>
 
@@ -146,7 +147,7 @@
 
 
 <div class="viewcode-block" id="dens"><a class="viewcode-back" href="../../../pyro.compressible_sr.html#pyro.compressible_sr.eos.dens">[docs]</a><span class="k">def</span> <span class="nf">dens</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">pres</span><span class="p">,</span> <span class="n">eint</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given the pressure and the specific internal energy, return</span>
 <span class="sd">    the density</span>
 
@@ -169,7 +170,7 @@
 
 
 <div class="viewcode-block" id="rhoe"><a class="viewcode-back" href="../../../pyro.compressible_sr.html#pyro.compressible_sr.eos.rhoe">[docs]</a><span class="k">def</span> <span class="nf">rhoe</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">pres</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given the pressure, return (rho * e)</span>
 
 <span class="sd">    Parameters</span>
@@ -189,7 +190,7 @@
 
 
 <div class="viewcode-block" id="h_from_eps"><a class="viewcode-back" href="../../../pyro.compressible_sr.html#pyro.compressible_sr.eos.h_from_eps">[docs]</a><span class="k">def</span> <span class="nf">h_from_eps</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">eint</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given rho and internal energy, return h</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -197,7 +198,7 @@
 
 
 <div class="viewcode-block" id="rhoh_from_rho_p"><a class="viewcode-back" href="../../../pyro.compressible_sr.html#pyro.compressible_sr.eos.rhoh_from_rho_p">[docs]</a><span class="k">def</span> <span class="nf">rhoh_from_rho_p</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given rho and p, return h</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">rho</span> <span class="o">+</span> <span class="n">gamma</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">p</span></div>

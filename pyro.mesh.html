@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.mesh package &mdash; pyro 4.0.1.post15+g7552cee documentation</title>
+  <title>pyro.mesh package &mdash; pyro 4.0.1.post16+ge1edb58 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -15,9 +15,6 @@
   <![endif]-->
   
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
@@ -35,15 +32,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> pyro
-            <img src="_static/logo.gif" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyro
+              <img src="_static/logo.gif" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 4.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -139,10 +140,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="modules.html">pyro</a> &raquo;</li>
-          <li><a href="pyro.html">pyro package</a> &raquo;</li>
-      <li>pyro.mesh package</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pyro</a></li>
+          <li class="breadcrumb-item"><a href="pyro.html">pyro package</a></li>
+      <li class="breadcrumb-item active">pyro.mesh package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/pyro.mesh.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -558,7 +559,7 @@ locked.  New variables cannot be added.</p>
 <span class="sig-name descname"><span class="pre">add_derived</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.add_derived"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.add_derived" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register a function to compute derived variable</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>func</strong><span class="classifier">function</span></dt><dd><p>A function to call to derive the variable.  This function
 should take two arguments, a CellCenterData2d object and a
@@ -592,7 +593,7 @@ variable at a time, to allow for maximum flexibility.</p>
 CellCenterData2d object – we refer to this to figure out the
 action to take at each boundary.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>The name of the variable for which to fill the BCs.</p>
 </dd>
@@ -612,13 +613,13 @@ action to take at each boundary.</p>
 <span class="sig-name descname"><span class="pre">get_aux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keyword</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.get_aux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.get_aux" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the auxillary data associated with keyword</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>keyword</strong><span class="classifier">str</span></dt><dd><p>The name of the auxillary data to access</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">variable type</span></dt><dd><p>The value corresponding to the keyword</p>
 </dd>
@@ -636,13 +637,13 @@ will be checked.</p>
 <p>For a stored variable, changes made to this are automatically
 reflected in the CellCenterData2d object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>The name of the variable to access</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>The array of data corresponding to the variable name</p>
 </dd>
@@ -658,13 +659,13 @@ reflected in the CellCenterData2d object.</p>
 data array.  Any changes made to this are automatically
 reflected in the CellCenterData2d object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>n</strong><span class="classifier">int</span></dt><dd><p>The index of the variable to access</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>The array of data corresponding to the index</p>
 </dd>
@@ -679,7 +680,7 @@ reflected in the CellCenterData2d object.</p>
 <dd><p>Return the entire data array.  Any changes made to this
 are automatically reflected in the CellCenterData2d object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>The array of data</p>
 </dd>
@@ -748,7 +749,7 @@ respective parents.</p>
 <span class="sig-name descname"><span class="pre">register_var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.register_var"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.register_var" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register a variable with CellCenterData2d object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>The variable name</p>
 </dd>
@@ -774,7 +775,7 @@ number of ghostcells)</p>
 <dd><p>Set any auxillary (scalar) data.  This data is simply carried
 along with the CellCenterData2d object</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>keyword</strong><span class="classifier">str</span></dt><dd><p>The name of the datum</p>
 </dd>
@@ -804,7 +805,7 @@ File pbject</p>
 <span class="sig-name descname"><span class="pre">zero</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.zero"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.zero" title="Permalink to this definition">¶</a></dt>
 <dd><p>Zero out the data array associated with variable name.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>The name of the variable to zero</p>
 </dd>
@@ -827,7 +828,7 @@ process  as a CellCenterData2d object</p>
 <span class="sig-name descname"><span class="pre">add_derived</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#FaceCenterData2d.add_derived"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.FaceCenterData2d.add_derived" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register a function to compute derived variable</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>func</strong><span class="classifier">function</span></dt><dd><p>A function to call to derive the variable.  This function
 should take two arguments, a CellCenterData2d object and a
@@ -856,7 +857,7 @@ variable at a time, to allow for maximum flexibility.</p>
 CellCenterData2d object – we refer to this to figure out the
 action to take at each boundary.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>The name of the variable for which to fill the BCs.</p>
 </dd>
@@ -872,13 +873,13 @@ action to take at each boundary.</p>
 data array.  Any changes made to this are automatically
 reflected in the CellCenterData2d object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>n</strong><span class="classifier">int</span></dt><dd><p>The index of the variable to access</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>The array of data corresponding to the index</p>
 </dd>
@@ -893,7 +894,7 @@ reflected in the CellCenterData2d object.</p>
 <dd><p>Return the entire data array.  Any changes made to this
 are automatically reflected in the CellCenterData2d object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>The array of data</p>
 </dd>
@@ -1001,7 +1002,7 @@ and number of ghostcells as the parent grid</p>
 <dd><p>Create a new CellCenterData2d object that is a copy of an existing
 one</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>old</strong><span class="classifier">CellCenterData2d object</span></dt><dd><p>The CellCenterData2d object we wish to copy</p>
 </dd>
@@ -1070,7 +1071,7 @@ only considers the y direction.</p>
 <span class="sig-prename descclassname"><span class="pre">pyro.mesh.reconstruction.</span></span><span class="sig-name descname"><span class="pre">weno</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/reconstruction.html#weno"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.reconstruction.weno" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform WENO reconstruction</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>q</strong><span class="classifier">np array</span></dt><dd><p>input data with 3 ghost zones</p>
 </dd>
@@ -1078,7 +1079,7 @@ only considers the y direction.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>q_plus, q_minus</strong><span class="classifier">np array</span></dt><dd><p>data reconstructed to the right / left respectively</p>
 </dd>
@@ -1092,7 +1093,7 @@ only considers the y direction.</p>
 <span class="sig-prename descclassname"><span class="pre">pyro.mesh.reconstruction.</span></span><span class="sig-name descname"><span class="pre">weno_upwind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/reconstruction.html#weno_upwind"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.reconstruction.weno_upwind" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform upwinded (left biased) WENO reconstruction</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>q</strong><span class="classifier">np array</span></dt><dd><p>input data</p>
 </dd>
@@ -1100,7 +1101,7 @@ only considers the y direction.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>q_plus</strong><span class="classifier">np array</span></dt><dd><p>data reconstructed to the right</p>
 </dd>

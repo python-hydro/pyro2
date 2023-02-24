@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible_sr package &mdash; pyro 4.0.1.post15+g7552cee documentation</title>
+  <title>pyro.compressible_sr package &mdash; pyro 4.0.1.post16+ge1edb58 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -15,9 +15,6 @@
   <![endif]-->
   
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
@@ -37,15 +34,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> pyro
-            <img src="_static/logo.gif" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyro
+              <img src="_static/logo.gif" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 4.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -141,10 +142,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="modules.html">pyro</a> &raquo;</li>
-          <li><a href="pyro.html">pyro package</a> &raquo;</li>
-      <li>pyro.compressible_sr package</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pyro</a></li>
+          <li class="breadcrumb-item"><a href="pyro.html">pyro package</a></li>
+      <li class="breadcrumb-item active">pyro.compressible_sr package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/pyro.compressible_sr.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -287,7 +288,7 @@ the ghost cells to get the pressure and density under the assumption
 that the specific internal energy is constant.</p>
 <p>Upon exit, the ghost cells for the input variable will be set</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>bc_name</strong><span class="classifier">{‘hse’}</span></dt><dd><p>The descriptive name for the boundary condition – this allows
 for pyro to have multiple types of user-supplied boundary
@@ -346,7 +347,7 @@ gamma is the constant ratio of specific heats.</p>
 <dd><p>Given the pressure and the specific internal energy, return
 the density</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>gamma</strong><span class="classifier">float</span></dt><dd><p>The ratio of specific heats</p>
 </dd>
@@ -356,7 +357,7 @@ the density</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">float</span></dt><dd><p>The density</p>
 </dd>
@@ -377,7 +378,7 @@ the density</p>
 <dd><p>Given the density and the specific internal energy, return the
 pressure</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>gamma</strong><span class="classifier">float</span></dt><dd><p>The ratio of specific heats</p>
 </dd>
@@ -387,7 +388,7 @@ pressure</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">float</span></dt><dd><p>The pressure</p>
 </dd>
@@ -401,7 +402,7 @@ pressure</p>
 <span class="sig-prename descclassname"><span class="pre">pyro.compressible_sr.eos.</span></span><span class="sig-name descname"><span class="pre">rhoe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pres</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_sr/eos.html#rhoe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_sr.eos.rhoe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given the pressure, return (rho * e)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>gamma</strong><span class="classifier">float</span></dt><dd><p>The ratio of specific heats</p>
 </dd>
@@ -409,7 +410,7 @@ pressure</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">float</span></dt><dd><p>The internal energy density, rho e</p>
 </dd>
@@ -455,7 +456,7 @@ directly Colella Woodward (1984) Eq. 4.5</p>
 <p><code class="docutils literal notranslate"><span class="pre">X</span></code> is the location of <code class="docutils literal notranslate"><span class="pre">avisco_x[i,j]</span></code>
 <code class="docutils literal notranslate"><span class="pre">Y</span></code> is the location of <code class="docutils literal notranslate"><span class="pre">avisco_y[i,j]</span></code></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>ng</strong><span class="classifier">int</span></dt><dd><p>The number of ghost cells</p>
 </dd>
@@ -467,7 +468,7 @@ directly Colella Woodward (1984) Eq. 4.5</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">ndarray, ndarray</span></dt><dd><p>Artificial viscosity in the x- and y-directions</p>
 </dd>
@@ -481,7 +482,7 @@ directly Colella Woodward (1984) Eq. 4.5</p>
 <span class="sig-prename descclassname"><span class="pre">pyro.compressible_sr.interface.</span></span><span class="sig-name descname"><span class="pre">consFlux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idens</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ixmom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iymom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iener</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">irhoX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ip</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nspec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_sr/interface.html#consFlux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_sr.interface.consFlux" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the conservative flux.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>idir</strong><span class="classifier">int</span></dt><dd><p>Are we predicting to the edges in the x-direction (1) or y-direction (2)?</p>
 </dd>
@@ -496,7 +497,7 @@ and species partial densities in the conserved state vector.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>Conserved flux</p>
 </dd>
@@ -532,7 +533,7 @@ and: use jump conditions to evaluate the state there.</p>
 variables jump across the other two.  Special attention is needed
 if a rarefaction spans the axis.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>idir</strong><span class="classifier">int</span></dt><dd><p>Are we predicting to the edges in the x-direction (1) or y-direction (2)?</p>
 </dd>
@@ -551,7 +552,7 @@ and species partial densities in the conserved state vector.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>Conserved flux</p>
 </dd>
@@ -567,7 +568,7 @@ and species partial densities in the conserved state vector.</p>
 directly out of Toro’s book.  Note: this does not handle the
 transonic rarefaction.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>idir</strong><span class="classifier">int</span></dt><dd><p>Are we predicting to the edges in the x-direction (1) or y-direction (2)?</p>
 </dd>
@@ -586,7 +587,7 @@ and species partial densities in the conserved state vector.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>Conserved flux</p>
 </dd>
@@ -625,7 +626,7 @@ and: use jump conditions to evaluate the state there.</p>
 variables jump across the other two.  Special attention is needed
 if a rarefaction spans the axis.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>idir</strong><span class="classifier">int</span></dt><dd><p>Are we predicting to the edges in the x-direction (1) or y-direction (2)?</p>
 </dd>
@@ -643,7 +644,7 @@ if a rarefaction spans the axis.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>Primitive flux</p>
 </dd>
@@ -703,7 +704,7 @@ computational zones:</p>
 </div>
 <p>q_r,i and q_l,i+1 are computed using the information in zone i,j.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>idir</strong><span class="classifier">int</span></dt><dd><p>Are we predicting to the edges in the x-direction (1) or y-direction (2)?</p>
 </dd>
@@ -726,7 +727,7 @@ state vector</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">ndarray, ndarray</span></dt><dd><p>State vector predicted to the left and right edges</p>
 </dd>
@@ -929,7 +930,7 @@ solving the Riemann problem through all the interfaces at once</p>
 <p>The runtime parameter grav is assumed to be the gravitational
 acceleration in the y-direction</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>my_data</strong><span class="classifier">CellCenterData2d object</span></dt><dd><p>The data object containing the grid and advective scalar that
 we are advecting.</p>
@@ -945,7 +946,7 @@ variables</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">ndarray, ndarray</span></dt><dd><p>The fluxes on the x- and y-interfaces</p>
 </dd>

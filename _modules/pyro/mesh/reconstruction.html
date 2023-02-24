@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.mesh.reconstruction &mdash; pyro 4.0.1.post15+g7552cee documentation</title>
+  <title>pyro.mesh.reconstruction &mdash; pyro 4.0.1.post16+ge1edb58 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -14,9 +14,6 @@
   <![endif]-->
   
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/sphinx_highlight.js"></script>
         <script src="../../../_static/clipboard.min.js"></script>
@@ -32,15 +29,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> pyro
-            <img src="../../../_static/logo.gif" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pyro
+              <img src="../../../_static/logo.gif" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 4.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -104,9 +105,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-      <li>pyro.mesh.reconstruction</li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pyro.mesh.reconstruction</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -125,7 +126,7 @@
 
 
 <div class="viewcode-block" id="limit"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.reconstruction.limit">[docs]</a><span class="k">def</span> <span class="nf">limit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="n">idir</span><span class="p">,</span> <span class="n">limiter</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; a single driver that calls the different limiters based on the value</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; a single driver that calls the different limiters based on the value</span>
 <span class="sd">    of the limiter input variable.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">limiter</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">nolimit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="n">idir</span><span class="p">)</span>
@@ -137,7 +138,7 @@
 
 
 <div class="viewcode-block" id="well_balance"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.reconstruction.well_balance">[docs]</a><span class="k">def</span> <span class="nf">well_balance</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="n">limiter</span><span class="p">,</span> <span class="n">iv</span><span class="p">,</span> <span class="n">grav</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;subtract off the hydrostatic pressure before limiting.  Note, this</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;subtract off the hydrostatic pressure before limiting.  Note, this</span>
 <span class="sd">    only considers the y direction.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">limiter</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;well-balanced only works for limiter == 1&quot;</span><span class="p">)</span>
@@ -172,7 +173,7 @@
 
 
 <div class="viewcode-block" id="nolimit"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.reconstruction.nolimit">[docs]</a><span class="k">def</span> <span class="nf">nolimit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="n">idir</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; just a centered difference without any limiting &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; just a centered difference without any limiting &quot;&quot;&quot;</span>
 
     <span class="n">lda</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
 
@@ -185,7 +186,7 @@
 
 
 <div class="viewcode-block" id="limit2"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.reconstruction.limit2">[docs]</a><span class="k">def</span> <span class="nf">limit2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="n">idir</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; 2nd order monotonized central difference limiter &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; 2nd order monotonized central difference limiter &quot;&quot;&quot;</span>
 
     <span class="n">lda</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
     <span class="n">dc</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
@@ -210,7 +211,7 @@
 
 
 <div class="viewcode-block" id="limit4"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.reconstruction.limit4">[docs]</a><span class="k">def</span> <span class="nf">limit4</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="n">idir</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; 4th order monotonized central difference limiter &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; 4th order monotonized central difference limiter &quot;&quot;&quot;</span>
 
     <span class="n">lda_tmp</span> <span class="o">=</span> <span class="n">limit2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="n">idir</span><span class="p">)</span>
 
@@ -239,7 +240,7 @@
 
 
 <div class="viewcode-block" id="flatten"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.reconstruction.flatten">[docs]</a><span class="k">def</span> <span class="nf">flatten</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">idir</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span> <span class="n">rp</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; compute the 1-d flattening coefficients &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; compute the 1-d flattening coefficients &quot;&quot;&quot;</span>
 
     <span class="n">xi</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
     <span class="n">z</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
@@ -283,7 +284,7 @@
 
 
 <div class="viewcode-block" id="flatten_multid"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.reconstruction.flatten_multid">[docs]</a><span class="k">def</span> <span class="nf">flatten_multid</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">xi_x</span><span class="p">,</span> <span class="n">xi_y</span><span class="p">,</span> <span class="n">ivars</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; compute the multidimensional flattening coefficient &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; compute the multidimensional flattening coefficient &quot;&quot;&quot;</span>
 
     <span class="n">xi</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
 
@@ -340,7 +341,7 @@
 
 
 <div class="viewcode-block" id="weno_upwind"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.reconstruction.weno_upwind">[docs]</a><span class="k">def</span> <span class="nf">weno_upwind</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">order</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Perform upwinded (left biased) WENO reconstruction</span>
 
 <span class="sd">    Parameters</span>
@@ -377,7 +378,7 @@
 
 
 <div class="viewcode-block" id="weno"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.reconstruction.weno">[docs]</a><span class="k">def</span> <span class="nf">weno</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">order</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Perform WENO reconstruction</span>
 
 <span class="sd">    Parameters</span>

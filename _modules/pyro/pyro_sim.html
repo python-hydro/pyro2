@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.pyro_sim &mdash; pyro 4.0.1.post15+g7552cee documentation</title>
+  <title>pyro.pyro_sim &mdash; pyro 4.0.1.post16+ge1edb58 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -14,9 +14,6 @@
   <![endif]-->
   
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
         <script src="../../_static/clipboard.min.js"></script>
@@ -32,15 +29,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> pyro
-            <img src="../../_static/logo.gif" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pyro
+              <img src="../../_static/logo.gif" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 4.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -104,9 +105,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>pyro.pyro_sim</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pyro.pyro_sim</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -147,12 +148,12 @@
 
 
 <div class="viewcode-block" id="Pyro"><a class="viewcode-back" href="../../pyro.html#pyro.pyro_sim.Pyro">[docs]</a><span class="k">class</span> <span class="nc">Pyro</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The main driver to run pyro.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solver_name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor</span>
 
 <span class="sd">        Parameters</span>
@@ -191,7 +192,7 @@
 
 <div class="viewcode-block" id="Pyro.initialize_problem"><a class="viewcode-back" href="../../pyro.html#pyro.pyro_sim.Pyro.initialize_problem">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_problem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">problem_name</span><span class="p">,</span> <span class="n">inputs_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inputs_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="n">other_commands</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the specific problem</span>
 
 <span class="sd">        Parameters</span>
@@ -257,7 +258,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">is_initialized</span> <span class="o">=</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="Pyro.run_sim"><a class="viewcode-back" href="../../pyro.html#pyro.pyro_sim.Pyro.run_sim">[docs]</a>    <span class="k">def</span> <span class="nf">run_sim</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Evolve entire simulation</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -297,7 +298,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span></div>
 
 <div class="viewcode-block" id="Pyro.single_step"><a class="viewcode-back" href="../../pyro.html#pyro.pyro_sim.Pyro.single_step">[docs]</a>    <span class="k">def</span> <span class="nf">single_step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Do a single step</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -339,7 +340,7 @@
             <span class="n">tm_vis</span><span class="o">.</span><span class="n">end</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return a representation of the Pyro object &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return a representation of the Pyro object &quot;&quot;&quot;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Solver = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">solver_name</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_initialized</span><span class="p">:</span>
             <span class="n">s</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;Problem = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">problem_name</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -351,7 +352,7 @@
         <span class="k">return</span> <span class="n">s</span>
 
 <div class="viewcode-block" id="Pyro.get_var"><a class="viewcode-back" href="../../pyro.html#pyro.pyro_sim.Pyro.get_var">[docs]</a>    <span class="k">def</span> <span class="nf">get_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Alias for cc_data&#39;s get_var routine, returns the cell-centered data</span>
 <span class="sd">        given the variable name v.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -363,13 +364,13 @@
 
 
 <div class="viewcode-block" id="PyroBenchmark"><a class="viewcode-back" href="../../pyro.html#pyro.pyro_sim.PyroBenchmark">[docs]</a><span class="k">class</span> <span class="nc">PyroBenchmark</span><span class="p">(</span><span class="n">Pyro</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A subclass of Pyro for benchmarking. Inherits everything from pyro, but adds benchmarking routines.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solver_name</span><span class="p">,</span> <span class="n">comp_bench</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">reset_bench_on_fail</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">make_bench</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor</span>
 
 <span class="sd">        Parameters</span>
@@ -391,7 +392,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">make_bench</span> <span class="o">=</span> <span class="n">make_bench</span>
 
 <div class="viewcode-block" id="PyroBenchmark.run_sim"><a class="viewcode-back" href="../../pyro.html#pyro.pyro_sim.PyroBenchmark.run_sim">[docs]</a>    <span class="k">def</span> <span class="nf">run_sim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1.e-12</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Evolve entire simulation and compare to benchmark at the end.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -411,7 +412,7 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span></div>
 
 <div class="viewcode-block" id="PyroBenchmark.compare_to_benchmark"><a class="viewcode-back" href="../../pyro.html#pyro.pyro_sim.PyroBenchmark.compare_to_benchmark">[docs]</a>    <span class="k">def</span> <span class="nf">compare_to_benchmark</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rtol</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Are we comparing to a benchmark? &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Are we comparing to a benchmark? &quot;&quot;&quot;</span>
 
         <span class="n">basename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;io.basename&quot;</span><span class="p">)</span>
         <span class="n">compare_file</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">/tests/</span><span class="si">{}{:04d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
@@ -433,7 +434,7 @@
         <span class="k">return</span> <span class="n">result</span></div>
 
 <div class="viewcode-block" id="PyroBenchmark.store_as_benchmark"><a class="viewcode-back" href="../../pyro.html#pyro.pyro_sim.PyroBenchmark.store_as_benchmark">[docs]</a>    <span class="k">def</span> <span class="nf">store_as_benchmark</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Are we storing a benchmark? &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Are we storing a benchmark? &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pyro_home</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">solver_name</span> <span class="o">+</span> <span class="s2">&quot;/tests/&quot;</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
@@ -450,7 +451,7 @@
 
 
 <div class="viewcode-block" id="parse_args"><a class="viewcode-back" href="../../pyro.html#pyro.pyro_sim.parse_args">[docs]</a><span class="k">def</span> <span class="nf">parse_args</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Parse the runtime parameters&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse the runtime parameters&quot;&quot;&quot;</span>
 
     <span class="n">p</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
 

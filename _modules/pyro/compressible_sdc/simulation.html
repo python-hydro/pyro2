@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible_sdc.simulation &mdash; pyro 4.0.1.post15+g7552cee documentation</title>
+  <title>pyro.compressible_sdc.simulation &mdash; pyro 4.0.1.post16+ge1edb58 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -14,9 +14,6 @@
   <![endif]-->
   
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/sphinx_highlight.js"></script>
         <script src="../../../_static/clipboard.min.js"></script>
@@ -32,15 +29,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> pyro
-            <img src="../../../_static/logo.gif" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pyro
+              <img src="../../../_static/logo.gif" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 4.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -104,9 +105,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-      <li>pyro.compressible_sdc.simulation</li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pyro.compressible_sdc.simulation</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -128,10 +129,10 @@
 
 
 <div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../../pyro.compressible_sdc.html#pyro.compressible_sdc.simulation.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="n">compressible_fv4</span><span class="o">.</span><span class="n">Simulation</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Drive the 4th-order compressible solver with SDC time integration&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Drive the 4th-order compressible solver with SDC time integration&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Simulation.sdc_integral"><a class="viewcode-back" href="../../../pyro.compressible_sdc.html#pyro.compressible_sdc.simulation.Simulation.sdc_integral">[docs]</a>    <span class="k">def</span> <span class="nf">sdc_integral</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_start</span><span class="p">,</span> <span class="n">m_end</span><span class="p">,</span> <span class="n">As</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Compute the integral over the sources from m to m+1 with a</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the integral over the sources from m to m+1 with a</span>
 <span class="sd">        Simpson&#39;s rule&quot;&quot;&quot;</span>
 
         <span class="n">integral</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">(</span><span class="n">nvar</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">)</span>
@@ -151,7 +152,7 @@
 
 <div class="viewcode-block" id="Simulation.evolve"><a class="viewcode-back" href="../../../pyro.compressible_sdc.html#pyro.compressible_sdc.simulation.Simulation.evolve">[docs]</a>    <span class="k">def</span> <span class="nf">evolve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Evolve the equations of compressible hydrodynamics through a</span>
 <span class="sd">        timestep dt.</span>
 <span class="sd">        &quot;&quot;&quot;</span>

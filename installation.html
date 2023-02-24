@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Setting up pyro &mdash; pyro 4.0.1.post15+g7552cee documentation</title>
+  <title>Setting up pyro &mdash; pyro 4.0.1.post16+ge1edb58 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -15,9 +15,6 @@
   <![endif]-->
   
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
@@ -35,15 +32,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> pyro
-            <img src="_static/logo.gif" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyro
+              <img src="_static/logo.gif" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 4.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -110,8 +111,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Setting up pyro</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Setting up pyro</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/installation.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -161,20 +162,20 @@
 span.prompt1:before {
   content: "$ ";
 }
-</style><span class="prompt1">pip install pyro-hydro</span>
+</style><span class="prompt1">pip<span class="w"> </span>install<span class="w"> </span>pyro-hydro</span>
 </pre></div></div><p>Alternately, you can install from source, using the <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>.
 From the <code class="docutils literal notranslate"><span class="pre">pyro2/</span></code> directory, we do:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">python setup.py install --user</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">python<span class="w"> </span>setup.py<span class="w"> </span>install<span class="w"> </span>--user</span>
 </pre></div></div><p>This will put the main driver, <code class="docutils literal notranslate"><span class="pre">pyro_sim.py</span></code>, in your path, and
 allow you to run pyro from anywhere.</p>
 <p>If you intend on directly developing the solvers, you can instead do:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">python setup.py develop --user</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">python<span class="w"> </span>setup.py<span class="w"> </span>develop<span class="w"> </span>--user</span>
 </pre></div></div><p>This will allow you to modify the python source without having to
 reinstall each time something changes.</p>
 <section id="quick-test">
 <h2>Quick test<a class="headerlink" href="#quick-test" title="Permalink to this heading">¶</a></h2>
 <p>Run the advection solver to quickly test if things are setup correctly:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./pyro_sim.py advection smooth inputs.smooth</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./pyro_sim.py<span class="w"> </span>advection<span class="w"> </span>smooth<span class="w"> </span>inputs.smooth</span>
 </pre></div></div><p>You should see a plot window pop up with a smooth pulse advecting
 diagonally through the periodic domain.</p>
 </section>

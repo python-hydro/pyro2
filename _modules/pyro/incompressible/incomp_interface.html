@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.incompressible.incomp_interface &mdash; pyro 4.0.1.post15+g7552cee documentation</title>
+  <title>pyro.incompressible.incomp_interface &mdash; pyro 4.0.1.post16+ge1edb58 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -14,9 +14,6 @@
   <![endif]-->
   
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/sphinx_highlight.js"></script>
         <script src="../../../_static/clipboard.min.js"></script>
@@ -32,15 +29,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> pyro
-            <img src="../../../_static/logo.gif" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pyro
+              <img src="../../../_static/logo.gif" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 4.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -104,9 +105,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-      <li>pyro.incompressible.incomp_interface</li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pyro.incompressible.incomp_interface</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -126,7 +127,7 @@
              <span class="n">ldelta_ux</span><span class="p">,</span> <span class="n">ldelta_vx</span><span class="p">,</span>
              <span class="n">ldelta_uy</span><span class="p">,</span> <span class="n">ldelta_vy</span><span class="p">,</span>
              <span class="n">gradp_x</span><span class="p">,</span> <span class="n">gradp_y</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the MAC velocities in the x and y directions.</span>
 
 <span class="sd">    Parameters</span>
@@ -177,7 +178,7 @@
            <span class="n">ldelta_uy</span><span class="p">,</span> <span class="n">ldelta_vy</span><span class="p">,</span>
            <span class="n">gradp_x</span><span class="p">,</span> <span class="n">gradp_y</span><span class="p">,</span>
            <span class="n">u_MAC</span><span class="p">,</span> <span class="n">v_MAC</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This is similar to ``mac_vels``, but it predicts the interface states</span>
 <span class="sd">    of both u and v on both interfaces, using the MAC velocities to</span>
 <span class="sd">    do the upwinding.</span>
@@ -232,7 +233,7 @@
                          <span class="n">ldelta_ux</span><span class="p">,</span> <span class="n">ldelta_vx</span><span class="p">,</span>
                          <span class="n">ldelta_uy</span><span class="p">,</span> <span class="n">ldelta_vy</span><span class="p">,</span>
                          <span class="n">gradp_x</span><span class="p">,</span> <span class="n">gradp_y</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the unsplit predictions of u and v on both the x- and</span>
 <span class="sd">    y-interfaces.  This includes the transverse terms.</span>
 
@@ -376,7 +377,7 @@
 <span class="c1"># xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
 <div class="viewcode-block" id="upwind"><a class="viewcode-back" href="../../../pyro.incompressible.html#pyro.incompressible.incomp_interface.upwind">[docs]</a><span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">upwind</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">q_l</span><span class="p">,</span> <span class="n">q_r</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    upwind the left and right states based on the specified input</span>
 <span class="sd">    velocity, s.  The resulting interface state is q_int</span>
 
@@ -422,7 +423,7 @@
 <span class="c1"># xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
 <div class="viewcode-block" id="riemann"><a class="viewcode-back" href="../../../pyro.incompressible.html#pyro.incompressible.incomp_interface.riemann">[docs]</a><span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">riemann</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">q_l</span><span class="p">,</span> <span class="n">q_r</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Solve the Burger&#39;s Riemann problem given the input left and right</span>
 <span class="sd">    states and return the state on the interface.</span>
 
@@ -468,7 +469,7 @@
 <span class="c1"># xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
 <div class="viewcode-block" id="riemann_and_upwind"><a class="viewcode-back" href="../../../pyro.incompressible.html#pyro.incompressible.incomp_interface.riemann_and_upwind">[docs]</a><span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">riemann_and_upwind</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">q_l</span><span class="p">,</span> <span class="n">q_r</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    First solve the Riemann problem given q_l and q_r to give the</span>
 <span class="sd">    velocity on the interface and: use this velocity to upwind to</span>
 <span class="sd">    determine the state (q_l, q_r, or a mix) on the interface).</span>
