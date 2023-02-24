@@ -6,6 +6,15 @@ import math
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import ImageGrid
 
+from pyro.util import msg
+
+
+# This is defined in the module scope instead of as a closure in setup_axes()
+# so it doesn't get added to the list of callbacks multiple times.
+def _key_handler(event):
+    if event.key == "ctrl+c":
+        msg.fail("ABORT: KeyboardInterrupt")
+
 
 def setup_axes(myg, num):
     """ create a grid of axes whose layout depends on the aspect ratio of the
@@ -15,6 +24,7 @@ def setup_axes(myg, num):
     L_y = myg.ymax - myg.ymin
 
     f = plt.figure(1)
+    f.canvas.mpl_connect("key_press_event", _key_handler)
 
     cbar_title = False
 
