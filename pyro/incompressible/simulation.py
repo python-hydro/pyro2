@@ -219,11 +219,11 @@ class Simulation(NullSimulation):
         if self.verbose > 0:
             print("  making MAC velocities")
 
-        _um, _vm = incomp_interface.mac_vels(myg.ng, myg.dx, myg.dy, self.dt,
-                                               u, v,
-                                               ldelta_ux, ldelta_vx,
-                                               ldelta_uy, ldelta_vy,
-                                               gradp_x, gradp_y)
+        _um, _vm = incomp_interface.mac_vels(myg, self.dt,
+                                             u, v,
+                                             ldelta_ux, ldelta_vx,
+                                             ldelta_uy, ldelta_vy,
+                                             gradp_x, gradp_y)
 
         u_MAC = ai.ArrayIndexer(d=_um, grid=myg)
         v_MAC = ai.ArrayIndexer(d=_vm, grid=myg)
@@ -284,12 +284,12 @@ class Simulation(NullSimulation):
             print("  making u, v edge states")
 
         _ux, _vx, _uy, _vy = \
-               incomp_interface.states(myg.ng, myg.dx, myg.dy, self.dt,
-                                         u, v,
-                                         ldelta_ux, ldelta_vx,
-                                         ldelta_uy, ldelta_vy,
-                                         gradp_x, gradp_y,
-                                         u_MAC, v_MAC)
+               incomp_interface.states(myg, self.dt,
+                                       u, v,
+                                       ldelta_ux, ldelta_vx,
+                                       ldelta_uy, ldelta_vy,
+                                       gradp_x, gradp_y,
+                                       u_MAC, v_MAC)
 
         u_xint = ai.ArrayIndexer(d=_ux, grid=myg)
         v_xint = ai.ArrayIndexer(d=_vx, grid=myg)
