@@ -1,5 +1,5 @@
 import numpy as np
-from numba import njit
+
 
 def mac_vels(grid,  dt,
              u, v,
@@ -200,7 +200,7 @@ def get_interface_states(grid, dt,
     vu_y.v(buf=2)[:, :] = vbar.v(buf=2) * (u_yint.jp(1, buf=2) - u_yint.v(buf=2))
 
     u_xl.ip(1, buf=2)[:, :] += -0.5 * dtdy * vu_y.v(buf=2) - 0.5 * dt * gradp_x.v(buf=2)
-    u_xr.v(buf=2)[:, :] +=  -0.5 * dtdy * vu_y.v(buf=2) - 0.5 * dt * gradp_x.v(buf=2)
+    u_xr.v(buf=2)[:, :] += -0.5 * dtdy * vu_y.v(buf=2) - 0.5 * dt * gradp_x.v(buf=2)
 
     # v dv/dy is the transverse term for the v states on x-interfaces
     vv_y = grid.scratch_array()
