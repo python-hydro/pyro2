@@ -34,11 +34,42 @@ Typical usage:
 import h5py
 import numpy as np
 
+from numba import int32, float64
+from numba.experimental import jitclass
+
 import pyro.mesh.boundary as bnd
 from pyro.mesh.array_indexer import ArrayIndexer, ArrayIndexerFC
 from pyro.util import msg
 
+grid_spec = [
+  ('nx', int32),
+  ('ny', int32),
+  ('ng', int32),
+  ('qx', int32),
+  ('qy', int32),
+  ('xmin', float64),
+  ('xmax', float64),
+  ('ymin', float64),
+  ('ymax', float64),
+  ('ilo', int32),
+  ('ihi', int32),
+  ('jlo', int32),
+  ('jhi', int32),
+  ('ic', int32),
+  ('jc', int32),
+  ('dx', float64),
+  ('xl', float64[:]),
+  ('xr', float64[:]),
+  ('x', float64[:]),
+  ('dy', float64),
+  ('yl', float64[:]),
+  ('yr', float64[:]),
+  ('y', float64[:]),
+  ('x2d', float64[:,:]),
+  ('y2d', float64[:,:])
+]
 
+@jitclass(grid_spec)
 class Grid2d:
     """
     the 2-d grid class.  The grid object will contain the coordinate
@@ -134,24 +165,23 @@ class Grid2d:
         self.y = 0.5*(self.yl + self.yr)
 
         # 2-d versions of the zone coordinates (replace with meshgrid?)
-        x2d = np.repeat(self.x, self.qy)
-        x2d.shape = (self.qx, self.qy)
-        self.x2d = x2d
+        self.x2d = np.repeat(self.x, self.qy).reshape(self.qx, self.qy)
+        self.y2d = np.transpose(np.repeat(self.y, self.qx).reshape(self.qy, self.qx))
 
-        y2d = np.repeat(self.y, self.qx)
-        y2d.shape = (self.qy, self.qx)
-        y2d = np.transpose(y2d)
-        self.y2d = y2d
-
-    def scratch_array(self, nvar=1):
+    def scratch_array(self):
         """
         return a standard numpy array dimensioned to have the size
         and number of ghostcells as the parent grid
         """
-        if nvar == 1:
-            _tmp = np.zeros((self.qx, self.qy), dtype=np.float64)
-        else:
-            _tmp = np.zeros((self.qx, self.qy, nvar), dtype=np.float64)
+        _tmp = np.zeros((self.qx, self.qy), dtype=np.float64)
+        return ArrayIndexer(d=_tmp, grid=self)
+
+    def scratch_array_n(self, nvar):
+        """
+        return a standard numpy array dimensioned to have the size
+        and number of ghostcells as the parent grid
+        """
+        _tmp = np.zeros((self.qx, self.qy, nvar), dtype=np.float64)
         return ArrayIndexer(d=_tmp, grid=self)
 
     def coarse_like(self, N):
