@@ -286,7 +286,7 @@ def weno(q, order):
 
     return q_minus, q_plus
 
-def ppm_reconstruction(a, idir):
+def ppm_reconstruction(a, myg, idir):
     """
     The PPM reconstruction method, performs an estimation of the values
     of a in each interface x_{i-1/2}. In order to accomplish this task
@@ -302,14 +302,13 @@ def ppm_reconstruction(a, idir):
     from a[i], in order to prevent overshooting and extrema in the boundaries.
     """
 
-    ai = a.scratch_array()
-    al = a.scratch_array()
-    ar = a.scratch_array()
-
-    dap = a.scratch_array()
-    dam = a.scratch_array()
-    davl = a.scratch_array()
-    sign = a.scratch_array()
+    ai = myg.scratch_array()
+    al = myg.scratch_array()
+    ar = myg.scratch_array()
+    dap = myg.scratch_array()
+    dam = myg.scratch_array()
+    davl = myg.scratch_array()
+    sign = myg.scratch_array()
 
     if idir == 1:
 
@@ -318,10 +317,10 @@ def ppm_reconstruction(a, idir):
 
         #Now, we should apply the Van Leer limiter for the slopes.
         davl.v(buf=2)[:,:] = 0.5*(a.ip(1,buf=2) - a.ip(-1,buf=2))
-        sign.v(buf=2)[:,:] = np.sign(davl)
+        sign.v(buf=2)[:,:] = np.sign(davl.v(buf=2))
 
-        davl.v(buf=2)[:,:] = np.minimum(np.abs(davl), 2.0 * np.abs(dam.v(buf=2)))
-        davl.v(buf=2)[:,:] = np.minimum(davl, 2.0 * np.abs(dap.v(buf=2)) * sign.v(buf=2))
+        davl.v(buf=2)[:,:] = np.minimum(np.abs(davl.v(buf=2)), 2.0 * np.abs(dam.v(buf=2)))
+        davl.v(buf=2)[:,:] = np.minimum(davl.v(buf=2), 2.0 * np.abs(dap.v(buf=2)) * sign.v(buf=2))
 
         #Now, we are in the position of writing the reconstruction interpolation
         #of the mid-zones.
@@ -339,10 +338,10 @@ def ppm_reconstruction(a, idir):
         ar = np.where((ai.ip(1, buf=2) - a.v(buf=2))*(a.v(buf=2) - ai.v(buf=2)) <= 0.0,
                                     a.v(buf=2), ai.v(buf=2))
 
-        al = np.where(-(ai.v(1,buf=2) - ai.ip(-1,buf=2))**2
+        al = np.where(-(ai.v(buf=2) - ai.ip(-1,buf=2))**2
                          > 6.0*(ai.v(buf=2) - ai.ip(1,buf=2))
                          * (a.v(buf=2) - 0.5*(ai.v(buf=2) + ai.ip(-1,buf=2))),
-                           3.0*a.ip(-1,buf=2) - 2.0*ai.v(), al)
+                           3.0*a.ip(-1,buf=2) - 2.0*ai.v(buf=2), al)
 
         ar = np.where(6.0 * (ai.ip(1,buf=2) - ai.v(buf=2))
                       * (a.v(buf=2) - 0.5*(ai.v(buf=2) + ai.ip(1, buf=2)))
@@ -356,10 +355,10 @@ def ppm_reconstruction(a, idir):
 
         #Now, we should apply the Van Leer limiter for the slopes.
         davl.v(buf=2)[:,:] = 0.5*(a.jp(1,buf=2) - a.jp(-1,buf=2))
-        sign.v(buf=2)[:,:] = np.sign(davl)
+        sign.v(buf=2)[:,:] = np.sign(davl.v(buf=2))
 
-        davl.v(buf=2)[:,:] = np.minimum(np.abs(davl), 2.0 * np.abs(dam.v(buf=2)))
-        davl.v(buf=2)[:,:] = np.minimum(davl, 2.0 * np.abs(dap.v(buf=2)) * sign.v(buf=2))
+        davl.v(buf=2)[:,:] = np.minimum(np.abs(davl.v(buf=2)), 2.0 * np.abs(dam.v(buf=2)))
+        davl.v(buf=2)[:,:] = np.minimum(davl.v(buf=2), 2.0 * np.abs(dap.v(buf=2)) * sign.v(buf=2))
 
         #Now, we are in the position of writing the reconstruction interpolation
         #of the mid-zones.
@@ -377,7 +376,7 @@ def ppm_reconstruction(a, idir):
         ar = np.where((ai.jp(1, buf=2) - a.v(buf=2))*(a.v(buf=2) - ai.v(buf=2)) <= 0.0,
                                     a.v(buf=2), ai.v(buf=2))
 
-        al = np.where(-(ai.v(1,buf=2) - ai.jp(-1,buf=2))**2
+        al = np.where(-(ai.v(buf=2) - ai.jp(-1,buf=2))**2
                       > 6.0*(ai.v(buf=2) - ai.jp(1,buf=2))
                       * (a.v(buf=2) - 0.5*(ai.v(buf=2) + ai.jp(-1,buf=2))),
                       3.0*a.ip(-1,buf=2) - 2.0*ai.v(buf=2), al)
