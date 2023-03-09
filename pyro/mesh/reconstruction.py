@@ -286,20 +286,33 @@ def weno(q, order):
 
     return q_minus, q_plus
 
+
 def ppm_reconstruction(a, myg, idir):
     """
-    The PPM reconstruction method, performs an estimation of the values
-    of a in each interface x_{i-1/2}. In order to accomplish this task
-    we perform first a 4th-order polynomial interpolation:
+    The PPM reconstruction method proceeds as follows:
+
+    1. First, we perform an estimation of the values
+    of a, in each interface x_{i+1/2}. In order to accomplish this
+    particular task a cuartic polynomial interpolation over:
 
     |----*----|----*----|----*----|----*----|
       a_{i-1}     a_i     a_{i+1}   a_{i+2}
 
-    these values are stored in ai, where ai[i] characterizes a_{i-1/2}.
+    After the calculation of these values, defined as a_{i+1/2},
+    we stored them in ai[i].
 
-    Next, we define two values, a_{L,i-1/2} and a_{R,i-1/2}, at x_{i-1/2}.
-    Each one of these values are stored in al[i] and ar[i], and are computed
-    from a[i], in order to prevent overshooting and extrema in the boundaries.
+    2. Next, we define two values for each interface: a_{L,i+1/2} and a_{R,i+1/2},
+    to the limits from the left and the right of x_{i+1/2}, respectively. Under
+    this definition, each cell defines:
+
+      |----------------------*----------------------|
+    a_{R,i-1/2}              a_i              a_{L, i+1/2}
+
+    where a_{R,i-1/2} will be stored in ar[i], and a_{L,i+1/2} in
+    al[i].
+
+
+    3. Finally, we return the ar[:] and al[:] np.ndarray types.
     """
 
     ai = myg.scratch_array()
@@ -312,78 +325,72 @@ def ppm_reconstruction(a, myg, idir):
 
     if idir == 1:
 
-        dam.v(buf=2)[:,:] = a.v(buf=2) - a.ip(-1,buf=2)
-        dap.v(buf=2)[:,:] = a.ip(1,buf=2) - a.v(buf=2)
+        dam.v(buf=2)[:, :] = a.v(buf=2) - a.ip(-1, buf=2)
+        dap.v(buf=2)[:, :] = a.ip(1, buf=2) - a.v(buf=2)
 
         #Now, we should apply the Van Leer limiter for the slopes.
-        davl.v(buf=2)[:,:] = 0.5*(a.ip(1,buf=2) - a.ip(-1,buf=2))
-        sign.v(buf=2)[:,:] = np.sign(davl.v(buf=2))
+        davl.v(buf=2)[:, :] = 0.5*(a.ip(1, buf=2) - a.ip(-1, buf=2))
+        sign.v(buf=2)[:, :] = np.sign(davl.v(buf=2))
 
-        davl.v(buf=2)[:,:] = np.minimum(np.abs(davl.v(buf=2)), 2.0 * np.abs(dam.v(buf=2)))
-        davl.v(buf=2)[:,:] = np.minimum(davl.v(buf=2), 2.0 * np.abs(dap.v(buf=2)) * sign.v(buf=2))
+        davl.v(buf=2)[:, :] = np.minimum(np.abs(davl.v(buf=2)), 2.0 * np.abs(dam.v(buf=2)))
+        davl.v(buf=2)[:, :] = np.minimum(davl.v(buf=2), 2.0 * np.abs(dap.v(buf=2))) * sign.v(buf=2)
 
         #Now, we are in the position of writing the reconstruction interpolation
         #of the mid-zones.
-        ai.v(buf=2)[:,:] = (a.v(buf=2) + 0.5*(a.ip(1, buf=2) + a.v(buf=2))
-                               - (davl.ip(1, buf=2) - davl.v(buf=2))/6.0)
+        ai.v(buf=2)[:, :] = a.v(buf=2) + 0.5*(dap.v(buf=2)) \
+                               - (davl.ip(1, buf=2) - davl.v(buf=2))/6.0
 
-        #From here we define al and ar to take the same value of ai. The values of al and
-        #ar, will be reformated accordingly to the neigbours behaviour.
-        al.v(buf=2)[:,:] = ai.v(buf=2)
-        ar.v(buf=2)[:,:] = ai.v(buf=2)
+        #From here we set ar and al to take the same value of ai. The values of ar and
+        #al, will be reformated accordingly to the neigbours behaviour.
+        al.v(buf=2)[:, :] = ai.v(buf=2)
+        ar.v(buf=2)[:, :] = ai.v(buf=2)
 
-        #From here, we can reset ai and ar:
-        al = np.where((ai.v(buf=2) - a.ip(-1, buf=2))*(a.ip(-1,buf=2) - ai.ip(-1, buf=2)) <= 0.0,
+        #From here, we can reset ar and al:
+        ar = np.where((ai.v(buf=2) - a.v(buf=2))*(a.v(buf=2) - ai.ip(-1, buf=2)) <= 0.0,
                                     a.v(buf=2), ai.v(buf=2))
-        ar = np.where((ai.ip(1, buf=2) - a.v(buf=2))*(a.v(buf=2) - ai.v(buf=2)) <= 0.0,
+        al = np.where((ai.v(buf=2) - a.v(buf=2))*(a.v(buf=2) - ai.ip(-1, buf=2)) <= 0.0,
                                     a.v(buf=2), ai.v(buf=2))
 
-        al = np.where(-(ai.v(buf=2) - ai.ip(-1,buf=2))**2
-                         > 6.0*(ai.v(buf=2) - ai.ip(1,buf=2))
-                         * (a.v(buf=2) - 0.5*(ai.v(buf=2) + ai.ip(-1,buf=2))),
-                           3.0*a.ip(-1,buf=2) - 2.0*ai.v(buf=2), al)
+        ar = np.where(6.0*(ai.v(buf=2) - ai.ip(-1, buf=2))*(a.v(buf=2) - 0.5*(ai.v(buf=2) + ai.ip(-1, buf=2))) >=
+                      (ai.v(buf=2) - ai.ip(-1, buf=2))**2, 3.0*a.v(buf=2) - 2.0*ai.v(buf=2), ai.v(buf=2))
 
-        ar = np.where(6.0 * (ai.ip(1,buf=2) - ai.v(buf=2))
-                      * (a.v(buf=2) - 0.5*(ai.v(buf=2) + ai.ip(1, buf=2)))
-                      > (ai.ip(1,buf=2) - ai.v(buf=2))**2,
-                        3.0*a.v(buf=2) - 2*ai.ip(1, buf=2), ar)
+        al = np.where(-(ai.v(buf=2) - ai.ip(-1, buf=2))**2 >=
+                      6.0*(ai.v(buf=2) - ai.ip(-1, buf=2))*(a.v(buf=2) - 0.5*(ai.v(buf=2) + ai.ip(-1, buf=2))),
+                      3.0*a.v(buf=2) - 2.0*ai.v(buf=2), ai.v(buf=2))
 
     elif idir == 2:
 
-        dam.v(buf=2)[:,:] = a.v(buf=2) - a.jp(-1,buf=2)
-        dap.v(buf=2)[:,:] = a.jp(1,buf=2) - a.v(buf=2)
+        dam.v(buf=2)[:, :] = a.v(buf=2) - a.jp(-1, buf=2)
+        dap.v(buf=2)[:, :] = a.jp(1, buf=2) - a.v(buf=2)
 
         #Now, we should apply the Van Leer limiter for the slopes.
-        davl.v(buf=2)[:,:] = 0.5*(a.jp(1,buf=2) - a.jp(-1,buf=2))
-        sign.v(buf=2)[:,:] = np.sign(davl.v(buf=2))
+        davl.v(buf=2)[:, :] = 0.5*(a.jp(1, buf=2) - a.jp(-1, buf=2))
+        sign.v(buf=2)[:, :] = np.sign(davl.v(buf=2))
 
-        davl.v(buf=2)[:,:] = np.minimum(np.abs(davl.v(buf=2)), 2.0 * np.abs(dam.v(buf=2)))
-        davl.v(buf=2)[:,:] = np.minimum(davl.v(buf=2), 2.0 * np.abs(dap.v(buf=2)) * sign.v(buf=2))
+        davl.v(buf=2)[:, :] = np.minimum(np.abs(davl.v(buf=2)), 2.0 * np.abs(dam.v(buf=2)))
+        davl.v(buf=2)[:, :] = np.minimum(davl.v(buf=2), 2.0 * np.abs(dap.v(buf=2))) * sign.v(buf=2)
 
         #Now, we are in the position of writing the reconstruction interpolation
         #of the mid-zones.
-        ai.v(buf=2)[:,:] = (a.v(buf=2) + 0.5*(a.jp(1, buf=2) + a.v(buf=2))
-                               - (davl.jp(1, buf=2) - davl.v(buf=2))/6.0)
+        ai.v(buf=2)[:, :] = a.v(buf=2) + 0.5*(a.jp(1, buf=2) + a.v(buf=2)) \
+                               - (davl.jp(1, buf=2) - davl.v(buf=2))/6.0
 
         #From here we define al and ar to take the same value of ai. The values of al and
         #ar, will be reformated accordingly to the neigbours behaviour.
-        al.v(buf=2)[:,:] = ai.v(buf=2)
-        ar.v(buf=2)[:,:] = ai.v(buf=2)
+        al.v(buf=2)[:, :] = ai.v(buf=2)
+        ar.v(buf=2)[:, :] = ai.v(buf=2)
 
         #From here, we can reset ai and ar:
-        al = np.where((ai.v(buf=2) - a.jp(-1, buf=2))*(a.jp(-1,buf=2) - ai.jp(-1, buf=2)) <= 0.0,
+        ar = np.where((ai.v(buf=2) - a.v(buf=2))*(a.v(buf=2) - ai.jp(-1, buf=2)) <= 0.0,
                                     a.v(buf=2), ai.v(buf=2))
-        ar = np.where((ai.jp(1, buf=2) - a.v(buf=2))*(a.v(buf=2) - ai.v(buf=2)) <= 0.0,
+        al = np.where((ai.v(buf=2) - a.v(buf=2))*(a.v(buf=2) - ai.jp(-1, buf=2)) <= 0.0,
                                     a.v(buf=2), ai.v(buf=2))
 
-        al = np.where(-(ai.v(buf=2) - ai.jp(-1,buf=2))**2
-                      > 6.0*(ai.v(buf=2) - ai.jp(1,buf=2))
-                      * (a.v(buf=2) - 0.5*(ai.v(buf=2) + ai.jp(-1,buf=2))),
-                      3.0*a.ip(-1,buf=2) - 2.0*ai.v(buf=2), al)
+        ar = np.where(6.0*(ai.v(buf=2) - ai.jp(-1, buf=2))*(a.v(buf=2) - 0.5*(ai.v(buf=2) + ai.jp(-1, buf=2))) >=
+                      (ai.v(buf=2) - ai.jp(-1, buf=2))**2, 3.0*a.v(buf=2) - 2.0*ai.v(buf=2), ai.v(buf=2))
 
-        ar = np.where(6.0 * (ai.jp(1,buf=2) - ai.v(buf=2))
-                      * (a.v(buf=2) - 0.5*(ai.v(buf=2) + ai.jp(1, buf=2)))
-                      > (ai.jp(1,buf=2) - ai.v(buf=2))**2,
-                      3.0*a.v(buf=2) - 2.0*ai.jp(1, buf=2), ar)
+        al = np.where(-(ai.v(buf=2) - ai.jp(-1, buf=2))**2 >=
+                      6.0*(ai.v(buf=2) - ai.jp(-1, buf=2))*(a.v(buf=2) - 0.5*(ai.v(buf=2) + ai.jp(-1, buf=2))),
+                      3.0*a.v(buf=2) - 2.0*ai.v(buf=2), ai.v(buf=2))
 
-    return al, ar
+    return ar, al
