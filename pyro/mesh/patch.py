@@ -1054,5 +1054,5 @@ class PolarGrid(Grid2d):
 
 
 
-# if __name__ == "__main__":
-#     do_demo()
+if __name__ == "__main__":
+    do_demo()
