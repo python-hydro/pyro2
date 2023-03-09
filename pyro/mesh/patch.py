@@ -34,9 +34,9 @@ Typical usage:
 import h5py
 import numpy as np
 
-# import pyro.mesh.boundary as bnd
-# from pyro.mesh.array_indexer import ArrayIndexer, ArrayIndexerFC
-# from pyro.util import msg
+import pyro.mesh.boundary as bnd
+from pyro.mesh.array_indexer import ArrayIndexer, ArrayIndexerFC
+from pyro.util import msg
 
 
 class Grid2d:
