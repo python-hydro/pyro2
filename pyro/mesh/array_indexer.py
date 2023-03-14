@@ -281,7 +281,7 @@ class ArrayIndexer(np.ndarray):
         """
 
         if fmt is None:
-            if self.dtype == np.int64:
+            if self.dtype == int:
                 fmt = "%4d"
             elif self.dtype == np.float64:
                 fmt = "%10.5g"

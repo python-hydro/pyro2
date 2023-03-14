@@ -68,7 +68,7 @@ p_exact = exact[:, 4]
 rmin = 0
 rmax = np.sqrt(myg.xmax**2 + myg.ymax**2)
 
-nbins = np.int64(np.sqrt(myg.nx**2 + myg.ny**2))
+nbins = int(np.sqrt(myg.nx**2 + myg.ny**2))
 
 # bins holds the edges, so there is one more value than actual bin
 # bin_centers holds the center value of the bin
