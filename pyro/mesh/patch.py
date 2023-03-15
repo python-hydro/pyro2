@@ -1011,6 +1011,41 @@ class PolarGrid(Grid2d):
         area_j = np.pi * (r0 * np.sin(t0) + r1 * np.sin(t0)) * np.sqrt(np.square(r1 * np.sin(t0) - r0 * np.sin(t0)) + np.square(r1 * np.cos(t0) - r0 * np.cos(t0)))
         return tr(np.array([area_i, area_j]))
 
+    def area_x(self):
+        """
+        Return an array of the face areas. 
+        The shape of the returned array is (ni, nj).
+        """
+        tr = lambda arr: arr.transpose(1, 2, 0)
+        x = self.cell_vertices()[:,0]
+        y = self.cell_vertices()[0,:]
+        r0 = x[:-1, :-1]
+        r1 = x[+1:, :-1]
+        t0 = y[:-1, :-1]
+        t1 = y[+1:, +1:]
+
+        area = r1 - r0
+        return area
+
+    def area_y(self):
+        """
+        Return an array of the face areas. 
+        The shape of the returned array is (ni, nj).
+        """
+        tr = lambda arr: arr.transpose(1, 2, 0)
+        x = self.cell_vertices()[:,0]
+        y = self.cell_vertices()[0,:]
+        r0 = x[:-1, :-1]
+        r1 = x[+1:, :-1]
+        t0 = y[:-1, :-1]
+        t1 = y[+1:, +1:]
+
+        # ** the area of a part of an annulus
+
+        area = 0.5 * (r1 ** 2 - r0 ** 2) * (t1 - t0)
+        return area
+
+
     def cell_volumes(self):
         """
         Return an array of the cell volume data for the given coordinate box
@@ -1025,8 +1060,7 @@ class PolarGrid(Grid2d):
         t0 = y[:-1, :-1]
         t1 = y[+1:, +1:]
 
-        return (r1 ** 3 - r0 ** 3) * (np.cos(t1) - np.cos(t0)) * (-2.0 * np.pi) / 3.0
-        # return r1
+        return 0.5 * (r1 ** 2 - r0 ** 2) * (t1 - t0) * (r1 - r0)
 
     def cell_vertices(self):
         """
