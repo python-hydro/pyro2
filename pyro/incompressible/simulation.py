@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import pyro.incompressible.incomp_interface as incomp_interface
+import pyro.mesh.boundary as bnd
 import pyro.mesh.array_indexer as ai
 import pyro.mesh.patch as patch
 import pyro.mesh.reconstruction as reconstruction
@@ -14,7 +15,7 @@ from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
 
 class Simulation(NullSimulation):
 
-    def initialize(self):
+    def initialize(self, other_bc=False):
         """
         Initialize the grid and variables for incompressible flow and
         set the initial conditions for the chosen problem.
@@ -23,19 +24,29 @@ class Simulation(NullSimulation):
         my_grid = grid_setup(self.rp, ng=4)
 
         # create the variables
-        bc, bc_xodd, bc_yodd = bc_setup(self.rp)
-
         my_data = patch.CellCenterData2d(my_grid)
+
+        if other_bc:
+            self.define_other_bc()
+
+        bc, bc_xodd, bc_yodd = bc_setup(self.rp)
 
         # velocities
         my_data.register_var("x-velocity", bc_xodd)
         my_data.register_var("y-velocity", bc_yodd)
 
-        # phi -- used for the projections
-        my_data.register_var("phi-MAC", bc)
-        my_data.register_var("phi", bc)
-        my_data.register_var("gradp_x", bc)
-        my_data.register_var("gradp_y", bc)
+        # phi -- used for the projections. Has neumann BC's if v is dirichlet
+        # Assuming BC's are either all periodic or all dirichlet
+        if bc.xlb == "periodic":
+            phi_bc = bc
+        elif bc.xlb == "dirichlet":
+            phi_bc = bnd.BC(xlb='neumann', xrb='neumann',
+                           ylb='neumann', yrb='neumann')
+
+        my_data.register_var("phi-MAC", phi_bc)
+        my_data.register_var("phi", phi_bc)
+        my_data.register_var("gradp_x", phi_bc)
+        my_data.register_var("gradp_y", phi_bc)
 
         my_data.create()
 
@@ -47,10 +58,11 @@ class Simulation(NullSimulation):
             self.particles = particles.Particles(self.cc_data, bc, n_particles, particle_generator)
 
         # now set the initial conditions for the problem
-        problem = importlib.import_module(f"pyro.incompressible.problems.{self.problem_name}")
+        problem = importlib.import_module(f"pyro.{self.solver_name}.problems.{self.problem_name}")
         problem.init_data(self.cc_data, self.rp)
 
-    def method_compute_timestep(self):
+
+    def method_compute_timestep(self, ):
         """
         The timestep() function computes the advective timestep
         (CFL) constraint.  The CFL constraint says that information
@@ -163,7 +175,7 @@ class Simulation(NullSimulation):
 
         self.in_preevolve = False
 
-    def evolve(self):
+    def evolve(self, other_update_velocity=False):
         """
         Evolve the incompressible equations through one timestep.
         """
@@ -242,10 +254,10 @@ class Simulation(NullSimulation):
 
         # create the multigrid object
         mg = MG.CellCenterMG2d(myg.nx, myg.ny,
-                               xl_BC_type="periodic",
-                               xr_BC_type="periodic",
-                               yl_BC_type="periodic",
-                               yr_BC_type="periodic",
+                               xl_BC_type=self.cc_data.BCs["phi"].xlb,
+                               xr_BC_type=self.cc_data.BCs["phi"].xrb,
+                               yl_BC_type=self.cc_data.BCs["phi"].ylb,
+                               yr_BC_type=self.cc_data.BCs["phi"].yrb,
                                xmin=myg.xmin, xmax=myg.xmax,
                                ymin=myg.ymin, ymax=myg.ymax,
                                verbose=0)
@@ -300,34 +312,42 @@ class Simulation(NullSimulation):
         # update U to get the provisional velocity field
         # ---------------------------------------------------------------------
 
-        if self.verbose > 0:
-            print("  doing provisional update of u, v")
-
-        # compute (U.grad)U
-
-        # we want u_MAC U_x + v_MAC U_y
-        advect_x = myg.scratch_array()
-        advect_y = myg.scratch_array()
-
-        # u u_x + v u_y
-        advect_x.v()[:, :] = \
-            0.5*(u_MAC.v() + u_MAC.ip(1))*(u_xint.ip(1) - u_xint.v())/myg.dx + \
-            0.5*(v_MAC.v() + v_MAC.jp(1))*(u_yint.jp(1) - u_yint.v())/myg.dy
-
-        # u v_x + v v_y
-        advect_y.v()[:, :] = \
-            0.5*(u_MAC.v() + u_MAC.ip(1))*(v_xint.ip(1) - v_xint.v())/myg.dx + \
-            0.5*(v_MAC.v() + v_MAC.jp(1))*(v_yint.jp(1) - v_yint.v())/myg.dy
-
         proj_type = self.rp.get_param("incompressible.proj_type")
 
-        if proj_type == 1:
-            u[:, :] -= (self.dt*advect_x[:, :] + self.dt*gradp_x[:, :])
-            v[:, :] -= (self.dt*advect_y[:, :] + self.dt*gradp_y[:, :])
+        if other_update_velocity:
+            U_MAC = (u_MAC,v_MAC)
+            U_INT = (u_xint,u_yint,v_xint,v_yint)
+            self.do_other_update_velocity(U_MAC,U_INT)
 
-        elif proj_type == 2:
-            u[:, :] -= self.dt*advect_x[:, :]
-            v[:, :] -= self.dt*advect_y[:, :]
+        else:
+            if self.verbose > 0:
+                print("  doing provisional update of u, v")
+
+            # compute (U.grad)U
+
+            # we want u_MAC U_x + v_MAC U_y
+            advect_x = myg.scratch_array()
+            advect_y = myg.scratch_array()
+
+            # u u_x + v u_y
+            advect_x.v()[:, :] = \
+                0.5*(u_MAC.v() + u_MAC.ip(1))*(u_xint.ip(1) - u_xint.v())/myg.dx + \
+                0.5*(v_MAC.v() + v_MAC.jp(1))*(u_yint.jp(1) - u_yint.v())/myg.dy
+
+            # u v_x + v v_y
+            advect_y.v()[:, :] = \
+                0.5*(u_MAC.v() + u_MAC.ip(1))*(v_xint.ip(1) - v_xint.v())/myg.dx + \
+                0.5*(v_MAC.v() + v_MAC.jp(1))*(v_yint.jp(1) - v_yint.v())/myg.dy
+
+
+            if proj_type == 1:
+                u[:, :] -= (self.dt*advect_x[:, :] + self.dt*gradp_x[:, :])
+                v[:, :] -= (self.dt*advect_y[:, :] + self.dt*gradp_y[:, :])
+
+            elif proj_type == 2:
+                u[:, :] -= self.dt*advect_x[:, :]
+                v[:, :] -= self.dt*advect_y[:, :]
+
 
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")
@@ -342,10 +362,10 @@ class Simulation(NullSimulation):
 
         # create the multigrid object
         mg = MG.CellCenterMG2d(myg.nx, myg.ny,
-                               xl_BC_type="periodic",
-                               xr_BC_type="periodic",
-                               yl_BC_type="periodic",
-                               yr_BC_type="periodic",
+                               xl_BC_type=self.cc_data.BCs["phi"].xlb,
+                               xr_BC_type=self.cc_data.BCs["phi"].xrb,
+                               yl_BC_type=self.cc_data.BCs["phi"].ylb,
+                               yr_BC_type=self.cc_data.BCs["phi"].yrb,
                                xmin=myg.xmin, xmax=myg.xmax,
                                ymin=myg.ymin, ymax=myg.ymax,
                                verbose=0)
@@ -457,3 +477,17 @@ class Simulation(NullSimulation):
 
         plt.pause(0.001)
         plt.draw()
+
+
+    def define_other_bc(self):
+        """
+        Used to set up user-defined BC's (see e.g. incompressible_viscous)
+        """
+        pass
+
+    def do_other_update_velocity(self, U_MAC, U_INT):
+        """
+        Change the method for updating the velocity from the projected velocity
+        and interface states (see e.g. incompressible_viscous)
+        """
+        pass
