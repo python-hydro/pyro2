@@ -3,6 +3,7 @@ import pyro.mesh.patch as patch
 from pyro.mesh.reconstruction import ppm_reconstruction
 import pyro.mesh.array_indexer as ai
 
+
 def riemman(myg, u, v, ar, al, idim):
     """Here we write the riemmann problem for the advection equation. The solution
      is trivial: from ql and qr, we choose the upwind case."""
@@ -39,8 +40,8 @@ def ctu_unsplit_fluxes(data, rp, dt, scalar_name):
 
     #Now,let's call the velocity parameters
     #and compute the cfl number of each dimesnion
-    u = rp.get_params("advection.u")
-    v = rp.get_params("advection.v")
+    u = rp.get_param("advection.u")
+    v = rp.get_param("advection.v")
 
     cx = u*dt / myg.dx
     cy = v*dt / myg.dy
@@ -51,18 +52,18 @@ def ctu_unsplit_fluxes(data, rp, dt, scalar_name):
     delta_ax = myg.scratch_array()
     a6x = myg.scratch_array()
 
-    _ar, _al = ppm_reconstruction(a,myg,idir=1)
+    _ar, _al = ppm_reconstruction(a, myg, idir=1)
     ar = ai.ArrayIndexer(_ar, myg)
     al = ai.ArrayIndexer(_al, myg)
 
-    delta_ax.v(buf=2)[:,:] = ar.v(buf=2) - al.v(buf=2)
-    a6x.v(buf=2)[:,:] = 6.0 * (a.v(buf=2) - 0.5*(ar.v(buf=2) + al.v(buf=2)))
+    delta_ax.v(buf=1)[:, :] = ar.v(buf=1) - al.v(buf=1)
+    a6x.v(buf=1)[:, :] = 6.0 * (a.v(buf=1) - 0.5*(ar.v(buf=1) + al.v(buf=1)))
 
     ax_normal_l = myg.scratch_array()
     ax_normal_r = myg.scratch_array()
 
-    ax_normal_l(buf=2)[:,:] = al.v(buf=2) - cx * (delta_ax.v(buf=2) - (1 - 2.0 * cx / 3.0)*a6x.v(buf=2))
-    ax_normal_r(buf=2)[:,:] = ar.ip(1, buf=2) + cx * (delta_ax.ip(1, buf=2) + (1 - 2*cx/3.0) * a6x.ip(1,buf=2))
+    ax_normal_l.v(buf=1)[:, :] = al.v(buf=1) - cx * (delta_ax.v(buf=1) - (1 - 2.0 * cx / 3.0) * a6x.v(buf=1))
+    ax_normal_r.v(buf=1)[:, :] = ar.ip(1, buf=1) + cx * (delta_ax.ip(1, buf=1) + (1 - 2*cx/3.0) * a6x.ip(1,buf=1))
 
     #Let us now move to idir==2:
     delta_ay = myg.scratch_array()
@@ -72,14 +73,14 @@ def ctu_unsplit_fluxes(data, rp, dt, scalar_name):
     ar = ai.ArrayIndexer(_ar, myg)
     al = ai.ArrayIndexer(_ar, myg)
 
-    delta_ay.v(buf=2)[:,:] = ar.v(buf=2) - al.v(buf=2)
-    a6y.v(buf=2)[:,:] = 6.0 * (a.v(buf=2) - 0.5*(ar.v(buf=2) + al.v(buf=2)))
+    delta_ay.v(buf=1)[:, :] = ar.v(buf=1) - al.v(buf=1)
+    a6y.v(buf=1)[:, :] = 6.0 * (a.v(buf=1) - 0.5*(ar.v(buf=1) + al.v(buf=1)))
 
     ay_normal_l = myg.scratch_array()
     ay_normal_r = myg.scratch_array()
 
-    ay_normal_l(buf=2)[:,:] = al.v(buf=2) - cx * (delta_ay.v(buf=2) - (1 - 2.0 * cx / 3.0)*a6y.v(buf=2))
-    ay_normal_r(buf=2)[:,:] = ar.jp(1, buf=2) + cx * (delta_ay.jp(1, buf=2) + (1 - 2*cx/3.0) * a6y.jp(1,buf=2))
+    ay_normal_l.v(buf=1)[:, :] = al.v(buf=1) - cx * (delta_ay.v(buf=1) - (1 - 2.0 * cx / 3.0)*a6y.v(buf=1))
+    ay_normal_r.v(buf=1)[:, :] = ar.jp(1, buf=1) + cx * (delta_ay.jp(1, buf=1) + (1 - 2*cx/3.0) * a6y.jp(1,buf=1))
 
     #Now we compute the Riemman Problem between to states, in order to compute the transverse states
     ax_T = myg.scratch_array()
@@ -94,21 +95,21 @@ def ctu_unsplit_fluxes(data, rp, dt, scalar_name):
     ay_l = myg.scratch_array()
     ay_r = myg.scratch_array()
 
-    ax_l = ax_normal_l - 0.5 * cy * (ay_T.v(buf=2) - ay_T.jp(-1))
-    ax_r = ax_normal_r - 0.5 * cy * (ay_T.ip(1, buf=2) - ay_T.ip_jp(1, -1, buf=2))
+    ax_l.v(buf=1)[:, :] = ax_normal_l.v(buf=1) - 0.5 * cy * (ay_T.v(buf=1) - ay_T.jp(-1, buf=1))
+    ax_r.v(buf=1)[:, :] = ax_normal_r.v(buf=1) - 0.5 * cy * (ay_T.ip(1, buf=1) - ay_T.ip_jp(1, -1, buf=1))
 
-    ay_l = ay_normal_l - 0.5 * cx * (ax_T.v(buf=2) - ax_T.ip(-1, buf=2))
-    ay_r = ay_normal_r - 0.5 * cx * (ax_T.jp(1, buf=2) - ay_T.ip_jp(-1, 1 ,buf=2))
+    ay_l.v(buf=1)[:, :] = ay_normal_l.v(buf=1) - 0.5 * cx * (ax_T.v(buf=1) - ax_T.ip(-1, buf=1))
+    ay_r.v(buf=1)[:, :] = ay_normal_r.v(buf=1) - 0.5 * cx * (ax_T.jp(1, buf=1) - ay_T.ip_jp(-1, 1 ,buf=1))
 
     #Finally we may perform another sequence of riemman problems
     ax = riemman(myg, u, v, ax_l, ax_r, idim=1)
     ay = riemman(myg, u, v,  ay_l, ay_r, idim=2)
 
     #From here we may compute the fluxes terms.
-    Fx = myg.myg.scratch_array()
+    Fx = myg.scratch_array()
     Fy = myg.scratch_array()
 
-    Fx.v(buf=2)[:, :] = u*ax.v(buf=2)
-    Fy.v(buf=2)[:, :] = v*ay.v(buf=2)
+    Fx.v(buf=1)[:, :] = u*ax.v(buf=1)
+    Fy.v(buf=1)[:, :] = v*ay.v(buf=1)
 
     return Fx, Fy
