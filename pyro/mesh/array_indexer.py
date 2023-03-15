@@ -4,6 +4,8 @@ operations we see in finite-difference methods, like i+1, i-1, etc.
 """
 
 
+import numbers
+
 import numpy as np
 
 
@@ -281,7 +283,7 @@ class ArrayIndexer(np.ndarray):
         """
 
         if fmt is None:
-            if self.dtype == np.int:
+            if isinstance(self.dtype.type, numbers.Integral):
                 fmt = "%4d"
             elif self.dtype == np.float64:
                 fmt = "%10.5g"
@@ -502,7 +504,7 @@ class ArrayIndexerFC(ArrayIndexer):
         """
 
         if fmt is None:
-            if self.dtype == np.int:
+            if isinstance(self.dtype.type, numbers.Integral):
                 fmt = "%4d"
             elif self.dtype == np.float64:
                 fmt = "%10.5g"
