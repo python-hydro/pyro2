@@ -5,7 +5,7 @@ operations we see in finite-difference methods, like i+1, i-1, etc.
 
 
 import numpy as np
-
+import numbers
 
 def _buf_split(b):
     """ take an integer or iterable and break it into a -x, +x, -y, +y
@@ -281,7 +281,7 @@ class ArrayIndexer(np.ndarray):
         """
 
         if fmt is None:
-            if self.dtype == int:
+            if isinstance(self.dtype.type, numbers.Integral):
                 fmt = "%4d"
             elif self.dtype == np.float64:
                 fmt = "%10.5g"
@@ -502,7 +502,7 @@ class ArrayIndexerFC(ArrayIndexer):
         """
 
         if fmt is None:
-            if self.dtype == int:
+            if isinstance(self.dtype.type, numbers.Integral):
                 fmt = "%4d"
             elif self.dtype == np.float64:
                 fmt = "%10.5g"
