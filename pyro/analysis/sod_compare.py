@@ -121,7 +121,7 @@ ax = axes.flat[3]
 ax.plot(x_exact, e_exact)
 ax.scatter(x, e, marker="x", s=7, color="r")
 
-if (myg.nx > myg.ny):
+if myg.nx > myg.ny:
     ax.set_xlabel(r"x")
 else:
     ax.set_xlabel(r"y")

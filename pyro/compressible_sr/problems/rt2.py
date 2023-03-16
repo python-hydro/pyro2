@@ -60,7 +60,7 @@ def init_data(my_data, rp):
 
     j = myg.jlo
     while j <= myg.jhi:
-        if (myg.y[j] < ycenter):
+        if myg.y[j] < ycenter:
             dens[:, j] = dens1
             p[:, j] = p0 + dens1*grav*myg.y[j]
 

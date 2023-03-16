@@ -132,7 +132,7 @@ def states(idir, ng, dx, dt,
             e_val[:] = 0.0
 
             # compute the eigenvalues and eigenvectors
-            if (idir == 1):
+            if idir == 1:
                 e_val[1:3] = np.array([q[iu], q[iu]])
 
                 e_val[0] = 1.0 / (1.0 - v2 * cs2) * \
@@ -243,7 +243,7 @@ def states(idir, ng, dx, dt,
                     rvec[n, n] = 1.0
 
             # define the reference states
-            if (idir == 1):
+            if idir == 1:
                 # this is one the right face of the current zone,
                 # so the fastest moving eigenvalue is e_val[3] = u + c
                 factor = 0.5 * (1.0 - dtdx * max(e_val[3], 0.0))
@@ -275,7 +275,7 @@ def states(idir, ng, dx, dt,
                 sum_l = np.dot(betal, rvec[:, m])
                 sum_r = np.dot(betar, rvec[:, m])
 
-                if (idir == 1):
+                if idir == 1:
                     U_l[i + 1, j, m] += sum_l
                     U_r[i,  j, m] += sum_r
                 else:
@@ -367,7 +367,7 @@ def riemann_cgf(idir, ng,
             rho_l = q_l[i, j, irho]
 
             # un = normal velocity; ut = transverse velocity
-            if (idir == 1):
+            if idir == 1:
                 un_l = q_l[i, j, iu] 
                 ut_l = q_l[i, j, iv] 
             else:
@@ -380,7 +380,7 @@ def riemann_cgf(idir, ng,
 
             rho_r = q_r[i, j, irho]
 
-            if (idir == 1):
+            if idir == 1:
                 un_r = q_r[i, j, iu] 
                 ut_r = q_r[i, j, iv] 
             else:
@@ -420,7 +420,7 @@ def riemann_cgf(idir, ng,
 
             # figure out which state we are in, based on the location of
             # the waves
-            if (ustar > 0.0):
+            if ustar > 0.0:
 
                 # contact is moving to the right, we need to understand
                 # the L and *L states
@@ -438,11 +438,11 @@ def riemann_cgf(idir, ng,
                     (ustar * (1.0 - cstar_l**2) - cstar_l * np.sqrt((1.0 - v2) *
                      (1.0 - v2*cstar_l**2 - ustar**2*(1.0-cstar_l**2))))
 
-                if (pstar > p_l):
+                if pstar > p_l:
                     # the wave is a shock -- find the shock speed
                     sigma = (lambda_l + lambdastar_l) / 2.0
 
-                    if (sigma > 0.0):
+                    if sigma > 0.0:
                         # shock is moving to the right -- solution is L state
                         rho_state = rho_l
                         un_state = un_l
@@ -567,14 +567,14 @@ def riemann_cgf(idir, ng,
                                 q_r[i, j, iX:iX + nspec])
 
             # are we on a solid boundary?
-            if (idir == 1):
+            if idir == 1:
                 if (i == ilo and lower_solid == 1):
                     un_state = 0.0
 
                 if (i == ihi + 1 and upper_solid == 1):
                     un_state = 0.0
 
-            elif (idir == 2):
+            elif idir == 2:
                 if (j == jlo and lower_solid == 1):
                     un_state = 0.0
 
@@ -583,7 +583,7 @@ def riemann_cgf(idir, ng,
 
             # Make primitive state 
             q[irho] = rho_state 
-            if (idir == 1):
+            if idir == 1:
                 q[iu] = un_state 
                 q[iv] = ut_state
             else:
@@ -691,7 +691,7 @@ def riemann_prim(idir, ng,
             rho_l = q_l[i, j, irho]
 
             # un = normal velocity; ut = transverse velocity
-            if (idir == 1):
+            if idir == 1:
                 un_l = q_l[i, j, iu]
                 ut_l = q_l[i, j, iv]
             else:
@@ -703,7 +703,7 @@ def riemann_prim(idir, ng,
 
             rho_r = q_r[i, j, irho]
 
-            if (idir == 1):
+            if idir == 1:
                 un_r = q_r[i, j, iu]
                 ut_r = q_r[i, j, iv]
             else:
@@ -864,24 +864,24 @@ def riemann_prim(idir, ng,
 
             # species now
             if nspec > 0:
-                if (ustar > 0.0):
+                if ustar > 0.0:
                     xn = q_l[i, j, iX:iX + nspec]
 
-                elif (ustar < 0.0):
+                elif ustar < 0.0:
                     xn = q_r[i, j, iX:iX + nspec]
                 else:
                     xn = 0.5 * (q_l[i, j, iX:iX + nspec] +
                                    q_r[i, j, iX:iX + nspec])
 
             # are we on a solid boundary?
-            if (idir == 1):
+            if idir == 1:
                 if (i == ilo and lower_solid == 1):
                     un_state = 0.0
 
                 if (i == ihi + 1 and upper_solid == 1):
                     un_state = 0.0
 
-            elif (idir == 2):
+            elif idir == 2:
                 if (j == jlo and lower_solid == 1):
                     un_state = 0.0
 
@@ -889,7 +889,7 @@ def riemann_prim(idir, ng,
                     un_state = 0.0
 
             q_int[i, j, irho] = rho_state
-            if (idir == 1):
+            if idir == 1:
                 q_int[i, j, iu] = un_state
                 q_int[i, j, iv] = ut_state
             else:
@@ -961,7 +961,7 @@ def riemann_hllc(idir, ng,
         for j in range(jlo - 1, jhi + 1):
 
             # un = normal velocity; ut = transverse velocity
-            if (idir == 1):
+            if idir == 1:
                 un_l = q_l[i, j, iu]
                 ut_l = q_l[i, j, iv] 
             else:
@@ -971,7 +971,7 @@ def riemann_hllc(idir, ng,
             p_l = q_l[i, j, ip]
             p_l = max(p_l, smallp)
 
-            if (idir == 1):
+            if idir == 1:
                 un_r = q_r[i, j, iu] 
                 ut_r = q_r[i, j, iv]
             else:
@@ -1134,7 +1134,7 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nspec, 
 
     p = q_state[ip]
 
-    if (idir == 1):
+    if idir == 1:
         F[idens] = U_state[idens] * u
         F[ixmom] = U_state[ixmom] * u + p
         F[iymom] = U_state[iymom] * u
