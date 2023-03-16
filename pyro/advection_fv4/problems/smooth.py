@@ -1,6 +1,6 @@
 import numpy
 
-import pyro.mesh.fv as fv
+from pyro.mesh import fv
 from pyro.util import msg
 
 

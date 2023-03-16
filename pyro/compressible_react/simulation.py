@@ -2,9 +2,9 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
-import pyro.compressible as compressible
-import pyro.compressible.eos as eos
-import pyro.util.plot_tools as plot_tools
+from pyro import compressible
+from pyro.compressible import eos
+from pyro.util import plot_tools
 
 
 class Simulation(compressible.Simulation):

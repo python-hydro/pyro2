@@ -3,12 +3,11 @@ import importlib
 import matplotlib.pyplot as plt
 import numpy as np
 
-import pyro.incompressible.incomp_interface as incomp_interface
 import pyro.mesh.array_indexer as ai
-import pyro.mesh.patch as patch
-import pyro.mesh.reconstruction as reconstruction
-import pyro.multigrid.MG as MG
-import pyro.particles.particles as particles
+from pyro.incompressible import incomp_interface
+from pyro.mesh import patch, reconstruction
+from pyro.multigrid import MG
+from pyro.particles import particles
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
 
 

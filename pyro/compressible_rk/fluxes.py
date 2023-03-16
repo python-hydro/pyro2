@@ -20,9 +20,9 @@ Taylor expanding *in space only* yields::
 """
 
 import pyro.compressible as comp
-import pyro.compressible.interface as interface
 import pyro.mesh.array_indexer as ai
-import pyro.mesh.reconstruction as reconstruction
+from pyro.compressible import interface
+from pyro.mesh import reconstruction
 from pyro.util import msg
 
 

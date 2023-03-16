@@ -1,7 +1,7 @@
 import sys
 
-import pyro.compressible_sr.eos as eos
-import pyro.mesh.patch as patch
+from pyro.compressible_sr import eos
+from pyro.mesh import patch
 
 
 def init_data(my_data, rp):

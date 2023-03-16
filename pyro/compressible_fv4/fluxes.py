@@ -2,11 +2,11 @@
 
 import numpy as np
 
-import pyro.advection_fv4.interface as interface
 import pyro.compressible as comp
 import pyro.compressible.interface as cf
 import pyro.mesh.array_indexer as ai
-import pyro.mesh.reconstruction as reconstruction
+from pyro.advection_fv4 import interface
+from pyro.mesh import reconstruction
 
 
 def flux_cons(ivars, idir, gamma, q):

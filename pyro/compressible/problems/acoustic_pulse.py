@@ -2,7 +2,7 @@ import sys
 
 import numpy as np
 
-import pyro.mesh.fv as fv
+from pyro.mesh import fv
 from pyro.util import msg
 
 

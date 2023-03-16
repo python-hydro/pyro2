@@ -7,8 +7,8 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 
-import pyro.diffusion.problems.gaussian as gaussian
 import pyro.util.io_pyro as io
+from pyro.diffusion.problems import gaussian
 
 mpl.rcParams["text.usetex"] = True
 mpl.rcParams['mathtext.fontset'] = 'cm'

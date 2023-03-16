@@ -2,7 +2,7 @@ import sys
 
 import numpy as np
 
-import pyro.mesh.patch as patch
+from pyro.mesh import patch
 from pyro.util import msg
 
 

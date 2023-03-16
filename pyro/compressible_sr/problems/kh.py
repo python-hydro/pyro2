@@ -1,7 +1,7 @@
 import numpy as np
 
-import pyro.compressible_sr.eos as eos
-import pyro.mesh.patch as patch
+from pyro.compressible_sr import eos
+from pyro.mesh import patch
 from pyro.util import msg
 
 

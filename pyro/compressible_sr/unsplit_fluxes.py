@@ -122,10 +122,10 @@ Updating U_{i,j}:
 
 """
 
-import pyro.compressible_sr.c2p as c2p
 import pyro.compressible_sr.interface as ifc
 import pyro.mesh.array_indexer as ai
-import pyro.mesh.reconstruction as reconstruction
+from pyro.compressible_sr import c2p
+from pyro.mesh import reconstruction
 from pyro.util import msg
 
 
