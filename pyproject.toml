@@ -21,6 +21,10 @@ disable = [
   "missing-function-docstring",
   "missing-module-docstring",
 ]
+enable = [
+  "useless-suppression",
+  "use-symbolic-message-instead",
+]
 
 [tool.pylint.FORMAT]
 max-line-length = 132
