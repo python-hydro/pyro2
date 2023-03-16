@@ -4,7 +4,7 @@ from numba import njit
 
 @njit(cache=True)
 def states(idir, ng, dx, dt,
-           irho, iu, iv, ip, iX, 
+           irho, iu, iv, ip, iX,
            idens, ixmom, iymom, iener, irhoX, nspec,
            gamma, qv, Uv, dUv):
     r"""
@@ -178,7 +178,7 @@ def states(idir, ng, dx, dt,
                 rvec[2, :ns] = [W*q[iv], 2.0*h*W**2*q[iu]*q[iv],
                 h*(1.0 + 2.0*W**2*q[iv]**2),
                     2*h*W**2*q[iv]-W*q[iv]]
-                rvec[3, :ns] = [1.0, h*W*Ap*e_val[3], h*W*q[iv], 
+                rvec[3, :ns] = [1.0, h*W*Ap*e_val[3], h*W*q[iv],
                                 h*W*Ap-1.0]
 
                 # now the species -- they only have a 1 in their corresponding slot
@@ -227,13 +227,13 @@ def states(idir, ng, dx, dt,
                     (2.0*h-1.0)*(q[iv]-Am*e_val[0]) + h * Am*e_val[0]]
                 lvec[3, :ns] = -lvec[3, :ns] * h**2 / Delta
 
-                rvec[0, :ns] = [1.0, h*W*q[iu], h*W*Am*e_val[0], 
+                rvec[0, :ns] = [1.0, h*W*q[iu], h*W*Am*e_val[0],
                                 h*W*Am-1.0]
-                rvec[1, :ns] = [W*q[iu], 
+                rvec[1, :ns] = [W*q[iu],
                     h*(1.0 + 2.0*W**2*q[iu]**2), 2.0*h*W**2*q[iu]*q[iv],
                     2*h*W**2*q[iu]-W*q[iu]]
                 rvec[2, :ns] = [1.0/W, q[iu], q[iv], 1.0-1.0/W]
-                rvec[3, :ns] = [1.0, h*W*q[iu], h*W*Ap*e_val[3], 
+                rvec[3, :ns] = [1.0, h*W*q[iu], h*W*Ap*e_val[3],
                                 h*W*Ap-1.0]
 
                 # now the species -- they only have a 1 in their corresponding slot
@@ -287,7 +287,7 @@ def states(idir, ng, dx, dt,
 
 @njit(cache=True)
 def riemann_cgf(idir, ng,
-                idens, ixmom, iymom, iener, irhoX, 
+                idens, ixmom, iymom, iener, irhoX,
                 irho, iu, iv, ip, iX, nspec,
                 lower_solid, upper_solid,
                 gamma, U_l, U_r, q_l, q_r):
@@ -368,11 +368,11 @@ def riemann_cgf(idir, ng,
 
             # un = normal velocity; ut = transverse velocity
             if idir == 1:
-                un_l = q_l[i, j, iu] 
-                ut_l = q_l[i, j, iv] 
+                un_l = q_l[i, j, iu]
+                ut_l = q_l[i, j, iv]
             else:
-                un_l = q_l[i, j, iv] 
-                ut_l = q_l[i, j, iu] 
+                un_l = q_l[i, j, iv]
+                ut_l = q_l[i, j, iu]
 
             p_l = q_l[i, j, ip]
             p_l = max(p_l, smallp)
@@ -381,11 +381,11 @@ def riemann_cgf(idir, ng,
             rho_r = q_r[i, j, irho]
 
             if idir == 1:
-                un_r = q_r[i, j, iu] 
-                ut_r = q_r[i, j, iv] 
+                un_r = q_r[i, j, iu]
+                ut_r = q_r[i, j, iv]
             else:
                 un_r = q_r[i, j, iv]
-                ut_r = q_r[i, j, iu] 
+                ut_r = q_r[i, j, iu]
 
             p_r = q_r[i, j, ip]
             p_r = max(p_r, smallp)
@@ -499,7 +499,7 @@ def riemann_cgf(idir, ng,
 
                 v2 = ustar**2 + ut_r**2
                 lambdastar_r = 1.0 / (1.0 - v2*cstar_r**2) * (ustar*(1.0-cstar_r**2) + cstar_r *
-                                      np.sqrt((1.0-v2) * 
+                                      np.sqrt((1.0-v2) *
                                       (1.0 - v2*cstar_r**2 - ustar**2*(1.0-cstar_r**2))))
 
                 if pstar > p_r:
@@ -559,9 +559,9 @@ def riemann_cgf(idir, ng,
             # species now
             if nspec > 0:
                 if ustar > 0.0:
-                    xn = q_l[i, j, iX:iX + nspec] 
+                    xn = q_l[i, j, iX:iX + nspec]
                 elif ustar < 0.0:
-                    xn = q_r[i, j, iX:iX + nspec] 
+                    xn = q_r[i, j, iX:iX + nspec]
                 else:
                     xn = 0.5 * (q_l[i, j, iX:iX + nspec] +
                                 q_r[i, j, iX:iX + nspec])
@@ -581,26 +581,26 @@ def riemann_cgf(idir, ng,
                 if (j == jhi + 1 and upper_solid == 1):
                     un_state = 0.0
 
-            # Make primitive state 
-            q[irho] = rho_state 
+            # Make primitive state
+            q[irho] = rho_state
             if idir == 1:
-                q[iu] = un_state 
+                q[iu] = un_state
                 q[iv] = ut_state
             else:
-                q[iu] = ut_state 
-                q[iv] = un_state 
+                q[iu] = ut_state
+                q[iv] = un_state
 
-            q[ip] = p_state 
+            q[ip] = p_state
 
-            # Make conservative state 
+            # Make conservative state
             W = 1.0 / np.sqrt(1.0 - q[iu]**2 - q[iv]**2)
-            U[idens] = rho_state * W 
+            U[idens] = rho_state * W
             U[ixmom] = (rho_state + p_state * gamma / (gamma - 1.0)) * q[iu] * W**2
             U[iymom] = (rho_state + p_state * gamma / (gamma - 1.0)) * q[iv] * W**2
             U[iener] = (rho_state + p_state * gamma / (gamma - 1.0)) * W**2 - p_state - U[idens]
 
             if nspec > 0:
-                q[iX:iX+nspec] = xn 
+                q[iX:iX+nspec] = xn
                 U[irhoX:irhoX+nspec] = xn * U[idens]
 
             # compute the fluxes
@@ -750,12 +750,12 @@ def riemann_prim(idir, ng,
                 # define eigenvalues
                 v2 = un_l**2 + ut_l**2
                 lambda_l = 1.0 / (1.0 - v2*c_l**2) * (un_l*(1.0-c_l**2) - c_l *
-                                  np.sqrt((1.0-v2) * 
+                                  np.sqrt((1.0-v2) *
                                   (1.0-v2*c_l**2 - un_l**2*(1.0-c_l**2))))
 
                 v2 = ustar**2 + ut_l**2
                 lambdastar_l = 1.0 / (1.0 - v2*cstar_l**2) * \
-                    (ustar*(1.0-cstar_l**2) - cstar_l * np.sqrt((1.0-v2) * 
+                    (ustar*(1.0-cstar_l**2) - cstar_l * np.sqrt((1.0-v2) *
                     (1.0-v2*cstar_l**2 - ustar**2*(1.0-cstar_l**2))))
 
                 if pstar > p_l:
@@ -906,7 +906,7 @@ def riemann_prim(idir, ng,
 
 @njit(cache=True)
 def riemann_hllc(idir, ng,
-                 idens, ixmom, iymom, iener, irhoX, 
+                 idens, ixmom, iymom, iener, irhoX,
                  irho, iu, iv, ip, iX, nspec,
                  lower_solid, upper_solid,
                  gamma, U_l, U_r, q_l, q_r):
@@ -963,19 +963,19 @@ def riemann_hllc(idir, ng,
             # un = normal velocity; ut = transverse velocity
             if idir == 1:
                 un_l = q_l[i, j, iu]
-                ut_l = q_l[i, j, iv] 
+                ut_l = q_l[i, j, iv]
             else:
                 un_l = q_l[i, j, iv]
-                ut_l = q_l[i, j, iu] 
+                ut_l = q_l[i, j, iu]
 
             p_l = q_l[i, j, ip]
             p_l = max(p_l, smallp)
 
             if idir == 1:
-                un_r = q_r[i, j, iu] 
+                un_r = q_r[i, j, iu]
                 ut_r = q_r[i, j, iv]
             else:
-                un_r = q_r[i, j, iv] 
+                un_r = q_r[i, j, iv]
                 ut_r = q_r[i, j, iu]
 
             p_r = q_r[i, j, ip]
@@ -1001,11 +1001,11 @@ def riemann_hllc(idir, ng,
 
             F_HLLE = (a_r*F_l - a_l*F_r + a_r*a_l*(U_r[i, j, :] - U_l[i, j, :])) / (a_r - a_l)
 
-            if a_r <= 0.0:  # right state 
+            if a_r <= 0.0:  # right state
                 U_HLLE = U_r[i, j, :]
-            elif a_l < 0.0:  # middle 
+            elif a_l < 0.0:  # middle
                 U_HLLE = (a_r*U_r[i, j, :] - a_l*U_l[i, j, :] - F_r+F_l) / (a_r - a_l)
-            else:  # left 
+            else:  # left
                 U_HLLE = U_l[i, j, :]
 
             if idir == 1:
@@ -1027,10 +1027,10 @@ def riemann_hllc(idir, ng,
             if a_star != a_star:
                 a_star = 0.0
 
-            # left 
+            # left
             if idir == 1:
                 A = (U_l[i, j, iener] + U_l[i, j, idens]) * a_l - U_l[i, j, ixmom]
-                B = U_l[i, j, ixmom] * (a_l - un_l) - p_l 
+                B = U_l[i, j, ixmom] * (a_l - un_l) - p_l
             else:
                 A = (U_l[i, j, iener] + U_l[i, j, idens]) * a_l - U_l[i, j, iymom]
                 B = U_l[i, j, iymom] * (a_l - un_l) - p_l
@@ -1046,7 +1046,7 @@ def riemann_hllc(idir, ng,
                 U_lstar[ixmom] = U_l[i, j, ixmom] * (a_l - un_l) / (a_l - a_star)
                 U_lstar[iymom] = (U_l[i, j, iymom] * (a_l - un_l) + p_lstar - p_l) / (a_l - a_star)
 
-            # species 
+            # species
             if nspec > 0:
                 U_lstar[irhoX:irhoX+nspec] = U_l[i, j, irhoX:irhoX+nspec] * (a_l - un_l) / (a_l - a_star)
 
@@ -1069,34 +1069,34 @@ def riemann_hllc(idir, ng,
                 U_rstar[ixmom] = U_r[i, j, ixmom] * (a_r - un_r) / (a_r - a_star)
                 U_rstar[iymom] = (U_r[i, j, iymom] * (a_r - un_r) + p_rstar - p_r) / (a_r - a_star)
 
-            # species 
+            # species
             if nspec > 0:
                 U_rstar[irhoX:irhoX+nspec] = U_r[i, j, irhoX:irhoX+nspec] * (a_r - un_r) / (a_r - a_star)
 
-            if a_r <= 0.0:  # right state 
-                F[i, j, :] = F_r 
+            if a_r <= 0.0:  # right state
+                F[i, j, :] = F_r
 
             elif a_star <= 0.0:  # right star
-                F[i, j, :] = U_rstar * a_star 
+                F[i, j, :] = U_rstar * a_star
 
                 if idir == 1:
-                    F[i, j, ixmom] += p_rstar 
+                    F[i, j, ixmom] += p_rstar
                     F[i, j, iener] = U_rstar[ixmom] - F[i, j, idens]
                 else:
                     F[i, j, iymom] += p_rstar
                     F[i, j, iener] = U_rstar[iymom] - F[i, j, idens]
 
-            elif a_l < 0.0:  # left star 
-                F[i, j, :] = U_lstar * a_star 
+            elif a_l < 0.0:  # left star
+                F[i, j, :] = U_lstar * a_star
 
                 if idir == 1:
-                    F[i, j, ixmom] += p_lstar 
+                    F[i, j, ixmom] += p_lstar
                     F[i, j, iener] = U_lstar[ixmom] - F[i, j, idens]
                 else:
                     F[i, j, iymom] += p_lstar
                     F[i, j, iener] = U_lstar[iymom] - F[i, j, idens]
 
-            else:  # left 
+            else:  # left
                 F[i, j, :] = F_l
 
     return F

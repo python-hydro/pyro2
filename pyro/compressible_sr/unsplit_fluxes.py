@@ -456,7 +456,7 @@ def cons_to_prim_wrapper(U, gamma, ivars, myg):
 
     q = myg.scratch_array(nvar=ivars.nq)
 
-    c2p.cons_to_prim(U, ivars.irho, 
+    c2p.cons_to_prim(U, ivars.irho,
                      ivars.iu, ivars.iv,
                      ivars.ip, ivars.ix, ivars.irhox,
                      ivars.idens, ivars.ixmom, ivars.iymom,
