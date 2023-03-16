@@ -24,7 +24,6 @@ class Simulation(compressible.Simulation):
         # compute energy generation rate
 
         # update energy due to reaction
-        pass
 
     def diffuse(self, dt):
         """ diffuse for dt """
@@ -34,7 +33,6 @@ class Simulation(compressible.Simulation):
         # compute div kappa grad T
 
         # update energy due to diffusion
-        pass
 
     def evolve(self):
         """

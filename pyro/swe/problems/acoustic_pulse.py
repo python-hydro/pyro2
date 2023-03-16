@@ -52,4 +52,3 @@ def init_data(myd, rp):
 
 def finalize():
     """ print out any information to the user at the end of the run """
-    pass

@@ -169,7 +169,6 @@ class NullSimulation(object):
         """
         the method-specific timestep code
         """
-        pass
 
     def compute_timestep(self):
         """
@@ -200,7 +199,6 @@ class NullSimulation(object):
         Do any necessary evolution before the main evolve loop.  This
         is not needed for advection
         """
-        pass
 
     def evolve(self):
 
@@ -247,10 +245,8 @@ class NullSimulation(object):
         """
         write out any extra simulation-specific stuff
         """
-        pass
 
     def read_extras(self, f):
         """
         read in any simulation-specific data from an h5py file object f
         """
-        pass
