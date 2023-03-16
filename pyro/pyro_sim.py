@@ -289,8 +289,7 @@ class PyroBenchmark(Pyro):
 
         if self.comp_bench:
             return result
-        else:
-            return self.sim
+        return self.sim
 
     def compare_to_benchmark(self, rtol):
         """ Are we comparing to a benchmark? """

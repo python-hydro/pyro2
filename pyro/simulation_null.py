@@ -160,8 +160,7 @@ class NullSimulation(object):
         if is_time and do_io == 1:
             self.n_num_out += 1
             return True
-        else:
-            return False
+        return False
 
     def initialize(self):
         pass

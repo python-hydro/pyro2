@@ -16,12 +16,12 @@ def read_bcs(f):
         gb = f["BC"]
     except KeyError:
         return None
-    else:
-        BCs = {}
-        for name in gb:
-            BCs[name] = gb[name]
 
-        return BCs
+    BCs = {}
+    for name in gb:
+        BCs[name] = gb[name]
+
+    return BCs
 
 
 def read(filename):

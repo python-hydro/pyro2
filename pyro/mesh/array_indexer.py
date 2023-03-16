@@ -371,7 +371,7 @@ class ArrayIndexerFC(ArrayIndexer):
         bxlo, bxhi, bylo, byhi = _buf_split(buf)
         c = len(self.shape)
 
-        if self.idir == 1:
+        if self.idir == 1:  # pylint: disable=no-else-return
             # face-centered in x
             if c == 2:
                 return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+2+bxhi+ishift:s,
@@ -449,7 +449,7 @@ class ArrayIndexerFC(ArrayIndexer):
         # -x boundary
         if bc.xlb in ["outflow", "neumann", "reflect-even", "reflect-odd", "dirichlet"]:
             raise NotImplementedError("boundary condition not implemented for -x")
-        elif bc.xlb == "periodic":
+        if bc.xlb == "periodic":
             if self.idir == 1:
                 # face-centered in x
                 for i in range(self.g.ilo):
@@ -462,7 +462,7 @@ class ArrayIndexerFC(ArrayIndexer):
         # +x boundary
         if bc.xrb in ["outflow", "neumann", "reflect-even", "reflect-odd", "dirichlet"]:
             raise NotImplementedError("boundary condition not implemented for +x")
-        elif bc.xrb == "periodic":
+        if bc.xrb == "periodic":
             if self.idir == 1:
                 # face-centered in x
                 for i in range(self.g.ihi+2, 2*self.g.ng + self.g.nx + 1):
@@ -475,7 +475,7 @@ class ArrayIndexerFC(ArrayIndexer):
         # -y boundary
         if bc.ylb in ["outflow", "neumann", "reflect-even", "reflect-odd", "dirichlet"]:
             raise NotImplementedError("boundary condition not implemented for -y")
-        elif bc.ylb == "periodic":
+        if bc.ylb == "periodic":
             if self.idir == 1:
                 # face-centered in x
                 for j in range(self.g.jlo):
@@ -488,7 +488,7 @@ class ArrayIndexerFC(ArrayIndexer):
         # +y boundary
         if bc.yrb in ["outflow", "neumann", "reflect-even", "reflect-odd", "dirichlet"]:
             raise NotImplementedError("boundary condition not implemented for +y")
-        elif bc.yrb == "periodic":
+        if bc.yrb == "periodic":
             if self.idir == 1:
                 # face-centered in x
                 for j in range(self.g.jhi+1, 2*self.g.ng + self.g.ny):

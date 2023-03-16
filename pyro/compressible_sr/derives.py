@@ -54,5 +54,4 @@ def derive_primitives(myd, varnames, ivars, myg):
             derived_vars.append(np.sqrt(gamma*p/dens))
     if len(derived_vars) > 1:
         return derived_vars
-    else:
-        return derived_vars[0]
+    return derived_vars[0]

@@ -428,13 +428,13 @@ class CellCenterMG2d:
 
         if grid is None:
             return v.copy()
-        else:
-            myg = self.soln_grid
-            assert grid.dx == myg.dx and grid.dy == myg.dy
 
-            sol = grid.scratch_array()
-            sol.v(buf=1)[:, :] = v.v(buf=1)
-            return sol
+        myg = self.soln_grid
+        assert grid.dx == myg.dx and grid.dy == myg.dy
+
+        sol = grid.scratch_array()
+        sol.v(buf=1)[:, :] = v.v(buf=1)
+        return sol
 
     def get_solution_gradient(self, grid=None):
         """
