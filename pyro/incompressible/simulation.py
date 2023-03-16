@@ -45,6 +45,8 @@ class Simulation(NullSimulation):
             particle_generator = self.rp.get_param("particles.particle_generator")
             self.particles = particles.Particles(self.cc_data, bc, n_particles, particle_generator)
 
+        self.in_preevolve = False
+
         # now set the initial conditions for the problem
         problem = importlib.import_module(f"pyro.incompressible.problems.{self.problem_name}")
         problem.init_data(self.cc_data, self.rp)

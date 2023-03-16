@@ -43,6 +43,7 @@ class Simulation(NullSimulation):
 
         self.base = {}
         self.aux_data = None
+        self.in_preevolve = False
 
     def initialize(self):
         """

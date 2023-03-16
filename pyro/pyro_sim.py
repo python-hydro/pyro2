@@ -87,6 +87,7 @@ class Pyro:
         other_commands : str
             Other command line parameter options
         """
+        # pylint: disable=attribute-defined-outside-init
 
         problem_defaults_file = self.pyro_home + self.solver_name + \
             "/problems/_" + problem_name + ".defaults"

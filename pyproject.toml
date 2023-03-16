@@ -26,5 +26,15 @@ enable = [
   "use-symbolic-message-instead",
 ]
 
+[tool.pylint.CLASSES]
+defining-attr-methods = [
+  "__init__",
+  "__new__",
+  "setUp",
+  "__post_init__",
+  "initialize",
+  "__array_finalize__",
+]
+
 [tool.pylint.FORMAT]
 max-line-length = 132
