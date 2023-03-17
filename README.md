@@ -90,7 +90,7 @@ https://python-hydro.github.io/pyro2
  - Finally, you can run a quick test of the advection solver:
 
    ```
-   ./pyro-sim.py advection smooth inputs.smooth
+   pyro-sim.py advection smooth inputs.smooth
    ```
 
    you should see a graphing window pop up with a smooth pulse

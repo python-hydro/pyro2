@@ -44,7 +44,7 @@ Run the advection solver to quickly test if things are setup correctly:
 
 .. prompt:: bash
 
-   ./pyro_sim.py advection smooth inputs.smooth
+   pyro_sim.py advection smooth inputs.smooth
 
 You should see a plot window pop up with a smooth pulse advecting
 diagonally through the periodic domain.
