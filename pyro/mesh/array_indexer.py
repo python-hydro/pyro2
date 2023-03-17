@@ -4,6 +4,8 @@ operations we see in finite-difference methods, like i+1, i-1, etc.
 """
 
 
+import numbers
+
 import numpy as np
 
 
@@ -45,7 +47,8 @@ class ArrayIndexer(np.ndarray):
         self.c = getattr(obj, "c", None)
 
     def __array_wrap__(self, out_arr, context=None):
-        return np.ndarray.__array_wrap__(self, out_arr, context)  # pylint: disable=E1121
+        # pylint: disable-next=too-many-function-args
+        return np.ndarray.__array_wrap__(self, out_arr, context)
 
     def v(self, buf=0, n=0, s=1):
         """return a view of the valid data region for component n, with stride
@@ -281,7 +284,7 @@ class ArrayIndexer(np.ndarray):
         """
 
         if fmt is None:
-            if self.dtype == np.int:
+            if isinstance(self.dtype.type, numbers.Integral):
                 fmt = "%4d"
             elif self.dtype == np.float64:
                 fmt = "%10.5g"
@@ -356,7 +359,8 @@ class ArrayIndexerFC(ArrayIndexer):
         self.c = getattr(obj, "c", None)
 
     def __array_wrap__(self, out_arr, context=None):
-        return np.ndarray.__array_wrap__(self, out_arr, context)  # pylint: disable=E1121
+        # pylint: disable-next=too-many-function-args
+        return np.ndarray.__array_wrap__(self, out_arr, context)
 
     def ip_jp(self, ishift, jshift, buf=0, n=0, s=1):
         """return a view of the data shifted by ishift in the x direction and
@@ -369,7 +373,7 @@ class ArrayIndexerFC(ArrayIndexer):
         bxlo, bxhi, bylo, byhi = _buf_split(buf)
         c = len(self.shape)
 
-        if self.idir == 1:
+        if self.idir == 1:  # pylint: disable=no-else-return
             # face-centered in x
             if c == 2:
                 return np.asarray(self[self.g.ilo-bxlo+ishift:self.g.ihi+2+bxhi+ishift:s,
@@ -447,7 +451,7 @@ class ArrayIndexerFC(ArrayIndexer):
         # -x boundary
         if bc.xlb in ["outflow", "neumann", "reflect-even", "reflect-odd", "dirichlet"]:
             raise NotImplementedError("boundary condition not implemented for -x")
-        elif bc.xlb == "periodic":
+        if bc.xlb == "periodic":
             if self.idir == 1:
                 # face-centered in x
                 for i in range(self.g.ilo):
@@ -460,7 +464,7 @@ class ArrayIndexerFC(ArrayIndexer):
         # +x boundary
         if bc.xrb in ["outflow", "neumann", "reflect-even", "reflect-odd", "dirichlet"]:
             raise NotImplementedError("boundary condition not implemented for +x")
-        elif bc.xrb == "periodic":
+        if bc.xrb == "periodic":
             if self.idir == 1:
                 # face-centered in x
                 for i in range(self.g.ihi+2, 2*self.g.ng + self.g.nx + 1):
@@ -473,7 +477,7 @@ class ArrayIndexerFC(ArrayIndexer):
         # -y boundary
         if bc.ylb in ["outflow", "neumann", "reflect-even", "reflect-odd", "dirichlet"]:
             raise NotImplementedError("boundary condition not implemented for -y")
-        elif bc.ylb == "periodic":
+        if bc.ylb == "periodic":
             if self.idir == 1:
                 # face-centered in x
                 for j in range(self.g.jlo):
@@ -486,7 +490,7 @@ class ArrayIndexerFC(ArrayIndexer):
         # +y boundary
         if bc.yrb in ["outflow", "neumann", "reflect-even", "reflect-odd", "dirichlet"]:
             raise NotImplementedError("boundary condition not implemented for +y")
-        elif bc.yrb == "periodic":
+        if bc.yrb == "periodic":
             if self.idir == 1:
                 # face-centered in x
                 for j in range(self.g.jhi+1, 2*self.g.ng + self.g.ny):
@@ -502,7 +506,7 @@ class ArrayIndexerFC(ArrayIndexer):
         """
 
         if fmt is None:
-            if self.dtype == np.int:
+            if isinstance(self.dtype.type, numbers.Integral):
                 fmt = "%4d"
             elif self.dtype == np.float64:
                 fmt = "%10.5g"

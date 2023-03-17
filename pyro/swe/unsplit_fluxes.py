@@ -123,9 +123,9 @@ Updating U_{i,j}:
 """
 
 import pyro.mesh.array_indexer as ai
-import pyro.mesh.reconstruction as reconstruction
 import pyro.swe as comp
 import pyro.swe.interface as ifc
+from pyro.mesh import reconstruction
 from pyro.util import msg
 
 

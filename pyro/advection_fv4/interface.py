@@ -52,7 +52,7 @@ def states(a, ng, idir):
     jhi = ng + ny
 
     # we need interface values on all faces of the domain
-    if (idir == 1):
+    if idir == 1:
 
         for i in range(ilo - 2, ihi + 3):
             for j in range(jlo - 1, jhi + 1):
@@ -110,14 +110,14 @@ def states(a, ng, idir):
                         # MC Eq. 27
                         rho = d2a_lim / d2af[i, j]
 
-                    if (rho < 1.0 - 1.e-12):
+                    if rho < 1.0 - 1.e-12:
                         # we may need to limit -- these quantities are at cell-centers
                         d3a_min = min(d3a[i - 1, j], d3a[i, j],
                                       d3a[i + 1, j], d3a[i + 2, j])
                         d3a_max = max(d3a[i - 1, j], d3a[i, j],
                                       d3a[i + 1, j], d3a[i + 2, j])
 
-                        if (C3 * max(abs(d3a_min), abs(d3a_max)) <= (d3a_max - d3a_min)):
+                        if C3 * max(abs(d3a_min), abs(d3a_max)) <= (d3a_max - d3a_min):
                             # limit
                             if (dafm[i, j] * dafp[i, j] < 0.0):
                                 # Eqs. 29, 30
@@ -135,13 +135,13 @@ def states(a, ng, idir):
 
                 else:
                     # if Eqs. 24 or 25 didn't hold we still may need to limit
-                    if (abs(dafm[i, j]) >= 2.0 * abs(dafp[i, j])):
+                    if abs(dafm[i, j]) >= 2.0 * abs(dafp[i, j]):
                         ar[i, j] = a[i, j] - 2.0 * dafp[i, j]
 
-                    if (abs(dafp[i, j]) >= 2.0 * abs(dafm[i, j])):
+                    if abs(dafp[i, j]) >= 2.0 * abs(dafm[i, j]):
                         al[i + 1, j] = a[i, j] + 2.0 * dafm[i, j]
 
-    elif (idir == 2):
+    elif idir == 2:
 
         for i in range(ilo - 1, ihi + 1):
             for j in range(jlo - 2, jhi + 3):
@@ -199,14 +199,14 @@ def states(a, ng, idir):
                         # MC Eq. 27
                         rho = d2a_lim / d2af[i, j]
 
-                    if (rho < 1.0 - 1.e-12):
+                    if rho < 1.0 - 1.e-12:
                         # we may need to limit -- these quantities are at cell-centers
                         d3a_min = min(d3a[i, j - 1], d3a[i, j],
                                       d3a[i, j + 1], d3a[i, j + 2])
                         d3a_max = max(d3a[i, j - 1], d3a[i, j],
                                       d3a[i, j + 1], d3a[i, j + 2])
 
-                        if (C3 * max(abs(d3a_min), abs(d3a_max)) <= (d3a_max - d3a_min)):
+                        if C3 * max(abs(d3a_min), abs(d3a_max)) <= (d3a_max - d3a_min):
                             # limit
                             if (dafm[i, j] * dafp[i, j] < 0.0):
                                 # Eqs. 29, 30
@@ -224,10 +224,10 @@ def states(a, ng, idir):
 
                 else:
                     # if Eqs. 24 or 25 didn't hold we still may need to limit
-                    if (abs(dafm[i, j]) >= 2.0 * abs(dafp[i, j])):
+                    if abs(dafm[i, j]) >= 2.0 * abs(dafp[i, j]):
                         ar[i, j] = a[i, j] - 2.0 * dafp[i, j]
 
-                    if (abs(dafp[i, j]) >= 2.0 * abs(dafm[i, j])):
+                    if abs(dafp[i, j]) >= 2.0 * abs(dafm[i, j]):
                         al[i, j + 1] = a[i, j] + 2.0 * dafm[i, j]
 
     return al, ar
@@ -273,7 +273,7 @@ def states_nolimit(a, qx, qy, ng, idir):
     jhi = ng + ny
 
     # we need interface values on all faces of the domain
-    if (idir == 1):
+    if idir == 1:
 
         for i in range(ilo - 2, ihi + 3):
             for j in range(jlo - 1, jhi + 1):
@@ -285,7 +285,7 @@ def states_nolimit(a, qx, qy, ng, idir):
                 al[i, j] = a_int[i, j]
                 ar[i, j] = a_int[i, j]
 
-    elif (idir == 2):
+    elif idir == 2:
 
         for i in range(ilo - 1, ihi + 1):
             for j in range(jlo - 2, jhi + 3):

@@ -87,6 +87,7 @@ class Pyro:
         other_commands : str
             Other command line parameter options
         """
+        # pylint: disable=attribute-defined-outside-init
 
         problem_defaults_file = self.pyro_home + self.solver_name + \
             "/problems/_" + problem_name + ".defaults"
@@ -289,8 +290,7 @@ class PyroBenchmark(Pyro):
 
         if self.comp_bench:
             return result
-        else:
-            return self.sim
+        return self.sim
 
     def compare_to_benchmark(self, rtol):
         """ Are we comparing to a benchmark? """

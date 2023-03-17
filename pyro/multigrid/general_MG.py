@@ -19,7 +19,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import pyro.multigrid.edge_coeffs as ec
-import pyro.multigrid.MG as MG
+from pyro.multigrid import MG
 
 np.set_printoptions(precision=3, linewidth=128)
 
