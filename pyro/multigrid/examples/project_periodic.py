@@ -27,8 +27,8 @@ field, and the recovered field.
 import numpy as np
 
 import pyro.mesh.boundary as bnd
-import pyro.mesh.patch as patch
-import pyro.multigrid.MG as MG
+from pyro.mesh import patch
+from pyro.multigrid import MG
 
 
 def doit(nx, ny):
