@@ -27,9 +27,7 @@ def fail(string):
     traceback.print_stack()
     # only exit if we are not running in interactive mode.  sys.ps1 is
     # only defined in interactive mode.
-    if hasattr(sys, 'ps1'):
-        return
-    else:
+    if not hasattr(sys, 'ps1'):
         sys.exit(1)
 
 

@@ -33,7 +33,7 @@ def is_symmetric_pair(ng, nodal, sl, sr):
 
     sym = 1
 
-    if (not nodal):
+    if not nodal:
         done = False
         for i in range(nx / 2):
             il = ilo + i
@@ -120,7 +120,7 @@ def is_asymmetric_pair(ng, nodal, sl, sr):
 
     asym = 1
 
-    if (not nodal):
+    if not nodal:
         done = False
         for i in range(nx / 2):
             for j in range(jlo, jhi):

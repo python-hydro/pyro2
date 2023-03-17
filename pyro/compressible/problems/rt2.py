@@ -8,7 +8,7 @@ import sys
 
 import numpy as np
 
-import pyro.mesh.patch as patch
+from pyro.mesh import patch
 from pyro.util import msg
 
 
@@ -59,7 +59,7 @@ def init_data(my_data, rp):
 
     j = myg.jlo
     while j <= myg.jhi:
-        if (myg.y[j] < ycenter):
+        if myg.y[j] < ycenter:
             dens[:, j] = dens1
             p[:, j] = p0 + dens1*grav*myg.y[j]
 
@@ -86,4 +86,3 @@ def init_data(my_data, rp):
 
 def finalize():
     """ print out any information to the user at the end of the run """
-    pass

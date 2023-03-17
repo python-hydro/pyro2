@@ -6,8 +6,8 @@ import importlib
 import h5py
 
 import pyro.mesh.boundary as bnd
-import pyro.particles.particles as particles
 from pyro.mesh.patch import CellCenterData2d, Grid2d
+from pyro.particles import particles
 
 
 def read_bcs(f):
@@ -16,12 +16,12 @@ def read_bcs(f):
         gb = f["BC"]
     except KeyError:
         return None
-    else:
-        BCs = {}
-        for name in gb:
-            BCs[name] = gb[name]
 
-        return BCs
+    BCs = {}
+    for name in gb:
+        BCs[name] = gb[name]
+
+    return BCs
 
 
 def read(filename):

@@ -61,8 +61,7 @@ def is_int(string):
         int(string)
     except ValueError:
         return False
-    else:
-        return True
+    return True
 
 
 def is_float(string):
@@ -71,17 +70,15 @@ def is_float(string):
         float(string)
     except ValueError:
         return False
-    else:
-        return True
+    return True
 
 
 def _get_val(value):
     if is_int(value):
         return int(value)
-    elif is_float(value):
+    if is_float(value):
         return float(value)
-    else:
-        return value.strip()
+    return value.strip()
 
 
 class RuntimeParameters:
@@ -212,8 +209,7 @@ class RuntimeParameters:
 
         if key in self.params.keys():
             return self.params[key]
-        else:
-            raise KeyError(f"ERROR: runtime parameter {key} not found")
+        raise KeyError(f"ERROR: runtime parameter {key} not found")
 
     def print_unused_params(self):
         """

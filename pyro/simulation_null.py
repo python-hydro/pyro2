@@ -3,8 +3,8 @@ import importlib
 import h5py
 
 import pyro.mesh.boundary as bnd
-import pyro.mesh.patch as patch
 import pyro.util.profile_pyro as profile
+from pyro.mesh import patch
 from pyro.util import msg
 
 
@@ -160,8 +160,7 @@ class NullSimulation(object):
         if is_time and do_io == 1:
             self.n_num_out += 1
             return True
-        else:
-            return False
+        return False
 
     def initialize(self):
         pass
@@ -170,7 +169,6 @@ class NullSimulation(object):
         """
         the method-specific timestep code
         """
-        pass
 
     def compute_timestep(self):
         """
@@ -201,7 +199,6 @@ class NullSimulation(object):
         Do any necessary evolution before the main evolve loop.  This
         is not needed for advection
         """
-        pass
 
     def evolve(self):
 
@@ -248,10 +245,8 @@ class NullSimulation(object):
         """
         write out any extra simulation-specific stuff
         """
-        pass
 
     def read_extras(self, f):
         """
         read in any simulation-specific data from an h5py file object f
         """
-        pass

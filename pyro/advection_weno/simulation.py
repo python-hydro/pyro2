@@ -1,7 +1,7 @@
-import pyro.advection as advection
 import pyro.advection_weno.fluxes as flx
 import pyro.mesh.array_indexer as ai
-import pyro.mesh.integration as integration
+from pyro import advection
+from pyro.mesh import integration
 
 
 class Simulation(advection.Simulation):
