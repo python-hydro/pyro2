@@ -1,10 +1,10 @@
 import importlib
 
 import pyro.advection_fv4.fluxes as flx
-import pyro.advection_rk as advection_rk
 import pyro.mesh.array_indexer as ai
-import pyro.mesh.fv as fv
-import pyro.particles.particles as particles
+from pyro import advection_rk
+from pyro.mesh import fv
+from pyro.particles import particles
 from pyro.simulation_null import bc_setup, grid_setup
 
 

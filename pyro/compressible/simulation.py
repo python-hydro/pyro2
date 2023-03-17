@@ -4,14 +4,12 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
-import pyro.compressible.BC as BC
-import pyro.compressible.derives as derives
-import pyro.compressible.eos as eos
 import pyro.compressible.unsplit_fluxes as flx
 import pyro.mesh.boundary as bnd
-import pyro.particles.particles as particles
-import pyro.util.plot_tools as plot_tools
+from pyro.compressible import BC, derives, eos
+from pyro.particles import particles
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
+from pyro.util import plot_tools
 
 
 class Variables:

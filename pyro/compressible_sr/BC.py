@@ -14,8 +14,8 @@ import math
 
 import numpy as np
 
-import pyro.compressible_sr.eos as eos
 import pyro.compressible_sr.unsplit_fluxes as flx
+from pyro.compressible_sr import eos
 from pyro.util import msg
 
 

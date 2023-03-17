@@ -125,7 +125,7 @@ Updating U_{i,j}:
 import pyro.compressible as comp
 import pyro.compressible.interface as ifc
 import pyro.mesh.array_indexer as ai
-import pyro.mesh.reconstruction as reconstruction
+from pyro.mesh import reconstruction
 from pyro.util import msg
 
 

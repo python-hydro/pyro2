@@ -282,7 +282,7 @@ class Particles:
             if p.x < myg.xmin:
                 if xlb in ["outflow", "neumann"]:
                     continue
-                elif xlb == "periodic":
+                if xlb == "periodic":
                     p.x = myg.xmax + p.x - myg.xmin
                 elif xlb in ["reflect-even", "reflect-odd", "dirichlet"]:
                     p.x = 2 * myg.xmin - p.x
@@ -293,7 +293,7 @@ class Particles:
             if p.x > myg.xmax:
                 if xrb in ["outflow", "neumann"]:
                     continue
-                elif xrb == "periodic":
+                if xrb == "periodic":
                     p.x = myg.xmin + p.x - myg.xmax
                 elif xrb in ["reflect-even", "reflect-odd", "dirichlet"]:
                     p.x = 2 * myg.xmax - p.x
@@ -304,7 +304,7 @@ class Particles:
             if p.y < myg.ymin:
                 if ylb in ["outflow", "neumann"]:
                     continue
-                elif ylb == "periodic":
+                if ylb == "periodic":
                     p.y = myg.ymax + p.y - myg.ymin
                 elif ylb in ["reflect-even", "reflect-odd", "dirichlet"]:
                     p.y = 2 * myg.ymin - p.y
@@ -315,7 +315,7 @@ class Particles:
             if p.y > myg.ymax:
                 if yrb in ["outflow", "neumann"]:
                     continue
-                elif yrb == "periodic":
+                if yrb == "periodic":
                     p.y = myg.ymin + p.y - myg.ymax
                 elif yrb in ["reflect-even", "reflect-odd", "dirichlet"]:
                     p.y = 2 * myg.ymax - p.y
