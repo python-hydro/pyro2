@@ -224,7 +224,7 @@ def states(a, ng, idir):
 
                 else:
                     # if Eqs. 24 or 25 didn't hold we still may need to limit
-                    if ():
+                    if abs(dafm[i, j]) >= 2.0 * abs(dafp[i, j]):
                         ar[i, j] = a[i, j] - 2.0 * dafp[i, j]
 
                     if abs(dafp[i, j]) >= 2.0 * abs(dafm[i, j]):
