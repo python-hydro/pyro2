@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible_sr.simulation &mdash; pyro 4.0.1.post18+gada4d3a documentation</title>
+  <title>pyro.compressible_sr.simulation &mdash; pyro 4.0.1.post19+g4c90ee6 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -122,13 +122,11 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">import</span> <span class="nn">pyro.compressible_sr.BC</span> <span class="k">as</span> <span class="nn">BC</span>
-<span class="kn">import</span> <span class="nn">pyro.compressible_sr.derives</span> <span class="k">as</span> <span class="nn">derives</span>
-<span class="kn">import</span> <span class="nn">pyro.compressible_sr.eos</span> <span class="k">as</span> <span class="nn">eos</span>
 <span class="kn">import</span> <span class="nn">pyro.compressible_sr.unsplit_fluxes</span> <span class="k">as</span> <span class="nn">flx</span>
 <span class="kn">import</span> <span class="nn">pyro.mesh.boundary</span> <span class="k">as</span> <span class="nn">bnd</span>
-<span class="kn">import</span> <span class="nn">pyro.util.plot_tools</span> <span class="k">as</span> <span class="nn">plot_tools</span>
+<span class="kn">from</span> <span class="nn">pyro.compressible_sr</span> <span class="kn">import</span> <span class="n">BC</span><span class="p">,</span> <span class="n">derives</span><span class="p">,</span> <span class="n">eos</span>
 <span class="kn">from</span> <span class="nn">pyro.simulation_null</span> <span class="kn">import</span> <span class="n">NullSimulation</span><span class="p">,</span> <span class="n">bc_setup</span><span class="p">,</span> <span class="n">grid_setup</span>
+<span class="kn">from</span> <span class="nn">pyro.util</span> <span class="kn">import</span> <span class="n">plot_tools</span>
 
 <span class="c1"># np.seterr(all=&#39;raise&#39;)</span>
 

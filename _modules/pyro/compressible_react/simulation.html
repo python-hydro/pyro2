@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible_react.simulation &mdash; pyro 4.0.1.post18+gada4d3a documentation</title>
+  <title>pyro.compressible_react.simulation &mdash; pyro 4.0.1.post19+g4c90ee6 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -121,9 +121,9 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">import</span> <span class="nn">pyro.compressible</span> <span class="k">as</span> <span class="nn">compressible</span>
-<span class="kn">import</span> <span class="nn">pyro.compressible.eos</span> <span class="k">as</span> <span class="nn">eos</span>
-<span class="kn">import</span> <span class="nn">pyro.util.plot_tools</span> <span class="k">as</span> <span class="nn">plot_tools</span>
+<span class="kn">from</span> <span class="nn">pyro</span> <span class="kn">import</span> <span class="n">compressible</span>
+<span class="kn">from</span> <span class="nn">pyro.compressible</span> <span class="kn">import</span> <span class="n">eos</span>
+<span class="kn">from</span> <span class="nn">pyro.util</span> <span class="kn">import</span> <span class="n">plot_tools</span>
 
 
 <div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../../pyro.compressible_react.html#pyro.compressible_react.simulation.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="n">compressible</span><span class="o">.</span><span class="n">Simulation</span><span class="p">):</span>
@@ -137,23 +137,21 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">extra_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;fuel&quot;</span><span class="p">,</span> <span class="s2">&quot;ash&quot;</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="Simulation.burn"><a class="viewcode-back" href="../../../pyro.compressible_react.html#pyro.compressible_react.simulation.Simulation.burn">[docs]</a>    <span class="k">def</span> <span class="nf">burn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; react fuel to ash &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; react fuel to ash &quot;&quot;&quot;</span></div>
         <span class="c1"># compute T</span>
 
         <span class="c1"># compute energy generation rate</span>
 
         <span class="c1"># update energy due to reaction</span>
-        <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="Simulation.diffuse"><a class="viewcode-back" href="../../../pyro.compressible_react.html#pyro.compressible_react.simulation.Simulation.diffuse">[docs]</a>    <span class="k">def</span> <span class="nf">diffuse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; diffuse for dt &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; diffuse for dt &quot;&quot;&quot;</span></div>
 
         <span class="c1"># compute T</span>
 
         <span class="c1"># compute div kappa grad T</span>
 
         <span class="c1"># update energy due to diffusion</span>
-        <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="Simulation.evolve"><a class="viewcode-back" href="../../../pyro.compressible_react.html#pyro.compressible_react.simulation.Simulation.evolve">[docs]</a>    <span class="k">def</span> <span class="nf">evolve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>

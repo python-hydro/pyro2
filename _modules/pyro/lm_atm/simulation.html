@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.lm_atm.simulation &mdash; pyro 4.0.1.post18+gada4d3a documentation</title>
+  <title>pyro.lm_atm.simulation &mdash; pyro 4.0.1.post19+g4c90ee6 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -125,9 +125,8 @@
 <span class="kn">import</span> <span class="nn">pyro.lm_atm.LM_atm_interface</span> <span class="k">as</span> <span class="nn">lm_interface</span>
 <span class="kn">import</span> <span class="nn">pyro.mesh.array_indexer</span> <span class="k">as</span> <span class="nn">ai</span>
 <span class="kn">import</span> <span class="nn">pyro.mesh.boundary</span> <span class="k">as</span> <span class="nn">bnd</span>
-<span class="kn">import</span> <span class="nn">pyro.mesh.patch</span> <span class="k">as</span> <span class="nn">patch</span>
-<span class="kn">import</span> <span class="nn">pyro.mesh.reconstruction</span> <span class="k">as</span> <span class="nn">reconstruction</span>
 <span class="kn">import</span> <span class="nn">pyro.multigrid.variable_coeff_MG</span> <span class="k">as</span> <span class="nn">vcMG</span>
+<span class="kn">from</span> <span class="nn">pyro.mesh</span> <span class="kn">import</span> <span class="n">patch</span><span class="p">,</span> <span class="n">reconstruction</span>
 <span class="kn">from</span> <span class="nn">pyro.simulation_null</span> <span class="kn">import</span> <span class="n">NullSimulation</span><span class="p">,</span> <span class="n">bc_setup</span><span class="p">,</span> <span class="n">grid_setup</span>
 
 
@@ -163,6 +162,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">base</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">aux_data</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_preevolve</span> <span class="o">=</span> <span class="kc">False</span>
 
 <div class="viewcode-block" id="Simulation.initialize"><a class="viewcode-back" href="../../../pyro.lm_atm.html#pyro.lm_atm.simulation.Simulation.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -643,7 +643,7 @@
         <span class="c1"># add the gravitational source</span>
         <span class="n">rho_half</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">rho</span> <span class="o">+</span> <span class="n">rho_old</span><span class="p">)</span>
         <span class="n">rhoprime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_prime</span><span class="p">(</span><span class="n">rho_half</span><span class="p">,</span> <span class="n">rho0</span><span class="p">)</span>
-        <span class="n">source</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">(</span><span class="n">rhoprime</span><span class="o">*</span><span class="n">g</span><span class="o">/</span><span class="n">rho_half</span><span class="p">)</span>
+        <span class="n">source</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">rhoprime</span><span class="o">*</span><span class="n">g</span><span class="o">/</span><span class="n">rho_half</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">aux_data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;source_y&quot;</span><span class="p">)</span>
 
         <span class="n">v</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">source</span>

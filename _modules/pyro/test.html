@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.test &mdash; pyro 4.0.1.post18+gada4d3a documentation</title>
+  <title>pyro.test &mdash; pyro 4.0.1.post19+g4c90ee6 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -125,11 +125,9 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="kn">import</span> <span class="nn">examples.multigrid.mg_test_general_inhomogeneous</span> <span class="k">as</span> <span class="nn">mg_test_general_inhomogeneous</span>
-<span class="kn">import</span> <span class="nn">examples.multigrid.mg_test_simple</span> <span class="k">as</span> <span class="nn">mg_test_simple</span>
-<span class="kn">import</span> <span class="nn">examples.multigrid.mg_test_vc_dirichlet</span> <span class="k">as</span> <span class="nn">mg_test_vc_dirichlet</span>
-<span class="kn">import</span> <span class="nn">examples.multigrid.mg_test_vc_periodic</span> <span class="k">as</span> <span class="nn">mg_test_vc_periodic</span>
 <span class="kn">import</span> <span class="nn">pyro.pyro_sim</span> <span class="k">as</span> <span class="nn">pyro</span>
+<span class="kn">from</span> <span class="nn">examples.multigrid</span> <span class="kn">import</span> <span class="p">(</span><span class="n">mg_test_general_inhomogeneous</span><span class="p">,</span> <span class="n">mg_test_simple</span><span class="p">,</span>
+                                <span class="n">mg_test_vc_dirichlet</span><span class="p">,</span> <span class="n">mg_test_vc_periodic</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="PyroTest"><a class="viewcode-back" href="../../pyro.html#pyro.test.PyroTest">[docs]</a><span class="k">class</span> <span class="nc">PyroTest</span><span class="p">:</span>

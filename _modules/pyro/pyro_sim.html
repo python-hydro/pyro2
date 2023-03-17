@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.pyro_sim &mdash; pyro 4.0.1.post18+gada4d3a documentation</title>
+  <title>pyro.pyro_sim &mdash; pyro 4.0.1.post19+g4c90ee6 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -206,6 +206,7 @@
 <span class="sd">        other_commands : str</span>
 <span class="sd">            Other command line parameter options</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># pylint: disable=attribute-defined-outside-init</span>
 
         <span class="n">problem_defaults_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyro_home</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">solver_name</span> <span class="o">+</span> \
             <span class="s2">&quot;/problems/_&quot;</span> <span class="o">+</span> <span class="n">problem_name</span> <span class="o">+</span> <span class="s2">&quot;.defaults&quot;</span>
@@ -408,8 +409,7 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comp_bench</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">result</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span></div>
 
 <div class="viewcode-block" id="PyroBenchmark.compare_to_benchmark"><a class="viewcode-back" href="../../pyro.html#pyro.pyro_sim.PyroBenchmark.compare_to_benchmark">[docs]</a>    <span class="k">def</span> <span class="nf">compare_to_benchmark</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rtol</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Are we comparing to a benchmark? &quot;&quot;&quot;</span>

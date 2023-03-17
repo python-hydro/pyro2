@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible_sr.unsplit_fluxes &mdash; pyro 4.0.1.post18+gada4d3a documentation</title>
+  <title>pyro.compressible_sr.unsplit_fluxes &mdash; pyro 4.0.1.post19+g4c90ee6 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -241,10 +241,10 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">pyro.compressible_sr.c2p</span> <span class="k">as</span> <span class="nn">c2p</span>
 <span class="kn">import</span> <span class="nn">pyro.compressible_sr.interface</span> <span class="k">as</span> <span class="nn">ifc</span>
 <span class="kn">import</span> <span class="nn">pyro.mesh.array_indexer</span> <span class="k">as</span> <span class="nn">ai</span>
-<span class="kn">import</span> <span class="nn">pyro.mesh.reconstruction</span> <span class="k">as</span> <span class="nn">reconstruction</span>
+<span class="kn">from</span> <span class="nn">pyro.compressible_sr</span> <span class="kn">import</span> <span class="n">c2p</span>
+<span class="kn">from</span> <span class="nn">pyro.mesh</span> <span class="kn">import</span> <span class="n">reconstruction</span>
 <span class="kn">from</span> <span class="nn">pyro.util</span> <span class="kn">import</span> <span class="n">msg</span>
 
 
@@ -575,7 +575,7 @@
 
     <span class="n">q</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">(</span><span class="n">nvar</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">nq</span><span class="p">)</span>
 
-    <span class="n">c2p</span><span class="o">.</span><span class="n">cons_to_prim</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">irho</span><span class="p">,</span> 
+    <span class="n">c2p</span><span class="o">.</span><span class="n">cons_to_prim</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">irho</span><span class="p">,</span>
                      <span class="n">ivars</span><span class="o">.</span><span class="n">iu</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iv</span><span class="p">,</span>
                      <span class="n">ivars</span><span class="o">.</span><span class="n">ip</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ix</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">irhox</span><span class="p">,</span>
                      <span class="n">ivars</span><span class="o">.</span><span class="n">idens</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ixmom</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">,</span>

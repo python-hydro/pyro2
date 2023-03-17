@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.particles.particles &mdash; pyro 4.0.1.post18+gada4d3a documentation</title>
+  <title>pyro.particles.particles &mdash; pyro 4.0.1.post19+g4c90ee6 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -401,7 +401,7 @@
             <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">myg</span><span class="o">.</span><span class="n">xmin</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">xlb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;outflow&quot;</span><span class="p">,</span> <span class="s2">&quot;neumann&quot;</span><span class="p">]:</span>
                     <span class="k">continue</span>
-                <span class="k">elif</span> <span class="n">xlb</span> <span class="o">==</span> <span class="s2">&quot;periodic&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">xlb</span> <span class="o">==</span> <span class="s2">&quot;periodic&quot;</span><span class="p">:</span>
                     <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">xmax</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">myg</span><span class="o">.</span><span class="n">xmin</span>
                 <span class="k">elif</span> <span class="n">xlb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;reflect-even&quot;</span><span class="p">,</span> <span class="s2">&quot;reflect-odd&quot;</span><span class="p">,</span> <span class="s2">&quot;dirichlet&quot;</span><span class="p">]:</span>
                     <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">myg</span><span class="o">.</span><span class="n">xmin</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">x</span>
@@ -412,7 +412,7 @@
             <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">myg</span><span class="o">.</span><span class="n">xmax</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">xrb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;outflow&quot;</span><span class="p">,</span> <span class="s2">&quot;neumann&quot;</span><span class="p">]:</span>
                     <span class="k">continue</span>
-                <span class="k">elif</span> <span class="n">xrb</span> <span class="o">==</span> <span class="s2">&quot;periodic&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">xrb</span> <span class="o">==</span> <span class="s2">&quot;periodic&quot;</span><span class="p">:</span>
                     <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">xmin</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">myg</span><span class="o">.</span><span class="n">xmax</span>
                 <span class="k">elif</span> <span class="n">xrb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;reflect-even&quot;</span><span class="p">,</span> <span class="s2">&quot;reflect-odd&quot;</span><span class="p">,</span> <span class="s2">&quot;dirichlet&quot;</span><span class="p">]:</span>
                     <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">myg</span><span class="o">.</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">x</span>
@@ -423,7 +423,7 @@
             <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymin</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">ylb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;outflow&quot;</span><span class="p">,</span> <span class="s2">&quot;neumann&quot;</span><span class="p">]:</span>
                     <span class="k">continue</span>
-                <span class="k">elif</span> <span class="n">ylb</span> <span class="o">==</span> <span class="s2">&quot;periodic&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">ylb</span> <span class="o">==</span> <span class="s2">&quot;periodic&quot;</span><span class="p">:</span>
                     <span class="n">p</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymax</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymin</span>
                 <span class="k">elif</span> <span class="n">ylb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;reflect-even&quot;</span><span class="p">,</span> <span class="s2">&quot;reflect-odd&quot;</span><span class="p">,</span> <span class="s2">&quot;dirichlet&quot;</span><span class="p">]:</span>
                     <span class="n">p</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymin</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span>
@@ -434,7 +434,7 @@
             <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymax</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">yrb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;outflow&quot;</span><span class="p">,</span> <span class="s2">&quot;neumann&quot;</span><span class="p">]:</span>
                     <span class="k">continue</span>
-                <span class="k">elif</span> <span class="n">yrb</span> <span class="o">==</span> <span class="s2">&quot;periodic&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">yrb</span> <span class="o">==</span> <span class="s2">&quot;periodic&quot;</span><span class="p">:</span>
                     <span class="n">p</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymin</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymax</span>
                 <span class="k">elif</span> <span class="n">yrb</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;reflect-even&quot;</span><span class="p">,</span> <span class="s2">&quot;reflect-odd&quot;</span><span class="p">,</span> <span class="s2">&quot;dirichlet&quot;</span><span class="p">]:</span>
                     <span class="n">p</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span>

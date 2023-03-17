@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.util.io_pyro &mdash; pyro 4.0.1.post18+gada4d3a documentation</title>
+  <title>pyro.util.io_pyro &mdash; pyro 4.0.1.post19+g4c90ee6 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -125,8 +125,8 @@
 <span class="kn">import</span> <span class="nn">h5py</span>
 
 <span class="kn">import</span> <span class="nn">pyro.mesh.boundary</span> <span class="k">as</span> <span class="nn">bnd</span>
-<span class="kn">import</span> <span class="nn">pyro.particles.particles</span> <span class="k">as</span> <span class="nn">particles</span>
 <span class="kn">from</span> <span class="nn">pyro.mesh.patch</span> <span class="kn">import</span> <span class="n">CellCenterData2d</span><span class="p">,</span> <span class="n">Grid2d</span>
+<span class="kn">from</span> <span class="nn">pyro.particles</span> <span class="kn">import</span> <span class="n">particles</span>
 
 
 <div class="viewcode-block" id="read_bcs"><a class="viewcode-back" href="../../../pyro.util.html#pyro.util.io_pyro.read_bcs">[docs]</a><span class="k">def</span> <span class="nf">read_bcs</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
@@ -135,12 +135,12 @@
         <span class="n">gb</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;BC&quot;</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">BCs</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">gb</span><span class="p">:</span>
-            <span class="n">BCs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">gb</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">BCs</span></div>
+    <span class="n">BCs</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">gb</span><span class="p">:</span>
+        <span class="n">BCs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">gb</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">BCs</span></div>
 
 
 <div class="viewcode-block" id="read"><a class="viewcode-back" href="../../../pyro.util.html#pyro.util.io_pyro.read">[docs]</a><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>

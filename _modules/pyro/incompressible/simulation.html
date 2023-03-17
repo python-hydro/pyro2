@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.incompressible.simulation &mdash; pyro 4.0.1.post18+gada4d3a documentation</title>
+  <title>pyro.incompressible.simulation &mdash; pyro 4.0.1.post19+g4c90ee6 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -122,12 +122,11 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">import</span> <span class="nn">pyro.incompressible.incomp_interface</span> <span class="k">as</span> <span class="nn">incomp_interface</span>
 <span class="kn">import</span> <span class="nn">pyro.mesh.array_indexer</span> <span class="k">as</span> <span class="nn">ai</span>
-<span class="kn">import</span> <span class="nn">pyro.mesh.patch</span> <span class="k">as</span> <span class="nn">patch</span>
-<span class="kn">import</span> <span class="nn">pyro.mesh.reconstruction</span> <span class="k">as</span> <span class="nn">reconstruction</span>
-<span class="kn">import</span> <span class="nn">pyro.multigrid.MG</span> <span class="k">as</span> <span class="nn">MG</span>
-<span class="kn">import</span> <span class="nn">pyro.particles.particles</span> <span class="k">as</span> <span class="nn">particles</span>
+<span class="kn">from</span> <span class="nn">pyro.incompressible</span> <span class="kn">import</span> <span class="n">incomp_interface</span>
+<span class="kn">from</span> <span class="nn">pyro.mesh</span> <span class="kn">import</span> <span class="n">patch</span><span class="p">,</span> <span class="n">reconstruction</span>
+<span class="kn">from</span> <span class="nn">pyro.multigrid</span> <span class="kn">import</span> <span class="n">MG</span>
+<span class="kn">from</span> <span class="nn">pyro.particles</span> <span class="kn">import</span> <span class="n">particles</span>
 <span class="kn">from</span> <span class="nn">pyro.simulation_null</span> <span class="kn">import</span> <span class="n">NullSimulation</span><span class="p">,</span> <span class="n">bc_setup</span><span class="p">,</span> <span class="n">grid_setup</span>
 
 
@@ -164,6 +163,8 @@
             <span class="n">n_particles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;particles.n_particles&quot;</span><span class="p">)</span>
             <span class="n">particle_generator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;particles.particle_generator&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="n">particles</span><span class="o">.</span><span class="n">Particles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="p">,</span> <span class="n">bc</span><span class="p">,</span> <span class="n">n_particles</span><span class="p">,</span> <span class="n">particle_generator</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_preevolve</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1"># now set the initial conditions for the problem</span>
         <span class="n">problem</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;pyro.incompressible.problems.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">problem_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>

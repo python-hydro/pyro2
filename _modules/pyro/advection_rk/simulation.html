@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.advection_rk.simulation &mdash; pyro 4.0.1.post18+gada4d3a documentation</title>
+  <title>pyro.advection_rk.simulation &mdash; pyro 4.0.1.post19+g4c90ee6 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -117,10 +117,10 @@
            <div itemprop="articleBody">
              
   <h1>Source code for pyro.advection_rk.simulation</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">pyro.advection</span> <span class="k">as</span> <span class="nn">advection</span>
-<span class="kn">import</span> <span class="nn">pyro.advection_rk.fluxes</span> <span class="k">as</span> <span class="nn">flx</span>
+<span></span><span class="kn">import</span> <span class="nn">pyro.advection_rk.fluxes</span> <span class="k">as</span> <span class="nn">flx</span>
 <span class="kn">import</span> <span class="nn">pyro.mesh.array_indexer</span> <span class="k">as</span> <span class="nn">ai</span>
-<span class="kn">import</span> <span class="nn">pyro.mesh.integration</span> <span class="k">as</span> <span class="nn">integration</span>
+<span class="kn">from</span> <span class="nn">pyro</span> <span class="kn">import</span> <span class="n">advection</span>
+<span class="kn">from</span> <span class="nn">pyro.mesh</span> <span class="kn">import</span> <span class="n">integration</span>
 
 
 <div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../../pyro.advection_rk.html#pyro.advection_rk.simulation.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="n">advection</span><span class="o">.</span><span class="n">Simulation</span><span class="p">):</span>
