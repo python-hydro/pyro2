@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Multigrid solvers &mdash; pyro 4.0.1.post19+g4c90ee6 documentation</title>
+  <title>Multigrid solvers &mdash; pyro 4.0.1.post20+gb2b5c5f documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -169,7 +169,7 @@ use.</p>
 span.prompt1:before {
   content: "$ ";
 }
-</style><span class="prompt1">./examples/multigrid/mg_test_simple.py</span>
+</style><span class="prompt1">./pyro/multigrid/examples/mg_test_simple.py</span>
 </pre></div></div><p>The <code class="docutils literal notranslate"><span class="pre">mg_test_simple.py</span></code> script solves a Poisson equation with a
 known analytic solution. This particular example comes from the text
 <cite>A Multigrid Tutorial, 2nd Ed.</cite>, by Briggs. The example is:</p>
@@ -190,13 +190,13 @@ analytic solution. This is shown below:</p>
 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
     <iframe src="https://www.youtube.com/embed/h9MUgwJvr-g?rel=0" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
 </div><br><p>You can run this example locally by running the <code class="docutils literal notranslate"><span class="pre">mg_vis.py</span></code> script:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./examples/multigrid/mg_vis.py</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./pyro/multigrid/examples/mg_vis.py</span>
 </pre></div></div></section>
 <section id="projection">
 <h3>projection<a class="headerlink" href="#projection" title="Permalink to this heading">¶</a></h3>
 <p>Another example uses multigrid to extract the divergence free part of a velocity
 field.  This is run as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./examples/multigrid/project_periodic.py</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./pyro/multigrid/examples/project_periodic.py</span>
 </pre></div></div><p>Given a vector field, <span class="math notranslate nohighlight">\(U\)</span>, we can decompose it into a divergence free part, <span class="math notranslate nohighlight">\(U_d\)</span>, and the gradient of a scalar, <span class="math notranslate nohighlight">\(\phi\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[U = U_d + \nabla \phi\]</div>
