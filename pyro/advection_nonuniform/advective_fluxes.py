@@ -1,6 +1,6 @@
 import numpy as np
 
-import pyro.mesh.reconstruction as reconstruction
+from pyro.mesh import reconstruction
 
 
 def unsplit_fluxes(my_data, rp, dt, scalar_name):

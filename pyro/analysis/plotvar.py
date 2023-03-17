@@ -5,8 +5,8 @@ import argparse
 import matplotlib.pyplot as plt
 import numpy as np
 
-import pyro.mesh.patch as patch
 import pyro.util.io_pyro as io
+from pyro.mesh import patch
 
 # plot a single variable from an output file
 #

@@ -1,8 +1,8 @@
 import numpy as np
 
-import pyro.compressible as compressible
 import pyro.compressible_rk.fluxes as flx
-import pyro.mesh.integration as integration
+from pyro import compressible
+from pyro.mesh import integration
 
 
 class Simulation(compressible.Simulation):

@@ -3,13 +3,12 @@ import importlib
 import matplotlib.pyplot as plt
 import numpy as np
 
-import pyro.incompressible.incomp_interface as incomp_interface
 import pyro.mesh.boundary as bnd
 import pyro.mesh.array_indexer as ai
-import pyro.mesh.patch as patch
-import pyro.mesh.reconstruction as reconstruction
-import pyro.multigrid.MG as MG
-import pyro.particles.particles as particles
+from pyro.incompressible import incomp_interface
+from pyro.mesh import patch, reconstruction
+from pyro.multigrid import MG
+from pyro.particles import particles
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
 
 
@@ -56,6 +55,8 @@ class Simulation(NullSimulation):
             n_particles = self.rp.get_param("particles.n_particles")
             particle_generator = self.rp.get_param("particles.particle_generator")
             self.particles = particles.Particles(self.cc_data, bc, n_particles, particle_generator)
+
+        self.in_preevolve = False
 
         # now set the initial conditions for the problem
         problem = importlib.import_module(f"pyro.{self.solver_name}.problems.{self.problem_name}")
