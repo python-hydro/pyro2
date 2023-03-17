@@ -178,18 +178,18 @@ that we describe here. Note: some problems write a report at the end
 of the simulation specifying the analysis routines that can be used
 with their data.
 
-  - `compare.py`: this takes two simulation output files as input and
-    compares zone-by-zone for exact agreement. This is used as part of
-    the regression testing.
+  - `pyro/util/compare.py`: this takes two simulation output files as
+    input and compares zone-by-zone for exact agreement. This is used as
+    part of the regression testing.
 
       usage: `./compare.py file1 file2`
 
-  - `plot.py`: this takes the an output file as input and plots the
+  - `pyro/plot.py`: this takes the an output file as input and plots the
     data using the solver's dovis method.
 
       usage: `./plot.py file`
 
-  - `analysis/`
+  - `pyro/analysis/`
 
       * `dam_compare.py`: this takes an output file from the
         shallow water dam break problem and plots a slice through the domain
@@ -251,15 +251,15 @@ with their data.
 
 ## Regression and unit testing
 
-  The `test.py` script will run several of the problems (as well as some
-  stand-alone multigrid tests) and compare the solution to stored
+  The `pyro/test.py` script will run several of the problems (as well as
+  some stand-alone multigrid tests) and compare the solution to stored
   benchmarks (in each solver's `tests/` subdirectory).  The return value
   of the script is the number of tests that failed.
 
   Unit tests are controlled by pytest and can be run simply via
 
   ```
-  pytest .
+  pytest pyro
   ```
 
 ## Acknowledgements

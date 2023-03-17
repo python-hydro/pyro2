@@ -31,7 +31,7 @@ We can compare to the stored benchmarks simply by running:
 
 .. prompt:: bash
 
-   ./test.py
+   ./pyro/test.py
 
 
 .. note::
