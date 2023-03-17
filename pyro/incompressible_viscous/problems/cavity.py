@@ -36,6 +36,6 @@ def init_data(my_data, rp):
     u[:, :] = 0
     v[:, :] = 0
 
+
 def finalize():
     """ print out any information to the user at the end of the run """
-    pass

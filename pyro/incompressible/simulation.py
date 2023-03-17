@@ -3,8 +3,8 @@ import importlib
 import matplotlib.pyplot as plt
 import numpy as np
 
-import pyro.mesh.boundary as bnd
 import pyro.mesh.array_indexer as ai
+import pyro.mesh.boundary as bnd
 from pyro.incompressible import incomp_interface
 from pyro.mesh import patch, reconstruction
 from pyro.multigrid import MG
@@ -61,7 +61,6 @@ class Simulation(NullSimulation):
         # now set the initial conditions for the problem
         problem = importlib.import_module(f"pyro.{self.solver_name}.problems.{self.problem_name}")
         problem.init_data(self.cc_data, self.rp)
-
 
     def method_compute_timestep(self, ):
         """
@@ -316,9 +315,9 @@ class Simulation(NullSimulation):
         proj_type = self.rp.get_param("incompressible.proj_type")
 
         if other_update_velocity:
-            U_MAC = (u_MAC,v_MAC)
-            U_INT = (u_xint,u_yint,v_xint,v_yint)
-            self.do_other_update_velocity(U_MAC,U_INT)
+            U_MAC = (u_MAC, v_MAC)
+            U_INT = (u_xint, u_yint, v_xint, v_yint)
+            self.do_other_update_velocity(U_MAC, U_INT)
 
         else:
             if self.verbose > 0:
@@ -340,7 +339,6 @@ class Simulation(NullSimulation):
                 0.5*(u_MAC.v() + u_MAC.ip(1))*(v_xint.ip(1) - v_xint.v())/myg.dx + \
                 0.5*(v_MAC.v() + v_MAC.jp(1))*(v_yint.jp(1) - v_yint.v())/myg.dy
 
-
             if proj_type == 1:
                 u[:, :] -= (self.dt*advect_x[:, :] + self.dt*gradp_x[:, :])
                 v[:, :] -= (self.dt*advect_y[:, :] + self.dt*gradp_y[:, :])
@@ -348,7 +346,6 @@ class Simulation(NullSimulation):
             elif proj_type == 2:
                 u[:, :] -= self.dt*advect_x[:, :]
                 v[:, :] -= self.dt*advect_y[:, :]
-
 
         self.cc_data.fill_BC("x-velocity")
         self.cc_data.fill_BC("y-velocity")
@@ -479,16 +476,13 @@ class Simulation(NullSimulation):
         plt.pause(0.001)
         plt.draw()
 
-
     def define_other_bc(self):
         """
         Used to set up user-defined BC's (see e.g. incompressible_viscous)
         """
-        pass
 
     def do_other_update_velocity(self, U_MAC, U_INT):
         """
         Change the method for updating the velocity from the projected velocity
         and interface states (see e.g. incompressible_viscous)
         """
-        pass

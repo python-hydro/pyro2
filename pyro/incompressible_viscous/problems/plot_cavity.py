@@ -3,9 +3,9 @@
 import argparse
 import os
 
-import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import numpy as np
 
 import pyro.util.io_pyro as io
 
@@ -30,17 +30,17 @@ def makeplot(plotfile_name, outfile, Reynolds, streamline_density):
     v = sim.cc_data.get_var("y-velocity")
     magvel = np.sqrt(u**2+v**2)
 
-    fig, ax = plt.subplots(1,1)
+    fig, ax = plt.subplots(1, 1)
     ax.set_aspect('equal')
 
     img = ax.contourf(x, y, np.transpose(magvel.v()), 30, cmap="magma")
-    ax.streamplot(x,y,np.transpose(u.v()),np.transpose(v.v()), broken_streamlines=False, 
+    ax.streamplot(x, y, np.transpose(u.v()), np.transpose(v.v()), broken_streamlines=False, 
                   linewidth=0.5, arrowstyle="-", density=streamline_density, color='w')
-    
-    cbar=plt.colorbar(img, ax=ax)
+
+    cbar = plt.colorbar(img, ax=ax)
     cbar.ax.tick_params(labelsize=8)
-    cbar.ax.get_yaxis().labelpad=15
-    cbar.ax.set_ylabel("velocity magnitude",rotation=270)
+    cbar.ax.get_yaxis().labelpad = 15
+    cbar.ax.set_ylabel("velocity magnitude", rotation=270)
     plt.xlabel("x")
     plt.ylabel("y")
 

@@ -6,9 +6,10 @@ import datetime
 import os
 import sys
 
-import pyro.pyro_sim as pyro
 from examples.multigrid import (mg_test_general_inhomogeneous, mg_test_simple,
                                 mg_test_vc_dirichlet, mg_test_vc_periodic)
+
+import pyro.pyro_sim as pyro
 
 
 class PyroTest:

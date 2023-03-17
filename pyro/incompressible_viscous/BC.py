@@ -5,6 +5,7 @@ implement a "moving-lid" option, i.e. fixed tangential velocity at a wall.
 
 from pyro.util import msg
 
+
 def user(bc_name, bc_edge, variable, ccdata):
     """
     A moving lid boundary.  This integrates the equation of HSE into
@@ -32,15 +33,15 @@ def user(bc_name, bc_edge, variable, ccdata):
 
         if bc_edge == "yrb":
 
-            if variable in ("x-velocity","u"):
+            if variable in ("x-velocity", "u"):
                 v = ccdata.get_var(variable)
                 for j in range(myg.jhi+1, myg.jhi+myg.ng+1):
-                    v[:, j] = 1.0 # unit velocity
+                    v[:, j] = 1.0  # unit velocity
 
-            elif variable in ("y-velocity","v"):
+            elif variable in ("y-velocity", "v"):
                 v = ccdata.get_var(variable)
                 for j in range(myg.jhi+1, myg.jhi+myg.ng+1):
-                    v[:, j] = 0.0 
+                    v[:, j] = 0.0
 
             else:
                 raise NotImplementedError("variable not defined")
