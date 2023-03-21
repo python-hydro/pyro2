@@ -1016,13 +1016,15 @@ class PolarGrid(Grid2d):
         Return an array of the face areas. 
         The shape of the returned array is (ni, nj).
         """
-        tr = lambda arr: arr.transpose(1, 2, 0)
-        x = self.cell_vertices()[:,0]
-        y = self.cell_vertices()[0,:]
-        r0 = x[:-1, :-1]
-        r1 = x[+1:, :-1]
-        t0 = y[:-1, :-1]
-        t1 = y[+1:, +1:]
+        # tr = lambda arr: arr.transpose(1, 2, 0)
+        # x = self.cell_vertices()[:,0]
+        # y = self.cell_vertices()[0,:]
+        # r0 = x[:-1, :-1]
+        # r1 = x[+1:, :-1]
+        # t0 = y[:-1, :-1]
+        # t1 = y[+1:, +1:]
+        r1 = self.xl
+        r0 = self.xr
 
         area = r1 - r0
         return area
@@ -1032,13 +1034,16 @@ class PolarGrid(Grid2d):
         Return an array of the face areas. 
         The shape of the returned array is (ni, nj).
         """
-        tr = lambda arr: arr.transpose(1, 2, 0)
-        x = self.cell_vertices()[:,0]
-        y = self.cell_vertices()[0,:]
-        r0 = x[:-1, :-1]
-        r1 = x[+1:, :-1]
-        t0 = y[:-1, :-1]
-        t1 = y[+1:, +1:]
+        # tr = lambda arr: arr.transpose(1, 2, 0)
+        # x = self.cell_vertices()[:,0]
+        # y = self.cell_vertices()[0,:]
+        # r0 = x[:-1, :-1]
+        # r1 = x[+1:, :-1]
+        # t0 = y[:-1, :-1]
+        # t1 = y[+1:, +1:]
+
+        r1, t1 = np.meshgrid(self.xl, self.yl)
+        r0, t0 = np.meshgrid(self.xr, self.yr)
 
         # ** the area of a part of an annulus
 
@@ -1052,13 +1057,18 @@ class PolarGrid(Grid2d):
         The shape of the returned array is (ni, nj).
         """
 
-        x = self.cell_vertices()[:,0]
-        y = self.cell_vertices()[0,:]
+        # x = self.cell_vertices()[:,0]
+        # y = self.cell_vertices()[0,:]
 
-        r0 = x[:-1, :-1]
-        r1 = x[+1:, :-1]
-        t0 = y[:-1, :-1]
-        t1 = y[+1:, +1:]
+        # r0 = x[:-1, :-1]
+        # r1 = x[+1:, :-1]
+        # t0 = y[:-1, :-1]
+        # t1 = y[+1:, +1:]
+
+        r1 = self.xl
+        r0 = self.xr
+        t1 = self.yl
+        t0 = self.yr
 
         return 0.5 * (r1 ** 2 - r0 ** 2) * (t1 - t0) * (r1 - r0)
 
