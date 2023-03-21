@@ -905,110 +905,25 @@ class PolarGrid(Grid2d):
 
     # pylint: disable=too-many-instance-attributes
 
-    def __init__(self, nx, ny, ng=1,
-                 xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0):
 
-        """
-        Create a PolarGrid object.
+    # def face_area(self):
+    #     """
+    #     Return an array of the face areas. 
+    #     The shape of the returned array is (ni, nj).
+    #     """
+    #     tr = lambda arr: arr.transpose(1, 2, 0)
+    #     x = self.cell_vertices()[:,0]
+    #     y = self.cell_vertices()[0,:]
+    #     r0 = x[:-1, :-1]
+    #     r1 = x[+1:, :-1]
+    #     t0 = y[:-1, :-1]
+    #     t1 = y[+1:, +1:]
 
-        The only data that we require is the number of points that
-        make up the mesh in each direction.  Optionally we take the
-        extrema of the domain (default is [0,1]x[0,1]) and number of
-        ghost cells (default is 1).
+    #     # ** the area of the arc
 
-        Note that the Grid2d object only defines the discretization,
-        it does not know about the boundary conditions, as these can
-        vary depending on the variable.
-
-        Parameters
-        ----------
-        nx : int
-            Number of zones in the r-direction
-        ny : int
-            Number of zones in the theta-direction
-        ng : int, optional
-            Number of ghost cells
-        xmin : float, optional
-            Physical coordinate at the lower x boundary
-        xmax : float, optional
-            Physical coordinate at the upper x boundary
-        ymin : float, optional
-            Physical coordinate at the lower y boundary
-        ymax : float, optional
-            Physical coordinate at the upper y boundary
-        """
-
-        # pylint: disable=too-many-arguments
-
-        # size of grid
-        self.nx = int(nx)
-        self.ny = int(ny)
-        self.ng = int(ng)
-
-        self.qx = int(2*ng + nx)
-        self.qy = int(2*ng + ny)
-
-        # domain extrema
-        self.xmin = xmin
-        self.xmax = xmax
-
-        self.ymin = ymin
-        self.ymax = ymax
-
-        # compute the indices of the block interior (excluding guardcells)
-        self.ilo = self.ng
-        self.ihi = self.ng + self.nx-1
-
-        self.jlo = self.ng
-        self.jhi = self.ng + self.ny-1
-
-        # center of the grid (for convenience)
-        self.ic = self.ilo + self.nx//2 - 1
-        self.jc = self.jlo + self.ny//2 - 1
-
-        # define the coordinate information at the left, center, and right
-        # zone coordinates
-        self.dx = (xmax - xmin)/nx
-
-        self.xl = (np.arange(self.qx) - ng)*self.dx + xmin
-        self.xr = (np.arange(self.qx) + 1.0 - ng)*self.dx + xmin
-        self.x = 0.5*(self.xl + self.xr)
-
-        self.dy = (ymax - ymin)/ny
-
-        self.yl = (np.arange(self.qy) - ng)*self.dy + ymin
-        self.yr = (np.arange(self.qy) + 1.0 - ng)*self.dy + ymin
-        self.y = 0.5*(self.yl + self.yr)
-
-        # 2-d versions of the zone coordinates (replace with meshgrid?)
-        x2d = np.repeat(self.x, self.qy)
-        x2d.shape = (self.qx, self.qy)
-        self.x2d = x2d
-
-        y2d = np.repeat(self.y, self.qx)
-        y2d.shape = (self.qy, self.qx)
-        y2d = np.transpose(y2d)
-        self.y2d = y2d
-
-
-    def face_area(self):
-        """
-        Return an array of the face areas. 
-        The shape of the returned array is (ni, nj).
-        """
-        tr = lambda arr: arr.transpose(1, 2, 0)
-        x = self.cell_vertices()[:,0]
-        y = self.cell_vertices()[0,:]
-        r0 = x[:-1, :-1]
-        r1 = x[+1:, :-1]
-        t0 = y[:-1, :-1]
-        t1 = y[+1:, +1:]
-
-        # ** the area of the arc
-
-        area_i = np.pi * (r0 * np.sin(t0) + r0 * np.sin(t1)) * np.sqrt(np.square(r0 * np.sin(t1) - r0 * np.sin(t0)) + np.square(r0 * np.cos(t1) - r0 * np.cos(t0)))
-        area_j = np.pi * (r0 * np.sin(t0) + r1 * np.sin(t0)) * np.sqrt(np.square(r1 * np.sin(t0) - r0 * np.sin(t0)) + np.square(r1 * np.cos(t0) - r0 * np.cos(t0)))
-        return tr(np.array([area_i, area_j]))
+    #     area_i = np.pi * (r0 * np.sin(t0) + r0 * np.sin(t1)) * np.sqrt(np.square(r0 * np.sin(t1) - r0 * np.sin(t0)) + np.square(r0 * np.cos(t1) - r0 * np.cos(t0)))
+    #     area_j = np.pi * (r0 * np.sin(t0) + r1 * np.sin(t0)) * np.sqrt(np.square(r1 * np.sin(t0) - r0 * np.sin(t0)) + np.square(r1 * np.cos(t0) - r0 * np.cos(t0)))
+    #     return tr(np.array([area_i, area_j]))
 
     def area_x(self):
         """
