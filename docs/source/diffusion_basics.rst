@@ -29,7 +29,7 @@ compare our solver to the analytic solution. This is run as:
 
 .. prompt:: bash
 
-   ./pyro_sim.py diffusion gaussian inputs.gaussian
+   pyro_sim.py diffusion gaussian inputs.gaussian
 
 .. image:: gauss_diffusion.png
    :align: center
