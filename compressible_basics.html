@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Compressible hydrodynamics solvers &mdash; pyro 4.0.1.post20+gb2b5c5f documentation</title>
+  <title>Compressible hydrodynamics solvers &mdash; pyro 4.0.1.post21+gbf48f286 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -14,6 +14,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -142,7 +144,7 @@
            <div itemprop="articleBody">
              
   <section id="compressible-hydrodynamics-solvers">
-<h1>Compressible hydrodynamics solvers<a class="headerlink" href="#compressible-hydrodynamics-solvers" title="Permalink to this heading">¶</a></h1>
+<h1>Compressible hydrodynamics solvers<a class="headerlink" href="#compressible-hydrodynamics-solvers" title="Permalink to this heading"></a></h1>
 <p>The Euler equations of compressible hydrodynamics take the form:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho U) &amp;= 0 \\
@@ -164,7 +166,7 @@ other compressible solvers, we simply use a symbolic-link to this
 directory in the solver’s directory.</p>
 </div>
 <section id="compressible-solver">
-<h2><code class="docutils literal notranslate"><span class="pre">compressible</span></code> solver<a class="headerlink" href="#compressible-solver" title="Permalink to this heading">¶</a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">compressible</span></code> solver<a class="headerlink" href="#compressible-solver" title="Permalink to this heading"></a></h2>
 <p><a class="reference internal" href="pyro.compressible.html#module-pyro.compressible" title="pyro.compressible"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.compressible</span></code></a> is based on a directionally unsplit (the corner
 transport upwind algorithm) piecewise linear method for the Euler
 equations, following <span id="id1">[<a class="reference internal" href="references.html#id2" title="P. Colella. Multidimensional upwind methods for hyperbolic conservation laws. Journal of Computational Physics, 87:171-200, March 1990. doi:10.1016/0021-9991(90)90233-Q.">Colella90</a>]</span>.  This is overall second-order
@@ -270,7 +272,7 @@ accurate.</p>
 </ul>
 </section>
 <section id="compressible-rk-solver">
-<h2><code class="docutils literal notranslate"><span class="pre">compressible_rk</span></code> solver<a class="headerlink" href="#compressible-rk-solver" title="Permalink to this heading">¶</a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">compressible_rk</span></code> solver<a class="headerlink" href="#compressible-rk-solver" title="Permalink to this heading"></a></h2>
 <p><a class="reference internal" href="pyro.compressible_rk.html#module-pyro.compressible_rk" title="pyro.compressible_rk"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.compressible_rk</span></code></a> uses a method of lines time-integration
 approach with piecewise linear spatial reconstruction for the Euler
 equations.  This is overall second-order accurate.</p>
@@ -364,7 +366,7 @@ hydrostatic equilibrium</p></td>
 </ul>
 </section>
 <section id="compressible-fv4-solver">
-<h2><code class="docutils literal notranslate"><span class="pre">compressible_fv4</span></code> solver<a class="headerlink" href="#compressible-fv4-solver" title="Permalink to this heading">¶</a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">compressible_fv4</span></code> solver<a class="headerlink" href="#compressible-fv4-solver" title="Permalink to this heading"></a></h2>
 <p><a class="reference internal" href="pyro.compressible_fv4.html#module-pyro.compressible_fv4" title="pyro.compressible_fv4"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.compressible_fv4</span></code></a> uses a 4th order accurate method with RK4
 time integration, following <span id="id2">[<a class="reference internal" href="references.html#id3" title="P. McCorquodale and P. Colella. A high-order finite-volume method for conservation laws on locally refined grids. Communication in Applied Mathematics and Computational Science, 6(1):1–25, 2011.">McCorquodaleColella11</a>]</span>.</p>
 <p>The parameter for this solver are:</p>
@@ -448,7 +450,7 @@ time integration, following <span id="id2">[<a class="reference internal" href="
 </ul>
 </section>
 <section id="compressible-sdc-solver">
-<h2><code class="docutils literal notranslate"><span class="pre">compressible_sdc</span></code> solver<a class="headerlink" href="#compressible-sdc-solver" title="Permalink to this heading">¶</a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">compressible_sdc</span></code> solver<a class="headerlink" href="#compressible-sdc-solver" title="Permalink to this heading"></a></h2>
 <p><a class="reference internal" href="pyro.compressible_sdc.html#module-pyro.compressible_sdc" title="pyro.compressible_sdc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.compressible_sdc</span></code></a> uses a 4th order accurate method with
 spectral-deferred correction (SDC) for the time integration.  This
 shares much in common with the <a class="reference internal" href="pyro.compressible_fv4.html#module-pyro.compressible_fv4" title="pyro.compressible_fv4"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.compressible_fv4</span></code></a> solver, aside from
@@ -534,7 +536,7 @@ how the time-integration is handled.</p>
 </ul>
 </section>
 <section id="example-problems">
-<h2>Example problems<a class="headerlink" href="#example-problems" title="Permalink to this heading">¶</a></h2>
+<h2>Example problems<a class="headerlink" href="#example-problems" title="Permalink to this heading"></a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The 4th-order accurate solver (<a class="reference internal" href="pyro.compressible_fv4.html#module-pyro.compressible_fv4" title="pyro.compressible_fv4"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.compressible_fv4</span></code></a>) requires that
@@ -546,7 +548,7 @@ fine for 2nd-order accuracy), and the
 these to cell-averages automatically after initialization.</p>
 </div>
 <section id="sod">
-<h3>Sod<a class="headerlink" href="#sod" title="Permalink to this heading">¶</a></h3>
+<h3>Sod<a class="headerlink" href="#sod" title="Permalink to this heading"></a></h3>
 <p>The Sod problem is a standard hydrodynamics problem. It is a
 one-dimensional shock tube (two states separated by an interface),
 that exhibits all three hydrodynamic waves: a shock, contact, and
@@ -559,8 +561,8 @@ Riemann solver.</p>
 span.prompt1:before {
   content: "$ ";
 }
-</style><span class="prompt1">./pyro_sim.py<span class="w"> </span>compressible<span class="w"> </span>sod<span class="w"> </span>inputs.sod.x</span>
-<span class="prompt1">./pyro_sim.py<span class="w"> </span>compressible<span class="w"> </span>sod<span class="w"> </span>inputs.sod.y</span>
+</style><span class="prompt1">pyro_sim.py<span class="w"> </span>compressible<span class="w"> </span>sod<span class="w"> </span>inputs.sod.x</span>
+<span class="prompt1">pyro_sim.py<span class="w"> </span>compressible<span class="w"> </span>sod<span class="w"> </span>inputs.sod.y</span>
 </pre></div></div><p>A simple script, <code class="docutils literal notranslate"><span class="pre">sod_compare.py</span></code> in <code class="docutils literal notranslate"><span class="pre">analysis/</span></code> will read a pyro output
 file and plot the solution over the exact Sod solution. Below we see
 the result for a Sod run with 128 points in the x-direction, gamma =
@@ -572,12 +574,12 @@ is discussed in the notes above, and can be improved in the PPM method
 with contact steepening.</p>
 </section>
 <section id="sedov">
-<h3>Sedov<a class="headerlink" href="#sedov" title="Permalink to this heading">¶</a></h3>
+<h3>Sedov<a class="headerlink" href="#sedov" title="Permalink to this heading"></a></h3>
 <p>The Sedov blast wave problem is another standard test with an analytic
 solution (Sedov 1959). A lot of energy is point into a point in a
 uniform medium and a blast wave propagates outward. The Sedov problem
 is run as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./pyro_sim.py<span class="w"> </span>compressible<span class="w"> </span>sedov<span class="w"> </span>inputs.sedov</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pyro_sim.py<span class="w"> </span>compressible<span class="w"> </span>sedov<span class="w"> </span>inputs.sedov</span>
 </pre></div></div><p>The video below shows the output from a 128 x 128 grid with the energy
 put in a radius of 0.0125 surrounding the center of the domain. A
 gamma-law EOS with gamma = 1.4 is used, and we run until 0.1</p>
@@ -593,30 +595,30 @@ binning is done with the <code class="docutils literal notranslate"><span class=
 <p>This shows good agreement with the analytic solution.</p>
 </section>
 <section id="quad">
-<h3>quad<a class="headerlink" href="#quad" title="Permalink to this heading">¶</a></h3>
+<h3>quad<a class="headerlink" href="#quad" title="Permalink to this heading"></a></h3>
 <p>The quad problem sets up different states in four regions of the
 domain and watches the complex interfaces that develop as shocks
 interact. This problem has appeared in several places (and a <a class="reference external" href="http://planets.utsc.utoronto.ca/~pawel/Riemann.hydro.html">detailed
 investigation</a> is
 online by Pawel Artymowicz). It is run as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./pyro_sim.py<span class="w"> </span>compressible<span class="w"> </span>quad<span class="w"> </span>inputs.quad</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pyro_sim.py<span class="w"> </span>compressible<span class="w"> </span>quad<span class="w"> </span>inputs.quad</span>
 </pre></div></div><img alt="_images/quad.png" class="align-center" src="_images/quad.png" />
 </section>
 <section id="rt">
-<h3>rt<a class="headerlink" href="#rt" title="Permalink to this heading">¶</a></h3>
+<h3>rt<a class="headerlink" href="#rt" title="Permalink to this heading"></a></h3>
 <p>The Rayleigh-Taylor problem puts a dense fluid over a lighter one and
 perturbs the interface with a sinusoidal velocity. Hydrostatic
 boundary conditions are used to ensure any initial pressure waves can
 escape the domain. It is run as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./pyro_sim.py<span class="w"> </span>compressible<span class="w"> </span>rt<span class="w"> </span>inputs.rt</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pyro_sim.py<span class="w"> </span>compressible<span class="w"> </span>rt<span class="w"> </span>inputs.rt</span>
 </pre></div></div><div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
     <iframe src="https://www.youtube.com/embed/P4zmObEYCOs?rel=0" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
 </div><br></section>
 <section id="bubble">
-<h3>bubble<a class="headerlink" href="#bubble" title="Permalink to this heading">¶</a></h3>
+<h3>bubble<a class="headerlink" href="#bubble" title="Permalink to this heading"></a></h3>
 <p>The bubble problem initializes a hot spot in a stratified domain and
 watches it buoyantly rise and roll up. This is run as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./pyro_sim.py<span class="w"> </span>compressible<span class="w"> </span>bubble<span class="w"> </span>inputs.bubble</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pyro_sim.py<span class="w"> </span>compressible<span class="w"> </span>bubble<span class="w"> </span>inputs.bubble</span>
 </pre></div></div><img alt="_images/bubble.png" class="align-center" src="_images/bubble.png" />
 <p>The shock at the top of the domain is because we cut off the
 stratified atmosphere at some low density and the resulting material
@@ -625,9 +627,9 @@ propagating outward from the bubble (visible in the U and e panels).</p>
 </section>
 </section>
 <section id="exercises">
-<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">¶</a></h2>
+<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading"></a></h2>
 <section id="explorations">
-<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this heading">¶</a></h3>
+<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Measure the growth rate of the Rayleigh-Taylor instability for
 different wavenumbers.</p></li>
@@ -639,7 +641,7 @@ understand what is happening.</p></li>
 </ul>
 </section>
 <section id="extensions">
-<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading">¶</a></h3>
+<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Limit on the characteristic variables instead of the primitive
 variables. What changes do you see? (the notes show how to implement
@@ -657,7 +659,7 @@ for this.  Research the Roe Riemann solver and implement it in pyro.</p></li>
 </section>
 </section>
 <section id="going-further">
-<h2>Going further<a class="headerlink" href="#going-further" title="Permalink to this heading">¶</a></h2>
+<h2>Going further<a class="headerlink" href="#going-further" title="Permalink to this heading"></a></h2>
 <p>The compressible algorithm presented here is essentially the
 single-grid hydrodynamics algorithm used in the <a class="reference external" href="https://amrex-astro.github.io/Castro/">Castro code</a>—an
 adaptive mesh radiation hydrodynamics code developed at
@@ -679,7 +681,7 @@ available. See the <a class="reference external" href="https://zingale.github.io
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, pyro development team.</p>
+    <p>&#169; Copyright 2023, pyro development team.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

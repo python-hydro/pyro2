@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Running &mdash; pyro 4.0.1.post20+gb2b5c5f documentation</title>
+  <title>Running &mdash; pyro 4.0.1.post21+gbf48f286 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -14,6 +14,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -125,13 +127,13 @@
            <div itemprop="articleBody">
              
   <section id="running">
-<h1>Running<a class="headerlink" href="#running" title="Permalink to this heading">¶</a></h1>
+<h1>Running<a class="headerlink" href="#running" title="Permalink to this heading"></a></h1>
 <p>Pyro can be run in two ways: either from the commandline, using the
 <code class="docutils literal notranslate"><span class="pre">pyro_sim.py</span></code> script (this will be installed into your search path)
 and passing in the solver, problem and inputs as arguments, or by
 using the <a class="reference internal" href="pyro.html#pyro.pyro_sim.Pyro" title="pyro.pyro_sim.Pyro"><code class="xref py py-func docutils literal notranslate"><span class="pre">Pyro</span></code></a> class.</p>
 <section id="commandline">
-<h2>Commandline<a class="headerlink" href="#commandline" title="Permalink to this heading">¶</a></h2>
+<h2>Commandline<a class="headerlink" href="#commandline" title="Permalink to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">pyro_sim.py</span></code> script takes 3
 arguments: the solver name, the problem setup to run with that solver
 (this is defined in the solver’s <code class="docutils literal notranslate"><span class="pre">problems/</span></code> sub-directory), and the
@@ -160,7 +162,7 @@ in  <a class="reference internal" href="analysis.html#analysis"><span class="std
 </div>
 </section>
 <section id="pyro-class">
-<h2>Pyro class<a class="headerlink" href="#pyro-class" title="Permalink to this heading">¶</a></h2>
+<h2>Pyro class<a class="headerlink" href="#pyro-class" title="Permalink to this heading"></a></h2>
 <p>Alternatively, pyro can be run using the <a class="reference internal" href="pyro.html#pyro.pyro_sim.Pyro" title="pyro.pyro_sim.Pyro"><code class="xref py py-func docutils literal notranslate"><span class="pre">Pyro</span></code></a> class. This provides
 an interface that enables simulations to be set up and run in a Jupyter notebook – see
 <code class="docutils literal notranslate"><span class="pre">examples/examples.ipynb</span></code> for an example notebook. A simulation can be set up and run
@@ -201,7 +203,7 @@ simulation forward by a single step, we’d run</p>
 single timestep and do output/visualization (if required).</p>
 </section>
 <section id="runtime-options">
-<h2>Runtime options<a class="headerlink" href="#runtime-options" title="Permalink to this heading">¶</a></h2>
+<h2>Runtime options<a class="headerlink" href="#runtime-options" title="Permalink to this heading"></a></h2>
 <p>The behavior of the main driver, the solver, and the problem setup can
 be controlled by runtime parameters specified in the inputs file (or
 via the command line or passed into the <code class="docutils literal notranslate"><span class="pre">initialize_problem</span></code> function).
@@ -413,7 +415,7 @@ given simulation.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, pyro development team.</p>
+    <p>&#169; Copyright 2023, pyro development team.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

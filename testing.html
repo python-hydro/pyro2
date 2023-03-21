@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Testing &mdash; pyro 4.0.1.post20+gb2b5c5f documentation</title>
+  <title>Testing &mdash; pyro 4.0.1.post21+gbf48f286 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -14,6 +14,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -124,30 +126,30 @@
            <div itemprop="articleBody">
              
   <section id="testing">
-<h1>Testing<a class="headerlink" href="#testing" title="Permalink to this heading">¶</a></h1>
+<h1>Testing<a class="headerlink" href="#testing" title="Permalink to this heading"></a></h1>
 <p>There are two types of testing implemented in pyro: unit tests and
 regression tests.  Both of these are driven by the <code class="docutils literal notranslate"><span class="pre">test.py</span></code>
 script in the root directory.</p>
 <section id="unit-tests">
-<h2>Unit tests<a class="headerlink" href="#unit-tests" title="Permalink to this heading">¶</a></h2>
-<p>pyro implements unit tests using <code class="docutils literal notranslate"><span class="pre">py.test</span></code>.  These can be run via:</p>
+<h2>Unit tests<a class="headerlink" href="#unit-tests" title="Permalink to this heading"></a></h2>
+<p>pyro implements unit tests using <code class="docutils literal notranslate"><span class="pre">pytest</span></code>.  These can be run via:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
 span.prompt1:before {
   content: "$ ";
 }
-</style><span class="prompt1">./test.py<span class="w"> </span>-u</span>
+</style><span class="prompt1">pytest<span class="w"> </span>-v<span class="w"> </span>--nbval<span class="w"> </span>pyro</span>
 </pre></div></div></section>
 <section id="regression-tests">
-<h2>Regression tests<a class="headerlink" href="#regression-tests" title="Permalink to this heading">¶</a></h2>
+<h2>Regression tests<a class="headerlink" href="#regression-tests" title="Permalink to this heading"></a></h2>
 <p>The main driver, <code class="docutils literal notranslate"><span class="pre">pyro_sim.py</span></code> has the ability to create benchmarks and
 compare output to stored benchmarks at the end of a simulation.
 Benchmark output is stored in each solver’s <code class="docutils literal notranslate"><span class="pre">tests/</span></code> directory.
 When testing, we compare zone-by-zone for each variable to see if we
 agree exactly.  If there is any disagreement, this means that we’ve
-made a change to the code that we need to understand (if may be a bug
+made a change to the code that we need to understand (it may be a bug
 or may be a fix or optimization).</p>
 <p>We can compare to the stored benchmarks simply by running:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./test.py</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./pyro/test.py</span>
 </pre></div></div><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>When running on a new machine, it is possible that roundoff-level differences
@@ -169,7 +171,7 @@ future tests.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, pyro development team.</p>
+    <p>&#169; Copyright 2023, pyro development team.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

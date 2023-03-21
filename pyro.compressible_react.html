@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible_react package &mdash; pyro 4.0.1.post20+gb2b5c5f documentation</title>
+  <title>pyro.compressible_react package &mdash; pyro 4.0.1.post21+gbf48f286 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -14,6 +14,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -154,12 +156,12 @@
            <div itemprop="articleBody">
              
   <section id="module-pyro.compressible_react">
-<span id="pyro-compressible-react-package"></span><h1>pyro.compressible_react package<a class="headerlink" href="#module-pyro.compressible_react" title="Permalink to this heading">¶</a></h1>
+<span id="pyro-compressible-react-package"></span><h1>pyro.compressible_react package<a class="headerlink" href="#module-pyro.compressible_react" title="Permalink to this heading"></a></h1>
 <p>The pyro compressible hydrodynamics solver with reactions.  This
 implements the second-order (piecewise-linear), unsplit method of
 Colella 1990, and incorporates reactions via Strang splitting.</p>
 <section id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading">¶</a></h2>
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pyro.compressible_react.problems.html">pyro.compressible_react.problems package</a><ul>
@@ -180,42 +182,42 @@ Colella 1990, and incorporates reactions via Strang splitting.</p>
 </div>
 </section>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
 </section>
 <section id="module-pyro.compressible_react.simulation">
-<span id="pyro-compressible-react-simulation-module"></span><h2>pyro.compressible_react.simulation module<a class="headerlink" href="#module-pyro.compressible_react.simulation" title="Permalink to this heading">¶</a></h2>
+<span id="pyro-compressible-react-simulation-module"></span><h2>pyro.compressible_react.simulation module<a class="headerlink" href="#module-pyro.compressible_react.simulation" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyro.compressible_react.simulation.Simulation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.compressible_react.simulation.</span></span><span class="sig-name descname"><span class="pre">Simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timers=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_class=&lt;class</span> <span class="pre">'pyro.mesh.patch.CellCenterData2d'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_react/simulation.html#Simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_react.simulation.Simulation" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.compressible_react.simulation.</span></span><span class="sig-name descname"><span class="pre">Simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timers=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_class=&lt;class</span> <span class="pre">'pyro.mesh.patch.CellCenterData2d'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_react/simulation.html#Simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_react.simulation.Simulation" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="pyro.compressible.html#pyro.compressible.simulation.Simulation" title="pyro.compressible.simulation.Simulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Simulation</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.compressible_react.simulation.Simulation.burn">
-<span class="sig-name descname"><span class="pre">burn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_react/simulation.html#Simulation.burn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_react.simulation.Simulation.burn" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">burn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_react/simulation.html#Simulation.burn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_react.simulation.Simulation.burn" title="Permalink to this definition"></a></dt>
 <dd><p>react fuel to ash</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.compressible_react.simulation.Simulation.diffuse">
-<span class="sig-name descname"><span class="pre">diffuse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_react/simulation.html#Simulation.diffuse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_react.simulation.Simulation.diffuse" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">diffuse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_react/simulation.html#Simulation.diffuse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_react.simulation.Simulation.diffuse" title="Permalink to this definition"></a></dt>
 <dd><p>diffuse for dt</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.compressible_react.simulation.Simulation.dovis">
-<span class="sig-name descname"><span class="pre">dovis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_react/simulation.html#Simulation.dovis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_react.simulation.Simulation.dovis" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">dovis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_react/simulation.html#Simulation.dovis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_react.simulation.Simulation.dovis" title="Permalink to this definition"></a></dt>
 <dd><p>Do runtime visualization.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.compressible_react.simulation.Simulation.evolve">
-<span class="sig-name descname"><span class="pre">evolve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_react/simulation.html#Simulation.evolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_react.simulation.Simulation.evolve" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">evolve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_react/simulation.html#Simulation.evolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_react.simulation.Simulation.evolve" title="Permalink to this definition"></a></dt>
 <dd><p>Evolve the equations of compressible hydrodynamics through a
 timestep dt.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.compressible_react.simulation.Simulation.initialize">
-<span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_react/simulation.html#Simulation.initialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_react.simulation.Simulation.initialize" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_react/simulation.html#Simulation.initialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_react.simulation.Simulation.initialize" title="Permalink to this definition"></a></dt>
 <dd><p>For the reacting compressible solver, our initialization of
 the data is the same as the compressible solver, but we
 supply additional variables.</p>
@@ -237,7 +239,7 @@ supply additional variables.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, pyro development team.</p>
+    <p>&#169; Copyright 2023, pyro development team.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

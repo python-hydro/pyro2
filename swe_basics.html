@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shallow water solver &mdash; pyro 4.0.1.post20+gb2b5c5f documentation</title>
+  <title>Shallow water solver &mdash; pyro 4.0.1.post21+gbf48f286 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -14,6 +14,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -135,7 +137,7 @@
            <div itemprop="articleBody">
              
   <section id="shallow-water-solver">
-<h1>Shallow water solver<a class="headerlink" href="#shallow-water-solver" title="Permalink to this heading">¶</a></h1>
+<h1>Shallow water solver<a class="headerlink" href="#shallow-water-solver" title="Permalink to this heading"></a></h1>
 <p>The (augmented) shallow water equations take the form:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\frac{\partial h}{\partial t} + \nabla \cdot (h U) &amp;= 0 \\
@@ -217,9 +219,9 @@ passive scalar.</p>
 </li>
 </ul>
 <section id="example-problems">
-<h2>Example problems<a class="headerlink" href="#example-problems" title="Permalink to this heading">¶</a></h2>
+<h2>Example problems<a class="headerlink" href="#example-problems" title="Permalink to this heading"></a></h2>
 <section id="dam">
-<h3>dam<a class="headerlink" href="#dam" title="Permalink to this heading">¶</a></h3>
+<h3>dam<a class="headerlink" href="#dam" title="Permalink to this heading"></a></h3>
 <p>The dam break problem is a standard hydrodynamics problem, analagous to the Sod
 shock tube problem in compressible hydrodynamics. It considers a one-multidimensional
 problem of two regions of fluid at different heights, initially separated by a dam.
@@ -233,8 +235,8 @@ y-directions. It can be run as:</p>
 span.prompt1:before {
   content: "$ ";
 }
-</style><span class="prompt1">./pyro_sim.py<span class="w"> </span>swe<span class="w"> </span>dam<span class="w"> </span>inputs.dam.x</span>
-<span class="prompt1">./pyro_sim.py<span class="w"> </span>swe<span class="w"> </span>dam<span class="w"> </span>inputs.dam.y</span>
+</style><span class="prompt1">pyro_sim.py<span class="w"> </span>swe<span class="w"> </span>dam<span class="w"> </span>inputs.dam.x</span>
+<span class="prompt1">pyro_sim.py<span class="w"> </span>swe<span class="w"> </span>dam<span class="w"> </span>inputs.dam.y</span>
 </pre></div></div><p>A simple script, <code class="docutils literal notranslate"><span class="pre">dam_compare.py</span></code> in <code class="docutils literal notranslate"><span class="pre">analysis/</span></code> will read a pyro output
 file and plot the solution over the exact dam break solution (as given by
 <a class="reference external" href="https://doi.org/10.1063/1.3062689">Stoker (1958)</a> and
@@ -248,28 +250,28 @@ slightly better than the HLLC solver, with less smearing at the shock
 and head/tail of the rarefaction.</p>
 </section>
 <section id="quad">
-<h3>quad<a class="headerlink" href="#quad" title="Permalink to this heading">¶</a></h3>
+<h3>quad<a class="headerlink" href="#quad" title="Permalink to this heading"></a></h3>
 <p>The quad problem sets up different states in four regions of the
 domain and watches the complex interfaces that develop as shocks
 interact. This problem has appeared in several places (and a <a class="reference external" href="http://planets.utsc.utoronto.ca/~pawel/Riemann.hydro.html">detailed
 investigation</a> is
 online by Pawel Artymowicz). It is run as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./pyro_sim.py<span class="w"> </span>swe<span class="w"> </span>quad<span class="w"> </span>inputs.quad</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pyro_sim.py<span class="w"> </span>swe<span class="w"> </span>quad<span class="w"> </span>inputs.quad</span>
 </pre></div></div></section>
 <section id="kh">
-<h3>kh<a class="headerlink" href="#kh" title="Permalink to this heading">¶</a></h3>
+<h3>kh<a class="headerlink" href="#kh" title="Permalink to this heading"></a></h3>
 <p>The Kelvin-Helmholtz problem models three layers of fluid: two at the top and
 bottom of the domain travelling in one direction, one in the central part of the
 domain travelling in the opposite direction. At the interface of the layers,
 shearing produces the characteristic Kelvin-Helmholtz instabilities, just as
 is seen in the standard compressible problem. It is run as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./pyro_sim.py<span class="w"> </span>swe<span class="w"> </span>kh<span class="w"> </span>inputs.kh</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pyro_sim.py<span class="w"> </span>swe<span class="w"> </span>kh<span class="w"> </span>inputs.kh</span>
 </pre></div></div></section>
 </section>
 <section id="exercises">
-<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">¶</a></h2>
+<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading"></a></h2>
 <section id="explorations">
-<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this heading">¶</a></h3>
+<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>There are multiple Riemann solvers in the swe
 algorithm. Run the same problem with the different Riemann solvers
@@ -279,7 +281,7 @@ understand what is happening.</p></li>
 </ul>
 </section>
 <section id="extensions">
-<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading">¶</a></h3>
+<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Limit on the characteristic variables instead of the primitive
 variables. What changes do you see? (the notes show how to implement
@@ -301,7 +303,7 @@ this change.)</p></li>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, pyro development team.</p>
+    <p>&#169; Copyright 2023, pyro development team.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

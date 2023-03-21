@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mesh overview &mdash; pyro 4.0.1.post20+gb2b5c5f documentation</title>
+  <title>Mesh overview &mdash; pyro 4.0.1.post21+gbf48f286 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -14,6 +14,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -127,7 +129,7 @@
            <div itemprop="articleBody">
              
   <section id="mesh-overview">
-<h1>Mesh overview<a class="headerlink" href="#mesh-overview" title="Permalink to this heading">¶</a></h1>
+<h1>Mesh overview<a class="headerlink" href="#mesh-overview" title="Permalink to this heading"></a></h1>
 <p>All solvers are based on a finite-volume/cell-centered
 discretization. The basic theory of such methods is discussed in
 <a class="reference internal" href="notes.html#notes"><span class="std std-ref">Notes on the numerical methods</span></a>.</p>
@@ -141,7 +143,7 @@ higher-order methods, the <a class="reference internal" href="pyro.mesh.html#pyr
 methods for converting between the two data centerings.</p>
 </div>
 <section id="mesh-patch-implementation-and-use">
-<h2><a class="reference internal" href="pyro.mesh.html#module-pyro.mesh.patch" title="pyro.mesh.patch"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesh.patch</span></code></a> implementation and use<a class="headerlink" href="#mesh-patch-implementation-and-use" title="Permalink to this heading">¶</a></h2>
+<h2><a class="reference internal" href="pyro.mesh.html#module-pyro.mesh.patch" title="pyro.mesh.patch"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesh.patch</span></code></a> implementation and use<a class="headerlink" href="#mesh-patch-implementation-and-use" title="Permalink to this heading"></a></h2>
 <p>We import the basic mesh functionality as:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyro.mesh.patch</span> <span class="k">as</span> <span class="nn">patch</span>
 <span class="kn">import</span> <span class="nn">pyro.mesh.fv</span> <span class="k">as</span> <span class="nn">fv</span>
@@ -209,14 +211,14 @@ different actions for each variable (for example, some may do even
 reflection while others may do odd reflection).</p>
 </section>
 <section id="jupyter-notebook">
-<h2>Jupyter notebook<a class="headerlink" href="#jupyter-notebook" title="Permalink to this heading">¶</a></h2>
+<h2>Jupyter notebook<a class="headerlink" href="#jupyter-notebook" title="Permalink to this heading"></a></h2>
 <p>A Jupyter notebook that illustrates some of the basics of working with
 the grid is provided as <a class="reference external" href="https://github.com/python-hydro/pyro2/blob/main/mesh/mesh-examples.ipynb">mesh-examples.ipynb</a>. This will
 demonstrate, for example, how to use the <a class="reference internal" href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer" title="pyro.mesh.array_indexer.ArrayIndexer"><code class="xref py py-func docutils literal notranslate"><span class="pre">ArrayIndexer</span></code></a> methods to
 construct differences.</p>
 </section>
 <section id="tests">
-<h2>Tests<a class="headerlink" href="#tests" title="Permalink to this heading">¶</a></h2>
+<h2>Tests<a class="headerlink" href="#tests" title="Permalink to this heading"></a></h2>
 <p>The actual filling of the boundary conditions is done by the <a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.fill_BC" title="pyro.mesh.patch.CellCenterData2d.fill_BC"><code class="xref py py-func docutils literal notranslate"><span class="pre">fill_BC</span></code></a>
 method. The script <code class="docutils literal notranslate"><span class="pre">bc_demo.py</span></code> tests the various types of boundary
 conditions by initializing a small grid with sequential data, filling
@@ -235,7 +237,7 @@ the BCs, and printing out the results.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, pyro development team.</p>
+    <p>&#169; Copyright 2023, pyro development team.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

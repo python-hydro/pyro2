@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.advection_weno package &mdash; pyro 4.0.1.post20+gb2b5c5f documentation</title>
+  <title>pyro.advection_weno package &mdash; pyro 4.0.1.post21+gbf48f286 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -14,6 +14,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -156,7 +158,7 @@
            <div itemprop="articleBody">
              
   <section id="module-pyro.advection_weno">
-<span id="pyro-advection-weno-package"></span><h1>pyro.advection_weno package<a class="headerlink" href="#module-pyro.advection_weno" title="Permalink to this heading">¶</a></h1>
+<span id="pyro-advection-weno-package"></span><h1>pyro.advection_weno package<a class="headerlink" href="#module-pyro.advection_weno" title="Permalink to this heading"></a></h1>
 <p>The pyro advection solver.  This implements a finite difference
 Lax-Friedrichs flux split method with WENO reconstruction based on
 Shu’s review from 1998
@@ -181,7 +183,7 @@ although the notation more follows Gerolymos et al
 </li>
 </ul>
 <section id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading">¶</a></h2>
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pyro.advection_weno.problems.html">pyro.advection_weno.problems package</a><ul>
@@ -207,13 +209,13 @@ although the notation more follows Gerolymos et al
 </div>
 </section>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
 </section>
 <section id="module-pyro.advection_weno.fluxes">
-<span id="pyro-advection-weno-fluxes-module"></span><h2>pyro.advection_weno.fluxes module<a class="headerlink" href="#module-pyro.advection_weno.fluxes" title="Permalink to this heading">¶</a></h2>
+<span id="pyro-advection-weno-fluxes-module"></span><h2>pyro.advection_weno.fluxes module<a class="headerlink" href="#module-pyro.advection_weno.fluxes" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.advection_weno.fluxes.fluxes">
-<span class="sig-prename descclassname"><span class="pre">pyro.advection_weno.fluxes.</span></span><span class="sig-name descname"><span class="pre">fluxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection_weno/fluxes.html#fluxes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection_weno.fluxes.fluxes" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.advection_weno.fluxes.</span></span><span class="sig-name descname"><span class="pre">fluxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection_weno/fluxes.html#fluxes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection_weno.fluxes.fluxes" title="Permalink to this definition"></a></dt>
 <dd><p>Construct the fluxes through the interfaces for the linear advection
 equation</p>
 <div class="math notranslate nohighlight">
@@ -248,7 +250,7 @@ advecting</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.advection_weno.fluxes.fvs">
-<span class="sig-prename descclassname"><span class="pre">pyro.advection_weno.fluxes.</span></span><span class="sig-name descname"><span class="pre">fvs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection_weno/fluxes.html#fvs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection_weno.fluxes.fvs" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.advection_weno.fluxes.</span></span><span class="sig-name descname"><span class="pre">fvs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection_weno/fluxes.html#fvs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection_weno.fluxes.fvs" title="Permalink to this definition"></a></dt>
 <dd><p>Perform Flux-Vector-Split (LF) finite differencing using WENO in 1d.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -274,14 +276,14 @@ advecting</p>
 
 </section>
 <section id="module-pyro.advection_weno.simulation">
-<span id="pyro-advection-weno-simulation-module"></span><h2>pyro.advection_weno.simulation module<a class="headerlink" href="#module-pyro.advection_weno.simulation" title="Permalink to this heading">¶</a></h2>
+<span id="pyro-advection-weno-simulation-module"></span><h2>pyro.advection_weno.simulation module<a class="headerlink" href="#module-pyro.advection_weno.simulation" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyro.advection_weno.simulation.Simulation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.advection_weno.simulation.</span></span><span class="sig-name descname"><span class="pre">Simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timers=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_class=&lt;class</span> <span class="pre">'pyro.mesh.patch.CellCenterData2d'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection_weno/simulation.html#Simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection_weno.simulation.Simulation" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.advection_weno.simulation.</span></span><span class="sig-name descname"><span class="pre">Simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timers=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_class=&lt;class</span> <span class="pre">'pyro.mesh.patch.CellCenterData2d'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection_weno/simulation.html#Simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection_weno.simulation.Simulation" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="pyro.advection.html#pyro.advection.simulation.Simulation" title="pyro.advection.simulation.Simulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Simulation</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.advection_weno.simulation.Simulation.evolve">
-<span class="sig-name descname"><span class="pre">evolve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection_weno/simulation.html#Simulation.evolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection_weno.simulation.Simulation.evolve" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">evolve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection_weno/simulation.html#Simulation.evolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection_weno.simulation.Simulation.evolve" title="Permalink to this definition"></a></dt>
 <dd><p>Evolve the linear advection equation through one timestep.  We only
 consider the “density” variable in the CellCenterData2d object that
 is part of the Simulation.</p>
@@ -289,7 +291,7 @@ is part of the Simulation.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.advection_weno.simulation.Simulation.method_compute_timestep">
-<span class="sig-name descname"><span class="pre">method_compute_timestep</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection_weno/simulation.html#Simulation.method_compute_timestep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection_weno.simulation.Simulation.method_compute_timestep" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">method_compute_timestep</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection_weno/simulation.html#Simulation.method_compute_timestep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection_weno.simulation.Simulation.method_compute_timestep" title="Permalink to this definition"></a></dt>
 <dd><p>Compute the advective timestep (CFL) constraint.  We use the
 driver.cfl parameter to control what fraction of the CFL
 step we actually take.</p>
@@ -297,7 +299,7 @@ step we actually take.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.advection_weno.simulation.Simulation.substep">
-<span class="sig-name descname"><span class="pre">substep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">myd</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection_weno/simulation.html#Simulation.substep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection_weno.simulation.Simulation.substep" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">substep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">myd</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection_weno/simulation.html#Simulation.substep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection_weno.simulation.Simulation.substep" title="Permalink to this definition"></a></dt>
 <dd><p>take a single substep in the RK timestepping starting with the
 conservative state defined as part of myd</p>
 </dd></dl>
@@ -318,7 +320,7 @@ conservative state defined as part of myd</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, pyro development team.</p>
+    <p>&#169; Copyright 2023, pyro development team.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

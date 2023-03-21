@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Incompressible hydrodynamics solver &mdash; pyro 4.0.1.post20+gb2b5c5f documentation</title>
+  <title>Incompressible hydrodynamics solver &mdash; pyro 4.0.1.post21+gbf48f286 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -14,6 +14,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -135,7 +137,7 @@
            <div itemprop="articleBody">
              
   <section id="incompressible-hydrodynamics-solver">
-<h1>Incompressible hydrodynamics solver<a class="headerlink" href="#incompressible-hydrodynamics-solver" title="Permalink to this heading">¶</a></h1>
+<h1>Incompressible hydrodynamics solver<a class="headerlink" href="#incompressible-hydrodynamics-solver" title="Permalink to this heading"></a></h1>
 <p>pyro’s incompressible solver solves:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\frac{\partial U}{\partial t} + U \cdot \nabla U + \nabla p &amp;= 0 \\
@@ -206,9 +208,9 @@ are supported.</p>
 </li>
 </ul>
 <section id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">¶</a></h2>
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
 <section id="shear">
-<h3>shear<a class="headerlink" href="#shear" title="Permalink to this heading">¶</a></h3>
+<h3>shear<a class="headerlink" href="#shear" title="Permalink to this heading"></a></h3>
 <p>The shear problem initializes a shear layer in a domain with
 doubly-periodic boundaries and looks at the development of two
 vortices as the shear layer rolls up. This problem was explored in a
@@ -218,14 +220,14 @@ number of papers, for example, Bell, Colella, &amp; Glaz (1989) and Martin
 span.prompt1:before {
   content: "$ ";
 }
-</style><span class="prompt1">./pyro_sim.py<span class="w"> </span>incompressible<span class="w"> </span>shear<span class="w"> </span>inputs.shear</span>
+</style><span class="prompt1">pyro_sim.py<span class="w"> </span>incompressible<span class="w"> </span>shear<span class="w"> </span>inputs.shear</span>
 </pre></div></div><img alt="_images/shear.png" class="align-center" src="_images/shear.png" />
 <p>The vorticity panel (lower left) is what is usually shown in
 papers. Note that the velocity divergence is not zero—this is because
 we are using an approximate projection.</p>
 </section>
 <section id="convergence">
-<h3>convergence<a class="headerlink" href="#convergence" title="Permalink to this heading">¶</a></h3>
+<h3>convergence<a class="headerlink" href="#convergence" title="Permalink to this heading"></a></h3>
 <p>The convergence test initializes a simple velocity field on a periodic
 unit square with known analytic solution. By evolving at a variety of
 resolutions and comparing to the analytic solution, we can measure the
@@ -233,9 +235,9 @@ convergence rate of the algorithm. The particular set of initial
 conditions is from Minion (1996). Limiting can be disabled by adding
 <code class="docutils literal notranslate"><span class="pre">incompressible.limiter=0</span></code> to the run command. The basic set of tests
 shown below are run as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./pyro_sim.py<span class="w"> </span>incompressible<span class="w"> </span>converge<span class="w"> </span>inputs.converge.32<span class="w"> </span>vis.dovis<span class="o">=</span><span class="m">0</span></span>
-<span class="prompt1">./pyro_sim.py<span class="w"> </span>incompressible<span class="w"> </span>converge<span class="w"> </span>inputs.converge.64<span class="w"> </span>vis.dovis<span class="o">=</span><span class="m">0</span></span>
-<span class="prompt1">./pyro_sim.py<span class="w"> </span>incompressible<span class="w"> </span>converge<span class="w"> </span>inputs.converge.128<span class="w"> </span>vis.dovis<span class="o">=</span><span class="m">0</span></span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pyro_sim.py<span class="w"> </span>incompressible<span class="w"> </span>converge<span class="w"> </span>inputs.converge.32<span class="w"> </span>vis.dovis<span class="o">=</span><span class="m">0</span></span>
+<span class="prompt1">pyro_sim.py<span class="w"> </span>incompressible<span class="w"> </span>converge<span class="w"> </span>inputs.converge.64<span class="w"> </span>vis.dovis<span class="o">=</span><span class="m">0</span></span>
+<span class="prompt1">pyro_sim.py<span class="w"> </span>incompressible<span class="w"> </span>converge<span class="w"> </span>inputs.converge.128<span class="w"> </span>vis.dovis<span class="o">=</span><span class="m">0</span></span>
 </pre></div></div><p>The error is measured by comparing with the analytic solution using
 the routine <code class="docutils literal notranslate"><span class="pre">incomp_converge_error.py</span></code> in <code class="docutils literal notranslate"><span class="pre">analysis/</span></code>.</p>
 <img alt="_images/incomp_converge.png" class="align-center" src="_images/incomp_converge.png" />
@@ -245,9 +247,9 @@ second order with no limiting.</p>
 </section>
 </section>
 <section id="exercises">
-<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">¶</a></h2>
+<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading"></a></h2>
 <section id="explorations">
-<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this heading">¶</a></h3>
+<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Disable the MAC projection and run the converge problem—is the method still 2nd order?</p></li>
 <li><p>Disable all projections—does the solution still even try to preserve <span class="math notranslate nohighlight">\(\nabla \cdot U = 0\)</span>?</p></li>
@@ -255,7 +257,7 @@ second order with no limiting.</p>
 </ul>
 </section>
 <section id="extensions">
-<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading">¶</a></h3>
+<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Switch the final projection from a cell-centered approximate
 projection to a nodal projection. This will require writing a new
@@ -271,7 +273,7 @@ to a variable-coeffient form (since ρ now enters).</p></li>
 </section>
 </section>
 <section id="going-further">
-<h2>Going further<a class="headerlink" href="#going-further" title="Permalink to this heading">¶</a></h2>
+<h2>Going further<a class="headerlink" href="#going-further" title="Permalink to this heading"></a></h2>
 <p>The incompressible algorithm presented here is a simplified version of
 the projection methods used in the <a class="reference external" href="http://amrex-astro.github.io/MAESTRO/">Maestro low Mach number
 hydrodynamics code</a>. Maestro
@@ -292,7 +294,7 @@ hydrostatic equilibrium.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, pyro development team.</p>
+    <p>&#169; Copyright 2023, pyro development team.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

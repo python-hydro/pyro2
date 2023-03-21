@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mesh examples &mdash; pyro 4.0.1.post20+gb2b5c5f documentation</title>
+  <title>Mesh examples &mdash; pyro 4.0.1.post21+gbf48f286 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -15,6 +15,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -130,7 +132,7 @@
            <div itemprop="articleBody">
              
   <section id="Mesh-examples">
-<h1>Mesh examples<a class="headerlink" href="#Mesh-examples" title="Permalink to this heading">¶</a></h1>
+<h1>Mesh examples<a class="headerlink" href="#Mesh-examples" title="Permalink to this heading"></a></h1>
 <p>this notebook illustrates the basic ways of interacting with the pyro2 mesh module. We create some data that lives on a grid and show how to fill the ghost cells. The pretty_print() function shows us that they work as expected.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -149,7 +151,7 @@
 </div>
 </div>
 <section id="Setup-a-Grid-with-Variables">
-<h2>Setup a Grid with Variables<a class="headerlink" href="#Setup-a-Grid-with-Variables" title="Permalink to this heading">¶</a></h2>
+<h2>Setup a Grid with Variables<a class="headerlink" href="#Setup-a-Grid-with-Variables" title="Permalink to this heading"></a></h2>
 <p>There are a few core classes that we deal with when creating a grid with associated variables:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">Grid2d</span></code> : this holds the size of the grid (in zones) and the physical coordinate information, including coordinates of cell edges and centers</p></li>
@@ -317,7 +319,7 @@ cc data: nx = 4, ny = 6, ng = 2
 </div>
 </section>
 <section id="Working-with-the-data">
-<h2>Working with the data<a class="headerlink" href="#Working-with-the-data" title="Permalink to this heading">¶</a></h2>
+<h2>Working with the data<a class="headerlink" href="#Working-with-the-data" title="Permalink to this heading"></a></h2>
 <p>Now we fill the grid with random data. <code class="docutils literal notranslate"><span class="pre">get_var()</span></code> returns an <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> object that has methods for accessing views into the data. Here we use <code class="docutils literal notranslate"><span class="pre">a.v()</span></code> to get the “valid” region, i.e. excluding ghost cells.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
@@ -459,7 +461,7 @@ cc data: nx = 4, ny = 6, ng = 2
 </div>
 </section>
 <section id="ArrayIndexer">
-<h2><code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code><a class="headerlink" href="#ArrayIndexer" title="Permalink to this heading">¶</a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code><a class="headerlink" href="#ArrayIndexer" title="Permalink to this heading"></a></h2>
 <p>We we access the data, an <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> object is returned. The <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> sub-classes the NumPy <code class="docutils literal notranslate"><span class="pre">ndarray</span></code>, so it can do all of the methods that a NumPy array can, but in addition, we can use the <code class="docutils literal notranslate"><span class="pre">ip()</span></code>, <code class="docutils literal notranslate"><span class="pre">jp()</span></code>, or <code class="docutils literal notranslate"><span class="pre">ip_jp()</span></code> methods to the <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> object shift our view in the x, y, or x &amp; y directions.</p>
 <p>To make this clearer, we’ll change our data set to be nicely ordered numbers. We index the <code class="docutils literal notranslate"><span class="pre">ArrayIndex</span></code> the same way we would a NumPy array. The index space includes ghost cells, so the <code class="docutils literal notranslate"><span class="pre">ilo</span></code> and <code class="docutils literal notranslate"><span class="pre">ihi</span></code> attributes from the grid object are useful to index just the valid region. The <code class="docutils literal notranslate"><span class="pre">.v()</span></code> method is a shortcut that also gives a view into just the valid data.</p>
 <p>Note: when we use one of the <code class="docutils literal notranslate"><span class="pre">ip()</span></code>, <code class="docutils literal notranslate"><span class="pre">jp()</span></code>, <code class="docutils literal notranslate"><span class="pre">ip_jp()</span></code>, or <code class="docutils literal notranslate"><span class="pre">v()</span></code> methods, the result is a regular NumPy <code class="docutils literal notranslate"><span class="pre">ndarray</span></code>, not an <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> object. This is because it only spans part of the domain (e.g., no ghost cells), and therefore cannot be associated with the <code class="docutils literal notranslate"><span class="pre">Grid2d</span></code> object that the <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> is built from.</p>
@@ -616,7 +618,7 @@ array([[ 1.,  2.,  3.,  4.,  5.,  6.,  7.,  8.],
 <p>Here, since d was really a view into <span class="math notranslate nohighlight">\(a_{i+1,j}\)</span>, and we accessed element (1,1) into that view (with 0,0 as the origin), we were really accessing the element (2,1) in the valid region</p>
 </section>
 <section id="Differencing">
-<h2>Differencing<a class="headerlink" href="#Differencing" title="Permalink to this heading">¶</a></h2>
+<h2>Differencing<a class="headerlink" href="#Differencing" title="Permalink to this heading"></a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> objects are easy to use to construct differences, like those that appear in a stencil for a finite-difference, without having to explicitly loop over the elements of the array.</p>
 <p>Here’s we’ll create a new dataset that is initialized with a sine function</p>
 <div class="nbinput nblast docutils container">
@@ -693,7 +695,7 @@ pyro.mesh.array_indexer.ArrayIndexer
 </div>
 </section>
 <section id="Coarsening-and-prolonging">
-<h2>Coarsening and prolonging<a class="headerlink" href="#Coarsening-and-prolonging" title="Permalink to this heading">¶</a></h2>
+<h2>Coarsening and prolonging<a class="headerlink" href="#Coarsening-and-prolonging" title="Permalink to this heading"></a></h2>
 <p>we can get a new <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> object on a coarser grid for one of our variables</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
@@ -810,7 +812,7 @@ pyro.mesh.array_indexer.ArrayIndexer
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, pyro development team.</p>
+    <p>&#169; Copyright 2023, pyro development team.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

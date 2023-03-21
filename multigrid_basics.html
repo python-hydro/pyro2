@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Multigrid solvers &mdash; pyro 4.0.1.post20+gb2b5c5f documentation</title>
+  <title>Multigrid solvers &mdash; pyro 4.0.1.post21+gbf48f286 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -14,6 +14,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -134,7 +136,7 @@
            <div itemprop="articleBody">
              
   <section id="multigrid-solvers">
-<h1>Multigrid solvers<a class="headerlink" href="#multigrid-solvers" title="Permalink to this heading">¶</a></h1>
+<h1>Multigrid solvers<a class="headerlink" href="#multigrid-solvers" title="Permalink to this heading"></a></h1>
 <p>pyro solves elliptic problems (like Laplace’s equation or Poisson’s
 equation) through multigrid. This accelerates the convergence of
 simple relaxation by moving the solution down and up through a series
@@ -160,9 +162,9 @@ there is no time-dependence in pure elliptic problems. Instead, there
 are a few scripts in the multigrid/ subdirectory that demonstrate its
 use.</p>
 <section id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">¶</a></h2>
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
 <section id="multigrid-test">
-<h3>multigrid test<a class="headerlink" href="#multigrid-test" title="Permalink to this heading">¶</a></h3>
+<h3>multigrid test<a class="headerlink" href="#multigrid-test" title="Permalink to this heading"></a></h3>
 <p>A basic multigrid test is run as (using a path relative to the root of the
 <code class="docutils literal notranslate"><span class="pre">pyro2</span></code> repository):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
@@ -193,7 +195,7 @@ analytic solution. This is shown below:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./pyro/multigrid/examples/mg_vis.py</span>
 </pre></div></div></section>
 <section id="projection">
-<h3>projection<a class="headerlink" href="#projection" title="Permalink to this heading">¶</a></h3>
+<h3>projection<a class="headerlink" href="#projection" title="Permalink to this heading"></a></h3>
 <p>Another example uses multigrid to extract the divergence free part of a velocity
 field.  This is run as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">./pyro/multigrid/examples/project_periodic.py</span>
@@ -213,9 +215,9 @@ results are shown below:</p>
 </section>
 </section>
 <section id="exercises">
-<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">¶</a></h2>
+<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading"></a></h2>
 <section id="explorations">
-<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this heading">¶</a></h3>
+<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Try doing just smoothing, no multigrid. Show that it still converges
 second order if you use enough iterations, but that the amount of
@@ -223,7 +225,7 @@ time needed to get a solution is much greater.</p></li>
 </ul>
 </section>
 <section id="extensions">
-<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading">¶</a></h3>
+<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Implement inhomogeneous dirichlet boundary conditions</p></li>
 <li><p>Add a different bottom solver to the multigrid algorithm</p></li>
@@ -244,7 +246,7 @@ time needed to get a solution is much greater.</p></li>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, pyro development team.</p>
+    <p>&#169; Copyright 2023, pyro development team.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

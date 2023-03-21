@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Multigrid examples &mdash; pyro 4.0.1.post20+gb2b5c5f documentation</title>
+  <title>Multigrid examples &mdash; pyro 4.0.1.post21+gbf48f286 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -15,6 +15,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -127,7 +129,7 @@
            <div itemprop="articleBody">
              
   <section id="Multigrid-examples">
-<h1>Multigrid examples<a class="headerlink" href="#Multigrid-examples" title="Permalink to this heading">¶</a></h1>
+<h1>Multigrid examples<a class="headerlink" href="#Multigrid-examples" title="Permalink to this heading"></a></h1>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -152,7 +154,7 @@
 </div>
 </div>
 <section id="Constant-coefficent-Poisson-equation">
-<h2>Constant-coefficent Poisson equation<a class="headerlink" href="#Constant-coefficent-Poisson-equation" title="Permalink to this heading">¶</a></h2>
+<h2>Constant-coefficent Poisson equation<a class="headerlink" href="#Constant-coefficent-Poisson-equation" title="Permalink to this heading"></a></h2>
 <p>We want to solve</p>
 <div class="math notranslate nohighlight">
 \[\phi_{xx} + \phi_{yy} = -2[(1-6x^2)y^2(1-y^2) + (1-6y^2)x^2(1-x^2)]\]</div>
@@ -773,7 +775,7 @@ cycle 7: relative err = 7.062255558417692e-07, residual err = 2.590386214782638e
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.image.AxesImage at 0x7fb1086311e0&gt;
+&lt;matplotlib.image.AxesImage at 0x7ff1f9b39990&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -809,7 +811,7 @@ cycle 7: relative err = 7.062255558417692e-07, residual err = 2.590386214782638e
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.image.AxesImage at 0x7fb1083755a0&gt;
+&lt;matplotlib.image.AxesImage at 0x7ff1f9951f00&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -821,7 +823,7 @@ cycle 7: relative err = 7.062255558417692e-07, residual err = 2.590386214782638e
 </div>
 </section>
 <section id="General-linear-elliptic-equation">
-<h2>General linear elliptic equation<a class="headerlink" href="#General-linear-elliptic-equation" title="Permalink to this heading">¶</a></h2>
+<h2>General linear elliptic equation<a class="headerlink" href="#General-linear-elliptic-equation" title="Permalink to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">GeneralMG2d</span></code> class implements support for a general elliptic equation of the form:</p>
 <div class="math notranslate nohighlight">
 \[\alpha \phi + \nabla \cdot (\beta \nabla \phi) + \gamma \cdot \nabla \phi = f\]</div>
@@ -1618,7 +1620,7 @@ cycle 8: relative err = 5.555103471809045e-11, residual err = 1.5080864047010877
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, pyro development team.</p>
+    <p>&#169; Copyright 2023, pyro development team.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

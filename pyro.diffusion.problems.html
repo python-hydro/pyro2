@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.diffusion.problems package &mdash; pyro 4.0.1.post20+gb2b5c5f documentation</title>
+  <title>pyro.diffusion.problems package &mdash; pyro 4.0.1.post21+gbf48f286 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -14,6 +14,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -155,42 +157,42 @@
            <div itemprop="articleBody">
              
   <section id="module-pyro.diffusion.problems">
-<span id="pyro-diffusion-problems-package"></span><h1>pyro.diffusion.problems package<a class="headerlink" href="#module-pyro.diffusion.problems" title="Permalink to this heading">¶</a></h1>
+<span id="pyro-diffusion-problems-package"></span><h1>pyro.diffusion.problems package<a class="headerlink" href="#module-pyro.diffusion.problems" title="Permalink to this heading"></a></h1>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
 </section>
 <section id="module-pyro.diffusion.problems.gaussian">
-<span id="pyro-diffusion-problems-gaussian-module"></span><h2>pyro.diffusion.problems.gaussian module<a class="headerlink" href="#module-pyro.diffusion.problems.gaussian" title="Permalink to this heading">¶</a></h2>
+<span id="pyro-diffusion-problems-gaussian-module"></span><h2>pyro.diffusion.problems.gaussian module<a class="headerlink" href="#module-pyro.diffusion.problems.gaussian" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.diffusion.problems.gaussian.finalize">
-<span class="sig-prename descclassname"><span class="pre">pyro.diffusion.problems.gaussian.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/diffusion/problems/gaussian.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.diffusion.problems.gaussian.finalize" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.diffusion.problems.gaussian.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/diffusion/problems/gaussian.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.diffusion.problems.gaussian.finalize" title="Permalink to this definition"></a></dt>
 <dd><p>print out any information to the user at the end of the run</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.diffusion.problems.gaussian.init_data">
-<span class="sig-prename descclassname"><span class="pre">pyro.diffusion.problems.gaussian.</span></span><span class="sig-name descname"><span class="pre">init_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/diffusion/problems/gaussian.html#init_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.diffusion.problems.gaussian.init_data" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.diffusion.problems.gaussian.</span></span><span class="sig-name descname"><span class="pre">init_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/diffusion/problems/gaussian.html#init_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.diffusion.problems.gaussian.init_data" title="Permalink to this definition"></a></dt>
 <dd><p>initialize the Gaussian diffusion problem</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.diffusion.problems.gaussian.phi_analytic">
-<span class="sig-prename descclassname"><span class="pre">pyro.diffusion.problems.gaussian.</span></span><span class="sig-name descname"><span class="pre">phi_analytic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi_2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/diffusion/problems/gaussian.html#phi_analytic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.diffusion.problems.gaussian.phi_analytic" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.diffusion.problems.gaussian.</span></span><span class="sig-name descname"><span class="pre">phi_analytic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi_2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/diffusion/problems/gaussian.html#phi_analytic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.diffusion.problems.gaussian.phi_analytic" title="Permalink to this definition"></a></dt>
 <dd><p>the analytic solution to the Gaussian diffusion problem</p>
 </dd></dl>
 
 </section>
 <section id="module-pyro.diffusion.problems.test">
-<span id="pyro-diffusion-problems-test-module"></span><h2>pyro.diffusion.problems.test module<a class="headerlink" href="#module-pyro.diffusion.problems.test" title="Permalink to this heading">¶</a></h2>
+<span id="pyro-diffusion-problems-test-module"></span><h2>pyro.diffusion.problems.test module<a class="headerlink" href="#module-pyro.diffusion.problems.test" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.diffusion.problems.test.finalize">
-<span class="sig-prename descclassname"><span class="pre">pyro.diffusion.problems.test.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/diffusion/problems/test.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.diffusion.problems.test.finalize" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.diffusion.problems.test.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/diffusion/problems/test.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.diffusion.problems.test.finalize" title="Permalink to this definition"></a></dt>
 <dd><p>print out any information to the user at the end of the run</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.diffusion.problems.test.init_data">
-<span class="sig-prename descclassname"><span class="pre">pyro.diffusion.problems.test.</span></span><span class="sig-name descname"><span class="pre">init_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/diffusion/problems/test.html#init_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.diffusion.problems.test.init_data" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.diffusion.problems.test.</span></span><span class="sig-name descname"><span class="pre">init_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/diffusion/problems/test.html#init_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.diffusion.problems.test.init_data" title="Permalink to this definition"></a></dt>
 <dd><p>an init routine for unit testing</p>
 </dd></dl>
 
@@ -208,7 +210,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, pyro development team.</p>
+    <p>&#169; Copyright 2023, pyro development team.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

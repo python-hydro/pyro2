@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.particles package &mdash; pyro 4.0.1.post20+gb2b5c5f documentation</title>
+  <title>pyro.particles package &mdash; pyro 4.0.1.post21+gbf48f286 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -14,6 +14,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -154,25 +156,25 @@
            <div itemprop="articleBody">
              
   <section id="module-pyro.particles">
-<span id="pyro-particles-package"></span><h1>pyro.particles package<a class="headerlink" href="#module-pyro.particles" title="Permalink to this heading">¶</a></h1>
+<span id="pyro-particles-package"></span><h1>pyro.particles package<a class="headerlink" href="#module-pyro.particles" title="Permalink to this heading"></a></h1>
 <p>Particles routines</p>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
 </section>
 <section id="module-pyro.particles.particles">
-<span id="pyro-particles-particles-module"></span><h2>pyro.particles.particles module<a class="headerlink" href="#module-pyro.particles.particles" title="Permalink to this heading">¶</a></h2>
+<span id="pyro-particles-particles-module"></span><h2>pyro.particles.particles module<a class="headerlink" href="#module-pyro.particles.particles" title="Permalink to this heading"></a></h2>
 <p>Stores and manages particles and updates their positions based
 on the velocity on the grid.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyro.particles.particles.Particle">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.particles.particles.</span></span><span class="sig-name descname"><span class="pre">Particle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particle" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.particles.particles.</span></span><span class="sig-name descname"><span class="pre">Particle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particle" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class to hold properties of a single (massless) particle.</p>
 <p>This class could be extended (i.e. inherited from) to
 model e.g. massive/charged particles.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.particles.particles.Particle.interpolate_velocity">
-<span class="sig-name descname"><span class="pre">interpolate_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">myg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particle.interpolate_velocity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particle.interpolate_velocity" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">interpolate_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">myg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particle.interpolate_velocity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particle.interpolate_velocity" title="Permalink to this definition"></a></dt>
 <dd><p>Interpolate the x- and y-velocities defined on grid myg to the
 particle’s position.</p>
 <dl class="field-list simple">
@@ -191,19 +193,19 @@ particle’s position.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.particles.particles.Particle.pos">
-<span class="sig-name descname"><span class="pre">pos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particle.pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particle.pos" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particle.pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particle.pos" title="Permalink to this definition"></a></dt>
 <dd><p>Return position vector.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.particles.particles.Particle.update">
-<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particle.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particle.update" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particle.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particle.update" title="Permalink to this definition"></a></dt>
 <dd><p>Advect the particle and update its velocity.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.particles.particles.Particle.velocity">
-<span class="sig-name descname"><span class="pre">velocity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particle.velocity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particle.velocity" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">velocity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particle.velocity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particle.velocity" title="Permalink to this definition"></a></dt>
 <dd><p>Return velocity vector.</p>
 </dd></dl>
 
@@ -211,12 +213,12 @@ particle’s position.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pyro.particles.particles.Particles">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.particles.particles.</span></span><span class="sig-name descname"><span class="pre">Particles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_particles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle_generator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'grid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_array</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_array</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particles" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.particles.particles.</span></span><span class="sig-name descname"><span class="pre">Particles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_particles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle_generator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'grid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_array</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_array</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particles" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class to hold multiple particles.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.particles.particles.Particles.array_generate_particles">
-<span class="sig-name descname"><span class="pre">array_generate_particles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos_array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_array</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particles.array_generate_particles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particles.array_generate_particles" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">array_generate_particles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos_array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_array</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particles.array_generate_particles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particles.array_generate_particles" title="Permalink to this definition"></a></dt>
 <dd><p>Generate particles based on array of their positions. This is used
 when reading particle data from file.</p>
 <dl class="field-list simple">
@@ -233,7 +235,7 @@ when reading particle data from file.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.particles.particles.Particles.enforce_particle_boundaries">
-<span class="sig-name descname"><span class="pre">enforce_particle_boundaries</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particles.enforce_particle_boundaries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particles.enforce_particle_boundaries" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">enforce_particle_boundaries</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particles.enforce_particle_boundaries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particles.enforce_particle_boundaries" title="Permalink to this definition"></a></dt>
 <dd><p>Enforce the particle boundaries</p>
 <p>TODO: copying the dict and adding everything back again is messy
 - think of a better way to do this? Did it this way so don’t have
@@ -243,7 +245,7 @@ boundaries.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.particles.particles.Particles.get_init_positions">
-<span class="sig-name descname"><span class="pre">get_init_positions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particles.get_init_positions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particles.get_init_positions" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_init_positions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particles.get_init_positions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particles.get_init_positions" title="Permalink to this definition"></a></dt>
 <dd><p>Return initial positions of the particles as an array.</p>
 <p>We defined the particles as a dictionary with their initial positions
 as the keys, so this just becomes a restructuring operation.</p>
@@ -251,13 +253,13 @@ as the keys, so this just becomes a restructuring operation.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.particles.particles.Particles.get_positions">
-<span class="sig-name descname"><span class="pre">get_positions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particles.get_positions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particles.get_positions" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_positions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particles.get_positions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particles.get_positions" title="Permalink to this definition"></a></dt>
 <dd><p>Return an array of current particle positions.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.particles.particles.Particles.grid_generate_particles">
-<span class="sig-name descname"><span class="pre">grid_generate_particles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_particles</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particles.grid_generate_particles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particles.grid_generate_particles" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">grid_generate_particles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_particles</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particles.grid_generate_particles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particles.grid_generate_particles" title="Permalink to this definition"></a></dt>
 <dd><p>Generate particles equally spaced across the grid.
 Currently has the same number of particles in the x and y
 directions (so dx != dy unless the domain is square) -
@@ -268,13 +270,13 @@ in order to fill grid.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.particles.particles.Particles.randomly_generate_particles">
-<span class="sig-name descname"><span class="pre">randomly_generate_particles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_particles</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particles.randomly_generate_particles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particles.randomly_generate_particles" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">randomly_generate_particles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_particles</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particles.randomly_generate_particles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particles.randomly_generate_particles" title="Permalink to this definition"></a></dt>
 <dd><p>Randomly generate n_particles.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.particles.particles.Particles.update_particles">
-<span class="sig-name descname"><span class="pre">update_particles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particles.update_particles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particles.update_particles" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">update_particles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particles.update_particles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particles.update_particles" title="Permalink to this definition"></a></dt>
 <dd><p>Update the particles on the grid. This is based off the
 <code class="docutils literal notranslate"><span class="pre">AdvectWithUcc</span></code> function in AMReX, which used the midpoint
 method to advance particles using the cell-centered velocity.</p>
@@ -296,7 +298,7 @@ method to advance particles using the cell-centered velocity.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.particles.particles.Particles.write_particles">
-<span class="sig-name descname"><span class="pre">write_particles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particles.write_particles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particles.write_particles" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">write_particles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/particles/particles.html#Particles.write_particles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.particles.particles.Particles.write_particles" title="Permalink to this definition"></a></dt>
 <dd><p>Output the particles’ positions (and initial positions) to an HDF5 file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -324,7 +326,7 @@ method to advance particles using the cell-centered velocity.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, pyro development team.</p>
+    <p>&#169; Copyright 2023, pyro development team.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

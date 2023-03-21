@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Diffusion &mdash; pyro 4.0.1.post20+gb2b5c5f documentation</title>
+  <title>Diffusion &mdash; pyro 4.0.1.post21+gbf48f286 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -14,6 +14,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -133,7 +135,7 @@
            <div itemprop="articleBody">
              
   <section id="diffusion">
-<h1>Diffusion<a class="headerlink" href="#diffusion" title="Permalink to this heading">¶</a></h1>
+<h1>Diffusion<a class="headerlink" href="#diffusion" title="Permalink to this heading"></a></h1>
 <p>pyro solves the constant-conductivity diffusion equation:</p>
 <div class="math notranslate nohighlight">
 \[\frac{\partial \phi}{\partial t} = k \nabla^2 \phi\]</div>
@@ -177,9 +179,9 @@ multigrid class. The main parameters that affect this solver are:</p>
 </li>
 </ul>
 <section id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">¶</a></h2>
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
 <section id="gaussian">
-<h3>gaussian<a class="headerlink" href="#gaussian" title="Permalink to this heading">¶</a></h3>
+<h3>gaussian<a class="headerlink" href="#gaussian" title="Permalink to this heading"></a></h3>
 <p>The gaussian problem initializes a strongly peaked Gaussian centered
 in the domain. The analytic solution for this shows that the profile
 remains a Gaussian, with a changing width and peak. This allows us to
@@ -188,7 +190,7 @@ compare our solver to the analytic solution. This is run as:</p>
 span.prompt1:before {
   content: "$ ";
 }
-</style><span class="prompt1">./pyro_sim.py<span class="w"> </span>diffusion<span class="w"> </span>gaussian<span class="w"> </span>inputs.gaussian</span>
+</style><span class="prompt1">pyro_sim.py<span class="w"> </span>diffusion<span class="w"> </span>gaussian<span class="w"> </span>inputs.gaussian</span>
 </pre></div></div><img alt="_images/gauss_diffusion.png" class="align-center" src="_images/gauss_diffusion.png" />
 <p>The above figure shows the scalar field after diffusing significantly
 from its initial strongly peaked state. We can compare to the analytic
@@ -200,12 +202,12 @@ restricted in range to bring out the detail at later times.</p>
 </section>
 </section>
 <section id="exercises">
-<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">¶</a></h2>
+<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading"></a></h2>
 <p>The best way to learn these methods is to play with them yourself. The
 exercises below are suggestions for explorations and features to add
 to the advection solver.</p>
 <section id="explorations">
-<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this heading">¶</a></h3>
+<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Test the convergence of the solver by varying the resolution and
 comparing to the analytic solution.</p></li>
@@ -215,7 +217,7 @@ well above 1?</p></li>
 </ul>
 </section>
 <section id="extensions">
-<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading">¶</a></h3>
+<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Switch from Crank-Nicolson (2nd order in time) to backward’s Euler
 (1st order in time) and compare the solution and convergence. This
@@ -240,7 +242,7 @@ will require improving the multigrid solver.</p></li>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, pyro development team.</p>
+    <p>&#169; Copyright 2023, pyro development team.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

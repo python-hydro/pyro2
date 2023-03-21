@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Low Mach number hydrodynamics solver &mdash; pyro 4.0.1.post20+gb2b5c5f documentation</title>
+  <title>Low Mach number hydrodynamics solver &mdash; pyro 4.0.1.post21+gbf48f286 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -14,6 +14,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -128,7 +130,7 @@
            <div itemprop="articleBody">
              
   <section id="low-mach-number-hydrodynamics-solver">
-<h1>Low Mach number hydrodynamics solver<a class="headerlink" href="#low-mach-number-hydrodynamics-solver" title="Permalink to this heading">¶</a></h1>
+<h1>Low Mach number hydrodynamics solver<a class="headerlink" href="#low-mach-number-hydrodynamics-solver" title="Permalink to this heading"></a></h1>
 <p>pyro’s low Mach hydrodynamics solver is designed for atmospheric
 flows. It captures the effects of stratification on a fluid element by
 enforcing a divergence constraint on the velocity field.  The
@@ -199,9 +201,9 @@ governing equations are:</p>
 </li>
 </ul>
 <section id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">¶</a></h2>
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
 <section id="bubble">
-<h3>bubble<a class="headerlink" href="#bubble" title="Permalink to this heading">¶</a></h3>
+<h3>bubble<a class="headerlink" href="#bubble" title="Permalink to this heading"></a></h3>
 <p>The bubble problem places a buoyant bubble in a stratified atmosphere
 and watches the development of the roll-up due to shear as it
 rises. This is run as:</p>
@@ -209,7 +211,7 @@ rises. This is run as:</p>
 span.prompt1:before {
   content: "$ ";
 }
-</style><span class="prompt1">./pyro_sim.py<span class="w"> </span>lm_atm<span class="w"> </span>bubble<span class="w"> </span>inputs.bubble</span>
+</style><span class="prompt1">pyro_sim.py<span class="w"> </span>lm_atm<span class="w"> </span>bubble<span class="w"> </span>inputs.bubble</span>
 </pre></div></div></section>
 </section>
 </section>
@@ -225,7 +227,7 @@ span.prompt1:before {
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, pyro development team.</p>
+    <p>&#169; Copyright 2023, pyro development team.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

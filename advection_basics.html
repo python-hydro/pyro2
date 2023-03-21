@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Advection solvers &mdash; pyro 4.0.1.post20+gb2b5c5f documentation</title>
+  <title>Advection solvers &mdash; pyro 4.0.1.post21+gbf48f286 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -14,6 +14,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -140,7 +142,7 @@
            <div itemprop="articleBody">
              
   <section id="advection-solvers">
-<h1>Advection solvers<a class="headerlink" href="#advection-solvers" title="Permalink to this heading">¶</a></h1>
+<h1>Advection solvers<a class="headerlink" href="#advection-solvers" title="Permalink to this heading"></a></h1>
 <p>The linear advection equation:</p>
 <div class="math notranslate nohighlight">
 \[a_t + u a_x + v a_y = 0\]</div>
@@ -150,7 +152,7 @@ numerical methods for advection that we implement in pyro.</p>
 <p>pyro has several solvers for linear advection, which solve the equation
 with different spatial and temporal intergration schemes.</p>
 <section id="advection-solver">
-<h2><code class="docutils literal notranslate"><span class="pre">advection</span></code> solver<a class="headerlink" href="#advection-solver" title="Permalink to this heading">¶</a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">advection</span></code> solver<a class="headerlink" href="#advection-solver" title="Permalink to this heading"></a></h2>
 <p><a class="reference internal" href="pyro.advection.html#module-pyro.advection" title="pyro.advection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.advection</span></code></a> implements the directionally unsplit corner
 transport upwind algorithm <span id="id1">[<a class="reference internal" href="references.html#id2" title="P. Colella. Multidimensional upwind methods for hyperbolic conservation laws. Journal of Computational Physics, 87:171-200, March 1990. doi:10.1016/0021-9991(90)90233-Q.">Colella90</a>]</span> with piecewise linear reconstruction.
 This is an overall second-order accurate method, with timesteps restricted
@@ -222,7 +224,7 @@ by</p>
 </ul>
 </section>
 <section id="advection-fv4-solver">
-<h2><code class="docutils literal notranslate"><span class="pre">advection_fv4</span></code> solver<a class="headerlink" href="#advection-fv4-solver" title="Permalink to this heading">¶</a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">advection_fv4</span></code> solver<a class="headerlink" href="#advection-fv4-solver" title="Permalink to this heading"></a></h2>
 <p><a class="reference internal" href="pyro.advection_fv4.html#module-pyro.advection_fv4" title="pyro.advection_fv4"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.advection_fv4</span></code></a> uses a fourth-order accurate finite-volume
 method with RK4 time integration, following the ideas in
 <span id="id2">[<a class="reference internal" href="references.html#id3" title="P. McCorquodale and P. Colella. A high-order finite-volume method for conservation laws on locally refined grids. Communication in Applied Mathematics and Computational Science, 6(1):1–25, 2011.">McCorquodaleColella11</a>]</span>.  It can be thought of as a
@@ -281,7 +283,7 @@ faces of the zones to achieve 4th order accuracy spatially.</p>
 </ul>
 </section>
 <section id="advection-nonuniform-solver">
-<h2><code class="docutils literal notranslate"><span class="pre">advection_nonuniform</span></code> solver<a class="headerlink" href="#advection-nonuniform-solver" title="Permalink to this heading">¶</a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">advection_nonuniform</span></code> solver<a class="headerlink" href="#advection-nonuniform-solver" title="Permalink to this heading"></a></h2>
 <p><a class="reference internal" href="pyro.advection_nonuniform.html#module-pyro.advection_nonuniform" title="pyro.advection_nonuniform"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.advection_nonuniform</span></code></a> models advection with a non-uniform
 velocity field.  This is used to implement the slotted disk problem
 from <span id="id3">[<a class="reference internal" href="references.html#id4" title="Steven T Zalesak. Fully multidimensional flux-corrected transport algorithms for fluids. Journal of Computational Physics, 31(3):335 - 362, 1979. URL: http://www.sciencedirect.com/science/article/pii/0021999179900512, doi:https://doi.org/10.1016/0021-9991(79)90051-2.">Zal79</a>]</span>.  The basic method is similar to the
@@ -351,7 +353,7 @@ algorithm used by the main <code class="docutils literal notranslate"><span clas
 </ul>
 </section>
 <section id="advection-rk-solver">
-<h2><code class="docutils literal notranslate"><span class="pre">advection_rk</span></code> solver<a class="headerlink" href="#advection-rk-solver" title="Permalink to this heading">¶</a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">advection_rk</span></code> solver<a class="headerlink" href="#advection-rk-solver" title="Permalink to this heading"></a></h2>
 <p><a class="reference internal" href="pyro.advection_rk.html#module-pyro.advection_rk" title="pyro.advection_rk"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.advection_rk</span></code></a> uses a method of lines time-integration
 approach with piecewise linear spatial reconstruction for linear
 advection.  This is overall second-order accurate, so it represents a
@@ -407,7 +409,7 @@ order).</p>
 </ul>
 </section>
 <section id="advection-weno-solver">
-<h2><code class="docutils literal notranslate"><span class="pre">advection_weno</span></code> solver<a class="headerlink" href="#advection-weno-solver" title="Permalink to this heading">¶</a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">advection_weno</span></code> solver<a class="headerlink" href="#advection-weno-solver" title="Permalink to this heading"></a></h2>
 <p><a class="reference internal" href="pyro.advection_weno.html#module-pyro.advection_weno" title="pyro.advection_weno"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.advection_weno</span></code></a> uses a WENO reconstruction and method of
 lines time-integration</p>
 <p>The main parameters that affect this solver are:</p>
@@ -464,7 +466,7 @@ base class</p></td>
 </ul>
 </section>
 <section id="general-ideas">
-<h2>General ideas<a class="headerlink" href="#general-ideas" title="Permalink to this heading">¶</a></h2>
+<h2>General ideas<a class="headerlink" href="#general-ideas" title="Permalink to this heading"></a></h2>
 <p>The main use for the advection solver is to understand how Godunov
 techniques work for hyperbolic problems. These same ideas will be used
 in the compressible and incompressible solvers. This video shows
@@ -474,9 +476,9 @@ reconstruction, evolution, and averaging steps:</p>
     <iframe src="https://www.youtube.com/embed/Z_yFd5HqOqc?rel=0" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
 </div><br></section>
 <section id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">¶</a></h2>
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
 <section id="smooth">
-<h3>smooth<a class="headerlink" href="#smooth" title="Permalink to this heading">¶</a></h3>
+<h3>smooth<a class="headerlink" href="#smooth" title="Permalink to this heading"></a></h3>
 <p>The smooth problem initializes a Gaussian profile and advects it with
 <span class="math notranslate nohighlight">\(u = v = 1\)</span> through periodic boundaries for a period. The result is that
 the final state should be identical to the initial state—any
@@ -485,7 +487,7 @@ disagreement is our numerical error. This is run as:</p>
 span.prompt1:before {
   content: "$ ";
 }
-</style><span class="prompt1">./pyro_sim.py<span class="w"> </span>advection<span class="w"> </span>smooth<span class="w"> </span>inputs.smooth</span>
+</style><span class="prompt1">pyro_sim.py<span class="w"> </span>advection<span class="w"> </span>smooth<span class="w"> </span>inputs.smooth</span>
 </pre></div></div><div style="position: relative; padding-bottom: 75%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
     <iframe src="https://www.youtube.com/embed/712Y0ocuz2M?rel=0" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
 </div><br><p>By varying the resolution and comparing to the analytic solution, we
@@ -502,19 +504,19 @@ with the <code class="docutils literal notranslate"><span class="pre">advection_
 are likely due to the use of limiters.</p>
 </section>
 <section id="tophat">
-<h3>tophat<a class="headerlink" href="#tophat" title="Permalink to this heading">¶</a></h3>
+<h3>tophat<a class="headerlink" href="#tophat" title="Permalink to this heading"></a></h3>
 <p>The tophat problem initializes a circle in the center of the domain
 with value 1, and 0 outside. This has very steep jumps, and the
 limiters will kick in strongly here.</p>
 </section>
 </section>
 <section id="exercises">
-<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">¶</a></h2>
+<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading"></a></h2>
 <p>The best way to learn these methods is to play with them yourself. The
 exercises below are suggestions for explorations and features to add
 to the advection solver.</p>
 <section id="explorations">
-<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this heading">¶</a></h3>
+<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Test the convergence of the solver for a variety of initial
 conditions (tophat hat will differ from the smooth case because of
@@ -527,7 +529,7 @@ problem?)</p></li>
 </ul>
 </section>
 <section id="extensions">
-<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading">¶</a></h3>
+<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading"></a></h3>
 <ul>
 <li><p>Implement a dimensionally split version of the advection
 algorithm. How does the solution compare between the unsplit and
@@ -558,7 +560,7 @@ rarefactions, so some very interesting flow problems can be setup.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, pyro development team.</p>
+    <p>&#169; Copyright 2023, pyro development team.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
