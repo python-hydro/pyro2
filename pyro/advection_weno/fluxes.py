@@ -1,6 +1,6 @@
 import numpy as np
 
-import pyro.mesh.reconstruction as reconstruction
+from pyro.mesh import reconstruction
 
 
 def fvs(q, order, u, alpha):

@@ -5,10 +5,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import pyro.advection_nonuniform.advective_fluxes as flx
-import pyro.mesh.patch as patch
-import pyro.particles.particles as particles
-import pyro.util.plot_tools as plot_tools
+from pyro.mesh import patch
+from pyro.particles import particles
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
+from pyro.util import plot_tools
 
 
 class Simulation(NullSimulation):

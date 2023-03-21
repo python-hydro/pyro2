@@ -7,8 +7,8 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 
-import pyro.diffusion.problems.gaussian as gaussian
 import pyro.util.io_pyro as io
+from pyro.diffusion.problems import gaussian
 
 mpl.rcParams["text.usetex"] = True
 mpl.rcParams['mathtext.fontset'] = 'cm'
@@ -58,7 +58,7 @@ def process(file):
     rmin = 0
     rmax = np.sqrt(myg.xmax**2 + myg.ymax**2)
 
-    nbins = np.int(np.sqrt(myg.nx**2 + myg.ny**2))
+    nbins = int(np.sqrt(myg.nx**2 + myg.ny**2))
 
     # bins holds the edges, so there is one more value than actual bin
     # bin_centers holds the center value of the bin

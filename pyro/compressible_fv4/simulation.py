@@ -1,7 +1,6 @@
 import pyro.compressible_fv4.fluxes as flx
-import pyro.compressible_rk as compressible_rk
-import pyro.mesh.fv as fv
-import pyro.mesh.integration as integration
+from pyro import compressible_rk
+from pyro.mesh import fv, integration
 
 
 class Simulation(compressible_rk.Simulation):

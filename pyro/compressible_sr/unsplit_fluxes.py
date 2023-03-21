@@ -122,10 +122,10 @@ Updating U_{i,j}:
 
 """
 
-import pyro.compressible_sr.c2p as c2p
 import pyro.compressible_sr.interface as ifc
 import pyro.mesh.array_indexer as ai
-import pyro.mesh.reconstruction as reconstruction
+from pyro.compressible_sr import c2p
+from pyro.mesh import reconstruction
 from pyro.util import msg
 
 
@@ -456,7 +456,7 @@ def cons_to_prim_wrapper(U, gamma, ivars, myg):
 
     q = myg.scratch_array(nvar=ivars.nq)
 
-    c2p.cons_to_prim(U, ivars.irho, 
+    c2p.cons_to_prim(U, ivars.irho,
                      ivars.iu, ivars.iv,
                      ivars.ip, ivars.ix, ivars.irhox,
                      ivars.idens, ivars.ixmom, ivars.iymom,

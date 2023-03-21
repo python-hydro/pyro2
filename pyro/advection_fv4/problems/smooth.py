@@ -1,6 +1,6 @@
 import numpy
 
-import pyro.mesh.fv as fv
+from pyro.mesh import fv
 from pyro.util import msg
 
 
@@ -45,4 +45,3 @@ def init_data(my_data, rp):
 
 def finalize():
     """ print out any information to the user at the end of the run """
-    pass

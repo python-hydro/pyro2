@@ -7,8 +7,8 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
-import pyro.mesh.patch as patch
-import pyro.multigrid.MG as MG
+from pyro.mesh import patch
+from pyro.multigrid import MG
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
 from pyro.util import msg
 
