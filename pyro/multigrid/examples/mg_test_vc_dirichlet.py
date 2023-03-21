@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-Test the variable-coefficient MG solver with periodic data.
+Test the variable-coefficient MG solver with Dirichlet boundary conditions.
 
 Here we solve::
 
@@ -27,17 +27,14 @@ force it to 0 on the boundary, which is not correct here)
 """
 
 
-import os
-
 import matplotlib.pyplot as plt
 import numpy as np
 
-from pyro.util import compare
 import pyro.mesh.boundary as bnd
-import pyro.mesh.patch as patch
 import pyro.multigrid.variable_coeff_MG as MG
 import pyro.util.io_pyro as io
-import pyro.util.msg as msg
+from pyro.mesh import patch
+from pyro.util import compare, msg
 
 
 # the analytic solution
@@ -56,8 +53,8 @@ def f(x, y):
         np.sin(2*np.pi*x)*np.sin(2*np.pi*y)
 
 
-def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False, bench_dir="tests/",
-                             make_plot=False, verbose=1, rtol=1.e-12):
+def test_vc_poisson_dirichlet(N, store_bench=False, comp_bench=False, bench_dir="tests/",
+                              make_plot=False, verbose=1, rtol=1.e-12):
     """
     test the variable-coefficient MG solver.  The return value
     here is the error compared to the exact solution, UNLESS
@@ -72,22 +69,18 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False, bench_dir="
     # create the coefficient variable
     g = patch.Grid2d(nx, ny, ng=1)
     d = patch.CellCenterData2d(g)
-    bc_c = bnd.BC(xlb="periodic", xrb="periodic",
-                  ylb="periodic", yrb="periodic")
+    bc_c = bnd.BC(xlb="neumann", xrb="neumann",
+                  ylb="neumann", yrb="neumann")
     d.register_var("c", bc_c)
     d.create()
 
     c = d.get_var("c")
     c[:, :] = alpha(g.x2d, g.y2d)
 
-    # check whether the RHS sums to zero (necessary for periodic data)
-    rhs = f(g.x2d, g.y2d)
-    print(f"rhs sum: {np.sum(rhs[g.ilo:g.ihi+1, g.jlo:g.jhi+1])}")
-
     # create the multigrid object
     a = MG.VarCoeffCCMG2d(nx, ny,
-                          xl_BC_type="periodic", yl_BC_type="periodic",
-                          xr_BC_type="periodic", yr_BC_type="periodic",
+                          xl_BC_type="dirichlet", yl_BC_type="dirichlet",
+                          xr_BC_type="dirichlet", yr_BC_type="dirichlet",
                           coeffs=c, coeffs_bc=bc_c,
                           verbose=verbose, vis=0, true_function=true)
 
@@ -102,20 +95,14 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False, bench_dir="
     a.solve(rtol=1.e-11)
 
     # alternately, we can just use smoothing by uncommenting the following
-    # a.smooth(a.nlevels-1,10000)
+    # a.smooth(a.nlevels-1,50000)
 
     # get the solution
     v = a.get_solution()
 
-    # get the true solution
+    # compute the error from the analytic solution
     b = true(a.x2d, a.y2d)
-
-    # compute the error from the analytic solution -- note that with
-    # periodic BCs all around, there is nothing to normalize the
-    # solution.  We subtract off the average of phi from the MG
-    # solution (we do the same for the true solution to put them on
-    # the same footing)
-    e = v - np.sum(v.v())/(nx*ny) - (b - np.sum(b[a.ilo:a.ihi+1, a.jlo:a.jhi+1])/(nx*ny))
+    e = v - b
 
     enorm = e.norm()
     print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" %
@@ -153,10 +140,10 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False, bench_dir="
 
         plt.tight_layout()
 
-        plt.savefig("mg_vc_periodic_test.png")
+        plt.savefig("mg_vc_dirichlet_test.png")
 
     # store the output for later comparison
-    bench = "mg_vc_poisson_periodic"
+    bench = "mg_vc_poisson_dirichlet"
 
     my_data = a.get_solution_object()
 
@@ -166,7 +153,7 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False, bench_dir="
     # do we do a comparison?
     if comp_bench:
         compare_file = f"{bench_dir}/{bench}"
-        msg.warning(f"comparing to {compare_file}")
+        msg.warning("comparing to: %s " % (compare_file))
         bench = io.read(compare_file)
 
         result = compare.compare(my_data, bench, rtol)
@@ -174,7 +161,7 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False, bench_dir="
         if result == 0:
             msg.success(f"results match benchmark to within relative tolerance of {rtol}\n")
         else:
-            msg.warning(f"ERROR: {compare.errors[result]}\n")
+            msg.warning("ERROR: " + compare.errors[result] + "\n")
 
         return result
 
@@ -194,9 +181,12 @@ if __name__ == "__main__":
     for nx in N:
         if nx == max(N):
             plot = True
+            # store = True
+            do_compare = True
 
-        enorm = test_vc_poisson_periodic(nx, make_plot=plot,
-                                         store_bench=store, comp_bench=do_compare)
+        enorm = test_vc_poisson_dirichlet(nx, make_plot=plot,
+                                          store_bench=store, comp_bench=do_compare)
+
         err.append(enorm)
 
     # plot the convergence
@@ -215,4 +205,4 @@ if __name__ == "__main__":
 
     plt.tight_layout()
 
-    plt.savefig("mg_vc_periodic_converge.png")
+    plt.savefig("mg_vc_dirichlet_converge.png")

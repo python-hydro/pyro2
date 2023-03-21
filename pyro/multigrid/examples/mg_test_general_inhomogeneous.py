@@ -1,65 +1,95 @@
 #!/usr/bin/env python3
 
-"""
-Test the variable-coefficient MG solver with Dirichlet boundary conditions.
+"""Test the general MG solver with inhomogeneous Dirichlet
+   boundary conditions.
 
 Here we solve::
 
-   div . ( alpha grad phi ) = f
+   alpha phi + div{beta grad phi} + gamma . grad phi = f
 
 with::
 
-   alpha = 2.0 + cos(2.0*pi*x)*cos(2.0*pi*y)
+   alpha = 10.0
+   beta = x*y + 1  (note: x*y alone doesn't work)
+   gamma_x = 1
+   gamma_y = 1
 
-   f = -16.0*pi**2*(cos(2*pi*x)*cos(2*pi*y) + 1)*sin(2*pi*x)*sin(2*pi*y)
+   f =  -(pi/2)*(x + 1)*sin(pi*y/2)*cos(pi*x/2)
+       - (pi/2)*(y + 1)*sin(pi*x/2)*cos(pi*y/2) +
+       (-pi**2*(x*y+1)/2 + 10)*cos(pi*x/2)*cos(pi*y/2)
 
 This has the exact solution::
 
-   phi = sin(2.0*pi*x)*sin(2.0*pi*y)
+   phi = cos(pi*x/2)*cos(pi*y/2)
 
-on [0,1] x [0,1]
+on [0,1] x [0,1], with Dirichlet boundary conditions::
 
-We use Dirichlet BCs on phi.  For alpha, we do not have to impose the
-same BCs, since that may represent a different physical quantity.
-Here we take alpha to have Neumann BCs.  (Dirichlet BCs for alpha will
-force it to 0 on the boundary, which is not correct here)
+   phi(x=0) = cos(pi*y/2)
+   phi(x=1) = 0
+   phi(y=0) = cos(pi*x/2)
+   phi(y=1) = 0
+
+For the coefficients we do not have to impose the same BCs, since that
+may represent a different physical quantity.  beta is the one that
+really matters since it must be brought to the edges.  Here we take
+beta to have Neumann BCs.  (Dirichlet BCs for beta will force it to 0
+on the boundary, which is not correct here)
 
 """
 
-
-import os
 
 import matplotlib.pyplot as plt
 import numpy as np
 
-from pyro.util import compare
 import pyro.mesh.boundary as bnd
-import pyro.mesh.patch as patch
-import pyro.multigrid.variable_coeff_MG as MG
+import pyro.multigrid.general_MG as MG
 import pyro.util.io_pyro as io
-import pyro.util.msg as msg
+from pyro.mesh import patch
+from pyro.util import compare, msg
 
 
 # the analytic solution
 def true(x, y):
-    return np.sin(2.0*np.pi*x)*np.sin(2.0*np.pi*y)
+    return np.cos(np.pi*x/2.0)*np.cos(np.pi*y/2.0)
 
 
 # the coefficients
 def alpha(x, y):
-    return 2.0 + np.cos(2.0*np.pi*x)*np.cos(2.0*np.pi*y)
+    return 10.0*np.ones_like(x)
+
+
+def beta(x, y):
+    return x*y + 1.0
+
+
+def gamma_x(x, y):
+    return np.ones_like(x)
+
+
+def gamma_y(x, y):
+    return np.ones_like(x)
 
 
 # the righthand side
 def f(x, y):
-    return -16.0*np.pi**2*(np.cos(2*np.pi*x)*np.cos(2*np.pi*y) + 1) * \
-        np.sin(2*np.pi*x)*np.sin(2*np.pi*y)
+    return -0.5*np.pi*(x + 1.0)*np.sin(np.pi*y/2.0)*np.cos(np.pi*x/2.0) - \
+        0.5*np.pi*(y + 1.0)*np.sin(np.pi*x/2.0)*np.cos(np.pi*y/2.0) + \
+        (-np.pi**2*(x*y+1.0)/2.0 + 10.0)*np.cos(np.pi*x/2.0)*np.cos(np.pi*y/2.0)
 
 
-def test_vc_poisson_dirichlet(N, store_bench=False, comp_bench=False, bench_dir="tests/",
-                              make_plot=False, verbose=1, rtol=1.e-12):
+# boundary conditions
+def xl_func(y):
+    return np.cos(np.pi*y/2.0)
+
+
+def yl_func(x):
+    return np.cos(np.pi*x/2.0)
+
+
+def test_general_poisson_inhomogeneous(N, store_bench=False, comp_bench=False, bench_dir="tests/",
+                                       make_plot=False, verbose=1, rtol=1.e-12):
     """
-    test the variable-coefficient MG solver.  The return value
+    test the general MG solver.  The return value
     here is the error compared to the exact solution, UNLESS
     comp_bench=True, in which case the return value is the
     error compared to the stored benchmark
@@ -74,28 +104,44 @@ def test_vc_poisson_dirichlet(N, store_bench=False, comp_bench=False, bench_dir=
     d = patch.CellCenterData2d(g)
     bc_c = bnd.BC(xlb="neumann", xrb="neumann",
                   ylb="neumann", yrb="neumann")
-    d.register_var("c", bc_c)
+    d.register_var("alpha", bc_c)
+    d.register_var("beta", bc_c)
+    d.register_var("gamma_x", bc_c)
+    d.register_var("gamma_y", bc_c)
     d.create()
 
-    c = d.get_var("c")
-    c[:, :] = alpha(g.x2d, g.y2d)
+    a = d.get_var("alpha")
+    a[:, :] = alpha(g.x2d, g.y2d)
+
+    b = d.get_var("beta")
+    b[:, :] = beta(g.x2d, g.y2d)
+
+    gx = d.get_var("gamma_x")
+    gx[:, :] = gamma_x(g.x2d, g.y2d)
+
+    gy = d.get_var("gamma_y")
+    gy[:, :] = gamma_y(g.x2d, g.y2d)
 
     # create the multigrid object
-    a = MG.VarCoeffCCMG2d(nx, ny,
-                          xl_BC_type="dirichlet", yl_BC_type="dirichlet",
-                          xr_BC_type="dirichlet", yr_BC_type="dirichlet",
-                          coeffs=c, coeffs_bc=bc_c,
-                          verbose=verbose, vis=0, true_function=true)
+    a = MG.GeneralMG2d(nx, ny,
+                       xl_BC_type="dirichlet", yl_BC_type="dirichlet",
+                       xr_BC_type="dirichlet", yr_BC_type="dirichlet",
+                       xl_BC=xl_func,
+                       yl_BC=yl_func,
+                       coeffs=d,
+                       verbose=verbose, vis=0, true_function=true)
 
     # initialize the solution to 0
     a.init_zeros()
 
     # initialize the RHS using the function f
     rhs = f(a.x2d, a.y2d)
+    print(np.min(rhs), np.max(rhs))
+
     a.init_RHS(rhs)
 
-    # solve to a relative tolerance of 1.e-11
-    a.solve(rtol=1.e-11)
+    # solve to a relative tolerance of 1.e-10
+    a.solve(rtol=1.e-10)
 
     # alternately, we can just use smoothing by uncommenting the following
     # a.smooth(a.nlevels-1,50000)
@@ -143,10 +189,10 @@ def test_vc_poisson_dirichlet(N, store_bench=False, comp_bench=False, bench_dir=
 
         plt.tight_layout()
 
-        plt.savefig("mg_vc_dirichlet_test.png")
+        plt.savefig("mg_general_inhomogeneous_test.png")
 
     # store the output for later comparison
-    bench = "mg_vc_poisson_dirichlet"
+    bench = "mg_general_poisson_inhomogeneous"
 
     my_data = a.get_solution_object()
 
@@ -184,11 +230,9 @@ if __name__ == "__main__":
     for nx in N:
         if nx == max(N):
             plot = True
-            # store = True
-            do_compare = True
 
-        enorm = test_vc_poisson_dirichlet(nx, make_plot=plot,
-                                          store_bench=store, comp_bench=do_compare)
+        enorm = test_general_poisson_inhomogeneous(nx, make_plot=plot,
+                                                   store_bench=store, comp_bench=do_compare)
 
         err.append(enorm)
 
@@ -203,9 +247,11 @@ if __name__ == "__main__":
     plt.xlabel("N")
     plt.ylabel("error")
 
+    plt.ylim(1.e-7, 1.e-2)
+
     fig = plt.gcf()
     fig.set_size_inches(7.0, 6.0)
 
     plt.tight_layout()
 
-    plt.savefig("mg_vc_dirichlet_converge.png")
+    plt.savefig("mg_general_inhomogeneous_converge.png")

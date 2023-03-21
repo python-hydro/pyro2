@@ -15,15 +15,10 @@ The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)
 """
 
 
-import os
-
 import matplotlib.pyplot as plt
 import numpy as np
 
-from pyro.util import compare
-import pyro.multigrid.MG as MG
-import pyro.util.io_pyro as io
-import pyro.util.msg as msg
+from pyro.multigrid import MG
 
 
 # the analytic solution
@@ -36,21 +31,26 @@ def f(x, y):
     return -2.0*((1.0-6.0*x**2)*y**2*(1.0-y**2) + (1.0-6.0*y**2)*x**2*(1.0-x**2))
 
 
-def test_poisson_dirichlet(N, store_bench=False, comp_bench=False, bench_dir="tests/",
-                           make_plot=False, verbose=1, rtol=1e-12):
-
+def doit(nx, ny):
     # test the multigrid solver
-    nx = N
-    ny = nx
 
     # create the multigrid object
     a = MG.CellCenterMG2d(nx, ny,
                           xl_BC_type="dirichlet", yl_BC_type="dirichlet",
                           xr_BC_type="dirichlet", yr_BC_type="dirichlet",
-                          verbose=verbose)
+                          verbose=0,
+                          nsmooth=5, nsmooth_bottom=10,
+                          vis=1, true_function=true,
+                          vis_title=r"$u_{xx} + u_{yy} = -2[(1-6x^2)y^2(1-y^2) + (1-6y^2)x^2(1-x^2)]$")
+
+    plt.ion()
+
+    plt.figure(num=1, figsize=(12.8, 7.2), dpi=100, facecolor='w')
 
     # initialize the solution to 0
-    a.init_zeros()
+    init = a.soln_grid.scratch_array()
+
+    a.init_solution(init)
 
     # initialize the RHS using the function f
     rhs = f(a.x2d, a.y2d)
@@ -70,48 +70,28 @@ def test_poisson_dirichlet(N, store_bench=False, comp_bench=False, bench_dir="te
     e = v - b
 
     print(" L2 error from true solution = %g\n rel. err from previous cycle = %g\n num. cycles = %d" %
-          (e.norm(), a.relative_error, a.num_cycles))
+          (a.soln_grid.norm(e), a.relative_error, a.num_cycles))
 
     # plot it
-    if make_plot:
-        plt.figure(num=1, figsize=(5.0, 5.0), dpi=100, facecolor='w')
+    # plt.figure(num=1, figsize=(2.10,2.10), dpi=100, facecolor='w')
+    plt.figure(num=1, figsize=(5.0, 5.0), dpi=100, facecolor='w')
 
-        plt.imshow(np.transpose(v[a.ilo:a.ihi+1, a.jlo:a.jhi+1]),
-                   interpolation="nearest", origin="lower",
-                   extent=[a.xmin, a.xmax, a.ymin, a.ymax])
+    plt.imshow(np.transpose(v[a.ilo:a.ihi+1, a.jlo:a.jhi+1]),
+               interpolation="nearest", origin="lower",
+               extent=[a.xmin, a.xmax, a.ymin, a.ymax])
 
-        plt.xlabel("x")
-        plt.ylabel("y")
+    # plt.axis("off")
+    # plt.subplots_adjust(bottom=0.0, top=1.0, left=0.0, right=1.0)
 
-        print("Saving figure to mg_test.png")
+    plt.xlabel("x")
+    plt.ylabel("y")
 
-        plt.savefig("mg_test.png")
+    plt.savefig("mg_test.png")
 
     # store the output for later comparison
-    bench = "mg_poisson_dirichlet"
-
     my_data = a.get_solution_object()
-
-    if store_bench:
-        my_data.write(f"{bench_dir}/{bench}")
-
-    # do we do a comparison?
-    if comp_bench:
-        compare_file = f"{bench_dir}/{bench}"
-        msg.warning("comparing to: %s " % (compare_file))
-        bench_data = io.read(compare_file)
-
-        result = compare.compare(my_data, bench_data, rtol)
-
-        if result == 0:
-            msg.success(f"results match benchmark to within relative tolerance of {rtol}\n")
-        else:
-            msg.warning("ERROR: " + compare.errors[result] + "\n")
-
-        return result
-
-    return None
+    my_data.write("mg_test")
 
 
 if __name__ == "__main__":
-    test_poisson_dirichlet(256, comp_bench=True, make_plot=True)
+    doit(64, 64)
