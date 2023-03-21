@@ -106,7 +106,7 @@ class Simulation(NullSimulation):
 
         myg = self.cc_data.grid
 
-        _, axes, cbar_title = plot_tools.setup_axes(myg, 1)
+        _, axes, _ = plot_tools.setup_axes(myg, 1)
 
         # plot density
         ax = axes[0]

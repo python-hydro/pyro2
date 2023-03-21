@@ -129,7 +129,7 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
         # print( "min/max eta_y: {}, {}".format(np.min(eta_y), np.max(eta_y)))
 
         # do red-black G-S
-        for i in range(nsmooth):
+        for _ in range(nsmooth):
 
             # do the red black updating in four decoupled groups
             #

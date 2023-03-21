@@ -100,7 +100,7 @@ rho_bin = np.zeros(len(ncount)-1, dtype=np.float64)
 u_bin = np.zeros(len(ncount)-1, dtype=np.float64)
 p_bin = np.zeros(len(ncount)-1, dtype=np.float64)
 
-for n in range(len(ncount)):
+for n in range(1, len(ncount)):
 
     # remember that there are no whichbin == 0, since that corresponds
     # to the left edge.  So we want whichbin == 1 to correspond to the
