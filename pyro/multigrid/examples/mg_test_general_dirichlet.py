@@ -33,17 +33,14 @@ on the boundary, which is not correct here)
 """
 
 
-import os
-
 import matplotlib.pyplot as plt
 import numpy as np
 
-from pyro.util import compare
 import pyro.mesh.boundary as bnd
-import pyro.mesh.patch as patch
 import pyro.multigrid.general_MG as MG
 import pyro.util.io_pyro as io
-import pyro.util.msg as msg
+from pyro.mesh import patch
+from pyro.util import compare, msg
 
 
 # the analytic solution
