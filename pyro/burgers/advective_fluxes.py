@@ -1,0 +1,155 @@
+import pyro.mesh.reconstruction as reconstruction
+import numpy as np
+
+def riemann(my_data, ul, ur):
+
+    myg = my_data.grid
+
+    S = myg.scratch_array()
+    S.v(buf=1)[:, :] = 0.5*(ul.v(buf=1)+ur.v(buf=1))
+
+    # shock when ul > ur
+    shock = myg.scratch_array()
+    shock.v(buf=1)[:, :] = np.where(S.v(buf=1) > 0, ul.v(buf=1), shock.v(buf=1))
+    shock.v(buf=1)[:, :] = np.where(S.v(buf=1) < 0, ur.v(buf=1), shock.v(buf=1))
+
+    # rarefaction otherwise
+    rarefac = myg.scratch_array()
+    rarefac.v(buf=1)[:, :] = np.where(ul.v(buf=1) > 0.0, ul.v(buf=1), rarefac.v(buf=1))
+    rarefac.v(buf=1)[:, :] = np.where(ur.v(buf=1) < 0.0, ur.v(buf=1), rarefac.v(buf=1))
+
+    state = myg.scratch_array()
+
+    # shock (compression) if the left interface state is faster than the right interface state
+    state.v(buf=1)[:, :] = np.where(ul.v(buf=1) > ur.v(buf=1), shock.v(buf=1), rarefac.v(buf=1))
+    
+    return state
+        
+def unsplit_fluxes(my_data, rp, dt, scalar_name):
+    r"""
+    Construct the fluxes through the interfaces for the linear advection
+    equation:
+
+    .. math::
+
+       a_t  + u a_x  + v a_y  = 0
+
+    We use a second-order (piecewise linear) unsplit Godunov method
+    (following Colella 1990).
+
+    In the pure advection case, there is no Riemann problem we need to
+    solve -- we just simply do upwinding.  So there is only one 'state'
+    at each interface, and the zone the information comes from depends
+    on the sign of the velocity.
+
+    Our convection is that the fluxes are going to be defined on the
+    left edge of the computational zones::
+
+        |             |             |             |
+        |             |             |             |
+       -+------+------+------+------+------+------+--
+        |     i-1     |      i      |     i+1     |
+
+                 a_l,i  a_r,i   a_l,i+1
+
+
+    a_r,i and a_l,i+1 are computed using the information in
+    zone i,j.
+
+    Parameters
+    ----------
+    my_data : CellCenterData2d object
+        The data object containing the grid and advective scalar that
+        we are advecting.
+    rp : RuntimeParameters object
+        The runtime parameters for the simulation
+    dt : float
+        The timestep we are advancing through.
+    scalar_name : str
+        The name of the variable contained in my_data that we are
+        advecting
+
+    Returns
+    -------
+    out : ndarray, ndarray
+        The fluxes on the x- and y-interfaces
+
+    """
+
+    myg = my_data.grid
+
+    a = my_data.get_var(scalar_name)
+
+    u = my_data.get_var("x-velocity")
+    v = my_data.get_var("y-velocity")
+
+    cx = myg.scratch_array()
+    cy = myg.scratch_array()
+
+    cx.v(buf=1)[:, :] = u.v(buf=1)*dt/myg.dx      #dt*u/dx
+    cy.v(buf=1)[:, :] = v.v(buf=1)*dt/myg.dy      #dt*v/dy
+
+    # --------------------------------------------------------------------------
+    # monotonized central differences
+    # --------------------------------------------------------------------------
+
+    limiter = rp.get_param("advection.limiter")
+
+    # state, grid, direction, limiter
+    ldelta_ax = reconstruction.limit(a, myg, 1, limiter)   #da/dx
+    ldelta_ay = reconstruction.limit(a, myg, 2, limiter)   #da/dy
+
+    ul_x = myg.scratch_array()
+    ur_x = myg.scratch_array()
+
+    ul_y = myg.scratch_array()
+    ur_y = myg.scratch_array()
+    
+    # Determine left and right interface states in x and y.
+
+    # First compute the predictor terms
+    
+    # L state in x dir
+    ul_x.v(buf=1)[:, :] = a.ip(-1, buf=1) + 0.5*(1.0 - cx.ip(-1, buf=1))*ldelta_ax.ip(-1, buf=1)
+
+    # R state in x dir
+    ur_x.v(buf=1)[:, :] = a.v(buf=1) - 0.5*(1.0 + cx.v(buf=1))*ldelta_ax.v(buf=1)
+
+    # L state in y dir
+    ul_y.v(buf=1)[:, :] = a.jp(-1, buf=1) + 0.5*(1.0 - cy.jp(-1, buf=1))*ldelta_ay.jp(-1, buf=1)
+
+    # R state in y dir
+    ur_y.v(buf=1)[:, :] = a.v(buf=1) - 0.5*(1.0 + cy.v(buf=1))*ldelta_ay.v(buf=1)
+
+    # Compute the transverse correction term:
+
+    tl_x = myg.scratch_array()
+    tl_y = myg.scratch_array()
+    tr_x = myg.scratch_array()
+    tr_y = myg.scratch_array()
+    
+    tl_x.v(buf=1)[:, :] = -0.5*cy.v(buf=1)[:, :]*(a.ip_jp(-1, 1, buf=1) - a.ip(-1, buf=1))
+    tl_y.v(buf=1)[:, :] = -0.5*cx.v(buf=1)[:, :]*(a.ip_jp(1, -1, buf=1) - a.jp(-1, buf=1))
+    tr_x.v(buf=1)[:, :] = -0.5*cy.v(buf=1)[:, :]*(a.ip_jp(0, 1, buf=1) - a.ip(0, buf=1))
+    tl_y.v(buf=1)[:, :] = -0.5*cx.v(buf=1)[:, :]*(a.ip_jp(1, 0, buf=1) - a.jp(0, buf=1))
+
+    # Apply transverse correction terms:
+
+    ul_x.v(buf=1)[:, :] = ul_x.v(buf=1)[:, :] - tl_x.v(buf=1)[:, :]
+    ul_y.v(buf=1)[:, :] = ul_y.v(buf=1)[:, :] - tl_y.v(buf=1)[:, :]
+    ur_x.v(buf=1)[:, :] = ur_x.v(buf=1)[:, :] - tr_x.v(buf=1)[:, :]
+    ur_y.v(buf=1)[:, :] = ur_y.v(buf=1)[:, :] - tr_y.v(buf=1)[:, :]
+    
+    # solve for riemann's problem.
+
+    u_x = riemann(my_data, ul_x, ur_x)
+    u_y = riemann(my_data, ul_y, ur_y)
+
+    # Compute the actual flux. F = 0.5 u^2
+    F_x = myg.scratch_array()
+    F_y = myg.scratch_array()
+
+    F_x.v(buf=1)[:, :] = 0.5 * u_x.v(buf=1)[:, :]*u_x.v(buf=1)[:, :]
+    F_y.v(buf=1)[:, :] = 0.5 * u_y.v(buf=1)[:, :]*u_y.v(buf=1)[:, :]
+    
+    return F_x, F_y
