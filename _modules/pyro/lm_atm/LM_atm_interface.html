@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.lm_atm.LM_atm_interface &mdash; pyro 4.0.1.post21+gbf48f286 documentation</title>
+  <title>pyro.lm_atm.LM_atm_interface &mdash; pyro 4.0.1.post22+g0e5ca9f8 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -361,6 +361,7 @@
 
     <span class="c1"># get the full u and v left and right states (including transverse</span>
     <span class="c1"># terms) on both the x- and y-interfaces</span>
+    <span class="c1"># pylint: disable-next=unused-variable</span>
     <span class="n">u_xl</span><span class="p">,</span> <span class="n">u_xr</span><span class="p">,</span> <span class="n">u_yl</span><span class="p">,</span> <span class="n">u_yr</span><span class="p">,</span> <span class="n">v_xl</span><span class="p">,</span> <span class="n">v_xr</span><span class="p">,</span> <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span> <span class="o">=</span> <span class="n">get_interface_states</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
                                                                           <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span>
                                                                           <span class="n">ldelta_ux</span><span class="p">,</span> <span class="n">ldelta_vx</span><span class="p">,</span>
