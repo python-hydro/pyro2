@@ -640,16 +640,14 @@ class Simulation(NullSimulation):
 
         vort.v()[:, :] = dv - du
 
-        fig, axes = plt.subplots(nrows=2, ncols=2, num=1)
+        _, axes = plt.subplots(nrows=2, ncols=2, num=1)
         plt.subplots_adjust(hspace=0.25)
 
         fields = [rho, magvel, vort, rhoprime]
         field_names = [r"$\rho$", r"|U|", r"$\nabla \times U$", r"$\rho'$"]
 
-        for n in range(len(fields)):
+        for n, f in enumerate(fields):
             ax = axes.flat[n]
-
-            f = fields[n]
 
             img = ax.imshow(np.transpose(f.v()),
                             interpolation="nearest", origin="lower",
@@ -676,8 +674,8 @@ class Simulation(NullSimulation):
 
         gb = f.create_group("base state")
 
-        for key in self.base:
-            gb.create_dataset(key, data=self.base[key].d)
+        for name, state in self.base.items():
+            gb.create_dataset(name, data=state.d)
 
     def read_extras(self, f):
         """

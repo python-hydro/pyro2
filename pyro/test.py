@@ -110,7 +110,7 @@ def do_tests(out_file,
 
         f.write(f"\n{failed} test(s) failed\n")
 
-        if not f == sys.stdout:
+        if f != sys.stdout:
             f.close()
 
     return failed
