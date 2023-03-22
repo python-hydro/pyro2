@@ -43,6 +43,6 @@ jobs:
       - name: Install pyro
         run: python setup.py install --user
 
-      - name: Run tests via test.py
-        run: ./pyro/test.py
+      - name: Run tests via test_parallel.py
+        run: ./pyro/test_parallel.py -n 0
 
