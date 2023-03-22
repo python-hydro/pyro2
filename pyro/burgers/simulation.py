@@ -30,6 +30,7 @@ class Simulation(NullSimulation):
 
         # register variables in the data
         # burgers equation advects velocity
+
         my_data.register_var("x-velocity", bc)
         my_data.register_var("y-velocity", bc)
         my_data.create()
@@ -108,9 +109,6 @@ class Simulation(NullSimulation):
                               dtdy*(v_flux_y.v() - v_flux_y.jp(1))
 
         if self.particles is not None:
-            # myg = self.cc_data.grid
-            # u = self.rp.get_param("advection.u")
-            # v = self.rp.get_param("advection.v")
 
             u2d = u
             v2d = v
@@ -139,7 +137,7 @@ class Simulation(NullSimulation):
 
         _, axes, cbar_title = plot_tools.setup_axes(myg, 1)
 
-        # plot density
+        # plot x-y velocity magnitude
         ax = axes[0]
         img = ax.imshow(np.transpose(uv.v()),
                    interpolation="nearest", origin="lower",

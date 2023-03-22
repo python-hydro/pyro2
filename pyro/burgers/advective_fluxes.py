@@ -27,12 +27,12 @@ def riemann(my_data, ul, ur):
         
 def unsplit_fluxes(my_data, rp, dt, scalar_name):
     r"""
-    Construct the fluxes through the interfaces for the linear advection
-    equation:
+    Construct the fluxes through the interfaces for the burgers equation:
 
     .. math::
 
-       a_t  + u a_x  + v a_y  = 0
+       u_t  + u u_x  + v u_y  = 0
+       v_t  + u v_x  + v v_y  = 0
 
     We use a second-order (piecewise linear) unsplit Godunov method
     (following Colella 1990).
