@@ -110,7 +110,7 @@ def do_tests(out_file,
 
         f.write(f"\n{failed} test(s) failed\n")
 
-        if not f == sys.stdout:
+        if f != sys.stdout:
             f.close()
 
     return failed
@@ -120,9 +120,9 @@ if __name__ == "__main__":
 
     p = argparse.ArgumentParser()
 
-    p.add_argument("-o",
-                   help="name of file to output the report to (otherwise output to the screen",
-                   type=str, nargs=1)
+    p.add_argument("--outfile", "-o",
+                   help="name of file to output the report to (in addition to the screen)",
+                   type=str, default=None)
 
     p.add_argument("--single",
                    help="name of a single test (solver-problem) to run",
@@ -142,23 +142,13 @@ if __name__ == "__main__":
 
     p.add_argument("--rtol",
                    help="relative tolerance to use when comparing data to benchmarks",
-                   type=float, nargs=1)
+                   type=float, default=1.e-12)
 
     args = p.parse_args()
 
-    try:
-        outfile = args.o[0]
-    except TypeError:
-        outfile = None
-
-    try:
-        rtol = args.rtol[0]
-    except TypeError:
-        rtol = 1.e-12
-
-    failed = do_tests(outfile,
+    failed = do_tests(args.outfile,
                       reset_fails=args.reset_failures,
                       store_all_benchmarks=args.store_all_benchmarks,
-                      single=args.single, solver=args.solver, rtol=rtol)
+                      single=args.single, solver=args.solver, rtol=args.rtol)
 
     sys.exit(failed)
