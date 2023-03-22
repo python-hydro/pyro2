@@ -38,8 +38,8 @@ def run_test(t, reset_fails, store_all_benchmarks, rtol):
         # capture all the output into a buffer, then print it when the test is
         # finished to avoid interleaving
         output_buffer = io.StringIO()
-        with (contextlib.redirect_stdout(output_buffer),
-              contextlib.redirect_stderr(output_buffer)):
+        with contextlib.redirect_stdout(output_buffer), \
+             contextlib.redirect_stderr(output_buffer):
             p = pyro.PyroBenchmark(t.solver, comp_bench=True,
                                    reset_bench_on_fail=reset_fails,
                                    make_bench=store_all_benchmarks)
