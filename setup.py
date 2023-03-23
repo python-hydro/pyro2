@@ -31,6 +31,7 @@ benchmarks = ["advection/tests/*.h5",
               "compressible_sdc/tests/*.h5",
               "diffusion/tests/*.h5",
               "incompressible/tests/*.h5",
+              "incompressible_viscous/tests/*.h5",
               "lm_atm/tests/*.h5",
               "multigrid/tests/*.h5",
               "swe/tests/*.h5"]
