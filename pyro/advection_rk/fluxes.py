@@ -1,4 +1,4 @@
-import pyro.mesh.reconstruction as reconstruction
+from pyro.mesh import reconstruction
 
 
 def fluxes(my_data, rp, dt):

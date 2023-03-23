@@ -41,7 +41,7 @@ A basic multigrid test is run as (using a path relative to the root of the
 
 .. prompt:: bash
 
-   ./examples/multigrid/mg_test_simple.py
+   ./pyro/multigrid/examples/mg_test_simple.py
 
 The ``mg_test_simple.py`` script solves a Poisson equation with a
 known analytic solution. This particular example comes from the text
@@ -86,7 +86,7 @@ You can run this example locally by running the ``mg_vis.py`` script:
 
 .. prompt:: bash
 
-   ./examples/multigrid/mg_vis.py
+   ./pyro/multigrid/examples/mg_vis.py
 
 projection
 ^^^^^^^^^^
@@ -96,7 +96,7 @@ field.  This is run as:
 
 .. prompt:: bash
 
-   ./examples/multigrid/project_periodic.py
+   ./pyro/multigrid/examples/project_periodic.py
 
 Given a vector field, :math:`U`, we can decompose it into a divergence free part, :math:`U_d`, and the gradient of a scalar, :math:`\phi`:
 

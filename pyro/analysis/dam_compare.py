@@ -24,7 +24,7 @@ def abort(string):
     sys.exit(2)
 
 
-if not len(sys.argv) == 2:
+if len(sys.argv) != 2:
     print(usage)
     sys.exit(2)
 
@@ -171,7 +171,7 @@ ax.scatter(x, u, marker="x", s=7, color="r")
 ax.set_ylabel(r"$u$")
 ax.set_xlim(0, 1.0)
 
-if (myg.nx > myg.ny):
+if myg.nx > myg.ny:
     ax.set_xlabel(r"x")
 else:
     ax.set_xlabel(r"y")

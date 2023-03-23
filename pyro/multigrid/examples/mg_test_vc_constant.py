@@ -22,8 +22,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import pyro.mesh.boundary as bnd
-import pyro.mesh.patch as patch
 import pyro.multigrid.variable_coeff_MG as MG
+from pyro.mesh import patch
 
 
 # the analytic solution

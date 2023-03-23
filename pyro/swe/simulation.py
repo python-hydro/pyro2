@@ -5,11 +5,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import pyro.mesh.boundary as bnd
-import pyro.particles.particles as particles
-import pyro.swe.derives as derives
 import pyro.swe.unsplit_fluxes as flx
-import pyro.util.plot_tools as plot_tools
+from pyro.particles import particles
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
+from pyro.swe import derives
+from pyro.util import plot_tools
 
 
 class Variables:

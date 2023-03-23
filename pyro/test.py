@@ -6,11 +6,10 @@ import datetime
 import os
 import sys
 
-import examples.multigrid.mg_test_general_inhomogeneous as mg_test_general_inhomogeneous
-import examples.multigrid.mg_test_simple as mg_test_simple
-import examples.multigrid.mg_test_vc_dirichlet as mg_test_vc_dirichlet
-import examples.multigrid.mg_test_vc_periodic as mg_test_vc_periodic
 import pyro.pyro_sim as pyro
+from pyro.multigrid.examples import (mg_test_general_inhomogeneous,
+                                     mg_test_simple, mg_test_vc_dirichlet,
+                                     mg_test_vc_periodic)
 
 
 class PyroTest:
@@ -111,7 +110,7 @@ def do_tests(out_file,
 
         f.write(f"\n{failed} test(s) failed\n")
 
-        if not f == sys.stdout:
+        if f != sys.stdout:
             f.close()
 
     return failed

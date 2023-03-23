@@ -6,8 +6,8 @@ import sys
 
 import numpy as np
 
-import pyro.mesh.patch as patch
 import pyro.util.io_pyro as io
+from pyro.mesh import patch
 
 usage = """
       compare the output in file from the smooth advection problem to
@@ -16,7 +16,7 @@ usage = """
       usage: ./smooth_error.py file
 """
 
-if not len(sys.argv) == 2:
+if len(sys.argv) != 2:
     print(usage)
     sys.exit(2)
 
