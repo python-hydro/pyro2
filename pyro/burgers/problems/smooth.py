@@ -7,7 +7,7 @@ from pyro.util import msg
 
 
 def init_data(my_data, rp):
-    """ initialize the smooth advection problem """
+    """ initialize the smooth burgers problem """
 
     msg.bold("initializing the smooth burgers problem...")
 
