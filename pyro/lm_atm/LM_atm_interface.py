@@ -33,7 +33,7 @@ def is_symmetric_pair(ng, nodal, sl, sr):
 
     sym = 1
 
-    if (not nodal):
+    if not nodal:
         done = False
         for i in range(nx / 2):
             il = ilo + i
@@ -120,7 +120,7 @@ def is_asymmetric_pair(ng, nodal, sl, sr):
 
     asym = 1
 
-    if (not nodal):
+    if not nodal:
         done = False
         for i in range(nx / 2):
             for j in range(jlo, jhi):
@@ -240,6 +240,7 @@ def mac_vels(ng, dx, dy, dt,
 
     # get the full u and v left and right states (including transverse
     # terms) on both the x- and y-interfaces
+    # pylint: disable-next=unused-variable
     u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = get_interface_states(ng, dx, dy, dt,
                                                                           u, v,
                                                                           ldelta_ux, ldelta_vx,

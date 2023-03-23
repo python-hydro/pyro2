@@ -2,9 +2,9 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
-import pyro.compressible as compressible
-import pyro.compressible.eos as eos
-import pyro.util.plot_tools as plot_tools
+from pyro import compressible
+from pyro.compressible import eos
+from pyro.util import plot_tools
 
 
 class Simulation(compressible.Simulation):
@@ -24,7 +24,6 @@ class Simulation(compressible.Simulation):
         # compute energy generation rate
 
         # update energy due to reaction
-        pass
 
     def diffuse(self, dt):
         """ diffuse for dt """
@@ -34,7 +33,6 @@ class Simulation(compressible.Simulation):
         # compute div kappa grad T
 
         # update energy due to diffusion
-        pass
 
     def evolve(self):
         """
@@ -94,7 +92,7 @@ class Simulation(compressible.Simulation):
         fields = [rho, magvel, p, e, X]
         field_names = [r"$\rho$", r"U", "p", "e", r"$X_\mathrm{fuel}$"]
 
-        f, axes, cbar_title = plot_tools.setup_axes(myg, len(fields))
+        _, axes, cbar_title = plot_tools.setup_axes(myg, len(fields))
 
         for n, ax in enumerate(axes):
             v = fields[n]

@@ -6,9 +6,8 @@ import numpy as np
 import pyro.lm_atm.LM_atm_interface as lm_interface
 import pyro.mesh.array_indexer as ai
 import pyro.mesh.boundary as bnd
-import pyro.mesh.patch as patch
-import pyro.mesh.reconstruction as reconstruction
 import pyro.multigrid.variable_coeff_MG as vcMG
+from pyro.mesh import patch, reconstruction
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
 
 
@@ -44,6 +43,7 @@ class Simulation(NullSimulation):
 
         self.base = {}
         self.aux_data = None
+        self.in_preevolve = False
 
     def initialize(self):
         """
@@ -524,7 +524,7 @@ class Simulation(NullSimulation):
         # add the gravitational source
         rho_half = 0.5*(rho + rho_old)
         rhoprime = self.make_prime(rho_half, rho0)
-        source[:, :] = (rhoprime*g/rho_half)
+        source[:, :] = rhoprime*g/rho_half
         self.aux_data.fill_BC("source_y")
 
         v[:, :] += self.dt*source
@@ -640,16 +640,14 @@ class Simulation(NullSimulation):
 
         vort.v()[:, :] = dv - du
 
-        fig, axes = plt.subplots(nrows=2, ncols=2, num=1)
+        _, axes = plt.subplots(nrows=2, ncols=2, num=1)
         plt.subplots_adjust(hspace=0.25)
 
         fields = [rho, magvel, vort, rhoprime]
         field_names = [r"$\rho$", r"|U|", r"$\nabla \times U$", r"$\rho'$"]
 
-        for n in range(len(fields)):
+        for n, f in enumerate(fields):
             ax = axes.flat[n]
-
-            f = fields[n]
 
             img = ax.imshow(np.transpose(f.v()),
                             interpolation="nearest", origin="lower",
@@ -676,8 +674,8 @@ class Simulation(NullSimulation):
 
         gb = f.create_group("base state")
 
-        for key in self.base:
-            gb.create_dataset(key, data=self.base[key].d)
+        for name, state in self.base.items():
+            gb.create_dataset(name, data=state.d)
 
     def read_extras(self, f):
         """

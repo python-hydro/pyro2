@@ -2,7 +2,7 @@ import sys
 
 import numpy
 
-import pyro.mesh.patch as patch
+from pyro.mesh import patch
 from pyro.util import msg
 
 
@@ -78,4 +78,3 @@ def init_data(my_data, rp):
 
 def finalize():
     """ print out any information to the userad at the end of the run """
-    pass

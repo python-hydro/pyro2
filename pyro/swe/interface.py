@@ -122,7 +122,7 @@ def states(idir, ng, dx, dt,
             e_val[:] = 0.0
 
             # compute the eigenvalues and eigenvectors
-            if (idir == 1):
+            if idir == 1:
                 e_val[:ns] = [q[iu] - cs, q[iu], q[iu] + cs]
 
                 lvec[0, :ns] = [cs, -q[ih], 0.0]
@@ -164,7 +164,7 @@ def states(idir, ng, dx, dt,
                 lvec[2, :] = -lvec[2, :] * 0.50 / (cs * q[ih])
 
             # define the reference states
-            if (idir == 1):
+            if idir == 1:
                 # this is one the right face of the current zone,
                 # so the fastest moving eigenvalue is e_val[2] = u + c
                 factor = 0.5 * (1.0 - dtdx * max(e_val[2], 0.0))
@@ -197,7 +197,7 @@ def states(idir, ng, dx, dt,
                 sum_l = np.dot(betal, rvec[:, m])
                 sum_r = np.dot(betar, rvec[:, m])
 
-                if (idir == 1):
+                if idir == 1:
                     q_l[i + 1, j, m] = q_l[i + 1, j, m] + sum_l
                     q_r[i,  j, m] = q_r[i,  j, m] + sum_r
                 else:
@@ -268,14 +268,14 @@ def riemann_roe(idir, ng,
             h_l = U_l[i, j, ih]
 
             # un = normal velocity; ut = transverse velocity
-            if (idir == 1):
+            if idir == 1:
                 un_l = U_l[i, j, ixmom] / h_l
             else:
                 un_l = U_l[i, j, iymom] / h_l
 
             h_r = U_r[i, j, ih]
 
-            if (idir == 1):
+            if idir == 1:
                 un_r = U_r[i, j, ixmom] / h_r
             else:
                 un_r = U_r[i, j, iymom] / h_r
@@ -295,7 +295,7 @@ def riemann_roe(idir, ng,
             delta[ih] = h_r - h_l
 
             # e_values and right evectors
-            if (idir == 1):
+            if idir == 1:
                 un_roe = U_roe[ixmom]
             else:
                 un_roe = U_roe[iymom]
@@ -303,7 +303,7 @@ def riemann_roe(idir, ng,
             K_roe[:, :] = 0.0
 
             lambda_roe[:3] = np.array([un_roe - c_roe, un_roe, un_roe + c_roe])
-            if (idir == 1):
+            if idir == 1:
                 alpha_roe[:3] = [0.5 * (delta[ih] - U_roe[ih] / c_roe * delta[ixmom]),
                                  U_roe[ih] * delta[iymom],
                                  0.5 * (delta[ih] + U_roe[ih] / c_roe * delta[ixmom])]
@@ -339,11 +339,11 @@ def riemann_roe(idir, ng,
             c_star = np.sqrt(g * h_star)
 
             # modified e_values for entropy fix
-            if (abs(lambda_roe[0]) < tol):
+            if abs(lambda_roe[0]) < tol:
                 lambda_roe[0] = lambda_roe[0] * (u_star - c_star - lambda_roe[0]) / \
                     (u_star - c_star - (un_l - c_l))
 
-            if (abs(lambda_roe[2]) < tol):
+            if abs(lambda_roe[2]) < tol:
                 lambda_roe[2] = lambda_roe[2] * (u_star + c_star - lambda_roe[2]) / \
                     (u_star + c_star - (un_r + c_r))
 
@@ -409,7 +409,7 @@ def riemann_hllc(idir, ng,
             h_l = U_l[i, j, ih]
 
             # un = normal velocity; ut = transverse velocity
-            if (idir == 1):
+            if idir == 1:
                 un_l = U_l[i, j, ixmom] / h_l
                 ut_l = U_l[i, j, iymom] / h_l
             else:
@@ -418,7 +418,7 @@ def riemann_hllc(idir, ng,
 
             h_r = U_r[i, j, ih]
 
-            if (idir == 1):
+            if idir == 1:
                 un_r = U_r[i, j, ixmom] / h_r
                 ut_r = U_r[i, j, iymom] / h_r
             else:
@@ -442,14 +442,14 @@ def riemann_hllc(idir, ng,
 
             # estimate the nonlinear wave speeds
 
-            if (hstar <= h_l):
+            if hstar <= h_l:
                 # rarefaction
                 S_l = un_l - c_l
             else:
                 # shock
                 S_l = un_l - c_l * np.sqrt(0.5 * (hstar + h_l) * hstar) / h_l
 
-            if (hstar <= h_r):
+            if hstar <= h_r:
                 # rarefaction
                 S_r = un_r + c_r
             else:
@@ -461,7 +461,7 @@ def riemann_hllc(idir, ng,
 
             # figure out which region we are in and compute the state and
             # the interface fluxes using the HLLC Riemann solver
-            if (S_r <= 0.0):
+            if S_r <= 0.0:
                 # R region
                 U_state[:] = U_r[i, j, :]
 
@@ -474,7 +474,7 @@ def riemann_hllc(idir, ng,
 
                 U_state[ih] = HLLCfactor
 
-                if (idir == 1):
+                if idir == 1:
                     U_state[ixmom] = HLLCfactor * S_c
                     U_state[iymom] = HLLCfactor * ut_r
                 else:
@@ -482,7 +482,7 @@ def riemann_hllc(idir, ng,
                     U_state[iymom] = HLLCfactor * S_c
 
                 # species
-                if (nspec > 0):
+                if nspec > 0:
                     U_state[ihX:ihX + nspec] = HLLCfactor * \
                         U_r[i, j, ihX:ihX + nspec] / h_r
 
@@ -499,7 +499,7 @@ def riemann_hllc(idir, ng,
 
                 U_state[ih] = HLLCfactor
 
-                if (idir == 1):
+                if idir == 1:
                     U_state[ixmom] = HLLCfactor * S_c
                     U_state[iymom] = HLLCfactor * ut_l
                 else:
@@ -507,7 +507,7 @@ def riemann_hllc(idir, ng,
                     U_state[iymom] = HLLCfactor * S_c
 
                 # species
-                if (nspec > 0):
+                if nspec > 0:
                     U_state[ihX:ihX + nspec] = HLLCfactor * \
                         U_l[i, j, ihX:ihX + nspec] / h_l
 
@@ -561,18 +561,18 @@ def consFlux(idir, g, ih, ixmom, iymom, ihX, nspec, U_state):
     u = U_state[ixmom] / U_state[ih]
     v = U_state[iymom] / U_state[ih]
 
-    if (idir == 1):
+    if idir == 1:
         F[ih] = U_state[ih] * u
         F[ixmom] = U_state[ixmom] * u + 0.5 * g * U_state[ih]**2
         F[iymom] = U_state[iymom] * u
-        if (nspec > 0):
+        if nspec > 0:
             F[ihX:ihX + nspec] = U_state[ihX:ihX + nspec] * u
 
     else:
         F[ih] = U_state[ih] * v
         F[ixmom] = U_state[ixmom] * v
         F[iymom] = U_state[iymom] * v + 0.5 * g * U_state[ih]**2
-        if (nspec > 0):
+        if nspec > 0:
             F[ihX:ihX + nspec] = U_state[ihX:ihX + nspec] * v
 
     return F

@@ -61,8 +61,7 @@ def is_int(string):
         int(string)
     except ValueError:
         return False
-    else:
-        return True
+    return True
 
 
 def is_float(string):
@@ -71,17 +70,15 @@ def is_float(string):
         float(string)
     except ValueError:
         return False
-    else:
-        return True
+    return True
 
 
 def _get_val(value):
     if is_int(value):
         return int(value)
-    elif is_float(value):
+    if is_float(value):
         return float(value)
-    else:
-        return value.strip()
+    return value.strip()
 
 
 class RuntimeParameters:
@@ -148,7 +145,7 @@ class RuntimeParameters:
                 # if we have no_new = 1, then we only want to override existing
                 # key/values
                 if no_new:
-                    if key not in self.params.keys():
+                    if key not in self.params:
                         msg.warning("warning, key: %s not defined" % (key))
                         continue
 
@@ -189,7 +186,7 @@ class RuntimeParameters:
             key, value = item.split("=")
 
             # we only want to override existing keys/values
-            if key not in self.params.keys():
+            if key not in self.params:
                 msg.warning("warning, key: %s not defined" % (key))
                 continue
 
@@ -202,7 +199,7 @@ class RuntimeParameters:
         input key
         """
 
-        if self.params == {}:
+        if not self.params:
             msg.warning("WARNING: runtime parameters not yet initialized")
             self.load_params("_defaults")
 
@@ -210,10 +207,9 @@ class RuntimeParameters:
         if key not in self.used_params:
             self.used_params.append(key)
 
-        if key in self.params.keys():
+        if key in self.params:
             return self.params[key]
-        else:
-            raise KeyError(f"ERROR: runtime parameter {key} not found")
+        raise KeyError(f"ERROR: runtime parameter {key} not found")
 
     def print_unused_params(self):
         """

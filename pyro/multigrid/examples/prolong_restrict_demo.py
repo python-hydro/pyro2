@@ -4,7 +4,7 @@
 import numpy as np
 
 import pyro.mesh.boundary as bnd
-import pyro.mesh.patch as patch
+from pyro.mesh import patch
 
 
 def doit():

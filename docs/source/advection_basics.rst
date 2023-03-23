@@ -120,7 +120,7 @@ disagreement is our numerical error. This is run as:
 
 .. prompt:: bash
 
-   ./pyro_sim.py advection smooth inputs.smooth
+   pyro_sim.py advection smooth inputs.smooth
 
 
 .. raw:: html

@@ -6,8 +6,8 @@ import importlib
 import h5py
 
 import pyro.mesh.boundary as bnd
-import pyro.particles.particles as particles
 from pyro.mesh.patch import CellCenterData2d, Grid2d
+from pyro.particles import particles
 
 
 def read_bcs(f):
@@ -16,12 +16,12 @@ def read_bcs(f):
         gb = f["BC"]
     except KeyError:
         return None
-    else:
-        BCs = {}
-        for name in gb:
-            BCs[name] = gb[name]
 
-        return BCs
+    BCs = {}
+    for name in gb:
+        BCs[name] = gb[name]
+
+    return BCs
 
 
 def read(filename):
@@ -63,8 +63,8 @@ def read(filename):
             else:
                 bc_solver = solver_name
             bcmod = importlib.import_module(f"pyro.{bc_solver}.BC")
-            for name in custom_bcs:
-                bnd.define_bc(name, bcmod.user, is_solid=custom_bcs[name])
+            for name, is_solid in custom_bcs.items():
+                bnd.define_bc(name, bcmod.user, is_solid=is_solid)
 
         # read in the variable info -- start by getting the names
         gs = f["state"]

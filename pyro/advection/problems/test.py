@@ -1,6 +1,6 @@
 import sys
 
-import pyro.mesh.patch as patch
+from pyro.mesh import patch
 
 
 def init_data(my_data, rp):
@@ -23,4 +23,3 @@ def init_data(my_data, rp):
 
 def finalize():
     """ print out any information to the user at the end of the run """
-    pass

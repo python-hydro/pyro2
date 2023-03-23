@@ -379,8 +379,7 @@ class CellCenterData2d:
                 if len(var) > 0:
                     return var
             raise KeyError(f"name {name} is not valid")
-        else:
-            return self.get_var_by_index(n)
+        return self.get_var_by_index(n)
 
     def get_var_by_index(self, n):
         """

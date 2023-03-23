@@ -7,8 +7,8 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 
-import pyro.diffusion.problems.gaussian as gaussian
 import pyro.util.io_pyro as io
+from pyro.diffusion.problems import gaussian
 
 mpl.rcParams["text.usetex"] = True
 mpl.rcParams['mathtext.fontset'] = 'cm'
@@ -58,7 +58,7 @@ def process(file):
     rmin = 0
     rmax = np.sqrt(myg.xmax**2 + myg.ymax**2)
 
-    nbins = np.int(np.sqrt(myg.nx**2 + myg.ny**2))
+    nbins = int(np.sqrt(myg.nx**2 + myg.ny**2))
 
     # bins holds the edges, so there is one more value than actual bin
     # bin_centers holds the center value of the bin
@@ -88,7 +88,7 @@ def process(file):
     # now bin the associated data
     phi_bin = np.zeros(len(ncount)-1, dtype=np.float64)
 
-    for n in range(len(ncount)):
+    for n in range(1, len(ncount)):
 
         # remember that there are no whichbin == 0, since that
         # corresponds to the left edge.  So we want whichbin == 1 to
@@ -106,7 +106,7 @@ def process(file):
 
 if __name__ == "__main__":
 
-    if not len(sys.argv) >= 2:
+    if len(sys.argv) < 2:
         print(usage)
         sys.exit(2)
 
