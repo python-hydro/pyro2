@@ -19,21 +19,10 @@ for f in glob.glob("pyro/**/inputs*", recursive=True):
     if not f.endswith("inputs.auto"):
         inputs.append(f.replace("pyro/", ""))
 
-benchmarks = ["advection/tests/*.h5",
-              "advection_fv4/tests/*.h5",
-              "advection_nonuniform/tests/*.h5",
-              "advection_rk/tests/*.h5",
-              "compressible/tests/*.h5",
-              "compressible/tests/*.h5",
-              "compressible/tests/*.h5",
-              "compressible_fv4/tests/*.h5",
-              "compressible_rk/tests/*.h5",
-              "compressible_sdc/tests/*.h5",
-              "diffusion/tests/*.h5",
-              "incompressible/tests/*.h5",
-              "lm_atm/tests/*.h5",
-              "multigrid/tests/*.h5",
-              "swe/tests/*.h5"]
+# find all of the benchmark output files
+benchmarks = []
+for path in Path("pyro").glob("*/tests/*.h5"):
+    benchmarks.append(str(path.relative_to("pyro")))
 
 setup(name='pyro-hydro',
       description='A python hydrodynamics code for teaching and prototyping',
