@@ -1,6 +1,7 @@
 import sys
 
 import numpy
+
 import pyro.mesh.patch as patch
 from pyro.util import msg
 
