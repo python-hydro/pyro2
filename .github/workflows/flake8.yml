@@ -38,7 +38,7 @@ jobs:
           pip install flake8
 
       - name: Install pyro
-        run: python setup.py install --user
+        run: pip install .
 
       - name: Run flake8
         run: flake8 pyro
