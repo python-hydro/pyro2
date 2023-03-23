@@ -27,7 +27,26 @@ class PyroTest:
         return f"{self.solver}-{self.problem}"
 
 
-def run_test(t, reset_fails, store_all_benchmarks, rtol):
+@contextlib.contextmanager
+def avoid_interleaved_output(nproc):
+    """Collect all the printed output and print it all at once to avoid interleaving."""
+    if nproc == 1:
+        # not running in parallel, so we don't have to worry about interleaving
+        yield
+    else:
+        # capture all the output into a buffer, then print it when the test is
+        # finished to avoid interleaving
+        output_buffer = io.StringIO()
+        try:
+            with contextlib.redirect_stdout(output_buffer), \
+                 contextlib.redirect_stderr(output_buffer):
+                yield
+        finally:
+            # a single print call probably won't get interleaved
+            print(output_buffer.getvalue(), end="", flush=True)
+
+
+def run_test(t, reset_fails, store_all_benchmarks, rtol, nproc):
     orig_cwd = Path.cwd()
     # run each test in its own directory, since some of the output file names
     # overlap between tests, and h5py needs exclusive access when writing
@@ -35,19 +54,13 @@ def run_test(t, reset_fails, store_all_benchmarks, rtol):
     test_dir.mkdir(parents=True, exist_ok=True)
     try:
         os.chdir(test_dir)
-        # capture all the output into a buffer, then print it when the test is
-        # finished to avoid interleaving
-        output_buffer = io.StringIO()
-        with contextlib.redirect_stdout(output_buffer), \
-             contextlib.redirect_stderr(output_buffer):
+        with avoid_interleaved_output(nproc):
             p = pyro.PyroBenchmark(t.solver, comp_bench=True,
                                    reset_bench_on_fail=reset_fails,
                                    make_bench=store_all_benchmarks)
             p.initialize_problem(t.problem, t.inputs, t.options)
             start_n = p.sim.n
             err = p.run_sim(rtol)
-        # a single print call probably won't get interleaved
-        print(output_buffer.getvalue(), end="", flush=True)
     finally:
         os.chdir(orig_cwd)
     if err == 0:
@@ -112,7 +125,7 @@ def do_tests(out_file,
     # don't create more processes than needed
     nproc = min(nproc, len(tests_to_run))
     with Pool(processes=nproc) as pool:
-        tasks = ((t, reset_fails, store_all_benchmarks, rtol) for t in tests_to_run)
+        tasks = ((t, reset_fails, store_all_benchmarks, rtol, nproc) for t in tests_to_run)
         imap_it = pool.imap_unordered(run_test_star, tasks)
         # collect run results
         for name, err in imap_it:
