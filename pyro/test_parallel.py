@@ -34,8 +34,6 @@ def avoid_interleaved_output(nproc):
         # not running in parallel, so we don't have to worry about interleaving
         yield
     else:
-        # capture all the output into a buffer, then print it when the test is
-        # finished to avoid interleaving
         output_buffer = io.StringIO()
         try:
             with contextlib.redirect_stdout(output_buffer), \
@@ -70,7 +68,7 @@ def run_test(t, reset_fails, store_all_benchmarks, rtol, nproc):
         (test_dir / f"{basename}{p.sim.n:04d}.h5").unlink()
         (test_dir / "inputs.auto").unlink()
         test_dir.rmdir()
-        # try removing the top-level test directory
+        # try removing the top-level output directory
         try:
             test_dir.parent.rmdir()
         except OSError:
@@ -185,7 +183,7 @@ if __name__ == "__main__":
     p = argparse.ArgumentParser()
 
     p.add_argument("--outfile", "-o",
-                   help="name of file to output the report to (otherwise output to the screen)",
+                   help="name of file to output the report to (in addition to the screen)",
                    type=str, default=None)
 
     p.add_argument("--single",
