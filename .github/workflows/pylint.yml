@@ -38,7 +38,7 @@ jobs:
           pip install pylint
 
       - name: Install pyro
-        run: python setup.py install --user
+        run: pip install .
 
       - name: Validate
         run: pylint --errors-only pyro pyro/analysis
