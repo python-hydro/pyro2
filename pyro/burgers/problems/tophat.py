@@ -17,7 +17,7 @@ def init_data(myd, rp):
 
     u = myd.get_var("x-velocity")
     v = myd.get_var("y-velocity")
-    
+
     xmin = myd.grid.xmin
     xmax = myd.grid.xmax
 
@@ -29,13 +29,14 @@ def init_data(myd, rp):
 
     u[:, :] = 0.0
     v[:, :] = 0.0
-    
+
     R = 0.1
 
     inside = (myd.grid.x2d - xctr)**2 + (myd.grid.y2d - yctr)**2 < R**2
 
     u[inside] = 1.0
     v[inside] = 1.0
+
 
 def finalize():
     """ print out any information to the user at the end of the run """

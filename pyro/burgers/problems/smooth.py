@@ -1,7 +1,6 @@
 import sys
 
 import numpy
-
 import pyro.mesh.patch as patch
 from pyro.util import msg
 
@@ -33,6 +32,7 @@ def init_data(my_data, rp):
                                         (my_data.grid.y2d-yctr)**2))
     v[:, :] = 1.0 + numpy.exp(-60.0*((my_data.grid.x2d-xctr)**2 +
                                         (my_data.grid.y2d-yctr)**2))
+
 
 def finalize():
     """ print out any information to the user at the end of the run """

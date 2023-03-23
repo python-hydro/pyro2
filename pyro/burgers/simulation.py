@@ -3,7 +3,6 @@ import importlib
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
-
 import pyro.burgers.advective_fluxes as flx
 import pyro.mesh.patch as patch
 import pyro.particles.particles as particles
@@ -21,7 +20,7 @@ class Simulation(NullSimulation):
 
         # create grid, self.rp contains mesh.nx and mesh.ny
         my_grid = grid_setup(self.rp, ng=4)
-        
+
         # create the variables
         my_data = patch.CellCenterData2d(my_grid)
 
@@ -63,7 +62,7 @@ class Simulation(NullSimulation):
         v = self.cc_data.get_var("y-velocity")
 
         # dt = min(min(dx/|u_i|), min(dy/|v_j|))
-        
+
         xtmp = self.cc_data.grid.dx/max(np.max(np.abs(u)), self.SMALL)
         ytmp = self.cc_data.grid.dy/max(np.max(np.abs(v)), self.SMALL)
 
@@ -77,7 +76,7 @@ class Simulation(NullSimulation):
         # ytmp = np.sum(v)/self.cc_data.grid.dy
 
         # self.dt = cfl * max(1.0/(xtmp+ytmp), self.SMALL)
-        
+
     def evolve(self):
         """
         Evolve the burgers equation through one timestep.
@@ -89,7 +88,7 @@ class Simulation(NullSimulation):
         u_flux_x, u_flux_y = flx.unsplit_fluxes(self.cc_data, self.rp, self.dt, "x-velocity")
 
         v_flux_x, v_flux_y = flx.unsplit_fluxes(self.cc_data, self.rp, self.dt, "y-velocity")
-        
+
         """
         do the differencing for the fluxes now.  Here, we use slices so we
         avoid slow loops in python.  This is equivalent to:
@@ -127,13 +126,13 @@ class Simulation(NullSimulation):
 
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
-        
+
         myg = self.cc_data.grid
 
         # magnitude of the x-y velocity
-        
+
         uv = myg.scratch_array()
-        uv.v()[:, :] = np.sqrt(u.v()[:, :]*u.v()[:, :] + v.v()[:, :]*v.v()[:, :])
+        uv.v()[:, :] = np.sqrt(u.v()*u.v() + v.v()*v.v())
 
         _, axes, cbar_title = plot_tools.setup_axes(myg, 1)
 
