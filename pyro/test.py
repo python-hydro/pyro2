@@ -38,6 +38,7 @@ def do_tests(out_file,
     tests.append(PyroTest("advection_rk", "smooth", "inputs.smooth", opts))
     tests.append(PyroTest("advection_fv4",
                           "smooth", "inputs.smooth", opts))
+    tests.append(PyroTest("burgers", "smooth", "inputs.smooth", opts))
     tests.append(PyroTest("compressible", "quad", "inputs.quad", opts))
     tests.append(PyroTest("compressible", "sod", "inputs.sod.x", opts))
     tests.append(PyroTest("compressible", "rt", "inputs.rt", opts))
