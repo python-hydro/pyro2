@@ -1,9 +1,7 @@
 import numpy as np
-from numba import njit
 
 
-@njit(cache=True)
-def mac_vels(ng, dx, dy, dt,
+def mac_vels(grid,  dt,
              u, v,
              ldelta_ux, ldelta_vx,
              ldelta_uy, ldelta_vy,
@@ -13,10 +11,8 @@ def mac_vels(ng, dx, dy, dt,
 
     Parameters
     ----------
-    ng : int
-        The number of ghost cells
-    dx, dy : float
-        The cell spacings
+    grid : Grid2d
+        The grid object
     dt : float
         The timestep
     u, v : ndarray
@@ -37,7 +33,7 @@ def mac_vels(ng, dx, dy, dt,
     # get the full u and v left and right states (including transverse
     # terms) on both the x- and y-interfaces
     # pylint: disable-next=unused-variable
-    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = get_interface_states(ng, dx, dy, dt,
+    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = get_interface_states(grid, dt,
                                                                           u, v,
                                                                           ldelta_ux, ldelta_vx,
                                                                           ldelta_uy, ldelta_vy,
@@ -46,15 +42,13 @@ def mac_vels(ng, dx, dy, dt,
     # Riemann problem -- this follows Burger's equation.  We don't use
     # any input velocity for the upwinding.  Also, we only care about
     # the normal states here (u on x and v on y)
-    u_MAC = riemann_and_upwind(ng, u_xl, u_xr)
-    v_MAC = riemann_and_upwind(ng, v_yl, v_yr)
+    u_MAC = riemann_and_upwind(grid, u_xl, u_xr)
+    v_MAC = riemann_and_upwind(grid, v_yl, v_yr)
 
     return u_MAC, v_MAC
 
 
-# xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-@njit(cache=True)
-def states(ng, dx, dy, dt,
+def states(grid, dt,
            u, v,
            ldelta_ux, ldelta_vx,
            ldelta_uy, ldelta_vy,
@@ -67,10 +61,8 @@ def states(ng, dx, dy, dt,
 
     Parameters
     ----------
-    ng : int
-        The number of ghost cells
-    dx, dy : float
-        The cell spacings
+    grid : Grid2d
+        The grid object
     dt : float
         The timestep
     u, v : ndarray
@@ -92,7 +84,7 @@ def states(ng, dx, dy, dt,
 
     # get the full u and v left and right states (including transverse
     # terms) on both the x- and y-interfaces
-    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = get_interface_states(ng, dx, dy, dt,
+    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = get_interface_states(grid, dt,
                                                                           u, v,
                                                                           ldelta_ux, ldelta_vx,
                                                                           ldelta_uy, ldelta_vy,
@@ -100,17 +92,15 @@ def states(ng, dx, dy, dt,
 
     # upwind using the MAC velocity to determine which state exists on
     # the interface
-    u_xint = upwind(ng, u_xl, u_xr, u_MAC)
-    v_xint = upwind(ng, v_xl, v_xr, u_MAC)
-    u_yint = upwind(ng, u_yl, u_yr, v_MAC)
-    v_yint = upwind(ng, v_yl, v_yr, v_MAC)
+    u_xint = upwind(grid, u_xl, u_xr, u_MAC)
+    v_xint = upwind(grid, v_xl, v_xr, u_MAC)
+    u_yint = upwind(grid, u_yl, u_yr, v_MAC)
+    v_yint = upwind(grid, v_yl, v_yr, v_MAC)
 
     return u_xint, v_xint, u_yint, v_yint
 
 
-# xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-@njit(cache=True)
-def get_interface_states(ng, dx, dy, dt,
+def get_interface_states(grid, dt,
                          u, v,
                          ldelta_ux, ldelta_vx,
                          ldelta_uy, ldelta_vy,
@@ -121,10 +111,8 @@ def get_interface_states(ng, dx, dy, dt,
 
     Parameters
     ----------
-    ng : int
-        The number of ghost cells
-    dx, dy : float
-        The cell spacings
+    grid : Grid2d
+        The grid object
     dt : float
         The timestep
     u, v : ndarray
@@ -143,130 +131,111 @@ def get_interface_states(ng, dx, dy, dt,
         y-interfaces
     """
 
-    qx, qy = u.shape
+    u_xl = grid.scratch_array()
+    u_xr = grid.scratch_array()
+    u_yl = grid.scratch_array()
+    u_yr = grid.scratch_array()
 
-    u_xl = np.zeros((qx, qy))
-    u_xr = np.zeros((qx, qy))
-    u_yl = np.zeros((qx, qy))
-    u_yr = np.zeros((qx, qy))
-
-    v_xl = np.zeros((qx, qy))
-    v_xr = np.zeros((qx, qy))
-    v_yl = np.zeros((qx, qy))
-    v_yr = np.zeros((qx, qy))
-
-    nx = qx - 2 * ng
-    ny = qy - 2 * ng
-    ilo = ng
-    ihi = ng + nx
-    jlo = ng
-    jhi = ng + ny
+    v_xl = grid.scratch_array()
+    v_xr = grid.scratch_array()
+    v_yl = grid.scratch_array()
+    v_yr = grid.scratch_array()
 
     # first predict u and v to both interfaces, considering only the normal
     # part of the predictor.  These are the 'hat' states.
 
-    dtdx = dt / dx
-    dtdy = dt / dy
+    dtdx = dt / grid.dx
+    dtdy = dt / grid.dy
 
-    for i in range(ilo - 2, ihi + 2):
-        for j in range(jlo - 2, jhi + 2):
+    # u on x-edges
+    u_xl.ip(1, buf=2)[:, :] = u.v(buf=2) + \
+        0.5 * (1.0 - dtdx * u.v(buf=2)) * ldelta_ux.v(buf=2)
+    u_xr.v(buf=2)[:, :] = u.v(buf=2) - \
+        0.5 * (1.0 + dtdx * u.v(buf=2)) * ldelta_ux.v(buf=2)
 
-            # u on x-edges
-            u_xl[i + 1, j] = u[i, j] + 0.5 * \
-                (1.0 - dtdx * u[i, j]) * ldelta_ux[i, j]
-            u_xr[i, j] = u[i, j] - 0.5 * \
-                (1.0 + dtdx * u[i, j]) * ldelta_ux[i, j]
+    # v on x-edges
+    v_xl.ip(1, buf=2)[:, :] = v.v(buf=2) + \
+        0.5 * (1.0 - dtdx * u.v(buf=2)) * ldelta_vx.v(buf=2)
+    v_xr.v(buf=2)[:, :] = v.v(buf=2) - \
+        0.5 * (1.0 + dtdx * u.v(buf=2)) * ldelta_vx.v(buf=2)
 
-            # v on x-edges
-            v_xl[i + 1, j] = v[i, j] + 0.5 * \
-                (1.0 - dtdx * u[i, j]) * ldelta_vx[i, j]
-            v_xr[i, j] = v[i, j] - 0.5 * \
-                (1.0 + dtdx * u[i, j]) * ldelta_vx[i, j]
+    # u on y-edges
+    u_yl.jp(1, buf=2)[:, :] = u.v(buf=2) + \
+        0.5 * (1.0 - dtdy * v.v(buf=2)) * ldelta_uy.v(buf=2)
+    u_yr.v(buf=2)[:, :] = u.v(buf=2) - \
+        0.5 * (1.0 + dtdy * v.v(buf=2)) * ldelta_uy.v(buf=2)
 
-            # u on y-edges
-            u_yl[i, j + 1] = u[i, j] + 0.5 * \
-                (1.0 - dtdy * v[i, j]) * ldelta_uy[i, j]
-            u_yr[i, j] = u[i, j] - 0.5 * \
-                (1.0 + dtdy * v[i, j]) * ldelta_uy[i, j]
-
-            # v on y-edges
-            v_yl[i, j + 1] = v[i, j] + 0.5 * \
-                (1.0 - dtdy * v[i, j]) * ldelta_vy[i, j]
-            v_yr[i, j] = v[i, j] - 0.5 * \
-                (1.0 + dtdy * v[i, j]) * ldelta_vy[i, j]
+    # v on y-edges
+    v_yl.jp(1, buf=2)[:, :] = v.v(buf=2) + \
+        0.5 * (1.0 - dtdy * v.v(buf=2)) * ldelta_vy.v(buf=2)
+    v_yr.v(buf=2)[:, :] = v.v(buf=2) - \
+        0.5 * (1.0 + dtdy * v.v(buf=2)) * ldelta_vy.v(buf=2)
 
     # now get the normal advective velocities on the interfaces by solving
     # the Riemann problem.
-    uhat_adv = riemann(ng, u_xl, u_xr)
-    vhat_adv = riemann(ng, v_yl, v_yr)
+    uhat_adv = riemann(grid, u_xl, u_xr)
+    vhat_adv = riemann(grid, v_yl, v_yr)
 
     # now that we have the advective velocities, upwind the left and right
     # states using the appropriate advective velocity.
 
     # on the x-interfaces, we upwind based on uhat_adv
-    u_xint = upwind(ng, u_xl, u_xr, uhat_adv)
-    v_xint = upwind(ng, v_xl, v_xr, uhat_adv)
+    u_xint = upwind(grid, u_xl, u_xr, uhat_adv)
+    v_xint = upwind(grid, v_xl, v_xr, uhat_adv)
 
     # on the y-interfaces, we upwind based on vhat_adv
-    u_yint = upwind(ng, u_yl, u_yr, vhat_adv)
-    v_yint = upwind(ng, v_yl, v_yr, vhat_adv)
+    u_yint = upwind(grid, u_yl, u_yr, vhat_adv)
+    v_yint = upwind(grid, v_yl, v_yr, vhat_adv)
 
     # at this point, these states are the `hat' states -- they only
     # considered the normal to the interface portion of the predictor.
 
-    # add the transverse flux differences to the preliminary interface states
-    for i in range(ilo - 2, ihi + 2):
-        for j in range(jlo - 2, jhi + 2):
+    ubar = grid.scratch_array()
+    vbar = grid.scratch_array()
 
-            ubar = 0.5 * (uhat_adv[i, j] + uhat_adv[i + 1, j])
-            vbar = 0.5 * (vhat_adv[i, j] + vhat_adv[i, j + 1])
+    ubar.v(buf=2)[:, :] = 0.5 * (uhat_adv.v(buf=2) + uhat_adv.ip(1, buf=2))
+    vbar.v(buf=2)[:, :] = 0.5 * (vhat_adv.v(buf=2) + vhat_adv.jp(1, buf=2))
 
-            # v du/dy is the transerse term for the u states on x-interfaces
-            vu_y = vbar * (u_yint[i, j + 1] - u_yint[i, j])
+    # v du/dy is the transerse term for the u states on x-interfaces
+    vu_y = grid.scratch_array()
+    vu_y.v(buf=2)[:, :] = vbar.v(buf=2) * (u_yint.jp(1, buf=2) - u_yint.v(buf=2))
 
-            u_xl[i + 1, j] = u_xl[i + 1, j] - 0.5 * \
-                dtdy * vu_y - 0.5 * dt * gradp_x[i, j]
-            u_xr[i, j] = u_xr[i, j] - 0.5 * dtdy * \
-                vu_y - 0.5 * dt * gradp_x[i, j]
+    u_xl.ip(1, buf=2)[:, :] += -0.5 * dtdy * vu_y.v(buf=2) - 0.5 * dt * gradp_x.v(buf=2)
+    u_xr.v(buf=2)[:, :] += -0.5 * dtdy * vu_y.v(buf=2) - 0.5 * dt * gradp_x.v(buf=2)
 
-            # v dv/dy is the transverse term for the v states on x-interfaces
-            vv_y = vbar * (v_yint[i, j + 1] - v_yint[i, j])
+    # v dv/dy is the transverse term for the v states on x-interfaces
+    vv_y = grid.scratch_array()
+    vv_y.v(buf=2)[:, :] = vbar.v(buf=2) * (v_yint.jp(1, buf=2) - v_yint.v(buf=2))
 
-            v_xl[i + 1, j] = v_xl[i + 1, j] - 0.5 * \
-                dtdy * vv_y - 0.5 * dt * gradp_y[i, j]
-            v_xr[i, j] = v_xr[i, j] - 0.5 * dtdy * \
-                vv_y - 0.5 * dt * gradp_y[i, j]
+    v_xl.ip(1, buf=2)[:, :] += -0.5 * dtdy * vv_y.v(buf=2) - 0.5 * dt * gradp_y.v(buf=2)
+    v_xr.v(buf=2)[:, :] += -0.5 * dtdy * vv_y.v(buf=2) - 0.5 * dt * gradp_y.v(buf=2)
 
-            # u dv/dx is the transverse term for the v states on y-interfaces
-            uv_x = ubar * (v_xint[i + 1, j] - v_xint[i, j])
+    # u dv/dx is the transverse term for the v states on y-interfaces
+    uv_x = grid.scratch_array()
+    uv_x.v(buf=2)[:, :] = ubar.v(buf=2) * (v_xint.ip(1, buf=2) - v_xint.v(buf=2))
 
-            v_yl[i, j + 1] = v_yl[i, j + 1] - 0.5 * \
-                dtdx * uv_x - 0.5 * dt * gradp_y[i, j]
-            v_yr[i, j] = v_yr[i, j] - 0.5 * dtdx * \
-                uv_x - 0.5 * dt * gradp_y[i, j]
+    v_yl.jp(1, buf=2)[:, :] += -0.5 * dtdx * uv_x.v(buf=2) - 0.5 * dt * gradp_y.v(buf=2)
+    v_yr.v(buf=2)[:, :] += -0.5 * dtdx * uv_x.v(buf=2) - 0.5 * dt * gradp_y.v(buf=2)
 
-            # u du/dx is the transverse term for the u states on y-interfaces
-            uu_x = ubar * (u_xint[i + 1, j] - u_xint[i, j])
+    # u du/dx is the transverse term for the u states on y-interfaces
+    uu_x = grid.scratch_array()
+    uu_x.v(buf=2)[:, :] = ubar.v(buf=2) * (u_xint.ip(1, buf=2) - u_xint.v(buf=2))
 
-            u_yl[i, j + 1] = u_yl[i, j + 1] - 0.5 * \
-                dtdx * uu_x - 0.5 * dt * gradp_x[i, j]
-            u_yr[i, j] = u_yr[i, j] - 0.5 * dtdx * \
-                uu_x - 0.5 * dt * gradp_x[i, j]
+    u_yl.jp(1, buf=2)[:, :] += -0.5 * dtdx * uu_x.v(buf=2) - 0.5 * dt * gradp_x.v(buf=2)
+    u_yr.v(buf=2)[:, :] += -0.5 * dtdx * uu_x.v(buf=2) - 0.5 * dt * gradp_x.v(buf=2)
 
     return u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr
 
 
-# xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-@njit(cache=True)
-def upwind(ng, q_l, q_r, s):
+def upwind(grid, q_l, q_r, s):
     r"""
     upwind the left and right states based on the specified input
     velocity, s.  The resulting interface state is q_int
 
     Parameters
     ----------
-    ng : int
-        The number of ghost cells
+    grid : Grid2d
+        The grid object
     q_l, q_r : ndarray
         left and right states
     s : ndarray
@@ -278,33 +247,16 @@ def upwind(ng, q_l, q_r, s):
         Upwinded state
     """
 
-    qx, qy = s.shape
+    q_int = grid.scratch_array()
 
-    nx = qx - 2 * ng
-    ny = qy - 2 * ng
-    ilo = ng
-    ihi = ng + nx
-    jlo = ng
-    jhi = ng + ny
-
-    q_int = np.zeros_like(s)
-
-    for i in range(ilo - 1, ihi + 1):
-        for j in range(jlo - 1, jhi + 1):
-
-            if (s[i, j] > 0.0):
-                q_int[i, j] = q_l[i, j]
-            elif (s[i, j] == 0.0):
-                q_int[i, j] = 0.5 * (q_l[i, j] + q_r[i, j])
-            else:
-                q_int[i, j] = q_r[i, j]
+    q_int.v(buf=1)[:, :] = np.where(s.v(buf=1) == 0.0,
+                                    0.5 * (q_l.v(buf=1) + q_r.v(buf=1)),
+                                    np.where(s.v(buf=1) > 0.0, q_l.v(buf=1), q_r.v(buf=1)))
 
     return q_int
 
 
-# xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-@njit(cache=True)
-def riemann(ng, q_l, q_r):
+def riemann(grid, q_l, q_r):
     """
     Solve the Burger's Riemann problem given the input left and right
     states and return the state on the interface.
@@ -313,8 +265,8 @@ def riemann(ng, q_l, q_r):
 
     Parameters
     ----------
-    ng : int
-        The number of ghost cells
+    grid : Grid2d
+        The grid object
     q_l, q_r : ndarray
         left and right states
 
@@ -324,33 +276,19 @@ def riemann(ng, q_l, q_r):
         Interface state
     """
 
-    qx, qy = q_l.shape
+    s = grid.scratch_array()
 
-    nx = qx - 2 * ng
-    ny = qy - 2 * ng
-    ilo = ng
-    ihi = ng + nx
-    jlo = ng
-    jhi = ng + ny
-
-    s = np.zeros_like(q_l)
-
-    for i in range(ilo - 1, ihi + 1):
-        for j in range(jlo - 1, jhi + 1):
-
-            if (q_l[i, j] > 0.0 and q_l[i, j] + q_r[i, j] > 0.0):
-                s[i, j] = q_l[i, j]
-            elif (q_l[i, j] <= 0.0 and q_r[i, j] >= 0.0):
-                s[i, j] = 0.0
-            else:
-                s[i, j] = q_r[i, j]
+    s.v(buf=1)[:, :] = np.where(np.logical_and(q_l.v(buf=1) <= 0.0,
+                                               q_r.v(buf=1) >= 0.0),
+                                0.0,
+                                np.where(np.logical_and(q_l.v(buf=1) > 0.0,
+                                                        q_l.v(buf=1) + q_r.v(buf=1) > 0.0),
+                                         q_l.v(buf=1), q_r.v(buf=1)))
 
     return s
 
 
-# xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-@njit(cache=True)
-def riemann_and_upwind(ng, q_l, q_r):
+def riemann_and_upwind(grid, q_l, q_r):
     r"""
     First solve the Riemann problem given q_l and q_r to give the
     velocity on the interface and: use this velocity to upwind to
@@ -361,8 +299,8 @@ def riemann_and_upwind(ng, q_l, q_r):
 
     Parameters
     ----------
-    ng : int
-        The number of ghost cells
+    grid : Grid2d
+        The grid object
     q_l, q_r : ndarray
         left and right states
 
@@ -372,5 +310,5 @@ def riemann_and_upwind(ng, q_l, q_r):
         Upwinded state
     """
 
-    s = riemann(ng, q_l, q_r)
-    return upwind(ng, q_l, q_r, s)
+    s = riemann(grid, q_l, q_r)
+    return upwind(grid, q_l, q_r, s)
