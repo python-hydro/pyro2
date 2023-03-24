@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 
-"""Test the general MG solver with a variable coeffcient Poisson
-problem (in essence, we are making this solver act like the
-variable_coefficient_MG.py solver).  This ensures we didn't
-screw up the base functionality here.
+"""Test the general MG solver with a variable coeffcient Helmholtz
+problem.  This ensures we didn't screw up the base functionality here.
 
 Here we solve::
 
-   div . ( beta grad phi ) = f
+   alpha phi + div . ( beta grad phi ) = f
 
 with::
 
+   alpha = 1.0
    beta = 2.0 + cos(2.0*pi*x)*cos(2.0*pi*y)
 
-   f = -16.0*pi**2*(cos(2*pi*x)*cos(2*pi*y) + 1)*sin(2*pi*x)*sin(2*pi*y)
+   f = (-16.0*pi**2*cos(2*pi*x)*cos(2*pi*y) - 16.0*pi**2 + 1.0)*sin(2*pi*x)*sin(2*pi*y)
+
 
 This has the exact solution::
 
@@ -29,17 +29,14 @@ force it to 0 on the boundary, which is not correct here)
 """
 
 
-import os
-
 import matplotlib.pyplot as plt
 import numpy as np
 
-from pyro.util import compare
 import pyro.mesh.boundary as bnd
-import pyro.mesh.patch as patch
 import pyro.multigrid.general_MG as MG
 import pyro.util.io_pyro as io
-import pyro.util.msg as msg
+from pyro.mesh import patch
+from pyro.util import compare, msg
 
 
 # the analytic solution
@@ -49,7 +46,7 @@ def true(x, y):
 
 # the coefficients
 def alpha(x, y):
-    return np.zeros_like(x)
+    return np.ones_like(x)
 
 
 def beta(x, y):
@@ -66,8 +63,8 @@ def gamma_y(x, y):
 
 # the righthand side
 def f(x, y):
-    return -16.0*np.pi**2*(np.cos(2*np.pi*x)*np.cos(2*np.pi*y) + 1) * \
-        np.sin(2*np.pi*x)*np.sin(2*np.pi*y)
+    return (-16.0*np.pi**2*np.cos(2*np.pi*x)*np.cos(2*np.pi*y) -
+            16.0*np.pi**2 + 1.0)*np.sin(2*np.pi*x)*np.sin(2*np.pi*y)
 
 
 def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False, bench_dir="tests/",
@@ -169,7 +166,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False, bench
 
         plt.tight_layout()
 
-        plt.savefig("mg_general_beta_only_test.png")
+        plt.savefig("mg_general_alphabeta_only_test.png")
 
     # store the output for later comparison
     bench = "mg_general_poisson_dirichlet"
@@ -232,4 +229,4 @@ if __name__ == "__main__":
 
     plt.tight_layout()
 
-    plt.savefig("mg_general_beta_only_converge.png")
+    plt.savefig("mg_general_alphabeta_only_converge.png")

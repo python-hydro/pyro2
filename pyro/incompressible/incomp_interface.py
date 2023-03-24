@@ -32,6 +32,7 @@ def mac_vels(grid,  dt,
 
     # get the full u and v left and right states (including transverse
     # terms) on both the x- and y-interfaces
+    # pylint: disable-next=unused-variable
     u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = get_interface_states(grid, dt,
                                                                           u, v,
                                                                           ldelta_ux, ldelta_vx,

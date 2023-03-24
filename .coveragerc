@@ -1,0 +1,16 @@
+[paths]
+# files installed in */site-packages/pyro/ are equivalent to those in pyro/
+source =
+  pyro
+  */site-packages/pyro
+
+[run]
+source = pyro
+# measure the source files from the installed pyro package
+source_pkgs = pyro
+
+[report]
+# don't include the test files themselves
+omit =
+  */tests/*
+  pyro/test.py

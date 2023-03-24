@@ -140,7 +140,7 @@ class GeneralMG2d(MG.CellCenterMG2d):
         beta_y = self.beta_edge[level].y
 
         # do red-black G-S
-        for i in range(nsmooth):
+        for _ in range(nsmooth):
 
             # do the red black updating in four decoupled groups
             #

@@ -88,7 +88,7 @@ def process(file):
     # now bin the associated data
     phi_bin = np.zeros(len(ncount)-1, dtype=np.float64)
 
-    for n in range(len(ncount)):
+    for n in range(1, len(ncount)):
 
         # remember that there are no whichbin == 0, since that
         # corresponds to the left edge.  So we want whichbin == 1 to
@@ -106,7 +106,7 @@ def process(file):
 
 if __name__ == "__main__":
 
-    if not len(sys.argv) >= 2:
+    if len(sys.argv) < 2:
         print(usage)
         sys.exit(2)
 

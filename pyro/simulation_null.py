@@ -85,7 +85,7 @@ def bc_setup(rp):
     return bc, bc_xodd, bc_yodd
 
 
-class NullSimulation(object):
+class NullSimulation:
 
     def __init__(self, solver_name, problem_name, rp, timers=None, data_class=patch.CellCenterData2d):
         """

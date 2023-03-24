@@ -422,7 +422,7 @@ class Simulation(NullSimulation):
             0.5*(u.ip(1) - u.ip(-1))/myg.dx + \
             0.5*(v.jp(1) - v.jp(-1))/myg.dy
 
-        fig, axes = plt.subplots(nrows=2, ncols=2, num=1)
+        _, axes = plt.subplots(nrows=2, ncols=2, num=1)
         plt.subplots_adjust(hspace=0.25)
 
         fields = [u, v, vort, divU]

@@ -27,7 +27,7 @@ def compare(fine, coarse):
 
 if __name__ == "__main__":
 
-    if not len(sys.argv) == 3:
+    if len(sys.argv) != 3:
         print(usage)
         sys.exit(2)
 

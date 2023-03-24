@@ -1,37 +1,47 @@
 #!/usr/bin/env python3
 
-"""Test the general MG solver with a CONSTANT coefficient problem --
-the same one from the multigrid class test.  This ensures we didn't
+"""Test the general MG solver with a variable coeffcient Poisson
+problem (in essence, we are making this solver act like the
+variable_coefficient_MG.py solver).  This ensures we didn't
 screw up the base functionality here.
 
-We solve::
+Here we solve::
 
-   u_xx + u_yy = -2[(1-6x**2)y**2(1-y**2) + (1-6y**2)x**2(1-x**2)]
-   u = 0 on the boundary
+   div . ( beta grad phi ) = f
 
-this is the example from page 64 of the book `A Multigrid Tutorial, 2nd Ed.`
+with::
 
-The analytic solution is u(x,y) = (x**2 - x**4)(y**4 - y**2)
+   beta = 2.0 + cos(2.0*pi*x)*cos(2.0*pi*y)
+
+   f = -16.0*pi**2*(cos(2*pi*x)*cos(2*pi*y) + 1)*sin(2*pi*x)*sin(2*pi*y)
+
+This has the exact solution::
+
+   phi = sin(2.0*pi*x)*sin(2.0*pi*y)
+
+on [0,1] x [0,1]
+
+We use Dirichlet BCs on phi.  For beta, we do not have to impose the
+same BCs, since that may represent a different physical quantity.
+Here we take beta to have Neumann BCs.  (Dirichlet BCs for beta will
+force it to 0 on the boundary, which is not correct here)
 
 """
 
 
-import os
-
 import matplotlib.pyplot as plt
 import numpy as np
 
-from pyro.util import compare
 import pyro.mesh.boundary as bnd
-import pyro.mesh.patch as patch
 import pyro.multigrid.general_MG as MG
 import pyro.util.io_pyro as io
-import pyro.util.msg as msg
+from pyro.mesh import patch
+from pyro.util import compare, msg
 
 
 # the analytic solution
 def true(x, y):
-    return (x**2 - x**4)*(y**4 - y**2)
+    return np.sin(2.0*np.pi*x)*np.sin(2.0*np.pi*y)
 
 
 # the coefficients
@@ -40,7 +50,7 @@ def alpha(x, y):
 
 
 def beta(x, y):
-    return np.ones_like(x)
+    return 2.0 + np.cos(2.0*np.pi*x)*np.cos(2.0*np.pi*y)
 
 
 def gamma_x(x, y):
@@ -53,7 +63,8 @@ def gamma_y(x, y):
 
 # the righthand side
 def f(x, y):
-    return -2.0*((1.0-6.0*x**2)*y**2*(1.0-y**2) + (1.0-6.0*y**2)*x**2*(1.0-x**2))
+    return -16.0*np.pi**2*(np.cos(2*np.pi*x)*np.cos(2*np.pi*y) + 1) * \
+        np.sin(2*np.pi*x)*np.sin(2*np.pi*y)
 
 
 def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False, bench_dir="tests/",
@@ -155,7 +166,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False, bench
 
         plt.tight_layout()
 
-        plt.savefig("mg_general_dirichlet_test.png")
+        plt.savefig("mg_general_beta_only_test.png")
 
     # store the output for later comparison
     bench = "mg_general_poisson_dirichlet"
@@ -171,7 +182,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False, bench
         msg.warning("comparing to: %s " % (compare_file))
         bench = io.read(compare_file)
 
-        result = compare.compare(my_data, bench)
+        result = compare.compare(my_data, bench, rtol)
 
         if result == 0:
             msg.success(f"results match benchmark to within relative tolerance of {rtol}\n")
@@ -218,4 +229,4 @@ if __name__ == "__main__":
 
     plt.tight_layout()
 
-    plt.savefig("mg_general_dirichlet_converge.png")
+    plt.savefig("mg_general_beta_only_converge.png")
