@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.incompressible package &mdash; pyro 4.0.1.post23+g2b20cd56 documentation</title>
+  <title>pyro.incompressible package &mdash; pyro 4.0.1.post24+g92d93660 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -198,15 +198,13 @@ projection (the MAC projection)</p></li>
 <span id="pyro-incompressible-incomp-interface-module"></span><h2>pyro.incompressible.incomp_interface module<a class="headerlink" href="#module-pyro.incompressible.incomp_interface" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.incompressible.incomp_interface.get_interface_states">
-<span class="sig-prename descclassname"><span class="pre">pyro.incompressible.incomp_interface.</span></span><span class="sig-name descname"><span class="pre">get_interface_states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_ux</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_vx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_uy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_vy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradp_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradp_y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/incomp_interface.html#get_interface_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.incomp_interface.get_interface_states" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.incompressible.incomp_interface.</span></span><span class="sig-name descname"><span class="pre">get_interface_states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_ux</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_vx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_uy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_vy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradp_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradp_y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/incomp_interface.html#get_interface_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.incomp_interface.get_interface_states" title="Permalink to this definition"></a></dt>
 <dd><p>Compute the unsplit predictions of u and v on both the x- and
 y-interfaces.  This includes the transverse terms.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>ng</strong><span class="classifier">int</span></dt><dd><p>The number of ghost cells</p>
-</dd>
-<dt><strong>dx, dy</strong><span class="classifier">float</span></dt><dd><p>The cell spacings</p>
+<dt><strong>grid</strong><span class="classifier">Grid2d</span></dt><dd><p>The grid object</p>
 </dd>
 <dt><strong>dt</strong><span class="classifier">float</span></dt><dd><p>The timestep</p>
 </dd>
@@ -232,14 +230,12 @@ y-interfaces</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.incompressible.incomp_interface.mac_vels">
-<span class="sig-prename descclassname"><span class="pre">pyro.incompressible.incomp_interface.</span></span><span class="sig-name descname"><span class="pre">mac_vels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_ux</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_vx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_uy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_vy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradp_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradp_y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/incomp_interface.html#mac_vels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.incomp_interface.mac_vels" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.incompressible.incomp_interface.</span></span><span class="sig-name descname"><span class="pre">mac_vels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_ux</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_vx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_uy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_vy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradp_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradp_y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/incomp_interface.html#mac_vels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.incomp_interface.mac_vels" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate the MAC velocities in the x and y directions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>ng</strong><span class="classifier">int</span></dt><dd><p>The number of ghost cells</p>
-</dd>
-<dt><strong>dx, dy</strong><span class="classifier">float</span></dt><dd><p>The cell spacings</p>
+<dt><strong>grid</strong><span class="classifier">Grid2d</span></dt><dd><p>The grid object</p>
 </dd>
 <dt><strong>dt</strong><span class="classifier">float</span></dt><dd><p>The timestep</p>
 </dd>
@@ -264,14 +260,14 @@ y-interfaces</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.incompressible.incomp_interface.riemann">
-<span class="sig-prename descclassname"><span class="pre">pyro.incompressible.incomp_interface.</span></span><span class="sig-name descname"><span class="pre">riemann</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_r</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/incomp_interface.html#riemann"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.incomp_interface.riemann" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.incompressible.incomp_interface.</span></span><span class="sig-name descname"><span class="pre">riemann</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_r</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/incomp_interface.html#riemann"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.incomp_interface.riemann" title="Permalink to this definition"></a></dt>
 <dd><p>Solve the Burger’s Riemann problem given the input left and right
 states and return the state on the interface.</p>
 <p>This uses the expressions from Almgren, Bell, and Szymczak 1996.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>ng</strong><span class="classifier">int</span></dt><dd><p>The number of ghost cells</p>
+<dt><strong>grid</strong><span class="classifier">Grid2d</span></dt><dd><p>The grid object</p>
 </dd>
 <dt><strong>q_l, q_r</strong><span class="classifier">ndarray</span></dt><dd><p>left and right states</p>
 </dd>
@@ -288,7 +284,7 @@ states and return the state on the interface.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.incompressible.incomp_interface.riemann_and_upwind">
-<span class="sig-prename descclassname"><span class="pre">pyro.incompressible.incomp_interface.</span></span><span class="sig-name descname"><span class="pre">riemann_and_upwind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_r</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/incomp_interface.html#riemann_and_upwind"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.incomp_interface.riemann_and_upwind" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.incompressible.incomp_interface.</span></span><span class="sig-name descname"><span class="pre">riemann_and_upwind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_r</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/incomp_interface.html#riemann_and_upwind"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.incomp_interface.riemann_and_upwind" title="Permalink to this definition"></a></dt>
 <dd><p>First solve the Riemann problem given q_l and q_r to give the
 velocity on the interface and: use this velocity to upwind to
 determine the state (q_l, q_r, or a mix) on the interface).</p>
@@ -297,7 +293,7 @@ velocity to upwind with).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>ng</strong><span class="classifier">int</span></dt><dd><p>The number of ghost cells</p>
+<dt><strong>grid</strong><span class="classifier">Grid2d</span></dt><dd><p>The grid object</p>
 </dd>
 <dt><strong>q_l, q_r</strong><span class="classifier">ndarray</span></dt><dd><p>left and right states</p>
 </dd>
@@ -314,16 +310,14 @@ velocity to upwind with).</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.incompressible.incomp_interface.states">
-<span class="sig-prename descclassname"><span class="pre">pyro.incompressible.incomp_interface.</span></span><span class="sig-name descname"><span class="pre">states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_ux</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_vx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_uy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_vy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradp_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradp_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_MAC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_MAC</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/incomp_interface.html#states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.incomp_interface.states" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.incompressible.incomp_interface.</span></span><span class="sig-name descname"><span class="pre">states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_ux</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_vx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_uy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_vy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradp_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradp_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_MAC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_MAC</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/incomp_interface.html#states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.incomp_interface.states" title="Permalink to this definition"></a></dt>
 <dd><p>This is similar to <code class="docutils literal notranslate"><span class="pre">mac_vels</span></code>, but it predicts the interface states
 of both u and v on both interfaces, using the MAC velocities to
 do the upwinding.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>ng</strong><span class="classifier">int</span></dt><dd><p>The number of ghost cells</p>
-</dd>
-<dt><strong>dx, dy</strong><span class="classifier">float</span></dt><dd><p>The cell spacings</p>
+<dt><strong>grid</strong><span class="classifier">Grid2d</span></dt><dd><p>The grid object</p>
 </dd>
 <dt><strong>dt</strong><span class="classifier">float</span></dt><dd><p>The timestep</p>
 </dd>
@@ -350,13 +344,13 @@ do the upwinding.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.incompressible.incomp_interface.upwind">
-<span class="sig-prename descclassname"><span class="pre">pyro.incompressible.incomp_interface.</span></span><span class="sig-name descname"><span class="pre">upwind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/incomp_interface.html#upwind"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.incomp_interface.upwind" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.incompressible.incomp_interface.</span></span><span class="sig-name descname"><span class="pre">upwind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/incomp_interface.html#upwind"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.incomp_interface.upwind" title="Permalink to this definition"></a></dt>
 <dd><p>upwind the left and right states based on the specified input
 velocity, s.  The resulting interface state is q_int</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>ng</strong><span class="classifier">int</span></dt><dd><p>The number of ghost cells</p>
+<dt><strong>grid</strong><span class="classifier">Grid2d</span></dt><dd><p>The grid object</p>
 </dd>
 <dt><strong>q_l, q_r</strong><span class="classifier">ndarray</span></dt><dd><p>left and right states</p>
 </dd>

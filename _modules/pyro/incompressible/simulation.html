@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.incompressible.simulation &mdash; pyro 4.0.1.post23+g2b20cd56 documentation</title>
+  <title>pyro.incompressible.simulation &mdash; pyro 4.0.1.post24+g92d93660 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -341,11 +341,11 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  making MAC velocities&quot;</span><span class="p">)</span>
 
-        <span class="n">_um</span><span class="p">,</span> <span class="n">_vm</span> <span class="o">=</span> <span class="n">incomp_interface</span><span class="o">.</span><span class="n">mac_vels</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
-                                               <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span>
-                                               <span class="n">ldelta_ux</span><span class="p">,</span> <span class="n">ldelta_vx</span><span class="p">,</span>
-                                               <span class="n">ldelta_uy</span><span class="p">,</span> <span class="n">ldelta_vy</span><span class="p">,</span>
-                                               <span class="n">gradp_x</span><span class="p">,</span> <span class="n">gradp_y</span><span class="p">)</span>
+        <span class="n">_um</span><span class="p">,</span> <span class="n">_vm</span> <span class="o">=</span> <span class="n">incomp_interface</span><span class="o">.</span><span class="n">mac_vels</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
+                                             <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span>
+                                             <span class="n">ldelta_ux</span><span class="p">,</span> <span class="n">ldelta_vx</span><span class="p">,</span>
+                                             <span class="n">ldelta_uy</span><span class="p">,</span> <span class="n">ldelta_vy</span><span class="p">,</span>
+                                             <span class="n">gradp_x</span><span class="p">,</span> <span class="n">gradp_y</span><span class="p">)</span>
 
         <span class="n">u_MAC</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_um</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
         <span class="n">v_MAC</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_vm</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
@@ -406,12 +406,12 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  making u, v edge states&quot;</span><span class="p">)</span>
 
         <span class="n">_ux</span><span class="p">,</span> <span class="n">_vx</span><span class="p">,</span> <span class="n">_uy</span><span class="p">,</span> <span class="n">_vy</span> <span class="o">=</span> \
-               <span class="n">incomp_interface</span><span class="o">.</span><span class="n">states</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
-                                         <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span>
-                                         <span class="n">ldelta_ux</span><span class="p">,</span> <span class="n">ldelta_vx</span><span class="p">,</span>
-                                         <span class="n">ldelta_uy</span><span class="p">,</span> <span class="n">ldelta_vy</span><span class="p">,</span>
-                                         <span class="n">gradp_x</span><span class="p">,</span> <span class="n">gradp_y</span><span class="p">,</span>
-                                         <span class="n">u_MAC</span><span class="p">,</span> <span class="n">v_MAC</span><span class="p">)</span>
+               <span class="n">incomp_interface</span><span class="o">.</span><span class="n">states</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
+                                       <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span>
+                                       <span class="n">ldelta_ux</span><span class="p">,</span> <span class="n">ldelta_vx</span><span class="p">,</span>
+                                       <span class="n">ldelta_uy</span><span class="p">,</span> <span class="n">ldelta_vy</span><span class="p">,</span>
+                                       <span class="n">gradp_x</span><span class="p">,</span> <span class="n">gradp_y</span><span class="p">,</span>
+                                       <span class="n">u_MAC</span><span class="p">,</span> <span class="n">v_MAC</span><span class="p">)</span>
 
         <span class="n">u_xint</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_ux</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
         <span class="n">v_xint</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_vx</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
