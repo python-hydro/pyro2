@@ -568,7 +568,7 @@ class CellCenterMG2d:
         ycoeff = self.beta/myg.dy**2
 
         # do red-black G-S
-        for i in range(nsmooth):
+        for _ in range(nsmooth):
 
             # do the red black updating in four decoupled groups
             #

@@ -7,8 +7,9 @@ import os
 import sys
 
 import pyro.pyro_sim as pyro
-from examples.multigrid import (mg_test_general_inhomogeneous, mg_test_simple,
-                                mg_test_vc_dirichlet, mg_test_vc_periodic)
+from pyro.multigrid.examples import (mg_test_general_inhomogeneous,
+                                     mg_test_simple, mg_test_vc_dirichlet,
+                                     mg_test_vc_periodic)
 
 
 class PyroTest:
@@ -110,7 +111,7 @@ def do_tests(out_file,
 
         f.write(f"\n{failed} test(s) failed\n")
 
-        if not f == sys.stdout:
+        if f != sys.stdout:
             f.close()
 
     return failed

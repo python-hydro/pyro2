@@ -102,8 +102,8 @@ Because it is one-dimensional, we run it in narrow domains in the x- or y-direct
 
 .. prompt:: bash
 
-   ./pyro_sim.py compressible sod inputs.sod.x
-   ./pyro_sim.py compressible sod inputs.sod.y
+   pyro_sim.py compressible sod inputs.sod.x
+   pyro_sim.py compressible sod inputs.sod.y
 
 A simple script, ``sod_compare.py`` in ``analysis/`` will read a pyro output
 file and plot the solution over the exact Sod solution. Below we see
@@ -128,7 +128,7 @@ is run as:
 
 .. prompt:: bash
 
-   ./pyro_sim.py compressible sedov inputs.sedov
+   pyro_sim.py compressible sedov inputs.sedov
 
 The video below shows the output from a 128 x 128 grid with the energy
 put in a radius of 0.0125 surrounding the center of the domain. A
@@ -165,7 +165,7 @@ online by Pawel Artymowicz). It is run as:
 
 .. prompt:: bash
 
-   ./pyro_sim.py compressible quad inputs.quad
+   pyro_sim.py compressible quad inputs.quad
 
 .. image:: quad.png
    :align: center
@@ -181,7 +181,7 @@ escape the domain. It is run as:
 
 .. prompt:: bash
 
-   ./pyro_sim.py compressible rt inputs.rt
+   pyro_sim.py compressible rt inputs.rt
 
 .. raw:: html
 
@@ -199,7 +199,7 @@ watches it buoyantly rise and roll up. This is run as:
 
 .. prompt:: bash
 
-   ./pyro_sim.py compressible bubble inputs.bubble
+   pyro_sim.py compressible bubble inputs.bubble
 
 
 .. image:: bubble.png

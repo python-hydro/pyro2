@@ -16,7 +16,7 @@ usage = """
       usage: ./smooth_error.py file
 """
 
-if not len(sys.argv) == 2:
+if len(sys.argv) != 2:
     print(usage)
     sys.exit(2)
 

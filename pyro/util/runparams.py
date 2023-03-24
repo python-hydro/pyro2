@@ -145,7 +145,7 @@ class RuntimeParameters:
                 # if we have no_new = 1, then we only want to override existing
                 # key/values
                 if no_new:
-                    if key not in self.params.keys():
+                    if key not in self.params:
                         msg.warning("warning, key: %s not defined" % (key))
                         continue
 
@@ -186,7 +186,7 @@ class RuntimeParameters:
             key, value = item.split("=")
 
             # we only want to override existing keys/values
-            if key not in self.params.keys():
+            if key not in self.params:
                 msg.warning("warning, key: %s not defined" % (key))
                 continue
 
@@ -199,7 +199,7 @@ class RuntimeParameters:
         input key
         """
 
-        if self.params == {}:
+        if not self.params:
             msg.warning("WARNING: runtime parameters not yet initialized")
             self.load_params("_defaults")
 
@@ -207,7 +207,7 @@ class RuntimeParameters:
         if key not in self.used_params:
             self.used_params.append(key)
 
-        if key in self.params.keys():
+        if key in self.params:
             return self.params[key]
         raise KeyError(f"ERROR: runtime parameter {key} not found")
 
