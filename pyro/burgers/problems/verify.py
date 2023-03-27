@@ -6,12 +6,11 @@ import numpy as np
 
 import pyro.util.io_pyro as io
 
-usage = """
+"""
 usage: ./verify.py file1 file2
 Used to verify the shock speed for inviscid Burgers' solver.
 Input files should be input files from burgers/problem/test.py
 """
-
 
 def verify(file1, file2):
 
