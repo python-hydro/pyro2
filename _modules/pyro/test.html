@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.test &mdash; pyro 4.0.1.post24+g92d93660 documentation</title>
+  <title>pyro.test &mdash; pyro 4.0.1.post25+ga6ad3575 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -123,9 +123,13 @@
 
 
 <span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">contextlib</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">io</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Pool</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">import</span> <span class="nn">pyro.pyro_sim</span> <span class="k">as</span> <span class="nn">pyro</span>
 <span class="kn">from</span> <span class="nn">pyro.multigrid.examples</span> <span class="kn">import</span> <span class="p">(</span><span class="n">mg_test_general_inhomogeneous</span><span class="p">,</span>
@@ -144,9 +148,64 @@
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
 
+<div class="viewcode-block" id="avoid_interleaved_output"><a class="viewcode-back" href="../../pyro.html#pyro.test.avoid_interleaved_output">[docs]</a><span class="nd">@contextlib</span><span class="o">.</span><span class="n">contextmanager</span>
+<span class="k">def</span> <span class="nf">avoid_interleaved_output</span><span class="p">(</span><span class="n">nproc</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Collect all the printed output and print it all at once to avoid interleaving.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">nproc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># not running in parallel, so we don&#39;t have to worry about interleaving</span>
+        <span class="k">yield</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">output_buffer</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">redirect_stdout</span><span class="p">(</span><span class="n">output_buffer</span><span class="p">),</span> \
+                 <span class="n">contextlib</span><span class="o">.</span><span class="n">redirect_stderr</span><span class="p">(</span><span class="n">output_buffer</span><span class="p">):</span>
+                <span class="k">yield</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="c1"># a single print call probably won&#39;t get interleaved</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">output_buffer</span><span class="o">.</span><span class="n">getvalue</span><span class="p">(),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="run_test"><a class="viewcode-back" href="../../pyro.html#pyro.test.run_test">[docs]</a><span class="k">def</span> <span class="nf">run_test</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">reset_fails</span><span class="p">,</span> <span class="n">store_all_benchmarks</span><span class="p">,</span> <span class="n">rtol</span><span class="p">,</span> <span class="n">nproc</span><span class="p">):</span>
+    <span class="n">orig_cwd</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span>
+    <span class="c1"># run each test in its own directory, since some of the output file names</span>
+    <span class="c1"># overlap between tests, and h5py needs exclusive access when writing</span>
+    <span class="n">test_dir</span> <span class="o">=</span> <span class="n">orig_cwd</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;test_outputs/</span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">test_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">test_dir</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">avoid_interleaved_output</span><span class="p">(</span><span class="n">nproc</span><span class="p">):</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">pyro</span><span class="o">.</span><span class="n">PyroBenchmark</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">solver</span><span class="p">,</span> <span class="n">comp_bench</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">reset_bench_on_fail</span><span class="o">=</span><span class="n">reset_fails</span><span class="p">,</span>
+                                   <span class="n">make_bench</span><span class="o">=</span><span class="n">store_all_benchmarks</span><span class="p">)</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">initialize_problem</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">problem</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
+            <span class="n">start_n</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">n</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">run_sim</span><span class="p">(</span><span class="n">rtol</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">orig_cwd</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">err</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># the test passed; clean up the output files for developer use</span>
+        <span class="n">basename</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;io.basename&quot;</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">test_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basename</span><span class="si">}{</span><span class="n">start_n</span><span class="si">:</span><span class="s2">04d</span><span class="si">}</span><span class="s2">.h5&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+        <span class="p">(</span><span class="n">test_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basename</span><span class="si">}{</span><span class="n">p</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">n</span><span class="si">:</span><span class="s2">04d</span><span class="si">}</span><span class="s2">.h5&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+        <span class="p">(</span><span class="n">test_dir</span> <span class="o">/</span> <span class="s2">&quot;inputs.auto&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+        <span class="n">test_dir</span><span class="o">.</span><span class="n">rmdir</span><span class="p">()</span>
+        <span class="c1"># try removing the top-level output directory</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">test_dir</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">rmdir</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">err</span></div>
+
+
+<div class="viewcode-block" id="run_test_star"><a class="viewcode-back" href="../../pyro.html#pyro.test.run_test_star">[docs]</a><span class="k">def</span> <span class="nf">run_test_star</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;multiprocessing doesn&#39;t like lambdas, so this needs to be a full function&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">run_test</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="do_tests"><a class="viewcode-back" href="../../pyro.html#pyro.test.do_tests">[docs]</a><span class="k">def</span> <span class="nf">do_tests</span><span class="p">(</span><span class="n">out_file</span><span class="p">,</span>
              <span class="n">reset_fails</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">store_all_benchmarks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-             <span class="n">single</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">):</span>
+             <span class="n">single</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span> <span class="n">nproc</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 
     <span class="n">opts</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;driver.verbose&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;vis.dovis&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;io.do_io&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
 
@@ -180,13 +239,16 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">tests_to_run</span> <span class="o">=</span> <span class="n">tests</span>
 
-    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tests_to_run</span><span class="p">:</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="n">pyro</span><span class="o">.</span><span class="n">PyroBenchmark</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">solver</span><span class="p">,</span> <span class="n">comp_bench</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                               <span class="n">reset_bench_on_fail</span><span class="o">=</span><span class="n">reset_fails</span><span class="p">,</span> <span class="n">make_bench</span><span class="o">=</span><span class="n">store_all_benchmarks</span><span class="p">)</span>
-        <span class="n">p</span><span class="o">.</span><span class="n">initialize_problem</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">problem</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
-        <span class="n">err</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">run_sim</span><span class="p">(</span><span class="n">rtol</span><span class="p">)</span>
-
-        <span class="n">results</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)]</span> <span class="o">=</span> <span class="n">err</span>
+    <span class="k">if</span> <span class="n">nproc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">nproc</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
+    <span class="c1"># don&#39;t create more processes than needed</span>
+    <span class="n">nproc</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">nproc</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">tests_to_run</span><span class="p">))</span>
+    <span class="k">with</span> <span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="n">nproc</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+        <span class="n">tasks</span> <span class="o">=</span> <span class="p">((</span><span class="n">t</span><span class="p">,</span> <span class="n">reset_fails</span><span class="p">,</span> <span class="n">store_all_benchmarks</span><span class="p">,</span> <span class="n">rtol</span><span class="p">,</span> <span class="n">nproc</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tests_to_run</span><span class="p">)</span>
+        <span class="n">imap_it</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">imap_unordered</span><span class="p">(</span><span class="n">run_test_star</span><span class="p">,</span> <span class="n">tasks</span><span class="p">)</span>
+        <span class="c1"># collect run results</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">err</span> <span class="ow">in</span> <span class="n">imap_it</span><span class="p">:</span>
+            <span class="n">results</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">err</span>
 
     <span class="c1"># standalone tests</span>
     <span class="k">if</span> <span class="n">single</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -241,9 +303,9 @@
 
     <span class="n">p</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
 
-    <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-o&quot;</span><span class="p">,</span>
-                   <span class="n">help</span><span class="o">=</span><span class="s2">&quot;name of file to output the report to (otherwise output to the screen&quot;</span><span class="p">,</span>
-                   <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--outfile&quot;</span><span class="p">,</span> <span class="s2">&quot;-o&quot;</span><span class="p">,</span>
+                   <span class="n">help</span><span class="o">=</span><span class="s2">&quot;name of file to output the report to (in addition to the screen)&quot;</span><span class="p">,</span>
+                   <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
     <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--single&quot;</span><span class="p">,</span>
                    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;name of a single test (solver-problem) to run&quot;</span><span class="p">,</span>
@@ -263,24 +325,19 @@
 
     <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--rtol&quot;</span><span class="p">,</span>
                    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;relative tolerance to use when comparing data to benchmarks&quot;</span><span class="p">,</span>
-                   <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                   <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">1.e-12</span><span class="p">)</span>
+
+    <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--nproc&quot;</span><span class="p">,</span> <span class="s2">&quot;-n&quot;</span><span class="p">,</span>
+                   <span class="n">help</span><span class="o">=</span><span class="s2">&quot;maximum number of parallel processes to run, or 0 to use all cores&quot;</span><span class="p">,</span>
+                   <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="n">args</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">outfile</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">o</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
-        <span class="n">outfile</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">rtol</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">rtol</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
-        <span class="n">rtol</span> <span class="o">=</span> <span class="mf">1.e-12</span>
-
-    <span class="n">failed</span> <span class="o">=</span> <span class="n">do_tests</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span>
+    <span class="n">failed</span> <span class="o">=</span> <span class="n">do_tests</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">outfile</span><span class="p">,</span>
                       <span class="n">reset_fails</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">reset_failures</span><span class="p">,</span>
                       <span class="n">store_all_benchmarks</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">store_all_benchmarks</span><span class="p">,</span>
-                      <span class="n">single</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">single</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">solver</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">rtol</span><span class="p">)</span>
+                      <span class="n">single</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">single</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">solver</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">rtol</span><span class="p">,</span>
+                      <span class="n">nproc</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">nproc</span><span class="p">)</span>
 
     <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">failed</span><span class="p">)</span>
 </pre></div>
