@@ -5,7 +5,7 @@ from pyro.util import msg
 
 
 def init_data(myd, rp):
-    """ initialize the tophat burgers problem """
+    """ initialize the burgers test problem """
 
     msg.bold("initializing the burgers test problem...")
 
