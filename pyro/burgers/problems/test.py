@@ -33,6 +33,7 @@ def init_data(myd, rp):
     u[myd.grid.x2d < xctr] = 2.0
     u[myd.grid.x2d > xctr] = 1.0
 
+
 def finalize():
     """ print out any information to the user at the end of the run """
     pass
