@@ -155,6 +155,9 @@ pyro provides the following solvers (all in 2-d):
     projection method for the incompressible equations of
     hydrodynamics.
 
+  - `incompressible_viscous`: an extension of the incompressible solver
+    including a diffusion term for viscosity.
+
   - `lm_atm`: a solver for the equations of low Mach number
     hydrodynamics for atmospheric flows.
 
