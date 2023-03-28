@@ -12,8 +12,8 @@ def riemann(my_data, ul, ur):
 
     # shock when ul > ur
     shock = myg.scratch_array()
-    shock.v(buf=1)[:, :] = np.where(S.v(buf=1) > 0, ul.v(buf=1), shock.v(buf=1))
-    shock.v(buf=1)[:, :] = np.where(S.v(buf=1) < 0, ur.v(buf=1), shock.v(buf=1))
+    shock.v(buf=1)[:, :] = np.where(S.v(buf=1) > 0.0, ul.v(buf=1), shock.v(buf=1))
+    shock.v(buf=1)[:, :] = np.where(S.v(buf=1) < 0.0, ur.v(buf=1), shock.v(buf=1))
 
     # rarefaction otherwise
     rarefac = myg.scratch_array()
