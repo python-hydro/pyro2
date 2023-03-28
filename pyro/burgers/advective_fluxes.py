@@ -109,8 +109,8 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
     # First compute the predictor terms
 
     ul_x.v(buf=1)[:, :] = a.ip(-1, buf=1) + 0.5*(1.0 - cx.ip(-1, buf=1))*ldelta_ax.ip(-1, buf=1)
-    ur_x.v(buf=1)[:, :] = a.v(buf=1) - 0.5*(1.0 + cx.v(buf=1))*ldelta_ax.v(buf=1)
     ul_y.v(buf=1)[:, :] = a.jp(-1, buf=1) + 0.5*(1.0 - cy.jp(-1, buf=1))*ldelta_ay.jp(-1, buf=1)
+    ur_x.v(buf=1)[:, :] = a.v(buf=1) - 0.5*(1.0 + cx.v(buf=1))*ldelta_ax.v(buf=1)
     ur_y.v(buf=1)[:, :] = a.v(buf=1) - 0.5*(1.0 + cy.v(buf=1))*ldelta_ay.v(buf=1)
 
     # Solve Riemann's problem to get the correct transverse term
@@ -125,10 +125,10 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
     tr_x = myg.scratch_array()
     tr_y = myg.scratch_array()
 
-    tl_x.v(buf=1)[:, :] = -0.5*cy.v(buf=1)*(u_y_T.ip_jp(-1, 1, buf=1) - u_y_T.ip(-1, buf=1))
-    tl_y.v(buf=1)[:, :] = -0.5*cx.v(buf=1)*(u_x_T.ip_jp(1, -1, buf=1) - u_x_T.jp(-1, buf=1))
-    tr_x.v(buf=1)[:, :] = -0.5*cy.v(buf=1)*(u_y_T.ip_jp(0, 1, buf=1) - u_y_T.ip(0, buf=1))
-    tr_y.v(buf=1)[:, :] = -0.5*cx.v(buf=1)*(u_x_T.ip_jp(1, 0, buf=1) - u_x_T.jp(0, buf=1))
+    tl_x.v(buf=1)[:, :] = -0.5*cy.ip(-1, buf=1)*(u_y_T.ip_jp(-1, 1, buf=1) - u_y_T.ip(-1, buf=1))
+    tl_y.v(buf=1)[:, :] = -0.5*cx.jp(-1, buf=1)*(u_x_T.ip_jp(1, -1, buf=1) - u_x_T.jp(-1, buf=1))
+    tr_x.v(buf=1)[:, :] = -0.5*cy.ip(0, buf=1)*(u_y_T.ip_jp(0, 1, buf=1) - u_y_T.ip(0, buf=1))
+    tr_y.v(buf=1)[:, :] = -0.5*cx.jp(0, buf=1)*(u_x_T.ip_jp(1, 0, buf=1) - u_x_T.jp(0, buf=1))
 
     # Apply transverse correction terms:
 
