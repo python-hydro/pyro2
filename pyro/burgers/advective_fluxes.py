@@ -40,11 +40,6 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
     We use a second-order (piecewise linear) unsplit Godunov method
     (following Colella 1990).
 
-    In the pure advection case, there is no Riemann problem we need to
-    solve -- we just simply do upwinding.  So there is only one 'state'
-    at each interface, and the zone the information comes from depends
-    on the sign of the velocity.
-
     Our convection is that the fluxes are going to be defined on the
     left edge of the computational zones::
 
