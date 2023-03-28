@@ -113,43 +113,42 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
 
     # First compute the predictor terms
 
-    # L state in x dir
     ul_x.v(buf=1)[:, :] = a.ip(-1, buf=1) + 0.5*(1.0 - cx.ip(-1, buf=1))*ldelta_ax.ip(-1, buf=1)
-
-    # R state in x dir
     ur_x.v(buf=1)[:, :] = a.v(buf=1) - 0.5*(1.0 + cx.v(buf=1))*ldelta_ax.v(buf=1)
-
-    # L state in y dir
     ul_y.v(buf=1)[:, :] = a.jp(-1, buf=1) + 0.5*(1.0 - cy.jp(-1, buf=1))*ldelta_ay.jp(-1, buf=1)
-
-    # R state in y dir
     ur_y.v(buf=1)[:, :] = a.v(buf=1) - 0.5*(1.0 + cy.v(buf=1))*ldelta_ay.v(buf=1)
 
-    # Compute the transverse correction term:
+    # Solve Riemann's problem to get the correct transverse term
+
+    u_x_T = riemann(my_data, ul_x, ur_x)
+    u_y_T = riemann(my_data, ul_y, ur_y)
+        
+    # # Compute the transverse correction term based off from predictor term.
 
     tl_x = myg.scratch_array()
     tl_y = myg.scratch_array()
     tr_x = myg.scratch_array()
     tr_y = myg.scratch_array()
 
-    tl_x.v(buf=1)[:, :] = -0.5*cy.v(buf=1)*(a.ip_jp(-1, 1, buf=1) - a.ip(-1, buf=1))
-    tl_y.v(buf=1)[:, :] = -0.5*cx.v(buf=1)*(a.ip_jp(1, -1, buf=1) - a.jp(-1, buf=1))
-    tr_x.v(buf=1)[:, :] = -0.5*cy.v(buf=1)*(a.ip_jp(0, 1, buf=1) - a.ip(0, buf=1))
-    tr_y.v(buf=1)[:, :] = -0.5*cx.v(buf=1)*(a.ip_jp(1, 0, buf=1) - a.jp(0, buf=1))
+    tl_x.v(buf=1)[:, :] = -0.5*cy.v(buf=1)*(u_y_T.ip_jp(-1, 1, buf=1) - u_y_T.ip(-1, buf=1))
+    tl_y.v(buf=1)[:, :] = -0.5*cx.v(buf=1)*(u_x_T.ip_jp(1, -1, buf=1) - u_x_T.jp(-1, buf=1))
+    tr_x.v(buf=1)[:, :] = -0.5*cy.v(buf=1)*(u_y_T.ip_jp(0, 1, buf=1) - u_y_T.ip(0, buf=1))
+    tr_y.v(buf=1)[:, :] = -0.5*cx.v(buf=1)*(u_x_T.ip_jp(1, 0, buf=1) - u_x_T.jp(0, buf=1))
 
     # Apply transverse correction terms:
 
-    ul_x.v(buf=1)[:, :] = ul_x.v(buf=1) - tl_x.v(buf=1)
-    ul_y.v(buf=1)[:, :] = ul_y.v(buf=1) - tl_y.v(buf=1)
-    ur_x.v(buf=1)[:, :] = ur_x.v(buf=1) - tr_x.v(buf=1)
-    ur_y.v(buf=1)[:, :] = ur_y.v(buf=1) - tr_y.v(buf=1)
+    ul_x.v(buf=1)[:, :] = ul_x.v(buf=1) + tl_x.v(buf=1)
+    ul_y.v(buf=1)[:, :] = ul_y.v(buf=1) + tl_y.v(buf=1)
+    ur_x.v(buf=1)[:, :] = ur_x.v(buf=1) + tr_x.v(buf=1)
+    ur_y.v(buf=1)[:, :] = ur_y.v(buf=1) + tr_y.v(buf=1)
 
-    # solve for riemann's problem.
+    # solve for riemann's problem again
 
     u_x = riemann(my_data, ul_x, ur_x)
     u_y = riemann(my_data, ul_y, ur_y)
 
     # Compute the actual flux.
+
     F_x = myg.scratch_array()
     F_y = myg.scratch_array()
 
