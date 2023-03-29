@@ -115,30 +115,47 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
 
     # Solve Riemann's problem to get the correct transverse term
 
-    u_x_T = riemann(my_data, ul_x, ur_x)
-    u_y_T = riemann(my_data, ul_y, ur_y)
+    u_xt = riemann(my_data, ul_x, ur_x)
+    u_yt = riemann(my_data, ul_y, ur_y)
         
-    # # Compute the transverse correction term based off from predictor term.
+    # # Compute the transverse correction flux based off from predictor term.
 
-    tl_x = myg.scratch_array()
-    tl_y = myg.scratch_array()
-    tr_x = myg.scratch_array()
-    tr_y = myg.scratch_array()
+    F_xt = myg.scratch_array()
+    F_yt = myg.scratch_array()
 
-    tl_x.v(buf=1)[:, :] = -0.5*cy.ip(-1, buf=1)*(u_y_T.ip_jp(-1, 1, buf=1) - u_y_T.ip(-1, buf=1))
-    tl_y.v(buf=1)[:, :] = -0.5*cx.jp(-1, buf=1)*(u_x_T.ip_jp(1, -1, buf=1) - u_x_T.jp(-1, buf=1))
-    tr_x.v(buf=1)[:, :] = -0.5*cy.ip(0, buf=1)*(u_y_T.ip_jp(0, 1, buf=1) - u_y_T.ip(0, buf=1))
-    tr_y.v(buf=1)[:, :] = -0.5*cx.jp(0, buf=1)*(u_x_T.ip_jp(1, 0, buf=1) - u_x_T.jp(0, buf=1))
+    if scalar_name == "x-velocity":
+        F_xt.v(buf=1)[:, :] = 0.5 * u_xt.v(buf=1) * u_xt.v(buf=1)
+        F_yt.v(buf=1)[:, :] = v.v(buf=1) * u_yt.v(buf=1)
+
+        # F_xt.v(buf=1)[:, :] = u_xt.v(buf=1) * u_xt.v(buf=1)
+        # F_yt.v(buf=1)[:, :] = v.v(buf=1) * u_yt.v(buf=1)
+
+        # F_xt.v(buf=1)[:, :] = u.v(buf=1) * u_xt.v(buf=1)
+        # F_yt.v(buf=1)[:, :] = v.v(buf=1) * u_yt.v(buf=1)
+
+    elif scalar_name == "y-velocity":
+        F_xt.v(buf=1)[:, :] = u.v(buf=1) * u_xt.v(buf=1)
+        F_yt.v(buf=1)[:, :] = 0.5 * u_yt.v(buf=1) * u_yt.v(buf=1)
+
+        # F_xt.v(buf=1)[:, :] = u.v(buf=1) * u_xt.v(buf=1)
+        # F_yt.v(buf=1)[:, :] = u_yt.v(buf=1) * u_yt.v(buf=1)
+
+        # F_xt.v(buf=1)[:, :] = u.v(buf=1) * u_xt.v(buf=1)
+        # F_yt.v(buf=1)[:, :] = v.v(buf=1) * u_yt.v(buf=1)
+
+    else:
+        F_xt.v(buf=1)[:, :] = u.v(buf=1) * u_xt.v(buf=1)
+        F_yt.v(buf=1)[:, :] = v.v(buf=1) * u_yt.v(buf=1)
 
     # Apply transverse correction terms:
 
-    ul_x.v(buf=1)[:, :] = ul_x.v(buf=1) + tl_x.v(buf=1)
-    ul_y.v(buf=1)[:, :] = ul_y.v(buf=1) + tl_y.v(buf=1)
-    ur_x.v(buf=1)[:, :] = ur_x.v(buf=1) + tr_x.v(buf=1)
-    ur_y.v(buf=1)[:, :] = ur_y.v(buf=1) + tr_y.v(buf=1)
+    ul_x.v(buf=1)[:, :] = ul_x.v(buf=1) - 0.5*dt/myg.dy*(F_yt.ip_jp(-1, 1, buf=1) - F_yt.ip(-1, buf=1))
+    ul_y.v(buf=1)[:, :] = ul_y.v(buf=1) - 0.5*dt/myg.dx*(F_xt.ip_jp(1, -1, buf=1) - F_xt.jp(-1, buf=1))
+    ur_x.v(buf=1)[:, :] = ur_x.v(buf=1) - 0.5*dt/myg.dy*(F_yt.ip_jp(0, 1, buf=1) - F_yt.ip_jp(0, 0, buf=1))
+    ur_y.v(buf=1)[:, :] = ur_y.v(buf=1) - 0.5*dt/myg.dx*(F_xt.ip_jp(1, 0, buf=1) - F_xt.ip_jp(0, 0, buf=1))
 
     # solve for riemann's problem again
-
+    
     u_x = riemann(my_data, ul_x, ur_x)
     u_y = riemann(my_data, ul_y, ur_y)
 
