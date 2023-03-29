@@ -117,7 +117,7 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
 
     u_xt = riemann(my_data, ul_x, ur_x)
     u_yt = riemann(my_data, ul_y, ur_y)
-        
+
     # # Compute the transverse correction flux based off from predictor term.
 
     F_xt = myg.scratch_array()
@@ -155,7 +155,7 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
     ur_y.v(buf=1)[:, :] = ur_y.v(buf=1) - 0.5*dt/myg.dx*(F_xt.ip_jp(1, 0, buf=1) - F_xt.ip_jp(0, 0, buf=1))
 
     # solve for riemann's problem again
-    
+
     u_x = riemann(my_data, ul_x, ur_x)
     u_y = riemann(my_data, ul_y, ur_y)
 

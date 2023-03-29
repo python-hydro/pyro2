@@ -18,20 +18,15 @@ def init_data(myd, rp):
     u = myd.get_var("x-velocity")
     v = myd.get_var("y-velocity")
 
-    xmin = myd.grid.xmin
-    xmax = myd.grid.xmax
+    u[:, :] = 2.0
+    v[:, :] = 2.0
 
-    ymin = myd.grid.ymin
-    ymax = myd.grid.ymax
+    # y = -x + 1
 
-    xctr = 0.5*(xmin + xmax)
-    yctr = 0.5*(ymin + ymax)
+    index = myd.grid.y2d > -1.0 * myd.grid.x2d + 1.0
 
-    u[:, :] = 0.0
-    v[:, :] = 0.0
-
-    u[myd.grid.x2d < xctr] = 2.0
-    u[myd.grid.x2d > xctr] = 1.0
+    u[index] = 1.0
+    v[index] = 1.0
 
 
 def finalize():
