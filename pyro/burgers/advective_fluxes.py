@@ -8,27 +8,47 @@ def riemann(my_data, ul, ur, direction=None):
     myg = my_data.grid
 
     S = myg.scratch_array()
+    fl = myg.scratch_array()
+    fr = myg.scratch_array()
+
     l = myg.scratch_array()
     r = myg.scratch_array()
 
     if direction == 1:
 
         u = my_data.get_var("x-velocity")
+
         l.v(buf=1)[:, :] = u.ip(-1, buf=1)
         r.v(buf=1)[:, :] = u.ip(0, buf=1)
+
+        fl.v(buf=1)[:, :] = u.ip(-1, buf=1)*ul.v(buf=1)
+        fr.v(buf=1)[:, :] = u.ip(0, buf=1)*ur.v(buf=1)
+
+        diff = ur.v(buf=1) - ul.v(buf=1)
+        S.v(buf=1)[:, :] = np.where(diff == 0.0, r.v(buf=1)-l.v(buf=1),
+                           (fr.v(buf=1) - fl.v(buf=1)) / (ur.v(buf=1) - ul.v(buf=1)))
 
     elif direction == 2:
 
         v = my_data.get_var("y-velocity")
+
         l.v(buf=1)[:, :] = v.jp(-1, buf=1)
         r.v(buf=1)[:, :] = v.jp(0, buf=1)
 
-    else:
+        fl.v(buf=1)[:, :] = v.jp(-1, buf=1)*ul.v(buf=1)
+        fr.v(buf=1)[:, :] = v.jp(0, buf=1)*ur.v(buf=1)
+        diff = ur.v(buf=1) - ul.v(buf=1)
+        S.v(buf=1)[:, :] = np.where(diff == 0.0, r.v(buf=1)-l.v(buf=1),
+                           (fr.v(buf=1) - fl.v(buf=1)) / (ur.v(buf=1) - ul.v(buf=1)))
 
+    else:
         l.v(buf=1)[:, :] = ul.v(buf=1)
         r.v(buf=1)[:, :] = ur.v(buf=1)
 
-    S.v(buf=1)[:, :] = 0.5*(l.v(buf=1)+r.v(buf=1))
+        # fl.v(buf=1)[:, :] = 0.5 * ul.v(buf=1) * ul.v(buf=1)
+        # fr.v(buf=1)[:, :] = 0.5 * ur.v(buf=1) * ur.v(buf=1)
+
+        S.v(buf=1)[:, :] = 0.5*(l.v(buf=1)+r.v(buf=1))
 
     # shock when ul > ur
 
@@ -46,7 +66,7 @@ def riemann(my_data, ul, ur, direction=None):
 
     # shock (compression) if the left interface state is faster than the right interface state
 
-    state.v(buf=1)[:, :] = np.where(l.v(buf=1) >= r.v(buf=1), shock.v(buf=1), rarefac.v(buf=1))
+    state.v(buf=1)[:, :] = np.where(l.v(buf=1) > r.v(buf=1), shock.v(buf=1), rarefac.v(buf=1))
 
     return state
 
