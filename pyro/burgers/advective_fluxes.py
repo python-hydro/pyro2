@@ -3,19 +3,34 @@ import numpy as np
 import pyro.mesh.reconstruction as reconstruction
 
 
-def riemann_burger(my_data, ul, ur):
+def riemann(my_data, ul, ur, direction=None):
 
     myg = my_data.grid
 
     S = myg.scratch_array()
-    S.v(buf=1)[:, :] = 0.5*(ul.v(buf=1)+ur.v(buf=1))
+
+    if direction == 1:
+
+        u = my_data.get_var("x-velocity")
+        S.v(buf=1)[:, :] = 0.5*(u.ip(-1, buf=1)+u.ip(0, buf=1))
+
+    elif direction == 2:
+
+        v = my_data.get_var("y-velocity")
+        S.v(buf=1)[:, :] = 0.5*(v.jp(-1, buf=1)+v.jp(0, buf=1))
+
+    else:
+
+        S.v(buf=1)[:, :] = 0.5*(ul.v(buf=1)+ur.v(buf=1))
 
     # shock when ul > ur
+
     shock = myg.scratch_array()
     shock.v(buf=1)[:, :] = np.where(S.v(buf=1) > 0.0, ul.v(buf=1), shock.v(buf=1))
     shock.v(buf=1)[:, :] = np.where(S.v(buf=1) < 0.0, ur.v(buf=1), shock.v(buf=1))
 
     # rarefaction otherwise
+
     rarefac = myg.scratch_array()
     rarefac.v(buf=1)[:, :] = np.where(ul.v(buf=1) > 0.0, ul.v(buf=1), rarefac.v(buf=1))
     rarefac.v(buf=1)[:, :] = np.where(ur.v(buf=1) < 0.0, ur.v(buf=1), rarefac.v(buf=1))
@@ -23,26 +38,8 @@ def riemann_burger(my_data, ul, ur):
     state = myg.scratch_array()
 
     # shock (compression) if the left interface state is faster than the right interface state
+
     state.v(buf=1)[:, :] = np.where(ul.v(buf=1) >= ur.v(buf=1), shock.v(buf=1), rarefac.v(buf=1))
-
-    return state
-
-
-def riemann_advection(my_data, ul, ur, direction):
-
-    myg = my_data.grid
-
-    state = myg.scratch_array()
-
-    if direction == 1:
-
-        u = my_data.get_var("x-velocity")
-        state.v(buf=1)[:, :] = np.where(u.v(buf=1) <= 0.0, ur.v(buf=1), ul.v(buf=1))
-
-    elif direction == 2:
-
-        v = my_data.get_var("y-velocity")
-        state.v(buf=1)[:, :] = np.where(v.v(buf=1) <= 0.0, ur.v(buf=1), ul.v(buf=1))
 
     return state
 
@@ -136,13 +133,13 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
 
     if scalar_name == "x-velocity":        
 
-        u_xt = riemann_burger(my_data, ul_x, ur_x)
-        u_yt = riemann_advection(my_data, ul_y, ur_y, 2)
+        u_xt = riemann(my_data, ul_x, ur_x)
+        u_yt = riemann(my_data, ul_y, ur_y, 2)
 
     elif scalar_name == "y-velocity":
 
-        u_xt = riemann_advection(my_data, ul_x, ur_x, 1)
-        u_yt = riemann_burger(my_data, ul_y, ur_y)
+        u_xt = riemann(my_data, ul_x, ur_x, 1)
+        u_yt = riemann(my_data, ul_y, ur_y)
 
     # # Compute the transverse correction flux based off from predictor term.
 
@@ -205,18 +202,15 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
 
     # solve for riemann's problem again
 
-    # u_x = riemann(my_data, ul_x, ur_x)
-    # u_y = riemann(my_data, ul_y, ur_y)
-
     if scalar_name == "x-velocity":        
 
-        u_x = riemann_burger(my_data, ul_x, ur_x)
-        u_y = riemann_advection(my_data, ul_y, ur_y, 2)
+        u_x = riemann(my_data, ul_x, ur_x)
+        u_y = riemann(my_data, ul_y, ur_y, 2)
 
     elif scalar_name == "y-velocity":
 
-        u_x = riemann_advection(my_data, ul_x, ur_x, 1)
-        u_y = riemann_burger(my_data, ul_y, ur_y)
+        u_x = riemann(my_data, ul_x, ur_x, 1)
+        u_y = riemann(my_data, ul_y, ur_y)
 
     # Compute the actual flux.
 
