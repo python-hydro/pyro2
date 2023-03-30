@@ -64,19 +64,10 @@ class Simulation(NullSimulation):
 
         # dt = min(min(dx/|u_i|), min(dy/|v_j|))
 
-        xtmp = self.cc_data.grid.dx/max(np.max(np.abs(u)), self.SMALL)
-        ytmp = self.cc_data.grid.dy/max(np.max(np.abs(v)), self.SMALL)
+        xtmp = max(np.max(np.abs(u)), self.SMALL) / self.cc_data.grid.dx
+        ytmp = max(np.max(np.abs(v)), self.SMALL) / self.cc_data.grid.dy
 
-        self.dt = cfl*min(xtmp, ytmp)
-
-        # OR
-
-        # dt = C(sum_d(U_d/dx_d))^-1
-
-        # xtmp = np.sum(u)/self.cc_data.grid.dx
-        # ytmp = np.sum(v)/self.cc_data.grid.dy
-
-        # self.dt = cfl * max(1.0/(xtmp+ytmp), self.SMALL)
+        self.dt = cfl / (xtmp + ytmp)
 
     def evolve(self):
         """
@@ -87,7 +78,6 @@ class Simulation(NullSimulation):
         dtdy = self.dt/self.cc_data.grid.dy
 
         u_flux_x, u_flux_y = flx.unsplit_fluxes(self.cc_data, self.rp, self.dt, "x-velocity")
-
         v_flux_x, v_flux_y = flx.unsplit_fluxes(self.cc_data, self.rp, self.dt, "y-velocity")
 
         """

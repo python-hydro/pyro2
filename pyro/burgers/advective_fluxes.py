@@ -3,7 +3,7 @@ import numpy as np
 import pyro.mesh.reconstruction as reconstruction
 
 
-def riemann(my_data, ul, ur):
+def riemann_burger(my_data, ul, ur):
 
     myg = my_data.grid
 
@@ -23,7 +23,26 @@ def riemann(my_data, ul, ur):
     state = myg.scratch_array()
 
     # shock (compression) if the left interface state is faster than the right interface state
-    state.v(buf=1)[:, :] = np.where(ul.v(buf=1) > ur.v(buf=1), shock.v(buf=1), rarefac.v(buf=1))
+    state.v(buf=1)[:, :] = np.where(ul.v(buf=1) >= ur.v(buf=1), shock.v(buf=1), rarefac.v(buf=1))
+
+    return state
+
+
+def riemann_advection(my_data, ul, ur, direction):
+
+    myg = my_data.grid
+
+    state = myg.scratch_array()
+
+    if direction == 1:
+
+        u = my_data.get_var("x-velocity")
+        state.v(buf=1)[:, :] = np.where(u.v(buf=1) <= 0.0, ur.v(buf=1), ul.v(buf=1))
+
+    elif direction == 2:
+
+        v = my_data.get_var("y-velocity")
+        state.v(buf=1)[:, :] = np.where(v.v(buf=1) <= 0.0, ur.v(buf=1), ul.v(buf=1))
 
     return state
 
@@ -115,8 +134,15 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
 
     # Solve Riemann's problem to get the correct transverse term
 
-    u_xt = riemann(my_data, ul_x, ur_x)
-    u_yt = riemann(my_data, ul_y, ur_y)
+    if scalar_name == "x-velocity":        
+
+        u_xt = riemann_burger(my_data, ul_x, ur_x)
+        u_yt = riemann_advection(my_data, ul_y, ur_y, 2)
+
+    elif scalar_name == "y-velocity":
+
+        u_xt = riemann_advection(my_data, ul_x, ur_x, 1)
+        u_yt = riemann_burger(my_data, ul_y, ur_y)
 
     # # Compute the transverse correction flux based off from predictor term.
 
@@ -124,6 +150,7 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
     F_yt = myg.scratch_array()
 
     if scalar_name == "x-velocity":
+
         F_xt.v(buf=1)[:, :] = 0.5 * u_xt.v(buf=1) * u_xt.v(buf=1)
         F_yt.v(buf=1)[:, :] = v.v(buf=1) * u_yt.v(buf=1)
 
@@ -134,6 +161,7 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
         # F_yt.v(buf=1)[:, :] = v.v(buf=1) * u_yt.v(buf=1)
 
     elif scalar_name == "y-velocity":
+
         F_xt.v(buf=1)[:, :] = u.v(buf=1) * u_xt.v(buf=1)
         F_yt.v(buf=1)[:, :] = 0.5 * u_yt.v(buf=1) * u_yt.v(buf=1)
 
@@ -144,20 +172,51 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
         # F_yt.v(buf=1)[:, :] = v.v(buf=1) * u_yt.v(buf=1)
 
     else:
+
         F_xt.v(buf=1)[:, :] = u.v(buf=1) * u_xt.v(buf=1)
         F_yt.v(buf=1)[:, :] = v.v(buf=1) * u_yt.v(buf=1)
 
     # Apply transverse correction terms:
 
-    ul_x.v(buf=1)[:, :] = ul_x.v(buf=1) - 0.5*dt/myg.dy*(F_yt.ip_jp(-1, 1, buf=1) - F_yt.ip(-1, buf=1))
-    ul_y.v(buf=1)[:, :] = ul_y.v(buf=1) - 0.5*dt/myg.dx*(F_xt.ip_jp(1, -1, buf=1) - F_xt.jp(-1, buf=1))
+    ul_x.v(buf=1)[:, :] = ul_x.v(buf=1) - 0.5*dt/myg.dy*(F_yt.ip_jp(-1, 1, buf=1) - F_yt.ip_jp(-1, 0, buf=1))
+    ul_y.v(buf=1)[:, :] = ul_y.v(buf=1) - 0.5*dt/myg.dx*(F_xt.ip_jp(1, -1, buf=1) - F_xt.ip_jp(0, -1, buf=1))
     ur_x.v(buf=1)[:, :] = ur_x.v(buf=1) - 0.5*dt/myg.dy*(F_yt.ip_jp(0, 1, buf=1) - F_yt.ip_jp(0, 0, buf=1))
     ur_y.v(buf=1)[:, :] = ur_y.v(buf=1) - 0.5*dt/myg.dx*(F_xt.ip_jp(1, 0, buf=1) - F_xt.ip_jp(0, 0, buf=1))
 
+    # ul_x.v(buf=1)[:, :] = ul_x.v(buf=1) - 0.5*dt/myg.dy*(F_yt.ip_jp(-1, 0, buf=1) - F_yt.ip_jp(-1, -1, buf=1))
+    # ul_y.v(buf=1)[:, :] = ul_y.v(buf=1) - 0.5*dt/myg.dx*(F_xt.ip_jp(0, -1, buf=1) - F_xt.ip_jp(-1, -1, buf=1))
+    # ur_x.v(buf=1)[:, :] = ur_x.v(buf=1) - 0.5*dt/myg.dy*(F_yt.ip_jp(0, 0, buf=1) - F_yt.ip_jp(0, -1, buf=1))
+    # ur_y.v(buf=1)[:, :] = ur_y.v(buf=1) - 0.5*dt/myg.dx*(F_xt.ip_jp(0, 0, buf=1) - F_xt.ip_jp(-1, 0, buf=1))
+
+    # ul_x.v(buf=1)[:, :] = ul_x.v(buf=1) - 0.5*dt/myg.dy*(F_yt.ip_jp(0, 1, buf=1) - F_yt.ip(0, buf=1))
+    # ul_y.v(buf=1)[:, :] = ul_y.v(buf=1) - 0.5*dt/myg.dx*(F_xt.ip_jp(1, 0, buf=1) - F_xt.jp(0, buf=1))
+    # ur_x.v(buf=1)[:, :] = ur_x.v(buf=1) - 0.5*dt/myg.dy*(F_yt.ip_jp(1, 1, buf=1) - F_yt.ip_jp(1, 0, buf=1))
+    # ur_y.v(buf=1)[:, :] = ur_y.v(buf=1) - 0.5*dt/myg.dx*(F_xt.ip_jp(1, 1, buf=1) - F_xt.ip_jp(0, 1, buf=1))
+
+    # maybe use reconstruction limiter for transverse terms:
+
+    # ldelta_F_xt = reconstruction.limit(F_xt, myg, 1, limiter)
+    # ldelta_F_yt = reconstruction.limit(F_yt, myg, 2, limiter)
+
+    # ul_x.v(buf=1)[:, :] = ul_x.v(buf=1) - 0.5*dt/myg.dy*ldelta_F_yt.ip(-1, buf=1)
+    # ul_y.v(buf=1)[:, :] = ul_y.v(buf=1) - 0.5*dt/myg.dx*ldelta_F_xt.jp(-1, buf=1)
+    # ur_x.v(buf=1)[:, :] = ur_x.v(buf=1) - 0.5*dt/myg.dy*ldelta_F_yt.ip(0, buf=1)
+    # ur_y.v(buf=1)[:, :] = ur_y.v(buf=1) - 0.5*dt/myg.dx*ldelta_F_xt.jp(0, buf=1)
+
     # solve for riemann's problem again
 
-    u_x = riemann(my_data, ul_x, ur_x)
-    u_y = riemann(my_data, ul_y, ur_y)
+    # u_x = riemann(my_data, ul_x, ur_x)
+    # u_y = riemann(my_data, ul_y, ur_y)
+
+    if scalar_name == "x-velocity":        
+
+        u_x = riemann_burger(my_data, ul_x, ur_x)
+        u_y = riemann_advection(my_data, ul_y, ur_y, 2)
+
+    elif scalar_name == "y-velocity":
+
+        u_x = riemann_advection(my_data, ul_x, ur_x, 1)
+        u_y = riemann_burger(my_data, ul_y, ur_y)
 
     # Compute the actual flux.
 

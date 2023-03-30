@@ -34,8 +34,8 @@ def init_data(myd, rp):
 
     inside = (myd.grid.x2d - xctr)**2 + (myd.grid.y2d - yctr)**2 < R**2
 
-    u[inside] = 0.15
-    v[inside] = 0.15
+    u[inside] = 0.3
+    v[inside] = 0.3
 
 
 def finalize():
