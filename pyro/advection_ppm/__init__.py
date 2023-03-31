@@ -1,5 +1,5 @@
 """
-The fourth-order pyro PPM advection solver.
+The second-order pyro PPM advection solver.
 
 """
 
