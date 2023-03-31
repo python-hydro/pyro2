@@ -301,96 +301,88 @@ def ppm_reconstruction(a, myg, idir):
     After the calculation of these values, defined as a_{i+1/2},
     we stored them in ai[i].
 
-    2. Next, we define two values for each interface: a_{L,i+1/2} and a_{R,i+1/2},
-    to the limits from the left and the right of x_{i+1/2}, respectively. Under
-    this definition, each cell defines:
+    2. Next, we define two values for each interface: a_{L,i} and a_{R},
+    to the limits of a_{i-1/2} and a_{i+1/2} from the right and left of x_i, respectively. Under
+    this definition:
 
       |----------------------*----------------------|
-    a_{R,i-1/2}              a_i              a_{L, i+1/2}
+    a_{L,i}                 a_i                   a_{R,i}
 
-    where a_{R,i-1/2} will be stored in ar[i], and a_{L,i+1/2} in
-    al[i].
-
-
-    3. Finally, we return the ar[:] and al[:] np.ndarray types.
+    where a_{L,i} will be stored in al[i], and a_{R,i} in
+    ar[i].
     """
 
-    ai = myg.scratch_array()
     al = myg.scratch_array()
     ar = myg.scratch_array()
-    dap = myg.scratch_array()
-    dam = myg.scratch_array()
+
+    ai = myg.scratch_array()
     davl = myg.scratch_array()
-    sign = myg.scratch_array()
+
+    dl1 = myg.scratch_array()
+    dl2 = myg.scratch_array()
+    dc = myg.scratch_array()
+    dr = myg.scratch_array()
 
     if idir == 1:
 
-        dam.v(buf=3)[:, :] = a.v(buf=3) - a.ip(-1, buf=3)
-        dap.v(buf=3)[:, :] = a.ip(1, buf=3) - a.v(buf=3)
+        davl = limit2(a, myg, idir)
 
-        #Now, we should apply the Van Leer limiter for the slopes.
-        davl.v(buf=3)[:, :] = 0.5*(a.ip(1, buf=3) - a.ip(-1, buf=3))
-        sign.v(buf=3)[:, :] = np.sign(davl.v(buf=3))
-
-        davl.v(buf=3)[:, :] = np.minimum(np.abs(davl.v(buf=3)), 2.0 * np.abs(dam.v(buf=3)))
-        davl.v(buf=3)[:, :] = np.minimum(davl.v(buf=3), 2.0 * np.abs(dap.v(buf=3))) * sign.v(buf=3)
-
-        #Now, we are in the position of writing the reconstruction interpolation
-        #of the mid-zones.
-        ai.v(buf=3)[:, :] = a.v(buf=3) + 0.5*(dap.v(buf=3)) \
+        ai.v(buf=3)[:, :] = a.v(buf=3) + 0.5*(a.ip(1, buf=3) - a.v(buf=3)) \
                                - (davl.ip(1, buf=3) - davl.v(buf=3))/6.0
 
-        #From here we set ar and al to take the same value of ai. The values of ar and
-        #al, will be reformated accordingly to the neigbours behaviour.
+        # #From here we set ar and al to take the same value of ai. The values of ar and
+        # #al, will be reformated accordingly to the neigbours behaviour.
         al.v(buf=3)[:, :] = ai.v(buf=3)
-        ar.v(buf=3)[:, :] = ai.v(buf=3)
+        ar.v(buf=3)[:, :] = ai.ip(-1,buf=3)
 
         #From here, we can reset ar and al:
-        ar = np.where((ai.v(buf=3) - a.v(buf=3))*(a.v(buf=3) - ai.ip(-1, buf=3)) <= 0.0,
-                                    a.v(buf=3), ai.v(buf=3))
-        al = np.where((ai.v(buf=3) - a.v(buf=3))*(a.v(buf=3) - ai.ip(-1, buf=3)) <= 0.0,
-                                    a.v(buf=3), ai.v(buf=3))
 
-        ar = np.where(6.0*(ai.v(buf=3) - ai.ip(-1, buf=3))*(a.v(buf=3) - 0.5*(ai.v(buf=3) + ai.ip(-1, buf=3))) >=
-                      (ai.v(buf=3) - ai.ip(-1, buf=3))**2, 3.0*a.v(buf=3) - 2.0*ai.v(buf=3), ai.v(buf=3))
+        dl1.v(buf=3)[:, :] = (ai.v(buf=3) - a.v(buf=3))* (a.v(buf=3) - ai.ip(-1, buf=3))
+        dc.v(buf=3)[:, :] = a.v(buf=3)
+        dr.v(buf=3)[:, :] = ai.v(buf=3)
 
-        al = np.where(-(ai.v(buf=3) - ai.ip(-1, buf=3))**2 >=
-                      6.0*(ai.v(buf=3) - ai.ip(-1, buf=3))*(a.v(buf=3) - 0.5*(ai.v(buf=3) + ai.ip(-1, buf=3))),
-                      3.0*a.v(buf=3) - 2.0*ai.v(buf=3), ai.v(buf=3))
+        ar.v(buf=myg.ng)[:, :] = np.where(dl1 <= 0.0, dc, dr)
+        al.v(buf=myg.ng)[:, :] = np.where(dl1 <= 0.0, dc, dr)
+
+        dl1.v(buf=3)[:, :] = 6.0 * (ai.v(buf=3) - ai.ip(-1, buf=3)) \
+                                * (a.v(buf=3) - 0.5*(ai.v(buf=3) + ai.ip(-1, buf=3)))
+
+        dl2.v(buf=3)[:,:] = (ai.v(buf=3) - ai.ip(-1, buf=3))**2
+        dc.v(buf=3)[:, :] = 3.0*a.v(buf=3) - 2.0*ai.v(buf=3)
+        dr.v(buf=3)[:, :] = ai.v(buf=3)
+
+        ar.v(buf=myg.ng)[:, :] = np.where(dl1 > dl2, dc, dr)
+        al.v(buf=myg.ng)[:, :] = np.where(-dl2 > dl1, dc, dr)
 
     elif idir == 2:
 
-        dam.v(buf=3)[:, :] = a.v(buf=3) - a.jp(-1, buf=3)
-        dap.v(buf=3)[:, :] = a.jp(1, buf=3) - a.v(buf=3)
+        davl = limit2(a, myg, idir)
 
-        #Now, we should apply the Van Leer limiter for the slopes.
-        davl.v(buf=3)[:, :] = 0.5*(a.jp(1, buf=3) - a.jp(-1, buf=3))
-        sign.v(buf=3)[:, :] = np.sign(davl.v(buf=3))
-
-        davl.v(buf=3)[:, :] = np.minimum(np.abs(davl.v(buf=3)), 2.0 * np.abs(dam.v(buf=3)))
-        davl.v(buf=3)[:, :] = np.minimum(davl.v(buf=3), 2.0 * np.abs(dap.v(buf=3))) * sign.v(buf=3)
-
-        #Now, we are in the position of writing the reconstruction interpolation
-        #of the mid-zones.
-        ai.v(buf=3)[:, :] = a.v(buf=3) + 0.5*(a.jp(1, buf=3) + a.v(buf=3)) \
+        ai.v(buf=3)[:, :] = a.v(buf=3) + 0.5*(a.jp(1, buf=3) - a.v(buf=3)) \
                                - (davl.jp(1, buf=3) - davl.v(buf=3))/6.0
 
-        #From here we define al and ar to take the same value of ai. The values of al and
-        #ar, will be reformated accordingly to the neigbours behaviour.
+        # #From here we set ar and al to take the same value of ai. The values of ar and
+        # #al, will be reformated accordingly to the neigbours behaviour.
         al.v(buf=3)[:, :] = ai.v(buf=3)
-        ar.v(buf=3)[:, :] = ai.v(buf=3)
+        ar.v(buf=3)[:, :] = ai.jp(-1,buf=3)
 
-        #From here, we can reset ai and ar:
-        ar = np.where((ai.v(buf=3) - a.v(buf=3))*(a.v(buf=3) - ai.jp(-1, buf=3)) <= 0.0,
-                                    a.v(buf=3), ai.v(buf=3))
-        al = np.where((ai.v(buf=3) - a.v(buf=3))*(a.v(buf=3) - ai.jp(-1, buf=3)) <= 0.0,
-                                    a.v(buf=3), ai.v(buf=3))
+        #From here, we can reset ar and al:
 
-        ar = np.where(6.0*(ai.v(buf=3) - ai.jp(-1, buf=3))*(a.v(buf=3) - 0.5*(ai.v(buf=3) + ai.jp(-1, buf=3))) >=
-                      (ai.v(buf=3) - ai.jp(-1, buf=3))**2, 3.0*a.v(buf=3) - 2.0*ai.v(buf=3), ai.v(buf=3))
+        dl1.v(buf=3)[:, :] = (ai.v(buf=3) - a.v(buf=3))* (a.v(buf=3) - ai.jp(-1, buf=3))
+        dc.v(buf=3)[:, :] = a.v(buf=3)
+        dr.v(buf=3)[:, :] = ai.v(buf=3)
 
-        al = np.where(-(ai.v(buf=3) - ai.jp(-1, buf=3))**2 >=
-                      6.0*(ai.v(buf=3) - ai.jp(-1, buf=3))*(a.v(buf=3) - 0.5*(ai.v(buf=3) + ai.jp(-1, buf=3))),
-                      3.0*a.v(buf=3) - 2.0*ai.v(buf=3), ai.v(buf=3))
+        ar.v(buf=myg.ng)[:, :] = np.where(dl1 <= 0.0, dc, dr)
+        al.v(buf=myg.ng)[:, :] = np.where(dl1 <= 0.0, dc, dr)
+
+        dl1.v(buf=3)[:, :] = 6.0 * (ai.v(buf=3) - ai.jp(-1, buf=3)) \
+                                * (a.v(buf=3) - 0.5*(ai.v(buf=3) + ai.jp(-1, buf=3)))
+
+        dl2.v(buf=3)[:,:] = (ai.v(buf=3) - ai.jp(-1, buf=3))**2
+        dc.v(buf=3)[:, :] = 3.0*a.v(buf=3) - 2.0*ai.v(buf=3)
+        dr.v(buf=3)[:, :] = ai.v(buf=3)
+
+        ar.v(buf=myg.ng)[:, :] = np.where(dl1 > dl2, dc, dr)
+        al.v(buf=myg.ng)[:, :] = np.where(-dl2 > dl1, dc, dr)
 
     return ar, al

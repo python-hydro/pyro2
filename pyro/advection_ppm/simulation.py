@@ -67,8 +67,8 @@ class Simulation(NullSimulation):
 
         dens = self.cc_data.get_var("density")
 
-        dens.v()[:, :] = dens.v() + dtdx*(Fx.v() - Fx.ip(-1)) + \
-                                    dtdy*(Fy.v() - Fy.jp(-1))
+        dens.v()[:, :] = dens.v() + dtdx*(Fx.v() - Fx.ip(1)) + \
+                                    dtdy*(Fy.v() - Fy.jp(1))
 
         if self.particles is not None:
             myg = self.cc_data.grid

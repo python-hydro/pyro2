@@ -1,115 +1,139 @@
-import numpy as np
-import pyro.mesh.patch as patch
 from pyro.mesh.reconstruction import ppm_reconstruction
-import pyro.mesh.array_indexer as ai
-
-
-def riemman(myg, u, v, ar, al, idim):
-    """Here we write the riemmann problem for the advection equation. The solution
-     is trivial: from ql and qr, we choose the upwind case."""
-
-    #create an array with all the discontinuities
-    r = myg.scratch_array()
-
-    if idim == 1:
-        if u > 0:
-            r.v(buf=2)[:, :] = al.v(buf=2)
-        else:
-            r.v(buf=2)[:, :] = ar.ip(1, buf=2)
-    elif idim == 2:
-        if v > 0:
-            r.v(buf=2)[:, :] = al.v(buf=2)
-        else:
-            r.v(buf=2)[:, :] = ar.jp(1, buf=2)
-
-    return r
-
 
 def ctu_unsplit_fluxes(data, rp, dt, scalar_name):
     """
-    From here we plan to unsplit the fluxes according to the CTU method, but using a PPM reconstruction.
-    In order to compute the fluxes states a_{i+1/2,j}^{n+1/2} we:
+    Construct the fluxes through the interfaces for the linear advection
+    equation:
 
-    1. Compute all the normal states for each interface. store them in a_xr[:] amd a_xl[:].
+    .. math::
+
+       a_t  + u a_x  + v a_y  = 0
+
+    We use a second-order (piecewise linear) unsplit Godunov method
+    (following Colella 1990).
+
+    In the pure advection case, there is no Riemann problem we need to
+    solve -- we just simply do upwinding.  So there is only one 'state'
+    at each interface, and the zone the information comes from depends
+    on the sign of the velocity.
+
+    Our convection is that the fluxes are going to be defined on the
+    left edge of the computational zones::
+
+               |                                     |
+               |                                     |
+       --------|------------------+------------------+----------
+              i-1                 i                  |
+               |                                     |
+               |a_r,i-1/2       a_i         a_l,i+1/2|
+
+
+    a_r,i-1/2 and a_l,i+1/2 are computed using the information in
+    zone i,j.
+
+    Parameters
+    ----------
+    my_data : CellCenterData2d object
+        The data object containing the grid and advective scalar that
+        we are advecting.
+    rp : RuntimeParameters object
+        The runtime parameters for the simulation
+    dt : float
+        The timestep we are advancing through.
+    scalar_name : str
+        The name of the variable contained in my_data that we are
+        advecting
+
+    Returns
+    -------
+    out : ndarray, ndarray
+        The fluxes on the x- and y-interfaces
 
     """
 
-    #We start by calling our data first.
     myg = data.grid
+
     a = data.get_var(scalar_name)
 
-    #Now,let's call the velocity parameters
-    #and compute the cfl number of each dimesnion
+    # get the advection velocities
     u = rp.get_param("advection.u")
     v = rp.get_param("advection.v")
 
-    cx = u*dt / myg.dx
-    cy = v*dt / myg.dy
+    cx = u*dt/myg.dx
+    cy = v*dt/myg.dy
 
-    #Now, using ar and al, we have to construct the normal states on each interface limit.
+    # --------------------------------------------------------------------------
+    # monotonized central differences
+    # --------------------------------------------------------------------------
 
-    #Let us start with idir == 1:
     delta_ax = myg.scratch_array()
     a6x = myg.scratch_array()
-
-    _ar, _al = ppm_reconstruction(a, myg, idir=1)
-    ar = ai.ArrayIndexer(_ar, myg)
-    al = ai.ArrayIndexer(_al, myg)
-
-    delta_ax.v(buf=1)[:, :] = ar.v(buf=1) - al.v(buf=1)
-    a6x.v(buf=1)[:, :] = 6.0 * (a.v(buf=1) - 0.5*(ar.v(buf=1) + al.v(buf=1)))
-
-    ax_normal_l = myg.scratch_array()
-    ax_normal_r = myg.scratch_array()
-
-    ax_normal_l.v(buf=1)[:, :] = al.v(buf=1) - cx * (delta_ax.v(buf=1) - (1 - 2.0 * cx / 3.0) * a6x.v(buf=1))
-    ax_normal_r.v(buf=1)[:, :] = ar.ip(1, buf=1) + cx * (delta_ax.ip(1, buf=1) + (1 - 2*cx/3.0) * a6x.ip(1,buf=1))
-
-    #Let us now move to idir==2:
     delta_ay = myg.scratch_array()
     a6y = myg.scratch_array()
 
-    _ar, _al = ppm_reconstruction(a, myg, idir=2)
-    ar = ai.ArrayIndexer(_ar, myg)
-    al = ai.ArrayIndexer(_ar, myg)
+    ar, al = ppm_reconstruction(a, myg, idir=1)
+    delta_ax.v(buf=1)[:, :] = al.v(buf=1) - ar.v(buf=1)
+    a6x.v(buf=1)[:, :] = 6.0 * (a.v(buf=1) - 0.5*(ar.v(buf=1) + al.v(buf=1)))
 
-    delta_ay.v(buf=1)[:, :] = ar.v(buf=1) - al.v(buf=1)
+    ar, al = ppm_reconstruction(a, myg, idir=2)
+    delta_ay.v(buf=1)[:, :] = al.v(buf=1) - ar.v(buf=1)
     a6y.v(buf=1)[:, :] = 6.0 * (a.v(buf=1) - 0.5*(ar.v(buf=1) + al.v(buf=1)))
 
-    ay_normal_l = myg.scratch_array()
-    ay_normal_r = myg.scratch_array()
+    a_x = myg.scratch_array()
 
-    ay_normal_l.v(buf=1)[:, :] = al.v(buf=1) - cx * (delta_ay.v(buf=1) - (1 - 2.0 * cx / 3.0)*a6y.v(buf=1))
-    ay_normal_r.v(buf=1)[:, :] = ar.jp(1, buf=1) + cx * (delta_ay.jp(1, buf=1) + (1 - 2*cx/3.0) * a6y.jp(1,buf=1))
+    # upwind
+    if u < 0:
+        # a_x[i,j] = a[i,j] - 0.5*(1.0 + cx)*ldelta_a[i,j]
+        a_x.v(buf=1)[:, :] = a.v(buf=1) - 0.5 * cx * (delta_ax.v(buf=1)
+                                - (1 - 2.0 * cx / 3.0) * a6x.v(buf=1))
+    else:
+        # a_x[i,j] = a[i-1,j] + 0.5*(1.0 - cx)*ldelta_a[i-1,j]
+        a_x.v(buf=1)[:, :] = a.ip(-1, buf=1) + 0.5 * cx * (delta_ax.ip(-1, buf=1)
+                                + (1 - 2.0 * cx / 3.0) * a6x.ip(-1,buf=1))
 
-    #Now we compute the Riemman Problem between to states, in order to compute the transverse states
-    ax_T = myg.scratch_array()
-    ay_T = myg.scratch_array()
+    # y-direction
+    a_y = myg.scratch_array()
 
-    ax_T = riemman(myg, u, v, ax_normal_l, ax_normal_r, idim=1)
-    ay_T = riemman(myg, u, v, ay_normal_l, ay_normal_r, idim=2)
+    # upwind
+    if v < 0:
+        # a_y[i,j] = a[i,j] - 0.5*(1.0 + cy)*ldelta_a[i,j]
+        a_y.v(buf=1)[:, :] = a.v(buf=1) - 0.5 * cy * (delta_ay.v(buf=1)
+                                - (1 - 2.0 * cy / 3.0)*a6y.v(buf=1))
+    else:
+        # a_y[i,j] = a[i,j-1] + 0.5*(1.0 - cy)*ldelta_a[i,j-1]
+        a_y.v(buf=1)[:, :] = a.jp(-1, buf=1) + 0.5 * cy * (delta_ay.jp(-1, buf=1)
+                                + (1 - 2.0*cy/3.0) * a6y.jp(-1,buf=1))
 
-    #Let's move to performing the flux tranverse corrections
-    ax_l = myg.scratch_array()
-    ax_r = myg.scratch_array()
-    ay_l = myg.scratch_array()
-    ay_r = myg.scratch_array()
+    # compute the transverse flux differences.  The flux is just (u a)
+    # HOTF
+    F_xt = u*a_x
+    F_yt = v*a_y
 
-    ax_l.v(buf=1)[:, :] = ax_normal_l.v(buf=1) - 0.5 * cy * (ay_T.v(buf=1) - ay_T.jp(-1, buf=1))
-    ax_r.v(buf=1)[:, :] = ax_normal_r.v(buf=1) - 0.5 * cy * (ay_T.ip(1, buf=1) - ay_T.ip_jp(1, -1, buf=1))
+    F_x = myg.scratch_array()
+    F_y = myg.scratch_array()
 
-    ay_l.v(buf=1)[:, :] = ay_normal_l.v(buf=1) - 0.5 * cx * (ax_T.v(buf=1) - ax_T.ip(-1, buf=1))
-    ay_r.v(buf=1)[:, :] = ay_normal_r.v(buf=1) - 0.5 * cx * (ax_T.jp(1, buf=1) - ay_T.ip_jp(-1, 1 ,buf=1))
+    # the zone where we grab the transverse flux derivative from
+    # depends on the sign of the advective velocity
 
-    #Finally we may perform another sequence of riemman problems
-    ax = riemman(myg, u, v, ax_l, ax_r, idim=1)
-    ay = riemman(myg, u, v,  ay_l, ay_r, idim=2)
+    if u <= 0:
+        mx = 0
+    else:
+        mx = -1
 
-    #From here we may compute the fluxes terms.
-    Fx = myg.scratch_array()
-    Fy = myg.scratch_array()
+    if v <= 0:
+        my = 0
+    else:
+        my = -1
 
-    Fx.v(buf=1)[:, :] = u*ax.v(buf=1)
-    Fy.v(buf=1)[:, :] = v*ay.v(buf=1)
+    dtdx2 = 0.5*dt/myg.dx
+    dtdy2 = 0.5*dt/myg.dy
 
-    return Fx, Fy
+    F_x.v(buf=1)[:, :] = u*(a_x.v(buf=1) -
+                           dtdy2*(F_yt.ip_jp(mx, 1, buf=1) -
+                                  F_yt.ip(mx, buf=1)))
+
+    F_y.v(buf=1)[:, :] = v*(a_y.v(buf=1) -
+                           dtdx2*(F_xt.ip_jp(1, my, buf=1) -
+                                  F_xt.jp(my, buf=1)))
+
+    return F_x, F_y
