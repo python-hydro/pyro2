@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Incompressible hydrodynamics solver &mdash; pyro 4.0.1.post25+ga6ad3575 documentation</title>
+  <title>Incompressible hydrodynamics solver &mdash; pyro 4.0.1.post26+gf2529e1e documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -239,8 +239,12 @@ shown below are run as:</p>
 <span class="prompt1">pyro_sim.py<span class="w"> </span>incompressible<span class="w"> </span>converge<span class="w"> </span>inputs.converge.64<span class="w"> </span>vis.dovis<span class="o">=</span><span class="m">0</span></span>
 <span class="prompt1">pyro_sim.py<span class="w"> </span>incompressible<span class="w"> </span>converge<span class="w"> </span>inputs.converge.128<span class="w"> </span>vis.dovis<span class="o">=</span><span class="m">0</span></span>
 </pre></div></div><p>The error is measured by comparing with the analytic solution using
-the routine <code class="docutils literal notranslate"><span class="pre">incomp_converge_error.py</span></code> in <code class="docutils literal notranslate"><span class="pre">analysis/</span></code>.</p>
-<img alt="_images/incomp_converge.png" class="align-center" src="_images/incomp_converge.png" />
+the routine <code class="docutils literal notranslate"><span class="pre">incomp_converge_error.py</span></code> in <code class="docutils literal notranslate"><span class="pre">analysis/</span></code>. To generate
+the plot below, run</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">python<span class="w"> </span>incompressible/tests/convergence_errors.py<span class="w"> </span>convergence_errors.txt</span>
+</pre></div></div><p>or <code class="docutils literal notranslate"><span class="pre">convergence_errors_no_limiter.txt</span></code> after running with that option. Then:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">python<span class="w"> </span>incompressible/tests/convergence_plot.py</span>
+</pre></div></div><img alt="_images/incomp_converge.png" class="align-center" src="_images/incomp_converge.png" />
 <p>The dashed line is second order convergence. We see almost second
 order behavior with the limiters enabled and slightly better than
 second order with no limiting.</p>
