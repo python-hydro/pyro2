@@ -1024,7 +1024,7 @@ def riemann_hllc(idir, ng,
                           2.0 * F_HLLE[iener])) / (2.0 * F_HLLE[iener])
 
             # NOTE: this shouldn't happen but just in case?
-            if a_star != a_star:
+            if np.isnan(a_star):
                 a_star = 0.0
 
             # left

@@ -185,12 +185,12 @@ def states(idir, ng, dx, dt,
 
             # compute the Vhat functions
             for m in range(nvar):
-                sum = np.dot(lvec[m, :], dq)
+                asum = np.dot(lvec[m, :], dq)
 
                 betal[m] = dtdx3 * (e_val[2] - e_val[m]) * \
-                                   (np.copysign(1.0, e_val[m]) + 1.0) * sum
+                                   (np.copysign(1.0, e_val[m]) + 1.0) * asum
                 betar[m] = dtdx3 * (e_val[0] - e_val[m]) * \
-                                   (1.0 - np.copysign(1.0, e_val[m])) * sum
+                                   (1.0 - np.copysign(1.0, e_val[m])) * asum
 
             # construct the states
             for m in range(nvar):
