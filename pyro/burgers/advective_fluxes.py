@@ -1,79 +1,12 @@
 import numpy as np
 
 import pyro.mesh.reconstruction as reconstruction
+import pyro.incompressible.incomp_interface as interface
 
 
-def riemann(my_data, ul, ur, direction=None):
-
-    myg = my_data.grid
-
-    S = myg.scratch_array()
-    fl = myg.scratch_array()
-    fr = myg.scratch_array()
-
-    l = myg.scratch_array()
-    r = myg.scratch_array()
-
-    if direction == 1:
-
-        u = my_data.get_var("x-velocity")
-
-        l.v(buf=1)[:, :] = u.ip(-1, buf=1)
-        r.v(buf=1)[:, :] = u.ip(0, buf=1)
-
-        fl.v(buf=1)[:, :] = u.ip(-1, buf=1)*ul.v(buf=1)
-        fr.v(buf=1)[:, :] = u.ip(0, buf=1)*ur.v(buf=1)
-
-        diff = ur.v(buf=1) - ul.v(buf=1)
-        S.v(buf=1)[:, :] = np.where(diff == 0.0, r.v(buf=1)-l.v(buf=1),
-                           (fr.v(buf=1) - fl.v(buf=1)) / (ur.v(buf=1) - ul.v(buf=1)))
-
-    elif direction == 2:
-
-        v = my_data.get_var("y-velocity")
-
-        l.v(buf=1)[:, :] = v.jp(-1, buf=1)
-        r.v(buf=1)[:, :] = v.jp(0, buf=1)
-
-        fl.v(buf=1)[:, :] = v.jp(-1, buf=1)*ul.v(buf=1)
-        fr.v(buf=1)[:, :] = v.jp(0, buf=1)*ur.v(buf=1)
-        diff = ur.v(buf=1) - ul.v(buf=1)
-        S.v(buf=1)[:, :] = np.where(diff == 0.0, r.v(buf=1)-l.v(buf=1),
-                           (fr.v(buf=1) - fl.v(buf=1)) / (ur.v(buf=1) - ul.v(buf=1)))
-
-    else:
-        l.v(buf=1)[:, :] = ul.v(buf=1)
-        r.v(buf=1)[:, :] = ur.v(buf=1)
-
-        # fl.v(buf=1)[:, :] = 0.5 * ul.v(buf=1) * ul.v(buf=1)
-        # fr.v(buf=1)[:, :] = 0.5 * ur.v(buf=1) * ur.v(buf=1)
-
-        S.v(buf=1)[:, :] = 0.5*(l.v(buf=1)+r.v(buf=1))
-
-    # shock when ul > ur
-
-    shock = myg.scratch_array()
-    shock.v(buf=1)[:, :] = np.where(S.v(buf=1) > 0.0, ul.v(buf=1), shock.v(buf=1))
-    shock.v(buf=1)[:, :] = np.where(S.v(buf=1) < 0.0, ur.v(buf=1), shock.v(buf=1))
-
-    # rarefaction otherwise
-
-    rarefac = myg.scratch_array()
-    rarefac.v(buf=1)[:, :] = np.where(l.v(buf=1) > 0.0, ul.v(buf=1), rarefac.v(buf=1))
-    rarefac.v(buf=1)[:, :] = np.where(r.v(buf=1) < 0.0, ur.v(buf=1), rarefac.v(buf=1))
-
-    state = myg.scratch_array()
-
-    # shock (compression) if the left interface state is faster than the right interface state
-
-    state.v(buf=1)[:, :] = np.where(l.v(buf=1) > r.v(buf=1), shock.v(buf=1), rarefac.v(buf=1))
-
-    return state
-
-
-def unsplit_fluxes(my_data, rp, dt, scalar_name):
+def unsplit_fluxes(my_data, rp, dt):
     r"""
-    Construct the fluxes through the interfaces for the burgers equation:
+    Construct the interface states for the burgers equation:
 
     .. math::
 
@@ -106,30 +39,28 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
         The runtime parameters for the simulation
     dt : float
         The timestep we are advancing through.
-    scalar_name : str
-        The name of the variable contained in my_data that we are
-        advecting
 
     Returns
     -------
     out : ndarray, ndarray
-        The fluxes on the x- and y-interfaces
+        The u,v fluxes on the x- and y-interfaces
 
     """
 
     myg = my_data.grid
 
-    a = my_data.get_var(scalar_name)
-
     u = my_data.get_var("x-velocity")
     v = my_data.get_var("y-velocity")
 
-    cx = myg.scratch_array()
-    cy = myg.scratch_array()
+    # cx = myg.scratch_array()
+    # cy = myg.scratch_array()
 
-    cx.v(buf=1)[:, :] = u.v(buf=1)*dt/myg.dx
-    cy.v(buf=1)[:, :] = v.v(buf=1)*dt/myg.dy
+    # cx.v(buf=1)[:, :] = u.v(buf=1)*dt/myg.dx
+    # cy.v(buf=1)[:, :] = v.v(buf=1)*dt/myg.dy
 
+    dtdx = dt/myg.dx
+    dtdy = dt/myg.dy
+    
     # --------------------------------------------------------------------------
     # monotonized central differences
     # --------------------------------------------------------------------------
@@ -138,125 +69,96 @@ def unsplit_fluxes(my_data, rp, dt, scalar_name):
 
     # Give da/dx and da/dy using input: (state, grid, direction, limiter)
 
-    ldelta_ax = reconstruction.limit(a, myg, 1, limiter)
-    ldelta_ay = reconstruction.limit(a, myg, 2, limiter)
+    ldelta_ux = reconstruction.limit(u, myg, 1, limiter)
+    ldelta_uy = reconstruction.limit(u, myg, 2, limiter)
+    ldelta_vx = reconstruction.limit(v, myg, 1, limiter)
+    ldelta_vy = reconstruction.limit(v, myg, 2, limiter)
 
     ul_x = myg.scratch_array()
     ur_x = myg.scratch_array()
-
     ul_y = myg.scratch_array()
     ur_y = myg.scratch_array()
 
+    vl_x = myg.scratch_array()
+    vr_x = myg.scratch_array()
+    vl_y = myg.scratch_array()
+    vr_y = myg.scratch_array()
+    
     # Determine left and right interface states in x and y.
 
-    # First compute the predictor terms
+    # First compute the predictor terms for both u and v states.
 
-    ul_x.v(buf=1)[:, :] = a.ip(-1, buf=1) + 0.5*(1.0 - cx.ip(-1, buf=1))*ldelta_ax.ip(-1, buf=1)
-    ul_y.v(buf=1)[:, :] = a.jp(-1, buf=1) + 0.5*(1.0 - cy.jp(-1, buf=1))*ldelta_ay.jp(-1, buf=1)
-    ur_x.v(buf=1)[:, :] = a.v(buf=1) - 0.5*(1.0 + cx.v(buf=1))*ldelta_ax.v(buf=1)
-    ur_y.v(buf=1)[:, :] = a.v(buf=1) - 0.5*(1.0 + cy.v(buf=1))*ldelta_ay.v(buf=1)
+    ul_x.v(buf=1)[:, :] = u.ip(-1, buf=1) + 0.5*(1.0 - dtdx*u.ip(-1, buf=1))*ldelta_ux.ip(-1, buf=1)
+    ul_y.v(buf=1)[:, :] = u.jp(-1, buf=1) + 0.5*(1.0 - dtdy*v.jp(-1, buf=1))*ldelta_uy.jp(-1, buf=1)
+    ur_x.v(buf=1)[:, :] = u.v(buf=1) - 0.5*(1.0 + dtdx*u.v(buf=1))*ldelta_ux.v(buf=1)
+    ur_y.v(buf=1)[:, :] = u.v(buf=1) - 0.5*(1.0 + dtdy*v.v(buf=1))*ldelta_uy.v(buf=1)
 
+    vl_x.v(buf=1)[:, :] = v.ip(-1, buf=1) + 0.5*(1.0 - dtdx*u.ip(-1, buf=1))*ldelta_vx.ip(-1, buf=1)
+    vl_y.v(buf=1)[:, :] = v.jp(-1, buf=1) + 0.5*(1.0 - dtdy*v.jp(-1, buf=1))*ldelta_vy.jp(-1, buf=1)
+    vr_x.v(buf=1)[:, :] = v.v(buf=1) - 0.5*(1.0 + dtdx*u.v(buf=1))*ldelta_vx.v(buf=1)
+    vr_y.v(buf=1)[:, :] = v.v(buf=1) - 0.5*(1.0 + dtdy*v.v(buf=1))*ldelta_vy.v(buf=1)
+    
     # Solve Riemann's problem to get the correct transverse term
 
-    if scalar_name == "x-velocity":        
+    # first get the normal advective velocity through each x and y interface
 
-        u_xt = riemann(my_data, ul_x, ur_x)
-        u_yt = riemann(my_data, ul_y, ur_y, 2)
+    uhat_adv = interface.riemann(myg, ul_x, ur_x)
+    vhat_adv = interface.riemann(myg, vl_y, vr_y)
 
-    elif scalar_name == "y-velocity":
+    # Upwind the l and r states using the normal advective velocity through x and y interface
 
-        u_xt = riemann(my_data, ul_x, ur_x, 1)
-        u_yt = riemann(my_data, ul_y, ur_y)
+    ux_int = interface.upwind(myg, ul_x, ur_x, uhat_adv)
+    vx_int = interface.upwind(myg, vl_x, vr_x, uhat_adv)
 
-    # # Compute the transverse correction flux based off from predictor term.
+    uy_int = interface.upwind(myg, ul_y, ur_y, vhat_adv)
+    vy_int = interface.upwind(myg, vl_y, vr_y, vhat_adv)
 
-    F_xt = myg.scratch_array()
-    F_yt = myg.scratch_array()
+    # Calculate the average normal interface velocities
 
-    if scalar_name == "x-velocity":
+    ubar_adv = myg.scratch_array()
+    vbar_adv = myg.scratch_array()
 
-        F_xt.v(buf=1)[:, :] = 0.5 * u_xt.v(buf=1) * u_xt.v(buf=1)
-        F_yt.v(buf=1)[:, :] = v.v(buf=1) * u_yt.v(buf=1)
-
-        # F_xt.v(buf=1)[:, :] = u_xt.v(buf=1) * u_xt.v(buf=1)
-        # F_yt.v(buf=1)[:, :] = v.v(buf=1) * u_yt.v(buf=1)
-
-        # F_xt.v(buf=1)[:, :] = u.v(buf=1) * u_xt.v(buf=1)
-        # F_yt.v(buf=1)[:, :] = v.v(buf=1) * u_yt.v(buf=1)
-
-    elif scalar_name == "y-velocity":
-
-        F_xt.v(buf=1)[:, :] = u.v(buf=1) * u_xt.v(buf=1)
-        F_yt.v(buf=1)[:, :] = 0.5 * u_yt.v(buf=1) * u_yt.v(buf=1)
-
-        # F_xt.v(buf=1)[:, :] = u.v(buf=1) * u_xt.v(buf=1)
-        # F_yt.v(buf=1)[:, :] = u_yt.v(buf=1) * u_yt.v(buf=1)
-
-        # F_xt.v(buf=1)[:, :] = u.v(buf=1) * u_xt.v(buf=1)
-        # F_yt.v(buf=1)[:, :] = v.v(buf=1) * u_yt.v(buf=1)
-
-    else:
-
-        F_xt.v(buf=1)[:, :] = u.v(buf=1) * u_xt.v(buf=1)
-        F_yt.v(buf=1)[:, :] = v.v(buf=1) * u_yt.v(buf=1)
+    ubar_adv.v(buf=1)[:, :] = 0.5*(uhat_adv.v(buf=1) + uhat_adv.ip(-1, buf=1))
+    vbar_adv.v(buf=1)[:, :] = 0.5*(vhat_adv.v(buf=1) + vhat_adv.jp(-1, buf=1))
 
     # Apply transverse correction terms:
 
-    ul_x.v(buf=1)[:, :] = ul_x.v(buf=1) - 0.5*dt/myg.dy*(F_yt.ip_jp(-1, 1, buf=1) - F_yt.ip_jp(-1, 0, buf=1))
-    ul_y.v(buf=1)[:, :] = ul_y.v(buf=1) - 0.5*dt/myg.dx*(F_xt.ip_jp(1, -1, buf=1) - F_xt.ip_jp(0, -1, buf=1))
-    ur_x.v(buf=1)[:, :] = ur_x.v(buf=1) - 0.5*dt/myg.dy*(F_yt.ip_jp(0, 1, buf=1) - F_yt.ip_jp(0, 0, buf=1))
-    ur_y.v(buf=1)[:, :] = ur_y.v(buf=1) - 0.5*dt/myg.dx*(F_xt.ip_jp(1, 0, buf=1) - F_xt.ip_jp(0, 0, buf=1))
+    ul_x.v(buf=1)[:, :] -= 0.5 * dtdy * vbar_adv.v(buf=1) * (uy_int.ip_jp(-1, 1, buf=1) - uy_int.ip_jp(-1, 0, buf=1))
+    ul_y.v(buf=1)[:, :] -= 0.5 * dtdx * ubar_adv.v(buf=1) * (ux_int.ip_jp(1, -1, buf=1) - ux_int.ip_jp(0, -1, buf=1))
+    ur_x.v(buf=1)[:, :] -= 0.5 * dtdy * vbar_adv.v(buf=1) * (uy_int.ip_jp(0, 1, buf=1) - uy_int.ip_jp(0, 0, buf=1))
+    ur_y.v(buf=1)[:, :] -= 0.5 * dtdx * ubar_adv.v(buf=1) * (ux_int.ip_jp(1, 0, buf=1) - ux_int.ip_jp(0, 0, buf=1))
 
-    # ul_x.v(buf=1)[:, :] = ul_x.v(buf=1) - 0.5*dt/myg.dy*(F_yt.ip_jp(-1, 0, buf=1) - F_yt.ip_jp(-1, -1, buf=1))
-    # ul_y.v(buf=1)[:, :] = ul_y.v(buf=1) - 0.5*dt/myg.dx*(F_xt.ip_jp(0, -1, buf=1) - F_xt.ip_jp(-1, -1, buf=1))
-    # ur_x.v(buf=1)[:, :] = ur_x.v(buf=1) - 0.5*dt/myg.dy*(F_yt.ip_jp(0, 0, buf=1) - F_yt.ip_jp(0, -1, buf=1))
-    # ur_y.v(buf=1)[:, :] = ur_y.v(buf=1) - 0.5*dt/myg.dx*(F_xt.ip_jp(0, 0, buf=1) - F_xt.ip_jp(-1, 0, buf=1))
+    vl_x.v(buf=1)[:, :] -= 0.5 * dtdy * vbar_adv.v(buf=1) * (vy_int.ip_jp(-1, 1, buf=1) - vy_int.ip_jp(-1, 0, buf=1))
+    vl_y.v(buf=1)[:, :] -= 0.5 * dtdx * ubar_adv.v(buf=1) * (vx_int.ip_jp(1, -1, buf=1) - vx_int.ip_jp(0, -1, buf=1))
+    vr_x.v(buf=1)[:, :] -= 0.5 * dtdy * vbar_adv.v(buf=1) * (vy_int.ip_jp(0, 1, buf=1) - vy_int.ip_jp(0, 0, buf=1))
+    vr_y.v(buf=1)[:, :] -= 0.5 * dtdx * ubar_adv.v(buf=1) * (vx_int.ip_jp(1, 0, buf=1) - vx_int.ip_jp(0, 0, buf=1))
 
-    # ul_x.v(buf=1)[:, :] = ul_x.v(buf=1) - 0.5*dt/myg.dy*(F_yt.ip_jp(0, 1, buf=1) - F_yt.ip(0, buf=1))
-    # ul_y.v(buf=1)[:, :] = ul_y.v(buf=1) - 0.5*dt/myg.dx*(F_xt.ip_jp(1, 0, buf=1) - F_xt.jp(0, buf=1))
-    # ur_x.v(buf=1)[:, :] = ur_x.v(buf=1) - 0.5*dt/myg.dy*(F_yt.ip_jp(1, 1, buf=1) - F_yt.ip_jp(1, 0, buf=1))
-    # ur_y.v(buf=1)[:, :] = ur_y.v(buf=1) - 0.5*dt/myg.dx*(F_xt.ip_jp(1, 1, buf=1) - F_xt.ip_jp(0, 1, buf=1))
+    # Solve for riemann problem for the second time
+    
+    # Get corrected normal advection velocity (MAC)
 
-    # maybe use reconstruction limiter for transverse terms:
+    u_MAC = interface.riemann(myg, ul_x, ur_x)
+    v_MAC = interface.riemann(myg, vl_y, vr_y)
 
-    # ldelta_F_xt = reconstruction.limit(F_xt, myg, 1, limiter)
-    # ldelta_F_yt = reconstruction.limit(F_yt, myg, 2, limiter)
+    # Upwind using the transverse corrected normal advective velocity
 
-    # ul_x.v(buf=1)[:, :] = ul_x.v(buf=1) - 0.5*dt/myg.dy*ldelta_F_yt.ip(-1, buf=1)
-    # ul_y.v(buf=1)[:, :] = ul_y.v(buf=1) - 0.5*dt/myg.dx*ldelta_F_xt.jp(-1, buf=1)
-    # ur_x.v(buf=1)[:, :] = ur_x.v(buf=1) - 0.5*dt/myg.dy*ldelta_F_yt.ip(0, buf=1)
-    # ur_y.v(buf=1)[:, :] = ur_y.v(buf=1) - 0.5*dt/myg.dx*ldelta_F_xt.jp(0, buf=1)
+    ux = interface.upwind(myg, ul_x, ur_x, u_MAC)
+    vx = interface.upwind(myg, vl_x, vr_x, u_MAC)
 
-    # solve for riemann's problem again
+    uy = interface.upwind(myg, ul_y, ur_y, v_MAC)
+    vy = interface.upwind(myg, vl_y, vr_y, v_MAC)
 
-    if scalar_name == "x-velocity":        
+    # construct the flux
 
-        u_x = riemann(my_data, ul_x, ur_x)
-        u_y = riemann(my_data, ul_y, ur_y, 2)
+    fu_x = myg.scratch_array()
+    fv_x = myg.scratch_array()
+    fu_y = myg.scratch_array()
+    fv_y = myg.scratch_array()
 
-    elif scalar_name == "y-velocity":
+    fu_x.v(buf=1)[:, :] = 0.5 * ux.v(buf=1) * ux.v(buf=1)
+    fv_x.v(buf=1)[:, :] = 0.5 * vx.v(buf=1) * ux.v(buf=1)
 
-        u_x = riemann(my_data, ul_x, ur_x, 1)
-        u_y = riemann(my_data, ul_y, ur_y)
+    fu_y.v(buf=1)[:, :] = 0.5 * vy.v(buf=1) * uy.v(buf=1)
+    fv_y.v(buf=1)[:, :] = 0.5 * vy.v(buf=1) * vy.v(buf=1)
 
-    # Compute the actual flux.
-
-    F_x = myg.scratch_array()
-    F_y = myg.scratch_array()
-
-    if scalar_name == "x-velocity":
-
-        F_x.v(buf=1)[:, :] = 0.5 * u_x.v(buf=1)*u_x.v(buf=1)
-        F_y.v(buf=1)[:, :] = v.v(buf=1)*u_y.v(buf=1)
-
-    elif scalar_name == "y-velocity":
-
-        F_x.v(buf=1)[:, :] = u.v(buf=1)*u_x.v(buf=1)
-        F_y.v(buf=1)[:, :] = 0.5 * u_y.v(buf=1)*u_y.v(buf=1)
-
-    else:
-
-        F_x.v(buf=1)[:, :] = u.v(buf=1)*u_x.v(buf=1)
-        F_y.v(buf=1)[:, :] = v.v(buf=1)*u_y.v(buf=1)
-
-    return F_x, F_y
+    return fu_x, fu_y, fv_x, fv_y

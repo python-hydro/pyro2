@@ -5,9 +5,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import pyro.burgers.advective_fluxes as flx
+import pyro.burgers.burgers_interface as interface
 import pyro.mesh.patch as patch
 import pyro.particles.particles as particles
 import pyro.util.plot_tools as plot_tools
+import pyro.mesh.reconstruction as reconstruction
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
 
 
@@ -73,11 +75,18 @@ class Simulation(NullSimulation):
         Evolve the burgers equation through one timestep.
         """
 
-        dtdx = self.dt/self.cc_data.grid.dx
-        dtdy = self.dt/self.cc_data.grid.dy
+        myg = self.cc_data.grid
 
-        u_flux_x, u_flux_y = flx.unsplit_fluxes(self.cc_data, self.rp, self.dt, "x-velocity")
-        v_flux_x, v_flux_y = flx.unsplit_fluxes(self.cc_data, self.rp, self.dt, "y-velocity")
+        dtdx = self.dt/myg.dx
+        dtdy = self.dt/myg.dy
+
+        u = self.cc_data.get_var("x-velocity")
+        v = self.cc_data.get_var("y-velocity")
+
+        # Get u, v fluxes
+
+        u_flux_x, u_flux_y, v_flux_x, v_flux_y = flx.unsplit_fluxes(self.cc_data,
+                                                                    self.rp, self.dt)
 
         """
         do the differencing for the fluxes now.  Here, we use slices so we
@@ -88,14 +97,11 @@ class Simulation(NullSimulation):
                                dtdy*(flux_y[i,j] - flux_y[i,j+1])
         """
 
-        u = self.cc_data.get_var("x-velocity")
-        v = self.cc_data.get_var("y-velocity")
-
         u.v()[:, :] = u.v() + dtdx*(u_flux_x.v() - u_flux_x.ip(1)) + \
                               dtdy*(u_flux_y.v() - u_flux_y.jp(1))
 
         v.v()[:, :] = v.v() + dtdx*(v_flux_x.v() - v_flux_x.ip(1)) + \
-                              dtdy*(v_flux_y.v() - v_flux_y.jp(1))
+                              dtdy*(v_flux_y.v() - v_flux_y.jp(1))        
 
         if self.particles is not None:
 

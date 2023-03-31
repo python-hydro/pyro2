@@ -18,8 +18,8 @@ def init_data(myd, rp):
     u = myd.get_var("x-velocity")
     v = myd.get_var("y-velocity")
 
-    u[:, :] = 2.0
-    v[:, :] = 2.0
+    u[:, :] = 3.0
+    v[:, :] = 3.0
 
     # y = -x + 1
 
