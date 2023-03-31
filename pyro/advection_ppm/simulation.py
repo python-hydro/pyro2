@@ -6,8 +6,8 @@ import numpy as np
 import pyro.mesh.patch as patch
 import pyro.particles.particles as particles
 import pyro.util.plot_tools as plot_tools
-from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
 import pyro.advection_ppm.fluxes as flx
+from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
 
 
 class Simulation(NullSimulation):
