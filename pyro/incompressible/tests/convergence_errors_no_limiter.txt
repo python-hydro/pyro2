@@ -1,0 +1,6 @@
+# convergence of incompressible converge problem
+# (convergence measured with analysis/incomp_converge_error.py)
+#
+ 32 0.01491254251261 0.01491254251261
+ 64 0.00216262704768 0.00216262704768
+128 0.00036281268740 0.00036281268740
