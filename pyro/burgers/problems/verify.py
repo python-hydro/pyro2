@@ -28,9 +28,9 @@ def verify(file1, file2):
 
     v1 = d1.get_var("y-velocity")
     v2 = d2.get_var("y-velocity")
-    
+
     grid = d1.grid.x[d1.grid.ilo:d1.grid.ihi]
-    
+
     # Do diagonal averaging:
     nx = len(grid)
 
@@ -44,7 +44,7 @@ def verify(file1, file2):
 
         diag_uv1 = np.diagonal(np.flipud(uv1), n)
         uv1_averages.append(diag_uv1.mean())
-        
+
         diag_uv2 = np.diagonal(np.flipud(uv2), n) 
         uv2_averages.append(diag_uv2.mean())
 
@@ -64,7 +64,7 @@ def verify(file1, file2):
 
     dx = disconX1[0] - disconX2[0]
     shock_speed_sim = np.sqrt(2.0 * (dx/dt) * (dx/dt))
-    
+
     print(f"Theoretical shock speed is: {shock_speed_theo}")
     print(f"Shock speed from simulation is: {shock_speed_sim}")
 

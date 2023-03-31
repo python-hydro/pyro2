@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import pyro.burgers.advective_fluxes as flx
-import pyro.burgers.burgers_interface as interface
 import pyro.mesh.patch as patch
 import pyro.particles.particles as particles
 import pyro.util.plot_tools as plot_tools

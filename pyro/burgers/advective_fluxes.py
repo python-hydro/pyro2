@@ -60,7 +60,7 @@ def unsplit_fluxes(my_data, rp, dt):
 
     dtdx = dt/myg.dx
     dtdy = dt/myg.dy
-    
+
     # --------------------------------------------------------------------------
     # monotonized central differences
     # --------------------------------------------------------------------------
@@ -83,7 +83,7 @@ def unsplit_fluxes(my_data, rp, dt):
     vr_x = myg.scratch_array()
     vl_y = myg.scratch_array()
     vr_y = myg.scratch_array()
-    
+
     # Determine left and right interface states in x and y.
 
     # First compute the predictor terms for both u and v states.
@@ -97,7 +97,7 @@ def unsplit_fluxes(my_data, rp, dt):
     vl_y.v(buf=1)[:, :] = v.jp(-1, buf=1) + 0.5*(1.0 - dtdy*v.jp(-1, buf=1))*ldelta_vy.jp(-1, buf=1)
     vr_x.v(buf=1)[:, :] = v.v(buf=1) - 0.5*(1.0 + dtdx*u.v(buf=1))*ldelta_vx.v(buf=1)
     vr_y.v(buf=1)[:, :] = v.v(buf=1) - 0.5*(1.0 + dtdy*v.v(buf=1))*ldelta_vy.v(buf=1)
-    
+
     # Solve Riemann's problem to get the correct transverse term
 
     # first get the normal advective velocity through each x and y interface
@@ -134,7 +134,7 @@ def unsplit_fluxes(my_data, rp, dt):
     vr_y.v(buf=1)[:, :] -= 0.5 * dtdx * ubar_adv.v(buf=1) * (vx_int.ip_jp(1, 0, buf=1) - vx_int.ip_jp(0, 0, buf=1))
 
     # Solve for riemann problem for the second time
-    
+
     # Get corrected normal advection velocity (MAC)
 
     u_MAC = interface.riemann(myg, ul_x, ur_x)
