@@ -1,12 +1,12 @@
 import importlib
+
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
-
+import pyro.advection_ppm.fluxes as flx
 import pyro.mesh.patch as patch
 import pyro.particles.particles as particles
 import pyro.util.plot_tools as plot_tools
-import pyro.advection_ppm.fluxes as flx
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
 
 
