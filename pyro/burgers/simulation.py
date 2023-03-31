@@ -64,10 +64,9 @@ class Simulation(NullSimulation):
 
         # dt = min(min(dx/|u_i|), min(dy/|v_j|))
 
-        xtmp = max(np.max(np.abs(u)), self.SMALL) / self.cc_data.grid.dx
-        ytmp = max(np.max(np.abs(v)), self.SMALL) / self.cc_data.grid.dy
-
-        self.dt = cfl / (xtmp + ytmp)
+        xtmp = self.cc_data.grid.dx / max(abs(u).max(), self.SMALL)
+        ytmp = self.cc_data.grid.dy / max(abs(v).max(), self.SMALL)
+        self.dt = cfl*min(xtmp, ytmp)
 
     def evolve(self):
         """
