@@ -45,13 +45,8 @@ def brentq(x1, b, U, gamma, idens, ixmom, iymom, iener,
 
     # switch variables
     if abs(fa) < abs(fb):
-        d = a
-        a = b
-        b = d
-
-        d = fa
-        fa = fb
-        fb = d
+        a, b = b, a
+        fa, fb = fb, fa
 
     c = a
     fc = fa
@@ -92,13 +87,8 @@ def brentq(x1, b, U, gamma, idens, ixmom, iymom, iener,
         fs = f(s, U, gamma, idens, ixmom, iymom, iener)
 
         if abs(fa) < abs(fb):
-            d = a
-            a = b
-            b = d
-
-            d = fa
-            fa = fb
-            fb = d
+            a, b = b, a
+            fa, fb = fb, fa
 
         d = c
         c = b

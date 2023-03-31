@@ -376,7 +376,7 @@ def riemann_cgf(idir, ng,
 
             p_l = q_l[i, j, ip]
             p_l = max(p_l, smallp)
-            rhoe_l = p_l / (gamma - 1.0)
+            # rhoe_l = p_l / (gamma - 1.0)
 
             rho_r = q_r[i, j, irho]
 
@@ -389,7 +389,7 @@ def riemann_cgf(idir, ng,
 
             p_r = q_r[i, j, ip]
             p_r = max(p_r, smallp)
-            rhoe_r = p_r / (gamma - 1.0)
+            # rhoe_r = p_r / (gamma - 1.0)
 
             # define the Lagrangian sound speed
             W_l = max(smallrho * smallc, np.sqrt(gamma * p_l * rho_l))
@@ -410,10 +410,10 @@ def riemann_cgf(idir, ng,
             rhostar_l = rho_l + (pstar - p_l) / c_l**2
             rhostar_r = rho_r + (pstar - p_r) / c_r**2
 
-            rhoestar_l = rhoe_l + \
-                (pstar - p_l) * (rhoe_l / rho_l + p_l / rho_l) / c_l**2
-            rhoestar_r = rhoe_r + \
-                (pstar - p_r) * (rhoe_r / rho_r + p_r / rho_r) / c_r**2
+            # rhoestar_l = rhoe_l + \
+            #     (pstar - p_l) * (rhoe_l / rho_l + p_l / rho_l) / c_l**2
+            # rhoestar_r = rhoe_r + \
+            #     (pstar - p_r) * (rhoe_r / rho_r + p_r / rho_r) / c_r**2
 
             cstar_l = max(smallc, np.sqrt(gamma * pstar / rhostar_l))
             cstar_r = max(smallc, np.sqrt(gamma * pstar / rhostar_r))
@@ -447,14 +447,14 @@ def riemann_cgf(idir, ng,
                         rho_state = rho_l
                         un_state = un_l
                         p_state = p_l
-                        rhoe_state = rhoe_l
+                        # rhoe_state = rhoe_l
 
                     else:
                         # solution is *L state
                         rho_state = rhostar_l
                         un_state = ustar
                         p_state = pstar
-                        rhoe_state = rhoestar_l
+                        # rhoe_state = rhoestar_l
 
                 else:
                     # the wave is a rarefaction
@@ -464,7 +464,7 @@ def riemann_cgf(idir, ng,
                         rho_state = rhostar_l
                         un_state = ustar
                         p_state = pstar
-                        rhoe_state = rhoestar_l
+                        # rhoe_state = rhoestar_l
 
                     elif (lambda_l > 0.0 and lambdastar_l > 0.0):
                         # rarefaction fan is moving to the right -- solution is
@@ -472,7 +472,7 @@ def riemann_cgf(idir, ng,
                         rho_state = rho_l
                         un_state = un_l
                         p_state = p_l
-                        rhoe_state = rhoe_l
+                        # rhoe_state = rhoe_l
 
                     else:
                         # rarefaction spans x/t = 0 -- interpolate
@@ -481,8 +481,8 @@ def riemann_cgf(idir, ng,
                         rho_state = alpha * rhostar_l + (1.0 - alpha) * rho_l
                         un_state = alpha * ustar + (1.0 - alpha) * un_l
                         p_state = alpha * pstar + (1.0 - alpha) * p_l
-                        rhoe_state = alpha * rhoestar_l + \
-                            (1.0 - alpha) * rhoe_l
+                        # rhoe_state = alpha * rhoestar_l + \
+                        #     (1.0 - alpha) * rhoe_l
 
             elif ustar < 0:
 
@@ -511,14 +511,14 @@ def riemann_cgf(idir, ng,
                         rho_state = rhostar_r
                         un_state = ustar
                         p_state = pstar
-                        rhoe_state = rhoestar_r
+                        # rhoe_state = rhoestar_r
 
                     else:
                         # solution is R state
                         rho_state = rho_r
                         un_state = un_r
                         p_state = p_r
-                        rhoe_state = rhoe_r
+                        # rhoe_state = rhoe_r
 
                 else:
                     # the wave is a rarefaction
@@ -528,7 +528,7 @@ def riemann_cgf(idir, ng,
                         rho_state = rho_r
                         un_state = un_r
                         p_state = p_r
-                        rhoe_state = rhoe_r
+                        # rhoe_state = rhoe_r
 
                     elif (lambda_r > 0.0 and lambdastar_r > 0.0):
                         # rarefaction fan is moving to the right -- solution is
@@ -536,7 +536,7 @@ def riemann_cgf(idir, ng,
                         rho_state = rhostar_r
                         un_state = ustar
                         p_state = pstar
-                        rhoe_state = rhoestar_r
+                        # rhoe_state = rhoestar_r
 
                     else:
                         # rarefaction spans x/t = 0 -- interpolate
@@ -545,8 +545,8 @@ def riemann_cgf(idir, ng,
                         rho_state = alpha * rhostar_r + (1.0 - alpha) * rho_r
                         un_state = alpha * ustar + (1.0 - alpha) * un_r
                         p_state = alpha * pstar + (1.0 - alpha) * p_r
-                        rhoe_state = alpha * rhoestar_r + \
-                            (1.0 - alpha) * rhoe_r
+                        # rhoe_state = alpha * rhoestar_r + \
+                        #     (1.0 - alpha) * rhoe_r
 
             else:  # ustar == 0
 
@@ -554,7 +554,7 @@ def riemann_cgf(idir, ng,
                 un_state = ustar
                 ut_state = 0.5 * (ut_l + ut_r)
                 p_state = pstar
-                rhoe_state = 0.5 * (rhoestar_l + rhoestar_r)
+                # rhoe_state = 0.5 * (rhoestar_l + rhoestar_r)
 
             # species now
             if nspec > 0:
@@ -943,10 +943,10 @@ def riemann_hllc(idir, ng,
 
     F = np.zeros((qx, qy, nvar))
 
-    smallc = 1.e-10
+    # smallc = 1.e-10
     smallp = 1.e-10
 
-    U_state = np.zeros(nvar)
+    # U_state = np.zeros(nvar)
     U_lstar = np.zeros(nvar)
     U_rstar = np.zeros(nvar)
 
@@ -963,30 +963,30 @@ def riemann_hllc(idir, ng,
             # un = normal velocity; ut = transverse velocity
             if idir == 1:
                 un_l = q_l[i, j, iu]
-                ut_l = q_l[i, j, iv]
+                # ut_l = q_l[i, j, iv]
             else:
                 un_l = q_l[i, j, iv]
-                ut_l = q_l[i, j, iu]
+                # ut_l = q_l[i, j, iu]
 
             p_l = q_l[i, j, ip]
             p_l = max(p_l, smallp)
 
             if idir == 1:
                 un_r = q_r[i, j, iu]
-                ut_r = q_r[i, j, iv]
+                # ut_r = q_r[i, j, iv]
             else:
                 un_r = q_r[i, j, iv]
-                ut_r = q_r[i, j, iu]
+                # ut_r = q_r[i, j, iu]
 
             p_r = q_r[i, j, ip]
             p_r = max(p_r, smallp)
 
-            rho_l = q_l[i, j, irho]
-            rho_r = q_r[i, j, irho]
+            # rho_l = q_l[i, j, irho]
+            # rho_r = q_r[i, j, irho]
 
             # compute the sound speeds
-            c_l = max(smallc, np.sqrt(gamma * p_l / rho_l))
-            c_r = max(smallc, np.sqrt(gamma * p_r / rho_r))
+            # c_l = max(smallc, np.sqrt(gamma * p_l / rho_l))
+            # c_r = max(smallc, np.sqrt(gamma * p_r / rho_r))
 
             # a_l = 0.5 * (un_l+un_r - c_l-c_r) / (1.0-0.25*(un_l+un_r)*(c_l+c_r))
             # a_r = 0.5 * (un_l+un_r + c_l+c_r) / (1.0+0.25*(un_l+un_r)*(c_l+c_r))
