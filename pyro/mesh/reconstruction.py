@@ -327,29 +327,29 @@ def ppm_reconstruction(a, myg, idir):
 
         davl = limit2(a, myg, idir)
 
-        ai.v(buf=3)[:, :] = a.v(buf=3) + 0.5*(a.ip(1, buf=3) - a.v(buf=3)) \
-                               - (davl.ip(1, buf=3) - davl.v(buf=3))/6.0
+        ai.v(buf=2)[:, :] = a.v(buf=2) + 0.5*(a.ip(1, buf=2) - a.v(buf=2)) \
+                               - (davl.ip(1, buf=2) - davl.v(buf=2))/6.0
 
         # #From here we set ar and al to take the same value of ai. The values of ar and
         # #al, will be reformated accordingly to the neigbours behaviour.
-        al.v(buf=3)[:, :] = ai.v(buf=3)
-        ar.v(buf=3)[:, :] = ai.ip(-1, buf=3)
+        al.v(buf=2)[:, :] = ai.v(buf=2)
+        ar.v(buf=2)[:, :] = ai.ip(-1, buf=2)
 
         #From here, we can reset ar and al:
 
-        dl1.v(buf=3)[:, :] = (ai.v(buf=3) - a.v(buf=3)) * (a.v(buf=3) - ai.ip(-1, buf=3))
-        dc.v(buf=3)[:, :] = a.v(buf=3)
-        dr.v(buf=3)[:, :] = ai.v(buf=3)
+        dl1.v(buf=2)[:, :] = (ai.v(buf=2) - a.v(buf=2)) * (a.v(buf=2) - ai.ip(-1, buf=2))
+        dc.v(buf=2)[:, :] = a.v(buf=2)
+        dr.v(buf=2)[:, :] = ai.v(buf=2)
 
         ar.v(buf=myg.ng)[:, :] = np.where(dl1 <= 0.0, dc, dr)
         al.v(buf=myg.ng)[:, :] = np.where(dl1 <= 0.0, dc, dr)
 
-        dl1.v(buf=3)[:, :] = 6.0 * (ai.v(buf=3) - ai.ip(-1, buf=3)) \
-                                * (a.v(buf=3) - 0.5*(ai.v(buf=3) + ai.ip(-1, buf=3)))
+        dl1.v(buf=2)[:, :] = 6.0 * (ai.v(buf=2) - ai.ip(-1, buf=2)) \
+                                * (a.v(buf=2) - 0.5*(ai.v(buf=2) + ai.ip(-1, buf=2)))
 
-        dl2.v(buf=3)[:, :] = (ai.v(buf=3) - ai.ip(-1, buf=3))**2
-        dc.v(buf=3)[:, :] = 3.0*a.v(buf=3) - 2.0*ai.v(buf=3)
-        dr.v(buf=3)[:, :] = ai.v(buf=3)
+        dl2.v(buf=2)[:, :] = (ai.v(buf=2) - ai.ip(-1, buf=2))**2
+        dc.v(buf=2)[:, :] = 3.0*a.v(buf=2) - 2.0*ai.v(buf=2)
+        dr.v(buf=2)[:, :] = ai.v(buf=2)
 
         ar.v(buf=myg.ng)[:, :] = np.where(dl1 > dl2, dc, dr)
         al.v(buf=myg.ng)[:, :] = np.where(-dl2 > dl1, dc, dr)
@@ -358,29 +358,29 @@ def ppm_reconstruction(a, myg, idir):
 
         davl = limit2(a, myg, idir)
 
-        ai.v(buf=3)[:, :] = a.v(buf=3) + 0.5*(a.jp(1, buf=3) - a.v(buf=3)) \
-                               - (davl.jp(1, buf=3) - davl.v(buf=3))/6.0
+        ai.v(buf=2)[:, :] = a.v(buf=2) + 0.5*(a.jp(1, buf=2) - a.v(buf=2)) \
+                               - (davl.jp(1, buf=2) - davl.v(buf=2))/6.0
 
         # #From here we set ar and al to take the same value of ai. The values of ar and
         # #al, will be reformated accordingly to the neigbours behaviour.
-        al.v(buf=3)[:, :] = ai.v(buf=3)
-        ar.v(buf=3)[:, :] = ai.jp(-1, buf=3)
+        al.v(buf=2)[:, :] = ai.v(buf=2)
+        ar.v(buf=2)[:, :] = ai.jp(-1, buf=2)
 
         #From here, we can reset ar and al:
 
-        dl1.v(buf=3)[:, :] = (ai.v(buf=3) - a.v(buf=3)) * (a.v(buf=3) - ai.jp(-1, buf=3))
-        dc.v(buf=3)[:, :] = a.v(buf=3)
-        dr.v(buf=3)[:, :] = ai.v(buf=3)
+        dl1.v(buf=2)[:, :] = (ai.v(buf=2) - a.v(buf=2)) * (a.v(buf=2) - ai.jp(-1, buf=2))
+        dc.v(buf=2)[:, :] = a.v(buf=2)
+        dr.v(buf=2)[:, :] = ai.v(buf=2)
 
         ar.v(buf=myg.ng)[:, :] = np.where(dl1 <= 0.0, dc, dr)
         al.v(buf=myg.ng)[:, :] = np.where(dl1 <= 0.0, dc, dr)
 
-        dl1.v(buf=3)[:, :] = 6.0 * (ai.v(buf=3) - ai.jp(-1, buf=3)) \
-                                * (a.v(buf=3) - 0.5*(ai.v(buf=3) + ai.jp(-1, buf=3)))
+        dl1.v(buf=2)[:, :] = 6.0 * (ai.v(buf=2) - ai.jp(-1, buf=2)) \
+                                * (a.v(buf=2) - 0.5*(ai.v(buf=2) + ai.jp(-1, buf=2)))
 
-        dl2.v(buf=3)[:, :] = (ai.v(buf=3) - ai.jp(-1, buf=3))**2
-        dc.v(buf=3)[:, :] = 3.0*a.v(buf=3) - 2.0*ai.v(buf=3)
-        dr.v(buf=3)[:, :] = ai.v(buf=3)
+        dl2.v(buf=2)[:, :] = (ai.v(buf=2) - ai.jp(-1, buf=2))**2
+        dc.v(buf=2)[:, :] = 3.0*a.v(buf=2) - 2.0*ai.v(buf=2)
+        dr.v(buf=2)[:, :] = ai.v(buf=2)
 
         ar.v(buf=myg.ng)[:, :] = np.where(dl1 > dl2, dc, dr)
         al.v(buf=myg.ng)[:, :] = np.where(-dl2 > dl1, dc, dr)
