@@ -114,9 +114,9 @@ class ArrayIndexer(np.ndarray):
         return np.sqrt(self.g.dx * self.g.dy *
                        np.sum((_tmp[self.g.ilo:self.g.ihi+1, self.g.jlo:self.g.jhi+1]**2).flat))
 
-    def copy(self):
+    def copy(self, order='C'):
         """make a copy of the array, defined on the same grid"""
-        return ArrayIndexer(np.asarray(self).copy(), grid=self.g)
+        return ArrayIndexer(np.asarray(self).copy(order=order), grid=self.g)
 
     def is_symmetric(self, nodal=False, tol=1.e-14, asymmetric=False):
         """return True is the data is left-right symmetric (to the tolerance
@@ -416,9 +416,9 @@ class ArrayIndexerFC(ArrayIndexer):
         return np.sqrt(self.g.dx * self.g.dy *
                        np.sum((_tmp[self.g.ilo:self.g.ihi+1, self.g.jlo:self.g.jhi+2]**2).flat))
 
-    def copy(self):
+    def copy(self, order='C'):
         """make a copy of the array, defined on the same grid"""
-        return ArrayIndexerFC(np.asarray(self).copy(), self.idir, grid=self.g)
+        return ArrayIndexerFC(np.asarray(self).copy(order=order), self.idir, grid=self.g)
 
     def is_symmetric(self, nodal=False, tol=1.e-14, asymmetric=False):
         """return True is the data is left-right symmetric (to the tolerance
