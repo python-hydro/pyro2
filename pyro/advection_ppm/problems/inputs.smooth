@@ -27,7 +27,6 @@ xrboundary = periodic
 ylboundary = periodic
 yrboundary = periodic
 
-
 [advection]
 u = 1.0
 v = 1.0

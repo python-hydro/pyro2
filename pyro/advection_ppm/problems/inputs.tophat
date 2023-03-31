@@ -9,7 +9,6 @@ init_tstep_factor = 1.0
 
 cfl = 0.8
 
-
 [io]
 basename = tophat_
 n_out = 10
@@ -26,9 +25,6 @@ xrboundary = periodic
 ylboundary = periodic
 yrboundary = periodic
 
-
 [advection]
 u = 1.0
 v = 1.0
-
-limiter = 2

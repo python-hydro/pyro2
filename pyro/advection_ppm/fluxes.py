@@ -72,7 +72,6 @@ def ctu_unsplit_fluxes(data, rp, dt, scalar_name):
     delta_ay = myg.scratch_array()
     a6y = myg.scratch_array()
 
-
     # upwind
     a_x = myg.scratch_array()
 
