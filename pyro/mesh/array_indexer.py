@@ -46,10 +46,6 @@ class ArrayIndexer(np.ndarray):
         self.g = getattr(obj, "g", None)
         self.c = getattr(obj, "c", None)
 
-    def __array_wrap__(self, out_arr, context=None):
-        # pylint: disable-next=too-many-function-args
-        return np.ndarray.__array_wrap__(self, out_arr, context)
-
     def v(self, buf=0, n=0, s=1):
         """return a view of the valid data region for component n, with stride
         s, and a buffer of ghost cells given by buf
@@ -357,10 +353,6 @@ class ArrayIndexerFC(ArrayIndexer):
         self.g = getattr(obj, "g", None)
         self.idir = getattr(obj, "idir", None)
         self.c = getattr(obj, "c", None)
-
-    def __array_wrap__(self, out_arr, context=None):
-        # pylint: disable-next=too-many-function-args
-        return np.ndarray.__array_wrap__(self, out_arr, context)
 
     def ip_jp(self, ishift, jshift, buf=0, n=0, s=1):
         """return a view of the data shifted by ishift in the x direction and
