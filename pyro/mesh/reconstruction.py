@@ -306,7 +306,7 @@ def ppm_reconstruction(a, myg, idir):
     this definition:
 
       |----------------------*----------------------|
-    a_{L,i}                 a_i                   a_{R,i}
+    a_{R,i-1/2}                 a_i                   a_{L,i+1/2}
 
     where a_{L,i} will be stored in al[i], and a_{R,i} in
     ar[i].
@@ -333,11 +333,11 @@ def ppm_reconstruction(a, myg, idir):
         # #From here we set ar and al to take the same value of ai. The values of ar and
         # #al, will be reformated accordingly to the neigbours behaviour.
         al.v(buf=3)[:, :] = ai.v(buf=3)
-        ar.v(buf=3)[:, :] = ai.ip(-1,buf=3)
+        ar.v(buf=3)[:, :] = ai.ip(-1, buf=3)
 
         #From here, we can reset ar and al:
 
-        dl1.v(buf=3)[:, :] = (ai.v(buf=3) - a.v(buf=3))* (a.v(buf=3) - ai.ip(-1, buf=3))
+        dl1.v(buf=3)[:, :] = (ai.v(buf=3) - a.v(buf=3)) * (a.v(buf=3) - ai.ip(-1, buf=3))
         dc.v(buf=3)[:, :] = a.v(buf=3)
         dr.v(buf=3)[:, :] = ai.v(buf=3)
 
@@ -347,7 +347,7 @@ def ppm_reconstruction(a, myg, idir):
         dl1.v(buf=3)[:, :] = 6.0 * (ai.v(buf=3) - ai.ip(-1, buf=3)) \
                                 * (a.v(buf=3) - 0.5*(ai.v(buf=3) + ai.ip(-1, buf=3)))
 
-        dl2.v(buf=3)[:,:] = (ai.v(buf=3) - ai.ip(-1, buf=3))**2
+        dl2.v(buf=3)[:, :] = (ai.v(buf=3) - ai.ip(-1, buf=3))**2
         dc.v(buf=3)[:, :] = 3.0*a.v(buf=3) - 2.0*ai.v(buf=3)
         dr.v(buf=3)[:, :] = ai.v(buf=3)
 
@@ -364,11 +364,11 @@ def ppm_reconstruction(a, myg, idir):
         # #From here we set ar and al to take the same value of ai. The values of ar and
         # #al, will be reformated accordingly to the neigbours behaviour.
         al.v(buf=3)[:, :] = ai.v(buf=3)
-        ar.v(buf=3)[:, :] = ai.jp(-1,buf=3)
+        ar.v(buf=3)[:, :] = ai.jp(-1, buf=3)
 
         #From here, we can reset ar and al:
 
-        dl1.v(buf=3)[:, :] = (ai.v(buf=3) - a.v(buf=3))* (a.v(buf=3) - ai.jp(-1, buf=3))
+        dl1.v(buf=3)[:, :] = (ai.v(buf=3) - a.v(buf=3)) * (a.v(buf=3) - ai.jp(-1, buf=3))
         dc.v(buf=3)[:, :] = a.v(buf=3)
         dr.v(buf=3)[:, :] = ai.v(buf=3)
 
@@ -378,7 +378,7 @@ def ppm_reconstruction(a, myg, idir):
         dl1.v(buf=3)[:, :] = 6.0 * (ai.v(buf=3) - ai.jp(-1, buf=3)) \
                                 * (a.v(buf=3) - 0.5*(ai.v(buf=3) + ai.jp(-1, buf=3)))
 
-        dl2.v(buf=3)[:,:] = (ai.v(buf=3) - ai.jp(-1, buf=3))**2
+        dl2.v(buf=3)[:, :] = (ai.v(buf=3) - ai.jp(-1, buf=3))**2
         dc.v(buf=3)[:, :] = 3.0*a.v(buf=3) - 2.0*ai.v(buf=3)
         dr.v(buf=3)[:, :] = ai.v(buf=3)
 

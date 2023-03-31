@@ -10,13 +10,15 @@ import pyro.util.plot_tools as plot_tools
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
 import pyro.advection_ppm.fluxes as flx
 
+
 class Simulation(NullSimulation):
 
     def initialize(self):
         """
         Initialize the grid and the initial conditions.
         """
-        my_grid = grid_setup(self.rp, ng = 4)
+
+        my_grid = grid_setup(self.rp, ng=4)
         my_data = patch.CellCenterData2d(my_grid)
         bc = bc_setup(self.rp)[0]
 
@@ -51,7 +53,6 @@ class Simulation(NullSimulation):
         ytmp = self.cc_data.grid.dy/max(abs(v), self.SMALL)
 
         self.dt = cfl*min(xtmp, ytmp)
-
 
     def evolve(self):
         """
