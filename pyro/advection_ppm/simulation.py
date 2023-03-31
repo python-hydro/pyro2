@@ -5,36 +5,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import pyro.advection_ppm.fluxes as flx
-import pyro.mesh.patch as patch
-import pyro.particles.particles as particles
 import pyro.util.plot_tools as plot_tools
-from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
+from pyro import advection
 
 
-class Simulation(NullSimulation):
-
-    def initialize(self):
-        """
-        Initialize the grid and the initial conditions.
-        """
-
-        my_grid = grid_setup(self.rp, ng=4)
-        my_data = patch.CellCenterData2d(my_grid)
-        bc = bc_setup(self.rp)[0]
-
-        my_data.register_var("density", bc)
-        my_data.create()
-
-        self.cc_data = my_data
-
-        if self.rp.get_param("particles.do_particles") == 1:
-            n_particles = self.rp.get_param("particles.n_particles")
-            particle_generator = self.rp.get_param("particles.particle_generator")
-            self.particles = particles.Particles(self.cc_data, bc, n_particles, particle_generator)
-
-        # now set the initial conditions for the problem
-        problem = importlib.import_module(f"pyro.advection_ppm.problems.{self.problem_name}")
-        problem.init_data(self.cc_data, self.rp)
+class Simulation(advection.Simulation):
 
     def method_compute_timestep(self):
         """
@@ -61,6 +36,9 @@ class Simulation(NullSimulation):
         is part of the Simulation.
         """
 
+        tm_evolve = self.tc.timer("evolve")
+        tm_evolve.begin()
+
         dtdx = self.dt/self.cc_data.grid.dx
         dtdy = self.dt/self.cc_data.grid.dy
 
@@ -84,6 +62,8 @@ class Simulation(NullSimulation):
         # increment the time
         self.cc_data.t += self.dt
         self.n += 1
+
+        tm_evolve.end()
 
     def dovis(self):
         """
