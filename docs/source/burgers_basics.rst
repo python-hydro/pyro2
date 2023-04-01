@@ -28,3 +28,9 @@ The main difference of Burgers equation compared to the linear advection equatio
 The parameters for this solver are:
 
 .. include:: burgers_defaults.inc
+
+
+.. image:: burgers.png
+   :align: center
+
+The figure above is generated using ``burgers/problems/test.py``, which is used to test the validity of the solver. Bottom-left of the domain has a higher velocity than the top-right domain. With :math:`u_{i,j}=v_{i,j}`, the wave travels diagonally to the top-right with a constant velocity that is equal to the shock speed. ``burgers/problem/verify.py`` can be used to calculate the wave speed using outputs from ``test.py`` and compare to the theoretical shock speed.

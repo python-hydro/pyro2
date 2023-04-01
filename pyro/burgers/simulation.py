@@ -6,9 +6,9 @@ import numpy as np
 
 import pyro.burgers.advective_fluxes as flx
 import pyro.mesh.patch as patch
+import pyro.mesh.reconstruction as reconstruction
 import pyro.particles.particles as particles
 import pyro.util.plot_tools as plot_tools
-import pyro.mesh.reconstruction as reconstruction
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
 
 
