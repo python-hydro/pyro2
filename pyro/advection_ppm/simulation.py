@@ -36,8 +36,8 @@ class Simulation(advection.Simulation):
         is part of the Simulation.
         """
 
-        tm_evolve = self.tc.timer("evolve")
-        tm_evolve.begin()
+        #tm_evolve = self.tc.timer("evolve")
+        #tm_evolve.begin()
 
         dtdx = self.dt/self.cc_data.grid.dx
         dtdy = self.dt/self.cc_data.grid.dy
@@ -63,7 +63,7 @@ class Simulation(advection.Simulation):
         self.cc_data.t += self.dt
         self.n += 1
 
-        tm_evolve.end()
+        #tm_evolve.end()
 
     def dovis(self):
         """
