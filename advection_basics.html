@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Advection solvers &mdash; pyro 4.0.1.post27+g8f8573eb documentation</title>
+  <title>Advection solvers &mdash; pyro 4.0.1.post28+g4d0f2d8c documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -114,7 +114,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zreferences.html">References</a></li>
 </ul>
 
         </div>
@@ -154,7 +154,7 @@ with different spatial and temporal intergration schemes.</p>
 <section id="advection-solver">
 <h2><code class="docutils literal notranslate"><span class="pre">advection</span></code> solver<a class="headerlink" href="#advection-solver" title="Permalink to this heading"></a></h2>
 <p><a class="reference internal" href="pyro.advection.html#module-pyro.advection" title="pyro.advection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.advection</span></code></a> implements the directionally unsplit corner
-transport upwind algorithm <span id="id1">[<a class="reference internal" href="references.html#id2" title="P. Colella. Multidimensional upwind methods for hyperbolic conservation laws. Journal of Computational Physics, 87:171-200, March 1990. doi:10.1016/0021-9991(90)90233-Q.">Colella90</a>]</span> with piecewise linear reconstruction.
+transport upwind algorithm <span id="id1">[<a class="reference internal" href="zreferences.html#id2" title="P. Colella. Multidimensional upwind methods for hyperbolic conservation laws. Journal of Computational Physics, 87:171-200, March 1990. doi:10.1016/0021-9991(90)90233-Q.">Colella90</a>]</span> with piecewise linear reconstruction.
 This is an overall second-order accurate method, with timesteps restricted
 by</p>
 <div class="math notranslate nohighlight">
@@ -227,7 +227,7 @@ by</p>
 <h2><code class="docutils literal notranslate"><span class="pre">advection_fv4</span></code> solver<a class="headerlink" href="#advection-fv4-solver" title="Permalink to this heading"></a></h2>
 <p><a class="reference internal" href="pyro.advection_fv4.html#module-pyro.advection_fv4" title="pyro.advection_fv4"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.advection_fv4</span></code></a> uses a fourth-order accurate finite-volume
 method with RK4 time integration, following the ideas in
-<span id="id2">[<a class="reference internal" href="references.html#id3" title="P. McCorquodale and P. Colella. A high-order finite-volume method for conservation laws on locally refined grids. Communication in Applied Mathematics and Computational Science, 6(1):1–25, 2011.">McCorquodaleColella11</a>]</span>.  It can be thought of as a
+<span id="id2">[<a class="reference internal" href="zreferences.html#id3" title="P. McCorquodale and P. Colella. A high-order finite-volume method for conservation laws on locally refined grids. Communication in Applied Mathematics and Computational Science, 6(1):1–25, 2011.">McCorquodaleColella11</a>]</span>.  It can be thought of as a
 method-of-lines integration, and as such has a slightly more restrictive
 timestep:</p>
 <div class="math notranslate nohighlight">
@@ -286,7 +286,7 @@ faces of the zones to achieve 4th order accuracy spatially.</p>
 <h2><code class="docutils literal notranslate"><span class="pre">advection_nonuniform</span></code> solver<a class="headerlink" href="#advection-nonuniform-solver" title="Permalink to this heading"></a></h2>
 <p><a class="reference internal" href="pyro.advection_nonuniform.html#module-pyro.advection_nonuniform" title="pyro.advection_nonuniform"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.advection_nonuniform</span></code></a> models advection with a non-uniform
 velocity field.  This is used to implement the slotted disk problem
-from <span id="id3">[<a class="reference internal" href="references.html#id4" title="Steven T Zalesak. Fully multidimensional flux-corrected transport algorithms for fluids. Journal of Computational Physics, 31(3):335 - 362, 1979. URL: http://www.sciencedirect.com/science/article/pii/0021999179900512, doi:https://doi.org/10.1016/0021-9991(79)90051-2.">Zal79</a>]</span>.  The basic method is similar to the
+from <span id="id3">[<a class="reference internal" href="zreferences.html#id4" title="Steven T Zalesak. Fully multidimensional flux-corrected transport algorithms for fluids. Journal of Computational Physics, 31(3):335 - 362, 1979. URL: http://www.sciencedirect.com/science/article/pii/0021999179900512, doi:https://doi.org/10.1016/0021-9991(79)90051-2.">Zal79</a>]</span>.  The basic method is similar to the
 algorithm used by the main <code class="docutils literal notranslate"><span class="pre">advection</span></code> solver.</p>
 <p>The paramters for this solver are:</p>
 <ul>

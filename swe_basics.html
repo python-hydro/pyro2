@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shallow water solver &mdash; pyro 4.0.1.post27+g8f8573eb documentation</title>
+  <title>Shallow water solver &mdash; pyro 4.0.1.post28+g4d0f2d8c documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -109,7 +109,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zreferences.html">References</a></li>
 </ul>
 
         </div>
@@ -237,12 +237,11 @@ span.prompt1:before {
 }
 </style><span class="prompt1">pyro_sim.py<span class="w"> </span>swe<span class="w"> </span>dam<span class="w"> </span>inputs.dam.x</span>
 <span class="prompt1">pyro_sim.py<span class="w"> </span>swe<span class="w"> </span>dam<span class="w"> </span>inputs.dam.y</span>
-</pre></div></div><p>A simple script, <code class="docutils literal notranslate"><span class="pre">dam_compare.py</span></code> in <code class="docutils literal notranslate"><span class="pre">analysis/</span></code> will read a pyro output
-file and plot the solution over the exact dam break solution (as given by
-<a class="reference external" href="https://doi.org/10.1063/1.3062689">Stoker (1958)</a> and
-<a class="reference external" href="https://doi.org/10.1061/(ASCE)0733-9429(1999)125:11(1210)">Wu, Huang &amp; Zheng (1999)</a>). Below we see
-the result for a dam break run with 128 points in the x-direction, and run
-until t = 0.3 s.</p>
+</pre></div></div><p>A simple script, <code class="docutils literal notranslate"><span class="pre">dam_compare.py</span></code> in <code class="docutils literal notranslate"><span class="pre">analysis/</span></code> will read a pyro
+output file and plot the solution over the exact dam break solution
+(as given by <span id="id1">[<a class="reference internal" href="zreferences.html#id5" title="J. J. Stoker and R. Bruce Lindsay. Water waves. Physics Today, 11(8):28-30, 1958. URL: https://doi.org/10.1063/1.3062689.">SL58</a>]</span> and <span id="id2">[<a class="reference internal" href="zreferences.html#id6" title="Chao Wu, Guofu Huang, and Yonghong Zheng. Theoretical solution of dam-break shock wave. Journal of Hydraulic Engineering, 125(11):1210-1215, 1999.">WHZ99</a>]</span>.  Below we see
+the result for a dam break run with 128 points in the x-direction, and
+run until t = 0.3 s.</p>
 <img alt="_images/dam_compare.png" class="align-center" src="_images/dam_compare.png" />
 <p>We see excellent agreement for all quantities. The shock wave is very
 steep, as expected. For this problem, the Roe-fix solver performs
