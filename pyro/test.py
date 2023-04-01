@@ -92,6 +92,8 @@ def do_tests(out_file,
 
     tests = []
     tests.append(PyroTest("advection", "smooth", "inputs.smooth", opts))
+    tests.append(PyroTest("advection_ppm",
+                          "smooth", "inputs.smooth", opts))
     tests.append(PyroTest("advection_nonuniform",
                           "slotted", "inputs.slotted", opts))
     tests.append(PyroTest("advection_rk", "smooth", "inputs.smooth", opts))
