@@ -63,7 +63,7 @@ pyro: a python hydro code
 .. toctree::
    :caption: Bibliography
 
-   references
+   zreferences
 
 
 Indices and tables
