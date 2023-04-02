@@ -3,7 +3,6 @@
 import sys
 
 import numpy as np
-
 import pyro.util.io_pyro as io
 
 # read in two files -- one twice the resolution of the other, and
@@ -39,4 +38,4 @@ if __name__ == "__main__":
 
     result = compare(ff.cc_data, cc.cc_data)
 
-    print("inf/L2 norm of density: ", result)
+    print("inf norm of density: ", result)
