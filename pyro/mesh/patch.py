@@ -930,15 +930,10 @@ class PolarGrid(Grid2d):
         Return an array of the face areas. 
         The shape of the returned array is (ni, nj).
         """
-        # tr = lambda arr: arr.transpose(1, 2, 0)
-        # x = self.cell_vertices()[:,0]
-        # y = self.cell_vertices()[0,:]
-        # r0 = x[:-1, :-1]
-        # r1 = x[+1:, :-1]
-        # t0 = y[:-1, :-1]
-        # t1 = y[+1:, +1:]
-        r1 = self.xl
-        r0 = self.xr
+        r1 = self.xr
+        r0 = self.xl
+
+        # ** this is just \Delta r
 
         area = r1 - r0
         return area
@@ -948,20 +943,13 @@ class PolarGrid(Grid2d):
         Return an array of the face areas. 
         The shape of the returned array is (ni, nj).
         """
-        # tr = lambda arr: arr.transpose(1, 2, 0)
-        # x = self.cell_vertices()[:,0]
-        # y = self.cell_vertices()[0,:]
-        # r0 = x[:-1, :-1]
-        # r1 = x[+1:, :-1]
-        # t0 = y[:-1, :-1]
-        # t1 = y[+1:, +1:]
 
-        r1, t1 = np.meshgrid(self.xl, self.yl)
-        r0, t0 = np.meshgrid(self.xr, self.yr)
+        t1 = self.yr
+        t0 = self.yl
 
-        # ** the area of a part of an annulus
+        # ** this is just \Delta \theta
 
-        area = 0.5 * (r1 ** 2 - r0 ** 2) * (t1 - t0)
+        area = t1 - t0
         return area
 
 
@@ -971,20 +959,14 @@ class PolarGrid(Grid2d):
         The shape of the returned array is (ni, nj).
         """
 
-        # x = self.cell_vertices()[:,0]
-        # y = self.cell_vertices()[0,:]
-
-        # r0 = x[:-1, :-1]
-        # r1 = x[+1:, :-1]
-        # t0 = y[:-1, :-1]
-        # t1 = y[+1:, +1:]
-
         r1 = self.xl
         r0 = self.xr
         t1 = self.yl
         t0 = self.yr
 
-        return 0.5 * (r1 ** 2 - r0 ** 2) * (t1 - t0) * (r1 - r0)
+        # ** this is just the face area
+
+        return 0.5 * (r1 ** 2 - r0 ** 2) * (t1 - t0)
 
     def cell_vertices(self):
         """
