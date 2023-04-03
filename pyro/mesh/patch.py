@@ -905,26 +905,6 @@ class PolarGrid(Grid2d):
 
     # pylint: disable=too-many-instance-attributes
 
-
-    # def face_area(self):
-    #     """
-    #     Return an array of the face areas. 
-    #     The shape of the returned array is (ni, nj).
-    #     """
-    #     tr = lambda arr: arr.transpose(1, 2, 0)
-    #     x = self.cell_vertices()[:,0]
-    #     y = self.cell_vertices()[0,:]
-    #     r0 = x[:-1, :-1]
-    #     r1 = x[+1:, :-1]
-    #     t0 = y[:-1, :-1]
-    #     t1 = y[+1:, +1:]
-
-    #     # ** the area of the arc
-
-    #     area_i = np.pi * (r0 * np.sin(t0) + r0 * np.sin(t1)) * np.sqrt(np.square(r0 * np.sin(t1) - r0 * np.sin(t0)) + np.square(r0 * np.cos(t1) - r0 * np.cos(t0)))
-    #     area_j = np.pi * (r0 * np.sin(t0) + r1 * np.sin(t0)) * np.sqrt(np.square(r1 * np.sin(t0) - r0 * np.sin(t0)) + np.square(r1 * np.cos(t0) - r0 * np.cos(t0)))
-    #     return tr(np.array([area_i, area_j]))
-
     def area_x(self):
         """
         Return an array of the face areas. 
@@ -952,7 +932,6 @@ class PolarGrid(Grid2d):
         area = t1 - t0
         return area
 
-
     def cell_volumes(self):
         """
         Return an array of the cell volume data for the given coordinate box
@@ -967,32 +946,6 @@ class PolarGrid(Grid2d):
         # ** this is just the face area
 
         return 0.5 * (r1 ** 2 - r0 ** 2) * (t1 - t0)
-
-    def cell_vertices(self):
-        """
-        Return the coordinates of cell vertices
-        The arrays range from 0 to 1 for now
-        """
-        # if self.ng == 0:
-        #     xv = np.linspace(0, 1, self.nx + 1)[:-1]
-        #     yv = np.linspace(0, 1, self.ny + 1)[:-1]
-        # else:
-        #     xv = np.linspace(0, 1, self.nx + 1)
-        #     yv = np.linspace(0, 1, self.ny + 1)
-
-        xv = np.linspace(0, 1, self.nx + 1)[:-1]
-        yv = np.linspace(0, 1, self.ny + 1)[:-1]
-
-     
-        tr = lambda arr: arr.transpose(1, 2, 0)
-        x, y = np.meshgrid(xv, yv, indexing="ij")
-        return tr(np.array([x, y]))
-
-   
-
-    
-
-
 
 if __name__ == "__main__":
     do_demo()
