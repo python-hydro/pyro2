@@ -41,7 +41,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Install pyro
-        run: python setup.py install --user
+        run: pip install .
 
       - name: Run tests with pytest
-        run: pytest -v --cov=. --cov-config .coveragerc --nbval --ignore=docs --ignore=./pyro/multigrid/variable_coeff_elliptic.ipynb --ignore=examples/mesh --ignore=examples/multigrid --ignore=presentations
+        run: pytest -v --cov=pyro --nbval --ignore=docs --ignore=./pyro/multigrid/variable_coeff_elliptic.ipynb --ignore=examples/mesh --ignore=examples/multigrid --ignore=presentations

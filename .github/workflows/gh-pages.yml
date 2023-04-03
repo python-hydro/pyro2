@@ -34,7 +34,7 @@ jobs:
         run: pip install -r ./requirements.txt
 
       - name: Install pyro
-        run: python setup.py install
+        run: pip install .
 
       - name: Build docs
         run: ./deploy_docs_action.sh

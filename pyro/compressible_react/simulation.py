@@ -92,7 +92,7 @@ class Simulation(compressible.Simulation):
         fields = [rho, magvel, p, e, X]
         field_names = [r"$\rho$", r"U", "p", "e", r"$X_\mathrm{fuel}$"]
 
-        f, axes, cbar_title = plot_tools.setup_axes(myg, len(fields))
+        _, axes, cbar_title = plot_tools.setup_axes(myg, len(fields))
 
         for n, ax in enumerate(axes):
             v = fields[n]

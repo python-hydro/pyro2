@@ -27,7 +27,7 @@ def compare(fine, coarse):
 
 if __name__ == "__main__":
 
-    if not len(sys.argv) == 3:
+    if len(sys.argv) != 3:
         print(usage)
         sys.exit(2)
 
@@ -39,4 +39,4 @@ if __name__ == "__main__":
 
     result = compare(ff.cc_data, cc.cc_data)
 
-    print("inf/L2 norm of density: ", result)
+    print("inf norm of density: ", result)

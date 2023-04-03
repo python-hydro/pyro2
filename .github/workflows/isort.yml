@@ -38,8 +38,8 @@ jobs:
           pip install isort
 
       - name: Install pyro
-        run: python setup.py install --user
+        run: pip install .
 
       - name: Validate
-        run: isort -c pyro
+        run: isort --check --diff pyro
 

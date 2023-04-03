@@ -63,8 +63,8 @@ def read(filename):
             else:
                 bc_solver = solver_name
             bcmod = importlib.import_module(f"pyro.{bc_solver}.BC")
-            for name in custom_bcs:
-                bnd.define_bc(name, bcmod.user, is_solid=custom_bcs[name])
+            for name, is_solid in custom_bcs.items():
+                bnd.define_bc(name, bcmod.user, is_solid=is_solid)
 
         # read in the variable info -- start by getting the names
         gs = f["state"]

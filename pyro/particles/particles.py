@@ -123,7 +123,7 @@ class Particles:
 
         self.sim_data = sim_data
         self.bc = bc
-        self.particles = dict()
+        self.particles = {}
 
         if n_particles <= 0:
             msg.fail("ERROR: n_particles = %s <= 0" % (n_particles))
@@ -237,7 +237,7 @@ class Particles:
         elif v is None:
             v = self.sim_data.get_var("y-velocity")
 
-        for k, p in self.particles.items():
+        for p in self.particles.values():
 
             # save old position and predict location at dt/2
             initial_position = p.pos()
@@ -266,7 +266,7 @@ class Particles:
         boundaries.
         """
         old_particles = self.particles.copy()
-        self.particles = dict()
+        self.particles = {}
 
         myg = self.sim_data.grid
 

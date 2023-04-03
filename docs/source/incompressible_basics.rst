@@ -62,7 +62,18 @@ shown below are run as:
    pyro_sim.py incompressible converge inputs.converge.128 vis.dovis=0
 
 The error is measured by comparing with the analytic solution using
-the routine ``incomp_converge_error.py`` in ``analysis/``.
+the routine ``incomp_converge_error.py`` in ``analysis/``. To generate
+the plot below, run
+
+.. prompt:: bash
+
+   python incompressible/tests/convergence_errors.py convergence_errors.txt
+
+or ``convergence_errors_no_limiter.txt`` after running with that option. Then:
+
+.. prompt:: bash
+
+   python incompressible/tests/convergence_plot.py
 
 .. image:: incomp_converge.png
    :align: center

@@ -58,7 +58,7 @@ def brentq(x1, b, U, gamma, idens, ixmom, iymom, iener,
 
     mflag = True
 
-    for i in range(ITMAX):
+    for _ in range(ITMAX):
         if fa != fc and fb != fc:
             s = a*fb*fc / ((fa-fb) * (fa-fc)) + b*fa*fc / ((fb-fa)*(fb-fc)) + \
                 c*fa*fb / ((fc-fa)*(fc-fb))
