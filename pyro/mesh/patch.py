@@ -947,5 +947,6 @@ class PolarGrid(Grid2d):
 
         return 0.5 * (r1 ** 2 - r0 ** 2) * (t1 - t0)
 
+
 if __name__ == "__main__":
     do_demo()
