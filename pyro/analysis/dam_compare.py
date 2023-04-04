@@ -106,7 +106,7 @@ h1 = rp.get_param("dam.h_left")
 h0 = rp.get_param("dam.h_right")
 
 
-def find_h2(h2):
+def find_h2(h2):  # pylint: disable=redefined-outer-name
     return (h2/h1)**3 - 9*(h2/h1)**2*(h0/h1) + \
         16*(h2/h1)**1.5*(h0/h1) - (h2/h1)*(h0/h1)*(h0/h1+8) + \
         (h0/h1)**3
