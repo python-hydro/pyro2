@@ -1,1 +1,1 @@
-__all__ = ['cavity',]
+__all__ = ['cavity', 'shear', 'converge']
