@@ -179,8 +179,7 @@ def do_tests(out_file,
     return failed
 
 
-if __name__ == "__main__":
-
+def main():
     p = argparse.ArgumentParser()
 
     p.add_argument("--outfile", "-o",
@@ -220,3 +219,7 @@ if __name__ == "__main__":
                       nproc=args.nproc)
 
     sys.exit(failed)
+
+
+if __name__ == "__main__":
+    main()

@@ -6,6 +6,7 @@ from pyro.util import msg
 
 def init_data(myd, rp):
     """ initialize the tophat advection problem """
+    del rp  # this problem doesn't use runtime params
 
     msg.bold("initializing the tophat advection problem...")
 

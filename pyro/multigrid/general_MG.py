@@ -177,7 +177,7 @@ class GeneralMG2d(MG.CellCenterMG2d):
                     # (beta_{i,j-1/2} - gamma^y_{i,j}) phi_{i,j-1}
                     (beta_y.ip_jp(ix, iy, s=2) - gamma_y.ip_jp(ix, iy, s=2)) * v.ip_jp(ix, -1+iy, s=2)) / denom
 
-                if n == 1 or n == 3:
+                if n in (1, 3):
                     self.grids[level].fill_BC("v")
 
             if self.vis == 1:
