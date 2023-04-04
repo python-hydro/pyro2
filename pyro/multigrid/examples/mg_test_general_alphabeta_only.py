@@ -45,7 +45,7 @@ def true(x, y):
 
 
 # the coefficients
-def alpha(x, y):
+def alpha(x, _y):
     return np.ones_like(x)
 
 
@@ -53,11 +53,11 @@ def beta(x, y):
     return 2.0 + np.cos(2.0*np.pi*x)*np.cos(2.0*np.pi*y)
 
 
-def gamma_x(x, y):
+def gamma_x(x, _y):
     return np.zeros_like(x)
 
 
-def gamma_y(x, y):
+def gamma_y(x, _y):
     return np.zeros_like(x)
 
 
@@ -195,8 +195,7 @@ def test_general_poisson_dirichlet(N, store_bench=False, comp_bench=False, bench
     return enorm
 
 
-if __name__ == "__main__":
-
+def main():
     N = [16, 32, 64]
     err = []
 
@@ -230,3 +229,7 @@ if __name__ == "__main__":
     plt.tight_layout()
 
     plt.savefig("mg_general_alphabeta_only_converge.png")
+
+
+if __name__ == "__main__":
+    main()

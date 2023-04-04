@@ -46,10 +46,6 @@ class ArrayIndexer(np.ndarray):
         self.g = getattr(obj, "g", None)
         self.c = getattr(obj, "c", None)
 
-    def __array_wrap__(self, out_arr, context=None):
-        # pylint: disable-next=too-many-function-args
-        return np.ndarray.__array_wrap__(self, out_arr, context)
-
     def v(self, buf=0, n=0, s=1):
         """return a view of the valid data region for component n, with stride
         s, and a buffer of ghost cells given by buf
@@ -114,9 +110,9 @@ class ArrayIndexer(np.ndarray):
         return np.sqrt(self.g.dx * self.g.dy *
                        np.sum((_tmp[self.g.ilo:self.g.ihi+1, self.g.jlo:self.g.jhi+1]**2).flat))
 
-    def copy(self):
+    def copy(self, order='C'):
         """make a copy of the array, defined on the same grid"""
-        return ArrayIndexer(np.asarray(self).copy(), grid=self.g)
+        return ArrayIndexer(np.asarray(self).copy(order=order), grid=self.g)
 
     def is_symmetric(self, nodal=False, tol=1.e-14, asymmetric=False):
         """return True is the data is left-right symmetric (to the tolerance
@@ -358,10 +354,6 @@ class ArrayIndexerFC(ArrayIndexer):
         self.idir = getattr(obj, "idir", None)
         self.c = getattr(obj, "c", None)
 
-    def __array_wrap__(self, out_arr, context=None):
-        # pylint: disable-next=too-many-function-args
-        return np.ndarray.__array_wrap__(self, out_arr, context)
-
     def ip_jp(self, ishift, jshift, buf=0, n=0, s=1):
         """return a view of the data shifted by ishift in the x direction and
         jshift in the y direction.  By default the view is the same
@@ -416,9 +408,9 @@ class ArrayIndexerFC(ArrayIndexer):
         return np.sqrt(self.g.dx * self.g.dy *
                        np.sum((_tmp[self.g.ilo:self.g.ihi+1, self.g.jlo:self.g.jhi+2]**2).flat))
 
-    def copy(self):
+    def copy(self, order='C'):
         """make a copy of the array, defined on the same grid"""
-        return ArrayIndexerFC(np.asarray(self).copy(), self.idir, grid=self.g)
+        return ArrayIndexerFC(np.asarray(self).copy(order=order), self.idir, grid=self.g)
 
     def is_symmetric(self, nodal=False, tol=1.e-14, asymmetric=False):
         """return True is the data is left-right symmetric (to the tolerance

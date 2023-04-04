@@ -9,6 +9,7 @@ from pyro.util import msg
 
 def init_data(my_data, rp):
     """ initialize the sedov problem """
+    del rp  # this problem doesn't use runtime params
 
     msg.bold("initializing the logo problem...")
 
