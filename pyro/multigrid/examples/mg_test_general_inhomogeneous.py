@@ -218,8 +218,7 @@ def test_general_poisson_inhomogeneous(N, store_bench=False, comp_bench=False, b
     return enorm
 
 
-if __name__ == "__main__":
-
+def main():
     N = [16, 32, 64, 128, 256, 512]
     err = []
 
@@ -255,3 +254,7 @@ if __name__ == "__main__":
     plt.tight_layout()
 
     plt.savefig("mg_general_inhomogeneous_converge.png")
+
+
+if __name__ == "__main__":
+    main()
