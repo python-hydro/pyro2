@@ -45,7 +45,7 @@ def true(x, y):
 
 
 # the coefficients
-def alpha(x, y):
+def alpha(x, _y):
     return np.ones_like(x)
 
 
@@ -53,11 +53,11 @@ def beta(x, y):
     return 2.0 + np.cos(2.0*np.pi*x)*np.cos(2.0*np.pi*y)
 
 
-def gamma_x(x, y):
+def gamma_x(x, _y):
     return np.zeros_like(x)
 
 
-def gamma_y(x, y):
+def gamma_y(x, _y):
     return np.zeros_like(x)
 
 
