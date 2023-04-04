@@ -74,9 +74,7 @@ def get_args():
     parser.add_argument("variable", type=str, nargs=1,
                         help="the name of the solver used to run the simulation")
 
-    args = parser.parse_args()
-
-    return args
+    return parser.parse_args()
 
 
 if __name__ == "__main__":
