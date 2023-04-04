@@ -21,9 +21,13 @@ class Simulation(incompressible.Simulation):
     def initialize(self):
         """
         Initialization of the data is the same as the incompressible
-        solver, but we define user BC.
+        solver, but we define user BC, and provide the viscosity
+        as an auxiliary variable.
         """
-        super().initialize(other_bc=True)
+        nu = self.rp.get_param("incompressible_viscous.viscosity")
+
+        super().initialize(other_bc=True,
+                           aux_vars=(("viscosity", nu),))
 
     def define_other_bc(self):
         bnd.define_bc("moving_lid", BC.user, is_solid=False)
