@@ -33,8 +33,7 @@ def makeplot(myd, variable):
     plt.show()
 
 
-if __name__ == "__main__":
-
+def main():
     print(sys.argv)
 
     file = sys.argv[1]
@@ -43,3 +42,7 @@ if __name__ == "__main__":
     sim = io.read(file)
 
     makeplot(sim.cc_data, variable)
+
+
+if __name__ == "__main__":
+    main()

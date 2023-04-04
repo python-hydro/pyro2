@@ -104,8 +104,7 @@ def process(file):
     return bin_centers, phi_exact, phi_bin
 
 
-if __name__ == "__main__":
-
+def main():
     if len(sys.argv) < 2:
         print(usage)
         sys.exit(2)
@@ -137,3 +136,7 @@ if __name__ == "__main__":
 
     plt.savefig("gauss_diffusion_compare.png", bbox_inches="tight")
     plt.savefig("gauss_diffusion_compare.pdf", bbox_inches="tight", dpi=100)
+
+
+if __name__ == "__main__":
+    main()

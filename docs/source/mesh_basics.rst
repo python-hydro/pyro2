@@ -100,7 +100,7 @@ Jupyter notebook
 ----------------
 
 A Jupyter notebook that illustrates some of the basics of working with
-the grid is provided as `mesh-examples.ipynb <https://github.com/python-hydro/pyro2/blob/main/mesh/mesh-examples.ipynb>`_. This will
+the grid is provided as `mesh-examples.ipynb <https://github.com/python-hydro/pyro2/blob/main/pyro/mesh/mesh-examples.ipynb>`_. This will
 demonstrate, for example, how to use the :func:`ArrayIndexer <pyro.mesh.array_indexer.ArrayIndexer>` methods to
 construct differences.
 
