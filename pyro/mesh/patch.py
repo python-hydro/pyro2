@@ -854,7 +854,7 @@ def cell_center_data_clone(old):
 
 def do_demo():
     """ show examples of the patch methods / classes """
-
+    # pylint: disable-next=import-outside-toplevel  # required to avoid import loops
     import pyro.util.io_pyro as io
 
     # illustrate basic mesh operations
