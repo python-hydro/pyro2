@@ -13,8 +13,8 @@ viscosity = 0.1
 
 
 [io]
-basename = converge_visous_64_
-n_out = 20
+basename = converge_viscous_64_
+dt_out = 0.1
 
 
 [mesh]

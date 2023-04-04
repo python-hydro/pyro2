@@ -14,7 +14,7 @@ viscosity = 0.1
 
 [io]
 basename = converge_viscous_128_
-n_out = 20
+dt_out = 0.1
 
 
 [mesh]
