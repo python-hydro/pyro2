@@ -18,21 +18,20 @@ def test_is_float():
 
 
 def test_get_val():
+    # pylint: disable=protected-access
     assert rp._get_val("1.5") == 1.5
 
 
 # test the runtime parameter class
-class TestRunParams(object):
+class TestRunParams:
 
     @classmethod
     def setup_class(cls):
         """ this is run once for each class before any tests """
-        pass
 
     @classmethod
     def teardown_class(cls):
         """ this is run once for each class after all tests """
-        pass
 
     def setup_method(self):
         """ this is run before each test """

@@ -10,14 +10,13 @@ def create_file(filename="convergence_errors.txt"):
     # Parse all converge*.h5 outputs
     # store the last file at each resolution
     fnames = glob.glob("converge*.h5")
-    res = set([f.split("_")[1] for f in fnames])
-    res = list(res)
-    res.sort(key=int)
+    res = {f.split("_")[1] for f in fnames}
+    res = sorted(res, key=int)
 
     simfiles = []
     for r in res:
         fnames = glob.glob(f"converge_{r}_*.h5")
-        last = max([int(f.split("_")[-1].split(".")[0]) for f in fnames])
+        last = max(int(f.split("_")[-1].split(".")[0]) for f in fnames)
         simfiles.append(f"converge_{r}_{last:04d}.h5")
 
     # Create the file

@@ -2,8 +2,8 @@ import numpy as np
 from numpy.testing import assert_array_equal
 
 import pyro.mesh.boundary as bnd
-import pyro.mesh.patch as patch
 import pyro.util.io_pyro as io
+from pyro.mesh import patch
 
 
 def test_write_read():
