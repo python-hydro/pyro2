@@ -84,9 +84,7 @@ def init_data(my_data, rp):
 def finalize():
     """ print out any information to the user at the end of the run """
 
-    msg = """
+    print("""
           The script analysis/dam_compare.py can be used to compare
           this output to the exact solution.
-          """
-
-    print(msg)
+          """)
