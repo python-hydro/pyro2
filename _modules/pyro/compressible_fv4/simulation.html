@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible_fv4.simulation &mdash; pyro 4.0.1.post29+g314d69f0 documentation</title>
+  <title>pyro.compressible_fv4.simulation &mdash; pyro 4.0.1.post30+gd1a8c9c4 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -129,8 +129,8 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solver_name</span><span class="p">,</span> <span class="n">problem_name</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">timers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data_class</span><span class="o">=</span><span class="n">fv</span><span class="o">.</span><span class="n">FV2d</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">solver_name</span><span class="p">,</span> <span class="n">problem_name</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">timers</span><span class="o">=</span><span class="n">timers</span><span class="p">,</span> <span class="n">data_class</span><span class="o">=</span><span class="n">data_class</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Simulation.initialize"><a class="viewcode-back" href="../../../pyro.compressible_fv4.html#pyro.compressible_fv4.simulation.Simulation.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">ng</span><span class="o">=</span><span class="n">ng</span><span class="p">)</span></div>
+<div class="viewcode-block" id="Simulation.initialize"><a class="viewcode-back" href="../../../pyro.compressible_fv4.html#pyro.compressible_fv4.simulation.Simulation.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extra_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">extra_vars</span><span class="o">=</span><span class="n">extra_vars</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="n">ng</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Simulation.substep"><a class="viewcode-back" href="../../../pyro.compressible_fv4.html#pyro.compressible_fv4.simulation.Simulation.substep">[docs]</a>    <span class="k">def</span> <span class="nf">substep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">myd</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible_sr package &mdash; pyro 4.0.1.post29+g314d69f0 documentation</title>
+  <title>pyro.compressible_sr package &mdash; pyro 4.0.1.post30+gd1a8c9c4 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -321,7 +321,7 @@ boundary.</p>
 gamma is the constant ratio of specific heats.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.compressible_sr.eos.dens">
-<span class="sig-prename descclassname"><span class="pre">pyro.compressible_sr.eos.</span></span><span class="sig-name descname"><span class="pre">dens</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pres</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_sr/eos.html#dens"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_sr.eos.dens" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.compressible_sr.eos.</span></span><span class="sig-name descname"><span class="pre">dens</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_sr/eos.html#dens"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_sr.eos.dens" title="Permalink to this definition"></a></dt>
 <dd><p>Given the pressure and the specific internal energy, return
 the density</p>
 <dl class="field-list simple">
@@ -329,7 +329,7 @@ the density</p>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>gamma</strong><span class="classifier">float</span></dt><dd><p>The ratio of specific heats</p>
 </dd>
-<dt><strong>pres</strong><span class="classifier">float</span></dt><dd><p>The pressure</p>
+<dt><strong>p</strong><span class="classifier">float</span></dt><dd><p>The pressure</p>
 </dd>
 <dt><strong>eint</strong><span class="classifier">float</span></dt><dd><p>The specific internal energy</p>
 </dd>
@@ -352,7 +352,7 @@ the density</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.compressible_sr.eos.pres">
-<span class="sig-prename descclassname"><span class="pre">pyro.compressible_sr.eos.</span></span><span class="sig-name descname"><span class="pre">pres</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dens</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_sr/eos.html#pres"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_sr.eos.pres" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.compressible_sr.eos.</span></span><span class="sig-name descname"><span class="pre">pres</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_sr/eos.html#pres"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_sr.eos.pres" title="Permalink to this definition"></a></dt>
 <dd><p>Given the density and the specific internal energy, return the
 pressure</p>
 <dl class="field-list simple">
@@ -360,7 +360,7 @@ pressure</p>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>gamma</strong><span class="classifier">float</span></dt><dd><p>The ratio of specific heats</p>
 </dd>
-<dt><strong>dens</strong><span class="classifier">float</span></dt><dd><p>The density</p>
+<dt><strong>rho</strong><span class="classifier">float</span></dt><dd><p>The density</p>
 </dd>
 <dt><strong>eint</strong><span class="classifier">float</span></dt><dd><p>The specific internal energy</p>
 </dd>
@@ -377,14 +377,14 @@ pressure</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.compressible_sr.eos.rhoe">
-<span class="sig-prename descclassname"><span class="pre">pyro.compressible_sr.eos.</span></span><span class="sig-name descname"><span class="pre">rhoe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pres</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_sr/eos.html#rhoe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_sr.eos.rhoe" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.compressible_sr.eos.</span></span><span class="sig-name descname"><span class="pre">rhoe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_sr/eos.html#rhoe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_sr.eos.rhoe" title="Permalink to this definition"></a></dt>
 <dd><p>Given the pressure, return (rho * e)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>gamma</strong><span class="classifier">float</span></dt><dd><p>The ratio of specific heats</p>
 </dd>
-<dt><strong>pres</strong><span class="classifier">float</span></dt><dd><p>The pressure</p>
+<dt><strong>p</strong><span class="classifier">float</span></dt><dd><p>The pressure</p>
 </dd>
 </dl>
 </dd>

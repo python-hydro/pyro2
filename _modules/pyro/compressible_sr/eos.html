@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible_sr.eos &mdash; pyro 4.0.1.post29+g314d69f0 documentation</title>
+  <title>pyro.compressible_sr.eos &mdash; pyro 4.0.1.post30+gd1a8c9c4 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -125,7 +125,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="pres"><a class="viewcode-back" href="../../../pyro.compressible_sr.html#pyro.compressible_sr.eos.pres">[docs]</a><span class="k">def</span> <span class="nf">pres</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">dens</span><span class="p">,</span> <span class="n">eint</span><span class="p">):</span>
+<div class="viewcode-block" id="pres"><a class="viewcode-back" href="../../../pyro.compressible_sr.html#pyro.compressible_sr.eos.pres">[docs]</a><span class="k">def</span> <span class="nf">pres</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">eint</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given the density and the specific internal energy, return the</span>
 <span class="sd">    pressure</span>
@@ -134,7 +134,7 @@
 <span class="sd">    ----------</span>
 <span class="sd">    gamma : float</span>
 <span class="sd">        The ratio of specific heats</span>
-<span class="sd">    dens : float</span>
+<span class="sd">    rho : float</span>
 <span class="sd">        The density</span>
 <span class="sd">    eint : float</span>
 <span class="sd">        The specific internal energy</span>
@@ -145,10 +145,10 @@
 <span class="sd">       The pressure</span>
 
 <span class="sd">     &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">dens</span><span class="o">*</span><span class="n">eint</span><span class="o">*</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">rho</span> <span class="o">*</span> <span class="n">eint</span> <span class="o">*</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="dens"><a class="viewcode-back" href="../../../pyro.compressible_sr.html#pyro.compressible_sr.eos.dens">[docs]</a><span class="k">def</span> <span class="nf">dens</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">pres</span><span class="p">,</span> <span class="n">eint</span><span class="p">):</span>
+<div class="viewcode-block" id="dens"><a class="viewcode-back" href="../../../pyro.compressible_sr.html#pyro.compressible_sr.eos.dens">[docs]</a><span class="k">def</span> <span class="nf">dens</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">eint</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given the pressure and the specific internal energy, return</span>
 <span class="sd">    the density</span>
@@ -157,7 +157,7 @@
 <span class="sd">    ----------</span>
 <span class="sd">    gamma : float</span>
 <span class="sd">        The ratio of specific heats</span>
-<span class="sd">    pres : float</span>
+<span class="sd">    p : float</span>
 <span class="sd">        The pressure</span>
 <span class="sd">    eint : float</span>
 <span class="sd">        The specific internal energy</span>
@@ -168,10 +168,10 @@
 <span class="sd">       The density</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">pres</span><span class="o">/</span><span class="p">(</span><span class="n">eint</span><span class="o">*</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="n">p</span> <span class="o">/</span> <span class="p">(</span><span class="n">eint</span> <span class="o">*</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="rhoe"><a class="viewcode-back" href="../../../pyro.compressible_sr.html#pyro.compressible_sr.eos.rhoe">[docs]</a><span class="k">def</span> <span class="nf">rhoe</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">pres</span><span class="p">):</span>
+<div class="viewcode-block" id="rhoe"><a class="viewcode-back" href="../../../pyro.compressible_sr.html#pyro.compressible_sr.eos.rhoe">[docs]</a><span class="k">def</span> <span class="nf">rhoe</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given the pressure, return (rho * e)</span>
 
@@ -179,7 +179,7 @@
 <span class="sd">    ----------</span>
 <span class="sd">    gamma : float</span>
 <span class="sd">        The ratio of specific heats</span>
-<span class="sd">    pres : float</span>
+<span class="sd">    p : float</span>
 <span class="sd">        The pressure</span>
 
 <span class="sd">    Returns</span>
@@ -188,7 +188,7 @@
 <span class="sd">       The internal energy density, rho e</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">pres</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">p</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="h_from_eps"><a class="viewcode-back" href="../../../pyro.compressible_sr.html#pyro.compressible_sr.eos.h_from_eps">[docs]</a><span class="k">def</span> <span class="nf">h_from_eps</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">eint</span><span class="p">):</span>

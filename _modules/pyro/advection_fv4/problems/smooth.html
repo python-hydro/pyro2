@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.advection_fv4.problems.smooth &mdash; pyro 4.0.1.post29+g314d69f0 documentation</title>
+  <title>pyro.advection_fv4.problems.smooth &mdash; pyro 4.0.1.post30+gd1a8c9c4 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
@@ -127,6 +127,7 @@
 
 <div class="viewcode-block" id="init_data"><a class="viewcode-back" href="../../../../pyro.advection_fv4.problems.html#pyro.advection_fv4.problems.smooth.init_data">[docs]</a><span class="k">def</span> <span class="nf">init_data</span><span class="p">(</span><span class="n">my_data</span><span class="p">,</span> <span class="n">rp</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; initialize the smooth advection problem &quot;&quot;&quot;</span>
+    <span class="k">del</span> <span class="n">rp</span>  <span class="c1"># this problem doesn&#39;t use runtime params</span>
 
     <span class="n">msg</span><span class="o">.</span><span class="n">bold</span><span class="p">(</span><span class="s2">&quot;initializing the smooth FV advection problem...&quot;</span><span class="p">)</span>
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.mesh.patch &mdash; pyro 4.0.1.post29+g314d69f0 documentation</title>
+  <title>pyro.mesh.patch &mdash; pyro 4.0.1.post30+gd1a8c9c4 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -499,7 +499,7 @@
                     <span class="n">var</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">var</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="k">return</span> <span class="n">var</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> is not valid&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> is not valid&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_var_by_index</span><span class="p">(</span><span class="n">n</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CellCenterData2d.get_var_by_index"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.get_var_by_index">[docs]</a>    <span class="k">def</span> <span class="nf">get_var_by_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
@@ -975,7 +975,7 @@
 
 <div class="viewcode-block" id="do_demo"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.do_demo">[docs]</a><span class="k">def</span> <span class="nf">do_demo</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; show examples of the patch methods / classes &quot;&quot;&quot;</span>
-
+    <span class="c1"># pylint: disable-next=import-outside-toplevel  # required to avoid import loops</span>
     <span class="kn">import</span> <span class="nn">pyro.util.io_pyro</span> <span class="k">as</span> <span class="nn">io</span>
 
     <span class="c1"># illustrate basic mesh operations</span>

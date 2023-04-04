@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible_react.simulation &mdash; pyro 4.0.1.post29+g314d69f0 documentation</title>
+  <title>pyro.compressible_react.simulation &mdash; pyro 4.0.1.post30+gd1a8c9c4 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -130,13 +130,13 @@
 
 <div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../../pyro.compressible_react.html#pyro.compressible_react.simulation.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="n">compressible</span><span class="o">.</span><span class="n">Simulation</span><span class="p">):</span>
 
-<div class="viewcode-block" id="Simulation.initialize"><a class="viewcode-back" href="../../../pyro.compressible_react.html#pyro.compressible_react.simulation.Simulation.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Simulation.initialize"><a class="viewcode-back" href="../../../pyro.compressible_react.html#pyro.compressible_react.simulation.Simulation.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extra_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        For the reacting compressible solver, our initialization of</span>
 <span class="sd">        the data is the same as the compressible solver, but we</span>
 <span class="sd">        supply additional variables.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">extra_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;fuel&quot;</span><span class="p">,</span> <span class="s2">&quot;ash&quot;</span><span class="p">])</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">extra_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;fuel&quot;</span><span class="p">,</span> <span class="s2">&quot;ash&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">extra_vars</span> <span class="ow">or</span> <span class="p">[]),</span> <span class="n">ng</span><span class="o">=</span><span class="n">ng</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Simulation.burn"><a class="viewcode-back" href="../../../pyro.compressible_react.html#pyro.compressible_react.simulation.Simulation.burn">[docs]</a>    <span class="k">def</span> <span class="nf">burn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; react fuel to ash &quot;&quot;&quot;</span></div>

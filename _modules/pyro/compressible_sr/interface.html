@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible_sr.interface &mdash; pyro 4.0.1.post29+g314d69f0 documentation</title>
+  <title>pyro.compressible_sr.interface &mdash; pyro 4.0.1.post30+gd1a8c9c4 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -497,7 +497,7 @@
 
             <span class="n">p_l</span> <span class="o">=</span> <span class="n">q_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ip</span><span class="p">]</span>
             <span class="n">p_l</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">p_l</span><span class="p">,</span> <span class="n">smallp</span><span class="p">)</span>
-            <span class="n">rhoe_l</span> <span class="o">=</span> <span class="n">p_l</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+            <span class="c1"># rhoe_l = p_l / (gamma - 1.0)</span>
 
             <span class="n">rho_r</span> <span class="o">=</span> <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">irho</span><span class="p">]</span>
 
@@ -510,7 +510,7 @@
 
             <span class="n">p_r</span> <span class="o">=</span> <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ip</span><span class="p">]</span>
             <span class="n">p_r</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">p_r</span><span class="p">,</span> <span class="n">smallp</span><span class="p">)</span>
-            <span class="n">rhoe_r</span> <span class="o">=</span> <span class="n">p_r</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+            <span class="c1"># rhoe_r = p_r / (gamma - 1.0)</span>
 
             <span class="c1"># define the Lagrangian sound speed</span>
             <span class="n">W_l</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallrho</span> <span class="o">*</span> <span class="n">smallc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">p_l</span> <span class="o">*</span> <span class="n">rho_l</span><span class="p">))</span>
@@ -531,10 +531,10 @@
             <span class="n">rhostar_l</span> <span class="o">=</span> <span class="n">rho_l</span> <span class="o">+</span> <span class="p">(</span><span class="n">pstar</span> <span class="o">-</span> <span class="n">p_l</span><span class="p">)</span> <span class="o">/</span> <span class="n">c_l</span><span class="o">**</span><span class="mi">2</span>
             <span class="n">rhostar_r</span> <span class="o">=</span> <span class="n">rho_r</span> <span class="o">+</span> <span class="p">(</span><span class="n">pstar</span> <span class="o">-</span> <span class="n">p_r</span><span class="p">)</span> <span class="o">/</span> <span class="n">c_r</span><span class="o">**</span><span class="mi">2</span>
 
-            <span class="n">rhoestar_l</span> <span class="o">=</span> <span class="n">rhoe_l</span> <span class="o">+</span> \
-                <span class="p">(</span><span class="n">pstar</span> <span class="o">-</span> <span class="n">p_l</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">rhoe_l</span> <span class="o">/</span> <span class="n">rho_l</span> <span class="o">+</span> <span class="n">p_l</span> <span class="o">/</span> <span class="n">rho_l</span><span class="p">)</span> <span class="o">/</span> <span class="n">c_l</span><span class="o">**</span><span class="mi">2</span>
-            <span class="n">rhoestar_r</span> <span class="o">=</span> <span class="n">rhoe_r</span> <span class="o">+</span> \
-                <span class="p">(</span><span class="n">pstar</span> <span class="o">-</span> <span class="n">p_r</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">rhoe_r</span> <span class="o">/</span> <span class="n">rho_r</span> <span class="o">+</span> <span class="n">p_r</span> <span class="o">/</span> <span class="n">rho_r</span><span class="p">)</span> <span class="o">/</span> <span class="n">c_r</span><span class="o">**</span><span class="mi">2</span>
+            <span class="c1"># rhoestar_l = rhoe_l + \</span>
+            <span class="c1">#     (pstar - p_l) * (rhoe_l / rho_l + p_l / rho_l) / c_l**2</span>
+            <span class="c1"># rhoestar_r = rhoe_r + \</span>
+            <span class="c1">#     (pstar - p_r) * (rhoe_r / rho_r + p_r / rho_r) / c_r**2</span>
 
             <span class="n">cstar_l</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">pstar</span> <span class="o">/</span> <span class="n">rhostar_l</span><span class="p">))</span>
             <span class="n">cstar_r</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">pstar</span> <span class="o">/</span> <span class="n">rhostar_r</span><span class="p">))</span>
@@ -568,14 +568,14 @@
                         <span class="n">rho_state</span> <span class="o">=</span> <span class="n">rho_l</span>
                         <span class="n">un_state</span> <span class="o">=</span> <span class="n">un_l</span>
                         <span class="n">p_state</span> <span class="o">=</span> <span class="n">p_l</span>
-                        <span class="n">rhoe_state</span> <span class="o">=</span> <span class="n">rhoe_l</span>
+                        <span class="c1"># rhoe_state = rhoe_l</span>
 
                     <span class="k">else</span><span class="p">:</span>
                         <span class="c1"># solution is *L state</span>
                         <span class="n">rho_state</span> <span class="o">=</span> <span class="n">rhostar_l</span>
                         <span class="n">un_state</span> <span class="o">=</span> <span class="n">ustar</span>
                         <span class="n">p_state</span> <span class="o">=</span> <span class="n">pstar</span>
-                        <span class="n">rhoe_state</span> <span class="o">=</span> <span class="n">rhoestar_l</span>
+                        <span class="c1"># rhoe_state = rhoestar_l</span>
 
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># the wave is a rarefaction</span>
@@ -585,7 +585,7 @@
                         <span class="n">rho_state</span> <span class="o">=</span> <span class="n">rhostar_l</span>
                         <span class="n">un_state</span> <span class="o">=</span> <span class="n">ustar</span>
                         <span class="n">p_state</span> <span class="o">=</span> <span class="n">pstar</span>
-                        <span class="n">rhoe_state</span> <span class="o">=</span> <span class="n">rhoestar_l</span>
+                        <span class="c1"># rhoe_state = rhoestar_l</span>
 
                     <span class="k">elif</span> <span class="p">(</span><span class="n">lambda_l</span> <span class="o">&gt;</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">lambdastar_l</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">):</span>
                         <span class="c1"># rarefaction fan is moving to the right -- solution is</span>
@@ -593,7 +593,7 @@
                         <span class="n">rho_state</span> <span class="o">=</span> <span class="n">rho_l</span>
                         <span class="n">un_state</span> <span class="o">=</span> <span class="n">un_l</span>
                         <span class="n">p_state</span> <span class="o">=</span> <span class="n">p_l</span>
-                        <span class="n">rhoe_state</span> <span class="o">=</span> <span class="n">rhoe_l</span>
+                        <span class="c1"># rhoe_state = rhoe_l</span>
 
                     <span class="k">else</span><span class="p">:</span>
                         <span class="c1"># rarefaction spans x/t = 0 -- interpolate</span>
@@ -602,8 +602,8 @@
                         <span class="n">rho_state</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">rhostar_l</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">rho_l</span>
                         <span class="n">un_state</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">ustar</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">un_l</span>
                         <span class="n">p_state</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">pstar</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">p_l</span>
-                        <span class="n">rhoe_state</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">rhoestar_l</span> <span class="o">+</span> \
-                            <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">rhoe_l</span>
+                        <span class="c1"># rhoe_state = alpha * rhoestar_l + \</span>
+                        <span class="c1">#     (1.0 - alpha) * rhoe_l</span>
 
             <span class="k">elif</span> <span class="n">ustar</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
 
@@ -632,14 +632,14 @@
                         <span class="n">rho_state</span> <span class="o">=</span> <span class="n">rhostar_r</span>
                         <span class="n">un_state</span> <span class="o">=</span> <span class="n">ustar</span>
                         <span class="n">p_state</span> <span class="o">=</span> <span class="n">pstar</span>
-                        <span class="n">rhoe_state</span> <span class="o">=</span> <span class="n">rhoestar_r</span>
+                        <span class="c1"># rhoe_state = rhoestar_r</span>
 
                     <span class="k">else</span><span class="p">:</span>
                         <span class="c1"># solution is R state</span>
                         <span class="n">rho_state</span> <span class="o">=</span> <span class="n">rho_r</span>
                         <span class="n">un_state</span> <span class="o">=</span> <span class="n">un_r</span>
                         <span class="n">p_state</span> <span class="o">=</span> <span class="n">p_r</span>
-                        <span class="n">rhoe_state</span> <span class="o">=</span> <span class="n">rhoe_r</span>
+                        <span class="c1"># rhoe_state = rhoe_r</span>
 
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># the wave is a rarefaction</span>
@@ -649,7 +649,7 @@
                         <span class="n">rho_state</span> <span class="o">=</span> <span class="n">rho_r</span>
                         <span class="n">un_state</span> <span class="o">=</span> <span class="n">un_r</span>
                         <span class="n">p_state</span> <span class="o">=</span> <span class="n">p_r</span>
-                        <span class="n">rhoe_state</span> <span class="o">=</span> <span class="n">rhoe_r</span>
+                        <span class="c1"># rhoe_state = rhoe_r</span>
 
                     <span class="k">elif</span> <span class="p">(</span><span class="n">lambda_r</span> <span class="o">&gt;</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">lambdastar_r</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">):</span>
                         <span class="c1"># rarefaction fan is moving to the right -- solution is</span>
@@ -657,7 +657,7 @@
                         <span class="n">rho_state</span> <span class="o">=</span> <span class="n">rhostar_r</span>
                         <span class="n">un_state</span> <span class="o">=</span> <span class="n">ustar</span>
                         <span class="n">p_state</span> <span class="o">=</span> <span class="n">pstar</span>
-                        <span class="n">rhoe_state</span> <span class="o">=</span> <span class="n">rhoestar_r</span>
+                        <span class="c1"># rhoe_state = rhoestar_r</span>
 
                     <span class="k">else</span><span class="p">:</span>
                         <span class="c1"># rarefaction spans x/t = 0 -- interpolate</span>
@@ -666,8 +666,8 @@
                         <span class="n">rho_state</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">rhostar_r</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">rho_r</span>
                         <span class="n">un_state</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">ustar</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">un_r</span>
                         <span class="n">p_state</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">pstar</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">p_r</span>
-                        <span class="n">rhoe_state</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">rhoestar_r</span> <span class="o">+</span> \
-                            <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">rhoe_r</span>
+                        <span class="c1"># rhoe_state = alpha * rhoestar_r + \</span>
+                        <span class="c1">#     (1.0 - alpha) * rhoe_r</span>
 
             <span class="k">else</span><span class="p">:</span>  <span class="c1"># ustar == 0</span>
 
@@ -675,7 +675,7 @@
                 <span class="n">un_state</span> <span class="o">=</span> <span class="n">ustar</span>
                 <span class="n">ut_state</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">ut_l</span> <span class="o">+</span> <span class="n">ut_r</span><span class="p">)</span>
                 <span class="n">p_state</span> <span class="o">=</span> <span class="n">pstar</span>
-                <span class="n">rhoe_state</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">rhoestar_l</span> <span class="o">+</span> <span class="n">rhoestar_r</span><span class="p">)</span>
+                <span class="c1"># rhoe_state = 0.5 * (rhoestar_l + rhoestar_r)</span>
 
             <span class="c1"># species now</span>
             <span class="k">if</span> <span class="n">nspec</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -1064,10 +1064,10 @@
 
     <span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">,</span> <span class="n">nvar</span><span class="p">))</span>
 
-    <span class="n">smallc</span> <span class="o">=</span> <span class="mf">1.e-10</span>
+    <span class="c1"># smallc = 1.e-10</span>
     <span class="n">smallp</span> <span class="o">=</span> <span class="mf">1.e-10</span>
 
-    <span class="n">U_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nvar</span><span class="p">)</span>
+    <span class="c1"># U_state = np.zeros(nvar)</span>
     <span class="n">U_lstar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nvar</span><span class="p">)</span>
     <span class="n">U_rstar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nvar</span><span class="p">)</span>
 
@@ -1084,30 +1084,30 @@
             <span class="c1"># un = normal velocity; ut = transverse velocity</span>
             <span class="k">if</span> <span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="n">un_l</span> <span class="o">=</span> <span class="n">q_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iu</span><span class="p">]</span>
-                <span class="n">ut_l</span> <span class="o">=</span> <span class="n">q_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iv</span><span class="p">]</span>
+                <span class="c1"># ut_l = q_l[i, j, iv]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">un_l</span> <span class="o">=</span> <span class="n">q_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iv</span><span class="p">]</span>
-                <span class="n">ut_l</span> <span class="o">=</span> <span class="n">q_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iu</span><span class="p">]</span>
+                <span class="c1"># ut_l = q_l[i, j, iu]</span>
 
             <span class="n">p_l</span> <span class="o">=</span> <span class="n">q_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ip</span><span class="p">]</span>
             <span class="n">p_l</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">p_l</span><span class="p">,</span> <span class="n">smallp</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="n">un_r</span> <span class="o">=</span> <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iu</span><span class="p">]</span>
-                <span class="n">ut_r</span> <span class="o">=</span> <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iv</span><span class="p">]</span>
+                <span class="c1"># ut_r = q_r[i, j, iv]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">un_r</span> <span class="o">=</span> <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iv</span><span class="p">]</span>
-                <span class="n">ut_r</span> <span class="o">=</span> <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iu</span><span class="p">]</span>
+                <span class="c1"># ut_r = q_r[i, j, iu]</span>
 
             <span class="n">p_r</span> <span class="o">=</span> <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ip</span><span class="p">]</span>
             <span class="n">p_r</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">p_r</span><span class="p">,</span> <span class="n">smallp</span><span class="p">)</span>
 
-            <span class="n">rho_l</span> <span class="o">=</span> <span class="n">q_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">irho</span><span class="p">]</span>
-            <span class="n">rho_r</span> <span class="o">=</span> <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">irho</span><span class="p">]</span>
+            <span class="c1"># rho_l = q_l[i, j, irho]</span>
+            <span class="c1"># rho_r = q_r[i, j, irho]</span>
 
             <span class="c1"># compute the sound speeds</span>
-            <span class="n">c_l</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">p_l</span> <span class="o">/</span> <span class="n">rho_l</span><span class="p">))</span>
-            <span class="n">c_r</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">p_r</span> <span class="o">/</span> <span class="n">rho_r</span><span class="p">))</span>
+            <span class="c1"># c_l = max(smallc, np.sqrt(gamma * p_l / rho_l))</span>
+            <span class="c1"># c_r = max(smallc, np.sqrt(gamma * p_r / rho_r))</span>
 
             <span class="c1"># a_l = 0.5 * (un_l+un_r - c_l-c_r) / (1.0-0.25*(un_l+un_r)*(c_l+c_r))</span>
             <span class="c1"># a_r = 0.5 * (un_l+un_r + c_l+c_r) / (1.0+0.25*(un_l+un_r)*(c_l+c_r))</span>
@@ -1145,7 +1145,7 @@
                           <span class="mf">2.0</span> <span class="o">*</span> <span class="n">F_HLLE</span><span class="p">[</span><span class="n">iener</span><span class="p">]))</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">F_HLLE</span><span class="p">[</span><span class="n">iener</span><span class="p">])</span>
 
             <span class="c1"># NOTE: this shouldn&#39;t happen but just in case?</span>
-            <span class="k">if</span> <span class="n">a_star</span> <span class="o">!=</span> <span class="n">a_star</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">a_star</span><span class="p">):</span>
                 <span class="n">a_star</span> <span class="o">=</span> <span class="mf">0.0</span>
 
             <span class="c1"># left</span>
