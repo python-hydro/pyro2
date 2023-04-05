@@ -900,6 +900,15 @@ class PolarGrid(Grid2d):
 
        |<- ng guardcells->|<---- nx interior zones ----->|<- ng guardcells->|
 
+              ____
+             /    |  
+            /     |
+           /      | 
+          /       |
+         /        |
+        /_________|
+
+
     The '*' marks the data locations.
     """
 
@@ -912,10 +921,12 @@ class PolarGrid(Grid2d):
         """
         r1 = self.xr
         r0 = self.xl
+        t1 = self.yr
+        t0 = self.yl
 
-        # ** this is just \Delta r
+        # ** this is just 1/2*dr*d\theta
 
-        area = r1 - r0
+        area = 0.5 * (r1 - r0) * (t1 - t0)
         return area
 
     def area_y(self):
@@ -924,12 +935,12 @@ class PolarGrid(Grid2d):
         The shape of the returned array is (ni, nj).
         """
 
-        t1 = self.yr
-        t0 = self.yl
+        r1 = self.xr
+        r0 = self.xl
 
-        # ** this is just \Delta \theta
+        # ** this is just dr
 
-        area = t1 - t0
+        area = r1 - r0
         return area
 
     def cell_volumes(self):
