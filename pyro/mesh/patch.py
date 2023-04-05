@@ -890,26 +890,18 @@ class PolarGrid(Grid2d):
     the 2-d grid class.  The grid object will contain the coordinate
     information (at various centerings).
 
-    A basic (1-d) representation of the layout is::
+    A basic representation of the layout is::
 
-       |     |      |     X     |     |      |     |     X     |      |     |
-       +--*--+- // -+--*--X--*--+--*--+- // -+--*--+--*--X--*--+- // -+--*--+
-          0          ng-1    ng   ng+1         ... ng+nx-1 ng+nx      2ng+nx-1
-
-                            ilo                      ihi
-
-       |<- ng guardcells->|<---- nx interior zones ----->|<- ng guardcells->|
-
-              ____
-             /    |  
+              *---* \theta_{i+1/2}
+             /    | 
             /     |
-           /      | 
+           /      * \theta_i 
           /       |
          /        |
-        /_________|
+        *____*____* \theta_{i-1/2}
+r_{i-1/2}   r_i   r_{i+1/2}
 
-
-    The '*' marks the data locations.
+    The '*' marks represent the vertices; i index is the data location.
     """
 
     # pylint: disable=too-many-instance-attributes
