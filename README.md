@@ -132,7 +132,7 @@ pyro provides the following solvers (all in 2-d):
   - `advection_weno`: a method-of-lines WENO solver for linear
     advection.
 
-  - 'burgers': a second-order unsplit solver for invsicid Burgers' equation.
+  - `burgers': a second-order unsplit solver for invsicid Burgers' equation.
 
   - `compressible`: a second-order unsplit solver for the Euler
     equations of compressible hydrodynamics.  This uses characteristic

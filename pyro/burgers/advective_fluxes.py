@@ -16,7 +16,7 @@ def unsplit_fluxes(my_data, rp, dt):
     We use a second-order (piecewise linear) unsplit Godunov method
     (following Colella 1990).
 
-    Our convection is that the fluxes are going to be defined on the
+    Our convention is that the fluxes are going to be defined on the
     left edge of the computational zones::
 
         |             |             |             |

@@ -1,7 +1,7 @@
-Burgers' Equations
+Burgers' Equation
 ==================
 
-Burgers' Equations are nonlinear hyperbolic equations. It has the same form as the advection equation, except that the quantity that we're advecting is the velocity itself.
+Burgers' Equation is a nonlinear hyperbolic equation. It has the same form as the advection equation, except that the quantity being advected is the velocity itself.
 
 ``Inviscid Burgers``
 --------------------------------

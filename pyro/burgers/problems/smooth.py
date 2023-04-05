@@ -29,6 +29,8 @@ def init_data(my_data, rp):
     xctr = 0.5*(xmin + xmax)
     yctr = 0.5*(ymin + ymax)
 
+    # A represents some magnitude that defines the initial u and v.
+
     A = 0.8
 
     u[:, :] = A + A * numpy.exp(-50.0*((my_data.grid.x2d-xctr)**2 +
