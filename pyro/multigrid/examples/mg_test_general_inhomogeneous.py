@@ -54,7 +54,7 @@ def true(x, y):
 
 
 # the coefficients
-def alpha(x, y):
+def alpha(x, _y):
     return 10.0*np.ones_like(x)
 
 
@@ -62,11 +62,11 @@ def beta(x, y):
     return x*y + 1.0
 
 
-def gamma_x(x, y):
+def gamma_x(x, _y):
     return np.ones_like(x)
 
 
-def gamma_y(x, y):
+def gamma_y(x, _y):
     return np.ones_like(x)
 
 
@@ -218,8 +218,7 @@ def test_general_poisson_inhomogeneous(N, store_bench=False, comp_bench=False, b
     return enorm
 
 
-if __name__ == "__main__":
-
+def main():
     N = [16, 32, 64, 128, 256, 512]
     err = []
 
@@ -255,3 +254,7 @@ if __name__ == "__main__":
     plt.tight_layout()
 
     plt.savefig("mg_general_inhomogeneous_converge.png")
+
+
+if __name__ == "__main__":
+    main()

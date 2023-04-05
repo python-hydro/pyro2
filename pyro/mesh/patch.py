@@ -378,7 +378,7 @@ class CellCenterData2d:
                     var = f(self, name, self.ivars, self.grid)
                 if len(var) > 0:
                     return var
-            raise KeyError(f"name {name} is not valid")
+            raise KeyError(f"name {name} is not valid") from None
         return self.get_var_by_index(n)
 
     def get_var_by_index(self, n):
@@ -854,7 +854,7 @@ def cell_center_data_clone(old):
 
 def do_demo():
     """ show examples of the patch methods / classes """
-
+    # pylint: disable-next=import-outside-toplevel  # required to avoid import loops
     import pyro.util.io_pyro as io
 
     # illustrate basic mesh operations

@@ -45,13 +45,8 @@ def brentq(x1, b, U, gamma, idens, ixmom, iymom, iener,
 
     # switch variables
     if abs(fa) < abs(fb):
-        d = a
-        a = b
-        b = d
-
-        d = fa
-        fa = fb
-        fb = d
+        a, b = b, a
+        fa, fb = fb, fa
 
     c = a
     fc = fa
@@ -59,7 +54,7 @@ def brentq(x1, b, U, gamma, idens, ixmom, iymom, iener,
     mflag = True
 
     for _ in range(ITMAX):
-        if fa != fc and fb != fc:
+        if fa != fc and fb != fc:  # pylint: disable=consider-using-in
             s = a*fb*fc / ((fa-fb) * (fa-fc)) + b*fa*fc / ((fb-fa)*(fb-fc)) + \
                 c*fa*fb / ((fc-fa)*(fc-fb))
         else:
@@ -92,13 +87,8 @@ def brentq(x1, b, U, gamma, idens, ixmom, iymom, iener,
         fs = f(s, U, gamma, idens, ixmom, iymom, iener)
 
         if abs(fa) < abs(fb):
-            d = a
-            a = b
-            b = d
-
-            d = fa
-            fa = fb
-            fb = d
+            a, b = b, a
+            fa, fb = fb, fa
 
         d = c
         c = b
