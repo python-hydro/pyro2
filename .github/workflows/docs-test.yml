@@ -44,3 +44,9 @@ jobs:
         run: |
           cd docs/
           PYTHONPATH=$GITHUB_WORKSPACE make SPHINXOPTS=-v html
+
+      - name: Check links
+        run: |
+          cd docs/
+          PYTHONPATH=$GITHUB_WORKSPACE make SPHINXOPTS=-v linkcheck
+

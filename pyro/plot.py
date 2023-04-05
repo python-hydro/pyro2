@@ -47,9 +47,7 @@ def get_args():
     parser.add_argument("plotfile", type=str, nargs=1,
                         help="the plotfile you wish to plot")
 
-    args = parser.parse_args()
-
-    return args
+    return parser.parse_args()
 
 
 if __name__ == "__main__":

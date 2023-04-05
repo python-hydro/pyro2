@@ -595,7 +595,7 @@ class CellCenterMG2d:
                     ycoeff*(v.ip_jp(ix, 1+iy, s=2) + v.ip_jp(ix, -1+iy, s=2))) / \
                     (self.alpha + 2.0*xcoeff + 2.0*ycoeff)
 
-                if n == 1 or n == 3:
+                if n in (1, 3):
                     self.grids[level].fill_BC("v")
 
             if self.vis == 1:

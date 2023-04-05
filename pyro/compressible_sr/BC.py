@@ -42,6 +42,7 @@ def user(bc_name, bc_edge, variable, ccdata, ivars):
         The data object
 
     """
+    # pylint: disable=too-many-nested-blocks
 
     myg = ccdata.grid
 
