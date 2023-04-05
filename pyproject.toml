@@ -35,6 +35,7 @@ defining-attr-methods = [
   "__post_init__",
   "initialize",
   "__array_finalize__",
+  "setup_class", "setup_method",  # for tests
 ]
 
 [tool.pylint.FORMAT]

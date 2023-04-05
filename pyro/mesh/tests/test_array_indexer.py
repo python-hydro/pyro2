@@ -2,11 +2,12 @@ import numpy as np
 from numpy.testing import assert_array_equal
 
 import pyro.mesh.array_indexer as ai
-import pyro.mesh.patch as patch
+from pyro.mesh import patch
 
 
 # utilities
 def test_buf_split():
+    # pylint: disable=protected-access
     assert_array_equal(ai._buf_split(2), [2, 2, 2, 2])
     assert_array_equal(ai._buf_split((2, 3)), [2, 3, 2, 3])
 
