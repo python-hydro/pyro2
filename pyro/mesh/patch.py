@@ -911,14 +911,12 @@ r_{i-1/2}   r_i   r_{i+1/2}
         Return an array of the face areas. 
         The shape of the returned array is (ni, nj).
         """
-        r1 = self.xr
-        r0 = self.xl
-        t1 = self.yr
-        t0 = self.yl
+        r1, t1 = np.meshgrid(self.xr, self.yr)
+        r0, t0 = np.meshgrid(self.xl, self.yl)
 
-        # ** this is just 1/2*dr*d\theta
+        # ** this is just 1/2*r*d\theta
 
-        area = 0.5 * (r1 - r0) * (t1 - t0)
+        area = 0.5 * r0 * (t1 - t0)
         return area
 
     def area_y(self):
@@ -926,9 +924,8 @@ r_{i-1/2}   r_i   r_{i+1/2}
         Return an array of the face areas. 
         The shape of the returned array is (ni, nj).
         """
-
-        r1 = self.xr
-        r0 = self.xl
+        r1, t1 = np.meshgrid(self.xr, self.yr)
+        r0, t0 = np.meshgrid(self.xl, self.yl)
 
         # ** this is just dr
 
@@ -940,11 +937,8 @@ r_{i-1/2}   r_i   r_{i+1/2}
         Return an array of the cell volume data for the given coordinate box
         The shape of the returned array is (ni, nj).
         """
-
-        r1 = self.xl
-        r0 = self.xr
-        t1 = self.yl
-        t0 = self.yr
+        r1, t1 = np.meshgrid(self.xr, self.yr)
+        r0, t0 = np.meshgrid(self.xl, self.yl)
 
         # ** this is just the face area
 
