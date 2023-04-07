@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.test &mdash; pyro 4.0.1.post32+g2fcec9a1 documentation</title>
+  <title>pyro.test &mdash; pyro 4.0.1.post33+g3ed568ee documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -64,6 +64,7 @@
 <p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../burgers_basics.html">Burgers’ Equation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../compressible_compare.html">Compressible solver comparisons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../multigrid_basics.html">Multigrid solvers</a></li>
@@ -218,6 +219,7 @@
     <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;advection_rk&quot;</span><span class="p">,</span> <span class="s2">&quot;smooth&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.smooth&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
     <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;advection_fv4&quot;</span><span class="p">,</span>
                           <span class="s2">&quot;smooth&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.smooth&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
+    <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;burgers&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.test&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
     <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;compressible&quot;</span><span class="p">,</span> <span class="s2">&quot;quad&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.quad&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
     <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;compressible&quot;</span><span class="p">,</span> <span class="s2">&quot;sod&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.sod.x&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
     <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;compressible&quot;</span><span class="p">,</span> <span class="s2">&quot;rt&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.rt&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>

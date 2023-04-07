@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyro.burgers.advective_fluxes &mdash; pyro 4.0.1.post33+g3ed568ee documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/clipboard.min.js"></script>
+        <script src="../../../_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pyro
+              <img src="../../../_static/logo.gif" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                4.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">pyro basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Setting up pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../burgers_basics.html">Burgers’ Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible_compare.html">Compressible solver comparisons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multigrid_basics.html">Multigrid solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../swe_basics.html">Shallow water solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../particles_basics.html">Particles</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../testing.html">Testing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../help.html">Contributing and getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ack.html#history">History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Software Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../zreferences.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pyro.burgers.advective_fluxes</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pyro.burgers.advective_fluxes</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pyro.incompressible.incomp_interface</span> <span class="k">as</span> <span class="nn">interface</span>
+<span class="kn">import</span> <span class="nn">pyro.mesh.reconstruction</span> <span class="k">as</span> <span class="nn">reconstruction</span>
+
+
+<div class="viewcode-block" id="unsplit_fluxes"><a class="viewcode-back" href="../../../pyro.burgers.html#pyro.burgers.advective_fluxes.unsplit_fluxes">[docs]</a><span class="k">def</span> <span class="nf">unsplit_fluxes</span><span class="p">(</span><span class="n">my_data</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Construct the interface states for the burgers equation:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">       u_t  + u u_x  + v u_y  = 0</span>
+<span class="sd">       v_t  + u v_x  + v v_y  = 0</span>
+
+<span class="sd">    We use a second-order (piecewise linear) unsplit Godunov method</span>
+<span class="sd">    (following Colella 1990).</span>
+
+<span class="sd">    Our convention is that the fluxes are going to be defined on the</span>
+<span class="sd">    left edge of the computational zones::</span>
+
+<span class="sd">        |             |             |             |</span>
+<span class="sd">        |             |             |             |</span>
+<span class="sd">       -+------+------+------+------+------+------+--</span>
+<span class="sd">        |     i-1     |      i      |     i+1     |</span>
+
+<span class="sd">                 a_l,i  a_r,i   a_l,i+1</span>
+
+
+<span class="sd">    a_r,i and a_l,i+1 are computed using the information in</span>
+<span class="sd">    zone i,j.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    my_data : CellCenterData2d object</span>
+<span class="sd">        The data object containing the grid and advective scalar that</span>
+<span class="sd">        we are advecting.</span>
+<span class="sd">    rp : RuntimeParameters object</span>
+<span class="sd">        The runtime parameters for the simulation</span>
+<span class="sd">    dt : float</span>
+<span class="sd">        The timestep we are advancing through.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : ndarray, ndarray</span>
+<span class="sd">        The u,v fluxes on the x- and y-interfaces</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">myg</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span>
+
+    <span class="n">u</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">)</span>
+
+    <span class="c1"># cx = myg.scratch_array()</span>
+    <span class="c1"># cy = myg.scratch_array()</span>
+
+    <span class="c1"># cx.v(buf=1)[:, :] = u.v(buf=1)*dt/myg.dx</span>
+    <span class="c1"># cy.v(buf=1)[:, :] = v.v(buf=1)*dt/myg.dy</span>
+
+    <span class="n">dtdx</span> <span class="o">=</span> <span class="n">dt</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span>
+    <span class="n">dtdy</span> <span class="o">=</span> <span class="n">dt</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
+
+    <span class="c1"># --------------------------------------------------------------------------</span>
+    <span class="c1"># monotonized central differences</span>
+    <span class="c1"># --------------------------------------------------------------------------</span>
+
+    <span class="n">limiter</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;advection.limiter&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Give da/dx and da/dy using input: (state, grid, direction, limiter)</span>
+
+    <span class="n">ldelta_ux</span> <span class="o">=</span> <span class="n">reconstruction</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">limiter</span><span class="p">)</span>
+    <span class="n">ldelta_uy</span> <span class="o">=</span> <span class="n">reconstruction</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">limiter</span><span class="p">)</span>
+    <span class="n">ldelta_vx</span> <span class="o">=</span> <span class="n">reconstruction</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">limiter</span><span class="p">)</span>
+    <span class="n">ldelta_vy</span> <span class="o">=</span> <span class="n">reconstruction</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">limiter</span><span class="p">)</span>
+
+    <span class="n">ul_x</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">ur_x</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">ul_y</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">ur_y</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+
+    <span class="n">vl_x</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">vr_x</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">vl_y</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">vr_y</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+
+    <span class="c1"># Determine left and right interface states in x and y.</span>
+
+    <span class="c1"># First compute the predictor terms for both u and v states.</span>
+
+    <span class="n">ul_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">dtdx</span><span class="o">*</span><span class="n">u</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">ldelta_ux</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ul_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">dtdy</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">ldelta_uy</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ur_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">dtdx</span><span class="o">*</span><span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">ldelta_ux</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ur_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">dtdy</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">ldelta_uy</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">vl_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">dtdx</span><span class="o">*</span><span class="n">u</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">ldelta_vx</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">vl_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">dtdy</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">ldelta_vy</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">vr_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">dtdx</span><span class="o">*</span><span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">ldelta_vx</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">vr_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">dtdy</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">ldelta_vy</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Solve Riemann&#39;s problem to get the correct transverse term</span>
+
+    <span class="c1"># first get the normal advective velocity through each x and y interface</span>
+
+    <span class="n">uhat_adv</span> <span class="o">=</span> <span class="n">interface</span><span class="o">.</span><span class="n">riemann</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="n">ul_x</span><span class="p">,</span> <span class="n">ur_x</span><span class="p">)</span>
+    <span class="n">vhat_adv</span> <span class="o">=</span> <span class="n">interface</span><span class="o">.</span><span class="n">riemann</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="n">vl_y</span><span class="p">,</span> <span class="n">vr_y</span><span class="p">)</span>
+
+    <span class="c1"># Upwind the l and r states using the normal advective velocity through x and y interface</span>
+
+    <span class="n">ux_int</span> <span class="o">=</span> <span class="n">interface</span><span class="o">.</span><span class="n">upwind</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="n">ul_x</span><span class="p">,</span> <span class="n">ur_x</span><span class="p">,</span> <span class="n">uhat_adv</span><span class="p">)</span>
+    <span class="n">vx_int</span> <span class="o">=</span> <span class="n">interface</span><span class="o">.</span><span class="n">upwind</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="n">vl_x</span><span class="p">,</span> <span class="n">vr_x</span><span class="p">,</span> <span class="n">uhat_adv</span><span class="p">)</span>
+
+    <span class="n">uy_int</span> <span class="o">=</span> <span class="n">interface</span><span class="o">.</span><span class="n">upwind</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="n">ul_y</span><span class="p">,</span> <span class="n">ur_y</span><span class="p">,</span> <span class="n">vhat_adv</span><span class="p">)</span>
+    <span class="n">vy_int</span> <span class="o">=</span> <span class="n">interface</span><span class="o">.</span><span class="n">upwind</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="n">vl_y</span><span class="p">,</span> <span class="n">vr_y</span><span class="p">,</span> <span class="n">vhat_adv</span><span class="p">)</span>
+
+    <span class="c1"># Calculate the average normal interface velocities</span>
+
+    <span class="n">ubar_adv</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">vbar_adv</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+
+    <span class="n">ubar_adv</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">uhat_adv</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">uhat_adv</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">vbar_adv</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">vhat_adv</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">vhat_adv</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># Apply the transverse correction terms following routines in incompressible.</span>
+
+    <span class="n">ul_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dtdy</span> <span class="o">*</span> <span class="n">vbar_adv</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">uy_int</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">uy_int</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">ul_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dtdx</span> <span class="o">*</span> <span class="n">ubar_adv</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">ux_int</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ux_int</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">ur_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dtdy</span> <span class="o">*</span> <span class="n">vbar_adv</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">uy_int</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">uy_int</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">ur_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dtdx</span> <span class="o">*</span> <span class="n">ubar_adv</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">ux_int</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ux_int</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="n">vl_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dtdy</span> <span class="o">*</span> <span class="n">vbar_adv</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">vy_int</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">vy_int</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">vl_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dtdx</span> <span class="o">*</span> <span class="n">ubar_adv</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">vx_int</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">vx_int</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">vr_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dtdy</span> <span class="o">*</span> <span class="n">vbar_adv</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">vy_int</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">vy_int</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">vr_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dtdx</span> <span class="o">*</span> <span class="n">ubar_adv</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">vx_int</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">vx_int</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># Solve for riemann problem for the second time</span>
+
+    <span class="c1"># Get corrected normal advection velocity (MAC)</span>
+
+    <span class="n">u_MAC</span> <span class="o">=</span> <span class="n">interface</span><span class="o">.</span><span class="n">riemann</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="n">ul_x</span><span class="p">,</span> <span class="n">ur_x</span><span class="p">)</span>
+    <span class="n">v_MAC</span> <span class="o">=</span> <span class="n">interface</span><span class="o">.</span><span class="n">riemann</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="n">vl_y</span><span class="p">,</span> <span class="n">vr_y</span><span class="p">)</span>
+
+    <span class="c1"># Upwind using the transverse corrected normal advective velocity</span>
+
+    <span class="n">ux</span> <span class="o">=</span> <span class="n">interface</span><span class="o">.</span><span class="n">upwind</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="n">ul_x</span><span class="p">,</span> <span class="n">ur_x</span><span class="p">,</span> <span class="n">u_MAC</span><span class="p">)</span>
+    <span class="n">vx</span> <span class="o">=</span> <span class="n">interface</span><span class="o">.</span><span class="n">upwind</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="n">vl_x</span><span class="p">,</span> <span class="n">vr_x</span><span class="p">,</span> <span class="n">u_MAC</span><span class="p">)</span>
+
+    <span class="n">uy</span> <span class="o">=</span> <span class="n">interface</span><span class="o">.</span><span class="n">upwind</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="n">ul_y</span><span class="p">,</span> <span class="n">ur_y</span><span class="p">,</span> <span class="n">v_MAC</span><span class="p">)</span>
+    <span class="n">vy</span> <span class="o">=</span> <span class="n">interface</span><span class="o">.</span><span class="n">upwind</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="n">vl_y</span><span class="p">,</span> <span class="n">vr_y</span><span class="p">,</span> <span class="n">v_MAC</span><span class="p">)</span>
+
+    <span class="c1"># construct the flux</span>
+
+    <span class="n">fu_x</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">fv_x</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">fu_y</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">fv_y</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+
+    <span class="n">fu_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">ux</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">ux</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">fv_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">vx</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">ux</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">fu_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">vy</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">uy</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">fv_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">vy</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">vy</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fu_x</span><span class="p">,</span> <span class="n">fu_y</span><span class="p">,</span> <span class="n">fv_x</span><span class="p">,</span> <span class="n">fv_y</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, pyro development team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
