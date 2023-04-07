@@ -1,4 +1,4 @@
-import pyro.compressible.eos as eos
+from pyro.compressible import eos
 
 
 def test_eos_consistency():
