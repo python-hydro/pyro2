@@ -45,7 +45,7 @@ def verify(file1, file2):
         diag_uv1 = np.diagonal(np.flipud(uv1), n)
         uv1_averages.append(diag_uv1.mean())
 
-        diag_uv2 = np.diagonal(np.flipud(uv2), n) 
+        diag_uv2 = np.diagonal(np.flipud(uv2), n)
         uv2_averages.append(diag_uv2.mean())
 
     shock_speed_theo = np.sqrt(2.0*2.0 + 2.0*2.0)
@@ -71,7 +71,7 @@ def verify(file1, file2):
     if np.isclose(shock_speed_sim, shock_speed_theo):
         print("SUCCESS, shock speeds match")
     else:
-        print("ERROR, shock speeds don't match") 
+        print("ERROR, shock speeds don't match")
 
 
 if __name__ == "__main__":

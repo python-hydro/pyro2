@@ -1,5 +1,3 @@
-import numpy as np
-
 import pyro.incompressible.incomp_interface as interface
 import pyro.mesh.reconstruction as reconstruction
 
