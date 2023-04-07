@@ -99,7 +99,7 @@ class Simulation(NullSimulation):
                               dtdy*(u_flux_y.v() - u_flux_y.jp(1))
 
         v.v()[:, :] = v.v() + dtdx*(v_flux_x.v() - v_flux_x.ip(1)) + \
-                              dtdy*(v_flux_y.v() - v_flux_y.jp(1))    
+                              dtdy*(v_flux_y.v() - v_flux_y.jp(1))
 
         if self.particles is not None:
 
