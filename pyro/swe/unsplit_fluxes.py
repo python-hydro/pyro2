@@ -172,7 +172,7 @@ def unsplit_fluxes(my_data, rp, ivars, solid, tc, dt):
     # =========================================================================
     # Q = (h, u, v, {X})
 
-    q = comp.cons_to_prim(my_data.data, g, ivars, myg)
+    q = comp.cons_to_prim(my_data.data, ivars, myg)
 
     # =========================================================================
     # compute the flattening coefficients
@@ -221,8 +221,8 @@ def unsplit_fluxes(my_data, rp, ivars, solid, tc, dt):
     tm_states.end()
 
     # transform interface states back into conserved variables
-    U_xl = comp.prim_to_cons(V_l, g, ivars, myg)
-    U_xr = comp.prim_to_cons(V_r, g, ivars, myg)
+    U_xl = comp.prim_to_cons(V_l, ivars, myg)
+    U_xr = comp.prim_to_cons(V_r, ivars, myg)
 
     # =========================================================================
     # y-direction
@@ -242,8 +242,8 @@ def unsplit_fluxes(my_data, rp, ivars, solid, tc, dt):
     tm_states.end()
 
     # transform interface states back into conserved variables
-    U_yl = comp.prim_to_cons(V_l, g, ivars, myg)
-    U_yr = comp.prim_to_cons(V_r, g, ivars, myg)
+    U_yl = comp.prim_to_cons(V_l, ivars, myg)
+    U_yr = comp.prim_to_cons(V_r, ivars, myg)
 
     # =========================================================================
     # compute transverse fluxes
