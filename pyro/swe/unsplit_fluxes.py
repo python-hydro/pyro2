@@ -129,7 +129,7 @@ from pyro.mesh import reconstruction
 from pyro.util import msg
 
 
-def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
+def unsplit_fluxes(my_data, rp, ivars, solid, tc, dt):
     """
     unsplitFluxes returns the fluxes through the x and y interfaces by
     doing an unsplit reconstruction of the interface values and then

@@ -48,7 +48,7 @@ class Simulation(advection_rk.Simulation):
 
         k = myg.scratch_array()
 
-        flux_x, flux_y = flx.fluxes(myd, self.rp, self.dt)
+        flux_x, flux_y = flx.fluxes(myd, self.rp)
 
         F_x = ai.ArrayIndexer(d=flux_x, grid=myg)
         F_y = ai.ArrayIndexer(d=flux_y, grid=myg)

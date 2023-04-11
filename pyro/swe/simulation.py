@@ -186,8 +186,8 @@ class Simulation(NullSimulation):
 
         myg = self.cc_data.grid
 
-        Flux_x, Flux_y = flx.unsplit_fluxes(self.cc_data, self.aux_data, self.rp,
-                                            self.ivars, self.solid, self.tc, self.dt)
+        Flux_x, Flux_y = flx.unsplit_fluxes(self.cc_data, self.rp, self.ivars,
+                                            self.solid, self.tc, self.dt)
 
         # conservative update
         dtdx = self.dt/myg.dx
