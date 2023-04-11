@@ -804,7 +804,7 @@ def riemann_prim(idir, ng,
 @njit(cache=True)
 def riemann_hllc(idir, ng,
                  idens, ixmom, iymom, iener, irhoX, nspec,
-                 lower_solid, upper_solid,
+                 lower_solid, upper_solid,  # pylint: disable=unused-argument
                  gamma, U_l, U_r):
     r"""
     This is the HLLC Riemann solver.  The implementation follows
