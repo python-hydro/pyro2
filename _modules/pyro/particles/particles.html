@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.particles.particles &mdash; pyro 4.0.1.post33+g3ed568ee documentation</title>
+  <title>pyro.particles.particles &mdash; pyro 4.0.1.post34+g70af790a documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -250,7 +250,7 @@
         <span class="k">if</span> <span class="n">n_particles</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ERROR: n_particles = </span><span class="si">%s</span><span class="s2"> &lt;= 0&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n_particles</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">particle_generator</span><span class="p">):</span>  <span class="c1"># custom particle generator function</span>
+        <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">particle_generator</span><span class="p">):</span>  <span class="c1"># custom particle generator function</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="n">particle_generator</span><span class="p">(</span><span class="n">n_particles</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">particle_generator</span> <span class="o">==</span> <span class="s2">&quot;random&quot;</span><span class="p">:</span>
