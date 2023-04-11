@@ -4,8 +4,7 @@ from numba import njit
 
 @njit(cache=True)
 def states(idir, ng, dx, dt,
-           irho, iu, iv, ip, iX,
-           idens, ixmom, iymom, iener, irhoX, nspec,
+           irho, iu, iv, ip, iX, nspec,
            gamma, qv, Uv, dUv):
     r"""
     predict the cell-centered state to the edges in one-dimension
@@ -342,6 +341,7 @@ def riemann_cgf(idir, ng,
     out : ndarray
         Conserved flux
     """
+    _ = U_l, U_r  # unused by this solver
 
     qx, qy, nvar = q_l.shape
 
@@ -604,7 +604,7 @@ def riemann_cgf(idir, ng,
                 U[irhoX:irhoX+nspec] = xn * U[idens]
 
             # compute the fluxes
-            F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nspec, U, q)
+            F[i, j, :] = consFlux(idir, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nspec, U, q)
 
     return F
 
@@ -938,6 +938,7 @@ def riemann_hllc(idir, ng,
     out : ndarray
         Conserved flux
     """
+    _ = irho, iX, lower_solid, upper_solid, gamma  # unused by this solver
 
     qx, qy, nvar = U_l.shape
 
@@ -994,9 +995,9 @@ def riemann_hllc(idir, ng,
             a_l = -1.0
             a_r = 1.0
 
-            F_l = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX,
+            F_l = consFlux(idir, idens, ixmom, iymom, iener, irhoX,
                            iu, iv, ip, nspec, U_l[i, j, :], q_l[i, j, :])
-            F_r = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX,
+            F_r = consFlux(idir, idens, ixmom, iymom, iener, irhoX,
                            iu, iv, ip, nspec, U_r[i, j, :], q_r[i, j, :])
 
             F_HLLE = (a_r*F_l - a_l*F_r + a_r*a_l*(U_r[i, j, :] - U_l[i, j, :])) / (a_r - a_l)
@@ -1103,7 +1104,7 @@ def riemann_hllc(idir, ng,
 
 
 @njit(cache=True)
-def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nspec, U_state, q_state):
+def consFlux(idir, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nspec, U_state, q_state):
     r"""
     Calculate the conservative flux.
 
@@ -1111,8 +1112,6 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nspec, 
     ----------
     idir : int
         Are we predicting to the edges in the x-direction (1) or y-direction (2)?
-    gamma : float
-        Adiabatic index
     idens, ixmom, iymom, iener, irhoX : int
         The indices of the density, x-momentum, y-momentum, internal energy density
         and species partial densities in the conserved state vector.
