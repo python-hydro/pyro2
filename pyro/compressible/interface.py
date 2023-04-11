@@ -3,8 +3,7 @@ from numba import njit
 
 
 @njit(cache=True)
-def states(idir, ng, dx, dt,
-           irho, iu, iv, ip, ix, nspec,
+def states(idir, grid, dt, ivars,
            gamma, qv, dqv):
     r"""
     predict the cell-centered state to the edges in one-dimension
@@ -65,13 +64,11 @@ def states(idir, ng, dx, dt,
     ----------
     idir : int
         Are we predicting to the edges in the x-direction (1) or y-direction (2)?
-    ng : int
-        The number of ghost cells
-    dx : float
-        The cell spacing
+    grid : Grid2d
+        The grid object
     dt : float
         The timestep
-    irho, iu, iv, ip, ix : int
+    ivars:
         Indices of the density, x-velocity, y-velocity, pressure and species in the
         state vector
     nspec : int
@@ -89,37 +86,32 @@ def states(idir, ng, dx, dt,
         State vector predicted to the left and right edges
     """
 
-    qx, qy, nvar = qv.shape
+    q_l = grid.scratch_array(nvar=ivars.nq)
+    q_r = grid.scratch_array(nvar=ivars.nq)
 
-    q_l = np.zeros_like(qv)
-    q_r = np.zeros_like(qv)
+    ns = ivars.nq - ivars.naux
 
-    nx = qx - 2 * ng
-    ny = qy - 2 * ng
-    ilo = ng
-    ihi = ng + nx
-    jlo = ng
-    jhi = ng + ny
+    if idir == 1:
+        dtdx = dt / grid.dx
+    else:
+        dtdx = dt / grid.dy
 
-    ns = nvar - nspec
-
-    dtdx = dt / dx
     dtdx4 = 0.25 * dtdx
 
-    lvec = np.zeros((nvar, nvar))
-    rvec = np.zeros((nvar, nvar))
-    e_val = np.zeros(nvar)
-    betal = np.zeros(nvar)
-    betar = np.zeros(nvar)
+    lvec = np.zeros((ivars.nq, ivars.nq))
+    rvec = np.zeros((ivars.nq, ivars.nq))
+    e_val = np.zeros(ivars.nq)
+    betal = np.zeros(ivars.nq)
+    betar = np.zeros(ivars.nq)
 
     # this is the loop over zones.  For zone i, we see q_l[i+1] and q_r[i]
-    for i in range(ilo - 2, ihi + 2):
-        for j in range(jlo - 2, jhi + 2):
+    for i in range(grid.ilo - 2, grid.ihi + 2):
+        for j in range(grid.jlo - 2, grid.jhi + 2):
 
             dq = dqv[i, j, :]
             q = qv[i, j, :]
 
-            cs = np.sqrt(gamma * q[ip] / q[irho])
+            cs = np.sqrt(gamma * q[ivars.ip] / q[ivars.irho])
 
             lvec[:, :] = 0.0
             rvec[:, :] = 0.0
@@ -127,46 +119,46 @@ def states(idir, ng, dx, dt,
 
             # compute the eigenvalues and eigenvectors
             if idir == 1:
-                e_val[:] = np.array([q[iu] - cs, q[iu], q[iu], q[iu] + cs])
+                e_val[:] = np.array([q[ivars.iu] - cs, q[ivars.iu], q[ivars.iu], q[ivars.iu] + cs])
 
                 lvec[0, :ns] = [0.0, -0.5 *
-                                 q[irho] / cs, 0.0, 0.5 / (cs * cs)]
+                                 q[ivars.irho] / cs, 0.0, 0.5 / (cs * cs)]
                 lvec[1, :ns] = [1.0, 0.0,
                                  0.0, -1.0 / (cs * cs)]
                 lvec[2, :ns] = [0.0, 0.0,             1.0, 0.0]
                 lvec[3, :ns] = [0.0, 0.5 *
-                                 q[irho] / cs,  0.0, 0.5 / (cs * cs)]
+                                 q[ivars.irho] / cs,  0.0, 0.5 / (cs * cs)]
 
-                rvec[0, :ns] = [1.0, -cs / q[irho], 0.0, cs * cs]
+                rvec[0, :ns] = [1.0, -cs / q[ivars.irho], 0.0, cs * cs]
                 rvec[1, :ns] = [1.0, 0.0,       0.0, 0.0]
                 rvec[2, :ns] = [0.0, 0.0,       1.0, 0.0]
-                rvec[3, :ns] = [1.0, cs / q[irho],  0.0, cs * cs]
+                rvec[3, :ns] = [1.0, cs / q[ivars.irho],  0.0, cs * cs]
 
                 # now the species -- they only have a 1 in their corresponding slot
-                e_val[ns:] = q[iu]
-                for n in range(ix, ix + nspec):
+                e_val[ns:] = q[ivars.iu]
+                for n in range(ivars.ix, ivars.ix + ivars.naux):
                     lvec[n, n] = 1.0
                     rvec[n, n] = 1.0
 
             else:
-                e_val[:] = np.array([q[iv] - cs, q[iv], q[iv], q[iv] + cs])
+                e_val[:] = np.array([q[ivars.iv] - cs, q[ivars.iv], q[ivars.iv], q[ivars.iv] + cs])
 
                 lvec[0, :ns] = [0.0, 0.0, -0.5 *
-                                 q[irho] / cs, 0.5 / (cs * cs)]
+                                 q[ivars.irho] / cs, 0.5 / (cs * cs)]
                 lvec[1, :ns] = [1.0, 0.0,
                                  0.0,             -1.0 / (cs * cs)]
                 lvec[2, :ns] = [0.0, 1.0, 0.0,             0.0]
                 lvec[3, :ns] = [0.0, 0.0, 0.5 *
-                                 q[irho] / cs,  0.5 / (cs * cs)]
+                                 q[ivars.irho] / cs,  0.5 / (cs * cs)]
 
-                rvec[0, :ns] = [1.0, 0.0, -cs / q[irho], cs * cs]
+                rvec[0, :ns] = [1.0, 0.0, -cs / q[ivars.irho], cs * cs]
                 rvec[1, :ns] = [1.0, 0.0, 0.0,       0.0]
                 rvec[2, :ns] = [0.0, 1.0, 0.0,       0.0]
-                rvec[3, :ns] = [1.0, 0.0, cs / q[irho],  cs * cs]
+                rvec[3, :ns] = [1.0, 0.0, cs / q[ivars.irho],  cs * cs]
 
                 # now the species -- they only have a 1 in their corresponding slot
-                e_val[ns:] = q[iv]
-                for n in range(ix, ix + nspec):
+                e_val[ns:] = q[ivars.iv]
+                for n in range(ivars.ix, ivars.ix + ivars.naux):
                     lvec[n, n] = 1.0
                     rvec[n, n] = 1.0
 
@@ -191,7 +183,7 @@ def states(idir, ng, dx, dt,
                 q_r[i, j, :] = q - factor * dq
 
             # compute the Vhat functions
-            for m in range(nvar):
+            for m in range(ivars.nq):
                 asum = np.dot(lvec[m, :], dq)
 
                 betal[m] = dtdx4 * (e_val[3] - e_val[m]) * \
@@ -200,7 +192,7 @@ def states(idir, ng, dx, dt,
                     (1.0 - np.copysign(1.0, e_val[m])) * asum
 
             # construct the states
-            for m in range(nvar):
+            for m in range(ivars.nq):
                 sum_l = np.dot(betal, rvec[:, m])
                 sum_r = np.dot(betar, rvec[:, m])
 
@@ -215,8 +207,7 @@ def states(idir, ng, dx, dt,
 
 
 @njit(cache=True)
-def riemann_cgf(idir, ng,
-                idens, ixmom, iymom, iener, irhoX, nspec,
+def riemann_cgf(idir, grid, ivars,
                 lower_solid, upper_solid,
                 gamma, U_l, U_r):
     r"""
@@ -271,50 +262,41 @@ def riemann_cgf(idir, ng,
         Conserved flux
     """
 
-    qx, qy, nvar = U_l.shape
-
-    F = np.zeros((qx, qy, nvar))
+    F = grid.scratch_array(nvar=ivars.nvar)
 
     smallc = 1.e-10
     smallrho = 1.e-10
     smallp = 1.e-10
 
-    nx = qx - 2 * ng
-    ny = qy - 2 * ng
-    ilo = ng
-    ihi = ng + nx
-    jlo = ng
-    jhi = ng + ny
-
-    for i in range(ilo - 1, ihi + 1):
-        for j in range(jlo - 1, jhi + 1):
+    for i in range(grid.ilo - 1, grid.ihi + 1):
+        for j in range(grid.jlo - 1, grid.jhi + 1):
 
             # primitive variable states
-            rho_l = U_l[i, j, idens]
+            rho_l = U_l[i, j, ivars.idens]
 
             # un = normal velocity; ut = transverse velocity
             if idir == 1:
-                un_l = U_l[i, j, ixmom] / rho_l
-                ut_l = U_l[i, j, iymom] / rho_l
+                un_l = U_l[i, j, ivars.ixmom] / rho_l
+                ut_l = U_l[i, j, ivars.iymom] / rho_l
             else:
-                un_l = U_l[i, j, iymom] / rho_l
-                ut_l = U_l[i, j, ixmom] / rho_l
+                un_l = U_l[i, j, ivars.iymom] / rho_l
+                ut_l = U_l[i, j, ivars.ixmom] / rho_l
 
-            rhoe_l = U_l[i, j, iener] - 0.5 * rho_l * (un_l**2 + ut_l**2)
+            rhoe_l = U_l[i, j, ivars.iener] - 0.5 * rho_l * (un_l**2 + ut_l**2)
 
             p_l = rhoe_l * (gamma - 1.0)
             p_l = max(p_l, smallp)
 
-            rho_r = U_r[i, j, idens]
+            rho_r = U_r[i, j, ivars.idens]
 
             if idir == 1:
-                un_r = U_r[i, j, ixmom] / rho_r
-                ut_r = U_r[i, j, iymom] / rho_r
+                un_r = U_r[i, j, ivars.ixmom] / rho_r
+                ut_r = U_r[i, j, ivars.iymom] / rho_r
             else:
-                un_r = U_r[i, j, iymom] / rho_r
-                ut_r = U_r[i, j, ixmom] / rho_r
+                un_r = U_r[i, j, ivars.iymom] / rho_r
+                ut_r = U_r[i, j, ivars.ixmom] / rho_r
 
-            rhoe_r = U_r[i, j, iener] - 0.5 * rho_r * (un_r**2 + ut_r**2)
+            rhoe_r = U_r[i, j, ivars.iener] - 0.5 * rho_r * (un_r**2 + ut_r**2)
 
             p_r = rhoe_r * (gamma - 1.0)
             p_r = max(p_r, smallp)
@@ -473,54 +455,53 @@ def riemann_cgf(idir, ng,
                 rhoe_state = 0.5 * (rhoestar_l + rhoestar_r)
 
             # species now
-            if nspec > 0:
+            if ivars.naux > 0:
                 if ustar > 0.0:
-                    xn = U_l[i, j, irhoX:irhoX + nspec] / U_l[i, j, idens]
+                    xn = U_l[i, j, ivars.irhoX:ivars.irhoX + ivars.naux] / U_l[i, j, ivars.idens]
 
                 elif ustar < 0.0:
-                    xn = U_r[i, j, irhoX:irhoX + nspec] / U_r[i, j, idens]
+                    xn = U_r[i, j, ivars.irhoX:ivars.irhoX + ivars.naux] / U_r[i, j, ivars.idens]
                 else:
-                    xn = 0.5 * (U_l[i, j, irhoX:irhoX + nspec] / U_l[i, j, idens] +
-                                   U_r[i, j, irhoX:irhoX + nspec] / U_r[i, j, idens])
+                    xn = 0.5 * (U_l[i, j, ivars.irhoX:ivars.irhoX + ivars.naux] / U_l[i, j, ivars.idens] +
+                                   U_r[i, j, ivars.irhoX:ivars.irhoX + ivars.nspec] / U_r[i, j, ivars.idens])
 
             # are we on a solid boundary?
             if idir == 1:
-                if i == ilo and lower_solid == 1:
+                if i == grid.ilo and lower_solid == 1:
                     un_state = 0.0
 
-                if i == ihi + 1 and upper_solid == 1:
+                if i == grid.ihi + 1 and upper_solid == 1:
                     un_state = 0.0
 
             elif idir == 2:
-                if j == jlo and lower_solid == 1:
+                if j == grid.jlo and lower_solid == 1:
                     un_state = 0.0
 
-                if j == jhi + 1 and upper_solid == 1:
+                if j == grid.jhi + 1 and upper_solid == 1:
                     un_state = 0.0
 
             # compute the fluxes
-            F[i, j, idens] = rho_state * un_state
+            F[i, j, ivars.idens] = rho_state * un_state
 
             if idir == 1:
-                F[i, j, ixmom] = rho_state * un_state**2 + p_state
-                F[i, j, iymom] = rho_state * ut_state * un_state
+                F[i, j, ivars.ixmom] = rho_state * un_state**2 + p_state
+                F[i, j, ivars.iymom] = rho_state * ut_state * un_state
             else:
-                F[i, j, ixmom] = rho_state * ut_state * un_state
-                F[i, j, iymom] = rho_state * un_state**2 + p_state
+                F[i, j, ivars.ixmom] = rho_state * ut_state * un_state
+                F[i, j, ivars.iymom] = rho_state * un_state**2 + p_state
 
-            F[i, j, iener] = rhoe_state * un_state + \
+            F[i, j, ivars.iener] = rhoe_state * un_state + \
                 0.5 * rho_state * (un_state**2 + ut_state**2) * un_state + \
                 p_state * un_state
 
-            if nspec > 0:
-                F[i, j, irhoX:irhoX + nspec] = xn * rho_state * un_state
+            if ivars.naux > 0:
+                F[i, j, ivars.irhoX:ivars.irhoX + ivars.naux] = xn * rho_state * un_state
 
     return F
 
 
 @njit(cache=True)
-def riemann_prim(idir, ng,
-                 irho, iu, iv, ip, iX, nspec,
+def riemann_prim(idir, grid, ivars,
                  lower_solid, upper_solid,
                  gamma, q_l, q_r):
     r"""
@@ -578,48 +559,39 @@ def riemann_prim(idir, ng,
         Primitive flux
     """
 
-    qx, qy, nvar = q_l.shape
-
-    q_int = np.zeros((qx, qy, nvar))
+    q_int = grid.scratch_array(nvar=ivars.nq)
 
     smallc = 1.e-10
     smallrho = 1.e-10
     smallp = 1.e-10
 
-    nx = qx - 2 * ng
-    ny = qy - 2 * ng
-    ilo = ng
-    ihi = ng + nx
-    jlo = ng
-    jhi = ng + ny
-
-    for i in range(ilo - 1, ihi + 1):
-        for j in range(jlo - 1, jhi + 1):
+    for i in range(grid.ilo - 1, grid.ihi + 1):
+        for j in range(grid.jlo - 1, grid.jhi + 1):
 
             # primitive variable states
-            rho_l = q_l[i, j, irho]
+            rho_l = q_l[i, j, ivars.irho]
 
             # un = normal velocity; ut = transverse velocity
             if idir == 1:
-                un_l = q_l[i, j, iu]
-                ut_l = q_l[i, j, iv]
+                un_l = q_l[i, j, ivars.iu]
+                ut_l = q_l[i, j, ivars.iv]
             else:
-                un_l = q_l[i, j, iv]
-                ut_l = q_l[i, j, iu]
+                un_l = q_l[i, j, ivars.iv]
+                ut_l = q_l[i, j, ivars.iu]
 
-            p_l = q_l[i, j, ip]
+            p_l = q_l[i, j, ivars.ip]
             p_l = max(p_l, smallp)
 
-            rho_r = q_r[i, j, irho]
+            rho_r = q_r[i, j, ivars.irho]
 
             if idir == 1:
-                un_r = q_r[i, j, iu]
-                ut_r = q_r[i, j, iv]
+                un_r = q_r[i, j, ivars.iu]
+                ut_r = q_r[i, j, ivars.iv]
             else:
-                un_r = q_r[i, j, iv]
-                ut_r = q_r[i, j, iu]
+                un_r = q_r[i, j, ivars.iv]
+                ut_r = q_r[i, j, ivars.iu]
 
-            p_r = q_r[i, j, ip]
+            p_r = q_r[i, j, ivars.ip]
             p_r = max(p_r, smallp)
 
             # define the Lagrangian sound speed
@@ -760,50 +732,49 @@ def riemann_prim(idir, ng,
                 p_state = pstar
 
             # species now
-            if nspec > 0:
+            if ivars.naux > 0:
                 if ustar > 0.0:
-                    xn = q_l[i, j, iX:iX + nspec]
+                    xn = q_l[i, j, ivars.iX:ivars.iX + ivars.naux]
 
                 elif ustar < 0.0:
-                    xn = q_r[i, j, iX:iX + nspec]
+                    xn = q_r[i, j, ivars.iX:ivars.iX + ivars.naux]
                 else:
-                    xn = 0.5 * (q_l[i, j, iX:iX + nspec] +
-                                   q_r[i, j, iX:iX + nspec])
+                    xn = 0.5 * (q_l[i, j, ivars.iX:ivars.iX + ivars.naux] +
+                                   q_r[i, j, ivars.iX:ivars.iX + ivars.naux])
 
             # are we on a solid boundary?
             if idir == 1:
-                if i == ilo and lower_solid == 1:
+                if i == grid.ilo and lower_solid == 1:
                     un_state = 0.0
 
-                if i == ihi + 1 and upper_solid == 1:
+                if i == grid.ihi + 1 and upper_solid == 1:
                     un_state = 0.0
 
             elif idir == 2:
-                if j == jlo and lower_solid == 1:
+                if j == grid.jlo and lower_solid == 1:
                     un_state = 0.0
 
-                if j == jhi + 1 and upper_solid == 1:
+                if j == grid.jhi + 1 and upper_solid == 1:
                     un_state = 0.0
 
-            q_int[i, j, irho] = rho_state
+            q_int[i, j, ivars.irho] = rho_state
             if idir == 1:
-                q_int[i, j, iu] = un_state
-                q_int[i, j, iv] = ut_state
+                q_int[i, j, ivars.iu] = un_state
+                q_int[i, j, ivars.iv] = ut_state
             else:
-                q_int[i, j, iu] = ut_state
-                q_int[i, j, iv] = un_state
+                q_int[i, j, ivars.iu] = ut_state
+                q_int[i, j, ivars.iv] = un_state
 
-            q_int[i, j, ip] = p_state
+            q_int[i, j, ivars.ip] = p_state
 
-            if nspec > 0:
-                q_int[i, j, iX:iX + nspec] = xn
+            if ivars.naux > 0:
+                q_int[i, j, ivars.iX:ivars.iX + ivars.naux] = xn
 
     return q_int
 
 
 @njit(cache=True)
-def riemann_hllc(idir, ng,
-                 idens, ixmom, iymom, iener, irhoX, nspec,
+def riemann_hllc(idir, grid, ivars,
                  lower_solid, upper_solid,
                  gamma, U_l, U_r):
     r"""
@@ -835,51 +806,42 @@ def riemann_hllc(idir, ng,
         Conserved flux
     """
 
-    qx, qy, nvar = U_l.shape
-
-    F = np.zeros((qx, qy, nvar))
+    F = grid.scratch_array(nvar=ivars.nvar)
 
     smallc = 1.e-10
     smallp = 1.e-10
 
-    U_state = np.zeros(nvar)
+    U_state = np.zeros(ivars.nvar)
 
-    nx = qx - 2 * ng
-    ny = qy - 2 * ng
-    ilo = ng
-    ihi = ng + nx
-    jlo = ng
-    jhi = ng + ny
-
-    for i in range(ilo - 1, ihi + 1):
-        for j in range(jlo - 1, jhi + 1):
+    for i in range(grid.ilo - 1, grid.ihi + 1):
+        for j in range(grid.jlo - 1, grid.jhi + 1):
 
             # primitive variable states
-            rho_l = U_l[i, j, idens]
+            rho_l = U_l[i, j, ivars.idens]
 
             # un = normal velocity; ut = transverse velocity
             if idir == 1:
-                un_l = U_l[i, j, ixmom] / rho_l
-                ut_l = U_l[i, j, iymom] / rho_l
+                un_l = U_l[i, j, ivars.ixmom] / rho_l
+                ut_l = U_l[i, j, ivars.iymom] / rho_l
             else:
-                un_l = U_l[i, j, iymom] / rho_l
-                ut_l = U_l[i, j, ixmom] / rho_l
+                un_l = U_l[i, j, ivars.iymom] / rho_l
+                ut_l = U_l[i, j, ivars.ixmom] / rho_l
 
-            rhoe_l = U_l[i, j, iener] - 0.5 * rho_l * (un_l**2 + ut_l**2)
+            rhoe_l = U_l[i, j, ivars.iener] - 0.5 * rho_l * (un_l**2 + ut_l**2)
 
             p_l = rhoe_l * (gamma - 1.0)
             p_l = max(p_l, smallp)
 
-            rho_r = U_r[i, j, idens]
+            rho_r = U_r[i, j, ivars.idens]
 
             if idir == 1:
-                un_r = U_r[i, j, ixmom] / rho_r
-                ut_r = U_r[i, j, iymom] / rho_r
+                un_r = U_r[i, j, ivars.ixmom] / rho_r
+                ut_r = U_r[i, j, ivars.iymom] / rho_r
             else:
-                un_r = U_r[i, j, iymom] / rho_r
-                ut_r = U_r[i, j, ixmom] / rho_r
+                un_r = U_r[i, j, ivars.iymom] / rho_r
+                ut_r = U_r[i, j, ivars.ixmom] / rho_r
 
-            rhoe_r = U_r[i, j, iener] - 0.5 * rho_r * (un_r**2 + ut_r**2)
+            rhoe_r = U_r[i, j, ivars.iener] - 0.5 * rho_r * (un_r**2 + ut_r**2)
 
             p_r = rhoe_r * (gamma - 1.0)
             p_r = max(p_r, smallp)
@@ -993,33 +955,31 @@ def riemann_hllc(idir, ng,
                 # R region
                 U_state[:] = U_r[i, j, :]
 
-                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec,
-                                      U_state)
+                F[i, j, :] = consFlux(idir, gamma, ivars, U_state)
 
             elif S_c <= 0.0 < S_r:
                 # R* region
                 HLLCfactor = rho_r * (S_r - un_r) / (S_r - S_c)
 
-                U_state[idens] = HLLCfactor
+                U_state[ivars.idens] = HLLCfactor
 
                 if idir == 1:
-                    U_state[ixmom] = HLLCfactor * S_c
-                    U_state[iymom] = HLLCfactor * ut_r
+                    U_state[ivars.ixmom] = HLLCfactor * S_c
+                    U_state[ivars.iymom] = HLLCfactor * ut_r
                 else:
-                    U_state[ixmom] = HLLCfactor * ut_r
-                    U_state[iymom] = HLLCfactor * S_c
+                    U_state[ivars.ixmom] = HLLCfactor * ut_r
+                    U_state[ivars.iymom] = HLLCfactor * S_c
 
-                U_state[iener] = HLLCfactor * (U_r[i, j, iener] / rho_r +
+                U_state[ivars.iener] = HLLCfactor * (U_r[i, j, ivars.iener] / rho_r +
                                                (S_c - un_r) * (S_c + p_r / (rho_r * (S_r - un_r))))
 
                 # species
-                if nspec > 0:
-                    U_state[irhoX:irhoX + nspec] = HLLCfactor * \
-                        U_r[i, j, irhoX:irhoX + nspec] / rho_r
+                if ivars.naux > 0:
+                    U_state[ivars.irhoX:ivars.irhoX + ivars.nspec] = HLLCfactor * \
+                        U_r[i, j, ivars.irhoX:ivars.irhoX + ivars.nspec] / rho_r
 
                 # find the flux on the right interface
-                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec,
-                                      U_r[i, j, :])
+                F[i, j, :] = consFlux(idir, gamma, ivars, U_r[i, j, :])
 
                 # correct the flux
                 F[i, j, :] = F[i, j, :] + S_r * (U_state[:] - U_r[i, j, :])
@@ -1028,26 +988,25 @@ def riemann_hllc(idir, ng,
                 # L* region
                 HLLCfactor = rho_l * (S_l - un_l) / (S_l - S_c)
 
-                U_state[idens] = HLLCfactor
+                U_state[ivars.idens] = HLLCfactor
 
                 if idir == 1:
-                    U_state[ixmom] = HLLCfactor * S_c
-                    U_state[iymom] = HLLCfactor * ut_l
+                    U_state[ivars.ixmom] = HLLCfactor * S_c
+                    U_state[ivars.iymom] = HLLCfactor * ut_l
                 else:
-                    U_state[ixmom] = HLLCfactor * ut_l
-                    U_state[iymom] = HLLCfactor * S_c
+                    U_state[ivars.ixmom] = HLLCfactor * ut_l
+                    U_state[ivars.iymom] = HLLCfactor * S_c
 
-                U_state[iener] = HLLCfactor * (U_l[i, j, iener] / rho_l +
+                U_state[ivars.iener] = HLLCfactor * (U_l[i, j, ivars.ener] / rho_l +
                                                (S_c - un_l) * (S_c + p_l / (rho_l * (S_l - un_l))))
 
                 # species
-                if nspec > 0:
-                    U_state[irhoX:irhoX + nspec] = HLLCfactor * \
-                        U_l[i, j, irhoX:irhoX + nspec] / rho_l
+                if ivars.naux > 0:
+                    U_state[ivars.irhoX:ivars.irhoX + ivars.nspec] = HLLCfactor * \
+                        U_l[i, j, ivars.irhoX:ivars.irhoX + ivars.nspec] / rho_l
 
                 # find the flux on the left interface
-                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec,
-                                      U_l[i, j, :])
+                F[i, j, :] = consFlux(idir, gamma, ivars, U_l[i, j, :])
 
                 # correct the flux
                 F[i, j, :] = F[i, j, :] + S_l * (U_state[:] - U_l[i, j, :])
@@ -1056,8 +1015,7 @@ def riemann_hllc(idir, ng,
                 # L region
                 U_state[:] = U_l[i, j, :]
 
-                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec,
-                                      U_state)
+                F[i, j, :] = consFlux(idir, gamma, ivars, U_state)
 
             # we should deal with solid boundaries somehow here
 
@@ -1065,7 +1023,7 @@ def riemann_hllc(idir, ng,
 
 
 @njit(cache=True)
-def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec, U_state):
+def consFlux(idir, gamma, ivars, U_state):
     r"""
     Calculate the conservative flux.
 
@@ -1075,7 +1033,7 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec, U_state):
         Are we predicting to the edges in the x-direction (1) or y-direction (2)?
     gamma : float
         Adiabatic index
-    idens, ixmom, iymom, iener, irhoX : int
+    ivars
         The indices of the density, x-momentum, y-momentum, internal energy density
         and species partial densities in the conserved state vector.
     nspec : int
@@ -1091,28 +1049,28 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec, U_state):
 
     F = np.zeros_like(U_state)
 
-    u = U_state[ixmom] / U_state[idens]
-    v = U_state[iymom] / U_state[idens]
+    u = U_state[ivars.ixmom] / U_state[ivars.idens]
+    v = U_state[ivars.iymom] / U_state[ivars.idens]
 
-    p = (U_state[iener] - 0.5 * U_state[idens] * (u * u + v * v)) * (gamma - 1.0)
+    p = (U_state[ivars.iener] - 0.5 * U_state[ivars.idens] * (u * u + v * v)) * (gamma - 1.0)
 
     if idir == 1:
-        F[idens] = U_state[idens] * u
-        F[ixmom] = U_state[ixmom] * u + p
-        F[iymom] = U_state[iymom] * u
-        F[iener] = (U_state[iener] + p) * u
+        F[ivars.idens] = U_state[ivars.idens] * u
+        F[ivars.ixmom] = U_state[ivars.ixmom] * u + p
+        F[ivars.iymom] = U_state[ivars.iymom] * u
+        F[ivars.iener] = (U_state[ivars.iener] + p) * u
 
-        if nspec > 0:
-            F[irhoX:irhoX + nspec] = U_state[irhoX:irhoX + nspec] * u
+        if ivars.naux > 0:
+            F[ivars.irhoX:ivars.irhoX + ivars.nspec] = U_state[ivars.irhoX:ivars.irhoX + ivars.naux] * u
 
     else:
-        F[idens] = U_state[idens] * v
-        F[ixmom] = U_state[ixmom] * v
-        F[iymom] = U_state[iymom] * v + p
-        F[iener] = (U_state[iener] + p) * v
+        F[ivars.idens] = U_state[ivars.idens] * v
+        F[ivars.ixmom] = U_state[ivars.ixmom] * v
+        F[ivars.iymom] = U_state[ivars.iymom] * v + p
+        F[ivars.iener] = (U_state[ivars.iener] + p) * v
 
-        if nspec > 0:
-            F[irhoX:irhoX + nspec] = U_state[irhoX:irhoX + nspec] * v
+        if ivars.naux > 0:
+            F[ivars.irhoX:ivars.irhoX + ivars.naux] = U_state[ivars.irhoX:ivars.irhoX + ivars.naux] * v
 
     return F
 

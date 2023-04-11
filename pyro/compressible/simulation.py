@@ -52,7 +52,7 @@ class Variables:
 def cons_to_prim(U, gamma, ivars, myg):
     """ convert an input vector of conserved variables to primitive variables """
 
-    q = myg.scratch_array(nvar=ivars.nq)
+    q = myg.scratch_array_n(ivars.nq)
 
     q[:, :, ivars.irho] = U[:, :, ivars.idens]
     q[:, :, ivars.iu] = U[:, :, ivars.ixmom]/U[:, :, ivars.idens]

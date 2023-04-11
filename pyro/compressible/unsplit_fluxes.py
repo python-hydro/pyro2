@@ -217,11 +217,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     tm_states = tc.timer("interfaceStates")
     tm_states.begin()
 
-    V_l, V_r = ifc.states(1, myg.ng, myg.dx, dt,
-                          ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
-                          ivars.naux,
-                          gamma,
-                          q, ldx)
+    V_l, V_r = ifc.states(1, myg, dt, ivars, gamma, q, ldx)
 
     tm_states.end()
 
@@ -236,11 +232,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     # left and right primitive variable states
     tm_states.begin()
 
-    _V_l, _V_r = ifc.states(2, myg.ng, myg.dy, dt,
-                            ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
-                            ivars.naux,
-                            gamma,
-                            q, ldy)
+    _V_l, _V_r = ifc.states(2, myg, dt, ivars, gamma, q, ldy)
     V_l = ai.ArrayIndexer(d=_V_l, grid=myg)
     V_r = ai.ArrayIndexer(d=_V_r, grid=myg)
 
@@ -294,13 +286,11 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     else:
         msg.fail("ERROR: Riemann solver undefined")
 
-    _fx = riemannFunc(1, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+    _fx = riemannFunc(1, myg, ivars,
                       solid.xl, solid.xr,
                       gamma, U_xl, U_xr)
 
-    _fy = riemannFunc(2, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+    _fy = riemannFunc(2, myg, ivars,
                       solid.yl, solid.yr,
                       gamma, U_yl, U_yr)
 
@@ -393,13 +383,11 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     tm_riem.begin()
 
-    _fx = riemannFunc(1, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+    _fx = riemannFunc(1, myg, ivars,
                       solid.xl, solid.xr,
                       gamma, U_xl, U_xr)
 
-    _fy = riemannFunc(2, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+    _fy = riemannFunc(2, myg, ivars,
                       solid.yl, solid.yr,
                       gamma, U_yl, U_yr)
 
