@@ -5,10 +5,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import pyro.burgers.advective_fluxes as flx
-import pyro.mesh.patch as patch
-import pyro.particles.particles as particles
-import pyro.util.plot_tools as plot_tools
+from pyro.mesh import patch
+from pyro.particles import particles
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
+from pyro.util import plot_tools
 
 
 class Simulation(NullSimulation):
@@ -128,7 +128,7 @@ class Simulation(NullSimulation):
         uv = myg.scratch_array()
         uv.v()[:, :] = np.sqrt(u.v()*u.v() + v.v()*v.v())
 
-        _, axes, cbar_title = plot_tools.setup_axes(myg, 1)
+        _, axes, _ = plot_tools.setup_axes(myg, 1)
 
         # plot x-y velocity magnitude
         ax = axes[0]
