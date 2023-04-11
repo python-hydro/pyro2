@@ -110,7 +110,7 @@ class Simulation(incompressible.Simulation):
         #     (u_MAC.ip(1) + u_MAC.ip(-1) - 2.0*u_MAC.v())/myg.dx**2 +
         #     (u_MAC.jp(1) + u_MAC.jp(-1) - 2.0*u_MAC.v())/myg.dy**2)   # this is the diffusion part
 
-        f.v()[:, :] -= 0.5*self.dt * (advect_x.v() + gradp_x.v())  # advection + pressure
+        f.v()[:, :] -= self.dt * (advect_x.v() + gradp_x.v())  # advection + pressure
 
         mg.init_RHS(f)
 
@@ -147,7 +147,7 @@ class Simulation(incompressible.Simulation):
         #     (v_MAC.ip(1) + v_MAC.ip(-1) - 2.0*v_MAC.v())/myg.dx**2 +
         #     (v_MAC.jp(1) + v_MAC.jp(-1) - 2.0*v_MAC.v())/myg.dy**2)
 
-        f.v()[:, :] -= 0.5*self.dt * (advect_y.v() + gradp_y.v())
+        f.v()[:, :] -= self.dt * (advect_y.v() + gradp_y.v())
 
         mg.init_RHS(f)
 
