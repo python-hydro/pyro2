@@ -21,6 +21,8 @@ disable = [
   "missing-function-docstring",
   "missing-module-docstring",
   "pointless-string-statement",
+  "cyclic-import",
+  "duplicate-code",
 ]
 enable = [
   "useless-suppression",
