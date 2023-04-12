@@ -5,7 +5,8 @@ def mac_vels(grid,  dt,
              u, v,
              ldelta_ux, ldelta_vx,
              ldelta_uy, ldelta_vy,
-             gradp_x, gradp_y):
+             gradp_x, gradp_y,
+             source_x=None, source_y=None):
     r"""
     Calculate the MAC velocities in the x and y directions.
 
@@ -23,6 +24,8 @@ def mac_vels(grid,  dt,
         Limited slopes of the y-velocity in the x and y directions
     gradp_x, gradp_y : ndarray
         Pressure gradients in the x and y directions
+    source_x, source_y : ndarray
+        Any other source terms
 
     Returns
     -------
@@ -37,7 +40,8 @@ def mac_vels(grid,  dt,
                                                                           u, v,
                                                                           ldelta_ux, ldelta_vx,
                                                                           ldelta_uy, ldelta_vy,
-                                                                          gradp_x, gradp_y)
+                                                                          gradp_x, gradp_y,
+                                                                          source_x, source_y)
 
     # Riemann problem -- this follows Burger's equation.  We don't use
     # any input velocity for the upwinding.  Also, we only care about
@@ -53,7 +57,8 @@ def states(grid, dt,
            ldelta_ux, ldelta_vx,
            ldelta_uy, ldelta_vy,
            gradp_x, gradp_y,
-           u_MAC, v_MAC):
+           u_MAC, v_MAC,
+           source_x=None, source_y=None):
     r"""
     This is similar to ``mac_vels``, but it predicts the interface states
     of both u and v on both interfaces, using the MAC velocities to
@@ -75,6 +80,8 @@ def states(grid, dt,
         Pressure gradients in the x and y directions
     u_MAC, v_MAC : ndarray
         MAC velocities in the x and y directions
+    source_x, source_y : ndarray
+        Any other source terms
 
     Returns
     -------
@@ -88,7 +95,8 @@ def states(grid, dt,
                                                                           u, v,
                                                                           ldelta_ux, ldelta_vx,
                                                                           ldelta_uy, ldelta_vy,
-                                                                          gradp_x, gradp_y)
+                                                                          gradp_x, gradp_y,
+                                                                          source_x, source_y)
 
     # upwind using the MAC velocity to determine which state exists on
     # the interface
@@ -104,7 +112,8 @@ def get_interface_states(grid, dt,
                          u, v,
                          ldelta_ux, ldelta_vx,
                          ldelta_uy, ldelta_vy,
-                         gradp_x, gradp_y):
+                         gradp_x, gradp_y,
+                         source_x=None, source_y=None):
     r"""
     Compute the unsplit predictions of u and v on both the x- and
     y-interfaces.  This includes the transverse terms.
@@ -123,6 +132,8 @@ def get_interface_states(grid, dt,
         Limited slopes of the y-velocity in the x and y directions
     gradp_x, gradp_y : ndarray
         Pressure gradients in the x and y directions
+    source_x, source_y : ndarray
+        Any other source terms (e.g. viscosity term)
 
     Returns
     -------
@@ -223,6 +234,18 @@ def get_interface_states(grid, dt,
 
     u_yl.jp(1, buf=2)[:, :] += -0.5 * dtdx * uu_x.v(buf=2) - 0.5 * dt * gradp_x.v(buf=2)
     u_yr.v(buf=2)[:, :] += -0.5 * dtdx * uu_x.v(buf=2) - 0.5 * dt * gradp_x.v(buf=2)
+
+    if source_x is not None:
+        u_xl.ip(1, buf=2)[:, :] += 0.5 * dt * source_x.v(buf=2)
+        u_xr.v(buf=2)[:, :] += 0.5 * dt * source_x.v(buf=2)
+        u_yl.jp(1, buf=2)[:, :] += 0.5 * dt * source_x.v(buf=2)
+        u_yr.v(buf=2)[:, :] += 0.5 * dt * source_x.v(buf=2)
+
+    if source_y is not None:
+        v_xl.ip(1, buf=2)[:, :] += 0.5 * dt * source_y.v(buf=2)
+        v_xr.v(buf=2)[:, :] += 0.5 * dt * source_y.v(buf=2)
+        v_yl.jp(1, buf=2)[:, :] += 0.5 * dt * source_y.v(buf=2)
+        v_yr.v(buf=2)[:, :] += 0.5 * dt * source_y.v(buf=2)
 
     return u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr
 

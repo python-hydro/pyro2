@@ -37,7 +37,26 @@ class Simulation(incompressible.Simulation):
         Solve is all the same steps as the incompressible solver, but the
         velocity update is different because of the viscosity term
         """
-        super().evolve(other_update_velocity=True)
+        super().evolve(other_update_velocity=True, other_source_term=True)
+
+    def other_source_term(self):
+        """
+        This is the viscous term nu L U
+        """
+        u = self.cc_data.get_var("x-velocity")
+        v = self.cc_data.get_var("y-velocity")
+        myg = self.cc_data.grid
+        nu = self.rp.get_param("incompressible_viscous.viscosity")
+
+        source_x = myg.scratch_array()
+        source_x.v()[:, :] = nu * ((u.ip(1) + u.ip(-1) - 2.0*u.v())/myg.dx**2 +
+                                    (u.jp(1) + u.jp(-1) - 2.0*u.v())/myg.dy**2)
+
+        source_y = myg.scratch_array()
+        source_y.v()[:, :] = nu * ((v.ip(1) + v.ip(-1) - 2.0*v.v())/myg.dx**2 +
+                                    (v.jp(1) + v.jp(-1) - 2.0*v.v())/myg.dy**2)
+
+        return source_x, source_y
 
     def do_other_update_velocity(self, U_MAC, U_INT):
         """

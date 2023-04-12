@@ -179,7 +179,7 @@ class Simulation(NullSimulation):
 
         self.in_preevolve = False
 
-    def evolve(self, other_update_velocity=False):
+    def evolve(self, other_update_velocity=False, other_source_term=False):
         """
         Evolve the incompressible equations through one timestep.
         """
@@ -193,6 +193,11 @@ class Simulation(NullSimulation):
         phi = self.cc_data.get_var("phi")
 
         myg = self.cc_data.grid
+
+        if other_source_term:    
+            source_x, source_y = self.other_source_term()
+        else:
+            source_x, source_y = None, None
 
         # ---------------------------------------------------------------------
         # create the limited slopes of u and v (in both directions)
@@ -239,7 +244,8 @@ class Simulation(NullSimulation):
                                              u, v,
                                              ldelta_ux, ldelta_vx,
                                              ldelta_uy, ldelta_vy,
-                                             gradp_x, gradp_y)
+                                             gradp_x, gradp_y,
+                                             source_x, source_y)
 
         u_MAC = ai.ArrayIndexer(d=_um, grid=myg)
         v_MAC = ai.ArrayIndexer(d=_vm, grid=myg)
@@ -305,7 +311,8 @@ class Simulation(NullSimulation):
                                        ldelta_ux, ldelta_vx,
                                        ldelta_uy, ldelta_vy,
                                        gradp_x, gradp_y,
-                                       u_MAC, v_MAC)
+                                       u_MAC, v_MAC,
+                                       source_x, source_y)
 
         u_xint = ai.ArrayIndexer(d=_ux, grid=myg)
         v_xint = ai.ArrayIndexer(d=_vx, grid=myg)
@@ -484,6 +491,13 @@ class Simulation(NullSimulation):
         """
         Used to set up user-defined BC's (see e.g. incompressible_viscous)
         """
+
+    def other_source_term(self):
+        """
+        Add source terms (other than gradp) for getting interface state values,
+        in the x and y directions
+        """
+        return None, None
 
     def do_other_update_velocity(self, U_MAC, U_INT):
         """
