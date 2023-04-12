@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible.interface &mdash; pyro 4.0.1.post34+g70af790a documentation</title>
+  <title>pyro.compressible.interface &mdash; pyro 4.0.1.post35+gee1c3596 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -926,7 +926,7 @@
 <div class="viewcode-block" id="riemann_hllc"><a class="viewcode-back" href="../../../pyro.compressible.html#pyro.compressible.interface.riemann_hllc">[docs]</a><span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">riemann_hllc</span><span class="p">(</span><span class="n">idir</span><span class="p">,</span> <span class="n">ng</span><span class="p">,</span>
                  <span class="n">idens</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">,</span> <span class="n">iymom</span><span class="p">,</span> <span class="n">iener</span><span class="p">,</span> <span class="n">irhoX</span><span class="p">,</span> <span class="n">nspec</span><span class="p">,</span>
-                 <span class="n">lower_solid</span><span class="p">,</span> <span class="n">upper_solid</span><span class="p">,</span>
+                 <span class="n">lower_solid</span><span class="p">,</span> <span class="n">upper_solid</span><span class="p">,</span>  <span class="c1"># pylint: disable=unused-argument</span>
                  <span class="n">gamma</span><span class="p">,</span> <span class="n">U_l</span><span class="p">,</span> <span class="n">U_r</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This is the HLLC Riemann solver.  The implementation follows</span>

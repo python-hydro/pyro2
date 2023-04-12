@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.advection_rk package &mdash; pyro 4.0.1.post34+g70af790a documentation</title>
+  <title>pyro.advection_rk package &mdash; pyro 4.0.1.post35+gee1c3596 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -196,7 +196,7 @@ reconstruction in space together with a Runge-Kutta integration for time.</p>
 <span id="pyro-advection-rk-fluxes-module"></span><h2>pyro.advection_rk.fluxes module<a class="headerlink" href="#module-pyro.advection_rk.fluxes" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.advection_rk.fluxes.fluxes">
-<span class="sig-prename descclassname"><span class="pre">pyro.advection_rk.fluxes.</span></span><span class="sig-name descname"><span class="pre">fluxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection_rk/fluxes.html#fluxes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection_rk.fluxes.fluxes" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.advection_rk.fluxes.</span></span><span class="sig-name descname"><span class="pre">fluxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection_rk/fluxes.html#fluxes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection_rk.fluxes.fluxes" title="Permalink to this definition"></a></dt>
 <dd><p>Construct the fluxes through the interfaces for the linear advection
 equation:</p>
 <div class="math notranslate nohighlight">
@@ -229,11 +229,6 @@ zone i,j.</p>
 we are advecting.</p>
 </dd>
 <dt><strong>rp</strong><span class="classifier">RuntimeParameters object</span></dt><dd><p>The runtime parameters for the simulation</p>
-</dd>
-<dt><strong>dt</strong><span class="classifier">float</span></dt><dd><p>The timestep we are advancing through.</p>
-</dd>
-<dt><strong>scalar_name</strong><span class="classifier">str</span></dt><dd><p>The name of the variable contained in my_data that we are
-advecting</p>
 </dd>
 </dl>
 </dd>

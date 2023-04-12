@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.advection_weno.fluxes &mdash; pyro 4.0.1.post34+g70af790a documentation</title>
+  <title>pyro.advection_weno.fluxes &mdash; pyro 4.0.1.post35+gee1c3596 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -163,7 +163,7 @@
     <span class="k">return</span> <span class="n">flux</span></div>
 
 
-<div class="viewcode-block" id="fluxes"><a class="viewcode-back" href="../../../pyro.advection_weno.html#pyro.advection_weno.fluxes.fluxes">[docs]</a><span class="k">def</span> <span class="nf">fluxes</span><span class="p">(</span><span class="n">my_data</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+<div class="viewcode-block" id="fluxes"><a class="viewcode-back" href="../../../pyro.advection_weno.html#pyro.advection_weno.fluxes.fluxes">[docs]</a><span class="k">def</span> <span class="nf">fluxes</span><span class="p">(</span><span class="n">my_data</span><span class="p">,</span> <span class="n">rp</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Construct the fluxes through the interfaces for the linear advection</span>
 <span class="sd">    equation</span>
@@ -184,11 +184,6 @@
 <span class="sd">        we are advecting.</span>
 <span class="sd">    rp : RuntimeParameters object</span>
 <span class="sd">        The runtime parameters for the simulation</span>
-<span class="sd">    dt : float</span>
-<span class="sd">        The timestep we are advancing through.</span>
-<span class="sd">    scalar_name : str</span>
-<span class="sd">        The name of the variable contained in my_data that we are</span>
-<span class="sd">        advecting</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.advection_rk.simulation &mdash; pyro 4.0.1.post34+g70af790a documentation</title>
+  <title>pyro.advection_rk.simulation &mdash; pyro 4.0.1.post35+gee1c3596 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -138,7 +138,7 @@
 
         <span class="n">k</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
 
-        <span class="n">flux_x</span><span class="p">,</span> <span class="n">flux_y</span> <span class="o">=</span> <span class="n">flx</span><span class="o">.</span><span class="n">fluxes</span><span class="p">(</span><span class="n">myd</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
+        <span class="n">flux_x</span><span class="p">,</span> <span class="n">flux_y</span> <span class="o">=</span> <span class="n">flx</span><span class="o">.</span><span class="n">fluxes</span><span class="p">(</span><span class="n">myd</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">)</span>
 
         <span class="n">F_x</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">flux_x</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
         <span class="n">F_y</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">flux_y</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>

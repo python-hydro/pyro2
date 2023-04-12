@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.swe.simulation &mdash; pyro 4.0.1.post34+g70af790a documentation</title>
+  <title>pyro.swe.simulation &mdash; pyro 4.0.1.post35+gee1c3596 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -169,7 +169,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">ix</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span></div>
 
 
-<div class="viewcode-block" id="cons_to_prim"><a class="viewcode-back" href="../../../pyro.swe.html#pyro.swe.simulation.cons_to_prim">[docs]</a><span class="k">def</span> <span class="nf">cons_to_prim</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span> <span class="n">myg</span><span class="p">):</span>
+<div class="viewcode-block" id="cons_to_prim"><a class="viewcode-back" href="../../../pyro.swe.html#pyro.swe.simulation.cons_to_prim">[docs]</a><span class="k">def</span> <span class="nf">cons_to_prim</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span> <span class="n">myg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert an input vector of conserved variables</span>
 <span class="sd">    :math:`U = (h, hu, hv, {hX})`</span>
@@ -190,7 +190,7 @@
     <span class="k">return</span> <span class="n">q</span></div>
 
 
-<div class="viewcode-block" id="prim_to_cons"><a class="viewcode-back" href="../../../pyro.swe.html#pyro.swe.simulation.prim_to_cons">[docs]</a><span class="k">def</span> <span class="nf">prim_to_cons</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span> <span class="n">myg</span><span class="p">):</span>
+<div class="viewcode-block" id="prim_to_cons"><a class="viewcode-back" href="../../../pyro.swe.html#pyro.swe.simulation.prim_to_cons">[docs]</a><span class="k">def</span> <span class="nf">prim_to_cons</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span> <span class="n">myg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert an input vector of primitive variables :math:`q = (h, u, v, {X})`</span>
 <span class="sd">    to conserved variables :math:`U = (h, hu, hv, {hX})`</span>
@@ -308,8 +308,8 @@
 
         <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">grid</span>
 
-        <span class="n">Flux_x</span><span class="p">,</span> <span class="n">Flux_y</span> <span class="o">=</span> <span class="n">flx</span><span class="o">.</span><span class="n">unsplit_fluxes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">aux_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">,</span>
-                                            <span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">solid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
+        <span class="n">Flux_x</span><span class="p">,</span> <span class="n">Flux_y</span> <span class="o">=</span> <span class="n">flx</span><span class="o">.</span><span class="n">unsplit_fluxes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="p">,</span>
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">solid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
 
         <span class="c1"># conservative update</span>
         <span class="n">dtdx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span>
@@ -344,11 +344,7 @@
         <span class="c1"># we are plotting from a file</span>
         <span class="n">ivars</span> <span class="o">=</span> <span class="n">Variables</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="p">)</span>
 
-        <span class="c1"># access g from the cc_data object so we can use dovis</span>
-        <span class="c1"># outside of a running simulation.</span>
-        <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_aux</span><span class="p">(</span><span class="s2">&quot;g&quot;</span><span class="p">)</span>
-
-        <span class="n">q</span> <span class="o">=</span> <span class="n">cons_to_prim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">cons_to_prim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span>
 
         <span class="n">h</span> <span class="o">=</span> <span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ih</span><span class="p">]</span>
         <span class="n">u</span> <span class="o">=</span> <span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iu</span><span class="p">]</span>
