@@ -67,7 +67,5 @@ def init_data(my_data, rp):
 def finalize():
     """ print out any information to the user at the end of the run """
 
-    msg = """
-          """
-
-    print(msg)
+    print("""
+          """)

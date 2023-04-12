@@ -8,7 +8,7 @@ logo_text = """
  XXX   XXX X     XX  
  X       X           
  X      X            
-"""
+"""  # noqa
 
 
 class LogoGrid:

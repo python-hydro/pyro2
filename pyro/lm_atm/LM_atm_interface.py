@@ -665,9 +665,9 @@ def riemann(ng, q_l, q_r):
     for i in range(ilo - 1, ihi + 2):
         for j in range(jlo - 1, jhi + 2):
 
-            if ((q_l[i, j] > 0.0) and (q_l[i, j] + q_r[i, j] > 0.0)):
+            if q_l[i, j] > 0.0 and q_l[i, j] + q_r[i, j] > 0.0:
                 s[i, j] = q_l[i, j]
-            elif ((q_l[i, j] <= 0.0) and (q_r[i, j] >= 0.0)):
+            elif q_l[i, j] <= 0.0 and q_r[i, j] >= 0.0:  # pylint: disable=chained-comparison
                 s[i, j] = 0.0
             else:
                 s[i, j] = q_r[i, j]

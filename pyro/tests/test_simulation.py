@@ -1,20 +1,18 @@
 import pyro.mesh.boundary as bnd
-import pyro.mesh.patch as patch
 import pyro.simulation_null as sn
+from pyro.mesh import patch
 from pyro.util import runparams
 
 
-class TestSimulation(object):
+class TestSimulation:
 
     @classmethod
     def setup_class(cls):
         """ this is run once for each class before any tests """
-        pass
 
     @classmethod
     def teardown_class(cls):
         """ this is run once for each class after all tests """
-        pass
 
     def setup_method(self):
         """ this is run before each test """
@@ -65,7 +63,7 @@ class TestSimulation(object):
 
         # now test what happens if we go over tmax
         self.sim.cc_data.t = 0.75
-        self.dt = 0.5
+        self.sim.dt = 0.5
         self.sim.compute_timestep()
         assert self.sim.dt == 0.25
 

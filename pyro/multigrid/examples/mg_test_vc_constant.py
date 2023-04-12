@@ -32,7 +32,7 @@ def true(x, y):
 
 
 # the coefficients
-def alpha(x, y):
+def alpha(x, _y):
     return np.ones_like(x)
 
 

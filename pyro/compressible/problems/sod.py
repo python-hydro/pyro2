@@ -89,10 +89,8 @@ def init_data(my_data, rp):
 def finalize():
     """ print out any information to the user at the end of the run """
 
-    msg = """
+    print("""
           The script analysis/sod_compare.py can be used to compare
           this output to the exact solution.  Some sample exact solution
           data is present as analysis/sod-exact.out
-          """
-
-    print(msg)
+          """)

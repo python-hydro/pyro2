@@ -28,6 +28,7 @@ def states(a, ng, idir):
     out : ndarray, ndarray
         The state predicted to the left and right edges.
     """
+    # pylint: disable=too-many-nested-blocks
 
     qx, qy = a.shape
 

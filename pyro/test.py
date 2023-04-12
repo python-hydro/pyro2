@@ -97,6 +97,7 @@ def do_tests(out_file,
     tests.append(PyroTest("advection_rk", "smooth", "inputs.smooth", opts))
     tests.append(PyroTest("advection_fv4",
                           "smooth", "inputs.smooth", opts))
+    tests.append(PyroTest("burgers", "test", "inputs.test", opts))
     tests.append(PyroTest("compressible", "quad", "inputs.quad", opts))
     tests.append(PyroTest("compressible", "sod", "inputs.sod.x", opts))
     tests.append(PyroTest("compressible", "rt", "inputs.rt", opts))
@@ -179,8 +180,7 @@ def do_tests(out_file,
     return failed
 
 
-if __name__ == "__main__":
-
+def main():
     p = argparse.ArgumentParser()
 
     p.add_argument("--outfile", "-o",
@@ -220,3 +220,7 @@ if __name__ == "__main__":
                       nproc=args.nproc)
 
     sys.exit(failed)
+
+
+if __name__ == "__main__":
+    main()

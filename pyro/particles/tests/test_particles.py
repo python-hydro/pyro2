@@ -1,8 +1,8 @@
 import numpy as np
 from numpy.testing import assert_array_equal
 
-import pyro.mesh.patch as patch
-import pyro.particles.particles as particles
+from pyro.mesh import patch
+from pyro.particles import particles
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
 from pyro.util import runparams
 
@@ -14,7 +14,7 @@ def test_particle():
 
     n_particles = 5
 
-    for n in range(n_particles):
+    for _ in range(n_particles):
         x, y = np.random.rand(2)
         p = particles.Particle(x, y)
 
@@ -47,7 +47,6 @@ def setup_test(n_particles=50, extra_rp_params=None):
     rp.params["mesh.ymin"] = 0
     rp.params["mesh.ymax"] = 1
     rp.params["particles.do_particles"] = 1
-    n_particles = n_particles
 
     if extra_rp_params is not None:
         for param, value in extra_rp_params.items():
@@ -77,7 +76,7 @@ def test_particles_random_gen():
     np.random.seed(3287469)
 
     ps = particles.Particles(myd, bc, n_particles, "random")
-    positions = set([(p.x, p.y) for p in ps.particles.values()])
+    positions = {(p.x, p.y) for p in ps.particles.values()}
 
     assert len(ps.particles) == n_particles, "There should be {} particles".format(n_particles)
 
@@ -85,7 +84,8 @@ def test_particles_random_gen():
     np.random.seed(3287469)
 
     correct_positions = np.random.rand(n_particles, 2)
-    correct_positions = set([(x, y) for (x, y) in correct_positions])
+    # pylint: disable-next=unnecessary-comprehension  # needed to convert ndarray to tuples
+    correct_positions = {(x, y) for (x, y) in correct_positions}
 
     assert positions == correct_positions, "sets are not the same"
 
@@ -101,12 +101,12 @@ def test_particles_grid_gen():
 
     assert len(ps.particles) == 49, "There should be 49 particles"
 
-    positions = set([(p.x, p.y) for p in ps.particles.values()])
+    positions = {(p.x, p.y) for p in ps.particles.values()}
 
     xs, step = np.linspace(0, 1, num=7, endpoint=False, retstep=True)
     xs += 0.5 * step
 
-    correct_positions = set([(x, y) for x in xs for y in xs])
+    correct_positions = {(x, y) for x in xs for y in xs}
 
     assert positions == correct_positions, "sets are not the same"
 
@@ -124,9 +124,10 @@ def test_particles_array_gen():
     ps = particles.Particles(myd, bc, n_particles,
                              "array", pos_array=init_positions)
 
-    positions = set([(p.x, p.y) for p in ps.particles.values()])
+    positions = {(p.x, p.y) for p in ps.particles.values()}
 
-    correct_positions = set([(x, y) for (x, y) in init_positions])
+    # pylint: disable-next=unnecessary-comprehension  # needed to convert ndarray to tuples
+    correct_positions = {(x, y) for (x, y) in init_positions}
 
     assert positions == correct_positions, "sets are not the same"
 
@@ -153,12 +154,12 @@ def test_particles_advect():
 
     ps.update_particles(1, u, v)
 
-    positions = set([(p.x, p.y) for p in ps.particles.values()])
+    positions = {(p.x, p.y) for p in ps.particles.values()}
 
     xs, step = np.linspace(0, 1, num=7, endpoint=False, retstep=True)
     xs += 0.5 * step
 
-    correct_positions = set([(x, y) for x in xs for y in xs])
+    correct_positions = {(x, y) for x in xs for y in xs}
 
     assert positions == correct_positions, "sets are not the same"
 
@@ -167,9 +168,9 @@ def test_particles_advect():
 
     ps.update_particles(0.1, u, v)
 
-    positions = set([(p.x, p.y) for p in ps.particles.values()])
+    positions = {(p.x, p.y) for p in ps.particles.values()}
 
-    correct_positions = set([((x+0.1) % 1, y) for x in xs for y in xs])
+    correct_positions = {((x+0.1) % 1, y) for x in xs for y in xs}
 
     assert positions == correct_positions, "sets are not the same"
 
@@ -180,9 +181,9 @@ def test_particles_advect():
     ps = particles.Particles(myd, bc, n_particles, "grid")
     ps.update_particles(0.1, u, v)
 
-    positions = set([(p.x, p.y) for p in ps.particles.values()])
+    positions = {(p.x, p.y) for p in ps.particles.values()}
 
-    correct_positions = set([(x, (y+0.1) % 1) for x in xs for y in xs])
+    correct_positions = {(x, (y+0.1) % 1) for x in xs for y in xs}
 
     assert positions == correct_positions, "sets are not the same"
 
@@ -192,9 +193,9 @@ def test_particles_advect():
     ps = particles.Particles(myd, bc, n_particles, "grid")
     ps.update_particles(0.1, u, v)
 
-    positions = set([(p.x, p.y) for p in ps.particles.values()])
+    positions = {(p.x, p.y) for p in ps.particles.values()}
 
-    correct_positions = set([((x+0.1) % 1, (y+0.1) % 1) for x in xs for y in xs])
+    correct_positions = {((x+0.1) % 1, (y+0.1) % 1) for x in xs for y in xs}
 
     assert positions == correct_positions, "sets are not the same"
 

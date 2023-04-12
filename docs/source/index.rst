@@ -30,6 +30,7 @@ pyro: a python hydro code
    :caption: Solvers
 
    advection_basics
+   burgers_basics
    compressible_basics
    compressible_compare
    multigrid_basics
@@ -64,7 +65,7 @@ pyro: a python hydro code
 .. toctree::
    :caption: Bibliography
 
-   references
+   zreferences
 
 
 Indices and tables

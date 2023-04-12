@@ -65,8 +65,7 @@ def compare(data1, data2, rtol=1.e-12):
     return result
 
 
-if __name__ == "__main__":
-
+def main():
     if not (len(sys.argv) == 3 or len(sys.argv) == 4):
         print(usage)
         sys.exit(2)
@@ -86,3 +85,7 @@ if __name__ == "__main__":
         print("SUCCESS: files agree")
     else:
         print("ERROR: ", errors[result])
+
+
+if __name__ == "__main__":
+    main()
