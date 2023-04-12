@@ -214,9 +214,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     _U_l, _U_r = ifc.states(1, myg.ng, myg.dx, dt,
                           ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
-                          ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
-                          ivars.irhox, ivars.naux,
-                          gamma, q, my_data.data, ldx)
+                          ivars.naux, gamma, q, my_data.data, ldx)
 
     U_xl = ai.ArrayIndexer(d=_U_l, grid=myg)
     U_xr = ai.ArrayIndexer(d=_U_r, grid=myg)
@@ -232,9 +230,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     _U_l, _U_r = ifc.states(2, myg.ng, myg.dy, dt,
                             ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
-                            ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener,
-                            ivars.irhox, ivars.naux,
-                            gamma, q, my_data.data, ldy)
+                            ivars.naux, gamma, q, my_data.data, ldy)
 
     U_yl = ai.ArrayIndexer(d=_U_l, grid=myg)
     U_yr = ai.ArrayIndexer(d=_U_r, grid=myg)

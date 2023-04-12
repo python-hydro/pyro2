@@ -39,11 +39,10 @@ class TestSimulation:
     def test_prim(self):
 
         # U -> q
-        g = self.sim.cc_data.get_aux("g")
-        q = sn.cons_to_prim(self.sim.cc_data.data, g, self.sim.ivars, self.sim.cc_data.grid)
+        q = sn.cons_to_prim(self.sim.cc_data.data, self.sim.ivars, self.sim.cc_data.grid)
 
         # q -> U
-        U = sn.prim_to_cons(q, g, self.sim.ivars, self.sim.cc_data.grid)
+        U = sn.prim_to_cons(q, self.sim.ivars, self.sim.cc_data.grid)
         assert_array_equal(U, self.sim.cc_data.data)
 
     def test_derives(self):

@@ -210,7 +210,7 @@ def states(idir, ng, dx, dt,
 @njit(cache=True)
 def riemann_roe(idir, ng,
                 ih, ixmom, iymom, ihX, nspec,
-                lower_solid, upper_solid,
+                lower_solid, upper_solid,  # pylint: disable=unused-argument
                 g, U_l, U_r):
     r"""
     This is the Roe Riemann solver with entropy fix. The implementation
@@ -358,7 +358,7 @@ def riemann_roe(idir, ng,
 @njit(cache=True)
 def riemann_hllc(idir, ng,
                  ih, ixmom, iymom, ihX, nspec,
-                 lower_solid, upper_solid,
+                 lower_solid, upper_solid,  # pylint: disable=unused-argument
                  g, U_l, U_r):
     r"""
     this is the HLLC Riemann solver.  The implementation follows

@@ -76,7 +76,7 @@ def verify(file1, file2):
 
 if __name__ == "__main__":
 
-    file1 = sys.argv[1]
-    file2 = sys.argv[2]
+    file1_ = sys.argv[1]
+    file2_ = sys.argv[2]
 
-    verify(file1, file2)
+    verify(file1_, file2_)
