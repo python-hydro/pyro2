@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import argparse
-import os
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -30,11 +29,11 @@ def makeplot(plotfile_name, outfile, Reynolds, streamline_density):
     v = sim.cc_data.get_var("y-velocity")
     magvel = np.sqrt(u**2+v**2)
 
-    fig, ax = plt.subplots(1, 1)
+    _, ax = plt.subplots(1, 1)
     ax.set_aspect('equal')
 
     img = ax.contourf(x, y, np.transpose(magvel.v()), 30, cmap="magma")
-    ax.streamplot(x, y, np.transpose(u.v()), np.transpose(v.v()), broken_streamlines=False, 
+    ax.streamplot(x, y, np.transpose(u.v()), np.transpose(v.v()), broken_streamlines=False,
                   linewidth=0.5, arrowstyle="-", density=streamline_density, color='w')
 
     cbar = plt.colorbar(img, ax=ax)
@@ -63,8 +62,8 @@ def get_args():
 
     parser.add_argument("-o", type=str, default="plot.png",
                         metavar="plot.png", help="output file name")
-    parser.add_argument("-Re", type=int, 
-                        metavar="Reynolds", help="Reynolds number (1/viscosity)") 
+    parser.add_argument("-Re", type=int,
+                        metavar="Reynolds", help="Reynolds number (1/viscosity)")
     parser.add_argument("-d", type=float, default=0.25,
                         metavar="density", help="density of streamlines (0 to 1)")
     parser.add_argument("plotfile", type=str, nargs=1,

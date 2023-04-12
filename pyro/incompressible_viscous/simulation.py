@@ -1,19 +1,7 @@
-import importlib
-
-import matplotlib.pyplot as plt
-import numpy as np
-
 import pyro.incompressible as incompressible
-import pyro.incompressible.incomp_interface as incomp_interface
 import pyro.incompressible_viscous.BC as BC
-import pyro.mesh.array_indexer as ai
 import pyro.mesh.boundary as bnd
-import pyro.mesh.patch as patch
-import pyro.mesh.reconstruction as reconstruction
 import pyro.multigrid.MG as MG
-import pyro.particles.particles as particles
-from pyro.simulation_null import bc_setup, grid_setup
-from pyro.util import msg
 
 
 class Simulation(incompressible.Simulation):
@@ -34,8 +22,10 @@ class Simulation(incompressible.Simulation):
 
     def evolve(self):
         """
-        Solve is all the same steps as the incompressible solver, but the
-        velocity update is different because of the viscosity term
+        Solve is all the same steps as the incompressible solver, but
+        including a source term for the viscosity in the interface
+        prediction, and changing the velocity update method to a double
+        parabolic solve.
         """
         super().evolve(other_update_velocity=True, other_source_term=True)
 

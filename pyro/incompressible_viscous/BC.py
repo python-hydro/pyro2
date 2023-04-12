@@ -21,7 +21,7 @@ def user(bc_name, bc_edge, variable, ccdata):
         for pyro to have multiple types of user-supplied boundary
         conditions.  For this module, it needs to be 'moving_lid'.
     bc_edge : {'ylb', 'yrb', 'xlb', 'xrb}
-        The boundary to update: ylb = lower y; yrb = upper y. 
+        The boundary to update: ylb = lower y; yrb = upper y.
         xlb = left x; xrb = right x
     ccdata : CellCenterData2d object
         The data object

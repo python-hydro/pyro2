@@ -1,5 +1,5 @@
 """
-The pyro solver for incompressible and viscous flow.  This implements a 
+The pyro solver for incompressible and viscous flow.  This implements a
 second-order approximate projection method.  The general flow is:
 
 * create the limited slopes of u and v (in both directions)

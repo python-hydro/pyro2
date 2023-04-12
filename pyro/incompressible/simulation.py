@@ -194,7 +194,7 @@ class Simulation(NullSimulation):
 
         myg = self.cc_data.grid
 
-        if other_source_term:    
+        if other_source_term:
             source_x, source_y = self.other_source_term()
         else:
             source_x, source_y = None, None
