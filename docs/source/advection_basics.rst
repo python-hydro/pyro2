@@ -33,7 +33,7 @@ The parameters for this solver are:
 ------------------------
 
 :py:mod:`pyro.advection_ppm` applies a piecewise parabolic reconstruction (PPM) in the directionally
-unsplit corner transport upwind algorithm (CTU) :cite:`collela:1984`. This reconstruction is an extension
+unsplit corner transport upwind algorithm (CTU) :cite:`colella:1984`. This reconstruction is an extension
 of a higher-order Gudunov's method, designed to capture steeper representation of discontinuities, with
 emphasis on contact discontinuities.
 
