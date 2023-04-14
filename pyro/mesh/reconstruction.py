@@ -293,7 +293,7 @@ def ppm_reconstruction(a, myg, idir):
 
     1. First, we perform an estimation of the values
     of a, in each interface x_{i+1/2}. In order to accomplish this
-    particular task a cuartic polynomial interpolation over:
+    particular goal, we fit a cuartic polynomial over the grid values:
 
     |----*----|----*----|----*----|----*----|
       a_{i-1}     a_i     a_{i+1}   a_{i+2}
@@ -332,27 +332,34 @@ def ppm_reconstruction(a, myg, idir):
 
         # #From here we set ar and al to take the same value of ai. The values of ar and
         # #al, will be reformated accordingly to the neigbours behaviour.
+
         al.v(buf=2)[:, :] = ai.v(buf=2)
         ar.v(buf=2)[:, :] = ai.ip(-1, buf=2)
 
         #From here, we can reset ar and al:
 
-        dl1.v(buf=2)[:, :] = (ai.v(buf=2) - a.v(buf=2)) * (a.v(buf=2) - ai.ip(-1, buf=2))
+        dl1.v(buf=2)[:, :] = (al.v(buf=2) - a.v(buf=2)) * (a.v(buf=2) - ar.v(buf=2))
         dc.v(buf=2)[:, :] = a.v(buf=2)
-        dr.v(buf=2)[:, :] = ai.v(buf=2)
+        dr.v(buf=2)[:, :] = ar.v(buf=2)
 
-        ar.v(buf=myg.ng)[:, :] = np.where(dl1 <= 0.0, dc, dr)
+        ar.v(buf=myg.ng)[:, :] = np.where(dl1 <= 0.0, dc, dr) #First Condition
+
+        dr.v(buf=2)[:, :] = al.v(buf=2)
         al.v(buf=myg.ng)[:, :] = np.where(dl1 <= 0.0, dc, dr)
 
-        dl1.v(buf=2)[:, :] = 6.0 * (ai.v(buf=2) - ai.ip(-1, buf=2)) \
-                                * (a.v(buf=2) - 0.5*(ai.v(buf=2) + ai.ip(-1, buf=2)))
+        dl1.v(buf=2)[:, :] = (al.v(buf=2) - ar.v(buf=2)) \
+                                 * (a.v(buf=2) - 0.5*(ar.v(buf=2) + al.v(buf=2)))
 
-        dl2.v(buf=2)[:, :] = (ai.v(buf=2) - ai.ip(-1, buf=2))**2
-        dc.v(buf=2)[:, :] = 3.0*a.v(buf=2) - 2.0*ai.v(buf=2)
-        dr.v(buf=2)[:, :] = ai.v(buf=2)
+        dl2.v(buf=2)[:, :] = (al.v(buf=2) - ar.v(buf=2))**2 / 6.0
+        dc.v(buf=2)[:, :] = 3.0*a.v(buf=2) - 2.0*al.v(buf=2)
+        dr.v(buf=2)[:, :] = ar.v(buf=2)
 
-        ar.v(buf=myg.ng)[:, :] = np.where(dl1 > dl2, dc, dr)
-        al.v(buf=myg.ng)[:, :] = np.where(-dl2 > dl1, dc, dr)
+        ar.v(buf=myg.ng)[:, :] = np.where(dl1 > dl2, dc, dr) #Second Condition
+
+        dc.v(buf=2)[:, :] = 3.0*a.v(buf=2) - 2.0*ar.v(buf=2)
+        dr.v(buf=2)[:, :] = al.v(buf=2)
+
+        al.v(buf=myg.ng)[:, :] = np.where(-dl2 > dl1, dc, dr) #Third Condition
 
     elif idir == 2:
 
@@ -367,22 +374,27 @@ def ppm_reconstruction(a, myg, idir):
         ar.v(buf=2)[:, :] = ai.jp(-1, buf=2)
 
         #From here, we can reset ar and al:
-
-        dl1.v(buf=2)[:, :] = (ai.v(buf=2) - a.v(buf=2)) * (a.v(buf=2) - ai.jp(-1, buf=2))
+        dl1.v(buf=2)[:, :] = (al.v(buf=2) - a.v(buf=2)) * (a.v(buf=2) - ar.v(buf=2))
         dc.v(buf=2)[:, :] = a.v(buf=2)
-        dr.v(buf=2)[:, :] = ai.v(buf=2)
+        dr.v(buf=2)[:, :] = ar.v(buf=2)
 
-        ar.v(buf=myg.ng)[:, :] = np.where(dl1 <= 0.0, dc, dr)
+        ar.v(buf=myg.ng)[:, :] = np.where(dl1 <= 0.0, dc, dr) #First Condition
+
+        dr.v(buf=2)[:, :] = al.v(buf=2)
         al.v(buf=myg.ng)[:, :] = np.where(dl1 <= 0.0, dc, dr)
 
-        dl1.v(buf=2)[:, :] = 6.0 * (ai.v(buf=2) - ai.jp(-1, buf=2)) \
-                                * (a.v(buf=2) - 0.5*(ai.v(buf=2) + ai.jp(-1, buf=2)))
+        dl1.v(buf=2)[:, :] = (al.v(buf=2) - ar.v(buf=2)) \
+                                 * (a.v(buf=2) - 0.5*(ar.v(buf=2) + al.v(buf=2)))
 
-        dl2.v(buf=2)[:, :] = (ai.v(buf=2) - ai.jp(-1, buf=2))**2
-        dc.v(buf=2)[:, :] = 3.0*a.v(buf=2) - 2.0*ai.v(buf=2)
-        dr.v(buf=2)[:, :] = ai.v(buf=2)
+        dl2.v(buf=2)[:, :] = (al.v(buf=2) - ar.v(buf=2))**2 / 6.0
+        dc.v(buf=2)[:, :] = 3.0*a.v(buf=2) - 2.0*al.v(buf=2)
+        dr.v(buf=2)[:, :] = ar.v(buf=2)
 
-        ar.v(buf=myg.ng)[:, :] = np.where(dl1 > dl2, dc, dr)
-        al.v(buf=myg.ng)[:, :] = np.where(-dl2 > dl1, dc, dr)
+        ar.v(buf=myg.ng)[:, :] = np.where(dl1 > dl2, dc, dr) #Second Condition
+
+        dc.v(buf=2)[:, :] = 3.0*a.v(buf=2) - 2.0*ar.v(buf=2)
+        dr.v(buf=2)[:, :] = al.v(buf=2)
+
+        al.v(buf=myg.ng)[:, :] = np.where(-dl2 > dl1, dc, dr) #Third Condition
 
     return ar, al
