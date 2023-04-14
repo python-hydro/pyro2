@@ -2,7 +2,7 @@ import pyro.advection_nonuniform.simulation as sn
 from pyro.util import runparams
 
 
-class TestSimulation(object):
+class TestSimulation:
     @classmethod
     def setup_class(cls):
         """ this is run once for each class before any tests """
