@@ -7,9 +7,8 @@ L \phi = f
 where L is the Laplacian operator in cylindrical coords.
 """
 
-import numpy as np
 import matplotlib.pyplot as plt
-
+import numpy as np
 from pyro.multigrid import MG
 
 np.set_printoptions(precision=3, linewidth=128)
@@ -20,6 +19,8 @@ class AxisymmetricMG2d(MG.CellCenterMG2d):
     def __init__(self, nx, ny, xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0,
                  xl_BC_type="reflect", xr_BC_type="dirichlet",
                  yl_BC_type="dirichlet", yr_BC_type="dirichlet",
+                 xl_BC=None, xr_BC=None,
+                 yl_BC=None, yr_BC=None,
                  nsmooth=10, nsmooth_bottom=50,
                  verbose=0,
                  true_function=None, vis=0, vis_title=""):
@@ -29,6 +30,8 @@ class AxisymmetricMG2d(MG.CellCenterMG2d):
                                    xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax,
                                    xl_BC_type=xl_BC_type, xr_BC_type=xr_BC_type,
                                    yl_BC_type=yl_BC_type, yr_BC_type=yr_BC_type,
+                                   xl_BC=xl_BC, xr_BC=xr_BC,
+                                   yl_BC=yl_BC, yr_BC=yr_BC,
                                    nsmooth=nsmooth, nsmooth_bottom=nsmooth_bottom,
                                    verbose=verbose,
                                    true_function=true_function, vis=vis,
