@@ -4,7 +4,7 @@ from pyro.mesh import patch
 from pyro.util import msg
 
 
-def init_data(myd, rp):
+def init_data(myd):
     """ initialize the tophat advection problem """
 
     msg.bold("initializing the tophat advection problem...")
@@ -37,4 +37,3 @@ def init_data(myd, rp):
 
 def finalize():
     """ print out any information to the user at the end of the run """
-    pass

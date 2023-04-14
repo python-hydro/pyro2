@@ -3,7 +3,7 @@ import sys
 from pyro.mesh import patch
 
 
-def init_data(my_data, rp):
+def init_data(my_data):
     """ an init routine for unit testing """
 
     # make sure that we are passed a valid patch object
@@ -23,4 +23,3 @@ def init_data(my_data, rp):
 
 def finalize():
     """ print out any information to the user at the end of the run """
-    pass

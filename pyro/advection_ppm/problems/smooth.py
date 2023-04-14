@@ -6,7 +6,7 @@ from pyro.mesh import patch
 from pyro.util import msg
 
 
-def init_data(my_data, rp):
+def init_data(my_data):
     """ initialize the smooth advection problem """
 
     msg.bold("initializing the smooth advection problem...")
@@ -34,4 +34,3 @@ def init_data(my_data, rp):
 
 def finalize():
     """ print out any information to the user at the end of the run """
-    pass
