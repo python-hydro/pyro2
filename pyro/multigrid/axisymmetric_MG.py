@@ -85,7 +85,7 @@ class AxisymmetricMG2d(MG.CellCenterMG2d):
                 v.ip_jp(ix, iy, s=2)[:, :] = (-f.ip_jp(ix, iy, s=2) +
                     1.0 / (rc.v(s=2) * dr**2) * (rr.v(s=2) * v.ip_jp(1+ix, iy, s=2) +
                                                  rl.v(s=2) * v.ip_jp(-1+ix, iy, s=2)) +
-                    1.0 / dz**2 * (v.ip_jp(ix, 1+iy, s=2) + v.ip_jp(ix, -1+iy, s=2)))
+                    1.0 / dz**2 * (v.ip_jp(ix, 1+iy, s=2) + v.ip_jp(ix, -1+iy, s=2))) / denom
 
                 if n in (1, 3):
                     self.grids[level].fill_BC("v")
