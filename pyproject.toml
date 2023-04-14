@@ -21,6 +21,8 @@ disable = [
   "missing-function-docstring",
   "missing-module-docstring",
   "pointless-string-statement",
+  "cyclic-import",
+  "duplicate-code",
 ]
 enable = [
   "useless-suppression",
@@ -35,6 +37,7 @@ defining-attr-methods = [
   "__post_init__",
   "initialize",
   "__array_finalize__",
+  "setup_class", "setup_method",  # for tests
 ]
 
 [tool.pylint.FORMAT]

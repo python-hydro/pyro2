@@ -5,16 +5,14 @@ import pyro.swe.simulation as sn
 from pyro.util import runparams
 
 
-class TestSimulation(object):
+class TestSimulation:
     @classmethod
     def setup_class(cls):
         """ this is run once for each class before any tests """
-        pass
 
     @classmethod
     def teardown_class(cls):
         """ this is run once for each class after all tests """
-        pass
 
     def setup_method(self):
         """ this is run before each test """
@@ -41,11 +39,10 @@ class TestSimulation(object):
     def test_prim(self):
 
         # U -> q
-        g = self.sim.cc_data.get_aux("g")
-        q = sn.cons_to_prim(self.sim.cc_data.data, g, self.sim.ivars, self.sim.cc_data.grid)
+        q = sn.cons_to_prim(self.sim.cc_data.data, self.sim.ivars, self.sim.cc_data.grid)
 
         # q -> U
-        U = sn.prim_to_cons(q, g, self.sim.ivars, self.sim.cc_data.grid)
+        U = sn.prim_to_cons(q, self.sim.ivars, self.sim.cc_data.grid)
         assert_array_equal(U, self.sim.cc_data.data)
 
     def test_derives(self):

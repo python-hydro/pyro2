@@ -185,12 +185,12 @@ def states(idir, ng, dx, dt,
 
             # compute the Vhat functions
             for m in range(nvar):
-                sum = np.dot(lvec[m, :], dq)
+                asum = np.dot(lvec[m, :], dq)
 
                 betal[m] = dtdx3 * (e_val[2] - e_val[m]) * \
-                                   (np.copysign(1.0, e_val[m]) + 1.0) * sum
+                                   (np.copysign(1.0, e_val[m]) + 1.0) * asum
                 betar[m] = dtdx3 * (e_val[0] - e_val[m]) * \
-                                   (1.0 - np.copysign(1.0, e_val[m])) * sum
+                                   (1.0 - np.copysign(1.0, e_val[m])) * asum
 
             # construct the states
             for m in range(nvar):
@@ -210,7 +210,7 @@ def states(idir, ng, dx, dt,
 @njit(cache=True)
 def riemann_roe(idir, ng,
                 ih, ixmom, iymom, ihX, nspec,
-                lower_solid, upper_solid,
+                lower_solid, upper_solid,  # pylint: disable=unused-argument
                 g, U_l, U_r):
     r"""
     This is the Roe Riemann solver with entropy fix. The implementation
@@ -358,7 +358,7 @@ def riemann_roe(idir, ng,
 @njit(cache=True)
 def riemann_hllc(idir, ng,
                  ih, ixmom, iymom, ihX, nspec,
-                 lower_solid, upper_solid,
+                 lower_solid, upper_solid,  # pylint: disable=unused-argument
                  g, U_l, U_r):
     r"""
     this is the HLLC Riemann solver.  The implementation follows
@@ -468,7 +468,7 @@ def riemann_hllc(idir, ng,
                 F[i, j, :] = consFlux(idir, g, ih, ixmom, iymom, ihX, nspec,
                                       U_state)
 
-            elif (S_r > 0.0 and S_c <= 0):
+            elif S_c <= 0.0 < S_r:
                 # R* region
                 HLLCfactor = h_r * (S_r - un_r) / (S_r - S_c)
 
@@ -493,7 +493,7 @@ def riemann_hllc(idir, ng,
                 # correct the flux
                 F[i, j, :] = F[i, j, :] + S_r * (U_state - U_r[i, j, :])
 
-            elif (S_c > 0.0 and S_l < 0.0):
+            elif S_l < 0.0 < S_c:
                 # L* region
                 HLLCfactor = h_l * (S_l - un_l) / (S_l - S_c)
 

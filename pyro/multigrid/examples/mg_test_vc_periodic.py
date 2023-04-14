@@ -179,8 +179,7 @@ def test_vc_poisson_periodic(N, store_bench=False, comp_bench=False, bench_dir="
     return enorm
 
 
-if __name__ == "__main__":
-
+def main():
     N = [16, 32, 64, 128, 256, 512]
     err = []
 
@@ -213,3 +212,7 @@ if __name__ == "__main__":
     plt.tight_layout()
 
     plt.savefig("mg_vc_periodic_converge.png")
+
+
+if __name__ == "__main__":
+    main()

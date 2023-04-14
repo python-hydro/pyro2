@@ -8,8 +8,8 @@ class Simulation(compressible_rk.Simulation):
     def __init__(self, solver_name, problem_name, rp, timers=None, data_class=fv.FV2d):
         super().__init__(solver_name, problem_name, rp, timers=timers, data_class=data_class)
 
-    def initialize(self, ng=5):
-        super().initialize(ng=ng)
+    def initialize(self, extra_vars=None, ng=5):
+        super().initialize(extra_vars=extra_vars, ng=ng)
 
     def substep(self, myd):
         """
@@ -38,8 +38,7 @@ class Simulation(compressible_rk.Simulation):
 
         k = myg.scratch_array(nvar=self.ivars.nvar)
 
-        flux_x, flux_y = flx.fluxes(myd, self.rp,
-                                    self.ivars, self.solid, self.tc)
+        flux_x, flux_y = flx.fluxes(myd, self.rp, self.ivars)
 
         for n in range(self.ivars.nvar):
             k.v(n=n)[:, :] = \

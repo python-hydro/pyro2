@@ -3,20 +3,18 @@ import numpy as np
 from numpy.testing import assert_array_equal
 
 import pyro.mesh.boundary as bnd
-import pyro.mesh.patch as patch
+from pyro.mesh import patch
 
 
 # Grid2d tests
-class TestGrid2d(object):
+class TestGrid2d:
     @classmethod
     def setup_class(cls):
         """ this is run once for each class before any tests """
-        pass
 
     @classmethod
     def teardown_class(cls):
         """ this is run once for each class after all tests """
-        pass
 
     def setup_method(self):
         """ this is run before each test """
@@ -71,16 +69,14 @@ class TestGrid2d(object):
 
 
 # CellCenterData2d tests
-class TestCellCenterData2d(object):
+class TestCellCenterData2d:
     @classmethod
     def setup_class(cls):
         """ this is run once for each class before any tests """
-        pass
 
     @classmethod
     def teardown_class(cls):
         """ this is run once for each class after all tests """
-        pass
 
     def setup_method(self):
         """ this is run before each test """

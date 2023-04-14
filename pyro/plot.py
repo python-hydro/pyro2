@@ -23,6 +23,7 @@ def makeplot(plotfile_name, outfile, width, height):
     """ plot the data in a plotfile using the solver's vis() method """
 
     sim = io.read(plotfile_name)
+    sim.cc_data.fill_BC_all()
 
     plt.figure(num=1, figsize=(width, height), dpi=100, facecolor='w')
 
@@ -47,9 +48,7 @@ def get_args():
     parser.add_argument("plotfile", type=str, nargs=1,
                         help="the plotfile you wish to plot")
 
-    args = parser.parse_args()
-
-    return args
+    return parser.parse_args()
 
 
 if __name__ == "__main__":

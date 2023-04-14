@@ -137,6 +137,9 @@ html_sidebars = {
     ]
 }
 
+linkcheck_ignore = [r"https://ascelibrary.org",
+                    r"https://doi.org/10.1061/(ASCE)0733-9429(1999)125:11(1210)"]
+
 
 # -- Options for HTMLHelp output ------------------------------------------
 

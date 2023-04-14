@@ -41,5 +41,5 @@ jobs:
         run: pip install .
 
       - name: Validate
-        run: pylint --errors-only pyro pyro/analysis
+        run: pylint --disable=fixme pyro pyro/analysis pyro/**/tests/*.py
 
