@@ -2,7 +2,7 @@ import pyro.mesh.array_indexer as ai
 from pyro.advection_fv4 import interface
 
 
-def fluxes(my_data, rp, dt):
+def fluxes(my_data, rp):
     r"""Construct the fluxes through the interfaces for the linear advection
     equation:
 
@@ -41,11 +41,6 @@ def fluxes(my_data, rp, dt):
         we are advecting.
     rp : RuntimeParameters object
         The runtime parameters for the simulation
-    dt : float
-        The timestep we are advancing through.
-    scalar_name : str
-        The name of the variable contained in my_data that we are
-        advecting
 
     Returns
     -------

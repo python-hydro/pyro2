@@ -1,11 +1,12 @@
 import sys
 
-import pyro.mesh.patch as patch
+from pyro.mesh import patch
 from pyro.util import msg
 
 
 def init_data(myd, rp):
     """ initialize the tophat burgers problem """
+    del rp  # this problem doesn't use runtime params
 
     msg.bold("initializing the tophat burgers problem...")
 
@@ -40,4 +41,3 @@ def init_data(myd, rp):
 
 def finalize():
     """ print out any information to the user at the end of the run """
-    pass

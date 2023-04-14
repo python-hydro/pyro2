@@ -1,5 +1,5 @@
 import pyro.incompressible.incomp_interface as interface
-import pyro.mesh.reconstruction as reconstruction
+from pyro.mesh import reconstruction
 
 
 def unsplit_fluxes(my_data, rp, dt):
