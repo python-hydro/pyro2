@@ -9,6 +9,7 @@ where L is the Laplacian operator in cylindrical coords.
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pyro.mesh.array_indexer as ai
 from pyro.multigrid import MG
 
 np.set_printoptions(precision=3, linewidth=128)
@@ -52,7 +53,7 @@ class AxisymmetricMG2d(MG.CellCenterMG2d):
         dr = myg.dx
         dz = myg.dy
 
-        rc = myg.x2d
+        rc = ai.ArrayIndexer(myg.x2d, grid=myg)
         rl = rc - 0.5 * dr
         rr = rc + 0.5 * dr
 
@@ -82,8 +83,8 @@ class AxisymmetricMG2d(MG.CellCenterMG2d):
             for n, (ix, iy) in enumerate([(0, 0), (1, 1), (1, 0), (0, 1)]):
 
                 v.ip_jp(ix, iy, s=2)[:, :] = (-f.ip_jp(ix, iy, s=2) +
-                    1.0 / (rc * dr**2) * (rr * v.ip_jp(1+ix, iy, s=2) +
-                                          rl * v.ip_jp(-1+ix, iy, s=2)) +
+                    1.0 / (rc.v(s=2) * dr**2) * (rr.v(s=2) * v.ip_jp(1+ix, iy, s=2) +
+                                                 rl.v(s=2) * v.ip_jp(-1+ix, iy, s=2)) +
                     1.0 / dz**2 * (v.ip_jp(ix, 1+iy, s=2) + v.ip_jp(ix, -1+iy, s=2)))
 
                 if n in (1, 3):
@@ -122,13 +123,13 @@ class AxisymmetricMG2d(MG.CellCenterMG2d):
         dr = myg.dx
         dz = myg.dy
 
-        rc = myg.x2d
+        rc = ai.ArrayIndexer(myg.x2d, grid=myg)
         rl = rc - 0.5 * dr
         rr = rc + 0.5 * dr
 
         # compute the residual
         # r = f - L_eta phi
-        L_phi = (1.0 / (rc * dr**2) * (rr * v.ip(1) - 2.0 * rc * v.v() + rl * v.ip(-1)) +
+        L_phi = (1.0 / (rc.v() * dr**2) * (rr.v() * v.ip(1) - 2.0 * rc.v() * v.v() + rl.v() * v.ip(-1)) +
                  1.0 / (dz**2) * (v.jp(1) - 2.0 * v.v() + v.jp(-1)))
 
         r.v()[:, :] = f.v() - L_phi
