@@ -2,8 +2,8 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
-from pyro import advection
 import pyro.advection_ppm.fluxes as flx
+from pyro import advection
 from pyro.util import plot_tools
 
 
