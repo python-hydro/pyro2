@@ -2,9 +2,9 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
+from pyro import advection
 import pyro.advection_ppm.fluxes as flx
 from pyro.util import plot_tools
-from pyro import advection
 
 
 class Simulation(advection.Simulation):
