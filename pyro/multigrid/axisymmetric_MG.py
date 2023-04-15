@@ -83,8 +83,8 @@ class AxisymmetricMG2d(MG.CellCenterMG2d):
             for n, (ix, iy) in enumerate([(0, 0), (1, 1), (1, 0), (0, 1)]):
 
                 v.ip_jp(ix, iy, s=2)[:, :] = (-f.ip_jp(ix, iy, s=2) +
-                    1.0 / (rc.v(s=2) * dr**2) * (rr.v(s=2) * v.ip_jp(1+ix, iy, s=2) +
-                                                 rl.v(s=2) * v.ip_jp(-1+ix, iy, s=2)) +
+                    1.0 / (rc.ip(ix, s=2) * dr**2) * (rr.ip(ix, s=2) * v.ip_jp(1+ix, iy, s=2) +
+                                                      rl.ip(ix, s=2) * v.ip_jp(-1+ix, iy, s=2)) +
                     1.0 / dz**2 * (v.ip_jp(ix, 1+iy, s=2) + v.ip_jp(ix, -1+iy, s=2))) / denom
 
                 if n in (1, 3):
