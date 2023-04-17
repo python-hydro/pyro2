@@ -1,8 +1,8 @@
 from pyro.mesh.reconstruction import ppm_reconstruction
 
 
-def ctu_unsplit_fluxes(data, rp, dt, scalar_name):
-    """
+def unsplit_fluxes(data, rp, dt, scalar_name):
+    r"""
     Construct the fluxes through the interfaces for the linear advection
     equation:
 
