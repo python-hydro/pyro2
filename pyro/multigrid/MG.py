@@ -723,7 +723,8 @@ class CellCenterMG2d:
 
             if self.verbose:
                 new_resid = fp.get_var("r").norm()
-                print(f"  level = {level:2}, nx = {self.grids[level].grid.nx:4}, residual change: {orig_resid:11.6g} → {new_resid:11.6g}")
+                nx = self.grids[level].grid.nx
+                print(f"  level = {level:2}, nx = {nx:4}, residual change: {orig_resid:11.6g} → {new_resid:11.6g}")
 
             # restrict the residual down to the RHS of the coarser level
             f_coarse = cp.get_var("f")
@@ -757,7 +758,8 @@ class CellCenterMG2d:
 
             if self.verbose:
                 new_resid = fp.get_var("r").norm()
-                print(f"  level = {level:2}, nx = {self.grids[level].grid.nx:4}, residual change: {orig_resid:11.6g} → {new_resid:11.6g}")
+                nx = self.grids[level].grid.nx
+                print(f"  level = {level:2}, nx = {nx:4}, residual change: {orig_resid:11.6g} → {new_resid:11.6g}")
 
         else:
             # bottom solve: solve the discrete coarse problem.  We
