@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Multigrid solvers &mdash; pyro 4.0.1.post36+g115a86d3 documentation</title>
+  <title>Multigrid Class Overview &mdash; pyro 4.0.1.post37+ge220287f documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -27,8 +27,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Multigrid examples" href="multigrid-examples.html" />
-    <link rel="prev" title="Compressible solver comparisons" href="compressible_compare.html" /> 
+    <link rel="next" title="Constant-Coefficient Poisson Equation" href="multigrid-constant-coefficients.html" />
+    <link rel="prev" title="Multigrid Solvers" href="multigrid.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -72,20 +72,21 @@
 <li class="toctree-l1"><a class="reference internal" href="burgers_basics.html">Burgers’ Equation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compressible_compare.html">Compressible solver comparisons</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Multigrid solvers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#multigrid-test">multigrid test</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#projection">projection</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#exercises">Exercises</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#explorations">Explorations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#extensions">Extensions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="multigrid.html">Multigrid Solvers</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Multigrid Class Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#simple-examples">Simple Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#multigrid-test">multigrid test</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projection">projection</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="multigrid-examples.html">Multigrid examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multigrid-constant-coefficients.html">Constant-Coefficient Poisson Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multigrid-variable-coeff.html">Variable Coefficient Poisson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multigrid-general-linear.html">General Linear Elliptic Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multigrid_exercises.html">Exercises</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
@@ -126,7 +127,8 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Multigrid solvers</li>
+          <li class="breadcrumb-item"><a href="multigrid.html">Multigrid Solvers</a></li>
+      <li class="breadcrumb-item active">Multigrid Class Overview</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/multigrid_basics.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -136,8 +138,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="multigrid-solvers">
-<h1>Multigrid solvers<a class="headerlink" href="#multigrid-solvers" title="Permalink to this heading"></a></h1>
+  <section id="multigrid-class-overview">
+<h1>Multigrid Class Overview<a class="headerlink" href="#multigrid-class-overview" title="Permalink to this heading"></a></h1>
 <p>pyro solves elliptic problems (like Laplace’s equation or Poisson’s
 equation) through multigrid. This accelerates the convergence of
 simple relaxation by moving the solution down and up through a series
@@ -162,8 +164,8 @@ to square grids with zoning a power of 2.</p>
 there is no time-dependence in pure elliptic problems. Instead, there
 are a few scripts in the multigrid/ subdirectory that demonstrate its
 use.</p>
-<section id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
+<section id="simple-examples">
+<h2>Simple Examples<a class="headerlink" href="#simple-examples" title="Permalink to this heading"></a></h2>
 <section id="multigrid-test">
 <h3>multigrid test<a class="headerlink" href="#multigrid-test" title="Permalink to this heading"></a></h3>
 <p>A basic multigrid test is run as (using a path relative to the root of the
@@ -215,33 +217,14 @@ results are shown below:</p>
 <p>Left is the original u velocity, middle is the modified field after adding the gradient of the scalar, and right is the recovered field.</p>
 </section>
 </section>
-<section id="exercises">
-<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading"></a></h2>
-<section id="explorations">
-<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this heading"></a></h3>
-<ul class="simple">
-<li><p>Try doing just smoothing, no multigrid. Show that it still converges
-second order if you use enough iterations, but that the amount of
-time needed to get a solution is much greater.</p></li>
-</ul>
-</section>
-<section id="extensions">
-<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading"></a></h3>
-<ul class="simple">
-<li><p>Implement inhomogeneous dirichlet boundary conditions</p></li>
-<li><p>Add a different bottom solver to the multigrid algorithm</p></li>
-<li><p>Make the multigrid solver work for non-square domains</p></li>
-</ul>
-</section>
-</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="compressible_compare.html" class="btn btn-neutral float-left" title="Compressible solver comparisons" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="multigrid-examples.html" class="btn btn-neutral float-right" title="Multigrid examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="multigrid.html" class="btn btn-neutral float-left" title="Multigrid Solvers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="multigrid-constant-coefficients.html" class="btn btn-neutral float-right" title="Constant-Coefficient Poisson Equation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Constant-Coefficient Poisson Equation &mdash; pyro 4.0.1.post37+ge220287f documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="_static/nbsphinx-code-cells.css" type="text/css" />
+      <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Variable Coefficient Poisson" href="multigrid-variable-coeff.html" />
+    <link rel="prev" title="Multigrid Class Overview" href="multigrid_basics.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyro
+              <img src="_static/logo.gif" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                4.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">pyro basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Setting up pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="burgers_basics.html">Burgers’ Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_compare.html">Compressible solver comparisons</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="multigrid.html">Multigrid Solvers</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="multigrid_basics.html">Multigrid Class Overview</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Constant-Coefficient Poisson Equation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Setting-up-the-solver">Setting up the solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Performing-the-solve">Performing the solve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Plotting-the-solution">Plotting the solution</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="multigrid-variable-coeff.html">Variable Coefficient Poisson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multigrid-general-linear.html">General Linear Elliptic Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multigrid_exercises.html">Exercises</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Contributing and getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html#history">History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Software Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="zreferences.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="multigrid.html">Multigrid Solvers</a></li>
+      <li class="breadcrumb-item active">Constant-Coefficient Poisson Equation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/multigrid-constant-coefficients.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Constant-Coefficient-Poisson-Equation">
+<h1>Constant-Coefficient Poisson Equation<a class="headerlink" href="#Constant-Coefficient-Poisson-Equation" title="Permalink to this heading"></a></h1>
+<p>We want to solve</p>
+<div class="math notranslate nohighlight">
+\[\phi_{xx} + \phi_{yy} = -2[(1-6x^2)y^2(1-y^2) + (1-6y^2)x^2(1-x^2)]\]</div>
+<p>on</p>
+<div class="math notranslate nohighlight">
+\[[0,1]\times [0,1]\]</div>
+<p>with homogeneous Dirichlet boundary conditions (this example comes from <em>A Multigrid Tutorial</em>).</p>
+<p>This has the analytic solution</p>
+<div class="math notranslate nohighlight">
+\[u(x,y) = (x^2 - x^4)(y^4 - y^2)\]</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+<section id="Setting-up-the-solver">
+<h2>Setting up the solver<a class="headerlink" href="#Setting-up-the-solver" title="Permalink to this heading"></a></h2>
+<p>We start by setting up a multigrid object—this needs to know the number of zones our problem is defined on</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyro.multigrid.MG</span> <span class="k">as</span> <span class="nn">MG</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nx</span> <span class="o">=</span> <span class="n">ny</span> <span class="o">=</span> <span class="mi">256</span>
+<span class="n">mg</span> <span class="o">=</span> <span class="n">MG</span><span class="o">.</span><span class="n">CellCenterMG2d</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span>
+                       <span class="n">xl_BC_type</span><span class="o">=</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">,</span> <span class="n">xr_BC_type</span><span class="o">=</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">,</span>
+                       <span class="n">yl_BC_type</span><span class="o">=</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">,</span> <span class="n">yr_BC_type</span><span class="o">=</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+cc data: nx = 2, ny = 2, ng = 1
+         nvars = 3
+         variables:
+               v: min:    0.0000000000    max:    0.0000000000
+                  BCs: -x: dirichlet    +x: dirichlet    -y: dirichlet    +y: dirichlet
+               f: min:    0.0000000000    max:    0.0000000000
+                  BCs: -x: dirichlet    +x: dirichlet    -y: dirichlet    +y: dirichlet
+               r: min:    0.0000000000    max:    0.0000000000
+                  BCs: -x: dirichlet    +x: dirichlet    -y: dirichlet    +y: dirichlet
+
+cc data: nx = 4, ny = 4, ng = 1
+         nvars = 3
+         variables:
+               v: min:    0.0000000000    max:    0.0000000000
+                  BCs: -x: dirichlet    +x: dirichlet    -y: dirichlet    +y: dirichlet
+               f: min:    0.0000000000    max:    0.0000000000
+                  BCs: -x: dirichlet    +x: dirichlet    -y: dirichlet    +y: dirichlet
+               r: min:    0.0000000000    max:    0.0000000000
+                  BCs: -x: dirichlet    +x: dirichlet    -y: dirichlet    +y: dirichlet
+
+cc data: nx = 8, ny = 8, ng = 1
+         nvars = 3
+         variables:
+               v: min:    0.0000000000    max:    0.0000000000
+                  BCs: -x: dirichlet    +x: dirichlet    -y: dirichlet    +y: dirichlet
+               f: min:    0.0000000000    max:    0.0000000000
+                  BCs: -x: dirichlet    +x: dirichlet    -y: dirichlet    +y: dirichlet
+               r: min:    0.0000000000    max:    0.0000000000
+                  BCs: -x: dirichlet    +x: dirichlet    -y: dirichlet    +y: dirichlet
+
+cc data: nx = 16, ny = 16, ng = 1
+         nvars = 3
+         variables:
+               v: min:    0.0000000000    max:    0.0000000000
+                  BCs: -x: dirichlet    +x: dirichlet    -y: dirichlet    +y: dirichlet
+               f: min:    0.0000000000    max:    0.0000000000
+                  BCs: -x: dirichlet    +x: dirichlet    -y: dirichlet    +y: dirichlet
+               r: min:    0.0000000000    max:    0.0000000000
+                  BCs: -x: dirichlet    +x: dirichlet    -y: dirichlet    +y: dirichlet
+
+cc data: nx = 32, ny = 32, ng = 1
+         nvars = 3
+         variables:
+               v: min:    0.0000000000    max:    0.0000000000
+                  BCs: -x: dirichlet    +x: dirichlet    -y: dirichlet    +y: dirichlet
+               f: min:    0.0000000000    max:    0.0000000000
+                  BCs: -x: dirichlet    +x: dirichlet    -y: dirichlet    +y: dirichlet
+               r: min:    0.0000000000    max:    0.0000000000
+                  BCs: -x: dirichlet    +x: dirichlet    -y: dirichlet    +y: dirichlet
+
+cc data: nx = 64, ny = 64, ng = 1
+         nvars = 3
+         variables:
+               v: min:    0.0000000000    max:    0.0000000000
+                  BCs: -x: dirichlet    +x: dirichlet    -y: dirichlet    +y: dirichlet
+               f: min:    0.0000000000    max:    0.0000000000
+                  BCs: -x: dirichlet    +x: dirichlet    -y: dirichlet    +y: dirichlet
+               r: min:    0.0000000000    max:    0.0000000000
+                  BCs: -x: dirichlet    +x: dirichlet    -y: dirichlet    +y: dirichlet
+
+cc data: nx = 128, ny = 128, ng = 1
+         nvars = 3
+         variables:
+               v: min:    0.0000000000    max:    0.0000000000
+                  BCs: -x: dirichlet    +x: dirichlet    -y: dirichlet    +y: dirichlet
+               f: min:    0.0000000000    max:    0.0000000000
+                  BCs: -x: dirichlet    +x: dirichlet    -y: dirichlet    +y: dirichlet
+               r: min:    0.0000000000    max:    0.0000000000
+                  BCs: -x: dirichlet    +x: dirichlet    -y: dirichlet    +y: dirichlet
+
+cc data: nx = 256, ny = 256, ng = 1
+         nvars = 3
+         variables:
+               v: min:    0.0000000000    max:    0.0000000000
+                  BCs: -x: dirichlet    +x: dirichlet    -y: dirichlet    +y: dirichlet
+               f: min:    0.0000000000    max:    0.0000000000
+                  BCs: -x: dirichlet    +x: dirichlet    -y: dirichlet    +y: dirichlet
+               r: min:    0.0000000000    max:    0.0000000000
+                  BCs: -x: dirichlet    +x: dirichlet    -y: dirichlet    +y: dirichlet
+
+</pre></div></div>
+</div>
+<p>Next, we initialize the RHS. To make life easier, the <code class="docutils literal notranslate"><span class="pre">CellCenterMG2d</span></code> object has the coordinates of the solution grid (including ghost cells) as <code class="docutils literal notranslate"><span class="pre">mg.x2d</span></code> and <code class="docutils literal notranslate"><span class="pre">mg.y2d</span></code> (these are two-dimensional arrays).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">rhs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mf">2.0</span> <span class="o">*</span> <span class="p">((</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">6.0</span> <span class="o">*</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span>
+                   <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">6.0</span> <span class="o">*</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mg</span><span class="o">.</span><span class="n">init_RHS</span><span class="p">(</span><span class="n">rhs</span><span class="p">(</span><span class="n">mg</span><span class="o">.</span><span class="n">x2d</span><span class="p">,</span> <span class="n">mg</span><span class="o">.</span><span class="n">y2d</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Source norm =  1.097515813669473
+</pre></div></div>
+</div>
+<p>The last setup step is to initialize the solution–this is the starting point for the solve. Usually we just want to start with all zeros, so we use the <code class="docutils literal notranslate"><span class="pre">init_zeros()</span></code> method</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mg</span><span class="o">.</span><span class="n">init_zeros</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Performing-the-solve">
+<h2>Performing the solve<a class="headerlink" href="#Performing-the-solve" title="Permalink to this heading"></a></h2>
+<p>We can now solve—there are actually two different techniques we can do here. We can just do pure smoothing on the solution grid using <code class="docutils literal notranslate"><span class="pre">mg.smooth(mg.nlevels-1,</span> <span class="pre">N)</span></code>, where <code class="docutils literal notranslate"><span class="pre">N</span></code> is the number of smoothing iterations. To get the solution <code class="docutils literal notranslate"><span class="pre">N</span></code> will need to be large and this will take a long time.</p>
+<p>Multigrid accelerates the smoothing. We can do a V-cycle multigrid solution using <code class="docutils literal notranslate"><span class="pre">mg.solve()</span></code></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mg</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+source norm =  1.097515813669473
+&lt;&lt;&lt; beginning V-cycle (cycle 1) &gt;&gt;&gt;
+
+  level: 7, grid: 256 x 256
+  before G-S, residual L2: 1.097515813669473
+  after G-S, residual L2: 1.502308451578657
+
+  level: 6, grid: 128 x 128
+  before G-S, residual L2: 1.0616243965458263
+  after G-S, residual L2: 1.4321452257629033
+
+  level: 5, grid: 64 x 64
+  before G-S, residual L2: 1.011366277976364
+  after G-S, residual L2: 1.281872470375375
+
+  level: 4, grid: 32 x 32
+  before G-S, residual L2: 0.903531158162907
+  after G-S, residual L2: 0.9607576999783505
+
+  level: 3, grid: 16 x 16
+  before G-S, residual L2: 0.6736112182020367
+  after G-S, residual L2: 0.4439774050299674
+
+  level: 2, grid: 8 x 8
+  before G-S, residual L2: 0.30721142286171554
+  after G-S, residual L2: 0.0727215591269748
+
+  level: 1, grid: 4 x 4
+  before G-S, residual L2: 0.04841813458618458
+  after G-S, residual L2: 3.9610700301811246e-05
+
+  bottom solve:
+  level: 0, grid: 2 x 2
+
+  level: 1, grid: 4 x 4
+  before G-S, residual L2: 3.925006722484123e-05
+  after G-S, residual L2: 1.0370099820862674e-09
+
+  level: 2, grid: 8 x 8
+  before G-S, residual L2: 0.07010129273961899
+  after G-S, residual L2: 0.0008815704830693547
+
+  level: 3, grid: 16 x 16
+  before G-S, residual L2: 0.4307377377402105
+  after G-S, residual L2: 0.007174899576794818
+
+  level: 4, grid: 32 x 32
+  before G-S, residual L2: 0.911086486792154
+  after G-S, residual L2: 0.01618756602227813
+
+  level: 5, grid: 64 x 64
+  before G-S, residual L2: 1.1945438349788615
+  after G-S, residual L2: 0.022021327892004925
+
+  level: 6, grid: 128 x 128
+  before G-S, residual L2: 1.313456560108626
+  after G-S, residual L2: 0.02518650395173617
+
+  level: 7, grid: 256 x 256
+  before G-S, residual L2: 1.3618314516335004
+  after G-S, residual L2: 0.026870007568672097
+
+cycle 1: relative err = 0.999999999999964, residual err = 0.02448256984911586
+
+&lt;&lt;&lt; beginning V-cycle (cycle 2) &gt;&gt;&gt;
+
+  level: 7, grid: 256 x 256
+  before G-S, residual L2: 0.026870007568672097
+  after G-S, residual L2: 0.025790216249923552
+
+  level: 6, grid: 128 x 128
+  before G-S, residual L2: 0.018218080204017304
+  after G-S, residual L2: 0.023654310121915274
+
+  level: 5, grid: 64 x 64
+  before G-S, residual L2: 0.01669077991582338
+  after G-S, residual L2: 0.01977335201785163
+
+  level: 4, grid: 32 x 32
+  before G-S, residual L2: 0.013922595404814862
+  after G-S, residual L2: 0.013577568890182053
+
+  level: 3, grid: 16 x 16
+  before G-S, residual L2: 0.009518306167970536
+  after G-S, residual L2: 0.006115159484497302
+
+  level: 2, grid: 8 x 8
+  before G-S, residual L2: 0.004244630812032651
+  after G-S, residual L2: 0.0010674120586864006
+
+  level: 1, grid: 4 x 4
+  before G-S, residual L2: 0.0007108144252738053
+  after G-S, residual L2: 5.818246254772703e-07
+
+  bottom solve:
+  level: 0, grid: 2 x 2
+
+  level: 1, grid: 4 x 4
+  before G-S, residual L2: 5.765281065294632e-07
+  after G-S, residual L2: 1.5231212503339452e-11
+
+  level: 2, grid: 8 x 8
+  before G-S, residual L2: 0.0010291471590693868
+  after G-S, residual L2: 1.2950948742201083e-05
+
+  level: 3, grid: 16 x 16
+  before G-S, residual L2: 0.006239446983842889
+  after G-S, residual L2: 0.00010483463130232172
+
+  level: 4, grid: 32 x 32
+  before G-S, residual L2: 0.014573363314854
+  after G-S, residual L2: 0.00026233988398787004
+
+  level: 5, grid: 64 x 64
+  before G-S, residual L2: 0.021564270263952755
+  after G-S, residual L2: 0.0003944827058086955
+
+  level: 6, grid: 128 x 128
+  before G-S, residual L2: 0.02579092712136628
+  after G-S, residual L2: 0.00048636495715121916
+
+  level: 7, grid: 256 x 256
+  before G-S, residual L2: 0.028051324215592862
+  after G-S, residual L2: 0.0005440874957950154
+
+cycle 2: relative err = 13.739483825281054, residual err = 0.0004957445615074047
+
+&lt;&lt;&lt; beginning V-cycle (cycle 3) &gt;&gt;&gt;
+
+  level: 7, grid: 256 x 256
+  before G-S, residual L2: 0.0005440874957950154
+  after G-S, residual L2: 0.0005095844930046698
+
+  level: 6, grid: 128 x 128
+  before G-S, residual L2: 0.0003597879816772893
+  after G-S, residual L2: 0.00044648485218937167
+
+  level: 5, grid: 64 x 64
+  before G-S, residual L2: 0.0003147892995472901
+  after G-S, residual L2: 0.0003492541721056348
+
+  level: 4, grid: 32 x 32
+  before G-S, residual L2: 0.0002457276904804801
+  after G-S, residual L2: 0.00022232862524233384
+
+  level: 3, grid: 16 x 16
+  before G-S, residual L2: 0.0001558932199490972
+  after G-S, residual L2: 9.511093023364078e-05
+
+  level: 2, grid: 8 x 8
+  before G-S, residual L2: 6.616899520585456e-05
+  after G-S, residual L2: 1.711006102346096e-05
+
+  level: 1, grid: 4 x 4
+  before G-S, residual L2: 1.139522901981679e-05
+  after G-S, residual L2: 9.33004809910226e-09
+
+  bottom solve:
+  level: 0, grid: 2 x 2
+
+  level: 1, grid: 4 x 4
+  before G-S, residual L2: 9.245125097272049e-09
+  after G-S, residual L2: 2.442311694447821e-13
+
+  level: 2, grid: 8 x 8
+  before G-S, residual L2: 1.64991725637487e-05
+  after G-S, residual L2: 2.0771258971860784e-07
+
+  level: 3, grid: 16 x 16
+  before G-S, residual L2: 0.00010097720436460624
+  after G-S, residual L2: 1.7241727900979902e-06
+
+  level: 4, grid: 32 x 32
+  before G-S, residual L2: 0.0002575410544503153
+  after G-S, residual L2: 4.766282851613449e-06
+
+  level: 5, grid: 64 x 64
+  before G-S, residual L2: 0.00041133882050328275
+  after G-S, residual L2: 7.600616845344458e-06
+
+  level: 6, grid: 128 x 128
+  before G-S, residual L2: 0.0005232809692242086
+  after G-S, residual L2: 9.860758095018993e-06
+
+  level: 7, grid: 256 x 256
+  before G-S, residual L2: 0.0005945070122423073
+  after G-S, residual L2: 1.1466134915427874e-05
+
+cycle 3: relative err = 34.347638624909216, residual err = 1.0447352805871284e-05
+
+&lt;&lt;&lt; beginning V-cycle (cycle 4) &gt;&gt;&gt;
+
+  level: 7, grid: 256 x 256
+  before G-S, residual L2: 1.1466134915427874e-05
+  after G-S, residual L2: 1.054466722279011e-05
+
+  level: 6, grid: 128 x 128
+  before G-S, residual L2: 7.442814693866286e-06
+  after G-S, residual L2: 8.955050475722099e-06
+
+  level: 5, grid: 64 x 64
+  before G-S, residual L2: 6.311313968968047e-06
+  after G-S, residual L2: 6.734553609148436e-06
+
+  level: 4, grid: 32 x 32
+  before G-S, residual L2: 4.737984987500691e-06
+  after G-S, residual L2: 4.091799997658277e-06
+
+  level: 3, grid: 16 x 16
+  before G-S, residual L2: 2.871028473858937e-06
+  after G-S, residual L2: 1.6319551993366253e-06
+
+  level: 2, grid: 8 x 8
+  before G-S, residual L2: 1.1372178077508109e-06
+  after G-S, residual L2: 2.961040430099916e-07
+
+  level: 1, grid: 4 x 4
+  before G-S, residual L2: 1.9721864323458624e-07
+  after G-S, residual L2: 1.61503943872384e-10
+
+  bottom solve:
+  level: 0, grid: 2 x 2
+
+  level: 1, grid: 4 x 4
+  before G-S, residual L2: 1.6003411195777404e-10
+  after G-S, residual L2: 4.2274326344473505e-15
+
+  level: 2, grid: 8 x 8
+  before G-S, residual L2: 2.855691101825338e-07
+  after G-S, residual L2: 3.5961118754371857e-09
+
+  level: 3, grid: 16 x 16
+  before G-S, residual L2: 1.7893831203170535e-06
+  after G-S, residual L2: 3.1136282101831173e-08
+
+  level: 4, grid: 32 x 32
+  before G-S, residual L2: 4.97129807196115e-06
+  after G-S, residual L2: 9.544819739422644e-08
+
+  level: 5, grid: 64 x 64
+  before G-S, residual L2: 8.281644276572538e-06
+  after G-S, residual L2: 1.56637783149839e-07
+
+  level: 6, grid: 128 x 128
+  before G-S, residual L2: 1.0888850082357996e-05
+  after G-S, residual L2: 2.0777271327080248e-07
+
+  level: 7, grid: 256 x 256
+  before G-S, residual L2: 1.2717522622400765e-05
+  after G-S, residual L2: 2.464531349025277e-07
+
+cycle 4: relative err = 0.17409776671446628, residual err = 2.24555429482631e-07
+
+&lt;&lt;&lt; beginning V-cycle (cycle 5) &gt;&gt;&gt;
+
+  level: 7, grid: 256 x 256
+  before G-S, residual L2: 2.464531349025277e-07
+  after G-S, residual L2: 2.2491138140311698e-07
+
+  level: 6, grid: 128 x 128
+  before G-S, residual L2: 1.5874562191875262e-07
+  after G-S, residual L2: 1.886249099391391e-07
+
+  level: 5, grid: 64 x 64
+  before G-S, residual L2: 1.3294481979637655e-07
+  after G-S, residual L2: 1.397710191717015e-07
+
+  level: 4, grid: 32 x 32
+  before G-S, residual L2: 9.836928907527788e-08
+  after G-S, residual L2: 8.269030961692836e-08
+
+  level: 3, grid: 16 x 16
+  before G-S, residual L2: 5.8062531341283565e-08
+  after G-S, residual L2: 3.034725896415429e-08
+
+  level: 2, grid: 8 x 8
+  before G-S, residual L2: 2.116912379336852e-08
+  after G-S, residual L2: 5.467519592468213e-09
+
+  level: 1, grid: 4 x 4
+  before G-S, residual L2: 3.6418116003284676e-09
+  after G-S, residual L2: 2.982625229812215e-12
+
+  bottom solve:
+  level: 0, grid: 2 x 2
+
+  level: 1, grid: 4 x 4
+  before G-S, residual L2: 2.955484162036181e-12
+  after G-S, residual L2: 7.806739482450516e-17
+
+  level: 2, grid: 8 x 8
+  before G-S, residual L2: 5.273610709946236e-09
+  after G-S, residual L2: 6.642323465658688e-11
+
+  level: 3, grid: 16 x 16
+  before G-S, residual L2: 3.4146989205844565e-08
+  after G-S, residual L2: 6.052228076583688e-10
+
+  level: 4, grid: 32 x 32
+  before G-S, residual L2: 1.031248597196911e-07
+  after G-S, residual L2: 2.0541497445308587e-09
+
+  level: 5, grid: 64 x 64
+  before G-S, residual L2: 1.7585349306604133e-07
+  after G-S, residual L2: 3.421022608879089e-09
+
+  level: 6, grid: 128 x 128
+  before G-S, residual L2: 2.3383756442516674e-07
+  after G-S, residual L2: 4.552170797983864e-09
+
+  level: 7, grid: 256 x 256
+  before G-S, residual L2: 2.7592842790687426e-07
+  after G-S, residual L2: 5.41488950707315e-09
+
+cycle 5: relative err = 0.005391244339065405, residual err = 4.933769007818501e-09
+
+&lt;&lt;&lt; beginning V-cycle (cycle 6) &gt;&gt;&gt;
+
+  level: 7, grid: 256 x 256
+  before G-S, residual L2: 5.41488950707315e-09
+  after G-S, residual L2: 4.948141362729419e-09
+
+  level: 6, grid: 128 x 128
+  before G-S, residual L2: 3.4929583962703016e-09
+  after G-S, residual L2: 4.154445183511443e-09
+
+  level: 5, grid: 64 x 64
+  before G-S, residual L2: 2.9288841397931397e-09
+  after G-S, residual L2: 3.074779198797186e-09
+
+  level: 4, grid: 32 x 32
+  before G-S, residual L2: 2.164991235492634e-09
+  after G-S, residual L2: 1.788028730183651e-09
+
+  level: 3, grid: 16 x 16
+  before G-S, residual L2: 1.2562223343389894e-09
+  after G-S, residual L2: 6.021983813990021e-10
+
+  level: 2, grid: 8 x 8
+  before G-S, residual L2: 4.2028073688787063e-10
+  after G-S, residual L2: 1.0655724637281067e-10
+
+  level: 1, grid: 4 x 4
+  before G-S, residual L2: 7.097871736854444e-11
+  after G-S, residual L2: 5.813506543301849e-14
+
+  bottom solve:
+  level: 0, grid: 2 x 2
+
+  level: 1, grid: 4 x 4
+  before G-S, residual L2: 5.760611936011378e-14
+  after G-S, residual L2: 1.521555112430923e-18
+
+  level: 2, grid: 8 x 8
+  before G-S, residual L2: 1.027891920456506e-10
+  after G-S, residual L2: 1.294879454701896e-12
+
+  level: 3, grid: 16 x 16
+  before G-S, residual L2: 6.914011940773812e-10
+  after G-S, residual L2: 1.2453691230551983e-11
+
+  level: 4, grid: 32 x 32
+  before G-S, residual L2: 2.2570491487662195e-09
+  after G-S, residual L2: 4.639035392364569e-11
+
+  level: 5, grid: 64 x 64
+  before G-S, residual L2: 3.908967396962745e-09
+  after G-S, residual L2: 7.803740782474827e-11
+
+  level: 6, grid: 128 x 128
+  before G-S, residual L2: 5.196394306272565e-09
+  after G-S, residual L2: 1.033274523100204e-10
+
+  level: 7, grid: 256 x 256
+  before G-S, residual L2: 6.117636729623554e-09
+  after G-S, residual L2: 1.2199402602477584e-10
+
+cycle 6: relative err = 7.51413991329132e-05, residual err = 1.111546863428753e-10
+
+&lt;&lt;&lt; beginning V-cycle (cycle 7) &gt;&gt;&gt;
+
+  level: 7, grid: 256 x 256
+  before G-S, residual L2: 1.2199402602477584e-10
+  after G-S, residual L2: 1.121992266879251e-10
+
+  level: 6, grid: 128 x 128
+  before G-S, residual L2: 7.921861122082639e-11
+  after G-S, residual L2: 9.493449600138316e-11
+
+  level: 5, grid: 64 x 64
+  before G-S, residual L2: 6.694993398453784e-11
+  after G-S, residual L2: 7.050995614737483e-11
+
+  level: 4, grid: 32 x 32
+  before G-S, residual L2: 4.9666563586565975e-11
+  after G-S, residual L2: 4.045094776680348e-11
+
+  level: 3, grid: 16 x 16
+  before G-S, residual L2: 2.843147343834713e-11
+  after G-S, residual L2: 1.2576313722677801e-11
+
+  level: 2, grid: 8 x 8
+  before G-S, residual L2: 8.777954081387978e-12
+  after G-S, residual L2: 2.170559196862902e-12
+
+  level: 1, grid: 4 x 4
+  before G-S, residual L2: 1.445876195415056e-12
+  after G-S, residual L2: 1.1842925278593641e-15
+
+  bottom solve:
+  level: 0, grid: 2 x 2
+
+  level: 1, grid: 4 x 4
+  before G-S, residual L2: 1.1735184729034125e-15
+  after G-S, residual L2: 3.0994757710835167e-20
+
+  level: 2, grid: 8 x 8
+  before G-S, residual L2: 2.094012660676073e-12
+  after G-S, residual L2: 2.6382579574150587e-14
+
+  level: 3, grid: 16 x 16
+  before G-S, residual L2: 1.466147487151147e-11
+  after G-S, residual L2: 2.6760553592700965e-13
+
+  level: 4, grid: 32 x 32
+  before G-S, residual L2: 5.130705216489902e-11
+  after G-S, residual L2: 1.0810419626613159e-12
+
+  level: 5, grid: 64 x 64
+  before G-S, residual L2: 9.001551103280705e-11
+  after G-S, residual L2: 1.8342879121275396e-12
+
+  level: 6, grid: 128 x 128
+  before G-S, residual L2: 1.1914921193827463e-10
+  after G-S, residual L2: 2.4124327865487605e-12
+
+  level: 7, grid: 256 x 256
+  before G-S, residual L2: 1.3907209384461257e-10
+  after G-S, residual L2: 2.8429898342353533e-12
+
+cycle 7: relative err = 7.062255558417692e-07, residual err = 2.590386214782638e-12
+
+</pre></div></div>
+</div>
+</section>
+<section id="Plotting-the-solution">
+<h2>Plotting the solution<a class="headerlink" href="#Plotting-the-solution" title="Permalink to this heading"></a></h2>
+<p>We can access the solution on the finest grid using <code class="docutils literal notranslate"><span class="pre">get_solution()</span></code></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">phi</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">get_solution</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">v</span><span class="p">()),</span> <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;lower&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.image.AxesImage at 0x7f1c2994e8c0&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/multigrid-constant-coefficients_17_1.png" src="_images/multigrid-constant-coefficients_17_1.png" />
+</div>
+</div>
+<p>We can also get the gradient of the solution</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gx</span><span class="p">,</span> <span class="n">gy</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">get_solution_gradient</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">gx</span><span class="o">.</span><span class="n">v</span><span class="p">()),</span> <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;lower&quot;</span><span class="p">)</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">gy</span><span class="o">.</span><span class="n">v</span><span class="p">()),</span> <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;lower&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.image.AxesImage at 0x7f1c2970e890&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/multigrid-constant-coefficients_20_1.png" src="_images/multigrid-constant-coefficients_20_1.png" />
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="multigrid_basics.html" class="btn btn-neutral float-left" title="Multigrid Class Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="multigrid-variable-coeff.html" class="btn btn-neutral float-right" title="Variable Coefficient Poisson" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, pyro development team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
