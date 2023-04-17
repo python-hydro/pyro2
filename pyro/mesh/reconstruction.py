@@ -292,7 +292,7 @@ def ppm_reconstruction(a, myg, idir):
     The PPM reconstruction method proceeds as follows:
 
     1. First, we perform an estimation of the values
-    of a, in each interface x_{i+1/2}. In order to accomplish this
+    of a on each interface x_{i+1/2}. In order to accomplish this
     particular goal, we fit a cuartic polynomial over the grid values:
 
     |----*----|----*----|----*----|----*----|
@@ -301,15 +301,44 @@ def ppm_reconstruction(a, myg, idir):
     After the calculation of these values, defined as a_{i+1/2},
     we stored them in ai[i].
 
-    2. Next, we define two values for each interface: a_{L,i} and a_{R},
-    to the limits of a_{i-1/2} and a_{i+1/2} from the right and left of x_i, respectively. Under
-    this definition:
+    2. Next, we define the values: a_{R,i-1/2} and a_{L,i+1/2},
+    to the limits of a_{i-1/2} and a_{i+1/2} from the right and left
+    of i-1/2 and i+1/2, respectively. Both values, a_{R,i+1/2} and
+    a_{L,i+1/2} are fixed initially to a_{i+1/2}. However, after the
+    limiting process, each interface will be double valued. Under this
+    definition:
 
       |----------------------*----------------------|
     a_{R,i-1/2}                 a_i                   a_{L,i+1/2}
 
-    where a_{L,i} will be stored in al[i], and a_{R,i} in
-    ar[i].
+    with a_{R,i-1/2} stored in ar[i], and a_{L,i+1/2} in
+    al[i].
+
+    3. We apply the limit described in Colella and Woodward (1984) to
+    reset the values of ar[i] and al[i].
+
+    Parameters
+    ----------
+    a: np.array
+        input cell data with 4 ghost cells.
+
+    myg: <CellCentered2D class object>
+        input mesh.
+
+    idir: int
+        desired reconstruction dimension.
+
+    Returns
+    -------
+
+    al[i]: np.array
+        the left limit interface values of the
+        ppm-reconstruction
+
+    ar[i]: np.array
+        the right limit interface values of the
+        ppm-reconstruction
+
     """
 
     al = myg.scratch_array()
