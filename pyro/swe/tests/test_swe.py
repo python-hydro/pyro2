@@ -5,16 +5,14 @@ import pyro.swe.simulation as sn
 from pyro.util import runparams
 
 
-class TestSimulation(object):
+class TestSimulation:
     @classmethod
     def setup_class(cls):
         """ this is run once for each class before any tests """
-        pass
 
     @classmethod
     def teardown_class(cls):
         """ this is run once for each class after all tests """
-        pass
 
     def setup_method(self):
         """ this is run before each test """

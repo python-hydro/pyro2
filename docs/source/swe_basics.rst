@@ -42,12 +42,11 @@ y-directions. It can be run as:
    pyro_sim.py swe dam inputs.dam.x
    pyro_sim.py swe dam inputs.dam.y
 
-A simple script, ``dam_compare.py`` in ``analysis/`` will read a pyro output
-file and plot the solution over the exact dam break solution (as given by
-`Stoker (1958) <https://doi.org/10.1063/1.3062689>`_ and
-`Wu, Huang & Zheng (1999) <https://doi.org/10.1061/(ASCE)0733-9429(1999)125:11(1210)>`_). Below we see
-the result for a dam break run with 128 points in the x-direction, and run
-until t = 0.3 s.
+A simple script, ``dam_compare.py`` in ``analysis/`` will read a pyro
+output file and plot the solution over the exact dam break solution
+(as given by :cite:`stoker:1958` and :cite:`chao:1999`.  Below we see
+the result for a dam break run with 128 points in the x-direction, and
+run until t = 0.3 s.
 
 .. image:: dam_compare.png
    :align: center

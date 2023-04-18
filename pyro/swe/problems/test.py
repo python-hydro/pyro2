@@ -5,6 +5,7 @@ from pyro.mesh import patch
 
 def init_data(my_data, rp):
     """ an init routine for unit testing """
+    del rp  # this problem doesn't use runtime params
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):

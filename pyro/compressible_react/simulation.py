@@ -9,13 +9,13 @@ from pyro.util import plot_tools
 
 class Simulation(compressible.Simulation):
 
-    def initialize(self):
+    def initialize(self, extra_vars=None, ng=4):
         """
         For the reacting compressible solver, our initialization of
         the data is the same as the compressible solver, but we
         supply additional variables.
         """
-        super().initialize(extra_vars=["fuel", "ash"])
+        super().initialize(extra_vars=["fuel", "ash"] + (extra_vars or []), ng=ng)
 
     def burn(self, dt):
         """ react fuel to ash """
