@@ -5,13 +5,13 @@ from pyro.util import msg
 
 
 def init_data(myd, rp):
-    """ initialize the tophat burgers problem """
+    """ initialize  problem """
 
-    msg.bold("initializing the tophat burgers problem...")
+    msg.bold("initializing the burgers convergence problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(myd, patch.CellCenterData2d):
-        print("ERROR: patch invalid in tophat.py")
+        print("ERROR: patch invalid in converge.py")
         print(myd.__class__)
         sys.exit()
 
