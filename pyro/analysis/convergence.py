@@ -14,7 +14,7 @@ usage = """
 """
 
 
-def compare(fine, coarse, var="density"):
+def compare(fine, coarse, var):
 
     dens = coarse.get_var(var)
     dens_avg = fine.restrict(var, N=2)
@@ -26,20 +26,23 @@ def compare(fine, coarse, var="density"):
 
 
 def main():
-    if len(sys.argv) > 4:
+    if (len(sys.argv) > 4 or len(sys.argv) < 3):
         print(usage)
         sys.exit(2)
 
     fine = sys.argv[1]
     coarse = sys.argv[2]
-    var = sys.argv[3]
+
+    var = "density"
+    if len(sys.argv) == 4:
+        var = sys.argv[3]
 
     ff = io.read(fine)
     cc = io.read(coarse)
 
     result = compare(ff.cc_data, cc.cc_data, var)
 
-    print("inf norm of density: ", result)
+    print(f"inf norm and L2 norm of {var}: ", result)
 
 
 if __name__ == "__main__":
