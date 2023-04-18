@@ -14,13 +14,13 @@ usage = """
 """
 
 
-def compare(fine, coarse, var):
+def compare(fine, coarse, var_name):
 
-    dens = coarse.get_var(var)
-    dens_avg = fine.restrict(var, N=2)
+    var = coarse.get_var(var_name)
+    var_avg = fine.restrict(var_name, N=2)
 
     e = coarse.grid.scratch_array()
-    e.v()[:, :] = dens.v() - dens_avg.v()
+    e.v()[:, :] = var.v() - var_avg.v()
 
     return float(np.abs(e).max()), e.norm()
 
@@ -33,16 +33,16 @@ def main():
     fine = sys.argv[1]
     coarse = sys.argv[2]
 
-    var = "density"
+    var_name = "density"
     if len(sys.argv) == 4:
-        var = sys.argv[3]
+        var_name = sys.argv[3]
 
     ff = io.read(fine)
     cc = io.read(coarse)
 
-    result = compare(ff.cc_data, cc.cc_data, var)
+    result = compare(ff.cc_data, cc.cc_data, var_name)
 
-    print(f"inf norm and L2 norm of {var}: ", result)
+    print(f"inf norm and L2 norm of {var_name}: ", result)
 
 
 if __name__ == "__main__":
