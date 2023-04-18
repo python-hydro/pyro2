@@ -44,4 +44,4 @@ jobs:
         run: pip install .
 
       - name: Run tests with pytest
-        run: pytest -v --cov=pyro --nbval --ignore=docs --ignore=./pyro/multigrid/variable_coeff_elliptic.ipynb --ignore=examples/mesh --ignore=examples/multigrid --ignore=presentations
+        run: pytest -v --cov=pyro --nbval --ignore=docs --ignore=./pyro/multigrid/derive_analytic_solutions.ipynb --ignore=examples/mesh --ignore=examples/multigrid --ignore=presentations

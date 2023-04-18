@@ -33,8 +33,7 @@ pyro: a python hydro code
    burgers_basics
    compressible_basics
    compressible_compare
-   multigrid_basics
-   multigrid-examples.ipynb
+   multigrid
    diffusion_basics
    incompressible_basics
    incompressible_viscous_basics

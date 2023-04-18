@@ -38,7 +38,7 @@ def flux_cons(ivars, idir, gamma, q):
     return flux
 
 
-def fluxes(myd, rp, ivars, solid, tc):
+def fluxes(myd, rp, ivars):
 
     alpha = 0.3
     beta = 0.3

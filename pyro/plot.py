@@ -23,6 +23,7 @@ def makeplot(plotfile_name, outfile, width, height):
     """ plot the data in a plotfile using the solver's vis() method """
 
     sim = io.read(plotfile_name)
+    sim.cc_data.fill_BC_all()
 
     plt.figure(num=1, figsize=(width, height), dpi=100, facecolor='w')
 
