@@ -111,25 +111,27 @@ def unsplit_fluxes(my_data, rp, dt):
     uy_int = interface.upwind(myg, ul_y, ur_y, vhat_adv)
     vy_int = interface.upwind(myg, vl_y, vr_y, vhat_adv)
 
-    # Calculate the average normal interface velocities
-
-    ubar_adv = myg.scratch_array()
-    vbar_adv = myg.scratch_array()
-
-    ubar_adv.v(buf=1)[:, :] = 0.5*(uhat_adv.v(buf=1) + uhat_adv.ip(-1, buf=1))
-    vbar_adv.v(buf=1)[:, :] = 0.5*(vhat_adv.v(buf=1) + vhat_adv.jp(-1, buf=1))
-
     # Apply the transverse correction terms following routines in incompressible.
 
-    ul_x.v(buf=1)[:, :] -= 0.5 * dtdy * vbar_adv.v(buf=1) * (uy_int.ip_jp(-1, 1, buf=1) - uy_int.ip_jp(-1, 0, buf=1))
-    ul_y.v(buf=1)[:, :] -= 0.5 * dtdx * ubar_adv.v(buf=1) * (ux_int.ip_jp(1, -1, buf=1) - ux_int.ip_jp(0, -1, buf=1))
-    ur_x.v(buf=1)[:, :] -= 0.5 * dtdy * vbar_adv.v(buf=1) * (uy_int.ip_jp(0, 1, buf=1) - uy_int.ip_jp(0, 0, buf=1))
-    ur_y.v(buf=1)[:, :] -= 0.5 * dtdx * ubar_adv.v(buf=1) * (ux_int.ip_jp(1, 0, buf=1) - ux_int.ip_jp(0, 0, buf=1))
+    fux_int = myg.scratch_array()
+    fuy_int = myg.scratch_array()
+    fvx_int = myg.scratch_array()
+    fvy_int = myg.scratch_array()
 
-    vl_x.v(buf=1)[:, :] -= 0.5 * dtdy * vbar_adv.v(buf=1) * (vy_int.ip_jp(-1, 1, buf=1) - vy_int.ip_jp(-1, 0, buf=1))
-    vl_y.v(buf=1)[:, :] -= 0.5 * dtdx * ubar_adv.v(buf=1) * (vx_int.ip_jp(1, -1, buf=1) - vx_int.ip_jp(0, -1, buf=1))
-    vr_x.v(buf=1)[:, :] -= 0.5 * dtdy * vbar_adv.v(buf=1) * (vy_int.ip_jp(0, 1, buf=1) - vy_int.ip_jp(0, 0, buf=1))
-    vr_y.v(buf=1)[:, :] -= 0.5 * dtdx * ubar_adv.v(buf=1) * (vx_int.ip_jp(1, 0, buf=1) - vx_int.ip_jp(0, 0, buf=1))
+    fux_int.v(buf=1)[:, :] = 0.5 * uhat_adv.v(buf=1) * ux_int.v(buf=1)
+    fuy_int.v(buf=1)[:, :] = 0.5 * vhat_adv.v(buf=1) * uy_int.v(buf=1)
+    fvx_int.v(buf=1)[:, :] = 0.5 * uhat_adv.v(buf=1) * vx_int.v(buf=1)
+    fvy_int.v(buf=1)[:, :] = 0.5 * vhat_adv.v(buf=1) * vy_int.v(buf=1)
+
+    ul_x.v(buf=1)[:, :] -= 0.5 * dtdy * (fuy_int.ip_jp(-1, 1, buf=1) - fuy_int.ip_jp(-1, 0, buf=1))
+    ul_y.v(buf=1)[:, :] -= 0.5 * dtdx * (fux_int.ip_jp(1, -1, buf=1) - fux_int.ip_jp(0, -1, buf=1))
+    ur_x.v(buf=1)[:, :] -= 0.5 * dtdy * (fuy_int.ip_jp(0, 1, buf=1) - fuy_int.ip_jp(0, 0, buf=1))
+    ur_y.v(buf=1)[:, :] -= 0.5 * dtdx * (fux_int.ip_jp(1, 0, buf=1) - fux_int.ip_jp(0, 0, buf=1))
+
+    vl_x.v(buf=1)[:, :] -= 0.5 * dtdy * (fvy_int.ip_jp(-1, 1, buf=1) - fvy_int.ip_jp(-1, 0, buf=1))
+    vl_y.v(buf=1)[:, :] -= 0.5 * dtdx * (fvx_int.ip_jp(1, -1, buf=1) - fvx_int.ip_jp(0, -1, buf=1))
+    vr_x.v(buf=1)[:, :] -= 0.5 * dtdy * (fvy_int.ip_jp(0, 1, buf=1) - fvy_int.ip_jp(0, 0, buf=1))
+    vr_y.v(buf=1)[:, :] -= 0.5 * dtdx * (fvx_int.ip_jp(1, 0, buf=1) - fvx_int.ip_jp(0, 0, buf=1))
 
     # Solve for riemann problem for the second time
 
@@ -153,10 +155,10 @@ def unsplit_fluxes(my_data, rp, dt):
     fu_y = myg.scratch_array()
     fv_y = myg.scratch_array()
 
-    fu_x.v(buf=1)[:, :] = 0.5 * ux.v(buf=1) * ux.v(buf=1)
-    fv_x.v(buf=1)[:, :] = 0.5 * vx.v(buf=1) * ux.v(buf=1)
+    fu_x.v(buf=1)[:, :] = 0.5 * ux.v(buf=1) * u_MAC.v(buf=1)
+    fv_x.v(buf=1)[:, :] = 0.5 * vx.v(buf=1) * u_MAC.v(buf=1)
 
-    fu_y.v(buf=1)[:, :] = 0.5 * vy.v(buf=1) * uy.v(buf=1)
-    fv_y.v(buf=1)[:, :] = 0.5 * vy.v(buf=1) * vy.v(buf=1)
+    fu_y.v(buf=1)[:, :] = 0.5 * uy.v(buf=1) * v_MAC.v(buf=1)
+    fv_y.v(buf=1)[:, :] = 0.5 * vy.v(buf=1) * v_MAC.v(buf=1)
 
     return fu_x, fu_y, fv_x, fv_y
