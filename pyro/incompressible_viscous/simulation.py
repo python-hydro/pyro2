@@ -63,6 +63,7 @@ class Simulation(incompressible.Simulation):
         gradp_y = self.cc_data.get_var("gradp_y")
         myg = self.cc_data.grid
         nu = self.rp.get_param("incompressible_viscous.viscosity")
+        proj_type = self.rp.get_param("incompressible.proj_type")
 
         # Get MAC and interface velocities from function args
         u_MAC, v_MAC = U_MAC
@@ -90,7 +91,7 @@ class Simulation(incompressible.Simulation):
         #
         # with alpha = 1
         #      beta  = (dt/2) nu
-        #      f     = U + (dt/2) (nu L U - (U.grad)U - grad p)
+        #      f     = U + dt * (0.5*nu L U - (U.grad)U - grad p)
         #
         # (one such equation for each velocity component)
         #
@@ -119,7 +120,10 @@ class Simulation(incompressible.Simulation):
         #     (u_MAC.ip(1) + u_MAC.ip(-1) - 2.0*u_MAC.v())/myg.dx**2 +
         #     (u_MAC.jp(1) + u_MAC.jp(-1) - 2.0*u_MAC.v())/myg.dy**2)   # this is the diffusion part
 
-        f.v()[:, :] -= self.dt * (advect_x.v() + gradp_x.v())  # advection + pressure
+        if proj_type == 1:
+            f.v()[:, :] -= self.dt * (advect_x.v() + gradp_x.v())  # advection + pressure
+        elif proj_type == 2:
+            f.v()[:, :] -= self.dt * advect_x.v()  # advection only
 
         mg.init_RHS(f)
 
@@ -156,11 +160,14 @@ class Simulation(incompressible.Simulation):
         #     (v_MAC.ip(1) + v_MAC.ip(-1) - 2.0*v_MAC.v())/myg.dx**2 +
         #     (v_MAC.jp(1) + v_MAC.jp(-1) - 2.0*v_MAC.v())/myg.dy**2)
 
-        f.v()[:, :] -= self.dt * (advect_y.v() + gradp_y.v())
+        if proj_type == 1:
+            f.v()[:, :] -= self.dt * (advect_y.v() + gradp_y.v())  # advection + pressure
+        elif proj_type == 2:
+            f.v()[:, :] -= self.dt * advect_y.v()  # advection only
 
         mg.init_RHS(f)
 
-        # use the old u as our initial guess
+        # use the old v as our initial guess
         uGuess = mg.soln_grid.scratch_array()
         uGuess.v(buf=1)[:, :] = v.v(buf=1)
         mg.init_solution(uGuess)
