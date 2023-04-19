@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 '''
-This file prints summary of the convergence given 3 plot files that
-are differ by a constant multiplicative resolution factor. It prints out
-a table as well as a plot
+This file prints summary of the convergence given at least 3 plot files
+that are differ by a constant multiplicative resolution factor.
+It prints out a table as well as a plot.
 '''
 
 import argparse
