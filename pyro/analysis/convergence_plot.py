@@ -123,5 +123,6 @@ def main():
     print(table)
     convergence_plot(data_file, fname=args.out, order=args.order)
 
+
 if __name__ == "__main__":
     main()
