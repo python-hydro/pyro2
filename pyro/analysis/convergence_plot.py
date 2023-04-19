@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import argparse
-import os
 import sys
 
 import convergence
@@ -25,6 +24,7 @@ parser.add_argument("-n", "--order", default=2, type=int, help=order_help)
 parser.add_argument("-r", "--resolution", default=2, type=int, help=resolution_help)
 
 args = parser.parse_args(sys.argv[1:])
+
 
 def convergence_plot(dataset, fname=None, order=2):
     # Plot the error and its theoretical convergence line.
@@ -50,10 +50,10 @@ def convergence_plot(dataset, fname=None, order=2):
         )
 
         err = np.array(data[1])
-        N =  np.array(data[2])
+        N = np.array(data[2])
 
-        ax.scatter(N, err, marker='x', color = 'k', label="Solutions")
-        ax.plot(N, err[0]*(N[0]/N)**2, linestyle="--", label="$\mathcal{O}$"+ f"$(\Delta x^{order})$")
+        ax.scatter(N, err, marker='x', color='k', label="Solutions")
+        ax.plot(N, err[0]*(N[0]/N)**2, linestyle="--", label=r"$\mathcal{O}$" + fr"$(\Delta x^{order})$")
 
         ax.legend()
 
@@ -107,7 +107,7 @@ if __name__ == "__main__":
         for n in range(1, len(args.input_file[:-1])):
             fdata = io.read(args.input_file[n])
             cdata = io.read(args.input_file[n+1])
-            
+
             _, l2norm = convergence.compare(fdata.cc_data, cdata.cc_data, variable, args.resolution)
 
             order = np.sqrt(l2norm/l2norms[-1])
@@ -117,8 +117,7 @@ if __name__ == "__main__":
             row.extend([order, l2norm])
 
         dataset.append([variable, l2norms, ns])
-        table.add_row(row)        
+        table.add_row(row)
 
     print(table)
-    
     convergence_plot(dataset, fname=args.out, order=args.order)
