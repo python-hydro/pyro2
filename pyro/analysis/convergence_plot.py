@@ -56,10 +56,10 @@ def convergence_plot(dataset, fname=None, order=2):
         )
 
         err = np.array(data[1])
-        N = np.array(data[2])
+        nx = np.array(data[2])
 
-        ax.scatter(N, err, marker='x', color='k', label="Solutions")
-        ax.plot(N, err[-1]*(N[-1]/N)**2, linestyle="--",
+        ax.scatter(nx, err, marker='x', color='k', label="Solutions")
+        ax.plot(nx, err[-1]*(nx[-1]/nx)**2, linestyle="--",
                 label=r"$\mathcal{O}$" + fr"$(\Delta x^{order})$")
 
         ax.legend()
@@ -71,7 +71,8 @@ def convergence_plot(dataset, fname=None, order=2):
         plt.savefig(fname, format="pdf", bbox_inches="tight")
 
 
-if __name__ == "__main__":
+def main():
+    ''' main driver '''
 
     if len(args.input_file) < 3:
         raise ValueError('''Must use at least 3 plotfiles with 3 different
@@ -87,15 +88,13 @@ if __name__ == "__main__":
 
     table = PrettyTable(field_names)
 
-    d = []
-    l2norms = []
-    ns = []
+    data_file = []
 
-    s = io.read(args.input_file[0])
-    for variable in s.cc_data.names:
+    temp_file = io.read(args.input_file[0])
+    for variable in temp_file.cc_data.names:
 
         l2norms = []
-        ns = []
+        nx_list = []
         row = [variable]
 
         fdata = io.read(args.input_file[0])
@@ -103,7 +102,7 @@ if __name__ == "__main__":
         _, l2norm = convergence.compare(fdata.cc_data, cdata.cc_data, variable, args.resolution)
 
         l2norms.append(l2norm)
-        ns.append(cdata.cc_data.grid.nx)
+        nx_list.append(cdata.cc_data.grid.nx)
         row.append(l2norm)
 
         for n in range(1, len(args.input_file[:-1])):
@@ -115,11 +114,14 @@ if __name__ == "__main__":
             order_conv = np.sqrt(l2norm/l2norms[-1])
 
             l2norms.append(l2norm)
-            ns.append(cdata.cc_data.grid.nx)
+            nx_list.append(cdata.cc_data.grid.nx)
             row.extend([order_conv, l2norm])
 
-        d.append([variable, l2norms, ns])
+        data_file.append([variable, l2norms, nx_list])
         table.add_row(row)
 
     print(table)
-    convergence_plot(d, fname=args.out, order=args.order)
+    convergence_plot(data_file, fname=args.out, order=args.order)
+
+if __name__ == "__main__":
+    main()
