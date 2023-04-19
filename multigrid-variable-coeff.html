@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Variable Coefficient Poisson &mdash; pyro 4.0.1.post37+ge220287f documentation</title>
+  <title>Variable Coefficient Poisson &mdash; pyro 4.0.1.post38+g35073a0f documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -143,7 +143,7 @@
 <p>We want to solve an equation of the form <span class="math notranslate nohighlight">\(\nabla \cdot (\alpha \nabla \phi) = f\)</span></p>
 <p>We’ll do this with periodic boundary conditions. Consider the coefficient <span class="math notranslate nohighlight">\(\alpha\)</span> of the form:</p>
 <div class="math notranslate nohighlight">
-\[\alpha = 2 + \cos(2 \pi x) * cos(2*\pi x)\]</div>
+\[\alpha = 2 + \cos(2 \pi x) \cos(2\pi x)\]</div>
 <p>and the source, <span class="math notranslate nohighlight">\(f\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[f = -16 \pi^2 \left ( \cos(2 \pi x) \cos(2\pi y) + 1 \right ) \sin(2\pi x) \sin(2\pi y)\]</div>
@@ -400,387 +400,121 @@ Source norm =  81.38684285750472
 source norm =  81.38684285750472
 &lt;&lt;&lt; beginning V-cycle (cycle 1) &gt;&gt;&gt;
 
-  level: 6, grid: 128 x 128
-  before G-S, residual L2: 81.38684285750472
-  after G-S, residual L2: 112.0908331315555
-
-  level: 5, grid: 64 x 64
-  before G-S, residual L2: 79.20476910530611
-  after G-S, residual L2: 101.02040748025243
-
-  level: 4, grid: 32 x 32
-  before G-S, residual L2: 71.24113182887879
-  after G-S, residual L2: 68.07049203593525
-
-  level: 3, grid: 16 x 16
-  before G-S, residual L2: 47.65766921623646
-  after G-S, residual L2: 14.457805865685271
-
-  level: 2, grid: 8 x 8
-  before G-S, residual L2: 9.844801065610541
-  after G-S, residual L2: 0.017140908875684105
-
-  level: 1, grid: 4 x 4
-  before G-S, residual L2: 0.010614107357162545
-  after G-S, residual L2: 5.960897793894367e-16
-
-  bottom solve:
-  level: 0, grid: 2 x 2
-
-  level: 1, grid: 4 x 4
-  before G-S, residual L2: 1.0834180107377754e-15
-  after G-S, residual L2: 5.96089897709959e-16
-
-  level: 2, grid: 8 x 8
-  before G-S, residual L2: 0.016824300188006493
-  after G-S, residual L2: 5.923427093762919e-06
-
-  level: 3, grid: 16 x 16
-  before G-S, residual L2: 14.490074298606162
-  after G-S, residual L2: 0.29986555275211024
-
-  level: 4, grid: 32 x 32
-  before G-S, residual L2: 69.37103937480299
-  after G-S, residual L2: 1.4310505086782221
-
-  level: 5, grid: 64 x 64
-  before G-S, residual L2: 103.88409363790088
-  after G-S, residual L2: 1.9330552480770293
-
-  level: 6, grid: 128 x 128
-  before G-S, residual L2: 115.5108718795978
-  after G-S, residual L2: 2.0813236343996566
-
+  level =  6, nx =  128, residual change:     81.3868 →     112.091
+  level =  5, nx =   64, residual change:     79.2048 →      101.02
+  level =  4, nx =   32, residual change:     71.2411 →     68.0705
+  level =  3, nx =   16, residual change:     47.6577 →     14.4578
+  level =  2, nx =    8, residual change:      9.8448 →   0.0171409
+  level =  1, nx =    4, residual change:   0.0106141 →  5.9609e-16
+  bottom solve
+  level =  1, nx =    4, residual change: 1.08342e-15 → 1.08342e-15
+  level =  2, nx =    8, residual change:   0.0168243 →   0.0168243
+  level =  3, nx =   16, residual change:     14.4901 →     14.4901
+  level =  4, nx =   32, residual change:      69.371 →      69.371
+  level =  5, nx =   64, residual change:     103.884 →     103.884
+  level =  6, nx =  128, residual change:     115.511 →     115.511
 cycle 1: relative err = 1.0000000000000007, residual err = 0.02557321996190121
 
 &lt;&lt;&lt; beginning V-cycle (cycle 2) &gt;&gt;&gt;
 
-  level: 6, grid: 128 x 128
-  before G-S, residual L2: 2.0813236343996566
-  after G-S, residual L2: 2.0286144000822977
-
-  level: 5, grid: 64 x 64
-  before G-S, residual L2: 1.4344055030175729
-  after G-S, residual L2: 1.8368397975808146
-
-  level: 4, grid: 32 x 32
-  before G-S, residual L2: 1.2987058278437036
-  after G-S, residual L2: 1.241442108554593
-
-  level: 3, grid: 16 x 16
-  before G-S, residual L2: 0.8774520735275131
-  after G-S, residual L2: 0.2560408781548493
-
-  level: 2, grid: 8 x 8
-  before G-S, residual L2: 0.18058839541897165
-  after G-S, residual L2: 0.00027228502856058054
-
-  level: 1, grid: 4 x 4
-  before G-S, residual L2: 0.00018744703409169443
-  after G-S, residual L2: 7.263727879510097e-16
-
-  bottom solve:
-  level: 0, grid: 2 x 2
-
-  level: 1, grid: 4 x 4
-  before G-S, residual L2: 1.3199121690260573e-15
-  after G-S, residual L2: 7.263837575970778e-16
-
-  level: 2, grid: 8 x 8
-  before G-S, residual L2: 0.0002985535823679947
-  after G-S, residual L2: 1.1883088366116377e-07
-
-  level: 3, grid: 16 x 16
-  before G-S, residual L2: 0.33718020660845777
-  after G-S, residual L2: 0.007385692779948865
-
-  level: 4, grid: 32 x 32
-  before G-S, residual L2: 1.7280933155235396
-  after G-S, residual L2: 0.03657676806410805
-
-  level: 5, grid: 64 x 64
-  before G-S, residual L2: 2.609705917946781
-  after G-S, residual L2: 0.04918033264955986
-
-  level: 6, grid: 128 x 128
-  before G-S, residual L2: 2.897205633139601
-  after G-S, residual L2: 0.052790732665913206
-
+  level =  6, nx =  128, residual change:     2.08132 →     2.02861
+  level =  5, nx =   64, residual change:     1.43441 →     1.83684
+  level =  4, nx =   32, residual change:     1.29871 →     1.24144
+  level =  3, nx =   16, residual change:    0.877452 →    0.256041
+  level =  2, nx =    8, residual change:    0.180588 → 0.000272285
+  level =  1, nx =    4, residual change: 0.000187447 → 7.26373e-16
+  bottom solve
+  level =  1, nx =    4, residual change: 1.31991e-15 → 1.31991e-15
+  level =  2, nx =    8, residual change: 0.000298554 → 0.000298554
+  level =  3, nx =   16, residual change:     0.33718 →     0.33718
+  level =  4, nx =   32, residual change:     1.72809 →     1.72809
+  level =  5, nx =   64, residual change:     2.60971 →     2.60971
+  level =  6, nx =  128, residual change:     2.89721 →     2.89721
 cycle 2: relative err = 2.1803634389910944, residual err = 0.0006486396426304593
 
 &lt;&lt;&lt; beginning V-cycle (cycle 3) &gt;&gt;&gt;
 
-  level: 6, grid: 128 x 128
-  before G-S, residual L2: 0.052790732665913206
-  after G-S, residual L2: 0.05151285072459296
-
-  level: 5, grid: 64 x 64
-  before G-S, residual L2: 0.03642414235588201
-  after G-S, residual L2: 0.046811291568551565
-
-  level: 4, grid: 32 x 32
-  before G-S, residual L2: 0.033096984133997955
-  after G-S, residual L2: 0.03183229031793143
-
-  level: 3, grid: 16 x 16
-  before G-S, residual L2: 0.02249751618308268
-  after G-S, residual L2: 0.006566311349661518
-
-  level: 2, grid: 8 x 8
-  before G-S, residual L2: 0.004631305942476893
-  after G-S, residual L2: 6.9547898567440375e-06
-
-  level: 1, grid: 4 x 4
-  before G-S, residual L2: 4.792096888289954e-06
-  after G-S, residual L2: 3.1103329993339164e-16
-
-  bottom solve:
-  level: 0, grid: 2 x 2
-
-  level: 1, grid: 4 x 4
-  before G-S, residual L2: 5.651835066970743e-16
-  after G-S, residual L2: 3.110334478086524e-16
-
-  level: 2, grid: 8 x 8
-  before G-S, residual L2: 7.63309212749222e-06
-  after G-S, residual L2: 3.040164302708131e-09
-
-  level: 3, grid: 16 x 16
-  before G-S, residual L2: 0.008648757461907115
-  after G-S, residual L2: 0.00018948785759489425
-
-  level: 4, grid: 32 x 32
-  before G-S, residual L2: 0.04427890540920815
-  after G-S, residual L2: 0.0009389342673250312
-
-  level: 5, grid: 64 x 64
-  before G-S, residual L2: 0.06654722333556279
-  after G-S, residual L2: 0.001258977557235815
-
-  level: 6, grid: 128 x 128
-  before G-S, residual L2: 0.07368186812692719
-  after G-S, residual L2: 0.0013504077838966668
-
+  level =  6, nx =  128, residual change:   0.0527907 →   0.0515129
+  level =  5, nx =   64, residual change:   0.0364241 →   0.0468113
+  level =  4, nx =   32, residual change:    0.033097 →   0.0318323
+  level =  3, nx =   16, residual change:   0.0224975 →  0.00656631
+  level =  2, nx =    8, residual change:  0.00463131 → 6.95479e-06
+  level =  1, nx =    4, residual change:  4.7921e-06 → 3.11033e-16
+  bottom solve
+  level =  1, nx =    4, residual change: 5.65184e-16 → 5.65184e-16
+  level =  2, nx =    8, residual change: 7.63309e-06 → 7.63309e-06
+  level =  3, nx =   16, residual change:  0.00864876 →  0.00864876
+  level =  4, nx =   32, residual change:   0.0442789 →   0.0442789
+  level =  5, nx =   64, residual change:   0.0665472 →   0.0665472
+  level =  6, nx =  128, residual change:   0.0736819 →   0.0736819
 cycle 3: relative err = 0.04844393523164513, residual err = 1.659245814782389e-05
 
 &lt;&lt;&lt; beginning V-cycle (cycle 4) &gt;&gt;&gt;
 
-  level: 6, grid: 128 x 128
-  before G-S, residual L2: 0.0013504077838966668
-  after G-S, residual L2: 0.001317620329624195
-
-  level: 5, grid: 64 x 64
-  before G-S, residual L2: 0.0009316676173486863
-  after G-S, residual L2: 0.001197647313451651
-
-  level: 4, grid: 32 x 32
-  before G-S, residual L2: 0.0008467506681850972
-  after G-S, residual L2: 0.0008162390069488267
-
-  level: 3, grid: 16 x 16
-  before G-S, residual L2: 0.0005768371115519472
-  after G-S, residual L2: 0.00016850178846723594
-
-  level: 2, grid: 8 x 8
-  before G-S, residual L2: 0.00011884018638330391
-  after G-S, residual L2: 1.7839871956703307e-07
-
-  level: 1, grid: 4 x 4
-  before G-S, residual L2: 1.2292492658967516e-07
-  after G-S, residual L2: 1.1951673389728944e-15
-
-  bottom solve:
-  level: 0, grid: 2 x 2
-
-  level: 1, grid: 4 x 4
-  before G-S, residual L2: 2.1717563853565473e-15
-  after G-S, residual L2: 1.1951673343517726e-15
-
-  level: 2, grid: 8 x 8
-  before G-S, residual L2: 1.9580123222794103e-07
-  after G-S, residual L2: 7.79859303008791e-11
-
-  level: 3, grid: 16 x 16
-  before G-S, residual L2: 0.00022190155431883385
-  after G-S, residual L2: 4.861726690456497e-06
-
-  level: 4, grid: 32 x 32
-  before G-S, residual L2: 0.0011347029972935902
-  after G-S, residual L2: 2.4095419570191306e-05
-
-  level: 5, grid: 64 x 64
-  before G-S, residual L2: 0.0017027846806156523
-  after G-S, residual L2: 3.2358754361395863e-05
-
-  level: 6, grid: 128 x 128
-  before G-S, residual L2: 0.001885972360392655
-  after G-S, residual L2: 3.4775740488740995e-05
-
+  level =  6, nx =  128, residual change:  0.00135041 →  0.00131762
+  level =  5, nx =   64, residual change: 0.000931668 →  0.00119765
+  level =  4, nx =   32, residual change: 0.000846751 → 0.000816239
+  level =  3, nx =   16, residual change: 0.000576837 → 0.000168502
+  level =  2, nx =    8, residual change:  0.00011884 → 1.78399e-07
+  level =  1, nx =    4, residual change: 1.22925e-07 → 1.19517e-15
+  bottom solve
+  level =  1, nx =    4, residual change: 2.17176e-15 → 2.17176e-15
+  level =  2, nx =    8, residual change: 1.95801e-07 → 1.95801e-07
+  level =  3, nx =   16, residual change: 0.000221902 → 0.000221902
+  level =  4, nx =   32, residual change:   0.0011347 →   0.0011347
+  level =  5, nx =   64, residual change:  0.00170278 →  0.00170278
+  level =  6, nx =  128, residual change:  0.00188597 →  0.00188597
 cycle 4: relative err = 0.0012759605328310877, residual err = 4.27289464337961e-07
 
 &lt;&lt;&lt; beginning V-cycle (cycle 5) &gt;&gt;&gt;
 
-  level: 6, grid: 128 x 128
-  before G-S, residual L2: 3.4775740488740995e-05
-  after G-S, residual L2: 3.3894284009186236e-05
-
-  level: 5, grid: 64 x 64
-  before G-S, residual L2: 2.3965949325302357e-05
-  after G-S, residual L2: 3.0729958855242354e-05
-
-  level: 4, grid: 32 x 32
-  before G-S, residual L2: 2.17259634734994e-05
-  after G-S, residual L2: 2.09217011827885e-05
-
-  level: 3, grid: 16 x 16
-  before G-S, residual L2: 1.4784500190985501e-05
-  after G-S, residual L2: 4.320982021919078e-06
-
-  level: 2, grid: 8 x 8
-  before G-S, residual L2: 3.0473684683728696e-06
-  after G-S, residual L2: 4.571730726436375e-09
-
-  level: 1, grid: 4 x 4
-  before G-S, residual L2: 3.1504292593220716e-09
-  after G-S, residual L2: 6.742021087598803e-16
-
-  bottom solve:
-  level: 0, grid: 2 x 2
-
-  level: 1, grid: 4 x 4
-  before G-S, residual L2: 1.225102696860825e-15
-  after G-S, residual L2: 6.74202108596908e-16
-
-  level: 2, grid: 8 x 8
-  before G-S, residual L2: 5.01820679645931e-09
-  after G-S, residual L2: 1.99892977791372e-12
-
-  level: 3, grid: 16 x 16
-  before G-S, residual L2: 5.689722535140836e-06
-  after G-S, residual L2: 1.2466131778979037e-07
-
-  level: 4, grid: 32 x 32
-  before G-S, residual L2: 2.907069520479966e-05
-  after G-S, residual L2: 6.180575451431378e-07
-
-  level: 5, grid: 64 x 64
-  before G-S, residual L2: 4.3699213464085597e-05
-  after G-S, residual L2: 8.346224078015328e-07
-
-  level: 6, grid: 128 x 128
-  before G-S, residual L2: 4.8555682496206175e-05
-  after G-S, residual L2: 9.008603784927371e-07
-
+  level =  6, nx =  128, residual change: 3.47757e-05 → 3.38943e-05
+  level =  5, nx =   64, residual change: 2.39659e-05 →   3.073e-05
+  level =  4, nx =   32, residual change:  2.1726e-05 → 2.09217e-05
+  level =  3, nx =   16, residual change: 1.47845e-05 → 4.32098e-06
+  level =  2, nx =    8, residual change: 3.04737e-06 → 4.57173e-09
+  level =  1, nx =    4, residual change: 3.15043e-09 → 6.74202e-16
+  bottom solve
+  level =  1, nx =    4, residual change:  1.2251e-15 →  1.2251e-15
+  level =  2, nx =    8, residual change: 5.01821e-09 → 5.01821e-09
+  level =  3, nx =   16, residual change: 5.68972e-06 → 5.68972e-06
+  level =  4, nx =   32, residual change: 2.90707e-05 → 2.90707e-05
+  level =  5, nx =   64, residual change: 4.36992e-05 → 4.36992e-05
+  level =  6, nx =  128, residual change: 4.85557e-05 → 4.85557e-05
 cycle 5: relative err = 3.301203452101295e-05, residual err = 1.1068869940931348e-08
 
 &lt;&lt;&lt; beginning V-cycle (cycle 6) &gt;&gt;&gt;
 
-  level: 6, grid: 128 x 128
-  before G-S, residual L2: 9.008603784927371e-07
-  after G-S, residual L2: 8.762740716220002e-07
-
-  level: 5, grid: 64 x 64
-  before G-S, residual L2: 6.195925716186319e-07
-  after G-S, residual L2: 7.904743197253191e-07
-
-  level: 4, grid: 32 x 32
-  before G-S, residual L2: 5.588523688826883e-07
-  after G-S, residual L2: 5.360094097119108e-07
-
-  level: 3, grid: 16 x 16
-  before G-S, residual L2: 3.7875634421723945e-07
-  after G-S, residual L2: 1.107319012007519e-07
-
-  level: 2, grid: 8 x 8
-  before G-S, residual L2: 7.809114941671054e-08
-  after G-S, residual L2: 1.1709550945755286e-10
-
-  level: 1, grid: 4 x 4
-  before G-S, residual L2: 8.069780100392984e-11
-  after G-S, residual L2: 1.168932677418541e-15
-
-  bottom solve:
-  level: 0, grid: 2 x 2
-
-  level: 1, grid: 4 x 4
-  before G-S, residual L2: 2.124084983634591e-15
-  after G-S, residual L2: 1.168932677420647e-15
-
-  level: 2, grid: 8 x 8
-  before G-S, residual L2: 1.2854148032666766e-10
-  after G-S, residual L2: 5.108134353300757e-14
-
-  level: 3, grid: 16 x 16
-  before G-S, residual L2: 1.4579494050910408e-07
-  after G-S, residual L2: 3.194414195430071e-09
-
-  level: 4, grid: 32 x 32
-  before G-S, residual L2: 7.445198032110184e-07
-  after G-S, residual L2: 1.5845029015298652e-08
-
-  level: 5, grid: 64 x 64
-  before G-S, residual L2: 1.1243886448682612e-06
-  after G-S, residual L2: 2.159277837963662e-08
-
-  level: 6, grid: 128 x 128
-  before G-S, residual L2: 1.2565779252968385e-06
-  after G-S, residual L2: 2.3455645702909965e-08
-
+  level =  6, nx =  128, residual change:  9.0086e-07 → 8.76274e-07
+  level =  5, nx =   64, residual change: 6.19593e-07 → 7.90474e-07
+  level =  4, nx =   32, residual change: 5.58852e-07 → 5.36009e-07
+  level =  3, nx =   16, residual change: 3.78756e-07 → 1.10732e-07
+  level =  2, nx =    8, residual change: 7.80911e-08 → 1.17096e-10
+  level =  1, nx =    4, residual change: 8.06978e-11 → 1.16893e-15
+  bottom solve
+  level =  1, nx =    4, residual change: 2.12408e-15 → 2.12408e-15
+  level =  2, nx =    8, residual change: 1.28541e-10 → 1.28541e-10
+  level =  3, nx =   16, residual change: 1.45795e-07 → 1.45795e-07
+  level =  4, nx =   32, residual change:  7.4452e-07 →  7.4452e-07
+  level =  5, nx =   64, residual change: 1.12439e-06 → 1.12439e-06
+  level =  6, nx =  128, residual change: 1.25658e-06 → 1.25658e-06
 cycle 6: relative err = 8.544249105967869e-07, residual err = 2.881994789253225e-10
 
 &lt;&lt;&lt; beginning V-cycle (cycle 7) &gt;&gt;&gt;
 
-  level: 6, grid: 128 x 128
-  before G-S, residual L2: 2.3455645702909965e-08
-  after G-S, residual L2: 2.2752953502861018e-08
-
-  level: 5, grid: 64 x 64
-  before G-S, residual L2: 1.608798720493313e-08
-  after G-S, residual L2: 2.0378120843151287e-08
-
-  level: 4, grid: 32 x 32
-  before G-S, residual L2: 1.4406796726849815e-08
-  after G-S, residual L2: 1.3725200850162448e-08
-
-  level: 3, grid: 16 x 16
-  before G-S, residual L2: 9.698118165355459e-09
-  after G-S, residual L2: 2.835633070180729e-09
-
-  level: 2, grid: 8 x 8
-  before G-S, residual L2: 1.999713776574159e-09
-  after G-S, residual L2: 2.997347745650498e-12
-
-  level: 1, grid: 4 x 4
-  before G-S, residual L2: 2.065782447061994e-12
-  after G-S, residual L2: 2.599100664678084e-16
-
-  bottom solve:
-  level: 0, grid: 2 x 2
-
-  level: 1, grid: 4 x 4
-  before G-S, residual L2: 4.722864540843643e-16
-  after G-S, residual L2: 2.599100664676744e-16
-
-  level: 2, grid: 8 x 8
-  before G-S, residual L2: 3.2905547307800835e-12
-  after G-S, residual L2: 1.3070628469669271e-15
-
-  level: 3, grid: 16 x 16
-  before G-S, residual L2: 3.733250557868477e-09
-  after G-S, residual L2: 8.179790374824944e-11
-
-  level: 4, grid: 32 x 32
-  before G-S, residual L2: 1.90594117759413e-08
-  after G-S, residual L2: 4.0598517771924617e-10
-
-  level: 5, grid: 64 x 64
-  before G-S, residual L2: 2.8995836832824593e-08
-  after G-S, residual L2: 5.60076582850891e-10
-
-  level: 6, grid: 128 x 128
-  before G-S, residual L2: 3.266367011998587e-08
-  after G-S, residual L2: 6.132225264736557e-10
-
+  level =  6, nx =  128, residual change: 2.34556e-08 →  2.2753e-08
+  level =  5, nx =   64, residual change:  1.6088e-08 → 2.03781e-08
+  level =  4, nx =   32, residual change: 1.44068e-08 → 1.37252e-08
+  level =  3, nx =   16, residual change: 9.69812e-09 → 2.83563e-09
+  level =  2, nx =    8, residual change: 1.99971e-09 → 2.99735e-12
+  level =  1, nx =    4, residual change: 2.06578e-12 →  2.5991e-16
+  bottom solve
+  level =  1, nx =    4, residual change: 4.72286e-16 → 4.72286e-16
+  level =  2, nx =    8, residual change: 3.29055e-12 → 3.29055e-12
+  level =  3, nx =   16, residual change: 3.73325e-09 → 3.73325e-09
+  level =  4, nx =   32, residual change: 1.90594e-08 → 1.90594e-08
+  level =  5, nx =   64, residual change: 2.89958e-08 → 2.89958e-08
+  level =  6, nx =  128, residual change: 3.26637e-08 → 3.26637e-08
 cycle 7: relative err = 2.2106792550668474e-08, residual err = 7.534664141565362e-12
 
 </pre></div></div>
@@ -815,7 +549,7 @@ cycle 7: relative err = 2.2106792550668474e-08, residual err = 7.534664141565362
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.colorbar.Colorbar at 0x7fc8387d2b00&gt;
+&lt;matplotlib.colorbar.Colorbar at 0x7fa4ea05ae00&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -883,7 +617,7 @@ error =      9.754984685e-05
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.colorbar.Colorbar at 0x7fc838703370&gt;
+&lt;matplotlib.colorbar.Colorbar at 0x7fa4e7d33790&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -891,14 +625,6 @@ error =      9.754984685e-05
 </div>
 <div class="output_area docutils container">
 <img alt="_images/multigrid-variable-coeff_33_1.png" src="_images/multigrid-variable-coeff_33_1.png" />
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
 </div>
 </div>
 </section>

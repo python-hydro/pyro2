@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.multigrid.MG &mdash; pyro 4.0.1.post37+ge220287f documentation</title>
+  <title>pyro.multigrid.MG &mdash; pyro 4.0.1.post38+g35073a0f documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -835,8 +835,7 @@
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_compute_residual</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">grid_info</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  before G-S, residual L2: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()))</span>
+                <span class="n">orig_resid</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span>
 
             <span class="c1"># smooth on the current level</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">smooth</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsmooth</span><span class="p">)</span>
@@ -845,7 +844,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_compute_residual</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  after G-S, residual L2: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()))</span>
+                <span class="n">new_resid</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span>
+                <span class="n">nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">nx</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  level = </span><span class="si">{</span><span class="n">level</span><span class="si">:</span><span class="s2">2</span><span class="si">}</span><span class="s2">, nx = </span><span class="si">{</span><span class="n">nx</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">, residual change: </span><span class="si">{</span><span class="n">orig_resid</span><span class="si">:</span><span class="s2">11.6g</span><span class="si">}</span><span class="s2"> → </span><span class="si">{</span><span class="n">new_resid</span><span class="si">:</span><span class="s2">11.6g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
             <span class="c1"># restrict the residual down to the RHS of the coarser level</span>
             <span class="n">f_coarse</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;f&quot;</span><span class="p">)</span>
@@ -872,15 +873,15 @@
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_compute_residual</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">grid_info</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  before G-S, residual L2: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()))</span>
+                <span class="n">orig_resid</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span>
 
             <span class="c1"># smooth</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">smooth</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsmooth</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_compute_residual</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  after G-S, residual L2: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()))</span>
+                <span class="n">new_resid</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span>
+                <span class="n">nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">nx</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  level = </span><span class="si">{</span><span class="n">level</span><span class="si">:</span><span class="s2">2</span><span class="si">}</span><span class="s2">, nx = </span><span class="si">{</span><span class="n">nx</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">, residual change: </span><span class="si">{</span><span class="n">orig_resid</span><span class="si">:</span><span class="s2">11.6g</span><span class="si">}</span><span class="s2"> → </span><span class="si">{</span><span class="n">new_resid</span><span class="si">:</span><span class="s2">11.6g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># bottom solve: solve the discrete coarse problem.  We</span>
@@ -888,14 +889,10 @@
             <span class="c1"># (like CG), but since we are 2x2 by design at this point,</span>
             <span class="c1"># we will just smooth</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  bottom solve:&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  bottom solve&quot;</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">current_level</span> <span class="o">=</span> <span class="n">level</span>
             <span class="n">bp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">level</span><span class="p">]</span>
-
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">grid_info</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">smooth</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsmooth_bottom</span><span class="p">)</span>
 
