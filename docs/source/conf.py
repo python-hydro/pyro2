@@ -138,7 +138,7 @@ html_sidebars = {
 }
 
 linkcheck_ignore = [r"https://ascelibrary.org",
-                    r"https://doi.org/10.1061/(ASCE)0733-9429(1999)125:11(1210)"
+                    r"https://doi.org/10.1061/(ASCE)0733-9429(1999)125:11(1210)",
                     r"https://pubs.aip.org/physicstoday/article/11/8/28/927415/Water-Waves"]
 
 
