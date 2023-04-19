@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 
+'''
+This file prints summary of the convergence given 3 plot files that
+are differ by a constant multiplicative resolution factor. It prints out
+a table as well as a plot
+'''
+
 import argparse
 import sys
 
@@ -10,24 +16,24 @@ from prettytable import PrettyTable
 
 import pyro.util.io_pyro as io
 
-description = "This file does convergence plotting for the solvers"
-input_help = '''The location of the input files: enter from finest to coarset files,
+DESCRIPTION = "This file does convergence plotting for the solvers"
+INPUT_HELP = '''The location of the input files: enter from finest to coarset files,
 at least 3 files are required'''
-output_help = "File name for the convergence plot"
-order_help = "The theoretical order of convergence for the solver"
-resolution_help = "Multiplicative Resolution between input files, default is 2"
+OUTPUT_HELP = "File name for the convergence plot"
+ORDER_HELP = "The theoretical order of convergence for the solver"
+RESOLUTION_HELP = "Multiplicative Resolution between input files, default is 2"
 
-parser = argparse.ArgumentParser(description=description)
-parser.add_argument("input_file", nargs='+', help=input_help)
-parser.add_argument("-o", "--out", default="convergence_plot.pdf", help=output_help)
-parser.add_argument("-n", "--order", default=2, type=int, help=order_help)
-parser.add_argument("-r", "--resolution", default=2, type=int, help=resolution_help)
+parser = argparse.ArgumentParser(description=DESCRIPTION)
+parser.add_argument("input_file", nargs='+', help=INPUT_HELP)
+parser.add_argument("-o", "--out", default="convergence_plot.pdf", help=OUTPUT_HELP)
+parser.add_argument("-n", "--order", default=2, type=int, help=ORDER_HELP)
+parser.add_argument("-r", "--resolution", default=2, type=int, help=RESOLUTION_HELP)
 
 args = parser.parse_args(sys.argv[1:])
 
 
 def convergence_plot(dataset, fname=None, order=2):
-    # Plot the error and its theoretical convergence line.
+    ''' Plot the error and its theoretical convergence line. '''
 
     figure = plt.figure(figsize=(12, 7))
 
@@ -38,9 +44,9 @@ def convergence_plot(dataset, fname=None, order=2):
     if tot % cols != 0:
         rows += 1
 
-    for n, data in enumerate(dataset):
+    for k, data in enumerate(dataset):
 
-        ax = figure.add_subplot(rows, cols, n+1)
+        ax = figure.add_subplot(rows, cols, k+1)
         ax.set(
             title=f"{data[0]}",
             xlabel="$N$",
@@ -53,7 +59,8 @@ def convergence_plot(dataset, fname=None, order=2):
         N = np.array(data[2])
 
         ax.scatter(N, err, marker='x', color='k', label="Solutions")
-        ax.plot(N, err[0]*(N[0]/N)**2, linestyle="--", label=r"$\mathcal{O}$" + fr"$(\Delta x^{order})$")
+        ax.plot(N, err[-1]*(N[-1]/N)**2, linestyle="--",
+                label=r"$\mathcal{O}$" + fr"$(\Delta x^{order})$")
 
         ax.legend()
 
@@ -70,27 +77,22 @@ if __name__ == "__main__":
         raise ValueError('''Must use at least 3 plotfiles with 3 different
         resolutions that differ by the same multiplicative factor''')
 
-    fine = io.read(args.input_file[0])
-    med = io.read(args.input_file[1])
-    coarse = io.read(args.input_file[2])
-
-    field_names = ["Variable Name", "L2 Norm (Finest)"]
+    field_names = ["Variable Name", "L2 Norm(1) (Finest)"]
 
     for i in range(len(args.input_file[2:])):
-        field_names.append("Order of Conv")
-        field_names.append("L2 Norm")
+        field_names.append(f"Order of Conv({i+1}:{i+2})")
+        field_names.append(f"L2 Norm({i+2})")
 
     field_names[-1] += " (Coarsest)"
 
-    table = PrettyTable()
-    table._validate_field_names = lambda *a, **k: None
-    table.field_names = field_names
+    table = PrettyTable(field_names)
 
-    dataset = []
+    d = []
     l2norms = []
     ns = []
 
-    for variable in fine.cc_data.names:
+    s = io.read(args.input_file[0])
+    for variable in s.cc_data.names:
 
         l2norms = []
         ns = []
@@ -110,14 +112,14 @@ if __name__ == "__main__":
 
             _, l2norm = convergence.compare(fdata.cc_data, cdata.cc_data, variable, args.resolution)
 
-            order = np.sqrt(l2norm/l2norms[-1])
+            order_conv = np.sqrt(l2norm/l2norms[-1])
 
             l2norms.append(l2norm)
             ns.append(cdata.cc_data.grid.nx)
-            row.extend([order, l2norm])
+            row.extend([order_conv, l2norm])
 
-        dataset.append([variable, l2norms, ns])
+        d.append([variable, l2norms, ns])
         table.add_row(row)
 
     print(table)
-    convergence_plot(dataset, fname=args.out, order=args.order)
+    convergence_plot(d, fname=args.out, order=args.order)

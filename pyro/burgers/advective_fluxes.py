@@ -97,9 +97,6 @@ def unsplit_fluxes(my_data, rp, dt):
     uhat_adv = interface.riemann(myg, ul_x, ur_x)
     vhat_adv = interface.riemann(myg, vl_y, vr_y)
 
-    ubar_adv = myg.scratch_array()
-    vbar_adv = myg.scratch_array()
-
     # Upwind the l and r states using the normal advective velocity through x and y interface
 
     ux_int = interface.upwind(myg, ul_x, ur_x, uhat_adv)
@@ -157,5 +154,5 @@ def unsplit_fluxes(my_data, rp, dt):
 
     fu_y.v(buf=1)[:, :] = 0.5 * uy.v(buf=1) * v_MAC.v(buf=1)
     fv_y.v(buf=1)[:, :] = 0.5 * vy.v(buf=1) * v_MAC.v(buf=1)
-    
+
     return fu_x, fu_y, fv_x, fv_y

@@ -44,7 +44,7 @@ def main():
     ff = io.read(fine)
     cc = io.read(coarse)
 
-    result = compare(ff.cc_data, cc.cc_data, var_name)
+    result = compare(ff.cc_data, cc.cc_data, var_name, N)
 
     print(f"inf norm and L2 norm of {var_name}: ", result)
 
