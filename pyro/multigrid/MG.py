@@ -714,8 +714,7 @@ class CellCenterMG2d:
 
             if self.verbose:
                 self._compute_residual(level)
-                self.grid_info(level, indent=2)
-                print("  before G-S, residual L2: {}".format(fp.get_var("r").norm()))
+                orig_resid = fp.get_var("r").norm()
 
             # smooth on the current level
             self.smooth(level, self.nsmooth)
@@ -724,7 +723,9 @@ class CellCenterMG2d:
             self._compute_residual(level)
 
             if self.verbose:
-                print("  after G-S, residual L2: {}\n".format(fp.get_var("r").norm()))
+                new_resid = fp.get_var("r").norm()
+                nx = self.grids[level].grid.nx
+                print(f"  level = {level:2}, nx = {nx:4}, residual change: {orig_resid:11.6g} → {new_resid:11.6g}")
 
             # restrict the residual down to the RHS of the coarser level
             f_coarse = cp.get_var("f")
@@ -751,15 +752,15 @@ class CellCenterMG2d:
 
             if self.verbose:
                 self._compute_residual(level)
-                self.grid_info(level, indent=2)
-                print("  before G-S, residual L2: {}".format(fp.get_var("r").norm()))
+                orig_resid = fp.get_var("r").norm()
 
             # smooth
             self.smooth(level, self.nsmooth)
 
             if self.verbose:
-                self._compute_residual(level)
-                print("  after G-S, residual L2: {}\n".format(fp.get_var("r").norm()))
+                new_resid = fp.get_var("r").norm()
+                nx = self.grids[level].grid.nx
+                print(f"  level = {level:2}, nx = {nx:4}, residual change: {orig_resid:11.6g} → {new_resid:11.6g}")
 
         else:
             # bottom solve: solve the discrete coarse problem.  We
@@ -767,14 +768,10 @@ class CellCenterMG2d:
             # (like CG), but since we are 2x2 by design at this point,
             # we will just smooth
             if self.verbose:
-                print("  bottom solve:")
+                print("  bottom solve")
 
             self.current_level = level
             bp = self.grids[level]
-
-            if self.verbose:
-                self.grid_info(level, indent=2)
-                print("")
 
             self.smooth(level, self.nsmooth_bottom)
 
