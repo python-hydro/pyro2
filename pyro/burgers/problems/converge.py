@@ -7,14 +7,14 @@ from pyro.util import msg
 
 
 def init_data(my_data, rp):
-    """ initialize the smooth burgers problem """
+    """ initialize the smooth burgers convergence problem """
     del rp  # this problem doesn't use runtime params
 
-    msg.bold("initializing the smooth burgers problem...")
+    msg.bold("initializing the smooth burgers convergence problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):
-        print("ERROR: patch invalid in smooth.py")
+        print("ERROR: patch invalid in converge.py")
         print(my_data.__class__)
         sys.exit()
 
@@ -32,7 +32,7 @@ def init_data(my_data, rp):
 
     # A represents some magnitude that defines the initial u and v.
 
-    A = 0.8
+    A = 0.05
 
     u[:, :] = A + A * numpy.exp(-50.0*((my_data.grid.x2d-xctr)**2 +
                                         (my_data.grid.y2d-yctr)**2))
