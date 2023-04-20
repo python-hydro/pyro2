@@ -287,7 +287,7 @@ def weno(q, order):
     return q_minus, q_plus
 
 
-def ppm_reconstruction(a, myg, idir):
+def ppm_reconstruction(a, myg, idir, limiter):
     """
     The PPM reconstruction method proceeds as follows:
 
@@ -354,7 +354,7 @@ def ppm_reconstruction(a, myg, idir):
 
     if idir == 1:
 
-        davl = limit2(a, myg, idir)
+        davl = limit(a, myg, idir, limiter)
 
         ai.v(buf=2)[:, :] = a.v(buf=2) + 0.5*(a.ip(1, buf=2) - a.v(buf=2)) \
                                - (davl.ip(1, buf=2) - davl.v(buf=2))/6.0
@@ -392,7 +392,7 @@ def ppm_reconstruction(a, myg, idir):
 
     elif idir == 2:
 
-        davl = limit2(a, myg, idir)
+        davl = limit(a, myg, idir, limiter)
 
         ai.v(buf=2)[:, :] = a.v(buf=2) + 0.5*(a.jp(1, buf=2) - a.v(buf=2)) \
                                - (davl.jp(1, buf=2) - davl.v(buf=2))/6.0

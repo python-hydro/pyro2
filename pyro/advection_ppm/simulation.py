@@ -1,5 +1,6 @@
-import pyro.advection_ppm.fluxes as flx
+import pyro.advection.advective_fluxes as flx
 from pyro import advection
+from pyro.advection_ppm.interface import ppm_interface
 
 
 class Simulation(advection.Simulation):
@@ -17,7 +18,7 @@ class Simulation(advection.Simulation):
         dtdx = self.dt/self.cc_data.grid.dx
         dtdy = self.dt/self.cc_data.grid.dy
 
-        Fx, Fy = flx.unsplit_fluxes(self.cc_data, self.rp, self.dt, "density")
+        Fx, Fy = flx.unsplit_fluxes(self.cc_data, self.rp, self.dt, "density", ppm_interface)
 
         dens = self.cc_data.get_var("density")
 
