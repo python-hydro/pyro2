@@ -1,4 +1,4 @@
-import numpy as np
+from pyro.burgers import burgers_interface
 
 
 def mac_vels(grid,  dt,
@@ -42,8 +42,8 @@ def mac_vels(grid,  dt,
     # Riemann problem -- this follows Burger's equation.  We don't use
     # any input velocity for the upwinding.  Also, we only care about
     # the normal states here (u on x and v on y)
-    u_MAC = riemann_and_upwind(grid, u_xl, u_xr)
-    v_MAC = riemann_and_upwind(grid, v_yl, v_yr)
+    u_MAC = burgers_interface.riemann_and_upwind(grid, u_xl, u_xr)
+    v_MAC = burgers_interface.riemann_and_upwind(grid, v_yl, v_yr)
 
     return u_MAC, v_MAC
 
@@ -92,10 +92,10 @@ def states(grid, dt,
 
     # upwind using the MAC velocity to determine which state exists on
     # the interface
-    u_xint = upwind(grid, u_xl, u_xr, u_MAC)
-    v_xint = upwind(grid, v_xl, v_xr, u_MAC)
-    u_yint = upwind(grid, u_yl, u_yr, v_MAC)
-    v_yint = upwind(grid, v_yl, v_yr, v_MAC)
+    u_xint = burgers_interface.upwind(grid, u_xl, u_xr, u_MAC)
+    v_xint = burgers_interface.upwind(grid, v_xl, v_xr, u_MAC)
+    u_yint = burgers_interface.upwind(grid, u_yl, u_yr, v_MAC)
+    v_yint = burgers_interface.upwind(grid, v_yl, v_yr, v_MAC)
 
     return u_xint, v_xint, u_yint, v_yint
 
@@ -173,19 +173,19 @@ def get_interface_states(grid, dt,
 
     # now get the normal advective velocities on the interfaces by solving
     # the Riemann problem.
-    uhat_adv = riemann(grid, u_xl, u_xr)
-    vhat_adv = riemann(grid, v_yl, v_yr)
+    uhat_adv = burgers_interface.riemann(grid, u_xl, u_xr)
+    vhat_adv = burgers_interface.riemann(grid, v_yl, v_yr)
 
     # now that we have the advective velocities, upwind the left and right
     # states using the appropriate advective velocity.
 
     # on the x-interfaces, we upwind based on uhat_adv
-    u_xint = upwind(grid, u_xl, u_xr, uhat_adv)
-    v_xint = upwind(grid, v_xl, v_xr, uhat_adv)
+    u_xint = burgers_interface.upwind(grid, u_xl, u_xr, uhat_adv)
+    v_xint = burgers_interface.upwind(grid, v_xl, v_xr, uhat_adv)
 
     # on the y-interfaces, we upwind based on vhat_adv
-    u_yint = upwind(grid, u_yl, u_yr, vhat_adv)
-    v_yint = upwind(grid, v_yl, v_yr, vhat_adv)
+    u_yint = burgers_interface.upwind(grid, u_yl, u_yr, vhat_adv)
+    v_yint = burgers_interface.upwind(grid, v_yl, v_yr, vhat_adv)
 
     # at this point, these states are the `hat' states -- they only
     # considered the normal to the interface portion of the predictor.
