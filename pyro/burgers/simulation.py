@@ -4,8 +4,8 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
-import pyro.burgers.advective_fluxes as flx
-from pyro.mesh import patch
+import pyro.burgers.burgers_interface as burgers_interface
+from pyro.mesh import patch, reconstruction
 from pyro.particles import particles
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
 from pyro.util import plot_tools
@@ -49,24 +49,24 @@ class Simulation(NullSimulation):
 
     def method_compute_timestep(self):
         """
-        Compute the advective timestep (CFL) constraint.  We use the
-        driver.cfl parameter to control what fraction of the CFL
+        The timestep() function computes the advective timestep
+        (CFL) constraint.  The CFL constraint says that information
+        cannot propagate further than one zone per timestep.
+
+        We use the driver.cfl parameter to control what fraction of the CFL
         step we actually take.
         """
 
         cfl = self.rp.get_param("driver.cfl")
 
-        # since velocity is no longer a constant
-        # velocity varies in each zone
-
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
 
-        # dt = min(min(dx/|u_i|), min(dy/|v_j|))
+        # the timestep is min(dx/|u|, dy|v|)
+        xtmp = self.cc_data.grid.dx/(abs(u))
+        ytmp = self.cc_data.grid.dy/(abs(v))
 
-        xtmp = self.cc_data.grid.dx / max(abs(u).max(), self.SMALL)
-        ytmp = self.cc_data.grid.dy / max(abs(v).max(), self.SMALL)
-        self.dt = cfl*min(xtmp, ytmp)
+        self.dt = cfl*float(min(xtmp.min(), ytmp.min()))
 
     def evolve(self):
         """
@@ -81,10 +81,25 @@ class Simulation(NullSimulation):
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
 
+        # --------------------------------------------------------------------------
+        # monotonized central differences
+        # --------------------------------------------------------------------------
+
+        limiter = self.rp.get_param("advection.limiter")
+
+        # Give da/dx and da/dy using input: (state, grid, direction, limiter)
+
+        ldelta_ux = reconstruction.limit(u, myg, 1, limiter)
+        ldelta_uy = reconstruction.limit(u, myg, 2, limiter)
+        ldelta_vx = reconstruction.limit(v, myg, 1, limiter)
+        ldelta_vy = reconstruction.limit(v, myg, 2, limiter)
+
         # Get u, v fluxes
 
-        u_flux_x, u_flux_y, v_flux_x, v_flux_y = flx.unsplit_fluxes(self.cc_data,
-                                                                    self.rp, self.dt)
+        u_flux_x, u_flux_y, v_flux_x, v_flux_y = burgers_interface.unsplit_fluxes(myg, self.dt,
+                                                                                  u, v,
+                                                                        ldelta_ux, ldelta_vx,
+                                                                        ldelta_uy, ldelta_vy)
 
         """
         do the differencing for the fluxes now.  Here, we use slices so we
