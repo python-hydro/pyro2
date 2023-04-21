@@ -1,5 +1,7 @@
 import numpy as np
-import pyro.burgers.burgers_interface as burgers_interface
+
+from pyro.burgers import burgers_interface
+
 
 def mac_vels(grid,  dt,
              u, v,
@@ -139,7 +141,7 @@ def get_interface_states(grid, dt,
                                                                                  ldelta_uy, ldelta_vy)
 
     # Apply pressure gradient correction terms
-    
+
     # transverse term for the u states on x-interfaces
     u_xl.ip(1, buf=2)[:, :] += - 0.5 * dt * gradp_x.v(buf=2)
     u_xr.v(buf=2)[:, :] += - 0.5 * dt * gradp_x.v(buf=2)
@@ -154,7 +156,7 @@ def get_interface_states(grid, dt,
 
     # transverse term for the u states on y-interfaces
     u_yl.jp(1, buf=2)[:, :] += - 0.5 * dt * gradp_x.v(buf=2)
-    u_yr.v(buf=2)[:, :] +=  - 0.5 * dt * gradp_x.v(buf=2)
+    u_yr.v(buf=2)[:, :] += - 0.5 * dt * gradp_x.v(buf=2)
 
     return u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr
 

@@ -3,14 +3,13 @@ import importlib
 import matplotlib.pyplot as plt
 import numpy as np
 
+from pyro import burgers
 import pyro.mesh.array_indexer as ai
-
-import pyro.burgers as burgers
 from pyro.incompressible import incomp_interface
 from pyro.mesh import patch, reconstruction
 from pyro.multigrid import MG
 from pyro.particles import particles
-from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
+from pyro.simulation_null import bc_setup, grid_setup
 
 
 class Simulation(burgers.Simulation):
