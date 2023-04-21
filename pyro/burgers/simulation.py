@@ -129,51 +129,48 @@ class Simulation(NullSimulation):
 
     def dovis(self):
         """
-        Do runtime visualization.
+        Do runtime visualization
         """
         plt.clf()
+
+        plt.rc("font", size=10)
 
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
 
         myg = self.cc_data.grid
+        _, axes, _ = plot_tools.setup_axes(myg, 2)
 
-        # magnitude of the x-y velocity
+        fields = [u, v]
+        field_names = ["u", "v"]
 
-        uv = myg.scratch_array()
-        uv.v()[:, :] = np.sqrt(u.v()*u.v() + v.v()*v.v())
+        for n in range(2):
+            ax = axes[n]
 
-        _, axes, _ = plot_tools.setup_axes(myg, 1)
+            f = fields[n]
+            img = ax.imshow(np.transpose(f.v()),
+                            interpolation="nearest", origin="lower",
+                            extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax], cmap=self.cm)
 
-        # plot x-y velocity magnitude
-        ax = axes[0]
-        img = ax.imshow(np.transpose(uv.v()),
-                   interpolation="nearest", origin="lower",
-                   extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax],
-                   cmap=self.cm)
+            ax.set_xlabel("x")
+            ax.set_ylabel("y")
+            ax.set_title(field_names[n])
 
-        ax.set_xlabel("x")
-        ax.set_ylabel("y")
+            cb = axes.cbar_axes[n].colorbar(img)
+            cb.solids.set_rasterized(True)
+            cb.solids.set_edgecolor("face")
 
-        # needed for PDF rendering
-        cb = axes.cbar_axes[0].colorbar(img)
-        cb.formatter = matplotlib.ticker.FormatStrFormatter("")
-        cb.solids.set_rasterized(True)
-        cb.solids.set_edgecolor("face")
+            if self.particles is not None:
 
-        plt.title("XY Velocity Magnitude")
+                particle_positions = self.particles.get_positions()
+                # dye particles
+                colors = self.particles.get_init_positions()[:, 0]
 
-        if self.particles is not None:
-            particle_positions = self.particles.get_positions()
-
-            # dye particles
-            colors = self.particles.get_init_positions()[:, 0]
-
-            # plot particles
-            ax.scatter(particle_positions[:, 0],
-                particle_positions[:, 1], c=colors, cmap="Greys")
-            ax.set_xlim([myg.xmin, myg.xmax])
-            ax.set_ylim([myg.ymin, myg.ymax])
+                # plot particles
+                ax.scatter(particle_positions[:, 0],
+                           particle_positions[:, 1], s=8, c=colors, cmap="Greys")
+                ax.set_xlim([myg.xmin, myg.xmax])
+                ax.set_ylim([myg.ymin, myg.ymax])
 
         plt.figtext(0.05, 0.0125, f"t = {self.cc_data.t:10.5f}")
 
