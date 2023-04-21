@@ -1,4 +1,4 @@
-import pyro.incompressible.incomp_interface as incomp_interface
+from pyro.incompressible import incomp_interface
 
 
 def get_interface_states(grid, dt,
