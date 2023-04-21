@@ -1,6 +1,5 @@
 import importlib
 
-import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -8,7 +7,6 @@ import pyro.burgers.burgers_interface as burgers_interface
 from pyro.mesh import patch, reconstruction
 from pyro.particles import particles
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
-from pyro.util import plot_tools
 
 
 class Simulation(NullSimulation):
@@ -129,51 +127,48 @@ class Simulation(NullSimulation):
 
     def dovis(self):
         """
-        Do runtime visualization.
+        Do runtime visualization
         """
         plt.clf()
+
+        plt.rc("font", size=10)
 
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
 
         myg = self.cc_data.grid
 
-        # magnitude of the x-y velocity
+        _, axes = plt.subplots(nrows=1, ncols=2, num=1)
+        plt.subplots_adjust(hspace=0.25)
 
-        uv = myg.scratch_array()
-        uv.v()[:, :] = np.sqrt(u.v()*u.v() + v.v()*v.v())
+        fields = [u, v]
+        field_names = ["u", "v"]
 
-        _, axes, _ = plot_tools.setup_axes(myg, 1)
+        for n in range(2):
+            ax = axes.flat[n]
 
-        # plot x-y velocity magnitude
-        ax = axes[0]
-        img = ax.imshow(np.transpose(uv.v()),
-                   interpolation="nearest", origin="lower",
-                   extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax],
-                   cmap=self.cm)
+            f = fields[n]
+            img = ax.imshow(np.transpose(f.v()),
+                            interpolation="nearest", origin="lower",
+                            extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax], cmap=self.cm)
 
-        ax.set_xlabel("x")
-        ax.set_ylabel("y")
+            ax.set_xlabel("x")
+            ax.set_ylabel("y")
+            ax.set_title(field_names[n])
 
-        # needed for PDF rendering
-        cb = axes.cbar_axes[0].colorbar(img)
-        cb.formatter = matplotlib.ticker.FormatStrFormatter("")
-        cb.solids.set_rasterized(True)
-        cb.solids.set_edgecolor("face")
+            plt.colorbar(img, ax=ax)
 
-        plt.title("XY Velocity Magnitude")
+            if self.particles is not None:
 
-        if self.particles is not None:
-            particle_positions = self.particles.get_positions()
+                particle_positions = self.particles.get_positions()
+                # dye particles
+                colors = self.particles.get_init_positions()[:, 0]
 
-            # dye particles
-            colors = self.particles.get_init_positions()[:, 0]
-
-            # plot particles
-            ax.scatter(particle_positions[:, 0],
-                particle_positions[:, 1], c=colors, cmap="Greys")
-            ax.set_xlim([myg.xmin, myg.xmax])
-            ax.set_ylim([myg.ymin, myg.ymax])
+                # plot particles
+                ax.scatter(particle_positions[:, 0],
+                           particle_positions[:, 1], s=5, c=colors, alpha=0.8, cmap="Greys")
+                ax.set_xlim([myg.xmin, myg.xmax])
+                ax.set_ylim([myg.ymin, myg.ymax])
 
         plt.figtext(0.05, 0.0125, f"t = {self.cc_data.t:10.5f}")
 
