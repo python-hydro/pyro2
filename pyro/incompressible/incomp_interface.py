@@ -1,5 +1,5 @@
 import numpy as np
-
+import pyro.burgers.burgers_interface as burgers_interface
 
 def mac_vels(grid,  dt,
              u, v,
@@ -131,98 +131,30 @@ def get_interface_states(grid, dt,
         y-interfaces
     """
 
-    u_xl = grid.scratch_array()
-    u_xr = grid.scratch_array()
-    u_yl = grid.scratch_array()
-    u_yr = grid.scratch_array()
+    # Get the left and right interface states
 
-    v_xl = grid.scratch_array()
-    v_xr = grid.scratch_array()
-    v_yl = grid.scratch_array()
-    v_yr = grid.scratch_array()
+    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = burgers_interface.get_interface_states(grid, dt,
+                                                                                      u, v,
+                                                                                 ldelta_ux, ldelta_vx,
+                                                                                 ldelta_uy, ldelta_vy)
 
-    # first predict u and v to both interfaces, considering only the normal
-    # part of the predictor.  These are the 'hat' states.
+    # Apply pressure gradient correction terms
+    
+    # transverse term for the u states on x-interfaces
+    u_xl.ip(1, buf=2)[:, :] += - 0.5 * dt * gradp_x.v(buf=2)
+    u_xr.v(buf=2)[:, :] += - 0.5 * dt * gradp_x.v(buf=2)
 
-    dtdx = dt / grid.dx
-    dtdy = dt / grid.dy
+    # transverse term for the v states on x-interfaces
+    v_xl.ip(1, buf=2)[:, :] += - 0.5 * dt * gradp_y.v(buf=2)
+    v_xr.v(buf=2)[:, :] += - 0.5 * dt * gradp_y.v(buf=2)
 
-    # u on x-edges
-    u_xl.ip(1, buf=2)[:, :] = u.v(buf=2) + \
-        0.5 * (1.0 - dtdx * u.v(buf=2)) * ldelta_ux.v(buf=2)
-    u_xr.v(buf=2)[:, :] = u.v(buf=2) - \
-        0.5 * (1.0 + dtdx * u.v(buf=2)) * ldelta_ux.v(buf=2)
+    # transverse term for the v states on y-interfaces
+    v_yl.jp(1, buf=2)[:, :] += - 0.5 * dt * gradp_y.v(buf=2)
+    v_yr.v(buf=2)[:, :] += - 0.5 * dt * gradp_y.v(buf=2)
 
-    # v on x-edges
-    v_xl.ip(1, buf=2)[:, :] = v.v(buf=2) + \
-        0.5 * (1.0 - dtdx * u.v(buf=2)) * ldelta_vx.v(buf=2)
-    v_xr.v(buf=2)[:, :] = v.v(buf=2) - \
-        0.5 * (1.0 + dtdx * u.v(buf=2)) * ldelta_vx.v(buf=2)
-
-    # u on y-edges
-    u_yl.jp(1, buf=2)[:, :] = u.v(buf=2) + \
-        0.5 * (1.0 - dtdy * v.v(buf=2)) * ldelta_uy.v(buf=2)
-    u_yr.v(buf=2)[:, :] = u.v(buf=2) - \
-        0.5 * (1.0 + dtdy * v.v(buf=2)) * ldelta_uy.v(buf=2)
-
-    # v on y-edges
-    v_yl.jp(1, buf=2)[:, :] = v.v(buf=2) + \
-        0.5 * (1.0 - dtdy * v.v(buf=2)) * ldelta_vy.v(buf=2)
-    v_yr.v(buf=2)[:, :] = v.v(buf=2) - \
-        0.5 * (1.0 + dtdy * v.v(buf=2)) * ldelta_vy.v(buf=2)
-
-    # now get the normal advective velocities on the interfaces by solving
-    # the Riemann problem.
-    uhat_adv = riemann(grid, u_xl, u_xr)
-    vhat_adv = riemann(grid, v_yl, v_yr)
-
-    # now that we have the advective velocities, upwind the left and right
-    # states using the appropriate advective velocity.
-
-    # on the x-interfaces, we upwind based on uhat_adv
-    u_xint = upwind(grid, u_xl, u_xr, uhat_adv)
-    v_xint = upwind(grid, v_xl, v_xr, uhat_adv)
-
-    # on the y-interfaces, we upwind based on vhat_adv
-    u_yint = upwind(grid, u_yl, u_yr, vhat_adv)
-    v_yint = upwind(grid, v_yl, v_yr, vhat_adv)
-
-    # at this point, these states are the `hat' states -- they only
-    # considered the normal to the interface portion of the predictor.
-
-    ubar = grid.scratch_array()
-    vbar = grid.scratch_array()
-
-    ubar.v(buf=2)[:, :] = 0.5 * (uhat_adv.v(buf=2) + uhat_adv.ip(1, buf=2))
-    vbar.v(buf=2)[:, :] = 0.5 * (vhat_adv.v(buf=2) + vhat_adv.jp(1, buf=2))
-
-    # v du/dy is the transerse term for the u states on x-interfaces
-    vu_y = grid.scratch_array()
-    vu_y.v(buf=2)[:, :] = vbar.v(buf=2) * (u_yint.jp(1, buf=2) - u_yint.v(buf=2))
-
-    u_xl.ip(1, buf=2)[:, :] += -0.5 * dtdy * vu_y.v(buf=2) - 0.5 * dt * gradp_x.v(buf=2)
-    u_xr.v(buf=2)[:, :] += -0.5 * dtdy * vu_y.v(buf=2) - 0.5 * dt * gradp_x.v(buf=2)
-
-    # v dv/dy is the transverse term for the v states on x-interfaces
-    vv_y = grid.scratch_array()
-    vv_y.v(buf=2)[:, :] = vbar.v(buf=2) * (v_yint.jp(1, buf=2) - v_yint.v(buf=2))
-
-    v_xl.ip(1, buf=2)[:, :] += -0.5 * dtdy * vv_y.v(buf=2) - 0.5 * dt * gradp_y.v(buf=2)
-    v_xr.v(buf=2)[:, :] += -0.5 * dtdy * vv_y.v(buf=2) - 0.5 * dt * gradp_y.v(buf=2)
-
-    # u dv/dx is the transverse term for the v states on y-interfaces
-    uv_x = grid.scratch_array()
-    uv_x.v(buf=2)[:, :] = ubar.v(buf=2) * (v_xint.ip(1, buf=2) - v_xint.v(buf=2))
-
-    v_yl.jp(1, buf=2)[:, :] += -0.5 * dtdx * uv_x.v(buf=2) - 0.5 * dt * gradp_y.v(buf=2)
-    v_yr.v(buf=2)[:, :] += -0.5 * dtdx * uv_x.v(buf=2) - 0.5 * dt * gradp_y.v(buf=2)
-
-    # u du/dx is the transverse term for the u states on y-interfaces
-    uu_x = grid.scratch_array()
-    uu_x.v(buf=2)[:, :] = ubar.v(buf=2) * (u_xint.ip(1, buf=2) - u_xint.v(buf=2))
-
-    u_yl.jp(1, buf=2)[:, :] += -0.5 * dtdx * uu_x.v(buf=2) - 0.5 * dt * gradp_x.v(buf=2)
-    u_yr.v(buf=2)[:, :] += -0.5 * dtdx * uu_x.v(buf=2) - 0.5 * dt * gradp_x.v(buf=2)
+    # transverse term for the u states on y-interfaces
+    u_yl.jp(1, buf=2)[:, :] += - 0.5 * dt * gradp_x.v(buf=2)
+    u_yr.v(buf=2)[:, :] +=  - 0.5 * dt * gradp_x.v(buf=2)
 
     return u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr
 
