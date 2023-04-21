@@ -1,5 +1,6 @@
 import importlib
 
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -7,6 +8,7 @@ import pyro.burgers.burgers_interface as burgers_interface
 from pyro.mesh import patch, reconstruction
 from pyro.particles import particles
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
+from pyro.util import plot_tools
 
 
 class Simulation(NullSimulation):
@@ -137,15 +139,13 @@ class Simulation(NullSimulation):
         v = self.cc_data.get_var("y-velocity")
 
         myg = self.cc_data.grid
-
-        _, axes = plt.subplots(nrows=1, ncols=2, num=1)
-        plt.subplots_adjust(hspace=0.25)
+        _, axes, _ = plot_tools.setup_axes(myg, 2)
 
         fields = [u, v]
         field_names = ["u", "v"]
 
         for n in range(2):
-            ax = axes.flat[n]
+            ax = axes[n]
 
             f = fields[n]
             img = ax.imshow(np.transpose(f.v()),
@@ -156,7 +156,9 @@ class Simulation(NullSimulation):
             ax.set_ylabel("y")
             ax.set_title(field_names[n])
 
-            plt.colorbar(img, ax=ax)
+            cb = axes.cbar_axes[n].colorbar(img)
+            cb.solids.set_rasterized(True)
+            cb.solids.set_edgecolor("face")
 
             if self.particles is not None:
 
@@ -166,7 +168,7 @@ class Simulation(NullSimulation):
 
                 # plot particles
                 ax.scatter(particle_positions[:, 0],
-                           particle_positions[:, 1], s=5, c=colors, alpha=0.8, cmap="Greys")
+                           particle_positions[:, 1], s=8, c=colors, cmap="Greys")
                 ax.set_xlim([myg.xmin, myg.xmax])
                 ax.set_ylim([myg.ymin, myg.ymax])
 
