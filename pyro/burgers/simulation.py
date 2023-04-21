@@ -1,10 +1,9 @@
 import importlib
 
-import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
-import pyro.burgers.burgers_interface as burgers_interface
+from pyro.burgers import burgers_interface
 from pyro.mesh import patch, reconstruction
 from pyro.particles import particles
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
