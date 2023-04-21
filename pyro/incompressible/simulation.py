@@ -3,8 +3,8 @@ import importlib
 import matplotlib.pyplot as plt
 import numpy as np
 
-from pyro.burgers import simulation
 import pyro.mesh.array_indexer as ai
+from pyro.burgers import Simulation as burgers_simulation
 from pyro.incompressible import incomp_interface
 from pyro.mesh import patch, reconstruction
 from pyro.multigrid import MG
@@ -12,7 +12,7 @@ from pyro.particles import particles
 from pyro.simulation_null import bc_setup, grid_setup
 
 
-class Simulation(simulation.Simulation):
+class Simulation(burgers_simulation):
 
     def initialize(self):
         """
