@@ -134,6 +134,10 @@ pyro provides the following solvers (all in 2-d):
 
   - `burgers`: a second-order unsplit solver for invsicid Burgers' equation.
 
+  - `viscous_burgers`: a second-order unsplit solver for viscous Burgers' equation
+    with constant-coefficient diffusion. It uses Crank-Nicolson time-discretized
+    solver for solving diffusion.
+
   - `compressible`: a second-order unsplit solver for the Euler
     equations of compressible hydrodynamics.  This uses characteristic
 	tracing and corner coupling for the prediction of the interface
