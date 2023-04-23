@@ -14,7 +14,7 @@ def get_interface_states(grid, dt,
        v_t  + u v_x  + v v_y  = 0
 
     Compute the unsplit predictions of u and v on both the x- and
-    y-interfaces.  This includes the transverse terms.
+    y-interfaces.
 
     Parameters
     ----------
@@ -32,8 +32,8 @@ def get_interface_states(grid, dt,
     Returns
     -------
     out : ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray
-        unsplit predictions of the left and right states of u and v on both the x- and
-        y-interfaces
+        get the predictions of the left and right states of u and v on both the x- and
+        y-interfaces interface states without the transverse terms.
     """
 
     u_xl = grid.scratch_array()
@@ -75,6 +75,39 @@ def get_interface_states(grid, dt,
         0.5 * (1.0 - dtdy * v.v(buf=2)) * ldelta_vy.v(buf=2)
     v_yr.v(buf=2)[:, :] = v.v(buf=2) - \
         0.5 * (1.0 + dtdy * v.v(buf=2)) * ldelta_vy.v(buf=2)
+
+    return u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr
+
+
+def apply_transverse_corrections(grid, dt,
+                                 u_xl, u_xr,
+                                 u_yl, u_yr,
+                                 v_xl, v_xr,
+                                 v_yl, v_yr):
+    r"""
+    Parameters
+    ----------
+    grid : Grid2d
+        The grid object
+    dt : float
+        The timestep
+    u_xl, u_xr : ndarray ndarray
+        left and right states of x-velocity in x-interface.
+    u_yl, u_yr : ndarray ndarray
+        left and right states of x-velocity in y-interface.
+    v_xl, v_xr : ndarray ndarray
+        left and right states of y-velocity in x-interface.
+    v_yl, u_yr : ndarray ndarray
+        left and right states of y-velocity in y-interface.
+    Returns
+    -------
+    out : ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray
+        correct the interface states of the left and right states of u and v on both the x- and
+        y-interfaces interface states with the transverse terms.
+    """
+
+    dtdx = dt / grid.dx
+    dtdy = dt / grid.dy
 
     # now get the normal advective velocities on the interfaces by solving
     # the Riemann problem.
@@ -120,10 +153,11 @@ def get_interface_states(grid, dt,
     return u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr
 
 
-def unsplit_fluxes(grid, dt,
-                   u, v,
-                   ldelta_ux, ldelta_vx,
-                   ldelta_uy, ldelta_vy):
+def construct_unsplit_fluxes(grid, dt,
+                             u_xl, u_xr,
+                             u_yl, u_yr,
+                             v_xl, v_xr,
+                             v_yl, v_yr):
     r"""
     Construct the interface fluxes for the burgers equation:
 
@@ -153,19 +187,12 @@ def unsplit_fluxes(grid, dt,
 
     """
 
-    # Get the left and right interface states
-
-    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = get_interface_states(grid, dt,
-                                                                          u, v,
-                                                                          ldelta_ux, ldelta_vx,
-                                                                          ldelta_uy, ldelta_vy)
-
     # Solve for riemann problem for the second time
 
     # Get corrected normal advection velocity (MAC)
 
-    u_MAC = riemann(grid, u_xl, u_xr)
-    v_MAC = riemann(grid, v_yl, v_yr)
+    u_MAC = riemann_and_upwind(grid, u_xl, u_xr)
+    v_MAC = riemann_and_upwind(grid, v_yl, v_yr)
 
     # Upwind using the transverse corrected normal advective velocity
 
@@ -182,11 +209,11 @@ def unsplit_fluxes(grid, dt,
     fu_y = grid.scratch_array()
     fv_y = grid.scratch_array()
 
-    fu_x.v(buf=1)[:, :] = 0.5 * ux.v(buf=1) * u_MAC.v(buf=1)
-    fv_x.v(buf=1)[:, :] = 0.5 * vx.v(buf=1) * u_MAC.v(buf=1)
+    fu_x.v(buf=2)[:, :] = 0.5 * ux.v(buf=2) * u_MAC.v(buf=2)
+    fv_x.v(buf=2)[:, :] = 0.5 * vx.v(buf=2) * u_MAC.v(buf=2)
 
-    fu_y.v(buf=1)[:, :] = 0.5 * uy.v(buf=1) * v_MAC.v(buf=1)
-    fv_y.v(buf=1)[:, :] = 0.5 * vy.v(buf=1) * v_MAC.v(buf=1)
+    fu_y.v(buf=2)[:, :] = 0.5 * uy.v(buf=2) * v_MAC.v(buf=2)
+    fv_y.v(buf=2)[:, :] = 0.5 * vy.v(buf=2) * v_MAC.v(buf=2)
 
     return fu_x, fu_y, fv_x, fv_y
 
@@ -213,9 +240,9 @@ def upwind(grid, q_l, q_r, s):
 
     q_int = grid.scratch_array()
 
-    q_int.v(buf=1)[:, :] = np.where(s.v(buf=1) == 0.0,
-                                    0.5 * (q_l.v(buf=1) + q_r.v(buf=1)),
-                                    np.where(s.v(buf=1) > 0.0, q_l.v(buf=1), q_r.v(buf=1)))
+    q_int.v(buf=2)[:, :] = np.where(s.v(buf=2) == 0.0,
+                                    0.5 * (q_l.v(buf=2) + q_r.v(buf=2)),
+                                    np.where(s.v(buf=2) > 0.0, q_l.v(buf=2), q_r.v(buf=2)))
 
     return q_int
 
@@ -242,12 +269,12 @@ def riemann(grid, q_l, q_r):
 
     s = grid.scratch_array()
 
-    s.v(buf=1)[:, :] = np.where(np.logical_and(q_l.v(buf=1) <= 0.0,
-                                               q_r.v(buf=1) >= 0.0),
+    s.v(buf=2)[:, :] = np.where(np.logical_and(q_l.v(buf=2) <= 0.0,
+                                               q_r.v(buf=2) >= 0.0),
                                 0.0,
-                                np.where(np.logical_and(q_l.v(buf=1) > 0.0,
-                                                        q_l.v(buf=1) + q_r.v(buf=1) > 0.0),
-                                         q_l.v(buf=1), q_r.v(buf=1)))
+                                np.where(np.logical_and(q_l.v(buf=2) > 0.0,
+                                                        q_l.v(buf=2) + q_r.v(buf=2) > 0.0),
+                                         q_l.v(buf=2), q_r.v(buf=2)))
 
     return s
 
