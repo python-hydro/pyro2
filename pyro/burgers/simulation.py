@@ -105,8 +105,8 @@ class Simulation(NullSimulation):
                                                                                                 u_yl, u_yr,
                                                                                                 v_xl, v_xr,
                                                                                                 v_yl, v_yr)
-        
-        u_flux_x, u_flux_y, v_flux_x, v_flux_y = burgers_interface.construct_unsplit_fluxes(myg, self.dt,
+
+        u_flux_x, u_flux_y, v_flux_x, v_flux_y = burgers_interface.construct_unsplit_fluxes(myg,
                                                                                             u_xl, u_xr,
                                                                                             u_yl, u_yr,
                                                                                             v_xl, v_xr,

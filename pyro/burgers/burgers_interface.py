@@ -170,19 +170,18 @@ def construct_unsplit_fluxes(grid, dt,
     ----------
     grid : Grid2d
         The grid object
-    dt : float
-        The timestep
-    u, v : ndarray
-        x-velocity and y-velocity
-    ldelta_ux, ldelta_uy: ndarray
-        Limited slopes of the x-velocity in the x and y directions
-    ldelta_vx, ldelta_vy: ndarray
-        Limited slopes of the y-velocity in the x and y directions
-
+    u_xl, u_xr : ndarray ndarray
+        left and right states of x-velocity in x-interface.
+    u_yl, u_yr : ndarray ndarray
+        left and right states of x-velocity in y-interface.
+    v_xl, v_xr : ndarray ndarray
+        left and right states of y-velocity in x-interface.
+    v_yl, u_yr : ndarray ndarray
+        left and right states of y-velocity in y-interface.
     -------
     Returns
     -------
-    out : ndarray, ndarray
+    out : ndarray, ndarray, ndarray, ndarray
         The u,v fluxes on the x- and y-interfaces
 
     """
