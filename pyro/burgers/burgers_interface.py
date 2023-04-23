@@ -164,8 +164,8 @@ def unsplit_fluxes(grid, dt,
 
     # Get corrected normal advection velocity (MAC)
 
-    u_MAC = riemann(grid, u_xl, u_xr)
-    v_MAC = riemann(grid, v_yl, v_yr)
+    u_MAC = riemann_and_upwind(grid, u_xl, u_xr)
+    v_MAC = riemann_and_upwind(grid, v_yl, v_yr)
 
     # Upwind using the transverse corrected normal advective velocity
 
