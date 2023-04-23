@@ -182,11 +182,11 @@ def unsplit_fluxes(grid, dt,
     fu_y = grid.scratch_array()
     fv_y = grid.scratch_array()
 
-    fu_x.v(buf=1)[:, :] = 0.5 * ux.v(buf=1) * u_MAC.v(buf=1)
-    fv_x.v(buf=1)[:, :] = 0.5 * vx.v(buf=1) * u_MAC.v(buf=1)
+    fu_x.v(buf=2)[:, :] = 0.5 * ux.v(buf=2) * u_MAC.v(buf=2)
+    fv_x.v(buf=2)[:, :] = 0.5 * vx.v(buf=2) * u_MAC.v(buf=2)
 
-    fu_y.v(buf=1)[:, :] = 0.5 * uy.v(buf=1) * v_MAC.v(buf=1)
-    fv_y.v(buf=1)[:, :] = 0.5 * vy.v(buf=1) * v_MAC.v(buf=1)
+    fu_y.v(buf=2)[:, :] = 0.5 * uy.v(buf=2) * v_MAC.v(buf=2)
+    fv_y.v(buf=2)[:, :] = 0.5 * vy.v(buf=2) * v_MAC.v(buf=2)
 
     return fu_x, fu_y, fv_x, fv_y
 
@@ -213,9 +213,9 @@ def upwind(grid, q_l, q_r, s):
 
     q_int = grid.scratch_array()
 
-    q_int.v(buf=1)[:, :] = np.where(s.v(buf=1) == 0.0,
-                                    0.5 * (q_l.v(buf=1) + q_r.v(buf=1)),
-                                    np.where(s.v(buf=1) > 0.0, q_l.v(buf=1), q_r.v(buf=1)))
+    q_int.v(buf=2)[:, :] = np.where(s.v(buf=2) == 0.0,
+                                    0.5 * (q_l.v(buf=2) + q_r.v(buf=2)),
+                                    np.where(s.v(buf=2) > 0.0, q_l.v(buf=2), q_r.v(buf=2)))
 
     return q_int
 
@@ -242,12 +242,12 @@ def riemann(grid, q_l, q_r):
 
     s = grid.scratch_array()
 
-    s.v(buf=1)[:, :] = np.where(np.logical_and(q_l.v(buf=1) <= 0.0,
-                                               q_r.v(buf=1) >= 0.0),
+    s.v(buf=2)[:, :] = np.where(np.logical_and(q_l.v(buf=2) <= 0.0,
+                                               q_r.v(buf=2) >= 0.0),
                                 0.0,
-                                np.where(np.logical_and(q_l.v(buf=1) > 0.0,
-                                                        q_l.v(buf=1) + q_r.v(buf=1) > 0.0),
-                                         q_l.v(buf=1), q_r.v(buf=1)))
+                                np.where(np.logical_and(q_l.v(buf=2) > 0.0,
+                                                        q_l.v(buf=2) + q_r.v(buf=2) > 0.0),
+                                         q_l.v(buf=2), q_r.v(buf=2)))
 
     return s
 
