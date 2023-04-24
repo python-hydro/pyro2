@@ -62,10 +62,11 @@ class Simulation(NullSimulation):
         v = self.cc_data.get_var("y-velocity")
 
         # the timestep is min(dx/|u|, dy|v|)
-        xtmp = self.cc_data.grid.dx/(abs(u))
-        ytmp = self.cc_data.grid.dy/(abs(v))
 
-        self.dt = cfl*float(min(xtmp.min(), ytmp.min()))
+        xtmp = self.cc_data.grid.dx / max(abs(u).max(), self.SMALL)
+        ytmp = self.cc_data.grid.dy / max(abs(v).max(), self.SMALL)
+
+        self.dt = cfl * min(xtmp, ytmp)
 
     def evolve(self):
         """

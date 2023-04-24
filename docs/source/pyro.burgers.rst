@@ -17,10 +17,10 @@ Subpackages
 Submodules
 ----------
 
-pyro.burgers.advective\_fluxes module
+pyro.burgers.burgers\_interface module
 ---------------------------------------
 
-.. automodule:: pyro.burgers.advective_fluxes
+.. automodule:: pyro.burgers.burgers_interface
    :members:
    :undoc-members:
    :show-inheritance:
