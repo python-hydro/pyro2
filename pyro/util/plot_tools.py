@@ -55,8 +55,8 @@ def setup_axes(myg, num):
 
     else:
         # 2-d grid of plots
-        ny = int(math.sqrt(num))
-        nx = num//ny
+        ny = math.ceil(math.sqrt(num))
+        nx = math.ceil(num/ny)
 
         axes = ImageGrid(f, 111,
                         nrows_ncols=(nx, ny),
