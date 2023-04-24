@@ -1,20 +1,11 @@
-import importlib
-
-import matplotlib
-import matplotlib.pyplot as plt
-import numpy as np
-
-import pyro.mesh.patch as patch
 import pyro.burgers as burgers
-from pyro.burgers import burgers_interface
-import pyro.particles.particles as particles
-import pyro.util.plot_tools as plot_tools
 import pyro.viscous_burgers.interface as interface
-from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
+from pyro.burgers import burgers_interface
 from pyro.mesh import reconstruction
 
+
 class Simulation(burgers.Simulation):
-        
+
     def evolve(self):
         """
         Evolve the viscous burgers equation through one timestep.
@@ -87,8 +78,8 @@ class Simulation(burgers.Simulation):
         # Update state by doing diffusion update with extra advective source term.
 
         interface.diffuse(self.cc_data, self.rp, self.dt, "x-velocity", A_u)
-        interface.diffuse(self.cc_data, self.rp, self.dt, "y-velocity", A_v)  
-        
+        interface.diffuse(self.cc_data, self.rp, self.dt, "y-velocity", A_v)
+
         if self.particles is not None:
 
             u2d = self.cc_data.get_var("x-velocity")

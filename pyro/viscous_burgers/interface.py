@@ -1,6 +1,3 @@
-import numpy as np
-
-from pyro.burgers import burgers_interface
 from pyro.multigrid import MG
 
 
@@ -18,11 +15,12 @@ def get_lap(grid, a):
     """
 
     lap = grid.scratch_array()
-    
+
     lap.v(buf=2)[:, :] = (a.ip(1, buf=2) - 2.0*a.v(buf=2) + a.ip(-1, buf=2)) / grid.dx**2 \
                        + (a.jp(1, buf=2) - 2.0*a.v(buf=2) + a.jp(-1, buf=2)) / grid.dy**2
 
     return lap
+
 
 def diffuse(my_data, rp, dt, scalar_name, A):
     r"""
@@ -32,7 +30,7 @@ def diffuse(my_data, rp, dt, scalar_name, A):
     (a + b \lap) phi = f
 
     using Crank-Nicolson discretization with multigrid V-cycle.
-    
+
     Parameters
     ----------
     my_data : CellCenterData2d object
@@ -83,22 +81,22 @@ def diffuse(my_data, rp, dt, scalar_name, A):
     # Compute the RHS: f
 
     f = mg.soln_grid.scratch_array()
-    
+
     lap = get_lap(myg, a)
-    
+
     f.v()[:, :] = a.v() + 0.5*dt*eps * lap.v() - dt*A.v()
 
     mg.init_RHS(f)
 
     # initial guess is zeros
-    
+
     mg.init_zeros()
-    
     mg.solve(rtol=1.e-12)
 
     # perform the diffusion update
 
     a.v()[:, :] = mg.get_solution().v()
+
 
 def apply_diffusion_corrections(grid, dt, eps,
                                 u, v,
@@ -155,23 +153,10 @@ def apply_diffusion_corrections(grid, dt, eps,
         y-interfaces along with diffusion correction terms.
     """
 
-    # Get the interface states from pure advection
-
-    # u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = burgers_interface.get_interface_states(grid, dt,
-    #                      u, v,
-    #                      ldelta_ux, ldelta_vx,
-    #                      ldelta_uy, ldelta_vy)
-
     #apply diffusion correction to the interface
-
-    # ud = grid.scratch_array()
-    # vd = grid.scratch_array()
 
     lap_u = get_lap(grid, u)
     lap_v = get_lap(grid, v)
-
-    # ud.v(buf=2)[:, :] = 0.5 * eps * dt * lap_u.v(buf=2)
-    # vd.v(buf=2)[:, :] = 0.5 * eps * dt * lap_v.v(buf=2)
 
     u_xl.ip(1, buf=2)[:, :] += 0.5 * eps * dt * lap_u.v(buf=2)
     u_yl.jp(1, buf=2)[:, :] += 0.5 * eps * dt * lap_u.v(buf=2)
@@ -183,197 +168,4 @@ def apply_diffusion_corrections(grid, dt, eps,
     v_xr.v(buf=2)[:, :] += 0.5 * eps * dt * lap_v.v(buf=2)
     v_yr.v(buf=2)[:, :] += 0.5 * eps * dt * lap_v.v(buf=2)
 
-    
-    # # now get the normal advective velocities on the interfaces by solving
-    # # the Riemann problem.
-    # uhat_adv = burgers_interface.riemann(grid, u_xl, u_xr)
-    # vhat_adv = burgers_interface.riemann(grid, v_yl, v_yr)
-
-    # # now that we have the advective velocities, upwind the left and right
-    # # states using the appropriate advective velocity.
-
-    # # on the x-interfaces, we upwind based on uhat_adv
-    # u_xint = burgers_interface.upwind(grid, u_xl, u_xr, uhat_adv)
-    # v_xint = burgers_interface.upwind(grid, v_xl, v_xr, uhat_adv)
-
-    # # on the y-interfaces, we upwind based on vhat_adv
-    # u_yint = burgers_interface.upwind(grid, u_yl, u_yr, vhat_adv)
-    # v_yint = burgers_interface.upwind(grid, v_yl, v_yr, vhat_adv)
-
-    # # at this point, these states are the `hat' states -- they only
-    # # considered the normal to the interface portion of the predictor.
-
-    # ubar = grid.scratch_array()
-    # vbar = grid.scratch_array()
-
-    # ubar.v(buf=2)[:, :] = 0.5 * (uhat_adv.v(buf=2) + uhat_adv.ip(1, buf=2))
-    # vbar.v(buf=2)[:, :] = 0.5 * (vhat_adv.v(buf=2) + vhat_adv.jp(1, buf=2))
-
-    # # the transverse term for the u states on x-interfaces
-    # u_xl.ip(1, buf=2)[:, :] += -0.5 * dtdy * vbar.v(buf=2) * (u_yint.jp(1, buf=2) - u_yint.v(buf=2))
-    # u_xr.v(buf=2)[:, :] += -0.5 * dtdy * vbar.v(buf=2) * (u_yint.jp(1, buf=2) - u_yint.v(buf=2))
-
-    # # the transverse term for the v states on x-interfaces
-    # v_xl.ip(1, buf=2)[:, :] += -0.5 * dtdy * vbar.v(buf=2) * (v_yint.jp(1, buf=2) - v_yint.v(buf=2))
-    # v_xr.v(buf=2)[:, :] += -0.5 * dtdy * vbar.v(buf=2) * (v_yint.jp(1, buf=2) - v_yint.v(buf=2))
-
-    # # the transverse term for the v states on y-interfaces
-    # v_yl.jp(1, buf=2)[:, :] += -0.5 * dtdx * ubar.v(buf=2) * (v_xint.ip(1, buf=2) - v_xint.v(buf=2))
-    # v_yr.v(buf=2)[:, :] += -0.5 * dtdx * ubar.v(buf=2) * (v_xint.ip(1, buf=2) - v_xint.v(buf=2))
-
-    # # the transverse term for the u states on y-interfaces
-    # u_yl.jp(1, buf=2)[:, :] += -0.5 * dtdx * ubar.v(buf=2) * (u_xint.ip(1, buf=2) - u_xint.v(buf=2))
-    # u_yr.v(buf=2)[:, :] += -0.5 * dtdx * ubar.v(buf=2) * (u_xint.ip(1, buf=2) - u_xint.v(buf=2))
-
-    
-    
-    # # eps = rp.get_param("diffusion.eps")
-    
-
-    # # Solve for riemann problem for the second time
-
-    # # Get corrected normal advection velocity
-
-    # # u_diffuse = burgers_interface.riemann(grid, u_xl, u_xr)
-    # # v_diffuse = burgers_interface.riemann(grid, v_yl, v_yr)
-
-    # # # # Upwind using the transverse corrected normal advective velocity
-
-    # ux_d = burgers_interface.upwind(grid, u_xl, u_xr, u_diffuse)
-    # vx_d = burgers_interface.upwind(grid, v_xl, v_xr, u_diffuse)
-
-    # uy_d = burgers_interface.upwind(grid, u_yl, u_yr, v_diffuse)
-    # vy_d = burgers_interface.upwind(grid, v_yl, v_yr, v_diffuse)
-    
-    # # # Compute the diffusion term:
-
-
-    # ud = grid.scratch_array()
-    # vd = grid.scratch_array()
-
-    # lap_u = get_lap(grid, u)
-    # lap_v = get_lap(grid, v)
-
-    # # lap_u = get_lap(grid, u_diffuse)
-    # # lap_v = get_lap(grid, v_diffuse)
-    
-    # ud.v(buf=2)[:, :] = 0.5 * eps * dt * lap_u.v(buf=2)
-    # vd.v(buf=2)[:, :] = 0.5 * eps * dt * lap_v.v(buf=2)
-
-    # # ud_x = grid.scratch_array()
-    # # ud_y = grid.scratch_array()
-    # # vd_x = grid.scratch_array()
-    # # vd_y = grid.scratch_array()
-
-    # # lap_ux = get_lap(grid, ux_d)
-    # # lap_uy = get_lap(grid, uy_d)
-    # # lap_vx = get_lap(grid, vx_d)
-    # # lap_vy = get_lap(grid, vy_d)
-
-    # # ud_x.v(buf=2)[:, :] = 0.5 * eps * dt * lap_uy.v(buf=2)
-    # # ud_y.v(buf=2)[:, :] = 0.5 * eps * dt * lap_ux.v(buf=2)
-    # # vd_x.v(buf=2)[:, :] = 0.5 * eps * dt * lap_vy.v(buf=2)
-    # # vd_y.v(buf=2)[:, :] = 0.5 * eps * dt * lap_vx.v(buf=2)
-
-    # # # apply diffusion term:
-
-    # # u_xl.ip(1, buf=2)[:, :] += ud_x.v(buf=2)
-    # # u_yl.jp(1, buf=2)[:, :] += ud_y.v(buf=2)
-    # # u_xr.v(buf=2)[:, :] += ud_x.v(buf=2)
-    # # u_yr.v(buf=2)[:, :] += ud_y.v(buf=2)
-
-    # # v_xl.ip(1, buf=2)[:, :] += vd_x.v(buf=2)
-    # # v_yl.jp(1, buf=2)[:, :] += vd_y.v(buf=2)
-    # # v_xr.v(buf=2)[:, :] += vd_x.v(buf=2)
-    # # v_yr.v(buf=2)[:, :] += vd_y.v(buf=2)
-    
-    
-    # u_xl.ip(1, buf=2)[:, :] += ud.v(buf=2)
-    # u_yl.jp(1, buf=2)[:, :] += ud.v(buf=2)
-    # u_xr.v(buf=2)[:, :] += ud.v(buf=2)
-    # u_yr.v(buf=2)[:, :] += ud.v(buf=2)
-
-    # v_xl.ip(1, buf=2)[:, :] += vd.v(buf=2)
-    # v_yl.jp(1, buf=2)[:, :] += vd.v(buf=2)
-    # v_xr.v(buf=2)[:, :] += vd.v(buf=2)
-    # v_yr.v(buf=2)[:, :] += vd.v(buf=2)
-    
     return u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr
-
-# def unsplit_fluxes(grid, dt,
-#                    u, v,
-#                    ldelta_ux, ldelta_vx,
-#                    ldelta_uy, ldelta_vy, eps):
-#     r"""
-#     Construct the interface fluxes for the viscous burgers equation:
-
-#     Parameters
-#     ----------
-#     grid : Grid2d
-#         The grid object
-#     dt : float
-#         The timestep
-#     u, v : ndarray
-#         x-velocity and y-velocity
-#     ldelta_ux, ldelta_uy: ndarray
-#         Limited slopes of the x-velocity in the x and y directions
-#     ldelta_vx, ldelta_vy: ndarray
-#         Limited slopes of the y-velocity in the x and y directions
-#     eps: float
-#          the viscosity
-#     -------
-#     Returns
-#     -------
-#     out : ndarray, ndarray
-#         The u,v fluxes on the x- and y-interfaces
-
-#     """
-
-#     # Get the interface states without transverse or diffusion corrections
-#     u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = burgers_interface.get_interface_states(grid, dt,
-#                                                                                             u, v,
-#                                                                                             ldelta_ux, ldelta_vx,
-#                                                                                             ldelta_uy, ldelta_vy)
-
-#     # Apply diffusion correction terms to the interface states
-#     u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = apply_diffusion_corrections(grid, dt, eps,
-#                                                                                  u, v,
-#                                                                                  u_xl, u_xr,
-#                                                                                  u_yl, u_yr,
-#                                                                                  v_xl, v_xr,
-#                                                                                  v_yl, v_yr)
-#     # Apply transverse correction terms to the interface states
-#     u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = apply_transverse_corrections(grid, dt,
-#                                                                                   u_xl, u_xr,
-#                                                                                   u_yl, u_yr,
-#                                                                                   v_xl, v_xr,
-#                                                                                   v_yl, v_yr)
-    
-    
-#     # construct the advective flux
-
-#     u_MAC = burgers_interface.riemann_and_upwind(grid, u_xl, u_xr)
-#     v_MAC = burgers_interface.riemann_and_upwind(grid, v_yl, v_yr)
-
-#     # Upwind using the transverse corrected normal advective velocity
-
-#     ux = burgers_interface.upwind(grid, u_xl, u_xr, u_MAC)
-#     vx = burgers_interface.upwind(grid, v_xl, v_xr, u_MAC)
-
-#     uy = burgers_interface.upwind(grid, u_yl, u_yr, v_MAC)
-#     vy = burgers_interface.upwind(grid, v_yl, v_yr, v_MAC)
-    
-#     fu_x = grid.scratch_array()
-#     fv_x = grid.scratch_array()
-#     fu_y = grid.scratch_array()
-#     fv_y = grid.scratch_array()
-
-#     fu_x.v(buf=2)[:, :] = 0.5 * ux.v(buf=2) * u_MAC.v(buf=2)
-#     fv_x.v(buf=2)[:, :] = 0.5 * vx.v(buf=2) * u_MAC.v(buf=2)
-
-#     fu_y.v(buf=2)[:, :] = 0.5 * uy.v(buf=2) * v_MAC.v(buf=2)
-#     fv_y.v(buf=2)[:, :] = 0.5 * vy.v(buf=2) * v_MAC.v(buf=2)
-
-#     return fu_x, fu_y, fv_x, fv_y
-
-
