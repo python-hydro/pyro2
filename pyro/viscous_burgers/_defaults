@@ -11,4 +11,4 @@ do_particles = 0
 particle_generator = grid
 
 [diffusion]
-eps = 0.005
+eps = 0.005               ; Viscosity for diffusion
