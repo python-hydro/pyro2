@@ -43,7 +43,8 @@ with their data.
     The output file name for the convergence plot, ``out = convergence_plot.pdf``,
     by default. The theoretical order of convergence for the solver, ``order=2``,
     by default. The multiplicative factor between each data files are, ``resolution=2``,
-    by default.
+    by default. This is used to test the order of the convergence of the solver
+    when there is no analytical solutions.
 
     usage: ``./convergence_plot.py files* -o out -n order -r resolution``
   
