@@ -95,10 +95,22 @@ class Simulation(NullSimulation):
 
         # Get u, v fluxes
 
-        u_flux_x, u_flux_y, v_flux_x, v_flux_y = burgers_interface.unsplit_fluxes(myg, self.dt,
-                                                                                  u, v,
-                                                                        ldelta_ux, ldelta_vx,
-                                                                        ldelta_uy, ldelta_vy)
+        u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = burgers_interface.get_interface_states(myg, self.dt,
+                                                                                                u, v,
+                                                                                                ldelta_ux, ldelta_vx,
+                                                                                                ldelta_uy, ldelta_vy)
+
+        u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = burgers_interface.apply_transverse_corrections(myg, self.dt,
+                                                                                                u_xl, u_xr,
+                                                                                                u_yl, u_yr,
+                                                                                                v_xl, v_xr,
+                                                                                                v_yl, v_yr)
+
+        u_flux_x, u_flux_y, v_flux_x, v_flux_y = burgers_interface.construct_unsplit_fluxes(myg,
+                                                                                            u_xl, u_xr,
+                                                                                            u_yl, u_yr,
+                                                                                            v_xl, v_xr,
+                                                                                            v_yl, v_yr)
 
         """
         do the differencing for the fluxes now.  Here, we use slices so we

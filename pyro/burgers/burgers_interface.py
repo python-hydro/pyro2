@@ -14,7 +14,7 @@ def get_interface_states(grid, dt,
        v_t  + u v_x  + v v_y  = 0
 
     Compute the unsplit predictions of u and v on both the x- and
-    y-interfaces.  This includes the transverse terms.
+    y-interfaces.
 
     Parameters
     ----------
@@ -32,8 +32,8 @@ def get_interface_states(grid, dt,
     Returns
     -------
     out : ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray
-        unsplit predictions of the left and right states of u and v on both the x- and
-        y-interfaces
+        get the predictions of the left and right states of u and v on both the x- and
+        y-interfaces interface states without the transverse terms.
     """
 
     u_xl = grid.scratch_array()
@@ -75,6 +75,39 @@ def get_interface_states(grid, dt,
         0.5 * (1.0 - dtdy * v.v(buf=2)) * ldelta_vy.v(buf=2)
     v_yr.v(buf=2)[:, :] = v.v(buf=2) - \
         0.5 * (1.0 + dtdy * v.v(buf=2)) * ldelta_vy.v(buf=2)
+
+    return u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr
+
+
+def apply_transverse_corrections(grid, dt,
+                                 u_xl, u_xr,
+                                 u_yl, u_yr,
+                                 v_xl, v_xr,
+                                 v_yl, v_yr):
+    r"""
+    Parameters
+    ----------
+    grid : Grid2d
+        The grid object
+    dt : float
+        The timestep
+    u_xl, u_xr : ndarray ndarray
+        left and right states of x-velocity in x-interface.
+    u_yl, u_yr : ndarray ndarray
+        left and right states of x-velocity in y-interface.
+    v_xl, v_xr : ndarray ndarray
+        left and right states of y-velocity in x-interface.
+    v_yl, u_yr : ndarray ndarray
+        left and right states of y-velocity in y-interface.
+    Returns
+    -------
+    out : ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray
+        correct the interface states of the left and right states of u and v on both the x- and
+        y-interfaces interface states with the transverse terms.
+    """
+
+    dtdx = dt / grid.dx
+    dtdy = dt / grid.dy
 
     # now get the normal advective velocities on the interfaces by solving
     # the Riemann problem.
@@ -120,10 +153,11 @@ def get_interface_states(grid, dt,
     return u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr
 
 
-def unsplit_fluxes(grid, dt,
-                   u, v,
-                   ldelta_ux, ldelta_vx,
-                   ldelta_uy, ldelta_vy):
+def construct_unsplit_fluxes(grid,
+                             u_xl, u_xr,
+                             u_yl, u_yr,
+                             v_xl, v_xr,
+                             v_yl, v_yr):
     r"""
     Construct the interface fluxes for the burgers equation:
 
@@ -136,29 +170,21 @@ def unsplit_fluxes(grid, dt,
     ----------
     grid : Grid2d
         The grid object
-    dt : float
-        The timestep
-    u, v : ndarray
-        x-velocity and y-velocity
-    ldelta_ux, ldelta_uy: ndarray
-        Limited slopes of the x-velocity in the x and y directions
-    ldelta_vx, ldelta_vy: ndarray
-        Limited slopes of the y-velocity in the x and y directions
-
+    u_xl, u_xr : ndarray ndarray
+        left and right states of x-velocity in x-interface.
+    u_yl, u_yr : ndarray ndarray
+        left and right states of x-velocity in y-interface.
+    v_xl, v_xr : ndarray ndarray
+        left and right states of y-velocity in x-interface.
+    v_yl, u_yr : ndarray ndarray
+        left and right states of y-velocity in y-interface.
     -------
     Returns
     -------
-    out : ndarray, ndarray
+    out : ndarray, ndarray, ndarray, ndarray
         The u,v fluxes on the x- and y-interfaces
 
     """
-
-    # Get the left and right interface states
-
-    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = get_interface_states(grid, dt,
-                                                                          u, v,
-                                                                          ldelta_ux, ldelta_vx,
-                                                                          ldelta_uy, ldelta_vy)
 
     # Solve for riemann problem for the second time
 
