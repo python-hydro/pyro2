@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.util.plot_tools &mdash; pyro 4.0.1.post39+g4334a714 documentation</title>
+  <title>pyro.util.plot_tools &mdash; pyro 4.0.1.post40+g6cf65c8a documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -176,8 +176,8 @@
 
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># 2-d grid of plots</span>
-        <span class="n">ny</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">num</span><span class="p">))</span>
-        <span class="n">nx</span> <span class="o">=</span> <span class="n">num</span><span class="o">//</span><span class="n">ny</span>
+        <span class="n">ny</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">num</span><span class="p">))</span>
+        <span class="n">nx</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">num</span><span class="o">/</span><span class="n">ny</span><span class="p">)</span>
 
         <span class="n">axes</span> <span class="o">=</span> <span class="n">ImageGrid</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mi">111</span><span class="p">,</span>
                         <span class="n">nrows_ncols</span><span class="o">=</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">),</span>
