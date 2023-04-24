@@ -153,7 +153,7 @@ def apply_transverse_corrections(grid, dt,
     return u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr
 
 
-def construct_unsplit_fluxes(grid, dt,
+def construct_unsplit_fluxes(grid,
                              u_xl, u_xr,
                              u_yl, u_yr,
                              v_xl, v_xr,
