@@ -1,10 +1,10 @@
-import pyro.burgers as burgers
-import pyro.viscous_burgers.interface as interface
+from pyro.burgers import Simulation as burgers_sim
+from pyro.viscous_burgers import interface
 from pyro.burgers import burgers_interface
 from pyro.mesh import reconstruction
 
 
-class Simulation(burgers.Simulation):
+class Simulation(burgers_sim):
 
     def evolve(self):
         """
@@ -12,9 +12,6 @@ class Simulation(burgers.Simulation):
         """
 
         myg = self.cc_data.grid
-
-        dtdx = self.dt/myg.dx
-        dtdy = self.dt/myg.dy
 
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
