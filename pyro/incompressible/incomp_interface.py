@@ -102,7 +102,7 @@ def states(grid, dt,
                                                                                             ldelta_uy, ldelta_vy)
 
     # apply pressure gradient correction terms to the interface state
-    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = apply_gradp_corrections(grid, dt,
+    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = apply_gradp_corrections(dt,
                                                                              u_xl, u_xr,
                                                                              u_yl, u_yr,
                                                                              v_xl, v_xr,
