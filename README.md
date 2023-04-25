@@ -83,7 +83,7 @@ https://python-hydro.github.io/pyro2
       ```python
       import matplotlib.pyplot
       print matplotlib.pyplot.get_backend()
-       ```
+      ```
 
  - If you want to run the unit tests, you need to have `pytest` installed.
 
@@ -136,8 +136,8 @@ pyro provides the following solvers (all in 2-d):
 
   - `compressible`: a second-order unsplit solver for the Euler
     equations of compressible hydrodynamics.  This uses characteristic
-	tracing and corner coupling for the prediction of the interface
-	states and a 2-shock or HLLC approximate Riemann solver.
+    tracing and corner coupling for the prediction of the interface
+    states and a 2-shock or HLLC approximate Riemann solver.
 
   - `compressible_fv4`: a fourth-order accurate finite-volume compressible
      hydro solver that uses RK4 time integration.  This is built from the
@@ -145,7 +145,7 @@ pyro provides the following solvers (all in 2-d):
 
   - `compressible_rk`: a second-order unsplit solver for Euler
      equations that uses Runge-Kutta integration instead of
-	 characteristic tracing.
+     characteristic tracing.
 
   - `compressible_sdc`: a fourth-order compressible solver,
      using spectral-deferred correction (SDC) for the time integration.

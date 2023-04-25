@@ -49,8 +49,8 @@ This provides two multigrid solvers for cell-centered data.
     ```
     alpha = 2.0 + cos(2.0*pi*x)*cos(2.0*pi*y)
     f = -16.0*pi**2*(cos(2*pi*x)*cos(2*pi*y) + 1)*sin(2*pi*x)*sin(2*pi*y)
-	```
-       
+    ```
+
     on [0,1] x [0,1] with homogeneous Dirichlet BCs.  The solution
     is compared to the exact solution and the convergence is measured.
 
@@ -75,22 +75,22 @@ This provides two multigrid solvers for cell-centered data.
      with
 
      ```
-	 alpha = 1.0
+     alpha = 1.0
      beta = 2.0 + cos(2.0*pi*x)*cos(2.0*pi*y)
      f = (-16.0*pi**2*cos(2*pi*x)*cos(2*pi*y) - 16.0*pi**2 + 1.0)*sin(2*pi*x)*sin(2*pi*y)
-	 ```
+     ```
 
     on [0,1] x [0,1] with homogeneous Dirichlet BCs.  The solution is
-	compared to the exact solution and the convergence is measured.
+    compared to the exact solution and the convergence is measured.
 
   - `mg_test_general_beta_only.py`: this neglects both the `alpha` and
     `gamma` terms and solves the same variable-coefficient Poisson problem
-	as `mg_test_vc_dirichlet.py` (note that the naming of the coefficients
-	differ between those solvers, but the equation solved is the same).
-	
+    as `mg_test_vc_dirichlet.py` (note that the naming of the coefficients
+    differ between those solvers, but the equation solved is the same).
+
   - `mg_test_general_constant.py`: this solves a pure Poisson problem
     (`alpha = gamma = 0; beta = 1`), solving the same problem as
-	the base MG solver in `mg_test_simple.py`.
+    the base MG solver in `mg_test_simple.py`.
 
   - `mg_test_general_dirichlet.py`: This solves a general elliptic
     problem of the form:
@@ -100,18 +100,18 @@ This provides two multigrid solvers for cell-centered data.
     with
 
     ```
-	alpha = 1.0
+    alpha = 1.0
     beta = cos(2*pi*x)*cos(2*pi*y) + 2.0
     gamma_x = sin(2*pi*x)
     gamma_y = sin(2*pi*y)
 
     f = (-16.0*pi**2*cos(2*pi*x)*cos(2*pi*y) + 2.0*pi*cos(2*pi*x) +
           2.0*pi*cos(2*pi*y) - 16.0*pi**2 + 1.0)*sin(2*pi*x)*sin(2*pi*y)
-    ```			
+    ```
 
     on [0,1] x [0,1] with homogeneous Dirichlet BCs.  The solution is
-	compared to the exact solution and a convergence plot is made.
-	
+    compared to the exact solution and a convergence plot is made.
+
   - `mg_test_general_inhomogeneous.py`: This solves a general elliptic
     problem with inhomogeneous BCs.  The coefficients are:
 
@@ -129,11 +129,11 @@ This provides two multigrid solvers for cell-centered data.
     on [0,1] x [0,1], with Dirichlet BCs of the form:
 
     ```
-	phi(x=0) = cos(pi*y/2)
-	phi(x=1) = 0
-	phi(y=0) = cos(pi*x/2)
-	phi(y=1) = 0
-	```
+    phi(x=0) = cos(pi*y/2)
+    phi(x=1) = 0
+    phi(y=0) = cos(pi*x/2)
+    phi(y=1) = 0
+    ```
 
 
 ## `prolong_restrict_demo.py`
