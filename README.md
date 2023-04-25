@@ -90,7 +90,7 @@ https://python-hydro.github.io/pyro2
  - Finally, you can run a quick test of the advection solver:
 
    ```
-   pyro-sim.py advection smooth inputs.smooth
+   pyro_sim.py advection smooth inputs.smooth
    ```
 
    you should see a graphing window pop up with a smooth pulse
@@ -102,13 +102,13 @@ https://python-hydro.github.io/pyro2
 The main data structures that describe the grid and the data the lives
 on the grid are described in a jupyter notebook:
 
-https://github.com/python-hydro/pyro2/blob/main/mesh/mesh-examples.ipynb
+https://github.com/python-hydro/pyro2/blob/main/pyro/mesh/mesh-examples.ipynb
 
 
 Many of the methods here rely on multigrid.  The multigrid solver is
 demonstrated in the juputer notebook:
 
-https://github.com/python-hydro/pyro2/blob/main/multigrid/multigrid-examples.ipynb
+https://github.com/python-hydro/pyro2/blob/main/pyro/multigrid/multigrid-examples.ipynb
 
 
 ## Solvers
