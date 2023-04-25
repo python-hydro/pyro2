@@ -29,8 +29,8 @@ shear
 The shear problem initializes a shear layer in a domain with
 doubly-periodic boundaries and looks at the development of two
 vortices as the shear layer rolls up. This problem was explored in a
-number of papers, for example, Bell, Colella, & Glaz (1989) and Martin
-& Colella (2000). This is run as:
+number of papers, for example, :cite:`bellcolellaglaz:1989` and
+:cite:`martincolella:2000`. This is run as:
 
 .. prompt:: bash
 
@@ -51,9 +51,9 @@ The convergence test initializes a simple velocity field on a periodic
 unit square with known analytic solution. By evolving at a variety of
 resolutions and comparing to the analytic solution, we can measure the
 convergence rate of the algorithm. The particular set of initial
-conditions is from Minion (1996). Limiting can be disabled by adding
-``incompressible.limiter=0`` to the run command. The basic set of tests
-shown below are run as:
+conditions is from :cite:`minion:1996`. Limiting can be disabled by
+adding ``incompressible.limiter=0`` to the run command. The basic set of
+tests shown below are run as:
 
 .. prompt:: bash
 
