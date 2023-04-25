@@ -62,7 +62,7 @@ with their data.
 
   * ``smooth_error.py``: this takes an output file from the advection
     solver's smooth problem and compares to the analytic solution,
-    outputing the L2 norm of the error.
+    outputting the L2 norm of the error.
 
     usage: ``./smooth_error.py file``
 

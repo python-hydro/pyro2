@@ -109,7 +109,7 @@ Extensions
 
 * Switch to a variable density system. This will require adding a mass
   continuity equation that is advected and switching the projections
-  to a variable-coeffient form (since ρ now enters).
+  to a variable-coefficient form (since ρ now enters).
 
 Going further
 -------------

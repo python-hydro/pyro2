@@ -11,7 +11,7 @@ compressible hydrodynamics. Chapter 4 of the notes summarizes the
 numerical methods for advection that we implement in pyro.
 
 pyro has several solvers for linear advection, which solve the equation
-with different spatial and temporal intergration schemes.
+with different spatial and temporal integration schemes.
 
 ``advection`` solver
 --------------------
@@ -58,7 +58,7 @@ velocity field.  This is used to implement the slotted disk problem
 from :cite:`ZALESAK1979335`.  The basic method is similar to the
 algorithm used by the main ``advection`` solver.
 
-The paramters for this solver are:
+The parameters for this solver are:
 
 .. include:: advection_nonuniform_defaults.inc
 
