@@ -30,11 +30,11 @@ def plot_convergence():
         nx = data[:, 0]
         errlim = data[:, 1]
 
-        plt.scatter(nx, errlim, marker="x", color="b", label="limiting")
-        plt.plot(nx, errlim[0]*(nx[0]/nx)**2, "--", color="k")
+        plt.scatter(nx, errlim, marker="x", color="b", label="no limiting")
 
     plt.xlabel("number of zones")
     plt.ylabel("L2 norm of abs error")
+    plt.legend(frameon=False)
 
     plt.title(r"convergence for incompressible viscous solver", fontsize=11)
 
@@ -42,7 +42,7 @@ def plot_convergence():
     f.set_size_inches(5.0, 5.0)
 
     plt.xlim(16, 256)
-    plt.ylim(2.e-4, 5.e-2)
+    plt.ylim(2.e-4, 2.e-2)
 
     plt.savefig("incomp_viscous_converge.png", bbox_inches="tight")
     plt.savefig("incomp_viscous_converge.eps", bbox_inches="tight")

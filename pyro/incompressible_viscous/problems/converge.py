@@ -12,9 +12,9 @@ and the exact solution at some later time t, for some viscosity nu, is
 
 .. math::
 
-    u(x,y,t) = 1 - 2 \cos(2 \pi (x - t)) \sin(2 \pi (y - t)) e^{-16 \pi^2 \nu t}
+    u(x,y,t) = 1 - 2 \cos(2 \pi (x - t)) \sin(2 \pi (y - t)) e^{-8 \pi^2 \nu t}
 
-    v(x,y,t) = 1 + 2 \sin(2 \pi (x - t)) \cos(2 \pi (y - t)) e^{-16 \pi^2 \nu t}
+    v(x,y,t) = 1 + 2 \sin(2 \pi (x - t)) \cos(2 \pi (y - t)) e^{-8 \pi^2 \nu t}
 
     p(x,y,t) = - (\cos(4 \pi (x - t)) + \cos(4 \pi (y - t))) e^{-16 \pi^2 \nu t}
 

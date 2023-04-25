@@ -31,10 +31,10 @@ def get_errors(file):
 
     # analytic solution
     u_exact = myg.scratch_array()
-    u_exact[:, :] = 1.0 - 2.0*np.cos(2.0*math.pi*(myg.x2d-t))*np.sin(2.0*math.pi*(myg.y2d-t))*np.exp(-16*math.pi**2*nu*t)
+    u_exact[:, :] = 1.0 - 2.0*np.cos(2.0*math.pi*(myg.x2d-t))*np.sin(2.0*math.pi*(myg.y2d-t))*np.exp(-8*math.pi**2*nu*t)
 
     v_exact = myg.scratch_array()
-    v_exact[:, :] = 1.0 + 2.0*np.sin(2.0*math.pi*(myg.x2d-t))*np.cos(2.0*math.pi*(myg.y2d-t))*np.exp(-16*math.pi**2*nu*t)
+    v_exact[:, :] = 1.0 + 2.0*np.sin(2.0*math.pi*(myg.x2d-t))*np.cos(2.0*math.pi*(myg.y2d-t))*np.exp(-8*math.pi**2*nu*t)
 
     # error
     udiff = u_exact - u
