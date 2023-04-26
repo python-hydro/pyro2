@@ -2,7 +2,6 @@
 import glob
 import sys
 
-# from pyro.analysis.incomp_converge_error import get_errors
 from pyro.analysis.incomp_viscous_converge_error import get_errors
 
 
@@ -11,14 +10,14 @@ def create_file(filename="convergence_errors.txt"):
     # Parse all converge*.h5 outputs
     # store the last file at each resolution
     fnames = glob.glob("converge_viscous*.h5")
-    res = set([f.split("_")[2] for f in fnames])
+    res = {f.split("_")[2] for f in fnames}
     res = list(res)
     res.sort(key=int)
 
     simfiles = []
     for r in res:
         fnames = glob.glob(f"converge_viscous_{r}_*.h5")
-        last = max([int(f.split("_")[-1].split(".")[0]) for f in fnames])
+        last = max(int(f.split("_")[-1].split(".")[0]) for f in fnames)
         simfiles.append(f"converge_viscous_{r}_{last:04d}.h5")
 
     # Create the file

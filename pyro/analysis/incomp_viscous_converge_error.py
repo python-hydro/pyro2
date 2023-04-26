@@ -43,7 +43,7 @@ def get_errors(file):
     return udiff.norm(), vdiff.norm()
 
 
-if __name__ == "__main__":
+def main():
     if len(sys.argv) != 2:
         print(usage)
         sys.exit(2)
@@ -56,3 +56,7 @@ if __name__ == "__main__":
 
     errors = get_errors(file)
     print("errors: ", errors[0], errors[1])
+
+
+if __name__ == "__main__":
+    main()

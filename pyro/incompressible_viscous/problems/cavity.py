@@ -16,6 +16,7 @@ from pyro.util import msg
 
 def init_data(my_data, rp):
     """ initialize the lid-driven cavity """
+    del rp  # this problem doesn't use runtime params
 
     msg.bold("initializing the lid-driven cavity problem...")
 
