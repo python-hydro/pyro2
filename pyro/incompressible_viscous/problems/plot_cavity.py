@@ -45,14 +45,17 @@ def makeplot(plotfile_name, outfile, Reynolds, streamline_density):
 
     title = ""
     if Reynolds is not None:
-        title += f"Re = {Reynolds}, "
-    title += rf"$t/\tau = $ {sim.cc_data.t:.1f}"
+        title += f"Re = {Reynolds}"
+
+    # The characteristic timescale tau is the length of the box divided by the lid velocity.
+    # For the default parameters, tau=1
+    # title += rf", $t/\tau = $ {sim.cc_data.t:.1f}"
     plt.title(title)
 
     if outfile.endswith(".pdf"):
         plt.savefig(outfile, bbox_inches="tight")
     else:
-        plt.savefig(outfile)
+        plt.savefig(outfile, bbox_inches="tight", dpi=500)
     plt.show()
 
 
