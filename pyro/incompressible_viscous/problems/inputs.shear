@@ -7,7 +7,7 @@ cfl = 0.8
 
 
 [incompressible_viscous]
-viscosity = 0.1
+viscosity = 0.001
 
 
 [io]
