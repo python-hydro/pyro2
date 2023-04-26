@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shallow water solver &mdash; pyro 4.0.1.post42+gcc7d883e documentation</title>
+  <title>Shallow water solver &mdash; pyro 4.0.1.post43+g5315369f documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -200,7 +200,7 @@ passive scalar.</p>
 </tr>
 <tr class="row-odd"><td><p>cvisc</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.1</span></code></p></td>
-<td><p>artifical viscosity coefficient</p></td>
+<td><p>artificial viscosity coefficient</p></td>
 </tr>
 <tr class="row-even"><td><p>limiter</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
@@ -222,11 +222,11 @@ passive scalar.</p>
 <h2>Example problems<a class="headerlink" href="#example-problems" title="Permalink to this heading"></a></h2>
 <section id="dam">
 <h3>dam<a class="headerlink" href="#dam" title="Permalink to this heading"></a></h3>
-<p>The dam break problem is a standard hydrodynamics problem, analagous to the Sod
+<p>The dam break problem is a standard hydrodynamics problem, analogous to the Sod
 shock tube problem in compressible hydrodynamics. It considers a one-multidimensional
 problem of two regions of fluid at different heights, initially separated by a dam.
 The problem then models the evolution of the system when this dam is removed.
-As for the Sod problem, there exists an exact solution for the dam break probem,
+As for the Sod problem, there exists an exact solution for the dam break problem,
 so we can check our solution against the exact solutions. See Toro’s shallow water
 equations book for details on this problem and the exact Riemann solver.</p>
 <p>Because it is one-dimensional, we run it in narrow domains in the x- or
@@ -239,7 +239,7 @@ span.prompt1:before {
 <span class="prompt1">pyro_sim.py<span class="w"> </span>swe<span class="w"> </span>dam<span class="w"> </span>inputs.dam.y</span>
 </pre></div></div><p>A simple script, <code class="docutils literal notranslate"><span class="pre">dam_compare.py</span></code> in <code class="docutils literal notranslate"><span class="pre">analysis/</span></code> will read a pyro
 output file and plot the solution over the exact dam break solution
-(as given by <span id="id1">[<a class="reference internal" href="zreferences.html#id5" title="J. J. Stoker and R. Bruce Lindsay. Water waves. Physics Today, 11(8):28-30, 1958. URL: https://pubs.aip.org/physicstoday/article/11/8/28/927415/Water-Waves.">SL58</a>]</span> and <span id="id2">[<a class="reference internal" href="zreferences.html#id6" title="Chao Wu, Guofu Huang, and Yonghong Zheng. Theoretical solution of dam-break shock wave. Journal of Hydraulic Engineering, 125(11):1210-1215, 1999.">WHZ99</a>]</span>.  Below we see
+(as given by <span id="id1">[<a class="reference internal" href="zreferences.html#id5" title="J. J. Stoker and R. Bruce Lindsay. Water waves. Physics Today, 11(8):28-30, 1958. URL: https://pubs.aip.org/physicstoday/article/11/8/28/927415/Water-Waves.">SL58</a>]</span> and <span id="id2">[<a class="reference internal" href="zreferences.html#id6" title="Chao Wu, Guofu Huang, and Yonghong Zheng. Theoretical solution of dam-break shock wave. Journal of Hydraulic Engineering, 125(11):1210-1215, 1999.">WHZ99</a>]</span>).  Below we see
 the result for a dam break run with 128 points in the x-direction, and
 run until t = 0.3 s.</p>
 <img alt="_images/dam_compare.png" class="align-center" src="_images/dam_compare.png" />

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Incompressible hydrodynamics solver &mdash; pyro 4.0.1.post42+gcc7d883e documentation</title>
+  <title>Incompressible hydrodynamics solver &mdash; pyro 4.0.1.post43+g5315369f documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -214,8 +214,8 @@ are supported.</p>
 <p>The shear problem initializes a shear layer in a domain with
 doubly-periodic boundaries and looks at the development of two
 vortices as the shear layer rolls up. This problem was explored in a
-number of papers, for example, Bell, Colella, &amp; Glaz (1989) and Martin
-&amp; Colella (2000). This is run as:</p>
+number of papers, for example, <span id="id1">[<a class="reference internal" href="zreferences.html#id7" title="John B. Bell, Phillip Colella, and Harland M. Glaz. A Second Order Projection Method for the Incompressible Navier-Stokes Equations. Journal of Computational Physics, 85(2):257-283, December 1989. doi:10.1016/0021-9991(89)90151-4.">BellColellaGlaz89</a>]</span> and
+<span id="id2">[<a class="reference internal" href="zreferences.html#id8" title="Daniel F. Martin and Phillip Colella. A Cell-Centered Adaptive Projection Method for the Incompressible Euler Equations. Journal of Computational Physics, 163(2):271-312, September 2000. doi:10.1006/jcph.2000.6575.">MartinColella00</a>]</span>. This is run as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
 span.prompt1:before {
   content: "$ ";
@@ -232,9 +232,9 @@ we are using an approximate projection.</p>
 unit square with known analytic solution. By evolving at a variety of
 resolutions and comparing to the analytic solution, we can measure the
 convergence rate of the algorithm. The particular set of initial
-conditions is from Minion (1996). Limiting can be disabled by adding
-<code class="docutils literal notranslate"><span class="pre">incompressible.limiter=0</span></code> to the run command. The basic set of tests
-shown below are run as:</p>
+conditions is from <span id="id3">[<a class="reference internal" href="zreferences.html#id9" title="Michael L. Minion. A Projection Method for Locally Refined Grids. Journal of Computational Physics, 127(1):158-178, August 1996. doi:10.1006/jcph.1996.0166.">Minion96</a>]</span>. Limiting can be disabled by
+adding <code class="docutils literal notranslate"><span class="pre">incompressible.limiter=0</span></code> to the run command. The basic set of
+tests shown below are run as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pyro_sim.py<span class="w"> </span>incompressible<span class="w"> </span>converge<span class="w"> </span>inputs.converge.32<span class="w"> </span>vis.dovis<span class="o">=</span><span class="m">0</span></span>
 <span class="prompt1">pyro_sim.py<span class="w"> </span>incompressible<span class="w"> </span>converge<span class="w"> </span>inputs.converge.64<span class="w"> </span>vis.dovis<span class="o">=</span><span class="m">0</span></span>
 <span class="prompt1">pyro_sim.py<span class="w"> </span>incompressible<span class="w"> </span>converge<span class="w"> </span>inputs.converge.128<span class="w"> </span>vis.dovis<span class="o">=</span><span class="m">0</span></span>
@@ -272,7 +272,7 @@ like the diffusion operation, and will update the provisional
 velocity field.</p></li>
 <li><p>Switch to a variable density system. This will require adding a mass
 continuity equation that is advected and switching the projections
-to a variable-coeffient form (since ρ now enters).</p></li>
+to a variable-coefficient form (since ρ now enters).</p></li>
 </ul>
 </section>
 </section>

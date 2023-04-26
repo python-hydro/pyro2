@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Advection solvers &mdash; pyro 4.0.1.post42+gcc7d883e documentation</title>
+  <title>Advection solvers &mdash; pyro 4.0.1.post43+g5315369f documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -150,7 +150,7 @@
 compressible hydrodynamics. Chapter 4 of the notes summarizes the
 numerical methods for advection that we implement in pyro.</p>
 <p>pyro has several solvers for linear advection, which solve the equation
-with different spatial and temporal intergration schemes.</p>
+with different spatial and temporal integration schemes.</p>
 <section id="advection-solver">
 <h2><code class="docutils literal notranslate"><span class="pre">advection</span></code> solver<a class="headerlink" href="#advection-solver" title="Permalink to this heading"></a></h2>
 <p><a class="reference internal" href="pyro.advection.html#module-pyro.advection" title="pyro.advection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.advection</span></code></a> implements the directionally unsplit corner
@@ -288,7 +288,7 @@ faces of the zones to achieve 4th order accuracy spatially.</p>
 velocity field.  This is used to implement the slotted disk problem
 from <span id="id3">[<a class="reference internal" href="zreferences.html#id4" title="Steven T Zalesak. Fully multidimensional flux-corrected transport algorithms for fluids. Journal of Computational Physics, 31(3):335 - 362, 1979. URL: http://www.sciencedirect.com/science/article/pii/0021999179900512, doi:https://doi.org/10.1016/0021-9991(79)90051-2.">Zal79</a>]</span>.  The basic method is similar to the
 algorithm used by the main <code class="docutils literal notranslate"><span class="pre">advection</span></code> solver.</p>
-<p>The paramters for this solver are:</p>
+<p>The parameters for this solver are:</p>
 <ul>
 <li><p>section: [advection]</p>
 <table class="docutils align-default">
@@ -385,7 +385,7 @@ order).</p>
 </tr>
 <tr class="row-odd"><td><p>temporal_method</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">RK4</span></code></p></td>
-<td><p>integration method (see mesh/integrators/.py)</p></td>
+<td><p>integration method (see mesh/integrators.py)</p></td>
 </tr>
 </tbody>
 </table>
@@ -442,7 +442,7 @@ base class</p></td>
 </tr>
 <tr class="row-even"><td><p>temporal_method</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">RK4</span></code></p></td>
-<td><p>integration method (see mesh/integrators/.py)</p></td>
+<td><p>integration method (see mesh/integrators.py)</p></td>
 </tr>
 </tbody>
 </table>

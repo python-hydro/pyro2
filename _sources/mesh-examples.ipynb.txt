@@ -293,7 +293,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "`pretty_print()` can also take an argumet, specifying the format string to be used for the output."
+    "`pretty_print()` can also take an argument, specifying the format string to be used for the output."
    ]
   },
   {

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Analysis routines &mdash; pyro 4.0.1.post42+gcc7d883e documentation</title>
+  <title>Analysis routines &mdash; pyro 4.0.1.post43+g5315369f documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -144,7 +144,8 @@ attributes stored in the HDF5 file.</p>
 resolutions (one a factor of N-times, (default is 2 times or <code class="docutils literal notranslate"><span class="pre">N=2</span></code>) finer
 than the other). It coarsens the finer data and then computes the
 norm of the difference.  The default variable being compared is
-density, <code class="docutils literal notranslate"><span class="pre">var_name=density</span></code> by default. but it takes arbitary variable name as input.
+density, but a different variable can be selected with the
+<code class="docutils literal notranslate"><span class="pre">var_name</span></code> argument.
 This is used to test the convergence of solvers.</p>
 <p>usage: <code class="docutils literal notranslate"><span class="pre">./convergence.py</span> <span class="pre">fine_file</span> <span class="pre">coarse_file</span> <span class="pre">var_name</span> <span class="pre">N</span></code></p>
 </li>
@@ -194,7 +195,7 @@ from <code class="docutils literal notranslate"><span class="pre">cylindrical-se
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">smooth_error.py</span></code>: this takes an output file from the advection
 solver’s smooth problem and compares to the analytic solution,
-outputing the L2 norm of the error.</p>
+outputting the L2 norm of the error.</p>
 <p>usage: <code class="docutils literal notranslate"><span class="pre">./smooth_error.py</span> <span class="pre">file</span></code></p>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">sod_compare.py</span></code>: this takes an output file from the
