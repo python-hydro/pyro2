@@ -6,7 +6,7 @@ from pyro.multigrid import MG
 
 class Simulation(incompressible.Simulation):
 
-    def initialize(self):
+    def initialize(self):  # pylint: disable=arguments-differ
         """
         Initialization of the data is the same as the incompressible
         solver, but we define user BC, and provide the viscosity
@@ -20,7 +20,7 @@ class Simulation(incompressible.Simulation):
     def define_other_bc(self):
         bnd.define_bc("moving_lid", BC.user, is_solid=False)
 
-    def evolve(self):
+    def evolve(self):  # pylint: disable=arguments-differ
         """
         Solve is all the same steps as the incompressible solver, but
         including a source term for the viscosity in the interface
