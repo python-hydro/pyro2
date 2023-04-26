@@ -28,7 +28,6 @@ added.
 
    pyro_sim.py incompressible_viscous shear inputs.shear
 
-
 .. image:: shear_viscous.png
    :align: center
 
@@ -39,7 +38,7 @@ cavity
 ^^^^^^
 
 The lid-driven cavity is a well-known benchmark problem for hydro codes
-(see e.g. :cite:t:`ghia1982`, :cite:t:`Kuhlman2018`). In a unit square box 
+(see e.g. :cite:t:`ghia1982`, :cite:t:`Kuhlmann2019`). In a unit square box 
 with initially static fluid, motion is initiated by a "lid" at the top 
 boundary, moving to the right with unit velocity. The basic command is:
 
@@ -48,20 +47,22 @@ boundary, moving to the right with unit velocity. The basic command is:
    pyro_sim.py incompressible_viscous cavity inputs.cavity
 
 It is interesting to observe what happens when varying the viscosity, or, 
-equivalently the Reynolds number (in this case :math:`\rm{Re}=1/\nu`` since 
+equivalently the Reynolds number (in this case :math:`\rm{Re}=1/\nu` since 
 the characteristic length and velocity scales are 1 by default).
 
-.. image:: cavity_Re100.png
-   :align: center
+|pic1| |pic2| |pic3|
 
-.. image:: cavity_Re400.png
-   :align: center
+.. |pic1| image:: cavity_Re100.png
+   :width: 32%
 
-   .. image:: cavity_Re1000.png
-   :align: center
+.. |pic2| image:: cavity_Re400.png
+   :width: 32%
+
+.. |pic3| image:: cavity_Re1000.png
+   :width: 32%
 
 These plots were made by allowing the code to run for longer and approach a
-steady-state with the option driver.max_steps=1000, then running 
+steady-state with the option ``driver.max_steps=1000``, then running 
 (e.g. for the Re=100 case):
 
 .. prompt:: bash
@@ -99,7 +100,8 @@ or ``convergence_errors_no_limiter.txt`` after running with that option. Then:
 .. image:: incomp_viscous_converge.png
    :align: center
 
-The solver is converging but not at second-order, as in the inviscid case.
+The solver is converging but below second-order, unlike the inviscid case. Limiting
+does not seem to make a difference here.
 
 Exercises
 ---------
