@@ -14,7 +14,7 @@ from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
 
 class Simulation(NullSimulation):
 
-    def initialize(self, other_bc=False, aux_vars=None):
+    def initialize(self, other_bc=False, aux_vars=()):
         """
         Initialize the grid and variables for incompressible flow and
         set the initial conditions for the chosen problem.
@@ -47,9 +47,8 @@ class Simulation(NullSimulation):
         my_data.register_var("gradp_x", phi_bc)
         my_data.register_var("gradp_y", phi_bc)
 
-        if aux_vars is not None:
-            for v in aux_vars:
-                my_data.set_aux(keyword=v[0], value=v[1])
+        for v in aux_vars:
+            my_data.set_aux(keyword=v[0], value=v[1])
 
         my_data.create()
 
