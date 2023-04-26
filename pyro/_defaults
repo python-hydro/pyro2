@@ -25,7 +25,7 @@ store_images = 0           ; store vis images to files (1=yes, 0=no)
 
 [mesh]
 
-xmin = 0.0                ; domain minumum x-coordinate
+xmin = 0.0                ; domain minimum x-coordinate
 xmax = 1.0                ; domain maximum x-coordinate
 ymin = 0.0                ; domain minimum y-coordinate
 ymax = 1.0                ; domain maximum y-coordinate
