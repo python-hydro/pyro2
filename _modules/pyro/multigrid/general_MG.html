@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.multigrid.general_MG &mdash; pyro 4.0.1.post43+g5315369f documentation</title>
+  <title>pyro.multigrid.general_MG &mdash; pyro 4.0.1.post44+gaa189b0c documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -179,7 +179,7 @@
         <span class="c1"># scaled by 1/dx**2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">beta_edge</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="c1"># initialize the MG object with the auxillary fields</span>
+        <span class="c1"># initialize the MG object with the auxiliary fields</span>
         <span class="n">MG</span><span class="o">.</span><span class="n">CellCenterMG2d</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                                    <span class="n">xmin</span><span class="o">=</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">ymax</span><span class="p">,</span>
                                    <span class="n">xl_BC_type</span><span class="o">=</span><span class="n">xl_BC_type</span><span class="p">,</span> <span class="n">xr_BC_type</span><span class="o">=</span><span class="n">xr_BC_type</span><span class="p">,</span>
@@ -195,7 +195,7 @@
                                    <span class="n">true_function</span><span class="o">=</span><span class="n">true_function</span><span class="p">,</span> <span class="n">vis</span><span class="o">=</span><span class="n">vis</span><span class="p">,</span>
                                    <span class="n">vis_title</span><span class="o">=</span><span class="n">vis_title</span><span class="p">)</span>
 
-        <span class="c1"># the coefficents come in a dictionary.  Set the coefficients</span>
+        <span class="c1"># the coefficients come in a dictionary.  Set the coefficients</span>
         <span class="c1"># and restrict them down the hierarchy we only need to do this</span>
         <span class="c1"># once.  We need to hold the original coeffs in our grid so we</span>
         <span class="c1"># can do a ghost cell fill.</span>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible.simulation &mdash; pyro 4.0.1.post43+g5315369f documentation</title>
+  <title>pyro.compressible.simulation &mdash; pyro 4.0.1.post44+gaa189b0c documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -250,7 +250,7 @@
             <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">extra_vars</span><span class="p">:</span>
                 <span class="n">my_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
 
-        <span class="c1"># store the EOS gamma as an auxillary quantity so we can have a</span>
+        <span class="c1"># store the EOS gamma as an auxiliary quantity so we can have a</span>
         <span class="c1"># self-contained object stored in output files to make plots.</span>
         <span class="c1"># store grav because we&#39;ll need that in some BCs</span>
         <span class="n">my_data</span><span class="o">.</span><span class="n">set_aux</span><span class="p">(</span><span class="s2">&quot;gamma&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;eos.gamma&quot;</span><span class="p">))</span>
@@ -263,7 +263,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;particles.do_particles&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="n">particles</span><span class="o">.</span><span class="n">Particles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="p">,</span> <span class="n">bc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">)</span>
 
-        <span class="c1"># some auxillary data that we&#39;ll need to fill GC in, but isn&#39;t</span>
+        <span class="c1"># some auxiliary data that we&#39;ll need to fill GC in, but isn&#39;t</span>
         <span class="c1"># really part of the main solution</span>
         <span class="n">aux_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_class</span><span class="p">(</span><span class="n">my_grid</span><span class="p">)</span>
         <span class="n">aux_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;ymom_src&quot;</span><span class="p">,</span> <span class="n">bc_yodd</span><span class="p">)</span>

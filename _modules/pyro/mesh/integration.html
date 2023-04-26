@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.mesh.integration &mdash; pyro 4.0.1.post43+g5315369f documentation</title>
+  <title>pyro.mesh.integration &mdash; pyro 4.0.1.post44+gaa189b0c documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -240,7 +240,7 @@
         <span class="k">return</span> <span class="n">ytmp</span></div>
 
 <div class="viewcode-block" id="RKIntegrator.compute_final_update"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.integration.RKIntegrator.compute_final_update">[docs]</a>    <span class="k">def</span> <span class="nf">compute_final_update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;this constructs the final t + dt update, overwriting the inital data&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;this constructs the final t + dt update, overwriting the initial data&quot;&quot;&quot;</span>
         <span class="n">ytmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span>
         <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ytmp</span><span class="o">.</span><span class="n">nvar</span><span class="p">):</span>
             <span class="n">var</span> <span class="o">=</span> <span class="n">ytmp</span><span class="o">.</span><span class="n">get_var_by_index</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>

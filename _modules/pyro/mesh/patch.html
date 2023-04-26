@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.mesh.patch &mdash; pyro 4.0.1.post43+g5315369f documentation</title>
+  <title>pyro.mesh.patch &mdash; pyro 4.0.1.post44+gaa189b0c documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -325,7 +325,7 @@
 <span class="sd">         my_data.register_var(&#39;x-momentum&#39;, BC)</span>
 <span class="sd">         ...</span>
 
-<span class="sd">    * Register any auxillary data -- these are any parameters that are</span>
+<span class="sd">    * Register any auxiliary data -- these are any parameters that are</span>
 <span class="sd">      needed to interpret the data outside of the simulation (for</span>
 <span class="sd">      example, the gamma for the equation of state)::</span>
 
@@ -401,7 +401,7 @@
 
 <div class="viewcode-block" id="CellCenterData2d.set_aux"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.set_aux">[docs]</a>    <span class="k">def</span> <span class="nf">set_aux</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set any auxillary (scalar) data.  This data is simply carried</span>
+<span class="sd">        Set any auxiliary (scalar) data.  This data is simply carried</span>
 <span class="sd">        along with the CellCenterData2d object</span>
 
 <span class="sd">        Parameters</span>
@@ -536,12 +536,12 @@
 
 <div class="viewcode-block" id="CellCenterData2d.get_aux"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.get_aux">[docs]</a>    <span class="k">def</span> <span class="nf">get_aux</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyword</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the auxillary data associated with keyword</span>
+<span class="sd">        Get the auxiliary data associated with keyword</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        keyword : str</span>
-<span class="sd">            The name of the auxillary data to access</span>
+<span class="sd">            The name of the auxiliary data to access</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -749,7 +749,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c1"># auxillary data</span>
+        <span class="c1"># auxiliary data</span>
         <span class="n">gaux</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s2">&quot;aux&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aux</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">gaux</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>

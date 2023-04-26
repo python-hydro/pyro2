@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.mesh package &mdash; pyro 4.0.1.post43+g5315369f documentation</title>
+  <title>pyro.mesh package &mdash; pyro 4.0.1.post44+gaa189b0c documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -427,7 +427,7 @@ integration</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.mesh.integration.RKIntegrator.compute_final_update">
 <span class="sig-name descname"><span class="pre">compute_final_update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/integration.html#RKIntegrator.compute_final_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.integration.RKIntegrator.compute_final_update" title="Permalink to this definition"></a></dt>
-<dd><p>this constructs the final t + dt update, overwriting the inital data</p>
+<dd><p>this constructs the final t + dt update, overwriting the initial data</p>
 </dd></dl>
 
 <dl class="py method">
@@ -517,7 +517,7 @@ Here BC describes the boundary conditions for that variable:</p>
 </pre></div>
 </div>
 </li>
-<li><p>Register any auxillary data – these are any parameters that are
+<li><p>Register any auxiliary data – these are any parameters that are
 needed to interpret the data outside of the simulation (for
 example, the gamma for the equation of state):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_data</span><span class="o">.</span><span class="n">set_aux</span><span class="p">(</span><span class="n">keyword</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
@@ -590,11 +590,11 @@ action to take at each boundary.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.mesh.patch.CellCenterData2d.get_aux">
 <span class="sig-name descname"><span class="pre">get_aux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keyword</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.get_aux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.get_aux" title="Permalink to this definition"></a></dt>
-<dd><p>Get the auxillary data associated with keyword</p>
+<dd><p>Get the auxiliary data associated with keyword</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>keyword</strong><span class="classifier">str</span></dt><dd><p>The name of the auxillary data to access</p>
+<dt><strong>keyword</strong><span class="classifier">str</span></dt><dd><p>The name of the auxiliary data to access</p>
 </dd>
 </dl>
 </dd>
@@ -751,7 +751,7 @@ number of ghostcells)</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.mesh.patch.CellCenterData2d.set_aux">
 <span class="sig-name descname"><span class="pre">set_aux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keyword</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d.set_aux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d.set_aux" title="Permalink to this definition"></a></dt>
-<dd><p>Set any auxillary (scalar) data.  This data is simply carried
+<dd><p>Set any auxiliary (scalar) data.  This data is simply carried
 along with the CellCenterData2d object</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

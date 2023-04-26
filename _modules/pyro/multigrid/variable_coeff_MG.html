@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.multigrid.variable_coeff_MG &mdash; pyro 4.0.1.post43+g5315369f documentation</title>
+  <title>pyro.multigrid.variable_coeff_MG &mdash; pyro 4.0.1.post44+gaa189b0c documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -166,7 +166,7 @@
         <span class="c1"># on each level -- note: this will already be scaled by 1/dx**2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">edge_coeffs</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="c1"># initialize the MG object with the auxillary &quot;coeffs&quot; field</span>
+        <span class="c1"># initialize the MG object with the auxiliary &quot;coeffs&quot; field</span>
         <span class="n">MG</span><span class="o">.</span><span class="n">CellCenterMG2d</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                                    <span class="n">xmin</span><span class="o">=</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">ymax</span><span class="p">,</span>
                                    <span class="n">xl_BC_type</span><span class="o">=</span><span class="n">xl_BC_type</span><span class="p">,</span> <span class="n">xr_BC_type</span><span class="o">=</span><span class="n">xr_BC_type</span><span class="p">,</span>
@@ -209,7 +209,7 @@
             <span class="c1"># put the coefficients on edges</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">edge_coeffs</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_coeffs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">restrict</span><span class="p">())</span>  <span class="c1"># _EdgeCoeffs(self.grids[n].grid, coeffs_c))</span>
 
-            <span class="c1"># if we are periodic, then we should force the edge coefficents</span>
+            <span class="c1"># if we are periodic, then we should force the edge coefficients</span>
             <span class="c1"># to be periodic</span>
             <span class="c1"># if self.grids[n].BCs[&quot;coeffs&quot;].xlb == &quot;periodic&quot;:</span>
             <span class="c1">#     self.edge_coeffs[0].x[self.grids[n].grid.ihi+1,:] = \</span>

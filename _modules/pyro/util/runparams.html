@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.util.runparams &mdash; pyro 4.0.1.post43+g5315369f documentation</title>
+  <title>pyro.util.runparams &mdash; pyro 4.0.1.post44+gaa189b0c documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -177,7 +177,7 @@
 
 
 <div class="viewcode-block" id="is_int"><a class="viewcode-back" href="../../../pyro.util.html#pyro.util.runparams.is_int">[docs]</a><span class="k">def</span> <span class="nf">is_int</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; is the given string an interger? &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; is the given string an integer? &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="nb">int</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
@@ -229,7 +229,7 @@
 <span class="sd">        file : str</span>
 <span class="sd">            The name of the file to parse</span>
 <span class="sd">        no_new : int, optional</span>
-<span class="sd">            If no_new = 1, then we don&#39;t add any new paramters to the</span>
+<span class="sd">            If no_new = 1, then we don&#39;t add any new parameters to the</span>
 <span class="sd">            dictionary of runtime parameters, but instead just override</span>
 <span class="sd">            the values of existing ones.</span>
 
@@ -311,7 +311,7 @@
                 <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;warning, key: </span><span class="si">%s</span><span class="s2"> not defined&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span>
                 <span class="k">continue</span>
 
-            <span class="c1"># check in turn whether this is an interger, float, or string</span>
+            <span class="c1"># check in turn whether this is an integer, float, or string</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">_get_val</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="RuntimeParameters.get_param"><a class="viewcode-back" href="../../../pyro.util.html#pyro.util.runparams.RuntimeParameters.get_param">[docs]</a>    <span class="k">def</span> <span class="nf">get_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
