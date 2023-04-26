@@ -23,10 +23,31 @@ with their data.
 * ``analysis/``
 
   * ``convergence.py``: this compares two files with different
-    resolutions (one a factor of 2 finer than the other).  It coarsens
-    the finer data and then computes the norm of the difference.  This
-    is used to test the convergence of solvers.
+    resolutions (one a factor of N-times, (default is 2 times or ``N=2``) finer
+    than the other). It coarsens the finer data and then computes the
+    norm of the difference.  The default variable being compared is
+    density, ``var_name=density`` by default. but it takes arbitary variable name as input.
+    This is used to test the convergence of solvers.
 
+    usage: ``./convergence.py fine_file coarse_file var_name N``
+
+  * ``convergence_plot.py``: this compares 3 or more files with different
+    resolutions (factor of N-times (default is 2 times) finer than the
+    others) by using ``convergence.py``. It prints out a table that summarizes
+    the L-2 Norm of all the variables by coarsening the finer data and comparing
+    it to the coarse data, as well as the order of convergence between the
+    L-2 Norms. It also produces a plot in the end to compare the theoretical
+    order of convergence to the actual order of convergence from the datasets.
+    The data files should enter from the finest file to the coarsest file. There
+    should be at least 3 files, ``fine_file med_file coarse_file``.
+    The output file name for the convergence plot, ``out = convergence_plot.pdf``,
+    by default. The theoretical order of convergence for the solver, ``order=2``,
+    by default. The multiplicative factor between each data files are, ``resolution=2``,
+    by default. This is used to test the order of the convergence of the solver
+    when there is no analytical solutions.
+
+    usage: ``./convergence_plot.py files* -o out -n order -r resolution``
+  
   * ``dam_compare.py``: this takes an output file from the
     shallow water dam break problem and plots a slice through the domain
     together with the analytic solution (calculated in the script).
