@@ -81,7 +81,7 @@ def states(idir, ng, dx, dt,
     qv : ndarray
         The primitive state vector
     dqv : ndarray
-        Spatial derivitive of the state vector
+        Spatial derivative of the state vector
 
     Returns
     -------
@@ -1157,7 +1157,7 @@ def consFlux(idir, idens, ixmom, iymom, iener, irhoX, iu, iv, ip, nspec, U_state
 def artificial_viscosity(ng, dx, dy,
                          cvisc, u, v):
     r"""
-    Compute the artifical viscosity.  Here, we compute edge-centered
+    Compute the artificial viscosity.  Here, we compute edge-centered
     approximations to the divergence of the velocity.  This follows
     directly Colella \ Woodward (1984) Eq. 4.5
 

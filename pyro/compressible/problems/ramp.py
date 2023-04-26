@@ -45,7 +45,7 @@ def init_data(my_data, rp):
 
     # there is probably an easier way to do this, but for now, we
     # will just do an explicit loop.  Also, we really want to set
-    # the pressue and get the internal energy from that, and then
+    # the pressure and get the internal energy from that, and then
     # compute the total energy (which is what we store).  For now
     # we will just fake this
 

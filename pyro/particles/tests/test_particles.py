@@ -27,7 +27,7 @@ def setup_test(n_particles=50, extra_rp_params=None):
     Function for setting up Particles tests. Would use unittest for this, but
     it doesn't seem to be possible/easy to pass in options to a setUp function.
 
-    Sets up runtime paramters, a blank simulation, fills it with a grid and sets
+    Sets up runtime parameters, a blank simulation, fills it with a grid and sets
     up the boundary conditions and simulation data.
 
     Parameters

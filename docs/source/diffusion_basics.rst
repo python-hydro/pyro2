@@ -66,9 +66,9 @@ Explorations
 Extensions
 ^^^^^^^^^^
 
-* Switch from Crank-Nicolson (2nd order in time) to backward's Euler
+* Switch from Crank-Nicolson (2nd order in time) to backward Euler
   (1st order in time) and compare the solution and convergence. This
-  should only require changing the source term and coefficents used in
+  should only require changing the source term and coefficients used in
   setting up the multigrid solve. It does not require changes to the
   multigrid solver itself.
 

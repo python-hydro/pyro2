@@ -129,7 +129,7 @@ class Simulation(NullSimulation):
             for v in extra_vars:
                 my_data.register_var(v, bc)
 
-        # store the EOS gamma as an auxillary quantity so we can have a
+        # store the EOS gamma as an auxiliary quantity so we can have a
         # self-contained object stored in output files to make plots.
         # store grav because we'll need that in some BCs
         my_data.set_aux("gamma", self.rp.get_param("eos.gamma"))
@@ -142,7 +142,7 @@ class Simulation(NullSimulation):
         if self.rp.get_param("particles.do_particles") == 1:
             self.particles = particles.Particles(self.cc_data, bc, self.rp)
 
-        # some auxillary data that we'll need to fill GC in, but isn't
+        # some auxiliary data that we'll need to fill GC in, but isn't
         # really part of the main solution
         aux_data = self.data_class(my_grid)
         aux_data.register_var("ymom_src", bc_yodd)

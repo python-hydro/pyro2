@@ -97,7 +97,7 @@ class Simulation(NullSimulation):
 
         self.cc_data = my_data
 
-        # some auxillary data that we'll need to fill GC in, but isn't
+        # some auxiliary data that we'll need to fill GC in, but isn't
         # really part of the main solution
         aux_data = patch.CellCenterData2d(myg)
 
@@ -198,7 +198,7 @@ class Simulation(NullSimulation):
         # 1. do the initial projection.  This makes sure that our original
         # velocity field satisties div U = 0
 
-        # the coefficent for the elliptic equation is beta_0^2/rho
+        # the coefficient for the elliptic equation is beta_0^2/rho
         coeff = 1/rho
         beta0 = self.base["beta0"]
         coeff.v()[:, :] = coeff.v()*beta0.v2d()**2

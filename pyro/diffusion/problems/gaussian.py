@@ -45,7 +45,7 @@ def init_data(my_data, rp):
 
     phi[:, :] = phi_analytic(dist, 0.0, t_0, k, phi_0, phi_max)
 
-    # for later interpretation / analysis, store some auxillary data
+    # for later interpretation / analysis, store some auxiliary data
     my_data.set_aux("k", k)
     my_data.set_aux("t_0", t_0)
     my_data.set_aux("phi_0", phi_0)
