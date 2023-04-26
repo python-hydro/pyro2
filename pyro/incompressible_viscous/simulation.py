@@ -1,7 +1,7 @@
-import pyro.incompressible as incompressible
-import pyro.incompressible_viscous.BC as BC
-import pyro.mesh.boundary as bnd
-import pyro.multigrid.MG as MG
+from pyro import incompressible
+from pyro.incompressible_viscous import BC
+from pyro.mesh import boundary as bnd
+from pyro.multigrid import MG
 
 
 class Simulation(incompressible.Simulation):
