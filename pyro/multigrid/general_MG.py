@@ -58,7 +58,7 @@ class GeneralMG2d(MG.CellCenterMG2d):
         # scaled by 1/dx**2
         self.beta_edge = []
 
-        # initialize the MG object with the auxillary fields
+        # initialize the MG object with the auxiliary fields
         MG.CellCenterMG2d.__init__(self, nx, ny, ng=1,
                                    xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax,
                                    xl_BC_type=xl_BC_type, xr_BC_type=xr_BC_type,
@@ -74,7 +74,7 @@ class GeneralMG2d(MG.CellCenterMG2d):
                                    true_function=true_function, vis=vis,
                                    vis_title=vis_title)
 
-        # the coefficents come in a dictionary.  Set the coefficients
+        # the coefficients come in a dictionary.  Set the coefficients
         # and restrict them down the hierarchy we only need to do this
         # once.  We need to hold the original coeffs in our grid so we
         # can do a ghost cell fill.
