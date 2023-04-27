@@ -33,25 +33,28 @@ def mac_vels(grid,  dt,
     # get the full u and v left and right states (including transverse
     # terms) on both the x- and y-interfaces
 
-    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = burgers_interface.get_interface_states(grid, dt,
-                                                                                            u, v,
-                                                                                            ldelta_ux, ldelta_vx,
-                                                                                            ldelta_uy, ldelta_vy)
+    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = \
+                burgers_interface.get_interface_states(grid, dt,
+                                                       u, v,
+                                                       ldelta_ux, ldelta_vx,
+                                                       ldelta_uy, ldelta_vy)
 
     # apply transverse terms on both x- and y- interfaces
-    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = burgers_interface.apply_transverse_corrections(grid, dt,
-                                                                                                    u_xl, u_xr,
-                                                                                                    u_yl, u_yr,
-                                                                                                    v_xl, v_xr,
-                                                                                                    v_yl, v_yr)
+    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = \
+                burgers_interface.apply_transverse_corrections(grid, dt,
+                                                               u_xl, u_xr,
+                                                               u_yl, u_yr,
+                                                               v_xl, v_xr,
+                                                               v_yl, v_yr)
 
     # apply pressure gradient correction terms to the interface state
-    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = apply_gradp_corrections(dt,
-                                                                             u_xl, u_xr,
-                                                                             u_yl, u_yr,
-                                                                             v_xl, v_xr,
-                                                                             v_yl, v_yr,
-                                                                             gradp_x, gradp_y)
+    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = \
+                apply_gradp_corrections(dt,
+                                        u_xl, u_xr,
+                                        u_yl, u_yr,
+                                        v_xl, v_xr,
+                                        v_yl, v_yr,
+                                        gradp_x, gradp_y)
 
     # Riemann problem -- this follows Burger's equation.  We don't use
     # any input velocity for the upwinding.  Also, we only care about
@@ -97,24 +100,28 @@ def states(grid, dt,
     """
 
     # get the full u and v left and right states without transverse terms and gradp
-    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = burgers_interface.get_interface_states(grid, dt,
-                                                                                            u, v,
-                                                                                            ldelta_ux, ldelta_vx,
-                                                                                            ldelta_uy, ldelta_vy)
+    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = \
+                burgers_interface.get_interface_states(grid, dt,
+                                                       u, v,
+                                                       ldelta_ux, ldelta_vx,
+                                                       ldelta_uy, ldelta_vy)
 
     # apply transverse terms on both x- and y- interfaces
-    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = burgers_interface.apply_transverse_corrections(grid, dt,
-                                                                                                    u_xl, u_xr,
-                                                                                                    u_yl, u_yr,
-                                                                                                    v_xl, v_xr,
-                                                                                                    v_yl, v_yr)
+    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = \
+                burgers_interface.apply_transverse_corrections(grid, dt,
+                                                               u_xl, u_xr,
+                                                               u_yl, u_yr,
+                                                               v_xl, v_xr,
+                                                               v_yl, v_yr)
+
     # apply pressure gradient correction terms to the interface state
-    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = apply_gradp_corrections(dt,
-                                                                             u_xl, u_xr,
-                                                                             u_yl, u_yr,
-                                                                             v_xl, v_xr,
-                                                                             v_yl, v_yr,
-                                                                             gradp_x, gradp_y)
+    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = \
+                apply_gradp_corrections(dt,
+                                        u_xl, u_xr,
+                                        u_yl, u_yr,
+                                        v_xl, v_xr,
+                                        v_yl, v_yr,
+                                        gradp_x, gradp_y)
 
     # upwind using the MAC velocity to determine which state exists on
     # the interface
@@ -150,8 +157,9 @@ def apply_gradp_corrections(dt,
     Returns
     -------
     out : ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray
-        correct the interface states of the left and right states of u and v on both the x- and
-        y-interfaces interface states with the pressure gradient terms.
+        correct the interface states of the left and right states of u and v on
+        both the x- and y-interfaces interface states with the pressure gradient
+        terms.
     """
 
     # Apply pressure gradient correction terms
