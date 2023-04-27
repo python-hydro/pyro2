@@ -48,12 +48,7 @@ def main():
         print(usage)
         sys.exit(2)
 
-    try:
-        file = sys.argv[1]
-    except IndexError:
-        print(usage)
-        sys.exit(2)
-
+    file = sys.argv[1]
     errors = get_errors(file)
     print("errors: ", errors[0], errors[1])
 
