@@ -210,7 +210,7 @@ class Simulation(burgers_simulation):
         v_MAC = ai.ArrayIndexer(d=_vm, grid=myg)
 
         # ---------------------------------------------------------------------
-        # do a MAC projection ot make the advective velocities divergence
+        # do a MAC projection to make the advective velocities divergence
         # free
         # ---------------------------------------------------------------------
 

@@ -1,5 +1,5 @@
 """A RT problem with two distinct modes: short wave length on the
-left and long wavelenght on the right.  This allows one to see
+left and long wavelength on the right.  This allows one to see
 how the growth rate depends on wavenumber.
 """
 

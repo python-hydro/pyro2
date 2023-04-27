@@ -42,7 +42,7 @@ The particles can be initialized in a number of ways:
   :func:`Particles <pyro.particles.particles.Particles>` constructor. This function takes the number of particles to be
   generated and returns a dictionary of :func:`Particle <pyro.particles.particles.Particle>` objects.
 
-We can turn on/off the particles solver using the following runtime paramters:
+We can turn on/off the particles solver using the following runtime parameters:
 
 +--------------------------------------------------------------------------------+
 |``[particles]``                                                                 |

@@ -83,7 +83,7 @@ def read(filename):
 
         myd.create()
 
-        # auxillary data
+        # auxiliary data
         for k in f["aux"].attrs:
             myd.set_aux(k, f["aux"].attrs[k])
 

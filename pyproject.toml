@@ -42,3 +42,7 @@ defining-attr-methods = [
 
 [tool.pylint.FORMAT]
 max-line-length = 132
+
+[tool.codespell]
+skip = ".git,*docs/build"
+ignore-words-list = "pres"
