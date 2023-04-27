@@ -38,6 +38,13 @@ def mac_vels(grid,  dt,
                                                                                             ldelta_ux, ldelta_vx,
                                                                                             ldelta_uy, ldelta_vy)
 
+    # apply transverse terms on both x- and y- interfaces
+    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = burgers_interface.apply_transverse_corrections(grid, dt,
+                                                                                                    u_xl, u_xr,
+                                                                                                    u_yl, u_yr,
+                                                                                                    v_xl, v_xr,
+                                                                                                    v_yl, v_yr)
+
     # apply pressure gradient correction terms to the interface state
     u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = apply_gradp_corrections(dt,
                                                                              u_xl, u_xr,
@@ -46,12 +53,6 @@ def mac_vels(grid,  dt,
                                                                              v_yl, v_yr,
                                                                              gradp_x, gradp_y)
 
-    # apply transverse terms on both x- and y- interfaces
-    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = burgers_interface.apply_transverse_corrections(grid, dt,
-                                                                                                    u_xl, u_xr,
-                                                                                                    u_yl, u_yr,
-                                                                                                    v_xl, v_xr,
-                                                                                                    v_yl, v_yr)
     # Riemann problem -- this follows Burger's equation.  We don't use
     # any input velocity for the upwinding.  Also, we only care about
     # the normal states here (u on x and v on y)
