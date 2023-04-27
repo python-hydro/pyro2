@@ -101,6 +101,12 @@ def states(grid, dt,
                                                                                             ldelta_ux, ldelta_vx,
                                                                                             ldelta_uy, ldelta_vy)
 
+    # apply transverse terms on both x- and y- interfaces
+    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = burgers_interface.apply_transverse_corrections(grid, dt,
+                                                                                                    u_xl, u_xr,
+                                                                                                    u_yl, u_yr,
+                                                                                                    v_xl, v_xr,
+                                                                                                    v_yl, v_yr)
     # apply pressure gradient correction terms to the interface state
     u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = apply_gradp_corrections(dt,
                                                                              u_xl, u_xr,
@@ -108,13 +114,6 @@ def states(grid, dt,
                                                                              v_xl, v_xr,
                                                                              v_yl, v_yr,
                                                                              gradp_x, gradp_y)
-
-    # apply transverse terms on both x- and y- interfaces
-    u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = burgers_interface.apply_transverse_corrections(grid, dt,
-                                                                                                    u_xl, u_xr,
-                                                                                                    u_yl, u_yr,
-                                                                                                    v_xl, v_xr,
-                                                                                                    v_yl, v_yr)
 
     # upwind using the MAC velocity to determine which state exists on
     # the interface
