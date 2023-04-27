@@ -135,20 +135,28 @@ def apply_transverse_corrections(grid, dt,
     vbar.v(buf=2)[:, :] = 0.5 * (vhat_adv.v(buf=2) + vhat_adv.jp(1, buf=2))
 
     # the transverse term for the u states on x-interfaces
-    u_xl.ip(1, buf=2)[:, :] += -0.5 * dtdy * vbar.v(buf=2) * (u_yint.jp(1, buf=2) - u_yint.v(buf=2))
-    u_xr.v(buf=2)[:, :] += -0.5 * dtdy * vbar.v(buf=2) * (u_yint.jp(1, buf=2) - u_yint.v(buf=2))
+    u_xl.ip(1, buf=2)[:, :] += -0.5 * dtdy * vbar.v(buf=2) * \
+                               (u_yint.jp(1, buf=2) - u_yint.v(buf=2))
+    u_xr.v(buf=2)[:, :] += -0.5 * dtdy * vbar.v(buf=2) * \
+                           (u_yint.jp(1, buf=2) - u_yint.v(buf=2))
 
     # the transverse term for the v states on x-interfaces
-    v_xl.ip(1, buf=2)[:, :] += -0.5 * dtdy * vbar.v(buf=2) * (v_yint.jp(1, buf=2) - v_yint.v(buf=2))
-    v_xr.v(buf=2)[:, :] += -0.5 * dtdy * vbar.v(buf=2) * (v_yint.jp(1, buf=2) - v_yint.v(buf=2))
+    v_xl.ip(1, buf=2)[:, :] += -0.5 * dtdy * vbar.v(buf=2) * \
+                               (v_yint.jp(1, buf=2) - v_yint.v(buf=2))
+    v_xr.v(buf=2)[:, :] += -0.5 * dtdy * vbar.v(buf=2) * \
+                           (v_yint.jp(1, buf=2) - v_yint.v(buf=2))
 
     # the transverse term for the v states on y-interfaces
-    v_yl.jp(1, buf=2)[:, :] += -0.5 * dtdx * ubar.v(buf=2) * (v_xint.ip(1, buf=2) - v_xint.v(buf=2))
-    v_yr.v(buf=2)[:, :] += -0.5 * dtdx * ubar.v(buf=2) * (v_xint.ip(1, buf=2) - v_xint.v(buf=2))
+    v_yl.jp(1, buf=2)[:, :] += -0.5 * dtdx * ubar.v(buf=2) * \
+                               (v_xint.ip(1, buf=2) - v_xint.v(buf=2))
+    v_yr.v(buf=2)[:, :] += -0.5 * dtdx * ubar.v(buf=2) * \
+                           (v_xint.ip(1, buf=2) - v_xint.v(buf=2))
 
     # the transverse term for the u states on y-interfaces
-    u_yl.jp(1, buf=2)[:, :] += -0.5 * dtdx * ubar.v(buf=2) * (u_xint.ip(1, buf=2) - u_xint.v(buf=2))
-    u_yr.v(buf=2)[:, :] += -0.5 * dtdx * ubar.v(buf=2) * (u_xint.ip(1, buf=2) - u_xint.v(buf=2))
+    u_yl.jp(1, buf=2)[:, :] += -0.5 * dtdx * ubar.v(buf=2) * \
+                               (u_xint.ip(1, buf=2) - u_xint.v(buf=2))
+    u_yr.v(buf=2)[:, :] += -0.5 * dtdx * ubar.v(buf=2) * \
+                           (u_xint.ip(1, buf=2) - u_xint.v(buf=2))
 
     return u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr
 
