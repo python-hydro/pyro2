@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Test the general MG solver with a variable coeffcient Poisson
+"""Test the general MG solver with a variable coefficient Poisson
 problem (in essence, we are making this solver act like the
 variable_coefficient_MG.py solver).  This ensures we didn't
 screw up the base functionality here.

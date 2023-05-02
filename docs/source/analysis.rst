@@ -26,7 +26,8 @@ with their data.
     resolutions (one a factor of N-times, (default is 2 times or ``N=2``) finer
     than the other). It coarsens the finer data and then computes the
     norm of the difference.  The default variable being compared is
-    density, ``var_name=density`` by default. but it takes arbitary variable name as input.
+    density, but a different variable can be selected with the
+    ``var_name`` argument.
     This is used to test the convergence of solvers.
 
     usage: ``./convergence.py fine_file coarse_file var_name N``
@@ -47,7 +48,7 @@ with their data.
     when there is no analytical solutions.
 
     usage: ``./convergence_plot.py files* -o out -n order -r resolution``
-  
+
   * ``dam_compare.py``: this takes an output file from the
     shallow water dam break problem and plots a slice through the domain
     together with the analytic solution (calculated in the script).
@@ -83,7 +84,7 @@ with their data.
 
   * ``smooth_error.py``: this takes an output file from the advection
     solver's smooth problem and compares to the analytic solution,
-    outputing the L2 norm of the error.
+    outputting the L2 norm of the error.
 
     usage: ``./smooth_error.py file``
 
