@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.advection.simulation &mdash; pyro 4.0.1.post44+gaa189b0c documentation</title>
+  <title>pyro.advection.simulation &mdash; pyro 4.0.1.post45+g95509bea documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -126,6 +126,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">import</span> <span class="nn">pyro.advection.advective_fluxes</span> <span class="k">as</span> <span class="nn">flx</span>
+<span class="kn">from</span> <span class="nn">pyro.advection.interface</span> <span class="kn">import</span> <span class="n">linear_interface</span>
 <span class="kn">from</span> <span class="nn">pyro.mesh</span> <span class="kn">import</span> <span class="n">patch</span>
 <span class="kn">from</span> <span class="nn">pyro.particles</span> <span class="kn">import</span> <span class="n">particles</span>
 <span class="kn">from</span> <span class="nn">pyro.simulation_null</span> <span class="kn">import</span> <span class="n">NullSimulation</span><span class="p">,</span> <span class="n">bc_setup</span><span class="p">,</span> <span class="n">grid_setup</span>
@@ -187,7 +188,7 @@
         <span class="n">dtdx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">dx</span>
         <span class="n">dtdy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">dy</span>
 
-        <span class="n">flux_x</span><span class="p">,</span> <span class="n">flux_y</span> <span class="o">=</span> <span class="n">flx</span><span class="o">.</span><span class="n">unsplit_fluxes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span> <span class="s2">&quot;density&quot;</span><span class="p">)</span>
+        <span class="n">flux_x</span><span class="p">,</span> <span class="n">flux_y</span> <span class="o">=</span> <span class="n">flx</span><span class="o">.</span><span class="n">unsplit_fluxes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span> <span class="s2">&quot;density&quot;</span><span class="p">,</span> <span class="n">linear_interface</span><span class="p">)</span>
 
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        do the differencing for the fluxes now.  Here, we use slices so we</span>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.advection.advective_fluxes &mdash; pyro 4.0.1.post44+gaa189b0c documentation</title>
+  <title>pyro.advection.advective_fluxes &mdash; pyro 4.0.1.post45+g95509bea documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -119,10 +119,8 @@
            <div itemprop="articleBody">
              
   <h1>Source code for pyro.advection.advective_fluxes</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">pyro.mesh</span> <span class="kn">import</span> <span class="n">reconstruction</span>
+<div class="viewcode-block" id="unsplit_fluxes"><a class="viewcode-back" href="../../../pyro.advection.html#pyro.advection.advective_fluxes.unsplit_fluxes">[docs]</a><span></span><span class="k">def</span> <span class="nf">unsplit_fluxes</span><span class="p">(</span><span class="n">my_data</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">scalar_name</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
 
-
-<div class="viewcode-block" id="unsplit_fluxes"><a class="viewcode-back" href="../../../pyro.advection.html#pyro.advection.advective_fluxes.unsplit_fluxes">[docs]</a><span class="k">def</span> <span class="nf">unsplit_fluxes</span><span class="p">(</span><span class="n">my_data</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">scalar_name</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Construct the fluxes through the interfaces for the linear advection</span>
 <span class="sd">    equation:</span>
@@ -174,45 +172,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">myg</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span>
-
     <span class="n">a</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">scalar_name</span><span class="p">)</span>
 
-    <span class="c1"># get the advection velocities</span>
-    <span class="n">u</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;advection.u&quot;</span><span class="p">)</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;advection.v&quot;</span><span class="p">)</span>
+    <span class="c1">#Compute the velocities on each direction and the interface states a_{i+1/2}^{n+1/2}.</span>
 
-    <span class="n">cx</span> <span class="o">=</span> <span class="n">u</span><span class="o">*</span><span class="n">dt</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span>
-    <span class="n">cy</span> <span class="o">=</span> <span class="n">v</span><span class="o">*</span><span class="n">dt</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
-
-    <span class="c1"># --------------------------------------------------------------------------</span>
-    <span class="c1"># monotonized central differences</span>
-    <span class="c1"># --------------------------------------------------------------------------</span>
-
-    <span class="n">limiter</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;advection.limiter&quot;</span><span class="p">)</span>
-
-    <span class="n">ldelta_ax</span> <span class="o">=</span> <span class="n">reconstruction</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">limiter</span><span class="p">)</span>
-    <span class="n">ldelta_ay</span> <span class="o">=</span> <span class="n">reconstruction</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">limiter</span><span class="p">)</span>
-
-    <span class="n">a_x</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
-
-    <span class="c1"># upwind</span>
-    <span class="k">if</span> <span class="n">u</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="c1"># a_x[i,j] = a[i,j] - 0.5*(1.0 + cx)*ldelta_a[i,j]</span>
-        <span class="n">a_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">cx</span><span class="p">)</span><span class="o">*</span><span class="n">ldelta_ax</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># a_x[i,j] = a[i-1,j] + 0.5*(1.0 - cx)*ldelta_a[i-1,j]</span>
-        <span class="n">a_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">cx</span><span class="p">)</span><span class="o">*</span><span class="n">ldelta_ax</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-    <span class="c1"># y-direction</span>
-    <span class="n">a_y</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
-
-    <span class="c1"># upwind</span>
-    <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="c1"># a_y[i,j] = a[i,j] - 0.5*(1.0 + cy)*ldelta_a[i,j]</span>
-        <span class="n">a_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">cy</span><span class="p">)</span><span class="o">*</span><span class="n">ldelta_ay</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># a_y[i,j] = a[i,j-1] + 0.5*(1.0 - cy)*ldelta_a[i,j-1]</span>
-        <span class="n">a_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">cy</span><span class="p">)</span><span class="o">*</span><span class="n">ldelta_ay</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">a_x</span><span class="p">,</span> <span class="n">a_y</span> <span class="o">=</span> <span class="n">interface</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
 
     <span class="c1"># compute the transverse flux differences.  The flux is just (u a)</span>
     <span class="c1"># HOTF</span>
