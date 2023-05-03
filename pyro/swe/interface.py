@@ -77,7 +77,7 @@ def states(idir, ng, dx, dt,
     qv : ndarray
         The primitive state vector
     dqv : ndarray
-        Spatial derivitive of the state vector
+        Spatial derivative of the state vector
 
     Returns
     -------
