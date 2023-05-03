@@ -10,4 +10,4 @@ limiter = 0  ; Unused here, but needed to inherit from advection base class
 
 weno_order = 3  ; k in WENO scheme
 
-temporal_method = RK4        ; integration method (see mesh/integrators/.py)
+temporal_method = RK4        ; integration method (see mesh/integrators.py)

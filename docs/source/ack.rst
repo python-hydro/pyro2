@@ -37,7 +37,7 @@ Bell, and Andy Nonaka.
 History
 =======
 
-The original pyro code was written in 2003-4 to help developmer
+The original pyro code was written in 2003-4 to help developer
 Zingale understand these methods for himself. It was originally written
 using the Numeric array package and handwritten C extensions for the
 compute-intensive kernels.  It was ported to numarray when that

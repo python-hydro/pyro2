@@ -43,7 +43,7 @@ used for a squashed commit message.*
 Discussions
 -----------
 
-We us github discussions:
+We use github discussions:
 https://github.com/python-hydro/pyro2/discussions
 for support.  You are encouraged to post in the discussions
 to ask questions.
