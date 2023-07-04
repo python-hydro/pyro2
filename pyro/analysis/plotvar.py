@@ -27,7 +27,8 @@ def makeplot(plotfile, variable, outfile,
         myd = sim.cc_data
     myg = myd.grid
 
-    plt.figure(num=1, figsize=(width, height), dpi=100, facecolor='w')
+    fig = plt.figure(num=1, figsize=(width, height), dpi=100, facecolor='w')
+    ax = fig.add_subplot(111)
 
     if variable == "vort":
         vx = myd.get_var("x-velocity")
@@ -47,22 +48,23 @@ def makeplot(plotfile, variable, outfile,
     if log:
         var = np.log10(var)
 
-    img = plt.imshow(np.transpose(var.v()),
-               interpolation="nearest", origin="lower",
-               extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
+    img = ax.imshow(np.transpose(var.v()),
+                    interpolation="nearest", origin="lower",
+                    extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax])
 
     if not compact:
-        plt.colorbar(img)
-
-        plt.xlabel("x")
-        plt.ylabel("y")
+        fig.colorbar(img)
+        fig.suptitle(f"{variable}")
+        ax.set_xlabel("x")
+        ax.set_ylabel("y")
 
     if compact:
-        plt.axis("off")
-        plt.subplots_adjust(bottom=0.0, top=1.0, left=0.0, right=1.0)
-        plt.savefig(outfile)
+        ax.axis("off")
+        fig.subplots_adjust(bottom=0.0, top=1.0, left=0.0, right=1.0)
+        fig.savefig(outfile, bbox_inches="tight")
     else:
-        plt.savefig(outfile, bbox_inches="tight", dpi=dpi)
+        fig.tight_layout()
+        fig.savefig(outfile, bbox_inches="tight", dpi=dpi)
 
     if not quiet:
         plt.show()
