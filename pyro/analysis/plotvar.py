@@ -15,7 +15,7 @@ from pyro.mesh import patch
 
 
 def makeplot(plotfile, variable, outfile,
-             width=6.5, height=5.25, dpi=100,
+             width=6.5, height=5.25, dpi=100, notitle=False,
              log=False, compact=False, quiet=False):
 
     sim = io.read(plotfile)
@@ -54,7 +54,8 @@ def makeplot(plotfile, variable, outfile,
 
     if not compact:
         fig.colorbar(img)
-        fig.suptitle(f"{variable}")
+        if not notitle:
+            fig.suptitle(f"{variable}")
         ax.set_xlabel("x")
         ax.set_ylabel("y")
 
@@ -78,6 +79,8 @@ def get_args():
                         metavar="plot.png", help="output file name")
     parser.add_argument("--log", action="store_true",
                         help="plot log of variable")
+    parser.add_argument("--notitle", action="store_true",
+                        help="suppress the title at the top of the figure")
     parser.add_argument("--compact", action="store_true",
                         help="remove axes and border")
     parser.add_argument("--quiet", action="store_true",
@@ -101,5 +104,5 @@ if __name__ == "__main__":
     args = get_args()
 
     makeplot(args.plotfile[0], args.variable[0], args.o,
-             width=args.W, height=args.H, dpi=args.dpi,
+             width=args.W, height=args.H, dpi=args.dpi, notitle=args.notitle,
              log=args.log, compact=args.compact, quiet=args.quiet)
