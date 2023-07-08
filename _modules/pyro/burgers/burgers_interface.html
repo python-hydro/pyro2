@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyro.burgers.burgers_interface &mdash; pyro 4.0.1.post48+g0815f12b documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/clipboard.min.js"></script>
+        <script src="../../../_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pyro
+              <img src="../../../_static/logo.gif" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                4.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">pyro basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Setting up pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../burgers_basics.html">Burgers’ Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible_compare.html">Compressible solver comparisons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multigrid.html">Multigrid Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../swe_basics.html">Shallow water solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../particles_basics.html">Particles</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../testing.html">Testing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../help.html">Contributing and getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ack.html#history">History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Software Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../zreferences.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pyro.burgers.burgers_interface</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pyro.burgers.burgers_interface</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="get_interface_states"><a class="viewcode-back" href="../../../pyro.burgers.html#pyro.burgers.burgers_interface.get_interface_states">[docs]</a><span class="k">def</span> <span class="nf">get_interface_states</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
+                         <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span>
+                         <span class="n">ldelta_ux</span><span class="p">,</span> <span class="n">ldelta_vx</span><span class="p">,</span>
+                         <span class="n">ldelta_uy</span><span class="p">,</span> <span class="n">ldelta_vy</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Construct the interface states for the burgers equation:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">       u_t  + u u_x  + v u_y  = 0</span>
+<span class="sd">       v_t  + u v_x  + v v_y  = 0</span>
+
+<span class="sd">    Compute the unsplit predictions of u and v on both the x- and</span>
+<span class="sd">    y-interfaces.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    grid : Grid2d</span>
+<span class="sd">        The grid object</span>
+<span class="sd">    dt : float</span>
+<span class="sd">        The timestep</span>
+<span class="sd">    u, v : ndarray</span>
+<span class="sd">        x-velocity and y-velocity</span>
+<span class="sd">    ldelta_ux, ldelta_uy: ndarray</span>
+<span class="sd">        Limited slopes of the x-velocity in the x and y directions</span>
+<span class="sd">    ldelta_vx, ldelta_vy: ndarray</span>
+<span class="sd">        Limited slopes of the y-velocity in the x and y directions</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray</span>
+<span class="sd">        get the predictions of the left and right states of u and v on both the x- and</span>
+<span class="sd">        y-interfaces interface states without the transverse terms.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">u_xl</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">u_xr</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">u_yl</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">u_yr</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+
+    <span class="n">v_xl</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">v_xr</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">v_yl</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">v_yr</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+
+    <span class="c1"># first predict u and v to both interfaces, considering only the normal</span>
+    <span class="c1"># part of the predictor.  These are the &#39;hat&#39; states.</span>
+
+    <span class="n">dtdx</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">/</span> <span class="n">grid</span><span class="o">.</span><span class="n">dx</span>
+    <span class="n">dtdy</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">/</span> <span class="n">grid</span><span class="o">.</span><span class="n">dy</span>
+
+    <span class="c1"># u on x-edges</span>
+    <span class="n">u_xl</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> \
+        <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">dtdx</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">ldelta_ux</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">u_xr</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> \
+        <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">dtdx</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">ldelta_ux</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># v on x-edges</span>
+    <span class="n">v_xl</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> \
+        <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">dtdx</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">ldelta_vx</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">v_xr</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> \
+        <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">dtdx</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">ldelta_vx</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># u on y-edges</span>
+    <span class="n">u_yl</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> \
+        <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">dtdy</span> <span class="o">*</span> <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">ldelta_uy</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">u_yr</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> \
+        <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">dtdy</span> <span class="o">*</span> <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">ldelta_uy</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># v on y-edges</span>
+    <span class="n">v_yl</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> \
+        <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">dtdy</span> <span class="o">*</span> <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">ldelta_vy</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">v_yr</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> \
+        <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">dtdy</span> <span class="o">*</span> <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">ldelta_vy</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">u_xl</span><span class="p">,</span> <span class="n">u_xr</span><span class="p">,</span> <span class="n">u_yl</span><span class="p">,</span> <span class="n">u_yr</span><span class="p">,</span> <span class="n">v_xl</span><span class="p">,</span> <span class="n">v_xr</span><span class="p">,</span> <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span></div>
+
+
+<div class="viewcode-block" id="apply_transverse_corrections"><a class="viewcode-back" href="../../../pyro.burgers.html#pyro.burgers.burgers_interface.apply_transverse_corrections">[docs]</a><span class="k">def</span> <span class="nf">apply_transverse_corrections</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
+                                 <span class="n">u_xl</span><span class="p">,</span> <span class="n">u_xr</span><span class="p">,</span>
+                                 <span class="n">u_yl</span><span class="p">,</span> <span class="n">u_yr</span><span class="p">,</span>
+                                 <span class="n">v_xl</span><span class="p">,</span> <span class="n">v_xr</span><span class="p">,</span>
+                                 <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    grid : Grid2d</span>
+<span class="sd">        The grid object</span>
+<span class="sd">    dt : float</span>
+<span class="sd">        The timestep</span>
+<span class="sd">    u_xl, u_xr : ndarray ndarray</span>
+<span class="sd">        left and right states of x-velocity in x-interface.</span>
+<span class="sd">    u_yl, u_yr : ndarray ndarray</span>
+<span class="sd">        left and right states of x-velocity in y-interface.</span>
+<span class="sd">    v_xl, v_xr : ndarray ndarray</span>
+<span class="sd">        left and right states of y-velocity in x-interface.</span>
+<span class="sd">    v_yl, u_yr : ndarray ndarray</span>
+<span class="sd">        left and right states of y-velocity in y-interface.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray</span>
+<span class="sd">        correct the interface states of the left and right states of u and v on both the x- and</span>
+<span class="sd">        y-interfaces interface states with the transverse terms.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">dtdx</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">/</span> <span class="n">grid</span><span class="o">.</span><span class="n">dx</span>
+    <span class="n">dtdy</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">/</span> <span class="n">grid</span><span class="o">.</span><span class="n">dy</span>
+
+    <span class="c1"># now get the normal advective velocities on the interfaces by solving</span>
+    <span class="c1"># the Riemann problem.</span>
+    <span class="n">uhat_adv</span> <span class="o">=</span> <span class="n">riemann</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">u_xl</span><span class="p">,</span> <span class="n">u_xr</span><span class="p">)</span>
+    <span class="n">vhat_adv</span> <span class="o">=</span> <span class="n">riemann</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span><span class="p">)</span>
+
+    <span class="c1"># now that we have the advective velocities, upwind the left and right</span>
+    <span class="c1"># states using the appropriate advective velocity.</span>
+
+    <span class="c1"># on the x-interfaces, we upwind based on uhat_adv</span>
+    <span class="n">u_xint</span> <span class="o">=</span> <span class="n">upwind</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">u_xl</span><span class="p">,</span> <span class="n">u_xr</span><span class="p">,</span> <span class="n">uhat_adv</span><span class="p">)</span>
+    <span class="n">v_xint</span> <span class="o">=</span> <span class="n">upwind</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">v_xl</span><span class="p">,</span> <span class="n">v_xr</span><span class="p">,</span> <span class="n">uhat_adv</span><span class="p">)</span>
+
+    <span class="c1"># on the y-interfaces, we upwind based on vhat_adv</span>
+    <span class="n">u_yint</span> <span class="o">=</span> <span class="n">upwind</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">u_yl</span><span class="p">,</span> <span class="n">u_yr</span><span class="p">,</span> <span class="n">vhat_adv</span><span class="p">)</span>
+    <span class="n">v_yint</span> <span class="o">=</span> <span class="n">upwind</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span><span class="p">,</span> <span class="n">vhat_adv</span><span class="p">)</span>
+
+    <span class="c1"># at this point, these states are the `hat&#39; states -- they only</span>
+    <span class="c1"># considered the normal to the interface portion of the predictor.</span>
+
+    <span class="n">ubar</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">vbar</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+
+    <span class="n">ubar</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">uhat_adv</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">uhat_adv</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">vbar</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">vhat_adv</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">vhat_adv</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="c1"># the transverse term for the u states on x-interfaces</span>
+    <span class="n">u_xl</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">dtdy</span> <span class="o">*</span> <span class="n">vbar</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> \
+                               <span class="p">(</span><span class="n">u_yint</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">u_yint</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">u_xr</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">dtdy</span> <span class="o">*</span> <span class="n">vbar</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> \
+                           <span class="p">(</span><span class="n">u_yint</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">u_yint</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="c1"># the transverse term for the v states on x-interfaces</span>
+    <span class="n">v_xl</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">dtdy</span> <span class="o">*</span> <span class="n">vbar</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> \
+                               <span class="p">(</span><span class="n">v_yint</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">v_yint</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">v_xr</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">dtdy</span> <span class="o">*</span> <span class="n">vbar</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> \
+                           <span class="p">(</span><span class="n">v_yint</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">v_yint</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="c1"># the transverse term for the v states on y-interfaces</span>
+    <span class="n">v_yl</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">dtdx</span> <span class="o">*</span> <span class="n">ubar</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> \
+                               <span class="p">(</span><span class="n">v_xint</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">v_xint</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">v_yr</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">dtdx</span> <span class="o">*</span> <span class="n">ubar</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> \
+                           <span class="p">(</span><span class="n">v_xint</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">v_xint</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="c1"># the transverse term for the u states on y-interfaces</span>
+    <span class="n">u_yl</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">dtdx</span> <span class="o">*</span> <span class="n">ubar</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> \
+                               <span class="p">(</span><span class="n">u_xint</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">u_xint</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">u_yr</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">dtdx</span> <span class="o">*</span> <span class="n">ubar</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> \
+                           <span class="p">(</span><span class="n">u_xint</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">u_xint</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">u_xl</span><span class="p">,</span> <span class="n">u_xr</span><span class="p">,</span> <span class="n">u_yl</span><span class="p">,</span> <span class="n">u_yr</span><span class="p">,</span> <span class="n">v_xl</span><span class="p">,</span> <span class="n">v_xr</span><span class="p">,</span> <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span></div>
+
+
+<div class="viewcode-block" id="construct_unsplit_fluxes"><a class="viewcode-back" href="../../../pyro.burgers.html#pyro.burgers.burgers_interface.construct_unsplit_fluxes">[docs]</a><span class="k">def</span> <span class="nf">construct_unsplit_fluxes</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span>
+                             <span class="n">u_xl</span><span class="p">,</span> <span class="n">u_xr</span><span class="p">,</span>
+                             <span class="n">u_yl</span><span class="p">,</span> <span class="n">u_yr</span><span class="p">,</span>
+                             <span class="n">v_xl</span><span class="p">,</span> <span class="n">v_xr</span><span class="p">,</span>
+                             <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Construct the interface fluxes for the burgers equation:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">       u_t  + u u_x  + v u_y  = 0</span>
+<span class="sd">       v_t  + u v_x  + v v_y  = 0</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    grid : Grid2d</span>
+<span class="sd">        The grid object</span>
+<span class="sd">    u_xl, u_xr : ndarray ndarray</span>
+<span class="sd">        left and right states of x-velocity in x-interface.</span>
+<span class="sd">    u_yl, u_yr : ndarray ndarray</span>
+<span class="sd">        left and right states of x-velocity in y-interface.</span>
+<span class="sd">    v_xl, v_xr : ndarray ndarray</span>
+<span class="sd">        left and right states of y-velocity in x-interface.</span>
+<span class="sd">    v_yl, u_yr : ndarray ndarray</span>
+<span class="sd">        left and right states of y-velocity in y-interface.</span>
+<span class="sd">    -------</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : ndarray, ndarray, ndarray, ndarray</span>
+<span class="sd">        The u,v fluxes on the x- and y-interfaces</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Solve for riemann problem for the second time</span>
+
+    <span class="c1"># Get corrected normal advection velocity (MAC)</span>
+
+    <span class="n">u_MAC</span> <span class="o">=</span> <span class="n">riemann_and_upwind</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">u_xl</span><span class="p">,</span> <span class="n">u_xr</span><span class="p">)</span>
+    <span class="n">v_MAC</span> <span class="o">=</span> <span class="n">riemann_and_upwind</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span><span class="p">)</span>
+
+    <span class="c1"># Upwind using the transverse corrected normal advective velocity</span>
+
+    <span class="n">ux</span> <span class="o">=</span> <span class="n">upwind</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">u_xl</span><span class="p">,</span> <span class="n">u_xr</span><span class="p">,</span> <span class="n">u_MAC</span><span class="p">)</span>
+    <span class="n">vx</span> <span class="o">=</span> <span class="n">upwind</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">v_xl</span><span class="p">,</span> <span class="n">v_xr</span><span class="p">,</span> <span class="n">u_MAC</span><span class="p">)</span>
+
+    <span class="n">uy</span> <span class="o">=</span> <span class="n">upwind</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">u_yl</span><span class="p">,</span> <span class="n">u_yr</span><span class="p">,</span> <span class="n">v_MAC</span><span class="p">)</span>
+    <span class="n">vy</span> <span class="o">=</span> <span class="n">upwind</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span><span class="p">,</span> <span class="n">v_MAC</span><span class="p">)</span>
+
+    <span class="c1"># construct the flux</span>
+
+    <span class="n">fu_x</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">fv_x</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">fu_y</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">fv_y</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+
+    <span class="n">fu_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">ux</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">u_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">fv_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">vx</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">u_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">fu_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">uy</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">v_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">fv_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">vy</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">v_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fu_x</span><span class="p">,</span> <span class="n">fu_y</span><span class="p">,</span> <span class="n">fv_x</span><span class="p">,</span> <span class="n">fv_y</span></div>
+
+
+<div class="viewcode-block" id="upwind"><a class="viewcode-back" href="../../../pyro.burgers.html#pyro.burgers.burgers_interface.upwind">[docs]</a><span class="k">def</span> <span class="nf">upwind</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">q_l</span><span class="p">,</span> <span class="n">q_r</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    upwind the left and right states based on the specified input</span>
+<span class="sd">    velocity, s.  The resulting interface state is q_int</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    grid : Grid2d</span>
+<span class="sd">        The grid object</span>
+<span class="sd">    q_l, q_r : ndarray</span>
+<span class="sd">        left and right states</span>
+<span class="sd">    s : ndarray</span>
+<span class="sd">        velocity</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : ndarray</span>
+<span class="sd">        Upwinded state</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">q_int</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+
+    <span class="n">q_int</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">,</span>
+                                    <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">q_l</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">q_r</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)),</span>
+                                    <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">q_l</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">q_r</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)))</span>
+
+    <span class="k">return</span> <span class="n">q_int</span></div>
+
+
+<div class="viewcode-block" id="riemann"><a class="viewcode-back" href="../../../pyro.burgers.html#pyro.burgers.burgers_interface.riemann">[docs]</a><span class="k">def</span> <span class="nf">riemann</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">q_l</span><span class="p">,</span> <span class="n">q_r</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Solve the Burger&#39;s Riemann problem given the input left and right</span>
+<span class="sd">    states and return the state on the interface.</span>
+
+<span class="sd">    This uses the expressions from Almgren, Bell, and Szymczak 1996.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    grid : Grid2d</span>
+<span class="sd">        The grid object</span>
+<span class="sd">    q_l, q_r : ndarray</span>
+<span class="sd">        left and right states</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : ndarray</span>
+<span class="sd">        Interface state</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">s</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+
+    <span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">q_l</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">,</span>
+                                               <span class="n">q_r</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mf">0.0</span><span class="p">),</span>
+                                <span class="mf">0.0</span><span class="p">,</span>
+                                <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">q_l</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">,</span>
+                                                        <span class="n">q_l</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">q_r</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">),</span>
+                                         <span class="n">q_l</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">q_r</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)))</span>
+
+    <span class="k">return</span> <span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="riemann_and_upwind"><a class="viewcode-back" href="../../../pyro.burgers.html#pyro.burgers.burgers_interface.riemann_and_upwind">[docs]</a><span class="k">def</span> <span class="nf">riemann_and_upwind</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">q_l</span><span class="p">,</span> <span class="n">q_r</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    First solve the Riemann problem given q_l and q_r to give the</span>
+<span class="sd">    velocity on the interface and: use this velocity to upwind to</span>
+<span class="sd">    determine the state (q_l, q_r, or a mix) on the interface).</span>
+
+<span class="sd">    This differs from upwind, above, in that we don&#39;t take in a</span>
+<span class="sd">    velocity to upwind with).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    grid : Grid2d</span>
+<span class="sd">        The grid object</span>
+<span class="sd">    q_l, q_r : ndarray</span>
+<span class="sd">        left and right states</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : ndarray</span>
+<span class="sd">        Upwinded state</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">s</span> <span class="o">=</span> <span class="n">riemann</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">q_l</span><span class="p">,</span> <span class="n">q_r</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">upwind</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">q_l</span><span class="p">,</span> <span class="n">q_r</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, pyro development team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

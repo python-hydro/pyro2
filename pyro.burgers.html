@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.burgers package &mdash; pyro 4.0.1.post47+ga169fa24 documentation</title>
+  <title>pyro.burgers package &mdash; pyro 4.0.1.post48+g0815f12b documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -168,9 +168,14 @@ unsplit method for inviscid burgers equations based on the Colella 1990 paper.</
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pyro.burgers.problems.html">pyro.burgers.problems package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="pyro.burgers.problems.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyro.burgers.problems.html#module-pyro.burgers.problems.smooth">pyro.burgers.problems.smooth module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyro.burgers.problems.html#pyro.burgers.problems.smooth.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyro.burgers.problems.html#pyro.burgers.problems.smooth.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.burgers.problems.html#module-pyro.burgers.problems.test">pyro.burgers.problems.test module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.burgers.problems.html#pyro.burgers.problems.test.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.burgers.problems.html#pyro.burgers.problems.test.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.burgers.problems.html#module-pyro.burgers.problems.converge">pyro.burgers.problems.converge module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.burgers.problems.html#pyro.burgers.problems.converge.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.burgers.problems.html#pyro.burgers.problems.converge.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="pyro.burgers.problems.html#module-pyro.burgers.problems.tophat">pyro.burgers.problems.tophat module</a><ul>
@@ -186,44 +191,169 @@ unsplit method for inviscid burgers equations based on the Colella 1990 paper.</
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
 </section>
-<section id="module-pyro.burgers.advective_fluxes">
-<span id="pyro-burgers-advective-fluxes-module"></span><h2>pyro.burgers.advective_fluxes module<a class="headerlink" href="#module-pyro.burgers.advective_fluxes" title="Permalink to this heading"></a></h2>
+<section id="module-pyro.burgers.burgers_interface">
+<span id="pyro-burgers-burgers-interface-module"></span><h2>pyro.burgers.burgers_interface module<a class="headerlink" href="#module-pyro.burgers.burgers_interface" title="Permalink to this heading"></a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="pyro.burgers.advective_fluxes.unsplit_fluxes">
-<span class="sig-prename descclassname"><span class="pre">pyro.burgers.advective_fluxes.</span></span><span class="sig-name descname"><span class="pre">unsplit_fluxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/burgers/advective_fluxes.html#unsplit_fluxes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.burgers.advective_fluxes.unsplit_fluxes" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pyro.burgers.burgers_interface.apply_transverse_corrections">
+<span class="sig-prename descclassname"><span class="pre">pyro.burgers.burgers_interface.</span></span><span class="sig-name descname"><span class="pre">apply_transverse_corrections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_xl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_xr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_yl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_yr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_xl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_xr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_yl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_yr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/burgers/burgers_interface.html#apply_transverse_corrections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.burgers.burgers_interface.apply_transverse_corrections" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>grid</strong><span class="classifier">Grid2d</span></dt><dd><p>The grid object</p>
+</dd>
+<dt><strong>dt</strong><span class="classifier">float</span></dt><dd><p>The timestep</p>
+</dd>
+<dt><strong>u_xl, u_xr</strong><span class="classifier">ndarray ndarray</span></dt><dd><p>left and right states of x-velocity in x-interface.</p>
+</dd>
+<dt><strong>u_yl, u_yr</strong><span class="classifier">ndarray ndarray</span></dt><dd><p>left and right states of x-velocity in y-interface.</p>
+</dd>
+<dt><strong>v_xl, v_xr</strong><span class="classifier">ndarray ndarray</span></dt><dd><p>left and right states of y-velocity in x-interface.</p>
+</dd>
+<dt><strong>v_yl, u_yr</strong><span class="classifier">ndarray ndarray</span></dt><dd><p>left and right states of y-velocity in y-interface.</p>
+</dd>
+<dt><strong>Returns</strong></dt><dd></dd>
+<dt><strong>——-</strong></dt><dd></dd>
+<dt><strong>out</strong><span class="classifier">ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray</span></dt><dd><p>correct the interface states of the left and right states of u and v on both the x- and
+y-interfaces interface states with the transverse terms.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.burgers.burgers_interface.construct_unsplit_fluxes">
+<span class="sig-prename descclassname"><span class="pre">pyro.burgers.burgers_interface.</span></span><span class="sig-name descname"><span class="pre">construct_unsplit_fluxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_xl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_xr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_yl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_yr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_xl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_xr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_yl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_yr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/burgers/burgers_interface.html#construct_unsplit_fluxes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.burgers.burgers_interface.construct_unsplit_fluxes" title="Permalink to this definition"></a></dt>
+<dd><p>Construct the interface fluxes for the burgers equation:</p>
+<div class="math notranslate nohighlight">
+\[u_t  + u u_x  + v u_y  = 0
+v_t  + u v_x  + v v_y  = 0\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>grid</strong><span class="classifier">Grid2d</span></dt><dd><p>The grid object</p>
+</dd>
+<dt><strong>u_xl, u_xr</strong><span class="classifier">ndarray ndarray</span></dt><dd><p>left and right states of x-velocity in x-interface.</p>
+</dd>
+<dt><strong>u_yl, u_yr</strong><span class="classifier">ndarray ndarray</span></dt><dd><p>left and right states of x-velocity in y-interface.</p>
+</dd>
+<dt><strong>v_xl, v_xr</strong><span class="classifier">ndarray ndarray</span></dt><dd><p>left and right states of y-velocity in x-interface.</p>
+</dd>
+<dt><strong>v_yl, u_yr</strong><span class="classifier">ndarray ndarray</span></dt><dd><p>left and right states of y-velocity in y-interface.</p>
+</dd>
+<dt><strong>——-</strong></dt><dd></dd>
+<dt><strong>Returns</strong></dt><dd></dd>
+<dt><strong>——-</strong></dt><dd></dd>
+<dt><strong>out</strong><span class="classifier">ndarray, ndarray, ndarray, ndarray</span></dt><dd><p>The u,v fluxes on the x- and y-interfaces</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.burgers.burgers_interface.get_interface_states">
+<span class="sig-prename descclassname"><span class="pre">pyro.burgers.burgers_interface.</span></span><span class="sig-name descname"><span class="pre">get_interface_states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_ux</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_vx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_uy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_vy</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/burgers/burgers_interface.html#get_interface_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.burgers.burgers_interface.get_interface_states" title="Permalink to this definition"></a></dt>
 <dd><p>Construct the interface states for the burgers equation:</p>
 <div class="math notranslate nohighlight">
 \[u_t  + u u_x  + v u_y  = 0
 v_t  + u v_x  + v v_y  = 0\]</div>
-<p>We use a second-order (piecewise linear) unsplit Godunov method
-(following Colella 1990).</p>
-<p>Our convention is that the fluxes are going to be defined on the
-left edge of the computational zones:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="o">|</span>             <span class="o">|</span>             <span class="o">|</span>             <span class="o">|</span>
- <span class="o">|</span>             <span class="o">|</span>             <span class="o">|</span>             <span class="o">|</span>
-<span class="o">-+------+------+------+------+------+------+--</span>
- <span class="o">|</span>     <span class="n">i</span><span class="o">-</span><span class="mi">1</span>     <span class="o">|</span>      <span class="n">i</span>      <span class="o">|</span>     <span class="n">i</span><span class="o">+</span><span class="mi">1</span>     <span class="o">|</span>
-
-          <span class="n">a_l</span><span class="p">,</span><span class="n">i</span>  <span class="n">a_r</span><span class="p">,</span><span class="n">i</span>   <span class="n">a_l</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span>
-</pre></div>
-</div>
-<p>a_r,i and a_l,i+1 are computed using the information in
-zone i,j.</p>
+<p>Compute the unsplit predictions of u and v on both the x- and
+y-interfaces.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>my_data</strong><span class="classifier">CellCenterData2d object</span></dt><dd><p>The data object containing the grid and advective scalar that
-we are advecting.</p>
+<dt><strong>grid</strong><span class="classifier">Grid2d</span></dt><dd><p>The grid object</p>
 </dd>
-<dt><strong>rp</strong><span class="classifier">RuntimeParameters object</span></dt><dd><p>The runtime parameters for the simulation</p>
+<dt><strong>dt</strong><span class="classifier">float</span></dt><dd><p>The timestep</p>
 </dd>
-<dt><strong>dt</strong><span class="classifier">float</span></dt><dd><p>The timestep we are advancing through.</p>
+<dt><strong>u, v</strong><span class="classifier">ndarray</span></dt><dd><p>x-velocity and y-velocity</p>
+</dd>
+<dt><strong>ldelta_ux, ldelta_uy: ndarray</strong></dt><dd><p>Limited slopes of the x-velocity in the x and y directions</p>
+</dd>
+<dt><strong>ldelta_vx, ldelta_vy: ndarray</strong></dt><dd><p>Limited slopes of the y-velocity in the x and y directions</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>out</strong><span class="classifier">ndarray, ndarray</span></dt><dd><p>The u,v fluxes on the x- and y-interfaces</p>
+<dt><strong>out</strong><span class="classifier">ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray</span></dt><dd><p>get the predictions of the left and right states of u and v on both the x- and
+y-interfaces interface states without the transverse terms.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.burgers.burgers_interface.riemann">
+<span class="sig-prename descclassname"><span class="pre">pyro.burgers.burgers_interface.</span></span><span class="sig-name descname"><span class="pre">riemann</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_r</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/burgers/burgers_interface.html#riemann"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.burgers.burgers_interface.riemann" title="Permalink to this definition"></a></dt>
+<dd><p>Solve the Burger’s Riemann problem given the input left and right
+states and return the state on the interface.</p>
+<p>This uses the expressions from Almgren, Bell, and Szymczak 1996.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>grid</strong><span class="classifier">Grid2d</span></dt><dd><p>The grid object</p>
+</dd>
+<dt><strong>q_l, q_r</strong><span class="classifier">ndarray</span></dt><dd><p>left and right states</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>Interface state</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.burgers.burgers_interface.riemann_and_upwind">
+<span class="sig-prename descclassname"><span class="pre">pyro.burgers.burgers_interface.</span></span><span class="sig-name descname"><span class="pre">riemann_and_upwind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_r</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/burgers/burgers_interface.html#riemann_and_upwind"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.burgers.burgers_interface.riemann_and_upwind" title="Permalink to this definition"></a></dt>
+<dd><p>First solve the Riemann problem given q_l and q_r to give the
+velocity on the interface and: use this velocity to upwind to
+determine the state (q_l, q_r, or a mix) on the interface).</p>
+<p>This differs from upwind, above, in that we don’t take in a
+velocity to upwind with).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>grid</strong><span class="classifier">Grid2d</span></dt><dd><p>The grid object</p>
+</dd>
+<dt><strong>q_l, q_r</strong><span class="classifier">ndarray</span></dt><dd><p>left and right states</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>Upwinded state</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.burgers.burgers_interface.upwind">
+<span class="sig-prename descclassname"><span class="pre">pyro.burgers.burgers_interface.</span></span><span class="sig-name descname"><span class="pre">upwind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/burgers/burgers_interface.html#upwind"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.burgers.burgers_interface.upwind" title="Permalink to this definition"></a></dt>
+<dd><p>upwind the left and right states based on the specified input
+velocity, s.  The resulting interface state is q_int</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>grid</strong><span class="classifier">Grid2d</span></dt><dd><p>The grid object</p>
+</dd>
+<dt><strong>q_l, q_r</strong><span class="classifier">ndarray</span></dt><dd><p>left and right states</p>
+</dd>
+<dt><strong>s</strong><span class="classifier">ndarray</span></dt><dd><p>velocity</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>Upwinded state</p>
 </dd>
 </dl>
 </dd>
@@ -240,7 +370,7 @@ we are advecting.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.burgers.simulation.Simulation.dovis">
 <span class="sig-name descname"><span class="pre">dovis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/burgers/simulation.html#Simulation.dovis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.burgers.simulation.Simulation.dovis" title="Permalink to this definition"></a></dt>
-<dd><p>Do runtime visualization.</p>
+<dd><p>Do runtime visualization</p>
 </dd></dl>
 
 <dl class="py method">
@@ -259,8 +389,10 @@ conditions for the chosen problem.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.burgers.simulation.Simulation.method_compute_timestep">
 <span class="sig-name descname"><span class="pre">method_compute_timestep</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/burgers/simulation.html#Simulation.method_compute_timestep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.burgers.simulation.Simulation.method_compute_timestep" title="Permalink to this definition"></a></dt>
-<dd><p>Compute the advective timestep (CFL) constraint.  We use the
-driver.cfl parameter to control what fraction of the CFL
+<dd><p>The timestep() function computes the advective timestep
+(CFL) constraint.  The CFL constraint says that information
+cannot propagate further than one zone per timestep.</p>
+<p>We use the driver.cfl parameter to control what fraction of the CFL
 step we actually take.</p>
 </dd></dl>
 

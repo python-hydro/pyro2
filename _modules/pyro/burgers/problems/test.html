@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible_sr.problems.test &mdash; pyro 4.0.1.post48+g0815f12b documentation</title>
+  <title>pyro.burgers.problems.test &mdash; pyro 4.0.1.post48+g0815f12b documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
@@ -109,7 +109,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">pyro.compressible_sr.problems.test</li>
+      <li class="breadcrumb-item active">pyro.burgers.problems.test</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -118,49 +118,40 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for pyro.compressible_sr.problems.test</h1><div class="highlight"><pre>
+  <h1>Source code for pyro.burgers.problems.test</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="kn">from</span> <span class="nn">pyro.compressible_sr</span> <span class="kn">import</span> <span class="n">eos</span>
 <span class="kn">from</span> <span class="nn">pyro.mesh</span> <span class="kn">import</span> <span class="n">patch</span>
+<span class="kn">from</span> <span class="nn">pyro.util</span> <span class="kn">import</span> <span class="n">msg</span>
 
 
-<div class="viewcode-block" id="init_data"><a class="viewcode-back" href="../../../../pyro.compressible_sr.problems.html#pyro.compressible_sr.problems.test.init_data">[docs]</a><span class="k">def</span> <span class="nf">init_data</span><span class="p">(</span><span class="n">my_data</span><span class="p">,</span> <span class="n">rp</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; an init routine for unit testing &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="init_data"><a class="viewcode-back" href="../../../../pyro.burgers.problems.html#pyro.burgers.problems.test.init_data">[docs]</a><span class="k">def</span> <span class="nf">init_data</span><span class="p">(</span><span class="n">myd</span><span class="p">,</span> <span class="n">rp</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; initialize the burgers test problem &quot;&quot;&quot;</span>
+    <span class="k">del</span> <span class="n">rp</span>  <span class="c1"># this problem doesn&#39;t use runtime params</span>
+
+    <span class="n">msg</span><span class="o">.</span><span class="n">bold</span><span class="p">(</span><span class="s2">&quot;initializing the burgers test problem...&quot;</span><span class="p">)</span>
 
     <span class="c1"># make sure that we are passed a valid patch object</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">my_data</span><span class="p">,</span> <span class="n">patch</span><span class="o">.</span><span class="n">CellCenterData2d</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: patch invalid in sedov.py&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">my_data</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">myd</span><span class="p">,</span> <span class="n">patch</span><span class="o">.</span><span class="n">CellCenterData2d</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: patch invalid in test.py&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">myd</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
 
-    <span class="c1"># get the density, momenta, and energy as separate variables</span>
-    <span class="n">dens</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
-    <span class="n">xmom</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;x-momentum&quot;</span><span class="p">)</span>
-    <span class="n">ymom</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;y-momentum&quot;</span><span class="p">)</span>
-    <span class="n">ener</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;energy&quot;</span><span class="p">)</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">myd</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">myd</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">)</span>
 
-    <span class="n">gamma</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;eos.gamma&quot;</span><span class="p">)</span>
+    <span class="n">u</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">3.0</span>
+    <span class="n">v</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">3.0</span>
 
-    <span class="c1"># initialize the components, remember, that ener here is rho*eint</span>
-    <span class="c1"># + 0.5*rho*v**2, where eint is the specific internal energy</span>
-    <span class="c1"># (erg/g)</span>
-    <span class="n">dens</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">1.0</span>
-    <span class="n">xmom</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span>
-    <span class="n">ymom</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span>
-    <span class="c1"># ener[:, :] = 2.5</span>
+    <span class="c1"># y = -x + 1</span>
 
-    <span class="n">p</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">myd</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">y2d</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">1.0</span> <span class="o">*</span> <span class="n">myd</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">x2d</span> <span class="o">+</span> <span class="mf">1.0</span>
 
-    <span class="n">rhoh</span> <span class="o">=</span> <span class="n">eos</span><span class="o">.</span><span class="n">rhoh_from_rho_p</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">dens</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
-    <span class="c1"># print(f&#39;rhoh = {rhoh}&#39;)</span>
-
-    <span class="c1"># u, v = 0 so W = 1</span>
-
-    <span class="n">ener</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">rhoh</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">p</span> <span class="o">-</span> <span class="n">dens</span><span class="p">[:,</span> <span class="p">:]</span></div>
+    <span class="n">u</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">v</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span></div>
 
 
-<div class="viewcode-block" id="finalize"><a class="viewcode-back" href="../../../../pyro.compressible_sr.problems.html#pyro.compressible_sr.problems.test.finalize">[docs]</a><span class="k">def</span> <span class="nf">finalize</span><span class="p">():</span>
+<div class="viewcode-block" id="finalize"><a class="viewcode-back" href="../../../../pyro.burgers.problems.html#pyro.burgers.problems.test.finalize">[docs]</a><span class="k">def</span> <span class="nf">finalize</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; print out any information to the user at the end of the run &quot;&quot;&quot;</span></div>
 </pre></div>
 

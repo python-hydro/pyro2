@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; pyro 4.0.1.post47+ga169fa24 documentation</title>
+  <title>Index &mdash; pyro 4.0.1.post48+g0815f12b documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -155,6 +155,8 @@
       </ul></li>
       <li><a href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.add_ivars">add_ivars() (pyro.mesh.patch.CellCenterData2d method)</a>
 </li>
+      <li><a href="pyro.burgers.html#pyro.burgers.burgers_interface.apply_transverse_corrections">apply_transverse_corrections() (in module pyro.burgers.burgers_interface)</a>
+</li>
       <li><a href="pyro.particles.html#pyro.particles.particles.Particles.array_generate_particles">array_generate_particles() (pyro.particles.particles.Particles method)</a>
 </li>
   </ul></td>
@@ -241,6 +243,8 @@
         <li><a href="pyro.swe.html#pyro.swe.interface.consFlux">(in module pyro.swe.interface)</a>
 </li>
       </ul></li>
+      <li><a href="pyro.burgers.html#pyro.burgers.burgers_interface.construct_unsplit_fluxes">construct_unsplit_fluxes() (in module pyro.burgers.burgers_interface)</a>
+</li>
       <li><a href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.copy">copy() (pyro.mesh.array_indexer.ArrayIndexer method)</a>
 
       <ul>
@@ -406,7 +410,9 @@
 </li>
         <li><a href="pyro.advection_weno.problems.html#pyro.advection_weno.problems.tophat.finalize">(in module pyro.advection_weno.problems.tophat)</a>
 </li>
-        <li><a href="pyro.burgers.problems.html#pyro.burgers.problems.smooth.finalize">(in module pyro.burgers.problems.smooth)</a>
+        <li><a href="pyro.burgers.problems.html#pyro.burgers.problems.converge.finalize">(in module pyro.burgers.problems.converge)</a>
+</li>
+        <li><a href="pyro.burgers.problems.html#pyro.burgers.problems.test.finalize">(in module pyro.burgers.problems.test)</a>
 </li>
         <li><a href="pyro.burgers.problems.html#pyro.burgers.problems.tophat.finalize">(in module pyro.burgers.problems.tophat)</a>
 </li>
@@ -625,9 +631,11 @@
 </li>
       <li><a href="pyro.particles.html#pyro.particles.particles.Particles.get_init_positions">get_init_positions() (pyro.particles.particles.Particles method)</a>
 </li>
-      <li><a href="pyro.incompressible.html#pyro.incompressible.incomp_interface.get_interface_states">get_interface_states() (in module pyro.incompressible.incomp_interface)</a>
+      <li><a href="pyro.burgers.html#pyro.burgers.burgers_interface.get_interface_states">get_interface_states() (in module pyro.burgers.burgers_interface)</a>
 
       <ul>
+        <li><a href="pyro.incompressible.html#pyro.incompressible.incomp_interface.get_interface_states">(in module pyro.incompressible.incomp_interface)</a>
+</li>
         <li><a href="pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.get_interface_states">(in module pyro.lm_atm.LM_atm_interface)</a>
 </li>
       </ul></li>
@@ -639,10 +647,10 @@
 </li>
       <li><a href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d.get_solution_gradient">get_solution_gradient() (pyro.multigrid.MG.CellCenterMG2d method)</a>
 </li>
-      <li><a href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d.get_solution_object">get_solution_object() (pyro.multigrid.MG.CellCenterMG2d method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d.get_solution_object">get_solution_object() (pyro.multigrid.MG.CellCenterMG2d method)</a>
+</li>
       <li><a href="pyro.mesh.html#pyro.mesh.integration.RKIntegrator.get_stage_start">get_stage_start() (pyro.mesh.integration.RKIntegrator method)</a>
 </li>
       <li><a href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.get_var">get_var() (pyro.mesh.patch.CellCenterData2d method)</a>
@@ -722,7 +730,9 @@
 </li>
         <li><a href="pyro.advection_weno.problems.html#pyro.advection_weno.problems.tophat.init_data">(in module pyro.advection_weno.problems.tophat)</a>
 </li>
-        <li><a href="pyro.burgers.problems.html#pyro.burgers.problems.smooth.init_data">(in module pyro.burgers.problems.smooth)</a>
+        <li><a href="pyro.burgers.problems.html#pyro.burgers.problems.converge.init_data">(in module pyro.burgers.problems.converge)</a>
+</li>
+        <li><a href="pyro.burgers.problems.html#pyro.burgers.problems.test.init_data">(in module pyro.burgers.problems.test)</a>
 </li>
         <li><a href="pyro.burgers.problems.html#pyro.burgers.problems.tophat.init_data">(in module pyro.burgers.problems.tophat)</a>
 </li>
@@ -1131,11 +1141,13 @@
 </li>
         <li><a href="pyro.burgers.html#module-pyro.burgers">pyro.burgers</a>
 </li>
-        <li><a href="pyro.burgers.html#module-pyro.burgers.advective_fluxes">pyro.burgers.advective_fluxes</a>
+        <li><a href="pyro.burgers.html#module-pyro.burgers.burgers_interface">pyro.burgers.burgers_interface</a>
 </li>
         <li><a href="pyro.burgers.problems.html#module-pyro.burgers.problems">pyro.burgers.problems</a>
 </li>
-        <li><a href="pyro.burgers.problems.html#module-pyro.burgers.problems.smooth">pyro.burgers.problems.smooth</a>
+        <li><a href="pyro.burgers.problems.html#module-pyro.burgers.problems.converge">pyro.burgers.problems.converge</a>
+</li>
+        <li><a href="pyro.burgers.problems.html#module-pyro.burgers.problems.test">pyro.burgers.problems.test</a>
 </li>
         <li><a href="pyro.burgers.problems.html#module-pyro.burgers.problems.tophat">pyro.burgers.problems.tophat</a>
 </li>
@@ -1786,10 +1798,10 @@
 </li>
       </ul></li>
       <li>
-    pyro.burgers.advective_fluxes
+    pyro.burgers.burgers_interface
 
       <ul>
-        <li><a href="pyro.burgers.html#module-pyro.burgers.advective_fluxes">module</a>
+        <li><a href="pyro.burgers.html#module-pyro.burgers.burgers_interface">module</a>
 </li>
       </ul></li>
       <li>
@@ -1800,10 +1812,17 @@
 </li>
       </ul></li>
       <li>
-    pyro.burgers.problems.smooth
+    pyro.burgers.problems.converge
 
       <ul>
-        <li><a href="pyro.burgers.problems.html#module-pyro.burgers.problems.smooth">module</a>
+        <li><a href="pyro.burgers.problems.html#module-pyro.burgers.problems.converge">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.burgers.problems.test
+
+      <ul>
+        <li><a href="pyro.burgers.problems.html#module-pyro.burgers.problems.test">module</a>
 </li>
       </ul></li>
       <li>
@@ -2965,7 +2984,7 @@
       </ul></li>
       <li><a href="pyro.compressible_sr.html#pyro.compressible_sr.eos.rhoh_from_rho_p">rhoh_from_rho_p() (in module pyro.compressible_sr.eos)</a>
 </li>
-      <li><a href="pyro.incompressible.html#pyro.incompressible.incomp_interface.riemann">riemann() (in module pyro.incompressible.incomp_interface)</a>
+      <li><a href="pyro.burgers.html#pyro.burgers.burgers_interface.riemann">riemann() (in module pyro.burgers.burgers_interface)</a>
 
       <ul>
         <li><a href="pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.riemann">(in module pyro.lm_atm.LM_atm_interface)</a>
@@ -2973,7 +2992,7 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="pyro.incompressible.html#pyro.incompressible.incomp_interface.riemann_and_upwind">riemann_and_upwind() (in module pyro.incompressible.incomp_interface)</a>
+      <li><a href="pyro.burgers.html#pyro.burgers.burgers_interface.riemann_and_upwind">riemann_and_upwind() (in module pyro.burgers.burgers_interface)</a>
 
       <ul>
         <li><a href="pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.riemann_and_upwind">(in module pyro.lm_atm.LM_atm_interface)</a>
@@ -3140,8 +3159,6 @@
       <ul>
         <li><a href="pyro.advection_nonuniform.html#pyro.advection_nonuniform.advective_fluxes.unsplit_fluxes">(in module pyro.advection_nonuniform.advective_fluxes)</a>
 </li>
-        <li><a href="pyro.burgers.html#pyro.burgers.advective_fluxes.unsplit_fluxes">(in module pyro.burgers.advective_fluxes)</a>
-</li>
         <li><a href="pyro.compressible.html#pyro.compressible.unsplit_fluxes.unsplit_fluxes">(in module pyro.compressible.unsplit_fluxes)</a>
 </li>
         <li><a href="pyro.compressible_sr.html#pyro.compressible_sr.unsplit_fluxes.unsplit_fluxes">(in module pyro.compressible_sr.unsplit_fluxes)</a>
@@ -3155,7 +3172,7 @@
 </li>
       <li><a href="pyro.particles.html#pyro.particles.particles.Particles.update_particles">update_particles() (pyro.particles.particles.Particles method)</a>
 </li>
-      <li><a href="pyro.incompressible.html#pyro.incompressible.incomp_interface.upwind">upwind() (in module pyro.incompressible.incomp_interface)</a>
+      <li><a href="pyro.burgers.html#pyro.burgers.burgers_interface.upwind">upwind() (in module pyro.burgers.burgers_interface)</a>
 
       <ul>
         <li><a href="pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.upwind">(in module pyro.lm_atm.LM_atm_interface)</a>
