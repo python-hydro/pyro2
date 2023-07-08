@@ -1,11 +1,10 @@
 import importlib
 
-import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
-import pyro.burgers.advective_fluxes as flx
-from pyro.mesh import patch
+from pyro.burgers import burgers_interface
+from pyro.mesh import patch, reconstruction
 from pyro.particles import particles
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
 from pyro.util import plot_tools
@@ -49,24 +48,25 @@ class Simulation(NullSimulation):
 
     def method_compute_timestep(self):
         """
-        Compute the advective timestep (CFL) constraint.  We use the
-        driver.cfl parameter to control what fraction of the CFL
+        The timestep() function computes the advective timestep
+        (CFL) constraint.  The CFL constraint says that information
+        cannot propagate further than one zone per timestep.
+
+        We use the driver.cfl parameter to control what fraction of the CFL
         step we actually take.
         """
 
         cfl = self.rp.get_param("driver.cfl")
 
-        # since velocity is no longer a constant
-        # velocity varies in each zone
-
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
 
-        # dt = min(min(dx/|u_i|), min(dy/|v_j|))
+        # the timestep is min(dx/|u|, dy|v|)
 
         xtmp = self.cc_data.grid.dx / max(abs(u).max(), self.SMALL)
         ytmp = self.cc_data.grid.dy / max(abs(v).max(), self.SMALL)
-        self.dt = cfl*min(xtmp, ytmp)
+
+        self.dt = cfl * min(xtmp, ytmp)
 
     def evolve(self):
         """
@@ -81,10 +81,37 @@ class Simulation(NullSimulation):
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
 
+        # --------------------------------------------------------------------------
+        # monotonized central differences
+        # --------------------------------------------------------------------------
+
+        limiter = self.rp.get_param("advection.limiter")
+
+        # Give da/dx and da/dy using input: (state, grid, direction, limiter)
+
+        ldelta_ux = reconstruction.limit(u, myg, 1, limiter)
+        ldelta_uy = reconstruction.limit(u, myg, 2, limiter)
+        ldelta_vx = reconstruction.limit(v, myg, 1, limiter)
+        ldelta_vy = reconstruction.limit(v, myg, 2, limiter)
+
         # Get u, v fluxes
 
-        u_flux_x, u_flux_y, v_flux_x, v_flux_y = flx.unsplit_fluxes(self.cc_data,
-                                                                    self.rp, self.dt)
+        u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = burgers_interface.get_interface_states(myg, self.dt,
+                                                                                                u, v,
+                                                                                                ldelta_ux, ldelta_vx,
+                                                                                                ldelta_uy, ldelta_vy)
+
+        u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr = burgers_interface.apply_transverse_corrections(myg, self.dt,
+                                                                                                u_xl, u_xr,
+                                                                                                u_yl, u_yr,
+                                                                                                v_xl, v_xr,
+                                                                                                v_yl, v_yr)
+
+        u_flux_x, u_flux_y, v_flux_x, v_flux_y = burgers_interface.construct_unsplit_fluxes(myg,
+                                                                                            u_xl, u_xr,
+                                                                                            u_yl, u_yr,
+                                                                                            v_xl, v_xr,
+                                                                                            v_yl, v_yr)
 
         """
         do the differencing for the fluxes now.  Here, we use slices so we
@@ -114,51 +141,48 @@ class Simulation(NullSimulation):
 
     def dovis(self):
         """
-        Do runtime visualization.
+        Do runtime visualization
         """
         plt.clf()
+
+        plt.rc("font", size=10)
 
         u = self.cc_data.get_var("x-velocity")
         v = self.cc_data.get_var("y-velocity")
 
         myg = self.cc_data.grid
+        _, axes, _ = plot_tools.setup_axes(myg, 2)
 
-        # magnitude of the x-y velocity
+        fields = [u, v]
+        field_names = ["u", "v"]
 
-        uv = myg.scratch_array()
-        uv.v()[:, :] = np.sqrt(u.v()*u.v() + v.v()*v.v())
+        for n in range(2):
+            ax = axes[n]
 
-        _, axes, _ = plot_tools.setup_axes(myg, 1)
+            f = fields[n]
+            img = ax.imshow(np.transpose(f.v()),
+                            interpolation="nearest", origin="lower",
+                            extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax], cmap=self.cm)
 
-        # plot x-y velocity magnitude
-        ax = axes[0]
-        img = ax.imshow(np.transpose(uv.v()),
-                   interpolation="nearest", origin="lower",
-                   extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax],
-                   cmap=self.cm)
+            ax.set_xlabel("x")
+            ax.set_ylabel("y")
+            ax.set_title(field_names[n])
 
-        ax.set_xlabel("x")
-        ax.set_ylabel("y")
+            cb = axes.cbar_axes[n].colorbar(img)
+            cb.solids.set_rasterized(True)
+            cb.solids.set_edgecolor("face")
 
-        # needed for PDF rendering
-        cb = axes.cbar_axes[0].colorbar(img)
-        cb.formatter = matplotlib.ticker.FormatStrFormatter("")
-        cb.solids.set_rasterized(True)
-        cb.solids.set_edgecolor("face")
+            if self.particles is not None:
 
-        plt.title("XY Velocity Magnitude")
+                particle_positions = self.particles.get_positions()
+                # dye particles
+                colors = self.particles.get_init_positions()[:, 0]
 
-        if self.particles is not None:
-            particle_positions = self.particles.get_positions()
-
-            # dye particles
-            colors = self.particles.get_init_positions()[:, 0]
-
-            # plot particles
-            ax.scatter(particle_positions[:, 0],
-                particle_positions[:, 1], c=colors, cmap="Greys")
-            ax.set_xlim([myg.xmin, myg.xmax])
-            ax.set_ylim([myg.ymin, myg.ymax])
+                # plot particles
+                ax.scatter(particle_positions[:, 0],
+                           particle_positions[:, 1], s=8, c=colors, cmap="Greys")
+                ax.set_xlim([myg.xmin, myg.xmax])
+                ax.set_ylim([myg.ymin, myg.ymax])
 
         plt.figtext(0.05, 0.0125, f"t = {self.cc_data.t:10.5f}")
 
