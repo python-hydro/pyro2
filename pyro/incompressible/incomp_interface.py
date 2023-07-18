@@ -1,4 +1,4 @@
-import numpy as np
+from pyro.burgers import burgers_interface
 
 
 def mac_vels(grid,  dt,
@@ -42,8 +42,8 @@ def mac_vels(grid,  dt,
     # Riemann problem -- this follows Burger's equation.  We don't use
     # any input velocity for the upwinding.  Also, we only care about
     # the normal states here (u on x and v on y)
-    u_MAC = riemann_and_upwind(grid, u_xl, u_xr)
-    v_MAC = riemann_and_upwind(grid, v_yl, v_yr)
+    u_MAC = burgers_interface.riemann_and_upwind(grid, u_xl, u_xr)
+    v_MAC = burgers_interface.riemann_and_upwind(grid, v_yl, v_yr)
 
     return u_MAC, v_MAC
 
@@ -92,10 +92,10 @@ def states(grid, dt,
 
     # upwind using the MAC velocity to determine which state exists on
     # the interface
-    u_xint = upwind(grid, u_xl, u_xr, u_MAC)
-    v_xint = upwind(grid, v_xl, v_xr, u_MAC)
-    u_yint = upwind(grid, u_yl, u_yr, v_MAC)
-    v_yint = upwind(grid, v_yl, v_yr, v_MAC)
+    u_xint = burgers_interface.upwind(grid, u_xl, u_xr, u_MAC)
+    v_xint = burgers_interface.upwind(grid, v_xl, v_xr, u_MAC)
+    u_yint = burgers_interface.upwind(grid, u_yl, u_yr, v_MAC)
+    v_yint = burgers_interface.upwind(grid, v_yl, v_yr, v_MAC)
 
     return u_xint, v_xint, u_yint, v_yint
 
@@ -173,19 +173,19 @@ def get_interface_states(grid, dt,
 
     # now get the normal advective velocities on the interfaces by solving
     # the Riemann problem.
-    uhat_adv = riemann(grid, u_xl, u_xr)
-    vhat_adv = riemann(grid, v_yl, v_yr)
+    uhat_adv = burgers_interface.riemann(grid, u_xl, u_xr)
+    vhat_adv = burgers_interface.riemann(grid, v_yl, v_yr)
 
     # now that we have the advective velocities, upwind the left and right
     # states using the appropriate advective velocity.
 
     # on the x-interfaces, we upwind based on uhat_adv
-    u_xint = upwind(grid, u_xl, u_xr, uhat_adv)
-    v_xint = upwind(grid, v_xl, v_xr, uhat_adv)
+    u_xint = burgers_interface.upwind(grid, u_xl, u_xr, uhat_adv)
+    v_xint = burgers_interface.upwind(grid, v_xl, v_xr, uhat_adv)
 
     # on the y-interfaces, we upwind based on vhat_adv
-    u_yint = upwind(grid, u_yl, u_yr, vhat_adv)
-    v_yint = upwind(grid, v_yl, v_yr, vhat_adv)
+    u_yint = burgers_interface.upwind(grid, u_yl, u_yr, vhat_adv)
+    v_yint = burgers_interface.upwind(grid, v_yl, v_yr, vhat_adv)
 
     # at this point, these states are the `hat' states -- they only
     # considered the normal to the interface portion of the predictor.
@@ -225,90 +225,3 @@ def get_interface_states(grid, dt,
     u_yr.v(buf=2)[:, :] += -0.5 * dtdx * uu_x.v(buf=2) - 0.5 * dt * gradp_x.v(buf=2)
 
     return u_xl, u_xr, u_yl, u_yr, v_xl, v_xr, v_yl, v_yr
-
-
-def upwind(grid, q_l, q_r, s):
-    r"""
-    upwind the left and right states based on the specified input
-    velocity, s.  The resulting interface state is q_int
-
-    Parameters
-    ----------
-    grid : Grid2d
-        The grid object
-    q_l, q_r : ndarray
-        left and right states
-    s : ndarray
-        velocity
-
-    Returns
-    -------
-    out : ndarray
-        Upwinded state
-    """
-
-    q_int = grid.scratch_array()
-
-    q_int.v(buf=1)[:, :] = np.where(s.v(buf=1) == 0.0,
-                                    0.5 * (q_l.v(buf=1) + q_r.v(buf=1)),
-                                    np.where(s.v(buf=1) > 0.0, q_l.v(buf=1), q_r.v(buf=1)))
-
-    return q_int
-
-
-def riemann(grid, q_l, q_r):
-    """
-    Solve the Burger's Riemann problem given the input left and right
-    states and return the state on the interface.
-
-    This uses the expressions from Almgren, Bell, and Szymczak 1996.
-
-    Parameters
-    ----------
-    grid : Grid2d
-        The grid object
-    q_l, q_r : ndarray
-        left and right states
-
-    Returns
-    -------
-    out : ndarray
-        Interface state
-    """
-
-    s = grid.scratch_array()
-
-    s.v(buf=1)[:, :] = np.where(np.logical_and(q_l.v(buf=1) <= 0.0,
-                                               q_r.v(buf=1) >= 0.0),
-                                0.0,
-                                np.where(np.logical_and(q_l.v(buf=1) > 0.0,
-                                                        q_l.v(buf=1) + q_r.v(buf=1) > 0.0),
-                                         q_l.v(buf=1), q_r.v(buf=1)))
-
-    return s
-
-
-def riemann_and_upwind(grid, q_l, q_r):
-    r"""
-    First solve the Riemann problem given q_l and q_r to give the
-    velocity on the interface and: use this velocity to upwind to
-    determine the state (q_l, q_r, or a mix) on the interface).
-
-    This differs from upwind, above, in that we don't take in a
-    velocity to upwind with).
-
-    Parameters
-    ----------
-    grid : Grid2d
-        The grid object
-    q_l, q_r : ndarray
-        left and right states
-
-    Returns
-    -------
-    out : ndarray
-        Upwinded state
-    """
-
-    s = riemann(grid, q_l, q_r)
-    return upwind(grid, q_l, q_r, s)
