@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Test the general MG solver with a variable coeffcient Helmholtz
+"""Test the general MG solver with a variable coefficient Helmholtz
 problem.  This ensures we didn't screw up the base functionality here.
 
 Here we solve::

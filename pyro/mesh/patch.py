@@ -204,7 +204,7 @@ class CellCenterData2d:
          my_data.register_var('x-momentum', BC)
          ...
 
-    * Register any auxillary data -- these are any parameters that are
+    * Register any auxiliary data -- these are any parameters that are
       needed to interpret the data outside of the simulation (for
       example, the gamma for the equation of state)::
 
@@ -280,7 +280,7 @@ class CellCenterData2d:
 
     def set_aux(self, keyword, value):
         """
-        Set any auxillary (scalar) data.  This data is simply carried
+        Set any auxiliary (scalar) data.  This data is simply carried
         along with the CellCenterData2d object
 
         Parameters
@@ -415,12 +415,12 @@ class CellCenterData2d:
 
     def get_aux(self, keyword):
         """
-        Get the auxillary data associated with keyword
+        Get the auxiliary data associated with keyword
 
         Parameters
         ----------
         keyword : str
-            The name of the auxillary data to access
+            The name of the auxiliary data to access
 
         Returns
         -------
@@ -628,7 +628,7 @@ class CellCenterData2d:
 
         """
 
-        # auxillary data
+        # auxiliary data
         gaux = f.create_group("aux")
         for k, v in self.aux.items():
             gaux.attrs[k] = v

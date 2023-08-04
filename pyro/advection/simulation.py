@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import pyro.advection.advective_fluxes as flx
+from pyro.advection.interface import linear_interface
 from pyro.mesh import patch
 from pyro.particles import particles
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
@@ -66,7 +67,7 @@ class Simulation(NullSimulation):
         dtdx = self.dt/self.cc_data.grid.dx
         dtdy = self.dt/self.cc_data.grid.dy
 
-        flux_x, flux_y = flx.unsplit_fluxes(self.cc_data, self.rp, self.dt, "density")
+        flux_x, flux_y = flx.unsplit_fluxes(self.cc_data, self.rp, self.dt, "density", linear_interface)
 
         """
         do the differencing for the fluxes now.  Here, we use slices so we

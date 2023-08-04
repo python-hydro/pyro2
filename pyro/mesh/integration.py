@@ -119,7 +119,7 @@ class RKIntegrator:
         return ytmp
 
     def compute_final_update(self):
-        """this constructs the final t + dt update, overwriting the inital data"""
+        """this constructs the final t + dt update, overwriting the initial data"""
         ytmp = self.start
         for n in range(ytmp.nvar):
             var = ytmp.get_var_by_index(n)
