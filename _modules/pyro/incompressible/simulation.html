@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.incompressible.simulation &mdash; pyro 4.0.1.post50+g70445dc9 documentation</title>
+  <title>pyro.incompressible.simulation &mdash; pyro 4.0.1.post51+g113a50d0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -70,6 +70,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../multigrid.html">Multigrid Solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../incompressible_viscous_basics.html">Incompressible viscous hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../swe_basics.html">Shallow water solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../particles_basics.html">Particles</a></li>
@@ -125,6 +126,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">import</span> <span class="nn">pyro.mesh.array_indexer</span> <span class="k">as</span> <span class="nn">ai</span>
+<span class="kn">import</span> <span class="nn">pyro.mesh.boundary</span> <span class="k">as</span> <span class="nn">bnd</span>
 <span class="kn">from</span> <span class="nn">pyro.burgers</span> <span class="kn">import</span> <span class="n">Simulation</span> <span class="k">as</span> <span class="n">burgers_simulation</span>
 <span class="kn">from</span> <span class="nn">pyro.incompressible</span> <span class="kn">import</span> <span class="n">incomp_interface</span>
 <span class="kn">from</span> <span class="nn">pyro.mesh</span> <span class="kn">import</span> <span class="n">patch</span><span class="p">,</span> <span class="n">reconstruction</span>
@@ -135,7 +137,7 @@
 
 <div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../../pyro.incompressible.html#pyro.incompressible.simulation.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="n">burgers_simulation</span><span class="p">):</span>
 
-<div class="viewcode-block" id="Simulation.initialize"><a class="viewcode-back" href="../../../pyro.incompressible.html#pyro.incompressible.simulation.Simulation.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Simulation.initialize"><a class="viewcode-back" href="../../../pyro.incompressible.html#pyro.incompressible.simulation.Simulation.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_bc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">aux_vars</span><span class="o">=</span><span class="p">()):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the grid and variables for incompressible flow and</span>
 <span class="sd">        set the initial conditions for the chosen problem.</span>
@@ -144,19 +146,32 @@
         <span class="n">my_grid</span> <span class="o">=</span> <span class="n">grid_setup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 
         <span class="c1"># create the variables</span>
-        <span class="n">bc</span><span class="p">,</span> <span class="n">bc_xodd</span><span class="p">,</span> <span class="n">bc_yodd</span> <span class="o">=</span> <span class="n">bc_setup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">)</span>
-
         <span class="n">my_data</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">CellCenterData2d</span><span class="p">(</span><span class="n">my_grid</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">other_bc</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">define_other_bc</span><span class="p">()</span>
+
+        <span class="n">bc</span><span class="p">,</span> <span class="n">bc_xodd</span><span class="p">,</span> <span class="n">bc_yodd</span> <span class="o">=</span> <span class="n">bc_setup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">)</span>
 
         <span class="c1"># velocities</span>
         <span class="n">my_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">,</span> <span class="n">bc_xodd</span><span class="p">)</span>
         <span class="n">my_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">,</span> <span class="n">bc_yodd</span><span class="p">)</span>
 
-        <span class="c1"># phi -- used for the projections</span>
-        <span class="n">my_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;phi-MAC&quot;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
-        <span class="n">my_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;phi&quot;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
-        <span class="n">my_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;gradp_x&quot;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
-        <span class="n">my_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;gradp_y&quot;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+        <span class="c1"># phi -- used for the projections. Has neumann BC&#39;s if v is dirichlet</span>
+        <span class="c1"># Assuming BC&#39;s are either all periodic or all dirichlet</span>
+        <span class="k">if</span> <span class="n">bc</span><span class="o">.</span><span class="n">xlb</span> <span class="o">==</span> <span class="s2">&quot;periodic&quot;</span><span class="p">:</span>
+            <span class="n">phi_bc</span> <span class="o">=</span> <span class="n">bc</span>
+        <span class="k">elif</span> <span class="n">bc</span><span class="o">.</span><span class="n">xlb</span> <span class="o">==</span> <span class="s2">&quot;dirichlet&quot;</span><span class="p">:</span>
+            <span class="n">phi_bc</span> <span class="o">=</span> <span class="n">bnd</span><span class="o">.</span><span class="n">BC</span><span class="p">(</span><span class="n">xlb</span><span class="o">=</span><span class="s1">&#39;neumann&#39;</span><span class="p">,</span> <span class="n">xrb</span><span class="o">=</span><span class="s1">&#39;neumann&#39;</span><span class="p">,</span>
+                           <span class="n">ylb</span><span class="o">=</span><span class="s1">&#39;neumann&#39;</span><span class="p">,</span> <span class="n">yrb</span><span class="o">=</span><span class="s1">&#39;neumann&#39;</span><span class="p">)</span>
+
+        <span class="n">my_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;phi-MAC&quot;</span><span class="p">,</span> <span class="n">phi_bc</span><span class="p">)</span>
+        <span class="n">my_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;phi&quot;</span><span class="p">,</span> <span class="n">phi_bc</span><span class="p">)</span>
+        <span class="n">my_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;gradp_x&quot;</span><span class="p">,</span> <span class="n">phi_bc</span><span class="p">)</span>
+        <span class="n">my_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;gradp_y&quot;</span><span class="p">,</span> <span class="n">phi_bc</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">aux_vars</span><span class="p">:</span>
+            <span class="n">my_data</span><span class="o">.</span><span class="n">set_aux</span><span class="p">(</span><span class="n">keyword</span><span class="o">=</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value</span><span class="o">=</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
         <span class="n">my_data</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
 
@@ -170,7 +185,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">in_preevolve</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1"># now set the initial conditions for the problem</span>
-        <span class="n">problem</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;pyro.incompressible.problems.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">problem_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">problem</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;pyro.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">solver_name</span><span class="si">}</span><span class="s2">.problems.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">problem_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">problem</span><span class="o">.</span><span class="n">init_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Simulation.preevolve"><a class="viewcode-back" href="../../../pyro.incompressible.html#pyro.incompressible.simulation.Simulation.preevolve">[docs]</a>    <span class="k">def</span> <span class="nf">preevolve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -265,7 +280,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">in_preevolve</span> <span class="o">=</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="Simulation.evolve"><a class="viewcode-back" href="../../../pyro.incompressible.html#pyro.incompressible.simulation.Simulation.evolve">[docs]</a>    <span class="k">def</span> <span class="nf">evolve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Simulation.evolve"><a class="viewcode-back" href="../../../pyro.incompressible.html#pyro.incompressible.simulation.Simulation.evolve">[docs]</a>    <span class="k">def</span> <span class="nf">evolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_update_velocity</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">other_source_term</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Evolve the incompressible equations through one timestep.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -279,6 +294,11 @@
         <span class="n">phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;phi&quot;</span><span class="p">)</span>
 
         <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">grid</span>
+
+        <span class="k">if</span> <span class="n">other_source_term</span><span class="p">:</span>
+            <span class="n">source_x</span><span class="p">,</span> <span class="n">source_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">other_source_term</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">source_x</span><span class="p">,</span> <span class="n">source_y</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
         <span class="c1"># ---------------------------------------------------------------------</span>
         <span class="c1"># create the limited slopes of u and v (in both directions)</span>
@@ -325,7 +345,8 @@
                                              <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span>
                                              <span class="n">ldelta_ux</span><span class="p">,</span> <span class="n">ldelta_vx</span><span class="p">,</span>
                                              <span class="n">ldelta_uy</span><span class="p">,</span> <span class="n">ldelta_vy</span><span class="p">,</span>
-                                             <span class="n">gradp_x</span><span class="p">,</span> <span class="n">gradp_y</span><span class="p">)</span>
+                                             <span class="n">gradp_x</span><span class="p">,</span> <span class="n">gradp_y</span><span class="p">,</span>
+                                             <span class="n">source_x</span><span class="p">,</span> <span class="n">source_y</span><span class="p">)</span>
 
         <span class="n">u_MAC</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_um</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
         <span class="n">v_MAC</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_vm</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
@@ -344,10 +365,10 @@
 
         <span class="c1"># create the multigrid object</span>
         <span class="n">mg</span> <span class="o">=</span> <span class="n">MG</span><span class="o">.</span><span class="n">CellCenterMG2d</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span>
-                               <span class="n">xl_BC_type</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span>
-                               <span class="n">xr_BC_type</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span>
-                               <span class="n">yl_BC_type</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span>
-                               <span class="n">yr_BC_type</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span>
+                               <span class="n">xl_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;phi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">xlb</span><span class="p">,</span>
+                               <span class="n">xr_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;phi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">xrb</span><span class="p">,</span>
+                               <span class="n">yl_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;phi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">ylb</span><span class="p">,</span>
+                               <span class="n">yr_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;phi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">yrb</span><span class="p">,</span>
                                <span class="n">xmin</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span>
                                <span class="n">ymin</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ymax</span><span class="p">,</span>
                                <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -391,7 +412,8 @@
                                        <span class="n">ldelta_ux</span><span class="p">,</span> <span class="n">ldelta_vx</span><span class="p">,</span>
                                        <span class="n">ldelta_uy</span><span class="p">,</span> <span class="n">ldelta_vy</span><span class="p">,</span>
                                        <span class="n">gradp_x</span><span class="p">,</span> <span class="n">gradp_y</span><span class="p">,</span>
-                                       <span class="n">u_MAC</span><span class="p">,</span> <span class="n">v_MAC</span><span class="p">)</span>
+                                       <span class="n">u_MAC</span><span class="p">,</span> <span class="n">v_MAC</span><span class="p">,</span>
+                                       <span class="n">source_x</span><span class="p">,</span> <span class="n">source_y</span><span class="p">)</span>
 
         <span class="n">u_xint</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_ux</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
         <span class="n">v_xint</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_vx</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
@@ -402,34 +424,40 @@
         <span class="c1"># update U to get the provisional velocity field</span>
         <span class="c1"># ---------------------------------------------------------------------</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  doing provisional update of u, v&quot;</span><span class="p">)</span>
-
-        <span class="c1"># compute (U.grad)U</span>
-
-        <span class="c1"># we want u_MAC U_x + v_MAC U_y</span>
-        <span class="n">advect_x</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
-        <span class="n">advect_y</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
-
-        <span class="c1"># u u_x + v u_y</span>
-        <span class="n">advect_x</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> \
-            <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">u_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="n">u_MAC</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">u_xint</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">u_xint</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span> <span class="o">+</span> \
-            <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">v_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="n">v_MAC</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">u_yint</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">u_yint</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
-
-        <span class="c1"># u v_x + v v_y</span>
-        <span class="n">advect_y</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> \
-            <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">u_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="n">u_MAC</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">v_xint</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">v_xint</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span> <span class="o">+</span> \
-            <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">v_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="n">v_MAC</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">v_yint</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">v_yint</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
-
         <span class="n">proj_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;incompressible.proj_type&quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">proj_type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">u</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">advect_x</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">gradp_x</span><span class="p">[:,</span> <span class="p">:])</span>
-            <span class="n">v</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">advect_y</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">gradp_y</span><span class="p">[:,</span> <span class="p">:])</span>
+        <span class="k">if</span> <span class="n">other_update_velocity</span><span class="p">:</span>
+            <span class="n">U_MAC</span> <span class="o">=</span> <span class="p">(</span><span class="n">u_MAC</span><span class="p">,</span> <span class="n">v_MAC</span><span class="p">)</span>
+            <span class="n">U_INT</span> <span class="o">=</span> <span class="p">(</span><span class="n">u_xint</span><span class="p">,</span> <span class="n">u_yint</span><span class="p">,</span> <span class="n">v_xint</span><span class="p">,</span> <span class="n">v_yint</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">do_other_update_velocity</span><span class="p">(</span><span class="n">U_MAC</span><span class="p">,</span> <span class="n">U_INT</span><span class="p">)</span>
 
-        <span class="k">elif</span> <span class="n">proj_type</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="n">u</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">advect_x</span><span class="p">[:,</span> <span class="p">:]</span>
-            <span class="n">v</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">advect_y</span><span class="p">[:,</span> <span class="p">:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  doing provisional update of u, v&quot;</span><span class="p">)</span>
+
+            <span class="c1"># compute (U.grad)U</span>
+
+            <span class="c1"># we want u_MAC U_x + v_MAC U_y</span>
+            <span class="n">advect_x</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+            <span class="n">advect_y</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+
+            <span class="c1"># u u_x + v u_y</span>
+            <span class="n">advect_x</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> \
+                <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">u_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="n">u_MAC</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">u_xint</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">u_xint</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span> <span class="o">+</span> \
+                <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">v_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="n">v_MAC</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">u_yint</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">u_yint</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
+
+            <span class="c1"># u v_x + v v_y</span>
+            <span class="n">advect_y</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> \
+                <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">u_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="n">u_MAC</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">v_xint</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">v_xint</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span> <span class="o">+</span> \
+                <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">v_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="n">v_MAC</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">v_yint</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">v_yint</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
+
+            <span class="k">if</span> <span class="n">proj_type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">u</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">advect_x</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">gradp_x</span><span class="p">[:,</span> <span class="p">:])</span>
+                <span class="n">v</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">advect_y</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">gradp_y</span><span class="p">[:,</span> <span class="p">:])</span>
+
+            <span class="k">elif</span> <span class="n">proj_type</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">u</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">advect_x</span><span class="p">[:,</span> <span class="p">:]</span>
+                <span class="n">v</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">advect_y</span><span class="p">[:,</span> <span class="p">:]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">)</span>
@@ -444,10 +472,10 @@
 
         <span class="c1"># create the multigrid object</span>
         <span class="n">mg</span> <span class="o">=</span> <span class="n">MG</span><span class="o">.</span><span class="n">CellCenterMG2d</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span>
-                               <span class="n">xl_BC_type</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span>
-                               <span class="n">xr_BC_type</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span>
-                               <span class="n">yl_BC_type</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span>
-                               <span class="n">yr_BC_type</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span>
+                               <span class="n">xl_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;phi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">xlb</span><span class="p">,</span>
+                               <span class="n">xr_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;phi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">xrb</span><span class="p">,</span>
+                               <span class="n">yl_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;phi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">ylb</span><span class="p">,</span>
+                               <span class="n">yr_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;phi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">yrb</span><span class="p">,</span>
                                <span class="n">xmin</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span>
                                <span class="n">ymin</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ymax</span><span class="p">,</span>
                                <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -558,7 +586,25 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">figtext</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.0125</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;t = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">t</span><span class="si">:</span><span class="s2">10.5f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="n">plt</span><span class="o">.</span><span class="n">pause</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div></div>
+        <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Simulation.define_other_bc"><a class="viewcode-back" href="../../../pyro.incompressible.html#pyro.incompressible.simulation.Simulation.define_other_bc">[docs]</a>    <span class="k">def</span> <span class="nf">define_other_bc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used to set up user-defined BC&#39;s (see e.g. incompressible_viscous)</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="Simulation.other_source_term"><a class="viewcode-back" href="../../../pyro.incompressible.html#pyro.incompressible.simulation.Simulation.other_source_term">[docs]</a>    <span class="k">def</span> <span class="nf">other_source_term</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add source terms (other than gradp) for getting interface state values,</span>
+<span class="sd">        in the x and y directions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Simulation.do_other_update_velocity"><a class="viewcode-back" href="../../../pyro.incompressible.html#pyro.incompressible.simulation.Simulation.do_other_update_velocity">[docs]</a>    <span class="k">def</span> <span class="nf">do_other_update_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">U_MAC</span><span class="p">,</span> <span class="n">U_INT</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Change the method for updating the velocity from the projected velocity</span>
+<span class="sd">        and interface states (see e.g. incompressible_viscous)</span>
+<span class="sd">        &quot;&quot;&quot;</span></div></div>
 </pre></div>
 
            </div>

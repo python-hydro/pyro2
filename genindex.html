@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; pyro 4.0.1.post50+g70445dc9 documentation</title>
+  <title>Index &mdash; pyro 4.0.1.post51+g113a50d0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -70,6 +70,7 @@
 <li class="toctree-l1"><a class="reference internal" href="multigrid.html">Multigrid Solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_viscous_basics.html">Incompressible viscous hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
@@ -134,6 +135,7 @@
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
@@ -156,6 +158,8 @@
       <li><a href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.add_ivars">add_ivars() (pyro.mesh.patch.CellCenterData2d method)</a>
 </li>
       <li><a href="pyro.incompressible.html#pyro.incompressible.incomp_interface.apply_gradp_corrections">apply_gradp_corrections() (in module pyro.incompressible.incomp_interface)</a>
+</li>
+      <li><a href="pyro.incompressible.html#pyro.incompressible.incomp_interface.apply_other_source_terms">apply_other_source_terms() (in module pyro.incompressible.incomp_interface)</a>
 </li>
       <li><a href="pyro.burgers.html#pyro.burgers.burgers_interface.apply_transverse_corrections">apply_transverse_corrections() (in module pyro.burgers.burgers_interface)</a>
 </li>
@@ -267,6 +271,12 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyro.mesh.html#pyro.mesh.boundary.define_bc">define_bc() (in module pyro.mesh.boundary)</a>
 </li>
+      <li><a href="pyro.incompressible.html#pyro.incompressible.simulation.Simulation.define_other_bc">define_other_bc() (pyro.incompressible.simulation.Simulation method)</a>
+
+      <ul>
+        <li><a href="pyro.incompressible_viscous.html#pyro.incompressible_viscous.simulation.Simulation.define_other_bc">(pyro.incompressible_viscous.simulation.Simulation method)</a>
+</li>
+      </ul></li>
       <li><a href="pyro.compressible.html#pyro.compressible.eos.dens">dens() (in module pyro.compressible.eos)</a>
 
       <ul>
@@ -285,12 +295,18 @@
 </li>
       <li><a href="pyro.mesh.html#pyro.mesh.patch.do_demo">do_demo() (in module pyro.mesh.patch)</a>
 </li>
+      <li><a href="pyro.incompressible.html#pyro.incompressible.simulation.Simulation.do_other_update_velocity">do_other_update_velocity() (pyro.incompressible.simulation.Simulation method)</a>
+
+      <ul>
+        <li><a href="pyro.incompressible_viscous.html#pyro.incompressible_viscous.simulation.Simulation.do_other_update_velocity">(pyro.incompressible_viscous.simulation.Simulation method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyro.html#pyro.simulation_null.NullSimulation.do_output">do_output() (pyro.simulation_null.NullSimulation method)</a>
 </li>
       <li><a href="pyro.html#pyro.test.do_tests">do_tests() (in module pyro.test)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyro.advection.html#pyro.advection.simulation.Simulation.dovis">dovis() (pyro.advection.simulation.Simulation method)</a>
 
       <ul>
@@ -353,6 +369,8 @@
         <li><a href="pyro.diffusion.html#pyro.diffusion.simulation.Simulation.evolve">(pyro.diffusion.simulation.Simulation method)</a>
 </li>
         <li><a href="pyro.incompressible.html#pyro.incompressible.simulation.Simulation.evolve">(pyro.incompressible.simulation.Simulation method)</a>
+</li>
+        <li><a href="pyro.incompressible_viscous.html#pyro.incompressible_viscous.simulation.Simulation.evolve">(pyro.incompressible_viscous.simulation.Simulation method)</a>
 </li>
         <li><a href="pyro.lm_atm.html#pyro.lm_atm.simulation.Simulation.evolve">(pyro.lm_atm.simulation.Simulation method)</a>
 </li>
@@ -568,6 +586,12 @@
 </li>
         <li><a href="pyro.incompressible.problems.html#pyro.incompressible.problems.shear.finalize">(in module pyro.incompressible.problems.shear)</a>
 </li>
+        <li><a href="pyro.incompressible_viscous.problems.html#pyro.incompressible_viscous.problems.cavity.finalize">(in module pyro.incompressible_viscous.problems.cavity)</a>
+</li>
+        <li><a href="pyro.incompressible_viscous.problems.html#pyro.incompressible_viscous.problems.converge.finalize">(in module pyro.incompressible_viscous.problems.converge)</a>
+</li>
+        <li><a href="pyro.incompressible_viscous.problems.html#pyro.incompressible_viscous.problems.shear.finalize">(in module pyro.incompressible_viscous.problems.shear)</a>
+</li>
         <li><a href="pyro.lm_atm.problems.html#pyro.lm_atm.problems.bubble.finalize">(in module pyro.lm_atm.problems.bubble)</a>
 </li>
         <li><a href="pyro.lm_atm.problems.html#pyro.lm_atm.problems.gresho.finalize">(in module pyro.lm_atm.problems.gresho)</a>
@@ -627,8 +651,12 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyro.multigrid.html#pyro.multigrid.general_MG.GeneralMG2d">GeneralMG2d (class in pyro.multigrid.general_MG)</a>
 </li>
-      <li><a href="pyro.html#pyro.plot.get_args">get_args() (in module pyro.plot)</a>
+      <li><a href="pyro.incompressible_viscous.problems.html#pyro.incompressible_viscous.problems.plot_cavity.get_args">get_args() (in module pyro.incompressible_viscous.problems.plot_cavity)</a>
+
+      <ul>
+        <li><a href="pyro.html#pyro.plot.get_args">(in module pyro.plot)</a>
 </li>
+      </ul></li>
       <li><a href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.get_aux">get_aux() (pyro.mesh.patch.CellCenterData2d method)</a>
 </li>
       <li><a href="pyro.particles.html#pyro.particles.particles.Particles.get_init_positions">get_init_positions() (pyro.particles.particles.Particles method)</a>
@@ -647,10 +675,10 @@
 </li>
       <li><a href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d.get_solution_gradient">get_solution_gradient() (pyro.multigrid.MG.CellCenterMG2d method)</a>
 </li>
-      <li><a href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d.get_solution_object">get_solution_object() (pyro.multigrid.MG.CellCenterMG2d method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d.get_solution_object">get_solution_object() (pyro.multigrid.MG.CellCenterMG2d method)</a>
+</li>
       <li><a href="pyro.mesh.html#pyro.mesh.integration.RKIntegrator.get_stage_start">get_stage_start() (pyro.mesh.integration.RKIntegrator method)</a>
 </li>
       <li><a href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.get_var">get_var() (pyro.mesh.patch.CellCenterData2d method)</a>
@@ -886,6 +914,12 @@
 </li>
         <li><a href="pyro.incompressible.problems.html#pyro.incompressible.problems.shear.init_data">(in module pyro.incompressible.problems.shear)</a>
 </li>
+        <li><a href="pyro.incompressible_viscous.problems.html#pyro.incompressible_viscous.problems.cavity.init_data">(in module pyro.incompressible_viscous.problems.cavity)</a>
+</li>
+        <li><a href="pyro.incompressible_viscous.problems.html#pyro.incompressible_viscous.problems.converge.init_data">(in module pyro.incompressible_viscous.problems.converge)</a>
+</li>
+        <li><a href="pyro.incompressible_viscous.problems.html#pyro.incompressible_viscous.problems.shear.init_data">(in module pyro.incompressible_viscous.problems.shear)</a>
+</li>
         <li><a href="pyro.lm_atm.problems.html#pyro.lm_atm.problems.bubble.init_data">(in module pyro.lm_atm.problems.bubble)</a>
 </li>
         <li><a href="pyro.lm_atm.problems.html#pyro.lm_atm.problems.gresho.init_data">(in module pyro.lm_atm.problems.gresho)</a>
@@ -933,6 +967,8 @@
         <li><a href="pyro.diffusion.html#pyro.diffusion.simulation.Simulation.initialize">(pyro.diffusion.simulation.Simulation method)</a>
 </li>
         <li><a href="pyro.incompressible.html#pyro.incompressible.simulation.Simulation.initialize">(pyro.incompressible.simulation.Simulation method)</a>
+</li>
+        <li><a href="pyro.incompressible_viscous.html#pyro.incompressible_viscous.simulation.Simulation.initialize">(pyro.incompressible_viscous.simulation.Simulation method)</a>
 </li>
         <li><a href="pyro.lm_atm.html#pyro.lm_atm.simulation.Simulation.initialize">(pyro.lm_atm.simulation.Simulation method)</a>
 </li>
@@ -1033,8 +1069,12 @@
       </ul></li>
       <li><a href="pyro.lm_atm.html#pyro.lm_atm.simulation.Simulation.make_prime">make_prime() (pyro.lm_atm.simulation.Simulation method)</a>
 </li>
-      <li><a href="pyro.html#pyro.plot.makeplot">makeplot() (in module pyro.plot)</a>
+      <li><a href="pyro.incompressible_viscous.problems.html#pyro.incompressible_viscous.problems.plot_cavity.makeplot">makeplot() (in module pyro.incompressible_viscous.problems.plot_cavity)</a>
+
+      <ul>
+        <li><a href="pyro.html#pyro.plot.makeplot">(in module pyro.plot)</a>
 </li>
+      </ul></li>
       <li><a href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.max">max() (pyro.mesh.patch.CellCenterData2d method)</a>
 </li>
       <li><a href="pyro.advection.html#pyro.advection.simulation.Simulation.method_compute_timestep">method_compute_timestep() (pyro.advection.simulation.Simulation method)</a>
@@ -1377,6 +1417,22 @@
 </li>
         <li><a href="pyro.incompressible.html#module-pyro.incompressible.simulation">pyro.incompressible.simulation</a>
 </li>
+        <li><a href="pyro.incompressible_viscous.html#module-pyro.incompressible_viscous">pyro.incompressible_viscous</a>
+</li>
+        <li><a href="pyro.incompressible_viscous.html#module-pyro.incompressible_viscous.BC">pyro.incompressible_viscous.BC</a>
+</li>
+        <li><a href="pyro.incompressible_viscous.problems.html#module-pyro.incompressible_viscous.problems">pyro.incompressible_viscous.problems</a>
+</li>
+        <li><a href="pyro.incompressible_viscous.problems.html#module-pyro.incompressible_viscous.problems.cavity">pyro.incompressible_viscous.problems.cavity</a>
+</li>
+        <li><a href="pyro.incompressible_viscous.problems.html#module-pyro.incompressible_viscous.problems.converge">pyro.incompressible_viscous.problems.converge</a>
+</li>
+        <li><a href="pyro.incompressible_viscous.problems.html#module-pyro.incompressible_viscous.problems.plot_cavity">pyro.incompressible_viscous.problems.plot_cavity</a>
+</li>
+        <li><a href="pyro.incompressible_viscous.problems.html#module-pyro.incompressible_viscous.problems.shear">pyro.incompressible_viscous.problems.shear</a>
+</li>
+        <li><a href="pyro.incompressible_viscous.html#module-pyro.incompressible_viscous.simulation">pyro.incompressible_viscous.simulation</a>
+</li>
         <li><a href="pyro.lm_atm.html#module-pyro.lm_atm">pyro.lm_atm</a>
 </li>
         <li><a href="pyro.lm_atm.html#module-pyro.lm_atm.LM_atm_interface">pyro.lm_atm.LM_atm_interface</a>
@@ -1486,6 +1542,18 @@
 </li>
       <li><a href="pyro.html#pyro.simulation_null.NullSimulation">NullSimulation (class in pyro.simulation_null)</a>
 </li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pyro.incompressible.html#pyro.incompressible.simulation.Simulation.other_source_term">other_source_term() (pyro.incompressible.simulation.Simulation method)</a>
+
+      <ul>
+        <li><a href="pyro.incompressible_viscous.html#pyro.incompressible_viscous.simulation.Simulation.other_source_term">(pyro.incompressible_viscous.simulation.Simulation method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -2208,8 +2276,6 @@
         <li><a href="pyro.compressible_rk.problems.html#module-pyro.compressible_rk.problems.hse">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     pyro.compressible_rk.problems.kh
 
@@ -2238,6 +2304,8 @@
         <li><a href="pyro.compressible_rk.problems.html#module-pyro.compressible_rk.problems.ramp">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     pyro.compressible_rk.problems.rt
 
@@ -2628,6 +2696,62 @@
 
       <ul>
         <li><a href="pyro.incompressible.html#module-pyro.incompressible.simulation">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.incompressible_viscous
+
+      <ul>
+        <li><a href="pyro.incompressible_viscous.html#module-pyro.incompressible_viscous">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.incompressible_viscous.BC
+
+      <ul>
+        <li><a href="pyro.incompressible_viscous.html#module-pyro.incompressible_viscous.BC">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.incompressible_viscous.problems
+
+      <ul>
+        <li><a href="pyro.incompressible_viscous.problems.html#module-pyro.incompressible_viscous.problems">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.incompressible_viscous.problems.cavity
+
+      <ul>
+        <li><a href="pyro.incompressible_viscous.problems.html#module-pyro.incompressible_viscous.problems.cavity">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.incompressible_viscous.problems.converge
+
+      <ul>
+        <li><a href="pyro.incompressible_viscous.problems.html#module-pyro.incompressible_viscous.problems.converge">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.incompressible_viscous.problems.plot_cavity
+
+      <ul>
+        <li><a href="pyro.incompressible_viscous.problems.html#module-pyro.incompressible_viscous.problems.plot_cavity">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.incompressible_viscous.problems.shear
+
+      <ul>
+        <li><a href="pyro.incompressible_viscous.problems.html#module-pyro.incompressible_viscous.problems.shear">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.incompressible_viscous.simulation
+
+      <ul>
+        <li><a href="pyro.incompressible_viscous.html#module-pyro.incompressible_viscous.simulation">module</a>
 </li>
       </ul></li>
       <li>
@@ -3077,6 +3201,8 @@
 </li>
         <li><a href="pyro.incompressible.html#pyro.incompressible.simulation.Simulation">(class in pyro.incompressible.simulation)</a>
 </li>
+        <li><a href="pyro.incompressible_viscous.html#pyro.incompressible_viscous.simulation.Simulation">(class in pyro.incompressible_viscous.simulation)</a>
+</li>
         <li><a href="pyro.lm_atm.html#pyro.lm_atm.simulation.Simulation">(class in pyro.lm_atm.simulation)</a>
 </li>
         <li><a href="pyro.swe.html#pyro.swe.simulation.Simulation">(class in pyro.swe.simulation)</a>
@@ -3164,10 +3290,10 @@
         <li><a href="pyro.swe.html#pyro.swe.unsplit_fluxes.unsplit_fluxes">(in module pyro.swe.unsplit_fluxes)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyro.particles.html#pyro.particles.particles.Particle.update">update() (pyro.particles.particles.Particle method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyro.particles.html#pyro.particles.particles.Particles.update_particles">update_particles() (pyro.particles.particles.Particles method)</a>
 </li>
       <li><a href="pyro.burgers.html#pyro.burgers.burgers_interface.upwind">upwind() (in module pyro.burgers.burgers_interface)</a>
@@ -3180,6 +3306,8 @@
 
       <ul>
         <li><a href="pyro.compressible_sr.html#pyro.compressible_sr.BC.user">(in module pyro.compressible_sr.BC)</a>
+</li>
+        <li><a href="pyro.incompressible_viscous.html#pyro.incompressible_viscous.BC.user">(in module pyro.incompressible_viscous.BC)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -3246,6 +3374,8 @@
 
       <ul>
         <li><a href="pyro.compressible_sr.html#pyro.compressible_sr.simulation.Simulation.write_extras">(pyro.compressible_sr.simulation.Simulation method)</a>
+</li>
+        <li><a href="pyro.incompressible_viscous.html#pyro.incompressible_viscous.simulation.Simulation.write_extras">(pyro.incompressible_viscous.simulation.Simulation method)</a>
 </li>
         <li><a href="pyro.lm_atm.html#pyro.lm_atm.simulation.Simulation.write_extras">(pyro.lm_atm.simulation.Simulation method)</a>
 </li>

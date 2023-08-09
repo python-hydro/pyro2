@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyro.incompressible_viscous.simulation &mdash; pyro 4.0.1.post51+g113a50d0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/clipboard.min.js"></script>
+        <script src="../../../_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pyro
+              <img src="../../../_static/logo.gif" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                4.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">pyro basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Setting up pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../burgers_basics.html">Burgers’ Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible_compare.html">Compressible solver comparisons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multigrid.html">Multigrid Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../incompressible_viscous_basics.html">Incompressible viscous hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../swe_basics.html">Shallow water solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../particles_basics.html">Particles</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../testing.html">Testing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../help.html">Contributing and getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ack.html#history">History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Software Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../zreferences.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pyro.incompressible_viscous.simulation</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pyro.incompressible_viscous.simulation</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">pyro</span> <span class="kn">import</span> <span class="n">incompressible</span>
+<span class="kn">from</span> <span class="nn">pyro.incompressible_viscous</span> <span class="kn">import</span> <span class="n">BC</span>
+<span class="kn">from</span> <span class="nn">pyro.mesh</span> <span class="kn">import</span> <span class="n">boundary</span> <span class="k">as</span> <span class="n">bnd</span>
+<span class="kn">from</span> <span class="nn">pyro.multigrid</span> <span class="kn">import</span> <span class="n">MG</span>
+
+
+<div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../../pyro.incompressible_viscous.html#pyro.incompressible_viscous.simulation.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="n">incompressible</span><span class="o">.</span><span class="n">Simulation</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Simulation.initialize"><a class="viewcode-back" href="../../../pyro.incompressible_viscous.html#pyro.incompressible_viscous.simulation.Simulation.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># pylint: disable=arguments-differ</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialization of the data is the same as the incompressible</span>
+<span class="sd">        solver, but we define user BC, and provide the viscosity</span>
+<span class="sd">        as an auxiliary variable.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;incompressible_viscous.viscosity&quot;</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">other_bc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                           <span class="n">aux_vars</span><span class="o">=</span><span class="p">((</span><span class="s2">&quot;viscosity&quot;</span><span class="p">,</span> <span class="n">nu</span><span class="p">),))</span></div>
+
+<div class="viewcode-block" id="Simulation.define_other_bc"><a class="viewcode-back" href="../../../pyro.incompressible_viscous.html#pyro.incompressible_viscous.simulation.Simulation.define_other_bc">[docs]</a>    <span class="k">def</span> <span class="nf">define_other_bc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">bnd</span><span class="o">.</span><span class="n">define_bc</span><span class="p">(</span><span class="s2">&quot;moving_lid&quot;</span><span class="p">,</span> <span class="n">BC</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">is_solid</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Simulation.evolve"><a class="viewcode-back" href="../../../pyro.incompressible_viscous.html#pyro.incompressible_viscous.simulation.Simulation.evolve">[docs]</a>    <span class="k">def</span> <span class="nf">evolve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># pylint: disable=arguments-differ</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Solve is all the same steps as the incompressible solver, but</span>
+<span class="sd">        including a source term for the viscosity in the interface</span>
+<span class="sd">        prediction, and changing the velocity update method to a double</span>
+<span class="sd">        parabolic solve.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">other_update_velocity</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">other_source_term</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Simulation.other_source_term"><a class="viewcode-back" href="../../../pyro.incompressible_viscous.html#pyro.incompressible_viscous.simulation.Simulation.other_source_term">[docs]</a>    <span class="k">def</span> <span class="nf">other_source_term</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This is the viscous term nu L U</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">)</span>
+        <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">grid</span>
+        <span class="n">nu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;incompressible_viscous.viscosity&quot;</span><span class="p">)</span>
+
+        <span class="n">source_x</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+        <span class="n">source_x</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">nu</span> <span class="o">*</span> <span class="p">((</span><span class="n">u</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">u</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
+                                    <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">u</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">source_y</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+        <span class="n">source_y</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">nu</span> <span class="o">*</span> <span class="p">((</span><span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
+                                    <span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">source_x</span><span class="p">,</span> <span class="n">source_y</span></div>
+
+<div class="viewcode-block" id="Simulation.do_other_update_velocity"><a class="viewcode-back" href="../../../pyro.incompressible_viscous.html#pyro.incompressible_viscous.simulation.Simulation.do_other_update_velocity">[docs]</a>    <span class="k">def</span> <span class="nf">do_other_update_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">U_MAC</span><span class="p">,</span> <span class="n">U_INT</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Solve for U in a (decoupled) parabolic solve including viscosity term</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  doing parabolic solve for u, v&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Get variables</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">)</span>
+        <span class="n">gradp_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;gradp_x&quot;</span><span class="p">)</span>
+        <span class="n">gradp_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;gradp_y&quot;</span><span class="p">)</span>
+        <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">grid</span>
+        <span class="n">nu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;incompressible_viscous.viscosity&quot;</span><span class="p">)</span>
+        <span class="n">proj_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;incompressible.proj_type&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Get MAC and interface velocities from function args</span>
+        <span class="n">u_MAC</span><span class="p">,</span> <span class="n">v_MAC</span> <span class="o">=</span> <span class="n">U_MAC</span>
+        <span class="n">u_xint</span><span class="p">,</span> <span class="n">u_yint</span><span class="p">,</span> <span class="n">v_xint</span><span class="p">,</span> <span class="n">v_yint</span> <span class="o">=</span> <span class="n">U_INT</span>
+
+        <span class="c1"># compute (U.grad)U terms</span>
+
+        <span class="c1"># we want u_MAC U_x + v_MAC U_y</span>
+        <span class="n">advect_x</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+        <span class="n">advect_y</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+
+        <span class="c1"># u u_x + v u_y</span>
+        <span class="n">advect_x</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> \
+            <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">u_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="n">u_MAC</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">u_xint</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">u_xint</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span> <span class="o">+</span> \
+            <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">v_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="n">v_MAC</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">u_yint</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">u_yint</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
+
+        <span class="c1"># u v_x + v v_y</span>
+        <span class="n">advect_y</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> \
+            <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">u_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="n">u_MAC</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">v_xint</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">v_xint</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span> <span class="o">+</span> \
+            <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">v_MAC</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="n">v_MAC</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">v_yint</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">v_yint</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span>
+
+        <span class="c1"># setup the MG object -- we want to solve a Helmholtz equation</span>
+        <span class="c1"># equation of the form:</span>
+        <span class="c1"># (alpha - beta L) U = f</span>
+        <span class="c1">#</span>
+        <span class="c1"># with alpha = 1</span>
+        <span class="c1">#      beta  = (dt/2) nu</span>
+        <span class="c1">#      f     = U + dt * (0.5*nu L U - (U.grad)U - grad p)</span>
+        <span class="c1">#</span>
+        <span class="c1"># (one such equation for each velocity component)</span>
+        <span class="c1">#</span>
+        <span class="c1"># this is the form that arises with a Crank-Nicolson discretization</span>
+        <span class="c1"># of the incompressible momentum equation</span>
+
+        <span class="c1"># Solve for x-velocity</span>
+
+        <span class="n">mg</span> <span class="o">=</span> <span class="n">MG</span><span class="o">.</span><span class="n">CellCenterMG2d</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span>
+                        <span class="n">xmin</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span>
+                        <span class="n">ymin</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ymax</span><span class="p">,</span>
+                        <span class="n">xl_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">xlb</span><span class="p">,</span>
+                        <span class="n">xr_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">xrb</span><span class="p">,</span>
+                        <span class="n">yl_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">ylb</span><span class="p">,</span>
+                        <span class="n">yr_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">yrb</span><span class="p">,</span>
+                        <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">nu</span><span class="p">,</span>
+                        <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># form the RHS: f = u + (dt/2) nu L u  (where L is the Laplacian)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">soln_grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">*</span> <span class="n">nu</span> <span class="o">*</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">u</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
+            <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">u</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>   <span class="c1"># this is the diffusion part</span>
+
+        <span class="c1"># f.v()[:, :] = u_MAC.v() + 0.5*self.dt * nu * (</span>
+        <span class="c1">#     (u_MAC.ip(1) + u_MAC.ip(-1) - 2.0*u_MAC.v())/myg.dx**2 +</span>
+        <span class="c1">#     (u_MAC.jp(1) + u_MAC.jp(-1) - 2.0*u_MAC.v())/myg.dy**2)   # this is the diffusion part</span>
+
+        <span class="k">if</span> <span class="n">proj_type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">advect_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="n">gradp_x</span><span class="o">.</span><span class="n">v</span><span class="p">())</span>  <span class="c1"># advection + pressure</span>
+        <span class="k">elif</span> <span class="n">proj_type</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">*</span> <span class="n">advect_x</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>  <span class="c1"># advection only</span>
+
+        <span class="n">mg</span><span class="o">.</span><span class="n">init_RHS</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="c1"># use the old u as our initial guess</span>
+        <span class="n">uGuess</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">soln_grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+        <span class="n">uGuess</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">mg</span><span class="o">.</span><span class="n">init_solution</span><span class="p">(</span><span class="n">uGuess</span><span class="p">)</span>
+
+        <span class="c1"># solve</span>
+        <span class="n">mg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">rtol</span><span class="o">=</span><span class="mf">1.e-12</span><span class="p">)</span>
+
+        <span class="c1"># store the solution</span>
+        <span class="n">u</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">get_solution</span><span class="p">()</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+
+        <span class="c1"># Solve for y-velocity</span>
+
+        <span class="n">mg</span> <span class="o">=</span> <span class="n">MG</span><span class="o">.</span><span class="n">CellCenterMG2d</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span>
+                        <span class="n">xmin</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span>
+                        <span class="n">ymin</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ymax</span><span class="p">,</span>
+                        <span class="n">xl_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">xlb</span><span class="p">,</span>
+                        <span class="n">xr_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">xrb</span><span class="p">,</span>
+                        <span class="n">yl_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">ylb</span><span class="p">,</span>
+                        <span class="n">yr_BC_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">yrb</span><span class="p">,</span>
+                        <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">nu</span><span class="p">,</span>
+                        <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># form the RHS: f = v + (dt/2) nu L v  (where L is the Laplacian)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">soln_grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">*</span> <span class="n">nu</span> <span class="o">*</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">v</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
+            <span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">v</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">/</span><span class="n">myg</span><span class="o">.</span><span class="n">dy</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># f.v()[:, :] = v_MAC.v() + 0.5*self.dt * nu * (</span>
+        <span class="c1">#     (v_MAC.ip(1) + v_MAC.ip(-1) - 2.0*v_MAC.v())/myg.dx**2 +</span>
+        <span class="c1">#     (v_MAC.jp(1) + v_MAC.jp(-1) - 2.0*v_MAC.v())/myg.dy**2)</span>
+
+        <span class="k">if</span> <span class="n">proj_type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">advect_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="n">gradp_y</span><span class="o">.</span><span class="n">v</span><span class="p">())</span>  <span class="c1"># advection + pressure</span>
+        <span class="k">elif</span> <span class="n">proj_type</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">*</span> <span class="n">advect_y</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>  <span class="c1"># advection only</span>
+
+        <span class="n">mg</span><span class="o">.</span><span class="n">init_RHS</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="c1"># use the old v as our initial guess</span>
+        <span class="n">uGuess</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">soln_grid</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+        <span class="n">uGuess</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">mg</span><span class="o">.</span><span class="n">init_solution</span><span class="p">(</span><span class="n">uGuess</span><span class="p">)</span>
+
+        <span class="c1"># solve</span>
+        <span class="n">mg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">rtol</span><span class="o">=</span><span class="mf">1.e-12</span><span class="p">)</span>
+
+        <span class="c1"># store the solution</span>
+        <span class="n">v</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">get_solution</span><span class="p">()</span><span class="o">.</span><span class="n">v</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Simulation.write_extras"><a class="viewcode-back" href="../../../pyro.incompressible_viscous.html#pyro.incompressible_viscous.simulation.Simulation.write_extras">[docs]</a>    <span class="k">def</span> <span class="nf">write_extras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Output simulation-specific data to the h5py file f</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># make note of the custom BC</span>
+        <span class="n">gb</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s2">&quot;BC&quot;</span><span class="p">)</span>
+
+        <span class="c1"># the value here is the value of &quot;is_solid&quot;</span>
+        <span class="n">gb</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;moving_lid&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, pyro development team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

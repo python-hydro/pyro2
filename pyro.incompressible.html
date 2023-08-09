@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.incompressible package &mdash; pyro 4.0.1.post50+g70445dc9 documentation</title>
+  <title>pyro.incompressible package &mdash; pyro 4.0.1.post51+g113a50d0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -73,6 +73,7 @@
 <li class="toctree-l1"><a class="reference internal" href="multigrid.html">Multigrid Solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_viscous_basics.html">Incompressible viscous hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
@@ -107,6 +108,7 @@
 <li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.html">pyro.compressible_sr package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyro.diffusion.html">pyro.diffusion package</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">pyro.incompressible package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible_viscous.html">pyro.incompressible_viscous package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyro.lm_atm.html">pyro.lm_atm package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html">pyro.mesh package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.html">pyro.multigrid package</a></li>
@@ -215,8 +217,10 @@ projection (the MAC projection)</p></li>
 </dd>
 <dt><strong>v_yl, u_yr</strong><span class="classifier">ndarray ndarray</span></dt><dd><p>left and right states of y-velocity in y-interface.</p>
 </dd>
-<dt><strong>Returns</strong></dt><dd></dd>
-<dt><strong>——-</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray</span></dt><dd><p>correct the interface states of the left and right states of u and v on
 both the x- and y-interfaces interface states with the pressure gradient
 terms.</p>
@@ -227,8 +231,40 @@ terms.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="pyro.incompressible.incomp_interface.apply_other_source_terms">
+<span class="sig-prename descclassname"><span class="pre">pyro.incompressible.incomp_interface.</span></span><span class="sig-name descname"><span class="pre">apply_other_source_terms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_xl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_xr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_yl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_yr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_xl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_xr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_yl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_yr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/incomp_interface.html#apply_other_source_terms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.incomp_interface.apply_other_source_terms" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>grid</strong><span class="classifier">Grid2d</span></dt><dd><p>The grid object</p>
+</dd>
+<dt><strong>dt</strong><span class="classifier">float</span></dt><dd><p>The timestep</p>
+</dd>
+<dt><strong>u_xl, u_xr</strong><span class="classifier">ndarray ndarray</span></dt><dd><p>left and right states of x-velocity in x-interface.</p>
+</dd>
+<dt><strong>u_yl, u_yr</strong><span class="classifier">ndarray ndarray</span></dt><dd><p>left and right states of x-velocity in y-interface.</p>
+</dd>
+<dt><strong>v_xl, v_xr</strong><span class="classifier">ndarray ndarray</span></dt><dd><p>left and right states of y-velocity in x-interface.</p>
+</dd>
+<dt><strong>v_yl, u_yr</strong><span class="classifier">ndarray ndarray</span></dt><dd><p>left and right states of y-velocity in y-interface.</p>
+</dd>
+<dt><strong>source_x, source_y</strong><span class="classifier">ndarray</span></dt><dd><p>Any other source terms</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray</span></dt><dd><p>correct the interface states of the left and right states of u and v on
+both the x- and y-interfaces interface states with the source terms.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="pyro.incompressible.incomp_interface.mac_vels">
-<span class="sig-prename descclassname"><span class="pre">pyro.incompressible.incomp_interface.</span></span><span class="sig-name descname"><span class="pre">mac_vels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_ux</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_vx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_uy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_vy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradp_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradp_y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/incomp_interface.html#mac_vels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.incomp_interface.mac_vels" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.incompressible.incomp_interface.</span></span><span class="sig-name descname"><span class="pre">mac_vels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_ux</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_vx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_uy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_vy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradp_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradp_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/incomp_interface.html#mac_vels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.incomp_interface.mac_vels" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate the MAC velocities in the x and y directions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -245,6 +281,8 @@ terms.</p>
 </dd>
 <dt><strong>gradp_x, gradp_y</strong><span class="classifier">ndarray</span></dt><dd><p>Pressure gradients in the x and y directions</p>
 </dd>
+<dt><strong>source_x, source_y</strong><span class="classifier">ndarray</span></dt><dd><p>Any other source terms</p>
+</dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -258,7 +296,7 @@ terms.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.incompressible.incomp_interface.states">
-<span class="sig-prename descclassname"><span class="pre">pyro.incompressible.incomp_interface.</span></span><span class="sig-name descname"><span class="pre">states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_ux</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_vx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_uy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_vy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradp_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradp_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_MAC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_MAC</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/incomp_interface.html#states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.incomp_interface.states" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.incompressible.incomp_interface.</span></span><span class="sig-name descname"><span class="pre">states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_ux</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_vx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_uy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldelta_vy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradp_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradp_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_MAC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_MAC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/incomp_interface.html#states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.incomp_interface.states" title="Permalink to this definition"></a></dt>
 <dd><p>This is similar to <code class="docutils literal notranslate"><span class="pre">mac_vels</span></code>, but it predicts the interface states
 of both u and v on both interfaces, using the MAC velocities to
 do the upwinding.</p>
@@ -279,6 +317,8 @@ do the upwinding.</p>
 </dd>
 <dt><strong>u_MAC, v_MAC</strong><span class="classifier">ndarray</span></dt><dd><p>MAC velocities in the x and y directions</p>
 </dd>
+<dt><strong>source_x, source_y</strong><span class="classifier">ndarray</span></dt><dd><p>Any other source terms</p>
+</dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -298,6 +338,19 @@ do the upwinding.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.incompressible.simulation.</span></span><span class="sig-name descname"><span class="pre">Simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timers=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_class=&lt;class</span> <span class="pre">'pyro.mesh.patch.CellCenterData2d'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/simulation.html#Simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.simulation.Simulation" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="pyro.burgers.html#pyro.burgers.simulation.Simulation" title="pyro.burgers.simulation.Simulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Simulation</span></code></a></p>
 <dl class="py method">
+<dt class="sig sig-object py" id="pyro.incompressible.simulation.Simulation.define_other_bc">
+<span class="sig-name descname"><span class="pre">define_other_bc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/simulation.html#Simulation.define_other_bc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.simulation.Simulation.define_other_bc" title="Permalink to this definition"></a></dt>
+<dd><p>Used to set up user-defined BC’s (see e.g. incompressible_viscous)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.incompressible.simulation.Simulation.do_other_update_velocity">
+<span class="sig-name descname"><span class="pre">do_other_update_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">U_MAC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U_INT</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/simulation.html#Simulation.do_other_update_velocity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.simulation.Simulation.do_other_update_velocity" title="Permalink to this definition"></a></dt>
+<dd><p>Change the method for updating the velocity from the projected velocity
+and interface states (see e.g. incompressible_viscous)</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pyro.incompressible.simulation.Simulation.dovis">
 <span class="sig-name descname"><span class="pre">dovis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/simulation.html#Simulation.dovis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.simulation.Simulation.dovis" title="Permalink to this definition"></a></dt>
 <dd><p>Do runtime visualization</p>
@@ -305,15 +358,22 @@ do the upwinding.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.incompressible.simulation.Simulation.evolve">
-<span class="sig-name descname"><span class="pre">evolve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/simulation.html#Simulation.evolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.simulation.Simulation.evolve" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">evolve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other_update_velocity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other_source_term</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/simulation.html#Simulation.evolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.simulation.Simulation.evolve" title="Permalink to this definition"></a></dt>
 <dd><p>Evolve the incompressible equations through one timestep.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.incompressible.simulation.Simulation.initialize">
-<span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/simulation.html#Simulation.initialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.simulation.Simulation.initialize" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other_bc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aux_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/simulation.html#Simulation.initialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.simulation.Simulation.initialize" title="Permalink to this definition"></a></dt>
 <dd><p>Initialize the grid and variables for incompressible flow and
 set the initial conditions for the chosen problem.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.incompressible.simulation.Simulation.other_source_term">
+<span class="sig-name descname"><span class="pre">other_source_term</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible/simulation.html#Simulation.other_source_term"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible.simulation.Simulation.other_source_term" title="Permalink to this definition"></a></dt>
+<dd><p>Add source terms (other than gradp) for getting interface state values,
+in the x and y directions</p>
 </dd></dl>
 
 <dl class="py method">

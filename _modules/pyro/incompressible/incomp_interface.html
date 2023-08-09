@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.incompressible.incomp_interface &mdash; pyro 4.0.1.post50+g70445dc9 documentation</title>
+  <title>pyro.incompressible.incomp_interface &mdash; pyro 4.0.1.post51+g113a50d0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -70,6 +70,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../multigrid.html">Multigrid Solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../incompressible_viscous_basics.html">Incompressible viscous hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../swe_basics.html">Shallow water solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../particles_basics.html">Particles</a></li>
@@ -126,7 +127,8 @@
              <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span>
              <span class="n">ldelta_ux</span><span class="p">,</span> <span class="n">ldelta_vx</span><span class="p">,</span>
              <span class="n">ldelta_uy</span><span class="p">,</span> <span class="n">ldelta_vy</span><span class="p">,</span>
-             <span class="n">gradp_x</span><span class="p">,</span> <span class="n">gradp_y</span><span class="p">):</span>
+             <span class="n">gradp_x</span><span class="p">,</span> <span class="n">gradp_y</span><span class="p">,</span>
+             <span class="n">source_x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">source_y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the MAC velocities in the x and y directions.</span>
 
@@ -144,6 +146,8 @@
 <span class="sd">        Limited slopes of the y-velocity in the x and y directions</span>
 <span class="sd">    gradp_x, gradp_y : ndarray</span>
 <span class="sd">        Pressure gradients in the x and y directions</span>
+<span class="sd">    source_x, source_y : ndarray</span>
+<span class="sd">        Any other source terms</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -177,6 +181,15 @@
                                         <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span><span class="p">,</span>
                                         <span class="n">gradp_x</span><span class="p">,</span> <span class="n">gradp_y</span><span class="p">)</span>
 
+    <span class="c1"># apply source terms</span>
+    <span class="n">u_xl</span><span class="p">,</span> <span class="n">u_xr</span><span class="p">,</span> <span class="n">u_yl</span><span class="p">,</span> <span class="n">u_yr</span><span class="p">,</span> <span class="n">v_xl</span><span class="p">,</span> <span class="n">v_xr</span><span class="p">,</span> <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span> <span class="o">=</span> \
+                <span class="n">apply_other_source_terms</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span>
+                                        <span class="n">u_xl</span><span class="p">,</span> <span class="n">u_xr</span><span class="p">,</span>
+                                        <span class="n">u_yl</span><span class="p">,</span> <span class="n">u_yr</span><span class="p">,</span>
+                                        <span class="n">v_xl</span><span class="p">,</span> <span class="n">v_xr</span><span class="p">,</span>
+                                        <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span><span class="p">,</span>
+                                        <span class="n">source_x</span><span class="p">,</span> <span class="n">source_y</span><span class="p">)</span>
+
     <span class="c1"># Riemann problem -- this follows Burger&#39;s equation.  We don&#39;t use</span>
     <span class="c1"># any input velocity for the upwinding.  Also, we only care about</span>
     <span class="c1"># the normal states here (u on x and v on y)</span>
@@ -191,7 +204,8 @@
            <span class="n">ldelta_ux</span><span class="p">,</span> <span class="n">ldelta_vx</span><span class="p">,</span>
            <span class="n">ldelta_uy</span><span class="p">,</span> <span class="n">ldelta_vy</span><span class="p">,</span>
            <span class="n">gradp_x</span><span class="p">,</span> <span class="n">gradp_y</span><span class="p">,</span>
-           <span class="n">u_MAC</span><span class="p">,</span> <span class="n">v_MAC</span><span class="p">):</span>
+           <span class="n">u_MAC</span><span class="p">,</span> <span class="n">v_MAC</span><span class="p">,</span>
+           <span class="n">source_x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">source_y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This is similar to ``mac_vels``, but it predicts the interface states</span>
 <span class="sd">    of both u and v on both interfaces, using the MAC velocities to</span>
@@ -213,6 +227,8 @@
 <span class="sd">        Pressure gradients in the x and y directions</span>
 <span class="sd">    u_MAC, v_MAC : ndarray</span>
 <span class="sd">        MAC velocities in the x and y directions</span>
+<span class="sd">    source_x, source_y : ndarray</span>
+<span class="sd">        Any other source terms</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -243,6 +259,15 @@
                                         <span class="n">v_xl</span><span class="p">,</span> <span class="n">v_xr</span><span class="p">,</span>
                                         <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span><span class="p">,</span>
                                         <span class="n">gradp_x</span><span class="p">,</span> <span class="n">gradp_y</span><span class="p">)</span>
+
+    <span class="c1"># apply source terms</span>
+    <span class="n">u_xl</span><span class="p">,</span> <span class="n">u_xr</span><span class="p">,</span> <span class="n">u_yl</span><span class="p">,</span> <span class="n">u_yr</span><span class="p">,</span> <span class="n">v_xl</span><span class="p">,</span> <span class="n">v_xr</span><span class="p">,</span> <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span> <span class="o">=</span> \
+                <span class="n">apply_other_source_terms</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span>
+                                        <span class="n">u_xl</span><span class="p">,</span> <span class="n">u_xr</span><span class="p">,</span>
+                                        <span class="n">u_yl</span><span class="p">,</span> <span class="n">u_yr</span><span class="p">,</span>
+                                        <span class="n">v_xl</span><span class="p">,</span> <span class="n">v_xr</span><span class="p">,</span>
+                                        <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span><span class="p">,</span>
+                                        <span class="n">source_x</span><span class="p">,</span> <span class="n">source_y</span><span class="p">)</span>
 
     <span class="c1"># upwind using the MAC velocity to determine which state exists on</span>
     <span class="c1"># the interface</span>
@@ -275,6 +300,7 @@
 <span class="sd">        left and right states of y-velocity in x-interface.</span>
 <span class="sd">    v_yl, u_yr : ndarray ndarray</span>
 <span class="sd">        left and right states of y-velocity in y-interface.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    out : ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray</span>
@@ -300,6 +326,52 @@
     <span class="c1"># transverse term for the u states on y-interfaces</span>
     <span class="n">u_yl</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">gradp_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">u_yr</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">gradp_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">u_xl</span><span class="p">,</span> <span class="n">u_xr</span><span class="p">,</span> <span class="n">u_yl</span><span class="p">,</span> <span class="n">u_yr</span><span class="p">,</span> <span class="n">v_xl</span><span class="p">,</span> <span class="n">v_xr</span><span class="p">,</span> <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span></div>
+
+
+<div class="viewcode-block" id="apply_other_source_terms"><a class="viewcode-back" href="../../../pyro.incompressible.html#pyro.incompressible.incomp_interface.apply_other_source_terms">[docs]</a><span class="k">def</span> <span class="nf">apply_other_source_terms</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span>
+                            <span class="n">u_xl</span><span class="p">,</span> <span class="n">u_xr</span><span class="p">,</span>
+                            <span class="n">u_yl</span><span class="p">,</span> <span class="n">u_yr</span><span class="p">,</span>
+                            <span class="n">v_xl</span><span class="p">,</span> <span class="n">v_xr</span><span class="p">,</span>
+                            <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span><span class="p">,</span>
+                            <span class="n">source_x</span><span class="p">,</span> <span class="n">source_y</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    grid : Grid2d</span>
+<span class="sd">        The grid object</span>
+<span class="sd">    dt : float</span>
+<span class="sd">        The timestep</span>
+<span class="sd">    u_xl, u_xr : ndarray ndarray</span>
+<span class="sd">        left and right states of x-velocity in x-interface.</span>
+<span class="sd">    u_yl, u_yr : ndarray ndarray</span>
+<span class="sd">        left and right states of x-velocity in y-interface.</span>
+<span class="sd">    v_xl, v_xr : ndarray ndarray</span>
+<span class="sd">        left and right states of y-velocity in x-interface.</span>
+<span class="sd">    v_yl, u_yr : ndarray ndarray</span>
+<span class="sd">        left and right states of y-velocity in y-interface.</span>
+<span class="sd">    source_x, source_y : ndarray</span>
+<span class="sd">        Any other source terms</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray</span>
+<span class="sd">        correct the interface states of the left and right states of u and v on</span>
+<span class="sd">        both the x- and y-interfaces interface states with the source terms.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">source_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">u_xl</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">source_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">u_xr</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">source_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">u_yl</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">source_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">u_yr</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">source_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">source_y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">v_xl</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">source_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">v_xr</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">source_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">v_yl</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">source_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">v_yr</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">source_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">u_xl</span><span class="p">,</span> <span class="n">u_xr</span><span class="p">,</span> <span class="n">u_yl</span><span class="p">,</span> <span class="n">u_yr</span><span class="p">,</span> <span class="n">v_xl</span><span class="p">,</span> <span class="n">v_xr</span><span class="p">,</span> <span class="n">v_yl</span><span class="p">,</span> <span class="n">v_yr</span></div>
 </pre></div>

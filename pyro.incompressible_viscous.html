@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyro.incompressible_viscous package &mdash; pyro 4.0.1.post51+g113a50d0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pyro.incompressible_viscous.problems package" href="pyro.incompressible_viscous.problems.html" />
+    <link rel="prev" title="pyro.incompressible.problems package" href="pyro.incompressible.problems.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyro
+              <img src="_static/logo.gif" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                4.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">pyro basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Setting up pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems.html">Adding a problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="burgers_basics.html">Burgers’ Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_compare.html">Compressible solver comparisons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid.html">Multigrid Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_viscous_basics.html">Incompressible viscous hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Contributing and getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ack.html#history">History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Software Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pyro.html">pyro package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pyro.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection.html">pyro.advection package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_fv4.html">pyro.advection_fv4 package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_nonuniform.html">pyro.advection_nonuniform package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_rk.html">pyro.advection_rk package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_weno.html">pyro.advection_weno package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.burgers.html">pyro.burgers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.html">pyro.compressible package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_fv4.html">pyro.compressible_fv4 package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_react.html">pyro.compressible_react package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_rk.html">pyro.compressible_rk package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sdc.html">pyro.compressible_sdc package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.html">pyro.compressible_sr package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.diffusion.html">pyro.diffusion package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible.html">pyro.incompressible package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pyro.incompressible_viscous package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.lm_atm.html">pyro.lm_atm package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html">pyro.mesh package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.html">pyro.multigrid package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.particles.html">pyro.particles package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.swe.html">pyro.swe package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.util.html">pyro.util package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.html#module-pyro.plot">pyro.plot module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.html#module-pyro.pyro_sim">pyro.pyro_sim module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.html#module-pyro.simulation_null">pyro.simulation_null module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.html#module-pyro.test">pyro.test module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="zreferences.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pyro</a></li>
+          <li class="breadcrumb-item"><a href="pyro.html">pyro package</a></li>
+      <li class="breadcrumb-item active">pyro.incompressible_viscous package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pyro.incompressible_viscous.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pyro.incompressible_viscous">
+<span id="pyro-incompressible-viscous-package"></span><h1>pyro.incompressible_viscous package<a class="headerlink" href="#module-pyro.incompressible_viscous" title="Permalink to this heading"></a></h1>
+<p>The pyro solver for incompressible and viscous flow.  This implements a
+second-order approximate projection method.  The general flow is:</p>
+<ul class="simple">
+<li><p>create the limited slopes of u and v (in both directions)</p></li>
+<li><p>get the advective velocities through a piecewise linear Godunov
+method</p></li>
+<li><p>enforce the divergence constraint on the velocities through a
+projection (the MAC projection)</p></li>
+<li><p>recompute the interface states using the new advective velocity</p></li>
+<li><p>Solve for U in a (decoupled) parabolic solve including viscosity term</p></li>
+<li><p>project the final velocity to enforce the divergence constraint.</p></li>
+</ul>
+<p>The projections are done using multigrid</p>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pyro.incompressible_viscous.problems.html">pyro.incompressible_viscous.problems package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyro.incompressible_viscous.problems.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.incompressible_viscous.problems.html#module-pyro.incompressible_viscous.problems.cavity">pyro.incompressible_viscous.problems.cavity module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.incompressible_viscous.problems.html#pyro.incompressible_viscous.problems.cavity.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.incompressible_viscous.problems.html#pyro.incompressible_viscous.problems.cavity.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.incompressible_viscous.problems.html#module-pyro.incompressible_viscous.problems.converge">pyro.incompressible_viscous.problems.converge module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.incompressible_viscous.problems.html#pyro.incompressible_viscous.problems.converge.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.incompressible_viscous.problems.html#pyro.incompressible_viscous.problems.converge.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.incompressible_viscous.problems.html#module-pyro.incompressible_viscous.problems.plot_cavity">pyro.incompressible_viscous.problems.plot_cavity module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.incompressible_viscous.problems.html#pyro.incompressible_viscous.problems.plot_cavity.get_args"><code class="docutils literal notranslate"><span class="pre">get_args()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.incompressible_viscous.problems.html#pyro.incompressible_viscous.problems.plot_cavity.makeplot"><code class="docutils literal notranslate"><span class="pre">makeplot()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.incompressible_viscous.problems.html#module-pyro.incompressible_viscous.problems.shear">pyro.incompressible_viscous.problems.shear module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.incompressible_viscous.problems.html#pyro.incompressible_viscous.problems.shear.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.incompressible_viscous.problems.html#pyro.incompressible_viscous.problems.shear.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-pyro.incompressible_viscous.BC">
+<span id="pyro-incompressible-viscous-bc-module"></span><h2>pyro.incompressible_viscous.BC module<a class="headerlink" href="#module-pyro.incompressible_viscous.BC" title="Permalink to this heading"></a></h2>
+<p>Solver-specific boundary conditions.  Here, in particular, we
+implement a “moving-lid” option, i.e. fixed tangential velocity at a wall.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.incompressible_viscous.BC.user">
+<span class="sig-prename descclassname"><span class="pre">pyro.incompressible_viscous.BC.</span></span><span class="sig-name descname"><span class="pre">user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bc_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc_edge</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ccdata</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible_viscous/BC.html#user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible_viscous.BC.user" title="Permalink to this definition"></a></dt>
+<dd><p>A moving lid boundary. This fixes the tangent velocity at the boundary
+to 1, and the y-velocity to 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>bc_name</strong><span class="classifier">{‘moving_lid’}</span></dt><dd><p>The descriptive name for the boundary condition – this allows
+for pyro to have multiple types of user-supplied boundary
+conditions.  For this module, it needs to be ‘moving_lid’.</p>
+</dd>
+<dt><strong>bc_edge</strong><span class="classifier">{‘ylb’, ‘yrb’, ‘xlb’, ‘xrb}</span></dt><dd><p>The boundary to update: ylb = lower y; yrb = upper y.
+xlb = left x; xrb = right x</p>
+</dd>
+<dt><strong>ccdata</strong><span class="classifier">CellCenterData2d object</span></dt><dd><p>The data object</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pyro.incompressible_viscous.simulation">
+<span id="pyro-incompressible-viscous-simulation-module"></span><h2>pyro.incompressible_viscous.simulation module<a class="headerlink" href="#module-pyro.incompressible_viscous.simulation" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyro.incompressible_viscous.simulation.Simulation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.incompressible_viscous.simulation.</span></span><span class="sig-name descname"><span class="pre">Simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timers=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_class=&lt;class</span> <span class="pre">'pyro.mesh.patch.CellCenterData2d'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible_viscous/simulation.html#Simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible_viscous.simulation.Simulation" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.simulation.Simulation" title="pyro.incompressible.simulation.Simulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Simulation</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.incompressible_viscous.simulation.Simulation.define_other_bc">
+<span class="sig-name descname"><span class="pre">define_other_bc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible_viscous/simulation.html#Simulation.define_other_bc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible_viscous.simulation.Simulation.define_other_bc" title="Permalink to this definition"></a></dt>
+<dd><p>Used to set up user-defined BC’s (see e.g. incompressible_viscous)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.incompressible_viscous.simulation.Simulation.do_other_update_velocity">
+<span class="sig-name descname"><span class="pre">do_other_update_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">U_MAC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U_INT</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible_viscous/simulation.html#Simulation.do_other_update_velocity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible_viscous.simulation.Simulation.do_other_update_velocity" title="Permalink to this definition"></a></dt>
+<dd><p>Solve for U in a (decoupled) parabolic solve including viscosity term</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.incompressible_viscous.simulation.Simulation.evolve">
+<span class="sig-name descname"><span class="pre">evolve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible_viscous/simulation.html#Simulation.evolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible_viscous.simulation.Simulation.evolve" title="Permalink to this definition"></a></dt>
+<dd><p>Solve is all the same steps as the incompressible solver, but
+including a source term for the viscosity in the interface
+prediction, and changing the velocity update method to a double
+parabolic solve.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.incompressible_viscous.simulation.Simulation.initialize">
+<span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible_viscous/simulation.html#Simulation.initialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible_viscous.simulation.Simulation.initialize" title="Permalink to this definition"></a></dt>
+<dd><p>Initialization of the data is the same as the incompressible
+solver, but we define user BC, and provide the viscosity
+as an auxiliary variable.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.incompressible_viscous.simulation.Simulation.other_source_term">
+<span class="sig-name descname"><span class="pre">other_source_term</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible_viscous/simulation.html#Simulation.other_source_term"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible_viscous.simulation.Simulation.other_source_term" title="Permalink to this definition"></a></dt>
+<dd><p>This is the viscous term nu L U</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyro.incompressible_viscous.simulation.Simulation.write_extras">
+<span class="sig-name descname"><span class="pre">write_extras</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/incompressible_viscous/simulation.html#Simulation.write_extras"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.incompressible_viscous.simulation.Simulation.write_extras" title="Permalink to this definition"></a></dt>
+<dd><p>Output simulation-specific data to the h5py file f</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pyro.incompressible.problems.html" class="btn btn-neutral float-left" title="pyro.incompressible.problems package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pyro.incompressible_viscous.problems.html" class="btn btn-neutral float-right" title="pyro.incompressible_viscous.problems package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, pyro development team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

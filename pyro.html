@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro package &mdash; pyro 4.0.1.post50+g70445dc9 documentation</title>
+  <title>pyro package &mdash; pyro 4.0.1.post51+g113a50d0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -73,6 +73,7 @@
 <li class="toctree-l1"><a class="reference internal" href="multigrid.html">Multigrid Solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_viscous_basics.html">Incompressible viscous hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
@@ -107,6 +108,7 @@
 <li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.html">pyro.compressible_sr package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyro.diffusion.html">pyro.diffusion package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyro.incompressible.html">pyro.incompressible package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible_viscous.html">pyro.incompressible_viscous package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyro.lm_atm.html">pyro.lm_atm package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html">pyro.mesh package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.html">pyro.multigrid package</a></li>
@@ -672,16 +674,51 @@ methods.</p>
 <li class="toctree-l2"><a class="reference internal" href="pyro.incompressible.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyro.incompressible.html#module-pyro.incompressible.incomp_interface">pyro.incompressible.incomp_interface module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.incomp_interface.apply_gradp_corrections"><code class="docutils literal notranslate"><span class="pre">apply_gradp_corrections()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.incomp_interface.apply_other_source_terms"><code class="docutils literal notranslate"><span class="pre">apply_other_source_terms()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.incomp_interface.mac_vels"><code class="docutils literal notranslate"><span class="pre">mac_vels()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.incomp_interface.states"><code class="docutils literal notranslate"><span class="pre">states()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="pyro.incompressible.html#module-pyro.incompressible.simulation">pyro.incompressible.simulation module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.simulation.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.simulation.Simulation.define_other_bc"><code class="docutils literal notranslate"><span class="pre">Simulation.define_other_bc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.simulation.Simulation.do_other_update_velocity"><code class="docutils literal notranslate"><span class="pre">Simulation.do_other_update_velocity()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.simulation.Simulation.dovis"><code class="docutils literal notranslate"><span class="pre">Simulation.dovis()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.simulation.Simulation.evolve"><code class="docutils literal notranslate"><span class="pre">Simulation.evolve()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.simulation.Simulation.initialize"><code class="docutils literal notranslate"><span class="pre">Simulation.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.simulation.Simulation.other_source_term"><code class="docutils literal notranslate"><span class="pre">Simulation.other_source_term()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyro.incompressible.html#pyro.incompressible.simulation.Simulation.preevolve"><code class="docutils literal notranslate"><span class="pre">Simulation.preevolve()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyro.incompressible_viscous.html">pyro.incompressible_viscous package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyro.incompressible_viscous.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.incompressible_viscous.problems.html">pyro.incompressible_viscous.problems package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible_viscous.problems.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible_viscous.problems.html#module-pyro.incompressible_viscous.problems.cavity">pyro.incompressible_viscous.problems.cavity module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible_viscous.problems.html#module-pyro.incompressible_viscous.problems.converge">pyro.incompressible_viscous.problems.converge module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible_viscous.problems.html#module-pyro.incompressible_viscous.problems.plot_cavity">pyro.incompressible_viscous.problems.plot_cavity module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible_viscous.problems.html#module-pyro.incompressible_viscous.problems.shear">pyro.incompressible_viscous.problems.shear module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.incompressible_viscous.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.incompressible_viscous.html#module-pyro.incompressible_viscous.BC">pyro.incompressible_viscous.BC module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.incompressible_viscous.html#pyro.incompressible_viscous.BC.user"><code class="docutils literal notranslate"><span class="pre">user()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.incompressible_viscous.html#module-pyro.incompressible_viscous.simulation">pyro.incompressible_viscous.simulation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.incompressible_viscous.html#pyro.incompressible_viscous.simulation.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible_viscous.html#pyro.incompressible_viscous.simulation.Simulation.define_other_bc"><code class="docutils literal notranslate"><span class="pre">Simulation.define_other_bc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible_viscous.html#pyro.incompressible_viscous.simulation.Simulation.do_other_update_velocity"><code class="docutils literal notranslate"><span class="pre">Simulation.do_other_update_velocity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible_viscous.html#pyro.incompressible_viscous.simulation.Simulation.evolve"><code class="docutils literal notranslate"><span class="pre">Simulation.evolve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible_viscous.html#pyro.incompressible_viscous.simulation.Simulation.initialize"><code class="docutils literal notranslate"><span class="pre">Simulation.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible_viscous.html#pyro.incompressible_viscous.simulation.Simulation.other_source_term"><code class="docutils literal notranslate"><span class="pre">Simulation.other_source_term()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible_viscous.html#pyro.incompressible_viscous.simulation.Simulation.write_extras"><code class="docutils literal notranslate"><span class="pre">Simulation.write_extras()</span></code></a></li>
 </ul>
 </li>
 </ul>
