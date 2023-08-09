@@ -8,11 +8,8 @@ from pyro.util import msg
 
 def user(bc_name, bc_edge, variable, ccdata):
     """
-    A moving lid boundary.  This integrates the equation of HSE into
-    the ghost cells to get the pressure and density under the assumption
-    that the specific internal energy is constant.
-
-    Upon exit, the ghost cells for the input variable will be set
+    A moving lid boundary. This fixes the tangent velocity at the boundary
+    to 1, and the y-velocity to 0.
 
     Parameters
     ----------
