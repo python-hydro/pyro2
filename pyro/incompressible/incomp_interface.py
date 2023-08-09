@@ -236,8 +236,7 @@ def apply_other_source_terms(dt,
     -------
     out : ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray, ndarray
         correct the interface states of the left and right states of u and v on
-        both the x- and y-interfaces interface states with the pressure gradient
-        terms.
+        both the x- and y-interfaces interface states with the source terms.
     """
 
     if source_x is not None:
