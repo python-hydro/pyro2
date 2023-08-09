@@ -26,6 +26,7 @@ Subpackages
    pyro.compressible_sr
    pyro.diffusion
    pyro.incompressible
+   pyro.incompressible_viscous
    pyro.lm_atm
    pyro.mesh
    pyro.multigrid

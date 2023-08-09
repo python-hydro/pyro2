@@ -1,0 +1,13 @@
+[incompressible]
+limiter = 2               ; limiter (0 = none, 1 = 2nd order, 2 = 4th order)
+proj_type = 2             ; what are we projecting? 1 includes -Gp term in U*
+
+[incompressible_viscous]
+viscosity = 0.1           ; kinematic viscosity of the fluid (units L^2/T)
+
+[driver]
+cfl = 0.8
+
+[particles]
+do_particles = 0
+particle_generator = grid

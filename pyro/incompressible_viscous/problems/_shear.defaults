@@ -1,0 +1,4 @@
+[shear]
+rho_s = 42.0   ; shear layer width
+delta_s = 0.05 ; perturbuation amplitude
+
