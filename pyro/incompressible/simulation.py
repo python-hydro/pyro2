@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import pyro.mesh.array_indexer as ai
+import pyro.mesh.boundary as bnd
 from pyro.burgers import Simulation as burgers_simulation
 from pyro.incompressible import incomp_interface
 from pyro.mesh import patch, reconstruction
