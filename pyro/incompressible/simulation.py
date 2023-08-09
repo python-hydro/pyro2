@@ -4,15 +4,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import pyro.mesh.array_indexer as ai
-import pyro.mesh.boundary as bnd
+from pyro.burgers import Simulation as burgers_simulation
 from pyro.incompressible import incomp_interface
 from pyro.mesh import patch, reconstruction
 from pyro.multigrid import MG
 from pyro.particles import particles
-from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
+from pyro.simulation_null import bc_setup, grid_setup
 
 
-class Simulation(NullSimulation):
+class Simulation(burgers_simulation):
 
     def initialize(self, other_bc=False, aux_vars=()):
         """
@@ -64,27 +64,6 @@ class Simulation(NullSimulation):
         # now set the initial conditions for the problem
         problem = importlib.import_module(f"pyro.{self.solver_name}.problems.{self.problem_name}")
         problem.init_data(self.cc_data, self.rp)
-
-    def method_compute_timestep(self, ):
-        """
-        The timestep() function computes the advective timestep
-        (CFL) constraint.  The CFL constraint says that information
-        cannot propagate further than one zone per timestep.
-
-        We use the driver.cfl parameter to control what fraction of the CFL
-        step we actually take.
-        """
-
-        cfl = self.rp.get_param("driver.cfl")
-
-        u = self.cc_data.get_var("x-velocity")
-        v = self.cc_data.get_var("y-velocity")
-
-        # the timestep is min(dx/|u|, dy|v|)
-        xtmp = self.cc_data.grid.dx/(abs(u))
-        ytmp = self.cc_data.grid.dy/(abs(v))
-
-        self.dt = cfl*float(min(xtmp.min(), ytmp.min()))
 
     def preevolve(self):
         """
