@@ -25,6 +25,7 @@ valid_solvers = ["advection",
                  "compressible_sr",
                  "diffusion",
                  "incompressible",
+                 "incompressible_viscous",
                  "lm_atm",
                  "swe"]
 
