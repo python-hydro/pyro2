@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; pyro 4.0.1.post51+g113a50d0 documentation</title>
+  <title>Index &mdash; pyro 4.0.1.post52+g279776bd documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -157,14 +157,16 @@
       </ul></li>
       <li><a href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.add_ivars">add_ivars() (pyro.mesh.patch.CellCenterData2d method)</a>
 </li>
+      <li><a href="pyro.viscous_burgers.html#pyro.viscous_burgers.interface.apply_diffusion_corrections">apply_diffusion_corrections() (in module pyro.viscous_burgers.interface)</a>
+</li>
       <li><a href="pyro.incompressible.html#pyro.incompressible.incomp_interface.apply_gradp_corrections">apply_gradp_corrections() (in module pyro.incompressible.incomp_interface)</a>
 </li>
       <li><a href="pyro.incompressible.html#pyro.incompressible.incomp_interface.apply_other_source_terms">apply_other_source_terms() (in module pyro.incompressible.incomp_interface)</a>
 </li>
-      <li><a href="pyro.burgers.html#pyro.burgers.burgers_interface.apply_transverse_corrections">apply_transverse_corrections() (in module pyro.burgers.burgers_interface)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pyro.burgers.html#pyro.burgers.burgers_interface.apply_transverse_corrections">apply_transverse_corrections() (in module pyro.burgers.burgers_interface)</a>
+</li>
       <li><a href="pyro.particles.html#pyro.particles.particles.Particles.array_generate_particles">array_generate_particles() (pyro.particles.particles.Particles method)</a>
 </li>
       <li><a href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer">ArrayIndexer (class in pyro.mesh.array_indexer)</a>
@@ -291,8 +293,12 @@
         <li><a href="pyro.swe.html#pyro.swe.derives.derive_primitives">(in module pyro.swe.derives)</a>
 </li>
       </ul></li>
-      <li><a href="pyro.compressible_react.html#pyro.compressible_react.simulation.Simulation.diffuse">diffuse() (pyro.compressible_react.simulation.Simulation method)</a>
+      <li><a href="pyro.viscous_burgers.html#pyro.viscous_burgers.interface.diffuse">diffuse() (in module pyro.viscous_burgers.interface)</a>
+
+      <ul>
+        <li><a href="pyro.compressible_react.html#pyro.compressible_react.simulation.Simulation.diffuse">(pyro.compressible_react.simulation.Simulation method)</a>
 </li>
+      </ul></li>
       <li><a href="pyro.mesh.html#pyro.mesh.patch.do_demo">do_demo() (in module pyro.mesh.patch)</a>
 </li>
       <li><a href="pyro.incompressible.html#pyro.incompressible.simulation.Simulation.do_other_update_velocity">do_other_update_velocity() (pyro.incompressible.simulation.Simulation method)</a>
@@ -377,6 +383,8 @@
         <li><a href="pyro.html#pyro.simulation_null.NullSimulation.evolve">(pyro.simulation_null.NullSimulation method)</a>
 </li>
         <li><a href="pyro.swe.html#pyro.swe.simulation.Simulation.evolve">(pyro.swe.simulation.Simulation method)</a>
+</li>
+        <li><a href="pyro.viscous_burgers.html#pyro.viscous_burgers.simulation.Simulation.evolve">(pyro.viscous_burgers.simulation.Simulation method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -610,6 +618,10 @@
 </li>
         <li><a href="pyro.swe.problems.html#pyro.swe.problems.test.finalize">(in module pyro.swe.problems.test)</a>
 </li>
+        <li><a href="pyro.viscous_burgers.problems.html#pyro.viscous_burgers.problems.converge.finalize">(in module pyro.viscous_burgers.problems.converge)</a>
+</li>
+        <li><a href="pyro.viscous_burgers.problems.html#pyro.viscous_burgers.problems.tophat.finalize">(in module pyro.viscous_burgers.problems.tophat)</a>
+</li>
         <li><a href="pyro.html#pyro.simulation_null.NullSimulation.finalize">(pyro.simulation_null.NullSimulation method)</a>
 </li>
       </ul></li>
@@ -667,6 +679,8 @@
         <li><a href="pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.get_interface_states">(in module pyro.lm_atm.LM_atm_interface)</a>
 </li>
       </ul></li>
+      <li><a href="pyro.viscous_burgers.html#pyro.viscous_burgers.interface.get_lap">get_lap() (in module pyro.viscous_burgers.interface)</a>
+</li>
       <li><a href="pyro.util.html#pyro.util.runparams.RuntimeParameters.get_param">get_param() (pyro.util.runparams.RuntimeParameters method)</a>
 </li>
       <li><a href="pyro.particles.html#pyro.particles.particles.Particles.get_positions">get_positions() (pyro.particles.particles.Particles method)</a>
@@ -937,6 +951,10 @@
         <li><a href="pyro.swe.problems.html#pyro.swe.problems.quad.init_data">(in module pyro.swe.problems.quad)</a>
 </li>
         <li><a href="pyro.swe.problems.html#pyro.swe.problems.test.init_data">(in module pyro.swe.problems.test)</a>
+</li>
+        <li><a href="pyro.viscous_burgers.problems.html#pyro.viscous_burgers.problems.converge.init_data">(in module pyro.viscous_burgers.problems.converge)</a>
+</li>
+        <li><a href="pyro.viscous_burgers.problems.html#pyro.viscous_burgers.problems.tophat.init_data">(in module pyro.viscous_burgers.problems.tophat)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1520,6 +1538,18 @@
         <li><a href="pyro.util.html#module-pyro.util.profile_pyro">pyro.util.profile_pyro</a>
 </li>
         <li><a href="pyro.util.html#module-pyro.util.runparams">pyro.util.runparams</a>
+</li>
+        <li><a href="pyro.viscous_burgers.html#module-pyro.viscous_burgers">pyro.viscous_burgers</a>
+</li>
+        <li><a href="pyro.viscous_burgers.html#module-pyro.viscous_burgers.interface">pyro.viscous_burgers.interface</a>
+</li>
+        <li><a href="pyro.viscous_burgers.problems.html#module-pyro.viscous_burgers.problems">pyro.viscous_burgers.problems</a>
+</li>
+        <li><a href="pyro.viscous_burgers.problems.html#module-pyro.viscous_burgers.problems.converge">pyro.viscous_burgers.problems.converge</a>
+</li>
+        <li><a href="pyro.viscous_burgers.problems.html#module-pyro.viscous_burgers.problems.tophat">pyro.viscous_burgers.problems.tophat</a>
+</li>
+        <li><a href="pyro.viscous_burgers.html#module-pyro.viscous_burgers.simulation">pyro.viscous_burgers.simulation</a>
 </li>
       </ul></li>
   </ul></td>
@@ -2304,8 +2334,6 @@
         <li><a href="pyro.compressible_rk.problems.html#module-pyro.compressible_rk.problems.ramp">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     pyro.compressible_rk.problems.rt
 
@@ -2327,6 +2355,8 @@
         <li><a href="pyro.compressible_rk.problems.html#module-pyro.compressible_rk.problems.sedov">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     pyro.compressible_rk.problems.sod
 
@@ -3062,6 +3092,48 @@
         <li><a href="pyro.util.html#module-pyro.util.runparams">module</a>
 </li>
       </ul></li>
+      <li>
+    pyro.viscous_burgers
+
+      <ul>
+        <li><a href="pyro.viscous_burgers.html#module-pyro.viscous_burgers">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.viscous_burgers.interface
+
+      <ul>
+        <li><a href="pyro.viscous_burgers.html#module-pyro.viscous_burgers.interface">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.viscous_burgers.problems
+
+      <ul>
+        <li><a href="pyro.viscous_burgers.problems.html#module-pyro.viscous_burgers.problems">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.viscous_burgers.problems.converge
+
+      <ul>
+        <li><a href="pyro.viscous_burgers.problems.html#module-pyro.viscous_burgers.problems.converge">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.viscous_burgers.problems.tophat
+
+      <ul>
+        <li><a href="pyro.viscous_burgers.problems.html#module-pyro.viscous_burgers.problems.tophat">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.viscous_burgers.simulation
+
+      <ul>
+        <li><a href="pyro.viscous_burgers.html#module-pyro.viscous_burgers.simulation">module</a>
+</li>
+      </ul></li>
       <li><a href="pyro.html#pyro.pyro_sim.PyroBenchmark">PyroBenchmark (class in pyro.pyro_sim)</a>
 </li>
       <li><a href="pyro.html#pyro.test.PyroTest">PyroTest (class in pyro.test)</a>
@@ -3206,6 +3278,8 @@
         <li><a href="pyro.lm_atm.html#pyro.lm_atm.simulation.Simulation">(class in pyro.lm_atm.simulation)</a>
 </li>
         <li><a href="pyro.swe.html#pyro.swe.simulation.Simulation">(class in pyro.swe.simulation)</a>
+</li>
+        <li><a href="pyro.viscous_burgers.html#pyro.viscous_burgers.simulation.Simulation">(class in pyro.viscous_burgers.simulation)</a>
 </li>
       </ul></li>
   </ul></td>
