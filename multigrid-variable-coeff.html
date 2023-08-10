@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Variable Coefficient Poisson &mdash; pyro 4.0.1.post52+g279776bd documentation</title>
+  <title>Variable Coefficient Poisson &mdash; pyro 4.0.1.post53+g7b7c6baf documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -248,7 +248,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-rhs sum:       2.07633187e-12
+rhs sum:      3.406203298e-12
 </pre></div></div>
 </div>
 <p>Now we can create the multigrid object</p>
@@ -379,7 +379,7 @@ cc data: nx = 128, ny = 128, ng = 1
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Source norm =  81.3868428575047
+Source norm =  81.38684285750472
 </pre></div></div>
 </div>
 </section>
@@ -398,7 +398,7 @@ Source norm =  81.3868428575047
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-source norm =  81.3868428575047
+source norm =  81.38684285750472
 &lt;&lt;&lt; beginning V-cycle (cycle 1) &gt;&gt;&gt;
 
   level =  6, nx =  128, residual change:     81.3868 →     112.091
@@ -406,15 +406,15 @@ source norm =  81.3868428575047
   level =  4, nx =   32, residual change:     71.2411 →     68.0705
   level =  3, nx =   16, residual change:     47.6577 →     14.4578
   level =  2, nx =    8, residual change:      9.8448 →   0.0171409
-  level =  1, nx =    4, residual change:   0.0106141 → 1.69329e-16
+  level =  1, nx =    4, residual change:   0.0106141 →  5.9609e-16
   bottom solve
-  level =  1, nx =    4, residual change: 3.07629e-16 → 3.07629e-16
+  level =  1, nx =    4, residual change: 1.08342e-15 → 1.08342e-15
   level =  2, nx =    8, residual change:   0.0168243 →   0.0168243
   level =  3, nx =   16, residual change:     14.4901 →     14.4901
   level =  4, nx =   32, residual change:      69.371 →      69.371
   level =  5, nx =   64, residual change:     103.884 →     103.884
   level =  6, nx =  128, residual change:     115.511 →     115.511
-cycle 1: relative err = 1.0000000000000007, residual err = 0.025573219961900512
+cycle 1: relative err = 1.0000000000000007, residual err = 0.02557321996190121
 
 &lt;&lt;&lt; beginning V-cycle (cycle 2) &gt;&gt;&gt;
 
@@ -423,15 +423,15 @@ cycle 1: relative err = 1.0000000000000007, residual err = 0.025573219961900512
   level =  4, nx =   32, residual change:     1.29871 →     1.24144
   level =  3, nx =   16, residual change:    0.877452 →    0.256041
   level =  2, nx =    8, residual change:    0.180588 → 0.000272285
-  level =  1, nx =    4, residual change: 0.000187447 → 6.55867e-17
+  level =  1, nx =    4, residual change: 0.000187447 → 7.26373e-16
   bottom solve
-  level =  1, nx =    4, residual change: 1.19217e-16 → 1.19217e-16
+  level =  1, nx =    4, residual change: 1.31991e-15 → 1.31991e-15
   level =  2, nx =    8, residual change: 0.000298554 → 0.000298554
   level =  3, nx =   16, residual change:     0.33718 →     0.33718
   level =  4, nx =   32, residual change:     1.72809 →     1.72809
   level =  5, nx =   64, residual change:     2.60971 →     2.60971
   level =  6, nx =  128, residual change:     2.89721 →     2.89721
-cycle 2: relative err = 2.1803634390217064, residual err = 0.0006486396426301177
+cycle 2: relative err = 2.1803634389910944, residual err = 0.0006486396426304593
 
 &lt;&lt;&lt; beginning V-cycle (cycle 3) &gt;&gt;&gt;
 
@@ -440,15 +440,15 @@ cycle 2: relative err = 2.1803634390217064, residual err = 0.0006486396426301177
   level =  4, nx =   32, residual change:    0.033097 →   0.0318323
   level =  3, nx =   16, residual change:   0.0224975 →  0.00656631
   level =  2, nx =    8, residual change:  0.00463131 → 6.95479e-06
-  level =  1, nx =    4, residual change:  4.7921e-06 → 3.47155e-16
+  level =  1, nx =    4, residual change:  4.7921e-06 → 3.11033e-16
   bottom solve
-  level =  1, nx =    4, residual change: 6.30821e-16 → 6.30821e-16
+  level =  1, nx =    4, residual change: 5.65184e-16 → 5.65184e-16
   level =  2, nx =    8, residual change: 7.63309e-06 → 7.63309e-06
   level =  3, nx =   16, residual change:  0.00864876 →  0.00864876
   level =  4, nx =   32, residual change:   0.0442789 →   0.0442789
   level =  5, nx =   64, residual change:   0.0665472 →   0.0665472
   level =  6, nx =  128, residual change:   0.0736819 →   0.0736819
-cycle 3: relative err = 0.04844393523115633, residual err = 1.659245815001406e-05
+cycle 3: relative err = 0.04844393523164513, residual err = 1.659245814782389e-05
 
 &lt;&lt;&lt; beginning V-cycle (cycle 4) &gt;&gt;&gt;
 
@@ -457,15 +457,15 @@ cycle 3: relative err = 0.04844393523115633, residual err = 1.659245815001406e-0
   level =  4, nx =   32, residual change: 0.000846751 → 0.000816239
   level =  3, nx =   16, residual change: 0.000576837 → 0.000168502
   level =  2, nx =    8, residual change:  0.00011884 → 1.78399e-07
-  level =  1, nx =    4, residual change: 1.22925e-07 →  2.1827e-16
+  level =  1, nx =    4, residual change: 1.22925e-07 → 1.19517e-15
   bottom solve
-  level =  1, nx =    4, residual change: 3.96622e-16 → 3.96622e-16
+  level =  1, nx =    4, residual change: 2.17176e-15 → 2.17176e-15
   level =  2, nx =    8, residual change: 1.95801e-07 → 1.95801e-07
   level =  3, nx =   16, residual change: 0.000221902 → 0.000221902
   level =  4, nx =   32, residual change:   0.0011347 →   0.0011347
   level =  5, nx =   64, residual change:  0.00170278 →  0.00170278
   level =  6, nx =  128, residual change:  0.00188597 →  0.00188597
-cycle 4: relative err = 0.0012759605329324085, residual err = 4.2728946362388976e-07
+cycle 4: relative err = 0.0012759605328310877, residual err = 4.27289464337961e-07
 
 &lt;&lt;&lt; beginning V-cycle (cycle 5) &gt;&gt;&gt;
 
@@ -474,15 +474,15 @@ cycle 4: relative err = 0.0012759605329324085, residual err = 4.2728946362388976
   level =  4, nx =   32, residual change:  2.1726e-05 → 2.09217e-05
   level =  3, nx =   16, residual change: 1.47845e-05 → 4.32098e-06
   level =  2, nx =    8, residual change: 3.04737e-06 → 4.57173e-09
-  level =  1, nx =    4, residual change: 3.15043e-09 → 4.90471e-17
+  level =  1, nx =    4, residual change: 3.15043e-09 → 6.74202e-16
   bottom solve
-  level =  1, nx =    4, residual change: 8.91242e-17 → 8.91242e-17
+  level =  1, nx =    4, residual change:  1.2251e-15 →  1.2251e-15
   level =  2, nx =    8, residual change: 5.01821e-09 → 5.01821e-09
   level =  3, nx =   16, residual change: 5.68972e-06 → 5.68972e-06
   level =  4, nx =   32, residual change: 2.90707e-05 → 2.90707e-05
   level =  5, nx =   64, residual change: 4.36992e-05 → 4.36992e-05
   level =  6, nx =  128, residual change: 4.85557e-05 → 4.85557e-05
-cycle 5: relative err = 3.301203447716335e-05, residual err = 1.1068868945958364e-08
+cycle 5: relative err = 3.301203452101295e-05, residual err = 1.1068869940931348e-08
 
 &lt;&lt;&lt; beginning V-cycle (cycle 6) &gt;&gt;&gt;
 
@@ -490,33 +490,33 @@ cycle 5: relative err = 3.301203447716335e-05, residual err = 1.1068868945958364
   level =  5, nx =   64, residual change: 6.19593e-07 → 7.90474e-07
   level =  4, nx =   32, residual change: 5.58852e-07 → 5.36009e-07
   level =  3, nx =   16, residual change: 3.78756e-07 → 1.10732e-07
-  level =  2, nx =    8, residual change: 7.80911e-08 → 1.17095e-10
-  level =  1, nx =    4, residual change: 8.06977e-11 → 5.69861e-16
+  level =  2, nx =    8, residual change: 7.80911e-08 → 1.17096e-10
+  level =  1, nx =    4, residual change: 8.06978e-11 → 1.16893e-15
   bottom solve
-  level =  1, nx =    4, residual change:  1.0355e-15 →  1.0355e-15
+  level =  1, nx =    4, residual change: 2.12408e-15 → 2.12408e-15
   level =  2, nx =    8, residual change: 1.28541e-10 → 1.28541e-10
   level =  3, nx =   16, residual change: 1.45795e-07 → 1.45795e-07
   level =  4, nx =   32, residual change:  7.4452e-07 →  7.4452e-07
   level =  5, nx =   64, residual change: 1.12439e-06 → 1.12439e-06
   level =  6, nx =  128, residual change: 1.25658e-06 → 1.25658e-06
-cycle 6: relative err = 8.544249588823554e-07, residual err = 2.88200772432267e-10
+cycle 6: relative err = 8.544249105967869e-07, residual err = 2.881994789253225e-10
 
 &lt;&lt;&lt; beginning V-cycle (cycle 7) &gt;&gt;&gt;
 
-  level =  6, nx =  128, residual change: 2.34558e-08 → 2.27531e-08
+  level =  6, nx =  128, residual change: 2.34556e-08 →  2.2753e-08
   level =  5, nx =   64, residual change:  1.6088e-08 → 2.03781e-08
   level =  4, nx =   32, residual change: 1.44068e-08 → 1.37252e-08
   level =  3, nx =   16, residual change: 9.69812e-09 → 2.83563e-09
-  level =  2, nx =    8, residual change: 1.99971e-09 → 2.99732e-12
-  level =  1, nx =    4, residual change: 2.06576e-12 → 1.74907e-17
+  level =  2, nx =    8, residual change: 1.99971e-09 → 2.99735e-12
+  level =  1, nx =    4, residual change: 2.06578e-12 →  2.5991e-16
   bottom solve
-  level =  1, nx =    4, residual change: 3.17826e-17 → 3.17826e-17
-  level =  2, nx =    8, residual change: 3.29051e-12 → 3.29051e-12
+  level =  1, nx =    4, residual change: 4.72286e-16 → 4.72286e-16
+  level =  2, nx =    8, residual change: 3.29055e-12 → 3.29055e-12
   level =  3, nx =   16, residual change: 3.73325e-09 → 3.73325e-09
   level =  4, nx =   32, residual change: 1.90594e-08 → 1.90594e-08
-  level =  5, nx =   64, residual change: 2.89959e-08 → 2.89959e-08
-  level =  6, nx =  128, residual change: 3.26638e-08 → 3.26638e-08
-cycle 7: relative err = 2.210681933627904e-08, residual err = 7.534885150074738e-12
+  level =  5, nx =   64, residual change: 2.89958e-08 → 2.89958e-08
+  level =  6, nx =  128, residual change: 3.26637e-08 → 3.26637e-08
+cycle 7: relative err = 2.2106792550668474e-08, residual err = 7.534664141565362e-12
 
 </pre></div></div>
 </div>
@@ -550,7 +550,7 @@ cycle 7: relative err = 2.210681933627904e-08, residual err = 7.534885150074738e
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.colorbar.Colorbar at 0x7f7dc62a6440&gt;
+&lt;matplotlib.colorbar.Colorbar at 0x7f18a811e2c0&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -618,7 +618,7 @@ error =      9.754984685e-05
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.colorbar.Colorbar at 0x7f7dc3fbaf50&gt;
+&lt;matplotlib.colorbar.Colorbar at 0x7f18a8086ef0&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
