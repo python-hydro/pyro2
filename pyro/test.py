@@ -111,6 +111,7 @@ def do_tests(out_file,
     tests.append(PyroTest("diffusion", "gaussian",
                           "inputs.gaussian", opts))
     tests.append(PyroTest("incompressible", "shear", "inputs.shear", opts))
+    tests.append(PyroTest("incompressible_viscous", "cavity", "inputs.cavity", opts))
     tests.append(PyroTest("lm_atm", "bubble", "inputs.bubble", opts))
     tests.append(PyroTest("swe", "dam", "inputs.dam.x", opts))
 

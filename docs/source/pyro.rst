@@ -18,6 +18,7 @@ Subpackages
    pyro.advection_rk
    pyro.advection_weno
    pyro.burgers
+   pyro.viscous_burgers
    pyro.compressible
    pyro.compressible_fv4
    pyro.compressible_react
@@ -26,6 +27,7 @@ Subpackages
    pyro.compressible_sr
    pyro.diffusion
    pyro.incompressible
+   pyro.incompressible_viscous
    pyro.lm_atm
    pyro.mesh
    pyro.multigrid

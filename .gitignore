@@ -22,7 +22,10 @@ inputs.auto
 
 __pycache__/
 
+.DS_Store
+
 
 pyro/_version.py
 pyro.egg-info/
+pyro_hydro.egg-info/
 .eggs/

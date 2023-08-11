@@ -46,3 +46,6 @@ max-line-length = 132
 [tool.codespell]
 skip = ".git,*docs/build"
 ignore-words-list = "pres"
+
+[tool.isort]
+known_first_party = ["pyro"]
