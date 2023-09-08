@@ -105,10 +105,10 @@ on the grid are described in a jupyter notebook:
 https://github.com/python-hydro/pyro2/blob/main/pyro/mesh/mesh-examples.ipynb
 
 
-Many of the methods here rely on multigrid.  The multigrid solver is
+Many of the methods here rely on multigrid.  The basic multigrid solver is
 demonstrated in the juputer notebook:
 
-https://github.com/python-hydro/pyro2/blob/main/pyro/multigrid/multigrid-examples.ipynb
+https://github.com/python-hydro/pyro2/blob/main/pyro/multigrid/multigrid-constant-coefficients.ipynb
 
 
 ## Solvers
