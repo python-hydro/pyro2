@@ -1,26 +1,28 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible_fv4 package &mdash; pyro 4.0.1.post53+g7b7c6baf documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
-      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
-      <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  <title>pyro.compressible_fv4 package &mdash; pyro 4.0.1.post54+g77514764 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/theme_overrides.css?v=2e394b92" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
-        <script src="_static/clipboard.min.js"></script>
-        <script src="_static/copybutton.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=68cc0106"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=f281be69"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -160,11 +162,11 @@
            <div itemprop="articleBody">
              
   <section id="module-pyro.compressible_fv4">
-<span id="pyro-compressible-fv4-package"></span><h1>pyro.compressible_fv4 package<a class="headerlink" href="#module-pyro.compressible_fv4" title="Permalink to this heading"></a></h1>
+<span id="pyro-compressible-fv4-package"></span><h1>pyro.compressible_fv4 package<a class="headerlink" href="#module-pyro.compressible_fv4" title="Link to this heading"></a></h1>
 <p>This is a 4th order accurate compressible hydrodynamics solver,
 implementing the algorithm from McCorquodale &amp; Colella (2011).</p>
 <section id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pyro.compressible_fv4.problems.html">pyro.compressible_fv4.problems package</a><ul>
@@ -245,44 +247,44 @@ implementing the algorithm from McCorquodale &amp; Colella (2011).</p>
 </div>
 </section>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
 <section id="module-pyro.compressible_fv4.fluxes">
-<span id="pyro-compressible-fv4-fluxes-module"></span><h2>pyro.compressible_fv4.fluxes module<a class="headerlink" href="#module-pyro.compressible_fv4.fluxes" title="Permalink to this heading"></a></h2>
+<span id="pyro-compressible-fv4-fluxes-module"></span><h2>pyro.compressible_fv4.fluxes module<a class="headerlink" href="#module-pyro.compressible_fv4.fluxes" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.compressible_fv4.fluxes.flux_cons">
-<span class="sig-prename descclassname"><span class="pre">pyro.compressible_fv4.fluxes.</span></span><span class="sig-name descname"><span class="pre">flux_cons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ivars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/fluxes.html#flux_cons"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.fluxes.flux_cons" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.compressible_fv4.fluxes.</span></span><span class="sig-name descname"><span class="pre">flux_cons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ivars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/fluxes.html#flux_cons"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.fluxes.flux_cons" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.compressible_fv4.fluxes.fluxes">
-<span class="sig-prename descclassname"><span class="pre">pyro.compressible_fv4.fluxes.</span></span><span class="sig-name descname"><span class="pre">fluxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">myd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivars</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/fluxes.html#fluxes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.fluxes.fluxes" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.compressible_fv4.fluxes.</span></span><span class="sig-name descname"><span class="pre">fluxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">myd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivars</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/fluxes.html#fluxes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.fluxes.fluxes" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </section>
 <section id="module-pyro.compressible_fv4.simulation">
-<span id="pyro-compressible-fv4-simulation-module"></span><h2>pyro.compressible_fv4.simulation module<a class="headerlink" href="#module-pyro.compressible_fv4.simulation" title="Permalink to this heading"></a></h2>
+<span id="pyro-compressible-fv4-simulation-module"></span><h2>pyro.compressible_fv4.simulation module<a class="headerlink" href="#module-pyro.compressible_fv4.simulation" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyro.compressible_fv4.simulation.Simulation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.compressible_fv4.simulation.</span></span><span class="sig-name descname"><span class="pre">Simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timers=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_class=&lt;class</span> <span class="pre">'pyro.mesh.fv.FV2d'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/simulation.html#Simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.simulation.Simulation" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.compressible_fv4.simulation.</span></span><span class="sig-name descname"><span class="pre">Simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timers=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_class=&lt;class</span> <span class="pre">'pyro.mesh.fv.FV2d'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/simulation.html#Simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.simulation.Simulation" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="pyro.compressible_rk.html#pyro.compressible_rk.simulation.Simulation" title="pyro.compressible_rk.simulation.Simulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Simulation</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.compressible_fv4.simulation.Simulation.evolve">
-<span class="sig-name descname"><span class="pre">evolve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/simulation.html#Simulation.evolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.simulation.Simulation.evolve" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">evolve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/simulation.html#Simulation.evolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.simulation.Simulation.evolve" title="Link to this definition"></a></dt>
 <dd><p>Evolve the equations of compressible hydrodynamics through a
 timestep dt.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.compressible_fv4.simulation.Simulation.initialize">
-<span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">extra_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ng</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/simulation.html#Simulation.initialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.simulation.Simulation.initialize" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">extra_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ng</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/simulation.html#Simulation.initialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.simulation.Simulation.initialize" title="Link to this definition"></a></dt>
 <dd><p>Initialize the grid and variables for compressible flow and set
 the initial conditions for the chosen problem.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.compressible_fv4.simulation.Simulation.preevolve">
-<span class="sig-name descname"><span class="pre">preevolve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/simulation.html#Simulation.preevolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.simulation.Simulation.preevolve" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">preevolve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/simulation.html#Simulation.preevolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.simulation.Simulation.preevolve" title="Link to this definition"></a></dt>
 <dd><p>Since we are 4th order accurate we need to make sure that we
 initialized with accurate zone-averages, so the preevolve for
 this solver assumes that the initialization was done to
@@ -291,7 +293,7 @@ cell-centers and converts it to cell-averages.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.compressible_fv4.simulation.Simulation.substep">
-<span class="sig-name descname"><span class="pre">substep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">myd</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/simulation.html#Simulation.substep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.simulation.Simulation.substep" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">substep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">myd</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/simulation.html#Simulation.substep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.simulation.Simulation.substep" title="Link to this definition"></a></dt>
 <dd><p>compute the advective source term for the given state</p>
 </dd></dl>
 

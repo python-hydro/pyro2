@@ -1,26 +1,28 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Incompressible hydrodynamics solver &mdash; pyro 4.0.1.post53+g7b7c6baf documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
-      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
-      <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  <title>Incompressible hydrodynamics solver &mdash; pyro 4.0.1.post54+g77514764 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/theme_overrides.css?v=2e394b92" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
-        <script src="_static/clipboard.min.js"></script>
-        <script src="_static/copybutton.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=68cc0106"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=f281be69"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -138,7 +140,7 @@
            <div itemprop="articleBody">
              
   <section id="incompressible-hydrodynamics-solver">
-<h1>Incompressible hydrodynamics solver<a class="headerlink" href="#incompressible-hydrodynamics-solver" title="Permalink to this heading"></a></h1>
+<h1>Incompressible hydrodynamics solver<a class="headerlink" href="#incompressible-hydrodynamics-solver" title="Link to this heading"></a></h1>
 <p>pyro’s incompressible solver solves:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\frac{\partial U}{\partial t} + U \cdot \nabla U + \nabla p &amp;= 0 \\
@@ -209,9 +211,9 @@ are supported.</p>
 </li>
 </ul>
 <section id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
 <section id="shear">
-<h3>shear<a class="headerlink" href="#shear" title="Permalink to this heading"></a></h3>
+<h3>shear<a class="headerlink" href="#shear" title="Link to this heading"></a></h3>
 <p>The shear problem initializes a shear layer in a domain with
 doubly-periodic boundaries and looks at the development of two
 vortices as the shear layer rolls up. This problem was explored in a
@@ -228,7 +230,7 @@ papers. Note that the velocity divergence is not zero—this is because
 we are using an approximate projection.</p>
 </section>
 <section id="convergence">
-<h3>convergence<a class="headerlink" href="#convergence" title="Permalink to this heading"></a></h3>
+<h3>convergence<a class="headerlink" href="#convergence" title="Link to this heading"></a></h3>
 <p>The convergence test initializes a simple velocity field on a periodic
 unit square with known analytic solution. By evolving at a variety of
 resolutions and comparing to the analytic solution, we can measure the
@@ -252,9 +254,9 @@ second order with no limiting.</p>
 </section>
 </section>
 <section id="exercises">
-<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading"></a></h2>
+<h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading"></a></h2>
 <section id="explorations">
-<h3>Explorations<a class="headerlink" href="#explorations" title="Permalink to this heading"></a></h3>
+<h3>Explorations<a class="headerlink" href="#explorations" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Disable the MAC projection and run the converge problem—is the method still 2nd order?</p></li>
 <li><p>Disable all projections—does the solution still even try to preserve <span class="math notranslate nohighlight">\(\nabla \cdot U = 0\)</span>?</p></li>
@@ -262,7 +264,7 @@ second order with no limiting.</p>
 </ul>
 </section>
 <section id="extensions">
-<h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this heading"></a></h3>
+<h3>Extensions<a class="headerlink" href="#extensions" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Switch the final projection from a cell-centered approximate
 projection to a nodal projection. This will require writing a new
@@ -278,7 +280,7 @@ to a variable-coefficient form (since ρ now enters).</p></li>
 </section>
 </section>
 <section id="going-further">
-<h2>Going further<a class="headerlink" href="#going-further" title="Permalink to this heading"></a></h2>
+<h2>Going further<a class="headerlink" href="#going-further" title="Link to this heading"></a></h2>
 <p>The incompressible algorithm presented here is a simplified version of
 the projection methods used in the <a class="reference external" href="http://amrex-astro.github.io/MAESTRO/">Maestro low Mach number
 hydrodynamics code</a>. Maestro

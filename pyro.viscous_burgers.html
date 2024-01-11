@@ -1,26 +1,28 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.viscous_burgers package &mdash; pyro 4.0.1.post53+g7b7c6baf documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
-      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
-      <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  <title>pyro.viscous_burgers package &mdash; pyro 4.0.1.post54+g77514764 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/theme_overrides.css?v=2e394b92" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
-        <script src="_static/clipboard.min.js"></script>
-        <script src="_static/copybutton.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=68cc0106"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=f281be69"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -162,11 +164,11 @@
            <div itemprop="articleBody">
              
   <section id="module-pyro.viscous_burgers">
-<span id="pyro-viscous-burgers-package"></span><h1>pyro.viscous_burgers package<a class="headerlink" href="#module-pyro.viscous_burgers" title="Permalink to this heading"></a></h1>
+<span id="pyro-viscous-burgers-package"></span><h1>pyro.viscous_burgers package<a class="headerlink" href="#module-pyro.viscous_burgers" title="Link to this heading"></a></h1>
 <p>The pyro viscous burgers solver.  This implements a second-order,
 unsplit method for viscous burgers equations.</p>
 <section id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pyro.viscous_burgers.problems.html">pyro.viscous_burgers.problems package</a><ul>
@@ -187,13 +189,13 @@ unsplit method for viscous burgers equations.</p>
 </div>
 </section>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
 <section id="module-pyro.viscous_burgers.interface">
-<span id="pyro-viscous-burgers-interface-module"></span><h2>pyro.viscous_burgers.interface module<a class="headerlink" href="#module-pyro.viscous_burgers.interface" title="Permalink to this heading"></a></h2>
+<span id="pyro-viscous-burgers-interface-module"></span><h2>pyro.viscous_burgers.interface module<a class="headerlink" href="#module-pyro.viscous_burgers.interface" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.viscous_burgers.interface.apply_diffusion_corrections">
-<span class="sig-prename descclassname"><span class="pre">pyro.viscous_burgers.interface.</span></span><span class="sig-name descname"><span class="pre">apply_diffusion_corrections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_xl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_xr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_yl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_yr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_xl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_xr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_yl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_yr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/viscous_burgers/interface.html#apply_diffusion_corrections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.viscous_burgers.interface.apply_diffusion_corrections" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.viscous_burgers.interface.</span></span><span class="sig-name descname"><span class="pre">apply_diffusion_corrections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_xl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_xr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_yl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_yr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_xl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_xr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_yl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_yr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/viscous_burgers/interface.html#apply_diffusion_corrections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.viscous_burgers.interface.apply_diffusion_corrections" title="Link to this definition"></a></dt>
 <dd><p>Apply diffusion correction term to the interface state</p>
 <div class="math notranslate nohighlight">
 \[u_t  + u u_x  + v u_y  = eps (u_xx + u_yy)
@@ -243,7 +245,7 @@ y-interfaces along with diffusion correction terms.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.viscous_burgers.interface.diffuse">
-<span class="sig-prename descclassname"><span class="pre">pyro.viscous_burgers.interface.</span></span><span class="sig-name descname"><span class="pre">diffuse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scalar_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/viscous_burgers/interface.html#diffuse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.viscous_burgers.interface.diffuse" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.viscous_burgers.interface.</span></span><span class="sig-name descname"><span class="pre">diffuse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scalar_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/viscous_burgers/interface.html#diffuse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.viscous_burgers.interface.diffuse" title="Link to this definition"></a></dt>
 <dd><p>A routine to solve the Helmhotlz equation with constant coefficient
 and update the state.</p>
 <p>(a + b lap) phi = f</p>
@@ -275,7 +277,7 @@ advecting</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.viscous_burgers.interface.get_lap">
-<span class="sig-prename descclassname"><span class="pre">pyro.viscous_burgers.interface.</span></span><span class="sig-name descname"><span class="pre">get_lap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/viscous_burgers/interface.html#get_lap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.viscous_burgers.interface.get_lap" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.viscous_burgers.interface.</span></span><span class="sig-name descname"><span class="pre">get_lap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/viscous_burgers/interface.html#get_lap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.viscous_burgers.interface.get_lap" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -294,14 +296,14 @@ advecting</p>
 
 </section>
 <section id="module-pyro.viscous_burgers.simulation">
-<span id="pyro-viscous-burgers-simulation-module"></span><h2>pyro.viscous_burgers.simulation module<a class="headerlink" href="#module-pyro.viscous_burgers.simulation" title="Permalink to this heading"></a></h2>
+<span id="pyro-viscous-burgers-simulation-module"></span><h2>pyro.viscous_burgers.simulation module<a class="headerlink" href="#module-pyro.viscous_burgers.simulation" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyro.viscous_burgers.simulation.Simulation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.viscous_burgers.simulation.</span></span><span class="sig-name descname"><span class="pre">Simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timers=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_class=&lt;class</span> <span class="pre">'pyro.mesh.patch.CellCenterData2d'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/viscous_burgers/simulation.html#Simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.viscous_burgers.simulation.Simulation" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.viscous_burgers.simulation.</span></span><span class="sig-name descname"><span class="pre">Simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timers=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_class=&lt;class</span> <span class="pre">'pyro.mesh.patch.CellCenterData2d'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/viscous_burgers/simulation.html#Simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.viscous_burgers.simulation.Simulation" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="pyro.burgers.html#pyro.burgers.simulation.Simulation" title="pyro.burgers.simulation.Simulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Simulation</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.viscous_burgers.simulation.Simulation.evolve">
-<span class="sig-name descname"><span class="pre">evolve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/viscous_burgers/simulation.html#Simulation.evolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.viscous_burgers.simulation.Simulation.evolve" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">evolve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/viscous_burgers/simulation.html#Simulation.evolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.viscous_burgers.simulation.Simulation.evolve" title="Link to this definition"></a></dt>
 <dd><p>Evolve the viscous burgers equation through one timestep.</p>
 </dd></dl>
 

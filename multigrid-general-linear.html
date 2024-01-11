@@ -1,27 +1,29 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>General Linear Elliptic Equation &mdash; pyro 4.0.1.post53+g7b7c6baf documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
-      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
-      <link rel="stylesheet" href="_static/nbsphinx-code-cells.css" type="text/css" />
-      <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  <title>General Linear Elliptic Equation &mdash; pyro 4.0.1.post54+g77514764 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/nbsphinx-code-cells.css" />
+      <link rel="stylesheet" type="text/css" href="_static/theme_overrides.css?v=2e394b92" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
-        <script src="_static/clipboard.min.js"></script>
-        <script src="_static/copybutton.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=68cc0106"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=f281be69"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -139,7 +141,7 @@
            <div itemprop="articleBody">
              
   <section id="General-Linear-Elliptic-Equation">
-<h1>General Linear Elliptic Equation<a class="headerlink" href="#General-Linear-Elliptic-Equation" title="Permalink to this heading"></a></h1>
+<h1>General Linear Elliptic Equation<a class="headerlink" href="#General-Linear-Elliptic-Equation" title="Link to this heading"></a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">GeneralMG2d</span></code> class implements support for a general elliptic equation of the form:</p>
 <div class="math notranslate nohighlight">
 \[\alpha \phi + \nabla \cdot (\beta \nabla \phi) + \gamma \cdot \nabla \phi = f\]</div>
@@ -177,7 +179,7 @@ f = &-\frac{\pi}{2}(x + 1)\sin\left( \frac{\pi y}{2}\right) \cos\left(\frac{\pi 
 </div>
 </div>
 <section id="Setting-up-the-solver">
-<h2>Setting up the solver<a class="headerlink" href="#Setting-up-the-solver" title="Permalink to this heading"></a></h2>
+<h2>Setting up the solver<a class="headerlink" href="#Setting-up-the-solver" title="Link to this heading"></a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -445,7 +447,7 @@ Source norm =  1.775181492337501
 </div>
 </section>
 <section id="Solving-the-system">
-<h2>Solving the system<a class="headerlink" href="#Solving-the-system" title="Permalink to this heading"></a></h2>
+<h2>Solving the system<a class="headerlink" href="#Solving-the-system" title="Link to this heading"></a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
@@ -454,7 +456,7 @@ Source norm =  1.775181492337501
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
@@ -475,7 +477,7 @@ source norm =  1.775181492337501
   level =  4, nx =   32, residual change:      19.591 →      19.591
   level =  5, nx =   64, residual change:     50.4641 →     50.4641
   level =  6, nx =  128, residual change:     160.213 →     160.213
-cycle 1: relative err = 0.9999999999999981, residual err = 2.323786088373031
+cycle 1: relative err = 0.9999999999999981, residual err = 2.323786088373021
 
 &lt;&lt;&lt; beginning V-cycle (cycle 2) &gt;&gt;&gt;
 
@@ -492,15 +494,36 @@ cycle 1: relative err = 0.9999999999999981, residual err = 2.323786088373031
   level =  4, nx =   32, residual change:    0.521885 →    0.521885
   level =  5, nx =   64, residual change:    0.991063 →    0.991063
   level =  6, nx =  128, residual change:     2.04419 →     2.04419
-cycle 2: relative err = 0.036315310129801166, residual err = 0.032838234439935464
+cycle 2: relative err = 0.036315310129800826, residual err = 0.03283823443993396
 
 &lt;&lt;&lt; beginning V-cycle (cycle 3) &gt;&gt;&gt;
 
   level =  6, nx =  128, residual change:   0.0582938 →   0.0417201
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
   level =  5, nx =   64, residual change:   0.0292467 →   0.0233563
   level =  4, nx =   32, residual change:   0.0163063 →   0.0129066
   level =  3, nx =   16, residual change:  0.00901111 →  0.00731526
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
   level =  2, nx =    8, residual change:   0.0050815 →  0.00256253
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
   level =  1, nx =    4, residual change:  0.00170641 → 2.79124e-05
   bottom solve
   level =  1, nx =    4, residual change: 3.88653e-05 → 3.88653e-05
@@ -509,7 +532,7 @@ cycle 2: relative err = 0.036315310129801166, residual err = 0.03283823443993546
   level =  4, nx =   32, residual change:   0.0160323 →   0.0160323
   level =  5, nx =   64, residual change:   0.0243037 →   0.0243037
   level =  6, nx =  128, residual change:   0.0377753 →   0.0377753
-cycle 3: relative err = 0.0012532978372416998, residual err = 0.000621633498759303
+cycle 3: relative err = 0.0012532978372415558, residual err = 0.0006216334987521017
 
 &lt;&lt;&lt; beginning V-cycle (cycle 4) &gt;&gt;&gt;
 
@@ -526,7 +549,7 @@ cycle 3: relative err = 0.0012532978372416998, residual err = 0.0006216334987593
   level =  4, nx =   32, residual change: 0.000524953 → 0.000524953
   level =  5, nx =   64, residual change: 0.000708087 → 0.000708087
   level =  6, nx =  128, residual change: 0.000918517 → 0.000918517
-cycle 4: relative err = 4.257466296345195e-05, residual err = 1.4967652937293164e-05
+cycle 4: relative err = 4.257466296364851e-05, residual err = 1.4967652930826935e-05
 
 &lt;&lt;&lt; beginning V-cycle (cycle 5) &gt;&gt;&gt;
 
@@ -538,12 +561,33 @@ cycle 4: relative err = 4.257466296345195e-05, residual err = 1.4967652937293164
   level =  1, nx =    4, residual change: 1.93217e-06 → 3.16168e-08
   bottom solve
   level =  1, nx =    4, residual change: 4.40233e-08 → 4.40233e-08
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
   level =  2, nx =    8, residual change: 3.94227e-06 → 3.94227e-06
   level =  3, nx =   16, residual change: 1.14059e-05 → 1.14059e-05
   level =  4, nx =   32, residual change:  1.7696e-05 →  1.7696e-05
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
   level =  5, nx =   64, residual change: 2.28172e-05 → 2.28172e-05
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
   level =  6, nx =  128, residual change: 2.72045e-05 → 2.72045e-05
-cycle 5: relative err = 1.4372233556002303e-06, residual err = 4.291035297048683e-07
+cycle 5: relative err = 1.437223355768636e-06, residual err = 4.2910353907176844e-07
 
 &lt;&lt;&lt; beginning V-cycle (cycle 6) &gt;&gt;&gt;
 
@@ -560,7 +604,7 @@ cycle 5: relative err = 1.4372233556002303e-06, residual err = 4.291035297048683
   level =  4, nx =   32, residual change: 6.03884e-07 → 6.03884e-07
   level =  5, nx =   64, residual change: 7.68242e-07 → 7.68242e-07
   level =  6, nx =  128, residual change: 8.86509e-07 → 8.86509e-07
-cycle 6: relative err = 4.849259893743e-08, residual err = 1.3530547409597026e-08
+cycle 6: relative err = 4.849259894834445e-08, residual err = 1.3530556515124825e-08
 
 &lt;&lt;&lt; beginning V-cycle (cycle 7) &gt;&gt;&gt;
 
@@ -577,30 +621,51 @@ cycle 6: relative err = 4.849259893743e-08, residual err = 1.3530547409597026e-0
   level =  4, nx =   32, residual change:  2.0705e-08 →  2.0705e-08
   level =  5, nx =   64, residual change: 2.62808e-08 → 2.62808e-08
   level =  6, nx =  128, residual change: 2.99444e-08 → 2.99444e-08
-cycle 7: relative err = 1.6392149521630824e-09, residual err = 4.4582004708456516e-10
+cycle 7: relative err = 1.6392149576904378e-09, residual err = 4.458207725000789e-10
 
 &lt;&lt;&lt; beginning V-cycle (cycle 8) &gt;&gt;&gt;
 
-  level =  6, nx =  128, residual change: 7.91411e-10 → 7.35556e-10
-  level =  5, nx =   64, residual change: 5.19219e-10 → 6.36466e-10
-  level =  4, nx =   32, residual change: 4.48551e-10 → 4.92823e-10
-  level =  3, nx =   16, residual change: 3.46371e-10 → 3.11942e-10
+  level =  6, nx =  128, residual change: 7.91413e-10 → 7.35586e-10
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+  level =  5, nx =   64, residual change:  5.1922e-10 → 6.36466e-10
+  level =  4, nx =   32, residual change:  4.4855e-10 → 4.92822e-10
+  level =  3, nx =   16, residual change:  3.4637e-10 → 3.11941e-10
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
   level =  2, nx =    8, residual change: 2.17418e-10 → 1.11945e-10
-  level =  1, nx =    4, residual change: 7.45573e-11 → 1.22015e-12
+  level =  1, nx =    4, residual change: 7.45572e-11 → 1.22015e-12
   bottom solve
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
   level =  1, nx =    4, residual change: 1.69894e-12 → 1.69894e-12
   level =  2, nx =    8, residual change: 1.52121e-10 → 1.52121e-10
-  level =  3, nx =   16, residual change: 4.44915e-10 → 4.44915e-10
-  level =  4, nx =   32, residual change: 7.10979e-10 → 7.10979e-10
-  level =  5, nx =   64, residual change: 9.03402e-10 → 9.03402e-10
-  level =  6, nx =  128, residual change: 1.02375e-09 → 1.02375e-09
-cycle 8: relative err = 5.555103471809045e-11, residual err = 1.5080864047010877e-11
+  level =  3, nx =   16, residual change: 4.44914e-10 → 4.44914e-10
+  level =  4, nx =   32, residual change: 7.10977e-10 → 7.10977e-10
+  level =  5, nx =   64, residual change:   9.034e-10 →   9.034e-10
+  level =  6, nx =  128, residual change:  1.0238e-09 →  1.0238e-09
+cycle 8: relative err = 5.555097426033948e-11, residual err = 1.5072807373286882e-11
 
 </pre></div></div>
 </div>
 </section>
 <section id="Checking-the-result">
-<h2>Checking the result<a class="headerlink" href="#Checking-the-result" title="Permalink to this heading"></a></h2>
+<h2>Checking the result<a class="headerlink" href="#Checking-the-result" title="Link to this heading"></a></h2>
 <p>We can compare to the true solution</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:

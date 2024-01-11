@@ -1,27 +1,29 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mesh examples &mdash; pyro 4.0.1.post53+g7b7c6baf documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
-      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
-      <link rel="stylesheet" href="_static/nbsphinx-code-cells.css" type="text/css" />
-      <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  <title>Mesh examples &mdash; pyro 4.0.1.post54+g77514764 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/nbsphinx-code-cells.css" />
+      <link rel="stylesheet" type="text/css" href="_static/theme_overrides.css?v=2e394b92" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
-        <script src="_static/clipboard.min.js"></script>
-        <script src="_static/copybutton.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=68cc0106"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=f281be69"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -133,7 +135,7 @@
            <div itemprop="articleBody">
              
   <section id="Mesh-examples">
-<h1>Mesh examples<a class="headerlink" href="#Mesh-examples" title="Permalink to this heading"></a></h1>
+<h1>Mesh examples<a class="headerlink" href="#Mesh-examples" title="Link to this heading"></a></h1>
 <p>this notebook illustrates the basic ways of interacting with the pyro2 mesh module. We create some data that lives on a grid and show how to fill the ghost cells. The pretty_print() function shows us that they work as expected.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -152,7 +154,7 @@
 </div>
 </div>
 <section id="Setup-a-Grid-with-Variables">
-<h2>Setup a Grid with Variables<a class="headerlink" href="#Setup-a-Grid-with-Variables" title="Permalink to this heading"></a></h2>
+<h2>Setup a Grid with Variables<a class="headerlink" href="#Setup-a-Grid-with-Variables" title="Link to this heading"></a></h2>
 <p>There are a few core classes that we deal with when creating a grid with associated variables:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">Grid2d</span></code> : this holds the size of the grid (in zones) and the physical coordinate information, including coordinates of cell edges and centers</p></li>
@@ -320,7 +322,7 @@ cc data: nx = 4, ny = 6, ng = 2
 </div>
 </section>
 <section id="Working-with-the-data">
-<h2>Working with the data<a class="headerlink" href="#Working-with-the-data" title="Permalink to this heading"></a></h2>
+<h2>Working with the data<a class="headerlink" href="#Working-with-the-data" title="Link to this heading"></a></h2>
 <p>Now we fill the grid with random data. <code class="docutils literal notranslate"><span class="pre">get_var()</span></code> returns an <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> object that has methods for accessing views into the data. Here we use <code class="docutils literal notranslate"><span class="pre">a.v()</span></code> to get the “valid” region, i.e. excluding ghost cells.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
@@ -462,7 +464,7 @@ cc data: nx = 4, ny = 6, ng = 2
 </div>
 </section>
 <section id="ArrayIndexer">
-<h2><code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code><a class="headerlink" href="#ArrayIndexer" title="Permalink to this heading"></a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code><a class="headerlink" href="#ArrayIndexer" title="Link to this heading"></a></h2>
 <p>We we access the data, an <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> object is returned. The <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> sub-classes the NumPy <code class="docutils literal notranslate"><span class="pre">ndarray</span></code>, so it can do all of the methods that a NumPy array can, but in addition, we can use the <code class="docutils literal notranslate"><span class="pre">ip()</span></code>, <code class="docutils literal notranslate"><span class="pre">jp()</span></code>, or <code class="docutils literal notranslate"><span class="pre">ip_jp()</span></code> methods to the <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> object shift our view in the x, y, or x &amp; y directions.</p>
 <p>To make this clearer, we’ll change our data set to be nicely ordered numbers. We index the <code class="docutils literal notranslate"><span class="pre">ArrayIndex</span></code> the same way we would a NumPy array. The index space includes ghost cells, so the <code class="docutils literal notranslate"><span class="pre">ilo</span></code> and <code class="docutils literal notranslate"><span class="pre">ihi</span></code> attributes from the grid object are useful to index just the valid region. The <code class="docutils literal notranslate"><span class="pre">.v()</span></code> method is a shortcut that also gives a view into just the valid data.</p>
 <p>Note: when we use one of the <code class="docutils literal notranslate"><span class="pre">ip()</span></code>, <code class="docutils literal notranslate"><span class="pre">jp()</span></code>, <code class="docutils literal notranslate"><span class="pre">ip_jp()</span></code>, or <code class="docutils literal notranslate"><span class="pre">v()</span></code> methods, the result is a regular NumPy <code class="docutils literal notranslate"><span class="pre">ndarray</span></code>, not an <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> object. This is because it only spans part of the domain (e.g., no ghost cells), and therefore cannot be associated with the <code class="docutils literal notranslate"><span class="pre">Grid2d</span></code> object that the <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> is built from.</p>
@@ -619,7 +621,7 @@ array([[ 1.,  2.,  3.,  4.,  5.,  6.,  7.,  8.],
 <p>Here, since d was really a view into <span class="math notranslate nohighlight">\(a_{i+1,j}\)</span>, and we accessed element (1,1) into that view (with 0,0 as the origin), we were really accessing the element (2,1) in the valid region</p>
 </section>
 <section id="Differencing">
-<h2>Differencing<a class="headerlink" href="#Differencing" title="Permalink to this heading"></a></h2>
+<h2>Differencing<a class="headerlink" href="#Differencing" title="Link to this heading"></a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> objects are easy to use to construct differences, like those that appear in a stencil for a finite-difference, without having to explicitly loop over the elements of the array.</p>
 <p>Here’s we’ll create a new dataset that is initialized with a sine function</p>
 <div class="nbinput nblast docutils container">
@@ -696,7 +698,7 @@ pyro.mesh.array_indexer.ArrayIndexer
 </div>
 </section>
 <section id="Coarsening-and-prolonging">
-<h2>Coarsening and prolonging<a class="headerlink" href="#Coarsening-and-prolonging" title="Permalink to this heading"></a></h2>
+<h2>Coarsening and prolonging<a class="headerlink" href="#Coarsening-and-prolonging" title="Link to this heading"></a></h2>
 <p>we can get a new <code class="docutils literal notranslate"><span class="pre">ArrayIndexer</span></code> object on a coarser grid for one of our variables</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:

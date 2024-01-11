@@ -1,25 +1,27 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.mesh.array_indexer &mdash; pyro 4.0.1.post53+g7b7c6baf documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/copybutton.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+  <title>pyro.mesh.array_indexer &mdash; pyro 4.0.1.post54+g77514764 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/theme_overrides.css?v=2e394b92" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
-        <script src="../../../_static/clipboard.min.js"></script>
-        <script src="../../../_static/copybutton.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=68cc0106"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../../../_static/copybutton.js?v=f281be69"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -148,7 +150,9 @@
     <span class="k">return</span> <span class="n">bxlo</span><span class="p">,</span> <span class="n">bxhi</span><span class="p">,</span> <span class="n">bylo</span><span class="p">,</span> <span class="n">byhi</span>
 
 
-<div class="viewcode-block" id="ArrayIndexer"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer">[docs]</a><span class="k">class</span> <span class="nc">ArrayIndexer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+<div class="viewcode-block" id="ArrayIndexer">
+<a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer">[docs]</a>
+<span class="k">class</span> <span class="nc">ArrayIndexer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;a class that wraps the data region of a single cell-centered data</span>
 <span class="sd">        array (d) and allows us to easily do array operations like</span>
 <span class="sd">        d[i+1,j] using the ip() method.</span>
@@ -168,14 +172,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ArrayIndexer.v"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.v">[docs]</a>    <span class="k">def</span> <span class="nf">v</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="ArrayIndexer.v">
+<a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.v">[docs]</a>
+    <span class="k">def</span> <span class="nf">v</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;return a view of the valid data region for component n, with stride</span>
 <span class="sd">        s, and a buffer of ghost cells given by buf</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ArrayIndexer.ip"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.ip">[docs]</a>    <span class="k">def</span> <span class="nf">ip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shift</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ArrayIndexer.ip">
+<a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.ip">[docs]</a>
+    <span class="k">def</span> <span class="nf">ip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shift</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;return a view of the data shifted by shift in the x direction.  By</span>
 <span class="sd">        default the view is the same size as the valid region, but the</span>
 <span class="sd">        buf can specify how many ghost cells on each side to include.</span>
@@ -184,7 +193,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="n">shift</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ArrayIndexer.jp"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.jp">[docs]</a>    <span class="k">def</span> <span class="nf">jp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shift</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ArrayIndexer.jp">
+<a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.jp">[docs]</a>
+    <span class="k">def</span> <span class="nf">jp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shift</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;return a view of the data shifted by shift in the y direction.  By</span>
 <span class="sd">        default the view is the same size as the valid region, but the</span>
 <span class="sd">        buf can specify how many ghost cells on each side to include.</span>
@@ -193,7 +205,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">shift</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ArrayIndexer.ip_jp"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.ip_jp">[docs]</a>    <span class="k">def</span> <span class="nf">ip_jp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ishift</span><span class="p">,</span> <span class="n">jshift</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ArrayIndexer.ip_jp">
+<a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.ip_jp">[docs]</a>
+    <span class="k">def</span> <span class="nf">ip_jp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ishift</span><span class="p">,</span> <span class="n">jshift</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;return a view of the data shifted by ishift in the x direction and</span>
 <span class="sd">        jshift in the y direction.  By default the view is the same</span>
 <span class="sd">        size as the valid region, but the buf can specify how many</span>
@@ -211,13 +226,19 @@
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="n">bxlo</span><span class="o">+</span><span class="n">ishift</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">bxhi</span><span class="o">+</span><span class="n">ishift</span><span class="p">:</span><span class="n">s</span><span class="p">,</span>
                                <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="n">bylo</span><span class="o">+</span><span class="n">jshift</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">byhi</span><span class="o">+</span><span class="n">jshift</span><span class="p">:</span><span class="n">s</span><span class="p">,</span> <span class="n">n</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="ArrayIndexer.lap"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.lap">[docs]</a>    <span class="k">def</span> <span class="nf">lap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ArrayIndexer.lap">
+<a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.lap">[docs]</a>
+    <span class="k">def</span> <span class="nf">lap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;return the 5-point Laplacian&quot;&quot;&quot;</span>
         <span class="n">l</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">))</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> \
             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">))</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">dy</span><span class="o">**</span><span class="mi">2</span>
         <span class="k">return</span> <span class="n">l</span></div>
 
-<div class="viewcode-block" id="ArrayIndexer.norm"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.norm">[docs]</a>    <span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ArrayIndexer.norm">
+<a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.norm">[docs]</a>
+    <span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        find the norm of the quantity (index n) defined on the same grid,</span>
 <span class="sd">        in the domain&#39;s valid region</span>
@@ -232,11 +253,17 @@
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">dx</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">dy</span> <span class="o">*</span>
                        <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">_tmp</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">flat</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="ArrayIndexer.copy"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ArrayIndexer.copy">
+<a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.copy">[docs]</a>
+    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;make a copy of the array, defined on the same grid&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">),</span> <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ArrayIndexer.is_symmetric"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.is_symmetric">[docs]</a>    <span class="k">def</span> <span class="nf">is_symmetric</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1.e-14</span><span class="p">,</span> <span class="n">asymmetric</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ArrayIndexer.is_symmetric">
+<a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.is_symmetric">[docs]</a>
+    <span class="k">def</span> <span class="nf">is_symmetric</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1.e-14</span><span class="p">,</span> <span class="n">asymmetric</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;return True is the data is left-right symmetric (to the tolerance</span>
 <span class="sd">        tol) For node-centered data, set nodal=True</span>
 
@@ -262,14 +289,20 @@
         <span class="n">e</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">L</span> <span class="o">-</span> <span class="n">s</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">R</span><span class="p">))</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">e</span> <span class="o">&lt;</span> <span class="n">tol</span></div>
 
-<div class="viewcode-block" id="ArrayIndexer.is_asymmetric"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.is_asymmetric">[docs]</a>    <span class="k">def</span> <span class="nf">is_asymmetric</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1.e-14</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ArrayIndexer.is_asymmetric">
+<a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.is_asymmetric">[docs]</a>
+    <span class="k">def</span> <span class="nf">is_asymmetric</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1.e-14</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;return True is the data is left-right asymmetric (to the tolerance</span>
 <span class="sd">        tol)---e.g, the sign flips. For node-centered data, set nodal=True</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_symmetric</span><span class="p">(</span><span class="n">nodal</span><span class="o">=</span><span class="n">nodal</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">,</span> <span class="n">asymmetric</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ArrayIndexer.fill_ghost"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.fill_ghost">[docs]</a>    <span class="k">def</span> <span class="nf">fill_ghost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bc</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ArrayIndexer.fill_ghost">
+<a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.fill_ghost">[docs]</a>
+    <span class="k">def</span> <span class="nf">fill_ghost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bc</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fill the boundary conditions.  This operates on a single component,</span>
 <span class="sd">        n. We do periodic, reflect-even, reflect-odd, and outflow</span>
 
@@ -395,7 +428,10 @@
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ny</span><span class="p">):</span>
                 <span class="bp">self</span><span class="p">[:,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[:,</span> <span class="n">j</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="ArrayIndexer.pretty_print"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.pretty_print">[docs]</a>    <span class="k">def</span> <span class="nf">pretty_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_ghost</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ArrayIndexer.pretty_print">
+<a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.pretty_print">[docs]</a>
+    <span class="k">def</span> <span class="nf">pretty_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_ghost</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Print out a small dataset to the screen with the ghost cells</span>
 <span class="sd">        a different color, to make things stand out</span>
@@ -451,10 +487,14 @@
 <span class="s2">         |</span>
 <span class="s2">         +---&gt; x</span>
 <span class="s2">        &quot;&quot;&quot;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">leg</span><span class="p">)</span></div></div>
+        <span class="nb">print</span><span class="p">(</span><span class="n">leg</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="ArrayIndexerFC"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC">[docs]</a><span class="k">class</span> <span class="nc">ArrayIndexerFC</span><span class="p">(</span><span class="n">ArrayIndexer</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ArrayIndexerFC">
+<a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC">[docs]</a>
+<span class="k">class</span> <span class="nc">ArrayIndexerFC</span><span class="p">(</span><span class="n">ArrayIndexer</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;a class that wraps the data region of a single face-centered data</span>
 <span class="sd">        array (d) and allows us to easily do array operations like</span>
 <span class="sd">        d[i+1,j] using the ip() method.</span>
@@ -476,7 +516,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">idir</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;idir&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ArrayIndexerFC.ip_jp"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC.ip_jp">[docs]</a>    <span class="k">def</span> <span class="nf">ip_jp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ishift</span><span class="p">,</span> <span class="n">jshift</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="ArrayIndexerFC.ip_jp">
+<a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC.ip_jp">[docs]</a>
+    <span class="k">def</span> <span class="nf">ip_jp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ishift</span><span class="p">,</span> <span class="n">jshift</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;return a view of the data shifted by ishift in the x direction and</span>
 <span class="sd">        jshift in the y direction.  By default the view is the same</span>
 <span class="sd">        size as the valid region, but the buf can specify how many</span>
@@ -502,10 +544,16 @@
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="n">bxlo</span><span class="o">+</span><span class="n">ishift</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">bxhi</span><span class="o">+</span><span class="n">ishift</span><span class="p">:</span><span class="n">s</span><span class="p">,</span>
                                    <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="n">bylo</span><span class="o">+</span><span class="n">jshift</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">2</span><span class="o">+</span><span class="n">byhi</span><span class="o">+</span><span class="n">jshift</span><span class="p">:</span><span class="n">s</span><span class="p">,</span> <span class="n">n</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="ArrayIndexerFC.lap"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC.lap">[docs]</a>    <span class="k">def</span> <span class="nf">lap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ArrayIndexerFC.lap">
+<a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC.lap">[docs]</a>
+    <span class="k">def</span> <span class="nf">lap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;lap not implemented for ArrayIndexerFC&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ArrayIndexerFC.norm"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC.norm">[docs]</a>    <span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ArrayIndexerFC.norm">
+<a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC.norm">[docs]</a>
+    <span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        find the norm of the quantity (index n) defined on the same grid,</span>
 <span class="sd">        in the domain&#39;s valid region</span>
@@ -530,25 +578,37 @@
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">dx</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">dy</span> <span class="o">*</span>
                        <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">_tmp</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">flat</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="ArrayIndexerFC.copy"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ArrayIndexerFC.copy">
+<a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC.copy">[docs]</a>
+    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;make a copy of the array, defined on the same grid&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">ArrayIndexerFC</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">idir</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ArrayIndexerFC.is_symmetric"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC.is_symmetric">[docs]</a>    <span class="k">def</span> <span class="nf">is_symmetric</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1.e-14</span><span class="p">,</span> <span class="n">asymmetric</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ArrayIndexerFC.is_symmetric">
+<a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC.is_symmetric">[docs]</a>
+    <span class="k">def</span> <span class="nf">is_symmetric</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1.e-14</span><span class="p">,</span> <span class="n">asymmetric</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;return True is the data is left-right symmetric (to the tolerance</span>
 <span class="sd">        tol) For node-centered data, set nodal=True</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ArrayIndexerFC.is_asymmetric"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC.is_asymmetric">[docs]</a>    <span class="k">def</span> <span class="nf">is_asymmetric</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1.e-14</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ArrayIndexerFC.is_asymmetric">
+<a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC.is_asymmetric">[docs]</a>
+    <span class="k">def</span> <span class="nf">is_asymmetric</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1.e-14</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;return True is the data is left-right asymmetric (to the tolerance</span>
 <span class="sd">        tol)---e.g, the sign flips. For node-centered data, set nodal=True</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ArrayIndexerFC.fill_ghost"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC.fill_ghost">[docs]</a>    <span class="k">def</span> <span class="nf">fill_ghost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bc</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ArrayIndexerFC.fill_ghost">
+<a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC.fill_ghost">[docs]</a>
+    <span class="k">def</span> <span class="nf">fill_ghost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bc</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fill the boundary conditions.  This operates on a single component,</span>
 <span class="sd">        n. We do periodic, reflect-even, reflect-odd, and outflow</span>
 
@@ -613,7 +673,10 @@
                 <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ny</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
                     <span class="bp">self</span><span class="p">[:,</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[:,</span> <span class="n">j</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="ArrayIndexerFC.pretty_print"><a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC.pretty_print">[docs]</a>    <span class="k">def</span> <span class="nf">pretty_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_ghost</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ArrayIndexerFC.pretty_print">
+<a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexerFC.pretty_print">[docs]</a>
+    <span class="k">def</span> <span class="nf">pretty_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_ghost</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Print out a small dataset to the screen with the ghost cells</span>
 <span class="sd">        a different color, to make things stand out</span>
@@ -686,7 +749,9 @@
 <span class="s2">         |</span>
 <span class="s2">         +---&gt; x</span>
 <span class="s2">        &quot;&quot;&quot;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">leg</span><span class="p">)</span></div></div>
+        <span class="nb">print</span><span class="p">(</span><span class="n">leg</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
            </div>
