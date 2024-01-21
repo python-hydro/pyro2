@@ -105,10 +105,10 @@ on the grid are described in a jupyter notebook:
 https://github.com/python-hydro/pyro2/blob/main/pyro/mesh/mesh-examples.ipynb
 
 
-Many of the methods here rely on multigrid.  The multigrid solver is
+Many of the methods here rely on multigrid.  The basic multigrid solver is
 demonstrated in the juputer notebook:
 
-https://github.com/python-hydro/pyro2/blob/main/pyro/multigrid/multigrid-examples.ipynb
+https://github.com/python-hydro/pyro2/blob/main/pyro/multigrid/multigrid-constant-coefficients.ipynb
 
 
 ## Solvers
@@ -251,7 +251,7 @@ with their data.
   There is a set of notes that describe the background and details of the
   algorithms that pyro implements:
 
-  http://bender.astro.sunysb.edu/hydro_by_example/CompHydroTutorial.pdf
+  http://open-astrophysics-bookshelf.github.io/numerical_exercises/
 
   The source for these notes is also available on github:
 
