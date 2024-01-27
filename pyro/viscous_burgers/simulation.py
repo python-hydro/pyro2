@@ -1,10 +1,48 @@
+import importlib
+
 from pyro.burgers import Simulation as burgers_sim
 from pyro.burgers import burgers_interface
-from pyro.mesh import reconstruction
+from pyro.mesh import patch, reconstruction
+from pyro.particles import particles
+from pyro.simulation_null import bc_setup, grid_setup
 from pyro.viscous_burgers import interface
 
 
 class Simulation(burgers_sim):
+
+    def initialize(self):
+        """
+        Initialize the grid and variables for advection and set the initial
+        conditions for the chosen problem.
+        """
+
+        # create grid, self.rp contains mesh.nx and mesh.ny
+        my_grid = grid_setup(self.rp, ng=4)
+
+        # create the variables
+        my_data = patch.CellCenterData2d(my_grid)
+
+        # outputs: bc, bc_xodd and bc_yodd for reflection boundary cond
+        bc = bc_setup(self.rp)[0]
+
+        # register variables in the data
+        # burgers equation advects velocity
+
+        my_data.register_var("x-velocity", bc)
+        my_data.register_var("y-velocity", bc)
+        my_data.create()
+
+        # holds various data, like time and registered variable.
+        self.cc_data = my_data
+
+        if self.rp.get_param("particles.do_particles") == 1:
+            n_particles = self.rp.get_param("particles.n_particles")
+            particle_generator = self.rp.get_param("particles.particle_generator")
+            self.particles = particles.Particles(self.cc_data, bc, n_particles, particle_generator)
+
+        # now set the initial conditions for the problem
+        problem = importlib.import_module(f"pyro.viscous_burgers.problems.{self.problem_name}")
+        problem.init_data(self.cc_data, self.rp)
 
     def evolve(self):
         """
