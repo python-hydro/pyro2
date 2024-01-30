@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.viscous_burgers.simulation &mdash; pyro 4.0.1.post60+g3edc9fe5 documentation</title>
+  <title>pyro.viscous_burgers.simulation &mdash; pyro 4.0.1.post61+g001318ef documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
@@ -17,7 +17,7 @@
   
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=4ee16b0b"></script>
+        <script src="../../../_static/documentation_options.js?v=0d37b454"></script>
         <script src="../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -122,15 +122,56 @@
            <div itemprop="articleBody">
              
   <h1>Source code for pyro.viscous_burgers.simulation</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">pyro.burgers</span> <span class="kn">import</span> <span class="n">Simulation</span> <span class="k">as</span> <span class="n">burgers_sim</span>
+<span></span><span class="kn">import</span> <span class="nn">importlib</span>
+
+<span class="kn">from</span> <span class="nn">pyro.burgers</span> <span class="kn">import</span> <span class="n">Simulation</span> <span class="k">as</span> <span class="n">burgers_sim</span>
 <span class="kn">from</span> <span class="nn">pyro.burgers</span> <span class="kn">import</span> <span class="n">burgers_interface</span>
-<span class="kn">from</span> <span class="nn">pyro.mesh</span> <span class="kn">import</span> <span class="n">reconstruction</span>
+<span class="kn">from</span> <span class="nn">pyro.mesh</span> <span class="kn">import</span> <span class="n">patch</span><span class="p">,</span> <span class="n">reconstruction</span>
+<span class="kn">from</span> <span class="nn">pyro.particles</span> <span class="kn">import</span> <span class="n">particles</span>
+<span class="kn">from</span> <span class="nn">pyro.simulation_null</span> <span class="kn">import</span> <span class="n">bc_setup</span><span class="p">,</span> <span class="n">grid_setup</span>
 <span class="kn">from</span> <span class="nn">pyro.viscous_burgers</span> <span class="kn">import</span> <span class="n">interface</span>
 
 
 <div class="viewcode-block" id="Simulation">
 <a class="viewcode-back" href="../../../pyro.viscous_burgers.html#pyro.viscous_burgers.simulation.Simulation">[docs]</a>
 <span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="n">burgers_sim</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Simulation.initialize">
+<a class="viewcode-back" href="../../../pyro.viscous_burgers.html#pyro.viscous_burgers.simulation.Simulation.initialize">[docs]</a>
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the grid and variables for advection and set the initial</span>
+<span class="sd">        conditions for the chosen problem.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># create grid, self.rp contains mesh.nx and mesh.ny</span>
+        <span class="n">my_grid</span> <span class="o">=</span> <span class="n">grid_setup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+        <span class="c1"># create the variables</span>
+        <span class="n">my_data</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">CellCenterData2d</span><span class="p">(</span><span class="n">my_grid</span><span class="p">)</span>
+
+        <span class="c1"># outputs: bc, bc_xodd and bc_yodd for reflection boundary cond</span>
+        <span class="n">bc</span> <span class="o">=</span> <span class="n">bc_setup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># register variables in the data</span>
+        <span class="c1"># burgers equation advects velocity</span>
+
+        <span class="n">my_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;x-velocity&quot;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+        <span class="n">my_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;y-velocity&quot;</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+        <span class="n">my_data</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+
+        <span class="c1"># holds various data, like time and registered variable.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span> <span class="o">=</span> <span class="n">my_data</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;particles.do_particles&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">n_particles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;particles.n_particles&quot;</span><span class="p">)</span>
+            <span class="n">particle_generator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;particles.particle_generator&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="n">particles</span><span class="o">.</span><span class="n">Particles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="p">,</span> <span class="n">bc</span><span class="p">,</span> <span class="n">n_particles</span><span class="p">,</span> <span class="n">particle_generator</span><span class="p">)</span>
+
+        <span class="c1"># now set the initial conditions for the problem</span>
+        <span class="n">problem</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;pyro.viscous_burgers.problems.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">problem_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">problem</span><span class="o">.</span><span class="n">init_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="Simulation.evolve">
 <a class="viewcode-back" href="../../../pyro.viscous_burgers.html#pyro.viscous_burgers.simulation.Simulation.evolve">[docs]</a>
