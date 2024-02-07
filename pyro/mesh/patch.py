@@ -884,5 +884,66 @@ def do_demo():
     mydata.pretty_print("a")
 
 
+# **c checking
+class PolarGrid(Grid2d):
+    """
+    the 2-d grid class.  The grid object will contain the coordinate
+    information (at various centerings).
+
+    A basic representation of the layout is::
+
+              *---* \theta_{i+1/2}
+             /    | 
+            /     |
+           /      * \theta_i 
+          /       |
+         /        |
+        *____*____* \theta_{i-1/2}
+r_{i-1/2}   r_i   r_{i+1/2}
+
+    The '*' marks represent the vertices; i index is the data location.
+    """
+
+    # pylint: disable=too-many-instance-attributes
+
+    def area_x(self):
+        """
+        Return an array of the face areas. 
+        The shape of the returned array is (ni, nj).
+        """
+        r1, t1 = np.meshgrid(self.xr, self.yr)
+        r0, t0 = np.meshgrid(self.xl, self.yl)
+
+        # ** this is just 1/2*r*d\theta
+
+        area = 0.5 * r0 * (t1 - t0)
+        return area
+
+    def area_y(self):
+        """
+        Return an array of the face areas. 
+        The shape of the returned array is (ni, nj).
+        """
+        r1, t1 = np.meshgrid(self.xr, self.yr)
+        r0, t0 = np.meshgrid(self.xl, self.yl)
+
+        # ** this is just dr
+
+        area = r1 - r0
+        return area
+
+    def cell_volumes(self):
+        """
+        Return an array of the cell volume data for the given coordinate box
+        The shape of the returned array is (ni, nj).
+        """
+        r1, t1 = np.meshgrid(self.xr, self.yr)
+        r0, t0 = np.meshgrid(self.xl, self.yl)
+
+        # ** this is just the face area
+
+        return 0.5 * (r1 ** 2 - r0 ** 2) * (t1 - t0)
+
+
 if __name__ == "__main__":
     do_demo()

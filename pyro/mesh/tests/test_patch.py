@@ -240,3 +240,79 @@ def test_bcs():
     # top
     assert_array_equal(d[myg.ilo:myg.ihi+1, myg.jhi-1:myg.jhi+1],
                        -np.fliplr(d[myg.ilo:myg.ihi+1, myg.jhi+1:myg.jhi+3]))
+
+
+# PolarGrid tests
+class TestPolarGrid(object):
+    @classmethod
+    def setup_class(cls):
+        """ this is run once for each class before any tests """
+        pass
+
+    @classmethod
+    def teardown_class(cls):
+        """ this is run once for each class after all tests """
+        pass
+
+    def setup_method(self):
+        """ this is run before each test """
+        self.g = patch.PolarGrid(4, 6, ng=2, ymax=1.5)
+
+    def teardown_method(self):
+        """ this is run after each test """
+        self.g = None
+
+    def test_dx_dy(self):
+        assert self.g.dx == 0.25
+        assert self.g.dy == 0.25
+
+    def test_grid_coords(self):
+        assert_array_equal(self.g.x[self.g.ilo:self.g.ihi+1],
+                           np.array([0.125, 0.375, 0.625, 0.875]))
+        assert_array_equal(self.g.y[self.g.jlo:self.g.jhi+1],
+                           np.array([0.125, 0.375, 0.625, 0.875, 1.125, 1.375]))
+
+    def test_grid_2d_coords(self):
+        assert_array_equal(self.g.x, self.g.x2d[:, self.g.jc])
+        assert_array_equal(self.g.y, self.g.y2d[self.g.ic, :])
+
+    def test_scratch_array(self):
+        q = self.g.scratch_array()
+        assert q.shape == (self.g.qx, self.g.qy)
+
+    def test_coarse_like(self):
+        q = self.g.coarse_like(2)
+        assert q.qx == 2*self.g.ng + self.g.nx//2
+        assert q.qy == 2*self.g.ng + self.g.ny//2
+
+    def test_fine_like(self):
+        q = self.g.fine_like(2)
+        assert q.qx == 2*self.g.ng + 2*self.g.nx
+        assert q.qy == 2*self.g.ng + 2*self.g.ny
+
+    def test_norm(self):
+        q = self.g.scratch_array()
+        # there are 24 elements, the norm L2 norm is
+        # sqrt(dx*dy*24)
+        q.v()[:, :] = np.array([[1, 1, 1, 1, 1, 1],
+                               [1, 1, 1, 1, 1, 1],
+                               [1, 1, 1, 1, 1, 1],
+                               [1, 1, 1, 1, 1, 1]])
+
+        assert q.norm() == np.sqrt(24*self.g.dx*self.g.dy)
+
+    def test_equality(self):
+        g2 = patch.PolarGrid(2, 5, ng=1)
+        assert g2 != self.g
+
+    def test_area_x(self):
+        A = self.g.area_x()
+        assert A[0,0] == (self.g.yr[0] - self.g.yl[0]) * (self.g.xr[0] - self.g.xl[0]) * 0.5
+
+    def test_area_y(self):
+        A = self.g.area_y()
+        assert A[0] == (self.g.xr - self.g.xl)
+
+    def test_cell_volumes(self):
+        V = self.g.cell_volumes()
+        assert V[0,0] == (self.g.yr[0] - self.g.yl[0]) * (self.g.xr[0] ** 2 - self.g.xl[0] ** 2) * 0.5
