@@ -19,7 +19,7 @@ with different spatial and temporal integration schemes.
 :py:mod:`pyro.advection` implements the directionally unsplit corner
 transport upwind algorithm :cite:`colella:1990` with piecewise linear reconstruction.
 This is an overall second-order accurate method, with timesteps restricted
-by 
+by
 
 .. math::
 
@@ -29,6 +29,23 @@ The parameters for this solver are:
 
 .. include:: advection_defaults.inc
 
+``advection_ppm`` solver
+------------------------
+
+:py:mod:`pyro.advection_ppm` applies a piecewise parabolic reconstruction (PPM) in the directionally
+unsplit corner transport upwind algorithm (CTU) :cite:`colella:1984`. This reconstruction is an extension
+of a higher-order Gudunov's method, designed to capture steeper representation of discontinuities, with
+emphasis on contact discontinuities.
+
+This is an overall second-order accurate method, with timesteps restricted by:
+
+.. math::
+
+  \Delta t < \min \left \{ \frac{\Delta x}{|u|}, \frac{\Delta y}{|v|} \right \}
+
+The parameters for this solver are:
+
+.. include:: advection_ppm_defaults.inc
 
 ``advection_fv4`` solver
 ------------------------
@@ -39,8 +56,8 @@ method with RK4 time integration, following the ideas in
 method-of-lines integration, and as such has a slightly more restrictive
 timestep:
 
-.. math:: 
- 
+.. math::
+
   \Delta t \lesssim \left [ \frac{|u|}{\Delta x} + \frac{|v|}{\Delta y} \right ]^{-1}
 
 The main complexity comes from needing to average the flux over the

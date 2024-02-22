@@ -285,3 +285,145 @@ def weno(q, order):
         q_minus[i] = weno_upwind(q[i+order-1:i-order:-1], order)
 
     return q_minus, q_plus
+
+
+def ppm_reconstruction(a, myg, idir, limiter):
+    """
+    The PPM reconstruction method proceeds as follows:
+
+    1. First, we perform an estimation of the values
+    of a on each interface x_{i+1/2}. In order to accomplish this
+    particular goal, we fit a cuartic polynomial over the grid values:
+
+    |----*----|----*----|----*----|----*----|
+      a_{i-1}     a_i     a_{i+1}   a_{i+2}
+
+    After the calculation of these values, defined as a_{i+1/2},
+    we stored them in ai[i].
+
+    2. Next, we define the values: a_{R,i-1/2} and a_{L,i+1/2},
+    to the limits of a_{i-1/2} and a_{i+1/2} from the right and left
+    of i-1/2 and i+1/2, respectively. Both values, a_{R,i+1/2} and
+    a_{L,i+1/2} are fixed initially to a_{i+1/2}. However, after the
+    limiting process, each interface will be double valued. Under this
+    definition:
+
+      |----------------------*----------------------|
+    a_{R,i-1/2}                 a_i                   a_{L,i+1/2}
+
+    with a_{R,i-1/2} stored in ar[i], and a_{L,i+1/2} in
+    al[i].
+
+    3. We apply the limit described in Colella and Woodward (1984) to
+    reset the values of ar[i] and al[i].
+
+    Parameters
+    ----------
+    a: np.array
+        input cell data with 4 ghost cells.
+
+    myg: <CellCentered2D class object>
+        input mesh.
+
+    idir: int
+        desired reconstruction dimension.
+
+    Returns
+    -------
+
+    al[i]: np.array
+        the left limit interface values of the
+        ppm-reconstruction
+
+    ar[i]: np.array
+        the right limit interface values of the
+        ppm-reconstruction
+
+    """
+
+    al = myg.scratch_array()
+    ar = myg.scratch_array()
+
+    ai = myg.scratch_array()
+    davl = myg.scratch_array()
+
+    dl1 = myg.scratch_array()
+    dl2 = myg.scratch_array()
+    dc = myg.scratch_array()
+    dr = myg.scratch_array()
+
+    if idir == 1:
+
+        davl = limit(a, myg, idir, limiter)
+
+        ai.v(buf=2)[:, :] = a.v(buf=2) + 0.5*(a.ip(1, buf=2) - a.v(buf=2)) \
+                               - (davl.ip(1, buf=2) - davl.v(buf=2))/6.0
+
+        # From here we set ar and al to take the same value of ai. The values of ar and
+        # al, will be reformated accordingly to the neigbours behaviour.
+
+        al.v(buf=2)[:, :] = ai.v(buf=2)
+        ar.v(buf=2)[:, :] = ai.ip(-1, buf=2)
+
+        # From here, we can reset ar and al:
+
+        dl1.v(buf=2)[:, :] = (al.v(buf=2) - a.v(buf=2)) * (a.v(buf=2) - ar.v(buf=2))
+        dc.v(buf=2)[:, :] = a.v(buf=2)
+        dr.v(buf=2)[:, :] = ar.v(buf=2)
+
+        ar.v(buf=myg.ng)[:, :] = np.where(dl1 <= 0.0, dc, dr)  # First Condition
+
+        dr.v(buf=2)[:, :] = al.v(buf=2)
+        al.v(buf=myg.ng)[:, :] = np.where(dl1 <= 0.0, dc, dr)
+
+        dl1.v(buf=2)[:, :] = (al.v(buf=2) - ar.v(buf=2)) \
+                                 * (a.v(buf=2) - 0.5*(ar.v(buf=2) + al.v(buf=2)))
+
+        dl2.v(buf=2)[:, :] = (al.v(buf=2) - ar.v(buf=2))**2 / 6.0
+        dc.v(buf=2)[:, :] = 3.0*a.v(buf=2) - 2.0*al.v(buf=2)
+        dr.v(buf=2)[:, :] = ar.v(buf=2)
+
+        ar.v(buf=myg.ng)[:, :] = np.where(dl1 > dl2, dc, dr)  # Second Condition
+
+        dc.v(buf=2)[:, :] = 3.0*a.v(buf=2) - 2.0*ar.v(buf=2)
+        dr.v(buf=2)[:, :] = al.v(buf=2)
+
+        al.v(buf=myg.ng)[:, :] = np.where(-dl2 > dl1, dc, dr)  # Third Condition
+
+    elif idir == 2:
+
+        davl = limit(a, myg, idir, limiter)
+
+        ai.v(buf=2)[:, :] = a.v(buf=2) + 0.5*(a.jp(1, buf=2) - a.v(buf=2)) \
+                               - (davl.jp(1, buf=2) - davl.v(buf=2))/6.0
+
+        # From here we set ar and al to take the same value of ai. The values of ar and
+        # al, will be reformated accordingly to the neigbours behaviour.
+        al.v(buf=2)[:, :] = ai.v(buf=2)
+        ar.v(buf=2)[:, :] = ai.jp(-1, buf=2)
+
+        # From here, we can reset ar and al:
+        dl1.v(buf=2)[:, :] = (al.v(buf=2) - a.v(buf=2)) * (a.v(buf=2) - ar.v(buf=2))
+        dc.v(buf=2)[:, :] = a.v(buf=2)
+        dr.v(buf=2)[:, :] = ar.v(buf=2)
+
+        ar.v(buf=myg.ng)[:, :] = np.where(dl1 <= 0.0, dc, dr)  # First Condition
+
+        dr.v(buf=2)[:, :] = al.v(buf=2)
+        al.v(buf=myg.ng)[:, :] = np.where(dl1 <= 0.0, dc, dr)
+
+        dl1.v(buf=2)[:, :] = (al.v(buf=2) - ar.v(buf=2)) \
+                                 * (a.v(buf=2) - 0.5*(ar.v(buf=2) + al.v(buf=2)))
+
+        dl2.v(buf=2)[:, :] = (al.v(buf=2) - ar.v(buf=2))**2 / 6.0
+        dc.v(buf=2)[:, :] = 3.0*a.v(buf=2) - 2.0*al.v(buf=2)
+        dr.v(buf=2)[:, :] = ar.v(buf=2)
+
+        ar.v(buf=myg.ng)[:, :] = np.where(dl1 > dl2, dc, dr)  # Second Condition
+
+        dc.v(buf=2)[:, :] = 3.0*a.v(buf=2) - 2.0*ar.v(buf=2)
+        dr.v(buf=2)[:, :] = al.v(buf=2)
+
+        al.v(buf=myg.ng)[:, :] = np.where(-dl2 > dl1, dc, dr)  # Third Condition
+
+    return ar, al
