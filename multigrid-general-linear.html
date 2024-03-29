@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>General Linear Elliptic Equation &mdash; pyro 4.0.1.post63+g26c9e0c6 documentation</title>
+  <title>General Linear Elliptic Equation &mdash; pyro 4.0.1.post64+ga867ee29 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
@@ -19,7 +19,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=f0c24076"></script>
+        <script src="_static/documentation_options.js?v=cd9c6898"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -517,6 +517,8 @@ cycle 2: relative err = 0.036315310129800826, residual err = 0.03283823443993396
 <div class="output_area docutils container">
 <div class="highlight"><pre>
   level =  2, nx =    8, residual change:   0.0050815 →  0.00256253
+  level =  1, nx =    4, residual change:  0.00170641 → 2.79124e-05
+  bottom solve
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -524,8 +526,6 @@ cycle 2: relative err = 0.036315310129800826, residual err = 0.03283823443993396
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-  level =  1, nx =    4, residual change:  0.00170641 → 2.79124e-05
-  bottom solve
   level =  1, nx =    4, residual change: 3.88653e-05 → 3.88653e-05
   level =  2, nx =    8, residual change:  0.00348191 →  0.00348191
   level =  3, nx =   16, residual change:    0.010065 →    0.010065
@@ -578,6 +578,12 @@ cycle 4: relative err = 4.257466296364851e-05, residual err = 1.4967652930826935
 <div class="output_area docutils container">
 <div class="highlight"><pre>
   level =  4, nx =   32, residual change:  1.7696e-05 →  1.7696e-05
+  level =  5, nx =   64, residual change: 2.28172e-05 → 2.28172e-05
+  level =  6, nx =  128, residual change: 2.72045e-05 → 2.72045e-05
+cycle 5: relative err = 1.437223355768636e-06, residual err = 4.2910353907176844e-07
+
+&lt;&lt;&lt; beginning V-cycle (cycle 6) &gt;&gt;&gt;
+
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -585,12 +591,6 @@ cycle 4: relative err = 4.257466296364851e-05, residual err = 1.4967652930826935
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-  level =  5, nx =   64, residual change: 2.28172e-05 → 2.28172e-05
-  level =  6, nx =  128, residual change: 2.72045e-05 → 2.72045e-05
-cycle 5: relative err = 1.437223355768636e-06, residual err = 4.2910353907176844e-07
-
-&lt;&lt;&lt; beginning V-cycle (cycle 6) &gt;&gt;&gt;
-
   level =  6, nx =  128, residual change: 7.61737e-07 → 6.88796e-07
   level =  5, nx =   64, residual change:  4.8583e-07 → 5.69884e-07
   level =  4, nx =   32, residual change: 4.01145e-07 → 4.28873e-07
@@ -644,6 +644,8 @@ cycle 7: relative err = 1.6392149576904378e-09, residual err = 4.458207725000789
 <div class="highlight"><pre>
   level =  3, nx =   16, residual change:  3.4637e-10 → 3.11941e-10
   level =  2, nx =    8, residual change: 2.17418e-10 → 1.11945e-10
+  level =  1, nx =    4, residual change: 7.45572e-11 → 1.22015e-12
+  bottom solve
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -651,8 +653,6 @@ cycle 7: relative err = 1.6392149576904378e-09, residual err = 4.458207725000789
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-  level =  1, nx =    4, residual change: 7.45572e-11 → 1.22015e-12
-  bottom solve
   level =  1, nx =    4, residual change: 1.69894e-12 → 1.69894e-12
   level =  2, nx =    8, residual change: 1.52121e-10 → 1.52121e-10
   level =  3, nx =   16, residual change: 4.44914e-10 → 4.44914e-10
