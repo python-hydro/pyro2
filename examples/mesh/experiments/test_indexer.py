@@ -3,7 +3,7 @@
 
 import numpy as np
 
-import mesh.patch as patch
+from pyro.mesh import patch
 
 myg = patch.Grid2d(8, 8, ng=2)
 a = myg.scratch_array()

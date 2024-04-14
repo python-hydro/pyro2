@@ -49,3 +49,11 @@ ignore-words-list = "pres"
 
 [tool.isort]
 known_first_party = ["pyro"]
+
+[tool.pytest.ini_options]
+# docs: symlinks to notebooks we're already testing
+# derive_analytic_solutions.ipynb: sympy derivations, doesn't use any pyro code
+addopts = """\
+  --ignore=docs/ \
+  --ignore=pyro/multigrid/derive_analytic_solutions.ipynb \
+  """

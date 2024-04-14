@@ -13,7 +13,7 @@ pyro implements unit tests using ``pytest``.  These can be run via:
 
 .. prompt:: bash
 
-   pytest -v --nbval pyro
+   pytest -v --nbval
 
 
 Regression tests
