@@ -268,7 +268,7 @@ with their data.
   Unit tests are controlled by pytest and can be run simply via
 
   ```
-  pytest pyro
+  pytest
   ```
 
 ## Acknowledgements
