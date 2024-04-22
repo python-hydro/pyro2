@@ -46,7 +46,8 @@ namespaces = false
 [tool.setuptools.package-data]
 # additional files to include when building a wheel
 pyro = [
-  "**/_*.defaults",
+  "_defaults",
+  "**/_defaults",
   "**/inputs*",
   "*/tests/*.h5"
 ]
