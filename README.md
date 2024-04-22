@@ -51,7 +51,7 @@ https://python-hydro.github.io/pyro2
 
 ## Getting started
 
-  - By default, we assume python 3.8 or later.
+  - By default, we assume python 3.9 or later.
 
   - We require `numpy`, `numba`, `matplotlib`, and `h5py` for running pyro
     and `setuptools_scm` for the install.
