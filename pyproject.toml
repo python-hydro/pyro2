@@ -48,6 +48,7 @@ namespaces = false
 pyro = [
   "_defaults",
   "**/_defaults",
+  "**/*.defaults",
   "**/inputs*",
   "*/tests/*.h5"
 ]
