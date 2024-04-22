@@ -33,7 +33,7 @@ pyro follows a standard python package structure.  The main directory
 
 * ``www/`` : the logo used in the website
 
-It is at this level (``pyro2/``) that the installation of pyro is done (via ``setup.py``).
+It is at this level (``pyro2/``) that the installation of pyro is done (via ``pyproject.toml``).
 
 ``pyro/``
 ^^^^^^^^^

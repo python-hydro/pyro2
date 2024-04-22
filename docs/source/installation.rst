@@ -17,12 +17,12 @@ The easiest way to install python is via PyPI using pip:
 
    pip install pyro-hydro
 
-Alternately, you can install from source, using the ``setup.py``.
+Alternately, you can install from source.
 From the ``pyro2/`` directory, we do:
 
 .. prompt:: bash
 
-   python setup.py install --user
+   pip install .
 
 This will put the main driver, ``pyro_sim.py``, in your path, and
 allow you to run pyro from anywhere.
@@ -31,7 +31,7 @@ If you intend on directly developing the solvers, you can instead do:
 
 .. prompt:: bash
 
-   python setup.py develop --user
+   pip install -e .
 
 This will allow you to modify the python source without having to
 reinstall each time something changes.
