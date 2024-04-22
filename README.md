@@ -65,10 +65,10 @@ https://python-hydro.github.io/pyro2
     Alternately, you can install directly from source, via
 
     ```
-    python setup.py install --user
+    pip install .
     ```
 
-    or you can use `develop` instead of `install` if you are
+    you can optionally add the `-e` argument to `install` if you are
     planning on developing pyro solvers directly.
 
   - Not all matplotlib backends allow for the interactive plotting as
