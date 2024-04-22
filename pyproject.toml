@@ -1,6 +1,61 @@
 # pyproject.toml
 [build-system]
-requires = ["setuptools>=45", "wheel", "setuptools_scm>=6.2"]
+requires = ["setuptools>=64", "setuptools_scm>=8"]
+build-backend = "setuptools.build_meta"
+
+
+# project metadata
+
+[project]
+name = "pyro-hydro"
+description = "A python hydrodynamics code for teaching and prototyping"
+readme = "README.md"
+license.text = "BSD"
+authors = [
+  {name="pyro development group"},
+  {email="michael.zingale@stonybrook.edu"},
+]
+dynamic = ["version"]
+
+dependencies = [
+  "numba",
+  "numpy",
+  "matplotlib",
+  "h5py",
+]
+
+[project.scripts]
+"pyro_sim.py" = "pyro.pyro_sim:main"
+
+[project.urls]
+Homepage = "https://github.com/python-hydro/pyro2"
+Documentation = "https://python-hydro.github.io/pyro2"
+
+# packaging
+
+[tool.setuptools]
+zip-safe = false
+# we explicitly list the data we want below
+include-package-data = false
+
+[tool.setuptools.packages.find]
+include = ["pyro*"]
+exclude = ["*.tests*"]
+namespaces = false
+
+[tool.setuptools.package-data]
+# additional files to include when building a wheel
+pyro = [
+  "**/_*.defaults",
+  "**/inputs*",
+  "*/tests/*.h5"
+]
+
+[tool.setuptools_scm]
+version_scheme = "post-release"
+version_file = "pyro/_version.py"
+
+# development tools
 
 [tool.pylint."MESSAGES CONTROL"]
 disable = [
