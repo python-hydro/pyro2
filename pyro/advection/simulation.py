@@ -67,6 +67,7 @@ class Simulation(NullSimulation):
         dtdx = self.dt/self.cc_data.grid.dx
         dtdy = self.dt/self.cc_data.grid.dy
 
+
         flux_x, flux_y = flx.unsplit_fluxes(self.cc_data, self.rp, self.dt, "density", linear_interface)
 
         """
@@ -80,7 +81,17 @@ class Simulation(NullSimulation):
 
         dens = self.cc_data.get_var("density")
 
-        dens.v()[:, :] = dens.v() + dtdx*(flux_x.v() - flux_x.ip(1)) + \
+        Ax_l = self.cc_data.grid.area_x[self.cc_data.grid.ilo:grid.ihi+1]
+        Ax_r = self.cc_data.grid.area_x[grid.ilo+1:grid.ihi+2]
+        Ay_l = self.cc_data.grid.area_y[grid.ilo:grid.ihi+1]
+        Ay_r = self.cc_data.grid.area_y[grid.ilo+1:grid.ihi+2]
+
+        dens.v()[:, :] = dens.v() \
+            + dtV*(Ax_l*flux_x.v() - Ax_r*flux_x.ip(1)) + \
+                                    dtdy*(flux_y.v() - flux_y.jp(1))
+
+        dens.v()[:, :] = dens.v() \
+            + dtdx*(flux_x.v() - flux_x.ip(1)) + \
                                     dtdy*(flux_y.v() - flux_y.jp(1))
 
         if self.particles is not None:
