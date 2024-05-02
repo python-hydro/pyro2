@@ -138,18 +138,6 @@ class Grid2d:
         self.xl2d, self.yl2d = np.meshgrid(self.xl, self.yl, indexing='ij')
         self.xr2d, self.yr2d = np.meshgrid(self.xr, self.yr, indexing='ij')
 
-        # x2d = np.repeat(self.x, self.qy)
-        # x2d.shape = (self.qx, self.qy)
-        # self.x2d = x2d
-
-        # y2d = np.repeat(self.y, self.qx)
-        # y2d.shape = (self.qy, self.qx)
-        # y2d = np.transpose(y2d)
-        # self.y2d = y2d
-        # print(self.x2d)
-        # print(self.x2dt)
-        # assert (self.x2dt == self.x2d).all() and (self.y2dt == self.y2d).all()
-
     def scratch_array(self, nvar=1):
         """
         return a standard numpy array dimensioned to have the size
@@ -209,12 +197,53 @@ class Cartesian2d(Grid2d):
 
         # This is length of the side that is perpendicular to x.
         self.area_x = np.full((self.qx, self.qy), self.dy)
+        # self.area_x = self.dy
 
         # This is length of the side that is perpendicular to y.
         self.area_y = np.full((self.qx, self.qy), self.dx)
+        # self.area_y = self.dx
 
         # Volume (Area) of the cell.
         self.vol = np.full((self.qx, self.qy), self.dx * self.dy)
+        # self.vol = self.dx * self.dy
+
+    def A_x(self, i=0, buf=0):
+        """
+        Returns the area in the x(r)-direction
+
+        parameter:
+        ----------
+        i : shifts the array in the x-direction by index i
+        buf : increases the buffer size.
+        """
+        return self.area_x[self.ilo+i+buf:self.ihi+1+i+buf,
+                           self.jlo+buf:self.jhi+1+buf]
+
+
+    def A_y(self, j=0, buf=0):
+        """
+        Returns the area in the y(theta)-direction
+        parameter:
+        ----------
+        j : shifts the array in the y-direction by index j
+        buf : increases the buffer size.
+        """
+        assert buf <= self.ng
+        return self.area_y[self.ilo+buf:self.ihi+1+buf,
+                           self.jlo+j+buf:self.jhi+1+j+buf]
+
+    def V(self, i=0, j=0, buf=0):
+        """
+        Returns the area
+        parameter:
+        -----------
+        i : shifts the array in the x-direction by index i
+        j : shifts the array in the y-direction by index j
+        buf : increases the buffer size
+        """
+        assert buf <= self.ng
+        return self.vol[self.ilo+i+buf:self.ihi+1+i+buf,
+                        self.jlo+j+buf:self.jhi+1+j+buf]
 
 class SphericalPolar(Grid2d):
     """
@@ -254,6 +283,46 @@ class SphericalPolar(Grid2d):
         self.vol = -0.6666666666666667 * np.pi * \
                    (np.cos(self.yr2d) - np.cos(self.yl2d)) * \
                    (self.xr2d**3 - self.xl2d**3)
+
+    def A_x(self, i=0, buf=0):
+        """
+        Returns the area in the x(r)-direction
+        parameter:
+        ----------
+        i : shifts the array in the x-direction by index i
+        buf : increases the buffer size.
+        """
+        assert buf <= self.ng
+        return self.area_x[self.ilo+i+buf:self.ihi+1+i+buf,
+                           self.jlo+buf:self.jhi+1+buf]
+
+
+    def A_y(self, j=0, buf=0):
+        """
+        Returns the area in the y(theta)-direction
+        parameter:
+        ----------
+        j : shifts the array in the y-direction by index j
+        buf : increases the buffer size.
+        """
+        assert buf <= self.ng
+        return self.area_y[self.ilo+buf:self.ihi+1+buf,
+                           self.jlo+j+buf:self.jhi+1+j+buf]
+
+    def Vol(self, i=0, j=0, buf=0):
+        """
+        Returns the area
+        parameter:
+        -----------
+        i : shifts the array in the x-direction by index i
+        j : shifts the array in the y-direction by index j
+        buf : increases the buffer size
+        """
+        assert buf <= self.ng
+        return self.vol[self.ilo+i+buf:self.ihi+1+i+buf,
+                        self.jlo+j+buf:self.jhi+1+j+buf]
+
+
 
 
 class CellCenterData2d:
