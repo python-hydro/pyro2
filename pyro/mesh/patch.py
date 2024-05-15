@@ -133,15 +133,10 @@ class Grid2d:
         self.yr = (np.arange(self.qy) + 1.0 - ng)*self.dy + ymin
         self.y = 0.5*(self.yl + self.yr)
 
-        # 2-d versions of the zone coordinates (replace with meshgrid?)
-        x2d = np.repeat(self.x, self.qy)
-        x2d.shape = (self.qx, self.qy)
-        self.x2d = x2d
-
-        y2d = np.repeat(self.y, self.qx)
-        y2d.shape = (self.qy, self.qx)
-        y2d = np.transpose(y2d)
-        self.y2d = y2d
+        # 2-d versions of the zone coordinates
+        self.x2d, self.y2d = np.meshgrid(self.x, self.y, indexing='ij')
+        self.xl2d, self.yl2d = np.meshgrid(self.xl, self.yl, indexing='ij')
+        self.xr2d, self.yr2d = np.meshgrid(self.xr, self.yr, indexing='ij')
 
     def scratch_array(self, nvar=1):
         """
@@ -184,6 +179,150 @@ class Grid2d:
                   self.ymin == other.ymin and self.ymax == other.ymax)
 
         return result
+
+
+class Cartesian2d(Grid2d):
+    """
+    This class defines a 2D Cartesian Grid.
+
+    Define:
+    x = x
+    y = y
+    """
+
+    def __init__(self, nx, ny, ng=1,
+                 xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0):
+
+        super().__init__(nx, ny, ng, xmin, xmax, ymin, ymax)
+
+        # This is length of the side that is perpendicular to x.
+        self.area_x = np.full((self.qx, self.qy), self.dy)
+        # self.area_x = self.dy
+
+        # This is length of the side that is perpendicular to y.
+        self.area_y = np.full((self.qx, self.qy), self.dx)
+        # self.area_y = self.dx
+
+        # Volume (Area) of the cell.
+        self.vol = np.full((self.qx, self.qy), self.dx * self.dy)
+        # self.vol = self.dx * self.dy
+
+    def A_x(self, i=0, buf=0):
+        """
+        Returns the area in the x(r)-direction
+
+        parameter:
+        ----------
+        i : shifts the array in the x-direction by index i
+        buf : increases the buffer size.
+        """
+        return self.area_x[self.ilo+i+buf:self.ihi+1+i+buf,
+                           self.jlo+buf:self.jhi+1+buf]
+
+
+    def A_y(self, j=0, buf=0):
+        """
+        Returns the area in the y(theta)-direction
+        parameter:
+        ----------
+        j : shifts the array in the y-direction by index j
+        buf : increases the buffer size.
+        """
+        assert buf <= self.ng
+        return self.area_y[self.ilo+buf:self.ihi+1+buf,
+                           self.jlo+j+buf:self.jhi+1+j+buf]
+
+    def V(self, i=0, j=0, buf=0):
+        """
+        Returns the area
+        parameter:
+        -----------
+        i : shifts the array in the x-direction by index i
+        j : shifts the array in the y-direction by index j
+        buf : increases the buffer size
+        """
+        assert buf <= self.ng
+        return self.vol[self.ilo+i+buf:self.ihi+1+i+buf,
+                        self.jlo+j+buf:self.jhi+1+j+buf]
+
+class SphericalPolar(Grid2d):
+    """
+    This class defines a spherical polar grid.
+    This is technically a 2D geometry but assumes azimuthal symmetry.
+
+    Define:
+    r = x
+    theta = y
+    """
+
+    def __init__(self, nx, ny, ng=1,
+                 xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0):
+
+        # Make sure theta is within [0, PI]
+
+        assert ymin >= 0.0 and ymax <= np.pi
+        super().__init__(nx, ny, ng, xmin, xmax, ymin, ymax)
+
+        # Returns an array of the face area that points in the r(x) direction.
+        # dL_theta x dL_phi = r^2 * sin(theta) * dtheta * dphi
+        # dA_r = - r{i-1/2}^2 * 2pi * cos(theta{i+1/2}) - cos(theta{i-1/2})
+        self.area_x =  -2.0 * np.pi * self.xl2d**2 * \
+                       (np.cos(self.yr2d) - np.cos(self.yl2d))
+
+        # Returns an array of the face area that points in the theta(y) direction.
+        # dL_phi x dL_r = dr * r * sin(theta) * dphi
+        # dA_theta = 0.5 * pi * sin(theta{i-1/2}) * (r{i+1/2}^2 - r{i-1/2}^2)
+        self.area_y =  0.5 * np.pi * np.sin(self.yl2d) * \
+                       (self.xr2d**2 - self.xl2d**2)
+
+
+        # Returns an array of the volume of each cell.
+        # dV = dL_r * dL_theta * dL_phi
+        #    = (dr) * (r * dtheta) * (r * sin(theta) * dphi)
+        # dV = - 2*np.pi / 3 * (cos(theta{i+1/2}) - cos(theta{i-1/2})) * (r{i+1/2}^3 - r{i-1/2}^3)
+        self.vol = -0.6666666666666667 * np.pi * \
+                   (np.cos(self.yr2d) - np.cos(self.yl2d)) * \
+                   (self.xr2d**3 - self.xl2d**3)
+
+    def A_x(self, i=0, buf=0):
+        """
+        Returns the area in the x(r)-direction
+        parameter:
+        ----------
+        i : shifts the array in the x-direction by index i
+        buf : increases the buffer size.
+        """
+        assert buf <= self.ng
+        return self.area_x[self.ilo+i+buf:self.ihi+1+i+buf,
+                           self.jlo+buf:self.jhi+1+buf]
+
+
+    def A_y(self, j=0, buf=0):
+        """
+        Returns the area in the y(theta)-direction
+        parameter:
+        ----------
+        j : shifts the array in the y-direction by index j
+        buf : increases the buffer size.
+        """
+        assert buf <= self.ng
+        return self.area_y[self.ilo+buf:self.ihi+1+buf,
+                           self.jlo+j+buf:self.jhi+1+j+buf]
+
+    def Vol(self, i=0, j=0, buf=0):
+        """
+        Returns the area
+        parameter:
+        -----------
+        i : shifts the array in the x-direction by index i
+        j : shifts the array in the y-direction by index j
+        buf : increases the buffer size
+        """
+        assert buf <= self.ng
+        return self.vol[self.ilo+i+buf:self.ihi+1+i+buf,
+                        self.jlo+j+buf:self.jhi+1+j+buf]
+
+
 
 
 class CellCenterData2d:
