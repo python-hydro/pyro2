@@ -309,7 +309,7 @@ class SphericalPolar(Grid2d):
         return self.area_y[self.ilo+buf:self.ihi+1+buf,
                            self.jlo+j+buf:self.jhi+1+j+buf]
 
-    def Vol(self, i=0, j=0, buf=0):
+    def V(self, i=0, j=0, buf=0):
         """
         Returns the area
         parameter:
