@@ -196,7 +196,7 @@ class Simulation(NullSimulation):
         self.cc_data.fill_BC("y-velocity")
 
         # 1. do the initial projection.  This makes sure that our original
-        # velocity field satisties div U = 0
+        # velocity field satisfies div U = 0
 
         # the coefficient for the elliptic equation is beta_0^2/rho
         coeff = 1/rho

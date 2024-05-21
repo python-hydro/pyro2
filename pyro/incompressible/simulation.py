@@ -86,7 +86,7 @@ class Simulation(burgers_simulation):
         self.cc_data.fill_BC("y-velocity")
 
         # 1. do the initial projection.  This makes sure that our original
-        # velocity field satisties div U = 0
+        # velocity field satisfies div U = 0
 
         # next create the multigrid object.  We want Neumann BCs on phi
         # at solid walls and periodic on phi for periodic BCs
