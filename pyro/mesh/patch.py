@@ -234,7 +234,7 @@ class Cartesian2d(Grid2d):
 
     def V(self, i=0, j=0, buf=0):
         """
-        Returns the area
+        Returns the volume
         parameter:
         -----------
         i : shifts the array in the x-direction by index i
@@ -244,6 +244,7 @@ class Cartesian2d(Grid2d):
         assert buf <= self.ng
         return self.vol[self.ilo+i+buf:self.ihi+1+i+buf,
                         self.jlo+j+buf:self.jhi+1+j+buf]
+
 
 class SphericalPolar(Grid2d):
     """
@@ -311,7 +312,7 @@ class SphericalPolar(Grid2d):
 
     def V(self, i=0, j=0, buf=0):
         """
-        Returns the area
+        Returns the volume
         parameter:
         -----------
         i : shifts the array in the x-direction by index i
@@ -321,8 +322,6 @@ class SphericalPolar(Grid2d):
         assert buf <= self.ng
         return self.vol[self.ilo+i+buf:self.ihi+1+i+buf,
                         self.jlo+j+buf:self.jhi+1+j+buf]
-
-
 
 
 class CellCenterData2d:
