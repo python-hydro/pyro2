@@ -201,8 +201,8 @@ def states(idir, ng, dx, dt,
 
             # construct the states
             for m in range(nvar):
-                sum_l = np.dot(betal, rvec[:, m])
-                sum_r = np.dot(betar, rvec[:, m])
+                sum_l = np.dot(betal, np.ascontiguousarray(rvec[:, m]))
+                sum_r = np.dot(betar, np.ascontiguousarray(rvec[:, m]))
 
                 if idir == 1:
                     q_l[i + 1, j, m] = q_l[i + 1, j, m] + sum_l
