@@ -75,6 +75,7 @@ class Simulation(NullSimulation):
                    self.rp.get_param("mesh.xrboundary"),
                    self.rp.get_param("mesh.ylboundary"),
                    self.rp.get_param("mesh.yrboundary")]:
+            bctype = None
             if bc == "periodic":
                 bctype = "periodic"
             elif bc in ["reflect", "slipwall"]:

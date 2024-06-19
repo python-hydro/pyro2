@@ -166,6 +166,7 @@ def fluxes(my_data, rp, ivars, solid, tc):
 
     riemann = rp.get_param("compressible.riemann")
 
+    riemannFunc = None
     if riemann == "HLLC":
         riemannFunc = interface.riemann_hllc
     elif riemann == "CGF":
