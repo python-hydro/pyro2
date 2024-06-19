@@ -507,6 +507,7 @@ class ArrayIndexerFC(ArrayIndexer):
 
         # print j descending, so it looks like a grid (y increasing
         # with height)
+        ilo = ihi = jlo = jhi = -1
         if show_ghost:
             if self.idir == 1:
                 ilo = 0

@@ -287,6 +287,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     riemann = rp.get_param("compressible.riemann")
 
+    riemannFunc = None
     if riemann == "HLLC":
         riemannFunc = ifc.riemann_hllc
     elif riemann == "CGF":
