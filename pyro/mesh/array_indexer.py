@@ -535,6 +535,8 @@ class ArrayIndexerFC(ArrayIndexer):
         for j in reversed(range(jlo, jhi+1)):
             for i in range(ilo, ihi+1):
 
+                gc = None
+
                 if self.idir == 1:
                     if (j < self.g.jlo or j > self.g.jhi or
                         i < self.g.ilo or i > self.g.ihi+1):
