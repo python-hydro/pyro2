@@ -841,11 +841,12 @@ class FaceCenterData2d(CellCenterData2d):
         if self.idir == 1:
             _tmp = np.zeros((self.grid.qx+1, self.grid.qy, self.nvar),
                             dtype=self.dtype)
+            self.data = ArrayIndexerFC(_tmp, idir=self.idir, grid=self.grid)
+
         elif self.idir == 2:
             _tmp = np.zeros((self.grid.qx, self.grid.qy+1, self.nvar),
                             dtype=self.dtype)
-
-        self.data = ArrayIndexerFC(_tmp, idir=self.idir, grid=self.grid)
+            self.data = ArrayIndexerFC(_tmp, idir=self.idir, grid=self.grid)
 
         self.initialized = 1
 

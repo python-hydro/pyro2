@@ -507,6 +507,7 @@ class ArrayIndexerFC(ArrayIndexer):
 
         # print j descending, so it looks like a grid (y increasing
         # with height)
+        ilo = ihi = jlo = jhi = -1
         if show_ghost:
             if self.idir == 1:
                 ilo = 0
@@ -533,6 +534,8 @@ class ArrayIndexerFC(ArrayIndexer):
 
         for j in reversed(range(jlo, jhi+1)):
             for i in range(ilo, ihi+1):
+
+                gc = None
 
                 if self.idir == 1:
                     if (j < self.g.jlo or j > self.g.jhi or
