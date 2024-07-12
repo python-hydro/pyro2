@@ -253,6 +253,7 @@ def unsplit_fluxes(my_data, rp, ivars, solid, tc, dt):
 
     riemann = rp.get_param("swe.riemann")
 
+    riemannFunc = None
     if riemann == "HLLC":
         riemannFunc = ifc.riemann_hllc
     elif riemann == "Roe":
