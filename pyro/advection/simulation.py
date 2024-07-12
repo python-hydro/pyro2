@@ -52,14 +52,8 @@ class Simulation(NullSimulation):
         v = self.rp.get_param("advection.v")
 
         # the timestep is min(dx/|u|, dy/|v|)
-        dx_min = np.min(self.cc_data.grid.V() / \
-                        self.cc_data.grid.A_x())
-
-        dy_min = np.min(self.cc_data.grid.V() / \
-                        self.cc_data.grid.A_y())
-
-        xtmp = dx_min/max(abs(u), self.SMALL)
-        ytmp = dy_min/max(abs(v), self.SMALL)
+        xtmp = self.cc_data.grid.dx/max(abs(u), self.SMALL)
+        ytmp = self.cc_data.grid.dy/max(abs(v), self.SMALL)
 
         self.dt = cfl*min(xtmp, ytmp)
 
@@ -70,7 +64,8 @@ class Simulation(NullSimulation):
         is part of the Simulation.
         """
 
-        myg = self.cc_data.grid
+        dtdx = self.dt/self.cc_data.grid.dx
+        dtdy = self.dt/self.cc_data.grid.dy
 
         flux_x, flux_y = flx.unsplit_fluxes(self.cc_data, self.rp, self.dt, "density", linear_interface)
 
@@ -85,14 +80,8 @@ class Simulation(NullSimulation):
 
         dens = self.cc_data.get_var("density")
 
-        dens.v()[:, :] = dens.v() + self.dt / myg.V() * \
-                         (myg.A_x()*flux_x.v() - myg.A_x(1)*flux_x.ip(1) + \
-                          myg.A_y()*flux_y.v() - myg.A_y(1)*flux_y.jp(1))
-
-
-        # dens.v()[:, :] = dens.v() \
-        #     + dtdx*(flux_x.v() - flux_x.ip(1)) + \
-        #                             dtdy*(flux_y.v() - flux_y.jp(1))
+        dens.v()[:, :] = dens.v() + dtdx*(flux_x.v() - flux_x.ip(1)) + \
+                                    dtdy*(flux_y.v() - flux_y.jp(1))
 
         if self.particles is not None:
             myg = self.cc_data.grid
