@@ -219,7 +219,6 @@ class Cartesian2d(Grid2d):
         return self.area_x[self.ilo+i+buf:self.ihi+1+i+buf,
                            self.jlo+buf:self.jhi+1+buf]
 
-
     def A_y(self, j=0, buf=0):
         """
         Returns the area in the y(theta)-direction
@@ -267,15 +266,14 @@ class SphericalPolar(Grid2d):
         # Returns an array of the face area that points in the r(x) direction.
         # dL_theta x dL_phi = r^2 * sin(theta) * dtheta * dphi
         # dA_r = - r{i-1/2}^2 * 2pi * cos(theta{i+1/2}) - cos(theta{i-1/2})
-        self.area_x =  -2.0 * np.pi * self.xl2d**2 * \
-                       (np.cos(self.yr2d) - np.cos(self.yl2d))
+        self.area_x = -2.0 * np.pi * self.xl2d**2 * \
+                      (np.cos(self.yr2d) - np.cos(self.yl2d))
 
         # Returns an array of the face area that points in the theta(y) direction.
         # dL_phi x dL_r = dr * r * sin(theta) * dphi
         # dA_theta = 0.5 * pi * sin(theta{i-1/2}) * (r{i+1/2}^2 - r{i-1/2}^2)
-        self.area_y =  0.5 * np.pi * np.sin(self.yl2d) * \
-                       (self.xr2d**2 - self.xl2d**2)
-
+        self.area_y = 0.5 * np.pi * np.sin(self.yl2d) * \
+                      (self.xr2d**2 - self.xl2d**2)
 
         # Returns an array of the volume of each cell.
         # dV = dL_r * dL_theta * dL_phi
@@ -296,7 +294,6 @@ class SphericalPolar(Grid2d):
         assert buf <= self.ng
         return self.area_x[self.ilo+i+buf:self.ihi+1+i+buf,
                            self.jlo+buf:self.jhi+1+buf]
-
 
     def A_y(self, j=0, buf=0):
         """
