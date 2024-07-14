@@ -37,6 +37,7 @@ class Simulation(burgers_simulation):
 
         # phi -- used for the projections. Has neumann BC's if v is dirichlet
         # Assuming BC's are either all periodic or all dirichlet
+        phi_bc = None
         if bc.xlb == "periodic":
             phi_bc = bc
         elif bc.xlb == "dirichlet":

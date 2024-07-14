@@ -56,7 +56,8 @@ https://python-hydro.github.io/pyro2
   - We require `numpy`, `numba`, `matplotlib`, and `h5py` for running pyro
     and `setuptools_scm` for the install.
 
-  - There are several ways to install pyro.  The simplest way is via PyPI/pip:
+  - There are several ways to install pyro.  The simplest way is via
+    PyPI/pip:
 
     ```
     pip install pyro-hydro
@@ -85,7 +86,8 @@ https://python-hydro.github.io/pyro2
       print matplotlib.pyplot.get_backend()
       ```
 
- - If you want to run the unit tests, you need to have `pytest` installed.
+ - If you want to run the unit tests, you need to have `pytest`
+   installed.
 
  - Finally, you can run a quick test of the advection solver:
 
@@ -105,8 +107,8 @@ on the grid are described in a jupyter notebook:
 https://github.com/python-hydro/pyro2/blob/main/pyro/mesh/mesh-examples.ipynb
 
 
-Many of the methods here rely on multigrid.  The basic multigrid solver is
-demonstrated in the juputer notebook:
+Many of the methods here rely on multigrid.  The basic multigrid
+solver is demonstrated in the juputer notebook:
 
 https://github.com/python-hydro/pyro2/blob/main/pyro/multigrid/multigrid-constant-coefficients.ipynb
 
@@ -123,7 +125,8 @@ pyro provides the following solvers (all in 2-d):
   - `advection_fv4`: a fourth-order accurate finite-volume advection
     solver that uses RK4 time integration.
 
-  - `advection_nonuniform`: a solver for advection with a non-uniform velocity field.
+  - `advection_nonuniform`: a solver for advection with a non-uniform
+    velocity field.
 
   - `advection_rk`: a second-order unsplit solver for linear advection
     that uses Runge-Kutta integration instead of characteristic
@@ -132,27 +135,28 @@ pyro provides the following solvers (all in 2-d):
   - `advection_weno`: a method-of-lines WENO solver for linear
     advection.
 
-  - `burgers`: a second-order unsplit solver for invsicid Burgers' equation.
+  - `burgers`: a second-order unsplit solver for invsicid Burgers'
+    equation.
 
-  - `viscous_burgers`: a second-order unsplit solver for viscous Burgers' equation
-    with constant-coefficient diffusion. It uses Crank-Nicolson time-discretized
-    solver for solving diffusion.
+  - `viscous_burgers`: a second-order unsplit solver for viscous
+    Burgers' equation with constant-coefficient diffusion. It uses
+    Crank-Nicolson time-discretized solver for solving diffusion.
 
   - `compressible`: a second-order unsplit solver for the Euler
     equations of compressible hydrodynamics.  This uses characteristic
     tracing and corner coupling for the prediction of the interface
     states and a 2-shock or HLLC approximate Riemann solver.
 
-  - `compressible_fv4`: a fourth-order accurate finite-volume compressible
-     hydro solver that uses RK4 time integration.  This is built from the
-     method of McCourquodale and Colella (2011).
+  - `compressible_fv4`: a fourth-order accurate finite-volume
+    compressible hydro solver that uses RK4 time integration.  This
+    is built from the method of McCourquodale and Colella (2011).
 
   - `compressible_rk`: a second-order unsplit solver for Euler
-     equations that uses Runge-Kutta integration instead of
-     characteristic tracing.
+    equations that uses Runge-Kutta integration instead of
+    characteristic tracing.
 
-  - `compressible_sdc`: a fourth-order compressible solver,
-     using spectral-deferred correction (SDC) for the time integration.
+  - `compressible_sdc`: a fourth-order compressible solver, using
+    spectral-deferred correction (SDC) for the time integration.
 
   - `diffusion`: a Crank-Nicolson time-discretized solver for the
     constant-coefficient diffusion equation.
@@ -188,29 +192,30 @@ of the simulation specifying the analysis routines that can be used
 with their data.
 
   - `pyro/util/compare.py`: this takes two simulation output files as
-    input and compares zone-by-zone for exact agreement. This is used as
-    part of the regression testing.
+    input and compares zone-by-zone for exact agreement. This is used
+    as part of the regression testing.
 
       usage: `./compare.py file1 file2`
 
-  - `pyro/plot.py`: this takes the an output file as input and plots the
-    data using the solver's dovis method.
+  - `pyro/plot.py`: this takes the an output file as input and plots
+    the data using the solver's dovis method.
 
       usage: `./plot.py file`
 
   - `pyro/analysis/`
 
-      * `dam_compare.py`: this takes an output file from the
-        shallow water dam break problem and plots a slice through the domain
-        together with the analytic solution (calculated in the script).
+      * `dam_compare.py`: this takes an output file from the shallow
+        water dam break problem and plots a slice through the domain
+        together with the analytic solution (calculated in the
+        script).
 
          usage: `./dam_compare.py file`
 
-      * `gauss_diffusion_compare.py`: this is for the diffusion solver's
-        Gaussian diffusion problem. It takes a sequence of output
-        files as arguments, computes the angle-average, and the plots
-        the resulting points over the analytic solution for comparison
-        with the exact result.
+      * `gauss_diffusion_compare.py`: this is for the diffusion
+        solver's Gaussian diffusion problem. It takes a sequence of
+        output files as arguments, computes the angle-average, and the
+        plots the resulting points over the analytic solution for
+        comparison with the exact result.
 
           usage: `./gauss_diffusion_compare.py file*`
 
@@ -233,9 +238,9 @@ with their data.
 
           usage: `./sedov_compare.py file`
 
-      * `smooth_error.py`: this takes an output file from the advection
-        solver's smooth problem and compares to the analytic solution,
-        outputting the L2 norm of the error.
+      * `smooth_error.py`: this takes an output file from the
+        advection solver's smooth problem and compares to the analytic
+        solution, outputting the L2 norm of the error.
 
           usage: `./smooth_error.py file`
 
@@ -248,8 +253,8 @@ with their data.
 
 ## Understanding the algorithms
 
-  There is a set of notes that describe the background and details of the
-  algorithms that pyro implements:
+  There is a set of notes that describe the background and details of
+  the algorithms that pyro implements:
 
   http://open-astrophysics-bookshelf.github.io/numerical_exercises/
 
@@ -260,10 +265,10 @@ with their data.
 
 ## Regression and unit testing
 
-  The `pyro/test.py` script will run several of the problems (as well as
-  some stand-alone multigrid tests) and compare the solution to stored
-  benchmarks (in each solver's `tests/` subdirectory).  The return value
-  of the script is the number of tests that failed.
+  The `pyro/test.py` script will run several of the problems (as well
+  as some stand-alone multigrid tests) and compare the solution to
+  stored benchmarks (in each solver's `tests/` subdirectory).  The
+  return value of the script is the number of tests that failed.
 
   Unit tests are controlled by pytest and can be run simply via
 
@@ -273,8 +278,8 @@ with their data.
 
 ## Acknowledgements
 
-  If you use pyro in a class or workshop, please e-mail us to let us know
-  (we'd like to start listing these on the website).
+  If you use pyro in a class or workshop, please e-mail us to let us
+  know (we'd like to start listing these on the website).
 
   If pyro was used for a publication, please cite the article found in
   the `CITATION` file.
