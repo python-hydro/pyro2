@@ -20,7 +20,7 @@ The total number of projections to perform is given by nproj.  Each
 projection uses the divergence of the velocity field from the previous
 iteration as its source term.
 
-Note: the output file created stores the original field, the poluted
+Note: the output file created stores the original field, the polluted
 field, and the recovered field.
 """
 
