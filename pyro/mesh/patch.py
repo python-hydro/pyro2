@@ -169,7 +169,7 @@ class Grid2d:
 
     def __str__(self):
         """ print out some basic information about the grid object """
-        return f"2-D Grid: nx = {self.nx}, ny = {self.ny}, ng = {self.ng}"
+        return f"2-d grid: nx = {self.nx}, ny = {self.ny}, ng = {self.ng}"
 
     def __eq__(self, other):
         """ are two grids equivalent? """
