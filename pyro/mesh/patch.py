@@ -246,7 +246,7 @@ class SphericalPolar(Grid2d):
         # dL_theta x dL_phi = r^2 * sin(theta) * dtheta * dphi
         # dA_r = - r{i-1/2}^2 * 2pi * cos(theta{i+1/2}) - cos(theta{i-1/2})
 
-        area_x = np.abs(-2.0 * np.pi * self.xl2d**2 * \
+        area_x = np.abs(-2.0 * np.pi * self.xl2d**2 *
                  (np.cos(self.yr2d) - np.cos(self.yl2d)))
         self.Ax = ArrayIndexer(area_x, grid=self)
 
@@ -254,8 +254,8 @@ class SphericalPolar(Grid2d):
         # dL_phi x dL_r = dr * r * sin(theta) * dphi
         # dA_theta = 0.5 * pi * sin(theta{i-1/2}) * (r{i+1/2}^2 - r{i-1/2}^2)
 
-        area_y = 0.5 * np.pi * np.abs(np.sin(self.yl2d)) * \
-                 (self.xr2d**2 - self.xl2d**2)
+        area_y = np.abs(0.5 * np.pi * np.sin(self.yl2d) *
+                 (self.xr2d**2 - self.xl2d**2))
         self.Ay = ArrayIndexer(area_y, grid=self)
 
         # Returns an array of the volume of each cell.
@@ -263,14 +263,14 @@ class SphericalPolar(Grid2d):
         #    = (dr) * (r * dtheta) * (r * sin(theta) * dphi)
         # dV = - 2*np.pi / 3 * (cos(theta{i+1/2}) - cos(theta{i-1/2})) * (r{i+1/2}^3 - r{i-1/2}^3)
 
-        volume = np.abs(-2.0 * np.pi / 3.0 * \
-                 (np.cos(self.yr2d) - np.cos(self.yl2d)) * \
+        volume = np.abs(-2.0 * np.pi / 3.0 *
+                 (np.cos(self.yr2d) - np.cos(self.yl2d)) *
                  (self.xr2d**3 - self.xl2d**3))
         self.V = ArrayIndexer(volume, grid=self)
 
     def __str__(self):
         """ print out some basic information about the grid object """
-        return f"Spherical Polar 2D Grid: Define x : r, y : \u03b8. " + \
+        return "Spherical Polar 2D Grid: Define x : r, y : \u03b8. " + \
                f"xmin (r) = {self.xmin}, xmax= {self.xmax}, " + \
                f"ymin = {self.ymin}, ymax = {self.ymax}, " + \
                f"nx = {self.nx}, ny = {self.ny}, ng = {self.ng}"
