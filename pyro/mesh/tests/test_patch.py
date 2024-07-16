@@ -68,6 +68,89 @@ class TestGrid2d:
         assert g2 != self.g
 
 
+# Cartesian2d tests
+class TestCartesian2d:
+    @classmethod
+    def setup_class(cls):
+        """ this is run once for each class before any tests """
+
+    @classmethod
+    def teardown_class(cls):
+        """ this is run once for each class after all tests """
+
+    def setup_method(self):
+        """ this is run before each test """
+        self.g = patch.Cartesian2d(4, 10, ng=2)
+
+    def teardown_method(self):
+        """ this is run after each test """
+        self.g = None
+
+    def test_Ax(self):
+        assert np.all(self.g.Ax.v() == 0.1)
+
+    def test_Ay(self):
+        assert np.all(self.g.Ay.v() == 0.25)
+
+    def test_V(self):
+        assert np.all(self.g.V.v() == 0.1 * 0.25)
+
+
+# SphericalPolar Grid tests
+class TestSphericalPolar:
+    @classmethod
+    def setup_class(cls):
+        """ this is run once for each class before any tests """
+
+    @classmethod
+    def teardown_class(cls):
+        """ this is run once for each class after all tests """
+
+    def setup_method(self):
+        """ this is run before each test """
+        self.g = patch.SphericalPolar(4, 10, ymax=np.pi, ng=2)
+
+    def teardown_method(self):
+        """ this is run after each test """
+        self.g = None
+
+    def test_Ax(self):
+        ilo = self.g.ilo
+        ihi = self.g.ihi
+        jlo = self.g.jlo
+        jhi = self.g.jhi
+
+        area_x = -2.0 * np.pi * self.g.xl2d[ilo:ihi+1, jlo:jhi+1]**2 * \
+                 (np.cos(self.g.yr2d[ilo:ihi+1, jlo:jhi+1]) -
+                  np.cos(self.g.yl2d[ilo:ihi+1, jlo:jhi+1]))
+
+        assert_array_equal(self.g.Ax.v(), area_x)
+
+    def test_Ay(self):
+        ilo = self.g.ilo
+        ihi = self.g.ihi
+        jlo = self.g.jlo
+        jhi = self.g.jhi
+
+        area_y = 0.5 * np.pi * np.sin(self.g.yl2d[ilo:ihi+1, jlo:jhi+1]) * \
+                 (self.g.xr2d[ilo:ihi+1, jlo:jhi+1]**2 -
+                  self.g.xl2d[ilo:ihi+1, jlo:jhi+1]**2)
+        assert_array_equal(self.g.Ay.v(), area_y)
+
+    def test_V(self):
+        ilo = self.g.ilo
+        ihi = self.g.ihi
+        jlo = self.g.jlo
+        jhi = self.g.jhi
+
+        volume = -2.0 * np.pi / 3.0 * \
+                 (np.cos(self.g.yr2d[ilo:ihi+1, jlo:jhi+1]) -
+                  np.cos(self.g.yl2d[ilo:ihi+1, jlo:jhi+1])) * \
+                 (self.g.xr2d[ilo:ihi+1, jlo:jhi+1]**3 -
+                  self.g.xl2d[ilo:ihi+1, jlo:jhi+1]**3)
+        assert_array_equal(self.g.V.v(), volume)
+
+
 # CellCenterData2d tests
 class TestCellCenterData2d:
     @classmethod

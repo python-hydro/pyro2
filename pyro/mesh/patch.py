@@ -253,7 +253,7 @@ class SphericalPolar(Grid2d):
         #    = (dr) * (r * dtheta) * (r * sin(theta) * dphi)
         # dV = - 2*np.pi / 3 * (cos(theta{i+1/2}) - cos(theta{i-1/2})) * (r{i+1/2}^3 - r{i-1/2}^3)
 
-        volume = -0.6666666666666667 * np.pi * \
+        volume = -2.0 * np.pi / 3.0 * \
                  (np.cos(self.yr2d) - np.cos(self.yl2d)) * \
                  (self.xr2d**3 - self.xl2d**3)
         self.V = ArrayIndexer(volume, grid=self)
