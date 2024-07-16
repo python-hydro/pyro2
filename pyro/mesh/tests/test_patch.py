@@ -108,7 +108,8 @@ class TestSphericalPolar:
 
     def setup_method(self):
         """ this is run before each test """
-        self.g = patch.SphericalPolar(4, 10, ymax=np.pi, ng=2)
+        self.g = patch.SphericalPolar(4, 10, xmin=1.0, xmax=2.0,
+                                      ymax=np.pi, ng=2)
 
     def teardown_method(self):
         """ this is run after each test """
@@ -120,9 +121,9 @@ class TestSphericalPolar:
         jlo = self.g.jlo
         jhi = self.g.jhi
 
-        area_x = -2.0 * np.pi * self.g.xl2d[ilo:ihi+1, jlo:jhi+1]**2 * \
+        area_x = np.abs(-2.0 * np.pi * self.g.xl2d[ilo:ihi+1, jlo:jhi+1]**2 * \
                  (np.cos(self.g.yr2d[ilo:ihi+1, jlo:jhi+1]) -
-                  np.cos(self.g.yl2d[ilo:ihi+1, jlo:jhi+1]))
+                  np.cos(self.g.yl2d[ilo:ihi+1, jlo:jhi+1])))
 
         assert_array_equal(self.g.Ax.v(), area_x)
 
@@ -132,7 +133,8 @@ class TestSphericalPolar:
         jlo = self.g.jlo
         jhi = self.g.jhi
 
-        area_y = 0.5 * np.pi * np.sin(self.g.yl2d[ilo:ihi+1, jlo:jhi+1]) * \
+        area_y = 0.5 * np.pi * \
+                 np.abs(np.sin(self.g.yl2d[ilo:ihi+1, jlo:jhi+1])) * \
                  (self.g.xr2d[ilo:ihi+1, jlo:jhi+1]**2 -
                   self.g.xl2d[ilo:ihi+1, jlo:jhi+1]**2)
         assert_array_equal(self.g.Ay.v(), area_y)
@@ -143,11 +145,11 @@ class TestSphericalPolar:
         jlo = self.g.jlo
         jhi = self.g.jhi
 
-        volume = -2.0 * np.pi / 3.0 * \
+        volume = np.abs(-2.0 * np.pi / 3.0 * \
                  (np.cos(self.g.yr2d[ilo:ihi+1, jlo:jhi+1]) -
                   np.cos(self.g.yl2d[ilo:ihi+1, jlo:jhi+1])) * \
                  (self.g.xr2d[ilo:ihi+1, jlo:jhi+1]**3 -
-                  self.g.xl2d[ilo:ihi+1, jlo:jhi+1]**3)
+                  self.g.xl2d[ilo:ihi+1, jlo:jhi+1]**3))
         assert_array_equal(self.g.V.v(), volume)
 
 
