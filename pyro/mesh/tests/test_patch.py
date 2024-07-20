@@ -118,11 +118,6 @@ class TestSphericalPolar:
         self.g = None
 
     def test_Ax(self):
-        ilo = self.g.ilo
-        ihi = self.g.ihi
-        jlo = self.g.jlo
-        jhi = self.g.jhi
-
         area_x_l = np.abs(-2.0 * np.pi * self.g.xl2d.v()**2 *
                  (np.cos(self.g.yr2d.v()) - np.cos(self.g.yl2d.v())))
         assert_array_equal(self.g.Ax_l.v(), area_x_l)
@@ -132,11 +127,6 @@ class TestSphericalPolar:
         assert_array_equal(self.g.Ax_r.v(), area_x_r)
 
     def test_Ay(self):
-        ilo = self.g.ilo
-        ihi = self.g.ihi
-        jlo = self.g.jlo
-        jhi = self.g.jhi
-
         area_y_l = np.abs(0.5 * np.pi *
                  np.sin(self.g.yl2d.v()) *
                  (self.g.xr2d.v()**2 - self.g.xl2d.v()**2))
@@ -148,11 +138,6 @@ class TestSphericalPolar:
         assert_array_equal(self.g.Ay_r.v(), area_y_r)
 
     def test_V(self):
-        ilo = self.g.ilo
-        ihi = self.g.ihi
-        jlo = self.g.jlo
-        jhi = self.g.jhi
-
         volume = np.abs(-2.0 * np.pi / 3.0 *
                  (np.cos(self.g.yr2d.v()) - np.cos(self.g.yl2d.v())) *
                  (self.g.xr2d.v()**3 - self.g.xl2d.v()**3))
