@@ -123,14 +123,12 @@ class TestSphericalPolar:
         jlo = self.g.jlo
         jhi = self.g.jhi
 
-        area_x_l = np.abs(-2.0 * np.pi * self.g.xl2d[ilo:ihi+1, jlo:jhi+1]**2 *
-                 (np.cos(self.g.yr2d[ilo:ihi+1, jlo:jhi+1]) -
-                  np.cos(self.g.yl2d[ilo:ihi+1, jlo:jhi+1])))
+        area_x_l = np.abs(-2.0 * np.pi * self.g.xl2d.v()**2 *
+                 (np.cos(self.g.yr2d.v()) - np.cos(self.g.yl2d.v())))
         assert_array_equal(self.g.Ax_l.v(), area_x_l)
 
-        area_x_r = np.abs(-2.0 * np.pi * self.g.xr2d[ilo:ihi+1, jlo:jhi+1]**2 *
-                 (np.cos(self.g.yr2d[ilo:ihi+1, jlo:jhi+1]) -
-                  np.cos(self.g.yl2d[ilo:ihi+1, jlo:jhi+1])))
+        area_x_r = np.abs(-2.0 * np.pi * self.g.xr2d.v()**2 *
+                 (np.cos(self.g.yr2d.v()) - np.cos(self.g.yl2d.v())))
         assert_array_equal(self.g.Ax_r.v(), area_x_r)
 
     def test_Ay(self):
@@ -140,15 +138,13 @@ class TestSphericalPolar:
         jhi = self.g.jhi
 
         area_y_l = np.abs(0.5 * np.pi *
-                 np.sin(self.g.yl2d[ilo:ihi+1, jlo:jhi+1]) *
-                 (self.g.xr2d[ilo:ihi+1, jlo:jhi+1]**2 -
-                  self.g.xl2d[ilo:ihi+1, jlo:jhi+1]**2))
+                 np.sin(self.g.yl2d.v()) *
+                 (self.g.xr2d.v()**2 - self.g.xl2d.v()**2))
         assert_array_equal(self.g.Ay_l.v(), area_y_l)
 
         area_y_r = np.abs(0.5 * np.pi *
-                 np.sin(self.g.yr2d[ilo:ihi+1, jlo:jhi+1]) *
-                 (self.g.xr2d[ilo:ihi+1, jlo:jhi+1]**2 -
-                  self.g.xl2d[ilo:ihi+1, jlo:jhi+1]**2))
+                 np.sin(self.g.yr2d.v()) *
+                 (self.g.xr2d.v()**2 - self.g.xl2d.v()**2))
         assert_array_equal(self.g.Ay_r.v(), area_y_r)
 
     def test_V(self):
@@ -158,10 +154,8 @@ class TestSphericalPolar:
         jhi = self.g.jhi
 
         volume = np.abs(-2.0 * np.pi / 3.0 *
-                 (np.cos(self.g.yr2d[ilo:ihi+1, jlo:jhi+1]) -
-                  np.cos(self.g.yl2d[ilo:ihi+1, jlo:jhi+1])) *
-                 (self.g.xr2d[ilo:ihi+1, jlo:jhi+1]**3 -
-                  self.g.xl2d[ilo:ihi+1, jlo:jhi+1]**3))
+                 (np.cos(self.g.yr2d.v()) - np.cos(self.g.yl2d.v())) *
+                 (self.g.xr2d.v()**3 - self.g.xl2d.v()**3))
         assert_array_equal(self.g.V.v(), volume)
 
 
