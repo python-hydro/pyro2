@@ -196,19 +196,18 @@ class Cartesian2d(Grid2d):
         super().__init__(nx, ny, ng, xmin, xmax, ymin, ymax)
 
         # This is length of the side that is perpendicular to x.
-        # self.area_x = self.dy
 
         area_x = np.full((self.qx, self.qy), self.dy)
-        self.Ax = ArrayIndexer(area_x, grid=self)
+        self.Ax_l = ArrayIndexer(area_x, grid=self)
+        self.Ax_r = ArrayIndexer(area_x, grid=self)
 
         # This is length of the side that is perpendicular to y.
-        # self.area_y = self.dx
 
         area_y = np.full((self.qx, self.qy), self.dx)
-        self.Ay = ArrayIndexer(area_y, grid=self)
+        self.Ay_l = ArrayIndexer(area_y, grid=self)
+        self.Ay_r = ArrayIndexer(area_y, grid=self)
 
         # Volume (Area) of the cell.
-        # self.vol = self.dx * self.dy
 
         volume = np.full((self.qx, self.qy), self.dx * self.dy)
         self.V = ArrayIndexer(volume, grid=self)
@@ -244,19 +243,29 @@ class SphericalPolar(Grid2d):
 
         # Returns an array of the face area that points in the r(x) direction.
         # dL_theta x dL_phi = r^2 * sin(theta) * dtheta * dphi
-        # dA_r = - r{i-1/2}^2 * 2pi * cos(theta{i+1/2}) - cos(theta{i-1/2})
 
-        area_x = np.abs(-2.0 * np.pi * self.xl2d**2 *
+        # dAr_l = - r{i-1/2}^2 * 2pi * cos(theta{i+1/2}) - cos(theta{i-1/2})
+        area_x_l = np.abs(-2.0 * np.pi * self.xl2d**2 *
                  (np.cos(self.yr2d) - np.cos(self.yl2d)))
-        self.Ax = ArrayIndexer(area_x, grid=self)
+        self.Ax_l = ArrayIndexer(area_x_l, grid=self)
+
+        # dAr_r = - r{i+1/2}^2 * 2pi * cos(theta{i+1/2}) - cos(theta{i-1/2})
+        area_x_r = np.abs(-2.0 * np.pi * self.xr2d**2 *
+                 (np.cos(self.yr2d) - np.cos(self.yl2d)))
+        self.Ax_r = ArrayIndexer(area_x_r, grid=self)
 
         # Returns an array of the face area that points in the theta(y) direction.
         # dL_phi x dL_r = dr * r * sin(theta) * dphi
-        # dA_theta = 0.5 * pi * sin(theta{i-1/2}) * (r{i+1/2}^2 - r{i-1/2}^2)
 
-        area_y = np.abs(0.5 * np.pi * np.sin(self.yl2d) *
+        # dAtheta_l = 0.5 * pi * sin(theta{i-1/2}) * (r{i+1/2}^2 - r{i-1/2}^2)
+        area_y_l = np.abs(0.5 * np.pi * np.sin(self.yl2d) *
                  (self.xr2d**2 - self.xl2d**2))
-        self.Ay = ArrayIndexer(area_y, grid=self)
+        self.Ay_l = ArrayIndexer(area_y_l, grid=self)
+
+        # dAtheta_r = 0.5 * pi * sin(theta{i+1/2}) * (r{i+1/2}^2 - r{i-1/2}^2)
+        area_y_r = np.abs(0.5 * np.pi * np.sin(self.yr2d) *
+                 (self.xr2d**2 - self.xl2d**2))
+        self.Ay_r = ArrayIndexer(area_y_r, grid=self)
 
         # Returns an array of the volume of each cell.
         # dV = dL_r * dL_theta * dL_phi

@@ -87,10 +87,12 @@ class TestCartesian2d:
         self.g = None
 
     def test_Ax(self):
-        assert np.all(self.g.Ax.v() == 0.1)
+        assert np.all(self.g.Ax_l.v() == 0.1)
+        assert np.all(self.g.Ax_r.v() == 0.1)
 
     def test_Ay(self):
-        assert np.all(self.g.Ay.v() == 0.25)
+        assert np.all(self.g.Ay_l.v() == 0.25)
+        assert np.all(self.g.Ay_r.v() == 0.25)
 
     def test_V(self):
         assert np.all(self.g.V.v() == 0.1 * 0.25)
@@ -121,11 +123,15 @@ class TestSphericalPolar:
         jlo = self.g.jlo
         jhi = self.g.jhi
 
-        area_x = np.abs(-2.0 * np.pi * self.g.xl2d[ilo:ihi+1, jlo:jhi+1]**2 *
+        area_x_l = np.abs(-2.0 * np.pi * self.g.xl2d[ilo:ihi+1, jlo:jhi+1]**2 *
                  (np.cos(self.g.yr2d[ilo:ihi+1, jlo:jhi+1]) -
                   np.cos(self.g.yl2d[ilo:ihi+1, jlo:jhi+1])))
+        assert_array_equal(self.g.Ax_l.v(), area_x_l)
 
-        assert_array_equal(self.g.Ax.v(), area_x)
+        area_x_r = np.abs(-2.0 * np.pi * self.g.xr2d[ilo:ihi+1, jlo:jhi+1]**2 *
+                 (np.cos(self.g.yr2d[ilo:ihi+1, jlo:jhi+1]) -
+                  np.cos(self.g.yl2d[ilo:ihi+1, jlo:jhi+1])))
+        assert_array_equal(self.g.Ax_r.v(), area_x_r)
 
     def test_Ay(self):
         ilo = self.g.ilo
@@ -133,11 +139,17 @@ class TestSphericalPolar:
         jlo = self.g.jlo
         jhi = self.g.jhi
 
-        area_y = np.abs(0.5 * np.pi *
+        area_y_l = np.abs(0.5 * np.pi *
                  np.sin(self.g.yl2d[ilo:ihi+1, jlo:jhi+1]) *
                  (self.g.xr2d[ilo:ihi+1, jlo:jhi+1]**2 -
                   self.g.xl2d[ilo:ihi+1, jlo:jhi+1]**2))
-        assert_array_equal(self.g.Ay.v(), area_y)
+        assert_array_equal(self.g.Ay_l.v(), area_y_l)
+
+        area_y_r = np.abs(0.5 * np.pi *
+                 np.sin(self.g.yr2d[ilo:ihi+1, jlo:jhi+1]) *
+                 (self.g.xr2d[ilo:ihi+1, jlo:jhi+1]**2 -
+                  self.g.xl2d[ilo:ihi+1, jlo:jhi+1]**2))
+        assert_array_equal(self.g.Ay_r.v(), area_y_r)
 
     def test_V(self):
         ilo = self.g.ilo
