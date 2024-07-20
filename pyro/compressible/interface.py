@@ -133,13 +133,13 @@ def states(idir, ng, dx, dt,
                                  q[irho] / cs, 0.0, 0.5 / (cs * cs)]
                 lvec[1, :ns] = [1.0, 0.0,
                                  0.0, -1.0 / (cs * cs)]
-                lvec[2, :ns] = [0.0, 0.0,             1.0, 0.0]
+                lvec[2, :ns] = [0.0, 0.0, 1.0, 0.0]
                 lvec[3, :ns] = [0.0, 0.5 *
                                  q[irho] / cs,  0.0, 0.5 / (cs * cs)]
 
                 rvec[0, :ns] = [1.0, -cs / q[irho], 0.0, cs * cs]
-                rvec[1, :ns] = [1.0, 0.0,       0.0, 0.0]
-                rvec[2, :ns] = [0.0, 0.0,       1.0, 0.0]
+                rvec[1, :ns] = [1.0, 0.0, 0.0, 0.0]
+                rvec[2, :ns] = [0.0, 0.0, 1.0, 0.0]
                 rvec[3, :ns] = [1.0, cs / q[irho],  0.0, cs * cs]
 
                 # now the species -- they only have a 1 in their corresponding slot
@@ -194,6 +194,7 @@ def states(idir, ng, dx, dt,
             for m in range(nvar):
                 asum = np.dot(lvec[m, :], dq)
 
+                # Should we change to max(e_val[3], 0.0) and min(e_val[0], 0.0)?
                 betal[m] = dtdx4 * (e_val[3] - e_val[m]) * \
                     (np.copysign(1.0, e_val[m]) + 1.0) * asum
                 betar[m] = dtdx4 * (e_val[0] - e_val[m]) * \
