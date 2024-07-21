@@ -207,7 +207,7 @@ class Simulation(NullSimulation):
         old_ymom = ymom.copy()
 
         # conservative update
-        dtdV = self.dt / g.V.v(n=n)
+        dtdV = self.dt / g.V.v()
 
         for n in range(self.ivars.nvar):
             var = self.cc_data.get_var_by_index(n)
