@@ -207,15 +207,14 @@ class Simulation(NullSimulation):
         old_ymom = ymom.copy()
 
         # conservative update
-        dtdx = self.dt/myg.dx
-        dtdy = self.dt/myg.dy
+        dtdV = self.dt / g.V.v(n=n)
 
         for n in range(self.ivars.nvar):
             var = self.cc_data.get_var_by_index(n)
 
-            var.v()[:, :] += \
-                dtdx*(Flux_x.v(n=n) - Flux_x.ip(1, n=n)) + \
-                dtdy*(Flux_y.v(n=n) - Flux_y.jp(1, n=n))
+            var.v()[:, :] += dtdV * \
+                (Flux_x.v(n=n)*g.Ax_l.v(n=n) - Flux_x.ip(1, n=n)*g.Ax_r.v(n=n) +
+                 Flux_y.v(n=n)*g.Ay_l.v(n=n) - Flux_y.jp(1, n=n)*g.Ay_r.v(n=n))
 
         # gravitational source terms
         ymom[:, :] += 0.5*self.dt*(dens[:, :] + old_dens[:, :])*grav
