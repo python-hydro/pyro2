@@ -145,6 +145,8 @@ class Simulation(NullSimulation):
         # some auxiliary data that we'll need to fill GC in, but isn't
         # really part of the main solution
         aux_data = self.data_class(my_grid)
+        aux_data.register_var("dens_src", bc)
+        aux_data.register_var("xmom_src", bc_xodd)
         aux_data.register_var("ymom_src", bc_yodd)
         aux_data.register_var("E_src", bc)
         aux_data.create()
@@ -204,21 +206,29 @@ class Simulation(NullSimulation):
                                             self.ivars, self.solid, self.tc, self.dt)
 
         old_dens = dens.copy()
+        old_xmom = xmom.copy()
         old_ymom = ymom.copy()
 
         # conservative update
-        dtdV = self.dt / g.V.v(n=n)
+        dtdV = self.dt / g.V.v()
 
         for n in range(self.ivars.nvar):
             var = self.cc_data.get_var_by_index(n)
 
             var.v()[:, :] += dtdV * \
-                (Flux_x.v(n=n)*g.Ax_l.v(n=n) - Flux_x.ip(1, n=n)*g.Ax_r.v(n=n) +
-                 Flux_y.v(n=n)*g.Ay_l.v(n=n) - Flux_y.jp(1, n=n)*g.Ay_r.v(n=n))
+                (Flux_x.v(n=n)*g.Ax_l.v() - Flux_x.ip(1, n=n)*g.Ax_r.v() +
+                 Flux_y.v(n=n)*g.Ay_l.v() - Flux_y.jp(1, n=n)*g.Ay_r.v())
 
-        # gravitational source terms
-        ymom[:, :] += 0.5*self.dt*(dens[:, :] + old_dens[:, :])*grav
-        ener[:, :] += 0.5*self.dt*(ymom[:, :] + old_ymom[:, :])*grav
+        # Apply source terms
+
+        if isinstance(g, SphericalPolar):
+            xmom[:, :] += 0.5*self.dt*()
+            ymom[:, :] +=
+            ener[:, :] +=
+        else:
+            # gravitational source terms
+            ymom[:, :] += 0.5*self.dt*(dens[:, :] + old_dens[:, :])*grav
+            ener[:, :] += 0.5*self.dt*(ymom[:, :] + old_ymom[:, :])*grav
 
         if self.particles is not None:
             self.particles.update_particles(self.dt)

@@ -174,9 +174,6 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     # =========================================================================
     # Q = (rho, u, v, p, {X})
 
-    dens = my_data.get_var("density")
-    ymom = my_data.get_var("y-momentum")
-
     q = comp.cons_to_prim(my_data.data, gamma, ivars, myg)
 
     # =========================================================================
@@ -217,7 +214,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     tm_states = tc.timer("interfaceStates")
     tm_states.begin()
 
-    V_l, V_r = ifc.states(1, myg.ng, myg.dx, dt,
+    V_l, V_r = ifc.states(1, myg, dt,
                           ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
                           ivars.naux,
                           gamma,
@@ -236,7 +233,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     # left and right primitive variable states
     tm_states.begin()
 
-    _V_l, _V_r = ifc.states(2, myg.ng, myg.dy, dt,
+    _V_l, _V_r = ifc.states(2, myg, dt,
                             ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
                             ivars.naux,
                             gamma,
@@ -253,29 +250,77 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     # =========================================================================
     # apply source terms
     # =========================================================================
+
+    dens = my_data.get_var("density")
+    xmom = my_data.get_var("x-momentum")
+    ymom = my_data.get_var("y-momentum")
+    E = my_data.get_var("energy")
+
+    dens_src = my_aux.get_var("dens_src")
+    xmom_src = my_aux.get_var("xmom_src")
+    ymom_src = my_aux.get_var("ymom_src")
+    E_src = my_aux.get_var("E_src")
+
     grav = rp.get_param("compressible.grav")
 
-    ymom_src = my_aux.get_var("ymom_src")
-    ymom_src.v()[:, :] = dens.v()*grav
-    my_aux.fill_BC("ymom_src")
+    # src = [0.0 for n in range(ivars.nvar)]
 
-    E_src = my_aux.get_var("E_src")
-    E_src.v()[:, :] = ymom.v()*grav
+    # Calculate external source terms
+    if isinstance(myg, SphericalPolar):
+        # assume gravity points in r-direction in spherical
+        dens_src.v()[:, :] = 0.0
+        xmom_src.v()[:, :] = dens.v()*grav
+        ymom_src.v()[:, :] = 0.0
+        E_src.v()[:, :] = xmom.v()*grav
+
+    else:
+        # assume gravity points in y-direction in cartesian
+        dens_src.v()[:, :] = 0.0
+        xmom_src.v()[:, :] = 0.0
+        ymom_src.v()[:, :] = dens.v()*grav
+        E_src.v()[:, :] = ymom.v()*grav
+
+    # Calculate geometric+ expanded divergence terms for spherical geometry
+    if isinstance(myg, SphericalPolar):
+        dens_src.v()[:, :] += (-2.0*xmom.v()[:, :] -
+                               np.cot(myg.y2d.v()[:, :])*ymom.v()[:, :]) \
+                               / myg.x2d.v()[:, :]
+
+        xmom_src.v()[:, :] += (ymom.v()[:, :]**2 - xmom.v()[:, :]**2 -
+                               np.cot(myg.y2d.v()[:, :])*xmom.v()[:, :]*ymom.v()[:, :]) \
+                               / (dens.v()[:, :] * myg.x2d.v()[:, :])
+
+        ymom_src.v()[:, :] += (-3.0*xmom.v()[:, :]*ymom.v()[:, :] -
+                               np.cot(myg.y2d.v()[:, :])*ymom.v()[:, :]**2) \
+                               / (dens.v()[:, :] * myg.x2d.v()[:, :])
+
+        E_src.v()[:, :] += (-2.0*xmom.v()[:, :] * (E.v()[:, :] + q.v(n=ivars.ip)[:, :])
+                            - np.cot(myg.y2d.v()[:, :])*ymom.v()[:, :] *
+                            (E.v()[:, :] + q.v(n=ivars.ip)[:, :])) \
+                               / (dens.v()[:, :] * myg.x2d.v()[:, :])
+
+    my_aux.fill_BC("dens_src")
+    my_aux.fill_BC("xmom_src")
+    my_aux.fill_BC("ymom_src")
     my_aux.fill_BC("E_src")
 
     # ymom_xl[i,j] += 0.5*dt*dens[i-1,j]*grav
+    U_xl.v(buf=1, n=ivars.ixmom)[:, :] += 0.5*dt*xmom_src.ip(-1, buf=1)
     U_xl.v(buf=1, n=ivars.iymom)[:, :] += 0.5*dt*ymom_src.ip(-1, buf=1)
     U_xl.v(buf=1, n=ivars.iener)[:, :] += 0.5*dt*E_src.ip(-1, buf=1)
 
     # ymom_xr[i,j] += 0.5*dt*dens[i,j]*grav
+    U_xr.v(buf=1, n=ivars.ixmom)[:, :] += 0.5*dt*xmom_src.v(buf=1)
     U_xr.v(buf=1, n=ivars.iymom)[:, :] += 0.5*dt*ymom_src.v(buf=1)
     U_xr.v(buf=1, n=ivars.iener)[:, :] += 0.5*dt*E_src.v(buf=1)
 
     # ymom_yl[i,j] += 0.5*dt*dens[i,j-1]*grav
+    U_yl.v(buf=1, n=ivars.ixmom)[:, :] += 0.5*dt*xmom_src.jp(-1, buf=1)
     U_yl.v(buf=1, n=ivars.iymom)[:, :] += 0.5*dt*ymom_src.jp(-1, buf=1)
     U_yl.v(buf=1, n=ivars.iener)[:, :] += 0.5*dt*E_src.jp(-1, buf=1)
 
     # ymom_yr[i,j] += 0.5*dt*dens[i,j]*grav
+    U_yr.v(buf=1, n=ivars.ixmom)[:, :] += 0.5*dt*xmom_src.v(buf=1)
     U_yr.v(buf=1, n=ivars.iymom)[:, :] += 0.5*dt*ymom_src.v(buf=1)
     U_yr.v(buf=1, n=ivars.iener)[:, :] += 0.5*dt*E_src.v(buf=1)
 
@@ -360,8 +405,8 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     tm_transverse = tc.timer("transverse flux addition")
     tm_transverse.begin()
 
-    dtdx = dt/myg.dx
-    dtdy = dt/myg.dy
+    dtdx = dt/myg.Lx
+    dtdy = dt/myg.Ly
 
     b = (2, 1)
 
