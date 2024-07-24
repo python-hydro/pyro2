@@ -203,22 +203,27 @@ class Cartesian2d(Grid2d):
 
         super().__init__(nx, ny, ng, xmin, xmax, ymin, ymax)
 
-        # This is length of the side that is perpendicular to x.
+        # Length of the side in x- and y-direction
 
-        area_x = np.full((self.qx, self.qy), self.dy)
-        self.Ax_l = ArrayIndexer(area_x, grid=self)
-        self.Ax_r = ArrayIndexer(area_x, grid=self)
+        self.Lx = ArrayIndexer(np.full((self.qx, self.qy), self.dx),
+                                 grid=self)
+        self.Ly = ArrayIndexer(np.full((self.qx, self.qy), self.dy),
+                                 grid=self)
 
-        # This is length of the side that is perpendicular to y.
+        # This is area of the side that is perpendicular to x.
 
-        area_y = np.full((self.qx, self.qy), self.dx)
-        self.Ay_l = ArrayIndexer(area_y, grid=self)
-        self.Ay_r = ArrayIndexer(area_y, grid=self)
+        self.Ax_l = self.Ly.copy()
+        self.Ax_r = self.Ly.copy()
 
-        # Volume (Area) of the cell.
+        # This is area of the side that is perpendicular to y.
 
-        volume = np.full((self.qx, self.qy), self.dx * self.dy)
-        self.V = ArrayIndexer(volume, grid=self)
+        self.Ay_l = self.Lx.copy()
+        self.Ay_r = self.Lx.copy()
+
+        # Volume of the cell.
+
+        self.V = ArrayIndexer(np.full((self.qx, self.qy), self.dx * self.dy),
+                              grid=self)
 
     def __str__(self):
         """ print out some basic information about the grid object """
@@ -248,6 +253,16 @@ class SphericalPolar(Grid2d):
             "xmin (r-direction), must be large enough so ghost cell doesn't have negative x."
 
         super().__init__(nx, ny, ng, xmin, xmax, ymin, ymax)
+
+        # Length of the side along r-direction, dr
+
+        self.Lx = ArrayIndexer(np.full((self.qx, self.qy), self.dx),
+                               grid=self)
+
+        # Length of the side along theta-direction, r*dtheta
+
+        self.Ly = ArrayIndexer(np.full((self.qx, self.qy), self.x2d*self.dy),
+                               grid=self)
 
         # Returns an array of the face area that points in the r(x) direction.
         # dL_theta x dL_phi = r^2 * sin(theta) * dtheta * dphi
