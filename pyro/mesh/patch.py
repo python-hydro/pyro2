@@ -134,9 +134,17 @@ class Grid2d:
         self.y = 0.5*(self.yl + self.yr)
 
         # 2-d versions of the zone coordinates
-        self.x2d, self.y2d = np.meshgrid(self.x, self.y, indexing='ij')
-        self.xl2d, self.yl2d = np.meshgrid(self.xl, self.yl, indexing='ij')
-        self.xr2d, self.yr2d = np.meshgrid(self.xr, self.yr, indexing='ij')
+        x2d, y2d = np.meshgrid(self.x, self.y, indexing='ij')
+        self.x2d = ArrayIndexer(d=x2d, grid=self)
+        self.y2d = ArrayIndexer(d=y2d, grid=self)
+
+        xl2d, yl2d = np.meshgrid(self.xl, self.yl, indexing='ij')
+        self.xl2d = ArrayIndexer(d=xl2d, grid=self)
+        self.yl2d = ArrayIndexer(d=yl2d, grid=self)
+
+        xr2d, yr2d = np.meshgrid(self.xr, self.yr, indexing='ij')
+        self.xr2d = ArrayIndexer(d=xr2d, grid=self)
+        self.yr2d = ArrayIndexer(d=yr2d, grid=self)
 
     def scratch_array(self, nvar=1):
         """
@@ -195,22 +203,27 @@ class Cartesian2d(Grid2d):
 
         super().__init__(nx, ny, ng, xmin, xmax, ymin, ymax)
 
-        # This is length of the side that is perpendicular to x.
+        # Length of the side in x- and y-direction
 
-        area_x = np.full((self.qx, self.qy), self.dy)
-        self.Ax_l = ArrayIndexer(area_x, grid=self)
-        self.Ax_r = ArrayIndexer(area_x, grid=self)
+        self.Lx = ArrayIndexer(np.full((self.qx, self.qy), self.dx),
+                                 grid=self)
+        self.Ly = ArrayIndexer(np.full((self.qx, self.qy), self.dy),
+                                 grid=self)
 
-        # This is length of the side that is perpendicular to y.
+        # This is area of the side that is perpendicular to x.
 
-        area_y = np.full((self.qx, self.qy), self.dx)
-        self.Ay_l = ArrayIndexer(area_y, grid=self)
-        self.Ay_r = ArrayIndexer(area_y, grid=self)
+        self.Ax_l = self.Ly.copy()
+        self.Ax_r = self.Ly.copy()
 
-        # Volume (Area) of the cell.
+        # This is area of the side that is perpendicular to y.
 
-        volume = np.full((self.qx, self.qy), self.dx * self.dy)
-        self.V = ArrayIndexer(volume, grid=self)
+        self.Ay_l = self.Lx.copy()
+        self.Ay_r = self.Lx.copy()
+
+        # Volume of the cell.
+
+        self.V = ArrayIndexer(np.full((self.qx, self.qy), self.dx * self.dy),
+                              grid=self)
 
     def __str__(self):
         """ print out some basic information about the grid object """
@@ -241,30 +254,44 @@ class SphericalPolar(Grid2d):
 
         super().__init__(nx, ny, ng, xmin, xmax, ymin, ymax)
 
+        # Length of the side along r-direction, dr
+
+        self.Lx = ArrayIndexer(np.full((self.qx, self.qy), self.dx),
+                               grid=self)
+
+        # Length of the side along theta-direction, r*dtheta
+
+        self.Ly = ArrayIndexer(np.full((self.qx, self.qy), self.x2d*self.dy),
+                               grid=self)
+
         # Returns an array of the face area that points in the r(x) direction.
         # dL_theta x dL_phi = r^2 * sin(theta) * dtheta * dphi
 
         # dAr_l = - r{i-1/2}^2 * 2pi * cos(theta{i+1/2}) - cos(theta{i-1/2})
-        area_x_l = np.abs(-2.0 * np.pi * self.xl2d**2 *
-                 (np.cos(self.yr2d) - np.cos(self.yl2d)))
+        area_x_l = np.abs(-2.0 * np.pi * self.xl2d.v(buf=self.ng)**2 *
+                 (np.cos(self.yr2d.v(buf=self.ng)) -
+                  np.cos(self.yl2d.v(buf=self.ng))))
         self.Ax_l = ArrayIndexer(area_x_l, grid=self)
 
         # dAr_r = - r{i+1/2}^2 * 2pi * cos(theta{i+1/2}) - cos(theta{i-1/2})
-        area_x_r = np.abs(-2.0 * np.pi * self.xr2d**2 *
-                 (np.cos(self.yr2d) - np.cos(self.yl2d)))
+        area_x_r = np.abs(-2.0 * np.pi * self.xr2d.v(buf=self.ng)**2 *
+                 (np.cos(self.yr2d.v(buf=self.ng)) -
+                  np.cos(self.yl2d.v(buf=self.ng))))
         self.Ax_r = ArrayIndexer(area_x_r, grid=self)
 
         # Returns an array of the face area that points in the theta(y) direction.
         # dL_phi x dL_r = dr * r * sin(theta) * dphi
 
         # dAtheta_l = 0.5 * pi * sin(theta{i-1/2}) * (r{i+1/2}^2 - r{i-1/2}^2)
-        area_y_l = np.abs(0.5 * np.pi * np.sin(self.yl2d) *
-                 (self.xr2d**2 - self.xl2d**2))
+        area_y_l = np.abs(0.5 * np.pi * np.sin(self.yl2d.v(buf=self.ng)) *
+                 (self.xr2d.v(buf=self.ng)**2 -
+                  self.xl2d.v(buf=self.ng)**2))
         self.Ay_l = ArrayIndexer(area_y_l, grid=self)
 
         # dAtheta_r = 0.5 * pi * sin(theta{i+1/2}) * (r{i+1/2}^2 - r{i-1/2}^2)
-        area_y_r = np.abs(0.5 * np.pi * np.sin(self.yr2d) *
-                 (self.xr2d**2 - self.xl2d**2))
+        area_y_r = np.abs(0.5 * np.pi * np.sin(self.yr2d.v(buf=self.ng)) *
+                 (self.xr2d.v(buf=self.ng)**2 -
+                  self.xl2d.v(buf=self.ng)**2))
         self.Ay_r = ArrayIndexer(area_y_r, grid=self)
 
         # Returns an array of the volume of each cell.
@@ -273,8 +300,8 @@ class SphericalPolar(Grid2d):
         # dV = - 2*np.pi / 3 * (cos(theta{i+1/2}) - cos(theta{i-1/2})) * (r{i+1/2}^3 - r{i-1/2}^3)
 
         volume = np.abs(-2.0 * np.pi / 3.0 *
-                 (np.cos(self.yr2d) - np.cos(self.yl2d)) *
-                 (self.xr2d**3 - self.xl2d**3))
+                 (np.cos(self.yr2d.v(buf=self.ng)) - np.cos(self.yl2d.v(buf=self.ng))) *
+                 (self.xr2d.v(buf=self.ng)**3 - self.xl2d.v(buf=self.ng)**3))
         self.V = ArrayIndexer(volume, grid=self)
 
     def __str__(self):
