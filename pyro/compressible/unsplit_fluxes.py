@@ -284,19 +284,19 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     # Calculate geometric + expanded divergence terms for spherical geometry
     if isinstance(myg, SphericalPolar):
         dens_src.v()[:, :] += (-2.0*xmom.v()[:, :] -
-                               np.cot(myg.y2d.v()[:, :])*ymom.v()[:, :]) \
+                               ymom.v()[:, :] / np.tan(myg.y2d.v()[:, :])) \
                                / myg.x2d.v()[:, :]
 
         xmom_src.v()[:, :] += (ymom.v()[:, :]**2 - xmom.v()[:, :]**2 -
-                               np.cot(myg.y2d.v()[:, :])*xmom.v()[:, :]*ymom.v()[:, :]) \
+                               xmom.v()[:, :]*ymom.v()[:, :] / np.tan(myg.y2d.v()[:, :])) \
                                / (dens.v()[:, :] * myg.x2d.v()[:, :])
 
         ymom_src.v()[:, :] += (-3.0*xmom.v()[:, :]*ymom.v()[:, :] -
-                               np.cot(myg.y2d.v()[:, :])*ymom.v()[:, :]**2) \
+                               ymom.v()[:, :]**2 / np.tan(myg.y2d.v()[:, :])) \
                                / (dens.v()[:, :] * myg.x2d.v()[:, :])
 
         E_src.v()[:, :] += (-2.0*xmom.v()[:, :] * (E.v()[:, :] + q.v(n=ivars.ip)[:, :]) -
-                            np.cot(myg.y2d.v()[:, :])*ymom.v()[:, :] *
+                            ymom.v()[:, :] / np.tan(myg.y2d.v()[:, :]) *
                             (E.v()[:, :] + q.v(n=ivars.ip)[:, :])) \
                                / (dens.v()[:, :] * myg.x2d.v()[:, :])
 

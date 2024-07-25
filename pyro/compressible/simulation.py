@@ -236,7 +236,7 @@ class Simulation(NullSimulation):
                   2.0*(old_pres[:, :] + pres[:, :])) / myg.x2d[:, :])
 
             ymom[:, :] += 0.5*self.dt * \
-                ((old_pres[:, :] + pres[:, :])*np.cot(myg.y2d[:, :]) -
+                ((old_pres[:, :] + pres[:, :]) / np.tan(myg.y2d[:, :]) -
                  (xmom[:, :]*ymom[:, :] / dens[:, :] +
                   old_xmom[:, :]*old_ymom[:, :]) / old_dens[:, :]) / myg.x2d[:, :]
 
@@ -288,15 +288,28 @@ class Simulation(NullSimulation):
         fields = [rho, magvel, p, e]
         field_names = [r"$\rho$", r"U", "p", "e"]
 
+        x = myg.scratch_array()
+        y = myg.scratch_array()
+
+        if isinstance(myg, SphericalPolar):
+            x.v()[:, :] = myg.x2d.v()[:, :]*np.sin(myg.y2d.v()[:, :])
+            y.v()[:, :] = myg.x2d.v()[:, :]*np.cos(myg.y2d.v()[:, :])
+        else :
+            x.v()[:, :] = myg.x2d.v()[:, :]
+            y.v()[:, :] = myg.y2d.v()[:, :]
+
         _, axes, cbar_title = plot_tools.setup_axes(myg, len(fields))
 
         for n, ax in enumerate(axes):
             v = fields[n]
 
-            img = ax.imshow(np.transpose(v.v()),
-                            interpolation="nearest", origin="lower",
-                            extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax],
-                            cmap=self.cm)
+            # img = ax.imshow(np.transpose(v.v()),
+            #                 interpolation="nearest", origin="lower",
+            #                 extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax],
+            #                 cmap=self.cm)
+
+            img = ax.pcolormesh(x.v(), y.v(), v.v(),
+                                shading="nearest", cmap=self.cm)
 
             ax.set_xlabel("x")
             ax.set_ylabel("y")
@@ -321,8 +334,13 @@ class Simulation(NullSimulation):
             # plot particles
             ax.scatter(particle_positions[:, 0],
                 particle_positions[:, 1], s=5, c=colors, alpha=0.8, cmap="Greys")
-            ax.set_xlim([myg.xmin, myg.xmax])
-            ax.set_ylim([myg.ymin, myg.ymax])
+
+            if isinstance(myg, SphericalPolar):
+                ax.set_xlim([np.min(x), np.max(x)])
+                ax.set_ylim([np.min(y), np.max(y)])
+            else:
+                ax.set_xlim([myg.xmin, myg.xmax])
+                ax.set_ylim([myg.ymin, myg.ymax])
 
         plt.figtext(0.05, 0.0125, f"t = {self.cc_data.t:10.5g}")
 
