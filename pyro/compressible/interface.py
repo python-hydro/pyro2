@@ -174,20 +174,20 @@ def states(idir, ng, dx, dt,
             if idir == 1:
                 # this is one the right face of the current zone,
                 # so the fastest moving eigenvalue is e_val[3] = u + c
-                factor = 0.5 * (1.0 - dtdx * max(e_val[3], 0.0))
+                factor = 0.5 * (1.0 - dtdx[i, j] * max(e_val[3], 0.0))
                 q_l[i + 1, j, :] = q + factor * dq
 
                 # left face of the current zone, so the fastest moving
                 # eigenvalue is e_val[3] = u - c
-                factor = 0.5 * (1.0 + dtdx * min(e_val[0], 0.0))
+                factor = 0.5 * (1.0 + dtdx[i, j] * min(e_val[0], 0.0))
                 q_r[i,  j, :] = q - factor * dq
 
             else:
 
-                factor = 0.5 * (1.0 - dtdx * max(e_val[3], 0.0))
+                factor = 0.5 * (1.0 - dtdx[i, j] * max(e_val[3], 0.0))
                 q_l[i, j + 1, :] = q + factor * dq
 
-                factor = 0.5 * (1.0 + dtdx * min(e_val[0], 0.0))
+                factor = 0.5 * (1.0 + dtdx[i, j] * min(e_val[0], 0.0))
                 q_r[i, j, :] = q - factor * dq
 
             # compute the Vhat functions
@@ -195,9 +195,9 @@ def states(idir, ng, dx, dt,
                 asum = np.dot(lvec[m, :], dq)
 
                 # Should we change to max(e_val[3], 0.0) and min(e_val[0], 0.0)?
-                betal[m] = dtdx4 * (e_val[3] - e_val[m]) * \
+                betal[m] = dtdx4[i, j] * (e_val[3] - e_val[m]) * \
                     (np.copysign(1.0, e_val[m]) + 1.0) * asum
-                betar[m] = dtdx4 * (e_val[0] - e_val[m]) * \
+                betar[m] = dtdx4[i, j] * (e_val[0] - e_val[m]) * \
                     (1.0 - np.copysign(1.0, e_val[m])) * asum
 
             # construct the states
