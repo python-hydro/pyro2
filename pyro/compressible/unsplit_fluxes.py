@@ -217,7 +217,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     tm_states = tc.timer("interfaceStates")
     tm_states.begin()
 
-    V_l, V_r = ifc.states(1, myg, dt,
+    V_l, V_r = ifc.states(1, myg.ng, myg.Lx, dt,
                           ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
                           ivars.naux,
                           gamma,
@@ -236,7 +236,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     # left and right primitive variable states
     tm_states.begin()
 
-    _V_l, _V_r = ifc.states(2, myg, dt,
+    _V_l, _V_r = ifc.states(2, myg.ng, myg.Ly, dt,
                             ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
                             ivars.naux,
                             gamma,

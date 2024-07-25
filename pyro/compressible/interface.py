@@ -3,7 +3,7 @@ from numba import njit
 
 
 @njit(cache=True)
-def states(idir, grid, dt,
+def states(idir, ng, dx, dt,
            irho, iu, iv, ip, ix, nspec,
            gamma, qv, dqv):
     r"""
@@ -65,8 +65,10 @@ def states(idir, grid, dt,
     ----------
     idir : int
         Are we predicting to the edges in the x-direction (1) or y-direction (2)?
-    grid : Grid2d, Cartesian2d, or SphericalPolar
-        The grid object.
+    ng : int
+        The number of ghost cells
+    dx : ndarray
+        The cell spacing
     dt : float
         The timestep
     irho, iu, iv, ip, ix : int
@@ -92,13 +94,16 @@ def states(idir, grid, dt,
     q_l = np.zeros_like(qv)
     q_r = np.zeros_like(qv)
 
+    nx = qx - 2 * ng
+    ny = qy - 2 * ng
+    ilo = ng
+    ihi = ng + nx
+    jlo = ng
+    jhi = ng + ny
+
     ns = nvar - nspec
 
-    if idir == 1:
-        dtdx = dt / grid.Lx.v()
-    else:
-        dtdx = dt / grid.Ly.v()
-
+    dtdx = dt / dx
     dtdx4 = 0.25 * dtdx
 
     lvec = np.zeros((nvar, nvar))
@@ -108,8 +113,8 @@ def states(idir, grid, dt,
     betar = np.zeros(nvar)
 
     # this is the loop over zones.  For zone i, we see q_l[i+1] and q_r[i]
-    for i in range(grid.ilo - 2, grid.ihi + 2):
-        for j in range(grid.jlo - 2, grid.jhi + 2):
+    for i in range(ilo - 2, ihi + 2):
+        for j in range(jlo - 2, jhi + 2):
 
             dq = dqv[i, j, :]
             q = qv[i, j, :]
