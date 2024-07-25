@@ -6,8 +6,8 @@ import numpy as np
 
 import pyro.compressible.unsplit_fluxes as flx
 import pyro.mesh.boundary as bnd
-from pyro.mesh.patch import SphericalPolar
 from pyro.compressible import BC, derives, eos
+from pyro.mesh.patch import SphericalPolar
 from pyro.particles import particles
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
 from pyro.util import plot_tools

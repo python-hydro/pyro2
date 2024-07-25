@@ -123,11 +123,12 @@ Updating U_{i,j}:
 """
 
 import numpy as np
+
 import pyro.compressible as comp
 import pyro.compressible.interface as ifc
 import pyro.mesh.array_indexer as ai
-from pyro.mesh.patch import SphericalPolar
 from pyro.mesh import reconstruction
+from pyro.mesh.patch import SphericalPolar
 from pyro.util import msg
 
 
