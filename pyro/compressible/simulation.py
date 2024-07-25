@@ -294,7 +294,7 @@ class Simulation(NullSimulation):
         if isinstance(myg, SphericalPolar):
             x.v()[:, :] = myg.x2d.v()[:, :]*np.sin(myg.y2d.v()[:, :])
             y.v()[:, :] = myg.x2d.v()[:, :]*np.cos(myg.y2d.v()[:, :])
-        else :
+        else:
             x.v()[:, :] = myg.x2d.v()[:, :]
             y.v()[:, :] = myg.y2d.v()[:, :]
 
@@ -302,11 +302,6 @@ class Simulation(NullSimulation):
 
         for n, ax in enumerate(axes):
             v = fields[n]
-
-            # img = ax.imshow(np.transpose(v.v()),
-            #                 interpolation="nearest", origin="lower",
-            #                 extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax],
-            #                 cmap=self.cm)
 
             img = ax.pcolormesh(x.v(), y.v(), v.v(),
                                 shading="nearest", cmap=self.cm)
