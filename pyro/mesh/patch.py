@@ -261,8 +261,7 @@ class SphericalPolar(Grid2d):
 
         # Length of the side along theta-direction, r*dtheta
 
-        self.Ly = ArrayIndexer(np.full((self.qx, self.qy), self.x2d*self.dy),
-                               grid=self)
+        self.Ly = ArrayIndexer(self.x2d*self.dy, grid=self)
 
         # Returns an array of the face area that points in the r(x) direction.
         # dL_theta x dL_phi = r^2 * sin(theta) * dtheta * dphi
