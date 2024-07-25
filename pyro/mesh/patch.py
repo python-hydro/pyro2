@@ -205,20 +205,20 @@ class Cartesian2d(Grid2d):
 
         # Length of the side in x- and y-direction
 
-        self.Lx = ArrayIndexer(np.full((self.qx, self.qy), self.dx),
-                                 grid=self)
-        self.Ly = ArrayIndexer(np.full((self.qx, self.qy), self.dy),
-                                 grid=self)
+        self.Lx = self.dx
+        self.Ly = self.dy
 
         # This is area of the side that is perpendicular to x.
 
-        self.Ax_l = self.Ly.copy()
-        self.Ax_r = self.Ly.copy()
+        self.Ax_l = ArrayIndexer(np.full((self.qx, self.qy), self.dy),
+                                 grid=self)
+        self.Ax_r = self.Ax_l.copy()
 
         # This is area of the side that is perpendicular to y.
 
-        self.Ay_l = self.Lx.copy()
-        self.Ay_r = self.Lx.copy()
+        self.Ay_l = ArrayIndexer(np.full((self.qx, self.qy), self.dx),
+                                 grid=self)
+        self.Ay_r = self.Ay_l.copy()
 
         # Volume of the cell.
 
@@ -254,15 +254,10 @@ class SphericalPolar(Grid2d):
 
         super().__init__(nx, ny, ng, xmin, xmax, ymin, ymax)
 
-        # Length of the side along r-direction, dr
+        # Length of the side along r-direction, dr and θ-direction, r*dθ
 
-        self.Lx = ArrayIndexer(np.full((self.qx, self.qy), self.dx),
-                               grid=self)
-
-        # Length of the side along theta-direction, r*dtheta
-
-        self.Ly = ArrayIndexer(np.full((self.qx, self.qy), self.x2d*self.dy),
-                               grid=self)
+        self.Lx = self.dx
+        self.Ly = self.x * self.dy
 
         # Returns an array of the face area that points in the r(x) direction.
         # dL_theta x dL_phi = r^2 * sin(theta) * dtheta * dphi
