@@ -263,8 +263,6 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     grav = rp.get_param("compressible.grav")
 
-    # src = [0.0 for n in range(ivars.nvar)]
-
     # Calculate external source terms
     if isinstance(myg, SphericalPolar):
         # assume gravity points in r-direction in spherical
@@ -280,7 +278,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
         ymom_src.v()[:, :] = dens.v()*grav
         E_src.v()[:, :] = ymom.v()*grav
 
-    # Calculate geometric+ expanded divergence terms for spherical geometry
+    # Calculate geometric + expanded divergence terms for spherical geometry
     if isinstance(myg, SphericalPolar):
         dens_src.v()[:, :] += (-2.0*xmom.v()[:, :] -
                                np.cot(myg.y2d.v()[:, :])*ymom.v()[:, :]) \

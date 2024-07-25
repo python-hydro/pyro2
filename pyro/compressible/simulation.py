@@ -195,6 +195,7 @@ class Simulation(NullSimulation):
         tm_evolve.begin()
 
         dens = self.cc_data.get_var("density")
+        xmom = self.cc_data.get_var("x-momentum")
         ymom = self.cc_data.get_var("y-momentum")
         ener = self.cc_data.get_var("energy")
 
@@ -208,6 +209,7 @@ class Simulation(NullSimulation):
         old_dens = dens.copy()
         old_xmom = xmom.copy()
         old_ymom = ymom.copy()
+        old_pres = derive_primitives(self.cc_data, "pressure")
 
         # conservative update
         dtdV = self.dt / g.V.v()
@@ -219,12 +221,26 @@ class Simulation(NullSimulation):
                 (Flux_x.v(n=n)*g.Ax_l.v() - Flux_x.ip(1, n=n)*g.Ax_r.v() +
                  Flux_y.v(n=n)*g.Ay_l.v() - Flux_y.jp(1, n=n)*g.Ay_r.v())
 
+        # Get updated pressure from energy.
+
+        pres = derive_primitives(self.cc_data, "pressure")
+
         # Apply source terms
 
         if isinstance(g, SphericalPolar):
-            xmom[:, :] += 0.5*self.dt*()
-            ymom[:, :] +=
-            ener[:, :] +=
+            xmom[:, :] += 0.5*self.dt* \
+                ((dens[:, :] + old_dens[:, :])*grav +
+                 (ymom[:, :]**2 / dens[:, :] +
+                  old_ymom[:, :]**2 / old_dens[:, :] +
+                  2.0*(old_pres[:, :] + pres[:, :])) / g.x2d[:, :])
+
+            ymom[:, :] += 0.5*self.dt* \
+                ((old_pres[:, :] + pres[:, :])*np.cot(g.y2d[:, :]) -
+                 (xmom[:, :]*ymom[:, :] / dens[:, :] +
+                  old_xmom[:, :]*old_ymom[:, :]) / old_dens[:, :]) / g.x2d[:, :]
+
+            ener[:, :] += 0.5*self.dt*(xmom[:, :] + old_xmom[:, :])*grav
+
         else:
             # gravitational source terms
             ymom[:, :] += 0.5*self.dt*(dens[:, :] + old_dens[:, :])*grav
