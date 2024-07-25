@@ -6,6 +6,7 @@ import numpy as np
 
 import pyro.compressible.unsplit_fluxes as flx
 import pyro.mesh.boundary as bnd
+from pyro.mesh.patch import SphericalPolar
 from pyro.compressible import BC, derives, eos
 from pyro.particles import particles
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
@@ -209,35 +210,35 @@ class Simulation(NullSimulation):
         old_dens = dens.copy()
         old_xmom = xmom.copy()
         old_ymom = ymom.copy()
-        old_pres = derive_primitives(self.cc_data, "pressure")
+        old_pres = derives.derive_primitives(self.cc_data, "pressure")
 
         # conservative update
-        dtdV = self.dt / g.V.v()
+        dtdV = self.dt / myg.V.v()
 
         for n in range(self.ivars.nvar):
             var = self.cc_data.get_var_by_index(n)
 
             var.v()[:, :] += dtdV * \
-                (Flux_x.v(n=n)*g.Ax_l.v() - Flux_x.ip(1, n=n)*g.Ax_r.v() +
-                 Flux_y.v(n=n)*g.Ay_l.v() - Flux_y.jp(1, n=n)*g.Ay_r.v())
+                (Flux_x.v(n=n)*myg.Ax_l.v() - Flux_x.ip(1, n=n)*myg.Ax_r.v() +
+                 Flux_y.v(n=n)*myg.Ay_l.v() - Flux_y.jp(1, n=n)*myg.Ay_r.v())
 
         # Get updated pressure from energy.
 
-        pres = derive_primitives(self.cc_data, "pressure")
+        pres = derives.derive_primitives(self.cc_data, "pressure")
 
         # Apply source terms
 
-        if isinstance(g, SphericalPolar):
-            xmom[:, :] += 0.5*self.dt* \
+        if isinstance(myg, SphericalPolar):
+            xmom[:, :] += 0.5*self.dt * \
                 ((dens[:, :] + old_dens[:, :])*grav +
                  (ymom[:, :]**2 / dens[:, :] +
                   old_ymom[:, :]**2 / old_dens[:, :] +
-                  2.0*(old_pres[:, :] + pres[:, :])) / g.x2d[:, :])
+                  2.0*(old_pres[:, :] + pres[:, :])) / myg.x2d[:, :])
 
-            ymom[:, :] += 0.5*self.dt* \
-                ((old_pres[:, :] + pres[:, :])*np.cot(g.y2d[:, :]) -
+            ymom[:, :] += 0.5*self.dt * \
+                ((old_pres[:, :] + pres[:, :])*np.cot(myg.y2d[:, :]) -
                  (xmom[:, :]*ymom[:, :] / dens[:, :] +
-                  old_xmom[:, :]*old_ymom[:, :]) / old_dens[:, :]) / g.x2d[:, :]
+                  old_xmom[:, :]*old_ymom[:, :]) / old_dens[:, :]) / myg.x2d[:, :]
 
             ener[:, :] += 0.5*self.dt*(xmom[:, :] + old_xmom[:, :])*grav
 

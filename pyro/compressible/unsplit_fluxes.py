@@ -122,9 +122,11 @@ Updating U_{i,j}:
 
 """
 
+import numpy as np
 import pyro.compressible as comp
 import pyro.compressible.interface as ifc
 import pyro.mesh.array_indexer as ai
+from pyro.mesh.patch import SphericalPolar
 from pyro.mesh import reconstruction
 from pyro.util import msg
 
@@ -292,8 +294,8 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
                                np.cot(myg.y2d.v()[:, :])*ymom.v()[:, :]**2) \
                                / (dens.v()[:, :] * myg.x2d.v()[:, :])
 
-        E_src.v()[:, :] += (-2.0*xmom.v()[:, :] * (E.v()[:, :] + q.v(n=ivars.ip)[:, :])
-                            - np.cot(myg.y2d.v()[:, :])*ymom.v()[:, :] *
+        E_src.v()[:, :] += (-2.0*xmom.v()[:, :] * (E.v()[:, :] + q.v(n=ivars.ip)[:, :]) -
+                            np.cot(myg.y2d.v()[:, :])*ymom.v()[:, :] *
                             (E.v()[:, :] + q.v(n=ivars.ip)[:, :])) \
                                / (dens.v()[:, :] * myg.x2d.v()[:, :])
 
