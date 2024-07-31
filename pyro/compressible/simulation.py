@@ -222,30 +222,30 @@ class Simulation(NullSimulation):
                 (Flux_x.v(n=n)*myg.Ax_l.v() - Flux_x.ip(1, n=n)*myg.Ax_r.v() +
                  Flux_y.v(n=n)*myg.Ay_l.v() - Flux_y.jp(1, n=n)*myg.Ay_r.v())
 
-        # Get updated pressure from energy.
+        # Get pressure using the interface flux
 
         pres = derives.derive_primitives(self.cc_data, "pressure")
 
-        # Apply source terms
+        # Apply external source (gravity) and geometric terms
 
         if isinstance(myg, SphericalPolar):
-            xmom[:, :] += 0.5*self.dt * \
-                ((dens[:, :] + old_dens[:, :])*grav +
-                 (ymom[:, :]**2 / dens[:, :] +
-                  old_ymom[:, :]**2 / old_dens[:, :] +
-                  2.0*(old_pres[:, :] + pres[:, :])) / myg.x2d[:, :])
+            xmom.v()[:, :] += 0.5*self.dt * \
+                ((dens.v() + old_dens.v())*grav +
+                 (ymom.v()**2 / dens.v() +
+                  old_ymom.v()**2 / old_dens.v()) / myg.x2d.v()) - \
+                self.dt * (pres.ip(1) - pres.v()) / myg.Lx.v()
 
-            ymom[:, :] += 0.5*self.dt * \
-                ((old_pres[:, :] + pres[:, :]) / np.tan(myg.y2d[:, :]) -
-                 (xmom[:, :]*ymom[:, :] / dens[:, :] +
-                  old_xmom[:, :]*old_ymom[:, :]) / old_dens[:, :]) / myg.x2d[:, :]
+            ymom.v()[:, :] += 0.5*self.dt * \
+                (-xmom.v()*ymom.v() / dens.v() -
+                 old_xmom.v()*old_ymom.v() / old_dens.v()) / myg.x2d.v() - \
+                self.dt * (pres.jp(1) - pres.v()) / myg.Ly.v()
 
-            ener[:, :] += 0.5*self.dt*(xmom[:, :] + old_xmom[:, :])*grav
+            ener.v()[:, :] += 0.5*self.dt*(xmom[:, :] + old_xmom[:, :])*grav
 
         else:
             # gravitational source terms
-            ymom[:, :] += 0.5*self.dt*(dens[:, :] + old_dens[:, :])*grav
-            ener[:, :] += 0.5*self.dt*(ymom[:, :] + old_ymom[:, :])*grav
+            ymom.v()[:, :] += 0.5*self.dt*(dens[:, :] + old_dens[:, :])*grav
+            ener.v()[:, :] += 0.5*self.dt*(ymom[:, :] + old_ymom[:, :])*grav
 
         if self.particles is not None:
             self.particles.update_particles(self.dt)

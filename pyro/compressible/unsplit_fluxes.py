@@ -258,6 +258,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     xmom = my_data.get_var("x-momentum")
     ymom = my_data.get_var("y-momentum")
     E = my_data.get_var("energy")
+    pres = my_data.get_var("pressure")
 
     dens_src = my_aux.get_var("dens_src")
     xmom_src = my_aux.get_var("xmom_src")
@@ -266,12 +267,15 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     grav = rp.get_param("compressible.grav")
 
-    # Calculate external source terms
+    # Calculate external source (gravity), geometric, and pressure terms
     if isinstance(myg, SphericalPolar):
-        # assume gravity points in r-direction in spherical
+        # assume gravity points in r-direction in spherical.
         dens_src.v()[:, :] = 0.0
-        xmom_src.v()[:, :] = dens.v()*grav
-        ymom_src.v()[:, :] = 0.0
+        xmom_src.v()[:, :] = dens.v()*grav + \
+            ymom.v()**2 / (dens.v()*myg.x2d.v()) - \
+            (pres.ip(1) - pres.v()) / myg.Lx.v()
+        ymom_src.v()[:, :] = -(pres.jp(1) - pres.v()) / myg.Ly.v() - \
+            dens.v()*xmom.v()*ymom.v() / (dens.v()*myg.x2d.v())
         E_src.v()[:, :] = xmom.v()*grav
 
     else:
@@ -280,25 +284,6 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
         xmom_src.v()[:, :] = 0.0
         ymom_src.v()[:, :] = dens.v()*grav
         E_src.v()[:, :] = ymom.v()*grav
-
-    # Calculate geometric + expanded divergence terms for spherical geometry
-    if isinstance(myg, SphericalPolar):
-        dens_src.v()[:, :] += (-2.0*xmom.v()[:, :] -
-                               ymom.v()[:, :] / np.tan(myg.y2d.v()[:, :])) \
-                               / myg.x2d.v()[:, :]
-
-        xmom_src.v()[:, :] += (ymom.v()[:, :]**2 - xmom.v()[:, :]**2 -
-                               xmom.v()[:, :]*ymom.v()[:, :] / np.tan(myg.y2d.v()[:, :])) \
-                               / (dens.v()[:, :] * myg.x2d.v()[:, :])
-
-        ymom_src.v()[:, :] += (-3.0*xmom.v()[:, :]*ymom.v()[:, :] -
-                               ymom.v()[:, :]**2 / np.tan(myg.y2d.v()[:, :])) \
-                               / (dens.v()[:, :] * myg.x2d.v()[:, :])
-
-        E_src.v()[:, :] += (-2.0*xmom.v()[:, :] * (E.v()[:, :] + q.v(n=ivars.ip)[:, :]) -
-                            ymom.v()[:, :] / np.tan(myg.y2d.v()[:, :]) *
-                            (E.v()[:, :] + q.v(n=ivars.ip)[:, :])) \
-                               / (dens.v()[:, :] * myg.x2d.v()[:, :])
 
     my_aux.fill_BC("dens_src")
     my_aux.fill_BC("xmom_src")
@@ -406,28 +391,30 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     tm_transverse = tc.timer("transverse flux addition")
     tm_transverse.begin()
 
-    dtdx = dt/myg.Lx
-    dtdy = dt/myg.Ly
-
     b = (2, 1)
+    hdtV = 0.5*dt / myg.V
 
     for n in range(ivars.nvar):
 
         # U_xl[i,j,:] = U_xl[i,j,:] - 0.5*dt/dy * (F_y[i-1,j+1,:] - F_y[i-1,j,:])
         U_xl.v(buf=b, n=n)[:, :] += \
-            - 0.5*dtdy.v(buf=b)*(F_y.ip_jp(-1, 1, buf=b, n=n) - F_y.ip(-1, buf=b, n=n))
+            - hdtV.v(buf=b)*(F_y.ip_jp(-1, 1, buf=b, n=n)*myg.Ay_r.ip(-1, buf=b) -
+                             F_y.ip(-1, buf=b, n=n)*myg.Ay_l.ip(-1, buf=b))
 
         # U_xr[i,j,:] = U_xr[i,j,:] - 0.5*dt/dy * (F_y[i,j+1,:] - F_y[i,j,:])
         U_xr.v(buf=b, n=n)[:, :] += \
-            - 0.5*dtdy.v(buf=b)*(F_y.jp(1, buf=b, n=n) - F_y.v(buf=b, n=n))
+            - hdtV.v(buf=b)*(F_y.jp(1, buf=b, n=n)*myg.Ay_r.v(buf=b) -
+                             F_y.v(buf=b, n=n)*myg.Ay_l.v(buf=b))
 
         # U_yl[i,j,:] = U_yl[i,j,:] - 0.5*dt/dx * (F_x[i+1,j-1,:] - F_x[i,j-1,:])
         U_yl.v(buf=b, n=n)[:, :] += \
-            - 0.5*dtdx.v(buf=b)*(F_x.ip_jp(1, -1, buf=b, n=n) - F_x.jp(-1, buf=b, n=n))
+            - hdtV.v(buf=b)*(F_x.ip_jp(1, -1, buf=b, n=n)*myg.Ax_r.jp(-1, buf=b) -
+                             F_x.jp(-1, buf=b, n=n)*myg.Ax_l.jp(-1, buf=b))
 
         # U_yr[i,j,:] = U_yr[i,j,:] - 0.5*dt/dx * (F_x[i+1,j,:] - F_x[i,j,:])
         U_yr.v(buf=b, n=n)[:, :] += \
-            - 0.5*dtdx.v(buf=b)*(F_x.ip(1, buf=b, n=n) - F_x.v(buf=b, n=n))
+            - hdtV.v(buf=b)*(F_x.ip(1, buf=b, n=n)*myg.Ax_r.v(buf=b) -
+                             F_x.v(buf=b, n=n)*myg.Ax_l.v(buf=b))
 
     tm_transverse.end()
 

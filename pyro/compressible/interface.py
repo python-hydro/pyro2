@@ -503,6 +503,7 @@ def riemann_cgf(idir, ng,
             F[i, j, idens] = rho_state * un_state
 
             if idir == 1:
+                if isinstance()
                 F[i, j, ixmom] = rho_state * un_state**2 + p_state
                 F[i, j, iymom] = rho_state * ut_state * un_state
             else:
