@@ -203,6 +203,8 @@ class Cartesian2d(Grid2d):
 
         super().__init__(nx, ny, ng, xmin, xmax, ymin, ymax)
 
+        self.coord_type = 0
+
         # Length of the side in x- and y-direction
 
         self.Lx = ArrayIndexer(np.full((self.qx, self.qy), self.dx),
@@ -253,6 +255,8 @@ class SphericalPolar(Grid2d):
             "xmin (r-direction), must be large enough so ghost cell doesn't have negative x."
 
         super().__init__(nx, ny, ng, xmin, xmax, ymin, ymax)
+
+        self.coord_type = 1
 
         # Length of the side along r-direction, dr
 
