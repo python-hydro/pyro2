@@ -1,8 +1,6 @@
 import numpy as np
 from numba import njit
 
-from pyro.util import msg
-
 
 @njit(cache=True)
 def states(idir, ng, dx, dt,

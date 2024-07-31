@@ -12,7 +12,7 @@ from pyro.compressible import BC, derives, eos
 from pyro.mesh.patch import SphericalPolar
 from pyro.particles import particles
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
-from pyro.util import plot_tools
+from pyro.util import msg, plot_tools
 
 
 class Variables:
