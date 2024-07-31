@@ -326,15 +326,15 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     else:
         msg.fail("ERROR: Riemann solver undefined")
 
-    _fx = riemannFunc(1, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
-                      solid.xl, solid.xr,
-                      gamma, U_xl, U_xr)
+    _fx, _ux = riemannFunc(1, myg.ng, myg.coord_type,
+                           ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+                           solid.xl, solid.xr,
+                           gamma, U_xl, U_xr)
 
-    _fy = riemannFunc(2, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
-                      solid.yl, solid.yr,
-                      gamma, U_yl, U_yr)
+    _fy, _uy = riemannFunc(2, myg.ng, myg.coord_type,
+                           ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+                           solid.yl, solid.yr,
+                           gamma, U_yl, U_yr)
 
     F_x = ai.ArrayIndexer(d=_fx, grid=myg)
     F_y = ai.ArrayIndexer(d=_fy, grid=myg)
@@ -427,20 +427,30 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     tm_riem.begin()
 
-    _fx = riemannFunc(1, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
-                      solid.xl, solid.xr,
-                      gamma, U_xl, U_xr)
+    _fx, _ux = riemannFunc(1, myg.ng, myg.coord_type,
+                           ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+                           solid.xl, solid.xr,
+                           gamma, U_xl, U_xr)
 
-    _fy = riemannFunc(2, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
-                      solid.yl, solid.yr,
-                      gamma, U_yl, U_yr)
+    _fy, _uy = riemannFunc(2, myg.ng, myg.coord_type,
+                           ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+                           solid.yl, solid.yr,
+                           gamma, U_yl, U_yr)
 
     F_x = ai.ArrayIndexer(d=_fx, grid=myg)
     F_y = ai.ArrayIndexer(d=_fy, grid=myg)
 
     tm_riem.end()
+
+    #
+    # Since conservative update of SphericalPolar Geometry need
+    # pressure term specifically, update pressure here.
+    #
+    # Use F_x to get p_{i +/- 1/2, j} and F_y to get p_{i,j +/- 1/2}
+
+    q_x = comp.cons_to_prim
+    p_x =
+    p_y =
 
     # =========================================================================
     # apply artificial viscosity
