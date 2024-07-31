@@ -122,14 +122,457 @@ Updating U_{i,j}:
 
 """
 
-import numpy as np
-
 import pyro.compressible as comp
 import pyro.compressible.interface as ifc
 import pyro.mesh.array_indexer as ai
 from pyro.mesh import reconstruction
 from pyro.mesh.patch import SphericalPolar
 from pyro.util import msg
+
+
+def interface_states(my_data, rp, ivars, tc, dt):
+    """
+    interface_states returns the normal conserved states in the x and y
+    interfaces. We get the normal fluxes by finding the normal primitive states,
+    Then construct the corresponding conserved states.
+
+    Parameters
+    ----------
+    my_data : CellCenterData2d object
+        The data object containing the grid and advective scalar that
+        we are advecting.
+    rp : RuntimeParameters object
+        The runtime parameters for the simulation
+    ivars : Variables object
+        The Variables object that tells us which indices refer to which
+        variables
+    tc : TimerCollection object
+        The timers we are using to profile
+    dt : float
+        The timestep we are advancing through.
+
+    Returns
+    -------
+    out : ndarray, ndarray, ndarray, ndarray
+        Left and right normal conserved states in x and y interfaces
+    """
+
+    myg = my_data.grid
+    gamma = rp.get_param("eos.gamma")
+
+    # =========================================================================
+    # compute the primitive variables
+    # =========================================================================
+    # Q = (rho, u, v, p, {X})
+
+    q = comp.cons_to_prim(my_data.data, gamma, ivars, myg)
+
+    # =========================================================================
+    # compute the flattening coefficients
+    # =========================================================================
+
+    # there is a single flattening coefficient (xi) for all directions
+    use_flattening = rp.get_param("compressible.use_flattening")
+
+    if use_flattening:
+        xi_x = reconstruction.flatten(myg, q, 1, ivars, rp)
+        xi_y = reconstruction.flatten(myg, q, 2, ivars, rp)
+
+        xi = reconstruction.flatten_multid(myg, q, xi_x, xi_y, ivars)
+    else:
+        xi = 1.0
+
+    # monotonized central differences
+    tm_limit = tc.timer("limiting")
+    tm_limit.begin()
+
+    limiter = rp.get_param("compressible.limiter")
+
+    ldx = myg.scratch_array(nvar=ivars.nvar)
+    ldy = myg.scratch_array(nvar=ivars.nvar)
+
+    for n in range(ivars.nvar):
+        ldx[:, :, n] = xi*reconstruction.limit(q[:, :, n], myg, 1, limiter)
+        ldy[:, :, n] = xi*reconstruction.limit(q[:, :, n], myg, 2, limiter)
+
+    tm_limit.end()
+
+    # =========================================================================
+    # x-direction
+    # =========================================================================
+
+    # left and right primitive variable states
+    tm_states = tc.timer("interfaceStates")
+    tm_states.begin()
+
+    V_l, V_r = ifc.states(1, myg.ng, myg.Lx, dt,
+                          ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
+                          ivars.naux,
+                          gamma,
+                          q, ldx)
+
+    tm_states.end()
+
+    # transform primitive interface states back into conserved variables
+    U_xl = comp.prim_to_cons(V_l, gamma, ivars, myg)
+    U_xr = comp.prim_to_cons(V_r, gamma, ivars, myg)
+
+    # =========================================================================
+    # y-direction
+    # =========================================================================
+
+    # left and right primitive variable states
+    tm_states.begin()
+
+    _V_l, _V_r = ifc.states(2, myg.ng, myg.Ly, dt,
+                            ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
+                            ivars.naux,
+                            gamma,
+                            q, ldy)
+    V_l = ai.ArrayIndexer(d=_V_l, grid=myg)
+    V_r = ai.ArrayIndexer(d=_V_r, grid=myg)
+
+    tm_states.end()
+
+    # transform primitive interface states back into conserved variables
+    U_yl = comp.prim_to_cons(V_l, gamma, ivars, myg)
+    U_yr = comp.prim_to_cons(V_r, gamma, ivars, myg)
+
+    return U_xl, U_xr, U_yl, U_yr
+
+
+def apply_source_terms(U_xl, U_xr, U_yl, U_yr,
+                       my_data, my_aux, rp, ivars, tc, dt):
+    """
+    This function applies source terms including external (gravity),
+    geometric terms, and pressure terms to the left and right
+    interface states (normal conserved states).
+    Both geometric and pressure terms arise purely from geometry.
+
+    Parameters
+    ----------
+    U_xl, U_xr, U_yl, U_yr: ndarray, ndarray, ndarray, ndarray
+        Conserved states in the left and right x-interface
+        and left and right y-interface.
+    my_data : CellCenterData2d object
+        The data object containing the grid and advective scalar that
+        we are advecting.
+    my_aux : CellCenterData2d object
+        The data object that carries auxillary quantities which we need
+        to fill in the ghost cells.
+    rp : RuntimeParameters object
+        The runtime parameters for the simulation
+    ivars : Variables object
+        The Variables object that tells us which indices refer to which
+        variables
+    tc : TimerCollection object
+        The timers we are using to profile
+    dt : float
+        The timestep we are advancing through.
+
+    Returns
+    -------
+    out : ndarray, ndarray, ndarray, ndarray
+        Left and right normal conserved states in x and y interfaces
+        with source terms added.
+    """
+
+    tm_source = tc.timer("sourceTerms")
+    tm_source.begin()
+
+    myg = my_data.grid
+
+    dens = my_data.get_var("density")
+    xmom = my_data.get_var("x-momentum")
+    ymom = my_data.get_var("y-momentum")
+    pres = my_data.get_var("pressure")
+
+    dens_src = my_aux.get_var("dens_src")
+    xmom_src = my_aux.get_var("xmom_src")
+    ymom_src = my_aux.get_var("ymom_src")
+    E_src = my_aux.get_var("E_src")
+
+    grav = rp.get_param("compressible.grav")
+
+    # Calculate external source (gravity), geometric, and pressure terms
+    if myg.coord == 1:
+        # assume gravity points in r-direction in spherical.
+        dens_src.v()[:, :] = 0.0
+        xmom_src.v()[:, :] = dens.v()*grav + \
+            ymom.v()**2 / (dens.v()*myg.x2d.v()) - \
+            (pres.ip(1) - pres.v()) / myg.Lx.v()
+        ymom_src.v()[:, :] = -(pres.jp(1) - pres.v()) / myg.Ly.v() - \
+            dens.v()*xmom.v()*ymom.v() / (dens.v()*myg.x2d.v())
+        E_src.v()[:, :] = xmom.v()*grav
+
+    else:
+        # assume gravity points in y-direction in cartesian
+        dens_src.v()[:, :] = 0.0
+        xmom_src.v()[:, :] = 0.0
+        ymom_src.v()[:, :] = dens.v()*grav
+        E_src.v()[:, :] = ymom.v()*grav
+
+    my_aux.fill_BC("dens_src")
+    my_aux.fill_BC("xmom_src")
+    my_aux.fill_BC("ymom_src")
+    my_aux.fill_BC("E_src")
+
+    # U_xl[i,j] += 0.5*dt*source[i-1, j]
+    U_xl.v(buf=1, n=ivars.ixmom)[:, :] += 0.5*dt*xmom_src.ip(-1, buf=1)
+    U_xl.v(buf=1, n=ivars.iymom)[:, :] += 0.5*dt*ymom_src.ip(-1, buf=1)
+    U_xl.v(buf=1, n=ivars.iener)[:, :] += 0.5*dt*E_src.ip(-1, buf=1)
+
+    # U_xr[i,j] += 0.5*dt*source[i, j]
+    U_xr.v(buf=1, n=ivars.ixmom)[:, :] += 0.5*dt*xmom_src.v(buf=1)
+    U_xr.v(buf=1, n=ivars.iymom)[:, :] += 0.5*dt*ymom_src.v(buf=1)
+    U_xr.v(buf=1, n=ivars.iener)[:, :] += 0.5*dt*E_src.v(buf=1)
+
+    # U_yl[i,j] += 0.5*dt*source[i, j-1]
+    U_yl.v(buf=1, n=ivars.ixmom)[:, :] += 0.5*dt*xmom_src.jp(-1, buf=1)
+    U_yl.v(buf=1, n=ivars.iymom)[:, :] += 0.5*dt*ymom_src.jp(-1, buf=1)
+    U_yl.v(buf=1, n=ivars.iener)[:, :] += 0.5*dt*E_src.jp(-1, buf=1)
+
+    # U_yr[i,j] += 0.5*dt*source[i, j]
+    U_yr.v(buf=1, n=ivars.ixmom)[:, :] += 0.5*dt*xmom_src.v(buf=1)
+    U_yr.v(buf=1, n=ivars.iymom)[:, :] += 0.5*dt*ymom_src.v(buf=1)
+    U_yr.v(buf=1, n=ivars.iener)[:, :] += 0.5*dt*E_src.v(buf=1)
+
+    tm_source.end()
+
+    return U_xl, U_xr, U_yl, U_yr
+
+
+def riemann_flux(U_xl, U_xr, U_yl, U_yr,
+                 my_data, rp, ivars, solid, tc):
+    """
+    This constructs the unsplit fluxes through the x and y interfaces
+    using the left and right conserved states by using the riemann solver.
+
+    Parameters
+    ----------
+    U_xl, U_xr, U_yl, U_yr: ndarray, ndarray, ndarray, ndarray
+        Conserved states in the left and right x-interface
+        and left and right y-interface.
+    my_data : CellCenterData2d object
+        The data object containing the grid and advective scalar that
+        we are advecting.
+    rp : RuntimeParameters object
+        The runtime parameters for the simulation
+    ivars : Variables object
+        The Variables object that tells us which indices refer to which
+        variables
+    solid: A container class
+        This is used in Riemann solver to indicate which side has solid boundary
+    tc : TimerCollection object
+        The timers we are using to profile
+
+    Returns
+    -------
+    out : ndarray, ndarray
+        Fluxes in x and y direction
+    """
+
+    tm_riem = tc.timer("riemann")
+    tm_riem.begin()
+
+    myg = my_data.grid
+
+    riemann = rp.get_param("compressible.riemann")
+    gamma = rp.get_param("eos.gamma")
+
+    riemannFunc = None
+    if riemann == "HLLC":
+        riemannFunc = ifc.riemann_hllc
+    elif riemann == "CGF":
+        riemannFunc = ifc.riemann_cgf
+    else:
+        msg.fail("ERROR: Riemann solver undefined")
+
+    _fx = riemannFunc(1, myg.ng, myg.coord_type,
+                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+                      solid.xl, solid.xr,
+                      gamma, U_xl, U_xr)
+
+    _fy = riemannFunc(2, myg.ng, myg.coord_type,
+                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+                      solid.yl, solid.yr,
+                      gamma, U_yl, U_yr)
+
+    F_x = ai.ArrayIndexer(d=_fx, grid=myg)
+    F_y = ai.ArrayIndexer(d=_fy, grid=myg)
+
+    tm_riem.end()
+
+    return F_x, F_y
+
+
+def apply_transverse_flux(U_xl, U_xr, U_yl, U_yr,
+                          my_data, rp, ivars, solid, tc, dt):
+    """
+    This function applies transverse correction terms to the
+    normal conserved states after applying other source terms.
+
+    We construct the state perpendicular to the interface
+    by adding the central difference part to the transverse flux
+    difference.
+
+    The states that we represent by indices i,j are shown below
+    (1,2,3,4):
+
+
+      j+3/2--+----------+----------+----------+
+             |          |          |          |
+             |          |          |          |
+        j+1 -+          |          |          |
+             |          |          |          |
+             |          |          |          |    1: U_xl[i,j,:] = U
+      j+1/2--+----------XXXXXXXXXXXX----------+                      i-1/2,j,L
+             |          X          X          |
+             |          X          X          |
+          j -+        1 X 2        X          |    2: U_xr[i,j,:] = U
+             |          X          X          |                      i-1/2,j,R
+             |          X    4     X          |
+      j-1/2--+----------XXXXXXXXXXXX----------+
+             |          |    3     |          |    3: U_yl[i,j,:] = U
+             |          |          |          |                      i,j-1/2,L
+        j-1 -+          |          |          |
+             |          |          |          |
+             |          |          |          |    4: U_yr[i,j,:] = U
+      j-3/2--+----------+----------+----------+                      i,j-1/2,R
+             |    |     |    |     |    |     |
+                 i-1         i         i+1
+           i-3/2      i-1/2      i+1/2      i+3/2
+
+
+    remember that the fluxes are stored on the left edge, so
+
+    F_x[i,j,:] = F_x
+                    i-1/2, j
+
+    F_y[i,j,:] = F_y
+                    i, j-1/2
+
+    Parameters
+    ----------
+    U_xl, U_xr, U_yl, U_yr: ndarray, ndarray, ndarray, ndarray
+        Conserved states in the left and right x-interface
+        and left and right y-interface.
+    my_data : CellCenterData2d object
+        The data object containing the grid and advective scalar that
+        we are advecting.
+    rp : RuntimeParameters object
+        The runtime parameters for the simulation
+    ivars : Variables object
+        The Variables object that tells us which indices refer to which
+        variables
+    solid: A container class
+        This is used in Riemann solver to indicate which side has solid boundary
+    tc : TimerCollection object
+        The timers we are using to profile
+    dt : float
+        The timestep we are advancing through.
+
+    Returns
+    -------
+    out : ndarray, ndarray, ndarray, ndarray
+        Left and right normal conserved states in x and y interfaces
+        with source terms added.
+    """
+
+    # Use Riemann Solver to get interface flux using the left and right states
+
+    F_x, F_y = riemann_flux(U_xl, U_xr, U_yl, U_yr,
+                            my_data, rp, ivars, solid, tc)
+
+    # Now we update the conserved states using the transverse fluxes.
+
+    myg = my_data.grid
+
+    tm_transverse = tc.timer("transverse flux addition")
+    tm_transverse.begin()
+
+    b = (2, 1)
+    hdtV = 0.5*dt / myg.V
+
+    for n in range(ivars.nvar):
+
+        # U_xl[i,j,:] = U_xl[i,j,:] - 0.5*dt/dy * (F_y[i-1,j+1,:] - F_y[i-1,j,:])
+        U_xl.v(buf=b, n=n)[:, :] += \
+            - hdtV.v(buf=b)*(F_y.ip_jp(-1, 1, buf=b, n=n)*myg.Ay_r.ip(-1, buf=b) -
+                             F_y.ip(-1, buf=b, n=n)*myg.Ay_l.ip(-1, buf=b))
+
+        # U_xr[i,j,:] = U_xr[i,j,:] - 0.5*dt/dy * (F_y[i,j+1,:] - F_y[i,j,:]
+        U_xr.v(buf=b, n=n)[:, :] += \
+            - hdtV.v(buf=b)*(F_y.jp(1, buf=b, n=n)*myg.Ay_r.v(buf=b) -
+                             F_y.v(buf=b, n=n)*myg.Ay_l.v(buf=b))
+
+        # U_yl[i,j,:] = U_yl[i,j,:] - 0.5*dt/dx * (F_x[i+1,j-1,:] - F_x[i,j-1,:])
+        U_yl.v(buf=b, n=n)[:, :] += \
+            - hdtV.v(buf=b)*(F_x.ip_jp(1, -1, buf=b, n=n)*myg.Ax_r.jp(-1, buf=b) -
+                             F_x.jp(-1, buf=b, n=n)*myg.Ax_l.jp(-1, buf=b))
+
+        # U_yr[i,j,:] = U_yr[i,j,:] - 0.5*dt/dx * (F_x[i+1,j,:] - F_x[i,j,:])
+        U_yr.v(buf=b, n=n)[:, :] += \
+            - hdtV.v(buf=b)*(F_x.ip(1, buf=b, n=n)*myg.Ax_r.v(buf=b) -
+                             F_x.v(buf=b, n=n)*myg.Ax_l.v(buf=b))
+
+    tm_transverse.end()
+
+    return U_xl, U_xr, U_yl, U_yr
+
+
+def apply_artificial_viscosity(F_x, F_y, q,
+                               my_data, rp, ivars):
+    """
+    This applies artificial viscosity correction terms to the fluxes.
+
+    Parameters
+    ----------
+    F_x, F_y : ndarray, ndarray
+        Fluxes in x and y interface.
+    q : ndarray
+        Primitive variables
+    my_data : CellCenterData2d object
+        The data object containing the grid and advective scalar that
+        we are advecting.
+    rp : RuntimeParameters object
+        The runtime parameters for the simulation
+    ivars : Variables object
+        The Variables object that tells us which indices refer to which
+        variables
+    dt : float
+        The timestep we are advancing through.
+
+    Returns
+    -------
+    out : ndarray, ndarray
+        Fluxes in x and y interface.
+    """
+
+    cvisc = rp.get_param("compressible.cvisc")
+
+    myg = my_data.grid
+
+    _ax, _ay = ifc.artificial_viscosity(myg.ng, myg.dx, myg.dy,
+        cvisc, q.v(n=ivars.iu, buf=myg.ng), q.v(n=ivars.iv, buf=myg.ng))
+
+    avisco_x = ai.ArrayIndexer(d=_ax, grid=myg)
+    avisco_y = ai.ArrayIndexer(d=_ay, grid=myg)
+
+    b = (2, 1)
+
+    for n in range(ivars.nvar):
+        # F_x = F_x + avisco_x * (U(i-1,j) - U(i,j))
+        var = my_data.get_var_by_index(n)
+
+        F_x.v(buf=b, n=n)[:, :] += \
+            avisco_x.v(buf=b)*(var.ip(-1, buf=b) - var.v(buf=b))
+
+        # F_y = F_y + avisco_y * (U(i,j-1) - U(i,j))
+        F_y.v(buf=b, n=n)[:, :] += \
+            avisco_y.v(buf=b)*(var.jp(-1, buf=b) - var.v(buf=b))
+
+    return F_x, F_y
 
 
 def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
@@ -162,7 +605,6 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     -------
     out : ndarray, ndarray
         The fluxes on the x- and y-interfaces
-
     """
 
     tm_flux = tc.timer("unsplitFluxes")
@@ -257,7 +699,6 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     dens = my_data.get_var("density")
     xmom = my_data.get_var("x-momentum")
     ymom = my_data.get_var("y-momentum")
-    E = my_data.get_var("energy")
     pres = my_data.get_var("pressure")
 
     dens_src = my_aux.get_var("dens_src")
@@ -326,12 +767,12 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     else:
         msg.fail("ERROR: Riemann solver undefined")
 
-    _fx, _ux = riemannFunc(1, myg.ng, myg.coord_type,
+    _fx = riemannFunc(1, myg.ng, myg.coord_type,
                            ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
                            solid.xl, solid.xr,
                            gamma, U_xl, U_xr)
 
-    _fy, _uy = riemannFunc(2, myg.ng, myg.coord_type,
+    _fy = riemannFunc(2, myg.ng, myg.coord_type,
                            ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
                            solid.yl, solid.yr,
                            gamma, U_yl, U_yr)
@@ -427,30 +868,20 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     tm_riem.begin()
 
-    _fx, _ux = riemannFunc(1, myg.ng, myg.coord_type,
-                           ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
-                           solid.xl, solid.xr,
-                           gamma, U_xl, U_xr)
+    _fx = riemannFunc(1, myg.ng, myg.coord_type,
+                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+                      solid.xl, solid.xr,
+                      gamma, U_xl, U_xr)
 
-    _fy, _uy = riemannFunc(2, myg.ng, myg.coord_type,
-                           ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
-                           solid.yl, solid.yr,
-                           gamma, U_yl, U_yr)
+    _fy = riemannFunc(2, myg.ng, myg.coord_type,
+                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+                      solid.yl, solid.yr,
+                      gamma, U_yl, U_yr)
 
     F_x = ai.ArrayIndexer(d=_fx, grid=myg)
     F_y = ai.ArrayIndexer(d=_fy, grid=myg)
 
     tm_riem.end()
-
-    #
-    # Since conservative update of SphericalPolar Geometry need
-    # pressure term specifically, update pressure here.
-    #
-    # Use F_x to get p_{i +/- 1/2, j} and F_y to get p_{i,j +/- 1/2}
-
-    q_x = comp.cons_to_prim
-    p_x =
-    p_y =
 
     # =========================================================================
     # apply artificial viscosity

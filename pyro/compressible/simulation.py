@@ -4,7 +4,9 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
+import pyro.compressible.interface as ifc
 import pyro.compressible.unsplit_fluxes as flx
+import pyro.mesh.array_indexer as ai
 import pyro.mesh.boundary as bnd
 from pyro.compressible import BC, derives, eos
 from pyro.mesh.patch import SphericalPolar
@@ -201,16 +203,86 @@ class Simulation(NullSimulation):
         ener = self.cc_data.get_var("energy")
 
         grav = self.rp.get_param("compressible.grav")
+        gamma = self.rp.get_param("eos.gamma")
 
         myg = self.cc_data.grid
 
-        Flux_x, Flux_y = flx.unsplit_fluxes(self.cc_data, self.aux_data, self.rp,
-                                            self.ivars, self.solid, self.tc, self.dt)
+        # First get conserved states normal to the x and y interface
+        U_xl, U_xr, U_yl, U_yr = flx.interface_states(self.cc_data, self.rp,
+                                                      self.ivars, self.tc, self.dt)
+
+        # Apply source terms to them.
+        # This includes external (gravity), geometric and pressure terms.
+        U_xl, U_xr, U_yl, U_yr = flx.apply_source_terms(U_xl, U_xr, U_yl, U_yr,
+                                                        self.cc_data, self.aux_data, self.rp,
+                                                        self.ivars, self.tc, self.dt)
+
+        # Apply transverse corrections.
+        U_xl, U_xr, U_yl, U_yr = flx.apply_transverse_flux(U_xl, U_xr, U_yl, U_yr,
+                                                           self.cc_data, self.rp, self.ivars,
+                                                           self.solid, self.tc, self.dt)
+
+        # Get the actual interface conserved state after using Riemann Solver
+        # Then construct the corresponding fluxes using the conserved states
+
+        if myg.coord_type == 1:
+            # We need pressure from interface state for conservative update for
+            # SphericalPolar geometry. So we need interface conserved states.
+
+            # Get the conserved interface state from Riemann Solver
+            _ux = ifc.riemann_cons(1, myg.ng, myg.coord_type,
+                                   self.ivars.idens, self.ivars.ixmom, self.ivars.iymom,
+                                   self.ivars.iener, self.ivars.irhox, self.ivars.naux,
+                                   self.solid.xl, self.solid.xr,
+                                   gamma, U_xl, U_xr)
+
+            _uy = ifc.riemann_cons(2, myg.ng, myg.coord_type,
+                                   self.ivars.idens, self.ivars.ixmom, self.ivars.iymom,
+                                   self.ivars.iener, self.ivars.irhox, self.ivars.naux,
+                                   self.solid.yl, self.solid.yr,
+                                   gamma, U_yl, U_yr)
+
+            U_x = ai.ArrayIndexer(d=_ux, grid=myg)
+            U_y = ai.ArrayIndexer(d=_uy, grid=myg)
+
+            # Find primitive variable since we need pressure in conservative update.
+
+            qx = cons_to_prim(U_x, gamma, self.ivars, myg)
+            qy = cons_to_prim(U_y, gamma, self.ivars, myg)
+
+            # Find the corresponding flux from the conserved states.
+            _fx = ifc.consFlux(1, myg.coord_type, gamma,
+                               self.ivars.idens, self.ivars.ixmom, self.ivars.iymom,
+                               self.ivars.iener, self.ivars.irhox, self.ivars.naux,
+                               _ux)
+
+            _fy = ifc.consFlux(2, myg.coord_type, gamma,
+                               self.ivars.idens, self.ivars.ixmom, self.ivars.iymom,
+                               self.ivars.iener, self.ivars.irhox, self.ivars.naux,
+                               _uy)
+
+            F_x = ai.ArrayIndexer(d=_fx, grid=myg)
+            F_y = ai.ArrayIndexer(d=_fy, grid=myg)
+
+        else:
+            # Directly calculate the interface flux using Riemann Solver
+            F_x, F_y = flx.riemann_flux(U_xl, U_xr, U_yl, U_yr,
+                                        self.cc_data, self.rp, self.ivars,
+                                        self.solid, self.tc)
+
+        # Apply artificial viscosity to fluxes
+        q = cons_to_prim(self.cc_data.data, gamma, self.ivars, myg)
+
+        F_x, F_y = flx.apply_artificial_viscosity(F_x, F_y, q,
+                                                  self.cc_data, self.rp,
+                                                  self.ivars)
+
+        # Flux_x, Flux_y = flx.unsplit_fluxes(self.cc_data, self.aux_data, self.rp,
+        #                                     self.ivars, self.solid, self.tc, self.dt)
 
         old_dens = dens.copy()
         old_xmom = xmom.copy()
         old_ymom = ymom.copy()
-        old_pres = derives.derive_primitives(self.cc_data, "pressure")
 
         # conservative update
         dtdV = self.dt / myg.V.v()
@@ -219,26 +291,22 @@ class Simulation(NullSimulation):
             var = self.cc_data.get_var_by_index(n)
 
             var.v()[:, :] += dtdV * \
-                (Flux_x.v(n=n)*myg.Ax_l.v() - Flux_x.ip(1, n=n)*myg.Ax_r.v() +
-                 Flux_y.v(n=n)*myg.Ay_l.v() - Flux_y.jp(1, n=n)*myg.Ay_r.v())
-
-        # Get pressure using the interface flux
-
-        pres = derives.derive_primitives(self.cc_data, "pressure")
+                (F_x.v(n=n)*myg.Ax_l.v() - F_x.ip(1, n=n)*myg.Ax_r.v() +
+                 F_y.v(n=n)*myg.Ay_l.v() - F_y.jp(1, n=n)*myg.Ay_r.v())
 
         # Apply external source (gravity) and geometric terms
 
-        if isinstance(myg, SphericalPolar):
+        if myg.coord_type == 1:
             xmom.v()[:, :] += 0.5*self.dt * \
                 ((dens.v() + old_dens.v())*grav +
                  (ymom.v()**2 / dens.v() +
                   old_ymom.v()**2 / old_dens.v()) / myg.x2d.v()) - \
-                self.dt * (pres.ip(1) - pres.v()) / myg.Lx.v()
+                self.dt * (qx.ip(1, n=self.ivars.ip) - qx.v(n=self.ivars.ip)) / myg.Lx.v()
 
             ymom.v()[:, :] += 0.5*self.dt * \
                 (-xmom.v()*ymom.v() / dens.v() -
                  old_xmom.v()*old_ymom.v() / old_dens.v()) / myg.x2d.v() - \
-                self.dt * (pres.jp(1) - pres.v()) / myg.Ly.v()
+                self.dt * (qy.jp(1, n=self.ivars.ip) - qy.v(n=self.ivars.ip)) / myg.Ly.v()
 
             ener.v()[:, :] += 0.5*self.dt*(xmom[:, :] + old_xmom[:, :])*grav
 
