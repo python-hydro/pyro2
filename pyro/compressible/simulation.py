@@ -308,12 +308,12 @@ class Simulation(NullSimulation):
                  old_xmom.v()*old_ymom.v() / old_dens.v()) / myg.x2d.v() - \
                 self.dt * (qy.jp(1, n=self.ivars.ip) - qy.v(n=self.ivars.ip)) / myg.Ly.v()
 
-            ener.v()[:, :] += 0.5*self.dt*(xmom[:, :] + old_xmom[:, :])*grav
+            ener.v()[:, :] += 0.5*self.dt*(xmom.v() + old_xmom.v())*grav
 
         else:
             # gravitational source terms
-            ymom.v()[:, :] += 0.5*self.dt*(dens[:, :] + old_dens[:, :])*grav
-            ener.v()[:, :] += 0.5*self.dt*(ymom[:, :] + old_ymom[:, :])*grav
+            ymom.v()[:, :] += 0.5*self.dt*(dens.v() + old_dens.v())*grav
+            ener.v()[:, :] += 0.5*self.dt*(ymom.v() + old_ymom.v())*grav
 
         if self.particles is not None:
             self.particles.update_particles(self.dt)

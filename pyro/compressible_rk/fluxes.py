@@ -174,12 +174,12 @@ def fluxes(my_data, rp, ivars, solid, tc):
     else:
         msg.fail("ERROR: Riemann solver undefined")
 
-    _fx = riemannFunc(1, myg.ng,
+    _fx = riemannFunc(1, myg.ng, myg.coord_type,
                       ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
                       solid.xl, solid.xr,
                       gamma, U_xl, U_xr)
 
-    _fy = riemannFunc(2, myg.ng,
+    _fy = riemannFunc(2, myg.ng, myg.coord_type,
                       ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
                       solid.yl, solid.yr,
                       gamma, U_yl, U_yr)

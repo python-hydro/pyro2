@@ -295,7 +295,7 @@ def apply_source_terms(U_xl, U_xr, U_yl, U_yr,
     grav = rp.get_param("compressible.grav")
 
     # Calculate external source (gravity), geometric, and pressure terms
-    if myg.coord == 1:
+    if myg.coord_type == 1:
         # assume gravity points in r-direction in spherical.
         dens_src.v()[:, :] = 0.0
         xmom_src.v()[:, :] = dens.v()*grav + \
