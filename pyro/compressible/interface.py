@@ -888,10 +888,6 @@ def riemann_hllc(idir, ng, coord_type,
         Conserved flux
     """
 
-
-    if coord_type == 1:
-        msg.fail("ERROR: HLLC Riemann Solver is not supported for SphericalPolar Geometry")
-
     qx, qy, nvar = U_l.shape
 
     F = np.zeros((qx, qy, nvar))

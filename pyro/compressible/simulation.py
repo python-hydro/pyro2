@@ -111,6 +111,12 @@ class Simulation(NullSimulation):
         my_grid = grid_setup(self.rp, ng=ng)
         my_data = self.data_class(my_grid)
 
+        # Make sure we use CGF for riemann solver when we do SphericalPolar
+        riemann = self.rp.get_param("compressible.riemann")
+        if my_grid.coord_type == 1 and riemann == "HLLC":
+            msg.fail("ERROR: Only CGF Riemann Solver is supported " +
+                     "with SphericalPolar Geometry")
+
         # define solver specific boundary condition routines
         bnd.define_bc("hse", BC.user, is_solid=False)
         bnd.define_bc("ramp", BC.user, is_solid=False)  # for double mach reflection problem
