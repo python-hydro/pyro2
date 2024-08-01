@@ -22,6 +22,8 @@ class TestSimulation:
         self.rp.params["eos.gamma"] = 1.4
         self.rp.params["compressible.grav"] = 1.0
 
+        self.rp.params["compressible.riemann"] = "HLLC"
+
         self.sim = sn.Simulation("compressible", "test", self.rp)
         self.sim.initialize()
 
