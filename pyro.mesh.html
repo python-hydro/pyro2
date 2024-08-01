@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.mesh package &mdash; pyro 4.1.0.post2+g493774e1 documentation</title>
+  <title>pyro.mesh package &mdash; pyro 4.1.0.post3+g6c84b5e5 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
@@ -18,7 +18,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=ffe0fef8"></script>
+        <script src="_static/documentation_options.js?v=536733cd"></script>
         <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -65,6 +65,7 @@
 <li class="toctree-l1"><a class="reference internal" href="problems.html">Adding a problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh-examples.html#Spherical-Polar-Grid">Spherical Polar Grid</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
 <ul>
@@ -500,6 +501,16 @@ data and the grid that it lives on.</p>
 </div>
 </li>
 </ul>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyro.mesh.patch.Cartesian2d">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.mesh.patch.</span></span><span class="sig-name descname"><span class="pre">Cartesian2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ng</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#Cartesian2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.Cartesian2d" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyro.mesh.patch.Grid2d" title="pyro.mesh.patch.Grid2d"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid2d</span></code></a></p>
+<p>This class defines a 2D Cartesian Grid.</p>
+<p>Define:
+x = x
+y = y</p>
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="pyro.mesh.patch.CellCenterData2d">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.mesh.patch.</span></span><span class="sig-name descname"><span class="pre">CellCenterData2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=&lt;class</span> <span class="pre">'numpy.float64'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#CellCenterData2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.CellCenterData2d" title="Link to this definition"></a></dt>
@@ -978,6 +989,17 @@ all the other properties the same</p>
 and number of ghostcells as the parent grid</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyro.mesh.patch.SphericalPolar">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.mesh.patch.</span></span><span class="sig-name descname"><span class="pre">SphericalPolar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ng</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/mesh/patch.html#SphericalPolar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.mesh.patch.SphericalPolar" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyro.mesh.patch.Grid2d" title="pyro.mesh.patch.Grid2d"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid2d</span></code></a></p>
+<p>This class defines a spherical polar grid.
+This is technically a 2D geometry but assumes azimuthal symmetry.</p>
+<p>Define:
+r = x
+theta = y</p>
 </dd></dl>
 
 <dl class="py function">

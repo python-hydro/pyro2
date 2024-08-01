@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mesh examples &mdash; pyro 4.1.0.post2+g493774e1 documentation</title>
+  <title>Mesh examples &mdash; pyro 4.1.0.post3+g6c84b5e5 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
@@ -19,7 +19,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=ffe0fef8"></script>
+        <script src="_static/documentation_options.js?v=536733cd"></script>
         <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -75,6 +75,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#Coarsening-and-prolonging">Coarsening and prolonging</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="#Spherical-Polar-Grid">Spherical Polar Grid</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
 <ul>
@@ -145,6 +146,8 @@
 <span class="kn">import</span> <span class="nn">pyro.mesh.boundary</span> <span class="k">as</span> <span class="nn">bnd</span>
 <span class="kn">import</span> <span class="nn">pyro.mesh.patch</span> <span class="k">as</span> <span class="nn">patch</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
 <span class="o">%</span><span class="k">matplotlib</span> inline
 
 <span class="c1"># for unit testing, we want to ensure the same random numbers</span>
@@ -785,6 +788,102 @@ pyro.mesh.array_indexer.ArrayIndexer
 </pre></div></div>
 </div>
 </section>
+</section>
+<section id="Spherical-Polar-Grid">
+<h1>Spherical Polar Grid<a class="headerlink" href="#Spherical-Polar-Grid" title="Link to this heading"></a></h1>
+<p>Demonstrating the grid with matplotlib pcolormesh</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">SphericalPolar</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Spherical Polar 2D Grid: Define x : r, y : θ. xmin (r) = 1.0, xmax= 2.0, ymin = 0.0, ymax = 3.141592653589793, nx = 4, ny = 8, ng = 2
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">g</span><span class="o">.</span><span class="n">V</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%9.2g</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">     0.13</span><span class="ansi-red-fg">     0.26</span><span class="ansi-red-fg">     0.43</span><span class="ansi-red-fg">     0.65</span><span class="ansi-red-fg">      0.9</span><span class="ansi-red-fg">      1.2</span><span class="ansi-red-fg">      1.5</span><span class="ansi-red-fg">      1.9</span>
+<span class="ansi-red-fg">    0.047</span><span class="ansi-red-fg">    0.092</span><span class="ansi-red-fg">     0.15</span><span class="ansi-red-fg">     0.23</span><span class="ansi-red-fg">     0.32</span><span class="ansi-red-fg">     0.42</span><span class="ansi-red-fg">     0.54</span><span class="ansi-red-fg">     0.68</span>
+<span class="ansi-red-fg">    0.047</span><span class="ansi-red-fg">    0.092</span>     0.15     0.23     0.32     0.42<span class="ansi-red-fg">     0.54</span><span class="ansi-red-fg">     0.68</span>
+<span class="ansi-red-fg">     0.13</span><span class="ansi-red-fg">     0.26</span>     0.43     0.65      0.9      1.2<span class="ansi-red-fg">      1.5</span><span class="ansi-red-fg">      1.9</span>
+<span class="ansi-red-fg">      0.2</span><span class="ansi-red-fg">     0.39</span>     0.65     0.97      1.3      1.8<span class="ansi-red-fg">      2.3</span><span class="ansi-red-fg">      2.9</span>
+<span class="ansi-red-fg">     0.24</span><span class="ansi-red-fg">     0.46</span>     0.76      1.1      1.6      2.1<span class="ansi-red-fg">      2.7</span><span class="ansi-red-fg">      3.4</span>
+<span class="ansi-red-fg">     0.24</span><span class="ansi-red-fg">     0.46</span>     0.76      1.1      1.6      2.1<span class="ansi-red-fg">      2.7</span><span class="ansi-red-fg">      3.4</span>
+<span class="ansi-red-fg">      0.2</span><span class="ansi-red-fg">     0.39</span>     0.65     0.97      1.3      1.8<span class="ansi-red-fg">      2.3</span><span class="ansi-red-fg">      2.9</span>
+<span class="ansi-red-fg">     0.13</span><span class="ansi-red-fg">     0.26</span>     0.43     0.65      0.9      1.2<span class="ansi-red-fg">      1.5</span><span class="ansi-red-fg">      1.9</span>
+<span class="ansi-red-fg">    0.047</span><span class="ansi-red-fg">    0.092</span>     0.15     0.23     0.32     0.42<span class="ansi-red-fg">     0.54</span><span class="ansi-red-fg">     0.68</span>
+<span class="ansi-red-fg">    0.047</span><span class="ansi-red-fg">    0.092</span><span class="ansi-red-fg">     0.15</span><span class="ansi-red-fg">     0.23</span><span class="ansi-red-fg">     0.32</span><span class="ansi-red-fg">     0.42</span><span class="ansi-red-fg">     0.54</span><span class="ansi-red-fg">     0.68</span>
+<span class="ansi-red-fg">     0.13</span><span class="ansi-red-fg">     0.26</span><span class="ansi-red-fg">     0.43</span><span class="ansi-red-fg">     0.65</span><span class="ansi-red-fg">      0.9</span><span class="ansi-red-fg">      1.2</span><span class="ansi-red-fg">      1.5</span><span class="ansi-red-fg">      1.9</span>
+
+         ^ y
+         |
+         +---&gt; x
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">x2d</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">theta</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">y2d</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">jlo</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">r</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">r</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">V</span><span class="o">.</span><span class="n">v</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">shading</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Volume&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Spherical Polar Grid&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;X&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/mesh-examples_57_0.png" src="_images/mesh-examples_57_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
 </section>
 
 

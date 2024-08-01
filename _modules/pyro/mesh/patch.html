@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.mesh.patch &mdash; pyro 4.1.0.post2+g493774e1 documentation</title>
+  <title>pyro.mesh.patch &mdash; pyro 4.1.0.post3+g6c84b5e5 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
@@ -17,7 +17,7 @@
   
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=ffe0fef8"></script>
+        <script src="../../../_static/documentation_options.js?v=536733cd"></script>
         <script src="../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -62,6 +62,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../problems.html">Adding a problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../mesh-examples.html">Mesh examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mesh-examples.html#Spherical-Polar-Grid">Spherical Polar Grid</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
 <ul>
@@ -259,15 +260,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">yr</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qy</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">ng</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dy</span> <span class="o">+</span> <span class="n">ymin</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">yl</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">yr</span><span class="p">)</span>
 
-        <span class="c1"># 2-d versions of the zone coordinates (replace with meshgrid?)</span>
-        <span class="n">x2d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qy</span><span class="p">)</span>
-        <span class="n">x2d</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qy</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x2d</span> <span class="o">=</span> <span class="n">x2d</span>
+        <span class="c1"># 2-d versions of the zone coordinates</span>
+        <span class="n">x2d</span><span class="p">,</span> <span class="n">y2d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s1">&#39;ij&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x2d</span> <span class="o">=</span> <span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">x2d</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y2d</span> <span class="o">=</span> <span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">y2d</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
-        <span class="n">y2d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qx</span><span class="p">)</span>
-        <span class="n">y2d</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qx</span><span class="p">)</span>
-        <span class="n">y2d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">y2d</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y2d</span> <span class="o">=</span> <span class="n">y2d</span>
+        <span class="n">xl2d</span><span class="p">,</span> <span class="n">yl2d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">yl</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s1">&#39;ij&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xl2d</span> <span class="o">=</span> <span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">xl2d</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yl2d</span> <span class="o">=</span> <span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">yl2d</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="n">xr2d</span><span class="p">,</span> <span class="n">yr2d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">yr</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s1">&#39;ij&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xr2d</span> <span class="o">=</span> <span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">xr2d</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yr2d</span> <span class="o">=</span> <span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">yr2d</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Grid2d.scratch_array">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.Grid2d.scratch_array">[docs]</a>
@@ -319,6 +323,121 @@
                   <span class="bp">self</span><span class="o">.</span><span class="n">ymin</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">ymin</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymax</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">ymax</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<div class="viewcode-block" id="Cartesian2d">
+<a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.Cartesian2d">[docs]</a>
+<span class="k">class</span> <span class="nc">Cartesian2d</span><span class="p">(</span><span class="n">Grid2d</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class defines a 2D Cartesian Grid.</span>
+
+<span class="sd">    Define:</span>
+<span class="sd">    x = x</span>
+<span class="sd">    y = y</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">xmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">ng</span><span class="p">,</span> <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">coord_type</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Length of the side in x- and y-direction</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Lx</span> <span class="o">=</span> <span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">qx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qy</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">),</span>
+                                 <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span> <span class="o">=</span> <span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">qx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qy</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">dy</span><span class="p">),</span>
+                                 <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># This is area of the side that is perpendicular to x.</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span>
+
+        <span class="c1"># This is area of the side that is perpendicular to y.</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lx</span>
+
+        <span class="c1"># Volume of the cell.</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">V</span> <span class="o">=</span> <span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">qx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qy</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dy</span><span class="p">),</span>
+                              <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; print out some basic information about the grid object &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Cartesian 2D Grid: xmin = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">xmin</span><span class="si">}</span><span class="s2">, xmax = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">xmax</span><span class="si">}</span><span class="s2">, &quot;</span> <span class="o">+</span> \
+               <span class="sa">f</span><span class="s2">&quot;ymin = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ymin</span><span class="si">}</span><span class="s2">, ymax = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ymax</span><span class="si">}</span><span class="s2">, &quot;</span> <span class="o">+</span> \
+               <span class="sa">f</span><span class="s2">&quot;nx = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="si">}</span><span class="s2">, ny = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="si">}</span><span class="s2">, ng = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ng</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="SphericalPolar">
+<a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.SphericalPolar">[docs]</a>
+<span class="k">class</span> <span class="nc">SphericalPolar</span><span class="p">(</span><span class="n">Grid2d</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class defines a spherical polar grid.</span>
+<span class="sd">    This is technically a 2D geometry but assumes azimuthal symmetry.</span>
+
+<span class="sd">    Define:</span>
+<span class="sd">    r = x</span>
+<span class="sd">    theta = y</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">xmin</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+
+        <span class="c1"># Make sure theta is within [0, PI]</span>
+        <span class="k">assert</span> <span class="n">ymin</span> <span class="o">&gt;=</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">ymax</span> <span class="o">&lt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="s2">&quot;y or </span><span class="se">\u03b8</span><span class="s2"> should be within [0, </span><span class="se">\u03c0</span><span class="s2">].&quot;</span>
+
+        <span class="c1"># Make sure the ghost cells doesn&#39;t extend out negative x(r)</span>
+        <span class="k">assert</span> <span class="n">xmin</span> <span class="o">-</span> <span class="n">ng</span><span class="o">*</span><span class="p">(</span><span class="n">xmax</span><span class="o">-</span><span class="n">xmin</span><span class="p">)</span><span class="o">/</span><span class="n">nx</span> <span class="o">&gt;=</span> <span class="mf">0.0</span><span class="p">,</span> \
+            <span class="s2">&quot;xmin (r-direction), must be large enough so ghost cell doesn&#39;t have negative x.&quot;</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">ng</span><span class="p">,</span> <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">coord_type</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># Length of the side along r-direction, dr</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Lx</span> <span class="o">=</span> <span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">qx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qy</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">),</span>
+                               <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># Length of the side along theta-direction, r*dtheta</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span> <span class="o">=</span> <span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">qx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qy</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">x2d</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dy</span><span class="p">),</span>
+                               <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># Returns an array of the face area that points in the r(x) direction.</span>
+        <span class="c1"># dL_theta x dL_phi = r^2 * sin(theta) * dtheta * dphi</span>
+
+        <span class="c1"># dAr_l = - r{i-1/2}^2 * 2pi * cos(theta{i+1/2}) - cos(theta{i-1/2})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">xl2d</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span>
+                         <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">yr2d</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">yl2d</span><span class="p">)))</span>
+
+        <span class="c1"># Returns an array of the face area that points in the theta(y) direction.</span>
+        <span class="c1"># dL_phi x dL_r = dr * r * sin(theta) * dphi</span>
+
+        <span class="c1"># dAtheta_l = pi * sin(theta{i-1/2}) * (r{i+1/2}^2 - r{i-1/2}^2)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ay</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">yl2d</span><span class="p">)</span> <span class="o">*</span>
+                         <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xr2d</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">xl2d</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+
+        <span class="c1"># Returns an array of the volume of each cell.</span>
+        <span class="c1"># dV = dL_r * dL_theta * dL_phi</span>
+        <span class="c1">#    = (dr) * (r * dtheta) * (r * sin(theta) * dphi)</span>
+        <span class="c1"># dV = - 2*np.pi / 3 * (cos(theta{i+1/2}) - cos(theta{i-1/2})) * (r{i+1/2}^3 - r{i-1/2}^3)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span>
+                        <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">yr2d</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">yl2d</span><span class="p">))</span> <span class="o">*</span>
+                        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xr2d</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">xl2d</span><span class="p">)</span> <span class="o">*</span>
+                        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xr2d</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">xl2d</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">xr2d</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">xl2d</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; print out some basic information about the grid object &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;Spherical Polar 2D Grid: Define x : r, y : </span><span class="se">\u03b8</span><span class="s2">. &quot;</span> <span class="o">+</span> \
+               <span class="sa">f</span><span class="s2">&quot;xmin (r) = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">xmin</span><span class="si">}</span><span class="s2">, xmax= </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">xmax</span><span class="si">}</span><span class="s2">, &quot;</span> <span class="o">+</span> \
+               <span class="sa">f</span><span class="s2">&quot;ymin = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ymin</span><span class="si">}</span><span class="s2">, ymax = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ymax</span><span class="si">}</span><span class="s2">, &quot;</span> <span class="o">+</span> \
+               <span class="sa">f</span><span class="s2">&quot;nx = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="si">}</span><span class="s2">, ny = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="si">}</span><span class="s2">, ng = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ng</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
 
 
