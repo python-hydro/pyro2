@@ -126,7 +126,6 @@ import pyro.compressible as comp
 import pyro.compressible.interface as ifc
 import pyro.mesh.array_indexer as ai
 from pyro.mesh import reconstruction
-from pyro.mesh.patch import SphericalPolar
 from pyro.util import msg
 
 
@@ -709,7 +708,7 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     grav = rp.get_param("compressible.grav")
 
     # Calculate external source (gravity), geometric, and pressure terms
-    if isinstance(myg, SphericalPolar):
+    if myg.coord_type == 1:
         # assume gravity points in r-direction in spherical.
         dens_src.v()[:, :] = 0.0
         xmom_src.v()[:, :] = dens.v()*grav + \
