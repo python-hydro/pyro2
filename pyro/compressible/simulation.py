@@ -115,7 +115,7 @@ class Simulation(NullSimulation):
         try:
             riemann = self.rp.get_param("compressible.riemann")
         except KeyError:
-            msg.fail("ERROR: Riemann Solver is not set.")
+            msg.warning("ERROR: Riemann Solver is not set.")
 
         if my_grid.coord_type == 1 and riemann == "HLLC":
             msg.fail("ERROR: Only CGF Riemann Solver is supported " +
