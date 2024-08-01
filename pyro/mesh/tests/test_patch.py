@@ -87,12 +87,10 @@ class TestCartesian2d:
         self.g = None
 
     def test_Ax(self):
-        assert np.all(self.g.Ax_l.v() == 0.1)
-        assert np.all(self.g.Ax_r.v() == 0.1)
+        assert np.all(self.g.Ax.v() == 0.1)
 
     def test_Ay(self):
-        assert np.all(self.g.Ay_l.v() == 0.25)
-        assert np.all(self.g.Ay_r.v() == 0.25)
+        assert np.all(self.g.Ay.v() == 0.25)
 
     def test_V(self):
         assert np.all(self.g.V.v() == 0.1 * 0.25)
@@ -120,22 +118,22 @@ class TestSphericalPolar:
     def test_Ax(self):
         area_x_l = np.abs(-2.0 * np.pi * self.g.xl2d.v()**2 *
                  (np.cos(self.g.yr2d.v()) - np.cos(self.g.yl2d.v())))
-        assert_array_equal(self.g.Ax_l.v(), area_x_l)
+        assert_array_equal(self.g.Ax.v(), area_x_l)
 
         area_x_r = np.abs(-2.0 * np.pi * self.g.xr2d.v()**2 *
                  (np.cos(self.g.yr2d.v()) - np.cos(self.g.yl2d.v())))
-        assert_array_equal(self.g.Ax_r.v(), area_x_r)
+        assert_array_equal(self.g.Ax.ip(1), area_x_r)
 
     def test_Ay(self):
-        area_y_l = np.abs(0.5 * np.pi *
-                 np.sin(self.g.yl2d.v()) *
-                 (self.g.xr2d.v()**2 - self.g.xl2d.v()**2))
-        assert_array_equal(self.g.Ay_l.v(), area_y_l)
+        area_y_l = np.abs(np.pi *
+                          np.sin(self.g.yl2d.v()) *
+                          (self.g.xr2d.v()**2 - self.g.xl2d.v()**2))
+        assert_array_equal(self.g.Ay.v(), area_y_l)
 
-        area_y_r = np.abs(0.5 * np.pi *
-                 np.sin(self.g.yr2d.v()) *
-                 (self.g.xr2d.v()**2 - self.g.xl2d.v()**2))
-        assert_array_equal(self.g.Ay_r.v(), area_y_r)
+        area_y_r = np.abs(np.pi *
+                          np.sin(self.g.yr2d.v()) *
+                          (self.g.xr2d.v()**2 - self.g.xl2d.v()**2))
+        assert_array_equal(self.g.Ay.jp(1), area_y_r)
 
     def test_V(self):
         volume = np.abs(-2.0 * np.pi / 3.0 *
