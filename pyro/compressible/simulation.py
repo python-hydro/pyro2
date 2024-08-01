@@ -239,13 +239,13 @@ class Simulation(NullSimulation):
             # SphericalPolar geometry. So we need interface conserved states.
 
             # Get the conserved interface state from Riemann Solver
-            _ux = ifc.riemann_cons(1, myg.ng, myg.coord_type,
+            _ux = ifc.riemann_cons(1, myg.ng,
                                    self.ivars.idens, self.ivars.ixmom, self.ivars.iymom,
                                    self.ivars.iener, self.ivars.irhox, self.ivars.naux,
                                    self.solid.xl, self.solid.xr,
                                    gamma, U_xl, U_xr)
 
-            _uy = ifc.riemann_cons(2, myg.ng, myg.coord_type,
+            _uy = ifc.riemann_cons(2, myg.ng,
                                    self.ivars.idens, self.ivars.ixmom, self.ivars.iymom,
                                    self.ivars.iener, self.ivars.irhox, self.ivars.naux,
                                    self.solid.yl, self.solid.yr,

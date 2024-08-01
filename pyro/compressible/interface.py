@@ -216,7 +216,7 @@ def states(idir, ng, dx, dt,
 
 
 @njit(cache=True)
-def riemann_cons(idir, ng, coord_type,
+def riemann_cons(idir, ng,
                  idens, ixmom, iymom, iener, irhoX, nspec,
                  lower_solid, upper_solid,
                  gamma, U_l, U_r):
@@ -271,6 +271,8 @@ def riemann_cons(idir, ng, coord_type,
     out : ndarray
         Conserved states.
     """
+
+    # pylint: disable=unused-variable
 
     qx, qy, nvar = U_l.shape
 
@@ -552,7 +554,7 @@ def riemann_cgf(idir, ng, coord_type,
     """
 
     # get conserved states from U_l and U_r
-    U_state = riemann_cons(idir, ng, coord_type,
+    U_state = riemann_cons(idir, ng,
                            idens, ixmom, iymom, iener, irhoX, nspec,
                            lower_solid, upper_solid,
                            gamma, U_l, U_r)
