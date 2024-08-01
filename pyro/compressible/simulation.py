@@ -9,7 +9,6 @@ import pyro.compressible.unsplit_fluxes as flx
 import pyro.mesh.array_indexer as ai
 import pyro.mesh.boundary as bnd
 from pyro.compressible import BC, derives, eos
-from pyro.mesh.patch import SphericalPolar
 from pyro.particles import particles
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
 from pyro.util import msg, plot_tools
@@ -369,7 +368,7 @@ class Simulation(NullSimulation):
         x = myg.scratch_array()
         y = myg.scratch_array()
 
-        if isinstance(myg, SphericalPolar):
+        if myg.coord_type == 1:
             x.v()[:, :] = myg.x2d.v()[:, :]*np.sin(myg.y2d.v()[:, :])
             y.v()[:, :] = myg.x2d.v()[:, :]*np.cos(myg.y2d.v()[:, :])
         else:
@@ -408,7 +407,7 @@ class Simulation(NullSimulation):
             ax.scatter(particle_positions[:, 0],
                 particle_positions[:, 1], s=5, c=colors, alpha=0.8, cmap="Greys")
 
-            if isinstance(myg, SphericalPolar):
+            if myg.coord_type == 1:
                 ax.set_xlim([np.min(x), np.max(x)])
                 ax.set_ylim([np.min(y), np.max(y)])
             else:

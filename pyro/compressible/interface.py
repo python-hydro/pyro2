@@ -505,13 +505,9 @@ def riemann_cons(idir, ng, coord_type,
             if idir == 1:
                 U_out[i, j, ixmom] = rho_state * un_state
                 U_out[i, j, iymom] = rho_state * ut_state
-                if coord_type == 0:
-                    U_out[i, j, ixmom] += p_state
             else:
                 U_out[i, j, ixmom] = rho_state * ut_state
                 U_out[i, j, iymom] = rho_state * un_state
-                if coord_type == 0:
-                    U_out[i, j, iymom] += p_state
 
             U_out[i, j, iener] = rhoe_state + \
                 0.5 * rho_state * (un_state**2 + ut_state**2)
