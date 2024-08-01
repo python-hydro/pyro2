@@ -112,7 +112,11 @@ class Simulation(NullSimulation):
         my_data = self.data_class(my_grid)
 
         # Make sure we use CGF for riemann solver when we do SphericalPolar
-        riemann = self.rp.get_param("compressible.riemann")
+        try:
+            riemann = self.rp.get_param("compressible.riemann")
+        except KeyError:
+            msg.fail("ERROR: Riemann Solver is not set.")
+
         if my_grid.coord_type == 1 and riemann == "HLLC":
             msg.fail("ERROR: Only CGF Riemann Solver is supported " +
                      "with SphericalPolar Geometry")
