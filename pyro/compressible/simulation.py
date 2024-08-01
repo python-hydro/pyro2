@@ -286,9 +286,6 @@ class Simulation(NullSimulation):
                                                   self.cc_data, self.rp,
                                                   self.ivars)
 
-        # Flux_x, Flux_y = flx.unsplit_fluxes(self.cc_data, self.aux_data, self.rp,
-        #                                     self.ivars, self.solid, self.tc, self.dt)
-
         old_dens = dens.copy()
         old_xmom = xmom.copy()
         old_ymom = ymom.copy()
