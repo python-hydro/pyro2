@@ -133,15 +133,18 @@ class Grid2d:
         self.yr = (np.arange(self.qy) + 1.0 - ng)*self.dy + ymin
         self.y = 0.5*(self.yl + self.yr)
 
-        # 2-d versions of the zone coordinates (replace with meshgrid?)
-        x2d = np.repeat(self.x, self.qy)
-        x2d.shape = (self.qx, self.qy)
-        self.x2d = x2d
+        # 2-d versions of the zone coordinates
+        x2d, y2d = np.meshgrid(self.x, self.y, indexing='ij')
+        self.x2d = ArrayIndexer(d=x2d, grid=self)
+        self.y2d = ArrayIndexer(d=y2d, grid=self)
 
-        y2d = np.repeat(self.y, self.qx)
-        y2d.shape = (self.qy, self.qx)
-        y2d = np.transpose(y2d)
-        self.y2d = y2d
+        xl2d, yl2d = np.meshgrid(self.xl, self.yl, indexing='ij')
+        self.xl2d = ArrayIndexer(d=xl2d, grid=self)
+        self.yl2d = ArrayIndexer(d=yl2d, grid=self)
+
+        xr2d, yr2d = np.meshgrid(self.xr, self.yr, indexing='ij')
+        self.xr2d = ArrayIndexer(d=xr2d, grid=self)
+        self.yr2d = ArrayIndexer(d=yr2d, grid=self)
 
     def scratch_array(self, nvar=1):
         """
@@ -184,6 +187,115 @@ class Grid2d:
                   self.ymin == other.ymin and self.ymax == other.ymax)
 
         return result
+
+
+class Cartesian2d(Grid2d):
+    """
+    This class defines a 2D Cartesian Grid.
+
+    Define:
+    x = x
+    y = y
+    """
+
+    def __init__(self, nx, ny, ng=1,
+                 xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0):
+
+        super().__init__(nx, ny, ng, xmin, xmax, ymin, ymax)
+
+        self.coord_type = 0
+
+        # Length of the side in x- and y-direction
+
+        self.Lx = ArrayIndexer(np.full((self.qx, self.qy), self.dx),
+                                 grid=self)
+        self.Ly = ArrayIndexer(np.full((self.qx, self.qy), self.dy),
+                                 grid=self)
+
+        # This is area of the side that is perpendicular to x.
+
+        self.Ax = self.Ly
+
+        # This is area of the side that is perpendicular to y.
+
+        self.Ay = self.Lx
+
+        # Volume of the cell.
+
+        self.V = ArrayIndexer(np.full((self.qx, self.qy), self.dx * self.dy),
+                              grid=self)
+
+    def __str__(self):
+        """ print out some basic information about the grid object """
+        return f"Cartesian 2D Grid: xmin = {self.xmin}, xmax = {self.xmax}, " + \
+               f"ymin = {self.ymin}, ymax = {self.ymax}, " + \
+               f"nx = {self.nx}, ny = {self.ny}, ng = {self.ng}"
+
+
+class SphericalPolar(Grid2d):
+    """
+    This class defines a spherical polar grid.
+    This is technically a 2D geometry but assumes azimuthal symmetry.
+
+    Define:
+    r = x
+    theta = y
+    """
+
+    def __init__(self, nx, ny, ng=1,
+                 xmin=0.2, xmax=1.0, ymin=0.0, ymax=1.0):
+
+        # Make sure theta is within [0, PI]
+        assert ymin >= 0.0 and ymax <= np.pi, "y or \u03b8 should be within [0, \u03c0]."
+
+        # Make sure the ghost cells doesn't extend out negative x(r)
+        assert xmin - ng*(xmax-xmin)/nx >= 0.0, \
+            "xmin (r-direction), must be large enough so ghost cell doesn't have negative x."
+
+        super().__init__(nx, ny, ng, xmin, xmax, ymin, ymax)
+
+        self.coord_type = 1
+
+        # Length of the side along r-direction, dr
+
+        self.Lx = ArrayIndexer(np.full((self.qx, self.qy), self.dx),
+                               grid=self)
+
+        # Length of the side along theta-direction, r*dtheta
+
+        self.Ly = ArrayIndexer(np.full((self.qx, self.qy), self.x2d*self.dy),
+                               grid=self)
+
+        # Returns an array of the face area that points in the r(x) direction.
+        # dL_theta x dL_phi = r^2 * sin(theta) * dtheta * dphi
+
+        # dAr_l = - r{i-1/2}^2 * 2pi * cos(theta{i+1/2}) - cos(theta{i-1/2})
+        self.Ax = np.abs(-2.0 * np.pi * self.xl2d**2 *
+                         (np.cos(self.yr2d) - np.cos(self.yl2d)))
+
+        # Returns an array of the face area that points in the theta(y) direction.
+        # dL_phi x dL_r = dr * r * sin(theta) * dphi
+
+        # dAtheta_l = pi * sin(theta{i-1/2}) * (r{i+1/2}^2 - r{i-1/2}^2)
+        self.Ay = np.abs(np.pi * np.sin(self.yl2d) *
+                         (self.xr2d**2 - self.xl2d**2))
+
+        # Returns an array of the volume of each cell.
+        # dV = dL_r * dL_theta * dL_phi
+        #    = (dr) * (r * dtheta) * (r * sin(theta) * dphi)
+        # dV = - 2*np.pi / 3 * (cos(theta{i+1/2}) - cos(theta{i-1/2})) * (r{i+1/2}^3 - r{i-1/2}^3)
+
+        self.V = np.abs(-2.0 * np.pi / 3.0 *
+                        (np.cos(self.yr2d) - np.cos(self.yl2d)) *
+                        (self.xr2d - self.xl2d) *
+                        (self.xr2d**2 + self.xl2d**2 + self.xr2d*self.xl2d))
+
+    def __str__(self):
+        """ print out some basic information about the grid object """
+        return "Spherical Polar 2D Grid: Define x : r, y : \u03b8. " + \
+               f"xmin (r) = {self.xmin}, xmax= {self.xmax}, " + \
+               f"ymin = {self.ymin}, ymax = {self.ymax}, " + \
+               f"nx = {self.nx}, ny = {self.ny}, ng = {self.ng}"
 
 
 class CellCenterData2d:
