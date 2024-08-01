@@ -301,7 +301,7 @@ def apply_source_terms(U_xl, U_xr, U_yl, U_yr,
             ymom.v()**2 / (dens.v()*myg.x2d.v()) - \
             (pres.ip(1) - pres.v()) / myg.Lx.v()
         ymom_src.v()[:, :] = -(pres.jp(1) - pres.v()) / myg.Ly.v() - \
-            dens.v()*xmom.v()*ymom.v() / (dens.v()*myg.x2d.v())
+            xmom.v()*ymom.v() / (dens.v()*myg.x2d.v())
         E_src.v()[:, :] = xmom.v()*grav
 
     else:
