@@ -297,8 +297,8 @@ class Simulation(NullSimulation):
             var = self.cc_data.get_var_by_index(n)
 
             var.v()[:, :] += dtdV * \
-                (F_x.v(n=n)*myg.Ax_l.v() - F_x.ip(1, n=n)*myg.Ax_r.v() +
-                 F_y.v(n=n)*myg.Ay_l.v() - F_y.jp(1, n=n)*myg.Ay_r.v())
+                (F_x.v(n=n)*myg.Ax.v() - F_x.ip(1, n=n)*myg.Ax.ip(1) +
+                 F_y.v(n=n)*myg.Ay.v() - F_y.jp(1, n=n)*myg.Ay.jp(1))
 
         # Apply external source (gravity) and geometric terms
 

@@ -497,23 +497,23 @@ def apply_transverse_flux(U_xl, U_xr, U_yl, U_yr,
 
         # U_xl[i,j,:] = U_xl[i,j,:] - 0.5*dt/dy * (F_y[i-1,j+1,:] - F_y[i-1,j,:])
         U_xl.v(buf=b, n=n)[:, :] += \
-            - hdtV.v(buf=b)*(F_y.ip_jp(-1, 1, buf=b, n=n)*myg.Ay_r.ip(-1, buf=b) -
-                             F_y.ip(-1, buf=b, n=n)*myg.Ay_l.ip(-1, buf=b))
+            - hdtV.v(buf=b)*(F_y.ip_jp(-1, 1, buf=b, n=n)*myg.Ay.ip_jp(-1, 1, buf=b) -
+                             F_y.ip(-1, buf=b, n=n)*myg.Ay.ip(-1, buf=b))
 
         # U_xr[i,j,:] = U_xr[i,j,:] - 0.5*dt/dy * (F_y[i,j+1,:] - F_y[i,j,:]
         U_xr.v(buf=b, n=n)[:, :] += \
-            - hdtV.v(buf=b)*(F_y.jp(1, buf=b, n=n)*myg.Ay_r.v(buf=b) -
-                             F_y.v(buf=b, n=n)*myg.Ay_l.v(buf=b))
+            - hdtV.v(buf=b)*(F_y.jp(1, buf=b, n=n)*myg.Ay.jp(1, buf=b) -
+                             F_y.v(buf=b, n=n)*myg.Ay.v(buf=b))
 
         # U_yl[i,j,:] = U_yl[i,j,:] - 0.5*dt/dx * (F_x[i+1,j-1,:] - F_x[i,j-1,:])
         U_yl.v(buf=b, n=n)[:, :] += \
-            - hdtV.v(buf=b)*(F_x.ip_jp(1, -1, buf=b, n=n)*myg.Ax_r.jp(-1, buf=b) -
-                             F_x.jp(-1, buf=b, n=n)*myg.Ax_l.jp(-1, buf=b))
+            - hdtV.v(buf=b)*(F_x.ip_jp(1, -1, buf=b, n=n)*myg.Ax.ip_jp(1, -1, buf=b) -
+                             F_x.jp(-1, buf=b, n=n)*myg.Ax.jp(-1, buf=b))
 
         # U_yr[i,j,:] = U_yr[i,j,:] - 0.5*dt/dx * (F_x[i+1,j,:] - F_x[i,j,:])
         U_yr.v(buf=b, n=n)[:, :] += \
-            - hdtV.v(buf=b)*(F_x.ip(1, buf=b, n=n)*myg.Ax_r.v(buf=b) -
-                             F_x.v(buf=b, n=n)*myg.Ax_l.v(buf=b))
+            - hdtV.v(buf=b)*(F_x.ip(1, buf=b, n=n)*myg.Ax.ip(1, buf=b) -
+                             F_x.v(buf=b, n=n)*myg.Ax.v(buf=b))
 
     tm_transverse.end()
 
