@@ -70,7 +70,6 @@ def init_data(my_data, rp):
         u = 0.0
         v = 3.0
 
-
     xmom[:, :] = dens[:, :]*u
     ymom[:, :] = dens[:, :]*v
 
