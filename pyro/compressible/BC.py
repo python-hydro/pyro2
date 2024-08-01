@@ -53,7 +53,9 @@ def user(bc_name, bc_edge, variable, ccdata):
 
             # we will take the density to be constant, the velocity to
             # be outflow, and the pressure to be in HSE
-            if variable in ["density", "x-momentum", "y-momentum", "ymom_src", "E_src", "fuel", "ash"]:
+            if variable in ["density", "x-momentum", "y-momentum",
+                            "dens_src", "xmom_src", "ymom_src", "E_src",
+                            "fuel", "ash"]:
                 v = ccdata.get_var(variable)
                 j = myg.jlo-1
                 while j >= 0:
@@ -99,7 +101,9 @@ def user(bc_name, bc_edge, variable, ccdata):
 
             # we will take the density to be constant, the velocity to
             # be outflow, and the pressure to be in HSE
-            if variable in ["density", "x-momentum", "y-momentum", "ymom_src", "E_src", "fuel", "ash"]:
+            if variable in ["density", "x-momentum", "y-momentum",
+                            "dens_src", "xmom_src", "ymom_src", "E_src",
+                            "fuel", "ash"]:
                 v = ccdata.get_var(variable)
                 for j in range(myg.jhi+1, myg.jhi+myg.ng+1):
                     v[:, j] = v[:, myg.jhi]
