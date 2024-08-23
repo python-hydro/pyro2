@@ -124,6 +124,7 @@ Updating U_{i,j}:
 
 import pyro.compressible as comp
 import pyro.compressible.interface as ifc
+import pyro.compressible.riemann as riemann
 import pyro.mesh.array_indexer as ai
 from pyro.mesh import reconstruction
 from pyro.util import msg
@@ -289,9 +290,9 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     riemannFunc = None
     if riemann == "HLLC":
-        riemannFunc = ifc.riemann_hllc
+        riemannFunc = riemann.riemann_hllc
     elif riemann == "CGF":
-        riemannFunc = ifc.riemann_cgf
+        riemannFunc = riemann.riemann_cgf
     else:
         msg.fail("ERROR: Riemann solver undefined")
 
