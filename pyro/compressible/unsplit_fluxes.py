@@ -286,12 +286,12 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     tm_riem = tc.timer("riemann")
     tm_riem.begin()
 
-    riemann = rp.get_param("compressible.riemann")
+    riemann_method = rp.get_param("compressible.riemann")
 
     riemannFunc = None
-    if riemann == "HLLC":
+    if riemann_method == "HLLC":
         riemannFunc = riemann.riemann_hllc
-    elif riemann == "CGF":
+    elif riemann_method == "CGF":
         riemannFunc = riemann.riemann_cgf
     else:
         msg.fail("ERROR: Riemann solver undefined")

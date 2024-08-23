@@ -3,7 +3,7 @@
 import numpy as np
 
 import pyro.compressible as comp
-import pyro.compressible.interface as cf
+import pyro.compressible.riemann as riemann
 import pyro.mesh.array_indexer as ai
 from pyro.advection_fv4 import interface
 from pyro.mesh import reconstruction
@@ -117,10 +117,10 @@ def fluxes(myd, rp, ivars):
                     q_r.v(n=n, buf=2)[:, :] = xi.v(buf=2)*q_r.v(n=n, buf=2) + \
                         (1.0 - xi.v(buf=2))*q_avg.v(n=n, buf=2)
 
-        _q = cf.riemann_prim(idir, myg.ng,
-                             ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix, ivars.naux,
-                             0, 0,
-                             gamma, q_l, q_r)
+        _q = riemann.riemann_prim(idir, myg.ng,
+                                  ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix, ivars.naux,
+                                  0, 0,
+                                  gamma, q_l, q_r)
 
         q_int_avg = ai.ArrayIndexer(_q, grid=myg)
 

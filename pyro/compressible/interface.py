@@ -214,7 +214,6 @@ def states(idir, ng, dx, dt,
     return q_l, q_r
 
 
-
 @njit(cache=True)
 def artificial_viscosity(ng, dx, dy,
                          cvisc, u, v):

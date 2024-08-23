@@ -22,6 +22,7 @@ Taylor expanding *in space only* yields::
 import pyro.compressible as comp
 import pyro.mesh.array_indexer as ai
 from pyro.compressible import interface
+from pyro.compressible import riemann
 from pyro.mesh import reconstruction
 from pyro.util import msg
 
@@ -164,13 +165,13 @@ def fluxes(my_data, rp, ivars, solid, tc):
     tm_riem = tc.timer("Riemann")
     tm_riem.begin()
 
-    riemann = rp.get_param("compressible.riemann")
+    riemann_method = rp.get_param("compressible.riemann")
 
     riemannFunc = None
-    if riemann == "HLLC":
-        riemannFunc = interface.riemann_hllc
-    elif riemann == "CGF":
-        riemannFunc = interface.riemann_cgf
+    if riemann_method == "HLLC":
+        riemannFunc = riemann.riemann_hllc
+    elif riemann_method == "CGF":
+        riemannFunc = riemann.riemann_cgf
     else:
         msg.fail("ERROR: Riemann solver undefined")
 
