@@ -3,9 +3,9 @@
 import numpy as np
 
 import pyro.compressible as comp
-import pyro.compressible.riemann as riemann
 import pyro.mesh.array_indexer as ai
 from pyro.advection_fv4 import interface
+from pyro.compressible import riemann
 from pyro.mesh import reconstruction
 
 
