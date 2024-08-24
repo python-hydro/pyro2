@@ -119,7 +119,6 @@ def fluxes(myd, rp, ivars):
                     q_r.v(n=n, buf=2)[:, :] = xi.v(buf=2)*q_r.v(n=n, buf=2) + \
                         (1.0 - xi.v(buf=2))*q_avg.v(n=n, buf=2)
 
-
         # solve the Riemann problem to find the face-average q
         _q = cf.riemann_prim(idir, myg.ng,
                              ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix, ivars.naux,
