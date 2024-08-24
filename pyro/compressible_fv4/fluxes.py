@@ -3,9 +3,9 @@
 import numpy as np
 
 import pyro.compressible as comp
-import pyro.compressible.interface as cf
 import pyro.mesh.array_indexer as ai
 from pyro.advection_fv4 import interface
+from pyro.compressible import riemann
 from pyro.mesh import reconstruction
 
 
@@ -120,10 +120,10 @@ def fluxes(myd, rp, ivars):
                         (1.0 - xi.v(buf=2))*q_avg.v(n=n, buf=2)
 
         # solve the Riemann problem to find the face-average q
-        _q = cf.riemann_prim(idir, myg.ng,
-                             ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix, ivars.naux,
-                             0, 0,
-                             gamma, q_l, q_r)
+        _q = riemann.riemann_prim(idir, myg.ng,
+                                  ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix, ivars.naux,
+                                   0, 0,
+                                   gamma, q_l, q_r)
 
         q_int_avg = ai.ArrayIndexer(_q, grid=myg)
 
