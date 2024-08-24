@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible_rk.fluxes &mdash; pyro 4.1.0.post6+gb088f2ec documentation</title>
+  <title>pyro.compressible_rk.fluxes &mdash; pyro 4.1.0.post7+gd045795b documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
@@ -17,7 +17,7 @@
   
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=64006784"></script>
+        <script src="../../../_static/documentation_options.js?v=b48d4b1d"></script>
         <script src="../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -146,7 +146,7 @@
 
 <span class="kn">import</span> <span class="nn">pyro.compressible</span> <span class="k">as</span> <span class="nn">comp</span>
 <span class="kn">import</span> <span class="nn">pyro.mesh.array_indexer</span> <span class="k">as</span> <span class="nn">ai</span>
-<span class="kn">from</span> <span class="nn">pyro.compressible</span> <span class="kn">import</span> <span class="n">interface</span>
+<span class="kn">from</span> <span class="nn">pyro.compressible</span> <span class="kn">import</span> <span class="n">interface</span><span class="p">,</span> <span class="n">riemann</span>
 <span class="kn">from</span> <span class="nn">pyro.mesh</span> <span class="kn">import</span> <span class="n">reconstruction</span>
 <span class="kn">from</span> <span class="nn">pyro.util</span> <span class="kn">import</span> <span class="n">msg</span>
 
@@ -291,13 +291,13 @@
     <span class="n">tm_riem</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">timer</span><span class="p">(</span><span class="s2">&quot;Riemann&quot;</span><span class="p">)</span>
     <span class="n">tm_riem</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span>
 
-    <span class="n">riemann</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;compressible.riemann&quot;</span><span class="p">)</span>
+    <span class="n">riemann_method</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;compressible.riemann&quot;</span><span class="p">)</span>
 
     <span class="n">riemannFunc</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="n">riemann</span> <span class="o">==</span> <span class="s2">&quot;HLLC&quot;</span><span class="p">:</span>
-        <span class="n">riemannFunc</span> <span class="o">=</span> <span class="n">interface</span><span class="o">.</span><span class="n">riemann_hllc</span>
-    <span class="k">elif</span> <span class="n">riemann</span> <span class="o">==</span> <span class="s2">&quot;CGF&quot;</span><span class="p">:</span>
-        <span class="n">riemannFunc</span> <span class="o">=</span> <span class="n">interface</span><span class="o">.</span><span class="n">riemann_cgf</span>
+    <span class="k">if</span> <span class="n">riemann_method</span> <span class="o">==</span> <span class="s2">&quot;HLLC&quot;</span><span class="p">:</span>
+        <span class="n">riemannFunc</span> <span class="o">=</span> <span class="n">riemann</span><span class="o">.</span><span class="n">riemann_hllc</span>
+    <span class="k">elif</span> <span class="n">riemann_method</span> <span class="o">==</span> <span class="s2">&quot;CGF&quot;</span><span class="p">:</span>
+        <span class="n">riemannFunc</span> <span class="o">=</span> <span class="n">riemann</span><span class="o">.</span><span class="n">riemann_cgf</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ERROR: Riemann solver undefined&quot;</span><span class="p">)</span>
 

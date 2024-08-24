@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible package &mdash; pyro 4.1.0.post6+gb088f2ec documentation</title>
+  <title>pyro.compressible package &mdash; pyro 4.1.0.post7+gd045795b documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
@@ -18,7 +18,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=64006784"></script>
+        <script src="_static/documentation_options.js?v=b48d4b1d"></script>
         <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -428,182 +428,6 @@ directly Colella Woodward (1984) Eq. 4.5</p>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">ndarray, ndarray</span></dt><dd><p>Artificial viscosity in the x- and y-directions</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyro.compressible.interface.consFlux">
-<span class="sig-prename descclassname"><span class="pre">pyro.compressible.interface.</span></span><span class="sig-name descname"><span class="pre">consFlux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idens</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ixmom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iymom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iener</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">irhoX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nspec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U_state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible/interface.html#consFlux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible.interface.consFlux" title="Link to this definition"></a></dt>
-<dd><p>Calculate the conservative flux.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>idir</strong><span class="classifier">int</span></dt><dd><p>Are we predicting to the edges in the x-direction (1) or y-direction (2)?</p>
-</dd>
-<dt><strong>gamma</strong><span class="classifier">float</span></dt><dd><p>Adiabatic index</p>
-</dd>
-<dt><strong>idens, ixmom, iymom, iener, irhoX</strong><span class="classifier">int</span></dt><dd><p>The indices of the density, x-momentum, y-momentum, internal energy density
-and species partial densities in the conserved state vector.</p>
-</dd>
-<dt><strong>nspec</strong><span class="classifier">int</span></dt><dd><p>The number of species</p>
-</dd>
-<dt><strong>U_state</strong><span class="classifier">ndarray</span></dt><dd><p>Conserved state vector.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>Conserved flux</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyro.compressible.interface.riemann_cgf">
-<span class="sig-prename descclassname"><span class="pre">pyro.compressible.interface.</span></span><span class="sig-name descname"><span class="pre">riemann_cgf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idens</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ixmom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iymom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iener</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">irhoX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nspec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_solid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_solid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U_r</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible/interface.html#riemann_cgf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible.interface.riemann_cgf" title="Link to this definition"></a></dt>
-<dd><p>Solve riemann shock tube problem for a general equation of
-state using the method of Colella, Glaz, and Ferguson.  See
-Almgren et al. 2010 (the CASTRO paper) for details.</p>
-<p>The Riemann problem for the Euler’s equation produces 4 regions,
-separated by the three characteristics (u - cs, u, u + cs):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">-</span> <span class="n">cs</span>    <span class="n">t</span>    <span class="n">u</span>      <span class="n">u</span> <span class="o">+</span> <span class="n">cs</span>
-  \       <span class="o">^</span>   <span class="o">.</span>       <span class="o">/</span>
-   \  <span class="o">*</span><span class="n">L</span>  <span class="o">|</span>   <span class="o">.</span> <span class="o">*</span><span class="n">R</span>   <span class="o">/</span>
-    \     <span class="o">|</span>  <span class="o">.</span>     <span class="o">/</span>
-     \    <span class="o">|</span>  <span class="o">.</span>    <span class="o">/</span>
- <span class="n">L</span>    \   <span class="o">|</span> <span class="o">.</span>   <span class="o">/</span>    <span class="n">R</span>
-       \  <span class="o">|</span> <span class="o">.</span>  <span class="o">/</span>
-        \ <span class="o">|.</span> <span class="o">/</span>
-         \<span class="o">|./</span>
-<span class="o">----------+----------------&gt;</span> <span class="n">x</span>
-</pre></div>
-</div>
-<p>We care about the solution on the axis.  The basic idea is to use
-estimates of the wave speeds to figure out which region we are in,
-and: use jump conditions to evaluate the state there.</p>
-<p>Only density jumps across the u characteristic.  All primitive
-variables jump across the other two.  Special attention is needed
-if a rarefaction spans the axis.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>idir</strong><span class="classifier">int</span></dt><dd><p>Are we predicting to the edges in the x-direction (1) or y-direction (2)?</p>
-</dd>
-<dt><strong>ng</strong><span class="classifier">int</span></dt><dd><p>The number of ghost cells</p>
-</dd>
-<dt><strong>nspec</strong><span class="classifier">int</span></dt><dd><p>The number of species</p>
-</dd>
-<dt><strong>idens, ixmom, iymom, iener, irhoX</strong><span class="classifier">int</span></dt><dd><p>The indices of the density, x-momentum, y-momentum, internal energy density
-and species partial densities in the conserved state vector.</p>
-</dd>
-<dt><strong>lower_solid, upper_solid</strong><span class="classifier">int</span></dt><dd><p>Are we at lower or upper solid boundaries?</p>
-</dd>
-<dt><strong>gamma</strong><span class="classifier">float</span></dt><dd><p>Adiabatic index</p>
-</dd>
-<dt><strong>U_l, U_r</strong><span class="classifier">ndarray</span></dt><dd><p>Conserved state on the left and right cell edges.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>Conserved flux</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyro.compressible.interface.riemann_hllc">
-<span class="sig-prename descclassname"><span class="pre">pyro.compressible.interface.</span></span><span class="sig-name descname"><span class="pre">riemann_hllc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idens</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ixmom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iymom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iener</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">irhoX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nspec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_solid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_solid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U_r</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible/interface.html#riemann_hllc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible.interface.riemann_hllc" title="Link to this definition"></a></dt>
-<dd><p>This is the HLLC Riemann solver.  The implementation follows
-directly out of Toro’s book.  Note: this does not handle the
-transonic rarefaction.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>idir</strong><span class="classifier">int</span></dt><dd><p>Are we predicting to the edges in the x-direction (1) or y-direction (2)?</p>
-</dd>
-<dt><strong>ng</strong><span class="classifier">int</span></dt><dd><p>The number of ghost cells</p>
-</dd>
-<dt><strong>nspec</strong><span class="classifier">int</span></dt><dd><p>The number of species</p>
-</dd>
-<dt><strong>idens, ixmom, iymom, iener, irhoX</strong><span class="classifier">int</span></dt><dd><p>The indices of the density, x-momentum, y-momentum, internal energy density
-and species partial densities in the conserved state vector.</p>
-</dd>
-<dt><strong>lower_solid, upper_solid</strong><span class="classifier">int</span></dt><dd><p>Are we at lower or upper solid boundaries?</p>
-</dd>
-<dt><strong>gamma</strong><span class="classifier">float</span></dt><dd><p>Adiabatic index</p>
-</dd>
-<dt><strong>U_l, U_r</strong><span class="classifier">ndarray</span></dt><dd><p>Conserved state on the left and right cell edges.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>Conserved flux</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyro.compressible.interface.riemann_prim">
-<span class="sig-prename descclassname"><span class="pre">pyro.compressible.interface.</span></span><span class="sig-name descname"><span class="pre">riemann_prim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">irho</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ip</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nspec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_solid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_solid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_r</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible/interface.html#riemann_prim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible.interface.riemann_prim" title="Link to this definition"></a></dt>
-<dd><p>this is like riemann_cgf, except that it works on a primitive
-variable input state and returns the primitive variable interface
-state</p>
-<p>Solve riemann shock tube problem for a general equation of
-state using the method of Colella, Glaz, and Ferguson.  See
-Almgren et al. 2010 (the CASTRO paper) for details.</p>
-<p>The Riemann problem for the Euler’s equation produces 4 regions,
-separated by the three characteristics <span class="math notranslate nohighlight">\((u - cs, u, u + cs)\)</span>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">-</span> <span class="n">cs</span>    <span class="n">t</span>    <span class="n">u</span>      <span class="n">u</span> <span class="o">+</span> <span class="n">cs</span>
-  \       <span class="o">^</span>   <span class="o">.</span>       <span class="o">/</span>
-   \  <span class="o">*</span><span class="n">L</span>  <span class="o">|</span>   <span class="o">.</span> <span class="o">*</span><span class="n">R</span>   <span class="o">/</span>
-    \     <span class="o">|</span>  <span class="o">.</span>     <span class="o">/</span>
-     \    <span class="o">|</span>  <span class="o">.</span>    <span class="o">/</span>
- <span class="n">L</span>    \   <span class="o">|</span> <span class="o">.</span>   <span class="o">/</span>    <span class="n">R</span>
-       \  <span class="o">|</span> <span class="o">.</span>  <span class="o">/</span>
-        \ <span class="o">|.</span> <span class="o">/</span>
-         \<span class="o">|./</span>
-<span class="o">----------+----------------&gt;</span> <span class="n">x</span>
-</pre></div>
-</div>
-<p>We care about the solution on the axis.  The basic idea is to use
-estimates of the wave speeds to figure out which region we are in,
-and: use jump conditions to evaluate the state there.</p>
-<p>Only density jumps across the <span class="math notranslate nohighlight">\(u\)</span> characteristic.  All primitive
-variables jump across the other two.  Special attention is needed
-if a rarefaction spans the axis.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>idir</strong><span class="classifier">int</span></dt><dd><p>Are we predicting to the edges in the x-direction (1) or y-direction (2)?</p>
-</dd>
-<dt><strong>ng</strong><span class="classifier">int</span></dt><dd><p>The number of ghost cells</p>
-</dd>
-<dt><strong>nspec</strong><span class="classifier">int</span></dt><dd><p>The number of species</p>
-</dd>
-<dt><strong>irho, iu, iv, ip, iX</strong><span class="classifier">int</span></dt><dd><p>The indices of the density, x-velocity, y-velocity, pressure and species fractions in the state vector.</p>
-</dd>
-<dt><strong>lower_solid, upper_solid</strong><span class="classifier">int</span></dt><dd><p>Are we at lower or upper solid boundaries?</p>
-</dd>
-<dt><strong>gamma</strong><span class="classifier">float</span></dt><dd><p>Adiabatic index</p>
-</dd>
-<dt><strong>q_l, q_r</strong><span class="classifier">ndarray</span></dt><dd><p>Primitive state on the left and right cell edges.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>Primitive flux</p>
 </dd>
 </dl>
 </dd>
