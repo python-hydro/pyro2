@@ -120,9 +120,14 @@ def fluxes(myd, rp, ivars):
                         (1.0 - xi.v(buf=2))*q_avg.v(n=n, buf=2)
 
         # solve the Riemann problem to find the face-average q
-        _q = riemann.riemann_prim(idir, myg.ng,
-                                  ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix, ivars.naux,
-                                  gamma, q_l, q_r)
+        _q = myg.scratch_array(nvar=ivars.nq)
+
+        for i in range(myg.ilo-1, myg.ihi+2):
+            for j in range(myg.jlo-1, myg.jhi+2):
+
+                _q[i, j, :] = riemann.riemann_prim(idir, myg.ng,
+                                                   ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix, ivars.naux,
+                                                   gamma, q_l[i, j, :], q_r[i, j, :])
 
         q_int_avg = ai.ArrayIndexer(_q, grid=myg)
 
