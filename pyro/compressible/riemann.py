@@ -5,8 +5,7 @@ from numba import njit
 @njit(cache=True)
 def riemann_cgf(idir, ng,
                 idens, ixmom, iymom, iener, irhoX, nspec,
-                lower_solid, upper_solid,
-                gamma, U_l, U_r):
+                gamma, U_l, U_r, is_solid=False):
     r"""
     Solve riemann shock tube problem for a general equation of
     state using the method of Colella, Glaz, and Ferguson.  See
@@ -46,12 +45,12 @@ def riemann_cgf(idir, ng,
     idens, ixmom, iymom, iener, irhoX : int
         The indices of the density, x-momentum, y-momentum, internal energy density
         and species partial densities in the conserved state vector.
-    lower_solid, upper_solid : int
-        Are we at lower or upper solid boundaries?
     gamma : float
         Adiabatic index
     U_l, U_r : ndarray
         Conserved state on the left and right cell edges.
+    is_solid : bool
+        Are we at a solid wall?
 
     Returns
     -------
@@ -59,249 +58,228 @@ def riemann_cgf(idir, ng,
         Conserved flux
     """
 
-    qx, qy, nvar = U_l.shape
+    nvar = U_l.shape[0]
 
-    F = np.zeros((qx, qy, nvar))
+    F = np.zeros((nvar))
 
     smallc = 1.e-10
     smallrho = 1.e-10
     smallp = 1.e-10
 
-    nx = qx - 2 * ng
-    ny = qy - 2 * ng
-    ilo = ng
-    ihi = ng + nx
-    jlo = ng
-    jhi = ng + ny
+    # primitive variable states
+    rho_l = U_l[idens]
 
-    for i in range(ilo - 1, ihi + 1):
-        for j in range(jlo - 1, jhi + 1):
+    # un = normal velocity; ut = transverse velocity
+    if idir == 1:
+        un_l = U_l[ixmom] / rho_l
+        ut_l = U_l[iymom] / rho_l
+    else:
+        un_l = U_l[iymom] / rho_l
+        ut_l = U_l[ixmom] / rho_l
 
-            # primitive variable states
-            rho_l = U_l[i, j, idens]
+    rhoe_l = U_l[iener] - 0.5 * rho_l * (un_l**2 + ut_l**2)
 
-            # un = normal velocity; ut = transverse velocity
-            if idir == 1:
-                un_l = U_l[i, j, ixmom] / rho_l
-                ut_l = U_l[i, j, iymom] / rho_l
+    p_l = rhoe_l * (gamma - 1.0)
+    p_l = max(p_l, smallp)
+
+    rho_r = U_r[idens]
+
+    if idir == 1:
+        un_r = U_r[ixmom] / rho_r
+        ut_r = U_r[iymom] / rho_r
+    else:
+        un_r = U_r[iymom] / rho_r
+        ut_r = U_r[ixmom] / rho_r
+
+    rhoe_r = U_r[iener] - 0.5 * rho_r * (un_r**2 + ut_r**2)
+
+    p_r = rhoe_r * (gamma - 1.0)
+    p_r = max(p_r, smallp)
+
+    # define the Lagrangian sound speed
+    W_l = max(smallrho * smallc, np.sqrt(gamma * p_l * rho_l))
+    W_r = max(smallrho * smallc, np.sqrt(gamma * p_r * rho_r))
+
+    # and the regular sound speeds
+    c_l = max(smallc, np.sqrt(gamma * p_l / rho_l))
+    c_r = max(smallc, np.sqrt(gamma * p_r / rho_r))
+
+    # define the star states
+    pstar = (W_l * p_r + W_r * p_l + W_l *
+             W_r * (un_l - un_r)) / (W_l + W_r)
+    pstar = max(pstar, smallp)
+    ustar = (W_l * un_l + W_r * un_r + (p_l - p_r)) / (W_l + W_r)
+
+    # now compute the remaining state to the left and right
+    # of the contact (in the star region)
+    rhostar_l = rho_l + (pstar - p_l) / c_l**2
+    rhostar_r = rho_r + (pstar - p_r) / c_r**2
+
+    rhoestar_l = rhoe_l + \
+        (pstar - p_l) * (rhoe_l / rho_l + p_l / rho_l) / c_l**2
+    rhoestar_r = rhoe_r + \
+        (pstar - p_r) * (rhoe_r / rho_r + p_r / rho_r) / c_r**2
+
+    cstar_l = max(smallc, np.sqrt(gamma * pstar / rhostar_l))
+    cstar_r = max(smallc, np.sqrt(gamma * pstar / rhostar_r))
+
+    # figure out which state we are in, based on the location of
+    # the waves
+    if ustar > 0.0:
+
+        # contact is moving to the right, we need to understand
+        # the L and *L states
+
+        # Note: transverse velocity only jumps across contact
+        ut_state = ut_l
+
+        # define eigenvalues
+        lambda_l = un_l - c_l
+        lambdastar_l = ustar - cstar_l
+
+        if pstar > p_l:
+            # the wave is a shock -- find the shock speed
+            sigma = (lambda_l + lambdastar_l) / 2.0
+
+            if sigma > 0.0:
+                # shock is moving to the right -- solution is L state
+                rho_state = rho_l
+                un_state = un_l
+                p_state = p_l
+                rhoe_state = rhoe_l
+
             else:
-                un_l = U_l[i, j, iymom] / rho_l
-                ut_l = U_l[i, j, ixmom] / rho_l
-
-            rhoe_l = U_l[i, j, iener] - 0.5 * rho_l * (un_l**2 + ut_l**2)
-
-            p_l = rhoe_l * (gamma - 1.0)
-            p_l = max(p_l, smallp)
-
-            rho_r = U_r[i, j, idens]
-
-            if idir == 1:
-                un_r = U_r[i, j, ixmom] / rho_r
-                ut_r = U_r[i, j, iymom] / rho_r
-            else:
-                un_r = U_r[i, j, iymom] / rho_r
-                ut_r = U_r[i, j, ixmom] / rho_r
-
-            rhoe_r = U_r[i, j, iener] - 0.5 * rho_r * (un_r**2 + ut_r**2)
-
-            p_r = rhoe_r * (gamma - 1.0)
-            p_r = max(p_r, smallp)
-
-            # define the Lagrangian sound speed
-            W_l = max(smallrho * smallc, np.sqrt(gamma * p_l * rho_l))
-            W_r = max(smallrho * smallc, np.sqrt(gamma * p_r * rho_r))
-
-            # and the regular sound speeds
-            c_l = max(smallc, np.sqrt(gamma * p_l / rho_l))
-            c_r = max(smallc, np.sqrt(gamma * p_r / rho_r))
-
-            # define the star states
-            pstar = (W_l * p_r + W_r * p_l + W_l *
-                     W_r * (un_l - un_r)) / (W_l + W_r)
-            pstar = max(pstar, smallp)
-            ustar = (W_l * un_l + W_r * un_r + (p_l - p_r)) / (W_l + W_r)
-
-            # now compute the remaining state to the left and right
-            # of the contact (in the star region)
-            rhostar_l = rho_l + (pstar - p_l) / c_l**2
-            rhostar_r = rho_r + (pstar - p_r) / c_r**2
-
-            rhoestar_l = rhoe_l + \
-                (pstar - p_l) * (rhoe_l / rho_l + p_l / rho_l) / c_l**2
-            rhoestar_r = rhoe_r + \
-                (pstar - p_r) * (rhoe_r / rho_r + p_r / rho_r) / c_r**2
-
-            cstar_l = max(smallc, np.sqrt(gamma * pstar / rhostar_l))
-            cstar_r = max(smallc, np.sqrt(gamma * pstar / rhostar_r))
-
-            # figure out which state we are in, based on the location of
-            # the waves
-            if ustar > 0.0:
-
-                # contact is moving to the right, we need to understand
-                # the L and *L states
-
-                # Note: transverse velocity only jumps across contact
-                ut_state = ut_l
-
-                # define eigenvalues
-                lambda_l = un_l - c_l
-                lambdastar_l = ustar - cstar_l
-
-                if pstar > p_l:
-                    # the wave is a shock -- find the shock speed
-                    sigma = (lambda_l + lambdastar_l) / 2.0
-
-                    if sigma > 0.0:
-                        # shock is moving to the right -- solution is L state
-                        rho_state = rho_l
-                        un_state = un_l
-                        p_state = p_l
-                        rhoe_state = rhoe_l
-
-                    else:
-                        # solution is *L state
-                        rho_state = rhostar_l
-                        un_state = ustar
-                        p_state = pstar
-                        rhoe_state = rhoestar_l
-
-                else:
-                    # the wave is a rarefaction
-                    if lambda_l < 0.0 and lambdastar_l < 0.0:
-                        # rarefaction fan is moving to the left -- solution is
-                        # *L state
-                        rho_state = rhostar_l
-                        un_state = ustar
-                        p_state = pstar
-                        rhoe_state = rhoestar_l
-
-                    elif lambda_l > 0.0 and lambdastar_l > 0.0:
-                        # rarefaction fan is moving to the right -- solution is
-                        # L state
-                        rho_state = rho_l
-                        un_state = un_l
-                        p_state = p_l
-                        rhoe_state = rhoe_l
-
-                    else:
-                        # rarefaction spans x/t = 0 -- interpolate
-                        alpha = lambda_l / (lambda_l - lambdastar_l)
-
-                        rho_state = alpha * rhostar_l + (1.0 - alpha) * rho_l
-                        un_state = alpha * ustar + (1.0 - alpha) * un_l
-                        p_state = alpha * pstar + (1.0 - alpha) * p_l
-                        rhoe_state = alpha * rhoestar_l + \
-                            (1.0 - alpha) * rhoe_l
-
-            elif ustar < 0:
-
-                # contact moving left, we need to understand the R and *R
-                # states
-
-                # Note: transverse velocity only jumps across contact
-                ut_state = ut_r
-
-                # define eigenvalues
-                lambda_r = un_r + c_r
-                lambdastar_r = ustar + cstar_r
-
-                if pstar > p_r:
-                    # the wave if a shock -- find the shock speed
-                    sigma = (lambda_r + lambdastar_r) / 2.0
-
-                    if sigma > 0.0:
-                        # shock is moving to the right -- solution is *R state
-                        rho_state = rhostar_r
-                        un_state = ustar
-                        p_state = pstar
-                        rhoe_state = rhoestar_r
-
-                    else:
-                        # solution is R state
-                        rho_state = rho_r
-                        un_state = un_r
-                        p_state = p_r
-                        rhoe_state = rhoe_r
-
-                else:
-                    # the wave is a rarefaction
-                    if lambda_r < 0.0 and lambdastar_r < 0.0:
-                        # rarefaction fan is moving to the left -- solution is
-                        # R state
-                        rho_state = rho_r
-                        un_state = un_r
-                        p_state = p_r
-                        rhoe_state = rhoe_r
-
-                    elif lambda_r > 0.0 and lambdastar_r > 0.0:
-                        # rarefaction fan is moving to the right -- solution is
-                        # *R state
-                        rho_state = rhostar_r
-                        un_state = ustar
-                        p_state = pstar
-                        rhoe_state = rhoestar_r
-
-                    else:
-                        # rarefaction spans x/t = 0 -- interpolate
-                        alpha = lambda_r / (lambda_r - lambdastar_r)
-
-                        rho_state = alpha * rhostar_r + (1.0 - alpha) * rho_r
-                        un_state = alpha * ustar + (1.0 - alpha) * un_r
-                        p_state = alpha * pstar + (1.0 - alpha) * p_r
-                        rhoe_state = alpha * rhoestar_r + \
-                            (1.0 - alpha) * rhoe_r
-
-            else:  # ustar == 0
-
-                rho_state = 0.5 * (rhostar_l + rhostar_r)
+                # solution is *L state
+                rho_state = rhostar_l
                 un_state = ustar
-                ut_state = 0.5 * (ut_l + ut_r)
                 p_state = pstar
-                rhoe_state = 0.5 * (rhoestar_l + rhoestar_r)
+                rhoe_state = rhoestar_l
 
-            # species now
-            if nspec > 0:
-                if ustar > 0.0:
-                    xn = U_l[i, j, irhoX:irhoX + nspec] / U_l[i, j, idens]
+        else:
+            # the wave is a rarefaction
+            if lambda_l < 0.0 and lambdastar_l < 0.0:
+                # rarefaction fan is moving to the left -- solution is
+                # *L state
+                rho_state = rhostar_l
+                un_state = ustar
+                p_state = pstar
+                rhoe_state = rhoestar_l
 
-                elif ustar < 0.0:
-                    xn = U_r[i, j, irhoX:irhoX + nspec] / U_r[i, j, idens]
-                else:
-                    xn = 0.5 * (U_l[i, j, irhoX:irhoX + nspec] / U_l[i, j, idens] +
-                                   U_r[i, j, irhoX:irhoX + nspec] / U_r[i, j, idens])
+            elif lambda_l > 0.0 and lambdastar_l > 0.0:
+                # rarefaction fan is moving to the right -- solution is
+                # L state
+                rho_state = rho_l
+                un_state = un_l
+                p_state = p_l
+                rhoe_state = rhoe_l
 
-            # are we on a solid boundary?
-            if idir == 1:
-                if i == ilo and lower_solid == 1:
-                    un_state = 0.0
-
-                if i == ihi + 1 and upper_solid == 1:
-                    un_state = 0.0
-
-            elif idir == 2:
-                if j == jlo and lower_solid == 1:
-                    un_state = 0.0
-
-                if j == jhi + 1 and upper_solid == 1:
-                    un_state = 0.0
-
-            # compute the fluxes
-            F[i, j, idens] = rho_state * un_state
-
-            if idir == 1:
-                F[i, j, ixmom] = rho_state * un_state**2 + p_state
-                F[i, j, iymom] = rho_state * ut_state * un_state
             else:
-                F[i, j, ixmom] = rho_state * ut_state * un_state
-                F[i, j, iymom] = rho_state * un_state**2 + p_state
+                # rarefaction spans x/t = 0 -- interpolate
+                alpha = lambda_l / (lambda_l - lambdastar_l)
 
-            F[i, j, iener] = rhoe_state * un_state + \
-                0.5 * rho_state * (un_state**2 + ut_state**2) * un_state + \
-                p_state * un_state
+                rho_state = alpha * rhostar_l + (1.0 - alpha) * rho_l
+                un_state = alpha * ustar + (1.0 - alpha) * un_l
+                p_state = alpha * pstar + (1.0 - alpha) * p_l
+                rhoe_state = alpha * rhoestar_l + \
+                    (1.0 - alpha) * rhoe_l
 
-            if nspec > 0:
-                F[i, j, irhoX:irhoX + nspec] = xn * rho_state * un_state
+    elif ustar < 0:
+
+        # contact moving left, we need to understand the R and *R
+        # states
+
+        # Note: transverse velocity only jumps across contact
+        ut_state = ut_r
+
+        # define eigenvalues
+        lambda_r = un_r + c_r
+        lambdastar_r = ustar + cstar_r
+
+        if pstar > p_r:
+            # the wave if a shock -- find the shock speed
+            sigma = (lambda_r + lambdastar_r) / 2.0
+
+            if sigma > 0.0:
+                # shock is moving to the right -- solution is *R state
+                rho_state = rhostar_r
+                un_state = ustar
+                p_state = pstar
+                rhoe_state = rhoestar_r
+
+            else:
+                # solution is R state
+                rho_state = rho_r
+                un_state = un_r
+                p_state = p_r
+                rhoe_state = rhoe_r
+
+        else:
+            # the wave is a rarefaction
+            if lambda_r < 0.0 and lambdastar_r < 0.0:
+                # rarefaction fan is moving to the left -- solution is
+                # R state
+                rho_state = rho_r
+                un_state = un_r
+                p_state = p_r
+                rhoe_state = rhoe_r
+
+            elif lambda_r > 0.0 and lambdastar_r > 0.0:
+                # rarefaction fan is moving to the right -- solution is
+                # *R state
+                rho_state = rhostar_r
+                un_state = ustar
+                p_state = pstar
+                rhoe_state = rhoestar_r
+
+            else:
+                # rarefaction spans x/t = 0 -- interpolate
+                alpha = lambda_r / (lambda_r - lambdastar_r)
+
+                rho_state = alpha * rhostar_r + (1.0 - alpha) * rho_r
+                un_state = alpha * ustar + (1.0 - alpha) * un_r
+                p_state = alpha * pstar + (1.0 - alpha) * p_r
+                rhoe_state = alpha * rhoestar_r + \
+                    (1.0 - alpha) * rhoe_r
+
+    else:  # ustar == 0
+
+        rho_state = 0.5 * (rhostar_l + rhostar_r)
+        un_state = ustar
+        ut_state = 0.5 * (ut_l + ut_r)
+        p_state = pstar
+        rhoe_state = 0.5 * (rhoestar_l + rhoestar_r)
+
+    # species now
+    if nspec > 0:
+        if ustar > 0.0:
+            xn = U_l[irhoX:irhoX + nspec] / U_l[idens]
+
+        elif ustar < 0.0:
+            xn = U_r[irhoX:irhoX + nspec] / U_r[idens]
+        else:
+            xn = 0.5 * (U_l[irhoX:irhoX + nspec] / U_l[idens] +
+                        U_r[irhoX:irhoX + nspec] / U_r[idens])
+
+    # are we on a solid boundary?
+    if is_solid:
+        un_state = 0.0
+
+    # compute the fluxes
+    F[idens] = rho_state * un_state
+
+    if idir == 1:
+        F[ixmom] = rho_state * un_state**2 + p_state
+        F[iymom] = rho_state * ut_state * un_state
+    else:
+        F[ixmom] = rho_state * ut_state * un_state
+        F[iymom] = rho_state * un_state**2 + p_state
+
+    F[iener] = rhoe_state * un_state + \
+        0.5 * rho_state * (un_state**2 + ut_state**2) * un_state + \
+        p_state * un_state
+
+    if nspec > 0:
+        F[irhoX:irhoX + nspec] = xn * rho_state * un_state
 
     return F
 
@@ -309,8 +287,7 @@ def riemann_cgf(idir, ng,
 @njit(cache=True)
 def riemann_prim(idir, ng,
                  irho, iu, iv, ip, iX, nspec,
-                 lower_solid, upper_solid,
-                 gamma, q_l, q_r):
+                 gamma, q_l, q_r, is_solid=False):
     r"""
     this is like riemann_cgf, except that it works on a primitive
     variable input state and returns the primitive variable interface
@@ -366,225 +343,202 @@ def riemann_prim(idir, ng,
         Primitive flux
     """
 
-    qx, qy, nvar = q_l.shape
+    nvar = q_l.shape[0]
 
-    q_int = np.zeros((qx, qy, nvar))
+    q_int = np.zeros((nvar))
 
     smallc = 1.e-10
     smallrho = 1.e-10
     smallp = 1.e-10
 
-    nx = qx - 2 * ng
-    ny = qy - 2 * ng
-    ilo = ng
-    ihi = ng + nx
-    jlo = ng
-    jhi = ng + ny
+    # primitive variable states
+    rho_l = q_l[irho]
 
-    for i in range(ilo - 1, ihi + 1):
-        for j in range(jlo - 1, jhi + 1):
+    # un = normal velocity; ut = transverse velocity
+    if idir == 1:
+        un_l = q_l[iu]
+        ut_l = q_l[iv]
+    else:
+        un_l = q_l[iv]
+        ut_l = q_l[iu]
 
-            # primitive variable states
-            rho_l = q_l[i, j, irho]
+    p_l = q_l[ip]
+    p_l = max(p_l, smallp)
 
-            # un = normal velocity; ut = transverse velocity
-            if idir == 1:
-                un_l = q_l[i, j, iu]
-                ut_l = q_l[i, j, iv]
+    rho_r = q_r[irho]
+
+    if idir == 1:
+        un_r = q_r[iu]
+        ut_r = q_r[iv]
+    else:
+        un_r = q_r[iv]
+        ut_r = q_r[iu]
+
+    p_r = q_r[ip]
+    p_r = max(p_r, smallp)
+
+    # define the Lagrangian sound speed
+    rho_l = max(smallrho, rho_l)
+    rho_r = max(smallrho, rho_r)
+    W_l = max(smallrho * smallc, np.sqrt(gamma * p_l * rho_l))
+    W_r = max(smallrho * smallc, np.sqrt(gamma * p_r * rho_r))
+
+    # and the regular sound speeds
+    c_l = max(smallc, np.sqrt(gamma * p_l / rho_l))
+    c_r = max(smallc, np.sqrt(gamma * p_r / rho_r))
+
+    # define the star states
+    pstar = (W_l * p_r + W_r * p_l + W_l *
+             W_r * (un_l - un_r)) / (W_l + W_r)
+    pstar = max(pstar, smallp)
+    ustar = (W_l * un_l + W_r * un_r + (p_l - p_r)) / (W_l + W_r)
+
+    # now compute the remaining state to the left and right
+    # of the contact (in the star region)
+    rhostar_l = rho_l + (pstar - p_l) / c_l**2
+    rhostar_r = rho_r + (pstar - p_r) / c_r**2
+
+    cstar_l = max(smallc, np.sqrt(gamma * pstar / rhostar_l))
+    cstar_r = max(smallc, np.sqrt(gamma * pstar / rhostar_r))
+
+    # figure out which state we are in, based on the location of
+    # the waves
+    if ustar > 0.0:
+
+        # contact is moving to the right, we need to understand
+        # the L and *L states
+
+        # Note: transverse velocity only jumps across contact
+        ut_state = ut_l
+
+        # define eigenvalues
+        lambda_l = un_l - c_l
+        lambdastar_l = ustar - cstar_l
+
+        if pstar > p_l:
+            # the wave is a shock -- find the shock speed
+            sigma = (lambda_l + lambdastar_l) / 2.0
+
+            if sigma > 0.0:
+                # shock is moving to the right -- solution is L state
+                rho_state = rho_l
+                un_state = un_l
+                p_state = p_l
+
             else:
-                un_l = q_l[i, j, iv]
-                ut_l = q_l[i, j, iu]
-
-            p_l = q_l[i, j, ip]
-            p_l = max(p_l, smallp)
-
-            rho_r = q_r[i, j, irho]
-
-            if idir == 1:
-                un_r = q_r[i, j, iu]
-                ut_r = q_r[i, j, iv]
-            else:
-                un_r = q_r[i, j, iv]
-                ut_r = q_r[i, j, iu]
-
-            p_r = q_r[i, j, ip]
-            p_r = max(p_r, smallp)
-
-            # define the Lagrangian sound speed
-            rho_l = max(smallrho, rho_l)
-            rho_r = max(smallrho, rho_r)
-            W_l = max(smallrho * smallc, np.sqrt(gamma * p_l * rho_l))
-            W_r = max(smallrho * smallc, np.sqrt(gamma * p_r * rho_r))
-
-            # and the regular sound speeds
-            c_l = max(smallc, np.sqrt(gamma * p_l / rho_l))
-            c_r = max(smallc, np.sqrt(gamma * p_r / rho_r))
-
-            # define the star states
-            pstar = (W_l * p_r + W_r * p_l + W_l *
-                     W_r * (un_l - un_r)) / (W_l + W_r)
-            pstar = max(pstar, smallp)
-            ustar = (W_l * un_l + W_r * un_r + (p_l - p_r)) / (W_l + W_r)
-
-            # now compute the remaining state to the left and right
-            # of the contact (in the star region)
-            rhostar_l = rho_l + (pstar - p_l) / c_l**2
-            rhostar_r = rho_r + (pstar - p_r) / c_r**2
-
-            cstar_l = max(smallc, np.sqrt(gamma * pstar / rhostar_l))
-            cstar_r = max(smallc, np.sqrt(gamma * pstar / rhostar_r))
-
-            # figure out which state we are in, based on the location of
-            # the waves
-            if ustar > 0.0:
-
-                # contact is moving to the right, we need to understand
-                # the L and *L states
-
-                # Note: transverse velocity only jumps across contact
-                ut_state = ut_l
-
-                # define eigenvalues
-                lambda_l = un_l - c_l
-                lambdastar_l = ustar - cstar_l
-
-                if pstar > p_l:
-                    # the wave is a shock -- find the shock speed
-                    sigma = (lambda_l + lambdastar_l) / 2.0
-
-                    if sigma > 0.0:
-                        # shock is moving to the right -- solution is L state
-                        rho_state = rho_l
-                        un_state = un_l
-                        p_state = p_l
-
-                    else:
-                        # solution is *L state
-                        rho_state = rhostar_l
-                        un_state = ustar
-                        p_state = pstar
-
-                else:
-                    # the wave is a rarefaction
-                    if lambda_l < 0.0 and lambdastar_l < 0.0:
-                        # rarefaction fan is moving to the left -- solution is
-                        # *L state
-                        rho_state = rhostar_l
-                        un_state = ustar
-                        p_state = pstar
-
-                    elif lambda_l > 0.0 and lambdastar_l > 0.0:
-                        # rarefaction fan is moving to the right -- solution is
-                        # L state
-                        rho_state = rho_l
-                        un_state = un_l
-                        p_state = p_l
-
-                    else:
-                        # rarefaction spans x/t = 0 -- interpolate
-                        alpha = lambda_l / (lambda_l - lambdastar_l)
-
-                        rho_state = alpha * rhostar_l + (1.0 - alpha) * rho_l
-                        un_state = alpha * ustar + (1.0 - alpha) * un_l
-                        p_state = alpha * pstar + (1.0 - alpha) * p_l
-
-            elif ustar < 0:
-
-                # contact moving left, we need to understand the R and *R
-                # states
-
-                # Note: transverse velocity only jumps across contact
-                ut_state = ut_r
-
-                # define eigenvalues
-                lambda_r = un_r + c_r
-                lambdastar_r = ustar + cstar_r
-
-                if pstar > p_r:
-                    # the wave if a shock -- find the shock speed
-                    sigma = (lambda_r + lambdastar_r) / 2.0
-
-                    if sigma > 0.0:
-                        # shock is moving to the right -- solution is *R state
-                        rho_state = rhostar_r
-                        un_state = ustar
-                        p_state = pstar
-
-                    else:
-                        # solution is R state
-                        rho_state = rho_r
-                        un_state = un_r
-                        p_state = p_r
-
-                else:
-                    # the wave is a rarefaction
-                    if lambda_r < 0.0 and lambdastar_r < 0.0:
-                        # rarefaction fan is moving to the left -- solution is
-                        # R state
-                        rho_state = rho_r
-                        un_state = un_r
-                        p_state = p_r
-
-                    elif lambda_r > 0.0 and lambdastar_r > 0.0:
-                        # rarefaction fan is moving to the right -- solution is
-                        # *R state
-                        rho_state = rhostar_r
-                        un_state = ustar
-                        p_state = pstar
-
-                    else:
-                        # rarefaction spans x/t = 0 -- interpolate
-                        alpha = lambda_r / (lambda_r - lambdastar_r)
-
-                        rho_state = alpha * rhostar_r + (1.0 - alpha) * rho_r
-                        un_state = alpha * ustar + (1.0 - alpha) * un_r
-                        p_state = alpha * pstar + (1.0 - alpha) * p_r
-
-            else:  # ustar == 0
-
-                rho_state = 0.5 * (rhostar_l + rhostar_r)
+                # solution is *L state
+                rho_state = rhostar_l
                 un_state = ustar
-                ut_state = 0.5 * (ut_l + ut_r)
                 p_state = pstar
 
-            # species now
-            if nspec > 0:
-                if ustar > 0.0:
-                    xn = q_l[i, j, iX:iX + nspec]
+        else:
+            # the wave is a rarefaction
+            if lambda_l < 0.0 and lambdastar_l < 0.0:
+                # rarefaction fan is moving to the left -- solution is
+                # *L state
+                rho_state = rhostar_l
+                un_state = ustar
+                p_state = pstar
 
-                elif ustar < 0.0:
-                    xn = q_r[i, j, iX:iX + nspec]
-                else:
-                    xn = 0.5 * (q_l[i, j, iX:iX + nspec] +
-                                   q_r[i, j, iX:iX + nspec])
+            elif lambda_l > 0.0 and lambdastar_l > 0.0:
+                # rarefaction fan is moving to the right -- solution is
+                # L state
+                rho_state = rho_l
+                un_state = un_l
+                p_state = p_l
 
-            # are we on a solid boundary?
-            if idir == 1:
-                if i == ilo and lower_solid == 1:
-                    un_state = 0.0
-
-                if i == ihi + 1 and upper_solid == 1:
-                    un_state = 0.0
-
-            elif idir == 2:
-                if j == jlo and lower_solid == 1:
-                    un_state = 0.0
-
-                if j == jhi + 1 and upper_solid == 1:
-                    un_state = 0.0
-
-            q_int[i, j, irho] = rho_state
-            if idir == 1:
-                q_int[i, j, iu] = un_state
-                q_int[i, j, iv] = ut_state
             else:
-                q_int[i, j, iu] = ut_state
-                q_int[i, j, iv] = un_state
+                # rarefaction spans x/t = 0 -- interpolate
+                alpha = lambda_l / (lambda_l - lambdastar_l)
 
-            q_int[i, j, ip] = p_state
+                rho_state = alpha * rhostar_l + (1.0 - alpha) * rho_l
+                un_state = alpha * ustar + (1.0 - alpha) * un_l
+                p_state = alpha * pstar + (1.0 - alpha) * p_l
 
-            if nspec > 0:
-                q_int[i, j, iX:iX + nspec] = xn
+    elif ustar < 0:
+
+        # contact moving left, we need to understand the R and *R
+        # states
+
+        # Note: transverse velocity only jumps across contact
+        ut_state = ut_r
+
+        # define eigenvalues
+        lambda_r = un_r + c_r
+        lambdastar_r = ustar + cstar_r
+
+        if pstar > p_r:
+            # the wave if a shock -- find the shock speed
+            sigma = (lambda_r + lambdastar_r) / 2.0
+
+            if sigma > 0.0:
+                # shock is moving to the right -- solution is *R state
+                rho_state = rhostar_r
+                un_state = ustar
+                p_state = pstar
+
+            else:
+                # solution is R state
+                rho_state = rho_r
+                un_state = un_r
+                p_state = p_r
+
+        else:
+            # the wave is a rarefaction
+            if lambda_r < 0.0 and lambdastar_r < 0.0:
+                # rarefaction fan is moving to the left -- solution is
+                # R state
+                rho_state = rho_r
+                un_state = un_r
+                p_state = p_r
+
+            elif lambda_r > 0.0 and lambdastar_r > 0.0:
+                # rarefaction fan is moving to the right -- solution is
+                # *R state
+                rho_state = rhostar_r
+                un_state = ustar
+                p_state = pstar
+
+            else:
+                # rarefaction spans x/t = 0 -- interpolate
+                alpha = lambda_r / (lambda_r - lambdastar_r)
+
+                rho_state = alpha * rhostar_r + (1.0 - alpha) * rho_r
+                un_state = alpha * ustar + (1.0 - alpha) * un_r
+                p_state = alpha * pstar + (1.0 - alpha) * p_r
+
+    else:  # ustar == 0
+
+        rho_state = 0.5 * (rhostar_l + rhostar_r)
+        un_state = ustar
+        ut_state = 0.5 * (ut_l + ut_r)
+        p_state = pstar
+
+    # species now
+    if nspec > 0:
+        if ustar > 0.0:
+            xn = q_l[iX:iX + nspec]
+        elif ustar < 0.0:
+            xn = q_r[iX:iX + nspec]
+        else:
+            xn = 0.5 * (q_l[iX:iX + nspec] + q_r[iX:iX + nspec])
+
+    # are we on a solid boundary?
+    if is_solid:
+        un_state = 0.0
+
+    q_int[irho] = rho_state
+    if idir == 1:
+        q_int[iu] = un_state
+        q_int[iv] = ut_state
+    else:
+        q_int[iu] = ut_state
+        q_int[iv] = un_state
+
+    q_int[ip] = p_state
+
+    if nspec > 0:
+        q_int[iX:iX + nspec] = xn
 
     return q_int
 
@@ -592,8 +546,7 @@ def riemann_prim(idir, ng,
 @njit(cache=True)
 def riemann_hllc(idir, ng,
                  idens, ixmom, iymom, iener, irhoX, nspec,
-                 lower_solid, upper_solid,  # pylint: disable=unused-argument
-                 gamma, U_l, U_r):
+                 gamma, U_l, U_r, is_solid=False):
     r"""
     This is the HLLC Riemann solver.  The implementation follows
     directly out of Toro's book.  Note: this does not handle the
@@ -623,231 +576,221 @@ def riemann_hllc(idir, ng,
         Conserved flux
     """
 
-    qx, qy, nvar = U_l.shape
+    nvar = U_l.shape[0]
 
-    F = np.zeros((qx, qy, nvar))
+    F = np.zeros(nvar)
 
     smallc = 1.e-10
     smallp = 1.e-10
 
     U_state = np.zeros(nvar)
 
-    nx = qx - 2 * ng
-    ny = qy - 2 * ng
-    ilo = ng
-    ihi = ng + nx
-    jlo = ng
-    jhi = ng + ny
+    # primitive variable states
+    rho_l = U_l[idens]
 
-    for i in range(ilo - 1, ihi + 1):
-        for j in range(jlo - 1, jhi + 1):
+    # un = normal velocity; ut = transverse velocity
+    if idir == 1:
+        un_l = U_l[ixmom] / rho_l
+        ut_l = U_l[iymom] / rho_l
+    else:
+        un_l = U_l[iymom] / rho_l
+        ut_l = U_l[ixmom] / rho_l
 
-            # primitive variable states
-            rho_l = U_l[i, j, idens]
+    rhoe_l = U_l[iener] - 0.5 * rho_l * (un_l**2 + ut_l**2)
 
-            # un = normal velocity; ut = transverse velocity
-            if idir == 1:
-                un_l = U_l[i, j, ixmom] / rho_l
-                ut_l = U_l[i, j, iymom] / rho_l
-            else:
-                un_l = U_l[i, j, iymom] / rho_l
-                ut_l = U_l[i, j, ixmom] / rho_l
+    p_l = rhoe_l * (gamma - 1.0)
+    p_l = max(p_l, smallp)
 
-            rhoe_l = U_l[i, j, iener] - 0.5 * rho_l * (un_l**2 + ut_l**2)
+    rho_r = U_r[idens]
 
-            p_l = rhoe_l * (gamma - 1.0)
-            p_l = max(p_l, smallp)
+    if idir == 1:
+        un_r = U_r[ixmom] / rho_r
+        ut_r = U_r[iymom] / rho_r
+    else:
+        un_r = U_r[iymom] / rho_r
+        ut_r = U_r[ixmom] / rho_r
 
-            rho_r = U_r[i, j, idens]
+    rhoe_r = U_r[iener] - 0.5 * rho_r * (un_r**2 + ut_r**2)
 
-            if idir == 1:
-                un_r = U_r[i, j, ixmom] / rho_r
-                ut_r = U_r[i, j, iymom] / rho_r
-            else:
-                un_r = U_r[i, j, iymom] / rho_r
-                ut_r = U_r[i, j, ixmom] / rho_r
+    p_r = rhoe_r * (gamma - 1.0)
+    p_r = max(p_r, smallp)
 
-            rhoe_r = U_r[i, j, iener] - 0.5 * rho_r * (un_r**2 + ut_r**2)
+    # compute the sound speeds
+    c_l = max(smallc, np.sqrt(gamma * p_l / rho_l))
+    c_r = max(smallc, np.sqrt(gamma * p_r / rho_r))
 
-            p_r = rhoe_r * (gamma - 1.0)
-            p_r = max(p_r, smallp)
+    # Estimate the star quantities -- use one of three methods to
+    # do this -- the primitive variable Riemann solver, the two
+    # shock approximation, or the two rarefaction approximation.
+    # Pick the method based on the pressure states at the
+    # interface.
 
-            # compute the sound speeds
-            c_l = max(smallc, np.sqrt(gamma * p_l / rho_l))
-            c_r = max(smallc, np.sqrt(gamma * p_r / rho_r))
+    p_max = max(p_l, p_r)
+    p_min = min(p_l, p_r)
 
-            # Estimate the star quantities -- use one of three methods to
-            # do this -- the primitive variable Riemann solver, the two
-            # shock approximation, or the two rarefaction approximation.
-            # Pick the method based on the pressure states at the
-            # interface.
+    Q = p_max / p_min
 
-            p_max = max(p_l, p_r)
-            p_min = min(p_l, p_r)
+    rho_avg = 0.5 * (rho_l + rho_r)
+    c_avg = 0.5 * (c_l + c_r)
 
-            Q = p_max / p_min
+    # primitive variable Riemann solver (Toro, 9.3)
+    factor = rho_avg * c_avg
+    # factor2 = rho_avg / c_avg
 
-            rho_avg = 0.5 * (rho_l + rho_r)
-            c_avg = 0.5 * (c_l + c_r)
+    pstar = 0.5 * (p_l + p_r) + 0.5 * (un_l - un_r) * factor
+    ustar = 0.5 * (un_l + un_r) + 0.5 * (p_l - p_r) / factor
 
-            # primitive variable Riemann solver (Toro, 9.3)
-            factor = rho_avg * c_avg
-            # factor2 = rho_avg / c_avg
+    # rhostar_l = rho_l + (un_l - ustar) * factor2
+    # rhostar_r = rho_r + (ustar - un_r) * factor2
 
-            pstar = 0.5 * (p_l + p_r) + 0.5 * (un_l - un_r) * factor
-            ustar = 0.5 * (un_l + un_r) + 0.5 * (p_l - p_r) / factor
+    if Q > 2 and (pstar < p_min or pstar > p_max):
 
-            # rhostar_l = rho_l + (un_l - ustar) * factor2
-            # rhostar_r = rho_r + (ustar - un_r) * factor2
+        # use a more accurate Riemann solver for the estimate here
 
-            if Q > 2 and (pstar < p_min or pstar > p_max):
+        if pstar < p_min:
 
-                # use a more accurate Riemann solver for the estimate here
+            # 2-rarefaction Riemann solver
+            z = (gamma - 1.0) / (2.0 * gamma)
+            p_lr = (p_l / p_r)**z
 
-                if pstar < p_min:
+            ustar = (p_lr * un_l / c_l + un_r / c_r +
+                     2.0 * (p_lr - 1.0) / (gamma - 1.0)) / \
+                     (p_lr / c_l + 1.0 / c_r)
 
-                    # 2-rarefaction Riemann solver
-                    z = (gamma - 1.0) / (2.0 * gamma)
-                    p_lr = (p_l / p_r)**z
+            pstar = 0.5 * (p_l * (1.0 + (gamma - 1.0) * (un_l - ustar) /
+                                  (2.0 * c_l))**(1.0 / z) +
+                           p_r * (1.0 + (gamma - 1.0) * (ustar - un_r) /
+                                  (2.0 * c_r))**(1.0 / z))
 
-                    ustar = (p_lr * un_l / c_l + un_r / c_r +
-                             2.0 * (p_lr - 1.0) / (gamma - 1.0)) / \
-                            (p_lr / c_l + 1.0 / c_r)
+            # rhostar_l = rho_l * (pstar / p_l)**(1.0 / gamma)
+            # rhostar_r = rho_r * (pstar / p_r)**(1.0 / gamma)
 
-                    pstar = 0.5 * (p_l * (1.0 + (gamma - 1.0) * (un_l - ustar) /
-                                          (2.0 * c_l))**(1.0 / z) +
-                                   p_r * (1.0 + (gamma - 1.0) * (ustar - un_r) /
-                                          (2.0 * c_r))**(1.0 / z))
+        else:
 
-                    # rhostar_l = rho_l * (pstar / p_l)**(1.0 / gamma)
-                    # rhostar_r = rho_r * (pstar / p_r)**(1.0 / gamma)
+            # 2-shock Riemann solver
+            A_r = 2.0 / ((gamma + 1.0) * rho_r)
+            B_r = p_r * (gamma - 1.0) / (gamma + 1.0)
 
-                else:
+            A_l = 2.0 / ((gamma + 1.0) * rho_l)
+            B_l = p_l * (gamma - 1.0) / (gamma + 1.0)
 
-                    # 2-shock Riemann solver
-                    A_r = 2.0 / ((gamma + 1.0) * rho_r)
-                    B_r = p_r * (gamma - 1.0) / (gamma + 1.0)
+            # guess of the pressure
+            p_guess = max(0.0, pstar)
 
-                    A_l = 2.0 / ((gamma + 1.0) * rho_l)
-                    B_l = p_l * (gamma - 1.0) / (gamma + 1.0)
+            g_l = np.sqrt(A_l / (p_guess + B_l))
+            g_r = np.sqrt(A_r / (p_guess + B_r))
 
-                    # guess of the pressure
-                    p_guess = max(0.0, pstar)
+            pstar = (g_l * p_l + g_r * p_r -
+                     (un_r - un_l)) / (g_l + g_r)
 
-                    g_l = np.sqrt(A_l / (p_guess + B_l))
-                    g_r = np.sqrt(A_r / (p_guess + B_r))
+            ustar = 0.5 * (un_l + un_r) + \
+                0.5 * ((pstar - p_r) * g_r - (pstar - p_l) * g_l)
 
-                    pstar = (g_l * p_l + g_r * p_r -
-                             (un_r - un_l)) / (g_l + g_r)
+            # rhostar_l = rho_l * (pstar / p_l + (gamma - 1.0) / (gamma + 1.0)) / \
+            #     ((gamma - 1.0) / (gamma + 1.0) * (pstar / p_l) + 1.0)
+            #
+            # rhostar_r = rho_r * (pstar / p_r + (gamma - 1.0) / (gamma + 1.0)) / \
+            #     ((gamma - 1.0) / (gamma + 1.0) * (pstar / p_r) + 1.0)
 
-                    ustar = 0.5 * (un_l + un_r) + \
-                        0.5 * ((pstar - p_r) * g_r - (pstar - p_l) * g_l)
+    # estimate the nonlinear wave speeds
 
-                    # rhostar_l = rho_l * (pstar / p_l + (gamma - 1.0) / (gamma + 1.0)) / \
-                    #     ((gamma - 1.0) / (gamma + 1.0) * (pstar / p_l) + 1.0)
-                    #
-                    # rhostar_r = rho_r * (pstar / p_r + (gamma - 1.0) / (gamma + 1.0)) / \
-                    #     ((gamma - 1.0) / (gamma + 1.0) * (pstar / p_r) + 1.0)
+    if pstar <= p_l:
+        # rarefaction
+        S_l = un_l - c_l
+    else:
+        # shock
+        S_l = un_l - c_l * np.sqrt(1.0 + ((gamma + 1.0) / (2.0 * gamma)) *
+                                   (pstar / p_l - 1.0))
 
-            # estimate the nonlinear wave speeds
+    if pstar <= p_r:
+        # rarefaction
+        S_r = un_r + c_r
+    else:
+        # shock
+        S_r = un_r + c_r * np.sqrt(1.0 + ((gamma + 1.0) / (2.0 / gamma)) *
+                                   (pstar / p_r - 1.0))
 
-            if pstar <= p_l:
-                # rarefaction
-                S_l = un_l - c_l
-            else:
-                # shock
-                S_l = un_l - c_l * np.sqrt(1.0 + ((gamma + 1.0) / (2.0 * gamma)) *
-                                           (pstar / p_l - 1.0))
+    #  We could just take S_c = u_star as the estimate for the
+    #  contact speed, but we can actually do this more accurately
+    #  by using the Rankine-Hugonoit jump conditions across each
+    #  of the waves (see Toro 10.58, Batten et al. SIAM
+    #  J. Sci. and Stat. Comp., 18:1553 (1997)
+    S_c = (p_r - p_l + rho_l * un_l * (S_l - un_l) - rho_r * un_r * (S_r - un_r)) / \
+        (rho_l * (S_l - un_l) - rho_r * (S_r - un_r))
 
-            if pstar <= p_r:
-                # rarefaction
-                S_r = un_r + c_r
-            else:
-                # shock
-                S_r = un_r + c_r * np.sqrt(1.0 + ((gamma + 1.0) / (2.0 / gamma)) *
-                                           (pstar / p_r - 1.0))
+    # figure out which region we are in and compute the state and
+    # the interface fluxes using the HLLC Riemann solver
+    if S_r <= 0.0:
+        # R region
+        U_state[:] = U_r[:]
 
-            #  We could just take S_c = u_star as the estimate for the
-            #  contact speed, but we can actually do this more accurately
-            #  by using the Rankine-Hugonoit jump conditions across each
-            #  of the waves (see Toro 10.58, Batten et al. SIAM
-            #  J. Sci. and Stat. Comp., 18:1553 (1997)
-            S_c = (p_r - p_l + rho_l * un_l * (S_l - un_l) - rho_r * un_r * (S_r - un_r)) / \
-                (rho_l * (S_l - un_l) - rho_r * (S_r - un_r))
+        F[:] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec,
+                        U_state)
 
-            # figure out which region we are in and compute the state and
-            # the interface fluxes using the HLLC Riemann solver
-            if S_r <= 0.0:
-                # R region
-                U_state[:] = U_r[i, j, :]
+    elif S_c <= 0.0 < S_r:
+        # R* region
+        HLLCfactor = rho_r * (S_r - un_r) / (S_r - S_c)
 
-                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec,
-                                      U_state)
+        U_state[idens] = HLLCfactor
 
-            elif S_c <= 0.0 < S_r:
-                # R* region
-                HLLCfactor = rho_r * (S_r - un_r) / (S_r - S_c)
+        if idir == 1:
+            U_state[ixmom] = HLLCfactor * S_c
+            U_state[iymom] = HLLCfactor * ut_r
+        else:
+            U_state[ixmom] = HLLCfactor * ut_r
+            U_state[iymom] = HLLCfactor * S_c
 
-                U_state[idens] = HLLCfactor
+        U_state[iener] = HLLCfactor * (U_r[iener] / rho_r +
+                                       (S_c - un_r) * (S_c + p_r / (rho_r * (S_r - un_r))))
 
-                if idir == 1:
-                    U_state[ixmom] = HLLCfactor * S_c
-                    U_state[iymom] = HLLCfactor * ut_r
-                else:
-                    U_state[ixmom] = HLLCfactor * ut_r
-                    U_state[iymom] = HLLCfactor * S_c
+        # species
+        if nspec > 0:
+            U_state[irhoX:irhoX + nspec] = HLLCfactor * \
+                U_r[irhoX:irhoX + nspec] / rho_r
 
-                U_state[iener] = HLLCfactor * (U_r[i, j, iener] / rho_r +
-                                               (S_c - un_r) * (S_c + p_r / (rho_r * (S_r - un_r))))
+        # find the flux on the right interface
+        F[:] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec,
+                        U_r[:])
 
-                # species
-                if nspec > 0:
-                    U_state[irhoX:irhoX + nspec] = HLLCfactor * \
-                        U_r[i, j, irhoX:irhoX + nspec] / rho_r
+        # correct the flux
+        F[:] = F[:] + S_r * (U_state[:] - U_r[:])
 
-                # find the flux on the right interface
-                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec,
-                                      U_r[i, j, :])
+    elif S_l < 0.0 < S_c:
+        # L* region
+        HLLCfactor = rho_l * (S_l - un_l) / (S_l - S_c)
 
-                # correct the flux
-                F[i, j, :] = F[i, j, :] + S_r * (U_state[:] - U_r[i, j, :])
+        U_state[idens] = HLLCfactor
 
-            elif S_l < 0.0 < S_c:
-                # L* region
-                HLLCfactor = rho_l * (S_l - un_l) / (S_l - S_c)
+        if idir == 1:
+            U_state[ixmom] = HLLCfactor * S_c
+            U_state[iymom] = HLLCfactor * ut_l
+        else:
+            U_state[ixmom] = HLLCfactor * ut_l
+            U_state[iymom] = HLLCfactor * S_c
 
-                U_state[idens] = HLLCfactor
+        U_state[iener] = HLLCfactor * (U_l[iener] / rho_l +
+                                       (S_c - un_l) * (S_c + p_l / (rho_l * (S_l - un_l))))
 
-                if idir == 1:
-                    U_state[ixmom] = HLLCfactor * S_c
-                    U_state[iymom] = HLLCfactor * ut_l
-                else:
-                    U_state[ixmom] = HLLCfactor * ut_l
-                    U_state[iymom] = HLLCfactor * S_c
+        # species
+        if nspec > 0:
+            U_state[irhoX:irhoX + nspec] = HLLCfactor * \
+                U_l[irhoX:irhoX + nspec] / rho_l
 
-                U_state[iener] = HLLCfactor * (U_l[i, j, iener] / rho_l +
-                                               (S_c - un_l) * (S_c + p_l / (rho_l * (S_l - un_l))))
+        # find the flux on the left interface
+        F[:] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec,
+                        U_l[:])
 
-                # species
-                if nspec > 0:
-                    U_state[irhoX:irhoX + nspec] = HLLCfactor * \
-                        U_l[i, j, irhoX:irhoX + nspec] / rho_l
+        # correct the flux
+        F[:] = F[:] + S_l * (U_state[:] - U_l[:])
 
-                # find the flux on the left interface
-                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec,
-                                      U_l[i, j, :])
+    else:
+        # L region
+        U_state[:] = U_l[:]
 
-                # correct the flux
-                F[i, j, :] = F[i, j, :] + S_l * (U_state[:] - U_l[i, j, :])
+        F[:] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec,
+                        U_state)
 
-            else:
-                # L region
-                U_state[:] = U_l[i, j, :]
-
-                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec,
-                                      U_state)
-
-            # we should deal with solid boundaries somehow here
+        # we should deal with solid boundaries somehow here
 
     return F
 
