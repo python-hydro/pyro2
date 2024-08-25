@@ -122,8 +122,7 @@ def fluxes(myd, rp, ivars):
         # solve the Riemann problem to find the face-average q
         _q = riemann.riemann_prim(idir, myg.ng,
                                   ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix, ivars.naux,
-                                   0, 0,
-                                   gamma, q_l, q_r)
+                                  gamma, q_l, q_r)
 
         q_int_avg = ai.ArrayIndexer(_q, grid=myg)
 
