@@ -28,11 +28,11 @@ xmax = 2.0
 ymin = 0.523
 ymax = 2.617
 
-xlboundary = periodic
-xrboundary = periodic
+xlboundary = outflow
+xrboundary = outflow
 
-ylboundary = periodic
-yrboundary = periodic
+ylboundary = outflow
+yrboundary = outflow
 
 
 [vis]

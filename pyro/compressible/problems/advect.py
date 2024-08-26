@@ -56,19 +56,22 @@ def init_data(my_data, rp):
         x = myg.scratch_array()
         y = myg.scratch_array()
 
-        xctr = 0.5*(xmin + xmax) * np.sin((ymin + ymax) * 0.25)
-        yctr = 0.5*(xmin + xmax) * np.cos((ymin + ymax) * 0.25)
+        # xctr = 0.5*(xmin + xmax) * np.sin((ymin + ymax) * 0.25)
+        # yctr = 0.5*(xmin + xmax) * np.cos((ymin + ymax) * 0.25)
+
+        xctr = 0.5*(xmin + xmax) * np.sin((ymin + ymax) * 0.5)
+        yctr = 0.5*(xmin + xmax) * np.cos((ymin + ymax) * 0.5)
 
         x[:, :] = myg.x2d.v(buf=myg.ng) * np.sin(myg.y2d.v(buf=myg.ng))
         y[:, :] = myg.x2d.v(buf=myg.ng) * np.cos(myg.y2d.v(buf=myg.ng))
 
         # this is identical to the advection/smooth problem
-        dens[:, :] = 1.0 + np.exp(-60.0*((x-xctr)**2 +
+        dens[:, :] = 1.0 + np.exp(-120.0*((x-xctr)**2 +
                                          (y-yctr)**2))
 
         # velocity in theta direction.
-        u = 0.0
-        v = 3.0
+        u = 1.0
+        v = 0.0
 
     xmom[:, :] = dens[:, :]*u
     ymom[:, :] = dens[:, :]*v

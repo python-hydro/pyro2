@@ -191,9 +191,16 @@ class Simulation(NullSimulation):
         # get the variables we need
         u, v, cs = self.cc_data.get_var(["velocity", "soundspeed"])
 
+        grid = self.cc_data.grid
+
         # the timestep is min(dx/(|u| + cs), dy/(|v| + cs))
-        xtmp = self.cc_data.grid.dx/(abs(u) + cs)
-        ytmp = self.cc_data.grid.dy/(abs(v) + cs)
+        if grid.coord_type == 0:
+            xtmp = grid.dx/(abs(u) + cs)
+            ytmp = grid.dy/(abs(v) + cs)
+
+        else:
+            xtmp = grid.dx/(abs(u) + cs)
+            ytmp = grid.xmin * grid.dy/(abs(v) + cs)
 
         self.dt = cfl*float(min(xtmp.min(), ytmp.min()))
 
