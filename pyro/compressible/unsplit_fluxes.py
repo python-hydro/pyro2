@@ -296,29 +296,24 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     else:
         msg.fail("ERROR: Riemann solver undefined")
 
-    ilo = myg.ng
-    ihi = myg.ng + myg.nx
-    jlo = myg.ng
-    jhi = myg.ng + myg.ny
-
     _fx = myg.scratch_array(nvar=ivars.nvar)
     _fy = myg.scratch_array(nvar=ivars.nvar)
 
     print(ivars.nvar)
     print(U_xl.shape)
 
-    for i in range(ilo - 1, ihi + 1):
-        for j in range(jlo - 1, jhi + 1):
+    for i in range(myg.ilo-1, myg.ihi+2):
+        for j in range(myg.jlo-1, myg.jhi+2):
 
-            is_solid = (i == ilo and solid.xl) or \
-                       (i == ihi+1 and solid.xr)
+            is_solid = (i == myg.ilo and solid.xl) or \
+                       (i == myg.ihi+1 and solid.xr)
 
             _fx[i, j, :] = riemannFunc(1, myg.ng,
                                        ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
                                        gamma, U_xl[i, j, :], U_xr[i, j, :], is_solid=is_solid)
 
-            is_solid = (j == jlo and solid.yl) or \
-                       (j == jhi+1 and solid.yr)
+            is_solid = (j == myg.jlo and solid.yl) or \
+                       (j == myg.jhi+1 and solid.yr)
 
             _fy[i, j, :] = riemannFunc(2, myg.ng,
                                        ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,

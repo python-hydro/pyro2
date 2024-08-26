@@ -174,15 +174,25 @@ def fluxes(my_data, rp, ivars, solid, tc):
     else:
         msg.fail("ERROR: Riemann solver undefined")
 
-    _fx = riemannFunc(1, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
-                      solid.xl, solid.xr,
-                      gamma, U_xl, U_xr)
+    _fx = myg.scratch_array(nvar=ivars.nvar)
+    _fy = myg.scratch_array(nvar=ivars.nvar)
 
-    _fy = riemannFunc(2, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
-                      solid.yl, solid.yr,
-                      gamma, U_yl, U_yr)
+    for i in range(myg.ilo-1, myg.ihi+2):
+        for j in range(myg.jlo-1, myg.jhi+2):
+
+            is_solid = (i == myg.ilo and solid.xl) or \
+                       (i == myg.ihi+1 and solid.xr)
+
+            _fx[i, j, :] = riemannFunc(1, myg.ng,
+                                       ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+                                       gamma, U_xl[i, j, :], U_xr[i, j, :], is_solid=is_solid)
+
+            is_solid = (j == myg.jlo and solid.yl) or \
+                       (j == myg.jhi+1 and solid.yr)
+
+            _fy[i, j, :] = riemannFunc(2, myg.ng,
+                                       ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+                                       gamma, U_yl[i, j, :], U_yr[i, j, :], is_solid=is_solid)
 
     F_x = ai.ArrayIndexer(d=_fx, grid=myg)
     F_y = ai.ArrayIndexer(d=_fy, grid=myg)
