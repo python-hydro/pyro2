@@ -34,7 +34,7 @@ yrboundary = outflow
 
 
 [sedov]
-r_init = 0.2
+r_init = 0.13
 
 
 [vis]

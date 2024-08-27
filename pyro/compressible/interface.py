@@ -1154,6 +1154,7 @@ def consFlux(idir, coord_type, gamma,
     if idir == 1:
         F[..., idens] = U_state[..., idens] * u
         F[..., ixmom] = U_state[..., ixmom] * u
+
         # if Cartesian2d, then add pressure to xmom flux
         if coord_type == 0:
             F[..., ixmom] += p
@@ -1168,6 +1169,7 @@ def consFlux(idir, coord_type, gamma,
         F[..., idens] = U_state[..., idens] * v
         F[..., ixmom] = U_state[..., ixmom] * v
         F[..., iymom] = U_state[..., iymom] * v
+
         # if Cartesian2d, then add pressure to ymom flux
         if coord_type == 0:
             F[..., iymom] += p

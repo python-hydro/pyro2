@@ -195,12 +195,12 @@ class Simulation(NullSimulation):
 
         # the timestep is min(dx/(|u| + cs), dy/(|v| + cs))
         if grid.coord_type == 0:
-            xtmp = grid.dx/(abs(u) + cs)
-            ytmp = grid.dy/(abs(v) + cs)
+            xtmp = grid.dx / (abs(u) + cs)
+            ytmp = grid.dy / (abs(v) + cs)
 
         else:
-            xtmp = grid.dx/(abs(u) + cs)
-            ytmp = grid.xmin * grid.dy/(abs(v) + cs)
+            xtmp = grid.dx / (abs(u) + cs)
+            ytmp = grid.x[grid.ilo] * grid.dy / (abs(v) + cs)
 
         self.dt = cfl*float(min(xtmp.min(), ytmp.min()))
 

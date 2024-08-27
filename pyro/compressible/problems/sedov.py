@@ -85,9 +85,9 @@ def init_data(my_data, rp):
         # If we do SphericalPolar geometry
 
         # Just put a high energy for now.
-        E_sedov = 1.e5
+        E_sedov = 1.e6
 
-        p = 1.e-5
+        p = 1.e-6
         ener[:, :] = p/(gamma - 1.0)
         myg = my_data.grid
         ener[myg.x2d < r_init] = E_sedov
