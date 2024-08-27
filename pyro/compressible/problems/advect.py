@@ -56,11 +56,8 @@ def init_data(my_data, rp):
         x = myg.scratch_array()
         y = myg.scratch_array()
 
-        # xctr = 0.5*(xmin + xmax) * np.sin((ymin + ymax) * 0.25)
-        # yctr = 0.5*(xmin + xmax) * np.cos((ymin + ymax) * 0.25)
-
-        xctr = 0.5*(xmin + xmax) * np.sin((ymin + ymax) * 0.5)
-        yctr = 0.5*(xmin + xmax) * np.cos((ymin + ymax) * 0.5)
+        xctr = 0.5*(xmin + xmax) * np.sin((ymin + ymax) * 0.25)
+        yctr = 0.5*(xmin + xmax) * np.cos((ymin + ymax) * 0.25)
 
         x[:, :] = myg.x2d.v(buf=myg.ng) * np.sin(myg.y2d.v(buf=myg.ng))
         y[:, :] = myg.x2d.v(buf=myg.ng) * np.cos(myg.y2d.v(buf=myg.ng))
@@ -70,8 +67,8 @@ def init_data(my_data, rp):
                                          (y-yctr)**2))
 
         # velocity in theta direction.
-        u = 1.0
-        v = 0.0
+        u = 0.0
+        v = 1.0
 
     xmom[:, :] = dens[:, :]*u
     ymom[:, :] = dens[:, :]*v

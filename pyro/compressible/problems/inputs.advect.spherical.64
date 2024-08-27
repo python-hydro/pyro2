@@ -12,7 +12,7 @@ cvisc = 0.1
 riemann = CGF
 
 [io]
-basename = spherical_advect_
+basename = spherical_advect_64_
 
 
 [eos]
