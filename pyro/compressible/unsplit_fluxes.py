@@ -553,6 +553,7 @@ def apply_artificial_viscosity(F_x, F_y, q,
     myg = my_data.grid
 
     _ax, _ay = ifc.artificial_viscosity(myg.ng, myg.dx, myg.dy,
+                                        myg.xmin, myg.ymin, myg.coord_type,
         cvisc, q.v(n=ivars.iu, buf=myg.ng), q.v(n=ivars.iv, buf=myg.ng))
 
     avisco_x = ai.ArrayIndexer(d=_ax, grid=myg)
@@ -565,10 +566,10 @@ def apply_artificial_viscosity(F_x, F_y, q,
         var = my_data.get_var_by_index(n)
 
         F_x.v(buf=b, n=n)[:, :] += \
-            avisco_x.v(buf=b)*(var.ip(-1, buf=b) - var.v(buf=b))
+            avisco_x.v(buf=b)*myg.Lx.v(buf=b)*(var.ip(-1, buf=b) - var.v(buf=b))
 
         # F_y = F_y + avisco_y * (U(i,j-1) - U(i,j))
         F_y.v(buf=b, n=n)[:, :] += \
-            avisco_y.v(buf=b)*(var.jp(-1, buf=b) - var.v(buf=b))
+            avisco_y.v(buf=b)*myg.Ly.v(buf=b)*(var.jp(-1, buf=b) - var.v(buf=b))
 
     return F_x, F_y

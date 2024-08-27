@@ -288,12 +288,11 @@ class Simulation(NullSimulation):
 
         # Apply artificial viscosity to fluxes
 
-        if myg.coord_type == 0:
-            q = cons_to_prim(self.cc_data.data, gamma, self.ivars, myg)
+        q = cons_to_prim(self.cc_data.data, gamma, self.ivars, myg)
 
-            F_x, F_y = flx.apply_artificial_viscosity(F_x, F_y, q,
-                                                      self.cc_data, self.rp,
-                                                      self.ivars)
+        F_x, F_y = flx.apply_artificial_viscosity(F_x, F_y, q,
+                                                  self.cc_data, self.rp,
+                                                  self.ivars)
 
         old_dens = dens.copy()
         old_xmom = xmom.copy()
