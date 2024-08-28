@@ -195,7 +195,8 @@ def fluxes(my_data, rp, ivars, solid, tc):
     cvisc = rp.get_param("compressible.cvisc")
 
     _ax, _ay = interface.artificial_viscosity(myg.ng, myg.dx, myg.dy,
-        cvisc, q.v(n=ivars.iu, buf=myg.ng), q.v(n=ivars.iv, buf=myg.ng))
+                                              myg.xmin, myg.ymin, myg.coord_type,
+                                              cvisc, q.v(n=ivars.iu, buf=myg.ng), q.v(n=ivars.iv, buf=myg.ng))
 
     avisco_x = ai.ArrayIndexer(d=_ax, grid=myg)
     avisco_y = ai.ArrayIndexer(d=_ay, grid=myg)
