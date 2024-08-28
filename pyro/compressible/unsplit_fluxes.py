@@ -125,6 +125,7 @@ Updating U_{i,j}:
 import pyro.compressible as comp
 import pyro.compressible.interface as ifc
 import pyro.mesh.array_indexer as ai
+from pyro.compressible import riemann
 from pyro.mesh import reconstruction
 from pyro.util import msg
 
@@ -376,14 +377,14 @@ def riemann_flux(U_xl, U_xr, U_yl, U_yr,
 
     myg = my_data.grid
 
-    riemann = rp.get_param("compressible.riemann")
+    riemann_method = rp.get_param("compressible.riemann")
     gamma = rp.get_param("eos.gamma")
 
     riemannFunc = None
-    if riemann == "HLLC":
-        riemannFunc = ifc.riemann_hllc
-    elif riemann == "CGF":
-        riemannFunc = ifc.riemann_cgf
+    if riemann_method == "HLLC":
+        riemannFunc = riemann.riemann_hllc
+    elif riemann_method == "CGF":
+        riemannFunc = riemann.riemann_cgf
     else:
         msg.fail("ERROR: Riemann solver undefined")
 
