@@ -1,6 +1,8 @@
 import numpy as np
 from numba import njit
+
 import pyro.mesh.array_indexer as ai
+from pyro.util import msg
 
 
 @njit(cache=True)

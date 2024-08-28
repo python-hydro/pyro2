@@ -127,7 +127,6 @@ import pyro.compressible.interface as ifc
 import pyro.mesh.array_indexer as ai
 from pyro.compressible import riemann
 from pyro.mesh import reconstruction
-from pyro.util import msg
 
 
 def interface_states(my_data, rp, ivars, tc, dt):

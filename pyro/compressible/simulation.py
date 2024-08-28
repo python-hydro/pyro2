@@ -4,11 +4,10 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
-import pyro.compressible.riemann as riemann
 import pyro.compressible.unsplit_fluxes as flx
 import pyro.mesh.array_indexer as ai
 import pyro.mesh.boundary as bnd
-from pyro.compressible import BC, derives, eos
+from pyro.compressible import BC, derives, eos, riemann
 from pyro.particles import particles
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
 from pyro.util import msg, plot_tools
@@ -112,11 +111,11 @@ class Simulation(NullSimulation):
 
         # Make sure we use CGF for riemann solver when we do SphericalPolar
         try:
-            riemann = self.rp.get_param("compressible.riemann")
+            riemann_method = self.rp.get_param("compressible.riemann")
         except KeyError:
             msg.warning("ERROR: Riemann Solver is not set.")
 
-        if my_grid.coord_type == 1 and riemann == "HLLC":
+        if my_grid.coord_type == 1 and riemann_method == "HLLC":
             msg.fail("ERROR: Only CGF Riemann Solver is supported " +
                      "with SphericalPolar Geometry")
 
