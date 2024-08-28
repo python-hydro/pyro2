@@ -194,13 +194,8 @@ class Simulation(NullSimulation):
         grid = self.cc_data.grid
 
         # the timestep is min(dx/(|u| + cs), dy/(|v| + cs))
-        if grid.coord_type == 0:
-            xtmp = grid.dx / (abs(u) + cs)
-            ytmp = grid.dy / (abs(v) + cs)
-
-        else:
-            xtmp = grid.dx / (abs(u) + cs)
-            ytmp = grid.x2d * grid.dy / (abs(v) + cs)
+        xtmp = grid.Lx / (abs(u) + cs)
+        ytmp = grid.Ly / (abs(v) + cs)
 
         self.dt = cfl*float(min(xtmp.min(), ytmp.min()))
 
