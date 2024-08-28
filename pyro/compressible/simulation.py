@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import pyro.compressible.interface as ifc
+import pyro.compressible.riemann as riemann
 import pyro.compressible.unsplit_fluxes as flx
 import pyro.mesh.array_indexer as ai
 import pyro.mesh.boundary as bnd
@@ -241,17 +242,17 @@ class Simulation(NullSimulation):
             # SphericalPolar geometry. So we need interface conserved states.
 
             # Get the conserved interface state from Riemann Solver
-            _ux = ifc.riemann_cons(1, myg.ng,
-                                   self.ivars.idens, self.ivars.ixmom, self.ivars.iymom,
-                                   self.ivars.iener, self.ivars.irhox, self.ivars.naux,
-                                   self.solid.xl, self.solid.xr,
-                                   gamma, U_xl, U_xr)
+            _ux = riemann.riemann_cons(1, myg.ng,
+                                       self.ivars.idens, self.ivars.ixmom, self.ivars.iymom,
+                                       self.ivars.iener, self.ivars.irhox, self.ivars.naux,
+                                       self.solid.xl, self.solid.xr,
+                                       gamma, U_xl, U_xr)
 
-            _uy = ifc.riemann_cons(2, myg.ng,
-                                   self.ivars.idens, self.ivars.ixmom, self.ivars.iymom,
-                                   self.ivars.iener, self.ivars.irhox, self.ivars.naux,
-                                   self.solid.yl, self.solid.yr,
-                                   gamma, U_yl, U_yr)
+            _uy = riemann.riemann_cons(2, myg.ng,
+                                       self.ivars.idens, self.ivars.ixmom, self.ivars.iymom,
+                                       self.ivars.iener, self.ivars.irhox, self.ivars.naux,
+                                       self.solid.yl, self.solid.yr,
+                                       gamma, U_yl, U_yr)
 
             U_x = ai.ArrayIndexer(d=_ux, grid=myg)
             U_y = ai.ArrayIndexer(d=_uy, grid=myg)
@@ -262,24 +263,24 @@ class Simulation(NullSimulation):
             qy = cons_to_prim(U_y, gamma, self.ivars, myg)
 
             # Find the corresponding flux from the conserved states.
-            _fx = ifc.consFlux(1, myg.coord_type, gamma,
-                               self.ivars.idens, self.ivars.ixmom, self.ivars.iymom,
-                               self.ivars.iener, self.ivars.irhox, self.ivars.naux,
-                               _ux)
+            _fx = riemann.consFlux(1, myg.coord_type, gamma,
+                                   self.ivars.idens, self.ivars.ixmom, self.ivars.iymom,
+                                   self.ivars.iener, self.ivars.irhox, self.ivars.naux,
+                                   _ux)
 
-            _fy = ifc.consFlux(2, myg.coord_type, gamma,
-                               self.ivars.idens, self.ivars.ixmom, self.ivars.iymom,
-                               self.ivars.iener, self.ivars.irhox, self.ivars.naux,
-                               _uy)
+            _fy = riemann.consFlux(2, myg.coord_type, gamma,
+                                   self.ivars.idens, self.ivars.ixmom, self.ivars.iymom,
+                                   self.ivars.iener, self.ivars.irhox, self.ivars.naux,
+                                   _uy)
 
             F_x = ai.ArrayIndexer(d=_fx, grid=myg)
             F_y = ai.ArrayIndexer(d=_fy, grid=myg)
 
         else:
             # Directly calculate the interface flux using Riemann Solver
-            F_x, F_y = flx.riemann_flux(U_xl, U_xr, U_yl, U_yr,
-                                        self.cc_data, self.rp, self.ivars,
-                                        self.solid, self.tc)
+            F_x, F_y = riemann.riemann_flux(U_xl, U_xr, U_yl, U_yr,
+                                            self.cc_data, self.rp, self.ivars,
+                                            self.solid, self.tc)
 
         # Apply artificial viscosity to fluxes
 
