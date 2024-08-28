@@ -342,70 +342,6 @@ def apply_source_terms(U_xl, U_xr, U_yl, U_yr,
     return U_xl, U_xr, U_yl, U_yr
 
 
-def riemann_flux(U_xl, U_xr, U_yl, U_yr,
-                 my_data, rp, ivars, solid, tc):
-    """
-    This constructs the unsplit fluxes through the x and y interfaces
-    using the left and right conserved states by using the riemann solver.
-
-    Parameters
-    ----------
-    U_xl, U_xr, U_yl, U_yr: ndarray, ndarray, ndarray, ndarray
-        Conserved states in the left and right x-interface
-        and left and right y-interface.
-    my_data : CellCenterData2d object
-        The data object containing the grid and advective scalar that
-        we are advecting.
-    rp : RuntimeParameters object
-        The runtime parameters for the simulation
-    ivars : Variables object
-        The Variables object that tells us which indices refer to which
-        variables
-    solid: A container class
-        This is used in Riemann solver to indicate which side has solid boundary
-    tc : TimerCollection object
-        The timers we are using to profile
-
-    Returns
-    -------
-    out : ndarray, ndarray
-        Fluxes in x and y direction
-    """
-
-    tm_riem = tc.timer("riemann")
-    tm_riem.begin()
-
-    myg = my_data.grid
-
-    riemann_method = rp.get_param("compressible.riemann")
-    gamma = rp.get_param("eos.gamma")
-
-    riemannFunc = None
-    if riemann_method == "HLLC":
-        riemannFunc = riemann.riemann_hllc
-    elif riemann_method == "CGF":
-        riemannFunc = riemann.riemann_cgf
-    else:
-        msg.fail("ERROR: Riemann solver undefined")
-
-    _fx = riemannFunc(1, myg.ng, myg.coord_type,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
-                      solid.xl, solid.xr,
-                      gamma, U_xl, U_xr)
-
-    _fy = riemannFunc(2, myg.ng, myg.coord_type,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
-                      solid.yl, solid.yr,
-                      gamma, U_yl, U_yr)
-
-    F_x = ai.ArrayIndexer(d=_fx, grid=myg)
-    F_y = ai.ArrayIndexer(d=_fy, grid=myg)
-
-    tm_riem.end()
-
-    return F_x, F_y
-
-
 def apply_transverse_flux(U_xl, U_xr, U_yl, U_yr,
                           my_data, rp, ivars, solid, tc, dt):
     """
@@ -481,8 +417,8 @@ def apply_transverse_flux(U_xl, U_xr, U_yl, U_yr,
 
     # Use Riemann Solver to get interface flux using the left and right states
 
-    F_x, F_y = riemann_flux(U_xl, U_xr, U_yl, U_yr,
-                            my_data, rp, ivars, solid, tc)
+    F_x, F_y = riemann.riemann_flux(U_xl, U_xr, U_yl, U_yr,
+                                    my_data, rp, ivars, solid, tc)
 
     # Now we update the conserved states using the transverse fluxes.
 

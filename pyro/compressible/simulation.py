@@ -4,7 +4,6 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
-import pyro.compressible.interface as ifc
 import pyro.compressible.riemann as riemann
 import pyro.compressible.unsplit_fluxes as flx
 import pyro.mesh.array_indexer as ai

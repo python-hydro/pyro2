@@ -92,6 +92,7 @@ def init_data(my_data, rp):
         myg = my_data.grid
         ener[myg.x2d < r_init] = E_sedov
 
+
 def finalize():
     """ print out any information to the user at the end of the run """
 
