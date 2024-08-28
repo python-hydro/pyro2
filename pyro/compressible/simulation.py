@@ -200,7 +200,7 @@ class Simulation(NullSimulation):
 
         else:
             xtmp = grid.dx / (abs(u) + cs)
-            ytmp = grid.x[grid.ilo] * grid.dy / (abs(v) + cs)
+            ytmp = grid.x2d * grid.dy / (abs(v) + cs)
 
         self.dt = cfl*float(min(xtmp.min(), ytmp.min()))
 
