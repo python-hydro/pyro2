@@ -1,12 +1,15 @@
 import numpy as np
 from numba import njit
 
+import pyro.mesh.array_indexer as ai
+from pyro.util import msg
+
 
 @njit(cache=True)
-def riemann_cgf(idir, ng,
-                idens, ixmom, iymom, iener, irhoX, nspec,
-                lower_solid, upper_solid,
-                gamma, U_l, U_r):
+def riemann_cons(idir, ng,
+                 idens, ixmom, iymom, iener, irhoX, nspec,
+                 lower_solid, upper_solid,
+                 gamma, U_l, U_r):
     r"""
     Solve riemann shock tube problem for a general equation of
     state using the method of Colella, Glaz, and Ferguson.  See
@@ -56,12 +59,14 @@ def riemann_cgf(idir, ng,
     Returns
     -------
     out : ndarray
-        Conserved flux
+        Conserved states.
     """
+
+    # pylint: disable=unused-variable
 
     qx, qy, nvar = U_l.shape
 
-    F = np.zeros((qx, qy, nvar))
+    U_out = np.zeros((qx, qy, nvar))
 
     smallc = 1.e-10
     smallrho = 1.e-10
@@ -286,22 +291,68 @@ def riemann_cgf(idir, ng,
                 if j == jhi + 1 and upper_solid == 1:
                     un_state = 0.0
 
-            # compute the fluxes
-            F[i, j, idens] = rho_state * un_state
+            # update conserved state
+            U_out[i, j, idens] = rho_state
 
             if idir == 1:
-                F[i, j, ixmom] = rho_state * un_state**2 + p_state
-                F[i, j, iymom] = rho_state * ut_state * un_state
+                U_out[i, j, ixmom] = rho_state * un_state
+                U_out[i, j, iymom] = rho_state * ut_state
             else:
-                F[i, j, ixmom] = rho_state * ut_state * un_state
-                F[i, j, iymom] = rho_state * un_state**2 + p_state
+                U_out[i, j, ixmom] = rho_state * ut_state
+                U_out[i, j, iymom] = rho_state * un_state
 
-            F[i, j, iener] = rhoe_state * un_state + \
-                0.5 * rho_state * (un_state**2 + ut_state**2) * un_state + \
-                p_state * un_state
+            U_out[i, j, iener] = rhoe_state + \
+                0.5 * rho_state * (un_state**2 + ut_state**2)
 
             if nspec > 0:
-                F[i, j, irhoX:irhoX + nspec] = xn * rho_state * un_state
+                U_out[i, j, irhoX:irhoX + nspec] = xn * rho_state
+
+    return U_out
+
+
+@njit(cache=True)
+def riemann_cgf(idir, ng, coord_type,
+                idens, ixmom, iymom, iener, irhoX, nspec,
+                lower_solid, upper_solid,
+                gamma, U_l, U_r):
+    r"""
+    This uses riemann_cons to directly output fluxes instead of conserved states.
+    This is mainly used to be consistent with riemann_hllc.
+
+    Parameters
+    ----------
+    idir : int
+        Are we predicting to the edges in the x-direction (1) or y-direction (2)?
+    ng : int
+        The number of ghost cells
+    nspec : int
+        The number of species
+    idens, ixmom, iymom, iener, irhoX : int
+        The indices of the density, x-momentum, y-momentum, internal energy density
+        and species partial densities in the conserved state vector.
+    lower_solid, upper_solid : int
+        Are we at lower or upper solid boundaries?
+    gamma : float
+        Adiabatic index
+    U_l, U_r : ndarray
+        Conserved state on the left and right cell edges.
+
+    Returns
+    -------
+    out : ndarray
+        Fluxes
+    """
+
+    # get conserved states from U_l and U_r using riemann solver
+    U_state = riemann_cons(idir, ng,
+                           idens, ixmom, iymom, iener, irhoX, nspec,
+                           lower_solid, upper_solid,
+                           gamma, U_l, U_r)
+
+    # Construct the corresponding flux
+    F = consFlux(idir, coord_type, gamma,
+                 idens, ixmom, iymom, iener, irhoX, nspec,
+                 U_state)
 
     return F
 
@@ -590,7 +641,7 @@ def riemann_prim(idir, ng,
 
 
 @njit(cache=True)
-def riemann_hllc(idir, ng,
+def riemann_hllc(idir, ng, coord_type,
                  idens, ixmom, iymom, iener, irhoX, nspec,
                  lower_solid, upper_solid,  # pylint: disable=unused-argument
                  gamma, U_l, U_r):
@@ -781,7 +832,8 @@ def riemann_hllc(idir, ng,
                 # R region
                 U_state[:] = U_r[i, j, :]
 
-                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec,
+                F[i, j, :] = consFlux(idir, coord_type, gamma,
+                                      idens, ixmom, iymom, iener, irhoX, nspec,
                                       U_state)
 
             elif S_c <= 0.0 < S_r:
@@ -806,7 +858,8 @@ def riemann_hllc(idir, ng,
                         U_r[i, j, irhoX:irhoX + nspec] / rho_r
 
                 # find the flux on the right interface
-                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec,
+                F[i, j, :] = consFlux(idir, coord_type, gamma,
+                                      idens, ixmom, iymom, iener, irhoX, nspec,
                                       U_r[i, j, :])
 
                 # correct the flux
@@ -834,7 +887,8 @@ def riemann_hllc(idir, ng,
                         U_l[i, j, irhoX:irhoX + nspec] / rho_l
 
                 # find the flux on the left interface
-                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec,
+                F[i, j, :] = consFlux(idir, coord_type, gamma,
+                                      idens, ixmom, iymom, iener, irhoX, nspec,
                                       U_l[i, j, :])
 
                 # correct the flux
@@ -844,7 +898,8 @@ def riemann_hllc(idir, ng,
                 # L region
                 U_state[:] = U_l[i, j, :]
 
-                F[i, j, :] = consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec,
+                F[i, j, :] = consFlux(idir, coord_type, gamma,
+                                      idens, ixmom, iymom, iener, irhoX, nspec,
                                       U_state)
 
             # we should deal with solid boundaries somehow here
@@ -852,8 +907,74 @@ def riemann_hllc(idir, ng,
     return F
 
 
+def riemann_flux(U_xl, U_xr, U_yl, U_yr,
+                 my_data, rp, ivars, solid, tc):
+    """
+    This constructs the unsplit fluxes through the x and y interfaces
+    using the left and right conserved states by using the riemann solver.
+
+    Parameters
+    ----------
+    U_xl, U_xr, U_yl, U_yr: ndarray, ndarray, ndarray, ndarray
+        Conserved states in the left and right x-interface
+        and left and right y-interface.
+    my_data : CellCenterData2d object
+        The data object containing the grid and advective scalar that
+        we are advecting.
+    rp : RuntimeParameters object
+        The runtime parameters for the simulation
+    ivars : Variables object
+        The Variables object that tells us which indices refer to which
+        variables
+    solid: A container class
+        This is used in Riemann solver to indicate which side has solid boundary
+    tc : TimerCollection object
+        The timers we are using to profile
+
+    Returns
+    -------
+    out : ndarray, ndarray
+        Fluxes in x and y direction
+    """
+
+    tm_riem = tc.timer("riemann")
+    tm_riem.begin()
+
+    myg = my_data.grid
+
+    riemann_method = rp.get_param("compressible.riemann")
+    gamma = rp.get_param("eos.gamma")
+
+    riemannFunc = None
+    if riemann_method == "HLLC":
+        riemannFunc = riemann_hllc
+    elif riemann_method == "CGF":
+        riemannFunc = riemann_cgf
+    else:
+        msg.fail("ERROR: Riemann solver undefined")
+
+    _fx = riemannFunc(1, myg.ng, myg.coord_type,
+                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+                      solid.xl, solid.xr,
+                      gamma, U_xl, U_xr)
+
+    _fy = riemannFunc(2, myg.ng, myg.coord_type,
+                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
+                      solid.yl, solid.yr,
+                      gamma, U_yl, U_yr)
+
+    F_x = ai.ArrayIndexer(d=_fx, grid=myg)
+    F_y = ai.ArrayIndexer(d=_fy, grid=myg)
+
+    tm_riem.end()
+
+    return F_x, F_y
+
+
 @njit(cache=True)
-def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec, U_state):
+def consFlux(idir, coord_type, gamma,
+             idens, ixmom, iymom, iener, irhoX, nspec,
+             U_state):
     r"""
     Calculate the conservative flux.
 
@@ -879,27 +1000,37 @@ def consFlux(idir, gamma, idens, ixmom, iymom, iener, irhoX, nspec, U_state):
 
     F = np.zeros_like(U_state)
 
-    u = U_state[ixmom] / U_state[idens]
-    v = U_state[iymom] / U_state[idens]
+    u = U_state[..., ixmom] / U_state[..., idens]
+    v = U_state[..., iymom] / U_state[..., idens]
 
-    p = (U_state[iener] - 0.5 * U_state[idens] * (u * u + v * v)) * (gamma - 1.0)
+    p = (U_state[..., iener] - 0.5 * U_state[..., idens] * (u * u + v * v)) * (gamma - 1.0)
 
     if idir == 1:
-        F[idens] = U_state[idens] * u
-        F[ixmom] = U_state[ixmom] * u + p
-        F[iymom] = U_state[iymom] * u
-        F[iener] = (U_state[iener] + p) * u
+        F[..., idens] = U_state[..., idens] * u
+        F[..., ixmom] = U_state[..., ixmom] * u
+
+        # if Cartesian2d, then add pressure to xmom flux
+        if coord_type == 0:
+            F[..., ixmom] += p
+
+        F[..., iymom] = U_state[..., iymom] * u
+        F[..., iener] = (U_state[..., iener] + p) * u
 
         if nspec > 0:
-            F[irhoX:irhoX + nspec] = U_state[irhoX:irhoX + nspec] * u
+            F[..., irhoX:irhoX + nspec] = U_state[..., irhoX:irhoX + nspec] * u
 
     else:
-        F[idens] = U_state[idens] * v
-        F[ixmom] = U_state[ixmom] * v
-        F[iymom] = U_state[iymom] * v + p
-        F[iener] = (U_state[iener] + p) * v
+        F[..., idens] = U_state[..., idens] * v
+        F[..., ixmom] = U_state[..., ixmom] * v
+        F[..., iymom] = U_state[..., iymom] * v
+
+        # if Cartesian2d, then add pressure to ymom flux
+        if coord_type == 0:
+            F[..., iymom] += p
+
+        F[..., iener] = (U_state[..., iener] + p) * v
 
         if nspec > 0:
-            F[irhoX:irhoX + nspec] = U_state[irhoX:irhoX + nspec] * v
+            F[..., irhoX:irhoX + nspec] = U_state[..., irhoX:irhoX + nspec] * v
 
     return F

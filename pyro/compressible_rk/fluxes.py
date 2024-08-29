@@ -161,33 +161,8 @@ def fluxes(my_data, rp, ivars, solid, tc):
     # =========================================================================
     # construct the fluxes normal to the interfaces
     # =========================================================================
-    tm_riem = tc.timer("Riemann")
-    tm_riem.begin()
-
-    riemann_method = rp.get_param("compressible.riemann")
-
-    riemannFunc = None
-    if riemann_method == "HLLC":
-        riemannFunc = riemann.riemann_hllc
-    elif riemann_method == "CGF":
-        riemannFunc = riemann.riemann_cgf
-    else:
-        msg.fail("ERROR: Riemann solver undefined")
-
-    _fx = riemannFunc(1, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
-                      solid.xl, solid.xr,
-                      gamma, U_xl, U_xr)
-
-    _fy = riemannFunc(2, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
-                      solid.yl, solid.yr,
-                      gamma, U_yl, U_yr)
-
-    F_x = ai.ArrayIndexer(d=_fx, grid=myg)
-    F_y = ai.ArrayIndexer(d=_fy, grid=myg)
-
-    tm_riem.end()
+    F_x, F_y = riemann.riemann_flux(U_xl, U_xr, U_yl, U_yr,
+                                    my_data, rp, ivars, solid, tc)
 
     # =========================================================================
     # apply artificial viscosity
