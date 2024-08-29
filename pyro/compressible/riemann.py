@@ -908,11 +908,11 @@ def riemann_flux(idir, U_l, U_r, my_data, rp, ivars,
 
     riemannFunc = riemann_solvers[riemann_method]
 
-    _f = riemann_hllc(idir, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom,
-                      ivars.iener, ivars.irhox, ivars.naux,
-                      lower_solid, upper_solid,
-                      gamma, U_l, U_r)
+    _f = riemannFunc(idir, myg.ng,
+                     ivars.idens, ivars.ixmom, ivars.iymom,
+                     ivars.iener, ivars.irhox, ivars.naux,
+                     lower_solid, upper_solid,
+                     gamma, U_l, U_r)
 
     # If riemann_method is not HLLC, then it outputs interface conserved states
     if riemann_method != "HLLC":
