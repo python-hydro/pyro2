@@ -386,7 +386,8 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     # =========================================================================
     cvisc = rp.get_param("compressible.cvisc")
 
-    _ax, _ay = ifc.artificial_viscosity(myg.ng, myg.dx, myg.dy,
+    _ax, _ay = ifc.artificial_viscosity(myg.ng, myg.dx, myg.dy, myg.Lx, myg.Ly,
+                                        myg.xmin, myg.ymin, myg.coord_type,
         cvisc, q.v(n=ivars.iu, buf=myg.ng), q.v(n=ivars.iv, buf=myg.ng))
 
     avisco_x = ai.ArrayIndexer(d=_ax, grid=myg)

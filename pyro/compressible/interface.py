@@ -215,7 +215,8 @@ def states(idir, ng, dx, dt,
 
 
 @njit(cache=True)
-def artificial_viscosity(ng, dx, dy,
+def artificial_viscosity(ng, dx, dy, Lx, Ly,
+                         xmin, ymin, coord_type,
                          cvisc, u, v):
     r"""
     Compute the artificial viscosity.  Here, we compute edge-centered
@@ -250,6 +251,10 @@ def artificial_viscosity(ng, dx, dy,
         The number of ghost cells
     dx, dy : float
         Cell spacings
+    xmin, ymin : float
+        Min physical x, y boundary
+    Lx, Ly: ndarray
+        Cell size in x, y direction
     cvisc : float
         viscosity parameter
     u, v : ndarray
@@ -265,6 +270,7 @@ def artificial_viscosity(ng, dx, dy,
 
     avisco_x = np.zeros((qx, qy))
     avisco_y = np.zeros((qx, qy))
+    divU = np.zeros((qx, qy))
 
     nx = qx - 2 * ng
     ny = qy - 2 * ng
@@ -273,25 +279,69 @@ def artificial_viscosity(ng, dx, dy,
     jlo = ng
     jhi = ng + ny
 
+    # Let's first compute divergence at the vertex
+    # First compute the left and right x-velocities by
+    # averaging over the y-interface.
+    # As well as the top and bottom y-velocities by
+    # averaging over the x-interface.
+    # Then a simple difference is done between the right and left,
+    # and top and bottom to get the divergence at the vertex.
+
     for i in range(ilo - 1, ihi + 1):
         for j in range(jlo - 1, jhi + 1):
 
-            # start by computing the divergence on the x-interface.  The
-            # x-difference is simply the difference of the cell-centered
-            # x-velocities on either side of the x-interface.  For the
-            # y-difference, first average the four cells to the node on
-            # each end of the edge, and: difference these to find the
-            # edge centered y difference.
-            divU_x = (u[i, j] - u[i - 1, j]) / dx + \
-                0.25 * (v[i, j + 1] + v[i - 1, j + 1] -
-                        v[i, j - 1] - v[i - 1, j - 1]) / dy
+            # For Cartesian2d:
+            if coord_type == 0:
+                # Find the average right and left u velocity
+                ur = 0.5 * (u[i, j] + u[i, j - 1])
+                ul = 0.5 * (u[i - 1, j] + u[i - 1, j - 1])
 
-            avisco_x[i, j] = cvisc * max(-divU_x * dx, 0.0)
+                # Find the average top and bottom v velocity
+                vt = 0.5 * (v[i, j] + v[i - 1, j])
+                vb = 0.5 * (v[i, j - 1] + v[i - 1, j - 1])
 
-            # now the y-interface value
-            divU_y = 0.25 * (u[i + 1, j] + u[i + 1, j - 1] - u[i - 1, j] - u[i - 1, j - 1]) / dx + \
-                (v[i, j] - v[i, j - 1]) / dy
+                # Finite difference to get ux and vy
+                ux = (ur - ul) / dx
+                vy = (vt - vb) / dy
 
-            avisco_y[i, j] = cvisc * max(-divU_y * dy, 0.0)
+                # Find div(U)_{i-1/2, j-1/2}
+                divU[i, j] = ux + vy
+
+            # For SphericalPolar:
+            else:
+                # cell-centered r-coord of right, left cell and face-centered r
+                rr = (i + 1 - ng) * dx + xmin
+                rl = (i - ng) * dx + xmin
+                rc = 0.5 * (rr + rl)
+
+                # cell-centered sin(theta) of top, bot cell and face-centered
+                sint = np.sin((j + 1 - ng) * dy + ymin)
+                sinb = np.sin((j - ng) * dy + ymin)
+                sinc = np.sin((j + 0.5 - ng) * dy + ymin)
+
+                # Find the average right and left u velocity
+                ur = 0.5 * (u[i, j] + u[i, j - 1])
+                ul = 0.5 * (u[i - 1, j] + u[i - 1, j - 1])
+
+                # Find the average top and bottom v velocity
+                vt = 0.5 * (v[i, j] + v[i - 1, j])
+                vb = 0.5 * (v[i, j - 1] + v[i - 1, j - 1])
+
+                # Finite difference to get ux and vy
+                ux = (ur*rr - ul*rl) / (rc * dx)
+                vy = (sint*vt - sinb*vb) / (rc * sinc * dy)
+
+                # Find div(U)_{i-1/2, j-1/2}
+                divU[i, j] = ux + vy
+
+    # Compute divergence at the face by averaging over divergence at vertex
+    for i in range(ilo, ihi):
+        for j in range(jlo, jhi):
+
+            divU_x = 0.5 * (divU[i, j] + divU[i, j + 1])
+            divU_y = 0.5 * (divU[i, j] + divU[i + 1, j])
+
+            avisco_x[i, j] = cvisc * max(-divU_x * Lx[i, j], 0.0)
+            avisco_y[i, j] = cvisc * max(-divU_y * Ly[i, j], 0.0)
 
     return avisco_x, avisco_y
