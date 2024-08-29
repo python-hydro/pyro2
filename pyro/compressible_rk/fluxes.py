@@ -23,7 +23,6 @@ import pyro.compressible as comp
 import pyro.mesh.array_indexer as ai
 from pyro.compressible import interface, riemann
 from pyro.mesh import reconstruction
-from pyro.util import msg
 
 
 def fluxes(my_data, rp, ivars, solid, tc):
@@ -161,33 +160,13 @@ def fluxes(my_data, rp, ivars, solid, tc):
     # =========================================================================
     # construct the fluxes normal to the interfaces
     # =========================================================================
-    tm_riem = tc.timer("Riemann")
-    tm_riem.begin()
+    F_x = riemann.riemann_flux(1, U_xl, U_xr,
+                               my_data, rp, ivars,
+                               solid.xl, solid.xr, tc)
 
-    riemann_method = rp.get_param("compressible.riemann")
-
-    riemannFunc = None
-    if riemann_method == "HLLC":
-        riemannFunc = riemann.riemann_hllc
-    elif riemann_method == "CGF":
-        riemannFunc = riemann.riemann_cgf
-    else:
-        msg.fail("ERROR: Riemann solver undefined")
-
-    _fx = riemannFunc(1, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
-                      solid.xl, solid.xr,
-                      gamma, U_xl, U_xr)
-
-    _fy = riemannFunc(2, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
-                      solid.yl, solid.yr,
-                      gamma, U_yl, U_yr)
-
-    F_x = ai.ArrayIndexer(d=_fx, grid=myg)
-    F_y = ai.ArrayIndexer(d=_fy, grid=myg)
-
-    tm_riem.end()
+    F_y = riemann.riemann_flux(2, U_yl, U_yr,
+                               my_data, rp, ivars,
+                               solid.yl, solid.yr, tc)
 
     # =========================================================================
     # apply artificial viscosity
