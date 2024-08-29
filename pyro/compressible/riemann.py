@@ -594,7 +594,7 @@ def riemann_prim(idir, ng,
 
 
 @njit(cache=True)
-def riemann_hllc(idir, ng, coord_type,
+def riemann_hllc(idir, ng,
                  idens, ixmom, iymom, iener, irhoX, nspec,
                  lower_solid, upper_solid,  # pylint: disable=unused-argument
                  gamma, U_l, U_r):
@@ -626,6 +626,9 @@ def riemann_hllc(idir, ng, coord_type,
     out : ndarray
         Conserved flux
     """
+
+    # Only Cartesian2d is supported in HLLC
+    coord_type = 0
 
     qx, qy, nvar = U_l.shape
 
@@ -898,19 +901,18 @@ def riemann_flux(idir, U_l, U_r, my_data, rp, ivars,
     riemann_method = rp.get_param("compressible.riemann")
     gamma = rp.get_param("eos.gamma")
 
-    riemannFunc = None
-    if riemann_method == "HLLC":
-        riemannFunc = riemann_hllc
-    elif riemann_method == "CGF":
-        riemannFunc = riemann_cgf
-    else:
+    riemann_solvers = {"HLLC": riemann_hllc, "CGF": riemann_cgf}
+
+    if riemann_method not in riemann_solvers:
         msg.fail("ERROR: Riemann solver undefined")
 
-    _f = riemannFunc(idir, myg.ng, myg.coord_type,
-                     ivars.idens, ivars.ixmom, ivars.iymom,
-                     ivars.iener, ivars.irhox, ivars.naux,
-                     lower_solid, upper_solid,
-                     gamma, U_l, U_r)
+    riemannFunc = riemann_solvers[riemann_method]
+
+    _f = riemann_hllc(idir, myg.ng,
+                      ivars.idens, ivars.ixmom, ivars.iymom,
+                      ivars.iener, ivars.irhox, ivars.naux,
+                      lower_solid, upper_solid,
+                      gamma, U_l, U_r)
 
     # If riemann_method is not HLLC, then it outputs interface conserved states
     if riemann_method != "HLLC":
