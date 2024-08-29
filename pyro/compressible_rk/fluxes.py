@@ -23,7 +23,6 @@ import pyro.compressible as comp
 import pyro.mesh.array_indexer as ai
 from pyro.compressible import interface, riemann
 from pyro.mesh import reconstruction
-from pyro.util import msg
 
 
 def fluxes(my_data, rp, ivars, solid, tc):
