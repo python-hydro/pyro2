@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible package &mdash; pyro 4.1.0.post7+gd045795b documentation</title>
+  <title>pyro.compressible package &mdash; pyro 4.1.0.post8+gd00a2316 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
@@ -18,7 +18,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=b48d4b1d"></script>
+        <script src="_static/documentation_options.js?v=135f285e"></script>
         <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -387,7 +387,7 @@ pressure</p>
 <span id="pyro-compressible-interface-module"></span><h2>pyro.compressible.interface module<a class="headerlink" href="#module-pyro.compressible.interface" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.compressible.interface.artificial_viscosity">
-<span class="sig-prename descclassname"><span class="pre">pyro.compressible.interface.</span></span><span class="sig-name descname"><span class="pre">artificial_viscosity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvisc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible/interface.html#artificial_viscosity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible.interface.artificial_viscosity" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.compressible.interface.</span></span><span class="sig-name descname"><span class="pre">artificial_viscosity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Lx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ly</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coord_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvisc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible/interface.html#artificial_viscosity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible.interface.artificial_viscosity" title="Link to this definition"></a></dt>
 <dd><p>Compute the artificial viscosity.  Here, we compute edge-centered
 approximations to the divergence of the velocity.  This follows
 directly Colella Woodward (1984) Eq. 4.5</p>
@@ -418,6 +418,10 @@ directly Colella Woodward (1984) Eq. 4.5</p>
 <dt><strong>ng</strong><span class="classifier">int</span></dt><dd><p>The number of ghost cells</p>
 </dd>
 <dt><strong>dx, dy</strong><span class="classifier">float</span></dt><dd><p>Cell spacings</p>
+</dd>
+<dt><strong>xmin, ymin</strong><span class="classifier">float</span></dt><dd><p>Min physical x, y boundary</p>
+</dd>
+<dt><strong>Lx, Ly: ndarray</strong></dt><dd><p>Cell size in x, y direction</p>
 </dd>
 <dt><strong>cvisc</strong><span class="classifier">float</span></dt><dd><p>viscosity parameter</p>
 </dd>

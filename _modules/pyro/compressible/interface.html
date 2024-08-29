@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible.interface &mdash; pyro 4.1.0.post7+gd045795b documentation</title>
+  <title>pyro.compressible.interface &mdash; pyro 4.1.0.post8+gd00a2316 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
@@ -17,7 +17,7 @@
   
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=b48d4b1d"></script>
+        <script src="../../../_static/documentation_options.js?v=135f285e"></script>
         <script src="../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -345,7 +345,8 @@
 <div class="viewcode-block" id="artificial_viscosity">
 <a class="viewcode-back" href="../../../pyro.compressible.html#pyro.compressible.interface.artificial_viscosity">[docs]</a>
 <span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">artificial_viscosity</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span>
+<span class="k">def</span> <span class="nf">artificial_viscosity</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">Lx</span><span class="p">,</span> <span class="n">Ly</span><span class="p">,</span>
+                         <span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">coord_type</span><span class="p">,</span>
                          <span class="n">cvisc</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the artificial viscosity.  Here, we compute edge-centered</span>
@@ -380,6 +381,10 @@
 <span class="sd">        The number of ghost cells</span>
 <span class="sd">    dx, dy : float</span>
 <span class="sd">        Cell spacings</span>
+<span class="sd">    xmin, ymin : float</span>
+<span class="sd">        Min physical x, y boundary</span>
+<span class="sd">    Lx, Ly: ndarray</span>
+<span class="sd">        Cell size in x, y direction</span>
 <span class="sd">    cvisc : float</span>
 <span class="sd">        viscosity parameter</span>
 <span class="sd">    u, v : ndarray</span>
@@ -395,6 +400,7 @@
 
     <span class="n">avisco_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">))</span>
     <span class="n">avisco_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">))</span>
+    <span class="n">divU</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">))</span>
 
     <span class="n">nx</span> <span class="o">=</span> <span class="n">qx</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
     <span class="n">ny</span> <span class="o">=</span> <span class="n">qy</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
@@ -403,26 +409,70 @@
     <span class="n">jlo</span> <span class="o">=</span> <span class="n">ng</span>
     <span class="n">jhi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">ny</span>
 
+    <span class="c1"># Let&#39;s first compute divergence at the vertex</span>
+    <span class="c1"># First compute the left and right x-velocities by</span>
+    <span class="c1"># averaging over the y-interface.</span>
+    <span class="c1"># As well as the top and bottom y-velocities by</span>
+    <span class="c1"># averaging over the x-interface.</span>
+    <span class="c1"># Then a simple difference is done between the right and left,</span>
+    <span class="c1"># and top and bottom to get the divergence at the vertex.</span>
+
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ilo</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ihi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">jlo</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">jhi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
 
-            <span class="c1"># start by computing the divergence on the x-interface.  The</span>
-            <span class="c1"># x-difference is simply the difference of the cell-centered</span>
-            <span class="c1"># x-velocities on either side of the x-interface.  For the</span>
-            <span class="c1"># y-difference, first average the four cells to the node on</span>
-            <span class="c1"># each end of the edge, and: difference these to find the</span>
-            <span class="c1"># edge centered y difference.</span>
-            <span class="n">divU_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">u</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="o">/</span> <span class="n">dx</span> <span class="o">+</span> \
-                <span class="mf">0.25</span> <span class="o">*</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span>
-                        <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">dy</span>
+            <span class="c1"># For Cartesian2d:</span>
+            <span class="k">if</span> <span class="n">coord_type</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># Find the average right and left u velocity</span>
+                <span class="n">ur</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+                <span class="n">ul</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">u</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
 
-            <span class="n">avisco_x</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">cvisc</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="n">divU_x</span> <span class="o">*</span> <span class="n">dx</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+                <span class="c1"># Find the average top and bottom v velocity</span>
+                <span class="n">vt</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+                <span class="n">vb</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
 
-            <span class="c1"># now the y-interface value</span>
-            <span class="n">divU_y</span> <span class="o">=</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">u</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">u</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">u</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">dx</span> <span class="o">+</span> \
-                <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">dy</span>
+                <span class="c1"># Finite difference to get ux and vy</span>
+                <span class="n">ux</span> <span class="o">=</span> <span class="p">(</span><span class="n">ur</span> <span class="o">-</span> <span class="n">ul</span><span class="p">)</span> <span class="o">/</span> <span class="n">dx</span>
+                <span class="n">vy</span> <span class="o">=</span> <span class="p">(</span><span class="n">vt</span> <span class="o">-</span> <span class="n">vb</span><span class="p">)</span> <span class="o">/</span> <span class="n">dy</span>
 
-            <span class="n">avisco_y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">cvisc</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="n">divU_y</span> <span class="o">*</span> <span class="n">dy</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+                <span class="c1"># Find div(U)_{i-1/2, j-1/2}</span>
+                <span class="n">divU</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">ux</span> <span class="o">+</span> <span class="n">vy</span>
+
+            <span class="c1"># For SphericalPolar:</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># cell-centered r-coord of right, left cell and face-centered r</span>
+                <span class="n">rr</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">ng</span><span class="p">)</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">+</span> <span class="n">xmin</span>
+                <span class="n">rl</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">ng</span><span class="p">)</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">+</span> <span class="n">xmin</span>
+                <span class="n">rc</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">rr</span> <span class="o">+</span> <span class="n">rl</span><span class="p">)</span>
+
+                <span class="c1"># cell-centered sin(theta) of top, bot cell and face-centered</span>
+                <span class="n">sint</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">((</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">ng</span><span class="p">)</span> <span class="o">*</span> <span class="n">dy</span> <span class="o">+</span> <span class="n">ymin</span><span class="p">)</span>
+                <span class="n">sinb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">((</span><span class="n">j</span> <span class="o">-</span> <span class="n">ng</span><span class="p">)</span> <span class="o">*</span> <span class="n">dy</span> <span class="o">+</span> <span class="n">ymin</span><span class="p">)</span>
+                <span class="n">sinc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">((</span><span class="n">j</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">-</span> <span class="n">ng</span><span class="p">)</span> <span class="o">*</span> <span class="n">dy</span> <span class="o">+</span> <span class="n">ymin</span><span class="p">)</span>
+
+                <span class="c1"># Find the average right and left u velocity</span>
+                <span class="n">ur</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+                <span class="n">ul</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">u</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+
+                <span class="c1"># Find the average top and bottom v velocity</span>
+                <span class="n">vt</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+                <span class="n">vb</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+
+                <span class="c1"># Finite difference to get ux and vy</span>
+                <span class="n">ux</span> <span class="o">=</span> <span class="p">(</span><span class="n">ur</span><span class="o">*</span><span class="n">rr</span> <span class="o">-</span> <span class="n">ul</span><span class="o">*</span><span class="n">rl</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">rc</span> <span class="o">*</span> <span class="n">dx</span><span class="p">)</span>
+                <span class="n">vy</span> <span class="o">=</span> <span class="p">(</span><span class="n">sint</span><span class="o">*</span><span class="n">vt</span> <span class="o">-</span> <span class="n">sinb</span><span class="o">*</span><span class="n">vb</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">rc</span> <span class="o">*</span> <span class="n">sinc</span> <span class="o">*</span> <span class="n">dy</span><span class="p">)</span>
+
+                <span class="c1"># Find div(U)_{i-1/2, j-1/2}</span>
+                <span class="n">divU</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">ux</span> <span class="o">+</span> <span class="n">vy</span>
+
+    <span class="c1"># Compute divergence at the face by averaging over divergence at vertex</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ilo</span><span class="p">,</span> <span class="n">ihi</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">jlo</span><span class="p">,</span> <span class="n">jhi</span><span class="p">):</span>
+
+            <span class="n">divU_x</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">divU</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">divU</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">divU_y</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">divU</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">divU</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+
+            <span class="n">avisco_x</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">cvisc</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="n">divU_x</span> <span class="o">*</span> <span class="n">Lx</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="mf">0.0</span><span class="p">)</span>
+            <span class="n">avisco_y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">cvisc</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="n">divU_y</span> <span class="o">*</span> <span class="n">Ly</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="mf">0.0</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">avisco_x</span><span class="p">,</span> <span class="n">avisco_y</span></div>
 
