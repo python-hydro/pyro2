@@ -216,7 +216,7 @@ def states(idir, ng, dx, dt,
 
 
 @njit(cache=True)
-def artificial_viscosity(ng, dx, dy,
+def artificial_viscosity(ng, dx, dy, Lx, Ly,
                          xmin, ymin, coord_type,
                          cvisc, u, v):
     r"""
@@ -254,6 +254,8 @@ def artificial_viscosity(ng, dx, dy,
         Cell spacings
     xmin, ymin : float
         Min physical x, y boundary
+    Lx, Ly: ndarray
+        Cell size in x, y direction
     cvisc : float
         viscosity parameter
     u, v : ndarray
@@ -340,7 +342,7 @@ def artificial_viscosity(ng, dx, dy,
             divU_x = 0.5 * (divU[i, j] + divU[i, j + 1])
             divU_y = 0.5 * (divU[i, j] + divU[i + 1, j])
 
-            avisco_x[i, j] = cvisc * max(-divU_x, 0.0)
-            avisco_y[i, j] = cvisc * max(-divU_y, 0.0)
+            avisco_x[i, j] = cvisc * max(-divU_x * Lx[i, j], 0.0)
+            avisco_y[i, j] = cvisc * max(-divU_y * Ly[i, j], 0.0)
 
     return avisco_x, avisco_y

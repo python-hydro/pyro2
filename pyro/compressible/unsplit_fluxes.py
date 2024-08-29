@@ -488,7 +488,7 @@ def apply_artificial_viscosity(F_x, F_y, q,
 
     myg = my_data.grid
 
-    _ax, _ay = ifc.artificial_viscosity(myg.ng, myg.dx, myg.dy,
+    _ax, _ay = ifc.artificial_viscosity(myg.ng, myg.dx, myg.dy, myg.Lx, myg.Ly,
                                         myg.xmin, myg.ymin, myg.coord_type,
         cvisc, q.v(n=ivars.iu, buf=myg.ng), q.v(n=ivars.iv, buf=myg.ng))
 
