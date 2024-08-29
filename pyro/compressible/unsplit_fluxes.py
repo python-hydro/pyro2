@@ -127,7 +127,6 @@ import pyro.compressible.interface as ifc
 import pyro.mesh.array_indexer as ai
 from pyro.compressible import riemann
 from pyro.mesh import reconstruction
-from pyro.util import msg
 
 
 def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
