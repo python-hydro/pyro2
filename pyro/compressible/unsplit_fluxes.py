@@ -284,8 +284,13 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
     # =========================================================================
 
     # Get the flux through x, y interface via riemann solver
-    F_x, F_y = riemann.riemann_flux(U_xl, U_xr, U_yl, U_yr,
-                                    my_data, rp, ivars, solid, tc)
+    F_x = riemann.riemann_flux(1, U_xl, U_xr,
+                               my_data, rp, ivars,
+                               solid.xl, solid.xr, tc)
+
+    F_y = riemann.riemann_flux(2, U_yl, U_yr,
+                               my_data, rp, ivars,
+                               solid.yl, solid.yr, tc)
 
     # =========================================================================
     # construct the interface values of U now
@@ -368,8 +373,13 @@ def unsplit_fluxes(my_data, my_aux, rp, ivars, solid, tc, dt):
 
     # up until now, F_x and F_y stored the transverse fluxes, now we
     # overwrite with the fluxes normal to the interfaces
-    F_x, F_y = riemann.riemann_flux(U_xl, U_xr, U_yl, U_yr,
-                                    my_data, rp, ivars, solid, tc)
+    F_x = riemann.riemann_flux(1, U_xl, U_xr,
+                               my_data, rp, ivars,
+                               solid.xl, solid.xr, tc)
+
+    F_y = riemann.riemann_flux(2, U_yl, U_yr,
+                               my_data, rp, ivars,
+                               solid.yl, solid.yr, tc)
 
     # =========================================================================
     # apply artificial viscosity
