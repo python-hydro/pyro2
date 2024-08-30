@@ -145,7 +145,7 @@ class Simulation(NullSimulation):
         plt.ylabel("y")
         plt.title("phi")
 
-        cb = plt.colorbar(img)
+        plt.colorbar(img)
 
         plt.figtext(0.05, 0.0125, f"t = {self.cc_data.t:10.5f}")
 
