@@ -221,7 +221,8 @@ class Simulation(NullSimulation):
                                                       self.ivars, self.tc, self.dt)
 
         # Apply source terms to them.
-        # This includes external (gravity), geometric and pressure terms.
+        # This includes external (gravity), geometric and pressure terms for SphericalPolar
+        # Only gravitional source for Cartesian2d
         U_xl, U_xr, U_yl, U_yr = flx.apply_source_terms(U_xl, U_xr, U_yl, U_yr,
                                                         self.cc_data, self.aux_data, self.rp,
                                                         self.ivars, self.tc, self.dt)
@@ -237,7 +238,6 @@ class Simulation(NullSimulation):
         if myg.coord_type == 1:
             # We need pressure from interface state for conservative update for
             # SphericalPolar geometry. So we need interface conserved states.
-
             F_x, U_x = riemann.riemann_flux(1, U_xl, U_xr,
                                             self.cc_data, self.rp, self.ivars,
                                             self.solid.xl, self.solid.xr, self.tc,
@@ -276,7 +276,9 @@ class Simulation(NullSimulation):
         old_xmom = xmom.copy()
         old_ymom = ymom.copy()
 
-        # conservative update
+        # Conservative update
+
+        # Apply contribution due to fluxes
         dtdV = self.dt / myg.V.v()
 
         for n in range(self.ivars.nvar):
@@ -286,7 +288,16 @@ class Simulation(NullSimulation):
                 (F_x.v(n=n)*myg.Ax.v() - F_x.ip(1, n=n)*myg.Ax.ip(1) +
                  F_y.v(n=n)*myg.Ay.v() - F_y.jp(1, n=n)*myg.Ay.jp(1))
 
-        # Apply external source (gravity) and geometric terms
+        # Now apply external sources
+
+        # For SphericalPolar (coord_type == 1):
+        # There are gravity (external) sources,
+        # geometric terms due to local unit vectors, and pressure gradient
+        # since we don't include pressure in xmom and ymom fluxes
+        # due to incompatible divergence and gradient in non-Cartesian geometry
+
+        # For Cartesian2d (coord_type == 0):
+        # There is only gravity sources.
 
         if myg.coord_type == 1:
             xmom.v()[:, :] += 0.5*self.dt * \
@@ -303,7 +314,6 @@ class Simulation(NullSimulation):
             ener.v()[:, :] += 0.5*self.dt*(xmom.v() + old_xmom.v())*grav
 
         else:
-            # gravitational source terms
             ymom.v()[:, :] += 0.5*self.dt*(dens.v() + old_dens.v())*grav
             ener.v()[:, :] += 0.5*self.dt*(ymom.v() + old_ymom.v())*grav
 
