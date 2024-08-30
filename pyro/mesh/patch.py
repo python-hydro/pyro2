@@ -755,6 +755,11 @@ class CellCenterData2d:
         ggrid.attrs["ymin"] = self.grid.ymin
         ggrid.attrs["ymax"] = self.grid.ymax
 
+        try:
+            ggrid.attrs["coord_type"] = self.grid.coord_type
+        except AttributeError:
+            pass
+
         # data
         gstate = f.create_group("state")
 
