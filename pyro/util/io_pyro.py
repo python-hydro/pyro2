@@ -48,10 +48,15 @@ def read(filename):
         # read in the grid info and create our grid
         grid = f["grid"].attrs
 
-        if grid["coord_type"] == 0:
-            grid_class = Cartesian2d
-        elif grid["coord_type"] == 1:
+        try:
+            coord_type = grid["coord_type"]
+        except KeyError:
+            coord_type = 0
+
+        if coord_type == 1:
             grid_class = SphericalPolar
+        else:
+            grid_class = Cartesian2d
 
         myg = grid_class(grid["nx"], grid["ny"], ng=grid["ng"],
                          xmin=grid["xmin"], xmax=grid["xmax"],

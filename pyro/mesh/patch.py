@@ -757,7 +757,7 @@ class CellCenterData2d:
 
         try:
             ggrid.attrs["coord_type"] = self.grid.coord_type
-        except KeyError:
+        except AttributeError:
             pass
 
         # data
