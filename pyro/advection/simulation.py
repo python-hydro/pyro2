@@ -1,6 +1,5 @@
 import importlib
 
-import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -121,7 +120,6 @@ class Simulation(NullSimulation):
 
         # needed for PDF rendering
         cb = axes.cbar_axes[0].colorbar(img)
-        cb.formatter = matplotlib.ticker.FormatStrFormatter("")
         cb.solids.set_rasterized(True)
         cb.solids.set_edgecolor("face")
 
