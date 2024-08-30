@@ -147,7 +147,6 @@ class Simulation(NullSimulation):
         plt.title("phi")
 
         cb = plt.colorbar(img)
-        cb.formatter = matplotlib.ticker.FormatStrFormatter("")
 
         plt.figtext(0.05, 0.0125, f"t = {self.cc_data.t:10.5f}")
 

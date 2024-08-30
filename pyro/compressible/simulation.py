@@ -277,7 +277,6 @@ class Simulation(NullSimulation):
 
             # needed for PDF rendering
             cb = axes.cbar_axes[n].colorbar(img)
-            cb.formatter = matplotlib.ticker.FormatStrFormatter("")
             cb.solids.set_rasterized(True)
             cb.solids.set_edgecolor("face")
 
