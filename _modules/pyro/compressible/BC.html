@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible.BC &mdash; pyro 4.1.0.post9+g1cdab612 documentation</title>
+  <title>pyro.compressible.BC &mdash; pyro 4.1.0.post10+g7a1562f0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
@@ -17,7 +17,7 @@
   
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=8a822c4d"></script>
+        <script src="../../../_static/documentation_options.js?v=5d6de4bf"></script>
         <script src="../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -180,7 +180,9 @@
 
             <span class="c1"># we will take the density to be constant, the velocity to</span>
             <span class="c1"># be outflow, and the pressure to be in HSE</span>
-            <span class="k">if</span> <span class="n">variable</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;density&quot;</span><span class="p">,</span> <span class="s2">&quot;x-momentum&quot;</span><span class="p">,</span> <span class="s2">&quot;y-momentum&quot;</span><span class="p">,</span> <span class="s2">&quot;ymom_src&quot;</span><span class="p">,</span> <span class="s2">&quot;E_src&quot;</span><span class="p">,</span> <span class="s2">&quot;fuel&quot;</span><span class="p">,</span> <span class="s2">&quot;ash&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">variable</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;density&quot;</span><span class="p">,</span> <span class="s2">&quot;x-momentum&quot;</span><span class="p">,</span> <span class="s2">&quot;y-momentum&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;dens_src&quot;</span><span class="p">,</span> <span class="s2">&quot;xmom_src&quot;</span><span class="p">,</span> <span class="s2">&quot;ymom_src&quot;</span><span class="p">,</span> <span class="s2">&quot;E_src&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;fuel&quot;</span><span class="p">,</span> <span class="s2">&quot;ash&quot;</span><span class="p">]:</span>
                 <span class="n">v</span> <span class="o">=</span> <span class="n">ccdata</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">variable</span><span class="p">)</span>
                 <span class="n">j</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">jlo</span><span class="o">-</span><span class="mi">1</span>
                 <span class="k">while</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
@@ -226,7 +228,9 @@
 
             <span class="c1"># we will take the density to be constant, the velocity to</span>
             <span class="c1"># be outflow, and the pressure to be in HSE</span>
-            <span class="k">if</span> <span class="n">variable</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;density&quot;</span><span class="p">,</span> <span class="s2">&quot;x-momentum&quot;</span><span class="p">,</span> <span class="s2">&quot;y-momentum&quot;</span><span class="p">,</span> <span class="s2">&quot;ymom_src&quot;</span><span class="p">,</span> <span class="s2">&quot;E_src&quot;</span><span class="p">,</span> <span class="s2">&quot;fuel&quot;</span><span class="p">,</span> <span class="s2">&quot;ash&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">variable</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;density&quot;</span><span class="p">,</span> <span class="s2">&quot;x-momentum&quot;</span><span class="p">,</span> <span class="s2">&quot;y-momentum&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;dens_src&quot;</span><span class="p">,</span> <span class="s2">&quot;xmom_src&quot;</span><span class="p">,</span> <span class="s2">&quot;ymom_src&quot;</span><span class="p">,</span> <span class="s2">&quot;E_src&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;fuel&quot;</span><span class="p">,</span> <span class="s2">&quot;ash&quot;</span><span class="p">]:</span>
                 <span class="n">v</span> <span class="o">=</span> <span class="n">ccdata</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">variable</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
                     <span class="n">v</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[:,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="p">]</span>

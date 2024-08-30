@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible_rk.fluxes &mdash; pyro 4.1.0.post9+g1cdab612 documentation</title>
+  <title>pyro.compressible_rk.fluxes &mdash; pyro 4.1.0.post10+g7a1562f0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
@@ -17,7 +17,7 @@
   
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=8a822c4d"></script>
+        <script src="../../../_static/documentation_options.js?v=5d6de4bf"></script>
         <script src="../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -145,8 +145,8 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">pyro.compressible</span> <span class="k">as</span> <span class="nn">comp</span>
-<span class="kn">import</span> <span class="nn">pyro.mesh.array_indexer</span> <span class="k">as</span> <span class="nn">ai</span>
-<span class="kn">from</span> <span class="nn">pyro.compressible</span> <span class="kn">import</span> <span class="n">interface</span><span class="p">,</span> <span class="n">riemann</span>
+<span class="kn">import</span> <span class="nn">pyro.compressible.unsplit_fluxes</span> <span class="k">as</span> <span class="nn">flx</span>
+<span class="kn">from</span> <span class="nn">pyro.compressible</span> <span class="kn">import</span> <span class="n">riemann</span>
 <span class="kn">from</span> <span class="nn">pyro.mesh</span> <span class="kn">import</span> <span class="n">reconstruction</span>
 
 
@@ -298,27 +298,9 @@
     <span class="c1"># =========================================================================</span>
     <span class="c1"># apply artificial viscosity</span>
     <span class="c1"># =========================================================================</span>
-    <span class="n">cvisc</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;compressible.cvisc&quot;</span><span class="p">)</span>
-
-    <span class="n">_ax</span><span class="p">,</span> <span class="n">_ay</span> <span class="o">=</span> <span class="n">interface</span><span class="o">.</span><span class="n">artificial_viscosity</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">Lx</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">Ly</span><span class="p">,</span>
-                                              <span class="n">myg</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">coord_type</span><span class="p">,</span>
-                  <span class="n">cvisc</span><span class="p">,</span> <span class="n">q</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">iu</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">),</span> <span class="n">q</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">iv</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">))</span>
-
-    <span class="n">avisco_x</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_ax</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
-    <span class="n">avisco_y</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_ay</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
-
-    <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">):</span>
-        <span class="c1"># F_x = F_x + avisco_x * (U(i-1,j) - U(i,j))</span>
-        <span class="n">var</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var_by_index</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-
-        <span class="n">F_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> \
-            <span class="n">avisco_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">var</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)</span> <span class="o">-</span> <span class="n">var</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">))</span>
-
-        <span class="c1"># F_y = F_y + avisco_y * (U(i,j-1) - U(i,j))</span>
-        <span class="n">F_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> \
-            <span class="n">avisco_y</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">var</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)</span> <span class="o">-</span> <span class="n">var</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">))</span>
+    <span class="n">F_x</span><span class="p">,</span> <span class="n">F_y</span> <span class="o">=</span> <span class="n">flx</span><span class="o">.</span><span class="n">apply_artificial_viscosity</span><span class="p">(</span><span class="n">F_x</span><span class="p">,</span> <span class="n">F_y</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span>
+                                              <span class="n">my_data</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span>
+                                              <span class="n">ivars</span><span class="p">)</span>
 
     <span class="n">tm_flux</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
 

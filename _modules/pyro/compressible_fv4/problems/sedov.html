@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible_fv4.problems.sedov &mdash; pyro 4.1.0.post9+g1cdab612 documentation</title>
+  <title>pyro.compressible_fv4.problems.sedov &mdash; pyro 4.1.0.post10+g7a1562f0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=fd3f3429" />
@@ -17,7 +17,7 @@
   
         <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../_static/documentation_options.js?v=8a822c4d"></script>
+        <script src="../../../../_static/documentation_options.js?v=5d6de4bf"></script>
         <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -158,8 +158,6 @@
     <span class="n">xmom</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="n">ymom</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span>
 
-    <span class="n">E_sedov</span> <span class="o">=</span> <span class="mf">1.0</span>
-
     <span class="n">r_init</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;sedov.r_init&quot;</span><span class="p">)</span>
 
     <span class="n">gamma</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;eos.gamma&quot;</span><span class="p">)</span>
@@ -171,37 +169,55 @@
     <span class="n">ymin</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.ymin&quot;</span><span class="p">)</span>
     <span class="n">ymax</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;mesh.ymax&quot;</span><span class="p">)</span>
 
-    <span class="n">xctr</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">xmin</span> <span class="o">+</span> <span class="n">xmax</span><span class="p">)</span>
-    <span class="n">yctr</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">ymin</span> <span class="o">+</span> <span class="n">ymax</span><span class="p">)</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span>
 
-    <span class="c1"># initialize the pressure by putting the explosion energy into a</span>
-    <span class="c1"># volume of constant pressure.  Then compute the energy in a zone</span>
-    <span class="c1"># from this.</span>
-    <span class="n">nsub</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;sedov.nsub&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">grid</span><span class="o">.</span><span class="n">coord_type</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># If we do Cartesian2d geometry</span>
 
-    <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">my_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">x2d</span> <span class="o">-</span> <span class="n">xctr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
-                   <span class="p">(</span><span class="n">my_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">y2d</span> <span class="o">-</span> <span class="n">yctr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">E_sedov</span> <span class="o">=</span> <span class="mf">1.0</span>
 
-    <span class="n">p</span> <span class="o">=</span> <span class="mf">1.e-5</span>
-    <span class="n">ener</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">p</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">xctr</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">xmin</span> <span class="o">+</span> <span class="n">xmax</span><span class="p">)</span>
+        <span class="n">yctr</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">ymin</span> <span class="o">+</span> <span class="n">ymax</span><span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">dist</span> <span class="o">&lt;</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">r_init</span><span class="p">)):</span>
+        <span class="c1"># initialize the pressure by putting the explosion energy into a</span>
+        <span class="c1"># volume of constant pressure.  Then compute the energy in a zone</span>
+        <span class="c1"># from this.</span>
+        <span class="n">nsub</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;sedov.nsub&quot;</span><span class="p">)</span>
 
-        <span class="n">xsub</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">xl</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">my_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">dx</span><span class="o">/</span><span class="n">nsub</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nsub</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
-        <span class="n">ysub</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">yl</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">my_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">dy</span><span class="o">/</span><span class="n">nsub</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nsub</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">my_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">x2d</span> <span class="o">-</span> <span class="n">xctr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
+                       <span class="p">(</span><span class="n">my_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">y2d</span> <span class="o">-</span> <span class="n">yctr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
-        <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">xsub</span><span class="p">,</span> <span class="n">ysub</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="mf">1.e-5</span>
+        <span class="n">ener</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">p</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
 
-        <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">xx</span> <span class="o">-</span> <span class="n">xctr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">yy</span> <span class="o">-</span> <span class="n">yctr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">dist</span> <span class="o">&lt;</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">r_init</span><span class="p">)):</span>
 
-        <span class="n">n_in_pert</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">dist</span> <span class="o">&lt;=</span> <span class="n">r_init</span><span class="p">)</span>
+            <span class="n">xsub</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">xl</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">my_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">dx</span><span class="o">/</span><span class="n">nsub</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nsub</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+            <span class="n">ysub</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">yl</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">my_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">dy</span><span class="o">/</span><span class="n">nsub</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nsub</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
 
-        <span class="n">p</span> <span class="o">=</span> <span class="n">n_in_pert</span><span class="o">*</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">*</span><span class="n">E_sedov</span><span class="o">/</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">r_init</span><span class="o">*</span><span class="n">r_init</span><span class="p">)</span> <span class="o">+</span> \
-            <span class="p">(</span><span class="n">nsub</span><span class="o">*</span><span class="n">nsub</span> <span class="o">-</span> <span class="n">n_in_pert</span><span class="p">)</span><span class="o">*</span><span class="mf">1.e-5</span>
+            <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">xsub</span><span class="p">,</span> <span class="n">ysub</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span><span class="p">)</span>
 
-        <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">/</span><span class="p">(</span><span class="n">nsub</span><span class="o">*</span><span class="n">nsub</span><span class="p">)</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">xx</span> <span class="o">-</span> <span class="n">xctr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">yy</span> <span class="o">-</span> <span class="n">yctr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
-        <span class="n">ener</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span></div>
+            <span class="n">n_in_pert</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">dist</span> <span class="o">&lt;=</span> <span class="n">r_init</span><span class="p">)</span>
+
+            <span class="n">p</span> <span class="o">=</span> <span class="n">n_in_pert</span><span class="o">*</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">*</span><span class="n">E_sedov</span><span class="o">/</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">r_init</span><span class="o">*</span><span class="n">r_init</span><span class="p">)</span> <span class="o">+</span> \
+                <span class="p">(</span><span class="n">nsub</span><span class="o">*</span><span class="n">nsub</span> <span class="o">-</span> <span class="n">n_in_pert</span><span class="p">)</span><span class="o">*</span><span class="mf">1.e-5</span>
+
+            <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">/</span><span class="p">(</span><span class="n">nsub</span><span class="o">*</span><span class="n">nsub</span><span class="p">)</span>
+
+            <span class="n">ener</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># If we do SphericalPolar geometry</span>
+
+        <span class="c1"># Just put a high energy for now.</span>
+        <span class="n">E_sedov</span> <span class="o">=</span> <span class="mf">1.e6</span>
+
+        <span class="n">p</span> <span class="o">=</span> <span class="mf">1.e-6</span>
+        <span class="n">ener</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">p</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">myg</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span>
+        <span class="n">ener</span><span class="p">[</span><span class="n">myg</span><span class="o">.</span><span class="n">x2d</span> <span class="o">&lt;</span> <span class="n">r_init</span><span class="p">]</span> <span class="o">=</span> <span class="n">E_sedov</span></div>
 
 
 

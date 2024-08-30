@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible package &mdash; pyro 4.1.0.post9+g1cdab612 documentation</title>
+  <title>pyro.compressible package &mdash; pyro 4.1.0.post10+g7a1562f0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
@@ -18,7 +18,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=8a822c4d"></script>
+        <script src="_static/documentation_options.js?v=5d6de4bf"></script>
         <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -495,7 +495,7 @@ computational zones:</p>
 </dd>
 <dt><strong>ng</strong><span class="classifier">int</span></dt><dd><p>The number of ghost cells</p>
 </dd>
-<dt><strong>dx</strong><span class="classifier">float</span></dt><dd><p>The cell spacing</p>
+<dt><strong>dx</strong><span class="classifier">ndarray</span></dt><dd><p>The cell spacing</p>
 </dd>
 <dt><strong>dt</strong><span class="classifier">float</span></dt><dd><p>The timestep</p>
 </dd>
@@ -706,23 +706,59 @@ transverse Riemann problem.</p></li>
 </li>
 </ul>
 <dl class="py function">
-<dt class="sig sig-object py" id="pyro.compressible.unsplit_fluxes.unsplit_fluxes">
-<span class="sig-prename descclassname"><span class="pre">pyro.compressible.unsplit_fluxes.</span></span><span class="sig-name descname"><span class="pre">unsplit_fluxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">my_aux</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible/unsplit_fluxes.html#unsplit_fluxes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible.unsplit_fluxes.unsplit_fluxes" title="Link to this definition"></a></dt>
-<dd><p>unsplitFluxes returns the fluxes through the x and y interfaces by
-doing an unsplit reconstruction of the interface values and then
-solving the Riemann problem through all the interfaces at once</p>
-<p>currently we assume a gamma-law EOS</p>
-<p>The runtime parameter grav is assumed to be the gravitational
-acceleration in the y-direction</p>
+<dt class="sig sig-object py" id="pyro.compressible.unsplit_fluxes.apply_artificial_viscosity">
+<span class="sig-prename descclassname"><span class="pre">pyro.compressible.unsplit_fluxes.</span></span><span class="sig-name descname"><span class="pre">apply_artificial_viscosity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivars</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible/unsplit_fluxes.html#apply_artificial_viscosity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible.unsplit_fluxes.apply_artificial_viscosity" title="Link to this definition"></a></dt>
+<dd><p>This applies artificial viscosity correction terms to the fluxes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
+<dt><strong>F_x, F_y</strong><span class="classifier">ndarray, ndarray</span></dt><dd><p>Fluxes in x and y interface.</p>
+</dd>
+<dt><strong>q</strong><span class="classifier">ndarray</span></dt><dd><p>Primitive variables</p>
+</dd>
 <dt><strong>my_data</strong><span class="classifier">CellCenterData2d object</span></dt><dd><p>The data object containing the grid and advective scalar that
 we are advecting.</p>
 </dd>
 <dt><strong>rp</strong><span class="classifier">RuntimeParameters object</span></dt><dd><p>The runtime parameters for the simulation</p>
 </dd>
-<dt><strong>vars</strong><span class="classifier">Variables object</span></dt><dd><p>The Variables object that tells us which indices refer to which
+<dt><strong>ivars</strong><span class="classifier">Variables object</span></dt><dd><p>The Variables object that tells us which indices refer to which
+variables</p>
+</dd>
+<dt><strong>dt</strong><span class="classifier">float</span></dt><dd><p>The timestep we are advancing through.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">ndarray, ndarray</span></dt><dd><p>Fluxes in x and y interface.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.compressible.unsplit_fluxes.apply_source_terms">
+<span class="sig-prename descclassname"><span class="pre">pyro.compressible.unsplit_fluxes.</span></span><span class="sig-name descname"><span class="pre">apply_source_terms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">U_xl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U_xr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U_yl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U_yr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">my_aux</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible/unsplit_fluxes.html#apply_source_terms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible.unsplit_fluxes.apply_source_terms" title="Link to this definition"></a></dt>
+<dd><p>This function applies source terms including external (gravity),
+geometric terms, and pressure terms to the left and right
+interface states (normal conserved states).
+Both geometric and pressure terms arise purely from geometry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>U_xl, U_xr, U_yl, U_yr: ndarray, ndarray, ndarray, ndarray</strong></dt><dd><p>Conserved states in the left and right x-interface
+and left and right y-interface.</p>
+</dd>
+<dt><strong>my_data</strong><span class="classifier">CellCenterData2d object</span></dt><dd><p>The data object containing the grid and advective scalar that
+we are advecting.</p>
+</dd>
+<dt><strong>my_aux</strong><span class="classifier">CellCenterData2d object</span></dt><dd><p>The data object that carries auxillary quantities which we need
+to fill in the ghost cells.</p>
+</dd>
+<dt><strong>rp</strong><span class="classifier">RuntimeParameters object</span></dt><dd><p>The runtime parameters for the simulation</p>
+</dd>
+<dt><strong>ivars</strong><span class="classifier">Variables object</span></dt><dd><p>The Variables object that tells us which indices refer to which
 variables</p>
 </dd>
 <dt><strong>tc</strong><span class="classifier">TimerCollection object</span></dt><dd><p>The timers we are using to profile</p>
@@ -733,7 +769,143 @@ variables</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>out</strong><span class="classifier">ndarray, ndarray</span></dt><dd><p>The fluxes on the x- and y-interfaces</p>
+<dt><strong>out</strong><span class="classifier">ndarray, ndarray, ndarray, ndarray</span></dt><dd><p>Left and right normal conserved states in x and y interfaces
+with source terms added.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.compressible.unsplit_fluxes.apply_transverse_flux">
+<span class="sig-prename descclassname"><span class="pre">pyro.compressible.unsplit_fluxes.</span></span><span class="sig-name descname"><span class="pre">apply_transverse_flux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">U_xl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U_xr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U_yl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U_yr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible/unsplit_fluxes.html#apply_transverse_flux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible.unsplit_fluxes.apply_transverse_flux" title="Link to this definition"></a></dt>
+<dd><p>This function applies transverse correction terms to the
+normal conserved states after applying other source terms.</p>
+<p>We construct the state perpendicular to the interface
+by adding the central difference part to the transverse flux
+difference.</p>
+<p>The states that we represent by indices i,j are shown below
+(1,2,3,4):</p>
+<blockquote>
+<div><dl>
+<dt>j+3/2–+———-+———-+———-+</dt><dd><blockquote>
+<div><div class="line-block">
+<div class="line">|          |          |</div>
+<div class="line">|          |          |</div>
+</div>
+</div></blockquote>
+<dl>
+<dt>j+1 -+          |          |          |</dt><dd><div class="line-block">
+<div class="line">|          |          |</div>
+<div class="line">|          |          |    1: U_xl[i,j,:] = U</div>
+</div>
+</dd>
+</dl>
+</dd>
+<dt>j+1/2–+———-XXXXXXXXXXXX———-+                      i-1/2,j,L</dt><dd><blockquote>
+<div><div class="line-block">
+<div class="line">X          X          |</div>
+<div class="line">X          X          |</div>
+</div>
+</div></blockquote>
+<dl>
+<dt>j -+        1 X 2        X          |    2: U_xr[i,j,:] = U</dt><dd><div class="line-block">
+<div class="line">X          X          |                      i-1/2,j,R</div>
+<div class="line">X    4     X          |</div>
+</div>
+</dd>
+</dl>
+</dd>
+<dt>j-1/2–+———-XXXXXXXXXXXX———-+</dt><dd><blockquote>
+<div><div class="line-block">
+<div class="line">|    3     |          |    3: U_yl[i,j,:] = U</div>
+<div class="line">|          |          |                      i,j-1/2,L</div>
+</div>
+</div></blockquote>
+<dl>
+<dt>j-1 -+          |          |          |</dt><dd><div class="line-block">
+<div class="line">|          |          |</div>
+<div class="line">|          |          |    4: U_yr[i,j,:] = U</div>
+</div>
+</dd>
+</dl>
+</dd>
+<dt>j-3/2–+———-+———-+———-+                      i,j-1/2,R</dt><dd><blockquote>
+<div><div class="line-block">
+<div class="line">|     |    |     |    |     |
+i-1         i         i+1</div>
+</div>
+</div></blockquote>
+<p>i-3/2      i-1/2      i+1/2      i+3/2</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>remember that the fluxes are stored on the left edge, so</p>
+<dl class="simple">
+<dt>F_x[i,j,:] = F_x</dt><dd><p>i-1/2, j</p>
+</dd>
+<dt>F_y[i,j,:] = F_y</dt><dd><p>i, j-1/2</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>U_xl, U_xr, U_yl, U_yr: ndarray, ndarray, ndarray, ndarray</strong></dt><dd><p>Conserved states in the left and right x-interface
+and left and right y-interface.</p>
+</dd>
+<dt><strong>my_data</strong><span class="classifier">CellCenterData2d object</span></dt><dd><p>The data object containing the grid and advective scalar that
+we are advecting.</p>
+</dd>
+<dt><strong>rp</strong><span class="classifier">RuntimeParameters object</span></dt><dd><p>The runtime parameters for the simulation</p>
+</dd>
+<dt><strong>ivars</strong><span class="classifier">Variables object</span></dt><dd><p>The Variables object that tells us which indices refer to which
+variables</p>
+</dd>
+<dt><strong>solid: A container class</strong></dt><dd><p>This is used in Riemann solver to indicate which side has solid boundary</p>
+</dd>
+<dt><strong>tc</strong><span class="classifier">TimerCollection object</span></dt><dd><p>The timers we are using to profile</p>
+</dd>
+<dt><strong>dt</strong><span class="classifier">float</span></dt><dd><p>The timestep we are advancing through.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">ndarray, ndarray, ndarray, ndarray</span></dt><dd><p>Left and right normal conserved states in x and y interfaces
+with source terms added.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.compressible.unsplit_fluxes.interface_states">
+<span class="sig-prename descclassname"><span class="pre">pyro.compressible.unsplit_fluxes.</span></span><span class="sig-name descname"><span class="pre">interface_states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible/unsplit_fluxes.html#interface_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible.unsplit_fluxes.interface_states" title="Link to this definition"></a></dt>
+<dd><p>interface_states returns the normal conserved states in the x and y
+interfaces. We get the normal fluxes by finding the normal primitive states,
+Then construct the corresponding conserved states.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>my_data</strong><span class="classifier">CellCenterData2d object</span></dt><dd><p>The data object containing the grid and advective scalar that
+we are advecting.</p>
+</dd>
+<dt><strong>rp</strong><span class="classifier">RuntimeParameters object</span></dt><dd><p>The runtime parameters for the simulation</p>
+</dd>
+<dt><strong>ivars</strong><span class="classifier">Variables object</span></dt><dd><p>The Variables object that tells us which indices refer to which
+variables</p>
+</dd>
+<dt><strong>tc</strong><span class="classifier">TimerCollection object</span></dt><dd><p>The timers we are using to profile</p>
+</dd>
+<dt><strong>dt</strong><span class="classifier">float</span></dt><dd><p>The timestep we are advancing through.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">ndarray, ndarray, ndarray, ndarray</span></dt><dd><p>Left and right normal conserved states in x and y interfaces</p>
 </dd>
 </dl>
 </dd>
