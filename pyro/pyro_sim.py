@@ -14,6 +14,7 @@ from pyro.util import compare, msg, runparams
 valid_solvers = ["advection",
                  "advection_nonuniform",
                  "advection_rk",
+                 "advection_ppm",
                  "advection_fv4",
                  "advection_weno",
                  "burgers",
