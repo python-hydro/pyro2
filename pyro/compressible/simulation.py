@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import pyro.compressible.unsplit_fluxes as flx
-import pyro.mesh.array_indexer as ai
 import pyro.mesh.boundary as bnd
 from pyro.compressible import BC, derives, eos, riemann
 from pyro.particles import particles

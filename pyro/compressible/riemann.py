@@ -922,7 +922,6 @@ def riemann_flux(idir, U_l, U_r, my_data, rp, ivars,
                      lower_solid, upper_solid,
                      gamma, U_l, U_r)
 
-
     # If riemann_method is not HLLC, then construct flux using conserved states
     if riemann_method != "HLLC":
         _f = consFlux(idir, myg.coord_type, gamma,
