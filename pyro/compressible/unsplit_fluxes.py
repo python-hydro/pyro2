@@ -257,7 +257,7 @@ def apply_source_terms(U_xl, U_xr, U_yl, U_yr,
         The data object containing the grid and advective scalar that
         we are advecting.
     my_aux : CellCenterData2d object
-        The data object that carries auxillary quantities which we need
+        The data object that carries auxiliary quantities which we need
         to fill in the ghost cells.
     rp : RuntimeParameters object
         The runtime parameters for the simulation
