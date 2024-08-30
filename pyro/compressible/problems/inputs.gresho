@@ -2,13 +2,13 @@
 
 [driver]
 max_steps = 2000
-tmax = 10000.0
+tmax = 1
 cfl = 0.8
 
 
 [io]
 basename = lm_gresho_128_
-n_out = 1
+dt_out = 0.2
 
 
 [mesh]

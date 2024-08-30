@@ -1,9 +1,5 @@
 [gresho]
-dens_base = 10.0            ; density at the base of the atmosphere
-scale_height = 2.0          ; scale height of the isothermal atmosphere
-
-r = 1.0
-u0 = 1.0
-p0 = 1.0
-
-dens_cutoff  = 0.01
+rho0 = 1.0                  ; density in the domain
+r = 0.2                     ; radial location of peak velocity
+p0 = 1.0                    ; ambient pressure in the domain
+t_r = 1.0                   ; reference time (used for setting peak velocity)

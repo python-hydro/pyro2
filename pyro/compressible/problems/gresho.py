@@ -1,6 +1,6 @@
 import sys
 
-import numpy
+import numpy as np
 
 from pyro.mesh import patch
 from pyro.util import msg
@@ -13,7 +13,7 @@ def init_data(my_data, rp):
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):
-        print("ErrrrOrr: patch invalid in bubble.py")
+        print("Error: patch invalid in gresho.py")
         print(my_data.__class__)
         sys.exit()
 
@@ -23,58 +23,55 @@ def init_data(my_data, rp):
     ymom = my_data.get_var("y-momentum")
     ener = my_data.get_var("energy")
 
-    # grav = rp.get_param("compressible.grav")
+    myg = my_data.grid
+
+    x_center = 0.5 * (myg.x[0] + myg.x[-1])
+    y_center = 0.5 * (myg.y[0] + myg.y[-1])
+    L_x = myg.xmax - myg.xmin
 
     gamma = rp.get_param("eos.gamma")
 
-    # scale_height = rp.get_param("gresho.scale_height")
-    dens_base = rp.get_param("gresho.dens_base")
-    dens_cutoff = rp.get_param("gresho.dens_cutoff")
-
-    rr = rp.get_param("gresho.r")
-    u0 = rp.get_param("gresho.u0")
+    rho0 = rp.get_param("gresho.rho0")
     p0 = rp.get_param("gresho.p0")
 
-    # initialize the components -- we'll get a psure too
-    # but that is used only to initialize the base state
-    xmom[:, :] = 0.0
-    ymom[:, :] = 0.0
-    dens[:, :] = dens_cutoff
+    rr = rp.get_param("gresho.r")
+    t_r = rp.get_param("gresho.t_r")
 
-    # set the density to be stratified in the y-direction
-    myg = my_data.grid
+    q_r = 0.4 * np.pi * L_x / t_r
+
     pres = myg.scratch_array()
+    u_phi = myg.scratch_array()
 
-    dens[:, :] = dens_base
-
+    dens[:, :] = rho0
     pres[:, :] = p0
 
-    x_centre = 0.5 * (myg.x[0] + myg.x[-1])
-    y_centre = 0.5 * (myg.y[0] + myg.y[-1])
+    rad = np.sqrt((myg.x2d - x_center)**2 +
+                  (myg.y2d - y_center)**2)
 
-    rad = numpy.sqrt((myg.x2d - x_centre)**2 + (myg.y2d - y_centre)**2)
+    indx1 = rad < rr
+    u_phi[indx1] = 5.0 * rad[indx1]
+    pres[indx1] = p0 + 12.5 * rad[indx1]**2
 
-    pres[rad <= rr] += 0.5 * (u0 * rad[rad <= rr]/rr)**2
-    pres[(rad > rr) & (rad <= 2*rr)] += \
-        u0**2 * (0.5 * (rad[(rad > rr) & (rad <= 2*rr)] / rr)**2 +
-        4 * (1 - rad[(rad > rr) & (rad <= 2*rr)]/rr +
-        numpy.log(rad[(rad > rr) & (rad <= 2*rr)]/rr)))
-    pres[rad > 2*rr] += u0**2 * (4 * numpy.log(2) - 2)
-    #
-    uphi = numpy.zeros_like(pres)
-    uphi[rad <= rr] = u0 * rad[rad <= rr]/rr
-    uphi[(rad > rr) & (rad <= 2*rr)] = u0 * (2 - rad[(rad > rr) & (rad <= 2*rr)]/rr)
+    indx2 = np.logical_and(rad >= rr, rad < 2.0*rr)
+    u_phi[indx2] = 2.0 - 5.0 * rad[indx2]
+    pres[indx2] = p0 + 12.5 * rad[indx2]**2 + \
+        4.0 * (1.0 - 5.0 * rad[indx2] - np.log(rr) + np.log(rad[indx2]))
 
-    xmom[:, :] = -dens[:, :] * uphi[:, :] * (myg.y2d - y_centre) / rad[:, :]
-    ymom[:, :] = dens[:, :] * uphi[:, :] * (myg.x2d - x_centre) / rad[:, :]
+    indx3 = rad >= 2.0 * rr
+    u_phi[indx3] = 0.0
+    pres[indx3] = p0 + 12.5 * (2.0 * rr)**2 + \
+        4.0 * (1.0 - 5.0 * (2.0 * rr) - np.log(rr) + np.log(2.0 * rr))
 
-    ener[:, :] = pres[:, :]/(gamma - 1.0) + \
-                0.5*(xmom[:, :]**2 + ymom[:, :]**2)/dens[:, :]
+    xmom[:, :] = -dens[:, :] * q_r * u_phi[:, :] * (myg.y2d - y_center) / rad[:, :]
+    ymom[:, :] = dens[:, :] * q_r * u_phi[:, :] * (myg.x2d - x_center) / rad[:, :]
 
-    eint = pres[:, :]/(gamma - 1.0)
+    ener[:, :] = pres[:, :] / (gamma - 1.0) + \
+                0.5 * (xmom[:, :]**2 + ymom[:, :]**2) / dens[:, :]
 
-    dens[:, :] = pres[:, :]/(eint[:, :]*(gamma - 1.0))
-
+    # report peak Mach number
+    cs = np.sqrt(gamma * pres / dens)
+    M = np.abs(q_r * u_phi).max() / cs.max()
+    print(f"peak Mach number = {M}")
 
 def finalize():
     """ print out any information to the userad at the end of the run """
