@@ -6,7 +6,7 @@ import importlib
 import h5py
 
 import pyro.mesh.boundary as bnd
-from pyro.mesh.patch import CellCenterData2d, Grid2d
+from pyro.mesh.patch import CellCenterData2d, Cartesian2d, SphericalPolar
 from pyro.particles import particles
 
 
@@ -48,9 +48,14 @@ def read(filename):
         # read in the grid info and create our grid
         grid = f["grid"].attrs
 
-        myg = Grid2d(grid["nx"], grid["ny"], ng=grid["ng"],
-                     xmin=grid["xmin"], xmax=grid["xmax"],
-                     ymin=grid["ymin"], ymax=grid["ymax"])
+        if grid["coord_type"] == 0:
+            grid_class = Cartesian2d
+        elif grid["coord_type"] == 1:
+            grid_class = SphericalPolar
+
+        myg = grid_class(grid["nx"], grid["ny"], ng=grid["ng"],
+                         xmin=grid["xmin"], xmax=grid["xmax"],
+                         ymin=grid["ymin"], ymax=grid["ymax"])
 
         # sometimes problems define custom BCs -- at the moment, we
         # are going to assume that these always map to BC.user.  We
