@@ -6,7 +6,7 @@ import importlib
 import h5py
 
 import pyro.mesh.boundary as bnd
-from pyro.mesh.patch import CellCenterData2d, Cartesian2d, SphericalPolar
+from pyro.mesh.patch import Cartesian2d, CellCenterData2d, SphericalPolar
 from pyro.particles import particles
 
 

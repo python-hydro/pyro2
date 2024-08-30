@@ -1,10 +1,9 @@
 # test the boundary fill routine
 
 
-import numpy as np
-
 import mesh.boundary as bnd
 import mesh.patch
+import numpy as np
 
 
 def doit():
