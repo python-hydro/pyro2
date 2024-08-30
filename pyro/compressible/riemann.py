@@ -6,7 +6,7 @@ from pyro.util import msg
 
 
 @njit(cache=True)
-def riemann_cons(idir, ng,
+def riemann_cgf(idir, ng,
                  idens, ixmom, iymom, iener, irhoX, nspec,
                  lower_solid, upper_solid,
                  gamma, U_l, U_r):
@@ -311,53 +311,6 @@ def riemann_cons(idir, ng,
 
 
 @njit(cache=True)
-def riemann_cgf(idir, ng, coord_type,
-                idens, ixmom, iymom, iener, irhoX, nspec,
-                lower_solid, upper_solid,
-                gamma, U_l, U_r):
-    r"""
-    This uses riemann_cons to directly output fluxes instead of conserved states.
-    This is mainly used to be consistent with riemann_hllc.
-
-    Parameters
-    ----------
-    idir : int
-        Are we predicting to the edges in the x-direction (1) or y-direction (2)?
-    ng : int
-        The number of ghost cells
-    nspec : int
-        The number of species
-    idens, ixmom, iymom, iener, irhoX : int
-        The indices of the density, x-momentum, y-momentum, internal energy density
-        and species partial densities in the conserved state vector.
-    lower_solid, upper_solid : int
-        Are we at lower or upper solid boundaries?
-    gamma : float
-        Adiabatic index
-    U_l, U_r : ndarray
-        Conserved state on the left and right cell edges.
-
-    Returns
-    -------
-    out : ndarray
-        Fluxes
-    """
-
-    # get conserved states from U_l and U_r
-    U_state = riemann_cons(idir, ng,
-                           idens, ixmom, iymom, iener, irhoX, nspec,
-                           lower_solid, upper_solid,
-                           gamma, U_l, U_r)
-
-    # Construct the corresponding flux
-    F = consFlux(idir, coord_type, gamma,
-                 idens, ixmom, iymom, iener, irhoX, nspec,
-                 U_state)
-
-    return F
-
-
-@njit(cache=True)
 def riemann_prim(idir, ng,
                  irho, iu, iv, ip, iX, nspec,
                  lower_solid, upper_solid,
@@ -641,7 +594,7 @@ def riemann_prim(idir, ng,
 
 
 @njit(cache=True)
-def riemann_hllc(idir, ng, coord_type,
+def riemann_hllc(idir, ng,
                  idens, ixmom, iymom, iener, irhoX, nspec,
                  lower_solid, upper_solid,  # pylint: disable=unused-argument
                  gamma, U_l, U_r):
@@ -673,6 +626,9 @@ def riemann_hllc(idir, ng, coord_type,
     out : ndarray
         Conserved flux
     """
+
+    # Only Cartesian2d is supported in HLLC
+    coord_type = 0
 
     qx, qy, nvar = U_l.shape
 
@@ -907,17 +863,17 @@ def riemann_hllc(idir, ng, coord_type,
     return F
 
 
-def riemann_flux(U_xl, U_xr, U_yl, U_yr,
-                 my_data, rp, ivars, solid, tc):
+def riemann_flux(idir, U_l, U_r, my_data, rp, ivars,
+                 lower_solid, upper_solid, tc, return_cons=False):
     """
-    This constructs the unsplit fluxes through the x and y interfaces
-    using the left and right conserved states by using the riemann solver.
+    This is the general interface that constructs the unsplit fluxes through
+    the idir (1 for x, 2 for y) interfaces using the left and right
+    conserved states by using the riemann solver.
 
     Parameters
     ----------
-    U_xl, U_xr, U_yl, U_yr: ndarray, ndarray, ndarray, ndarray
-        Conserved states in the left and right x-interface
-        and left and right y-interface.
+    U_l, U_r: ndarray, ndarray
+        Conserved states in the left and right interface
     my_data : CellCenterData2d object
         The data object containing the grid and advective scalar that
         we are advecting.
@@ -926,15 +882,21 @@ def riemann_flux(U_xl, U_xr, U_yl, U_yr,
     ivars : Variables object
         The Variables object that tells us which indices refer to which
         variables
-    solid: A container class
-        This is used in Riemann solver to indicate which side has solid boundary
+    lower_solid, upper_solid : int
+        Are we at lower or upper solid boundaries?
     tc : TimerCollection object
         The timers we are using to profile
+    return_cons: Boolean
+        If we don't use HLLC Riemann solver, do we also return conserved states?
 
     Returns
     -------
-    out : ndarray, ndarray
-        Fluxes in x and y direction
+    F : ndarray
+        Fluxes in x or y direction
+
+    Optionally:
+    U: ndarray
+        Conserved states in x or y direction
     """
 
     tm_riem = tc.timer("riemann")
@@ -945,30 +907,40 @@ def riemann_flux(U_xl, U_xr, U_yl, U_yr,
     riemann_method = rp.get_param("compressible.riemann")
     gamma = rp.get_param("eos.gamma")
 
-    riemannFunc = None
-    if riemann_method == "HLLC":
-        riemannFunc = riemann_hllc
-    elif riemann_method == "CGF":
-        riemannFunc = riemann_cgf
-    else:
+    riemann_solvers = {"HLLC": riemann_hllc, "CGF": riemann_cgf}
+
+    if riemann_method not in riemann_solvers:
         msg.fail("ERROR: Riemann solver undefined")
 
-    _fx = riemannFunc(1, myg.ng, myg.coord_type,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
-                      solid.xl, solid.xr,
-                      gamma, U_xl, U_xr)
+    riemannFunc = riemann_solvers[riemann_method]
 
-    _fy = riemannFunc(2, myg.ng, myg.coord_type,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
-                      solid.yl, solid.yr,
-                      gamma, U_yl, U_yr)
+    # This returns Flux in idir direction if we use HLLC
+    # and conserved states otherwise
+    _u = riemannFunc(idir, myg.ng,
+                     ivars.idens, ivars.ixmom, ivars.iymom,
+                     ivars.iener, ivars.irhox, ivars.naux,
+                     lower_solid, upper_solid,
+                     gamma, U_l, U_r)
 
-    F_x = ai.ArrayIndexer(d=_fx, grid=myg)
-    F_y = ai.ArrayIndexer(d=_fy, grid=myg)
 
+    # If riemann_method is not HLLC, then construct flux using conserved states
+    if riemann_method != "HLLC":
+        _f = consFlux(idir, myg.coord_type, gamma,
+                      ivars.idens, ivars.ixmom, ivars.iymom,
+                      ivars.iener, ivars.irhox, ivars.naux,
+                      _u)
+    else:
+        # If riemann_method is HLLC, then its already flux
+        _f = _u
+
+    F = ai.ArrayIndexer(d=_f, grid=myg)
     tm_riem.end()
 
-    return F_x, F_y
+    if riemann_method != "HLLC" and return_cons:
+        U = ai.ArrayIndexer(d=_u, grid=myg)
+        return F, U
+
+    return F
 
 
 @njit(cache=True)

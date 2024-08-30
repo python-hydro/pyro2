@@ -116,7 +116,7 @@ class Simulation(NullSimulation):
             msg.warning("ERROR: Riemann Solver is not set.")
 
         if my_grid.coord_type == 1 and riemann_method == "HLLC":
-            msg.fail("ERROR: Only CGF Riemann Solver is supported " +
+            msg.fail("ERROR: HLLC Riemann Solver is not supported " +
                      "with SphericalPolar Geometry")
 
         # define solver specific boundary condition routines
@@ -239,46 +239,31 @@ class Simulation(NullSimulation):
             # We need pressure from interface state for conservative update for
             # SphericalPolar geometry. So we need interface conserved states.
 
-            # Get the conserved interface state from Riemann Solver
-            _ux = riemann.riemann_cons(1, myg.ng,
-                                       self.ivars.idens, self.ivars.ixmom, self.ivars.iymom,
-                                       self.ivars.iener, self.ivars.irhox, self.ivars.naux,
-                                       self.solid.xl, self.solid.xr,
-                                       gamma, U_xl, U_xr)
+            F_x, U_x = riemann.riemann_flux(1, U_xl, U_xr,
+                                            self.cc_data, self.rp, self.ivars,
+                                            self.solid.xl, self.solid.xr, self.tc,
+                                            return_cons=True)
 
-            _uy = riemann.riemann_cons(2, myg.ng,
-                                       self.ivars.idens, self.ivars.ixmom, self.ivars.iymom,
-                                       self.ivars.iener, self.ivars.irhox, self.ivars.naux,
-                                       self.solid.yl, self.solid.yr,
-                                       gamma, U_yl, U_yr)
-
-            U_x = ai.ArrayIndexer(d=_ux, grid=myg)
-            U_y = ai.ArrayIndexer(d=_uy, grid=myg)
+            F_y, U_y = riemann.riemann_flux(2, U_yl, U_yr,
+                                            self.cc_data, self.rp, self.ivars,
+                                            self.solid.yl, self.solid.yr, self.tc,
+                                            return_cons=True)
 
             # Find primitive variable since we need pressure in conservative update.
-
             qx = cons_to_prim(U_x, gamma, self.ivars, myg)
             qy = cons_to_prim(U_y, gamma, self.ivars, myg)
 
-            # Find the corresponding flux from the conserved states.
-            _fx = riemann.consFlux(1, myg.coord_type, gamma,
-                                   self.ivars.idens, self.ivars.ixmom, self.ivars.iymom,
-                                   self.ivars.iener, self.ivars.irhox, self.ivars.naux,
-                                   _ux)
-
-            _fy = riemann.consFlux(2, myg.coord_type, gamma,
-                                   self.ivars.idens, self.ivars.ixmom, self.ivars.iymom,
-                                   self.ivars.iener, self.ivars.irhox, self.ivars.naux,
-                                   _uy)
-
-            F_x = ai.ArrayIndexer(d=_fx, grid=myg)
-            F_y = ai.ArrayIndexer(d=_fy, grid=myg)
-
         else:
             # Directly calculate the interface flux using Riemann Solver
-            F_x, F_y = riemann.riemann_flux(U_xl, U_xr, U_yl, U_yr,
-                                            self.cc_data, self.rp, self.ivars,
-                                            self.solid, self.tc)
+            F_x = riemann.riemann_flux(1, U_xl, U_xr,
+                                       self.cc_data, self.rp, self.ivars,
+                                       self.solid.xl, self.solid.xr, self.tc,
+                                       return_cons=False)
+
+            F_y = riemann.riemann_flux(2, U_yl, U_yr,
+                                       self.cc_data, self.rp, self.ivars,
+                                       self.solid.yl, self.solid.yr, self.tc,
+                                       return_cons=False)
 
         # Apply artificial viscosity to fluxes
 

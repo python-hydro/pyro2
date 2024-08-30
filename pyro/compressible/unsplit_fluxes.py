@@ -416,8 +416,13 @@ def apply_transverse_flux(U_xl, U_xr, U_yl, U_yr,
 
     # Use Riemann Solver to get interface flux using the left and right states
 
-    F_x, F_y = riemann.riemann_flux(U_xl, U_xr, U_yl, U_yr,
-                                    my_data, rp, ivars, solid, tc)
+    F_x = riemann.riemann_flux(1, U_xl, U_xr,
+                               my_data, rp, ivars,
+                               solid.xl, solid.xr, tc)
+
+    F_y = riemann.riemann_flux(2, U_yl, U_yr,
+                               my_data, rp, ivars,
+                               solid.yl, solid.yr, tc)
 
     # Now we update the conserved states using the transverse fluxes.
 
@@ -502,10 +507,10 @@ def apply_artificial_viscosity(F_x, F_y, q,
         var = my_data.get_var_by_index(n)
 
         F_x.v(buf=b, n=n)[:, :] += \
-            avisco_x.v(buf=b)*myg.Lx.v(buf=b)*(var.ip(-1, buf=b) - var.v(buf=b))
+            avisco_x.v(buf=b)*(var.ip(-1, buf=b) - var.v(buf=b))
 
         # F_y = F_y + avisco_y * (U(i,j-1) - U(i,j))
         F_y.v(buf=b, n=n)[:, :] += \
-            avisco_y.v(buf=b)*myg.Ly.v(buf=b)*(var.jp(-1, buf=b) - var.v(buf=b))
+            avisco_y.v(buf=b)*(var.jp(-1, buf=b) - var.v(buf=b))
 
     return F_x, F_y
