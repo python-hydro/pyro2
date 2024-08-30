@@ -12,7 +12,7 @@ cvisc = 0.1
 
 
 [io]
-basename = advect_
+basename = advect_64_
 
 
 [eos]

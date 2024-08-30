@@ -110,10 +110,10 @@ class Grid2d:
 
         # compute the indices of the block interior (excluding guardcells)
         self.ilo = self.ng
-        self.ihi = self.ng + self.nx-1
+        self.ihi = self.ng + self.nx - 1
 
         self.jlo = self.ng
-        self.jhi = self.ng + self.ny-1
+        self.jhi = self.ng + self.ny - 1
 
         # center of the grid (for convenience)
         self.ic = self.ilo + self.nx//2 - 1
@@ -263,8 +263,7 @@ class SphericalPolar(Grid2d):
 
         # Length of the side along theta-direction, r*dtheta
 
-        self.Ly = ArrayIndexer(np.full((self.qx, self.qy), self.x2d*self.dy),
-                               grid=self)
+        self.Ly = ArrayIndexer(self.x2d*self.dy, grid=self)
 
         # Returns an array of the face area that points in the r(x) direction.
         # dL_theta x dL_phi = r^2 * sin(theta) * dtheta * dphi

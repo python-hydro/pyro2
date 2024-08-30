@@ -67,7 +67,7 @@ def states(idir, ng, dx, dt,
         Are we predicting to the edges in the x-direction (1) or y-direction (2)?
     ng : int
         The number of ghost cells
-    dx : float
+    dx : ndarray
         The cell spacing
     dt : float
         The timestep
@@ -133,13 +133,13 @@ def states(idir, ng, dx, dt,
                                  q[irho] / cs, 0.0, 0.5 / (cs * cs)]
                 lvec[1, :ns] = [1.0, 0.0,
                                  0.0, -1.0 / (cs * cs)]
-                lvec[2, :ns] = [0.0, 0.0,             1.0, 0.0]
+                lvec[2, :ns] = [0.0, 0.0, 1.0, 0.0]
                 lvec[3, :ns] = [0.0, 0.5 *
                                  q[irho] / cs,  0.0, 0.5 / (cs * cs)]
 
                 rvec[0, :ns] = [1.0, -cs / q[irho], 0.0, cs * cs]
-                rvec[1, :ns] = [1.0, 0.0,       0.0, 0.0]
-                rvec[2, :ns] = [0.0, 0.0,       1.0, 0.0]
+                rvec[1, :ns] = [1.0, 0.0, 0.0, 0.0]
+                rvec[2, :ns] = [0.0, 0.0, 1.0, 0.0]
                 rvec[3, :ns] = [1.0, cs / q[irho],  0.0, cs * cs]
 
                 # now the species -- they only have a 1 in their corresponding slot
@@ -174,29 +174,30 @@ def states(idir, ng, dx, dt,
             if idir == 1:
                 # this is one the right face of the current zone,
                 # so the fastest moving eigenvalue is e_val[3] = u + c
-                factor = 0.5 * (1.0 - dtdx * max(e_val[3], 0.0))
+                factor = 0.5 * (1.0 - dtdx[i, j] * max(e_val[3], 0.0))
                 q_l[i + 1, j, :] = q + factor * dq
 
                 # left face of the current zone, so the fastest moving
                 # eigenvalue is e_val[3] = u - c
-                factor = 0.5 * (1.0 + dtdx * min(e_val[0], 0.0))
+                factor = 0.5 * (1.0 + dtdx[i, j] * min(e_val[0], 0.0))
                 q_r[i,  j, :] = q - factor * dq
 
             else:
 
-                factor = 0.5 * (1.0 - dtdx * max(e_val[3], 0.0))
+                factor = 0.5 * (1.0 - dtdx[i, j] * max(e_val[3], 0.0))
                 q_l[i, j + 1, :] = q + factor * dq
 
-                factor = 0.5 * (1.0 + dtdx * min(e_val[0], 0.0))
+                factor = 0.5 * (1.0 + dtdx[i, j] * min(e_val[0], 0.0))
                 q_r[i, j, :] = q - factor * dq
 
             # compute the Vhat functions
             for m in range(nvar):
                 asum = np.dot(lvec[m, :], dq)
 
-                betal[m] = dtdx4 * (e_val[3] - e_val[m]) * \
+                # Should we change to max(e_val[3], 0.0) and min(e_val[0], 0.0)?
+                betal[m] = dtdx4[i, j] * (e_val[3] - e_val[m]) * \
                     (np.copysign(1.0, e_val[m]) + 1.0) * asum
-                betar[m] = dtdx4 * (e_val[0] - e_val[m]) * \
+                betar[m] = dtdx4[i, j] * (e_val[0] - e_val[m]) * \
                     (1.0 - np.copysign(1.0, e_val[m])) * asum
 
             # construct the states

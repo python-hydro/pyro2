@@ -20,8 +20,8 @@ Taylor expanding *in space only* yields::
 """
 
 import pyro.compressible as comp
-import pyro.mesh.array_indexer as ai
-from pyro.compressible import interface, riemann
+import pyro.compressible.unsplit_fluxes as flx
+from pyro.compressible import riemann
 from pyro.mesh import reconstruction
 
 
@@ -171,27 +171,9 @@ def fluxes(my_data, rp, ivars, solid, tc):
     # =========================================================================
     # apply artificial viscosity
     # =========================================================================
-    cvisc = rp.get_param("compressible.cvisc")
-
-    _ax, _ay = interface.artificial_viscosity(myg.ng, myg.dx, myg.dy, myg.Lx, myg.Ly,
-                                              myg.xmin, myg.ymin, myg.coord_type,
-                  cvisc, q.v(n=ivars.iu, buf=myg.ng), q.v(n=ivars.iv, buf=myg.ng))
-
-    avisco_x = ai.ArrayIndexer(d=_ax, grid=myg)
-    avisco_y = ai.ArrayIndexer(d=_ay, grid=myg)
-
-    b = (2, 1)
-
-    for n in range(ivars.nvar):
-        # F_x = F_x + avisco_x * (U(i-1,j) - U(i,j))
-        var = my_data.get_var_by_index(n)
-
-        F_x.v(buf=b, n=n)[:, :] += \
-            avisco_x.v(buf=b) * (var.ip(-1, buf=b) - var.v(buf=b))
-
-        # F_y = F_y + avisco_y * (U(i,j-1) - U(i,j))
-        F_y.v(buf=b, n=n)[:, :] += \
-            avisco_y.v(buf=b) * (var.jp(-1, buf=b) - var.v(buf=b))
+    F_x, F_y = flx.apply_artificial_viscosity(F_x, F_y, q,
+                                              my_data, rp,
+                                              ivars)
 
     tm_flux.end()
 

@@ -7,9 +7,9 @@ from pyro.util import msg
 
 @njit(cache=True)
 def riemann_cgf(idir, ng,
-                idens, ixmom, iymom, iener, irhoX, nspec,
-                lower_solid, upper_solid,
-                gamma, U_l, U_r):
+                 idens, ixmom, iymom, iener, irhoX, nspec,
+                 lower_solid, upper_solid,
+                 gamma, U_l, U_r):
     r"""
     Solve riemann shock tube problem for a general equation of
     state using the method of Colella, Glaz, and Ferguson.  See
@@ -864,11 +864,11 @@ def riemann_hllc(idir, ng,
 
 
 def riemann_flux(idir, U_l, U_r, my_data, rp, ivars,
-                 lower_solid, upper_solid, tc):
+                 lower_solid, upper_solid, tc, return_cons=False):
     """
-    This is the general interface that  constructs the unsplit fluxes through
-    the x and y interfaces using the left and right conserved states by
-    using the riemann solver.
+    This is the general interface that constructs the unsplit fluxes through
+    the idir (1 for x, 2 for y) interfaces using the left and right
+    conserved states by using the riemann solver.
 
     Parameters
     ----------
@@ -886,11 +886,17 @@ def riemann_flux(idir, U_l, U_r, my_data, rp, ivars,
         Are we at lower or upper solid boundaries?
     tc : TimerCollection object
         The timers we are using to profile
+    return_cons: Boolean
+        If we don't use HLLC Riemann solver, do we also return conserved states?
 
     Returns
     -------
-    out : ndarray, ndarray
-        Fluxes in x and y direction
+    F : ndarray
+        Fluxes in x or y direction
+
+    Optionally:
+    U: ndarray
+        Conserved states in x or y direction
     """
 
     tm_riem = tc.timer("riemann")
@@ -908,21 +914,30 @@ def riemann_flux(idir, U_l, U_r, my_data, rp, ivars,
 
     riemannFunc = riemann_solvers[riemann_method]
 
-    _f = riemannFunc(idir, myg.ng,
+    # This returns Flux in idir direction if we use HLLC
+    # and conserved states otherwise
+    _u = riemannFunc(idir, myg.ng,
                      ivars.idens, ivars.ixmom, ivars.iymom,
                      ivars.iener, ivars.irhox, ivars.naux,
                      lower_solid, upper_solid,
                      gamma, U_l, U_r)
 
-    # If riemann_method is not HLLC, then it outputs interface conserved states
+    # If riemann_method is not HLLC, then construct flux using conserved states
     if riemann_method != "HLLC":
         _f = consFlux(idir, myg.coord_type, gamma,
                       ivars.idens, ivars.ixmom, ivars.iymom,
                       ivars.iener, ivars.irhox, ivars.naux,
-                      _f)
+                      _u)
+    else:
+        # If riemann_method is HLLC, then its already flux
+        _f = _u
 
     F = ai.ArrayIndexer(d=_f, grid=myg)
     tm_riem.end()
+
+    if riemann_method != "HLLC" and return_cons:
+        U = ai.ArrayIndexer(d=_u, grid=myg)
+        return F, U
 
     return F
 
