@@ -73,5 +73,6 @@ def init_data(my_data, rp):
     M = np.abs(q_r * u_phi).max() / cs.max()
     print(f"peak Mach number = {M}")
 
+
 def finalize():
     """ print out any information to the userad at the end of the run """
