@@ -247,6 +247,16 @@ class Pyro:
 
         return self.sim.cc_data.get_var(v)
 
+    def get_grid(self):
+        """
+        Return the underlying grid object for the simulation
+        """
+
+        if not self.is_initialized:
+            msg.fail("ERROR: problem has not been initialized")
+
+        return self.sim.cc_data.grid
+
 
 class PyroBenchmark(Pyro):
     """
