@@ -22,8 +22,14 @@ pyro: a python hydro code
    running
    output
    problems
+
+.. toctree::
+   maxdepth: 1
+   :caption: mesh
+
    mesh_basics
    mesh-examples.ipynb
+   spherical-mesh.ipynb
 
 .. toctree::
    :maxdepth: 1
