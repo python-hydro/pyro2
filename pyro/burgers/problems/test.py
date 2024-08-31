@@ -3,6 +3,8 @@ import sys
 from pyro.mesh import patch
 from pyro.util import msg
 
+DEFAULT_INPUTS = "inputs.test"
+
 
 def init_data(myd, rp):
     """ initialize the burgers test problem """

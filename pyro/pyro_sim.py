@@ -112,6 +112,10 @@ class Pyro:
             self.rp.load_params(problem_defaults_file)
 
         # now read in the inputs file
+        if inputs_file is None:
+            problem = importlib.import_module("pyro.{}.problems.{}".format(self.solver_name, problem_name))
+            inputs_file = problem.DEFAULT_INPUTS
+
         if inputs_file is not None:
             if not os.path.isfile(inputs_file):
                 # check if the param file lives in the solver's problems directory

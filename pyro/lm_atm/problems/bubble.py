@@ -5,6 +5,8 @@ import numpy
 from pyro.mesh import patch
 from pyro.util import msg
 
+DEFAULT_INPUTS = "inputs.bubble"
+
 
 def init_data(my_data, base, rp):
     """ initialize the bubble problem """

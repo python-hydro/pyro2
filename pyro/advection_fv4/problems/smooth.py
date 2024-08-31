@@ -3,6 +3,8 @@ import numpy
 from pyro.mesh import fv
 from pyro.util import msg
 
+DEFAULT_INPUTS = "inputs.smooth"
+
 
 def init_data(my_data, rp):
     """ initialize the smooth advection problem """

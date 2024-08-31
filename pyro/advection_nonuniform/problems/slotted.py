@@ -3,6 +3,8 @@ import numpy as np
 from pyro.mesh import patch
 from pyro.util import msg
 
+DEFAULT_INPUTS = "inputs.slotted"
+
 
 def init_data(my_data, rp):
     """ initialize the slotted advection problem """
