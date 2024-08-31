@@ -1,5 +1,6 @@
 [gresho]
 rho0 = 1.0                  ; density in the domain
 r = 0.2                     ; radial location of peak velocity
-p0 = 1.0                    ; ambient pressure in the domain
+
+p0 = 59.5                    ; ambient pressure in the domain
 t_r = 1.0                   ; reference time (used for setting peak velocity)
