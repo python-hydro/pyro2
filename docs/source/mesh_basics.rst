@@ -96,15 +96,6 @@ Note that each variable needs to specify a BC—this allows us to do
 different actions for each variable (for example, some may do even
 reflection while others may do odd reflection).
 
-Jupyter notebook
-----------------
-
-A Jupyter notebook that illustrates some of the basics of working with
-the grid is provided as `mesh-examples.ipynb <https://github.com/python-hydro/pyro2/blob/main/pyro/mesh/mesh-examples.ipynb>`_. This will
-demonstrate, for example, how to use the :func:`ArrayIndexer <pyro.mesh.array_indexer.ArrayIndexer>` methods to
-construct differences.
-
-
 Tests
 -----
 
