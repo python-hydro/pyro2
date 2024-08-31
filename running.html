@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Running &mdash; pyro 4.1.0.post20+g710e6f43 documentation</title>
+  <title>Running &mdash; pyro 4.1.0.post21+ged25543b documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
@@ -18,7 +18,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=26864ace"></script>
+        <script src="_static/documentation_options.js?v=581ca29f"></script>
         <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -135,10 +135,11 @@
              
   <section id="running">
 <h1>Running<a class="headerlink" href="#running" title="Link to this heading"></a></h1>
-<p>Pyro can be run in two ways: either from the commandline, using the
-<code class="docutils literal notranslate"><span class="pre">pyro_sim.py</span></code> script (this will be installed into your search path)
-and passing in the solver, problem and inputs as arguments, or by
-using the <a class="reference internal" href="pyro.html#pyro.pyro_sim.Pyro" title="pyro.pyro_sim.Pyro"><code class="xref py py-func docutils literal notranslate"><span class="pre">Pyro</span></code></a> class.</p>
+<p>Pyro can be run in two ways:</p>
+<ul class="simple">
+<li><p>from the commandline, using the <code class="docutils literal notranslate"><span class="pre">pyro_sim.py</span></code> script (this will be installed into your search path)</p></li>
+<li><p>by using the <a class="reference internal" href="pyro.html#pyro.pyro_sim.Pyro" title="pyro.pyro_sim.Pyro"><code class="xref py py-func docutils literal notranslate"><span class="pre">Pyro</span></code></a> class directly in ipython or Jupyter</p></li>
+</ul>
 <section id="commandline">
 <h2>Commandline<a class="headerlink" href="#commandline" title="Link to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">pyro_sim.py</span></code> script takes 3
@@ -193,7 +194,7 @@ dictionary of parameters and pass them into the <a class="reference internal" hr
 If an inputs file is also passed into the function, the parameters in the dictionary
 will override any parameters in the file. For example, if we wished to turn off
 visualization for the previous example, we would do:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;vis.dovis&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;vis.dovis&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
 <span class="n">p</span><span class="o">.</span><span class="n">initialize_problem</span><span class="p">(</span><span class="n">problem_name</span><span class="o">=</span><span class="s2">&quot;kh&quot;</span><span class="p">,</span>
                      <span class="n">inputs_file</span><span class="o">=</span><span class="s2">&quot;inputs.kh&quot;</span><span class="p">,</span>
                      <span class="n">inputs_dict</span><span class="o">=</span><span class="n">parameters</span><span class="p">)</span>
@@ -240,11 +241,14 @@ as:</p>
 <span class="n">cfl</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;hydro.cfl&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
 <p>When pyro is run, the file <code class="docutils literal notranslate"><span class="pre">inputs.auto</span></code> is output containing the
 full list of runtime parameters, their value for the simulation, and
 the comment that was associated with them from the <code class="docutils literal notranslate"><span class="pre">_defaults</span></code>
 files. This is a useful way to see what parameters are in play for a
 given simulation.</p>
+</div>
 <p>All solvers use the following parameters:</p>
 <ul>
 <li><p>section: [driver]</p>

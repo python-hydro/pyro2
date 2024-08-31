@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Design ideas &mdash; pyro 4.1.0.post20+g710e6f43 documentation</title>
+  <title>Design ideas &mdash; pyro 4.1.0.post21+ged25543b documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
@@ -18,7 +18,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=26864ace"></script>
+        <script src="_static/documentation_options.js?v=581ca29f"></script>
         <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -171,11 +171,8 @@ two sub-directories for problems and tests, appearing as:</p>
 <ul class="simple">
 <li><p><em>solver-name</em></p>
 <ul>
-<li><dl class="simple">
-<dt><code class="docutils literal notranslate"><span class="pre">problems/</span></code><span class="classifier">the problem setups and inputs file that work for this solver.</span></dt><dd><p>In some cases, this might be a symlink to a similar solver that we inherit from.</p>
-</dd>
-</dl>
-</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">problems/</span></code> : the problem setups and inputs file that work for this solver.
+In some cases, this might be a symlink to a similar solver that we inherit from.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">tests/</span></code>. reference output (HDF5 files) used for the regression testing.</p></li>
 </ul>
 </li>
