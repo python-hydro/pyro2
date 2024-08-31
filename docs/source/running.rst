@@ -1,10 +1,11 @@
 Running
 =======
 
-Pyro can be run in two ways: either from the commandline, using the
-``pyro_sim.py`` script (this will be installed into your search path)
-and passing in the solver, problem and inputs as arguments, or by
-using the :func:`Pyro <pyro.pyro_sim.Pyro>` class.
+Pyro can be run in two ways:
+
+* from the commandline, using the ``pyro_sim.py`` script (this will be installed into your search path)
+
+* by using the :func:`Pyro <pyro.pyro_sim.Pyro>` class directly in ipython or Jupyter
 
 Commandline
 ------------
