@@ -36,7 +36,7 @@ class Pyro:
     The main driver to run pyro.
     """
 
-    def __init__(self, solver_name):
+    def __init__(self, solver_name, from_commandline=False):
         """
         Constructor
 
@@ -44,12 +44,17 @@ class Pyro:
         ----------
         solver_name : str
             Name of solver to use
+        from_commandline : bool
+            True if we are running from the commandline -- this enables
+            runtime vis by default.
         """
 
         msg.bold('pyro ...')
 
         if solver_name not in valid_solvers:
             msg.fail(f"ERROR: {solver_name} is not a valid solver")
+
+        self.from_commandline = from_commandline
 
         self.pyro_home = os.path.dirname(os.path.realpath(__file__)) + '/'
         if not solver_name.startswith("pyro."):
@@ -69,6 +74,13 @@ class Pyro:
         self.rp = runparams.RuntimeParameters()
         self.rp.load_params(self.pyro_home + "_defaults")
         self.rp.load_params(self.pyro_home + self.solver_name + "/_defaults")
+
+        # manually override the dovis default
+        # for Jupyter, we want runtime vis disabled by default
+        if self.from_commandline:
+            self.rp.set_param("vis.dovis", 1)
+        else:
+            self.rp.set_param("vis.dovis", 0)
 
         self.tc = profile.TimerCollection()
 
@@ -378,7 +390,7 @@ def main():
                              comp_bench=args.compare_benchmark,
                              make_bench=args.make_benchmark)
     else:
-        pyro = Pyro(args.solver[0])
+        pyro = Pyro(args.solver[0], from_commandline=True)
 
     pyro.initialize_problem(problem_name=args.problem[0],
                             inputs_file=args.param[0],
