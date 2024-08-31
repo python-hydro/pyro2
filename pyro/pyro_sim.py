@@ -125,7 +125,6 @@ class Pyro:
 
             self.rp.load_params(inputs_file, no_new=1)
 
-
         if inputs_dict is not None:
             for k, v in inputs_dict.items():
                 self.rp.params[k] = v
