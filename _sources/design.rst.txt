@@ -12,8 +12,8 @@ All solvers are written for a 2-d grid.  This gives a good balance
 between complexity and speed.
 
 A paper describing the design philosophy of pyro was published in
-Astronomy & Computing `[A&C paper link]<http://adsabs.harvard.edu/abs/2013arXiv1306.6883Z>`_.
-A follow-on paper was published in JOSS `[JOSS paper link]<https://joss.theoj.org/papers/10.21105/joss.01265>`_.
+Astronomy & Computing `[A&C paper link] <http://adsabs.harvard.edu/abs/2013arXiv1306.6883Z>`_.
+A follow-on paper was published in JOSS `[JOSS paper link] <https://joss.theoj.org/papers/10.21105/joss.01265>`_.
 
 Directory structure
 -------------------
