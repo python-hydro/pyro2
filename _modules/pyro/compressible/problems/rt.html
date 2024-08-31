@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.compressible.problems.rt &mdash; pyro 4.1.0.post15+ga8415d3c documentation</title>
+  <title>pyro.compressible.problems.rt &mdash; pyro 4.1.0.post16+ge9df7b20 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=fd3f3429" />
@@ -17,7 +17,7 @@
   
         <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../_static/documentation_options.js?v=8d88b9a3"></script>
+        <script src="../../../../_static/documentation_options.js?v=f93052b2"></script>
         <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -186,8 +186,9 @@
 
         <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
 
-    <span class="n">ymom</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">amp</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">x2d</span><span class="o">/</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">xmax</span><span class="o">-</span><span class="n">myg</span><span class="o">.</span><span class="n">xmin</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">y2d</span><span class="o">-</span><span class="n">ycenter</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-
+    <span class="n">L</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">xmax</span><span class="o">-</span><span class="n">myg</span><span class="o">.</span><span class="n">xmin</span>
+    <span class="n">ymom</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">x2d</span><span class="o">/</span><span class="n">L</span><span class="p">)</span> <span class="o">+</span>
+                              <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">L</span> <span class="o">-</span> <span class="n">myg</span><span class="o">.</span><span class="n">x2d</span><span class="p">)</span><span class="o">/</span><span class="n">L</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">y2d</span><span class="o">-</span><span class="n">ycenter</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">ymom</span> <span class="o">*=</span> <span class="n">dens</span>
 
     <span class="c1"># set the energy (P = cs2*dens)</span>
