@@ -209,6 +209,22 @@ class RuntimeParameters:
 
         if key in self.params:
             return self.params[key]
+
+        raise KeyError(f"ERROR: runtime parameter {key} not found")
+
+    def set_param(self, key, value):
+        """
+        manually set one of the existing runtime parameters
+        """
+
+        if not self.params:
+            msg.warning("WARNING: runtime parameters not yet initialized")
+            self.load_params("_defaults")
+
+        if key in self.params:
+            self.params[key] = value
+            return
+
         raise KeyError(f"ERROR: runtime parameter {key} not found")
 
     def print_unused_params(self):
