@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Design ideas &mdash; pyro 4.1.0.post14+g0d61534f documentation</title>
+  <title>Design ideas &mdash; pyro 4.1.0.post15+ga8415d3c documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
@@ -18,7 +18,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=fcdc5f00"></script>
+        <script src="_static/documentation_options.js?v=8d88b9a3"></script>
         <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -135,16 +135,17 @@
              
   <section id="design-ideas">
 <h1>Design ideas<a class="headerlink" href="#design-ideas" title="Link to this heading"></a></h1>
-<p>pyro is written entirely in python (by default, we expect python 3),
-with a few low-level routines compiled <em>just-in-time</em> by <cite>numba</cite> for performance. The
+<p>pyro is written entirely in python,
+with a few low-level routines compiled <em>just-in-time</em> by <code class="docutils literal notranslate"><span class="pre">numba</span></code> for performance. The
 <code class="docutils literal notranslate"><span class="pre">numpy</span></code> package is used for representing arrays throughout the
 python code and the <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> library is used for
 visualization. Finally, <code class="docutils literal notranslate"><span class="pre">pytest</span></code> is used for unit testing of some
 components.</p>
 <p>All solvers are written for a 2-d grid.  This gives a good balance
 between complexity and speed.</p>
-<p>A paper describing the design philosophy of pyro was accepted to
-Astronomy &amp; Computing <a class="reference external" href="http://adsabs.harvard.edu/abs/2013arXiv1306.6883Z">[paper link]</a>.</p>
+<p>A paper describing the design philosophy of pyro was published in
+Astronomy &amp; Computing <a href="#id1"><span class="problematic" id="id2">`[A&amp;C paper link]&lt;http://adsabs.harvard.edu/abs/2013arXiv1306.6883Z&gt;`_</span></a>.
+A follow-on paper was published in JOSS <a href="#id3"><span class="problematic" id="id4">`[JOSS paper link]&lt;https://joss.theoj.org/papers/10.21105/joss.01265&gt;`_</span></a>.</p>
 <section id="directory-structure">
 <h2>Directory structure<a class="headerlink" href="#directory-structure" title="Link to this heading"></a></h2>
 <p>pyro follows a standard python package structure.  The main directory
@@ -163,113 +164,33 @@ Astronomy &amp; Computing <a class="reference external" href="http://adsabs.harv
 <p>The main code is all contained in the <code class="docutils literal notranslate"><span class="pre">pyro/</span></code> subdirectory.  Here we discuss that.</p>
 <p>The files for each solver are in their own sub-directory, with
 additional sub-directories for the mesh and utilities. Each solver has
-two sub-directories: <code class="docutils literal notranslate"><span class="pre">problems/</span></code> and <code class="docutils literal notranslate"><span class="pre">tests/</span></code>. These store the
-different problem setups for the solver and reference output for
-testing.</p>
-<p>The overall structure is:</p>
+two sub-directories for problems and tests, appearing as:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">advection/</span></code>: The linear advection equation solver using the CTU
-method. All advection-specific routines live here.</p>
+<li><p><em>solver-name</em></p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">problems/</span></code>: The problem setups for the advection solver.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tests/</span></code>: Reference advection output files for comparison and regression testing.</p></li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">problems/</span></code><span class="classifier">the problem setups and inputs file that work for this solver.</span></dt><dd><p>In some cases, this might be a symlink to a similar solver that we inherit from.</p>
+</dd>
+</dl>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tests/</span></code>. reference output (HDF5 files) used for the regression testing.</p></li>
 </ul>
 </li>
-<li><p><code class="docutils literal notranslate"><span class="pre">advection_fv4/</span></code>: The fourth-order accurate finite-volume advection
-solver that uses RK4 time integration.</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">problems/</span></code>: The problem setups for the fourth-order advection solver.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tests/</span></code>: Reference advection output files for comparison and regression testing.</p></li>
 </ul>
-</li>
-<li><p><code class="docutils literal notranslate"><span class="pre">advection_nonuniform/</span></code>: The solver for advection with a non-uniform velocity field.</p>
+<p>The other directories include:</p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">problems/</span></code>: The problem setups for the non-uniform advection solver.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tests/</span></code>: Reference advection output files for comparison and regression testing.</p></li>
-</ul>
-</li>
-<li><p><code class="docutils literal notranslate"><span class="pre">advection_rk/</span></code>: The linear advection equation solver using the
-method-of-lines approach.</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">problems/</span></code>: This is a symbolic link to the advection/problems/ directory.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tests/</span></code>: Reference advection output files for comparison and regression testing.</p></li>
-</ul>
-</li>
-<li><p><code class="docutils literal notranslate"><span class="pre">advection_weno/</span></code>: The method-of-lines WENO solver for linear
-advection.</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">problems/</span></code>: This is a symbolic link to the advection/problems/ directory.</p></li>
-</ul>
-</li>
 <li><p><code class="docutils literal notranslate"><span class="pre">analysis/</span></code>: Various analysis scripts for processing pyro output files.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">compressible/</span></code>: The fourth-order accurate finite-volume compressible
-hydro solver that uses RK4 time integration.  This is built from the
-method of McCourquodale and Colella (2011).</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">problems/</span></code>: The problem setups for the fourth-order compressible hydrodynamics solver.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tests/</span></code>: Reference compressible hydro output for regression testing.</p></li>
-</ul>
-</li>
-<li><p><code class="docutils literal notranslate"><span class="pre">compressible_fv4/</span></code>: The compressible hydrodynamics solver using the
-CTU method. All source files specific to this solver live here.</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">problems/</span></code>: This is a symbolic link to the compressible/problems/ directory.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tests/</span></code>: Reference compressible hydro output for regression testing.</p></li>
-</ul>
-</li>
-<li><p><code class="docutils literal notranslate"><span class="pre">compressible_rk/</span></code>: The compressible hydrodynamics solver using method of lines integration.</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">problems/</span></code>: This is a symbolic link to the compressible/problems/ directory.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tests/</span></code>: Reference compressible hydro output for regression testing.</p></li>
-</ul>
-</li>
-<li><p><code class="docutils literal notranslate"><span class="pre">compressible_sdc/</span></code>: The fourth-order compressible solver,
-using spectral-deferred correction (SDC) for the time integration.</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">problems/</span></code>: This is a symbolic link to the compressible/problems/ directory.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tests/</span></code>: Reference compressible hydro output for regression testing.</p></li>
-</ul>
-</li>
-<li><p><code class="docutils literal notranslate"><span class="pre">diffusion/</span></code>: The implicit (thermal) diffusion solver. All diffusion-specific routines live here.</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">problems/</span></code>: The problem setups for the diffusion solver.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tests/</span></code>: Reference diffusion output for regression testing.</p></li>
-</ul>
-</li>
-<li><p><code class="docutils literal notranslate"><span class="pre">incompressible/</span></code>: The incompressible hydrodynamics solver. All incompressible-specific routines live here.</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">problems/</span></code>: The problem setups for the incompressible solver.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tests/</span></code>:  Reference incompressible hydro output for regression testing.</p></li>
-</ul>
-</li>
-<li><p><code class="docutils literal notranslate"><span class="pre">lm_atm/</span></code>: The low Mach number hydrodynamics solver for atmospherical flows. All low-Mach-specific files live here.</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">problems/</span></code>: The problem setups for the low Mach number solver.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tests/</span></code>: Reference low Mach hydro output for regression testing.</p></li>
-</ul>
-</li>
 <li><p><code class="docutils literal notranslate"><span class="pre">mesh/</span></code>: The main classes that deal with 2-d cell-centered grids
 and the data that lives on them. All the solvers use these classes
 to represent their discretized data.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">multigrid/</span></code>: The multigrid solver for cell-centered data. This
 solver is used on its own to illustrate how multigrid works, and
 directly by the diffusion and incompressible solvers.</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">problems/</span></code>: The problem setups for when the multigrid solver is used in a stand-alone fashion.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tests/</span></code>: Reference multigrid solver solutions (from when the multigrid solver is used stand-alone) for regression testing.</p></li>
-</ul>
+<p>This includes its own <code class="docutils literal notranslate"><span class="pre">problems</span></code> and <code class="docutils literal notranslate"><span class="pre">tests</span></code> directories for when
+it is run in a standalone fashion.</p>
 </li>
-<li><p><code class="docutils literal notranslate"><span class="pre">particles/</span></code>: The solver for Lagrangian tracer particles.</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">tests/</span></code>: Particle solver testing.</p></li>
-</ul>
-</li>
-<li><p><code class="docutils literal notranslate"><span class="pre">swe/</span></code>: The shallow water solver.</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">problems/</span></code>: The problem setups for the shallow water solver.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tests/</span></code>: Reference shallow water output for regression testing.</p></li>
-</ul>
-</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">particles/</span></code>: The solver for Lagrangian tracer particles.  This is meant
+to be used with another solver.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">util/</span></code>: Various service modules used by the pyro routines,
 including runtime parameters, I/O, profiling, and pretty output
 modes.</p></li>

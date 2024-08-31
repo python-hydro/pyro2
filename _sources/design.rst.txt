@@ -1,8 +1,8 @@
 Design ideas
 ============
 
-pyro is written entirely in python (by default, we expect python 3),
-with a few low-level routines compiled *just-in-time* by `numba` for performance. The
+pyro is written entirely in python,
+with a few low-level routines compiled *just-in-time* by ``numba`` for performance. The
 ``numpy`` package is used for representing arrays throughout the
 python code and the ``matplotlib`` library is used for
 visualization. Finally, ``pytest`` is used for unit testing of some
@@ -11,9 +11,9 @@ components.
 All solvers are written for a 2-d grid.  This gives a good balance
 between complexity and speed.
 
-A paper describing the design philosophy of pyro was accepted to
-Astronomy & Computing `[paper link] <http://adsabs.harvard.edu/abs/2013arXiv1306.6883Z>`_.
-
+A paper describing the design philosophy of pyro was published in
+Astronomy & Computing `[A&C paper link]<http://adsabs.harvard.edu/abs/2013arXiv1306.6883Z>`_.
+A follow-on paper was published in JOSS `[JOSS paper link]<https://joss.theoj.org/papers/10.21105/joss.01265>`_.
 
 Directory structure
 -------------------
@@ -42,80 +42,18 @@ The main code is all contained in the ``pyro/`` subdirectory.  Here we discuss t
 
 The files for each solver are in their own sub-directory, with
 additional sub-directories for the mesh and utilities. Each solver has
-two sub-directories: ``problems/`` and ``tests/``. These store the
-different problem setups for the solver and reference output for
-testing.
+two sub-directories for problems and tests, appearing as:
 
-The overall structure is:
+* *solver-name*
 
-* ``advection/``: The linear advection equation solver using the CTU
-  method. All advection-specific routines live here.
+  * ``problems/`` : the problem setups and inputs file that work for this solver.
+     In some cases, this might be a symlink to a similar solver that we inherit from.
 
-  * ``problems/``: The problem setups for the advection solver.
-  * ``tests/``: Reference advection output files for comparison and regression testing.
+  * ``tests/``. reference output (HDF5 files) used for the regression testing.
 
-* ``advection_fv4/``: The fourth-order accurate finite-volume advection
-  solver that uses RK4 time integration.
-
-  * ``problems/``: The problem setups for the fourth-order advection solver.
-  * ``tests/``: Reference advection output files for comparison and regression testing.
-
-* ``advection_nonuniform/``: The solver for advection with a non-uniform velocity field.
-
-  * ``problems/``: The problem setups for the non-uniform advection solver.
-  * ``tests/``: Reference advection output files for comparison and regression testing.
-
-* ``advection_rk/``: The linear advection equation solver using the
-  method-of-lines approach.
-
-  * ``problems/``: This is a symbolic link to the advection/problems/ directory.
-  * ``tests/``: Reference advection output files for comparison and regression testing.
-
-* ``advection_weno/``: The method-of-lines WENO solver for linear
-  advection.
-
-  * ``problems/``: This is a symbolic link to the advection/problems/ directory.
+The other directories include:
 
 * ``analysis/``: Various analysis scripts for processing pyro output files.
-
-* ``compressible/``: The fourth-order accurate finite-volume compressible
-  hydro solver that uses RK4 time integration.  This is built from the
-  method of McCourquodale and Colella (2011).
-
-  * ``problems/``: The problem setups for the fourth-order compressible hydrodynamics solver.
-  * ``tests/``: Reference compressible hydro output for regression testing.
-
-* ``compressible_fv4/``: The compressible hydrodynamics solver using the
-  CTU method. All source files specific to this solver live here.
-
-  * ``problems/``: This is a symbolic link to the compressible/problems/ directory.
-  * ``tests/``: Reference compressible hydro output for regression testing.
-
-* ``compressible_rk/``: The compressible hydrodynamics solver using method of lines integration.
-
-  * ``problems/``: This is a symbolic link to the compressible/problems/ directory.
-  * ``tests/``: Reference compressible hydro output for regression testing.
-
-* ``compressible_sdc/``: The fourth-order compressible solver,
-  using spectral-deferred correction (SDC) for the time integration.
-
-  * ``problems/``: This is a symbolic link to the compressible/problems/ directory.
-  * ``tests/``: Reference compressible hydro output for regression testing.
-
-* ``diffusion/``: The implicit (thermal) diffusion solver. All diffusion-specific routines live here.
-
-  * ``problems/``: The problem setups for the diffusion solver.
-  * ``tests/``: Reference diffusion output for regression testing.
-
-* ``incompressible/``: The incompressible hydrodynamics solver. All incompressible-specific routines live here.
-
-  * ``problems/``: The problem setups for the incompressible solver.
-  * ``tests/``:  Reference incompressible hydro output for regression testing.
-
-* ``lm_atm/``: The low Mach number hydrodynamics solver for atmospherical flows. All low-Mach-specific files live here.
-
-  * ``problems/``: The problem setups for the low Mach number solver.
-  * ``tests/``: Reference low Mach hydro output for regression testing.
 
 * ``mesh/``: The main classes that deal with 2-d cell-centered grids
   and the data that lives on them. All the solvers use these classes
@@ -125,17 +63,11 @@ The overall structure is:
   solver is used on its own to illustrate how multigrid works, and
   directly by the diffusion and incompressible solvers.
 
-  * ``problems/``: The problem setups for when the multigrid solver is used in a stand-alone fashion.
-  * ``tests/``: Reference multigrid solver solutions (from when the multigrid solver is used stand-alone) for regression testing.
+  This includes its own ``problems`` and ``tests`` directories for when
+  it is run in a standalone fashion.
 
-* ``particles/``: The solver for Lagrangian tracer particles.
-
-  * ``tests/``: Particle solver testing.
-
-* ``swe/``: The shallow water solver.
-
-  * ``problems/``: The problem setups for the shallow water solver.
-  * ``tests/``: Reference shallow water output for regression testing.
+* ``particles/``: The solver for Lagrangian tracer particles.  This is meant
+  to be used with another solver.
 
 * ``util/``: Various service modules used by the pyro routines,
   including runtime parameters, I/O, profiling, and pretty output
