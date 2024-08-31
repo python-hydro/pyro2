@@ -79,7 +79,7 @@ visualization for the previous example, we would do:
 
 .. code-block:: python
 
-    parameters = {"vis.dovis":0}
+    parameters = {"vis.dovis": 0}
     p.initialize_problem(problem_name="kh",
                          inputs_file="inputs.kh",
                          inputs_dict=parameters)
@@ -132,11 +132,13 @@ as:
    ...
    cfl = rp.get_param("hydro.cfl")
 
-When pyro is run, the file ``inputs.auto`` is output containing the
-full list of runtime parameters, their value for the simulation, and
-the comment that was associated with them from the ``_defaults``
-files. This is a useful way to see what parameters are in play for a
-given simulation.
+.. tip::
+
+   When pyro is run, the file ``inputs.auto`` is output containing the
+   full list of runtime parameters, their value for the simulation, and
+   the comment that was associated with them from the ``_defaults``
+   files. This is a useful way to see what parameters are in play for a
+   given simulation.
 
 All solvers use the following parameters:
 
