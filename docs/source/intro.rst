@@ -23,7 +23,11 @@ equations. In particular, the following solvers are developed:
 
 * linear advection
 
+* Burgers' equation
+
 * compressible hydrodynamics
+
+* special relativistic compressible hydrodynamics
 
 * shallow water hydrodynamics
 
@@ -31,7 +35,9 @@ equations. In particular, the following solvers are developed:
 
 * implicit thermal diffusion
 
-* incompressible hydrodynamics
+* inviscid incompressible hydrodynamics
+
+* viscous incompressible hydrodynamics
 
 * low Mach number atmospheric hydrodynamics
 
