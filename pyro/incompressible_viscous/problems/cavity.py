@@ -13,6 +13,8 @@ https://www.fluid.tuwien.ac.at/HendrikKuhlmann?action=AttachFile&do=get&target=L
 from pyro.mesh import patch
 from pyro.util import msg
 
+DEFAULT_INPUTS = "inputs.cavity"
+
 
 def init_data(my_data, rp):
     """ initialize the lid-driven cavity """

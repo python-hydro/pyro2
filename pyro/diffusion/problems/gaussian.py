@@ -5,6 +5,8 @@ import numpy
 from pyro.mesh import patch
 from pyro.util import msg
 
+DEFAULT_INPUTS = "inputs.gaussian"
+
 
 def phi_analytic(dist, t, t_0, k, phi_1, phi_2):
     """ the analytic solution to the Gaussian diffusion problem """

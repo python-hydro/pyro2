@@ -3,7 +3,6 @@ import numpy
 from pyro.mesh import fv
 from pyro.util import msg
 
-
 DEFAULT_INPUTS = "inputs.smooth"
 
 

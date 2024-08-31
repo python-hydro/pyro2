@@ -2,7 +2,6 @@ import sys
 
 from pyro.mesh import patch
 
-
 DEFAULT_INPUTS = None
 
 

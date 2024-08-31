@@ -5,7 +5,6 @@ import numpy as np
 from pyro.mesh import fv
 from pyro.util import msg
 
-
 DEFAULT_INPUTS = "inputs.acoustic_pulse"
 
 
