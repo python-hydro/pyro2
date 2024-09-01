@@ -75,13 +75,6 @@ class Pyro:
         self.rp.load_params(self.pyro_home + "_defaults")
         self.rp.load_params(self.pyro_home + self.solver_name + "/_defaults")
 
-        # manually override the dovis default
-        # for Jupyter, we want runtime vis disabled by default
-        if self.from_commandline:
-            self.rp.set_param("vis.dovis", 1)
-        else:
-            self.rp.set_param("vis.dovis", 0)
-
         self.tc = profile.TimerCollection()
 
         self.is_initialized = False
@@ -125,9 +118,16 @@ class Pyro:
 
             self.rp.load_params(inputs_file, no_new=1)
 
+        # manually override the dovis default
+        # for Jupyter, we want runtime vis disabled by default
+        if self.from_commandline:
+            self.rp.set_param("vis.dovis", 1)
+        else:
+            self.rp.set_param("vis.dovis", 0)
+
         if inputs_dict is not None:
             for k, v in inputs_dict.items():
-                self.rp.params[k] = v
+                self.rp.set_param(k, v)
 
         # and any commandline overrides
         if other_commands is not None:
