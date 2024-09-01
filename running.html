@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=7b73c551"></script>
+    <script src="_static/documentation_options.js?v=063bd29d"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -592,13 +592,15 @@ by carrying out the following steps:</p>
 </ul>
 <p>For example, if we wished to use the <a class="reference internal" href="pyro.compressible.html#module-pyro.compressible" title="pyro.compressible"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compressible</span></code></a> solver to run the
 Kelvin-Helmholtz problem <code class="docutils literal notranslate"><span class="pre">kh</span></code>, we would do the following:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyro.pyro_sim</span> <span class="kn">import</span> <span class="n">Pyro</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyro</span> <span class="kn">import</span> <span class="n">Pyro</span>
 <span class="n">p</span> <span class="o">=</span> <span class="n">Pyro</span><span class="p">(</span><span class="s2">&quot;compressible&quot;</span><span class="p">)</span>
-<span class="n">p</span><span class="o">.</span><span class="n">initialize_problem</span><span class="p">(</span><span class="n">problem_name</span><span class="o">=</span><span class="s2">&quot;kh&quot;</span><span class="p">,</span>
-                     <span class="n">inputs_file</span><span class="o">=</span><span class="s2">&quot;inputs.kh&quot;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">initialize_problem</span><span class="p">(</span><span class="n">problem_name</span><span class="o">=</span><span class="s2">&quot;kh&quot;</span><span class="p">)</span>
 <span class="n">p</span><span class="o">.</span><span class="n">run_sim</span><span class="p">()</span>
 </pre></div>
 </div>
+<p>This will use the default set of parameters for the problem specified
+in the inputs file defined by <code class="docutils literal notranslate"><span class="pre">DEFAULT_INPUTS</span></code> in the problem
+initialization module.</p>
 <p>Instead of using an inputs file to define the problem parameters, we can define a
 dictionary of parameters and pass them into the <a class="reference internal" href="pyro.html#pyro.pyro_sim.Pyro.initialize_problem" title="pyro.pyro_sim.Pyro.initialize_problem"><code class="xref py py-func docutils literal notranslate"><span class="pre">initialize_problem</span></code></a> function using the keyword argument <code class="docutils literal notranslate"><span class="pre">inputs_dict</span></code>.
 If an inputs file is also passed into the function, the parameters in the dictionary
@@ -606,7 +608,6 @@ will override any parameters in the file. For example, if we wished to turn off
 visualization for the previous example, we would do:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;vis.dovis&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
 <span class="n">p</span><span class="o">.</span><span class="n">initialize_problem</span><span class="p">(</span><span class="n">problem_name</span><span class="o">=</span><span class="s2">&quot;kh&quot;</span><span class="p">,</span>
-                     <span class="n">inputs_file</span><span class="o">=</span><span class="s2">&quot;inputs.kh&quot;</span><span class="p">,</span>
                      <span class="n">inputs_dict</span><span class="o">=</span><span class="n">parameters</span><span class="p">)</span>
 </pre></div>
 </div>
