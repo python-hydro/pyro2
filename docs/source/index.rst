@@ -24,8 +24,8 @@ pyro: a python hydro code
    problems
 
 .. toctree::
-   maxdepth: 1
-   :caption: mesh
+   :maxdepth: 1
+   :caption: Mesh
 
    mesh_basics
    mesh-examples.ipynb
@@ -51,7 +51,7 @@ pyro: a python hydro code
    :maxdepth: 1
    :caption: Examples
 
-   compressible_convergence.ipynb
+   compressible-convergence.ipynb
 
 .. toctree::
    :maxdepth: 1
