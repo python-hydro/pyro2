@@ -45,7 +45,6 @@ extensions = ['sphinx.ext.autodoc',
     'sphinx.ext.graphviz',
     'sphinx_copybutton',
     'sphinx-prompt',
-    'sphinx_rtd_theme',
     'IPython.sphinxext.ipython_console_highlighting',
     'sphinx.ext.githubpages']
 
@@ -72,10 +71,11 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'pyro'
-copyright = '2023, pyro development team'
+copyright = '2024, pyro development team'
 author = 'pyro development team'
 
 html_logo = "logo.gif"
+html_title = "pyro"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -110,32 +110,40 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'sphinx_book_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-# html_theme_options = {}
+html_theme_options = {
+    "repository_url": "https://github.com/python-hydro/pyro2",
+    "use_repository_button": True,
+    "use_issues_button": True,
+    "use_edit_page_button": True,
+    "use_source_button": True,
+    "repository_branch": "main",
+    "path_to_docs": "docs/source"
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-html_css_files = ["theme_overrides.css"]
+html_css_files = ["myfile.css"]
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
 #
 # This is required for the alabaster theme
 # refs: http://alabaster.readthedocs.io/en/latest/installation.html#sidebars
-html_sidebars = {
-    '**': [
-        'relations.html',  # needs 'show_related': True theme option to display
-        'searchbox.html',
-    ]
-}
+#html_sidebars = {
+#    '**': [
+#        'relations.html',  # needs 'show_related': True theme option to display
+#        'searchbox.html',
+#    ]
+#}
 
 linkcheck_ignore = [r"https://ascelibrary.org",
                     r"https://doi.org/10.1061/(ASCE)0733-9429(1999)125:11(1210)",

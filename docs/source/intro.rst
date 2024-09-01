@@ -3,6 +3,8 @@ Introduction to pyro
 
 .. image:: pyro_plots.png
 
+|
+
 pyro is a simple framework for implementing and playing with
 hydrodynamics solvers.  It is designed to provide a tutorial for
 students in computational astrophysics (and hydrodynamics in general)
