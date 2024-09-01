@@ -21,5 +21,7 @@ temporal_method = RK4     ; integration method (see mesh/integration.py)
 
 grav = 0.0                ; gravitational acceleration (in y-direction)
 
+riemann = CGF
+
 
 

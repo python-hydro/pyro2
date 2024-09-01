@@ -49,6 +49,12 @@ pyro: a python hydro code
 
 .. toctree::
    :maxdepth: 1
+   :caption: Examples
+
+   compressible_convergence.ipynb
+
+.. toctree::
+   :maxdepth: 1
    :caption: Utilities
 
    analysis
