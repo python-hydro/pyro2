@@ -1,61 +1,167 @@
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="./">
-<head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyro.util package &mdash; pyro 4.1.0.post24+g91721f7a documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
-      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-      <link rel="stylesheet" type="text/css" href="_static/theme_overrides.css?v=2e394b92" />
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>pyro.util package &#8212; pyro</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/myfile.css?v=359afcf4" />
   
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=1fc65837"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-        <script src="_static/copybutton.js?v=f281be69"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="_static/js/theme.js"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=da73b046"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'pyro.util';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="References" href="zreferences.html" />
-    <link rel="prev" title="pyro.swe.problems package" href="pyro.swe.problems.html" /> 
-</head>
+    <link rel="prev" title="pyro.swe.problems package" href="pyro.swe.problems.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
-          
-          
-          <a href="index.html" class="icon icon-home">
-            pyro
-              <img src="_static/logo.gif" class="logo" alt="Logo"/>
-          </a>
-              <div class="version">
-                4.1
-              </div>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">pyro basics</span></p>
-<ul>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.gif" class="logo__image only-light" alt="pyro - Home"/>
+    <script>document.write(`<img src="_static/logo.gif" class="logo__image only-dark" alt="pyro - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">pyro basics</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Setting up pyro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notes.html">Notes on the numerical methods</a></li>
@@ -64,19 +170,26 @@
 <li class="toctree-l1"><a class="reference internal" href="output.html">Working with output</a></li>
 <li class="toctree-l1"><a class="reference internal" href="problems.html">Adding a problem</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Mesh</span></p>
-<ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Mesh</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="mesh_basics.html">Mesh overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="spherical-mesh.html">Spherical Polar Grid</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Solvers</span></p>
-<ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Solvers</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="burgers_basics.html">Burgers’ Equation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compressible_compare.html">Compressible solver comparisons</a></li>
-<li class="toctree-l1"><a class="reference internal" href="multigrid.html">Multigrid Solvers</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="multigrid.html">Multigrid Solvers</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="multigrid_basics.html">Multigrid Class Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multigrid-constant-coefficients.html">Constant-Coefficient Poisson Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multigrid-variable-coeff.html">Variable Coefficient Poisson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multigrid-general-linear.html">General Linear Elliptic Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multigrid_exercises.html">Exercises</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_viscous_basics.html">Incompressible viscous hydrodynamics solver</a></li>
@@ -84,102 +197,412 @@
 <li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
-<ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="compressible-convergence.html">Convergence of the compressible solvers</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
-<ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis routines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Community</span></p>
-<ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="help.html">Contributing and getting help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ack.html">Acknowledgments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ack.html#history">History</a></li>
+
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Software Reference</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="pyro.html">pyro package</a><ul class="current">
-<li class="toctree-l3 current"><a class="reference internal" href="pyro.html#subpackages">Subpackages</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="pyro.advection.html">pyro.advection package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyro.advection_fv4.html">pyro.advection_fv4 package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyro.advection_nonuniform.html">pyro.advection_nonuniform package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyro.advection_rk.html">pyro.advection_rk package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyro.advection_weno.html">pyro.advection_weno package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyro.burgers.html">pyro.burgers package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyro.viscous_burgers.html">pyro.viscous_burgers package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.html">pyro.compressible package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_fv4.html">pyro.compressible_fv4 package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_react.html">pyro.compressible_react package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_rk.html">pyro.compressible_rk package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sdc.html">pyro.compressible_sdc package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.html">pyro.compressible_sr package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyro.diffusion.html">pyro.diffusion package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible.html">pyro.incompressible package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible_viscous.html">pyro.incompressible_viscous package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyro.lm_atm.html">pyro.lm_atm package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyro.mesh.html">pyro.mesh package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.html">pyro.multigrid package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyro.particles.html">pyro.particles package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyro.swe.html">pyro.swe package</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#">pyro.util package</a></li>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Software Reference</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="modules.html">API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="pyro.html">pyro package</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.advection.html">pyro.advection package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection.problems.html">pyro.advection.problems package</a></li>
 </ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="pyro.html#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyro.html#module-pyro.plot">pyro.plot module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyro.html#module-pyro.pyro_sim">pyro.pyro_sim module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyro.html#module-pyro.simulation_null">pyro.simulation_null module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyro.html#module-pyro.test">pyro.test module</a></li>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.advection_fv4.html">pyro.advection_fv4 package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_fv4.problems.html">pyro.advection_fv4.problems package</a></li>
 </ul>
-</li>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.advection_nonuniform.html">pyro.advection_nonuniform package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_nonuniform.problems.html">pyro.advection_nonuniform.problems package</a></li>
 </ul>
-</li>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.advection_rk.html">pyro.advection_rk package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_rk.problems.html">pyro.advection_rk.problems package</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
-<ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.advection_weno.html">pyro.advection_weno package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.advection_weno.problems.html">pyro.advection_weno.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.burgers.html">pyro.burgers package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.burgers.problems.html">pyro.burgers.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.viscous_burgers.html">pyro.viscous_burgers package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.viscous_burgers.problems.html">pyro.viscous_burgers.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.compressible.html">pyro.compressible package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible.problems.html">pyro.compressible.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.compressible_fv4.html">pyro.compressible_fv4 package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_fv4.problems.html">pyro.compressible_fv4.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.compressible_react.html">pyro.compressible_react package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_react.problems.html">pyro.compressible_react.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.compressible_rk.html">pyro.compressible_rk package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_rk.problems.html">pyro.compressible_rk.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.compressible_sdc.html">pyro.compressible_sdc package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sdc.problems.html">pyro.compressible_sdc.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.compressible_sr.html">pyro.compressible_sr package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.compressible_sr.problems.html">pyro.compressible_sr.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.diffusion.html">pyro.diffusion package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.diffusion.problems.html">pyro.diffusion.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.incompressible.html">pyro.incompressible package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible.problems.html">pyro.incompressible.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.incompressible_viscous.html">pyro.incompressible_viscous package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.incompressible_viscous.problems.html">pyro.incompressible_viscous.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.lm_atm.html">pyro.lm_atm package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.lm_atm.problems.html">pyro.lm_atm.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html">pyro.mesh package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.html">pyro.multigrid package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.particles.html">pyro.particles package</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.swe.html">pyro.swe package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.swe.problems.html">pyro.swe.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">pyro.util package</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="zreferences.html">References</a></li>
 </ul>
 
-        </div>
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
       </div>
-    </nav>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">pyro</a>
-      </nav>
+<div class="sbt-scroll-pixel-helper"></div>
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="modules.html">pyro</a></li>
-          <li class="breadcrumb-item"><a href="pyro.html">pyro package</a></li>
-      <li class="breadcrumb-item active">pyro.util package</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="_sources/pyro.util.rst.txt" rel="nofollow"> View page source</a>
-      </li>
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/python-hydro/pyro2" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/python-hydro/pyro2/blob/main/docs/source/pyro.util.rst?plain=1" target="_blank"
+   class="btn btn-sm btn-source-file-button dropdown-item"
+   title="Show source"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="btn__text-container">Show source</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/python-hydro/pyro2/edit/main/docs/source/pyro.util.rst" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/python-hydro/pyro2/issues/new?title=Issue%20on%20page%20%2Fpyro.util.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
   </ul>
-  <hr/>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/pyro.util.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>pyro.util package</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.util.compare">pyro.util.compare module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.compare.compare"><code class="docutils literal notranslate"><span class="pre">compare()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.compare.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.util.io_pyro">pyro.util.io_pyro module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.io_pyro.read"><code class="docutils literal notranslate"><span class="pre">read()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.io_pyro.read_bcs"><code class="docutils literal notranslate"><span class="pre">read_bcs()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.util.msg">pyro.util.msg module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.msg.bold"><code class="docutils literal notranslate"><span class="pre">bold()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.msg.fail"><code class="docutils literal notranslate"><span class="pre">fail()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.msg.success"><code class="docutils literal notranslate"><span class="pre">success()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.msg.warning"><code class="docutils literal notranslate"><span class="pre">warning()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.util.plot_tools">pyro.util.plot_tools module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.plot_tools.setup_axes"><code class="docutils literal notranslate"><span class="pre">setup_axes()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.util.profile_pyro">pyro.util.profile_pyro module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.profile_pyro.Timer"><code class="docutils literal notranslate"><span class="pre">Timer</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.profile_pyro.Timer.begin"><code class="docutils literal notranslate"><span class="pre">Timer.begin()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.profile_pyro.Timer.end"><code class="docutils literal notranslate"><span class="pre">Timer.end()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.profile_pyro.TimerCollection"><code class="docutils literal notranslate"><span class="pre">TimerCollection</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.profile_pyro.TimerCollection.report"><code class="docutils literal notranslate"><span class="pre">TimerCollection.report()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.profile_pyro.TimerCollection.timer"><code class="docutils literal notranslate"><span class="pre">TimerCollection.timer()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.util.runparams">pyro.util.runparams module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.command_line_params"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.command_line_params()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.get_param"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.get_param()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.load_params"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.load_params()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.print_all_params"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.print_all_params()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.print_paramfile"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.print_paramfile()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.print_sphinx_tables"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.print_sphinx_tables()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.print_unused_params"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.print_unused_params()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.set_param"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.set_param()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.write_params"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.write_params()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.is_float"><code class="docutils literal notranslate"><span class="pre">is_float()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.is_int"><code class="docutils literal notranslate"><span class="pre">is_int()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
   <section id="module-pyro.util">
-<span id="pyro-util-package"></span><h1>pyro.util package<a class="headerlink" href="#module-pyro.util" title="Link to this heading"></a></h1>
+<span id="pyro-util-package"></span><h1>pyro.util package<a class="headerlink" href="#module-pyro.util" title="Link to this heading">#</a></h1>
 <p>This module provides utility functions for pyro</p>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
 </section>
 <section id="module-pyro.util.compare">
-<span id="pyro-util-compare-module"></span><h2>pyro.util.compare module<a class="headerlink" href="#module-pyro.util.compare" title="Link to this heading"></a></h2>
+<span id="pyro-util-compare-module"></span><h2>pyro.util.compare module<a class="headerlink" href="#module-pyro.util.compare" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.util.compare.compare">
-<span class="sig-prename descclassname"><span class="pre">pyro.util.compare.</span></span><span class="sig-name descname"><span class="pre">compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-12</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/compare.html#compare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.compare.compare" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.util.compare.</span></span><span class="sig-name descname"><span class="pre">compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-12</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/compare.html#compare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.compare.compare" title="Link to this definition">#</a></dt>
 <dd><p>given two CellCenterData2d objects, compare the data, zone-by-zone
 and output any errors</p>
 <dl class="field-list simple">
@@ -196,39 +619,39 @@ and output any errors</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.util.compare.main">
-<span class="sig-prename descclassname"><span class="pre">pyro.util.compare.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/compare.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.compare.main" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.util.compare.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/compare.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.compare.main" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </section>
 <section id="module-pyro.util.io_pyro">
-<span id="pyro-util-io-pyro-module"></span><h2>pyro.util.io_pyro module<a class="headerlink" href="#module-pyro.util.io_pyro" title="Link to this heading"></a></h2>
+<span id="pyro-util-io-pyro-module"></span><h2>pyro.util.io_pyro module<a class="headerlink" href="#module-pyro.util.io_pyro" title="Link to this heading">#</a></h2>
 <p>This manages the reading of the HDF5 output files for pyro.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.util.io_pyro.read">
-<span class="sig-prename descclassname"><span class="pre">pyro.util.io_pyro.</span></span><span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/io_pyro.html#read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.io_pyro.read" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.util.io_pyro.</span></span><span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/io_pyro.html#read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.io_pyro.read" title="Link to this definition">#</a></dt>
 <dd><p>read an HDF5 file and recreate the simulation object that holds the
 data and state of the simulation.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.util.io_pyro.read_bcs">
-<span class="sig-prename descclassname"><span class="pre">pyro.util.io_pyro.</span></span><span class="sig-name descname"><span class="pre">read_bcs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/io_pyro.html#read_bcs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.io_pyro.read_bcs" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.util.io_pyro.</span></span><span class="sig-name descname"><span class="pre">read_bcs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/io_pyro.html#read_bcs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.io_pyro.read_bcs" title="Link to this definition">#</a></dt>
 <dd><p>read in the boundary condition record from the HDF5 file</p>
 </dd></dl>
 
 </section>
 <section id="module-pyro.util.msg">
-<span id="pyro-util-msg-module"></span><h2>pyro.util.msg module<a class="headerlink" href="#module-pyro.util.msg" title="Link to this heading"></a></h2>
+<span id="pyro-util-msg-module"></span><h2>pyro.util.msg module<a class="headerlink" href="#module-pyro.util.msg" title="Link to this heading">#</a></h2>
 <p>support output in highlighted colors</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.util.msg.bold">
-<span class="sig-prename descclassname"><span class="pre">pyro.util.msg.</span></span><span class="sig-name descname"><span class="pre">bold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/msg.html#bold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.msg.bold" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.util.msg.</span></span><span class="sig-name descname"><span class="pre">bold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/msg.html#bold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.msg.bold" title="Link to this definition">#</a></dt>
 <dd><p>Output a string in a bold weight</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.util.msg.fail">
-<span class="sig-prename descclassname"><span class="pre">pyro.util.msg.</span></span><span class="sig-name descname"><span class="pre">fail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/msg.html#fail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.msg.fail" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.util.msg.</span></span><span class="sig-name descname"><span class="pre">fail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/msg.html#fail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.msg.fail" title="Link to this definition">#</a></dt>
 <dd><p>Output a string to the terminal and abort if we are running
 non-interactively.  The string is colored red to indicate a
 failure</p>
@@ -236,33 +659,33 @@ failure</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.util.msg.success">
-<span class="sig-prename descclassname"><span class="pre">pyro.util.msg.</span></span><span class="sig-name descname"><span class="pre">success</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/msg.html#success"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.msg.success" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.util.msg.</span></span><span class="sig-name descname"><span class="pre">success</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/msg.html#success"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.msg.success" title="Link to this definition">#</a></dt>
 <dd><p>Output a string to the terminal colored green to indicate
 success</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.util.msg.warning">
-<span class="sig-prename descclassname"><span class="pre">pyro.util.msg.</span></span><span class="sig-name descname"><span class="pre">warning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/msg.html#warning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.msg.warning" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.util.msg.</span></span><span class="sig-name descname"><span class="pre">warning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/msg.html#warning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.msg.warning" title="Link to this definition">#</a></dt>
 <dd><p>Output a string to the terminal colored orange to indicate a
 warning</p>
 </dd></dl>
 
 </section>
 <section id="module-pyro.util.plot_tools">
-<span id="pyro-util-plot-tools-module"></span><h2>pyro.util.plot_tools module<a class="headerlink" href="#module-pyro.util.plot_tools" title="Link to this heading"></a></h2>
+<span id="pyro-util-plot-tools-module"></span><h2>pyro.util.plot_tools module<a class="headerlink" href="#module-pyro.util.plot_tools" title="Link to this heading">#</a></h2>
 <p>Some basic support routines for configuring the plots during
 runtime visualization</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.util.plot_tools.setup_axes">
-<span class="sig-prename descclassname"><span class="pre">pyro.util.plot_tools.</span></span><span class="sig-name descname"><span class="pre">setup_axes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">myg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/plot_tools.html#setup_axes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.plot_tools.setup_axes" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.util.plot_tools.</span></span><span class="sig-name descname"><span class="pre">setup_axes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">myg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/plot_tools.html#setup_axes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.plot_tools.setup_axes" title="Link to this definition">#</a></dt>
 <dd><p>create a grid of axes whose layout depends on the aspect ratio of the
 domain</p>
 </dd></dl>
 
 </section>
 <section id="module-pyro.util.profile_pyro">
-<span id="pyro-util-profile-pyro-module"></span><h2>pyro.util.profile_pyro module<a class="headerlink" href="#module-pyro.util.profile_pyro" title="Link to this heading"></a></h2>
+<span id="pyro-util-profile-pyro-module"></span><h2>pyro.util.profile_pyro module<a class="headerlink" href="#module-pyro.util.profile_pyro" title="Link to this heading">#</a></h2>
 <p>A very simple profiling class, to use to determine where
 most of the time is spent in a code.  This supports nested
 timers and outputs a report at the end.</p>
@@ -270,19 +693,19 @@ timers and outputs a report at the end.</p>
 nesting.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyro.util.profile_pyro.Timer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.util.profile_pyro.</span></span><span class="sig-name descname"><span class="pre">Timer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stack_count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/profile_pyro.html#Timer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.profile_pyro.Timer" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.util.profile_pyro.</span></span><span class="sig-name descname"><span class="pre">Timer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stack_count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/profile_pyro.html#Timer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.profile_pyro.Timer" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A single timer – this simply stores the accumulated time for
 a single named region</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.util.profile_pyro.Timer.begin">
-<span class="sig-name descname"><span class="pre">begin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/profile_pyro.html#Timer.begin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.profile_pyro.Timer.begin" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">begin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/profile_pyro.html#Timer.begin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.profile_pyro.Timer.begin" title="Link to this definition">#</a></dt>
 <dd><p>Start timing</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.util.profile_pyro.Timer.end">
-<span class="sig-name descname"><span class="pre">end</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/profile_pyro.html#Timer.end"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.profile_pyro.Timer.end" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">end</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/profile_pyro.html#Timer.end"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.profile_pyro.Timer.end" title="Link to this definition">#</a></dt>
 <dd><p>Stop timing.  This does not destroy the timer, it simply
 stops it from counting time.</p>
 </dd></dl>
@@ -291,7 +714,7 @@ stops it from counting time.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pyro.util.profile_pyro.TimerCollection">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.util.profile_pyro.</span></span><span class="sig-name descname"><span class="pre">TimerCollection</span></span><a class="reference internal" href="_modules/pyro/util/profile_pyro.html#TimerCollection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.profile_pyro.TimerCollection" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.util.profile_pyro.</span></span><span class="sig-name descname"><span class="pre">TimerCollection</span></span><a class="reference internal" href="_modules/pyro/util/profile_pyro.html#TimerCollection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.profile_pyro.TimerCollection" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A timer collection—this manages the timers and has methods to
 start and stop them.  Nesting of timers is tracked so we can
@@ -317,13 +740,13 @@ to offset the overhead of the timer class method calls.</p>
 <p>tc.report() prints out a summary of the timing.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.util.profile_pyro.TimerCollection.report">
-<span class="sig-name descname"><span class="pre">report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/profile_pyro.html#TimerCollection.report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.profile_pyro.TimerCollection.report" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/profile_pyro.html#TimerCollection.report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.profile_pyro.TimerCollection.report" title="Link to this definition">#</a></dt>
 <dd><p>Generate a timing summary report</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.util.profile_pyro.TimerCollection.timer">
-<span class="sig-name descname"><span class="pre">timer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/profile_pyro.html#TimerCollection.timer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.profile_pyro.TimerCollection.timer" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">timer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/profile_pyro.html#TimerCollection.timer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.profile_pyro.TimerCollection.timer" title="Link to this definition">#</a></dt>
 <dd><p>Create a timer with the given name.  If one with that name already
 exists, then we return that timer.</p>
 <dl class="field-list simple">
@@ -346,7 +769,7 @@ exists, then we return that timer.</p>
 
 </section>
 <section id="module-pyro.util.runparams">
-<span id="pyro-util-runparams-module"></span><h2>pyro.util.runparams module<a class="headerlink" href="#module-pyro.util.runparams" title="Link to this heading"></a></h2>
+<span id="pyro-util-runparams-module"></span><h2>pyro.util.runparams module<a class="headerlink" href="#module-pyro.util.runparams" title="Link to this heading">#</a></h2>
 <p>basic syntax of the parameter file is:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># simple parameter file</span>
 
@@ -388,11 +811,11 @@ This is useful for reading in an inputs file that overrides previously
 read default values.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyro.util.runparams.RuntimeParameters">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.util.runparams.</span></span><span class="sig-name descname"><span class="pre">RuntimeParameters</span></span><a class="reference internal" href="_modules/pyro/util/runparams.html#RuntimeParameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.RuntimeParameters" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.util.runparams.</span></span><span class="sig-name descname"><span class="pre">RuntimeParameters</span></span><a class="reference internal" href="_modules/pyro/util/runparams.html#RuntimeParameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.RuntimeParameters" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.util.runparams.RuntimeParameters.command_line_params">
-<span class="sig-name descname"><span class="pre">command_line_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd_strings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/runparams.html#RuntimeParameters.command_line_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.RuntimeParameters.command_line_params" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">command_line_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd_strings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/runparams.html#RuntimeParameters.command_line_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.RuntimeParameters.command_line_params" title="Link to this definition">#</a></dt>
 <dd><p>finds dictionary pairs from a string that came from the
 commandline.  Stores the parameters in only if they
 already exist.</p>
@@ -411,14 +834,14 @@ with each opt an element in the list</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.util.runparams.RuntimeParameters.get_param">
-<span class="sig-name descname"><span class="pre">get_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/runparams.html#RuntimeParameters.get_param"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.RuntimeParameters.get_param" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/runparams.html#RuntimeParameters.get_param"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.RuntimeParameters.get_param" title="Link to this definition">#</a></dt>
 <dd><p>returns the value of the runtime parameter corresponding to the
 input key</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.util.runparams.RuntimeParameters.load_params">
-<span class="sig-name descname"><span class="pre">load_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_new</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/runparams.html#RuntimeParameters.load_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.RuntimeParameters.load_params" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">load_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_new</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/runparams.html#RuntimeParameters.load_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.RuntimeParameters.load_params" title="Link to this definition">#</a></dt>
 <dd><p>Reads line from file and makes dictionary pairs from the data
 to store.</p>
 <dl class="field-list simple">
@@ -437,39 +860,39 @@ the values of existing ones.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.util.runparams.RuntimeParameters.print_all_params">
-<span class="sig-name descname"><span class="pre">print_all_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/runparams.html#RuntimeParameters.print_all_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.RuntimeParameters.print_all_params" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">print_all_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/runparams.html#RuntimeParameters.print_all_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.RuntimeParameters.print_all_params" title="Link to this definition">#</a></dt>
 <dd><p>Print out all runtime parameters and their values</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.util.runparams.RuntimeParameters.print_paramfile">
-<span class="sig-name descname"><span class="pre">print_paramfile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/runparams.html#RuntimeParameters.print_paramfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.RuntimeParameters.print_paramfile" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">print_paramfile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/runparams.html#RuntimeParameters.print_paramfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.RuntimeParameters.print_paramfile" title="Link to this definition">#</a></dt>
 <dd><p>Create a file, inputs.auto, that has the structure of a pyro
 inputs file, with all known parameters and values</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.util.runparams.RuntimeParameters.print_sphinx_tables">
-<span class="sig-name descname"><span class="pre">print_sphinx_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'params-sphinx.inc'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/runparams.html#RuntimeParameters.print_sphinx_tables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.RuntimeParameters.print_sphinx_tables" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">print_sphinx_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'params-sphinx.inc'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/runparams.html#RuntimeParameters.print_sphinx_tables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.RuntimeParameters.print_sphinx_tables" title="Link to this definition">#</a></dt>
 <dd><p>Output Sphinx-formatted tables for inclusion in the documentation.
 The table columns will be: param, default, description.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.util.runparams.RuntimeParameters.print_unused_params">
-<span class="sig-name descname"><span class="pre">print_unused_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/runparams.html#RuntimeParameters.print_unused_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.RuntimeParameters.print_unused_params" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">print_unused_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/runparams.html#RuntimeParameters.print_unused_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.RuntimeParameters.print_unused_params" title="Link to this definition">#</a></dt>
 <dd><p>Print out the list of parameters that were defined by never used</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.util.runparams.RuntimeParameters.set_param">
-<span class="sig-name descname"><span class="pre">set_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/runparams.html#RuntimeParameters.set_param"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.RuntimeParameters.set_param" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/runparams.html#RuntimeParameters.set_param"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.RuntimeParameters.set_param" title="Link to this definition">#</a></dt>
 <dd><p>manually set one of the existing runtime parameters</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.util.runparams.RuntimeParameters.write_params">
-<span class="sig-name descname"><span class="pre">write_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/runparams.html#RuntimeParameters.write_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.RuntimeParameters.write_params" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">write_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/runparams.html#RuntimeParameters.write_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.RuntimeParameters.write_params" title="Link to this definition">#</a></dt>
 <dd><p>Write the runtime parameters to an HDF5 file.  Here, f is the
 h5py file object</p>
 </dd></dl>
@@ -478,13 +901,13 @@ h5py file object</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.util.runparams.is_float">
-<span class="sig-prename descclassname"><span class="pre">pyro.util.runparams.</span></span><span class="sig-name descname"><span class="pre">is_float</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/runparams.html#is_float"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.is_float" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.util.runparams.</span></span><span class="sig-name descname"><span class="pre">is_float</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/runparams.html#is_float"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.is_float" title="Link to this definition">#</a></dt>
 <dd><p>is the given string a float?</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.util.runparams.is_int">
-<span class="sig-prename descclassname"><span class="pre">pyro.util.runparams.</span></span><span class="sig-name descname"><span class="pre">is_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/runparams.html#is_int"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.is_int" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyro.util.runparams.</span></span><span class="sig-name descname"><span class="pre">is_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/runparams.html#is_int"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.is_int" title="Link to this definition">#</a></dt>
 <dd><p>is the given string an integer?</p>
 </dd></dl>
 
@@ -492,34 +915,154 @@ h5py file object</p>
 </section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="pyro.swe.problems.html" class="btn btn-neutral float-left" title="pyro.swe.problems package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="zreferences.html" class="btn btn-neutral float-right" title="References" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+                </article>
+              
 
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2023, pyro development team.</p>
-  </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
-
-</footer>
-        </div>
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="pyro.swe.problems.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">pyro.swe.problems package</p>
       </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+    </a>
+    <a class="right-next"
+       href="zreferences.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">References</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
-</body>
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.util.compare">pyro.util.compare module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.compare.compare"><code class="docutils literal notranslate"><span class="pre">compare()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.compare.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.util.io_pyro">pyro.util.io_pyro module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.io_pyro.read"><code class="docutils literal notranslate"><span class="pre">read()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.io_pyro.read_bcs"><code class="docutils literal notranslate"><span class="pre">read_bcs()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.util.msg">pyro.util.msg module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.msg.bold"><code class="docutils literal notranslate"><span class="pre">bold()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.msg.fail"><code class="docutils literal notranslate"><span class="pre">fail()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.msg.success"><code class="docutils literal notranslate"><span class="pre">success()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.msg.warning"><code class="docutils literal notranslate"><span class="pre">warning()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.util.plot_tools">pyro.util.plot_tools module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.plot_tools.setup_axes"><code class="docutils literal notranslate"><span class="pre">setup_axes()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.util.profile_pyro">pyro.util.profile_pyro module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.profile_pyro.Timer"><code class="docutils literal notranslate"><span class="pre">Timer</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.profile_pyro.Timer.begin"><code class="docutils literal notranslate"><span class="pre">Timer.begin()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.profile_pyro.Timer.end"><code class="docutils literal notranslate"><span class="pre">Timer.end()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.profile_pyro.TimerCollection"><code class="docutils literal notranslate"><span class="pre">TimerCollection</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.profile_pyro.TimerCollection.report"><code class="docutils literal notranslate"><span class="pre">TimerCollection.report()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.profile_pyro.TimerCollection.timer"><code class="docutils literal notranslate"><span class="pre">TimerCollection.timer()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.util.runparams">pyro.util.runparams module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.command_line_params"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.command_line_params()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.get_param"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.get_param()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.load_params"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.load_params()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.print_all_params"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.print_all_params()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.print_paramfile"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.print_paramfile()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.print_sphinx_tables"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.print_sphinx_tables()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.print_unused_params"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.print_unused_params()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.set_param"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.set_param()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.write_params"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.write_params()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.is_float"><code class="docutils literal notranslate"><span class="pre">is_float()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.is_int"><code class="docutils literal notranslate"><span class="pre">is_int()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By pyro development team
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, pyro development team.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
 </html>
