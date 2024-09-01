@@ -10,9 +10,9 @@ DEFAULT_INPUTS = "inputs.converge.64"
 
 def init_data(my_data, rp):
     """ initialize the smooth burgers convergence problem """
-    del rp  # this problem doesn't use runtime params
 
-    msg.bold("initializing the smooth burgers convergence problem...")
+    if rp.get_param("driver.verbose"):
+        msg.bold("initializing the smooth burgers convergence problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):

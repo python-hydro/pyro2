@@ -12,7 +12,8 @@ DEFAULT_INPUTS = "inputs.ramp"
 def init_data(my_data, rp):
     """ initialize the double Mach reflection problem """
 
-    msg.bold("initializing the double Mach reflection problem...")
+    if rp.get_param("driver.verbose"):
+        msg.bold("initializing the double Mach reflection problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):
