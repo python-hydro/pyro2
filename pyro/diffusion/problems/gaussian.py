@@ -18,7 +18,8 @@ def phi_analytic(dist, t, t_0, k, phi_1, phi_2):
 def init_data(my_data, rp):
     """ initialize the Gaussian diffusion problem """
 
-    msg.bold("initializing the Gaussian diffusion problem...")
+    if rp.get_param("driver.verbose"):
+        msg.bold("initializing the Gaussian diffusion problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):

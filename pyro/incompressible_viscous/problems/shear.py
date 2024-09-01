@@ -27,7 +27,8 @@ DEFAULT_INPUTS = "inputs.shear"
 def init_data(my_data, rp):
     """ initialize the incompressible shear problem """
 
-    msg.bold("initializing the incompressible shear problem...")
+    if rp.get_param("driver.verbose"):
+        msg.bold("initializing the incompressible shear problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):

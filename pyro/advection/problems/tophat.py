@@ -8,9 +8,9 @@ DEFAULT_INPUTS = "inputs.tophat"
 
 def init_data(myd, rp):
     """ initialize the tophat advection problem """
-    del rp  # this problem doesn't use runtime params
 
-    msg.bold("initializing the tophat advection problem...")
+    if rp.get_param("driver.verbose"):
+        msg.bold("initializing the tophat advection problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(myd, patch.CellCenterData2d):

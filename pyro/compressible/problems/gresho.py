@@ -11,7 +11,8 @@ DEFAULT_INPUTS = "inputs.gresho"
 def init_data(my_data, rp):
     """ initialize the Gresho vortex problem """
 
-    msg.bold("initializing the Gresho vortex problem...")
+    if rp.get_param("driver.verbose"):
+        msg.bold("initializing the Gresho vortex problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):

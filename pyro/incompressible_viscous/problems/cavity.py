@@ -18,9 +18,9 @@ DEFAULT_INPUTS = "inputs.cavity"
 
 def init_data(my_data, rp):
     """ initialize the lid-driven cavity """
-    del rp  # this problem doesn't use runtime params
 
-    msg.bold("initializing the lid-driven cavity problem...")
+    if rp.get_param("driver.verbose"):
+        msg.bold("initializing the lid-driven cavity problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):
