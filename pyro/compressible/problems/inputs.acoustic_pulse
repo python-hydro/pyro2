@@ -33,6 +33,5 @@ yrboundary = periodic
 rho0 = 1.4
 drho0 = 0.14
 
-
 [vis]
 dovis = 1
