@@ -49,7 +49,8 @@ class Pyro:
             runtime vis by default.
         """
 
-        msg.bold('pyro ...')
+        if from_commandline:
+            msg.bold('pyro ...')
 
         if solver_name not in valid_solvers:
             msg.fail(f"ERROR: {solver_name} is not a valid solver")
@@ -118,12 +119,11 @@ class Pyro:
 
             self.rp.load_params(inputs_file, no_new=1)
 
-        # manually override the dovis default
+        # manually override the dovis and verbose defaults
         # for Jupyter, we want runtime vis disabled by default
-        if self.from_commandline:
-            self.rp.set_param("vis.dovis", 1)
-        else:
+        if not self.from_commandline:
             self.rp.set_param("vis.dovis", 0)
+            self.rp.set_param("driver.verbose", 0)
 
         if inputs_dict is not None:
             for k, v in inputs_dict.items():
