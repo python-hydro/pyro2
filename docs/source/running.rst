@@ -65,11 +65,14 @@ Kelvin-Helmholtz problem ``kh``, we would do the following:
 
 .. code-block:: python
 
-    from pyro.pyro_sim import Pyro
+    from pyro import Pyro
     p = Pyro("compressible")
-    p.initialize_problem(problem_name="kh",
-                         inputs_file="inputs.kh")
+    p.initialize_problem(problem_name="kh")
     p.run_sim()
+
+This will use the default set of parameters for the problem specified
+in the inputs file defined by ``DEFAULT_INPUTS`` in the problem
+initialization module.
 
 Instead of using an inputs file to define the problem parameters, we can define a
 dictionary of parameters and pass them into the :func:`initialize_problem
@@ -82,7 +85,6 @@ visualization for the previous example, we would do:
 
     parameters = {"vis.dovis": 0}
     p.initialize_problem(problem_name="kh",
-                         inputs_file="inputs.kh",
                          inputs_dict=parameters)
 
 It's possible to evolve the simulation forward timestep by timestep manually using
