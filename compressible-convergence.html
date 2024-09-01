@@ -40,7 +40,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=da73b046"></script>
+    <script src="_static/documentation_options.js?v=7b73c551"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -572,7 +572,7 @@ document.write(`
 <section id="compressible">
 <h2><code class="docutils literal notranslate"><span class="pre">compressible</span></code><a class="headerlink" href="#compressible" title="Link to this heading">#</a></h2>
 <p>We’ll run the problem at several different resolutions and store the <code class="docutils literal notranslate"><span class="pre">Pyro</span></code> simulation objects in a list.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
@@ -587,21 +587,6 @@ document.write(`
     <span class="n">sims</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-bold">pyro ...</span>
-<span class="ansi-bold">initializing the acoustic pulse problem...</span>
-<span class="ansi-bold">pyro ...</span>
-<span class="ansi-bold">initializing the acoustic pulse problem...</span>
-<span class="ansi-bold">pyro ...</span>
-<span class="ansi-bold">initializing the acoustic pulse problem...</span>
-<span class="ansi-bold">pyro ...</span>
-<span class="ansi-bold">initializing the acoustic pulse problem...</span>
-</pre></div></div>
 </div>
 <p>Now we want to loop over each adjacent pair of simulations, coarsen the finer resolution simulation and compute the norm of the difference. We’ll do this for a single variable.</p>
 <div class="nbinput nblast docutils container">
@@ -640,7 +625,7 @@ document.write(`
 <section id="compressible_fv4">
 <h2><code class="docutils literal notranslate"><span class="pre">compressible_fv4</span></code><a class="headerlink" href="#compressible_fv4" title="Link to this heading">#</a></h2>
 <p>Now we’ll do the same for the 4th order solver. We need to change the Riemann solver to</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
@@ -655,21 +640,6 @@ document.write(`
     <span class="n">sims</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-bold">pyro ...</span>
-<span class="ansi-bold">initializing the acoustic pulse problem...</span>
-<span class="ansi-bold">pyro ...</span>
-<span class="ansi-bold">initializing the acoustic pulse problem...</span>
-<span class="ansi-bold">pyro ...</span>
-<span class="ansi-bold">initializing the acoustic pulse problem...</span>
-<span class="ansi-bold">pyro ...</span>
-<span class="ansi-bold">initializing the acoustic pulse problem...</span>
-</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:

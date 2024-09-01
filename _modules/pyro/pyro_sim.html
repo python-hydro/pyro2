@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=da73b046"></script>
+    <script src="../../_static/documentation_options.js?v=7b73c551"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -502,7 +502,8 @@ document.write(`
 <span class="sd">            runtime vis by default.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">msg</span><span class="o">.</span><span class="n">bold</span><span class="p">(</span><span class="s1">&#39;pyro ...&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">from_commandline</span><span class="p">:</span>
+            <span class="n">msg</span><span class="o">.</span><span class="n">bold</span><span class="p">(</span><span class="s1">&#39;pyro ...&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">solver_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_solvers</span><span class="p">:</span>
             <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ERROR: </span><span class="si">{</span><span class="n">solver_name</span><span class="si">}</span><span class="s2"> is not a valid solver&quot;</span><span class="p">)</span>
@@ -573,12 +574,11 @@ document.write(`
 
             <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">load_params</span><span class="p">(</span><span class="n">inputs_file</span><span class="p">,</span> <span class="n">no_new</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="c1"># manually override the dovis default</span>
+        <span class="c1"># manually override the dovis and verbose defaults</span>
         <span class="c1"># for Jupyter, we want runtime vis disabled by default</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_commandline</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">set_param</span><span class="p">(</span><span class="s2">&quot;vis.dovis&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_commandline</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">set_param</span><span class="p">(</span><span class="s2">&quot;vis.dovis&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">set_param</span><span class="p">(</span><span class="s2">&quot;driver.verbose&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">inputs_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">inputs_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
