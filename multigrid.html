@@ -39,14 +39,14 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=e1c03715"></script>
+    <script src="_static/documentation_options.js?v=95647be6"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>
     <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "processEscapes": true, "displayMath": [["\\[", "\\]"]]}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'multigrid';</script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -543,15 +543,21 @@ of grids. Chapter 9 of the <a class="reference external" href="http://open-astro
 <p>There are three solvers:</p>
 <ul>
 <li><p>The core solver, provided in the class <a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d" title="pyro.multigrid.MG.CellCenterMG2d"><code class="xref py py-func docutils literal notranslate"><span class="pre">MG.CellCenterMG2d</span></code></a> solves constant-coefficient Helmholtz problems of the form</p>
-<p>$$(alpha - beta nabla^2) phi = f$$</p>
+<p><div class="math notranslate nohighlight">
+\[(\alpha - \beta \nabla^2) \phi = f\]</div>
+</p>
 </li>
 <li><p>The class <a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.variable_coeff_MG.VarCoeffCCMG2d" title="pyro.multigrid.variable_coeff_MG.VarCoeffCCMG2d"><code class="xref py py-func docutils literal notranslate"><span class="pre">variable_coeff_MG.VarCoeffCCMG2d</span></code></a> solves variable coefficient Poisson problems of the form</p>
-<p>$$nabla cdot (eta nabla phi ) = f`$$</p>
+<p><div class="math notranslate nohighlight">
+\[\nabla \cdot (\eta \nabla \phi ) = f\]</div>
+</p>
 <p>This class inherits the core functionality from <code class="docutils literal notranslate"><span class="pre">MG.CellCenterMG2d</span></code>.</p>
 </li>
 <li><p>The class <a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.general_MG.GeneralMG2d" title="pyro.multigrid.general_MG.GeneralMG2d"><code class="xref py py-func docutils literal notranslate"><span class="pre">general_MG.GeneralMG2d</span></code></a> solves a general elliptic
 equation of the form</p>
-<p>$$`alpha phi + nabla cdot ( beta nabla phi) + gamma cdot nabla phi = f`$$</p>
+<p><div class="math notranslate nohighlight">
+\[`\alpha \phi + \nabla \cdot ( \beta \nabla \phi) + \gamma \cdot \nabla \phi = f\]</div>
+</p>
 <p>This class inherits
 the core functionality from <a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d" title="pyro.multigrid.MG.CellCenterMG2d"><code class="xref py py-func docutils literal notranslate"><span class="pre">MG.CellCenterMG2d</span></code></a>.</p>
 <p>This solver is the only one to support inhomogeneous boundary

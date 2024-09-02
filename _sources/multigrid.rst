@@ -14,14 +14,14 @@ There are three solvers:
 
 * The class :func:`variable_coeff_MG.VarCoeffCCMG2d <pyro.multigrid.variable_coeff_MG.VarCoeffCCMG2d>` solves variable coefficient Poisson problems of the form
 
-  $$\nabla \cdot (\eta \nabla \phi ) = f`$$
+  $$\nabla \cdot (\eta \nabla \phi ) = f$$
 
   This class inherits the core functionality from ``MG.CellCenterMG2d``.
 
 * The class :func:`general_MG.GeneralMG2d <pyro.multigrid.general_MG.GeneralMG2d>` solves a general elliptic
   equation of the form
 
-  $$`\alpha \phi + \nabla \cdot ( \beta \nabla \phi) + \gamma \cdot \nabla \phi = f`$$
+  $$`\alpha \phi + \nabla \cdot ( \beta \nabla \phi) + \gamma \cdot \nabla \phi = f$$
 
   This class inherits
   the core functionality from :func:`MG.CellCenterMG2d <pyro.multigrid.MG.CellCenterMG2d>`.
