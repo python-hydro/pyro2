@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=e87632f3"></script>
+    <script src="_static/documentation_options.js?v=e1c03715"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -51,7 +51,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'multigrid';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Multigrid Class Overview" href="multigrid_basics.html" />
+    <link rel="next" title="Simple Multigrid Examples" href="multigrid_basics.html" />
     <link rel="prev" title="Compressible solver comparisons" href="compressible_compare.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -185,7 +185,7 @@
 <li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compressible_compare.html">Compressible solver comparisons</a></li>
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Multigrid Solvers</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="multigrid_basics.html">Multigrid Class Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multigrid_basics.html">Simple Multigrid Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="multigrid-constant-coefficients.html">Constant-Coefficient Poisson Equation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="multigrid-variable-coeff.html">Variable Coefficient Poisson</a></li>
 <li class="toctree-l2"><a class="reference internal" href="multigrid-general-linear.html">General Linear Elliptic Equation</a></li>
@@ -536,41 +536,38 @@ document.write(`
                   
   <section id="multigrid-solvers">
 <h1>Multigrid Solvers<a class="headerlink" href="#multigrid-solvers" title="Link to this heading">#</a></h1>
-<div class="toctree-wrapper compound">
+<p>pyro solves elliptic problems (like Laplace’s equation or Poisson’s
+equation) through multigrid. This accelerates the convergence of
+qsimple relaxation by moving the solution down and up through a series
+of grids. Chapter 9 of the <a class="reference external" href="http://open-astrophysics-bookshelf.github.io/numerical_exercises/CompHydroTutorial.pdf">pdf notes</a> gives an introduction to solving elliptic equations, including multigrid.</p>
+<p>There are three solvers:</p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="multigrid_basics.html">Multigrid Class Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="multigrid_basics.html#simple-examples">Simple Examples</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="multigrid_basics.html#multigrid-test">multigrid test</a></li>
-<li class="toctree-l3"><a class="reference internal" href="multigrid_basics.html#projection">projection</a></li>
-</ul>
+<li><p>The core solver, provided in the class <a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d" title="pyro.multigrid.MG.CellCenterMG2d"><code class="xref py py-func docutils literal notranslate"><span class="pre">MG.CellCenterMG2d</span></code></a> solves constant-coefficient Helmholtz problems of the form</p>
+<p>$$(alpha - beta nabla^2) phi = f$$</p>
+</li>
+<li><p>The class <a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.variable_coeff_MG.VarCoeffCCMG2d" title="pyro.multigrid.variable_coeff_MG.VarCoeffCCMG2d"><code class="xref py py-func docutils literal notranslate"><span class="pre">variable_coeff_MG.VarCoeffCCMG2d</span></code></a> solves variable coefficient Poisson problems of the form</p>
+<p>$$nabla cdot (eta nabla phi ) = f`$$</p>
+<p>This class inherits the core functionality from <code class="docutils literal notranslate"><span class="pre">MG.CellCenterMG2d</span></code>.</p>
+</li>
+<li><p>The class <a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.general_MG.GeneralMG2d" title="pyro.multigrid.general_MG.GeneralMG2d"><code class="xref py py-func docutils literal notranslate"><span class="pre">general_MG.GeneralMG2d</span></code></a> solves a general elliptic
+equation of the form</p>
+<p>$$`alpha phi + nabla cdot ( beta nabla phi) + gamma cdot nabla phi = f`$$</p>
+<p>This class inherits
+the core functionality from <a class="reference internal" href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d" title="pyro.multigrid.MG.CellCenterMG2d"><code class="xref py py-func docutils literal notranslate"><span class="pre">MG.CellCenterMG2d</span></code></a>.</p>
+<p>This solver is the only one to support inhomogeneous boundary
+conditions.</p>
 </li>
 </ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="multigrid-constant-coefficients.html">Constant-Coefficient Poisson Equation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="multigrid-constant-coefficients.html#Setting-up-the-solver">Setting up the solver</a></li>
-<li class="toctree-l2"><a class="reference internal" href="multigrid-constant-coefficients.html#Performing-the-solve">Performing the solve</a></li>
-<li class="toctree-l2"><a class="reference internal" href="multigrid-constant-coefficients.html#Plotting-the-solution">Plotting the solution</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="multigrid-variable-coeff.html">Variable Coefficient Poisson</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="multigrid-variable-coeff.html#Setting-up-the-solver">Setting up the solver</a></li>
-<li class="toctree-l2"><a class="reference internal" href="multigrid-variable-coeff.html#Solving-the-system">Solving the system</a></li>
-<li class="toctree-l2"><a class="reference internal" href="multigrid-variable-coeff.html#Visualizing-the-solution">Visualizing the solution</a></li>
-<li class="toctree-l2"><a class="reference internal" href="multigrid-variable-coeff.html#Comparing-to-the-exact-solution">Comparing to the exact solution</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="multigrid-general-linear.html">General Linear Elliptic Equation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="multigrid-general-linear.html#Setting-up-the-solver">Setting up the solver</a></li>
-<li class="toctree-l2"><a class="reference internal" href="multigrid-general-linear.html#Solving-the-system">Solving the system</a></li>
-<li class="toctree-l2"><a class="reference internal" href="multigrid-general-linear.html#Checking-the-result">Checking the result</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="multigrid_exercises.html">Exercises</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="multigrid_exercises.html#explorations">Explorations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="multigrid_exercises.html#extensions">Extensions</a></li>
-</ul>
-</li>
-</ul>
+<p>We simply use V-cycles in our implementation, and restrict ourselves
+to square grids with zoning a power of 2.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The multigrid solver is not controlled through <code class="docutils literal notranslate"><span class="pre">pyro_sim.py</span></code>
+since there is no time-dependence in pure elliptic problems. Instead,
+there are a few scripts in the multigrid/ subdirectory that
+demonstrate its use.</p>
+</div>
+<div class="toctree-wrapper compound">
 </div>
 </section>
 
@@ -599,7 +596,7 @@ document.write(`
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Multigrid Class Overview</p>
+        <p class="prev-next-title">Simple Multigrid Examples</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
