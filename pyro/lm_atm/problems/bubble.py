@@ -5,11 +5,14 @@ import numpy
 from pyro.mesh import patch
 from pyro.util import msg
 
+DEFAULT_INPUTS = "inputs.bubble"
+
 
 def init_data(my_data, base, rp):
     """ initialize the bubble problem """
 
-    msg.bold("initializing the bubble problem...")
+    if rp.get_param("driver.verbose"):
+        msg.bold("initializing the bubble problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):

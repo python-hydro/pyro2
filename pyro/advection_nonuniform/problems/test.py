@@ -1,6 +1,8 @@
 from pyro.mesh import patch
 from pyro.util import msg
 
+DEFAULT_INPUTS = None
+
 
 def init_data(my_data, rp):
     """ an init routine for unit testing """

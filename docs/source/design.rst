@@ -47,7 +47,7 @@ two sub-directories for problems and tests, appearing as:
 * *solver-name*
 
   * ``problems/`` : the problem setups and inputs file that work for this solver.
-     In some cases, this might be a symlink to a similar solver that we inherit from.
+    In some cases, this might be a symlink to a similar solver that we inherit from.
 
   * ``tests/``. reference output (HDF5 files) used for the regression testing.
 

@@ -5,11 +5,14 @@ import numpy as np
 from pyro.mesh import patch
 from pyro.util import msg
 
+DEFAULT_INPUTS = "inputs.advect.64"
+
 
 def init_data(my_data, rp):
     """ initialize a smooth advection problem for testing convergence """
 
-    msg.bold("initializing the advect problem...")
+    if rp.get_param("driver.verbose"):
+        msg.bold("initializing the advect problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):

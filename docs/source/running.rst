@@ -1,10 +1,11 @@
 Running
 =======
 
-Pyro can be run in two ways: either from the commandline, using the
-``pyro_sim.py`` script (this will be installed into your search path)
-and passing in the solver, problem and inputs as arguments, or by
-using the :func:`Pyro <pyro.pyro_sim.Pyro>` class.
+Pyro can be run in two ways:
+
+* from the commandline, using the ``pyro_sim.py`` script (this will be installed into your search path)
+
+* by using the :func:`Pyro <pyro.pyro_sim.Pyro>` class directly in ipython or Jupyter
 
 Commandline
 ------------
@@ -64,11 +65,14 @@ Kelvin-Helmholtz problem ``kh``, we would do the following:
 
 .. code-block:: python
 
-    from pyro.pyro_sim import Pyro
+    from pyro import Pyro
     p = Pyro("compressible")
-    p.initialize_problem(problem_name="kh",
-                         inputs_file="inputs.kh")
+    p.initialize_problem(problem_name="kh")
     p.run_sim()
+
+This will use the default set of parameters for the problem specified
+in the inputs file defined by ``DEFAULT_INPUTS`` in the problem
+initialization module.
 
 Instead of using an inputs file to define the problem parameters, we can define a
 dictionary of parameters and pass them into the :func:`initialize_problem
@@ -79,9 +83,8 @@ visualization for the previous example, we would do:
 
 .. code-block:: python
 
-    parameters = {"vis.dovis":0}
+    parameters = {"vis.dovis": 0}
     p.initialize_problem(problem_name="kh",
-                         inputs_file="inputs.kh",
                          inputs_dict=parameters)
 
 It's possible to evolve the simulation forward timestep by timestep manually using
@@ -132,11 +135,13 @@ as:
    ...
    cfl = rp.get_param("hydro.cfl")
 
-When pyro is run, the file ``inputs.auto`` is output containing the
-full list of runtime parameters, their value for the simulation, and
-the comment that was associated with them from the ``_defaults``
-files. This is a useful way to see what parameters are in play for a
-given simulation.
+.. tip::
+
+   When pyro is run, the file ``inputs.auto`` is output containing the
+   full list of runtime parameters, their value for the simulation, and
+   the comment that was associated with them from the ``_defaults``
+   files. This is a useful way to see what parameters are in play for a
+   given simulation.
 
 All solvers use the following parameters:
 

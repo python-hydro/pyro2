@@ -5,12 +5,15 @@ import numpy as np
 from pyro.mesh import patch
 from pyro.util import msg
 
+DEFAULT_INPUTS = "inputs.acoustic_pulse"
+
 
 def init_data(myd, rp):
     """initialize the acoustic_pulse problem.  This comes from
     McCourquodale & Coella 2011"""
 
-    msg.bold("initializing the acoustic pulse problem...")
+    if rp.get_param("driver.verbose"):
+        msg.bold("initializing the acoustic pulse problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(myd, patch.CellCenterData2d):

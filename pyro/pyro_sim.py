@@ -48,7 +48,8 @@ class Pyro:
             runtime vis by default.
         """
 
-        msg.bold('pyro ...')
+        if from_commandline:
+            msg.bold('pyro ...')
 
         if solver_name not in valid_solvers:
             msg.fail(f"ERROR: {solver_name} is not a valid solver")
@@ -73,13 +74,6 @@ class Pyro:
         self.rp = runparams.RuntimeParameters()
         self.rp.load_params(self.pyro_home + "_defaults")
         self.rp.load_params(self.pyro_home + self.solver_name + "/_defaults")
-
-        # manually override the dovis default
-        # for Jupyter, we want runtime vis disabled by default
-        if self.from_commandline:
-            self.rp.set_param("vis.dovis", 1)
-        else:
-            self.rp.set_param("vis.dovis", 0)
 
         self.tc = profile.TimerCollection()
 
@@ -111,6 +105,10 @@ class Pyro:
             self.rp.load_params(problem_defaults_file)
 
         # now read in the inputs file
+        if inputs_file is None:
+            problem = importlib.import_module("pyro.{}.problems.{}".format(self.solver_name, problem_name))
+            inputs_file = problem.DEFAULT_INPUTS
+
         if inputs_file is not None:
             if not os.path.isfile(inputs_file):
                 # check if the param file lives in the solver's problems directory
@@ -120,9 +118,15 @@ class Pyro:
 
             self.rp.load_params(inputs_file, no_new=1)
 
+        # manually override the dovis and verbose defaults
+        # for Jupyter, we want runtime vis disabled by default
+        if not self.from_commandline:
+            self.rp.set_param("vis.dovis", 0)
+            self.rp.set_param("driver.verbose", 0)
+
         if inputs_dict is not None:
             for k, v in inputs_dict.items():
-                self.rp.params[k] = v
+                self.rp.set_param(k, v)
 
         # and any commandline overrides
         if other_commands is not None:
@@ -191,8 +195,6 @@ class Pyro:
 
         self.sim.finalize()
 
-        return self.sim
-
     def single_step(self):
         """
         Do a single step
@@ -236,7 +238,10 @@ class Pyro:
             tm_vis.end()
 
     def __repr__(self):
-        """ Return a representation of the Pyro object """
+        s = f"Pyro('{self.solver_name}')"
+        return s
+
+    def __str__(self):
         s = f"Solver = {self.solver_name}\n"
         if self.is_initialized:
             s += f"Problem = {self.sim.problem_name}\n"
@@ -248,9 +253,9 @@ class Pyro:
         return s
 
     def get_var(self, v):
-        """
-        Alias for cc_data's get_var routine, returns the cell-centered data
-        given the variable name v.
+        """Alias for the data's get_var routine, returns the
+        simulation data given the variable name v.
+
         """
 
         if not self.is_initialized:
@@ -259,14 +264,18 @@ class Pyro:
         return self.sim.cc_data.get_var(v)
 
     def get_grid(self):
-        """
-        Return the underlying grid object for the simulation
+        """Return the underlying grid object for the simulation
+
         """
 
         if not self.is_initialized:
             msg.fail("ERROR: problem has not been initialized")
 
         return self.sim.cc_data.grid
+
+    def get_sim(self):
+        """Return the Simulation object"""
+        return self.sim
 
 
 class PyroBenchmark(Pyro):

@@ -11,9 +11,17 @@ pyro: a python hydro code
 
 .. image:: pyro_plots.png
 
+About
+=====
+
+pyro is a python hydrodynamics code meant to illustrate how the basic methods
+used in astrophysical simulations work.  It is also used for prototyping
+new ideas.
+
 .. toctree::
    :maxdepth: 1
    :caption: pyro basics
+   :hidden:
 
    intro
    installation
@@ -22,12 +30,20 @@ pyro: a python hydro code
    running
    output
    problems
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Mesh
+   :hidden:
+
    mesh_basics
    mesh-examples.ipynb
+   spherical-mesh.ipynb
 
 .. toctree::
    :maxdepth: 1
    :caption: Solvers
+   :hidden:
 
    advection_basics
    burgers_basics
@@ -43,7 +59,17 @@ pyro: a python hydro code
 
 .. toctree::
    :maxdepth: 1
+   :caption: Examples
+   :hidden:
+
+   compressible-rt-compare.ipynb
+   advection-error.ipynb
+   compressible-convergence.ipynb
+
+.. toctree::
+   :maxdepth: 1
    :caption: Utilities
+   :hidden:
 
    analysis
    testing
@@ -51,6 +77,7 @@ pyro: a python hydro code
 .. toctree::
    :maxdepth: 1
    :caption: Community
+   :hidden:
 
    help
    ack
@@ -58,11 +85,13 @@ pyro: a python hydro code
 .. toctree::
    :maxdepth: 1
    :caption: Software Reference
+   :hidden:
 
    API <modules>
 
 .. toctree::
    :caption: Bibliography
+   :hidden:
 
    zreferences
 
@@ -72,4 +101,3 @@ Indices and tables
 
 * :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`
