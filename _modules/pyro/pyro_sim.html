@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=95647be6"></script>
+    <script src="../../_static/documentation_options.js?v=b97ab158"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -653,9 +653,7 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">print_unused_params</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tc</span><span class="o">.</span><span class="n">report</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
-
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="Pyro.single_step">
@@ -718,9 +716,9 @@ document.write(`
 <div class="viewcode-block" id="Pyro.get_var">
 <a class="viewcode-back" href="../../pyro.html#pyro.pyro_sim.Pyro.get_var">[docs]</a>
     <span class="k">def</span> <span class="nf">get_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Alias for cc_data&#39;s get_var routine, returns the cell-centered data</span>
-<span class="sd">        given the variable name v.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for the data&#39;s get_var routine, returns the</span>
+<span class="sd">        simulation data given the variable name v.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_initialized</span><span class="p">:</span>
@@ -732,14 +730,21 @@ document.write(`
 <div class="viewcode-block" id="Pyro.get_grid">
 <a class="viewcode-back" href="../../pyro.html#pyro.pyro_sim.Pyro.get_grid">[docs]</a>
     <span class="k">def</span> <span class="nf">get_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return the underlying grid object for the simulation</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the underlying grid object for the simulation</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_initialized</span><span class="p">:</span>
             <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ERROR: problem has not been initialized&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">grid</span></div>
+
+
+<div class="viewcode-block" id="Pyro.get_sim">
+<a class="viewcode-back" href="../../pyro.html#pyro.pyro_sim.Pyro.get_sim">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_sim</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the Simulation object&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span></div>
 </div>
 
 

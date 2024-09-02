@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=95647be6"></script>
+    <script src="_static/documentation_options.js?v=b97ab158"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -542,6 +542,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.pyro_sim">pyro.pyro_sim module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.pyro_sim.Pyro"><code class="docutils literal notranslate"><span class="pre">Pyro</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.pyro_sim.Pyro.get_grid"><code class="docutils literal notranslate"><span class="pre">Pyro.get_grid()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.pyro_sim.Pyro.get_sim"><code class="docutils literal notranslate"><span class="pre">Pyro.get_sim()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.pyro_sim.Pyro.get_var"><code class="docutils literal notranslate"><span class="pre">Pyro.get_var()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.pyro_sim.Pyro.initialize_problem"><code class="docutils literal notranslate"><span class="pre">Pyro.initialize_problem()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.pyro_sim.Pyro.run_sim"><code class="docutils literal notranslate"><span class="pre">Pyro.run_sim()</span></code></a></li>
@@ -1535,10 +1536,16 @@ methods.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pyro.pyro_sim.Pyro.get_sim">
+<span class="sig-name descname"><span class="pre">get_sim</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/pyro_sim.html#Pyro.get_sim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.pyro_sim.Pyro.get_sim" title="Link to this definition">#</a></dt>
+<dd><p>Return the Simulation object</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pyro.pyro_sim.Pyro.get_var">
 <span class="sig-name descname"><span class="pre">get_var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/pyro_sim.html#Pyro.get_var"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.pyro_sim.Pyro.get_var" title="Link to this definition">#</a></dt>
-<dd><p>Alias for cc_data’s get_var routine, returns the cell-centered data
-given the variable name v.</p>
+<dd><p>Alias for the data’s get_var routine, returns the
+simulation data given the variable name v.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1796,6 +1803,7 @@ is not needed for advection</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.pyro_sim">pyro.pyro_sim module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.pyro_sim.Pyro"><code class="docutils literal notranslate"><span class="pre">Pyro</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.pyro_sim.Pyro.get_grid"><code class="docutils literal notranslate"><span class="pre">Pyro.get_grid()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.pyro_sim.Pyro.get_sim"><code class="docutils literal notranslate"><span class="pre">Pyro.get_sim()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.pyro_sim.Pyro.get_var"><code class="docutils literal notranslate"><span class="pre">Pyro.get_var()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.pyro_sim.Pyro.initialize_problem"><code class="docutils literal notranslate"><span class="pre">Pyro.initialize_problem()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.pyro_sim.Pyro.run_sim"><code class="docutils literal notranslate"><span class="pre">Pyro.run_sim()</span></code></a></li>
