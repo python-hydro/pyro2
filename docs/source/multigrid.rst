@@ -38,13 +38,3 @@ to square grids with zoning a power of 2.
    since there is no time-dependence in pure elliptic problems. Instead,
    there are a few scripts in the multigrid/ subdirectory that
    demonstrate its use.
-
-
-.. toctree::
-   :hidden:
-
-   multigrid_basics
-   multigrid-constant-coefficients
-   multigrid-variable-coeff
-   multigrid-general-linear
-   multigrid_exercises
