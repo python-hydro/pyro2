@@ -62,6 +62,7 @@ new ideas.
    :caption: Examples
    :hidden:
 
+   advection-error.ipynb
    compressible-convergence.ipynb
 
 .. toctree::
