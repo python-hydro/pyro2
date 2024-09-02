@@ -196,8 +196,6 @@ class Pyro:
 
         self.sim.finalize()
 
-        return self.sim
-
     def single_step(self):
         """
         Do a single step
@@ -253,9 +251,9 @@ class Pyro:
         return s
 
     def get_var(self, v):
-        """
-        Alias for cc_data's get_var routine, returns the cell-centered data
-        given the variable name v.
+        """Alias for the data's get_var routine, returns the
+        simulation data given the variable name v.
+
         """
 
         if not self.is_initialized:
@@ -264,14 +262,18 @@ class Pyro:
         return self.sim.cc_data.get_var(v)
 
     def get_grid(self):
-        """
-        Return the underlying grid object for the simulation
+        """Return the underlying grid object for the simulation
+
         """
 
         if not self.is_initialized:
             msg.fail("ERROR: problem has not been initialized")
 
         return self.sim.cc_data.grid
+
+    def get_sim(self):
+        """Return the Simulation object"""
+        return self.sim
 
 
 class PyroBenchmark(Pyro):
