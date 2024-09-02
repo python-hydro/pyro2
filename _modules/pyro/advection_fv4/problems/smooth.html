@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../../_static/documentation_options.js?v=063bd29d"></script>
+    <script src="../../../../_static/documentation_options.js?v=e87632f3"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -198,6 +198,7 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../advection-error.html">Error Measurement of the <code class="docutils literal notranslate"><span class="pre">advection_fv4</span></code> Solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../compressible-convergence.html">Convergence of the compressible solvers</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Utilities</span></p>
@@ -449,9 +450,11 @@ document.write(`
                 <article class="bd-article">
                   
   <h1>Source code for pyro.advection_fv4.problems.smooth</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="kn">from</span> <span class="nn">pyro.mesh</span> <span class="kn">import</span> <span class="n">fv</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="kn">from</span> <span class="nn">pyro.mesh</span> <span class="kn">import</span> <span class="n">patch</span>
 <span class="kn">from</span> <span class="nn">pyro.util</span> <span class="kn">import</span> <span class="n">msg</span>
 
 <span class="n">DEFAULT_INPUTS</span> <span class="o">=</span> <span class="s2">&quot;inputs.smooth&quot;</span>
@@ -461,15 +464,17 @@ document.write(`
 <a class="viewcode-back" href="../../../../pyro.advection_fv4.problems.html#pyro.advection_fv4.problems.smooth.init_data">[docs]</a>
 <span class="k">def</span> <span class="nf">init_data</span><span class="p">(</span><span class="n">my_data</span><span class="p">,</span> <span class="n">rp</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; initialize the smooth advection problem &quot;&quot;&quot;</span>
-    <span class="k">del</span> <span class="n">rp</span>  <span class="c1"># this problem doesn&#39;t use runtime params</span>
 
-    <span class="n">msg</span><span class="o">.</span><span class="n">bold</span><span class="p">(</span><span class="s2">&quot;initializing the smooth FV advection problem...&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;driver.verbose&quot;</span><span class="p">):</span>
+        <span class="n">msg</span><span class="o">.</span><span class="n">bold</span><span class="p">(</span><span class="s2">&quot;initializing the smooth advection problem...&quot;</span><span class="p">)</span>
 
     <span class="c1"># make sure that we are passed a valid patch object</span>
-    <span class="c1"># if not isinstance(my_data, patch.FV2d):</span>
-    <span class="c1">#    print(&quot;ERROR: patch invalid in smooth.py&quot;)</span>
-    <span class="c1">#    print(my_data.__class__)</span>
-    <span class="c1">#    sys.exit()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">my_data</span><span class="p">,</span> <span class="n">patch</span><span class="o">.</span><span class="n">CellCenterData2d</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: patch invalid in smooth.py&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">my_data</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+
+    <span class="n">dens</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
 
     <span class="n">xmin</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">xmin</span>
     <span class="n">xmax</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">xmax</span>
@@ -480,23 +485,8 @@ document.write(`
     <span class="n">xctr</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">xmin</span> <span class="o">+</span> <span class="n">xmax</span><span class="p">)</span>
     <span class="n">yctr</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">ymin</span> <span class="o">+</span> <span class="n">ymax</span><span class="p">)</span>
 
-    <span class="c1"># we need to initialize the cell-averages, so we will create</span>
-    <span class="c1"># a finer grid, initialize it, and then average down</span>
-    <span class="n">mgf</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">fine_like</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-
-    <span class="c1"># since restrict operates in the data class, we need to</span>
-    <span class="c1"># create a FV2d object here</span>
-    <span class="n">fine_data</span> <span class="o">=</span> <span class="n">fv</span><span class="o">.</span><span class="n">FV2d</span><span class="p">(</span><span class="n">mgf</span><span class="p">)</span>
-    <span class="n">fine_data</span><span class="o">.</span><span class="n">register_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">,</span> <span class="n">my_data</span><span class="o">.</span><span class="n">BCs</span><span class="p">[</span><span class="s2">&quot;density&quot;</span><span class="p">])</span>
-    <span class="n">fine_data</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
-
-    <span class="n">dens_fine</span> <span class="o">=</span> <span class="n">fine_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
-
-    <span class="n">dens_fine</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">60.0</span><span class="o">*</span><span class="p">((</span><span class="n">mgf</span><span class="o">.</span><span class="n">x2d</span><span class="o">-</span><span class="n">xctr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
-                                             <span class="p">(</span><span class="n">mgf</span><span class="o">.</span><span class="n">y2d</span><span class="o">-</span><span class="n">yctr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
-
-    <span class="n">dens</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
-    <span class="n">dens</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">fine_data</span><span class="o">.</span><span class="n">restrict</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
+    <span class="n">dens</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">60.0</span><span class="o">*</span><span class="p">((</span><span class="n">my_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">x2d</span><span class="o">-</span><span class="n">xctr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
+                                        <span class="p">(</span><span class="n">my_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">y2d</span><span class="o">-</span><span class="n">yctr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span></div>
 
 
 
