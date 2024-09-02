@@ -44,6 +44,7 @@ extensions = ['sphinx.ext.autodoc',
     'sphinx.ext.inheritance_diagram',
     'sphinx.ext.graphviz',
     'sphinx_copybutton',
+    'sphinx_math_dollar',
     'sphinx-prompt',
     'IPython.sphinxext.ipython_console_highlighting',
     'sphinx.ext.githubpages']
@@ -103,6 +104,15 @@ pygments_style = 'sphinx'
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
+
+# -- Options for MathJax
+# for sphinx-math-dollar
+mathjax3_config = {}
+
+mathjax3_config["tex"] = {
+    "inlineMath": [['\\(', '\\)']],
+    "displayMath": [["\\[", "\\]"]],
+  }
 
 
 # -- Options for HTML output ----------------------------------------------
