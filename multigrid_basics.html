@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=543d99e9"></script>
+    <script src="_static/documentation_options.js?v=246368f4"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -178,20 +178,20 @@
 <li class="toctree-l1"><a class="reference internal" href="mesh-examples.html">Mesh examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="spherical-mesh.html">Spherical Polar Grid</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Solvers</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Multigrid</span></p>
 <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="multigrid.html">Multigrid Solvers</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Simple Multigrid Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid-constant-coefficients.html">Constant-Coefficient Poisson Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid-variable-coeff.html">Variable Coefficient Poisson</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multigrid-general-linear.html">General Linear Elliptic Equation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Hydro Solvers</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="burgers_basics.html">Burgers’ Equation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compressible_compare.html">Compressible solver comparisons</a></li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="multigrid.html">Multigrid Solvers</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Simple Multigrid Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="multigrid-constant-coefficients.html">Constant-Coefficient Poisson Equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="multigrid-variable-coeff.html">Variable Coefficient Poisson</a></li>
-<li class="toctree-l2"><a class="reference internal" href="multigrid-general-linear.html">General Linear Elliptic Equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="multigrid_exercises.html">Exercises</a></li>
-</ul>
-</details></li>
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_viscous_basics.html">Incompressible viscous hydrodynamics solver</a></li>
@@ -535,6 +535,11 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#known-solution">Known Solution</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#projection">Projection</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explorations">Explorations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extensions">Extensions</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -601,6 +606,25 @@ results are shown below:</p>
 <p>Left is the original u velocity, middle is the modified field after
 adding the gradient of the scalar, and right is the recovered field.</p>
 </section>
+<section id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<section id="explorations">
+<h3>Explorations<a class="headerlink" href="#explorations" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Try doing just smoothing, no multigrid. Show that it still converges
+second order if you use enough iterations, but that the amount of
+time needed to get a solution is much greater.</p></li>
+</ul>
+</section>
+<section id="extensions">
+<h3>Extensions<a class="headerlink" href="#extensions" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add a different bottom solver to the multigrid algorithm</p></li>
+<li><p>Make the multigrid solver work for non-square domains</p></li>
+<li><p>Implement the full-multigrid algorithm instead of just V-cycles</p></li>
+</ul>
+</section>
+</section>
 </section>
 
 
@@ -650,6 +674,11 @@ adding the gradient of the scalar, and right is the recovered field.</p>
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#known-solution">Known Solution</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#projection">Projection</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explorations">Explorations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extensions">Extensions</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
