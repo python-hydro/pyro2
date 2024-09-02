@@ -1,7 +1,6 @@
 [driver]
 max_steps = 5000
 tmax = 5.0
-splitting = unsplit
 
 
 [swe]
