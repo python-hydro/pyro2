@@ -239,7 +239,10 @@ class Pyro:
             tm_vis.end()
 
     def __repr__(self):
-        """ Return a representation of the Pyro object """
+        s = f"Pyro('{self.solver_name}')"
+        return s
+
+    def __str__(self):
         s = f"Solver = {self.solver_name}\n"
         if self.is_initialized:
             s += f"Problem = {self.sim.problem_name}\n"

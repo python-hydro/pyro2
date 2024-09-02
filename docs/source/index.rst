@@ -62,6 +62,7 @@ new ideas.
    :caption: Examples
    :hidden:
 
+   compressible-rt-compare.ipynb
    advection-error.ipynb
    compressible-convergence.ipynb
 
