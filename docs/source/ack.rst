@@ -1,12 +1,8 @@
 Acknowledgments
 ===============
 
-Pyro developed by (in alphabetical order):
-
-  * Alice Harpole
-  * Ian Hawke
-  * Michael Zingale
-
+The current pyro developers are listed in the `.zenodo.json` file that
+is used for releases.
 
 You are free to use this code and the accompanying notes in your
 classes. Please credit "pyro development team" for the code, and
