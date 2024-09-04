@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Comparing the Compressible Solvers &#8212; pyro 4.2.0.post5+g1fc283f4 documentation</title>
+    <title>Comparing the Compressible Solvers &#8212; pyro 4.2.0.post6+g3879ae4a documentation</title>
   
   
   
@@ -40,7 +40,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=3b4678de"></script>
+    <script src="_static/documentation_options.js?v=1c49ee1b"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -562,13 +562,13 @@ document.write(`
 </div>
 <section id="First-run">
 <h2>First run<a class="headerlink" href="#First-run" title="Link to this heading">#</a></h2>
-<p>To start, let’s just run with problem with the <code class="docutils literal notranslate"><span class="pre">compressible</span></code> solver and look at the default parameters</p>
+<p>To start, let’s just run with problem with the <code class="docutils literal notranslate"><span class="pre">compressible</span></code> solver and look at the default parameters with one change–we’ll disable I/O</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">Pyro</span><span class="p">(</span><span class="s2">&quot;compressible&quot;</span><span class="p">)</span>
-<span class="n">p</span><span class="o">.</span><span class="n">initialize_problem</span><span class="p">(</span><span class="n">problem_name</span><span class="o">=</span><span class="s2">&quot;rt&quot;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">initialize_problem</span><span class="p">(</span><span class="s2">&quot;rt&quot;</span><span class="p">,</span> <span class="n">inputs_dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;io.do_io&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -602,7 +602,7 @@ driver.tmax = 3.0
 driver.verbose = 0
 eos.gamma = 1.4
 io.basename = rt_
-io.do_io = 1
+io.do_io = 0
 io.dt_out = 0.1
 io.n_out = 100
 mesh.grid_type = Cartesian2d
@@ -716,7 +716,7 @@ vis.store_images = 0
   0.5*(xmom[:, :]**2 + ymom[:, :]**2)/dens[:, :]
 </pre></div></div>
 </div>
-<p>Finally, we’ll plot them. We’ll just look at the density and put them all on the same set of axes. Since our data is stored as <span class="math notranslate nohighlight">\(\rho(x, y)\)</span>, <code class="docutils literal notranslate"><span class="pre">imshow()</span></code> will want to put <span class="math notranslate nohighlight">\(x\)</span> on the vertical axis, so we transpose the data before plotting.</p>
+<p>Finally, we’ll plot them. We’ll just look at the density and put them all on the same set of axes. Since our data is stored as <span class="math notranslate nohighlight">\(\rho(x, y)\)</span>, <code class="docutils literal notranslate"><span class="pre">imshow()</span></code> will want to put <span class="math notranslate nohighlight">\(x\)</span> on the vertical axis, so we transpose the data before plotting. We also want to exclude the ghost cells, so we use <code class="docutils literal notranslate"><span class="pre">rho.v()</span></code>.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
@@ -737,7 +737,7 @@ vis.store_images = 0
 <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">solvers</span><span class="p">,</span> <span class="n">runs</span><span class="p">):</span>
     <span class="n">rho</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
     <span class="n">g</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get_grid</span><span class="p">()</span>
-    <span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+    <span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">rho</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
                    <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">ymax</span><span class="p">],</span>
                    <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;lower&quot;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">2.1</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;small&quot;</span><span class="p">)</span>
@@ -751,7 +751,7 @@ vis.store_images = 0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.colorbar.Colorbar at 0x7fb7c4175420&gt;
+&lt;matplotlib.colorbar.Colorbar at 0x7f7a3eb11570&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
