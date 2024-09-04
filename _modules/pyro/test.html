@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.test &#8212; pyro 4.2.0.post6+g3879ae4a documentation</title>
+    <title>pyro.test &#8212; pyro 4.2.0.post7+g2b2488e4 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=1c49ee1b"></script>
+    <script src="../../_static/documentation_options.js?v=6fda83b6"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -519,7 +519,7 @@ document.write(`
             <span class="n">p</span> <span class="o">=</span> <span class="n">pyro</span><span class="o">.</span><span class="n">PyroBenchmark</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">solver</span><span class="p">,</span> <span class="n">comp_bench</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                    <span class="n">reset_bench_on_fail</span><span class="o">=</span><span class="n">reset_fails</span><span class="p">,</span>
                                    <span class="n">make_bench</span><span class="o">=</span><span class="n">store_all_benchmarks</span><span class="p">)</span>
-            <span class="n">p</span><span class="o">.</span><span class="n">initialize_problem</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">problem</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">initialize_problem</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">problem</span><span class="p">,</span> <span class="n">inputs_file</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span> <span class="n">inputs_dict</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
             <span class="n">start_n</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">n</span>
             <span class="n">err</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">run_sim</span><span class="p">(</span><span class="n">rtol</span><span class="p">)</span>
     <span class="k">finally</span><span class="p">:</span>
