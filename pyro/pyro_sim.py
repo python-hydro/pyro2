@@ -80,7 +80,7 @@ class Pyro:
 
         self.is_initialized = False
 
-    def initialize_problem(self, problem_name, inputs_file=None, inputs_dict=None,
+    def initialize_problem(self, problem_name, *, inputs_file=None, inputs_dict=None,
                            other_commands=None):
         """
         Initialize the specific problem
