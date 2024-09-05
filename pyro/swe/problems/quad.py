@@ -7,6 +7,20 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.quad"
 
+PROBLEM_PARAMS = {"quadrant.h1": 1.5,  # quadrant 1 initial density
+                  "quadrant.u1": 0.0,  # quadrant 1 initial x-velocity
+                  "quadrant.v1": 0.0,  # quadrant 1 initial y-velocity
+                  "quadrant.h2": 0.532258064516129,  # quadrant 2 initial density
+                  "quadrant.u2": 1.206045378311055,  # quadrant 2 initial x-velocity
+                  "quadrant.v2": 0.0,  # quadrant 2 initial y-velocity
+                  "quadrant.h3": 0.137992831541219,  # quadrant 3 initial density
+                  "quadrant.u3": 1.206045378311055,  # quadrant 3 initial x-velocity
+                  "quadrant.v3": 1.206045378311055,  # quadrant 3 initial y-velocity
+                  "quadrant.h4": 0.532258064516129,  # quadrant 4 initial density
+                  "quadrant.u4": 0.0,  # quadrant 4 initial x-velocity
+                  "quadrant.v4": 1.206045378311055,  # quadrant 4 initial y-velocity
+                  "quadrant.cx": 0.5,  # corner x position
+                  "quadrant.cy": 0.5}  # corner y position
 
 def init_data(my_data, rp):
     """ initialize the quadrant problem """

@@ -15,6 +15,8 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.cavity"
 
+PROBLEM_PARAMS = {}
+
 
 def init_data(my_data, rp):
     """ initialize the lid-driven cavity """

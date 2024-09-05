@@ -7,6 +7,9 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.acoustic_pulse"
 
+PROBLEM_PARAMS = {"acoustic_pulse.h0": 1.4,
+                  "acoustic_pulse.dh0": 0.14}
+
 
 def init_data(myd, rp):
     """initialize the acoustic_pulse problem.  This comes from

@@ -23,6 +23,9 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.shear"
 
+PROBLEM_PARAMS = {"shear.rho_s": 42.0,  # shear layer width
+                  "shear.delta_s": 0.05}  # perturbuation amplitude
+
 
 def init_data(my_data, rp):
     """ initialize the incompressible shear problem """

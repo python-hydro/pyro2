@@ -8,15 +8,17 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.flame"
 
+PROBLEM_PARAMS = {}
+
 
 def init_data(my_data, rp):
     """ initialize the sedov problem """
 
-    msg.bold("initializing the sedov problem...")
+    msg.bold("initializing the flame problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):
-        print("ERROR: patch invalid in sedov.py")
+        print("ERROR: patch invalid in flame.py")
         print(my_data.__class__)
         sys.exit()
 
@@ -34,8 +36,6 @@ def init_data(my_data, rp):
     ymom[:, :] = 0.0
 
     E_sedov = 1.0
-
-    r_init = rp.get_param("sedov.r_init")
 
     gamma = rp.get_param("eos.gamma")
     pi = math.pi
