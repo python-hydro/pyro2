@@ -20,10 +20,9 @@ Taylor expanding *in space only* yields::
 """
 
 import pyro.compressible as comp
-import pyro.mesh.array_indexer as ai
-from pyro.compressible import interface
+import pyro.compressible.unsplit_fluxes as flx
+from pyro.compressible import riemann
 from pyro.mesh import reconstruction
-from pyro.util import msg
 
 
 def fluxes(my_data, rp, ivars, solid, tc):
@@ -116,8 +115,8 @@ def fluxes(my_data, rp, ivars, solid, tc):
     tm_states = tc.timer("interfaceStates")
     tm_states.begin()
 
-    V_l = myg.scratch_array(ivars.nvar)
-    V_r = myg.scratch_array(ivars.nvar)
+    V_l = myg.scratch_array(nvar=ivars.nvar)
+    V_r = myg.scratch_array(nvar=ivars.nvar)
 
     for n in range(ivars.nvar):
         V_l.ip(1, n=n, buf=2)[:, :] = q.v(n=n, buf=2) + 0.5 * ldx.v(n=n, buf=2)
@@ -161,56 +160,20 @@ def fluxes(my_data, rp, ivars, solid, tc):
     # =========================================================================
     # construct the fluxes normal to the interfaces
     # =========================================================================
-    tm_riem = tc.timer("Riemann")
-    tm_riem.begin()
+    F_x = riemann.riemann_flux(1, U_xl, U_xr,
+                               my_data, rp, ivars,
+                               solid.xl, solid.xr, tc)
 
-    riemann = rp.get_param("compressible.riemann")
-
-    if riemann == "HLLC":
-        riemannFunc = interface.riemann_hllc
-    elif riemann == "CGF":
-        riemannFunc = interface.riemann_cgf
-    else:
-        msg.fail("ERROR: Riemann solver undefined")
-
-    _fx = riemannFunc(1, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
-                      solid.xl, solid.xr,
-                      gamma, U_xl, U_xr)
-
-    _fy = riemannFunc(2, myg.ng,
-                      ivars.idens, ivars.ixmom, ivars.iymom, ivars.iener, ivars.irhox, ivars.naux,
-                      solid.yl, solid.yr,
-                      gamma, U_yl, U_yr)
-
-    F_x = ai.ArrayIndexer(d=_fx, grid=myg)
-    F_y = ai.ArrayIndexer(d=_fy, grid=myg)
-
-    tm_riem.end()
+    F_y = riemann.riemann_flux(2, U_yl, U_yr,
+                               my_data, rp, ivars,
+                               solid.yl, solid.yr, tc)
 
     # =========================================================================
     # apply artificial viscosity
     # =========================================================================
-    cvisc = rp.get_param("compressible.cvisc")
-
-    _ax, _ay = interface.artificial_viscosity(myg.ng, myg.dx, myg.dy,
-        cvisc, q.v(n=ivars.iu, buf=myg.ng), q.v(n=ivars.iv, buf=myg.ng))
-
-    avisco_x = ai.ArrayIndexer(d=_ax, grid=myg)
-    avisco_y = ai.ArrayIndexer(d=_ay, grid=myg)
-
-    b = (2, 1)
-
-    for n in range(ivars.nvar):
-        # F_x = F_x + avisco_x * (U(i-1,j) - U(i,j))
-        var = my_data.get_var_by_index(n)
-
-        F_x.v(buf=b, n=n)[:, :] += \
-            avisco_x.v(buf=b) * (var.ip(-1, buf=b) - var.v(buf=b))
-
-        # F_y = F_y + avisco_y * (U(i,j-1) - U(i,j))
-        F_y.v(buf=b, n=n)[:, :] += \
-            avisco_y.v(buf=b) * (var.jp(-1, buf=b) - var.v(buf=b))
+    F_x, F_y = flx.apply_artificial_viscosity(F_x, F_y, q,
+                                              my_data, rp,
+                                              ivars)
 
     tm_flux.end()
 

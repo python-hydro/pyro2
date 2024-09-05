@@ -6,11 +6,14 @@ import numpy as np
 from pyro.mesh import patch
 from pyro.util import msg
 
+DEFAULT_INPUTS = "inputs.sedov"
+
 
 def init_data(my_data, rp):
     """ initialize the sedov problem """
 
-    msg.bold("initializing the sedov problem...")
+    if rp.get_param("driver.verbose"):
+        msg.bold("initializing the sedov problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):
@@ -31,8 +34,6 @@ def init_data(my_data, rp):
     xmom[:, :] = 0.0
     ymom[:, :] = 0.0
 
-    E_sedov = 1.0
-
     r_init = rp.get_param("sedov.r_init")
 
     gamma = rp.get_param("eos.gamma")
@@ -44,37 +45,55 @@ def init_data(my_data, rp):
     ymin = rp.get_param("mesh.ymin")
     ymax = rp.get_param("mesh.ymax")
 
-    xctr = 0.5*(xmin + xmax)
-    yctr = 0.5*(ymin + ymax)
+    grid = my_data.grid
 
-    # initialize the pressure by putting the explosion energy into a
-    # volume of constant pressure.  Then compute the energy in a zone
-    # from this.
-    nsub = rp.get_param("sedov.nsub")
+    if grid.coord_type == 0:
+        # If we do Cartesian2d geometry
 
-    dist = np.sqrt((my_data.grid.x2d - xctr)**2 +
-                   (my_data.grid.y2d - yctr)**2)
+        E_sedov = 1.0
 
-    p = 1.e-5
-    ener[:, :] = p/(gamma - 1.0)
+        xctr = 0.5*(xmin + xmax)
+        yctr = 0.5*(ymin + ymax)
 
-    for i, j in np.transpose(np.nonzero(dist < 2.0*r_init)):
+        # initialize the pressure by putting the explosion energy into a
+        # volume of constant pressure.  Then compute the energy in a zone
+        # from this.
+        nsub = rp.get_param("sedov.nsub")
 
-        xsub = my_data.grid.xl[i] + (my_data.grid.dx/nsub)*(np.arange(nsub) + 0.5)
-        ysub = my_data.grid.yl[j] + (my_data.grid.dy/nsub)*(np.arange(nsub) + 0.5)
+        dist = np.sqrt((my_data.grid.x2d - xctr)**2 +
+                       (my_data.grid.y2d - yctr)**2)
 
-        xx, yy = np.meshgrid(xsub, ysub, indexing="ij")
+        p = 1.e-5
+        ener[:, :] = p/(gamma - 1.0)
 
-        dist = np.sqrt((xx - xctr)**2 + (yy - yctr)**2)
+        for i, j in np.transpose(np.nonzero(dist < 2.0*r_init)):
 
-        n_in_pert = np.count_nonzero(dist <= r_init)
+            xsub = my_data.grid.xl[i] + (my_data.grid.dx/nsub)*(np.arange(nsub) + 0.5)
+            ysub = my_data.grid.yl[j] + (my_data.grid.dy/nsub)*(np.arange(nsub) + 0.5)
 
-        p = n_in_pert*(gamma - 1.0)*E_sedov/(pi*r_init*r_init) + \
-            (nsub*nsub - n_in_pert)*1.e-5
+            xx, yy = np.meshgrid(xsub, ysub, indexing="ij")
 
-        p = p/(nsub*nsub)
+            dist = np.sqrt((xx - xctr)**2 + (yy - yctr)**2)
 
-        ener[i, j] = p/(gamma - 1.0)
+            n_in_pert = np.count_nonzero(dist <= r_init)
+
+            p = n_in_pert*(gamma - 1.0)*E_sedov/(pi*r_init*r_init) + \
+                (nsub*nsub - n_in_pert)*1.e-5
+
+            p = p/(nsub*nsub)
+
+            ener[i, j] = p/(gamma - 1.0)
+
+    else:
+        # If we do SphericalPolar geometry
+
+        # Just put a high energy for now.
+        E_sedov = 1.e6
+
+        p = 1.e-6
+        ener[:, :] = p/(gamma - 1.0)
+        myg = my_data.grid
+        ener[myg.x2d < r_init] = E_sedov
 
 
 def finalize():

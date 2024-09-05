@@ -5,11 +5,14 @@ import numpy as np
 from pyro.mesh import patch
 from pyro.util import msg
 
+DEFAULT_INPUTS = "inputs.rt"
+
 
 def init_data(my_data, rp):
     """ initialize the rt problem """
 
-    msg.bold("initializing the rt problem...")
+    if rp.get_param("driver.verbose"):
+        msg.bold("initializing the rt problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):
@@ -59,8 +62,9 @@ def init_data(my_data, rp):
 
         j += 1
 
-    ymom[:, :] = amp*np.cos(2.0*np.pi*myg.x2d/(myg.xmax-myg.xmin))*np.exp(-(myg.y2d-ycenter)**2/sigma**2)
-
+    L = myg.xmax-myg.xmin
+    ymom[:, :] = amp * 0.5 * (np.cos(2.0*np.pi*myg.x2d/L) +
+                              np.cos(2.0*np.pi*(L - myg.x2d)/L)) * np.exp(-(myg.y2d-ycenter)**2/sigma**2)
     ymom *= dens
 
     # set the energy (P = cs2*dens)

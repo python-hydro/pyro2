@@ -11,9 +11,17 @@ pyro: a python hydro code
 
 .. image:: pyro_plots.png
 
+About
+=====
+
+pyro is a python hydrodynamics code meant to illustrate how the basic methods
+used in astrophysical simulations work.  It is also used for prototyping
+new ideas.
+
 .. toctree::
    :maxdepth: 1
    :caption: pyro basics
+   :hidden:
 
    intro
    installation
@@ -22,28 +30,55 @@ pyro: a python hydro code
    running
    output
    problems
-   mesh_basics
-   mesh-examples.ipynb
 
 .. toctree::
    :maxdepth: 1
-   :caption: Solvers
+   :caption: Mesh
+   :hidden:
+
+   mesh_basics
+   mesh-examples.ipynb
+   spherical-mesh.ipynb
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Multigrid
+   :hidden:
+
+   multigrid
+   multigrid_basics
+   multigrid-constant-coefficients
+   multigrid-variable-coeff
+   multigrid-general-linear
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Hydro Solvers
+   :hidden:
 
    advection_basics
    burgers_basics
    compressible_basics
-   compressible_compare
-   multigrid_basics
-   multigrid-examples.ipynb
    diffusion_basics
    incompressible_basics
+   incompressible_viscous_basics
    lowmach_basics
    swe_basics
    particles_basics
 
 .. toctree::
    :maxdepth: 1
+   :caption: Examples
+   :hidden:
+
+   compressible-rt-compare.ipynb
+   advection-error.ipynb
+   compressible-convergence.ipynb
+
+.. toctree::
+   :maxdepth: 1
    :caption: Utilities
+   :hidden:
 
    analysis
    testing
@@ -51,6 +86,7 @@ pyro: a python hydro code
 .. toctree::
    :maxdepth: 1
    :caption: Community
+   :hidden:
 
    help
    ack
@@ -58,11 +94,13 @@ pyro: a python hydro code
 .. toctree::
    :maxdepth: 1
    :caption: Software Reference
+   :hidden:
 
    API <modules>
 
 .. toctree::
    :caption: Bibliography
+   :hidden:
 
    zreferences
 
@@ -72,4 +110,3 @@ Indices and tables
 
 * :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`

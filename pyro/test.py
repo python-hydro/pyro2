@@ -56,7 +56,7 @@ def run_test(t, reset_fails, store_all_benchmarks, rtol, nproc):
             p = pyro.PyroBenchmark(t.solver, comp_bench=True,
                                    reset_bench_on_fail=reset_fails,
                                    make_bench=store_all_benchmarks)
-            p.initialize_problem(t.problem, t.inputs, t.options)
+            p.initialize_problem(t.problem, inputs_file=t.inputs, inputs_dict=t.options)
             start_n = p.sim.n
             err = p.run_sim(rtol)
     finally:
@@ -109,6 +109,7 @@ def do_tests(out_file,
     tests.append(PyroTest("diffusion", "gaussian",
                           "inputs.gaussian", opts))
     tests.append(PyroTest("incompressible", "shear", "inputs.shear", opts))
+    tests.append(PyroTest("incompressible_viscous", "cavity", "inputs.cavity", opts))
     tests.append(PyroTest("lm_atm", "bubble", "inputs.bubble", opts))
     tests.append(PyroTest("swe", "dam", "inputs.dam.x", opts))
 
@@ -131,7 +132,7 @@ def do_tests(out_file,
             results[name] = err
 
     # standalone tests
-    if single is None:
+    if single is None and solver is None:
         bench_dir = os.path.dirname(os.path.realpath(__file__)) + "/multigrid/tests/"
         err = mg_test_simple.test_poisson_dirichlet(256, comp_bench=True, bench_dir=bench_dir,
                                                     store_bench=store_all_benchmarks, verbose=0)

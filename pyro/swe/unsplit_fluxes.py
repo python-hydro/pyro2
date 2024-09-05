@@ -253,6 +253,7 @@ def unsplit_fluxes(my_data, rp, ivars, solid, tc, dt):
 
     riemann = rp.get_param("swe.riemann")
 
+    riemannFunc = None
     if riemann == "HLLC":
         riemannFunc = ifc.riemann_hllc
     elif riemann == "Roe":
@@ -281,7 +282,7 @@ def unsplit_fluxes(my_data, rp, ivars, solid, tc, dt):
 
     """
     finally, we can construct the state perpendicular to the interface
-    by adding the central difference part to the trasverse flux
+    by adding the central difference part to the transverse flux
     difference.
 
     The states that we represent by indices i,j are shown below

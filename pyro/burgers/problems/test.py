@@ -3,12 +3,14 @@ import sys
 from pyro.mesh import patch
 from pyro.util import msg
 
+DEFAULT_INPUTS = "inputs.test"
+
 
 def init_data(myd, rp):
     """ initialize the burgers test problem """
-    del rp  # this problem doesn't use runtime params
 
-    msg.bold("initializing the burgers test problem...")
+    if rp.get_param("driver.verbose"):
+        msg.bold("initializing the burgers test problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(myd, patch.CellCenterData2d):

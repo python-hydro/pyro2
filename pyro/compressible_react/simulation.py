@@ -1,4 +1,3 @@
-import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -9,7 +8,7 @@ from pyro.util import plot_tools
 
 class Simulation(compressible.Simulation):
 
-    def initialize(self, extra_vars=None, ng=4):
+    def initialize(self, *, extra_vars=None, ng=4):    # pylint: disable=useless-parent-delegation
         """
         For the reacting compressible solver, our initialization of
         the data is the same as the compressible solver, but we
@@ -107,7 +106,6 @@ class Simulation(compressible.Simulation):
 
             # needed for PDF rendering
             cb = axes.cbar_axes[n].colorbar(img)
-            cb.formatter = matplotlib.ticker.FormatStrFormatter("")
             cb.solids.set_rasterized(True)
             cb.solids.set_edgecolor("face")
 

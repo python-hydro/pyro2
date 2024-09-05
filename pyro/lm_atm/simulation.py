@@ -12,7 +12,7 @@ from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
 
 
 class Basestate:
-    def __init__(self, ny, ng=0):
+    def __init__(self, ny, *, ng=0):
         self.ny = ny
         self.ng = ng
         self.qy = ny + 2*ng
@@ -37,7 +37,7 @@ class Basestate:
 
 class Simulation(NullSimulation):
 
-    def __init__(self, solver_name, problem_name, rp, timers=None):
+    def __init__(self, solver_name, problem_name, rp, *, timers=None):
 
         NullSimulation.__init__(self, solver_name, problem_name, rp, timers=timers)
 
@@ -75,6 +75,7 @@ class Simulation(NullSimulation):
                    self.rp.get_param("mesh.xrboundary"),
                    self.rp.get_param("mesh.ylboundary"),
                    self.rp.get_param("mesh.yrboundary")]:
+            bctype = None
             if bc == "periodic":
                 bctype = "periodic"
             elif bc in ["reflect", "slipwall"]:
@@ -97,7 +98,7 @@ class Simulation(NullSimulation):
 
         self.cc_data = my_data
 
-        # some auxillary data that we'll need to fill GC in, but isn't
+        # some auxiliary data that we'll need to fill GC in, but isn't
         # really part of the main solution
         aux_data = patch.CellCenterData2d(myg)
 
@@ -196,9 +197,9 @@ class Simulation(NullSimulation):
         self.cc_data.fill_BC("y-velocity")
 
         # 1. do the initial projection.  This makes sure that our original
-        # velocity field satisties div U = 0
+        # velocity field satisfies div U = 0
 
-        # the coefficent for the elliptic equation is beta_0^2/rho
+        # the coefficient for the elliptic equation is beta_0^2/rho
         coeff = 1/rho
         beta0 = self.base["beta0"]
         coeff.v()[:, :] = coeff.v()*beta0.v2d()**2

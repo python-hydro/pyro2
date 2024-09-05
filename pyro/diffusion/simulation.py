@@ -3,7 +3,6 @@
 import importlib
 import math
 
-import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -146,8 +145,7 @@ class Simulation(NullSimulation):
         plt.ylabel("y")
         plt.title("phi")
 
-        cb = plt.colorbar(img)
-        cb.formatter = matplotlib.ticker.FormatStrFormatter("")
+        plt.colorbar(img)
 
         plt.figtext(0.05, 0.0125, f"t = {self.cc_data.t:10.5f}")
 

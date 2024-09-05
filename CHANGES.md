@@ -1,3 +1,77 @@
+# 4.2.0
+
+  * moved docs to sphinx-book-theme (#229, #235, #240)
+
+  * docs reorganization (#214, #221, #222, #234, #239) and new
+    examples (#228, #236)
+
+  * remove driver.splitting unused parameter (#238)
+
+  * clean-ups of the Pyro class (#219, #232, #233) including disabling
+    verbosity and vis by default when using it directly (#220, #231)
+
+  * the `advection_fv4` solver now properly averages the initial
+    conditions from centers to cell-averages
+
+  * each problem initial conditions file now specifies a
+    `DEFAULT_INPUTS` (#225)
+
+  * the gresho initial conditions were fixed to be closer to the
+    source of the Miczek et al. paper (#218)
+
+  * the RT initial conditions were tweaked to be more symmetric (#216)
+
+  * the colorbar tick labels in plots were fixed (#212)
+
+  * the compressible solver now supports 2D spherical geometry
+    (r-theta) (#204, #210, #211)
+
+  * the mesh now supports spherical geometry (r-theta) (#201, #217)
+
+  * the compressible Riemann solvers were reorganized (#206)
+
+  * CI fixes (#202, #215) and a codespell action (#199, #205)
+
+  * python 3.12 was added to the CI (#208)
+
+  * comment fixes to the compressible FV4 solver (#207)
+
+# 4.1.0
+
+  * Switched to pyproject.toml (#195)
+
+  * pytest improvements allowing it to be run more easily (#194)
+
+  * plotvar.py script improvements (#178)
+
+  * a new viscous Burgers solver was added (#171)
+
+  * a new viscous incompressible solver was added with a lid-drive
+    cavity test problem (#138)
+
+  * the incompressible solver was synced up with the Burgers solver
+    (#168, #169)
+
+  * convergence.py can now take any variable and multiplicative
+    factor, as well as take 3 plotfiles to estimate convergence
+    directly. (#165)
+
+  * the multigrid solver output is now more compact (#161)
+
+  * plot.py can fill ghostcells now (#156)
+
+  * a new inviscid Burgers solver was added (#144)
+
+  * a new convergence_error.py script for incompressible was added to
+    make the convergence plot for that solver (#147)
+
+  * regression tests can now be run in parallel (#145)
+
+  * fixes for numpy > 1.20 (#137)
+
+  * we can now Ctrl+C to abort when visualization is on (#131)
+
+  * lots of pylint cleaning (#155, #152, #151, #143, #139)
 
 # 4.0
 

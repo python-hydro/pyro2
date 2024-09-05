@@ -45,7 +45,7 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
         # on each level -- note: this will already be scaled by 1/dx**2
         self.edge_coeffs = []
 
-        # initialize the MG object with the auxillary "coeffs" field
+        # initialize the MG object with the auxiliary "coeffs" field
         MG.CellCenterMG2d.__init__(self, nx, ny, ng=1,
                                    xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax,
                                    xl_BC_type=xl_BC_type, xr_BC_type=xr_BC_type,
@@ -88,7 +88,7 @@ class VarCoeffCCMG2d(MG.CellCenterMG2d):
             # put the coefficients on edges
             self.edge_coeffs.insert(0, self.edge_coeffs[0].restrict())  # _EdgeCoeffs(self.grids[n].grid, coeffs_c))
 
-            # if we are periodic, then we should force the edge coefficents
+            # if we are periodic, then we should force the edge coefficients
             # to be periodic
             # if self.grids[n].BCs["coeffs"].xlb == "periodic":
             #     self.edge_coeffs[0].x[self.grids[n].grid.ihi+1,:] = \

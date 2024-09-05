@@ -4,8 +4,8 @@ import time
 
 import numpy as np
 
-import mesh.boundary as bnd
-from mesh import patch
+import pyro.mesh.boundary as bnd
+from pyro.mesh import patch
 
 
 class Mask(object):

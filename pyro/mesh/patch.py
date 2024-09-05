@@ -59,7 +59,7 @@ class Grid2d:
 
     # pylint: disable=too-many-instance-attributes
 
-    def __init__(self, nx, ny, ng=1,
+    def __init__(self, nx, ny, *, ng=1,
                  xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0):
         """
         Create a Grid2d object.
@@ -110,10 +110,10 @@ class Grid2d:
 
         # compute the indices of the block interior (excluding guardcells)
         self.ilo = self.ng
-        self.ihi = self.ng + self.nx-1
+        self.ihi = self.ng + self.nx - 1
 
         self.jlo = self.ng
-        self.jhi = self.ng + self.ny-1
+        self.jhi = self.ng + self.ny - 1
 
         # center of the grid (for convenience)
         self.ic = self.ilo + self.nx//2 - 1
@@ -133,17 +133,20 @@ class Grid2d:
         self.yr = (np.arange(self.qy) + 1.0 - ng)*self.dy + ymin
         self.y = 0.5*(self.yl + self.yr)
 
-        # 2-d versions of the zone coordinates (replace with meshgrid?)
-        x2d = np.repeat(self.x, self.qy)
-        x2d.shape = (self.qx, self.qy)
-        self.x2d = x2d
+        # 2-d versions of the zone coordinates
+        x2d, y2d = np.meshgrid(self.x, self.y, indexing='ij')
+        self.x2d = ArrayIndexer(d=x2d, grid=self)
+        self.y2d = ArrayIndexer(d=y2d, grid=self)
 
-        y2d = np.repeat(self.y, self.qx)
-        y2d.shape = (self.qy, self.qx)
-        y2d = np.transpose(y2d)
-        self.y2d = y2d
+        xl2d, yl2d = np.meshgrid(self.xl, self.yl, indexing='ij')
+        self.xl2d = ArrayIndexer(d=xl2d, grid=self)
+        self.yl2d = ArrayIndexer(d=yl2d, grid=self)
 
-    def scratch_array(self, nvar=1):
+        xr2d, yr2d = np.meshgrid(self.xr, self.yr, indexing='ij')
+        self.xr2d = ArrayIndexer(d=xr2d, grid=self)
+        self.yr2d = ArrayIndexer(d=yr2d, grid=self)
+
+    def scratch_array(self, *, nvar=1):
         """
         return a standard numpy array dimensioned to have the size
         and number of ghostcells as the parent grid
@@ -186,6 +189,114 @@ class Grid2d:
         return result
 
 
+class Cartesian2d(Grid2d):
+    """
+    This class defines a 2D Cartesian Grid.
+
+    Define:
+    x = x
+    y = y
+    """
+
+    def __init__(self, nx, ny, *, ng=1,
+                 xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0):
+
+        super().__init__(nx, ny, ng=ng, xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+
+        self.coord_type = 0
+
+        # Length of the side in x- and y-direction
+
+        self.Lx = ArrayIndexer(np.full((self.qx, self.qy), self.dx),
+                                 grid=self)
+        self.Ly = ArrayIndexer(np.full((self.qx, self.qy), self.dy),
+                                 grid=self)
+
+        # This is area of the side that is perpendicular to x.
+
+        self.Ax = self.Ly
+
+        # This is area of the side that is perpendicular to y.
+
+        self.Ay = self.Lx
+
+        # Volume of the cell.
+
+        self.V = ArrayIndexer(np.full((self.qx, self.qy), self.dx * self.dy),
+                              grid=self)
+
+    def __str__(self):
+        """ print out some basic information about the grid object """
+        return f"Cartesian 2D Grid: xmin = {self.xmin}, xmax = {self.xmax}, " + \
+               f"ymin = {self.ymin}, ymax = {self.ymax}, " + \
+               f"nx = {self.nx}, ny = {self.ny}, ng = {self.ng}"
+
+
+class SphericalPolar(Grid2d):
+    """
+    This class defines a spherical polar grid.
+    This is technically a 2D geometry but assumes azimuthal symmetry.
+
+    Define:
+    r = x
+    theta = y
+    """
+
+    def __init__(self, nx, ny, *, ng=1,
+                 xmin=0.2, xmax=1.0, ymin=0.0, ymax=1.0):
+
+        # Make sure theta is within [0, PI]
+        assert ymin >= 0.0 and ymax <= np.pi, "y or \u03b8 should be within [0, \u03c0]."
+
+        # Make sure the ghost cells doesn't extend out negative x(r)
+        assert xmin - ng*(xmax-xmin)/nx >= 0.0, \
+            "xmin (r-direction), must be large enough so ghost cell doesn't have negative x."
+
+        super().__init__(nx, ny, ng=ng, xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+
+        self.coord_type = 1
+
+        # Length of the side along r-direction, dr
+
+        self.Lx = ArrayIndexer(np.full((self.qx, self.qy), self.dx),
+                               grid=self)
+
+        # Length of the side along theta-direction, r*dtheta
+
+        self.Ly = ArrayIndexer(self.x2d*self.dy, grid=self)
+
+        # Returns an array of the face area that points in the r(x) direction.
+        # dL_theta x dL_phi = r^2 * sin(theta) * dtheta * dphi
+
+        # dAr_l = - r{i-1/2}^2 * 2pi * cos(theta{i+1/2}) - cos(theta{i-1/2})
+        self.Ax = np.abs(-2.0 * np.pi * self.xl2d**2 *
+                         (np.cos(self.yr2d) - np.cos(self.yl2d)))
+
+        # Returns an array of the face area that points in the theta(y) direction.
+        # dL_phi x dL_r = dr * r * sin(theta) * dphi
+
+        # dAtheta_l = pi * sin(theta{i-1/2}) * (r{i+1/2}^2 - r{i-1/2}^2)
+        self.Ay = np.abs(np.pi * np.sin(self.yl2d) *
+                         (self.xr2d**2 - self.xl2d**2))
+
+        # Returns an array of the volume of each cell.
+        # dV = dL_r * dL_theta * dL_phi
+        #    = (dr) * (r * dtheta) * (r * sin(theta) * dphi)
+        # dV = - 2*np.pi / 3 * (cos(theta{i+1/2}) - cos(theta{i-1/2})) * (r{i+1/2}^3 - r{i-1/2}^3)
+
+        self.V = np.abs(-2.0 * np.pi / 3.0 *
+                        (np.cos(self.yr2d) - np.cos(self.yl2d)) *
+                        (self.xr2d - self.xl2d) *
+                        (self.xr2d**2 + self.xl2d**2 + self.xr2d*self.xl2d))
+
+    def __str__(self):
+        """ print out some basic information about the grid object """
+        return "Spherical Polar 2D Grid: Define x : r, y : \u03b8. " + \
+               f"xmin (r) = {self.xmin}, xmax= {self.xmax}, " + \
+               f"ymin = {self.ymin}, ymax = {self.ymax}, " + \
+               f"nx = {self.nx}, ny = {self.ny}, ng = {self.ng}"
+
+
 class CellCenterData2d:
     """
     A class to define cell-centered data that lives on a grid.  A
@@ -204,7 +315,7 @@ class CellCenterData2d:
          my_data.register_var('x-momentum', BC)
          ...
 
-    * Register any auxillary data -- these are any parameters that are
+    * Register any auxiliary data -- these are any parameters that are
       needed to interpret the data outside of the simulation (for
       example, the gamma for the equation of state)::
 
@@ -221,7 +332,7 @@ class CellCenterData2d:
 
     # pylint: disable=too-many-instance-attributes
 
-    def __init__(self, grid, dtype=np.float64):
+    def __init__(self, grid, *, dtype=np.float64):
 
         """
         Initialize the CellCenterData2d object.
@@ -280,7 +391,7 @@ class CellCenterData2d:
 
     def set_aux(self, keyword, value):
         """
-        Set any auxillary (scalar) data.  This data is simply carried
+        Set any auxiliary (scalar) data.  This data is simply carried
         along with the CellCenterData2d object
 
         Parameters
@@ -415,12 +526,12 @@ class CellCenterData2d:
 
     def get_aux(self, keyword):
         """
-        Get the auxillary data associated with keyword
+        Get the auxiliary data associated with keyword
 
         Parameters
         ----------
         keyword : str
-            The name of the auxillary data to access
+            The name of the auxiliary data to access
 
         Returns
         -------
@@ -497,14 +608,14 @@ class CellCenterData2d:
             except TypeError:
                 bnd.ext_bcs[self.BCs[name].yrb](self.BCs[name].yrb, "yrb", name, self, self.ivars)
 
-    def min(self, name, ng=0):
+    def min(self, name, *, ng=0):
         """
         return the minimum of the variable name in the domain's valid region
         """
         n = self.names.index(name)
         return np.min(self.data.v(buf=ng, n=n))
 
-    def max(self, name, ng=0):
+    def max(self, name, *, ng=0):
         """
         return the maximum of the variable name in the domain's valid region
         """
@@ -628,7 +739,7 @@ class CellCenterData2d:
 
         """
 
-        # auxillary data
+        # auxiliary data
         gaux = f.create_group("aux")
         for k, v in self.aux.items():
             gaux.attrs[k] = v
@@ -643,6 +754,11 @@ class CellCenterData2d:
         ggrid.attrs["xmax"] = self.grid.xmax
         ggrid.attrs["ymin"] = self.grid.ymin
         ggrid.attrs["ymax"] = self.grid.ymax
+
+        try:
+            ggrid.attrs["coord_type"] = self.grid.coord_type
+        except AttributeError:
+            pass
 
         # data
         gstate = f.create_group("state")
@@ -703,11 +819,12 @@ class FaceCenterData2d(CellCenterData2d):
         if self.idir == 1:
             _tmp = np.zeros((self.grid.qx+1, self.grid.qy, self.nvar),
                             dtype=self.dtype)
+            self.data = ArrayIndexerFC(_tmp, idir=self.idir, grid=self.grid)
+
         elif self.idir == 2:
             _tmp = np.zeros((self.grid.qx, self.grid.qy+1, self.nvar),
                             dtype=self.dtype)
-
-        self.data = ArrayIndexerFC(_tmp, idir=self.idir, grid=self.grid)
+            self.data = ArrayIndexerFC(_tmp, idir=self.idir, grid=self.grid)
 
         self.initialized = 1
 

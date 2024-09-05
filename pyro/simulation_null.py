@@ -34,11 +34,26 @@ def grid_setup(rp, ng=1):
         ymax = rp.get_param("mesh.ymax")
     except KeyError:
         ymax = 1.0
-        msg.warning("mesh.ynax not set, defaulting to 1.0")
+        msg.warning("mesh.ymax not set, defaulting to 1.0")
 
-    my_grid = patch.Grid2d(nx, ny,
-                           xmin=xmin, xmax=xmax,
-                           ymin=ymin, ymax=ymax, ng=ng)
+    try:
+        grid_type = rp.get_param("mesh.grid_type")
+    except KeyError:
+        grid_type = "Cartesian2d"
+        msg.warning("mesh.grid_type not set, defaulting to Cartesian2D")
+
+    if grid_type == "Cartesian2d":
+        create_grid = patch.Cartesian2d
+    elif grid_type == "SphericalPolar":
+        create_grid = patch.SphericalPolar
+    else:
+        raise ValueError("Unsupported grid type!")
+
+    my_grid = create_grid(nx, ny,
+                          xmin=xmin, xmax=xmax,
+                          ymin=ymin, ymax=ymax,
+                          ng=ng)
+
     return my_grid
 
 
@@ -87,7 +102,8 @@ def bc_setup(rp):
 
 class NullSimulation:
 
-    def __init__(self, solver_name, problem_name, rp, timers=None, data_class=patch.CellCenterData2d):
+    def __init__(self, solver_name, problem_name, rp, *,
+                 timers=None, data_class=patch.CellCenterData2d):
         """
         Initialize the Simulation object
 

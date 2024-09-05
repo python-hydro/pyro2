@@ -3,6 +3,8 @@ Introduction to pyro
 
 .. image:: pyro_plots.png
 
+|
+
 pyro is a simple framework for implementing and playing with
 hydrodynamics solvers.  It is designed to provide a tutorial for
 students in computational astrophysics (and hydrodynamics in general)
@@ -23,7 +25,11 @@ equations. In particular, the following solvers are developed:
 
 * linear advection
 
+* Burgers' equation
+
 * compressible hydrodynamics
+
+* special relativistic compressible hydrodynamics
 
 * shallow water hydrodynamics
 
@@ -31,7 +37,9 @@ equations. In particular, the following solvers are developed:
 
 * implicit thermal diffusion
 
-* incompressible hydrodynamics
+* inviscid incompressible hydrodynamics
+
+* viscous incompressible hydrodynamics
 
 * low Mach number atmospheric hydrodynamics
 

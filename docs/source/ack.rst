@@ -1,12 +1,8 @@
 Acknowledgments
 ===============
 
-Pyro developed by (in alphabetical order):
-
-  * Alice Harpole
-  * Ian Hawke
-  * Michael Zingale
-
+The current pyro developers are listed in the `.zenodo.json` file that
+is used for releases.
 
 You are free to use this code and the accompanying notes in your
 classes. Please credit "pyro development team" for the code, and
@@ -37,7 +33,7 @@ Bell, and Andy Nonaka.
 History
 =======
 
-The original pyro code was written in 2003-4 to help developmer
+The original pyro code was written in 2003-4 to help developer
 Zingale understand these methods for himself. It was originally written
 using the Numeric array package and handwritten C extensions for the
 compute-intensive kernels.  It was ported to numarray when that

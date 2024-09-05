@@ -1,0 +1,6 @@
+# convergence of incompressible viscous converge problem
+# (convergence measured with analysis/incomp_viscous_converge_error.py)
+#
+ 32 0.02207392410018 0.02207392410018
+ 64 0.00682161894998 0.00682161894998
+128 0.00214081341364 0.00214081341364

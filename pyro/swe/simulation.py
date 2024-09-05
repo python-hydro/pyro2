@@ -1,6 +1,5 @@
 import importlib
 
-import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -94,7 +93,7 @@ class Simulation(NullSimulation):
 
     """
 
-    def initialize(self, extra_vars=None, ng=4):
+    def initialize(self, *, extra_vars=None, ng=4):
         """
         Initialize the grid and variables for swe flow and set
         the initial conditions for the chosen problem.
@@ -119,7 +118,7 @@ class Simulation(NullSimulation):
             for v in extra_vars:
                 my_data.register_var(v, bc)
 
-        # store the gravitational acceration g as an auxillary quantity
+        # store the gravitational acceration g as an auxiliary quantity
         # so we can have a
         # self-contained object stored in output files to make plots.
         # store grav because we'll need that in some BCs
@@ -134,7 +133,7 @@ class Simulation(NullSimulation):
             particle_generator = self.rp.get_param("particles.particle_generator")
             self.particles = particles.Particles(self.cc_data, bc, n_particles, particle_generator)
 
-        # some auxillary data that we'll need to fill GC in, but isn't
+        # some auxiliary data that we'll need to fill GC in, but isn't
         # really part of the main solution
         aux_data = self.data_class(my_grid)
         aux_data.register_var("ymom_src", bc_yodd)
@@ -258,7 +257,6 @@ class Simulation(NullSimulation):
 
             # needed for PDF rendering
             cb = axes.cbar_axes[n].colorbar(img)
-            cb.formatter = matplotlib.ticker.FormatStrFormatter("")
             cb.solids.set_rasterized(True)
             cb.solids.set_edgecolor("face")
 

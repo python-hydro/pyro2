@@ -5,11 +5,14 @@ import numpy as np
 from pyro.mesh import patch
 from pyro.util import msg
 
+DEFAULT_INPUTS = "inputs.advect.64"
+
 
 def init_data(my_data, rp):
     """ initialize a smooth advection problem for testing convergence """
 
-    msg.bold("initializing the advect problem...")
+    if rp.get_param("driver.verbose"):
+        msg.bold("initializing the advect problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):
@@ -38,16 +41,38 @@ def init_data(my_data, rp):
     ymin = rp.get_param("mesh.ymin")
     ymax = rp.get_param("mesh.ymax")
 
-    xctr = 0.5*(xmin + xmax)
-    yctr = 0.5*(ymin + ymax)
+    myg = my_data.grid
 
-    # this is identical to the advection/smooth problem
-    dens[:, :] = 1.0 + np.exp(-60.0*((my_data.grid.x2d-xctr)**2 +
-                                    (my_data.grid.y2d-yctr)**2))
+    if myg.coord_type == 0:
+        xctr = 0.5*(xmin + xmax)
+        yctr = 0.5*(ymin + ymax)
 
-    # velocity is diagonal
-    u = 1.0
-    v = 1.0
+        # this is identical to the advection/smooth problem
+        dens[:, :] = 1.0 + np.exp(-60.0*((my_data.grid.x2d-xctr)**2 +
+                                         (my_data.grid.y2d-yctr)**2))
+
+        # velocity is diagonal
+        u = 1.0
+        v = 1.0
+
+    else:
+        x = myg.scratch_array()
+        y = myg.scratch_array()
+
+        xctr = 0.5*(xmin + xmax) * np.sin((ymin + ymax) * 0.25)
+        yctr = 0.5*(xmin + xmax) * np.cos((ymin + ymax) * 0.25)
+
+        x[:, :] = myg.x2d.v(buf=myg.ng) * np.sin(myg.y2d.v(buf=myg.ng))
+        y[:, :] = myg.x2d.v(buf=myg.ng) * np.cos(myg.y2d.v(buf=myg.ng))
+
+        # this is identical to the advection/smooth problem
+        dens[:, :] = 1.0 + np.exp(-120.0*((x-xctr)**2 +
+                                         (y-yctr)**2))
+
+        # velocity in theta direction.
+        u = 0.0
+        v = 1.0
+
     xmom[:, :] = dens[:, :]*u
     ymom[:, :] = dens[:, :]*v
 

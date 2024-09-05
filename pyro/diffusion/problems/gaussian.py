@@ -5,6 +5,8 @@ import numpy
 from pyro.mesh import patch
 from pyro.util import msg
 
+DEFAULT_INPUTS = "inputs.gaussian"
+
 
 def phi_analytic(dist, t, t_0, k, phi_1, phi_2):
     """ the analytic solution to the Gaussian diffusion problem """
@@ -16,7 +18,8 @@ def phi_analytic(dist, t, t_0, k, phi_1, phi_2):
 def init_data(my_data, rp):
     """ initialize the Gaussian diffusion problem """
 
-    msg.bold("initializing the Gaussian diffusion problem...")
+    if rp.get_param("driver.verbose"):
+        msg.bold("initializing the Gaussian diffusion problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):
@@ -45,7 +48,7 @@ def init_data(my_data, rp):
 
     phi[:, :] = phi_analytic(dist, 0.0, t_0, k, phi_0, phi_max)
 
-    # for later interpretation / analysis, store some auxillary data
+    # for later interpretation / analysis, store some auxiliary data
     my_data.set_aux("k", k)
     my_data.set_aux("t_0", t_0)
     my_data.set_aux("phi_0", phi_0)

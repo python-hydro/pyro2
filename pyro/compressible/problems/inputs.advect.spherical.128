@@ -1,0 +1,39 @@
+[driver]
+max_steps = 500
+tmax = 1.0
+
+init_tstep_factor = 1.0
+fix_dt = 0.0025
+
+
+[compressible]
+limiter = 0
+cvisc = 0.1
+riemann = CGF
+
+[io]
+basename = spherical_advect_128_
+
+
+[eos]
+gamma = 1.4
+
+
+[mesh]
+grid_type = SphericalPolar
+nx = 128
+ny = 128
+xmin = 1.0
+xmax = 2.0
+ymin = 0.523
+ymax = 2.617
+
+xlboundary = outflow
+xrboundary = outflow
+
+ylboundary = outflow
+yrboundary = outflow
+
+
+[vis]
+dovis = 1

@@ -17,6 +17,7 @@ valid_solvers = ["advection",
                  "advection_fv4",
                  "advection_weno",
                  "burgers",
+                 "viscous_burgers",
                  "compressible",
                  "compressible_rk",
                  "compressible_fv4",
@@ -25,6 +26,7 @@ valid_solvers = ["advection",
                  "compressible_sr",
                  "diffusion",
                  "incompressible",
+                 "incompressible_viscous",
                  "lm_atm",
                  "swe"]
 
@@ -34,7 +36,7 @@ class Pyro:
     The main driver to run pyro.
     """
 
-    def __init__(self, solver_name):
+    def __init__(self, solver_name, *, from_commandline=False):
         """
         Constructor
 
@@ -42,12 +44,18 @@ class Pyro:
         ----------
         solver_name : str
             Name of solver to use
+        from_commandline : bool
+            True if we are running from the commandline -- this enables
+            runtime vis by default.
         """
 
-        msg.bold('pyro ...')
+        if from_commandline:
+            msg.bold('pyro ...')
 
         if solver_name not in valid_solvers:
             msg.fail(f"ERROR: {solver_name} is not a valid solver")
+
+        self.from_commandline = from_commandline
 
         self.pyro_home = os.path.dirname(os.path.realpath(__file__)) + '/'
         if not solver_name.startswith("pyro."):
@@ -72,7 +80,7 @@ class Pyro:
 
         self.is_initialized = False
 
-    def initialize_problem(self, problem_name, inputs_file=None, inputs_dict=None,
+    def initialize_problem(self, problem_name, *, inputs_file=None, inputs_dict=None,
                            other_commands=None):
         """
         Initialize the specific problem
@@ -98,6 +106,10 @@ class Pyro:
             self.rp.load_params(problem_defaults_file)
 
         # now read in the inputs file
+        if inputs_file is None:
+            problem = importlib.import_module("pyro.{}.problems.{}".format(self.solver_name, problem_name))
+            inputs_file = problem.DEFAULT_INPUTS
+
         if inputs_file is not None:
             if not os.path.isfile(inputs_file):
                 # check if the param file lives in the solver's problems directory
@@ -107,9 +119,15 @@ class Pyro:
 
             self.rp.load_params(inputs_file, no_new=1)
 
+        # manually override the dovis and verbose defaults
+        # for Jupyter, we want runtime vis disabled by default
+        if not self.from_commandline:
+            self.rp.set_param("vis.dovis", 0)
+            self.rp.set_param("driver.verbose", 0)
+
         if inputs_dict is not None:
             for k, v in inputs_dict.items():
-                self.rp.params[k] = v
+                self.rp.set_param(k, v)
 
         # and any commandline overrides
         if other_commands is not None:
@@ -178,8 +196,6 @@ class Pyro:
 
         self.sim.finalize()
 
-        return self.sim
-
     def single_step(self):
         """
         Do a single step
@@ -223,7 +239,10 @@ class Pyro:
             tm_vis.end()
 
     def __repr__(self):
-        """ Return a representation of the Pyro object """
+        s = f"Pyro('{self.solver_name}')"
+        return s
+
+    def __str__(self):
         s = f"Solver = {self.solver_name}\n"
         if self.is_initialized:
             s += f"Problem = {self.sim.problem_name}\n"
@@ -235,9 +254,9 @@ class Pyro:
         return s
 
     def get_var(self, v):
-        """
-        Alias for cc_data's get_var routine, returns the cell-centered data
-        given the variable name v.
+        """Alias for the data's get_var routine, returns the
+        simulation data given the variable name v.
+
         """
 
         if not self.is_initialized:
@@ -245,14 +264,29 @@ class Pyro:
 
         return self.sim.cc_data.get_var(v)
 
+    def get_grid(self):
+        """Return the underlying grid object for the simulation
+
+        """
+
+        if not self.is_initialized:
+            msg.fail("ERROR: problem has not been initialized")
+
+        return self.sim.cc_data.grid
+
+    def get_sim(self):
+        """Return the Simulation object"""
+        return self.sim
+
 
 class PyroBenchmark(Pyro):
-    """
-    A subclass of Pyro for benchmarking. Inherits everything from pyro, but adds benchmarking routines.
+    """A subclass of Pyro for benchmarking. Inherits everything from
+    pyro, but adds benchmarking routines.
+
     """
 
-    def __init__(self, solver_name, comp_bench=False,
-                 reset_bench_on_fail=False, make_bench=False):
+    def __init__(self, solver_name, *,
+                 comp_bench=False, reset_bench_on_fail=False, make_bench=False):
         """
         Constructor
 
@@ -366,7 +400,7 @@ def main():
                              comp_bench=args.compare_benchmark,
                              make_bench=args.make_benchmark)
     else:
-        pyro = Pyro(args.solver[0])
+        pyro = Pyro(args.solver[0], from_commandline=True)
 
     pyro.initialize_problem(problem_name=args.problem[0],
                             inputs_file=args.param[0],

@@ -19,9 +19,9 @@
 
 import numpy as np
 
-import mesh.array_indexer as ai
-import mesh.patch as patch
-from util import msg
+import pyro.mesh.array_indexer as ai
+from pyro.mesh import patch
+from pyro.util import msg
 
 _buf_split = ai._buf_split
 
@@ -121,7 +121,7 @@ class ArrayIndexer(np.ndarray):
         a different color, to make things stand out
         """
 
-        if self.dtype == np.int:
+        if self.dtype == int:
             fmt = "%4d"
         elif self.dtype == np.float64:
             fmt = "%10.5g"

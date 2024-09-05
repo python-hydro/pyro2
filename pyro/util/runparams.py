@@ -56,7 +56,7 @@ from pyro.util import msg
 
 
 def is_int(string):
-    """ is the given string an interger? """
+    """ is the given string an integer? """
     try:
         int(string)
     except ValueError:
@@ -108,7 +108,7 @@ class RuntimeParameters:
         file : str
             The name of the file to parse
         no_new : int, optional
-            If no_new = 1, then we don't add any new paramters to the
+            If no_new = 1, then we don't add any new parameters to the
             dictionary of runtime parameters, but instead just override
             the values of existing ones.
 
@@ -190,7 +190,7 @@ class RuntimeParameters:
                 msg.warning("warning, key: %s not defined" % (key))
                 continue
 
-            # check in turn whether this is an interger, float, or string
+            # check in turn whether this is an integer, float, or string
             self.params[key] = _get_val(value)
 
     def get_param(self, key):
@@ -209,6 +209,22 @@ class RuntimeParameters:
 
         if key in self.params:
             return self.params[key]
+
+        raise KeyError(f"ERROR: runtime parameter {key} not found")
+
+    def set_param(self, key, value):
+        """
+        manually set one of the existing runtime parameters
+        """
+
+        if not self.params:
+            msg.warning("WARNING: runtime parameters not yet initialized")
+            self.load_params("_defaults")
+
+        if key in self.params:
+            self.params[key] = value
+            return
+
         raise KeyError(f"ERROR: runtime parameter {key} not found")
 
     def print_unused_params(self):

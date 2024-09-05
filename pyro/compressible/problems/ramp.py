@@ -6,11 +6,14 @@ import numpy as np
 from pyro.mesh import patch
 from pyro.util import msg
 
+DEFAULT_INPUTS = "inputs.ramp"
+
 
 def init_data(my_data, rp):
     """ initialize the double Mach reflection problem """
 
-    msg.bold("initializing the double Mach reflection problem...")
+    if rp.get_param("driver.verbose"):
+        msg.bold("initializing the double Mach reflection problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):
@@ -45,7 +48,7 @@ def init_data(my_data, rp):
 
     # there is probably an easier way to do this, but for now, we
     # will just do an explicit loop.  Also, we really want to set
-    # the pressue and get the internal energy from that, and then
+    # the pressure and get the internal energy from that, and then
     # compute the total energy (which is what we store).  For now
     # we will just fake this
 

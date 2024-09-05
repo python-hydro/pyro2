@@ -1,15 +1,14 @@
 import importlib
 
-import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
 import pyro.compressible.unsplit_fluxes as flx
 import pyro.mesh.boundary as bnd
-from pyro.compressible import BC, derives, eos
+from pyro.compressible import BC, derives, eos, riemann
 from pyro.particles import particles
 from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
-from pyro.util import plot_tools
+from pyro.util import msg, plot_tools
 
 
 class Variables:
@@ -100,13 +99,23 @@ class Simulation(NullSimulation):
 
     """
 
-    def initialize(self, extra_vars=None, ng=4):
+    def initialize(self, *, extra_vars=None, ng=4):
         """
         Initialize the grid and variables for compressible flow and set
         the initial conditions for the chosen problem.
         """
         my_grid = grid_setup(self.rp, ng=ng)
         my_data = self.data_class(my_grid)
+
+        # Make sure we use CGF for riemann solver when we do SphericalPolar
+        try:
+            riemann_method = self.rp.get_param("compressible.riemann")
+        except KeyError:
+            msg.warning("ERROR: Riemann Solver is not set.")
+
+        if my_grid.coord_type == 1 and riemann_method == "HLLC":
+            msg.fail("ERROR: HLLC Riemann Solver is not supported " +
+                     "with SphericalPolar Geometry")
 
         # define solver specific boundary condition routines
         bnd.define_bc("hse", BC.user, is_solid=False)
@@ -129,7 +138,7 @@ class Simulation(NullSimulation):
             for v in extra_vars:
                 my_data.register_var(v, bc)
 
-        # store the EOS gamma as an auxillary quantity so we can have a
+        # store the EOS gamma as an auxiliary quantity so we can have a
         # self-contained object stored in output files to make plots.
         # store grav because we'll need that in some BCs
         my_data.set_aux("gamma", self.rp.get_param("eos.gamma"))
@@ -142,9 +151,11 @@ class Simulation(NullSimulation):
         if self.rp.get_param("particles.do_particles") == 1:
             self.particles = particles.Particles(self.cc_data, bc, self.rp)
 
-        # some auxillary data that we'll need to fill GC in, but isn't
+        # some auxiliary data that we'll need to fill GC in, but isn't
         # really part of the main solution
         aux_data = self.data_class(my_grid)
+        aux_data.register_var("dens_src", bc)
+        aux_data.register_var("xmom_src", bc_xodd)
         aux_data.register_var("ymom_src", bc_yodd)
         aux_data.register_var("E_src", bc)
         aux_data.create()
@@ -177,9 +188,11 @@ class Simulation(NullSimulation):
         # get the variables we need
         u, v, cs = self.cc_data.get_var(["velocity", "soundspeed"])
 
+        grid = self.cc_data.grid
+
         # the timestep is min(dx/(|u| + cs), dy/(|v| + cs))
-        xtmp = self.cc_data.grid.dx/(abs(u) + cs)
-        ytmp = self.cc_data.grid.dy/(abs(v) + cs)
+        xtmp = grid.Lx / (abs(u) + cs)
+        ytmp = grid.Ly / (abs(v) + cs)
 
         self.dt = cfl*float(min(xtmp.min(), ytmp.min()))
 
@@ -193,33 +206,115 @@ class Simulation(NullSimulation):
         tm_evolve.begin()
 
         dens = self.cc_data.get_var("density")
+        xmom = self.cc_data.get_var("x-momentum")
         ymom = self.cc_data.get_var("y-momentum")
         ener = self.cc_data.get_var("energy")
 
         grav = self.rp.get_param("compressible.grav")
+        gamma = self.rp.get_param("eos.gamma")
 
         myg = self.cc_data.grid
 
-        Flux_x, Flux_y = flx.unsplit_fluxes(self.cc_data, self.aux_data, self.rp,
-                                            self.ivars, self.solid, self.tc, self.dt)
+        # First get conserved states normal to the x and y interface
+        U_xl, U_xr, U_yl, U_yr = flx.interface_states(self.cc_data, self.rp,
+                                                      self.ivars, self.tc, self.dt)
+
+        # Apply source terms to them.
+        # This includes external (gravity), geometric and pressure terms for SphericalPolar
+        # Only gravitional source for Cartesian2d
+        U_xl, U_xr, U_yl, U_yr = flx.apply_source_terms(U_xl, U_xr, U_yl, U_yr,
+                                                        self.cc_data, self.aux_data, self.rp,
+                                                        self.ivars, self.tc, self.dt)
+
+        # Apply transverse corrections.
+        U_xl, U_xr, U_yl, U_yr = flx.apply_transverse_flux(U_xl, U_xr, U_yl, U_yr,
+                                                           self.cc_data, self.rp, self.ivars,
+                                                           self.solid, self.tc, self.dt)
+
+        # Get the actual interface conserved state after using Riemann Solver
+        # Then construct the corresponding fluxes using the conserved states
+
+        if myg.coord_type == 1:
+            # We need pressure from interface state for conservative update for
+            # SphericalPolar geometry. So we need interface conserved states.
+            F_x, U_x = riemann.riemann_flux(1, U_xl, U_xr,
+                                            self.cc_data, self.rp, self.ivars,
+                                            self.solid.xl, self.solid.xr, self.tc,
+                                            return_cons=True)
+
+            F_y, U_y = riemann.riemann_flux(2, U_yl, U_yr,
+                                            self.cc_data, self.rp, self.ivars,
+                                            self.solid.yl, self.solid.yr, self.tc,
+                                            return_cons=True)
+
+            # Find primitive variable since we need pressure in conservative update.
+            qx = cons_to_prim(U_x, gamma, self.ivars, myg)
+            qy = cons_to_prim(U_y, gamma, self.ivars, myg)
+
+        else:
+            # Directly calculate the interface flux using Riemann Solver
+            F_x = riemann.riemann_flux(1, U_xl, U_xr,
+                                       self.cc_data, self.rp, self.ivars,
+                                       self.solid.xl, self.solid.xr, self.tc,
+                                       return_cons=False)
+
+            F_y = riemann.riemann_flux(2, U_yl, U_yr,
+                                       self.cc_data, self.rp, self.ivars,
+                                       self.solid.yl, self.solid.yr, self.tc,
+                                       return_cons=False)
+
+        # Apply artificial viscosity to fluxes
+
+        q = cons_to_prim(self.cc_data.data, gamma, self.ivars, myg)
+
+        F_x, F_y = flx.apply_artificial_viscosity(F_x, F_y, q,
+                                                  self.cc_data, self.rp,
+                                                  self.ivars)
 
         old_dens = dens.copy()
+        old_xmom = xmom.copy()
         old_ymom = ymom.copy()
 
-        # conservative update
-        dtdx = self.dt/myg.dx
-        dtdy = self.dt/myg.dy
+        # Conservative update
+
+        # Apply contribution due to fluxes
+        dtdV = self.dt / myg.V.v()
 
         for n in range(self.ivars.nvar):
             var = self.cc_data.get_var_by_index(n)
 
-            var.v()[:, :] += \
-                dtdx*(Flux_x.v(n=n) - Flux_x.ip(1, n=n)) + \
-                dtdy*(Flux_y.v(n=n) - Flux_y.jp(1, n=n))
+            var.v()[:, :] += dtdV * \
+                (F_x.v(n=n)*myg.Ax.v() - F_x.ip(1, n=n)*myg.Ax.ip(1) +
+                 F_y.v(n=n)*myg.Ay.v() - F_y.jp(1, n=n)*myg.Ay.jp(1))
 
-        # gravitational source terms
-        ymom[:, :] += 0.5*self.dt*(dens[:, :] + old_dens[:, :])*grav
-        ener[:, :] += 0.5*self.dt*(ymom[:, :] + old_ymom[:, :])*grav
+        # Now apply external sources
+
+        # For SphericalPolar (coord_type == 1):
+        # There are gravity (external) sources,
+        # geometric terms due to local unit vectors, and pressure gradient
+        # since we don't include pressure in xmom and ymom fluxes
+        # due to incompatible divergence and gradient in non-Cartesian geometry
+
+        # For Cartesian2d (coord_type == 0):
+        # There is only gravity sources.
+
+        if myg.coord_type == 1:
+            xmom.v()[:, :] += 0.5*self.dt * \
+                ((dens.v() + old_dens.v())*grav +
+                 (ymom.v()**2 / dens.v() +
+                  old_ymom.v()**2 / old_dens.v()) / myg.x2d.v()) - \
+                self.dt * (qx.ip(1, n=self.ivars.ip) - qx.v(n=self.ivars.ip)) / myg.Lx.v()
+
+            ymom.v()[:, :] += 0.5*self.dt * \
+                (-xmom.v()*ymom.v() / dens.v() -
+                 old_xmom.v()*old_ymom.v() / old_dens.v()) / myg.x2d.v() - \
+                self.dt * (qy.jp(1, n=self.ivars.ip) - qy.v(n=self.ivars.ip)) / myg.Ly.v()
+
+            ener.v()[:, :] += 0.5*self.dt*(xmom.v() + old_xmom.v())*grav
+
+        else:
+            ymom.v()[:, :] += 0.5*self.dt*(dens.v() + old_dens.v())*grav
+            ener.v()[:, :] += 0.5*self.dt*(ymom.v() + old_ymom.v())*grav
 
         if self.particles is not None:
             self.particles.update_particles(self.dt)
@@ -262,22 +357,29 @@ class Simulation(NullSimulation):
         fields = [rho, magvel, p, e]
         field_names = [r"$\rho$", r"U", "p", "e"]
 
+        x = myg.scratch_array()
+        y = myg.scratch_array()
+
+        if myg.coord_type == 1:
+            x.v()[:, :] = myg.x2d.v()[:, :]*np.sin(myg.y2d.v()[:, :])
+            y.v()[:, :] = myg.x2d.v()[:, :]*np.cos(myg.y2d.v()[:, :])
+        else:
+            x.v()[:, :] = myg.x2d.v()[:, :]
+            y.v()[:, :] = myg.y2d.v()[:, :]
+
         _, axes, cbar_title = plot_tools.setup_axes(myg, len(fields))
 
         for n, ax in enumerate(axes):
             v = fields[n]
 
-            img = ax.imshow(np.transpose(v.v()),
-                            interpolation="nearest", origin="lower",
-                            extent=[myg.xmin, myg.xmax, myg.ymin, myg.ymax],
-                            cmap=self.cm)
+            img = ax.pcolormesh(x.v(), y.v(), v.v(),
+                                shading="nearest", cmap=self.cm)
 
             ax.set_xlabel("x")
             ax.set_ylabel("y")
 
             # needed for PDF rendering
             cb = axes.cbar_axes[n].colorbar(img)
-            cb.formatter = matplotlib.ticker.FormatStrFormatter("")
             cb.solids.set_rasterized(True)
             cb.solids.set_edgecolor("face")
 
@@ -295,8 +397,13 @@ class Simulation(NullSimulation):
             # plot particles
             ax.scatter(particle_positions[:, 0],
                 particle_positions[:, 1], s=5, c=colors, alpha=0.8, cmap="Greys")
-            ax.set_xlim([myg.xmin, myg.xmax])
-            ax.set_ylim([myg.ymin, myg.ymax])
+
+            if myg.coord_type == 1:
+                ax.set_xlim([np.min(x), np.max(x)])
+                ax.set_ylim([np.min(y), np.max(y)])
+            else:
+                ax.set_xlim([myg.xmin, myg.xmax])
+                ax.set_ylim([myg.ymin, myg.ymax])
 
         plt.figtext(0.05, 0.0125, f"t = {self.cc_data.t:10.5g}")
 

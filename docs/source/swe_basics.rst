@@ -26,11 +26,11 @@ Example problems
 dam
 ^^^
 
-The dam break problem is a standard hydrodynamics problem, analagous to the Sod
+The dam break problem is a standard hydrodynamics problem, analogous to the Sod
 shock tube problem in compressible hydrodynamics. It considers a one-multidimensional
 problem of two regions of fluid at different heights, initially separated by a dam.
 The problem then models the evolution of the system when this dam is removed.
-As for the Sod problem, there exists an exact solution for the dam break probem,
+As for the Sod problem, there exists an exact solution for the dam break problem,
 so we can check our solution against the exact solutions. See Toro's shallow water
 equations book for details on this problem and the exact Riemann solver.
 
@@ -44,7 +44,7 @@ y-directions. It can be run as:
 
 A simple script, ``dam_compare.py`` in ``analysis/`` will read a pyro
 output file and plot the solution over the exact dam break solution
-(as given by :cite:`stoker:1958` and :cite:`chao:1999`.  Below we see
+(as given by :cite:`stoker:1958` and :cite:`chao:1999`).  Below we see
 the result for a dam break run with 128 points in the x-direction, and
 run until t = 0.3 s.
 

@@ -16,24 +16,16 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-
-      - name: Cache pip
-        uses: actions/cache@v3
-        with:
-          # this path is specific to Ubuntu
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+          cache: "pip"
 
       - name: Install dependencies
         run: |
@@ -44,5 +36,8 @@ jobs:
         run: pip install .
 
       - name: Run tests via test.py
-        run: ./pyro/test.py --nproc 0
+        run: |
+          # Numpy 1.24 gets slightly diff answers: https://github.com/numpy/numpy/issues/23289
+          export NPY_DISABLE_CPU_FEATURES="AVX512_SKX"
+          ./pyro/test.py --nproc 0
 
