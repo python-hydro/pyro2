@@ -75,8 +75,8 @@ project = 'pyro'
 copyright = '2024, pyro development team'
 author = 'pyro development team'
 
-html_logo = "logo.gif"
-html_title = "pyro"
+#html_logo = "logo.gif"
+#html_title = "pyro"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -133,7 +133,12 @@ html_theme_options = {
     "use_edit_page_button": True,
     "use_source_button": True,
     "repository_branch": "main",
-    "path_to_docs": "docs/source"
+    "path_to_docs": "docs/source",
+    "logo": {
+        "text": f"pyro {version}",
+        "image_light": "logo.gif",
+        "image_dark": "logo.gif",
+    }
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,

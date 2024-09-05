@@ -75,7 +75,7 @@ class BC:
 
     """
 
-    def __init__(self,
+    def __init__(self, *,
                  xlb="outflow", xrb="outflow",
                  ylb="outflow", yrb="outflow",
                  xl_func=None, xr_func=None,

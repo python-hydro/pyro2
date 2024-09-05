@@ -4,14 +4,13 @@
             "name": "the Pyro Development Team"
         },
         {
-            "affiliation": "Department of Physics and Astronomy, Stony Brook University",
-            "name": "Harpole, Alice",
-            "orcid": "0000-0002-1530-781X"
+            "affiliation": "University of Houston",
+            "name": "Chegini, Taher",
+            "orcid": "0000-0002-5430-6000"
         },
-        {
-            "affiliation": "Department of Physics and Astronomy, Stony Brook University",
-            "name": "Zingale, Michael",
-            "orcid": "0000-0001-8401-030X"
+        {   "affiliation": "Department of Physics and Astronomy, Stony Brook University",
+            "name": "Chen, Zhi",
+            "orcid": "0000-0002-2839-107X"
         },
         {
             "affiliation": "University of Southampton",
@@ -19,9 +18,18 @@
             "orcid": "0000-0003-4805-0309"
         },
         {
-            "affiliation": "University of Houston",
-            "name": "Chegini, Taher",
-            "orcid": "0000-0002-5430-6000"
+            "affiliation": "Department of Physics and Astronomy, Stony Brook University",
+            "name": "Harpole, Alice",
+            "orcid": "0000-0002-1530-781X"
+        },
+        {   "affiliation": "Department of Physics and Astronomy, Stony Brook University",
+            "name": "Johnson, Eric",
+            "orcid": "0000-0003-3603-6868"
+        },
+        {
+            "affiliation": "Department of Physics and Astronomy, Stony Brook University",
+            "name": "Zingale, Michael",
+            "orcid": "0000-0001-8401-030X"
         }
     ],
     "keywords": [

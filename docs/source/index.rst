@@ -42,14 +42,23 @@ new ideas.
 
 .. toctree::
    :maxdepth: 1
-   :caption: Solvers
+   :caption: Multigrid
+   :hidden:
+
+   multigrid
+   multigrid_basics
+   multigrid-constant-coefficients
+   multigrid-variable-coeff
+   multigrid-general-linear
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Hydro Solvers
    :hidden:
 
    advection_basics
    burgers_basics
    compressible_basics
-   compressible_compare
-   multigrid
    diffusion_basics
    incompressible_basics
    incompressible_viscous_basics

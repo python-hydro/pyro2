@@ -115,8 +115,8 @@ def fluxes(my_data, rp, ivars, solid, tc):
     tm_states = tc.timer("interfaceStates")
     tm_states.begin()
 
-    V_l = myg.scratch_array(ivars.nvar)
-    V_r = myg.scratch_array(ivars.nvar)
+    V_l = myg.scratch_array(nvar=ivars.nvar)
+    V_r = myg.scratch_array(nvar=ivars.nvar)
 
     for n in range(ivars.nvar):
         V_l.ip(1, n=n, buf=2)[:, :] = q.v(n=n, buf=2) + 0.5 * ldx.v(n=n, buf=2)

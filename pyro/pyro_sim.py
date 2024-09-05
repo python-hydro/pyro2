@@ -35,7 +35,7 @@ class Pyro:
     The main driver to run pyro.
     """
 
-    def __init__(self, solver_name, from_commandline=False):
+    def __init__(self, solver_name, *, from_commandline=False):
         """
         Constructor
 
@@ -79,7 +79,7 @@ class Pyro:
 
         self.is_initialized = False
 
-    def initialize_problem(self, problem_name, inputs_file=None, inputs_dict=None,
+    def initialize_problem(self, problem_name, *, inputs_file=None, inputs_dict=None,
                            other_commands=None):
         """
         Initialize the specific problem
@@ -279,12 +279,13 @@ class Pyro:
 
 
 class PyroBenchmark(Pyro):
-    """
-    A subclass of Pyro for benchmarking. Inherits everything from pyro, but adds benchmarking routines.
+    """A subclass of Pyro for benchmarking. Inherits everything from
+    pyro, but adds benchmarking routines.
+
     """
 
-    def __init__(self, solver_name, comp_bench=False,
-                 reset_bench_on_fail=False, make_bench=False):
+    def __init__(self, solver_name, *,
+                 comp_bench=False, reset_bench_on_fail=False, make_bench=False):
         """
         Constructor
 

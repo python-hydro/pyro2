@@ -1,4 +1,42 @@
-# 4.1
+# 4.2.0
+
+  * moved docs to sphinx-book-theme (#229, #235, #240)
+
+  * docs reorganization (#214, #221, #222, #234, #239) and new
+    examples (#228, #236)
+
+  * remove driver.splitting unused parameter (#238)
+
+  * clean-ups of the Pyro class (#219, #232, #233) including disabling
+    verbosity and vis by default when using it directly (#220, #231)
+
+  * the `advection_fv4` solver now properly averages the initial
+    conditions from centers to cell-averages
+
+  * each problem initial conditions file now specifies a
+    `DEFAULT_INPUTS` (#225)
+
+  * the gresho initial conditions were fixed to be closer to the
+    source of the Miczek et al. paper (#218)
+
+  * the RT initial conditions were tweaked to be more symmetric (#216)
+
+  * the colorbar tick labels in plots were fixed (#212)
+
+  * the compressible solver now supports 2D spherical geometry
+    (r-theta) (#204, #210, #211)
+
+  * the mesh now supports spherical geometry (r-theta) (#201, #217)
+
+  * the compressible Riemann solvers were reorganized (#206)
+
+  * CI fixes (#202, #215) and a codespell action (#199, #205)
+
+  * python 3.12 was added to the CI (#208)
+
+  * comment fixes to the compressible FV4 solver (#207)
+
+# 4.1.0
 
   * Switched to pyproject.toml (#195)
 
