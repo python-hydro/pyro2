@@ -8,6 +8,9 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.sedov"
 
+PROBLEM_PARAMS = {"sedov.r_init": 0.1,  # radius for the initial perturbation
+                  "sedov.nsub": 4}
+
 
 def init_data(my_data, rp):
     """ initialize the sedov problem """

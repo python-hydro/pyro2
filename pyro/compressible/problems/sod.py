@@ -5,6 +5,14 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.sod.x"
 
+PROBLEM_PARAMS = {"sod.direction": "x",  # direction of the flow
+                  "sod.dens_left": 1.0,
+                  "sod.dens_right": 0.125,
+                  "sod.u_left": 0.0,
+                  "sod.u_right": 0.0,
+                  "sod.p_left": 1.0,
+                  "sod.p_right": 0.1}
+
 
 def init_data(my_data, rp):
     """ initialize the sod problem """

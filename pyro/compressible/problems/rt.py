@@ -7,6 +7,12 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.rt"
 
+PROBLEM_PARAMS = {"rt.dens1": 1.0,
+                  "rt.dens2": 2.0,
+                  "rt.amp": 1.0,
+                  "rt.sigma": 0.1,
+                  "rt.p0": 10.0}
+
 
 def init_data(my_data, rp):
     """ initialize the rt problem """
