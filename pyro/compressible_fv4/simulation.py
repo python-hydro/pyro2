@@ -9,9 +9,6 @@ class Simulation(compressible_rk.Simulation):
                  timers=None, data_class=fv.FV2d):
         super().__init__(solver_name, problem_name, rp, timers=timers, data_class=data_class)
 
-    def initialize(self, *, extra_vars=None, ng=4):
-        super().initialize(extra_vars=extra_vars, ng=ng)
-
     def substep(self, myd):
         """
         compute the advective source term for the given state
