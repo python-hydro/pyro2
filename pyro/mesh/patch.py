@@ -59,7 +59,7 @@ class Grid2d:
 
     # pylint: disable=too-many-instance-attributes
 
-    def __init__(self, nx, ny, ng=1,
+    def __init__(self, nx, ny, *, ng=1,
                  xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0):
         """
         Create a Grid2d object.
@@ -146,7 +146,7 @@ class Grid2d:
         self.xr2d = ArrayIndexer(d=xr2d, grid=self)
         self.yr2d = ArrayIndexer(d=yr2d, grid=self)
 
-    def scratch_array(self, nvar=1):
+    def scratch_array(self, *, nvar=1):
         """
         return a standard numpy array dimensioned to have the size
         and number of ghostcells as the parent grid
@@ -198,10 +198,10 @@ class Cartesian2d(Grid2d):
     y = y
     """
 
-    def __init__(self, nx, ny, ng=1,
+    def __init__(self, nx, ny, *, ng=1,
                  xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0):
 
-        super().__init__(nx, ny, ng, xmin, xmax, ymin, ymax)
+        super().__init__(nx, ny, ng=ng, xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
 
         self.coord_type = 0
 
@@ -242,7 +242,7 @@ class SphericalPolar(Grid2d):
     theta = y
     """
 
-    def __init__(self, nx, ny, ng=1,
+    def __init__(self, nx, ny, *, ng=1,
                  xmin=0.2, xmax=1.0, ymin=0.0, ymax=1.0):
 
         # Make sure theta is within [0, PI]
@@ -252,7 +252,7 @@ class SphericalPolar(Grid2d):
         assert xmin - ng*(xmax-xmin)/nx >= 0.0, \
             "xmin (r-direction), must be large enough so ghost cell doesn't have negative x."
 
-        super().__init__(nx, ny, ng, xmin, xmax, ymin, ymax)
+        super().__init__(nx, ny, ng=ng, xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
 
         self.coord_type = 1
 
@@ -332,7 +332,7 @@ class CellCenterData2d:
 
     # pylint: disable=too-many-instance-attributes
 
-    def __init__(self, grid, dtype=np.float64):
+    def __init__(self, grid, *, dtype=np.float64):
 
         """
         Initialize the CellCenterData2d object.
@@ -608,14 +608,14 @@ class CellCenterData2d:
             except TypeError:
                 bnd.ext_bcs[self.BCs[name].yrb](self.BCs[name].yrb, "yrb", name, self, self.ivars)
 
-    def min(self, name, ng=0):
+    def min(self, name, *, ng=0):
         """
         return the minimum of the variable name in the domain's valid region
         """
         n = self.names.index(name)
         return np.min(self.data.v(buf=ng, n=n))
 
-    def max(self, name, ng=0):
+    def max(self, name, *, ng=0):
         """
         return the maximum of the variable name in the domain's valid region
         """

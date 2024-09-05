@@ -59,7 +59,6 @@ new ideas.
    advection_basics
    burgers_basics
    compressible_basics
-   compressible_compare
    diffusion_basics
    incompressible_basics
    incompressible_viscous_basics

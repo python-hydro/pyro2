@@ -15,7 +15,7 @@ from pyro.simulation_null import bc_setup, grid_setup
 
 class Simulation(burgers_simulation):
 
-    def initialize(self, other_bc=False, aux_vars=()):
+    def initialize(self, *, other_bc=False, aux_vars=()):
         """
         Initialize the grid and variables for incompressible flow and
         set the initial conditions for the chosen problem.
