@@ -24,7 +24,6 @@ Subpackages
    pyro.compressible_react
    pyro.compressible_rk
    pyro.compressible_sdc
-   pyro.compressible_sr
    pyro.diffusion
    pyro.incompressible
    pyro.incompressible_viscous
