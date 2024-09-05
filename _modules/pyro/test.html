@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.test &#8212; pyro 4.2.0.post9+g30c4e417 documentation</title>
+    <title>pyro.test &#8212; pyro 4.2.0.post10+gc4e9b4c0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=0cddbe38"></script>
+    <script src="../../_static/documentation_options.js?v=421c4aa4"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -600,7 +600,7 @@ document.write(`
             <span class="n">results</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">err</span>
 
     <span class="c1"># standalone tests</span>
-    <span class="k">if</span> <span class="n">single</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">single</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">solver</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">bench_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;/multigrid/tests/&quot;</span>
         <span class="n">err</span> <span class="o">=</span> <span class="n">mg_test_simple</span><span class="o">.</span><span class="n">test_poisson_dirichlet</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="n">comp_bench</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bench_dir</span><span class="o">=</span><span class="n">bench_dir</span><span class="p">,</span>
                                                     <span class="n">store_bench</span><span class="o">=</span><span class="n">store_all_benchmarks</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
