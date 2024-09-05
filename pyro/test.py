@@ -132,7 +132,7 @@ def do_tests(out_file,
             results[name] = err
 
     # standalone tests
-    if single is None:
+    if single is None and solver is None:
         bench_dir = os.path.dirname(os.path.realpath(__file__)) + "/multigrid/tests/"
         err = mg_test_simple.test_poisson_dirichlet(256, comp_bench=True, bench_dir=bench_dir,
                                                     store_bench=store_all_benchmarks, verbose=0)
