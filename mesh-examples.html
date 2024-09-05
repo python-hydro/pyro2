@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Mesh examples &#8212; pyro 4.2.0.post8+ga1a81246 documentation</title>
+    <title>Mesh examples &#8212; pyro 4.2.0.post9+g30c4e417 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=4a833d52"></script>
+    <script src="_static/documentation_options.js?v=0cddbe38"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -627,7 +627,7 @@ document.write(`
 Help on Grid2d in module pyro.mesh.patch object:
 
 class Grid2d(builtins.object)
- |  Grid2d(nx, ny, ng=1, xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0)
+ |  Grid2d(nx, ny, *, ng=1, xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0)
  |
  |  the 2-d grid class.  The grid object will contain the coordinate
  |  information (at various centerings).
@@ -649,7 +649,7 @@ class Grid2d(builtins.object)
  |  __eq__(self, other)
  |      are two grids equivalent?
  |
- |  __init__(self, nx, ny, ng=1, xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0)
+ |  __init__(self, nx, ny, *, ng=1, xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0)
  |      Create a Grid2d object.
  |
  |      The only data that we require is the number of points that
@@ -689,7 +689,7 @@ class Grid2d(builtins.object)
  |      return a new grid object finer by a factor n, but with
  |      all the other properties the same
  |
- |  scratch_array(self, nvar=1)
+ |  scratch_array(self, *, nvar=1)
  |      return a standard numpy array dimensioned to have the size
  |      and number of ghostcells as the parent grid
  |

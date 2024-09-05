@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.compressible_rk.fluxes &#8212; pyro 4.2.0.post8+ga1a81246 documentation</title>
+    <title>pyro.compressible_rk.fluxes &#8212; pyro 4.2.0.post9+g30c4e417 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=4a833d52"></script>
+    <script src="../../../_static/documentation_options.js?v=0cddbe38"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -571,8 +571,8 @@ document.write(`
     <span class="n">tm_states</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">timer</span><span class="p">(</span><span class="s2">&quot;interfaceStates&quot;</span><span class="p">)</span>
     <span class="n">tm_states</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span>
 
-    <span class="n">V_l</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">(</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">)</span>
-    <span class="n">V_r</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">(</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">)</span>
+    <span class="n">V_l</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">(</span><span class="n">nvar</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">)</span>
+    <span class="n">V_r</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">(</span><span class="n">nvar</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">):</span>
         <span class="n">V_l</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">ldx</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>

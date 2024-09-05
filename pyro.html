@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyro package &#8212; pyro 4.2.0.post8+ga1a81246 documentation</title>
+    <title>pyro package &#8212; pyro 4.2.0.post9+g30c4e417 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=4a833d52"></script>
+    <script src="_static/documentation_options.js?v=0cddbe38"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -1528,7 +1528,7 @@ methods.</p>
 <span id="pyro-pyro-sim-module"></span><h2>pyro.pyro_sim module<a class="headerlink" href="#module-pyro.pyro_sim" title="Link to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyro.pyro_sim.Pyro">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.pyro_sim.</span></span><span class="sig-name descname"><span class="pre">Pyro</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_commandline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/pyro_sim.html#Pyro"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.pyro_sim.Pyro" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.pyro_sim.</span></span><span class="sig-name descname"><span class="pre">Pyro</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver_name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_commandline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/pyro_sim.html#Pyro"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.pyro_sim.Pyro" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>The main driver to run pyro.</p>
 <dl class="py method">
@@ -1586,9 +1586,10 @@ simulation data given the variable name v.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pyro.pyro_sim.PyroBenchmark">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.pyro_sim.</span></span><span class="sig-name descname"><span class="pre">PyroBenchmark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp_bench</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset_bench_on_fail</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">make_bench</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/pyro_sim.html#PyroBenchmark"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.pyro_sim.PyroBenchmark" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.pyro_sim.</span></span><span class="sig-name descname"><span class="pre">PyroBenchmark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver_name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp_bench</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset_bench_on_fail</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">make_bench</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/pyro_sim.html#PyroBenchmark"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.pyro_sim.PyroBenchmark" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyro.pyro_sim.Pyro" title="pyro.pyro_sim.Pyro"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pyro</span></code></a></p>
-<p>A subclass of Pyro for benchmarking. Inherits everything from pyro, but adds benchmarking routines.</p>
+<p>A subclass of Pyro for benchmarking. Inherits everything from
+pyro, but adds benchmarking routines.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.pyro_sim.PyroBenchmark.compare_to_benchmark">
 <span class="sig-name descname"><span class="pre">compare_to_benchmark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rtol</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/pyro_sim.html#PyroBenchmark.compare_to_benchmark"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.pyro_sim.PyroBenchmark.compare_to_benchmark" title="Link to this definition">#</a></dt>
@@ -1625,7 +1626,7 @@ simulation data given the variable name v.</p>
 <span id="pyro-simulation-null-module"></span><h2>pyro.simulation_null module<a class="headerlink" href="#module-pyro.simulation_null" title="Link to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyro.simulation_null.NullSimulation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.simulation_null.</span></span><span class="sig-name descname"><span class="pre">NullSimulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timers=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_class=&lt;class</span> <span class="pre">'pyro.mesh.patch.CellCenterData2d'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/simulation_null.html#NullSimulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.simulation_null.NullSimulation" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.simulation_null.</span></span><span class="sig-name descname"><span class="pre">NullSimulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timers=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_class=&lt;class</span> <span class="pre">'pyro.mesh.patch.CellCenterData2d'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/simulation_null.html#NullSimulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.simulation_null.NullSimulation" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.simulation_null.NullSimulation.compute_timestep">
