@@ -99,7 +99,7 @@ class Simulation(NullSimulation):
 
     """
 
-    def initialize(self, extra_vars=None, ng=4):
+    def initialize(self, *, extra_vars=None, ng=4):
         """
         Initialize the grid and variables for compressible flow and set
         the initial conditions for the chosen problem.

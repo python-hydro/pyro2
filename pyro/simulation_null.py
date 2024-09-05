@@ -102,7 +102,8 @@ def bc_setup(rp):
 
 class NullSimulation:
 
-    def __init__(self, solver_name, problem_name, rp, timers=None, data_class=patch.CellCenterData2d):
+    def __init__(self, solver_name, problem_name, rp, *,
+                 timers=None, data_class=patch.CellCenterData2d):
         """
         Initialize the Simulation object
 
