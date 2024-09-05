@@ -12,7 +12,7 @@ from pyro.simulation_null import NullSimulation, bc_setup, grid_setup
 
 
 class Basestate:
-    def __init__(self, ny, ng=0):
+    def __init__(self, ny, *, ng=0):
         self.ny = ny
         self.ng = ng
         self.qy = ny + 2*ng
@@ -37,7 +37,7 @@ class Basestate:
 
 class Simulation(NullSimulation):
 
-    def __init__(self, solver_name, problem_name, rp, timers=None):
+    def __init__(self, solver_name, problem_name, rp, *, timers=None):
 
         NullSimulation.__init__(self, solver_name, problem_name, rp, timers=timers)
 

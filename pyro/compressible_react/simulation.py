@@ -8,7 +8,7 @@ from pyro.util import plot_tools
 
 class Simulation(compressible.Simulation):
 
-    def initialize(self, extra_vars=None, ng=4):
+    def initialize(self, *, extra_vars=None, ng=4):
         """
         For the reacting compressible solver, our initialization of
         the data is the same as the compressible solver, but we
