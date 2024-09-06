@@ -3,11 +3,8 @@ left and long wavelength on the right.  This allows one to see
 how the growth rate depends on wavenumber.
 """
 
-import sys
-
 import numpy as np
 
-from pyro.mesh import patch
 from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.rt2"

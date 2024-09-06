@@ -18,7 +18,6 @@ import math
 
 import numpy as np
 
-from pyro.mesh import patch
 from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.shear"

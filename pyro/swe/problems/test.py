@@ -1,7 +1,3 @@
-import sys
-
-from pyro.mesh import patch
-
 DEFAULT_INPTUS = None
 
 PROBLEM_PARAMS = {}

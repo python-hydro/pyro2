@@ -10,7 +10,6 @@ https://doi.org/10.1007/978-3-319-91494-7_8
 https://www.fluid.tuwien.ac.at/HendrikKuhlmann?action=AttachFile&do=get&target=LidDrivenCavity.pdf
 """
 
-from pyro.mesh import patch
 from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.cavity"
