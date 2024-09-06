@@ -9,7 +9,8 @@ import matplotlib.pyplot as plt
 
 import pyro.util.io_pyro as io
 import pyro.util.profile_pyro as profile
-from pyro.util import compare, msg, runparams
+from pyro.util import compare, msg
+from pyro.util.runparams import RuntimeParameters, _get_val
 
 valid_solvers = ["advection",
                  "advection_nonuniform",
@@ -71,7 +72,7 @@ class Pyro:
         # -------------------------------------------------------------------------
 
         # parameter defaults
-        self.rp = runparams.RuntimeParameters()
+        self.rp = RuntimeParameters()
         self.rp.load_params(self.pyro_home + "_defaults")
         self.rp.load_params(self.pyro_home + self.solver_name + "/_defaults")
 
@@ -79,8 +80,7 @@ class Pyro:
 
         self.is_initialized = False
 
-    def initialize_problem(self, problem_name, *, inputs_file=None, inputs_dict=None,
-                           other_commands=None):
+    def initialize_problem(self, problem_name, *, inputs_file=None, inputs_dict=None):
         """
         Initialize the specific problem
 
@@ -92,8 +92,6 @@ class Pyro:
             Filename containing problem's runtime parameters
         inputs_dict : dict
             Dictionary containing extra runtime parameters
-        other_commands : str
-            Other command line parameter options
         """
         # pylint: disable=attribute-defined-outside-init
 
@@ -125,10 +123,6 @@ class Pyro:
         if inputs_dict is not None:
             for k, v in inputs_dict.items():
                 self.rp.set_param(k, v)
-
-        # and any commandline overrides
-        if other_commands is not None:
-            self.rp.command_line_params(other_commands)
 
         # write out the inputs.auto
         self.rp.print_paramfile()
@@ -399,9 +393,15 @@ def main():
     else:
         pyro = Pyro(args.solver[0], from_commandline=True)
 
+    other = {}
+    for param_string in args.other:
+        k, v = param_string.split("=")
+        other[k] = _get_val(v)
+
+    print(other)
     pyro.initialize_problem(problem_name=args.problem[0],
                             inputs_file=args.param[0],
-                            other_commands=args.other)
+                            inputs_dict=other)
     pyro.run_sim()
 
 

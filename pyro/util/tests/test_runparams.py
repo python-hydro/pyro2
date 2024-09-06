@@ -50,11 +50,12 @@ class TestRunParams:
         assert self.rp.get_param("test3.param") == "this is a test"
         assert self.rp.get_param("test3.i1") == 1
 
-    def test_command_line_params(self):
+    def test_dict(self):
 
-        param_string = "test.p1=q test3.i1=2"
+        params = {"test.p1": "q",  "test3.i1": 2}
 
-        self.rp.command_line_params(param_string.split())
+        for k, v in params.items():
+            self.rp.set_param(k, v, no_new=False)
 
         assert self.rp.get_param("test.p1") == "q"
         assert self.rp.get_param("test3.i1") == 2
