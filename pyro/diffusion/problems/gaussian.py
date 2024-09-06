@@ -8,7 +8,7 @@ from pyro.util import msg
 DEFAULT_INPUTS = "inputs.gaussian"
 
 PROBLEM_PARAMS = {"gaussian.t_0": 0.001,
-                  "gaussian:phi_0": 1.0,
+                  "gaussian.phi_0": 1.0,
                   "gaussian.phi_max": 2.0}
 
 
