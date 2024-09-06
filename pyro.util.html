@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyro.util package &#8212; pyro 4.2.0.post14+g9c65825f documentation</title>
+    <title>pyro.util package &#8212; pyro 4.2.0.post15+g23cb4f46 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=54db60f0"></script>
+    <script src="_static/documentation_options.js?v=8b10dae1"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -565,7 +565,6 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.util.runparams">pyro.util.runparams module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.command_line_params"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.command_line_params()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.get_param"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.get_param()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.load_params"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.load_params()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.print_all_params"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.print_all_params()</span></code></a></li>
@@ -813,25 +812,6 @@ read default values.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.util.runparams.</span></span><span class="sig-name descname"><span class="pre">RuntimeParameters</span></span><a class="reference internal" href="_modules/pyro/util/runparams.html#RuntimeParameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.RuntimeParameters" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
-<dt class="sig sig-object py" id="pyro.util.runparams.RuntimeParameters.command_line_params">
-<span class="sig-name descname"><span class="pre">command_line_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd_strings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/runparams.html#RuntimeParameters.command_line_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.RuntimeParameters.command_line_params" title="Link to this definition">#</a></dt>
-<dd><p>finds dictionary pairs from a string that came from the
-commandline.  Stores the parameters in only if they
-already exist.</p>
-<p>we expect things in the string in the form:
-[“sec.opt=value”,  “sec.opt=value”]
-with each opt an element in the list</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>cmd_strings</strong><span class="classifier">list</span></dt><dd><p>The list of strings containing runtime parameter pairs</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="pyro.util.runparams.RuntimeParameters.get_param">
 <span class="sig-name descname"><span class="pre">get_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/util/runparams.html#RuntimeParameters.get_param"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.util.runparams.RuntimeParameters.get_param" title="Link to this definition">#</a></dt>
 <dd><p>returns the value of the runtime parameter corresponding to the
@@ -995,7 +975,6 @@ h5py file object</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.util.runparams">pyro.util.runparams module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.command_line_params"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.command_line_params()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.get_param"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.get_param()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.load_params"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.load_params()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.util.runparams.RuntimeParameters.print_all_params"><code class="docutils literal notranslate"><span class="pre">RuntimeParameters.print_all_params()</span></code></a></li>

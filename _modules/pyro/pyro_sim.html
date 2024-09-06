@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.pyro_sim &#8212; pyro 4.2.0.post14+g9c65825f documentation</title>
+    <title>pyro.pyro_sim &#8212; pyro 4.2.0.post15+g23cb4f46 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=54db60f0"></script>
+    <script src="../../_static/documentation_options.js?v=8b10dae1"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -459,7 +459,8 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">pyro.util.io_pyro</span> <span class="k">as</span> <span class="nn">io</span>
 <span class="kn">import</span> <span class="nn">pyro.util.profile_pyro</span> <span class="k">as</span> <span class="nn">profile</span>
-<span class="kn">from</span> <span class="nn">pyro.util</span> <span class="kn">import</span> <span class="n">compare</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">runparams</span>
+<span class="kn">from</span> <span class="nn">pyro.util</span> <span class="kn">import</span> <span class="n">compare</span><span class="p">,</span> <span class="n">msg</span>
+<span class="kn">from</span> <span class="nn">pyro.util.runparams</span> <span class="kn">import</span> <span class="n">RuntimeParameters</span><span class="p">,</span> <span class="n">_get_val</span>
 
 <span class="n">valid_solvers</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;advection&quot;</span><span class="p">,</span>
                  <span class="s2">&quot;advection_nonuniform&quot;</span><span class="p">,</span>
@@ -523,7 +524,7 @@ document.write(`
         <span class="c1"># -------------------------------------------------------------------------</span>
 
         <span class="c1"># parameter defaults</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rp</span> <span class="o">=</span> <span class="n">runparams</span><span class="o">.</span><span class="n">RuntimeParameters</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rp</span> <span class="o">=</span> <span class="n">RuntimeParameters</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">load_params</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pyro_home</span> <span class="o">+</span> <span class="s2">&quot;_defaults&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">load_params</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pyro_home</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">solver_name</span> <span class="o">+</span> <span class="s2">&quot;/_defaults&quot;</span><span class="p">)</span>
 
@@ -533,8 +534,7 @@ document.write(`
 
 <div class="viewcode-block" id="Pyro.initialize_problem">
 <a class="viewcode-back" href="../../pyro.html#pyro.pyro_sim.Pyro.initialize_problem">[docs]</a>
-    <span class="k">def</span> <span class="nf">initialize_problem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">problem_name</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">inputs_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inputs_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                           <span class="n">other_commands</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">initialize_problem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">problem_name</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">inputs_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inputs_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the specific problem</span>
 
@@ -546,8 +546,6 @@ document.write(`
 <span class="sd">            Filename containing problem&#39;s runtime parameters</span>
 <span class="sd">        inputs_dict : dict</span>
 <span class="sd">            Dictionary containing extra runtime parameters</span>
-<span class="sd">        other_commands : str</span>
-<span class="sd">            Other command line parameter options</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># pylint: disable=attribute-defined-outside-init</span>
 
@@ -579,10 +577,6 @@ document.write(`
         <span class="k">if</span> <span class="n">inputs_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">inputs_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">set_param</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
-
-        <span class="c1"># and any commandline overrides</span>
-        <span class="k">if</span> <span class="n">other_commands</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">command_line_params</span><span class="p">(</span><span class="n">other_commands</span><span class="p">)</span>
 
         <span class="c1"># write out the inputs.auto</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">print_paramfile</span><span class="p">()</span>
@@ -887,9 +881,15 @@ document.write(`
     <span class="k">else</span><span class="p">:</span>
         <span class="n">pyro</span> <span class="o">=</span> <span class="n">Pyro</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">solver</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">from_commandline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
+    <span class="n">other</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">param_string</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">other</span><span class="p">:</span>
+        <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">param_string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span>
+        <span class="n">other</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">_get_val</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
     <span class="n">pyro</span><span class="o">.</span><span class="n">initialize_problem</span><span class="p">(</span><span class="n">problem_name</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">problem</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
                             <span class="n">inputs_file</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                            <span class="n">other_commands</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">other</span><span class="p">)</span>
+                            <span class="n">inputs_dict</span><span class="o">=</span><span class="n">other</span><span class="p">)</span>
     <span class="n">pyro</span><span class="o">.</span><span class="n">run_sim</span><span class="p">()</span></div>
 
 
