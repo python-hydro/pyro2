@@ -1,8 +1,5 @@
-import sys
-
 import numpy as np
 
-from pyro.mesh import patch
 from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.hse"
@@ -16,12 +13,6 @@ def init_data(my_data, rp):
 
     if rp.get_param("driver.verbose"):
         msg.bold("initializing the HSE problem...")
-
-    # make sure that we are passed a valid patch object
-    if not isinstance(my_data, patch.CellCenterData2d):
-        print("ERROR: patch invalid in hse.py")
-        print(my_data.__class__)
-        sys.exit()
 
     # get the density, momenta, and energy as separate variables
     dens = my_data.get_var("density")

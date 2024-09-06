@@ -28,7 +28,6 @@ import math
 
 import numpy as np
 
-from pyro.mesh import patch
 from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.converge.64"
@@ -41,11 +40,6 @@ def init_data(my_data, rp):
 
     if rp.get_param("driver.verbose"):
         msg.bold("initializing the incompressible converge problem...")
-
-    # make sure that we are passed a valid patch object
-    if not isinstance(my_data, patch.CellCenterData2d):
-        print(my_data.__class__)
-        msg.fail("ERROR: patch invalid in converge.py")
 
     # get the velocities
     u = my_data.get_var("x-velocity")

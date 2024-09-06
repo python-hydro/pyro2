@@ -1,8 +1,5 @@
-import sys
-
 import numpy as np
 
-from pyro.mesh import fv, patch
 from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.acoustic_pulse"
@@ -17,12 +14,6 @@ def init_data(myd, rp):
 
     if rp.get_param("driver.verbose"):
         msg.bold("initializing the acoustic pulse problem...")
-
-    # make sure that we are passed a valid patch object
-    if not isinstance(myd, (patch.CellCenterData2d, fv.FV2d)):
-        print("ERROR: patch invalid in acoustic_pulse.py")
-        print(myd.__class__)
-        sys.exit()
 
     # get the density, momenta, and energy as separate variables
     dens = myd.get_var("density")

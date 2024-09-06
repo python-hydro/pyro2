@@ -1,6 +1,3 @@
-import sys
-
-from pyro.mesh import patch
 from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.tophat"
@@ -11,12 +8,6 @@ def init_data(myd, rp):
 
     if rp.get_param("driver.verbose"):
         msg.bold("initializing the tophat burgers problem...")
-
-    # make sure that we are passed a valid patch object
-    if not isinstance(myd, patch.CellCenterData2d):
-        print("ERROR: patch invalid in tophat.py")
-        print(myd.__class__)
-        sys.exit()
 
     u = myd.get_var("x-velocity")
     v = myd.get_var("y-velocity")

@@ -10,7 +10,6 @@ https://doi.org/10.1007/978-3-319-91494-7_8
 https://www.fluid.tuwien.ac.at/HendrikKuhlmann?action=AttachFile&do=get&target=LidDrivenCavity.pdf
 """
 
-from pyro.mesh import patch
 from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.cavity"
@@ -23,11 +22,6 @@ def init_data(my_data, rp):
 
     if rp.get_param("driver.verbose"):
         msg.bold("initializing the lid-driven cavity problem...")
-
-    # make sure that we are passed a valid patch object
-    if not isinstance(my_data, patch.CellCenterData2d):
-        print(my_data.__class__)
-        msg.fail("ERROR: patch invalid in cavity.py")
 
     myg = my_data.grid
 

@@ -1,8 +1,5 @@
-import sys
-
 import numpy as np
 
-from pyro.mesh import patch
 from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.advect"
@@ -15,12 +12,6 @@ def init_data(my_data, rp):
 
     if rp.get_param("driver.verbose"):
         msg.bold("initializing the advect problem...")
-
-    # make sure that we are passed a valid patch object
-    if not isinstance(my_data, patch.CellCenterData2d):
-        print("ERROR: patch invalid in advect.py")
-        print(my_data.__class__)
-        sys.exit()
 
     # get the hity, momenta, and energy as separate variables
     h = my_data.get_var("height")

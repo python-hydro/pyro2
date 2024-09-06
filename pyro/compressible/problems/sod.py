@@ -1,6 +1,3 @@
-import sys
-
-from pyro.mesh import patch
 from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.sod.x"
@@ -19,12 +16,6 @@ def init_data(my_data, rp):
 
     if rp.get_param("driver.verbose"):
         msg.bold("initializing the sod problem...")
-
-    # make sure that we are passed a valid patch object
-    if not isinstance(my_data, patch.CellCenterData2d):
-        print("ERROR: patch invalid in sod.py")
-        print(my_data.__class__)
-        sys.exit()
 
     # get the sod parameters
     dens_left = rp.get_param("sod.dens_left")

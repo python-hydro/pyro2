@@ -1,8 +1,5 @@
-import sys
-
 import numpy
 
-from pyro.mesh import patch
 from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.gaussian"
@@ -24,12 +21,6 @@ def init_data(my_data, rp):
 
     if rp.get_param("driver.verbose"):
         msg.bold("initializing the Gaussian diffusion problem...")
-
-    # make sure that we are passed a valid patch object
-    if not isinstance(my_data, patch.CellCenterData2d):
-        print("ERROR: patch invalid in diffuse.py")
-        print(my_data.__class__)
-        sys.exit()
 
     phi = my_data.get_var("phi")
 

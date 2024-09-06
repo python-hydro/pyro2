@@ -1,6 +1,5 @@
 import numpy as np
 
-from pyro.mesh import patch
 from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.slotted"
@@ -14,11 +13,6 @@ def init_data(my_data, rp):
 
     if rp.get_param("driver.verbose"):
         msg.bold("initializing the slotted advection problem...")
-
-    # make sure that we are passed a valid patch object
-    if not isinstance(my_data, patch.CellCenterData2d):
-        print(my_data.__class__)
-        msg.fail("ERROR: patch invalid in slotted.py")
 
     offset = rp.get_param("slotted.offset")
     omega = rp.get_param("slotted.omega")
