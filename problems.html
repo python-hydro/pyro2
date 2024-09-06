@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Adding a problem &#8212; pyro 4.2.0.post13+g633f394d documentation</title>
+    <title>Adding a problem &#8212; pyro 4.2.0.post14+g9c65825f documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=cdad65fc"></script>
+    <script src="_static/documentation_options.js?v=54db60f0"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -505,7 +505,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -521,6 +523,14 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-py">“<cite>problem.py</cite>”</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -532,29 +542,93 @@ document.write(`
                   
   <section id="adding-a-problem">
 <h1>Adding a problem<a class="headerlink" href="#adding-a-problem" title="Link to this heading">#</a></h1>
-<p>The easiest way to add a problem is to copy an existing problem setup
-in the solver you wish to use (in its problems/ sub-directory). Three
-different files will need to be copied (created):</p>
+<p>Problem setups are defined in a <code class="docutils literal notranslate"><span class="pre">problems/</span></code> subdirectory under each
+solver.  For example, the problem setups for <code class="docutils literal notranslate"><span class="pre">compressible</span></code> are here:
+<a class="github reference external" href="https://github.com/python-hydro/pyro2/tree/main/pyro/compressible/problems">python-hydro/pyro2</a></p>
+<p>When you install pyro via <code class="docutils literal notranslate"><span class="pre">pip</span></code>, these problem setups become available.
+At the moment, the way to add a new problem is to directly put files
+into these directories.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If you are working on adding problems, it is
+recommended that you install pyro from source and do it as an
+<a class="reference external" href="https://setuptools.pypa.io/en/latest/userguide/development_mode.html">editable install</a>
+as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
+span.prompt1:before {
+  content: "$ ";
+}
+</style><span class="prompt1">pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.</span>
+</pre></div></div></div>
+<p>Every problem needs a python module of the form <em>problem_name.py</em>.
+This will define the runtime parameters that the problem expects
+and do the initialization of the state variables.</p>
+<p>Many problems will also provide an <em>inputs</em> file that overrides
+some of the runtime parameter defaults (like the domain size and BCs)
+to be appropriate for this problem.</p>
+<section id="problem-py">
+<h2>“<cite>problem.py</cite>”<a class="headerlink" href="#problem-py" title="Link to this heading">#</a></h2>
+<p>A python module named after the problem (we’ll call it <code class="docutils literal notranslate"><span class="pre">problem.py</span></code> here)
+provides the following:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">PROBLEM_PARAMS</span></code> : this is a dictionary (it can be empty, <code class="docutils literal notranslate"><span class="pre">{}</span></code>)
+that defines the runtime parameters that are needed to this problem
+setup.  For instance, for the <code class="docutils literal notranslate"><span class="pre">compressible</span></code> <code class="docutils literal notranslate"><span class="pre">sod</span></code> problem:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">PROBLEM_PARAMS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;sod.direction&quot;</span><span class="p">:</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;sod.dens_left&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                  <span class="s2">&quot;sod.dens_right&quot;</span><span class="p">:</span> <span class="mf">0.125</span><span class="p">,</span>
+                  <span class="s2">&quot;sod.u_left&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                  <span class="s2">&quot;sod.u_right&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                  <span class="s2">&quot;sod.p_left&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                  <span class="s2">&quot;sod.p_right&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Each key in the dictionary should be of the form
+<em>problem-name.parameter</em>, and the values are the default value of
+the parameter.</p>
+<p>Any of these runtime parameters can be overridden in an inputs file
+or on the commandline (when running via <code class="docutils literal notranslate"><span class="pre">pyro_sim.py</span></code>) or via the
+<code class="docutils literal notranslate"><span class="pre">inputs_dict</span></code> keyword argument (when running via the
+<a class="reference internal" href="pyro.html#pyro.pyro_sim.Pyro" title="pyro.pyro_sim.Pyro"><code class="xref py py-func docutils literal notranslate"><span class="pre">Pyro</span></code></a> class).</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DEFAULT_INPUTS</span></code> : this is the name of an inputs file to be
+read in by default when using the <code class="docutils literal notranslate"><span class="pre">Pyro</span></code> class interface.  It
+can be <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<p>This is not used when running via <code class="docutils literal notranslate"><span class="pre">pyro_sim.py</span></code>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">init_data()</span></code> : this is the main initialization routine.  It has
+the signature:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">init_data</span><span class="p">(</span><span class="n">my_data</span><span class="p">,</span> <span class="n">rp</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">problem.py</span></code>: this is the main initialization routine. The
-function <code class="docutils literal notranslate"><span class="pre">init_data()</span></code> is called at runtime by the <code class="docutils literal notranslate"><span class="pre">Simulation</span></code>
-object’s <code class="docutils literal notranslate"><span class="pre">initialize()</span></code> method. Two arguments are passed in, the
-simulation’s <code class="docutils literal notranslate"><span class="pre">CellCenterData2d</span></code> object and the
-<code class="docutils literal notranslate"><span class="pre">RuntimeParameters</span></code> object.  The job of <code class="docutils literal notranslate"><span class="pre">init_data()</span></code> is to fill
-all of the variables defined in the <code class="docutils literal notranslate"><span class="pre">CellCenterData2d</span></code> object.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">_problem.defaults</span></code>: this contains the runtime parameters and
-their defaults for your problem. They should be placed in a block
-with the heading <code class="docutils literal notranslate"><span class="pre">[problem]</span></code> (where <code class="docutils literal notranslate"><span class="pre">problem</span></code> is your problem’s
-name). Anything listed here will be available through the
-<code class="docutils literal notranslate"><span class="pre">RuntimeParameters</span></code> object at runtime.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">inputs.problem</span></code>: this is the inputs file that is used at runtime
-to set the parameters for your problem. Any of the general
-parameters (like the grid size, boundary conditions, etc.) as well
-as the problem-specific parameters can be set here.  Once the
-problem is defined, you need to add the problem name to the
-<code class="docutils literal notranslate"><span class="pre">__all__</span></code> list in the <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file in the <code class="docutils literal notranslate"><span class="pre">problems/</span></code>
-sub-directory. This lets python know about the problem.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">my_data</span></code> is a <a class="reference internal" href="pyro.mesh.html#pyro.mesh.patch.CellCenterData2d" title="pyro.mesh.patch.CellCenterData2d"><code class="xref py py-func docutils literal notranslate"><span class="pre">CellCenterData2d</span></code></a> or <a class="reference internal" href="pyro.mesh.html#pyro.mesh.fv.FV2d" title="pyro.mesh.fv.FV2d"><code class="xref py py-func docutils literal notranslate"><span class="pre">FV2d</span></code></a> object.  The <code class="docutils literal notranslate"><span class="pre">Grid</span></code> object can be obtained from this
+as needed.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rp</span></code> is a <a class="reference internal" href="pyro.util.html#pyro.util.runparams.RuntimeParameters" title="pyro.util.runparams.RuntimeParameters"><code class="xref py py-func docutils literal notranslate"><span class="pre">RuntimeParameters</span></code></a> object.
+Any of the runtime parameters (including the problem-specific ones
+defined via <code class="docutils literal notranslate"><span class="pre">PROBLEM_PARAMS</span></code>) can be accessed via this.</p></li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The interface for <code class="docutils literal notranslate"><span class="pre">init_data</span></code> is the same for all solvers.</p>
+</div>
+<p>The job of <code class="docutils literal notranslate"><span class="pre">init_data</span></code> is to initialize the state data that is
+managed by the <code class="docutils literal notranslate"><span class="pre">my_data</span></code> object passed in.  Exactly which variables
+are included there will depend on the solver.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">finalize()</span></code> : this is called at the very end of evolution.  It
+is meant to output instructions to the user on how the can analyze the
+data.  It takes no arguments.</p></li>
+</ul>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Once the problem is defined, you need to add the problem name to
+the <code class="docutils literal notranslate"><span class="pre">__all__</span></code> list in the <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file in the
+<code class="docutils literal notranslate"><span class="pre">problems/</span></code> sub-directory. This lets python know about the
+problem.</p>
+</div>
+</section>
 </section>
 
 
@@ -592,6 +666,21 @@ sub-directory. This lets python know about the problem.</p></li>
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-py">“<cite>problem.py</cite>”</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

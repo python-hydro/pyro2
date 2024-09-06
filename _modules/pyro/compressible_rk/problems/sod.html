@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.compressible_rk.problems.sod &#8212; pyro 4.2.0.post13+g633f394d documentation</title>
+    <title>pyro.compressible_rk.problems.sod &#8212; pyro 4.2.0.post14+g9c65825f documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../../_static/documentation_options.js?v=cdad65fc"></script>
+    <script src="../../../../_static/documentation_options.js?v=54db60f0"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -454,6 +454,14 @@ document.write(`
 <span class="kn">from</span> <span class="nn">pyro.util</span> <span class="kn">import</span> <span class="n">msg</span>
 
 <span class="n">DEFAULT_INPUTS</span> <span class="o">=</span> <span class="s2">&quot;inputs.sod.x&quot;</span>
+
+<span class="n">PROBLEM_PARAMS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;sod.direction&quot;</span><span class="p">:</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span>  <span class="c1"># direction of the flow</span>
+                  <span class="s2">&quot;sod.dens_left&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                  <span class="s2">&quot;sod.dens_right&quot;</span><span class="p">:</span> <span class="mf">0.125</span><span class="p">,</span>
+                  <span class="s2">&quot;sod.u_left&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                  <span class="s2">&quot;sod.u_right&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                  <span class="s2">&quot;sod.p_left&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                  <span class="s2">&quot;sod.p_right&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">}</span>
 
 
 <div class="viewcode-block" id="init_data">

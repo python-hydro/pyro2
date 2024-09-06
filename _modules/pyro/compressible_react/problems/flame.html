@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.compressible_react.problems.flame &#8212; pyro 4.2.0.post13+g633f394d documentation</title>
+    <title>pyro.compressible_react.problems.flame &#8212; pyro 4.2.0.post14+g9c65825f documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../../_static/documentation_options.js?v=cdad65fc"></script>
+    <script src="../../../../_static/documentation_options.js?v=54db60f0"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -458,17 +458,19 @@ document.write(`
 
 <span class="n">DEFAULT_INPUTS</span> <span class="o">=</span> <span class="s2">&quot;inputs.flame&quot;</span>
 
+<span class="n">PROBLEM_PARAMS</span> <span class="o">=</span> <span class="p">{}</span>
+
 
 <div class="viewcode-block" id="init_data">
 <a class="viewcode-back" href="../../../../pyro.compressible_react.problems.html#pyro.compressible_react.problems.flame.init_data">[docs]</a>
 <span class="k">def</span> <span class="nf">init_data</span><span class="p">(</span><span class="n">my_data</span><span class="p">,</span> <span class="n">rp</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; initialize the sedov problem &quot;&quot;&quot;</span>
 
-    <span class="n">msg</span><span class="o">.</span><span class="n">bold</span><span class="p">(</span><span class="s2">&quot;initializing the sedov problem...&quot;</span><span class="p">)</span>
+    <span class="n">msg</span><span class="o">.</span><span class="n">bold</span><span class="p">(</span><span class="s2">&quot;initializing the flame problem...&quot;</span><span class="p">)</span>
 
     <span class="c1"># make sure that we are passed a valid patch object</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">my_data</span><span class="p">,</span> <span class="n">patch</span><span class="o">.</span><span class="n">CellCenterData2d</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: patch invalid in sedov.py&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: patch invalid in flame.py&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">my_data</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
 
@@ -487,8 +489,6 @@ document.write(`
 
     <span class="n">E_sedov</span> <span class="o">=</span> <span class="mf">1.0</span>
 
-    <span class="n">r_init</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;sedov.r_init&quot;</span><span class="p">)</span>
-
     <span class="n">gamma</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;eos.gamma&quot;</span><span class="p">)</span>
     <span class="n">pi</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span>
 
@@ -500,6 +500,8 @@ document.write(`
 
     <span class="n">xctr</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">xmin</span> <span class="o">+</span> <span class="n">xmax</span><span class="p">)</span>
     <span class="n">yctr</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">ymin</span> <span class="o">+</span> <span class="n">ymax</span><span class="p">)</span>
+
+    <span class="n">r_init</span> <span class="o">=</span> <span class="mf">0.1</span>
 
     <span class="c1"># initialize the pressure by putting the explosion energy into a</span>
     <span class="c1"># volume of constant pressure.  Then compute the energy in a zone</span>
