@@ -7,6 +7,13 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.gresho"
 
+PROBLEM_PARAMS = {"gresho.dens_base": 10.0,  # density at the base of the atmosphere
+                  "gresho.scale_height": 2.0,  # scale height of the isothermal atmosphere
+                  "gresho.r": 1.0,
+                  "gresho.u0": 1.0,
+                  "gresho.p0": 1.0,
+                  "gresho.dens_cutoff": 0.01}
+
 
 def init_data(my_data, base, rp):
     """ initialize the Gresho vortex problem """

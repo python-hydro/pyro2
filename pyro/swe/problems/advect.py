@@ -7,6 +7,8 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.advect"
 
+PROBLEM_PARAMS = {}
+
 
 def init_data(my_data, rp):
     """ initialize a smooth advection problem for testing convergence """

@@ -7,6 +7,9 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.hse"
 
+PROBLEM_PARAMS = {"hse.dens0": 1.0,
+                  "hse.h": 1.0}
+
 
 def init_data(my_data, rp):
     """ initialize the HSE problem """

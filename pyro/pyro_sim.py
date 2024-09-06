@@ -97,16 +97,14 @@ class Pyro:
         """
         # pylint: disable=attribute-defined-outside-init
 
-        problem_defaults_file = self.pyro_home + self.solver_name + \
-            "/problems/_" + problem_name + ".defaults"
+        problem = importlib.import_module("pyro.{}.problems.{}".format(self.solver_name, problem_name))
 
         # problem-specific runtime parameters
-        if os.path.isfile(problem_defaults_file):
-            self.rp.load_params(problem_defaults_file)
+        for k, v in problem.PROBLEM_PARAMS.items():
+            self.rp.set_param(k, v, no_new=False)
 
         # now read in the inputs file
         if inputs_file is None:
-            problem = importlib.import_module("pyro.{}.problems.{}".format(self.solver_name, problem_name))
             inputs_file = problem.DEFAULT_INPUTS
 
         if inputs_file is not None:

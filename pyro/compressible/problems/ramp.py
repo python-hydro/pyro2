@@ -8,6 +8,20 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.ramp"
 
+# these defaults comes from the third test problem in
+# Woodward and Colella. Journal of Computational Physics, 54, 115-174, 1984
+#
+# Also, the numbers are consistent with the ones in Castro
+
+PROBLEM_PARAMS = {"ramp.rhol": 8.0,  # post-shock initial density
+                  "ramp.ul": 7.1447096,  # post-shock initial x-velocity
+                  "ramp.vl": -4.125,  # post-shock initial y-velocity
+                  "ramp.pl": 116.5,  # post-shock initial pressure
+                  "ramp.rhor": 1.4,  # pre-shock initial density
+                  "ramp.ur": 0.0,  # pre-shock initial x-velocity
+                  "ramp.vr": 0.0,  # pre-shock initial y-velocity
+                  "ramp.pr": 1.0}  # pre-shock initial pressure
+
 
 def init_data(my_data, rp):
     """ initialize the double Mach reflection problem """

@@ -5,6 +5,12 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.dam.x"
 
+PROBLEM_PARAMS = {"dam.direction": "x",  # direction of the flow
+                  "dam.h_left": 1.0,
+                  "dam.h_right": 0.125,
+                  "dam.u_left": 0.0,
+                  "dam.u_right": 0.0}
+
 
 def init_data(my_data, rp):
     """ initialize the dam problem """

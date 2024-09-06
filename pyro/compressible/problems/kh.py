@@ -5,6 +5,12 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.kh"
 
+PROBLEM_PARAMS = {"kh.rho_1": 1.0,
+                  "kh.u_1": -1.0,
+                  "kh.rho_2": 2.0,
+                  "kh.u_2": 1.0,
+                  "kh.bulk_velocity": 0.0}
+
 
 def init_data(my_data, rp):
     """ initialize the Kelvin-Helmholtz problem """

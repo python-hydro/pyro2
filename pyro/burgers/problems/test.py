@@ -5,6 +5,8 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.test"
 
+PROBLEM_PARAMS = {}
+
 
 def init_data(myd, rp):
     """ initialize the burgers test problem """

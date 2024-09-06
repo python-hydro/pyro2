@@ -7,6 +7,10 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.gaussian"
 
+PROBLEM_PARAMS = {"gaussian.t_0": 0.001,
+                  "gaussian.phi_0": 1.0,
+                  "gaussian.phi_max": 2.0}
+
 
 def phi_analytic(dist, t, t_0, k, phi_1, phi_2):
     """ the analytic solution to the Gaussian diffusion problem """

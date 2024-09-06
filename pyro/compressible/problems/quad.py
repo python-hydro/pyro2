@@ -7,6 +7,33 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.quad"
 
+# these defaults seem to be equivalent to Configuration 3 from
+# Shulz-Rinne et al. SIAM J. Sci. Comput., 14, 6, 1394-1414, 1993
+#
+# Also, with the numbers written out, this is Configuration 3 from
+# Lax and Liu, SIAM J. Sci. Comput., 19, 2, 319-340, 1998
+#
+# See also LeVeque JCP 131, 327-353, 1997
+
+PROBLEM_PARAMS = {"quadrant.rho1": 1.5,  # quadrant 1 initial density
+                  "quadrant.u1": 0.0,  # quadrant 1 initial x-velocity
+                  "quadrant.v1": 0.0,  # quadrant 1 initial y-velocity
+                  "quadrant.p1": 1.5,  # quadrant 1 initial pressure
+                  "quadrant.rho2": 0.532258064516129,  # quadrant 2 initial density
+                  "quadrant.u2": 1.206045378311055,  # quadrant 2 initial x-velocity
+                  "quadrant.v2": 0.0,  # quadrant 2 initial y-velocity
+                  "quadrant.p2": 0.3,  # quadrant 2 initial pressure
+                  "quadrant.rho3": 0.137992831541219,  # quadrant 3 initial density
+                  "quadrant.u3": 1.206045378311055,  # quadrant 3 initial x-velocity
+                  "quadrant.v3": 1.206045378311055,  # quadrant 3 initial y-velocity
+                  "quadrant.p3": 0.029032258064516,  # quadrant 3 initial pressure
+                  "quadrant.rho4": 0.532258064516129,  # quadrant 4 initial density
+                  "quadrant.u4": 0.0,  # quadrant 4 initial x-velocity
+                  "quadrant.v4": 1.206045378311055,  # quadrant 4 initial y-velocity
+                  "quadrant.p4": 0.3,  # quadrant 4 initial pressure
+                  "quadrant.cx": 0.5,  # corner x position
+                  "quadrant.cy": 0.5}  # corner y position
+
 
 def init_data(my_data, rp):
     """ initialize the quadrant problem """
