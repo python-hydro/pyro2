@@ -12,7 +12,6 @@ import pyro.util.profile_pyro as profile
 from pyro.util import compare, msg
 from pyro.util.runparams import RuntimeParameters, _get_val
 
-
 valid_solvers = ["advection",
                  "advection_nonuniform",
                  "advection_rk",
