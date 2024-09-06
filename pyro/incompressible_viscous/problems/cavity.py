@@ -24,11 +24,6 @@ def init_data(my_data, rp):
     if rp.get_param("driver.verbose"):
         msg.bold("initializing the lid-driven cavity problem...")
 
-    # make sure that we are passed a valid patch object
-    if not isinstance(my_data, patch.CellCenterData2d):
-        print(my_data.__class__)
-        msg.fail("ERROR: patch invalid in cavity.py")
-
     myg = my_data.grid
 
     if (myg.xmin != 0 or myg.xmax != 1 or

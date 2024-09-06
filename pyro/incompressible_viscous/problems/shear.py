@@ -33,11 +33,6 @@ def init_data(my_data, rp):
     if rp.get_param("driver.verbose"):
         msg.bold("initializing the incompressible shear problem...")
 
-    # make sure that we are passed a valid patch object
-    if not isinstance(my_data, patch.CellCenterData2d):
-        print(my_data.__class__)
-        msg.fail("ERROR: patch invalid in shear.py")
-
     # get the necessary runtime parameters
     rho_s = rp.get_param("shear.rho_s")
     delta_s = rp.get_param("shear.delta_s")

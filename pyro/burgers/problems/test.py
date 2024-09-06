@@ -14,12 +14,6 @@ def init_data(myd, rp):
     if rp.get_param("driver.verbose"):
         msg.bold("initializing the burgers test problem...")
 
-    # make sure that we are passed a valid patch object
-    if not isinstance(myd, patch.CellCenterData2d):
-        print("ERROR: patch invalid in test.py")
-        print(myd.__class__)
-        sys.exit()
-
     u = myd.get_var("x-velocity")
     v = myd.get_var("y-velocity")
 

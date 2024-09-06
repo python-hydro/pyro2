@@ -14,12 +14,6 @@ def init_data(myd, rp):
     if rp.get_param("driver.verbose"):
         msg.bold("initializing the tophat advection problem...")
 
-    # make sure that we are passed a valid patch object
-    if not isinstance(myd, patch.CellCenterData2d):
-        print("ERROR: patch invalid in tophat.py")
-        print(myd.__class__)
-        sys.exit()
-
     dens = myd.get_var("density")
 
     xmin = myd.grid.xmin

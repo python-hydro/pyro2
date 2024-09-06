@@ -18,11 +18,6 @@ def init_data(my_data, rp):
     if rp.get_param("driver.verbose"):
         msg.bold("initializing the Kelvin-Helmholtz problem...")
 
-    # make sure that we are passed a valid patch object
-    if not isinstance(my_data, patch.CellCenterData2d):
-        print(my_data.__class__)
-        msg.fail("ERROR: patch invalid in kh.py")
-
     # get the density, momenta, and energy as separate variables
     dens = my_data.get_var("density")
     xmom = my_data.get_var("x-momentum")

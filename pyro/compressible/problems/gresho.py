@@ -19,12 +19,6 @@ def init_data(my_data, rp):
     if rp.get_param("driver.verbose"):
         msg.bold("initializing the Gresho vortex problem...")
 
-    # make sure that we are passed a valid patch object
-    if not isinstance(my_data, patch.CellCenterData2d):
-        print("Error: patch invalid in gresho.py")
-        print(my_data.__class__)
-        sys.exit()
-
     # get the density and velocities
     dens = my_data.get_var("density")
     xmom = my_data.get_var("x-momentum")
