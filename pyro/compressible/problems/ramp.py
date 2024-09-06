@@ -8,7 +8,7 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.ramp"
 
-# these defaults comes from the third test problem in 
+# these defaults comes from the third test problem in
 # Woodward and Colella. Journal of Computational Physics, 54, 115-174, 1984
 #
 # Also, the numbers are consistent with the ones in Castro

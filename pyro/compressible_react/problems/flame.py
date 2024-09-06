@@ -49,6 +49,8 @@ def init_data(my_data, rp):
     xctr = 0.5*(xmin + xmax)
     yctr = 0.5*(ymin + ymax)
 
+    r_init = 0.1
+
     # initialize the pressure by putting the explosion energy into a
     # volume of constant pressure.  Then compute the energy in a zone
     # from this.
