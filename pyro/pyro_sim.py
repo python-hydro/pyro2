@@ -176,7 +176,9 @@ class Pyro:
             self.single_step()
 
         # final output
-        if do_io:
+        force_final_output = self.rp.get_param("io.force_final_output")
+
+        if do_io or force_final_output:
             if self.verbose > 0:
                 msg.warning("outputting...")
             basename = self.rp.get_param("io.basename")
