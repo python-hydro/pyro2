@@ -57,7 +57,6 @@ def run_test(t, reset_fails, store_all_benchmarks, rtol, nproc):
                                    reset_bench_on_fail=reset_fails,
                                    make_bench=store_all_benchmarks)
             p.initialize_problem(t.problem, inputs_file=t.inputs, inputs_dict=t.options)
-            start_n = p.sim.n
             err = p.run_sim(rtol)
     finally:
         os.chdir(orig_cwd)
