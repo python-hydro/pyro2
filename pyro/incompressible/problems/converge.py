@@ -33,6 +33,8 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.converge.64"
 
+PROBLEM_PARAMS = {}
+
 
 def init_data(my_data, rp):
     """ initialize the incompressible converge problem """

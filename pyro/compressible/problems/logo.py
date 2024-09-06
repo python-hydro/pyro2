@@ -8,6 +8,8 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.logo"
 
+PROBLEM_PARAMS = {}
+
 
 def init_data(my_data, rp):
     """ initialize the logo problem """

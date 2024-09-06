@@ -4,6 +4,8 @@ from pyro.mesh import patch
 
 DEFAULT_INPTUS = None
 
+PROBLEM_PARAMS = {}
+
 
 def init_data(my_data, rp):
     """ an init routine for unit testing """

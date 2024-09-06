@@ -7,6 +7,8 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.smooth"
 
+PROBLEM_PARAMS = {}
+
 
 def init_data(my_data, rp):
     """ initialize the smooth advection problem """

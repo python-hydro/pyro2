@@ -5,6 +5,9 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.slotted"
 
+PROBLEM_PARAMS = {"slotted.omega": 0.5,  # angular velocity
+                  "slotted.offset": 0.25}  # offset of the slot center from domain center
+
 
 def init_data(my_data, rp):
     """ initialize the slotted advection problem """

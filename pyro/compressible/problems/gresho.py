@@ -7,6 +7,11 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.gresho"
 
+PROBLEM_PARAMS = {"gresho.rho0": 1.0,  # density in the domain
+                  "gresho.r": 0.2,  # radial location of peak velocity
+                  "gresho.p0": 59.5,  # ambient pressure in the domain
+                  "gresho.t_r": 1.0}  # reference time (used for setting peak velocity)
+
 
 def init_data(my_data, rp):
     """ initialize the Gresho vortex problem """

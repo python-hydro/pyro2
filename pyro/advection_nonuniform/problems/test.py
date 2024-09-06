@@ -3,6 +3,8 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = None
 
+PROBLEM_PARAMS = {}
+
 
 def init_data(my_data, rp):
     """ an init routine for unit testing """

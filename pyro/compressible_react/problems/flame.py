@@ -8,15 +8,17 @@ from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.flame"
 
+PROBLEM_PARAMS = {}
+
 
 def init_data(my_data, rp):
     """ initialize the sedov problem """
 
-    msg.bold("initializing the sedov problem...")
+    msg.bold("initializing the flame problem...")
 
     # make sure that we are passed a valid patch object
     if not isinstance(my_data, patch.CellCenterData2d):
-        print("ERROR: patch invalid in sedov.py")
+        print("ERROR: patch invalid in flame.py")
         print(my_data.__class__)
         sys.exit()
 
@@ -35,8 +37,6 @@ def init_data(my_data, rp):
 
     E_sedov = 1.0
 
-    r_init = rp.get_param("sedov.r_init")
-
     gamma = rp.get_param("eos.gamma")
     pi = math.pi
 
@@ -48,6 +48,8 @@ def init_data(my_data, rp):
 
     xctr = 0.5*(xmin + xmax)
     yctr = 0.5*(ymin + ymax)
+
+    r_init = 0.1
 
     # initialize the pressure by putting the explosion energy into a
     # volume of constant pressure.  Then compute the energy in a zone

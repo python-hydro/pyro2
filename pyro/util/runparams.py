@@ -98,7 +98,7 @@ class RuntimeParameters:
         # actually looked- up
         self.used_params = []
 
-    def load_params(self, pfile, no_new=0):
+    def load_params(self, pfile, *, no_new=False):
         """
         Reads line from file and makes dictionary pairs from the data
         to store.
@@ -182,7 +182,7 @@ class RuntimeParameters:
 
         raise KeyError(f"ERROR: runtime parameter {key} not found")
 
-    def set_param(self, key, value):
+    def set_param(self, key, value, *, no_new=True):
         """
         manually set one of the existing runtime parameters
         """
@@ -191,8 +191,13 @@ class RuntimeParameters:
             msg.warning("WARNING: runtime parameters not yet initialized")
             self.load_params("_defaults")
 
-        if key in self.params:
+        if no_new and key in self.params:
             self.params[key] = value
+            return
+
+        if not no_new:
+            self.params[key] = value
+            self.param_comments[key] = ""
             return
 
         raise KeyError(f"ERROR: runtime parameter {key} not found")
