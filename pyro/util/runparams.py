@@ -163,36 +163,6 @@ class RuntimeParameters:
 
                 self.param_comments[key] = comment.strip()
 
-    def command_line_params(self, cmd_strings):
-        """
-        finds dictionary pairs from a string that came from the
-        commandline.  Stores the parameters in only if they
-        already exist.
-
-        we expect things in the string in the form:
-        ["sec.opt=value",  "sec.opt=value"]
-        with each opt an element in the list
-
-        Parameters
-        ----------
-        cmd_strings : list
-            The list of strings containing runtime parameter pairs
-
-        """
-
-        for item in cmd_strings:
-
-            # break it apart
-            key, value = item.split("=")
-
-            # we only want to override existing keys/values
-            if key not in self.params:
-                msg.warning("warning, key: %s not defined" % (key))
-                continue
-
-            # check in turn whether this is an integer, float, or string
-            self.params[key] = _get_val(value)
-
     def get_param(self, key):
         """
         returns the value of the runtime parameter corresponding to the
