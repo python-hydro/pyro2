@@ -8,7 +8,7 @@ from pyro.util import msg
 DEFAULT_INPUTS = "inputs.bubble"
 
 PROBLEM_PARAMS = {"bubble.dens_base": 10.0,  # density at the base of the atmosphere
-                  "bubble.scale_height": 2.0, # scale height of the isothermal atmosphere
+                  "bubble.scale_height": 2.0,  # scale height of the isothermal atmosphere
                   "bubble.x_pert": 2.0,
                   "bubble.y_pert": 2.0,
                   "bubble.r_pert": 0.25,

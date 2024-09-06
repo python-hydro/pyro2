@@ -22,6 +22,7 @@ PROBLEM_PARAMS = {"quadrant.h1": 1.5,  # quadrant 1 initial density
                   "quadrant.cx": 0.5,  # corner x position
                   "quadrant.cy": 0.5}  # corner y position
 
+
 def init_data(my_data, rp):
     """ initialize the quadrant problem """
 
