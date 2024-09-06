@@ -114,11 +114,12 @@ class Pyro:
 
             self.rp.load_params(inputs_file, no_new=1)
 
-        # manually override the dovis and verbose defaults
+        # manually override the I/O, dovis, and verbose defaults
         # for Jupyter, we want runtime vis disabled by default
         if not self.from_commandline:
             self.rp.set_param("vis.dovis", 0)
             self.rp.set_param("driver.verbose", 0)
+            self.rp.set_param("io.do_io", 0)
 
         if inputs_dict is not None:
             for k, v in inputs_dict.items():
@@ -162,7 +163,10 @@ class Pyro:
 
         # output the 0th data
         basename = self.rp.get_param("io.basename")
-        self.sim.write(f"{basename}{self.sim.n:04d}")
+        do_io = self.rp.get_param("io.do_io")
+
+        if do_io:
+            self.sim.write(f"{basename}{self.sim.n:04d}")
 
         if self.dovis:
             plt.figure(num=1, figsize=(8, 6), dpi=100, facecolor='w')
@@ -172,10 +176,11 @@ class Pyro:
             self.single_step()
 
         # final output
-        if self.verbose > 0:
-            msg.warning("outputting...")
-        basename = self.rp.get_param("io.basename")
-        self.sim.write(f"{basename}{self.sim.n:04d}")
+        if do_io:
+            if self.verbose > 0:
+                msg.warning("outputting...")
+            basename = self.rp.get_param("io.basename")
+            self.sim.write(f"{basename}{self.sim.n:04d}")
 
         tm_main.end()
         # -------------------------------------------------------------------------
