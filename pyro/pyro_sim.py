@@ -103,8 +103,6 @@ class Pyro:
         for k, v in problem.PROBLEM_PARAMS.items():
             self.rp.set_param(k, v, no_new=False)
 
-        print(self.rp.params)
-
         # now read in the inputs file
         if inputs_file is None:
             inputs_file = problem.DEFAULT_INPUTS
