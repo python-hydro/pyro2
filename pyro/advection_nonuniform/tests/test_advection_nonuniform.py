@@ -1,4 +1,5 @@
-import pyro.advection_nonuniform.simulation as sn
+import pyro.advection_nonuniform.simulation as sim
+import pyro.advection_nonuniform.problems.test as test
 from pyro.util import runparams
 
 
@@ -19,7 +20,7 @@ class TestSimulation:
         self.rp.params["mesh.ny"] = 8
         self.rp.params["particles.do_particles"] = 0
 
-        self.sim = sn.Simulation("advection_nonuniform", "test", self.rp)
+        self.sim = sim.Simulation("advection_nonuniform", "test", self.rp, test.init_data)
         self.sim.initialize()
 
     def teardown_method(self):

@@ -53,7 +53,7 @@ def setup_test(n_particles=50, extra_rp_params=None):
             rp.params[param] = value
 
     # set up sim
-    sim = NullSimulation("", "", rp)
+    sim = NullSimulation("", "", rp, None)
 
     # set up grid
     my_grid = grid_setup(rp)

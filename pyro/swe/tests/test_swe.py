@@ -1,7 +1,8 @@
 import numpy as np
 from numpy.testing import assert_array_equal
 
-import pyro.swe.simulation as sn
+import pyro.swe.simulation as sim
+import pyro.swe.problems.test as test
 from pyro.util import runparams
 
 
@@ -24,7 +25,7 @@ class TestSimulation:
 
         self.rp.params["swe.grav"] = 1.0
 
-        self.sim = sn.Simulation("swe", "test", self.rp)
+        self.sim = sim.Simulation("swe", "test", self.rp, test.init_data)
         self.sim.initialize()
 
     def teardown_method(self):
@@ -39,10 +40,10 @@ class TestSimulation:
     def test_prim(self):
 
         # U -> q
-        q = sn.cons_to_prim(self.sim.cc_data.data, self.sim.ivars, self.sim.cc_data.grid)
+        q = sim.cons_to_prim(self.sim.cc_data.data, self.sim.ivars, self.sim.cc_data.grid)
 
         # q -> U
-        U = sn.prim_to_cons(q, self.sim.ivars, self.sim.cc_data.grid)
+        U = sim.prim_to_cons(q, self.sim.ivars, self.sim.cc_data.grid)
         assert_array_equal(U, self.sim.cc_data.data)
 
     def test_derives(self):

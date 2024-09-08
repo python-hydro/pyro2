@@ -2,7 +2,8 @@ import numpy as np
 import pytest
 from numpy.testing import assert_array_equal
 
-import pyro.compressible.simulation as sn
+import pyro.compressible.simulation as sim
+import pyro.compressible.problems.test as test
 from pyro.util import runparams
 
 
@@ -26,7 +27,7 @@ class TestSimulation:
         self.rp.params["eos.gamma"] = 1.4
         self.rp.params["compressible.grav"] = 1.0
 
-        self.sim = sn.Simulation("compressible", "test", self.rp)
+        self.sim = sim.Simulation("compressible", "test", self.rp, test.init_data)
         self.sim.initialize()
 
     def teardown_method(self):
