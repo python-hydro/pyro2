@@ -1,5 +1,3 @@
-import importlib
-
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -167,8 +165,7 @@ class Simulation(NullSimulation):
         self.cc_data.add_derived(derives.derive_primitives)
 
         # initial conditions for the problem
-        problem = importlib.import_module(f"pyro.{self.solver_name}.problems.{self.problem_name}")
-        problem.init_data(self.cc_data, self.rp)
+        self.problem_func(self.cc_data, self.rp)
 
         if self.verbose > 0:
             print(my_data)

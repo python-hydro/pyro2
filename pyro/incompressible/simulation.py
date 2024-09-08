@@ -1,5 +1,3 @@
-import importlib
-
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -64,8 +62,7 @@ class Simulation(burgers_simulation):
         self.in_preevolve = False
 
         # now set the initial conditions for the problem
-        problem = importlib.import_module(f"pyro.{self.solver_name}.problems.{self.problem_name}")
-        problem.init_data(self.cc_data, self.rp)
+        self.problem_func(self.cc_data, self.rp)
 
     def preevolve(self):
         """

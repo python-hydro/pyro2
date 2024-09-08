@@ -1,5 +1,3 @@
-import importlib
-
 import h5py
 
 import pyro.mesh.boundary as bnd
@@ -102,20 +100,29 @@ def bc_setup(rp):
 
 class NullSimulation:
 
-    def __init__(self, solver_name, problem_name, rp, *,
+    def __init__(self, solver_name, problem_name, problem_func, rp, *,
+                 problem_finalize_func=None,
                  timers=None, data_class=patch.CellCenterData2d):
         """
         Initialize the Simulation object
 
         Parameters
         ----------
+        solver_name : str
+            The name of the solver we are using
         problem_name : str
-            The name of the problem we wish to run.  This should
-            correspond to one of the modules in advection/problems/
+            The descriptive name for the problem (used in output)
+        problem_func : function
+            The function to call to initialize the problem
         rp : RuntimeParameters object
             The runtime parameters for the simulation
+        problem_finalize_func : function
+            An (optional) function to call when the simulation is
+            over.
         timers : TimerCollection object, optional
-            The timers used for profiling this simulation
+            The timers used for profiling this simulation.
+        data_class : CellCenterData2d or FV2d
+            The class that manages the data.
         """
 
         self.n = 0
@@ -142,6 +149,8 @@ class NullSimulation:
 
         self.solver_name = solver_name
         self.problem_name = problem_name
+        self.problem_func = problem_func
+        self.problem_finalize = problem_finalize_func
 
         if timers is None:
             self.tc = profile.TimerCollection()
@@ -230,10 +239,9 @@ class NullSimulation:
         Do any final clean-ups for the simulation and call the problem's
         finalize() method.
         """
-        # there should be a cleaner way of doing this
-        problem = importlib.import_module("pyro.{}.problems.{}".format(self.solver_name, self.problem_name))
 
-        problem.finalize()
+        if self.problem_finalize:
+            self.problem_finalize()
 
     def write(self, filename):
         """
