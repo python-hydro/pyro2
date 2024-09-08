@@ -1,4 +1,5 @@
-import pyro.advection.simulation as sn
+import pyro.advection.simulation as sim
+from pyro.advection.problems import test
 from pyro.util import runparams
 
 
@@ -19,7 +20,7 @@ class TestSimulation:
         self.rp.params["mesh.ny"] = 8
         self.rp.params["particles.do_particles"] = 0
 
-        self.sim = sn.Simulation("advection", "test", self.rp)
+        self.sim = sim.Simulation("advection", "test", test.init_data, self.rp)
         self.sim.initialize()
 
     def teardown_method(self):

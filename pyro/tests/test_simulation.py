@@ -1,5 +1,5 @@
 import pyro.mesh.boundary as bnd
-import pyro.simulation_null as sn
+import pyro.simulation_null as sim
 from pyro.mesh import patch
 from pyro.util import runparams
 
@@ -23,7 +23,7 @@ class TestSimulation:
         self.rp.params["driver.max_dt_change"] = 1.2
         self.rp.params["driver.fix_dt"] = -1.0
 
-        self.sim = sn.NullSimulation("test", "test", self.rp)
+        self.sim = sim.NullSimulation("test", "test", None, self.rp)
 
         myg = patch.Grid2d(8, 16)
         myd = patch.CellCenterData2d(myg)
@@ -78,7 +78,7 @@ def test_grid_setup():
     rp.params["mesh.ymin"] = 0.0
     rp.params["mesh.ymax"] = 2.0
 
-    g = sn.grid_setup(rp)
+    g = sim.grid_setup(rp)
 
     assert g.nx == 8
     assert g.ny == 16

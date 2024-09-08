@@ -67,9 +67,16 @@ class Pyro:
         self.solver = importlib.import_module(solver_import)
         self.solver_name = solver_name
 
-        # -------------------------------------------------------------------------
+        self.problem_name = None
+        self.problem_func = None
+        self.problem_params = None
+        self.problem_finalize = None
+
+        # custom problems
+
+        self.custom_problems = {}
+
         # runtime parameters
-        # -------------------------------------------------------------------------
 
         # parameter defaults
         self.rp = RuntimeParameters()
@@ -79,6 +86,23 @@ class Pyro:
         self.tc = profile.TimerCollection()
 
         self.is_initialized = False
+
+    def add_problem(self, name, problem_func, *, problem_params=None):
+        """Add a problem setup for this solver.
+
+        Parameters
+        ----------
+        name : str
+            The descriptive name of the problem
+        problem_func : function
+            The function to initialize the state data
+        problem_params : dict
+            A dictionary of runtime parameters needed for the problem setup
+        """
+
+        if problem_params is None:
+            problem_params = {}
+        self.custom_problems[name] = (problem_func, problem_params)
 
     def initialize_problem(self, problem_name, *, inputs_file=None, inputs_dict=None):
         """
@@ -95,16 +119,27 @@ class Pyro:
         """
         # pylint: disable=attribute-defined-outside-init
 
-        problem = importlib.import_module("pyro.{}.problems.{}".format(self.solver_name, problem_name))
+        if problem_name in self.custom_problems:
+            # this is a problem we added via self.add_problem
+            self.problem_name = problem_name
+            self.problem_func, self.problem_params = self.custom_problems[problem_name]
+            self.problem_finalize = None
+
+        else:
+            problem = importlib.import_module("pyro.{}.problems.{}".format(self.solver_name, problem_name))
+            self.problem_name = problem_name
+            self.problem_func = problem.init_data
+            self.problem_params = problem.PROBLEM_PARAMS
+            self.problem_finalize = problem.finalize
+
+            if inputs_file is None:
+                inputs_file = problem.DEFAULT_INPUTS
 
         # problem-specific runtime parameters
-        for k, v in problem.PROBLEM_PARAMS.items():
+        for k, v in self.problem_params.items():
             self.rp.set_param(k, v, no_new=False)
 
         # now read in the inputs file
-        if inputs_file is None:
-            inputs_file = problem.DEFAULT_INPUTS
-
         if inputs_file is not None:
             if not os.path.isfile(inputs_file):
                 # check if the param file lives in the solver's problems directory
@@ -138,7 +173,8 @@ class Pyro:
         # data and know about the runtime parameters and which problem we
         # are running
         self.sim = self.solver.Simulation(
-            self.solver_name, problem_name, self.rp, timers=self.tc)
+            self.solver_name, self.problem_name, self.problem_func, self.rp,
+            problem_finalize_func=self.problem_finalize, timers=self.tc)
 
         self.sim.initialize()
         self.sim.preevolve()

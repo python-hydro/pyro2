@@ -1,8 +1,5 @@
 """ A simulation of diffusion """
 
-import importlib
-import math
-
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -28,7 +25,7 @@ class Simulation(NullSimulation):
         if my_grid.nx != my_grid.ny:
             msg.fail("need nx = ny for diffusion problems")
 
-        n = int(math.log(my_grid.nx)/math.log(2.0))
+        n = int(np.log(my_grid.nx)/np.log(2.0))
         if 2**n != my_grid.nx:
             msg.fail("grid needs to be a power of 2")
 
@@ -50,8 +47,7 @@ class Simulation(NullSimulation):
         self.cc_data = my_data
 
         # now set the initial conditions for the problem
-        problem = importlib.import_module(f"pyro.diffusion.problems.{self.problem_name}")
-        problem.init_data(self.cc_data, self.rp)
+        self.problem_func(self.cc_data, self.rp)
 
     def method_compute_timestep(self):
         """

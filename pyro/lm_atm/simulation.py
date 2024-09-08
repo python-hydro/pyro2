@@ -1,5 +1,3 @@
-import importlib
-
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -37,9 +35,11 @@ class Basestate:
 
 class Simulation(NullSimulation):
 
-    def __init__(self, solver_name, problem_name, rp, *, timers=None):
+    def __init__(self, solver_name, problem_name, problem_func, rp, *,
+                 problem_finalize_func=None, timers=None):
 
-        NullSimulation.__init__(self, solver_name, problem_name, rp, timers=timers)
+        super().__init__(solver_name, problem_name, problem_func, rp,
+                         problem_finalize_func=problem_finalize_func, timers=timers)
 
         self.base = {}
         self.aux_data = None
@@ -114,8 +114,7 @@ class Simulation(NullSimulation):
         self.base["p0"] = Basestate(myg.ny, ng=myg.ng)
 
         # now set the initial conditions for the problem
-        problem = importlib.import_module(f"pyro.lm_atm.problems.{self.problem_name}")
-        problem.init_data(self.cc_data, self.base, self.rp)
+        self.problem_func(self.cc_data, self.base, self.rp)
 
         # Construct beta_0
         gamma = self.rp.get_param("eos.gamma")
