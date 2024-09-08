@@ -119,7 +119,7 @@ def read(filename):
         if solver_name is not None:
             solver = importlib.import_module(f"pyro.{solver_name}")
 
-            sim = solver.Simulation(solver_name, problem_name, None)
+            sim = solver.Simulation(solver_name, problem_name, None, None)
             sim.n = n
             sim.cc_data = myd
             sim.cc_data.t = t
