@@ -2,8 +2,8 @@ import numpy as np
 import pytest
 from numpy.testing import assert_array_equal
 
-import pyro.compressible.simulation as sim
 import pyro.compressible.problems.test as test
+import pyro.compressible.simulation as sim
 from pyro.util import runparams
 
 

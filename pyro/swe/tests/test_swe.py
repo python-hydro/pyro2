@@ -1,8 +1,8 @@
 import numpy as np
 from numpy.testing import assert_array_equal
 
-import pyro.swe.simulation as sim
 import pyro.swe.problems.test as test
+import pyro.swe.simulation as sim
 from pyro.util import runparams
 
 

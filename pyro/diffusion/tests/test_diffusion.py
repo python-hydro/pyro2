@@ -1,5 +1,5 @@
-import pyro.diffusion.simulation as sim
 import pyro.diffusion.problems.test as test
+import pyro.diffusion.simulation as sim
 from pyro.util import runparams
 
 
