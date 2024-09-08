@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.test &#8212; pyro 4.2.0.post19+g8e6acd6e documentation</title>
+    <title>pyro.test &#8212; pyro 4.2.0.post20+g73d80384 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=4d0294fd"></script>
+    <script src="../../_static/documentation_options.js?v=be1bf294"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -516,14 +516,12 @@ document.write(`
                                    <span class="n">reset_bench_on_fail</span><span class="o">=</span><span class="n">reset_fails</span><span class="p">,</span>
                                    <span class="n">make_bench</span><span class="o">=</span><span class="n">store_all_benchmarks</span><span class="p">)</span>
             <span class="n">p</span><span class="o">.</span><span class="n">initialize_problem</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">problem</span><span class="p">,</span> <span class="n">inputs_file</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span> <span class="n">inputs_dict</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
-            <span class="n">start_n</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">n</span>
             <span class="n">err</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">run_sim</span><span class="p">(</span><span class="n">rtol</span><span class="p">)</span>
     <span class="k">finally</span><span class="p">:</span>
         <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">orig_cwd</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">err</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="c1"># the test passed; clean up the output files for developer use</span>
         <span class="n">basename</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;io.basename&quot;</span><span class="p">)</span>
-        <span class="p">(</span><span class="n">test_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basename</span><span class="si">}{</span><span class="n">start_n</span><span class="si">:</span><span class="s2">04d</span><span class="si">}</span><span class="s2">.h5&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
         <span class="p">(</span><span class="n">test_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basename</span><span class="si">}{</span><span class="n">p</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">n</span><span class="si">:</span><span class="s2">04d</span><span class="si">}</span><span class="s2">.h5&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
         <span class="p">(</span><span class="n">test_dir</span> <span class="o">/</span> <span class="s2">&quot;inputs.auto&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
         <span class="n">test_dir</span><span class="o">.</span><span class="n">rmdir</span><span class="p">()</span>
@@ -551,7 +549,7 @@ document.write(`
              <span class="n">reset_fails</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">store_all_benchmarks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
              <span class="n">single</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span> <span class="n">nproc</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 
-    <span class="n">opts</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;driver.verbose&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;vis.dovis&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;io.do_io&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;driver.verbose&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;vis.dovis&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;io.do_io&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;io.force_final_output&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
 
     <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
 

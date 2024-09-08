@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Comparing the Compressible Solvers &#8212; pyro 4.2.0.post19+g8e6acd6e documentation</title>
+    <title>Comparing the Compressible Solvers &#8212; pyro 4.2.0.post20+g73d80384 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=4d0294fd"></script>
+    <script src="_static/documentation_options.js?v=be1bf294"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -604,6 +604,7 @@ eos.gamma = 1.4
 io.basename = rt_
 io.do_io = 0
 io.dt_out = 0.1
+io.force_final_output = 0
 io.n_out = 100
 mesh.grid_type = Cartesian2d
 mesh.nx = 64
@@ -750,7 +751,7 @@ vis.store_images = 0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.colorbar.Colorbar at 0x7fce87809090&gt;
+&lt;matplotlib.colorbar.Colorbar at 0x7f0824dc51e0&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -806,8 +807,9 @@ driver.tmax = 2.0
 driver.verbose = 0
 eos.gamma = 1.4
 io.basename = kh_
-io.do_io = 1
+io.do_io = 0
 io.dt_out = 0.1
+io.force_final_output = 0
 io.n_out = 10000
 kh.bulk_velocity = 0.0
 kh.rho_1 = 1
@@ -882,7 +884,7 @@ vis.store_images = 0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.colorbar.Colorbar at 0x7fce8794fd90&gt;
+&lt;matplotlib.colorbar.Colorbar at 0x7f0824effee0&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
