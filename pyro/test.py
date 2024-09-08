@@ -57,14 +57,12 @@ def run_test(t, reset_fails, store_all_benchmarks, rtol, nproc):
                                    reset_bench_on_fail=reset_fails,
                                    make_bench=store_all_benchmarks)
             p.initialize_problem(t.problem, inputs_file=t.inputs, inputs_dict=t.options)
-            start_n = p.sim.n
             err = p.run_sim(rtol)
     finally:
         os.chdir(orig_cwd)
     if err == 0:
         # the test passed; clean up the output files for developer use
         basename = p.rp.get_param("io.basename")
-        (test_dir / f"{basename}{start_n:04d}.h5").unlink()
         (test_dir / f"{basename}{p.sim.n:04d}.h5").unlink()
         (test_dir / "inputs.auto").unlink()
         test_dir.rmdir()
@@ -86,7 +84,7 @@ def do_tests(out_file,
              reset_fails=False, store_all_benchmarks=False,
              single=None, solver=None, rtol=1e-12, nproc=1):
 
-    opts = {"driver.verbose": 0, "vis.dovis": 0, "io.do_io": 0}
+    opts = {"driver.verbose": 0, "vis.dovis": 0, "io.do_io": 0, "io.force_final_output": 1}
 
     results = {}
 
