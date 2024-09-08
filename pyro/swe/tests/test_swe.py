@@ -1,7 +1,7 @@
 import numpy as np
 from numpy.testing import assert_array_equal
 
-import pyro.swe.problems.test as test
+from pyro.swe.problems import test
 import pyro.swe.simulation as sim
 from pyro.util import runparams
 
@@ -25,7 +25,7 @@ class TestSimulation:
 
         self.rp.params["swe.grav"] = 1.0
 
-        self.sim = sim.Simulation("swe", "test", self.rp, test.init_data)
+        self.sim = sim.Simulation("swe", "test", test.init_data, self.rp)
         self.sim.initialize()
 
     def teardown_method(self):

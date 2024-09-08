@@ -27,7 +27,7 @@ class TestSimulation:
         self.rp.params["eos.gamma"] = 1.4
         self.rp.params["compressible.grav"] = 1.0
 
-        self.sim = sim.Simulation("compressible", "test", self.rp, test.init_data)
+        self.sim = sim.Simulation("compressible", "test", test.init_data, self.rp)
         self.sim.initialize()
 
     def teardown_method(self):
@@ -46,13 +46,13 @@ class TestSimulation:
 
         # U -> q
         gamma = self.sim.cc_data.get_aux("gamma")
-        q = sn.cons_to_prim(self.sim.cc_data.data, gamma, self.sim.ivars, self.sim.cc_data.grid)
+        q = sim.cons_to_prim(self.sim.cc_data.data, gamma, self.sim.ivars, self.sim.cc_data.grid)
 
         assert q[:, :, self.sim.ivars.ip].min() == pytest.approx(1.0) and \
                q[:, :, self.sim.ivars.ip].max() == pytest.approx(1.0)
 
         # q -> U
-        U = sn.prim_to_cons(q, gamma, self.sim.ivars, self.sim.cc_data.grid)
+        U = sim.prim_to_cons(q, gamma, self.sim.ivars, self.sim.cc_data.grid)
         assert_array_equal(U, self.sim.cc_data.data)
 
     def test_derives(self):

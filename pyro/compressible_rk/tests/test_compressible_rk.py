@@ -1,4 +1,4 @@
-import pyro.compressible_rk.problems.test as test
+from pyro.compressible_rk.problems import test
 import pyro.compressible_rk.simulation as sim
 from pyro.util import runparams
 
@@ -23,7 +23,7 @@ class TestSimulation:
         self.rp.params["eos.gamma"] = 1.4
         self.rp.params["compressible.grav"] = 1.0
 
-        self.sim = sim.Simulation("compressible", "test", self.rp, test.init_data)
+        self.sim = sim.Simulation("compressible", "test", test.init_data, self.rp)
         self.sim.initialize()
 
     def teardown_method(self):

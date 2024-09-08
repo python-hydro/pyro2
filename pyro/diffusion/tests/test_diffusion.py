@@ -1,4 +1,4 @@
-import pyro.diffusion.problems.test as test
+from pyro.diffusion.problems import test
 import pyro.diffusion.simulation as sim
 from pyro.util import runparams
 
@@ -20,7 +20,7 @@ class TestSimulation:
         self.rp.params["mesh.nx"] = 8
         self.rp.params["mesh.ny"] = 8
 
-        self.sim = sim.Simulation("diffusion", "test", self.rp, test.init_data)
+        self.sim = sim.Simulation("diffusion", "test", test.init_data, self.rp)
         self.sim.initialize()
 
     def teardown_method(self):
