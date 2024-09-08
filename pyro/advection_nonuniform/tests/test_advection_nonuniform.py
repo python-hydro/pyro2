@@ -1,5 +1,5 @@
-from pyro.advection_nonuniform.problems import test
 import pyro.advection_nonuniform.simulation as sim
+from pyro.advection_nonuniform.problems import test
 from pyro.util import runparams
 
 

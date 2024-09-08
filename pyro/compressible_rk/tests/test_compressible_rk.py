@@ -1,5 +1,5 @@
-from pyro.compressible_rk.problems import test
 import pyro.compressible_rk.simulation as sim
+from pyro.compressible_rk.problems import test
 from pyro.util import runparams
 
 

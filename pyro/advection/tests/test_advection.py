@@ -1,5 +1,5 @@
-from pyro.advection.problems import test
 import pyro.advection.simulation as sim
+from pyro.advection.problems import test
 from pyro.util import runparams
 
 
