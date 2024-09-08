@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.lm_atm.simulation &#8212; pyro 4.2.0.post18+ge4dffa7c documentation</title>
+    <title>pyro.lm_atm.simulation &#8212; pyro 4.2.0.post19+g8e6acd6e documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=252fcc08"></script>
+    <script src="../../../_static/documentation_options.js?v=4d0294fd"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -200,6 +200,7 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../../compressible-rt-compare.html">Comparing the Compressible Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../adding_a_problem_jupyter.html">Defining our own problem in Jupyter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../advection-error.html">Error Measurement of the <code class="docutils literal notranslate"><span class="pre">advection_fv4</span></code> Solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../compressible-convergence.html">Convergence of the compressible solvers</a></li>
 </ul>
@@ -448,9 +449,7 @@ document.write(`
                 <article class="bd-article">
                   
   <h1>Source code for pyro.lm_atm.simulation</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">importlib</span>
-
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">import</span> <span class="nn">pyro.lm_atm.LM_atm_interface</span> <span class="k">as</span> <span class="nn">lm_interface</span>
@@ -504,9 +503,11 @@ document.write(`
 <a class="viewcode-back" href="../../../pyro.lm_atm.html#pyro.lm_atm.simulation.Simulation">[docs]</a>
 <span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="n">NullSimulation</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solver_name</span><span class="p">,</span> <span class="n">problem_name</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">timers</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solver_name</span><span class="p">,</span> <span class="n">problem_name</span><span class="p">,</span> <span class="n">problem_func</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
+                 <span class="n">problem_finalize_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timers</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
-        <span class="n">NullSimulation</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solver_name</span><span class="p">,</span> <span class="n">problem_name</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">timers</span><span class="o">=</span><span class="n">timers</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">solver_name</span><span class="p">,</span> <span class="n">problem_name</span><span class="p">,</span> <span class="n">problem_func</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span>
+                         <span class="n">problem_finalize_func</span><span class="o">=</span><span class="n">problem_finalize_func</span><span class="p">,</span> <span class="n">timers</span><span class="o">=</span><span class="n">timers</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">base</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">aux_data</span> <span class="o">=</span> <span class="kc">None</span>
@@ -583,8 +584,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;p0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Basestate</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">)</span>
 
         <span class="c1"># now set the initial conditions for the problem</span>
-        <span class="n">problem</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;pyro.lm_atm.problems.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">problem_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">problem</span><span class="o">.</span><span class="n">init_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">)</span>
 
         <span class="c1"># Construct beta_0</span>
         <span class="n">gamma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;eos.gamma&quot;</span><span class="p">)</span>

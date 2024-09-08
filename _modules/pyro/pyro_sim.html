@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.pyro_sim &#8212; pyro 4.2.0.post18+ge4dffa7c documentation</title>
+    <title>pyro.pyro_sim &#8212; pyro 4.2.0.post19+g8e6acd6e documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=252fcc08"></script>
+    <script src="../../_static/documentation_options.js?v=4d0294fd"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -200,6 +200,7 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../compressible-rt-compare.html">Comparing the Compressible Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../adding_a_problem_jupyter.html">Defining our own problem in Jupyter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../advection-error.html">Error Measurement of the <code class="docutils literal notranslate"><span class="pre">advection_fv4</span></code> Solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../compressible-convergence.html">Convergence of the compressible solvers</a></li>
 </ul>
@@ -519,9 +520,16 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">solver_import</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">solver_name</span> <span class="o">=</span> <span class="n">solver_name</span>
 
-        <span class="c1"># -------------------------------------------------------------------------</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem_name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem_func</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem_params</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem_finalize</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># custom problems</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">custom_problems</span> <span class="o">=</span> <span class="p">{}</span>
+
         <span class="c1"># runtime parameters</span>
-        <span class="c1"># -------------------------------------------------------------------------</span>
 
         <span class="c1"># parameter defaults</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rp</span> <span class="o">=</span> <span class="n">RuntimeParameters</span><span class="p">()</span>
@@ -531,6 +539,26 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">tc</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">TimerCollection</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">is_initialized</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="Pyro.add_problem">
+<a class="viewcode-back" href="../../pyro.html#pyro.pyro_sim.Pyro.add_problem">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_problem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">problem_func</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">problem_params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a problem setup for this solver.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            The descriptive name of the problem</span>
+<span class="sd">        problem_func : function</span>
+<span class="sd">            The function to initialize the state data</span>
+<span class="sd">        problem_params : dict</span>
+<span class="sd">            A dictionary of runtime parameters needed for the problem setup</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">problem_params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">problem_params</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">custom_problems</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">problem_func</span><span class="p">,</span> <span class="n">problem_params</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="Pyro.initialize_problem">
 <a class="viewcode-back" href="../../pyro.html#pyro.pyro_sim.Pyro.initialize_problem">[docs]</a>
@@ -549,16 +577,27 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># pylint: disable=attribute-defined-outside-init</span>
 
-        <span class="n">problem</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;pyro.</span><span class="si">{}</span><span class="s2">.problems.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solver_name</span><span class="p">,</span> <span class="n">problem_name</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">problem_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_problems</span><span class="p">:</span>
+            <span class="c1"># this is a problem we added via self.add_problem</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">problem_name</span> <span class="o">=</span> <span class="n">problem_name</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">problem_func</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_problems</span><span class="p">[</span><span class="n">problem_name</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">problem_finalize</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">problem</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;pyro.</span><span class="si">{}</span><span class="s2">.problems.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solver_name</span><span class="p">,</span> <span class="n">problem_name</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">problem_name</span> <span class="o">=</span> <span class="n">problem_name</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">problem_func</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">init_data</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">problem_params</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">PROBLEM_PARAMS</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">problem_finalize</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">finalize</span>
+
+            <span class="k">if</span> <span class="n">inputs_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">inputs_file</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">DEFAULT_INPUTS</span>
 
         <span class="c1"># problem-specific runtime parameters</span>
-        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">problem</span><span class="o">.</span><span class="n">PROBLEM_PARAMS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem_params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">set_param</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">no_new</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="c1"># now read in the inputs file</span>
-        <span class="k">if</span> <span class="n">inputs_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">inputs_file</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">DEFAULT_INPUTS</span>
-
         <span class="k">if</span> <span class="n">inputs_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">inputs_file</span><span class="p">):</span>
                 <span class="c1"># check if the param file lives in the solver&#39;s problems directory</span>
@@ -592,7 +631,8 @@ document.write(`
         <span class="c1"># data and know about the runtime parameters and which problem we</span>
         <span class="c1"># are running</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">Simulation</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">solver_name</span><span class="p">,</span> <span class="n">problem_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">,</span> <span class="n">timers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tc</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">solver_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem_func</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">,</span>
+            <span class="n">problem_finalize_func</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">problem_finalize</span><span class="p">,</span> <span class="n">timers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tc</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">preevolve</span><span class="p">()</span>

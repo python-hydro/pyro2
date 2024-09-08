@@ -72,6 +72,7 @@ new ideas.
    :hidden:
 
    compressible-rt-compare.ipynb
+   adding_a_problem_jupyter.ipynb
    advection-error.ipynb
    compressible-convergence.ipynb
 

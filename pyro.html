@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyro package &#8212; pyro 4.2.0.post18+ge4dffa7c documentation</title>
+    <title>pyro package &#8212; pyro 4.2.0.post19+g8e6acd6e documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=252fcc08"></script>
+    <script src="_static/documentation_options.js?v=4d0294fd"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -203,6 +203,7 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="compressible-rt-compare.html">Comparing the Compressible Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adding_a_problem_jupyter.html">Defining our own problem in Jupyter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advection-error.html">Error Measurement of the <code class="docutils literal notranslate"><span class="pre">advection_fv4</span></code> Solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compressible-convergence.html">Convergence of the compressible solvers</a></li>
 </ul>
@@ -539,6 +540,7 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.pyro_sim">pyro.pyro_sim module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.pyro_sim.Pyro"><code class="docutils literal notranslate"><span class="pre">Pyro</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.pyro_sim.Pyro.add_problem"><code class="docutils literal notranslate"><span class="pre">Pyro.add_problem()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.pyro_sim.Pyro.get_grid"><code class="docutils literal notranslate"><span class="pre">Pyro.get_grid()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.pyro_sim.Pyro.get_sim"><code class="docutils literal notranslate"><span class="pre">Pyro.get_sim()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.pyro_sim.Pyro.get_var"><code class="docutils literal notranslate"><span class="pre">Pyro.get_var()</span></code></a></li>
@@ -798,7 +800,6 @@ methods.</p>
 <li class="toctree-l2"><a class="reference internal" href="pyro.viscous_burgers.html#module-pyro.viscous_burgers.simulation">pyro.viscous_burgers.simulation module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyro.viscous_burgers.html#pyro.viscous_burgers.simulation.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="pyro.viscous_burgers.html#pyro.viscous_burgers.simulation.Simulation.evolve"><code class="docutils literal notranslate"><span class="pre">Simulation.evolve()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyro.viscous_burgers.html#pyro.viscous_burgers.simulation.Simulation.initialize"><code class="docutils literal notranslate"><span class="pre">Simulation.initialize()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -1451,6 +1452,24 @@ methods.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>The main driver to run pyro.</p>
 <dl class="py method">
+<dt class="sig sig-object py" id="pyro.pyro_sim.Pyro.add_problem">
+<span class="sig-name descname"><span class="pre">add_problem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/pyro_sim.html#Pyro.add_problem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.pyro_sim.Pyro.add_problem" title="Link to this definition">#</a></dt>
+<dd><p>Add a problem setup for this solver.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>The descriptive name of the problem</p>
+</dd>
+<dt><strong>problem_func</strong><span class="classifier">function</span></dt><dd><p>The function to initialize the state data</p>
+</dd>
+<dt><strong>problem_params</strong><span class="classifier">dict</span></dt><dd><p>A dictionary of runtime parameters needed for the problem setup</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pyro.pyro_sim.Pyro.get_grid">
 <span class="sig-name descname"><span class="pre">get_grid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/pyro_sim.html#Pyro.get_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.pyro_sim.Pyro.get_grid" title="Link to this definition">#</a></dt>
 <dd><p>Return the underlying grid object for the simulation</p>
@@ -1543,7 +1562,7 @@ pyro, but adds benchmarking routines.</p>
 <span id="pyro-simulation-null-module"></span><h2>pyro.simulation_null module<a class="headerlink" href="#module-pyro.simulation_null" title="Link to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyro.simulation_null.NullSimulation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.simulation_null.</span></span><span class="sig-name descname"><span class="pre">NullSimulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timers=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_class=&lt;class</span> <span class="pre">'pyro.mesh.patch.CellCenterData2d'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/simulation_null.html#NullSimulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.simulation_null.NullSimulation" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyro.simulation_null.</span></span><span class="sig-name descname"><span class="pre">NullSimulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_finalize_func=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timers=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_class=&lt;class</span> <span class="pre">'pyro.mesh.patch.CellCenterData2d'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/simulation_null.html#NullSimulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.simulation_null.NullSimulation" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyro.simulation_null.NullSimulation.compute_timestep">
@@ -1722,6 +1741,7 @@ is not needed for advection</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.pyro_sim">pyro.pyro_sim module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.pyro_sim.Pyro"><code class="docutils literal notranslate"><span class="pre">Pyro</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.pyro_sim.Pyro.add_problem"><code class="docutils literal notranslate"><span class="pre">Pyro.add_problem()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.pyro_sim.Pyro.get_grid"><code class="docutils literal notranslate"><span class="pre">Pyro.get_grid()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.pyro_sim.Pyro.get_sim"><code class="docutils literal notranslate"><span class="pre">Pyro.get_sim()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.pyro_sim.Pyro.get_var"><code class="docutils literal notranslate"><span class="pre">Pyro.get_var()</span></code></a></li>

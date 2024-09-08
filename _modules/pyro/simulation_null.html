@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.simulation_null &#8212; pyro 4.2.0.post18+ge4dffa7c documentation</title>
+    <title>pyro.simulation_null &#8212; pyro 4.2.0.post19+g8e6acd6e documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=252fcc08"></script>
+    <script src="../../_static/documentation_options.js?v=4d0294fd"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -200,6 +200,7 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../compressible-rt-compare.html">Comparing the Compressible Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../adding_a_problem_jupyter.html">Defining our own problem in Jupyter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../advection-error.html">Error Measurement of the <code class="docutils literal notranslate"><span class="pre">advection_fv4</span></code> Solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../compressible-convergence.html">Convergence of the compressible solvers</a></li>
 </ul>
@@ -448,9 +449,7 @@ document.write(`
                 <article class="bd-article">
                   
   <h1>Source code for pyro.simulation_null</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">importlib</span>
-
-<span class="kn">import</span> <span class="nn">h5py</span>
+<span></span><span class="kn">import</span> <span class="nn">h5py</span>
 
 <span class="kn">import</span> <span class="nn">pyro.mesh.boundary</span> <span class="k">as</span> <span class="nn">bnd</span>
 <span class="kn">import</span> <span class="nn">pyro.util.profile_pyro</span> <span class="k">as</span> <span class="nn">profile</span>
@@ -560,20 +559,29 @@ document.write(`
 <a class="viewcode-back" href="../../pyro.html#pyro.simulation_null.NullSimulation">[docs]</a>
 <span class="k">class</span> <span class="nc">NullSimulation</span><span class="p">:</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solver_name</span><span class="p">,</span> <span class="n">problem_name</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solver_name</span><span class="p">,</span> <span class="n">problem_name</span><span class="p">,</span> <span class="n">problem_func</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
+                 <span class="n">problem_finalize_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">timers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data_class</span><span class="o">=</span><span class="n">patch</span><span class="o">.</span><span class="n">CellCenterData2d</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the Simulation object</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        solver_name : str</span>
+<span class="sd">            The name of the solver we are using</span>
 <span class="sd">        problem_name : str</span>
-<span class="sd">            The name of the problem we wish to run.  This should</span>
-<span class="sd">            correspond to one of the modules in advection/problems/</span>
+<span class="sd">            The descriptive name for the problem (used in output)</span>
+<span class="sd">        problem_func : function</span>
+<span class="sd">            The function to call to initialize the problem</span>
 <span class="sd">        rp : RuntimeParameters object</span>
 <span class="sd">            The runtime parameters for the simulation</span>
+<span class="sd">        problem_finalize_func : function</span>
+<span class="sd">            An (optional) function to call when the simulation is</span>
+<span class="sd">            over.</span>
 <span class="sd">        timers : TimerCollection object, optional</span>
-<span class="sd">            The timers used for profiling this simulation</span>
+<span class="sd">            The timers used for profiling this simulation.</span>
+<span class="sd">        data_class : CellCenterData2d or FV2d</span>
+<span class="sd">            The class that manages the data.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
@@ -600,6 +608,8 @@ document.write(`
 
         <span class="bp">self</span><span class="o">.</span><span class="n">solver_name</span> <span class="o">=</span> <span class="n">solver_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">problem_name</span> <span class="o">=</span> <span class="n">problem_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem_func</span> <span class="o">=</span> <span class="n">problem_func</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem_finalize</span> <span class="o">=</span> <span class="n">problem_finalize_func</span>
 
         <span class="k">if</span> <span class="n">timers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tc</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">TimerCollection</span><span class="p">()</span>
@@ -714,10 +724,9 @@ document.write(`
 <span class="sd">        Do any final clean-ups for the simulation and call the problem&#39;s</span>
 <span class="sd">        finalize() method.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># there should be a cleaner way of doing this</span>
-        <span class="n">problem</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;pyro.</span><span class="si">{}</span><span class="s2">.problems.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solver_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem_name</span><span class="p">))</span>
 
-        <span class="n">problem</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span></div>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem_finalize</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">problem_finalize</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="NullSimulation.write">
