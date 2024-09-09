@@ -329,8 +329,8 @@ def artificial_viscosity(ng, dx, dy, Lx, Ly,
                 vb = 0.5 * (v[i, j - 1] + v[i - 1, j - 1])
 
                 # Finite difference to get ux and vy
-                ux = (ur*rr - ul*rl) / (rc * dx)
-                vy = (sint*vt - sinb*vb) / (rc * sinc * dy)
+                ux = (ur * rr * rr - ul * rl * rl) / (rc * rc * dx)
+                vy = (sint * vt - sinb * vb) / (rc * sinc * dy)
 
                 # Find div(U)_{i-1/2, j-1/2}
                 divU[i, j] = ux + vy
