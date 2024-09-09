@@ -1,3 +1,40 @@
+# 4.3.0
+
+  * it is now possible to define a problem setup in a Jupyter
+    notebook (#262, #264)
+
+  * fix a bug in the artificial viscosity for spherical coords (#263)
+
+  * I/O is disabled by default when running in Jupyter (#259)
+
+  * the bc_demo test works again (#260, #261)
+
+  * problem setups no longer check if the input grid is
+    CellCenterData2d (#258)
+
+  * the Pyro class interface was simplified to have command line
+    parameter use the dict interface (#257)
+
+  * problem setups no longer use a _*.defaults file, but instead
+    specify their runtime parameters via a dict in the problem module
+    (#255)
+
+  * the compressible_sr solver was removed (#226)
+
+  * gresho problem uses more steps by default now (#254)
+
+  * the 4th order compressible solver only needs 4 ghost cells, not 5
+    (#248)
+
+  * the compressible solver comparison docs were changed to an
+    interactive Jupyter page (#243, #246, #249, #252)
+
+  * some interfaces were cleaned-up to require keyword args (#247)
+
+  * developers were added to the zenodo file (#242)
+
+  * doc updates (#241)
+
 # 4.2.0
 
   * moved docs to sphinx-book-theme (#229, #235, #240)
