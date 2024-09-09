@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Defining our own problem in Jupyter &#8212; pyro 4.2.0.post21+gd11ac15c documentation</title>
+    <title>Defining our own problem in Jupyter &#8212; pyro 4.2.0.post22+ge0b9e236 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=e7dbabae"></script>
+    <script src="_static/documentation_options.js?v=04a7d878"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -588,7 +588,7 @@ document.write(`
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.image.AxesImage at 0x7fbabcd89ab0&gt;
+&lt;matplotlib.image.AxesImage at 0x7f66d8a8d840&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -620,13 +620,8 @@ document.write(`
     <span class="n">dens</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
     <span class="n">g</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span>
 
-    <span class="n">xmin</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">xmin</span>
-    <span class="n">xmax</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">xmax</span>
-    <span class="n">L_x</span> <span class="o">=</span> <span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span>
-
-    <span class="n">ymin</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">ymin</span>
-    <span class="n">ymax</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">ymax</span>
-    <span class="n">L_y</span> <span class="o">=</span> <span class="n">ymax</span> <span class="o">-</span> <span class="n">ymin</span>
+    <span class="n">L_x</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">g</span><span class="o">.</span><span class="n">xmin</span>
+    <span class="n">L_y</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">g</span><span class="o">.</span><span class="n">ymin</span>
 
     <span class="n">m</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;waves.m&quot;</span><span class="p">)</span>
     <span class="n">n</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;waves.n&quot;</span><span class="p">)</span>
