@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.compressible.interface &#8212; pyro 4.2.0.post20+g73d80384 documentation</title>
+    <title>pyro.compressible.interface &#8212; pyro 4.2.0.post21+gd11ac15c documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=be1bf294"></script>
+    <script src="../../../_static/documentation_options.js?v=e7dbabae"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -785,8 +785,8 @@ document.write(`
                 <span class="n">vb</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
 
                 <span class="c1"># Finite difference to get ux and vy</span>
-                <span class="n">ux</span> <span class="o">=</span> <span class="p">(</span><span class="n">ur</span><span class="o">*</span><span class="n">rr</span> <span class="o">-</span> <span class="n">ul</span><span class="o">*</span><span class="n">rl</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">rc</span> <span class="o">*</span> <span class="n">dx</span><span class="p">)</span>
-                <span class="n">vy</span> <span class="o">=</span> <span class="p">(</span><span class="n">sint</span><span class="o">*</span><span class="n">vt</span> <span class="o">-</span> <span class="n">sinb</span><span class="o">*</span><span class="n">vb</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">rc</span> <span class="o">*</span> <span class="n">sinc</span> <span class="o">*</span> <span class="n">dy</span><span class="p">)</span>
+                <span class="n">ux</span> <span class="o">=</span> <span class="p">(</span><span class="n">ur</span> <span class="o">*</span> <span class="n">rr</span> <span class="o">*</span> <span class="n">rr</span> <span class="o">-</span> <span class="n">ul</span> <span class="o">*</span> <span class="n">rl</span> <span class="o">*</span> <span class="n">rl</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">rc</span> <span class="o">*</span> <span class="n">rc</span> <span class="o">*</span> <span class="n">dx</span><span class="p">)</span>
+                <span class="n">vy</span> <span class="o">=</span> <span class="p">(</span><span class="n">sint</span> <span class="o">*</span> <span class="n">vt</span> <span class="o">-</span> <span class="n">sinb</span> <span class="o">*</span> <span class="n">vb</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">rc</span> <span class="o">*</span> <span class="n">sinc</span> <span class="o">*</span> <span class="n">dy</span><span class="p">)</span>
 
                 <span class="c1"># Find div(U)_{i-1/2, j-1/2}</span>
                 <span class="n">divU</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">ux</span> <span class="o">+</span> <span class="n">vy</span>
