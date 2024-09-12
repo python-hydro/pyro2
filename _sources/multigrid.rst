@@ -21,7 +21,7 @@ There are three solvers:
 * The class :func:`general_MG.GeneralMG2d <pyro.multigrid.general_MG.GeneralMG2d>` solves a general elliptic
   equation of the form
 
-  $$`\alpha \phi + \nabla \cdot ( \beta \nabla \phi) + \gamma \cdot \nabla \phi = f$$
+  $$\alpha \phi + \nabla \cdot ( \beta \nabla \phi) + \gamma \cdot \nabla \phi = f$$
 
   This class inherits
   the core functionality from :func:`MG.CellCenterMG2d <pyro.multigrid.MG.CellCenterMG2d>`.
@@ -35,6 +35,8 @@ to square grids with zoning a power of 2.
 .. note::
 
    The multigrid solver is not controlled through ``pyro_sim.py``
-   since there is no time-dependence in pure elliptic problems. Instead,
-   there are a few scripts in the multigrid/ subdirectory that
-   demonstrate its use.
+   since there is no time-dependence in pure elliptic
+   problems. Instead, there are a few scripts in the ``multigrid/``
+   subdirectory (see:
+   https://github.com/python-hydro/pyro2/tree/main/pyro/multigrid/examples)
+   that demonstrate its use.
