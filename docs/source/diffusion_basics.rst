@@ -2,6 +2,9 @@
 Diffusion
 *********
 
+``diffusion`` solver
+====================
+
 pyro solves the constant-conductivity diffusion equation:
 
 .. math::
@@ -18,6 +21,7 @@ multigrid class. The main parameters that affect this solver are:
 .. include:: diffusion_defaults.inc
 
 .. include:: diffusion_problems.inc
+
 
 Examples
 ========

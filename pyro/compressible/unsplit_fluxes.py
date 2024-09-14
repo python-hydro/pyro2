@@ -14,27 +14,29 @@ discussed in the Colella paper).
 
 * delta, z0, z1: flattening parameters (we use Colella 1990 defaults)
 
-The grid indices look like::
+The grid indices look like
 
-   j+3/2--+---------+---------+---------+
-          |         |         |         |
-     j+1 _|         |         |         |
-          |         |         |         |
-          |         |         |         |
-   j+1/2--+---------XXXXXXXXXXX---------+
-          |         X         X         |
-       j _|         X         X         |
-          |         X         X         |
-          |         X         X         |
-   j-1/2--+---------XXXXXXXXXXX---------+
-          |         |         |         |
-     j-1 _|         |         |         |
-          |         |         |         |
-          |         |         |         |
-   j-3/2--+---------+---------+---------+
-          |    |    |    |    |    |    |
-              i-1        i        i+1
-        i-3/2     i-1/2     i+1/2     i+3/2
+::
+
+       j+3/2--+---------+---------+---------+
+              |         |         |         |
+         j+1 _|         |         |         |
+              |         |         |         |
+              |         |         |         |
+       j+1/2--+---------XXXXXXXXXXX---------+
+              |         X         X         |
+           j _|         X         X         |
+              |         X         X         |
+              |         X         X         |
+       j-1/2--+---------XXXXXXXXXXX---------+
+              |         |         |         |
+         j-1 _|         |         |         |
+              |         |         |         |
+              |         |         |         |
+       j-3/2--+---------+---------+---------+
+              |    |    |    |    |    |    |
+                  i-1        i        i+1
+            i-3/2     i-1/2     i+1/2     i+3/2
 
 We wish to solve
 
@@ -354,38 +356,39 @@ def apply_transverse_flux(U_xl, U_xr, U_yl, U_yr,
     The states that we represent by indices i,j are shown below
     (1,2,3,4):
 
+    ::
 
-      j+3/2--+----------+----------+----------+
-             |          |          |          |
-             |          |          |          |
-        j+1 -+          |          |          |
-             |          |          |          |
-             |          |          |          |    1: U_xl[i,j,:] = U
-      j+1/2--+----------XXXXXXXXXXXX----------+                      i-1/2,j,L
-             |          X          X          |
-             |          X          X          |
-          j -+        1 X 2        X          |    2: U_xr[i,j,:] = U
-             |          X          X          |                      i-1/2,j,R
-             |          X    4     X          |
-      j-1/2--+----------XXXXXXXXXXXX----------+
-             |          |    3     |          |    3: U_yl[i,j,:] = U
-             |          |          |          |                      i,j-1/2,L
-        j-1 -+          |          |          |
-             |          |          |          |
-             |          |          |          |    4: U_yr[i,j,:] = U
-      j-3/2--+----------+----------+----------+                      i,j-1/2,R
-             |    |     |    |     |    |     |
-                 i-1         i         i+1
-           i-3/2      i-1/2      i+1/2      i+3/2
+        j+3/2--+----------+----------+----------+
+               |          |          |          |
+               |          |          |          |
+          j+1 -+          |          |          |
+               |          |          |          |
+               |          |          |          |    1: U_xl[i,j,:] = U
+        j+1/2--+----------XXXXXXXXXXXX----------+                      i-1/2,j,L
+               |          X          X          |
+               |          X          X          |
+            j -+        1 X 2        X          |    2: U_xr[i,j,:] = U
+               |          X          X          |                      i-1/2,j,R
+               |          X    4     X          |
+        j-1/2--+----------XXXXXXXXXXXX----------+
+               |          |    3     |          |    3: U_yl[i,j,:] = U
+               |          |          |          |                      i,j-1/2,L
+          j-1 -+          |          |          |
+               |          |          |          |
+               |          |          |          |    4: U_yr[i,j,:] = U
+        j-3/2--+----------+----------+----------+                      i,j-1/2,R
+               |    |     |    |     |    |     |
+                   i-1         i         i+1
+             i-3/2      i-1/2      i+1/2      i+3/2
 
 
-    remember that the fluxes are stored on the left edge, so
+    remember that the fluxes are stored on the left edge, so::
 
-    F_x[i,j,:] = F_x
-                    i-1/2, j
+        F_x[i,j,:] = F_x
+                        i-1/2, j
 
-    F_y[i,j,:] = F_y
-                    i, j-1/2
+        F_y[i,j,:] = F_y
+                        i, j-1/2
 
     Parameters
     ----------

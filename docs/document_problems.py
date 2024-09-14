@@ -51,8 +51,8 @@ def doit(pyro_home):
                         # not a problem setup
                         continue
 
-                    finc.write(f"``{prob.name}``\n")
-                    finc.write("^" * (len(prob.name)+4) + "\n\n")
+                    finc.write(f"``{prob.stem}``\n")
+                    finc.write("^" * (len(prob.stem)+4) + "\n\n")
 
                     if mprob.__doc__:
                         finc.write(mprob.__doc__)
