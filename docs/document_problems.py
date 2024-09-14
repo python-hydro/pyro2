@@ -21,7 +21,7 @@ SOLVERS = ["advection",
            "lm_atm",
            "swe"]
 
-MAX_LEN = 30
+MAX_LEN = 36
 
 
 def doit(pyro_home):
@@ -72,7 +72,8 @@ def doit(pyro_home):
                         finc.write("="*MAX_LEN + " " + "="*MAX_LEN + "\n")
 
                         for k, v in params.items():
-                            finc.write(f"{k:{MAX_LEN}} {v:{MAX_LEN}}\n")
+                            pname = "``" + k + "``"
+                            finc.write(f"{pname:{MAX_LEN}} {v:{MAX_LEN}}\n")
 
                         finc.write("="*MAX_LEN + " " + "="*MAX_LEN + "\n")
 
