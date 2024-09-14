@@ -289,9 +289,9 @@ class RuntimeParameters:
         # find all the sections
         secs = {q for (q, _) in [k.split(".") for k in all_keys]}
 
-        heading = "  +=" + 32*"=" + "=+=" + 14*"=" + "=+=" + 50*"=" + "=+" + "\n"
-        separator = "  +-" + 32*"-" + "-+-" + 14*"-" + "-+-" + 50*"-" + "-+" + "\n"
-        entry = "  | {:32} | {:14} | {:50} |\n"
+        heading = "  +=" + 32*"=" + "=+=" + 16*"=" + "=+=" + 50*"=" + "=+" + "\n"
+        separator = "  +-" + 32*"-" + "-+-" + 16*"-" + "-+-" + 50*"-" + "-+" + "\n"
+        entry = "  | {:32} | {:16} | {:50} |\n"
 
         for sec in sorted(secs):
             keys = [q for q in all_keys if q.startswith(f"{sec}.")]
