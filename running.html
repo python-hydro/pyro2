@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Running &#8212; pyro 4.3.0.post5+ge4cb631a documentation</title>
+    <title>Running &#8212; pyro 4.3.0.post6+g075ce404 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=156945a7"></script>
+    <script src="_static/documentation_options.js?v=963e3132"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -674,27 +674,27 @@ given simulation.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>tmax</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tmax</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
 <td><p>maximum simulation time to evolve</p></td>
 </tr>
-<tr class="row-odd"><td><p>max_steps</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">max_steps</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">10000</span></code></p></td>
 <td><p>maximum number of steps to take</p></td>
 </tr>
-<tr class="row-even"><td><p>fix_dt</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">fix_dt</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">-1.0</span></code></p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>init_tstep_factor</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">init_tstep_factor</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.01</span></code></p></td>
 <td><p>first timestep = init_tstep_factor * CFL timestep</p></td>
 </tr>
-<tr class="row-even"><td><p>max_dt_change</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">max_dt_change</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">2.0</span></code></p></td>
 <td><p>max amount the timestep can change between steps</p></td>
 </tr>
-<tr class="row-odd"><td><p>verbose</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">verbose</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
 <td><p>verbosity</p></td>
 </tr>
@@ -711,23 +711,23 @@ given simulation.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>basename</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">basename</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">pyro_</span></code></p></td>
 <td><p>basename for output files</p></td>
 </tr>
-<tr class="row-odd"><td><p>dt_out</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dt_out</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.1</span></code></p></td>
 <td><p>simulation time between writing output files</p></td>
 </tr>
-<tr class="row-even"><td><p>n_out</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">n_out</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">10000</span></code></p></td>
 <td><p>number of timesteps between writing output files</p></td>
 </tr>
-<tr class="row-odd"><td><p>do_io</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">do_io</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
 <td><p>do we output at all?</p></td>
 </tr>
-<tr class="row-even"><td><p>force_final_output</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">force_final_output</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
 <td><p>regardless of do_io, do we output when the
 simulation ends?</p></td>
@@ -745,48 +745,48 @@ simulation ends?</p></td>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>grid_type</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">grid_type</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">Cartesian2d</span></code></p></td>
 <td><p>Geometry of the Grid (‘Cartesian2d’ or
 ‘SphericalPolar’)</p></td>
 </tr>
-<tr class="row-odd"><td><p>xmin</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">xmin</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.0</span></code></p></td>
 <td><p>domain minimum x-coordinate</p></td>
 </tr>
-<tr class="row-even"><td><p>xmax</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">xmax</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
 <td><p>domain maximum x-coordinate</p></td>
 </tr>
-<tr class="row-odd"><td><p>ymin</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ymin</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.0</span></code></p></td>
 <td><p>domain minimum y-coordinate</p></td>
 </tr>
-<tr class="row-even"><td><p>ymax</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ymax</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
 <td><p>domain maximum y-coordinate</p></td>
 </tr>
-<tr class="row-odd"><td><p>xlboundary</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">xlboundary</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">reflect</span></code></p></td>
 <td><p>minimum x BC (‘reflect’, ‘outflow’, or ‘periodic’)</p></td>
 </tr>
-<tr class="row-even"><td><p>xrboundary</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">xrboundary</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">reflect</span></code></p></td>
 <td><p>maximum x BC (‘reflect’, ‘outflow’, or ‘periodic’)</p></td>
 </tr>
-<tr class="row-odd"><td><p>ylboundary</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ylboundary</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">reflect</span></code></p></td>
 <td><p>minimum y BC (‘reflect’, ‘outflow’, or ‘periodic’)</p></td>
 </tr>
-<tr class="row-even"><td><p>yrboundary</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">yrboundary</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">reflect</span></code></p></td>
 <td><p>maximum y BC (‘reflect’, ‘outflow’, or ‘periodic’)</p></td>
 </tr>
-<tr class="row-odd"><td><p>nx</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nx</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">25</span></code></p></td>
 <td><p>number of zones in the x-direction</p></td>
 </tr>
-<tr class="row-even"><td><p>ny</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ny</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">25</span></code></p></td>
 <td><p>number of zones in the y-direction</p></td>
 </tr>
@@ -803,15 +803,15 @@ simulation ends?</p></td>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>do_particles</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">do_particles</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
 <td><p>include particles? (1=yes, 0=no)</p></td>
 </tr>
-<tr class="row-odd"><td><p>n_particles</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">n_particles</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">100</span></code></p></td>
 <td><p>number of particles</p></td>
 </tr>
-<tr class="row-even"><td><p>particle_generator</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">particle_generator</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">random</span></code></p></td>
 <td><p>how do we generate particles? (random, grid)</p></td>
 </tr>
@@ -828,11 +828,11 @@ simulation ends?</p></td>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>dovis</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dovis</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
 <td><p>runtime visualization? (1=yes, 0=no)</p></td>
 </tr>
-<tr class="row-odd"><td><p>store_images</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">store_images</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
 <td><p>store vis images to files (1=yes, 0=no)</p></td>
 </tr>

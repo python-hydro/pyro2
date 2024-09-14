@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Compressible hydrodynamics solvers &#8212; pyro 4.3.0.post5+ge4cb631a documentation</title>
+    <title>Compressible hydrodynamics solvers &#8212; pyro 4.3.0.post6+g075ce404 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=156945a7"></script>
+    <script src="_static/documentation_options.js?v=963e3132"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -602,35 +602,35 @@ accurate.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>use_flattening</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">use_flattening</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
 <td><p>apply flattening at shocks (1)</p></td>
 </tr>
-<tr class="row-odd"><td><p>z0</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">z0</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.75</span></code></p></td>
 <td><p>flattening z0 parameter</p></td>
 </tr>
-<tr class="row-even"><td><p>z1</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">z1</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.85</span></code></p></td>
 <td><p>flattening z1 parameter</p></td>
 </tr>
-<tr class="row-odd"><td><p>delta</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">delta</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.33</span></code></p></td>
 <td><p>flattening delta parameter</p></td>
 </tr>
-<tr class="row-even"><td><p>cvisc</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cvisc</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.1</span></code></p></td>
 <td><p>artificial viscosity coefficient</p></td>
 </tr>
-<tr class="row-odd"><td><p>limiter</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">limiter</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
 <td><p>limiter (0 = none, 1 = 2nd order, 2 = 4th order)</p></td>
 </tr>
-<tr class="row-even"><td><p>grav</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">grav</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.0</span></code></p></td>
 <td><p>gravitational acceleration (in y-direction)</p></td>
 </tr>
-<tr class="row-odd"><td><p>riemann</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">riemann</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">HLLC</span></code></p></td>
 <td><p>HLLC or CGF</p></td>
 </tr>
@@ -647,7 +647,7 @@ accurate.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>cfl</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cfl</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.8</span></code></p></td>
 <td></td>
 </tr>
@@ -664,7 +664,7 @@ accurate.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>gamma</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gamma</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1.4</span></code></p></td>
 <td><p>pres = rho ener (gamma - 1)</p></td>
 </tr>
@@ -681,11 +681,11 @@ accurate.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>do_particles</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">do_particles</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>particle_generator</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">particle_generator</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">grid</span></code></p></td>
 <td></td>
 </tr>
@@ -711,43 +711,43 @@ equations.  This is overall second-order accurate.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>use_flattening</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">use_flattening</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
 <td><p>apply flattening at shocks (1)</p></td>
 </tr>
-<tr class="row-odd"><td><p>z0</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">z0</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.75</span></code></p></td>
 <td><p>flattening z0 parameter</p></td>
 </tr>
-<tr class="row-even"><td><p>z1</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">z1</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.85</span></code></p></td>
 <td><p>flattening z1 parameter</p></td>
 </tr>
-<tr class="row-odd"><td><p>delta</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">delta</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.33</span></code></p></td>
 <td><p>flattening delta parameter</p></td>
 </tr>
-<tr class="row-even"><td><p>cvisc</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cvisc</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.1</span></code></p></td>
 <td><p>artificial viscosity coefficient</p></td>
 </tr>
-<tr class="row-odd"><td><p>limiter</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">limiter</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
 <td><p>limiter (0 = none, 1 = 2nd order, 2 = 4th order)</p></td>
 </tr>
-<tr class="row-even"><td><p>temporal_method</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">temporal_method</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">RK4</span></code></p></td>
 <td><p>integration method (see mesh/integration.py)</p></td>
 </tr>
-<tr class="row-odd"><td><p>grav</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">grav</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.0</span></code></p></td>
 <td><p>gravitational acceleration (in y-direction)</p></td>
 </tr>
-<tr class="row-even"><td><p>riemann</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">riemann</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">HLLC</span></code></p></td>
 <td><p>HLLC or CGF</p></td>
 </tr>
-<tr class="row-odd"><td><p>well_balanced</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">well_balanced</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
 <td><p>use a well-balanced scheme to keep the model in
 hydrostatic equilibrium</p></td>
@@ -765,7 +765,7 @@ hydrostatic equilibrium</p></td>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>cfl</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cfl</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.8</span></code></p></td>
 <td></td>
 </tr>
@@ -782,7 +782,7 @@ hydrostatic equilibrium</p></td>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>gamma</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gamma</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1.4</span></code></p></td>
 <td><p>pres = rho ener (gamma - 1)</p></td>
 </tr>
@@ -807,39 +807,39 @@ time integration, following <span id="id2">[<a class="reference internal" href="
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>use_flattening</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">use_flattening</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
 <td><p>apply flattening at shocks (1)</p></td>
 </tr>
-<tr class="row-odd"><td><p>z0</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">z0</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.75</span></code></p></td>
 <td><p>flattening z0 parameter</p></td>
 </tr>
-<tr class="row-even"><td><p>z1</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">z1</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.85</span></code></p></td>
 <td><p>flattening z1 parameter</p></td>
 </tr>
-<tr class="row-odd"><td><p>delta</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">delta</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.33</span></code></p></td>
 <td><p>flattening delta parameter</p></td>
 </tr>
-<tr class="row-even"><td><p>cvisc</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cvisc</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.1</span></code></p></td>
 <td><p>artificial viscosity coefficient</p></td>
 </tr>
-<tr class="row-odd"><td><p>limiter</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">limiter</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
 <td><p>limiter (0 = none, 1 = 2nd order, 2 = 4th order)</p></td>
 </tr>
-<tr class="row-even"><td><p>temporal_method</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">temporal_method</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">RK4</span></code></p></td>
 <td><p>integration method (see mesh/integration.py)</p></td>
 </tr>
-<tr class="row-odd"><td><p>grav</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">grav</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.0</span></code></p></td>
 <td><p>gravitational acceleration (in y-direction)</p></td>
 </tr>
-<tr class="row-even"><td><p>riemann</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">riemann</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">CGF</span></code></p></td>
 <td></td>
 </tr>
@@ -856,7 +856,7 @@ time integration, following <span id="id2">[<a class="reference internal" href="
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>cfl</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cfl</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.8</span></code></p></td>
 <td></td>
 </tr>
@@ -873,7 +873,7 @@ time integration, following <span id="id2">[<a class="reference internal" href="
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>gamma</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gamma</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1.4</span></code></p></td>
 <td><p>pres = rho ener (gamma - 1)</p></td>
 </tr>
@@ -900,39 +900,39 @@ how the time-integration is handled.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>use_flattening</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">use_flattening</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
 <td><p>apply flattening at shocks (1)</p></td>
 </tr>
-<tr class="row-odd"><td><p>z0</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">z0</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.75</span></code></p></td>
 <td><p>flattening z0 parameter</p></td>
 </tr>
-<tr class="row-even"><td><p>z1</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">z1</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.85</span></code></p></td>
 <td><p>flattening z1 parameter</p></td>
 </tr>
-<tr class="row-odd"><td><p>delta</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">delta</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.33</span></code></p></td>
 <td><p>flattening delta parameter</p></td>
 </tr>
-<tr class="row-even"><td><p>cvisc</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cvisc</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.1</span></code></p></td>
 <td><p>artificial viscosity coefficient</p></td>
 </tr>
-<tr class="row-odd"><td><p>limiter</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">limiter</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
 <td><p>limiter (0 = none, 1 = 2nd order, 2 = 4th order)</p></td>
 </tr>
-<tr class="row-even"><td><p>temporal_method</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">temporal_method</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">RK4</span></code></p></td>
 <td><p>integration method (see mesh/integration.py)</p></td>
 </tr>
-<tr class="row-odd"><td><p>grav</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">grav</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.0</span></code></p></td>
 <td><p>gravitational acceleration (in y-direction)</p></td>
 </tr>
-<tr class="row-even"><td><p>riemann</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">riemann</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">CGF</span></code></p></td>
 <td></td>
 </tr>
@@ -949,7 +949,7 @@ how the time-integration is handled.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>cfl</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cfl</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.8</span></code></p></td>
 <td></td>
 </tr>
@@ -966,7 +966,7 @@ how the time-integration is handled.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>gamma</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gamma</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1.4</span></code></p></td>
 <td><p>pres = rho ener (gamma - 1)</p></td>
 </tr>
