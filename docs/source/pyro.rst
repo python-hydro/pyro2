@@ -37,34 +37,10 @@ Subpackages
 Submodules
 ----------
 
-pyro.compare module
--------------------
-
-.. automodule:: pyro.compare
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-pyro.mg\_test\_simple module
-----------------------------
-
-.. automodule:: pyro.mg_test_simple
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 pyro.plot module
 ----------------
 
 .. automodule:: pyro.plot
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-pyro.plotvar module
--------------------
-
-.. automodule:: pyro.plotvar
    :members:
    :undoc-members:
    :show-inheritance:
