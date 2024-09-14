@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Compressible hydrodynamics solvers &#8212; pyro 4.3.0.post3+g8a731ce9 documentation</title>
+    <title>Compressible hydrodynamics solvers &#8212; pyro 4.3.0.post4+g2541fad2 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=3d30f61e"></script>
+    <script src="_static/documentation_options.js?v=7e020e21"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -593,7 +593,7 @@ equations, following <span id="id1">[<a class="reference internal" href="zrefere
 accurate.</p>
 <p>The parameters for this solver are:</p>
 <ul>
-<li><p>section: [compressible]</p>
+<li><p>section: <code class="docutils literal notranslate"><span class="pre">[compressible]</span></code></p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>option</p></th>
@@ -638,7 +638,7 @@ accurate.</p>
 </table>
 </div>
 </li>
-<li><p>section: [driver]</p>
+<li><p>section: <code class="docutils literal notranslate"><span class="pre">[driver]</span></code></p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>option</p></th>
@@ -655,7 +655,7 @@ accurate.</p>
 </table>
 </div>
 </li>
-<li><p>section: [eos]</p>
+<li><p>section: <code class="docutils literal notranslate"><span class="pre">[eos]</span></code></p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>option</p></th>
@@ -672,7 +672,7 @@ accurate.</p>
 </table>
 </div>
 </li>
-<li><p>section: [particles]</p>
+<li><p>section: <code class="docutils literal notranslate"><span class="pre">[particles]</span></code></p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>option</p></th>
@@ -702,7 +702,7 @@ approach with piecewise linear spatial reconstruction for the Euler
 equations.  This is overall second-order accurate.</p>
 <p>The parameters for this solver are:</p>
 <ul>
-<li><p>section: [compressible]</p>
+<li><p>section: <code class="docutils literal notranslate"><span class="pre">[compressible]</span></code></p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>option</p></th>
@@ -756,7 +756,7 @@ hydrostatic equilibrium</p></td>
 </table>
 </div>
 </li>
-<li><p>section: [driver]</p>
+<li><p>section: <code class="docutils literal notranslate"><span class="pre">[driver]</span></code></p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>option</p></th>
@@ -773,7 +773,7 @@ hydrostatic equilibrium</p></td>
 </table>
 </div>
 </li>
-<li><p>section: [eos]</p>
+<li><p>section: <code class="docutils literal notranslate"><span class="pre">[eos]</span></code></p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>option</p></th>
@@ -798,7 +798,7 @@ hydrostatic equilibrium</p></td>
 time integration, following <span id="id2">[<a class="reference internal" href="zreferences.html#id3" title="P. McCorquodale and P. Colella. A high-order finite-volume method for conservation laws on locally refined grids. Communication in Applied Mathematics and Computational Science, 6(1):1–25, 2011.">McCorquodaleColella11</a>]</span>.</p>
 <p>The parameter for this solver are:</p>
 <ul>
-<li><p>section: [compressible]</p>
+<li><p>section: <code class="docutils literal notranslate"><span class="pre">[compressible]</span></code></p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>option</p></th>
@@ -839,11 +839,15 @@ time integration, following <span id="id2">[<a class="reference internal" href="
 <td><p><code class="docutils literal notranslate"><span class="pre">0.0</span></code></p></td>
 <td><p>gravitational acceleration (in y-direction)</p></td>
 </tr>
+<tr class="row-even"><td><p>riemann</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CGF</span></code></p></td>
+<td></td>
+</tr>
 </tbody>
 </table>
 </div>
 </li>
-<li><p>section: [driver]</p>
+<li><p>section: <code class="docutils literal notranslate"><span class="pre">[driver]</span></code></p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>option</p></th>
@@ -860,7 +864,7 @@ time integration, following <span id="id2">[<a class="reference internal" href="
 </table>
 </div>
 </li>
-<li><p>section: [eos]</p>
+<li><p>section: <code class="docutils literal notranslate"><span class="pre">[eos]</span></code></p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>option</p></th>
@@ -887,7 +891,7 @@ shares much in common with the <a class="reference internal" href="pyro.compress
 how the time-integration is handled.</p>
 <p>The parameters for this solver are:</p>
 <ul>
-<li><p>section: [compressible]</p>
+<li><p>section: <code class="docutils literal notranslate"><span class="pre">[compressible]</span></code></p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>option</p></th>
@@ -928,11 +932,15 @@ how the time-integration is handled.</p>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.0</span></code></p></td>
 <td><p>gravitational acceleration (in y-direction)</p></td>
 </tr>
+<tr class="row-even"><td><p>riemann</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CGF</span></code></p></td>
+<td></td>
+</tr>
 </tbody>
 </table>
 </div>
 </li>
-<li><p>section: [driver]</p>
+<li><p>section: <code class="docutils literal notranslate"><span class="pre">[driver]</span></code></p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>option</p></th>
@@ -949,7 +957,7 @@ how the time-integration is handled.</p>
 </table>
 </div>
 </li>
-<li><p>section: [eos]</p>
+<li><p>section: <code class="docutils literal notranslate"><span class="pre">[eos]</span></code></p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>option</p></th>
