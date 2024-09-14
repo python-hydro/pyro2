@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyro.advection_fv4.problems package &#8212; pyro 4.3.0.post2+gd063c13e documentation</title>
+    <title>pyro.advection_fv4.problems package &#8212; pyro 4.3.0.post3+g8a731ce9 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=6a7f607a"></script>
+    <script src="_static/documentation_options.js?v=3d30f61e"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -244,8 +244,8 @@
 <li class="toctree-l4"><a class="reference internal" href="pyro.burgers.problems.html">pyro.burgers.problems package</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.viscous_burgers.html">pyro.viscous_burgers package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="pyro.viscous_burgers.problems.html">pyro.viscous_burgers.problems package</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.burgers_viscous.html">pyro.burgers_viscous package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.burgers_viscous.problems.html">pyro.burgers_viscous.problems package</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="pyro.compressible.html">pyro.compressible package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -285,7 +285,10 @@
 </ul>
 </details></li>
 <li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html">pyro.mesh package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.html">pyro.multigrid package</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.multigrid.html">pyro.multigrid package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.examples.html">pyro.multigrid.examples package</a></li>
+</ul>
+</details></li>
 <li class="toctree-l3"><a class="reference internal" href="pyro.particles.html">pyro.particles package</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="pyro.swe.html">pyro.swe package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="pyro.swe.problems.html">pyro.swe.problems package</a></li>
@@ -535,6 +538,16 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection_fv4.problems.smooth.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.advection_fv4.problems.test">pyro.advection_fv4.problems.test module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection_fv4.problems.test.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection_fv4.problems.test.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.advection_fv4.problems.tophat">pyro.advection_fv4.problems.tophat module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection_fv4.problems.tophat.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection_fv4.problems.tophat.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -563,6 +576,36 @@ document.write(`
 <dt class="sig sig-object py" id="pyro.advection_fv4.problems.smooth.init_data">
 <span class="sig-prename descclassname"><span class="pre">pyro.advection_fv4.problems.smooth.</span></span><span class="sig-name descname"><span class="pre">init_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection_fv4/problems/smooth.html#init_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection_fv4.problems.smooth.init_data" title="Link to this definition">#</a></dt>
 <dd><p>initialize the smooth advection problem</p>
+</dd></dl>
+
+</section>
+<section id="module-pyro.advection_fv4.problems.test">
+<span id="pyro-advection-fv4-problems-test-module"></span><h2>pyro.advection_fv4.problems.test module<a class="headerlink" href="#module-pyro.advection_fv4.problems.test" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.advection_fv4.problems.test.finalize">
+<span class="sig-prename descclassname"><span class="pre">pyro.advection_fv4.problems.test.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection_fv4/problems/test.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection_fv4.problems.test.finalize" title="Link to this definition">#</a></dt>
+<dd><p>print out any information to the user at the end of the run</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.advection_fv4.problems.test.init_data">
+<span class="sig-prename descclassname"><span class="pre">pyro.advection_fv4.problems.test.</span></span><span class="sig-name descname"><span class="pre">init_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection_fv4/problems/test.html#init_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection_fv4.problems.test.init_data" title="Link to this definition">#</a></dt>
+<dd><p>an init routine for unit testing</p>
+</dd></dl>
+
+</section>
+<section id="module-pyro.advection_fv4.problems.tophat">
+<span id="pyro-advection-fv4-problems-tophat-module"></span><h2>pyro.advection_fv4.problems.tophat module<a class="headerlink" href="#module-pyro.advection_fv4.problems.tophat" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.advection_fv4.problems.tophat.finalize">
+<span class="sig-prename descclassname"><span class="pre">pyro.advection_fv4.problems.tophat.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection_fv4/problems/tophat.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection_fv4.problems.tophat.finalize" title="Link to this definition">#</a></dt>
+<dd><p>print out any information to the user at the end of the run</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.advection_fv4.problems.tophat.init_data">
+<span class="sig-prename descclassname"><span class="pre">pyro.advection_fv4.problems.tophat.</span></span><span class="sig-name descname"><span class="pre">init_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">myd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection_fv4/problems/tophat.html#init_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection_fv4.problems.tophat.init_data" title="Link to this definition">#</a></dt>
+<dd><p>initialize the tophat advection problem</p>
 </dd></dl>
 
 </section>
@@ -617,6 +660,16 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.advection_fv4.problems.smooth">pyro.advection_fv4.problems.smooth module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection_fv4.problems.smooth.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection_fv4.problems.smooth.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.advection_fv4.problems.test">pyro.advection_fv4.problems.test module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection_fv4.problems.test.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection_fv4.problems.test.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.advection_fv4.problems.tophat">pyro.advection_fv4.problems.tophat module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection_fv4.problems.tophat.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection_fv4.problems.tophat.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
 </ul>
 </li>
 </ul>

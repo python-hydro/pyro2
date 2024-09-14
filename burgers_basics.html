@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Burgers’ Equation &#8212; pyro 4.3.0.post2+gd063c13e documentation</title>
+    <title>Burgers’ Equation &#8212; pyro 4.3.0.post3+g8a731ce9 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=6a7f607a"></script>
+    <script src="_static/documentation_options.js?v=3d30f61e"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -246,8 +246,8 @@
 <li class="toctree-l4"><a class="reference internal" href="pyro.burgers.problems.html">pyro.burgers.problems package</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.viscous_burgers.html">pyro.viscous_burgers package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="pyro.viscous_burgers.problems.html">pyro.viscous_burgers.problems package</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.burgers_viscous.html">pyro.burgers_viscous package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.burgers_viscous.problems.html">pyro.burgers_viscous.problems package</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="pyro.compressible.html">pyro.compressible package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -287,7 +287,10 @@
 </ul>
 </details></li>
 <li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html">pyro.mesh package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.html">pyro.multigrid package</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.multigrid.html">pyro.multigrid package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.examples.html">pyro.multigrid.examples package</a></li>
+</ul>
+</details></li>
 <li class="toctree-l3"><a class="reference internal" href="pyro.particles.html">pyro.particles package</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="pyro.swe.html">pyro.swe package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="pyro.swe.problems.html">pyro.swe.problems package</a></li>
@@ -626,85 +629,20 @@ v_t + u v_x + v v_y = 0\end{split}\]</div>
 <div class="math notranslate nohighlight">
 \[\begin{split}u_t + u u_x + v u_y = \epsilon \left( u_{xx} + u_{yy}\right) \\
 v_t + u v_x + v v_y = \epsilon \left( v_{xx} + v_{yy}\right)\end{split}\]</div>
-<p>The viscous Burgers’ equation has an additional velocity diffusion term on the RHS compared to the inviscid Burgers’ equation. Here <span class="math notranslate nohighlight">\(\epsilon\)</span> represents the constant viscosity.</p>
-<p><a class="reference internal" href="pyro.viscous_burgers.html#module-pyro.viscous_burgers" title="pyro.viscous_burgers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.viscous_burgers</span></code></a> is inherited from <a class="reference internal" href="pyro.burgers.html#module-pyro.burgers" title="pyro.burgers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.burgers</span></code></a>, where we added an additional diffusion term when constructing the interface states. We then solve for diffusion along with the extra advective source to the Helmholtz equation by using the Crank-Nicolson discretization and multigrid solvers.</p>
+<p>The viscous Burgers’ equation has an additional velocity diffusion
+term on the RHS compared to the inviscid Burgers’ equation. Here
+<span class="math notranslate nohighlight">\(\epsilon\)</span> represents the constant viscosity.</p>
+<p><a class="reference internal" href="pyro.burgers_viscous.html#module-pyro.burgers_viscous" title="pyro.burgers_viscous"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.burgers_viscous</span></code></a> is inherited from
+<a class="reference internal" href="pyro.burgers.html#module-pyro.burgers" title="pyro.burgers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.burgers</span></code></a>, where we added an additional diffusion term
+when constructing the interface states. We then solve for diffusion
+along with the extra advective source to the Helmholtz equation by
+using the Crank-Nicolson discretization and multigrid solvers.</p>
 <p>The parameters for this solver are:</p>
-<ul>
-<li><p>section: [advection]</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>option</p></th>
-<th class="head"><p>value</p></th>
-<th class="head"><p>description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>limiter</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
-<td><p>limiter (0 = none, 1 = 2nd order, 2 = 4th order)</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</li>
-<li><p>section: [diffusion]</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>option</p></th>
-<th class="head"><p>value</p></th>
-<th class="head"><p>description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>eps</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">0.005</span></code></p></td>
-<td><p>Viscosity for diffusion</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</li>
-<li><p>section: [driver]</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>option</p></th>
-<th class="head"><p>value</p></th>
-<th class="head"><p>description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>cfl</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">0.8</span></code></p></td>
-<td><p>advective CFL number</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</li>
-<li><p>section: [particles]</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>option</p></th>
-<th class="head"><p>value</p></th>
-<th class="head"><p>description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>do_particles</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>particle_generator</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">grid</span></code></p></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
-</li>
-</ul>
 <img alt="_images/viscous_burgers.png" class="align-center" src="_images/viscous_burgers.png" />
-<p>The figure above is generated using <code class="docutils literal notranslate"><span class="pre">viscous_burgers/problems/test.py</span></code>, which has the identical setup as in <code class="docutils literal notranslate"><span class="pre">burgers/problems/test.py</span></code>. With diffusion added to the system, we see the shock (discontinuity) is smeared out as system evolves.</p>
+<p>The figure above is generated using
+<code class="docutils literal notranslate"><span class="pre">burgers_viscous/problems/test.py</span></code>, which has the identical setup as
+in <code class="docutils literal notranslate"><span class="pre">burgers/problems/test.py</span></code>. With diffusion added to the system,
+we see the shock (discontinuity) is smeared out as system evolves.</p>
 </section>
 </section>
 

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyro.advection package &#8212; pyro 4.3.0.post2+gd063c13e documentation</title>
+    <title>pyro.advection package &#8212; pyro 4.3.0.post3+g8a731ce9 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=6a7f607a"></script>
+    <script src="_static/documentation_options.js?v=3d30f61e"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -246,8 +246,8 @@
 <li class="toctree-l4"><a class="reference internal" href="pyro.burgers.problems.html">pyro.burgers.problems package</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.viscous_burgers.html">pyro.viscous_burgers package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="pyro.viscous_burgers.problems.html">pyro.viscous_burgers.problems package</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.burgers_viscous.html">pyro.burgers_viscous package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.burgers_viscous.problems.html">pyro.burgers_viscous.problems package</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="pyro.compressible.html">pyro.compressible package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -287,7 +287,10 @@
 </ul>
 </details></li>
 <li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html">pyro.mesh package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.html">pyro.multigrid package</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.multigrid.html">pyro.multigrid package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.examples.html">pyro.multigrid.examples package</a></li>
+</ul>
+</details></li>
 <li class="toctree-l3"><a class="reference internal" href="pyro.particles.html">pyro.particles package</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="pyro.swe.html">pyro.swe package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="pyro.swe.problems.html">pyro.swe.problems package</a></li>
@@ -537,6 +540,10 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection.advective_fluxes.unsplit_fluxes"><code class="docutils literal notranslate"><span class="pre">unsplit_fluxes()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.advection.interface">pyro.advection.interface module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection.interface.linear_interface"><code class="docutils literal notranslate"><span class="pre">linear_interface()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.advection.simulation">pyro.advection.simulation module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection.simulation.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection.simulation.Simulation.dovis"><code class="docutils literal notranslate"><span class="pre">Simulation.dovis()</span></code></a></li>
@@ -643,6 +650,14 @@ advecting</p>
 </dd></dl>
 
 </section>
+<section id="module-pyro.advection.interface">
+<span id="pyro-advection-interface-module"></span><h2>pyro.advection.interface module<a class="headerlink" href="#module-pyro.advection.interface" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.advection.interface.linear_interface">
+<span class="sig-prename descclassname"><span class="pre">pyro.advection.interface.</span></span><span class="sig-name descname"><span class="pre">linear_interface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">myg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection/interface.html#linear_interface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection.interface.linear_interface" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</section>
 <section id="module-pyro.advection.simulation">
 <span id="pyro-advection-simulation-module"></span><h2>pyro.advection.simulation module<a class="headerlink" href="#module-pyro.advection.simulation" title="Link to this heading">#</a></h2>
 <dl class="py class">
@@ -732,6 +747,10 @@ step we actually take.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.advection.advective_fluxes">pyro.advection.advective_fluxes module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection.advective_fluxes.unsplit_fluxes"><code class="docutils literal notranslate"><span class="pre">unsplit_fluxes()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.advection.interface">pyro.advection.interface module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection.interface.linear_interface"><code class="docutils literal notranslate"><span class="pre">linear_interface()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.advection.simulation">pyro.advection.simulation module</a><ul class="nav section-nav flex-column">

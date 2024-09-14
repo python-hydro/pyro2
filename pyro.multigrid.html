@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyro.multigrid package &#8212; pyro 4.3.0.post2+gd063c13e documentation</title>
+    <title>pyro.multigrid package &#8212; pyro 4.3.0.post3+g8a731ce9 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=6a7f607a"></script>
+    <script src="_static/documentation_options.js?v=3d30f61e"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -51,7 +51,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'pyro.multigrid';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="pyro.particles package" href="pyro.particles.html" />
+    <link rel="next" title="pyro.multigrid.examples package" href="pyro.multigrid.examples.html" />
     <link rel="prev" title="pyro.mesh package" href="pyro.mesh.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -246,8 +246,8 @@
 <li class="toctree-l4"><a class="reference internal" href="pyro.burgers.problems.html">pyro.burgers.problems package</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.viscous_burgers.html">pyro.viscous_burgers package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="pyro.viscous_burgers.problems.html">pyro.viscous_burgers.problems package</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.burgers_viscous.html">pyro.burgers_viscous package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.burgers_viscous.problems.html">pyro.burgers_viscous.problems package</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="pyro.compressible.html">pyro.compressible package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -287,7 +287,10 @@
 </ul>
 </details></li>
 <li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html">pyro.mesh package</a></li>
-<li class="toctree-l3 current active"><a class="current reference internal" href="#">pyro.multigrid package</a></li>
+<li class="toctree-l3 current active has-children"><a class="current reference internal" href="#">pyro.multigrid package</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.examples.html">pyro.multigrid.examples package</a></li>
+</ul>
+</details></li>
 <li class="toctree-l3"><a class="reference internal" href="pyro.particles.html">pyro.particles package</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="pyro.swe.html">pyro.swe package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="pyro.swe.problems.html">pyro.swe.problems package</a></li>
@@ -531,6 +534,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subpackages">Subpackages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.multigrid.MG">pyro.multigrid.MG module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.multigrid.MG.CellCenterMG2d"><code class="docutils literal notranslate"><span class="pre">CellCenterMG2d</span></code></a><ul class="nav section-nav flex-column">
@@ -594,6 +598,117 @@ Helmholtz equation:</p>
 <div class="math notranslate nohighlight">
 \[\alpha \phi + \nabla \cdot { \beta \nabla \phi } + \gamma \cdot \nabla \phi = f\]</div>
 <p>All use pure V-cycles to solve elliptic problems</p>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pyro.multigrid.examples.html">pyro.multigrid.examples package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyro.multigrid.examples.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_general_alphabeta_only">pyro.multigrid.examples.mg_test_general_alphabeta_only module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_alphabeta_only.alpha"><code class="docutils literal notranslate"><span class="pre">alpha()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_alphabeta_only.beta"><code class="docutils literal notranslate"><span class="pre">beta()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_alphabeta_only.f"><code class="docutils literal notranslate"><span class="pre">f()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_alphabeta_only.gamma_x"><code class="docutils literal notranslate"><span class="pre">gamma_x()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_alphabeta_only.gamma_y"><code class="docutils literal notranslate"><span class="pre">gamma_y()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_alphabeta_only.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_alphabeta_only.test_general_poisson_dirichlet"><code class="docutils literal notranslate"><span class="pre">test_general_poisson_dirichlet()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_alphabeta_only.true"><code class="docutils literal notranslate"><span class="pre">true()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_general_beta_only">pyro.multigrid.examples.mg_test_general_beta_only module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_beta_only.alpha"><code class="docutils literal notranslate"><span class="pre">alpha()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_beta_only.beta"><code class="docutils literal notranslate"><span class="pre">beta()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_beta_only.f"><code class="docutils literal notranslate"><span class="pre">f()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_beta_only.gamma_x"><code class="docutils literal notranslate"><span class="pre">gamma_x()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_beta_only.gamma_y"><code class="docutils literal notranslate"><span class="pre">gamma_y()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_beta_only.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_beta_only.test_general_poisson_dirichlet"><code class="docutils literal notranslate"><span class="pre">test_general_poisson_dirichlet()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_beta_only.true"><code class="docutils literal notranslate"><span class="pre">true()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_general_constant">pyro.multigrid.examples.mg_test_general_constant module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_constant.alpha"><code class="docutils literal notranslate"><span class="pre">alpha()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_constant.beta"><code class="docutils literal notranslate"><span class="pre">beta()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_constant.f"><code class="docutils literal notranslate"><span class="pre">f()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_constant.gamma_x"><code class="docutils literal notranslate"><span class="pre">gamma_x()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_constant.gamma_y"><code class="docutils literal notranslate"><span class="pre">gamma_y()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_constant.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_constant.test_general_poisson_dirichlet"><code class="docutils literal notranslate"><span class="pre">test_general_poisson_dirichlet()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_constant.true"><code class="docutils literal notranslate"><span class="pre">true()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_general_dirichlet">pyro.multigrid.examples.mg_test_general_dirichlet module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_dirichlet.alpha"><code class="docutils literal notranslate"><span class="pre">alpha()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_dirichlet.beta"><code class="docutils literal notranslate"><span class="pre">beta()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_dirichlet.f"><code class="docutils literal notranslate"><span class="pre">f()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_dirichlet.gamma_x"><code class="docutils literal notranslate"><span class="pre">gamma_x()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_dirichlet.gamma_y"><code class="docutils literal notranslate"><span class="pre">gamma_y()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_dirichlet.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_dirichlet.test_general_poisson_dirichlet"><code class="docutils literal notranslate"><span class="pre">test_general_poisson_dirichlet()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_dirichlet.true"><code class="docutils literal notranslate"><span class="pre">true()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_general_inhomogeneous">pyro.multigrid.examples.mg_test_general_inhomogeneous module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_inhomogeneous.alpha"><code class="docutils literal notranslate"><span class="pre">alpha()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_inhomogeneous.beta"><code class="docutils literal notranslate"><span class="pre">beta()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_inhomogeneous.f"><code class="docutils literal notranslate"><span class="pre">f()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_inhomogeneous.gamma_x"><code class="docutils literal notranslate"><span class="pre">gamma_x()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_inhomogeneous.gamma_y"><code class="docutils literal notranslate"><span class="pre">gamma_y()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_inhomogeneous.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_inhomogeneous.test_general_poisson_inhomogeneous"><code class="docutils literal notranslate"><span class="pre">test_general_poisson_inhomogeneous()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_inhomogeneous.true"><code class="docutils literal notranslate"><span class="pre">true()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_inhomogeneous.xl_func"><code class="docutils literal notranslate"><span class="pre">xl_func()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_inhomogeneous.yl_func"><code class="docutils literal notranslate"><span class="pre">yl_func()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_simple">pyro.multigrid.examples.mg_test_simple module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_simple.f"><code class="docutils literal notranslate"><span class="pre">f()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_simple.test_poisson_dirichlet"><code class="docutils literal notranslate"><span class="pre">test_poisson_dirichlet()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_simple.true"><code class="docutils literal notranslate"><span class="pre">true()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_vc_constant">pyro.multigrid.examples.mg_test_vc_constant module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_constant.alpha"><code class="docutils literal notranslate"><span class="pre">alpha()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_constant.f"><code class="docutils literal notranslate"><span class="pre">f()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_constant.test_vc_constant"><code class="docutils literal notranslate"><span class="pre">test_vc_constant()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_constant.true"><code class="docutils literal notranslate"><span class="pre">true()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_vc_dirichlet">pyro.multigrid.examples.mg_test_vc_dirichlet module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_dirichlet.alpha"><code class="docutils literal notranslate"><span class="pre">alpha()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_dirichlet.f"><code class="docutils literal notranslate"><span class="pre">f()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_dirichlet.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_dirichlet.test_vc_poisson_dirichlet"><code class="docutils literal notranslate"><span class="pre">test_vc_poisson_dirichlet()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_dirichlet.true"><code class="docutils literal notranslate"><span class="pre">true()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_vc_periodic">pyro.multigrid.examples.mg_test_vc_periodic module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_periodic.alpha"><code class="docutils literal notranslate"><span class="pre">alpha()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_periodic.f"><code class="docutils literal notranslate"><span class="pre">f()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_periodic.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_periodic.test_vc_poisson_periodic"><code class="docutils literal notranslate"><span class="pre">test_vc_poisson_periodic()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_periodic.true"><code class="docutils literal notranslate"><span class="pre">true()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_vis">pyro.multigrid.examples.mg_vis module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_vis.doit"><code class="docutils literal notranslate"><span class="pre">doit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_vis.f"><code class="docutils literal notranslate"><span class="pre">f()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_vis.true"><code class="docutils literal notranslate"><span class="pre">true()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.project_periodic">pyro.multigrid.examples.project_periodic module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.project_periodic.doit"><code class="docutils literal notranslate"><span class="pre">doit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.prolong_restrict_demo">pyro.multigrid.examples.prolong_restrict_demo module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.examples.html#pyro.multigrid.examples.prolong_restrict_demo.doit"><code class="docutils literal notranslate"><span class="pre">doit()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
 </section>
@@ -922,11 +1037,11 @@ many more iterations).</p>
       </div>
     </a>
     <a class="right-next"
-       href="pyro.particles.html"
+       href="pyro.multigrid.examples.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">pyro.particles package</p>
+        <p class="prev-next-title">pyro.multigrid.examples package</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -946,6 +1061,7 @@ many more iterations).</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subpackages">Subpackages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.multigrid.MG">pyro.multigrid.MG module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.multigrid.MG.CellCenterMG2d"><code class="docutils literal notranslate"><span class="pre">CellCenterMG2d</span></code></a><ul class="nav section-nav flex-column">

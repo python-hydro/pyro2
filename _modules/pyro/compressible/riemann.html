@@ -1,0 +1,1545 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyro.compressible.riemann &#8212; pyro 4.3.0.post3+g8a731ce9 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/myfile.css?v=359afcf4" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../_static/documentation_options.js?v=3d30f61e"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyro/compressible/riemann';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo.gif" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../../../_static/logo.gif" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">pyro 4.3</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">pyro basics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction to pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Setting up pyro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes.html">Notes on the numerical methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../design.html">Design ideas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../running.html">Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../output.html">Working with output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../problems.html">Adding a problem</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Mesh</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../mesh_basics.html">Mesh overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mesh-examples.html">Mesh examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../spherical-mesh.html">Spherical Polar Grid</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Multigrid</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../multigrid.html">Multigrid Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multigrid_basics.html">Simple Multigrid Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multigrid-constant-coefficients.html">Constant-Coefficient Poisson Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multigrid-variable-coeff.html">Variable Coefficient Poisson</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multigrid-general-linear.html">General Linear Elliptic Equation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Hydro Solvers</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../burgers_basics.html">Burgers’ Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../diffusion_basics.html">Diffusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../incompressible_viscous_basics.html">Incompressible viscous hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../swe_basics.html">Shallow water solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../particles_basics.html">Particles</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible-rt-compare.html">Comparing the Compressible Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../adding_a_problem_jupyter.html">Defining our own problem in Jupyter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../advection-error.html">Error Measurement of the <code class="docutils literal notranslate"><span class="pre">advection_fv4</span></code> Solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compressible-convergence.html">Convergence of the compressible solvers</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../analysis.html">Analysis routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../testing.html">Testing</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../help.html">Contributing and getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ack.html">Acknowledgments</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Software Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../pyro.html">pyro package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../pyro.advection.html">pyro.advection package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../pyro.advection.problems.html">pyro.advection.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../pyro.advection_fv4.html">pyro.advection_fv4 package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../pyro.advection_fv4.problems.html">pyro.advection_fv4.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../pyro.advection_nonuniform.html">pyro.advection_nonuniform package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../pyro.advection_nonuniform.problems.html">pyro.advection_nonuniform.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../pyro.advection_rk.html">pyro.advection_rk package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../pyro.advection_rk.problems.html">pyro.advection_rk.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../pyro.advection_weno.html">pyro.advection_weno package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../pyro.advection_weno.problems.html">pyro.advection_weno.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../pyro.burgers.html">pyro.burgers package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../pyro.burgers.problems.html">pyro.burgers.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../pyro.burgers_viscous.html">pyro.burgers_viscous package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../pyro.burgers_viscous.problems.html">pyro.burgers_viscous.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../pyro.compressible.html">pyro.compressible package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../pyro.compressible.problems.html">pyro.compressible.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../pyro.compressible_fv4.html">pyro.compressible_fv4 package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../pyro.compressible_fv4.problems.html">pyro.compressible_fv4.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../pyro.compressible_react.html">pyro.compressible_react package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../pyro.compressible_react.problems.html">pyro.compressible_react.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../pyro.compressible_rk.html">pyro.compressible_rk package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../pyro.compressible_rk.problems.html">pyro.compressible_rk.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../pyro.compressible_sdc.html">pyro.compressible_sdc package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../pyro.compressible_sdc.problems.html">pyro.compressible_sdc.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../pyro.diffusion.html">pyro.diffusion package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../pyro.diffusion.problems.html">pyro.diffusion.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../pyro.incompressible.html">pyro.incompressible package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../pyro.incompressible.problems.html">pyro.incompressible.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../pyro.incompressible_viscous.html">pyro.incompressible_viscous package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../pyro.incompressible_viscous.problems.html">pyro.incompressible_viscous.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../pyro.lm_atm.html">pyro.lm_atm package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../pyro.lm_atm.problems.html">pyro.lm_atm.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../pyro.mesh.html">pyro.mesh package</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../pyro.multigrid.html">pyro.multigrid package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../pyro.multigrid.examples.html">pyro.multigrid.examples package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../pyro.particles.html">pyro.particles package</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../pyro.swe.html">pyro.swe package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../pyro.swe.problems.html">pyro.swe.problems package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../pyro.util.html">pyro.util package</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Bibliography</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../zreferences.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/python-hydro/pyro2" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/python-hydro/pyro2/issues/new?title=Issue%20on%20page%20%2F_modules/pyro/compressible/riemann.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pyro.compressible.riemann</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">njit</span>
+
+<span class="kn">import</span> <span class="nn">pyro.mesh.array_indexer</span> <span class="k">as</span> <span class="nn">ai</span>
+<span class="kn">from</span> <span class="nn">pyro.util</span> <span class="kn">import</span> <span class="n">msg</span>
+
+
+<div class="viewcode-block" id="riemann_cgf">
+<a class="viewcode-back" href="../../../pyro.compressible.html#pyro.compressible.riemann.riemann_cgf">[docs]</a>
+<span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">riemann_cgf</span><span class="p">(</span><span class="n">idir</span><span class="p">,</span> <span class="n">ng</span><span class="p">,</span>
+                 <span class="n">idens</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">,</span> <span class="n">iymom</span><span class="p">,</span> <span class="n">iener</span><span class="p">,</span> <span class="n">irhoX</span><span class="p">,</span> <span class="n">nspec</span><span class="p">,</span>
+                 <span class="n">lower_solid</span><span class="p">,</span> <span class="n">upper_solid</span><span class="p">,</span>
+                 <span class="n">gamma</span><span class="p">,</span> <span class="n">U_l</span><span class="p">,</span> <span class="n">U_r</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Solve riemann shock tube problem for a general equation of</span>
+<span class="sd">    state using the method of Colella, Glaz, and Ferguson.  See</span>
+<span class="sd">    Almgren et al. 2010 (the CASTRO paper) for details.</span>
+
+<span class="sd">    The Riemann problem for the Euler&#39;s equation produces 4 regions,</span>
+<span class="sd">    separated by the three characteristics (u - cs, u, u + cs)::</span>
+
+
+<span class="sd">           u - cs    t    u      u + cs</span>
+<span class="sd">             \       ^   .       /</span>
+<span class="sd">              \  *L  |   . *R   /</span>
+<span class="sd">               \     |  .     /</span>
+<span class="sd">                \    |  .    /</span>
+<span class="sd">            L    \   | .   /    R</span>
+<span class="sd">                  \  | .  /</span>
+<span class="sd">                   \ |. /</span>
+<span class="sd">                    \|./</span>
+<span class="sd">           ----------+----------------&gt; x</span>
+
+<span class="sd">    We care about the solution on the axis.  The basic idea is to use</span>
+<span class="sd">    estimates of the wave speeds to figure out which region we are in,</span>
+<span class="sd">    and: use jump conditions to evaluate the state there.</span>
+
+<span class="sd">    Only density jumps across the u characteristic.  All primitive</span>
+<span class="sd">    variables jump across the other two.  Special attention is needed</span>
+<span class="sd">    if a rarefaction spans the axis.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    idir : int</span>
+<span class="sd">        Are we predicting to the edges in the x-direction (1) or y-direction (2)?</span>
+<span class="sd">    ng : int</span>
+<span class="sd">        The number of ghost cells</span>
+<span class="sd">    nspec : int</span>
+<span class="sd">        The number of species</span>
+<span class="sd">    idens, ixmom, iymom, iener, irhoX : int</span>
+<span class="sd">        The indices of the density, x-momentum, y-momentum, internal energy density</span>
+<span class="sd">        and species partial densities in the conserved state vector.</span>
+<span class="sd">    lower_solid, upper_solid : int</span>
+<span class="sd">        Are we at lower or upper solid boundaries?</span>
+<span class="sd">    gamma : float</span>
+<span class="sd">        Adiabatic index</span>
+<span class="sd">    U_l, U_r : ndarray</span>
+<span class="sd">        Conserved state on the left and right cell edges.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : ndarray</span>
+<span class="sd">        Conserved states.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># pylint: disable=unused-variable</span>
+
+    <span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">,</span> <span class="n">nvar</span> <span class="o">=</span> <span class="n">U_l</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">U_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">,</span> <span class="n">nvar</span><span class="p">))</span>
+
+    <span class="n">smallc</span> <span class="o">=</span> <span class="mf">1.e-10</span>
+    <span class="n">smallrho</span> <span class="o">=</span> <span class="mf">1.e-10</span>
+    <span class="n">smallp</span> <span class="o">=</span> <span class="mf">1.e-10</span>
+
+    <span class="n">nx</span> <span class="o">=</span> <span class="n">qx</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
+    <span class="n">ny</span> <span class="o">=</span> <span class="n">qy</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
+    <span class="n">ilo</span> <span class="o">=</span> <span class="n">ng</span>
+    <span class="n">ihi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">nx</span>
+    <span class="n">jlo</span> <span class="o">=</span> <span class="n">ng</span>
+    <span class="n">jhi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">ny</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ilo</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ihi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">jlo</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">jhi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+
+            <span class="c1"># primitive variable states</span>
+            <span class="n">rho_l</span> <span class="o">=</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">idens</span><span class="p">]</span>
+
+            <span class="c1"># un = normal velocity; ut = transverse velocity</span>
+            <span class="k">if</span> <span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">un_l</span> <span class="o">=</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">]</span> <span class="o">/</span> <span class="n">rho_l</span>
+                <span class="n">ut_l</span> <span class="o">=</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iymom</span><span class="p">]</span> <span class="o">/</span> <span class="n">rho_l</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">un_l</span> <span class="o">=</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iymom</span><span class="p">]</span> <span class="o">/</span> <span class="n">rho_l</span>
+                <span class="n">ut_l</span> <span class="o">=</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">]</span> <span class="o">/</span> <span class="n">rho_l</span>
+
+            <span class="n">rhoe_l</span> <span class="o">=</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iener</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">rho_l</span> <span class="o">*</span> <span class="p">(</span><span class="n">un_l</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">ut_l</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+            <span class="n">p_l</span> <span class="o">=</span> <span class="n">rhoe_l</span> <span class="o">*</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+            <span class="n">p_l</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">p_l</span><span class="p">,</span> <span class="n">smallp</span><span class="p">)</span>
+
+            <span class="n">rho_r</span> <span class="o">=</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">idens</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">un_r</span> <span class="o">=</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">]</span> <span class="o">/</span> <span class="n">rho_r</span>
+                <span class="n">ut_r</span> <span class="o">=</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iymom</span><span class="p">]</span> <span class="o">/</span> <span class="n">rho_r</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">un_r</span> <span class="o">=</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iymom</span><span class="p">]</span> <span class="o">/</span> <span class="n">rho_r</span>
+                <span class="n">ut_r</span> <span class="o">=</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">]</span> <span class="o">/</span> <span class="n">rho_r</span>
+
+            <span class="n">rhoe_r</span> <span class="o">=</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iener</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">rho_r</span> <span class="o">*</span> <span class="p">(</span><span class="n">un_r</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">ut_r</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+            <span class="n">p_r</span> <span class="o">=</span> <span class="n">rhoe_r</span> <span class="o">*</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+            <span class="n">p_r</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">p_r</span><span class="p">,</span> <span class="n">smallp</span><span class="p">)</span>
+
+            <span class="c1"># define the Lagrangian sound speed</span>
+            <span class="n">W_l</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallrho</span> <span class="o">*</span> <span class="n">smallc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">p_l</span> <span class="o">*</span> <span class="n">rho_l</span><span class="p">))</span>
+            <span class="n">W_r</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallrho</span> <span class="o">*</span> <span class="n">smallc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">p_r</span> <span class="o">*</span> <span class="n">rho_r</span><span class="p">))</span>
+
+            <span class="c1"># and the regular sound speeds</span>
+            <span class="n">c_l</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">p_l</span> <span class="o">/</span> <span class="n">rho_l</span><span class="p">))</span>
+            <span class="n">c_r</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">p_r</span> <span class="o">/</span> <span class="n">rho_r</span><span class="p">))</span>
+
+            <span class="c1"># define the star states</span>
+            <span class="n">pstar</span> <span class="o">=</span> <span class="p">(</span><span class="n">W_l</span> <span class="o">*</span> <span class="n">p_r</span> <span class="o">+</span> <span class="n">W_r</span> <span class="o">*</span> <span class="n">p_l</span> <span class="o">+</span> <span class="n">W_l</span> <span class="o">*</span>
+                     <span class="n">W_r</span> <span class="o">*</span> <span class="p">(</span><span class="n">un_l</span> <span class="o">-</span> <span class="n">un_r</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">W_l</span> <span class="o">+</span> <span class="n">W_r</span><span class="p">)</span>
+            <span class="n">pstar</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">pstar</span><span class="p">,</span> <span class="n">smallp</span><span class="p">)</span>
+            <span class="n">ustar</span> <span class="o">=</span> <span class="p">(</span><span class="n">W_l</span> <span class="o">*</span> <span class="n">un_l</span> <span class="o">+</span> <span class="n">W_r</span> <span class="o">*</span> <span class="n">un_r</span> <span class="o">+</span> <span class="p">(</span><span class="n">p_l</span> <span class="o">-</span> <span class="n">p_r</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">W_l</span> <span class="o">+</span> <span class="n">W_r</span><span class="p">)</span>
+
+            <span class="c1"># now compute the remaining state to the left and right</span>
+            <span class="c1"># of the contact (in the star region)</span>
+            <span class="n">rhostar_l</span> <span class="o">=</span> <span class="n">rho_l</span> <span class="o">+</span> <span class="p">(</span><span class="n">pstar</span> <span class="o">-</span> <span class="n">p_l</span><span class="p">)</span> <span class="o">/</span> <span class="n">c_l</span><span class="o">**</span><span class="mi">2</span>
+            <span class="n">rhostar_r</span> <span class="o">=</span> <span class="n">rho_r</span> <span class="o">+</span> <span class="p">(</span><span class="n">pstar</span> <span class="o">-</span> <span class="n">p_r</span><span class="p">)</span> <span class="o">/</span> <span class="n">c_r</span><span class="o">**</span><span class="mi">2</span>
+
+            <span class="n">rhoestar_l</span> <span class="o">=</span> <span class="n">rhoe_l</span> <span class="o">+</span> \
+                <span class="p">(</span><span class="n">pstar</span> <span class="o">-</span> <span class="n">p_l</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">rhoe_l</span> <span class="o">/</span> <span class="n">rho_l</span> <span class="o">+</span> <span class="n">p_l</span> <span class="o">/</span> <span class="n">rho_l</span><span class="p">)</span> <span class="o">/</span> <span class="n">c_l</span><span class="o">**</span><span class="mi">2</span>
+            <span class="n">rhoestar_r</span> <span class="o">=</span> <span class="n">rhoe_r</span> <span class="o">+</span> \
+                <span class="p">(</span><span class="n">pstar</span> <span class="o">-</span> <span class="n">p_r</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">rhoe_r</span> <span class="o">/</span> <span class="n">rho_r</span> <span class="o">+</span> <span class="n">p_r</span> <span class="o">/</span> <span class="n">rho_r</span><span class="p">)</span> <span class="o">/</span> <span class="n">c_r</span><span class="o">**</span><span class="mi">2</span>
+
+            <span class="n">cstar_l</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">pstar</span> <span class="o">/</span> <span class="n">rhostar_l</span><span class="p">))</span>
+            <span class="n">cstar_r</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">pstar</span> <span class="o">/</span> <span class="n">rhostar_r</span><span class="p">))</span>
+
+            <span class="c1"># figure out which state we are in, based on the location of</span>
+            <span class="c1"># the waves</span>
+            <span class="k">if</span> <span class="n">ustar</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+
+                <span class="c1"># contact is moving to the right, we need to understand</span>
+                <span class="c1"># the L and *L states</span>
+
+                <span class="c1"># Note: transverse velocity only jumps across contact</span>
+                <span class="n">ut_state</span> <span class="o">=</span> <span class="n">ut_l</span>
+
+                <span class="c1"># define eigenvalues</span>
+                <span class="n">lambda_l</span> <span class="o">=</span> <span class="n">un_l</span> <span class="o">-</span> <span class="n">c_l</span>
+                <span class="n">lambdastar_l</span> <span class="o">=</span> <span class="n">ustar</span> <span class="o">-</span> <span class="n">cstar_l</span>
+
+                <span class="k">if</span> <span class="n">pstar</span> <span class="o">&gt;</span> <span class="n">p_l</span><span class="p">:</span>
+                    <span class="c1"># the wave is a shock -- find the shock speed</span>
+                    <span class="n">sigma</span> <span class="o">=</span> <span class="p">(</span><span class="n">lambda_l</span> <span class="o">+</span> <span class="n">lambdastar_l</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
+
+                    <span class="k">if</span> <span class="n">sigma</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                        <span class="c1"># shock is moving to the right -- solution is L state</span>
+                        <span class="n">rho_state</span> <span class="o">=</span> <span class="n">rho_l</span>
+                        <span class="n">un_state</span> <span class="o">=</span> <span class="n">un_l</span>
+                        <span class="n">p_state</span> <span class="o">=</span> <span class="n">p_l</span>
+                        <span class="n">rhoe_state</span> <span class="o">=</span> <span class="n">rhoe_l</span>
+
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># solution is *L state</span>
+                        <span class="n">rho_state</span> <span class="o">=</span> <span class="n">rhostar_l</span>
+                        <span class="n">un_state</span> <span class="o">=</span> <span class="n">ustar</span>
+                        <span class="n">p_state</span> <span class="o">=</span> <span class="n">pstar</span>
+                        <span class="n">rhoe_state</span> <span class="o">=</span> <span class="n">rhoestar_l</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># the wave is a rarefaction</span>
+                    <span class="k">if</span> <span class="n">lambda_l</span> <span class="o">&lt;</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">lambdastar_l</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                        <span class="c1"># rarefaction fan is moving to the left -- solution is</span>
+                        <span class="c1"># *L state</span>
+                        <span class="n">rho_state</span> <span class="o">=</span> <span class="n">rhostar_l</span>
+                        <span class="n">un_state</span> <span class="o">=</span> <span class="n">ustar</span>
+                        <span class="n">p_state</span> <span class="o">=</span> <span class="n">pstar</span>
+                        <span class="n">rhoe_state</span> <span class="o">=</span> <span class="n">rhoestar_l</span>
+
+                    <span class="k">elif</span> <span class="n">lambda_l</span> <span class="o">&gt;</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">lambdastar_l</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                        <span class="c1"># rarefaction fan is moving to the right -- solution is</span>
+                        <span class="c1"># L state</span>
+                        <span class="n">rho_state</span> <span class="o">=</span> <span class="n">rho_l</span>
+                        <span class="n">un_state</span> <span class="o">=</span> <span class="n">un_l</span>
+                        <span class="n">p_state</span> <span class="o">=</span> <span class="n">p_l</span>
+                        <span class="n">rhoe_state</span> <span class="o">=</span> <span class="n">rhoe_l</span>
+
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># rarefaction spans x/t = 0 -- interpolate</span>
+                        <span class="n">alpha</span> <span class="o">=</span> <span class="n">lambda_l</span> <span class="o">/</span> <span class="p">(</span><span class="n">lambda_l</span> <span class="o">-</span> <span class="n">lambdastar_l</span><span class="p">)</span>
+
+                        <span class="n">rho_state</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">rhostar_l</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">rho_l</span>
+                        <span class="n">un_state</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">ustar</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">un_l</span>
+                        <span class="n">p_state</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">pstar</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">p_l</span>
+                        <span class="n">rhoe_state</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">rhoestar_l</span> <span class="o">+</span> \
+                            <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">rhoe_l</span>
+
+            <span class="k">elif</span> <span class="n">ustar</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+
+                <span class="c1"># contact moving left, we need to understand the R and *R</span>
+                <span class="c1"># states</span>
+
+                <span class="c1"># Note: transverse velocity only jumps across contact</span>
+                <span class="n">ut_state</span> <span class="o">=</span> <span class="n">ut_r</span>
+
+                <span class="c1"># define eigenvalues</span>
+                <span class="n">lambda_r</span> <span class="o">=</span> <span class="n">un_r</span> <span class="o">+</span> <span class="n">c_r</span>
+                <span class="n">lambdastar_r</span> <span class="o">=</span> <span class="n">ustar</span> <span class="o">+</span> <span class="n">cstar_r</span>
+
+                <span class="k">if</span> <span class="n">pstar</span> <span class="o">&gt;</span> <span class="n">p_r</span><span class="p">:</span>
+                    <span class="c1"># the wave if a shock -- find the shock speed</span>
+                    <span class="n">sigma</span> <span class="o">=</span> <span class="p">(</span><span class="n">lambda_r</span> <span class="o">+</span> <span class="n">lambdastar_r</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
+
+                    <span class="k">if</span> <span class="n">sigma</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                        <span class="c1"># shock is moving to the right -- solution is *R state</span>
+                        <span class="n">rho_state</span> <span class="o">=</span> <span class="n">rhostar_r</span>
+                        <span class="n">un_state</span> <span class="o">=</span> <span class="n">ustar</span>
+                        <span class="n">p_state</span> <span class="o">=</span> <span class="n">pstar</span>
+                        <span class="n">rhoe_state</span> <span class="o">=</span> <span class="n">rhoestar_r</span>
+
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># solution is R state</span>
+                        <span class="n">rho_state</span> <span class="o">=</span> <span class="n">rho_r</span>
+                        <span class="n">un_state</span> <span class="o">=</span> <span class="n">un_r</span>
+                        <span class="n">p_state</span> <span class="o">=</span> <span class="n">p_r</span>
+                        <span class="n">rhoe_state</span> <span class="o">=</span> <span class="n">rhoe_r</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># the wave is a rarefaction</span>
+                    <span class="k">if</span> <span class="n">lambda_r</span> <span class="o">&lt;</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">lambdastar_r</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                        <span class="c1"># rarefaction fan is moving to the left -- solution is</span>
+                        <span class="c1"># R state</span>
+                        <span class="n">rho_state</span> <span class="o">=</span> <span class="n">rho_r</span>
+                        <span class="n">un_state</span> <span class="o">=</span> <span class="n">un_r</span>
+                        <span class="n">p_state</span> <span class="o">=</span> <span class="n">p_r</span>
+                        <span class="n">rhoe_state</span> <span class="o">=</span> <span class="n">rhoe_r</span>
+
+                    <span class="k">elif</span> <span class="n">lambda_r</span> <span class="o">&gt;</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">lambdastar_r</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                        <span class="c1"># rarefaction fan is moving to the right -- solution is</span>
+                        <span class="c1"># *R state</span>
+                        <span class="n">rho_state</span> <span class="o">=</span> <span class="n">rhostar_r</span>
+                        <span class="n">un_state</span> <span class="o">=</span> <span class="n">ustar</span>
+                        <span class="n">p_state</span> <span class="o">=</span> <span class="n">pstar</span>
+                        <span class="n">rhoe_state</span> <span class="o">=</span> <span class="n">rhoestar_r</span>
+
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># rarefaction spans x/t = 0 -- interpolate</span>
+                        <span class="n">alpha</span> <span class="o">=</span> <span class="n">lambda_r</span> <span class="o">/</span> <span class="p">(</span><span class="n">lambda_r</span> <span class="o">-</span> <span class="n">lambdastar_r</span><span class="p">)</span>
+
+                        <span class="n">rho_state</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">rhostar_r</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">rho_r</span>
+                        <span class="n">un_state</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">ustar</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">un_r</span>
+                        <span class="n">p_state</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">pstar</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">p_r</span>
+                        <span class="n">rhoe_state</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">rhoestar_r</span> <span class="o">+</span> \
+                            <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">rhoe_r</span>
+
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># ustar == 0</span>
+
+                <span class="n">rho_state</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">rhostar_l</span> <span class="o">+</span> <span class="n">rhostar_r</span><span class="p">)</span>
+                <span class="n">un_state</span> <span class="o">=</span> <span class="n">ustar</span>
+                <span class="n">ut_state</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">ut_l</span> <span class="o">+</span> <span class="n">ut_r</span><span class="p">)</span>
+                <span class="n">p_state</span> <span class="o">=</span> <span class="n">pstar</span>
+                <span class="n">rhoe_state</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">rhoestar_l</span> <span class="o">+</span> <span class="n">rhoestar_r</span><span class="p">)</span>
+
+            <span class="c1"># species now</span>
+            <span class="k">if</span> <span class="n">nspec</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">ustar</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                    <span class="n">xn</span> <span class="o">=</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">irhoX</span><span class="p">:</span><span class="n">irhoX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span> <span class="o">/</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">idens</span><span class="p">]</span>
+
+                <span class="k">elif</span> <span class="n">ustar</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                    <span class="n">xn</span> <span class="o">=</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">irhoX</span><span class="p">:</span><span class="n">irhoX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span> <span class="o">/</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">idens</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">xn</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">irhoX</span><span class="p">:</span><span class="n">irhoX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span> <span class="o">/</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">idens</span><span class="p">]</span> <span class="o">+</span>
+                                   <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">irhoX</span><span class="p">:</span><span class="n">irhoX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span> <span class="o">/</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">idens</span><span class="p">])</span>
+
+            <span class="c1"># are we on a solid boundary?</span>
+            <span class="k">if</span> <span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">ilo</span> <span class="ow">and</span> <span class="n">lower_solid</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">un_state</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">ihi</span> <span class="o">+</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">upper_solid</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">un_state</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+            <span class="k">elif</span> <span class="n">idir</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="n">jlo</span> <span class="ow">and</span> <span class="n">lower_solid</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">un_state</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+                <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="n">jhi</span> <span class="o">+</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">upper_solid</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">un_state</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+            <span class="c1"># update conserved state</span>
+            <span class="n">U_out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">idens</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho_state</span>
+
+            <span class="k">if</span> <span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">U_out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho_state</span> <span class="o">*</span> <span class="n">un_state</span>
+                <span class="n">U_out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iymom</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho_state</span> <span class="o">*</span> <span class="n">ut_state</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">U_out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho_state</span> <span class="o">*</span> <span class="n">ut_state</span>
+                <span class="n">U_out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iymom</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho_state</span> <span class="o">*</span> <span class="n">un_state</span>
+
+            <span class="n">U_out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iener</span><span class="p">]</span> <span class="o">=</span> <span class="n">rhoe_state</span> <span class="o">+</span> \
+                <span class="mf">0.5</span> <span class="o">*</span> <span class="n">rho_state</span> <span class="o">*</span> <span class="p">(</span><span class="n">un_state</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">ut_state</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">nspec</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">U_out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">irhoX</span><span class="p">:</span><span class="n">irhoX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span> <span class="o">=</span> <span class="n">xn</span> <span class="o">*</span> <span class="n">rho_state</span>
+
+    <span class="k">return</span> <span class="n">U_out</span></div>
+
+
+
+<div class="viewcode-block" id="riemann_prim">
+<a class="viewcode-back" href="../../../pyro.compressible.html#pyro.compressible.riemann.riemann_prim">[docs]</a>
+<span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">riemann_prim</span><span class="p">(</span><span class="n">idir</span><span class="p">,</span> <span class="n">ng</span><span class="p">,</span>
+                 <span class="n">irho</span><span class="p">,</span> <span class="n">iu</span><span class="p">,</span> <span class="n">iv</span><span class="p">,</span> <span class="n">ip</span><span class="p">,</span> <span class="n">iX</span><span class="p">,</span> <span class="n">nspec</span><span class="p">,</span>
+                 <span class="n">lower_solid</span><span class="p">,</span> <span class="n">upper_solid</span><span class="p">,</span>
+                 <span class="n">gamma</span><span class="p">,</span> <span class="n">q_l</span><span class="p">,</span> <span class="n">q_r</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    this is like riemann_cgf, except that it works on a primitive</span>
+<span class="sd">    variable input state and returns the primitive variable interface</span>
+<span class="sd">    state</span>
+
+<span class="sd">    Solve riemann shock tube problem for a general equation of</span>
+<span class="sd">    state using the method of Colella, Glaz, and Ferguson.  See</span>
+<span class="sd">    Almgren et al. 2010 (the CASTRO paper) for details.</span>
+
+<span class="sd">    The Riemann problem for the Euler&#39;s equation produces 4 regions,</span>
+<span class="sd">    separated by the three characteristics :math:`(u - cs, u, u + cs)`::</span>
+
+
+<span class="sd">           u - cs    t    u      u + cs</span>
+<span class="sd">             \       ^   .       /</span>
+<span class="sd">              \  *L  |   . *R   /</span>
+<span class="sd">               \     |  .     /</span>
+<span class="sd">                \    |  .    /</span>
+<span class="sd">            L    \   | .   /    R</span>
+<span class="sd">                  \  | .  /</span>
+<span class="sd">                   \ |. /</span>
+<span class="sd">                    \|./</span>
+<span class="sd">           ----------+----------------&gt; x</span>
+
+<span class="sd">    We care about the solution on the axis.  The basic idea is to use</span>
+<span class="sd">    estimates of the wave speeds to figure out which region we are in,</span>
+<span class="sd">    and: use jump conditions to evaluate the state there.</span>
+
+<span class="sd">    Only density jumps across the :math:`u` characteristic.  All primitive</span>
+<span class="sd">    variables jump across the other two.  Special attention is needed</span>
+<span class="sd">    if a rarefaction spans the axis.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    idir : int</span>
+<span class="sd">        Are we predicting to the edges in the x-direction (1) or y-direction (2)?</span>
+<span class="sd">    ng : int</span>
+<span class="sd">        The number of ghost cells</span>
+<span class="sd">    nspec : int</span>
+<span class="sd">        The number of species</span>
+<span class="sd">    irho, iu, iv, ip, iX : int</span>
+<span class="sd">        The indices of the density, x-velocity, y-velocity, pressure and species fractions in the state vector.</span>
+<span class="sd">    lower_solid, upper_solid : int</span>
+<span class="sd">        Are we at lower or upper solid boundaries?</span>
+<span class="sd">    gamma : float</span>
+<span class="sd">        Adiabatic index</span>
+<span class="sd">    q_l, q_r : ndarray</span>
+<span class="sd">        Primitive state on the left and right cell edges.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : ndarray</span>
+<span class="sd">        Primitive flux</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">,</span> <span class="n">nvar</span> <span class="o">=</span> <span class="n">q_l</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">q_int</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">,</span> <span class="n">nvar</span><span class="p">))</span>
+
+    <span class="n">smallc</span> <span class="o">=</span> <span class="mf">1.e-10</span>
+    <span class="n">smallrho</span> <span class="o">=</span> <span class="mf">1.e-10</span>
+    <span class="n">smallp</span> <span class="o">=</span> <span class="mf">1.e-10</span>
+
+    <span class="n">nx</span> <span class="o">=</span> <span class="n">qx</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
+    <span class="n">ny</span> <span class="o">=</span> <span class="n">qy</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
+    <span class="n">ilo</span> <span class="o">=</span> <span class="n">ng</span>
+    <span class="n">ihi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">nx</span>
+    <span class="n">jlo</span> <span class="o">=</span> <span class="n">ng</span>
+    <span class="n">jhi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">ny</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ilo</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ihi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">jlo</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">jhi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+
+            <span class="c1"># primitive variable states</span>
+            <span class="n">rho_l</span> <span class="o">=</span> <span class="n">q_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">irho</span><span class="p">]</span>
+
+            <span class="c1"># un = normal velocity; ut = transverse velocity</span>
+            <span class="k">if</span> <span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">un_l</span> <span class="o">=</span> <span class="n">q_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iu</span><span class="p">]</span>
+                <span class="n">ut_l</span> <span class="o">=</span> <span class="n">q_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iv</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">un_l</span> <span class="o">=</span> <span class="n">q_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iv</span><span class="p">]</span>
+                <span class="n">ut_l</span> <span class="o">=</span> <span class="n">q_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iu</span><span class="p">]</span>
+
+            <span class="n">p_l</span> <span class="o">=</span> <span class="n">q_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ip</span><span class="p">]</span>
+            <span class="n">p_l</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">p_l</span><span class="p">,</span> <span class="n">smallp</span><span class="p">)</span>
+
+            <span class="n">rho_r</span> <span class="o">=</span> <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">irho</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">un_r</span> <span class="o">=</span> <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iu</span><span class="p">]</span>
+                <span class="n">ut_r</span> <span class="o">=</span> <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iv</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">un_r</span> <span class="o">=</span> <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iv</span><span class="p">]</span>
+                <span class="n">ut_r</span> <span class="o">=</span> <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iu</span><span class="p">]</span>
+
+            <span class="n">p_r</span> <span class="o">=</span> <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ip</span><span class="p">]</span>
+            <span class="n">p_r</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">p_r</span><span class="p">,</span> <span class="n">smallp</span><span class="p">)</span>
+
+            <span class="c1"># define the Lagrangian sound speed</span>
+            <span class="n">rho_l</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallrho</span><span class="p">,</span> <span class="n">rho_l</span><span class="p">)</span>
+            <span class="n">rho_r</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallrho</span><span class="p">,</span> <span class="n">rho_r</span><span class="p">)</span>
+            <span class="n">W_l</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallrho</span> <span class="o">*</span> <span class="n">smallc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">p_l</span> <span class="o">*</span> <span class="n">rho_l</span><span class="p">))</span>
+            <span class="n">W_r</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallrho</span> <span class="o">*</span> <span class="n">smallc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">p_r</span> <span class="o">*</span> <span class="n">rho_r</span><span class="p">))</span>
+
+            <span class="c1"># and the regular sound speeds</span>
+            <span class="n">c_l</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">p_l</span> <span class="o">/</span> <span class="n">rho_l</span><span class="p">))</span>
+            <span class="n">c_r</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">p_r</span> <span class="o">/</span> <span class="n">rho_r</span><span class="p">))</span>
+
+            <span class="c1"># define the star states</span>
+            <span class="n">pstar</span> <span class="o">=</span> <span class="p">(</span><span class="n">W_l</span> <span class="o">*</span> <span class="n">p_r</span> <span class="o">+</span> <span class="n">W_r</span> <span class="o">*</span> <span class="n">p_l</span> <span class="o">+</span> <span class="n">W_l</span> <span class="o">*</span>
+                     <span class="n">W_r</span> <span class="o">*</span> <span class="p">(</span><span class="n">un_l</span> <span class="o">-</span> <span class="n">un_r</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">W_l</span> <span class="o">+</span> <span class="n">W_r</span><span class="p">)</span>
+            <span class="n">pstar</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">pstar</span><span class="p">,</span> <span class="n">smallp</span><span class="p">)</span>
+            <span class="n">ustar</span> <span class="o">=</span> <span class="p">(</span><span class="n">W_l</span> <span class="o">*</span> <span class="n">un_l</span> <span class="o">+</span> <span class="n">W_r</span> <span class="o">*</span> <span class="n">un_r</span> <span class="o">+</span> <span class="p">(</span><span class="n">p_l</span> <span class="o">-</span> <span class="n">p_r</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">W_l</span> <span class="o">+</span> <span class="n">W_r</span><span class="p">)</span>
+
+            <span class="c1"># now compute the remaining state to the left and right</span>
+            <span class="c1"># of the contact (in the star region)</span>
+            <span class="n">rhostar_l</span> <span class="o">=</span> <span class="n">rho_l</span> <span class="o">+</span> <span class="p">(</span><span class="n">pstar</span> <span class="o">-</span> <span class="n">p_l</span><span class="p">)</span> <span class="o">/</span> <span class="n">c_l</span><span class="o">**</span><span class="mi">2</span>
+            <span class="n">rhostar_r</span> <span class="o">=</span> <span class="n">rho_r</span> <span class="o">+</span> <span class="p">(</span><span class="n">pstar</span> <span class="o">-</span> <span class="n">p_r</span><span class="p">)</span> <span class="o">/</span> <span class="n">c_r</span><span class="o">**</span><span class="mi">2</span>
+
+            <span class="n">cstar_l</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">pstar</span> <span class="o">/</span> <span class="n">rhostar_l</span><span class="p">))</span>
+            <span class="n">cstar_r</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">pstar</span> <span class="o">/</span> <span class="n">rhostar_r</span><span class="p">))</span>
+
+            <span class="c1"># figure out which state we are in, based on the location of</span>
+            <span class="c1"># the waves</span>
+            <span class="k">if</span> <span class="n">ustar</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+
+                <span class="c1"># contact is moving to the right, we need to understand</span>
+                <span class="c1"># the L and *L states</span>
+
+                <span class="c1"># Note: transverse velocity only jumps across contact</span>
+                <span class="n">ut_state</span> <span class="o">=</span> <span class="n">ut_l</span>
+
+                <span class="c1"># define eigenvalues</span>
+                <span class="n">lambda_l</span> <span class="o">=</span> <span class="n">un_l</span> <span class="o">-</span> <span class="n">c_l</span>
+                <span class="n">lambdastar_l</span> <span class="o">=</span> <span class="n">ustar</span> <span class="o">-</span> <span class="n">cstar_l</span>
+
+                <span class="k">if</span> <span class="n">pstar</span> <span class="o">&gt;</span> <span class="n">p_l</span><span class="p">:</span>
+                    <span class="c1"># the wave is a shock -- find the shock speed</span>
+                    <span class="n">sigma</span> <span class="o">=</span> <span class="p">(</span><span class="n">lambda_l</span> <span class="o">+</span> <span class="n">lambdastar_l</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
+
+                    <span class="k">if</span> <span class="n">sigma</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                        <span class="c1"># shock is moving to the right -- solution is L state</span>
+                        <span class="n">rho_state</span> <span class="o">=</span> <span class="n">rho_l</span>
+                        <span class="n">un_state</span> <span class="o">=</span> <span class="n">un_l</span>
+                        <span class="n">p_state</span> <span class="o">=</span> <span class="n">p_l</span>
+
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># solution is *L state</span>
+                        <span class="n">rho_state</span> <span class="o">=</span> <span class="n">rhostar_l</span>
+                        <span class="n">un_state</span> <span class="o">=</span> <span class="n">ustar</span>
+                        <span class="n">p_state</span> <span class="o">=</span> <span class="n">pstar</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># the wave is a rarefaction</span>
+                    <span class="k">if</span> <span class="n">lambda_l</span> <span class="o">&lt;</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">lambdastar_l</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                        <span class="c1"># rarefaction fan is moving to the left -- solution is</span>
+                        <span class="c1"># *L state</span>
+                        <span class="n">rho_state</span> <span class="o">=</span> <span class="n">rhostar_l</span>
+                        <span class="n">un_state</span> <span class="o">=</span> <span class="n">ustar</span>
+                        <span class="n">p_state</span> <span class="o">=</span> <span class="n">pstar</span>
+
+                    <span class="k">elif</span> <span class="n">lambda_l</span> <span class="o">&gt;</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">lambdastar_l</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                        <span class="c1"># rarefaction fan is moving to the right -- solution is</span>
+                        <span class="c1"># L state</span>
+                        <span class="n">rho_state</span> <span class="o">=</span> <span class="n">rho_l</span>
+                        <span class="n">un_state</span> <span class="o">=</span> <span class="n">un_l</span>
+                        <span class="n">p_state</span> <span class="o">=</span> <span class="n">p_l</span>
+
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># rarefaction spans x/t = 0 -- interpolate</span>
+                        <span class="n">alpha</span> <span class="o">=</span> <span class="n">lambda_l</span> <span class="o">/</span> <span class="p">(</span><span class="n">lambda_l</span> <span class="o">-</span> <span class="n">lambdastar_l</span><span class="p">)</span>
+
+                        <span class="n">rho_state</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">rhostar_l</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">rho_l</span>
+                        <span class="n">un_state</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">ustar</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">un_l</span>
+                        <span class="n">p_state</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">pstar</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">p_l</span>
+
+            <span class="k">elif</span> <span class="n">ustar</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+
+                <span class="c1"># contact moving left, we need to understand the R and *R</span>
+                <span class="c1"># states</span>
+
+                <span class="c1"># Note: transverse velocity only jumps across contact</span>
+                <span class="n">ut_state</span> <span class="o">=</span> <span class="n">ut_r</span>
+
+                <span class="c1"># define eigenvalues</span>
+                <span class="n">lambda_r</span> <span class="o">=</span> <span class="n">un_r</span> <span class="o">+</span> <span class="n">c_r</span>
+                <span class="n">lambdastar_r</span> <span class="o">=</span> <span class="n">ustar</span> <span class="o">+</span> <span class="n">cstar_r</span>
+
+                <span class="k">if</span> <span class="n">pstar</span> <span class="o">&gt;</span> <span class="n">p_r</span><span class="p">:</span>
+                    <span class="c1"># the wave if a shock -- find the shock speed</span>
+                    <span class="n">sigma</span> <span class="o">=</span> <span class="p">(</span><span class="n">lambda_r</span> <span class="o">+</span> <span class="n">lambdastar_r</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
+
+                    <span class="k">if</span> <span class="n">sigma</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                        <span class="c1"># shock is moving to the right -- solution is *R state</span>
+                        <span class="n">rho_state</span> <span class="o">=</span> <span class="n">rhostar_r</span>
+                        <span class="n">un_state</span> <span class="o">=</span> <span class="n">ustar</span>
+                        <span class="n">p_state</span> <span class="o">=</span> <span class="n">pstar</span>
+
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># solution is R state</span>
+                        <span class="n">rho_state</span> <span class="o">=</span> <span class="n">rho_r</span>
+                        <span class="n">un_state</span> <span class="o">=</span> <span class="n">un_r</span>
+                        <span class="n">p_state</span> <span class="o">=</span> <span class="n">p_r</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># the wave is a rarefaction</span>
+                    <span class="k">if</span> <span class="n">lambda_r</span> <span class="o">&lt;</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">lambdastar_r</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                        <span class="c1"># rarefaction fan is moving to the left -- solution is</span>
+                        <span class="c1"># R state</span>
+                        <span class="n">rho_state</span> <span class="o">=</span> <span class="n">rho_r</span>
+                        <span class="n">un_state</span> <span class="o">=</span> <span class="n">un_r</span>
+                        <span class="n">p_state</span> <span class="o">=</span> <span class="n">p_r</span>
+
+                    <span class="k">elif</span> <span class="n">lambda_r</span> <span class="o">&gt;</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">lambdastar_r</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                        <span class="c1"># rarefaction fan is moving to the right -- solution is</span>
+                        <span class="c1"># *R state</span>
+                        <span class="n">rho_state</span> <span class="o">=</span> <span class="n">rhostar_r</span>
+                        <span class="n">un_state</span> <span class="o">=</span> <span class="n">ustar</span>
+                        <span class="n">p_state</span> <span class="o">=</span> <span class="n">pstar</span>
+
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># rarefaction spans x/t = 0 -- interpolate</span>
+                        <span class="n">alpha</span> <span class="o">=</span> <span class="n">lambda_r</span> <span class="o">/</span> <span class="p">(</span><span class="n">lambda_r</span> <span class="o">-</span> <span class="n">lambdastar_r</span><span class="p">)</span>
+
+                        <span class="n">rho_state</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">rhostar_r</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">rho_r</span>
+                        <span class="n">un_state</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">ustar</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">un_r</span>
+                        <span class="n">p_state</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">pstar</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">p_r</span>
+
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># ustar == 0</span>
+
+                <span class="n">rho_state</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">rhostar_l</span> <span class="o">+</span> <span class="n">rhostar_r</span><span class="p">)</span>
+                <span class="n">un_state</span> <span class="o">=</span> <span class="n">ustar</span>
+                <span class="n">ut_state</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">ut_l</span> <span class="o">+</span> <span class="n">ut_r</span><span class="p">)</span>
+                <span class="n">p_state</span> <span class="o">=</span> <span class="n">pstar</span>
+
+            <span class="c1"># species now</span>
+            <span class="k">if</span> <span class="n">nspec</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">ustar</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                    <span class="n">xn</span> <span class="o">=</span> <span class="n">q_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iX</span><span class="p">:</span><span class="n">iX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span>
+
+                <span class="k">elif</span> <span class="n">ustar</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                    <span class="n">xn</span> <span class="o">=</span> <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iX</span><span class="p">:</span><span class="n">iX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">xn</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">q_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iX</span><span class="p">:</span><span class="n">iX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span> <span class="o">+</span>
+                                   <span class="n">q_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iX</span><span class="p">:</span><span class="n">iX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">])</span>
+
+            <span class="c1"># are we on a solid boundary?</span>
+            <span class="k">if</span> <span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">ilo</span> <span class="ow">and</span> <span class="n">lower_solid</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">un_state</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">ihi</span> <span class="o">+</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">upper_solid</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">un_state</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+            <span class="k">elif</span> <span class="n">idir</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="n">jlo</span> <span class="ow">and</span> <span class="n">lower_solid</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">un_state</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+                <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="n">jhi</span> <span class="o">+</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">upper_solid</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">un_state</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+            <span class="n">q_int</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">irho</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho_state</span>
+            <span class="k">if</span> <span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">q_int</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iu</span><span class="p">]</span> <span class="o">=</span> <span class="n">un_state</span>
+                <span class="n">q_int</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iv</span><span class="p">]</span> <span class="o">=</span> <span class="n">ut_state</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">q_int</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iu</span><span class="p">]</span> <span class="o">=</span> <span class="n">ut_state</span>
+                <span class="n">q_int</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iv</span><span class="p">]</span> <span class="o">=</span> <span class="n">un_state</span>
+
+            <span class="n">q_int</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ip</span><span class="p">]</span> <span class="o">=</span> <span class="n">p_state</span>
+
+            <span class="k">if</span> <span class="n">nspec</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">q_int</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iX</span><span class="p">:</span><span class="n">iX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span> <span class="o">=</span> <span class="n">xn</span>
+
+    <span class="k">return</span> <span class="n">q_int</span></div>
+
+
+
+<div class="viewcode-block" id="riemann_hllc">
+<a class="viewcode-back" href="../../../pyro.compressible.html#pyro.compressible.riemann.riemann_hllc">[docs]</a>
+<span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">riemann_hllc</span><span class="p">(</span><span class="n">idir</span><span class="p">,</span> <span class="n">ng</span><span class="p">,</span>
+                 <span class="n">idens</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">,</span> <span class="n">iymom</span><span class="p">,</span> <span class="n">iener</span><span class="p">,</span> <span class="n">irhoX</span><span class="p">,</span> <span class="n">nspec</span><span class="p">,</span>
+                 <span class="n">lower_solid</span><span class="p">,</span> <span class="n">upper_solid</span><span class="p">,</span>  <span class="c1"># pylint: disable=unused-argument</span>
+                 <span class="n">gamma</span><span class="p">,</span> <span class="n">U_l</span><span class="p">,</span> <span class="n">U_r</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is the HLLC Riemann solver.  The implementation follows</span>
+<span class="sd">    directly out of Toro&#39;s book.  Note: this does not handle the</span>
+<span class="sd">    transonic rarefaction.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    idir : int</span>
+<span class="sd">        Are we predicting to the edges in the x-direction (1) or y-direction (2)?</span>
+<span class="sd">    ng : int</span>
+<span class="sd">        The number of ghost cells</span>
+<span class="sd">    nspec : int</span>
+<span class="sd">        The number of species</span>
+<span class="sd">    idens, ixmom, iymom, iener, irhoX : int</span>
+<span class="sd">        The indices of the density, x-momentum, y-momentum, internal energy density</span>
+<span class="sd">        and species partial densities in the conserved state vector.</span>
+<span class="sd">    lower_solid, upper_solid : int</span>
+<span class="sd">        Are we at lower or upper solid boundaries?</span>
+<span class="sd">    gamma : float</span>
+<span class="sd">        Adiabatic index</span>
+<span class="sd">    U_l, U_r : ndarray</span>
+<span class="sd">        Conserved state on the left and right cell edges.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : ndarray</span>
+<span class="sd">        Conserved flux</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Only Cartesian2d is supported in HLLC</span>
+    <span class="n">coord_type</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">,</span> <span class="n">nvar</span> <span class="o">=</span> <span class="n">U_l</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">,</span> <span class="n">nvar</span><span class="p">))</span>
+
+    <span class="n">smallc</span> <span class="o">=</span> <span class="mf">1.e-10</span>
+    <span class="n">smallp</span> <span class="o">=</span> <span class="mf">1.e-10</span>
+
+    <span class="n">U_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nvar</span><span class="p">)</span>
+
+    <span class="n">nx</span> <span class="o">=</span> <span class="n">qx</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
+    <span class="n">ny</span> <span class="o">=</span> <span class="n">qy</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ng</span>
+    <span class="n">ilo</span> <span class="o">=</span> <span class="n">ng</span>
+    <span class="n">ihi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">nx</span>
+    <span class="n">jlo</span> <span class="o">=</span> <span class="n">ng</span>
+    <span class="n">jhi</span> <span class="o">=</span> <span class="n">ng</span> <span class="o">+</span> <span class="n">ny</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ilo</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ihi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">jlo</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">jhi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+
+            <span class="c1"># primitive variable states</span>
+            <span class="n">rho_l</span> <span class="o">=</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">idens</span><span class="p">]</span>
+
+            <span class="c1"># un = normal velocity; ut = transverse velocity</span>
+            <span class="k">if</span> <span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">un_l</span> <span class="o">=</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">]</span> <span class="o">/</span> <span class="n">rho_l</span>
+                <span class="n">ut_l</span> <span class="o">=</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iymom</span><span class="p">]</span> <span class="o">/</span> <span class="n">rho_l</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">un_l</span> <span class="o">=</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iymom</span><span class="p">]</span> <span class="o">/</span> <span class="n">rho_l</span>
+                <span class="n">ut_l</span> <span class="o">=</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">]</span> <span class="o">/</span> <span class="n">rho_l</span>
+
+            <span class="n">rhoe_l</span> <span class="o">=</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iener</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">rho_l</span> <span class="o">*</span> <span class="p">(</span><span class="n">un_l</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">ut_l</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+            <span class="n">p_l</span> <span class="o">=</span> <span class="n">rhoe_l</span> <span class="o">*</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+            <span class="n">p_l</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">p_l</span><span class="p">,</span> <span class="n">smallp</span><span class="p">)</span>
+
+            <span class="n">rho_r</span> <span class="o">=</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">idens</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">un_r</span> <span class="o">=</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">]</span> <span class="o">/</span> <span class="n">rho_r</span>
+                <span class="n">ut_r</span> <span class="o">=</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iymom</span><span class="p">]</span> <span class="o">/</span> <span class="n">rho_r</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">un_r</span> <span class="o">=</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iymom</span><span class="p">]</span> <span class="o">/</span> <span class="n">rho_r</span>
+                <span class="n">ut_r</span> <span class="o">=</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">]</span> <span class="o">/</span> <span class="n">rho_r</span>
+
+            <span class="n">rhoe_r</span> <span class="o">=</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iener</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">rho_r</span> <span class="o">*</span> <span class="p">(</span><span class="n">un_r</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">ut_r</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+            <span class="n">p_r</span> <span class="o">=</span> <span class="n">rhoe_r</span> <span class="o">*</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+            <span class="n">p_r</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">p_r</span><span class="p">,</span> <span class="n">smallp</span><span class="p">)</span>
+
+            <span class="c1"># compute the sound speeds</span>
+            <span class="n">c_l</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">p_l</span> <span class="o">/</span> <span class="n">rho_l</span><span class="p">))</span>
+            <span class="n">c_r</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smallc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">p_r</span> <span class="o">/</span> <span class="n">rho_r</span><span class="p">))</span>
+
+            <span class="c1"># Estimate the star quantities -- use one of three methods to</span>
+            <span class="c1"># do this -- the primitive variable Riemann solver, the two</span>
+            <span class="c1"># shock approximation, or the two rarefaction approximation.</span>
+            <span class="c1"># Pick the method based on the pressure states at the</span>
+            <span class="c1"># interface.</span>
+
+            <span class="n">p_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">p_l</span><span class="p">,</span> <span class="n">p_r</span><span class="p">)</span>
+            <span class="n">p_min</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">p_l</span><span class="p">,</span> <span class="n">p_r</span><span class="p">)</span>
+
+            <span class="n">Q</span> <span class="o">=</span> <span class="n">p_max</span> <span class="o">/</span> <span class="n">p_min</span>
+
+            <span class="n">rho_avg</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">rho_l</span> <span class="o">+</span> <span class="n">rho_r</span><span class="p">)</span>
+            <span class="n">c_avg</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">c_l</span> <span class="o">+</span> <span class="n">c_r</span><span class="p">)</span>
+
+            <span class="c1"># primitive variable Riemann solver (Toro, 9.3)</span>
+            <span class="n">factor</span> <span class="o">=</span> <span class="n">rho_avg</span> <span class="o">*</span> <span class="n">c_avg</span>
+            <span class="c1"># factor2 = rho_avg / c_avg</span>
+
+            <span class="n">pstar</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">p_l</span> <span class="o">+</span> <span class="n">p_r</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">un_l</span> <span class="o">-</span> <span class="n">un_r</span><span class="p">)</span> <span class="o">*</span> <span class="n">factor</span>
+            <span class="n">ustar</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">un_l</span> <span class="o">+</span> <span class="n">un_r</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">p_l</span> <span class="o">-</span> <span class="n">p_r</span><span class="p">)</span> <span class="o">/</span> <span class="n">factor</span>
+
+            <span class="c1"># rhostar_l = rho_l + (un_l - ustar) * factor2</span>
+            <span class="c1"># rhostar_r = rho_r + (ustar - un_r) * factor2</span>
+
+            <span class="k">if</span> <span class="n">Q</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="p">(</span><span class="n">pstar</span> <span class="o">&lt;</span> <span class="n">p_min</span> <span class="ow">or</span> <span class="n">pstar</span> <span class="o">&gt;</span> <span class="n">p_max</span><span class="p">):</span>
+
+                <span class="c1"># use a more accurate Riemann solver for the estimate here</span>
+
+                <span class="k">if</span> <span class="n">pstar</span> <span class="o">&lt;</span> <span class="n">p_min</span><span class="p">:</span>
+
+                    <span class="c1"># 2-rarefaction Riemann solver</span>
+                    <span class="n">z</span> <span class="o">=</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">gamma</span><span class="p">)</span>
+                    <span class="n">p_lr</span> <span class="o">=</span> <span class="p">(</span><span class="n">p_l</span> <span class="o">/</span> <span class="n">p_r</span><span class="p">)</span><span class="o">**</span><span class="n">z</span>
+
+                    <span class="n">ustar</span> <span class="o">=</span> <span class="p">(</span><span class="n">p_lr</span> <span class="o">*</span> <span class="n">un_l</span> <span class="o">/</span> <span class="n">c_l</span> <span class="o">+</span> <span class="n">un_r</span> <span class="o">/</span> <span class="n">c_r</span> <span class="o">+</span>
+                             <span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">p_lr</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">))</span> <span class="o">/</span> \
+                            <span class="p">(</span><span class="n">p_lr</span> <span class="o">/</span> <span class="n">c_l</span> <span class="o">+</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">c_r</span><span class="p">)</span>
+
+                    <span class="n">pstar</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">p_l</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">un_l</span> <span class="o">-</span> <span class="n">ustar</span><span class="p">)</span> <span class="o">/</span>
+                                          <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">c_l</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">z</span><span class="p">)</span> <span class="o">+</span>
+                                   <span class="n">p_r</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">ustar</span> <span class="o">-</span> <span class="n">un_r</span><span class="p">)</span> <span class="o">/</span>
+                                          <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">c_r</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">z</span><span class="p">))</span>
+
+                    <span class="c1"># rhostar_l = rho_l * (pstar / p_l)**(1.0 / gamma)</span>
+                    <span class="c1"># rhostar_r = rho_r * (pstar / p_r)**(1.0 / gamma)</span>
+
+                <span class="k">else</span><span class="p">:</span>
+
+                    <span class="c1"># 2-shock Riemann solver</span>
+                    <span class="n">A_r</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="p">((</span><span class="n">gamma</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">rho_r</span><span class="p">)</span>
+                    <span class="n">B_r</span> <span class="o">=</span> <span class="n">p_r</span> <span class="o">*</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span>
+
+                    <span class="n">A_l</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="p">((</span><span class="n">gamma</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">rho_l</span><span class="p">)</span>
+                    <span class="n">B_l</span> <span class="o">=</span> <span class="n">p_l</span> <span class="o">*</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span>
+
+                    <span class="c1"># guess of the pressure</span>
+                    <span class="n">p_guess</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pstar</span><span class="p">)</span>
+
+                    <span class="n">g_l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">A_l</span> <span class="o">/</span> <span class="p">(</span><span class="n">p_guess</span> <span class="o">+</span> <span class="n">B_l</span><span class="p">))</span>
+                    <span class="n">g_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">A_r</span> <span class="o">/</span> <span class="p">(</span><span class="n">p_guess</span> <span class="o">+</span> <span class="n">B_r</span><span class="p">))</span>
+
+                    <span class="n">pstar</span> <span class="o">=</span> <span class="p">(</span><span class="n">g_l</span> <span class="o">*</span> <span class="n">p_l</span> <span class="o">+</span> <span class="n">g_r</span> <span class="o">*</span> <span class="n">p_r</span> <span class="o">-</span>
+                             <span class="p">(</span><span class="n">un_r</span> <span class="o">-</span> <span class="n">un_l</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">g_l</span> <span class="o">+</span> <span class="n">g_r</span><span class="p">)</span>
+
+                    <span class="n">ustar</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">un_l</span> <span class="o">+</span> <span class="n">un_r</span><span class="p">)</span> <span class="o">+</span> \
+                        <span class="mf">0.5</span> <span class="o">*</span> <span class="p">((</span><span class="n">pstar</span> <span class="o">-</span> <span class="n">p_r</span><span class="p">)</span> <span class="o">*</span> <span class="n">g_r</span> <span class="o">-</span> <span class="p">(</span><span class="n">pstar</span> <span class="o">-</span> <span class="n">p_l</span><span class="p">)</span> <span class="o">*</span> <span class="n">g_l</span><span class="p">)</span>
+
+                    <span class="c1"># rhostar_l = rho_l * (pstar / p_l + (gamma - 1.0) / (gamma + 1.0)) / \</span>
+                    <span class="c1">#     ((gamma - 1.0) / (gamma + 1.0) * (pstar / p_l) + 1.0)</span>
+                    <span class="c1">#</span>
+                    <span class="c1"># rhostar_r = rho_r * (pstar / p_r + (gamma - 1.0) / (gamma + 1.0)) / \</span>
+                    <span class="c1">#     ((gamma - 1.0) / (gamma + 1.0) * (pstar / p_r) + 1.0)</span>
+
+            <span class="c1"># estimate the nonlinear wave speeds</span>
+
+            <span class="k">if</span> <span class="n">pstar</span> <span class="o">&lt;=</span> <span class="n">p_l</span><span class="p">:</span>
+                <span class="c1"># rarefaction</span>
+                <span class="n">S_l</span> <span class="o">=</span> <span class="n">un_l</span> <span class="o">-</span> <span class="n">c_l</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># shock</span>
+                <span class="n">S_l</span> <span class="o">=</span> <span class="n">un_l</span> <span class="o">-</span> <span class="n">c_l</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="p">((</span><span class="n">gamma</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">gamma</span><span class="p">))</span> <span class="o">*</span>
+                                           <span class="p">(</span><span class="n">pstar</span> <span class="o">/</span> <span class="n">p_l</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">pstar</span> <span class="o">&lt;=</span> <span class="n">p_r</span><span class="p">:</span>
+                <span class="c1"># rarefaction</span>
+                <span class="n">S_r</span> <span class="o">=</span> <span class="n">un_r</span> <span class="o">+</span> <span class="n">c_r</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># shock</span>
+                <span class="n">S_r</span> <span class="o">=</span> <span class="n">un_r</span> <span class="o">+</span> <span class="n">c_r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="p">((</span><span class="n">gamma</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">/</span> <span class="n">gamma</span><span class="p">))</span> <span class="o">*</span>
+                                           <span class="p">(</span><span class="n">pstar</span> <span class="o">/</span> <span class="n">p_r</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">))</span>
+
+            <span class="c1">#  We could just take S_c = u_star as the estimate for the</span>
+            <span class="c1">#  contact speed, but we can actually do this more accurately</span>
+            <span class="c1">#  by using the Rankine-Hugonoit jump conditions across each</span>
+            <span class="c1">#  of the waves (see Toro 10.58, Batten et al. SIAM</span>
+            <span class="c1">#  J. Sci. and Stat. Comp., 18:1553 (1997)</span>
+            <span class="n">S_c</span> <span class="o">=</span> <span class="p">(</span><span class="n">p_r</span> <span class="o">-</span> <span class="n">p_l</span> <span class="o">+</span> <span class="n">rho_l</span> <span class="o">*</span> <span class="n">un_l</span> <span class="o">*</span> <span class="p">(</span><span class="n">S_l</span> <span class="o">-</span> <span class="n">un_l</span><span class="p">)</span> <span class="o">-</span> <span class="n">rho_r</span> <span class="o">*</span> <span class="n">un_r</span> <span class="o">*</span> <span class="p">(</span><span class="n">S_r</span> <span class="o">-</span> <span class="n">un_r</span><span class="p">))</span> <span class="o">/</span> \
+                <span class="p">(</span><span class="n">rho_l</span> <span class="o">*</span> <span class="p">(</span><span class="n">S_l</span> <span class="o">-</span> <span class="n">un_l</span><span class="p">)</span> <span class="o">-</span> <span class="n">rho_r</span> <span class="o">*</span> <span class="p">(</span><span class="n">S_r</span> <span class="o">-</span> <span class="n">un_r</span><span class="p">))</span>
+
+            <span class="c1"># figure out which region we are in and compute the state and</span>
+            <span class="c1"># the interface fluxes using the HLLC Riemann solver</span>
+            <span class="k">if</span> <span class="n">S_r</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="c1"># R region</span>
+                <span class="n">U_state</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+
+                <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">consFlux</span><span class="p">(</span><span class="n">idir</span><span class="p">,</span> <span class="n">coord_type</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span>
+                                      <span class="n">idens</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">,</span> <span class="n">iymom</span><span class="p">,</span> <span class="n">iener</span><span class="p">,</span> <span class="n">irhoX</span><span class="p">,</span> <span class="n">nspec</span><span class="p">,</span>
+                                      <span class="n">U_state</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">S_c</span> <span class="o">&lt;=</span> <span class="mf">0.0</span> <span class="o">&lt;</span> <span class="n">S_r</span><span class="p">:</span>
+                <span class="c1"># R* region</span>
+                <span class="n">HLLCfactor</span> <span class="o">=</span> <span class="n">rho_r</span> <span class="o">*</span> <span class="p">(</span><span class="n">S_r</span> <span class="o">-</span> <span class="n">un_r</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">S_r</span> <span class="o">-</span> <span class="n">S_c</span><span class="p">)</span>
+
+                <span class="n">U_state</span><span class="p">[</span><span class="n">idens</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span>
+
+                <span class="k">if</span> <span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">U_state</span><span class="p">[</span><span class="n">ixmom</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span> <span class="o">*</span> <span class="n">S_c</span>
+                    <span class="n">U_state</span><span class="p">[</span><span class="n">iymom</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span> <span class="o">*</span> <span class="n">ut_r</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">U_state</span><span class="p">[</span><span class="n">ixmom</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span> <span class="o">*</span> <span class="n">ut_r</span>
+                    <span class="n">U_state</span><span class="p">[</span><span class="n">iymom</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span> <span class="o">*</span> <span class="n">S_c</span>
+
+                <span class="n">U_state</span><span class="p">[</span><span class="n">iener</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span> <span class="o">*</span> <span class="p">(</span><span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iener</span><span class="p">]</span> <span class="o">/</span> <span class="n">rho_r</span> <span class="o">+</span>
+                                               <span class="p">(</span><span class="n">S_c</span> <span class="o">-</span> <span class="n">un_r</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">S_c</span> <span class="o">+</span> <span class="n">p_r</span> <span class="o">/</span> <span class="p">(</span><span class="n">rho_r</span> <span class="o">*</span> <span class="p">(</span><span class="n">S_r</span> <span class="o">-</span> <span class="n">un_r</span><span class="p">))))</span>
+
+                <span class="c1"># species</span>
+                <span class="k">if</span> <span class="n">nspec</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">U_state</span><span class="p">[</span><span class="n">irhoX</span><span class="p">:</span><span class="n">irhoX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span> <span class="o">*</span> \
+                        <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">irhoX</span><span class="p">:</span><span class="n">irhoX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span> <span class="o">/</span> <span class="n">rho_r</span>
+
+                <span class="c1"># find the flux on the right interface</span>
+                <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">consFlux</span><span class="p">(</span><span class="n">idir</span><span class="p">,</span> <span class="n">coord_type</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span>
+                                      <span class="n">idens</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">,</span> <span class="n">iymom</span><span class="p">,</span> <span class="n">iener</span><span class="p">,</span> <span class="n">irhoX</span><span class="p">,</span> <span class="n">nspec</span><span class="p">,</span>
+                                      <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:])</span>
+
+                <span class="c1"># correct the flux</span>
+                <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">S_r</span> <span class="o">*</span> <span class="p">(</span><span class="n">U_state</span><span class="p">[:]</span> <span class="o">-</span> <span class="n">U_r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:])</span>
+
+            <span class="k">elif</span> <span class="n">S_l</span> <span class="o">&lt;</span> <span class="mf">0.0</span> <span class="o">&lt;</span> <span class="n">S_c</span><span class="p">:</span>
+                <span class="c1"># L* region</span>
+                <span class="n">HLLCfactor</span> <span class="o">=</span> <span class="n">rho_l</span> <span class="o">*</span> <span class="p">(</span><span class="n">S_l</span> <span class="o">-</span> <span class="n">un_l</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">S_l</span> <span class="o">-</span> <span class="n">S_c</span><span class="p">)</span>
+
+                <span class="n">U_state</span><span class="p">[</span><span class="n">idens</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span>
+
+                <span class="k">if</span> <span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">U_state</span><span class="p">[</span><span class="n">ixmom</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span> <span class="o">*</span> <span class="n">S_c</span>
+                    <span class="n">U_state</span><span class="p">[</span><span class="n">iymom</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span> <span class="o">*</span> <span class="n">ut_l</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">U_state</span><span class="p">[</span><span class="n">ixmom</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span> <span class="o">*</span> <span class="n">ut_l</span>
+                    <span class="n">U_state</span><span class="p">[</span><span class="n">iymom</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span> <span class="o">*</span> <span class="n">S_c</span>
+
+                <span class="n">U_state</span><span class="p">[</span><span class="n">iener</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span> <span class="o">*</span> <span class="p">(</span><span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">iener</span><span class="p">]</span> <span class="o">/</span> <span class="n">rho_l</span> <span class="o">+</span>
+                                               <span class="p">(</span><span class="n">S_c</span> <span class="o">-</span> <span class="n">un_l</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">S_c</span> <span class="o">+</span> <span class="n">p_l</span> <span class="o">/</span> <span class="p">(</span><span class="n">rho_l</span> <span class="o">*</span> <span class="p">(</span><span class="n">S_l</span> <span class="o">-</span> <span class="n">un_l</span><span class="p">))))</span>
+
+                <span class="c1"># species</span>
+                <span class="k">if</span> <span class="n">nspec</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">U_state</span><span class="p">[</span><span class="n">irhoX</span><span class="p">:</span><span class="n">irhoX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span> <span class="o">=</span> <span class="n">HLLCfactor</span> <span class="o">*</span> \
+                        <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">irhoX</span><span class="p">:</span><span class="n">irhoX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span> <span class="o">/</span> <span class="n">rho_l</span>
+
+                <span class="c1"># find the flux on the left interface</span>
+                <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">consFlux</span><span class="p">(</span><span class="n">idir</span><span class="p">,</span> <span class="n">coord_type</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span>
+                                      <span class="n">idens</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">,</span> <span class="n">iymom</span><span class="p">,</span> <span class="n">iener</span><span class="p">,</span> <span class="n">irhoX</span><span class="p">,</span> <span class="n">nspec</span><span class="p">,</span>
+                                      <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:])</span>
+
+                <span class="c1"># correct the flux</span>
+                <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">S_l</span> <span class="o">*</span> <span class="p">(</span><span class="n">U_state</span><span class="p">[:]</span> <span class="o">-</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:])</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># L region</span>
+                <span class="n">U_state</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">U_l</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+
+                <span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">consFlux</span><span class="p">(</span><span class="n">idir</span><span class="p">,</span> <span class="n">coord_type</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span>
+                                      <span class="n">idens</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">,</span> <span class="n">iymom</span><span class="p">,</span> <span class="n">iener</span><span class="p">,</span> <span class="n">irhoX</span><span class="p">,</span> <span class="n">nspec</span><span class="p">,</span>
+                                      <span class="n">U_state</span><span class="p">)</span>
+
+            <span class="c1"># we should deal with solid boundaries somehow here</span>
+
+    <span class="k">return</span> <span class="n">F</span></div>
+
+
+
+<div class="viewcode-block" id="riemann_flux">
+<a class="viewcode-back" href="../../../pyro.compressible.html#pyro.compressible.riemann.riemann_flux">[docs]</a>
+<span class="k">def</span> <span class="nf">riemann_flux</span><span class="p">(</span><span class="n">idir</span><span class="p">,</span> <span class="n">U_l</span><span class="p">,</span> <span class="n">U_r</span><span class="p">,</span> <span class="n">my_data</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span>
+                 <span class="n">lower_solid</span><span class="p">,</span> <span class="n">upper_solid</span><span class="p">,</span> <span class="n">tc</span><span class="p">,</span> <span class="n">return_cons</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is the general interface that constructs the unsplit fluxes through</span>
+<span class="sd">    the idir (1 for x, 2 for y) interfaces using the left and right</span>
+<span class="sd">    conserved states by using the riemann solver.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    U_l, U_r: ndarray, ndarray</span>
+<span class="sd">        Conserved states in the left and right interface</span>
+<span class="sd">    my_data : CellCenterData2d object</span>
+<span class="sd">        The data object containing the grid and advective scalar that</span>
+<span class="sd">        we are advecting.</span>
+<span class="sd">    rp : RuntimeParameters object</span>
+<span class="sd">        The runtime parameters for the simulation</span>
+<span class="sd">    ivars : Variables object</span>
+<span class="sd">        The Variables object that tells us which indices refer to which</span>
+<span class="sd">        variables</span>
+<span class="sd">    lower_solid, upper_solid : int</span>
+<span class="sd">        Are we at lower or upper solid boundaries?</span>
+<span class="sd">    tc : TimerCollection object</span>
+<span class="sd">        The timers we are using to profile</span>
+<span class="sd">    return_cons: Boolean</span>
+<span class="sd">        If we don&#39;t use HLLC Riemann solver, do we also return conserved states?</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    F : ndarray</span>
+<span class="sd">        Fluxes in x or y direction</span>
+
+<span class="sd">    Optionally:</span>
+<span class="sd">    U: ndarray</span>
+<span class="sd">        Conserved states in x or y direction</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">tm_riem</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">timer</span><span class="p">(</span><span class="s2">&quot;riemann&quot;</span><span class="p">)</span>
+    <span class="n">tm_riem</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span>
+
+    <span class="n">myg</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span>
+
+    <span class="n">riemann_method</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;compressible.riemann&quot;</span><span class="p">)</span>
+    <span class="n">gamma</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;eos.gamma&quot;</span><span class="p">)</span>
+
+    <span class="n">riemann_solvers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;HLLC&quot;</span><span class="p">:</span> <span class="n">riemann_hllc</span><span class="p">,</span> <span class="s2">&quot;CGF&quot;</span><span class="p">:</span> <span class="n">riemann_cgf</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">riemann_method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">riemann_solvers</span><span class="p">:</span>
+        <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;ERROR: Riemann solver undefined&quot;</span><span class="p">)</span>
+
+    <span class="n">riemannFunc</span> <span class="o">=</span> <span class="n">riemann_solvers</span><span class="p">[</span><span class="n">riemann_method</span><span class="p">]</span>
+
+    <span class="c1"># This returns Flux in idir direction if we use HLLC</span>
+    <span class="c1"># and conserved states otherwise</span>
+    <span class="n">_u</span> <span class="o">=</span> <span class="n">riemannFunc</span><span class="p">(</span><span class="n">idir</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span>
+                     <span class="n">ivars</span><span class="o">.</span><span class="n">idens</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ixmom</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">,</span>
+                     <span class="n">ivars</span><span class="o">.</span><span class="n">iener</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">irhox</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">naux</span><span class="p">,</span>
+                     <span class="n">lower_solid</span><span class="p">,</span> <span class="n">upper_solid</span><span class="p">,</span>
+                     <span class="n">gamma</span><span class="p">,</span> <span class="n">U_l</span><span class="p">,</span> <span class="n">U_r</span><span class="p">)</span>
+
+    <span class="c1"># If riemann_method is not HLLC, then construct flux using conserved states</span>
+    <span class="k">if</span> <span class="n">riemann_method</span> <span class="o">!=</span> <span class="s2">&quot;HLLC&quot;</span><span class="p">:</span>
+        <span class="n">_f</span> <span class="o">=</span> <span class="n">consFlux</span><span class="p">(</span><span class="n">idir</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">coord_type</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span>
+                      <span class="n">ivars</span><span class="o">.</span><span class="n">idens</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ixmom</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">,</span>
+                      <span class="n">ivars</span><span class="o">.</span><span class="n">iener</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">irhox</span><span class="p">,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">naux</span><span class="p">,</span>
+                      <span class="n">_u</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># If riemann_method is HLLC, then its already flux</span>
+        <span class="n">_f</span> <span class="o">=</span> <span class="n">_u</span>
+
+    <span class="n">F</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_f</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
+    <span class="n">tm_riem</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">riemann_method</span> <span class="o">!=</span> <span class="s2">&quot;HLLC&quot;</span> <span class="ow">and</span> <span class="n">return_cons</span><span class="p">:</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">_u</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">F</span><span class="p">,</span> <span class="n">U</span>
+
+    <span class="k">return</span> <span class="n">F</span></div>
+
+
+
+<div class="viewcode-block" id="consFlux">
+<a class="viewcode-back" href="../../../pyro.compressible.html#pyro.compressible.riemann.consFlux">[docs]</a>
+<span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">consFlux</span><span class="p">(</span><span class="n">idir</span><span class="p">,</span> <span class="n">coord_type</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span>
+             <span class="n">idens</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">,</span> <span class="n">iymom</span><span class="p">,</span> <span class="n">iener</span><span class="p">,</span> <span class="n">irhoX</span><span class="p">,</span> <span class="n">nspec</span><span class="p">,</span>
+             <span class="n">U_state</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the conservative flux.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    idir : int</span>
+<span class="sd">        Are we predicting to the edges in the x-direction (1) or y-direction (2)?</span>
+<span class="sd">    gamma : float</span>
+<span class="sd">        Adiabatic index</span>
+<span class="sd">    idens, ixmom, iymom, iener, irhoX : int</span>
+<span class="sd">        The indices of the density, x-momentum, y-momentum, internal energy density</span>
+<span class="sd">        and species partial densities in the conserved state vector.</span>
+<span class="sd">    nspec : int</span>
+<span class="sd">        The number of species</span>
+<span class="sd">    U_state : ndarray</span>
+<span class="sd">        Conserved state vector.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : ndarray</span>
+<span class="sd">        Conserved flux</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">U_state</span><span class="p">)</span>
+
+    <span class="n">u</span> <span class="o">=</span> <span class="n">U_state</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">]</span> <span class="o">/</span> <span class="n">U_state</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">idens</span><span class="p">]</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">U_state</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">iymom</span><span class="p">]</span> <span class="o">/</span> <span class="n">U_state</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">idens</span><span class="p">]</span>
+
+    <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">U_state</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">iener</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">U_state</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">idens</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">u</span> <span class="o">*</span> <span class="n">u</span> <span class="o">+</span> <span class="n">v</span> <span class="o">*</span> <span class="n">v</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">idir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">F</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">idens</span><span class="p">]</span> <span class="o">=</span> <span class="n">U_state</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">idens</span><span class="p">]</span> <span class="o">*</span> <span class="n">u</span>
+        <span class="n">F</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">]</span> <span class="o">=</span> <span class="n">U_state</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">]</span> <span class="o">*</span> <span class="n">u</span>
+
+        <span class="c1"># if Cartesian2d, then add pressure to xmom flux</span>
+        <span class="k">if</span> <span class="n">coord_type</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">F</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">]</span> <span class="o">+=</span> <span class="n">p</span>
+
+        <span class="n">F</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">iymom</span><span class="p">]</span> <span class="o">=</span> <span class="n">U_state</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">iymom</span><span class="p">]</span> <span class="o">*</span> <span class="n">u</span>
+        <span class="n">F</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">iener</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">U_state</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">iener</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span>
+
+        <span class="k">if</span> <span class="n">nspec</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">F</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">irhoX</span><span class="p">:</span><span class="n">irhoX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span> <span class="o">=</span> <span class="n">U_state</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">irhoX</span><span class="p">:</span><span class="n">irhoX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span> <span class="o">*</span> <span class="n">u</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">F</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">idens</span><span class="p">]</span> <span class="o">=</span> <span class="n">U_state</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">idens</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span>
+        <span class="n">F</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">]</span> <span class="o">=</span> <span class="n">U_state</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">ixmom</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span>
+        <span class="n">F</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">iymom</span><span class="p">]</span> <span class="o">=</span> <span class="n">U_state</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">iymom</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span>
+
+        <span class="c1"># if Cartesian2d, then add pressure to ymom flux</span>
+        <span class="k">if</span> <span class="n">coord_type</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">F</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">iymom</span><span class="p">]</span> <span class="o">+=</span> <span class="n">p</span>
+
+        <span class="n">F</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">iener</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">U_state</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">iener</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="p">)</span> <span class="o">*</span> <span class="n">v</span>
+
+        <span class="k">if</span> <span class="n">nspec</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">F</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">irhoX</span><span class="p">:</span><span class="n">irhoX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span> <span class="o">=</span> <span class="n">U_state</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">irhoX</span><span class="p">:</span><span class="n">irhoX</span> <span class="o">+</span> <span class="n">nspec</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span>
+
+    <span class="k">return</span> <span class="n">F</span></div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By pyro development team
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, pyro development team.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; pyro 4.3.0.post2+gd063c13e documentation</title>
+    <title>Index &#8212; pyro 4.3.0.post3+g8a731ce9 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=6a7f607a"></script>
+    <script src="_static/documentation_options.js?v=3d30f61e"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -243,8 +243,8 @@
 <li class="toctree-l4"><a class="reference internal" href="pyro.burgers.problems.html">pyro.burgers.problems package</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.viscous_burgers.html">pyro.viscous_burgers package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="pyro.viscous_burgers.problems.html">pyro.viscous_burgers.problems package</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.burgers_viscous.html">pyro.burgers_viscous package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.burgers_viscous.problems.html">pyro.burgers_viscous.problems package</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="pyro.compressible.html">pyro.compressible package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -284,7 +284,10 @@
 </ul>
 </details></li>
 <li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html">pyro.mesh package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.html">pyro.multigrid package</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.multigrid.html">pyro.multigrid package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.examples.html">pyro.multigrid.examples package</a></li>
+</ul>
+</details></li>
 <li class="toctree-l3"><a class="reference internal" href="pyro.particles.html">pyro.particles package</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="pyro.swe.html">pyro.swe package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="pyro.swe.problems.html">pyro.swe.problems package</a></li>
@@ -472,6 +475,8 @@ document.write(`
  | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
  | <a href="#W"><strong>W</strong></a>
+ | <a href="#X"><strong>X</strong></a>
+ | <a href="#Y"><strong>Y</strong></a>
  | <a href="#Z"><strong>Z</strong></a>
  
 </div>
@@ -488,16 +493,34 @@ document.write(`
 </li>
       <li><a href="pyro.html#pyro.pyro_sim.Pyro.add_problem">add_problem() (pyro.pyro_sim.Pyro method)</a>
 </li>
+      <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_alphabeta_only.alpha">alpha() (in module pyro.multigrid.examples.mg_test_general_alphabeta_only)</a>
+
+      <ul>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_beta_only.alpha">(in module pyro.multigrid.examples.mg_test_general_beta_only)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_constant.alpha">(in module pyro.multigrid.examples.mg_test_general_constant)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_dirichlet.alpha">(in module pyro.multigrid.examples.mg_test_general_dirichlet)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_inhomogeneous.alpha">(in module pyro.multigrid.examples.mg_test_general_inhomogeneous)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_constant.alpha">(in module pyro.multigrid.examples.mg_test_vc_constant)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_dirichlet.alpha">(in module pyro.multigrid.examples.mg_test_vc_dirichlet)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_periodic.alpha">(in module pyro.multigrid.examples.mg_test_vc_periodic)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyro.compressible.html#pyro.compressible.unsplit_fluxes.apply_artificial_viscosity">apply_artificial_viscosity() (in module pyro.compressible.unsplit_fluxes)</a>
 </li>
-      <li><a href="pyro.viscous_burgers.html#pyro.viscous_burgers.interface.apply_diffusion_corrections">apply_diffusion_corrections() (in module pyro.viscous_burgers.interface)</a>
+      <li><a href="pyro.burgers_viscous.html#pyro.burgers_viscous.interface.apply_diffusion_corrections">apply_diffusion_corrections() (in module pyro.burgers_viscous.interface)</a>
 </li>
       <li><a href="pyro.incompressible.html#pyro.incompressible.incomp_interface.apply_gradp_corrections">apply_gradp_corrections() (in module pyro.incompressible.incomp_interface)</a>
 </li>
       <li><a href="pyro.incompressible.html#pyro.incompressible.incomp_interface.apply_other_source_terms">apply_other_source_terms() (in module pyro.incompressible.incomp_interface)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyro.compressible.html#pyro.compressible.unsplit_fluxes.apply_source_terms">apply_source_terms() (in module pyro.compressible.unsplit_fluxes)</a>
 </li>
       <li><a href="pyro.burgers.html#pyro.burgers.burgers_interface.apply_transverse_corrections">apply_transverse_corrections() (in module pyro.burgers.burgers_interface)</a>
@@ -528,12 +551,24 @@ document.write(`
 </li>
       <li><a href="pyro.html#pyro.simulation_null.bc_setup">bc_setup() (in module pyro.simulation_null)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyro.mesh.html#pyro.mesh.boundary.BCProp">BCProp (class in pyro.mesh.boundary)</a>
 </li>
       <li><a href="pyro.util.html#pyro.util.profile_pyro.Timer.begin">begin() (pyro.util.profile_pyro.Timer method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_alphabeta_only.beta">beta() (in module pyro.multigrid.examples.mg_test_general_alphabeta_only)</a>
+
+      <ul>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_beta_only.beta">(in module pyro.multigrid.examples.mg_test_general_beta_only)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_constant.beta">(in module pyro.multigrid.examples.mg_test_general_constant)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_dirichlet.beta">(in module pyro.multigrid.examples.mg_test_general_dirichlet)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_inhomogeneous.beta">(in module pyro.multigrid.examples.mg_test_general_inhomogeneous)</a>
+</li>
+      </ul></li>
       <li><a href="pyro.util.html#pyro.util.msg.bold">bold() (in module pyro.util.msg)</a>
 </li>
       <li><a href="pyro.compressible_react.html#pyro.compressible_react.simulation.Simulation.burn">burn() (pyro.compressible_react.simulation.Simulation method)</a>
@@ -560,18 +595,22 @@ document.write(`
 </li>
       <li><a href="pyro.mesh.html#pyro.mesh.integration.RKIntegrator.compute_final_update">compute_final_update() (pyro.mesh.integration.RKIntegrator method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyro.html#pyro.simulation_null.NullSimulation.compute_timestep">compute_timestep() (pyro.simulation_null.NullSimulation method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyro.compressible.html#pyro.compressible.simulation.cons_to_prim">cons_to_prim() (in module pyro.compressible.simulation)</a>
 
       <ul>
         <li><a href="pyro.swe.html#pyro.swe.simulation.cons_to_prim">(in module pyro.swe.simulation)</a>
 </li>
       </ul></li>
-      <li><a href="pyro.swe.html#pyro.swe.interface.consFlux">consFlux() (in module pyro.swe.interface)</a>
+      <li><a href="pyro.compressible.html#pyro.compressible.riemann.consFlux">consFlux() (in module pyro.compressible.riemann)</a>
+
+      <ul>
+        <li><a href="pyro.swe.html#pyro.swe.interface.consFlux">(in module pyro.swe.interface)</a>
 </li>
+      </ul></li>
       <li><a href="pyro.burgers.html#pyro.burgers.burgers_interface.construct_unsplit_fluxes">construct_unsplit_fluxes() (in module pyro.burgers.burgers_interface)</a>
 </li>
       <li><a href="pyro.mesh.html#pyro.mesh.array_indexer.ArrayIndexer.copy">copy() (pyro.mesh.array_indexer.ArrayIndexer method)</a>
@@ -608,7 +647,7 @@ document.write(`
         <li><a href="pyro.swe.html#pyro.swe.derives.derive_primitives">(in module pyro.swe.derives)</a>
 </li>
       </ul></li>
-      <li><a href="pyro.viscous_burgers.html#pyro.viscous_burgers.interface.diffuse">diffuse() (in module pyro.viscous_burgers.interface)</a>
+      <li><a href="pyro.burgers_viscous.html#pyro.burgers_viscous.interface.diffuse">diffuse() (in module pyro.burgers_viscous.interface)</a>
 
       <ul>
         <li><a href="pyro.compressible_react.html#pyro.compressible_react.simulation.Simulation.diffuse">(pyro.compressible_react.simulation.Simulation method)</a>
@@ -622,12 +661,20 @@ document.write(`
         <li><a href="pyro.incompressible_viscous.html#pyro.incompressible_viscous.simulation.Simulation.do_other_update_velocity">(pyro.incompressible_viscous.simulation.Simulation method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyro.html#pyro.simulation_null.NullSimulation.do_output">do_output() (pyro.simulation_null.NullSimulation method)</a>
 </li>
       <li><a href="pyro.html#pyro.test.do_tests">do_tests() (in module pyro.test)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_vis.doit">doit() (in module pyro.multigrid.examples.mg_vis)</a>
+
+      <ul>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.project_periodic.doit">(in module pyro.multigrid.examples.project_periodic)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.prolong_restrict_demo.doit">(in module pyro.multigrid.examples.prolong_restrict_demo)</a>
+</li>
+      </ul></li>
       <li><a href="pyro.advection.html#pyro.advection.simulation.Simulation.dovis">dovis() (pyro.advection.simulation.Simulation method)</a>
 
       <ul>
@@ -673,6 +720,8 @@ document.write(`
 </li>
         <li><a href="pyro.burgers.html#pyro.burgers.simulation.Simulation.evolve">(pyro.burgers.simulation.Simulation method)</a>
 </li>
+        <li><a href="pyro.burgers_viscous.html#pyro.burgers_viscous.simulation.Simulation.evolve">(pyro.burgers_viscous.simulation.Simulation method)</a>
+</li>
         <li><a href="pyro.compressible.html#pyro.compressible.simulation.Simulation.evolve">(pyro.compressible.simulation.Simulation method)</a>
 </li>
         <li><a href="pyro.compressible_fv4.html#pyro.compressible_fv4.simulation.Simulation.evolve">(pyro.compressible_fv4.simulation.Simulation method)</a>
@@ -695,8 +744,6 @@ document.write(`
 </li>
         <li><a href="pyro.swe.html#pyro.swe.simulation.Simulation.evolve">(pyro.swe.simulation.Simulation method)</a>
 </li>
-        <li><a href="pyro.viscous_burgers.html#pyro.viscous_burgers.simulation.Simulation.evolve">(pyro.viscous_burgers.simulation.Simulation method)</a>
-</li>
       </ul></li>
   </ul></td>
 </tr></table>
@@ -704,6 +751,28 @@ document.write(`
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_alphabeta_only.f">f() (in module pyro.multigrid.examples.mg_test_general_alphabeta_only)</a>
+
+      <ul>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_beta_only.f">(in module pyro.multigrid.examples.mg_test_general_beta_only)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_constant.f">(in module pyro.multigrid.examples.mg_test_general_constant)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_dirichlet.f">(in module pyro.multigrid.examples.mg_test_general_dirichlet)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_inhomogeneous.f">(in module pyro.multigrid.examples.mg_test_general_inhomogeneous)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_simple.f">(in module pyro.multigrid.examples.mg_test_simple)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_constant.f">(in module pyro.multigrid.examples.mg_test_vc_constant)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_dirichlet.f">(in module pyro.multigrid.examples.mg_test_vc_dirichlet)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_periodic.f">(in module pyro.multigrid.examples.mg_test_vc_periodic)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_vis.f">(in module pyro.multigrid.examples.mg_vis)</a>
+</li>
+      </ul></li>
       <li><a href="pyro.mesh.html#pyro.mesh.patch.FaceCenterData2d">FaceCenterData2d (class in pyro.mesh.patch)</a>
 </li>
       <li><a href="pyro.util.html#pyro.util.msg.fail">fail() (in module pyro.util.msg)</a>
@@ -731,6 +800,10 @@ document.write(`
 </li>
         <li><a href="pyro.advection_fv4.problems.html#pyro.advection_fv4.problems.smooth.finalize">(in module pyro.advection_fv4.problems.smooth)</a>
 </li>
+        <li><a href="pyro.advection_fv4.problems.html#pyro.advection_fv4.problems.test.finalize">(in module pyro.advection_fv4.problems.test)</a>
+</li>
+        <li><a href="pyro.advection_fv4.problems.html#pyro.advection_fv4.problems.tophat.finalize">(in module pyro.advection_fv4.problems.tophat)</a>
+</li>
         <li><a href="pyro.advection_nonuniform.problems.html#pyro.advection_nonuniform.problems.slotted.finalize">(in module pyro.advection_nonuniform.problems.slotted)</a>
 </li>
         <li><a href="pyro.advection_nonuniform.problems.html#pyro.advection_nonuniform.problems.test.finalize">(in module pyro.advection_nonuniform.problems.test)</a>
@@ -752,6 +825,12 @@ document.write(`
         <li><a href="pyro.burgers.problems.html#pyro.burgers.problems.test.finalize">(in module pyro.burgers.problems.test)</a>
 </li>
         <li><a href="pyro.burgers.problems.html#pyro.burgers.problems.tophat.finalize">(in module pyro.burgers.problems.tophat)</a>
+</li>
+        <li><a href="pyro.burgers_viscous.problems.html#pyro.burgers_viscous.problems.converge.finalize">(in module pyro.burgers_viscous.problems.converge)</a>
+</li>
+        <li><a href="pyro.burgers_viscous.problems.html#pyro.burgers_viscous.problems.test.finalize">(in module pyro.burgers_viscous.problems.test)</a>
+</li>
+        <li><a href="pyro.burgers_viscous.problems.html#pyro.burgers_viscous.problems.tophat.finalize">(in module pyro.burgers_viscous.problems.tophat)</a>
 </li>
         <li><a href="pyro.compressible.problems.html#pyro.compressible.problems.acoustic_pulse.finalize">(in module pyro.compressible.problems.acoustic_pulse)</a>
 </li>
@@ -901,10 +980,6 @@ document.write(`
 </li>
         <li><a href="pyro.swe.problems.html#pyro.swe.problems.test.finalize">(in module pyro.swe.problems.test)</a>
 </li>
-        <li><a href="pyro.viscous_burgers.problems.html#pyro.viscous_burgers.problems.converge.finalize">(in module pyro.viscous_burgers.problems.converge)</a>
-</li>
-        <li><a href="pyro.viscous_burgers.problems.html#pyro.viscous_burgers.problems.tophat.finalize">(in module pyro.viscous_burgers.problems.tophat)</a>
-</li>
         <li><a href="pyro.html#pyro.simulation_null.NullSimulation.finalize">(pyro.simulation_null.NullSimulation method)</a>
 </li>
       </ul></li>
@@ -944,6 +1019,30 @@ document.write(`
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_alphabeta_only.gamma_x">gamma_x() (in module pyro.multigrid.examples.mg_test_general_alphabeta_only)</a>
+
+      <ul>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_beta_only.gamma_x">(in module pyro.multigrid.examples.mg_test_general_beta_only)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_constant.gamma_x">(in module pyro.multigrid.examples.mg_test_general_constant)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_dirichlet.gamma_x">(in module pyro.multigrid.examples.mg_test_general_dirichlet)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_inhomogeneous.gamma_x">(in module pyro.multigrid.examples.mg_test_general_inhomogeneous)</a>
+</li>
+      </ul></li>
+      <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_alphabeta_only.gamma_y">gamma_y() (in module pyro.multigrid.examples.mg_test_general_alphabeta_only)</a>
+
+      <ul>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_beta_only.gamma_y">(in module pyro.multigrid.examples.mg_test_general_beta_only)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_constant.gamma_y">(in module pyro.multigrid.examples.mg_test_general_constant)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_dirichlet.gamma_y">(in module pyro.multigrid.examples.mg_test_general_dirichlet)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_inhomogeneous.gamma_y">(in module pyro.multigrid.examples.mg_test_general_inhomogeneous)</a>
+</li>
+      </ul></li>
       <li><a href="pyro.multigrid.html#pyro.multigrid.general_MG.GeneralMG2d">GeneralMG2d (class in pyro.multigrid.general_MG)</a>
 </li>
       <li><a href="pyro.incompressible_viscous.problems.html#pyro.incompressible_viscous.problems.plot_cavity.get_args">get_args() (in module pyro.incompressible_viscous.problems.plot_cavity)</a>
@@ -964,7 +1063,9 @@ document.write(`
         <li><a href="pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.get_interface_states">(in module pyro.lm_atm.LM_atm_interface)</a>
 </li>
       </ul></li>
-      <li><a href="pyro.viscous_burgers.html#pyro.viscous_burgers.interface.get_lap">get_lap() (in module pyro.viscous_burgers.interface)</a>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pyro.burgers_viscous.html#pyro.burgers_viscous.interface.get_lap">get_lap() (in module pyro.burgers_viscous.interface)</a>
 </li>
       <li><a href="pyro.util.html#pyro.util.runparams.RuntimeParameters.get_param">get_param() (pyro.util.runparams.RuntimeParameters method)</a>
 </li>
@@ -974,8 +1075,6 @@ document.write(`
 </li>
       <li><a href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d.get_solution">get_solution() (pyro.multigrid.MG.CellCenterMG2d method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d.get_solution_gradient">get_solution_gradient() (pyro.multigrid.MG.CellCenterMG2d method)</a>
 </li>
       <li><a href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d.get_solution_object">get_solution_object() (pyro.multigrid.MG.CellCenterMG2d method)</a>
@@ -1027,6 +1126,10 @@ document.write(`
 </li>
         <li><a href="pyro.advection_fv4.problems.html#pyro.advection_fv4.problems.smooth.init_data">(in module pyro.advection_fv4.problems.smooth)</a>
 </li>
+        <li><a href="pyro.advection_fv4.problems.html#pyro.advection_fv4.problems.test.init_data">(in module pyro.advection_fv4.problems.test)</a>
+</li>
+        <li><a href="pyro.advection_fv4.problems.html#pyro.advection_fv4.problems.tophat.init_data">(in module pyro.advection_fv4.problems.tophat)</a>
+</li>
         <li><a href="pyro.advection_nonuniform.problems.html#pyro.advection_nonuniform.problems.slotted.init_data">(in module pyro.advection_nonuniform.problems.slotted)</a>
 </li>
         <li><a href="pyro.advection_nonuniform.problems.html#pyro.advection_nonuniform.problems.test.init_data">(in module pyro.advection_nonuniform.problems.test)</a>
@@ -1048,6 +1151,12 @@ document.write(`
         <li><a href="pyro.burgers.problems.html#pyro.burgers.problems.test.init_data">(in module pyro.burgers.problems.test)</a>
 </li>
         <li><a href="pyro.burgers.problems.html#pyro.burgers.problems.tophat.init_data">(in module pyro.burgers.problems.tophat)</a>
+</li>
+        <li><a href="pyro.burgers_viscous.problems.html#pyro.burgers_viscous.problems.converge.init_data">(in module pyro.burgers_viscous.problems.converge)</a>
+</li>
+        <li><a href="pyro.burgers_viscous.problems.html#pyro.burgers_viscous.problems.test.init_data">(in module pyro.burgers_viscous.problems.test)</a>
+</li>
+        <li><a href="pyro.burgers_viscous.problems.html#pyro.burgers_viscous.problems.tophat.init_data">(in module pyro.burgers_viscous.problems.tophat)</a>
 </li>
         <li><a href="pyro.compressible.problems.html#pyro.compressible.problems.acoustic_pulse.init_data">(in module pyro.compressible.problems.acoustic_pulse)</a>
 </li>
@@ -1197,10 +1306,6 @@ document.write(`
 </li>
         <li><a href="pyro.swe.problems.html#pyro.swe.problems.test.init_data">(in module pyro.swe.problems.test)</a>
 </li>
-        <li><a href="pyro.viscous_burgers.problems.html#pyro.viscous_burgers.problems.converge.init_data">(in module pyro.viscous_burgers.problems.converge)</a>
-</li>
-        <li><a href="pyro.viscous_burgers.problems.html#pyro.viscous_burgers.problems.tophat.init_data">(in module pyro.viscous_burgers.problems.tophat)</a>
-</li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -1306,6 +1411,8 @@ document.write(`
 </li>
       <li><a href="pyro.mesh.html#pyro.mesh.reconstruction.limit4">limit4() (in module pyro.mesh.reconstruction)</a>
 </li>
+      <li><a href="pyro.advection.html#pyro.advection.interface.linear_interface">linear_interface() (in module pyro.advection.interface)</a>
+</li>
       <li><a href="pyro.util.html#pyro.util.runparams.RuntimeParameters.load_params">load_params() (pyro.util.runparams.RuntimeParameters method)</a>
 </li>
   </ul></td>
@@ -1320,9 +1427,23 @@ document.write(`
         <li><a href="pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.mac_vels">(in module pyro.lm_atm.LM_atm_interface)</a>
 </li>
       </ul></li>
-      <li><a href="pyro.html#pyro.pyro_sim.main">main() (in module pyro.pyro_sim)</a>
+      <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_alphabeta_only.main">main() (in module pyro.multigrid.examples.mg_test_general_alphabeta_only)</a>
 
       <ul>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_beta_only.main">(in module pyro.multigrid.examples.mg_test_general_beta_only)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_constant.main">(in module pyro.multigrid.examples.mg_test_general_constant)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_dirichlet.main">(in module pyro.multigrid.examples.mg_test_general_dirichlet)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_inhomogeneous.main">(in module pyro.multigrid.examples.mg_test_general_inhomogeneous)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_dirichlet.main">(in module pyro.multigrid.examples.mg_test_vc_dirichlet)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_periodic.main">(in module pyro.multigrid.examples.mg_test_vc_periodic)</a>
+</li>
+        <li><a href="pyro.html#pyro.pyro_sim.main">(in module pyro.pyro_sim)</a>
+</li>
         <li><a href="pyro.html#pyro.test.main">(in module pyro.test)</a>
 </li>
         <li><a href="pyro.util.html#pyro.util.compare.main">(in module pyro.util.compare)</a>
@@ -1374,6 +1495,8 @@ document.write(`
 </li>
         <li><a href="pyro.advection.html#module-pyro.advection.advective_fluxes">pyro.advection.advective_fluxes</a>
 </li>
+        <li><a href="pyro.advection.html#module-pyro.advection.interface">pyro.advection.interface</a>
+</li>
         <li><a href="pyro.advection.problems.html#module-pyro.advection.problems">pyro.advection.problems</a>
 </li>
         <li><a href="pyro.advection.problems.html#module-pyro.advection.problems.smooth">pyro.advection.problems.smooth</a>
@@ -1393,6 +1516,10 @@ document.write(`
         <li><a href="pyro.advection_fv4.problems.html#module-pyro.advection_fv4.problems">pyro.advection_fv4.problems</a>
 </li>
         <li><a href="pyro.advection_fv4.problems.html#module-pyro.advection_fv4.problems.smooth">pyro.advection_fv4.problems.smooth</a>
+</li>
+        <li><a href="pyro.advection_fv4.problems.html#module-pyro.advection_fv4.problems.test">pyro.advection_fv4.problems.test</a>
+</li>
+        <li><a href="pyro.advection_fv4.problems.html#module-pyro.advection_fv4.problems.tophat">pyro.advection_fv4.problems.tophat</a>
 </li>
         <li><a href="pyro.advection_fv4.html#module-pyro.advection_fv4.simulation">pyro.advection_fv4.simulation</a>
 </li>
@@ -1448,7 +1575,23 @@ document.write(`
 </li>
         <li><a href="pyro.burgers.problems.html#module-pyro.burgers.problems.tophat">pyro.burgers.problems.tophat</a>
 </li>
+        <li><a href="pyro.burgers.problems.html#module-pyro.burgers.problems.verify">pyro.burgers.problems.verify</a>
+</li>
         <li><a href="pyro.burgers.html#module-pyro.burgers.simulation">pyro.burgers.simulation</a>
+</li>
+        <li><a href="pyro.burgers_viscous.html#module-pyro.burgers_viscous">pyro.burgers_viscous</a>
+</li>
+        <li><a href="pyro.burgers_viscous.html#module-pyro.burgers_viscous.interface">pyro.burgers_viscous.interface</a>
+</li>
+        <li><a href="pyro.burgers_viscous.problems.html#module-pyro.burgers_viscous.problems">pyro.burgers_viscous.problems</a>
+</li>
+        <li><a href="pyro.burgers_viscous.problems.html#module-pyro.burgers_viscous.problems.converge">pyro.burgers_viscous.problems.converge</a>
+</li>
+        <li><a href="pyro.burgers_viscous.problems.html#module-pyro.burgers_viscous.problems.test">pyro.burgers_viscous.problems.test</a>
+</li>
+        <li><a href="pyro.burgers_viscous.problems.html#module-pyro.burgers_viscous.problems.tophat">pyro.burgers_viscous.problems.tophat</a>
+</li>
+        <li><a href="pyro.burgers_viscous.html#module-pyro.burgers_viscous.simulation">pyro.burgers_viscous.simulation</a>
 </li>
         <li><a href="pyro.compressible.html#module-pyro.compressible">pyro.compressible</a>
 </li>
@@ -1489,6 +1632,8 @@ document.write(`
         <li><a href="pyro.compressible.problems.html#module-pyro.compressible.problems.sod">pyro.compressible.problems.sod</a>
 </li>
         <li><a href="pyro.compressible.problems.html#module-pyro.compressible.problems.test">pyro.compressible.problems.test</a>
+</li>
+        <li><a href="pyro.compressible.html#module-pyro.compressible.riemann">pyro.compressible.riemann</a>
 </li>
         <li><a href="pyro.compressible.html#module-pyro.compressible.simulation">pyro.compressible.simulation</a>
 </li>
@@ -1678,6 +1823,32 @@ document.write(`
 </li>
         <li><a href="pyro.multigrid.html#module-pyro.multigrid.edge_coeffs">pyro.multigrid.edge_coeffs</a>
 </li>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples">pyro.multigrid.examples</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_general_alphabeta_only">pyro.multigrid.examples.mg_test_general_alphabeta_only</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_general_beta_only">pyro.multigrid.examples.mg_test_general_beta_only</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_general_constant">pyro.multigrid.examples.mg_test_general_constant</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_general_dirichlet">pyro.multigrid.examples.mg_test_general_dirichlet</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_general_inhomogeneous">pyro.multigrid.examples.mg_test_general_inhomogeneous</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_simple">pyro.multigrid.examples.mg_test_simple</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_vc_constant">pyro.multigrid.examples.mg_test_vc_constant</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_vc_dirichlet">pyro.multigrid.examples.mg_test_vc_dirichlet</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_vc_periodic">pyro.multigrid.examples.mg_test_vc_periodic</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_vis">pyro.multigrid.examples.mg_vis</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.project_periodic">pyro.multigrid.examples.project_periodic</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.prolong_restrict_demo">pyro.multigrid.examples.prolong_restrict_demo</a>
+</li>
         <li><a href="pyro.multigrid.html#module-pyro.multigrid.general_MG">pyro.multigrid.general_MG</a>
 </li>
         <li><a href="pyro.multigrid.html#module-pyro.multigrid.MG">pyro.multigrid.MG</a>
@@ -1735,18 +1906,6 @@ document.write(`
         <li><a href="pyro.util.html#module-pyro.util.profile_pyro">pyro.util.profile_pyro</a>
 </li>
         <li><a href="pyro.util.html#module-pyro.util.runparams">pyro.util.runparams</a>
-</li>
-        <li><a href="pyro.viscous_burgers.html#module-pyro.viscous_burgers">pyro.viscous_burgers</a>
-</li>
-        <li><a href="pyro.viscous_burgers.html#module-pyro.viscous_burgers.interface">pyro.viscous_burgers.interface</a>
-</li>
-        <li><a href="pyro.viscous_burgers.problems.html#module-pyro.viscous_burgers.problems">pyro.viscous_burgers.problems</a>
-</li>
-        <li><a href="pyro.viscous_burgers.problems.html#module-pyro.viscous_burgers.problems.converge">pyro.viscous_burgers.problems.converge</a>
-</li>
-        <li><a href="pyro.viscous_burgers.problems.html#module-pyro.viscous_burgers.problems.tophat">pyro.viscous_burgers.problems.tophat</a>
-</li>
-        <li><a href="pyro.viscous_burgers.html#module-pyro.viscous_burgers.simulation">pyro.viscous_burgers.simulation</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1863,6 +2022,13 @@ document.write(`
 </li>
       </ul></li>
       <li>
+    pyro.advection.interface
+
+      <ul>
+        <li><a href="pyro.advection.html#module-pyro.advection.interface">module</a>
+</li>
+      </ul></li>
+      <li>
     pyro.advection.problems
 
       <ul>
@@ -1930,6 +2096,20 @@ document.write(`
 
       <ul>
         <li><a href="pyro.advection_fv4.problems.html#module-pyro.advection_fv4.problems.smooth">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.advection_fv4.problems.test
+
+      <ul>
+        <li><a href="pyro.advection_fv4.problems.html#module-pyro.advection_fv4.problems.test">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.advection_fv4.problems.tophat
+
+      <ul>
+        <li><a href="pyro.advection_fv4.problems.html#module-pyro.advection_fv4.problems.tophat">module</a>
 </li>
       </ul></li>
       <li>
@@ -2122,10 +2302,66 @@ document.write(`
 </li>
       </ul></li>
       <li>
+    pyro.burgers.problems.verify
+
+      <ul>
+        <li><a href="pyro.burgers.problems.html#module-pyro.burgers.problems.verify">module</a>
+</li>
+      </ul></li>
+      <li>
     pyro.burgers.simulation
 
       <ul>
         <li><a href="pyro.burgers.html#module-pyro.burgers.simulation">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.burgers_viscous
+
+      <ul>
+        <li><a href="pyro.burgers_viscous.html#module-pyro.burgers_viscous">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.burgers_viscous.interface
+
+      <ul>
+        <li><a href="pyro.burgers_viscous.html#module-pyro.burgers_viscous.interface">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.burgers_viscous.problems
+
+      <ul>
+        <li><a href="pyro.burgers_viscous.problems.html#module-pyro.burgers_viscous.problems">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.burgers_viscous.problems.converge
+
+      <ul>
+        <li><a href="pyro.burgers_viscous.problems.html#module-pyro.burgers_viscous.problems.converge">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.burgers_viscous.problems.test
+
+      <ul>
+        <li><a href="pyro.burgers_viscous.problems.html#module-pyro.burgers_viscous.problems.test">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.burgers_viscous.problems.tophat
+
+      <ul>
+        <li><a href="pyro.burgers_viscous.problems.html#module-pyro.burgers_viscous.problems.tophat">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.burgers_viscous.simulation
+
+      <ul>
+        <li><a href="pyro.burgers_viscous.html#module-pyro.burgers_viscous.simulation">module</a>
 </li>
       </ul></li>
       <li>
@@ -2266,6 +2502,13 @@ document.write(`
 
       <ul>
         <li><a href="pyro.compressible.problems.html#module-pyro.compressible.problems.test">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.compressible.riemann
+
+      <ul>
+        <li><a href="pyro.compressible.html#module-pyro.compressible.riemann">module</a>
 </li>
       </ul></li>
       <li>
@@ -2450,6 +2693,8 @@ document.write(`
         <li><a href="pyro.compressible_rk.html#module-pyro.compressible_rk">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     pyro.compressible_rk.fluxes
 
@@ -2471,8 +2716,6 @@ document.write(`
         <li><a href="pyro.compressible_rk.problems.html#module-pyro.compressible_rk.problems.acoustic_pulse">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     pyro.compressible_rk.problems.advect
 
@@ -2929,6 +3172,97 @@ document.write(`
 </li>
       </ul></li>
       <li>
+    pyro.multigrid.examples
+
+      <ul>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.multigrid.examples.mg_test_general_alphabeta_only
+
+      <ul>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_general_alphabeta_only">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.multigrid.examples.mg_test_general_beta_only
+
+      <ul>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_general_beta_only">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.multigrid.examples.mg_test_general_constant
+
+      <ul>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_general_constant">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.multigrid.examples.mg_test_general_dirichlet
+
+      <ul>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_general_dirichlet">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.multigrid.examples.mg_test_general_inhomogeneous
+
+      <ul>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_general_inhomogeneous">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.multigrid.examples.mg_test_simple
+
+      <ul>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_simple">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.multigrid.examples.mg_test_vc_constant
+
+      <ul>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_vc_constant">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.multigrid.examples.mg_test_vc_dirichlet
+
+      <ul>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_vc_dirichlet">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.multigrid.examples.mg_test_vc_periodic
+
+      <ul>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_vc_periodic">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.multigrid.examples.mg_vis
+
+      <ul>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_vis">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.multigrid.examples.project_periodic
+
+      <ul>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.project_periodic">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyro.multigrid.examples.prolong_restrict_demo
+
+      <ul>
+        <li><a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.prolong_restrict_demo">module</a>
+</li>
+      </ul></li>
+      <li>
     pyro.multigrid.general_MG
 
       <ul>
@@ -3131,48 +3465,6 @@ document.write(`
         <li><a href="pyro.util.html#module-pyro.util.runparams">module</a>
 </li>
       </ul></li>
-      <li>
-    pyro.viscous_burgers
-
-      <ul>
-        <li><a href="pyro.viscous_burgers.html#module-pyro.viscous_burgers">module</a>
-</li>
-      </ul></li>
-      <li>
-    pyro.viscous_burgers.interface
-
-      <ul>
-        <li><a href="pyro.viscous_burgers.html#module-pyro.viscous_burgers.interface">module</a>
-</li>
-      </ul></li>
-      <li>
-    pyro.viscous_burgers.problems
-
-      <ul>
-        <li><a href="pyro.viscous_burgers.problems.html#module-pyro.viscous_burgers.problems">module</a>
-</li>
-      </ul></li>
-      <li>
-    pyro.viscous_burgers.problems.converge
-
-      <ul>
-        <li><a href="pyro.viscous_burgers.problems.html#module-pyro.viscous_burgers.problems.converge">module</a>
-</li>
-      </ul></li>
-      <li>
-    pyro.viscous_burgers.problems.tophat
-
-      <ul>
-        <li><a href="pyro.viscous_burgers.problems.html#module-pyro.viscous_burgers.problems.tophat">module</a>
-</li>
-      </ul></li>
-      <li>
-    pyro.viscous_burgers.simulation
-
-      <ul>
-        <li><a href="pyro.viscous_burgers.html#module-pyro.viscous_burgers.simulation">module</a>
-</li>
-      </ul></li>
       <li><a href="pyro.html#pyro.pyro_sim.PyroBenchmark">PyroBenchmark (class in pyro.pyro_sim)</a>
 </li>
       <li><a href="pyro.html#pyro.test.PyroTest">PyroTest (class in pyro.test)</a>
@@ -3211,21 +3503,31 @@ document.write(`
 </li>
       <li><a href="pyro.compressible.html#pyro.compressible.eos.rhoe">rhoe() (in module pyro.compressible.eos)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyro.burgers.html#pyro.burgers.burgers_interface.riemann">riemann() (in module pyro.burgers.burgers_interface)</a>
 
       <ul>
         <li><a href="pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.riemann">(in module pyro.lm_atm.LM_atm_interface)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyro.burgers.html#pyro.burgers.burgers_interface.riemann_and_upwind">riemann_and_upwind() (in module pyro.burgers.burgers_interface)</a>
 
       <ul>
         <li><a href="pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.riemann_and_upwind">(in module pyro.lm_atm.LM_atm_interface)</a>
 </li>
       </ul></li>
-      <li><a href="pyro.swe.html#pyro.swe.interface.riemann_hllc">riemann_hllc() (in module pyro.swe.interface)</a>
+      <li><a href="pyro.compressible.html#pyro.compressible.riemann.riemann_cgf">riemann_cgf() (in module pyro.compressible.riemann)</a>
+</li>
+      <li><a href="pyro.compressible.html#pyro.compressible.riemann.riemann_flux">riemann_flux() (in module pyro.compressible.riemann)</a>
+</li>
+      <li><a href="pyro.compressible.html#pyro.compressible.riemann.riemann_hllc">riemann_hllc() (in module pyro.compressible.riemann)</a>
+
+      <ul>
+        <li><a href="pyro.swe.html#pyro.swe.interface.riemann_hllc">(in module pyro.swe.interface)</a>
+</li>
+      </ul></li>
+      <li><a href="pyro.compressible.html#pyro.compressible.riemann.riemann_prim">riemann_prim() (in module pyro.compressible.riemann)</a>
 </li>
       <li><a href="pyro.swe.html#pyro.swe.interface.riemann_roe">riemann_roe() (in module pyro.swe.interface)</a>
 </li>
@@ -3274,6 +3576,8 @@ document.write(`
 </li>
         <li><a href="pyro.burgers.html#pyro.burgers.simulation.Simulation">(class in pyro.burgers.simulation)</a>
 </li>
+        <li><a href="pyro.burgers_viscous.html#pyro.burgers_viscous.simulation.Simulation">(class in pyro.burgers_viscous.simulation)</a>
+</li>
         <li><a href="pyro.compressible.html#pyro.compressible.simulation.Simulation">(class in pyro.compressible.simulation)</a>
 </li>
         <li><a href="pyro.compressible_fv4.html#pyro.compressible_fv4.simulation.Simulation">(class in pyro.compressible_fv4.simulation)</a>
@@ -3293,8 +3597,6 @@ document.write(`
         <li><a href="pyro.lm_atm.html#pyro.lm_atm.simulation.Simulation">(class in pyro.lm_atm.simulation)</a>
 </li>
         <li><a href="pyro.swe.html#pyro.swe.simulation.Simulation">(class in pyro.swe.simulation)</a>
-</li>
-        <li><a href="pyro.viscous_burgers.html#pyro.viscous_burgers.simulation.Simulation">(class in pyro.viscous_burgers.simulation)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -3351,6 +3653,26 @@ document.write(`
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_alphabeta_only.test_general_poisson_dirichlet">test_general_poisson_dirichlet() (in module pyro.multigrid.examples.mg_test_general_alphabeta_only)</a>
+
+      <ul>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_beta_only.test_general_poisson_dirichlet">(in module pyro.multigrid.examples.mg_test_general_beta_only)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_constant.test_general_poisson_dirichlet">(in module pyro.multigrid.examples.mg_test_general_constant)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_dirichlet.test_general_poisson_dirichlet">(in module pyro.multigrid.examples.mg_test_general_dirichlet)</a>
+</li>
+      </ul></li>
+      <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_inhomogeneous.test_general_poisson_inhomogeneous">test_general_poisson_inhomogeneous() (in module pyro.multigrid.examples.mg_test_general_inhomogeneous)</a>
+</li>
+      <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_simple.test_poisson_dirichlet">test_poisson_dirichlet() (in module pyro.multigrid.examples.mg_test_simple)</a>
+</li>
+      <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_constant.test_vc_constant">test_vc_constant() (in module pyro.multigrid.examples.mg_test_vc_constant)</a>
+</li>
+      <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_dirichlet.test_vc_poisson_dirichlet">test_vc_poisson_dirichlet() (in module pyro.multigrid.examples.mg_test_vc_dirichlet)</a>
+</li>
+      <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_periodic.test_vc_poisson_periodic">test_vc_poisson_periodic() (in module pyro.multigrid.examples.mg_test_vc_periodic)</a>
+</li>
       <li><a href="pyro.util.html#pyro.util.profile_pyro.Timer">Timer (class in pyro.util.profile_pyro)</a>
 </li>
       <li><a href="pyro.util.html#pyro.util.profile_pyro.TimerCollection.timer">timer() (pyro.util.profile_pyro.TimerCollection method)</a>
@@ -3361,6 +3683,28 @@ document.write(`
 </li>
       <li><a href="pyro.mesh.html#pyro.mesh.fv.FV2d.to_centers">to_centers() (pyro.mesh.fv.FV2d method)</a>
 </li>
+      <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_alphabeta_only.true">true() (in module pyro.multigrid.examples.mg_test_general_alphabeta_only)</a>
+
+      <ul>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_beta_only.true">(in module pyro.multigrid.examples.mg_test_general_beta_only)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_constant.true">(in module pyro.multigrid.examples.mg_test_general_constant)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_dirichlet.true">(in module pyro.multigrid.examples.mg_test_general_dirichlet)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_inhomogeneous.true">(in module pyro.multigrid.examples.mg_test_general_inhomogeneous)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_simple.true">(in module pyro.multigrid.examples.mg_test_simple)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_constant.true">(in module pyro.multigrid.examples.mg_test_vc_constant)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_dirichlet.true">(in module pyro.multigrid.examples.mg_test_vc_dirichlet)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_vc_periodic.true">(in module pyro.multigrid.examples.mg_test_vc_periodic)</a>
+</li>
+        <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_vis.true">(in module pyro.multigrid.examples.mg_vis)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -3409,10 +3753,10 @@ document.write(`
 </li>
       <li><a href="pyro.lm_atm.html#pyro.lm_atm.simulation.Basestate.v2dp">v2dp() (pyro.lm_atm.simulation.Basestate method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyro.multigrid.html#pyro.multigrid.MG.CellCenterMG2d.v_cycle">v_cycle() (pyro.multigrid.MG.CellCenterMG2d method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyro.multigrid.html#pyro.multigrid.variable_coeff_MG.VarCoeffCCMG2d">VarCoeffCCMG2d (class in pyro.multigrid.variable_coeff_MG)</a>
 </li>
       <li><a href="pyro.compressible.html#pyro.compressible.simulation.Variables">Variables (class in pyro.compressible.simulation)</a>
@@ -3422,6 +3766,8 @@ document.write(`
 </li>
       </ul></li>
       <li><a href="pyro.particles.html#pyro.particles.particles.Particle.velocity">velocity() (pyro.particles.particles.Particle method)</a>
+</li>
+      <li><a href="pyro.burgers.problems.html#pyro.burgers.problems.verify.verify">verify() (in module pyro.burgers.problems.verify)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -3464,6 +3810,22 @@ document.write(`
       <li><a href="pyro.util.html#pyro.util.runparams.RuntimeParameters.write_params">write_params() (pyro.util.runparams.RuntimeParameters method)</a>
 </li>
       <li><a href="pyro.particles.html#pyro.particles.particles.Particles.write_particles">write_particles() (pyro.particles.particles.Particles method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="X">X</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_inhomogeneous.xl_func">xl_func() (in module pyro.multigrid.examples.mg_test_general_inhomogeneous)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Y">Y</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pyro.multigrid.examples.html#pyro.multigrid.examples.mg_test_general_inhomogeneous.yl_func">yl_func() (in module pyro.multigrid.examples.mg_test_general_inhomogeneous)</a>
 </li>
   </ul></td>
 </tr></table>

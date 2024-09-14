@@ -45,19 +45,28 @@ A 2D viscous Burgers' Equation has the following form:
    u_t + u u_x + v u_y = \epsilon \left( u_{xx} + u_{yy}\right) \\
    v_t + u v_x + v v_y = \epsilon \left( v_{xx} + v_{yy}\right)
 
-The viscous Burgers' equation has an additional velocity diffusion term on the RHS compared to the inviscid Burgers' equation. Here :math:`\epsilon` represents the constant viscosity.
+The viscous Burgers' equation has an additional velocity diffusion
+term on the RHS compared to the inviscid Burgers' equation. Here
+:math:`\epsilon` represents the constant viscosity.
 
-:py:mod:`pyro.viscous_burgers` is inherited from :py:mod:`pyro.burgers`, where we added an additional diffusion term when constructing the interface states. We then solve for diffusion along with the extra advective source to the Helmholtz equation by using the Crank-Nicolson discretization and multigrid solvers.
+:py:mod:`pyro.burgers_viscous` is inherited from
+:py:mod:`pyro.burgers`, where we added an additional diffusion term
+when constructing the interface states. We then solve for diffusion
+along with the extra advective source to the Helmholtz equation by
+using the Crank-Nicolson discretization and multigrid solvers.
 
 
 The parameters for this solver are:
 
-.. include:: viscous_burgers_defaults.inc
+.. include:: burgers_viscous_defaults.inc
 
 
 .. image:: viscous_burgers.png
    :align: center
 
-The figure above is generated using ``viscous_burgers/problems/test.py``, which has the identical setup as in ``burgers/problems/test.py``. With diffusion added to the system, we see the shock (discontinuity) is smeared out as system evolves.
+The figure above is generated using
+``burgers_viscous/problems/test.py``, which has the identical setup as
+in ``burgers/problems/test.py``. With diffusion added to the system,
+we see the shock (discontinuity) is smeared out as system evolves.
 
 

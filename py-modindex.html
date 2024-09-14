@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Python Module Index &#8212; pyro 4.3.0.post2+gd063c13e documentation</title>
+    <title>Python Module Index &#8212; pyro 4.3.0.post3+g8a731ce9 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=6a7f607a"></script>
+    <script src="_static/documentation_options.js?v=3d30f61e"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -246,8 +246,8 @@
 <li class="toctree-l4"><a class="reference internal" href="pyro.burgers.problems.html">pyro.burgers.problems package</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.viscous_burgers.html">pyro.viscous_burgers package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="pyro.viscous_burgers.problems.html">pyro.viscous_burgers.problems package</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.burgers_viscous.html">pyro.burgers_viscous package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.burgers_viscous.problems.html">pyro.burgers_viscous.problems package</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="pyro.compressible.html">pyro.compressible package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -287,7 +287,10 @@
 </ul>
 </details></li>
 <li class="toctree-l3"><a class="reference internal" href="pyro.mesh.html">pyro.mesh package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyro.multigrid.html">pyro.multigrid package</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="pyro.multigrid.html">pyro.multigrid package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyro.multigrid.examples.html">pyro.multigrid.examples package</a></li>
+</ul>
+</details></li>
 <li class="toctree-l3"><a class="reference internal" href="pyro.particles.html">pyro.particles package</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="pyro.swe.html">pyro.swe package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="pyro.swe.problems.html">pyro.swe.problems package</a></li>
@@ -481,6 +484,11 @@ document.write(`
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
+       <a href="pyro.advection.html#module-pyro.advection.interface"><code class="xref">pyro.advection.interface</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
        <a href="pyro.advection.problems.html#module-pyro.advection.problems"><code class="xref">pyro.advection.problems</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
@@ -527,6 +535,16 @@ document.write(`
        <td></td>
        <td>&#160;&#160;&#160;
        <a href="pyro.advection_fv4.problems.html#module-pyro.advection_fv4.problems.smooth"><code class="xref">pyro.advection_fv4.problems.smooth</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="pyro.advection_fv4.problems.html#module-pyro.advection_fv4.problems.test"><code class="xref">pyro.advection_fv4.problems.test</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="pyro.advection_fv4.problems.html#module-pyro.advection_fv4.problems.tophat"><code class="xref">pyro.advection_fv4.problems.tophat</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
@@ -666,7 +684,47 @@ document.write(`
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
+       <a href="pyro.burgers.problems.html#module-pyro.burgers.problems.verify"><code class="xref">pyro.burgers.problems.verify</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
        <a href="pyro.burgers.html#module-pyro.burgers.simulation"><code class="xref">pyro.burgers.simulation</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="pyro.burgers_viscous.html#module-pyro.burgers_viscous"><code class="xref">pyro.burgers_viscous</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="pyro.burgers_viscous.html#module-pyro.burgers_viscous.interface"><code class="xref">pyro.burgers_viscous.interface</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="pyro.burgers_viscous.problems.html#module-pyro.burgers_viscous.problems"><code class="xref">pyro.burgers_viscous.problems</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="pyro.burgers_viscous.problems.html#module-pyro.burgers_viscous.problems.converge"><code class="xref">pyro.burgers_viscous.problems.converge</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="pyro.burgers_viscous.problems.html#module-pyro.burgers_viscous.problems.test"><code class="xref">pyro.burgers_viscous.problems.test</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="pyro.burgers_viscous.problems.html#module-pyro.burgers_viscous.problems.tophat"><code class="xref">pyro.burgers_viscous.problems.tophat</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="pyro.burgers_viscous.html#module-pyro.burgers_viscous.simulation"><code class="xref">pyro.burgers_viscous.simulation</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
@@ -767,6 +825,11 @@ document.write(`
        <td></td>
        <td>&#160;&#160;&#160;
        <a href="pyro.compressible.problems.html#module-pyro.compressible.problems.test"><code class="xref">pyro.compressible.problems.test</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="pyro.compressible.html#module-pyro.compressible.riemann"><code class="xref">pyro.compressible.riemann</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
@@ -1241,6 +1304,71 @@ document.write(`
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
+       <a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples"><code class="xref">pyro.multigrid.examples</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_general_alphabeta_only"><code class="xref">pyro.multigrid.examples.mg_test_general_alphabeta_only</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_general_beta_only"><code class="xref">pyro.multigrid.examples.mg_test_general_beta_only</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_general_constant"><code class="xref">pyro.multigrid.examples.mg_test_general_constant</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_general_dirichlet"><code class="xref">pyro.multigrid.examples.mg_test_general_dirichlet</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_general_inhomogeneous"><code class="xref">pyro.multigrid.examples.mg_test_general_inhomogeneous</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_simple"><code class="xref">pyro.multigrid.examples.mg_test_simple</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_vc_constant"><code class="xref">pyro.multigrid.examples.mg_test_vc_constant</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_vc_dirichlet"><code class="xref">pyro.multigrid.examples.mg_test_vc_dirichlet</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_test_vc_periodic"><code class="xref">pyro.multigrid.examples.mg_test_vc_periodic</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.mg_vis"><code class="xref">pyro.multigrid.examples.mg_vis</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.project_periodic"><code class="xref">pyro.multigrid.examples.project_periodic</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="pyro.multigrid.examples.html#module-pyro.multigrid.examples.prolong_restrict_demo"><code class="xref">pyro.multigrid.examples.prolong_restrict_demo</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
        <a href="pyro.multigrid.html#module-pyro.multigrid.general_MG"><code class="xref">pyro.multigrid.general_MG</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
@@ -1382,36 +1510,6 @@ document.write(`
        <td></td>
        <td>&#160;&#160;&#160;
        <a href="pyro.util.html#module-pyro.util.runparams"><code class="xref">pyro.util.runparams</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="pyro.viscous_burgers.html#module-pyro.viscous_burgers"><code class="xref">pyro.viscous_burgers</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="pyro.viscous_burgers.html#module-pyro.viscous_burgers.interface"><code class="xref">pyro.viscous_burgers.interface</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="pyro.viscous_burgers.problems.html#module-pyro.viscous_burgers.problems"><code class="xref">pyro.viscous_burgers.problems</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="pyro.viscous_burgers.problems.html#module-pyro.viscous_burgers.problems.converge"><code class="xref">pyro.viscous_burgers.problems.converge</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="pyro.viscous_burgers.problems.html#module-pyro.viscous_burgers.problems.tophat"><code class="xref">pyro.viscous_burgers.problems.tophat</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="pyro.viscous_burgers.html#module-pyro.viscous_burgers.simulation"><code class="xref">pyro.viscous_burgers.simulation</code></a></td><td>
        <em></em></td></tr>
    </table>
 
