@@ -6,6 +6,14 @@ pyro.multigrid package
    :undoc-members:
    :show-inheritance:
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   pyro.multigrid.examples
+
 Submodules
 ----------
 
