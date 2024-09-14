@@ -1,7 +1,7 @@
 from pyro.burgers import Simulation as burgers_sim
 from pyro.burgers import burgers_interface
-from pyro.mesh import reconstruction
 from pyro.burgers_viscous import interface
+from pyro.mesh import reconstruction
 
 
 class Simulation(burgers_sim):
