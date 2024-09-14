@@ -296,7 +296,7 @@ class RuntimeParameters:
         for sec in sorted(secs):
             keys = [q for q in all_keys if q.startswith(f"{sec}.")]
 
-            head = f"* section: [{sec.strip()}]"
+            head = f"* section: ``[{sec.strip()}]``"
             f.write(f"{head}\n\n")
             #f.write(len(head)*"^"+"\n\n")
 
