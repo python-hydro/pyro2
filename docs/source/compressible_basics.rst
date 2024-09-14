@@ -1,5 +1,6 @@
+**********************************
 Compressible hydrodynamics solvers
-==================================
+**********************************
 
 The Euler equations of compressible hydrodynamics take the form:
 
@@ -27,7 +28,7 @@ direction is allowed.
    directory in the solver's directory.
 
 ``compressible`` solver
------------------------
+=======================
 
 :py:mod:`pyro.compressible` is based on a directionally unsplit (the corner
 transport upwind algorithm) piecewise linear method for the Euler
@@ -38,8 +39,11 @@ The parameters for this solver are:
 
 .. include:: compressible_defaults.inc
 
+.. include:: compressible_problems.inc
+
+
 ``compressible_rk`` solver
---------------------------
+==========================
 
 :py:mod:`pyro.compressible_rk` uses a method of lines time-integration
 approach with piecewise linear spatial reconstruction for the Euler
@@ -49,8 +53,10 @@ The parameters for this solver are:
 
 .. include:: compressible_rk_defaults.inc
 
+.. include:: compressible_rk_problems.inc
+
 ``compressible_fv4`` solver
----------------------------
+===========================
 
 :py:mod:`pyro.compressible_fv4` uses a 4th order accurate method with RK4
 time integration, following :cite:`mccorquodalecolella`.
@@ -59,9 +65,10 @@ The parameter for this solver are:
 
 .. include:: compressible_fv4_defaults.inc
 
+.. include:: compressible_fv4_problems.inc
 
 ``compressible_sdc`` solver
----------------------------
+===========================
 
 :py:mod:`pyro.compressible_sdc` uses a 4th order accurate method with
 spectral-deferred correction (SDC) for the time integration.  This
@@ -72,9 +79,10 @@ The parameters for this solver are:
 
 .. include:: compressible_sdc_defaults.inc
 
+.. include:: compressible_sdc_problems.inc
 
 Example problems
-----------------
+================
 
 .. note::
 
@@ -88,7 +96,7 @@ Example problems
 
 
 Sod
-^^^
+---
 
 The Sod problem is a standard hydrodynamics problem. It is a
 one-dimensional shock tube (two states separated by an interface),
@@ -119,7 +127,7 @@ is discussed in the notes above, and can be improved in the PPM method
 with contact steepening.
 
 Sedov
-^^^^^
+-----
 
 The Sedov blast wave problem is another standard test with an analytic
 solution (Sedov 1959). A lot of energy is point into a point in a
@@ -154,7 +162,7 @@ This shows good agreement with the analytic solution.
 
 
 quad
-^^^^
+----
 
 The quad problem sets up different states in four regions of the
 domain and watches the complex interfaces that develop as shocks
@@ -172,7 +180,7 @@ online by Pawel Artymowicz). It is run as:
 
 
 rt
-^^
+--
 
 The Rayleigh-Taylor problem puts a dense fluid over a lighter one and
 perturbs the interface with a sinusoidal velocity. Hydrostatic
@@ -192,7 +200,7 @@ escape the domain. It is run as:
 
 
 bubble
-^^^^^^
+------
 
 The bubble problem initializes a hot spot in a stratified domain and
 watches it buoyantly rise and roll up. This is run as:
@@ -211,10 +219,10 @@ above that rains down on our atmosphere. Also note the acoustic signal
 propagating outward from the bubble (visible in the U and e panels).
 
 Exercises
----------
+=========
 
 Explorations
-^^^^^^^^^^^^
+------------
 
 * Measure the growth rate of the Rayleigh-Taylor instability for
   different wavenumbers.
@@ -228,7 +236,7 @@ Explorations
 
 
 Extensions
-^^^^^^^^^^
+----------
 
 * Limit on the characteristic variables instead of the primitive
   variables. What changes do you see? (the notes show how to implement
@@ -246,16 +254,3 @@ Extensions
 * Swap the piecewise linear reconstruction for piecewise parabolic
   (PPM). The notes and the Miller and Colella paper provide a good basis
   for this.  Research the Roe Riemann solver and implement it in pyro.
-
-
-Going further
--------------
-
-The compressible algorithm presented here is essentially the
-single-grid hydrodynamics algorithm used in the `Castro code <https://amrex-astro.github.io/Castro/>`_—an
-adaptive mesh radiation hydrodynamics code developed at
-CCSE/LBNL. `Castro is freely available for download <https://github.com/AMReX-Astro/Castro>`_.
-
-A simple, pure Fortran, 1-d compressible hydrodynamics code that does
-piecewise constant, linear, or parabolic (PPM) reconstruction is also
-available. See the `hydro1d <https://zingale.github.io/hydro1d/>`_ page.

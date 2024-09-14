@@ -1,10 +1,13 @@
+*****************
 Burgers' Equation
-==================
+*****************
 
-Burgers' Equation is a nonlinear hyperbolic equation. It has the same form as the advection equation, except that the quantity being advected is the velocity itself.
+Burgers' Equation is a nonlinear hyperbolic equation. It has the same
+form as the advection equation, except that the quantity being
+advected is the velocity itself.
 
 ``Inviscid Burgers``
---------------------------------
+====================
 
 A 2D inviscid Burgers' Equation has the following form:
 
@@ -29,14 +32,25 @@ The parameters for this solver are:
 
 .. include:: burgers_defaults.inc
 
+.. include:: burgers_problems.inc
+
+Example
+-------
 
 .. image:: burgers.png
    :align: center
 
-The figure above is generated using ``burgers/problems/test.py``, which is used to test the validity of the solver. Bottom-left of the domain has a higher velocity than the top-right domain. With :math:`u_{i,j}=v_{i,j}`, the wave travels diagonally to the top-right with a constant velocity that is equal to the shock speed. ``burgers/problem/verify.py`` can be used to calculate the wave speed using outputs from ``test.py`` and compare to the theoretical shock speed.
+The figure above is generated using ``burgers/problems/test.py``,
+which is used to test the validity of the solver. Bottom-left of the
+domain has a higher velocity than the top-right domain. With
+:math:`u_{i,j}=v_{i,j}`, the wave travels diagonally to the top-right
+with a constant velocity that is equal to the shock
+speed. ``burgers/problem/verify.py`` can be used to calculate the wave
+speed using outputs from ``test.py`` and compare to the theoretical
+shock speed.
 
 ``Viscous Burgers``
---------------------------------
+===================
 
 A 2D viscous Burgers' Equation has the following form:
 
@@ -60,6 +74,10 @@ The parameters for this solver are:
 
 .. include:: burgers_viscous_defaults.inc
 
+.. include:: burgers_problems.inc
+
+Example
+-------
 
 .. image:: viscous_burgers.png
    :align: center
