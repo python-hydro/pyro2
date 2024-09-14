@@ -138,7 +138,7 @@ pyro provides the following solvers (all in 2-d):
   - `burgers`: a second-order unsplit solver for invsicid Burgers'
     equation.
 
-  - `viscous_burgers`: a second-order unsplit solver for viscous
+  - `burgers_viscous`: a second-order unsplit solver for viscous
     Burgers' equation with constant-coefficient diffusion. It uses
     Crank-Nicolson time-discretized solver for solving diffusion.
 
