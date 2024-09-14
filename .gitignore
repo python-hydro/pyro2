@@ -9,6 +9,8 @@ dist/
 inputs.auto
 .noseids
 
+*problems.inc
+
 .ipynb_checkpoints/
 
 *.pdf
