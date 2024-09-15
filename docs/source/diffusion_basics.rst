@@ -1,5 +1,9 @@
+*********
 Diffusion
-=========
+*********
+
+``diffusion`` solver
+====================
 
 pyro solves the constant-conductivity diffusion equation:
 
@@ -16,11 +20,14 @@ multigrid class. The main parameters that affect this solver are:
 
 .. include:: diffusion_defaults.inc
 
+.. include:: diffusion_problems.inc
+
+
 Examples
---------
+========
 
 gaussian
-^^^^^^^^
+--------
 
 The gaussian problem initializes a strongly peaked Gaussian centered
 in the domain. The analytic solution for this shows that the profile
@@ -46,14 +53,14 @@ restricted in range to bring out the detail at later times.
 
 
 Exercises
----------
+=========
 
 The best way to learn these methods is to play with them yourself. The
 exercises below are suggestions for explorations and features to add
 to the advection solver.
 
 Explorations
-^^^^^^^^^^^^
+------------
 
 * Test the convergence of the solver by varying the resolution and
   comparing to the analytic solution.
@@ -64,7 +71,7 @@ Explorations
 * Setup some other profiles and experiment with different boundary conditions.
 
 Extensions
-^^^^^^^^^^
+----------
 
 * Switch from Crank-Nicolson (2nd order in time) to backward Euler
   (1st order in time) and compare the solution and convergence. This
