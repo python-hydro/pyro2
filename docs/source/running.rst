@@ -74,16 +74,31 @@ This will use the default set of parameters for the problem specified
 in the inputs file defined by ``DEFAULT_INPUTS`` in the problem
 initialization module.
 
+.. note::
+
+   By default, I/O, visualization, and verbosity are disabled when we run in Jupyter.
+
 Instead of using an inputs file to define the problem parameters, we can define a
 dictionary of parameters and pass them into the :func:`initialize_problem
 <pyro.pyro_sim.Pyro.initialize_problem>` function using the keyword argument ``inputs_dict``.
 If an inputs file is also passed into the function, the parameters in the dictionary
-will override any parameters in the file. For example, if we wished to turn off
-visualization for the previous example, we would do:
+will override any parameters in the file.
+
+.. tip::
+
+   If you want to see all of the runtime parameters and their current values, you can
+   simply print the ``Pyro`` object:
+
+   .. code:: python
+
+      print(p)
+
+For example, if we wished to turn on
+verbosity for the previous example, we would do:
 
 .. code-block:: python
 
-    parameters = {"vis.dovis": 0}
+    parameters = {"driver.verbose": 1}
     p.initialize_problem(problem_name="kh",
                          inputs_dict=parameters)
 
@@ -112,15 +127,18 @@ parameters are stored in three places:
 
 * the ``pyro/_defaults`` file
 * the solver's ``_defaults`` file
-* problem's ``_defaults`` file (named ``_problem-name.defaults`` in the
-  solver's ``problem/`` sub-directory).
+* problem-specific parameters: each problem module provides a dictionary
+  called ``PROBLEM_PARAMS`` that is used to define the problem-specific
+  parameters and their defaults.
 
-These three files are parsed at runtime to define the list of valid
+These defaults are parsed at runtime to define the list of valid
 parameters. The inputs file is read next and used to override the
 default value of any of these previously defined
-parameters. Additionally, any parameter can be specified at the end of
-the commandline, and these will be used to override the defaults. The
-collection of runtime parameters is stored in a
+parameters.  Then any parameters passed to ``Pyro`` via a dictionary
+or added to the commandline when using ``pyro_sim.py`` are parsed
+and override the current values.
+
+The collection of runtime parameters is stored in a
 :func:`RuntimeParameters <pyro.util.runparams.RuntimeParameters>` object.
 
 The ``runparams.py`` module in ``util/`` controls access to the runtime
