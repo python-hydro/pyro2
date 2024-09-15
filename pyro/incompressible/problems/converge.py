@@ -19,7 +19,8 @@ and the exact solution at some later time t is then
     p(x,y,t) = -\cos(4 \pi (x - t)) - \cos(4 \pi (y - t))
 
 The numerical solution can be compared to the exact solution to
-measure the convergence rate of the algorithm.
+measure the convergence rate of the algorithm.  These initial
+conditions come from Minion 1996.
 
 """
 
