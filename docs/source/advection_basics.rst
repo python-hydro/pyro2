@@ -1,6 +1,6 @@
-*****************
-Advection solvers
-*****************
+*********
+Advection
+*********
 
 The linear advection equation:
 

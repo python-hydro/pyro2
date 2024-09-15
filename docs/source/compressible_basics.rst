@@ -1,6 +1,6 @@
-**********************************
-Compressible hydrodynamics solvers
-**********************************
+**************************
+Compressible hydrodynamics
+**************************
 
 The Euler equations of compressible hydrodynamics take the form:
 
