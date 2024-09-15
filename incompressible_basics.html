@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Incompressible hydrodynamics solver &#8212; pyro 4.3.0.post6+g075ce404 documentation</title>
+    <title>Incompressible hydrodynamics &#8212; pyro 4.3.0.post7+g903285ee documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=963e3132"></script>
+    <script src="_static/documentation_options.js?v=22c05107"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -51,7 +51,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'incompressible_basics';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Incompressible viscous hydrodynamics solver" href="incompressible_viscous_basics.html" />
+    <link rel="next" title="Low Mach number hydrodynamics" href="lowmach_basics.html" />
     <link rel="prev" title="Diffusion" href="diffusion_basics.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -190,14 +190,13 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Hydro Solvers</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection</a></li>
 <li class="toctree-l1"><a class="reference internal" href="burgers_basics.html">Burgers’ Equation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Incompressible hydrodynamics solver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="incompressible_viscous_basics.html">Incompressible viscous hydrodynamics solver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solver</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Incompressible hydrodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water hydrodynamics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
@@ -524,7 +523,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Incompressible hydrodynamics solver</h1>
+    <h1>Incompressible hydrodynamics</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -534,9 +533,32 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shear">shear</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convergence">convergence</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#incompressible-solver"><code class="docutils literal notranslate"><span class="pre">incompressible</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-problems">supported problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#converge"><code class="docutils literal notranslate"><span class="pre">converge</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shear"><code class="docutils literal notranslate"><span class="pre">shear</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">shear</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#convergence">convergence</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#incompressible-viscous-solver"><code class="docutils literal notranslate"><span class="pre">incompressible_viscous</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">supported problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6"><code class="docutils literal notranslate"><span class="pre">converge</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7"><code class="docutils literal notranslate"><span class="pre">shear</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cavity"><code class="docutils literal notranslate"><span class="pre">cavity</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">shear</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">cavity</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">convergence</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a><ul class="nav section-nav flex-column">
@@ -544,7 +566,6 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extensions">Extensions</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#going-further">Going further</a></li>
 </ul>
             </nav>
         </div>
@@ -556,8 +577,12 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="incompressible-hydrodynamics-solver">
-<h1>Incompressible hydrodynamics solver<a class="headerlink" href="#incompressible-hydrodynamics-solver" title="Link to this heading">#</a></h1>
+  <section id="incompressible-hydrodynamics">
+<h1>Incompressible hydrodynamics<a class="headerlink" href="#incompressible-hydrodynamics" title="Link to this heading">#</a></h1>
+<p>pyro has two different incompressible solvers: <code class="docutils literal notranslate"><span class="pre">incompressible</span></code> is
+inviscid and <code class="docutils literal notranslate"><span class="pre">incompressible_viscous</span></code> has viscosity.</p>
+<section id="incompressible-solver">
+<h2><code class="docutils literal notranslate"><span class="pre">incompressible</span></code> solver<a class="headerlink" href="#incompressible-solver" title="Link to this heading">#</a></h2>
 <p>pyro’s incompressible solver solves:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\frac{\partial U}{\partial t} + U \cdot \nabla U + \nabla p &amp;= 0 \\
@@ -630,15 +655,61 @@ are supported.</p>
 </div>
 </li>
 </ul>
-<section id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
+<section id="supported-problems">
+<h3>supported problems<a class="headerlink" href="#supported-problems" title="Link to this heading">#</a></h3>
+<section id="converge">
+<h4><code class="docutils literal notranslate"><span class="pre">converge</span></code><a class="headerlink" href="#converge" title="Link to this heading">#</a></h4>
+<p>Initialize a smooth incompressible convergence test.  Here, the
+velocities are initialized as</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}u(x,y) = 1 - 2 \cos(2 \pi x) \sin(2 \pi y)\\v(x,y) = 1 + 2 \sin(2 \pi x) \cos(2 \pi y)\end{aligned}\end{align} \]</div>
+<p>and the exact solution at some later time t is then</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}u(x,y,t) = 1 - 2 \cos(2 \pi (x - t)) \sin(2 \pi (y - t))\\v(x,y,t) = 1 + 2 \sin(2 \pi (x - t)) \cos(2 \pi (y - t))\\p(x,y,t) = -\cos(4 \pi (x - t)) - \cos(4 \pi (y - t))\end{aligned}\end{align} \]</div>
+<p>The numerical solution can be compared to the exact solution to
+measure the convergence rate of the algorithm.</p>
+</section>
 <section id="shear">
-<h3>shear<a class="headerlink" href="#shear" title="Link to this heading">#</a></h3>
+<h4><code class="docutils literal notranslate"><span class="pre">shear</span></code><a class="headerlink" href="#shear" title="Link to this heading">#</a></h4>
+<p>Initialize the doubly periodic shear layer (see, for example, Martin
+and Colella, 2000, JCP, 163, 271).  This is run in a unit square
+domain, with periodic boundary conditions on all sides.  Here, the
+initial velocity is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>              <span class="o">/</span> <span class="n">tanh</span><span class="p">(</span><span class="n">rho_s</span> <span class="p">(</span><span class="n">y</span><span class="o">-</span><span class="mf">0.25</span><span class="p">))</span>   <span class="k">if</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="mf">0.5</span>
+<span class="n">u</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="o">&lt;</span>
+              \ <span class="n">tanh</span><span class="p">(</span><span class="n">rho_s</span> <span class="p">(</span><span class="mf">0.75</span><span class="o">-</span><span class="n">y</span><span class="p">))</span>   <span class="k">if</span> <span class="n">y</span> <span class="o">&gt;</span> <span class="mf">0.5</span>
+
+<span class="n">v</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">delta_s</span> <span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="n">pi</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">shear.rho_s</span></code></p></td>
+<td><p>42.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">shear.delta_s</span></code></p></td>
+<td><p>0.05</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h3>
+<section id="id1">
+<h4>shear<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
 <p>The shear problem initializes a shear layer in a domain with
 doubly-periodic boundaries and looks at the development of two
 vortices as the shear layer rolls up. This problem was explored in a
-number of papers, for example, <span id="id1">[<a class="reference internal" href="zreferences.html#id7" title="John B. Bell, Phillip Colella, and Harland M. Glaz. A Second Order Projection Method for the Incompressible Navier-Stokes Equations. Journal of Computational Physics, 85(2):257-283, December 1989. doi:10.1016/0021-9991(89)90151-4.">BellColellaGlaz89</a>]</span> and
-<span id="id2">[<a class="reference internal" href="zreferences.html#id8" title="Daniel F. Martin and Phillip Colella. A Cell-Centered Adaptive Projection Method for the Incompressible Euler Equations. Journal of Computational Physics, 163(2):271-312, September 2000. doi:10.1006/jcph.2000.6575.">MartinColella00</a>]</span>. This is run as:</p>
+number of papers, for example, <span id="id2">[<a class="reference internal" href="zreferences.html#id7" title="John B. Bell, Phillip Colella, and Harland M. Glaz. A Second Order Projection Method for the Incompressible Navier-Stokes Equations. Journal of Computational Physics, 85(2):257-283, December 1989. doi:10.1016/0021-9991(89)90151-4.">BellColellaGlaz89</a>]</span> and
+<span id="id3">[<a class="reference internal" href="zreferences.html#id8" title="Daniel F. Martin and Phillip Colella. A Cell-Centered Adaptive Projection Method for the Incompressible Euler Equations. Journal of Computational Physics, 163(2):271-312, September 2000. doi:10.1006/jcph.2000.6575.">MartinColella00</a>]</span>. This is run as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
 span.prompt1:before {
   content: "$ ";
@@ -650,12 +721,12 @@ papers. Note that the velocity divergence is not zero—this is because
 we are using an approximate projection.</p>
 </section>
 <section id="convergence">
-<h3>convergence<a class="headerlink" href="#convergence" title="Link to this heading">#</a></h3>
+<h4>convergence<a class="headerlink" href="#convergence" title="Link to this heading">#</a></h4>
 <p>The convergence test initializes a simple velocity field on a periodic
 unit square with known analytic solution. By evolving at a variety of
 resolutions and comparing to the analytic solution, we can measure the
 convergence rate of the algorithm. The particular set of initial
-conditions is from <span id="id3">[<a class="reference internal" href="zreferences.html#id9" title="Michael L. Minion. A Projection Method for Locally Refined Grids. Journal of Computational Physics, 127(1):158-178, August 1996. doi:10.1006/jcph.1996.0166.">Minion96</a>]</span>. Limiting can be disabled by
+conditions is from <span id="id4">[<a class="reference internal" href="zreferences.html#id9" title="Michael L. Minion. A Projection Method for Locally Refined Grids. Journal of Computational Physics, 127(1):158-178, August 1996. doi:10.1006/jcph.1996.0166.">Minion96</a>]</span>. Limiting can be disabled by
 adding <code class="docutils literal notranslate"><span class="pre">incompressible.limiter=0</span></code> to the run command. The basic set of
 tests shown below are run as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pyro_sim.py<span class="w"> </span>incompressible<span class="w"> </span>converge<span class="w"> </span>inputs.converge.32<span class="w"> </span>vis.dovis<span class="o">=</span><span class="m">0</span></span>
@@ -673,6 +744,199 @@ order behavior with the limiters enabled and slightly better than
 second order with no limiting.</p>
 </section>
 </section>
+</section>
+<section id="incompressible-viscous-solver">
+<h2><code class="docutils literal notranslate"><span class="pre">incompressible_viscous</span></code> solver<a class="headerlink" href="#incompressible-viscous-solver" title="Link to this heading">#</a></h2>
+<p>pyro’s incompressible viscous solver solves:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\frac{\partial U}{\partial t} + U \cdot \nabla U + \nabla p &amp;= \nu \nabla^2 U \\
+\nabla \cdot U &amp;= 0\end{split}\]</div>
+<p>This is based on the <code class="docutils literal notranslate"><span class="pre">incompressible</span></code> solver, but modifies the
+velocity update step to take viscosity into account, by solving two
+parabolic equations (one for each velocity component) using multigrid.</p>
+<p>The main parameters that affect this solver are:</p>
+<ul>
+<li><p>section: <code class="docutils literal notranslate"><span class="pre">[driver]</span></code></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cfl</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.8</span></code></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li><p>section: <code class="docutils literal notranslate"><span class="pre">[incompressible]</span></code></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">limiter</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p>limiter (0 = none, 1 = 2nd order, 2 = 4th order)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">proj_type</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p>what are we projecting? 1 includes -Gp term in U*</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li><p>section: <code class="docutils literal notranslate"><span class="pre">[incompressible_viscous]</span></code></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">viscosity</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.1</span></code></p></td>
+<td><p>kinematic viscosity of the fluid (units L^2/T)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li><p>section: <code class="docutils literal notranslate"><span class="pre">[particles]</span></code></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">do_particles</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">particle_generator</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">grid</span></code></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+</ul>
+<section id="id5">
+<h3>supported problems<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<section id="id6">
+<h4><code class="docutils literal notranslate"><span class="pre">converge</span></code><a class="headerlink" href="#id6" title="Link to this heading">#</a></h4>
+<p>Initialize a smooth incompressible+viscous convergence test.  Here, the
+velocities are initialized as</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}u(x,y) = 1 - 2 \cos(2 \pi x) \sin(2 \pi y)\\v(x,y) = 1 + 2 \sin(2 \pi x) \cos(2 \pi y)\end{aligned}\end{align} \]</div>
+<p>and the exact solution at some later time t, for some viscosity nu, is</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}u(x,y,t) = 1 - 2 \cos(2 \pi (x - t)) \sin(2 \pi (y - t)) e^{-8 \pi^2 \nu t}\\v(x,y,t) = 1 + 2 \sin(2 \pi (x - t)) \cos(2 \pi (y - t)) e^{-8 \pi^2 \nu t}\\p(x,y,t) = - (\cos(4 \pi (x - t)) + \cos(4 \pi (y - t))) e^{-16 \pi^2 \nu t}\end{aligned}\end{align} \]</div>
+<p>The numerical solution can be compared to the exact solution to
+measure the convergence rate of the algorithm.</p>
+</section>
+<section id="id7">
+<h4><code class="docutils literal notranslate"><span class="pre">shear</span></code><a class="headerlink" href="#id7" title="Link to this heading">#</a></h4>
+<p>Initialize the doubly periodic shear layer (see, for example, Martin
+and Colella, 2000, JCP, 163, 271).  This is run in a unit square
+domain, with periodic boundary conditions on all sides.  Here, the
+initial velocity is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>              <span class="o">/</span> <span class="n">tanh</span><span class="p">(</span><span class="n">rho_s</span> <span class="p">(</span><span class="n">y</span><span class="o">-</span><span class="mf">0.25</span><span class="p">))</span>   <span class="k">if</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="mf">0.5</span>
+<span class="n">u</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="o">&lt;</span>
+              \ <span class="n">tanh</span><span class="p">(</span><span class="n">rho_s</span> <span class="p">(</span><span class="mf">0.75</span><span class="o">-</span><span class="n">y</span><span class="p">))</span>   <span class="k">if</span> <span class="n">y</span> <span class="o">&gt;</span> <span class="mf">0.5</span>
+
+<span class="n">v</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">delta_s</span> <span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="n">pi</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">shear.rho_s</span></code></p></td>
+<td><p>42.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">shear.delta_s</span></code></p></td>
+<td><p>0.05</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="cavity">
+<h4><code class="docutils literal notranslate"><span class="pre">cavity</span></code><a class="headerlink" href="#cavity" title="Link to this heading">#</a></h4>
+<p>Initialize the lid-driven cavity problem. Run on a unit square with the top wall
+moving to the right with unit velocity, driving the flow. The other three walls
+are no-slip boundary conditions. The initial velocity of the fluid is zero.</p>
+<p>Since the length and velocity scales are both 1, the Reynolds number is 1/viscosity.</p>
+<p>References:
+<a class="reference external" href="https://doi.org/10.1007/978-3-319-91494-7_8">https://doi.org/10.1007/978-3-319-91494-7_8</a>
+<a class="reference external" href="https://www.fluid.tuwien.ac.at/HendrikKuhlmann?action=AttachFile&amp;do=get&amp;target=LidDrivenCavity.pdf">https://www.fluid.tuwien.ac.at/HendrikKuhlmann?action=AttachFile&amp;do=get&amp;target=LidDrivenCavity.pdf</a></p>
+</section>
+</section>
+<section id="id8">
+<h3>Examples<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<section id="id9">
+<h4>shear<a class="headerlink" href="#id9" title="Link to this heading">#</a></h4>
+<p>The same shear problem as in incompressible solver, here with viscosity
+added.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pyro_sim.py<span class="w"> </span>incompressible_viscous<span class="w"> </span>shear<span class="w"> </span>inputs.shear</span>
+</pre></div></div><img alt="_images/shear_viscous.png" class="align-center" src="_images/shear_viscous.png" />
+<p>Compare this with the inviscid result. Notice how the velocities have
+diffused in all directions.</p>
+</section>
+<section id="id10">
+<h4>cavity<a class="headerlink" href="#id10" title="Link to this heading">#</a></h4>
+<p>The lid-driven cavity is a well-known benchmark problem for hydro codes
+(see e.g. <span id="id11">Ghia <em>et al.</em> [<a class="reference internal" href="zreferences.html#id10" title="U. Ghia, K. N. Ghia, and C. T. Shin. High-Re Solutions for Incompressible Flow Using the Navier-Stokes Equations and a Multigrid Method. Journal of Computational Physics, 48(3):387-411, December 1982. doi:10.1016/0021-9991(82)90058-4.">GhiaGhiaShin82</a>]</span>, <span id="id12">Kuhlmann and Romanò [<a class="reference internal" href="zreferences.html#id11" title="Hendrik C. Kuhlmann and Francesco Romanò. The Lid-Driven Cavity, pages 233–309. Springer International Publishing, Cham, 2019. doi:10.1007/978-3-319-91494-7_8.">KRomano19</a>]</span>). In a unit square box
+with initially static fluid, motion is initiated by a “lid” at the top
+boundary, moving to the right with unit velocity. The basic command is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pyro_sim.py<span class="w"> </span>incompressible_viscous<span class="w"> </span>cavity<span class="w"> </span>inputs.cavity</span>
+</pre></div></div><p>It is interesting to observe what happens when varying the viscosity, or,
+equivalently the Reynolds number (in this case <span class="math notranslate nohighlight">\(\rm{Re}=1/\nu\)</span> since
+the characteristic length and velocity scales are 1 by default).</p>
+<p><a class="reference internal" href="_images/cavity_Re100.png"><img alt="pic1" src="_images/cavity_Re100.png" style="width: 32%;" /></a> <a class="reference internal" href="_images/cavity_Re400.png"><img alt="pic2" src="_images/cavity_Re400.png" style="width: 32%;" /></a> <a class="reference internal" href="_images/cavity_Re1000.png"><img alt="pic3" src="_images/cavity_Re1000.png" style="width: 32%;" /></a></p>
+<p>These plots were made by allowing the code to run for longer and approach a
+steady-state with the option <code class="docutils literal notranslate"><span class="pre">driver.max_steps=1000</span></code>, then running
+(e.g. for the Re=100 case):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">python<span class="w"> </span>incompressible_viscous/problems/plot_cavity.py<span class="w"> </span>cavity_n64_Re100_0406.h5<span class="w"> </span>-Re<span class="w"> </span><span class="m">100</span><span class="w"> </span>-o<span class="w"> </span>cavity_Re100.png</span>
+</pre></div></div></section>
+<section id="id13">
+<h4>convergence<a class="headerlink" href="#id13" title="Link to this heading">#</a></h4>
+<p>This is the same test as in the incompressible solver. With viscosity,
+an exponential term is added to the solution. Limiting can again be
+disabled by adding <code class="docutils literal notranslate"><span class="pre">incompressible.limiter=0</span></code> to the run command.
+The basic set of tests shown below are run as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pyro_sim.py<span class="w"> </span>incompressible_viscous<span class="w"> </span>converge<span class="w"> </span>inputs.converge.32<span class="w"> </span>vis.dovis<span class="o">=</span><span class="m">0</span></span>
+<span class="prompt1">pyro_sim.py<span class="w"> </span>incompressible_viscous<span class="w"> </span>converge<span class="w"> </span>inputs.converge.64<span class="w"> </span>vis.dovis<span class="o">=</span><span class="m">0</span></span>
+<span class="prompt1">pyro_sim.py<span class="w"> </span>incompressible_viscous<span class="w"> </span>converge<span class="w"> </span>inputs.converge.128<span class="w"> </span>vis.dovis<span class="o">=</span><span class="m">0</span></span>
+</pre></div></div><p>The error is measured by comparing with the analytic solution using
+the routine <code class="docutils literal notranslate"><span class="pre">incomp_viscous_converge_error.py</span></code> in <code class="docutils literal notranslate"><span class="pre">analysis/</span></code>. To
+generate the plot below, run</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">python<span class="w"> </span>incompressible_viscous/tests/convergence_errors.py<span class="w"> </span>convergence_errors.txt</span>
+</pre></div></div><p>or <code class="docutils literal notranslate"><span class="pre">convergence_errors_no_limiter.txt</span></code> after running with that option. Then:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">python<span class="w"> </span>incompressible_viscous/tests/convergence_plot.py</span>
+</pre></div></div><img alt="_images/incomp_viscous_converge.png" class="align-center" src="_images/incomp_viscous_converge.png" />
+<p>The solver is converging but below second-order, unlike the inviscid case. Limiting
+does not seem to make a difference here.</p>
+</section>
+</section>
+</section>
 <section id="exercises">
 <h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
 <section id="explorations">
@@ -681,6 +945,9 @@ second order with no limiting.</p>
 <li><p>Disable the MAC projection and run the converge problem—is the method still 2nd order?</p></li>
 <li><p>Disable all projections—does the solution still even try to preserve <span class="math notranslate nohighlight">\(\nabla \cdot U = 0\)</span>?</p></li>
 <li><p>Experiment with what is projected. Try projecting <span class="math notranslate nohighlight">\(U_t\)</span> to see if that makes a difference.</p></li>
+<li><p>In the lid-driven cavity problem, when does the solution reach a steady-state?</p></li>
+<li><p><span id="id14">[<a class="reference internal" href="zreferences.html#id10" title="U. Ghia, K. N. Ghia, and C. T. Shin. High-Re Solutions for Incompressible Flow Using the Navier-Stokes Equations and a Multigrid Method. Journal of Computational Physics, 48(3):387-411, December 1982. doi:10.1016/0021-9991(82)90058-4.">GhiaGhiaShin82</a>]</span> give benchmark velocities at different Reynolds number for the
+lid-driven cavity problem (see their Table I). Do we agree with their results?</p></li>
 </ul>
 </section>
 <section id="extensions">
@@ -689,24 +956,11 @@ second order with no limiting.</p>
 <li><p>Switch the final projection from a cell-centered approximate
 projection to a nodal projection. This will require writing a new
 multigrid solver that operates on nodal data.</p></li>
-<li><p>Add viscosity to the system. This will require doing 2 parabolic
-solves (one for each velocity component). These solves will look
-like the diffusion operation, and will update the provisional
-velocity field.</p></li>
 <li><p>Switch to a variable density system. This will require adding a mass
 continuity equation that is advected and switching the projections
 to a variable-coefficient form (since ρ now enters).</p></li>
 </ul>
 </section>
-</section>
-<section id="going-further">
-<h2>Going further<a class="headerlink" href="#going-further" title="Link to this heading">#</a></h2>
-<p>The incompressible algorithm presented here is a simplified version of
-the projection methods used in the <a class="reference external" href="http://amrex-astro.github.io/MAESTRO/">Maestro low Mach number
-hydrodynamics code</a>. Maestro
-can do variable-density incompressible, anelastic, and low Mach number
-stratified flows in stellar (and terrestrial) environments in close
-hydrostatic equilibrium.</p>
 </section>
 </section>
 
@@ -731,11 +985,11 @@ hydrostatic equilibrium.</p>
       </div>
     </a>
     <a class="right-next"
-       href="incompressible_viscous_basics.html"
+       href="lowmach_basics.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Incompressible viscous hydrodynamics solver</p>
+        <p class="prev-next-title">Low Mach number hydrodynamics</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -755,9 +1009,32 @@ hydrostatic equilibrium.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shear">shear</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convergence">convergence</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#incompressible-solver"><code class="docutils literal notranslate"><span class="pre">incompressible</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-problems">supported problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#converge"><code class="docutils literal notranslate"><span class="pre">converge</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#shear"><code class="docutils literal notranslate"><span class="pre">shear</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">shear</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#convergence">convergence</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#incompressible-viscous-solver"><code class="docutils literal notranslate"><span class="pre">incompressible_viscous</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">supported problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6"><code class="docutils literal notranslate"><span class="pre">converge</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7"><code class="docutils literal notranslate"><span class="pre">shear</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cavity"><code class="docutils literal notranslate"><span class="pre">cavity</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">shear</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">cavity</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">convergence</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a><ul class="nav section-nav flex-column">
@@ -765,7 +1042,6 @@ hydrostatic equilibrium.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extensions">Extensions</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#going-further">Going further</a></li>
 </ul>
   </nav></div>
 

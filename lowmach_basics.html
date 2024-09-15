@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Low Mach number hydrodynamics solver &#8212; pyro 4.3.0.post6+g075ce404 documentation</title>
+    <title>Low Mach number hydrodynamics &#8212; pyro 4.3.0.post7+g903285ee documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=963e3132"></script>
+    <script src="_static/documentation_options.js?v=22c05107"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -51,8 +51,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'lowmach_basics';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Shallow water solver" href="swe_basics.html" />
-    <link rel="prev" title="Incompressible viscous hydrodynamics solver" href="incompressible_viscous_basics.html" />
+    <link rel="next" title="Shallow water hydrodynamics" href="swe_basics.html" />
+    <link rel="prev" title="Incompressible hydrodynamics" href="incompressible_basics.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -190,14 +190,13 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Hydro Solvers</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection</a></li>
 <li class="toctree-l1"><a class="reference internal" href="burgers_basics.html">Burgers’ Equation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
-<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="incompressible_viscous_basics.html">Incompressible viscous hydrodynamics solver</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Low Mach number hydrodynamics solver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Low Mach number hydrodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water hydrodynamics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
@@ -524,7 +523,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Low Mach number hydrodynamics solver</h1>
+    <h1>Low Mach number hydrodynamics</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -534,8 +533,12 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bubble">bubble</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lm-atm-solver"><code class="docutils literal notranslate"><span class="pre">lm_atm</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-problems">supported problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bubble"><code class="docutils literal notranslate"><span class="pre">bubble</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gresho"><code class="docutils literal notranslate"><span class="pre">gresho</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -549,8 +552,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="low-mach-number-hydrodynamics-solver">
-<h1>Low Mach number hydrodynamics solver<a class="headerlink" href="#low-mach-number-hydrodynamics-solver" title="Link to this heading">#</a></h1>
+  <section id="low-mach-number-hydrodynamics">
+<h1>Low Mach number hydrodynamics<a class="headerlink" href="#low-mach-number-hydrodynamics" title="Link to this heading">#</a></h1>
 <p>pyro’s low Mach hydrodynamics solver is designed for atmospheric
 flows. It captures the effects of stratification on a fluid element by
 enforcing a divergence constraint on the velocity field.  The
@@ -560,6 +563,8 @@ governing equations are:</p>
 \frac{\partial U}{\partial t} + U \cdot \nabla U + \frac{\beta_0}{\rho} \nabla \left ( \frac{p'}{\beta_0} \right ) &amp;= \frac{\rho'}{\rho} g \\
 \nabla \cdot (\beta_0 U) = 0\end{split}\]</div>
 <p>with <span class="math notranslate nohighlight">\(\nabla p_0 = \rho_0 g\)</span> and <span class="math notranslate nohighlight">\(\beta_0 = p_0^{1/\gamma}\)</span>.</p>
+<section id="lm-atm-solver">
+<h2><code class="docutils literal notranslate"><span class="pre">lm_atm</span></code> solver<a class="headerlink" href="#lm-atm-solver" title="Link to this heading">#</a></h2>
 <p>As with the incompressible solver, we implement a cell-centered approximate projection method.</p>
 <p>The main parameters that affect this solver are:</p>
 <ul>
@@ -623,19 +628,76 @@ governing equations are:</p>
 </div>
 </li>
 </ul>
-<section id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
+<section id="supported-problems">
+<h3>supported problems<a class="headerlink" href="#supported-problems" title="Link to this heading">#</a></h3>
 <section id="bubble">
-<h3>bubble<a class="headerlink" href="#bubble" title="Link to this heading">#</a></h3>
-<p>The bubble problem places a buoyant bubble in a stratified atmosphere
-and watches the development of the roll-up due to shear as it
-rises. This is run as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
-span.prompt1:before {
-  content: "$ ";
-}
-</style><span class="prompt1">pyro_sim.py<span class="w"> </span>lm_atm<span class="w"> </span>bubble<span class="w"> </span>inputs.bubble</span>
-</pre></div></div></section>
+<h4><code class="docutils literal notranslate"><span class="pre">bubble</span></code><a class="headerlink" href="#bubble" title="Link to this heading">#</a></h4>
+<p>parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.dens_base</span></code></p></td>
+<td><p>10.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.scale_height</span></code></p></td>
+<td><p>2.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.x_pert</span></code></p></td>
+<td><p>2.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.y_pert</span></code></p></td>
+<td><p>2.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.r_pert</span></code></p></td>
+<td><p>0.25</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.pert_amplitude_factor</span></code></p></td>
+<td><p>5.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.dens_cutoff</span></code></p></td>
+<td><p>0.01</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="gresho">
+<h4><code class="docutils literal notranslate"><span class="pre">gresho</span></code><a class="headerlink" href="#gresho" title="Link to this heading">#</a></h4>
+<p>parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gresho.dens_base</span></code></p></td>
+<td><p>10.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gresho.scale_height</span></code></p></td>
+<td><p>2.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gresho.r</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gresho.u0</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gresho.p0</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gresho.dens_cutoff</span></code></p></td>
+<td><p>0.01</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
 </section>
 </section>
 
@@ -651,12 +713,12 @@ span.prompt1:before {
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="incompressible_viscous_basics.html"
+       href="incompressible_basics.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Incompressible viscous hydrodynamics solver</p>
+        <p class="prev-next-title">Incompressible hydrodynamics</p>
       </div>
     </a>
     <a class="right-next"
@@ -664,7 +726,7 @@ span.prompt1:before {
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Shallow water solver</p>
+        <p class="prev-next-title">Shallow water hydrodynamics</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -684,8 +746,12 @@ span.prompt1:before {
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bubble">bubble</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lm-atm-solver"><code class="docutils literal notranslate"><span class="pre">lm_atm</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-problems">supported problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bubble"><code class="docutils literal notranslate"><span class="pre">bubble</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gresho"><code class="docutils literal notranslate"><span class="pre">gresho</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Shallow water solver &#8212; pyro 4.3.0.post6+g075ce404 documentation</title>
+    <title>Shallow water hydrodynamics &#8212; pyro 4.3.0.post7+g903285ee documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=963e3132"></script>
+    <script src="_static/documentation_options.js?v=22c05107"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,7 +52,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Particles" href="particles_basics.html" />
-    <link rel="prev" title="Low Mach number hydrodynamics solver" href="lowmach_basics.html" />
+    <link rel="prev" title="Low Mach number hydrodynamics" href="lowmach_basics.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -190,14 +190,13 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Hydro Solvers</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection</a></li>
 <li class="toctree-l1"><a class="reference internal" href="burgers_basics.html">Burgers’ Equation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
-<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="incompressible_viscous_basics.html">Incompressible viscous hydrodynamics solver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Shallow water solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Shallow water hydrodynamics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
@@ -524,7 +523,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Shallow water solver</h1>
+    <h1>Shallow water hydrodynamics</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -534,10 +533,21 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-problems">Example problems</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dam">dam</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quad">quad</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kh">kh</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#swe-solver"><code class="docutils literal notranslate"><span class="pre">swe</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-problems">supported problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#kh"><code class="docutils literal notranslate"><span class="pre">kh</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#quad"><code class="docutils literal notranslate"><span class="pre">quad</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#advect"><code class="docutils literal notranslate"><span class="pre">advect</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acoustic-pulse"><code class="docutils literal notranslate"><span class="pre">acoustic_pulse</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#logo"><code class="docutils literal notranslate"><span class="pre">logo</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#test"><code class="docutils literal notranslate"><span class="pre">test</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dam"><code class="docutils literal notranslate"><span class="pre">dam</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">dam</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a><ul class="nav section-nav flex-column">
@@ -556,8 +566,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="shallow-water-solver">
-<h1>Shallow water solver<a class="headerlink" href="#shallow-water-solver" title="Link to this heading">#</a></h1>
+  <section id="shallow-water-hydrodynamics">
+<h1>Shallow water hydrodynamics<a class="headerlink" href="#shallow-water-hydrodynamics" title="Link to this heading">#</a></h1>
 <p>The (augmented) shallow water equations take the form:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\frac{\partial h}{\partial t} + \nabla \cdot (h U) &amp;= 0 \\
@@ -566,7 +576,9 @@ document.write(`
 <p>with <span class="math notranslate nohighlight">\(h\)</span> is the fluid height, <span class="math notranslate nohighlight">\(U\)</span> the fluid velocity, <span class="math notranslate nohighlight">\(g\)</span> the
 gravitational acceleration and <span class="math notranslate nohighlight">\(\psi = \psi(x, t)\)</span> represents some
 passive scalar.</p>
-<p>The implementation here has flattening at shocks and a choice of Riemann solvers.</p>
+<section id="swe-solver">
+<h2><code class="docutils literal notranslate"><span class="pre">swe</span></code> solver<a class="headerlink" href="#swe-solver" title="Link to this heading">#</a></h2>
+<p>The pyro <code class="docutils literal notranslate"><span class="pre">swe</span></code> implementation has flattening at shocks and a choice of Riemann solvers.</p>
 <p>The main parameters that affect this solver are:</p>
 <ul>
 <li><p>section: <code class="docutils literal notranslate"><span class="pre">[driver]</span></code></p>
@@ -641,17 +653,163 @@ passive scalar.</p>
 </div>
 </li>
 </ul>
-<section id="example-problems">
-<h2>Example problems<a class="headerlink" href="#example-problems" title="Link to this heading">#</a></h2>
+<section id="supported-problems">
+<h3>supported problems<a class="headerlink" href="#supported-problems" title="Link to this heading">#</a></h3>
+<section id="kh">
+<h4><code class="docutils literal notranslate"><span class="pre">kh</span></code><a class="headerlink" href="#kh" title="Link to this heading">#</a></h4>
+<p>parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kh.h_1</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">kh.v_1</span></code></p></td>
+<td><p>-1.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kh.h_2</span></code></p></td>
+<td><p>2.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">kh.v_2</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="quad">
+<h4><code class="docutils literal notranslate"><span class="pre">quad</span></code><a class="headerlink" href="#quad" title="Link to this heading">#</a></h4>
+<p>parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.h1</span></code></p></td>
+<td><p>1.5</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.u1</span></code></p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.v1</span></code></p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.h2</span></code></p></td>
+<td><p>0.532258064516129</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.u2</span></code></p></td>
+<td><p>1.206045378311055</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.v2</span></code></p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.h3</span></code></p></td>
+<td><p>0.137992831541219</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.u3</span></code></p></td>
+<td><p>1.206045378311055</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.v3</span></code></p></td>
+<td><p>1.206045378311055</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.h4</span></code></p></td>
+<td><p>0.532258064516129</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.u4</span></code></p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.v4</span></code></p></td>
+<td><p>1.206045378311055</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.cx</span></code></p></td>
+<td><p>0.5</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.cy</span></code></p></td>
+<td><p>0.5</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="advect">
+<h4><code class="docutils literal notranslate"><span class="pre">advect</span></code><a class="headerlink" href="#advect" title="Link to this heading">#</a></h4>
+</section>
+<section id="acoustic-pulse">
+<h4><code class="docutils literal notranslate"><span class="pre">acoustic_pulse</span></code><a class="headerlink" href="#acoustic-pulse" title="Link to this heading">#</a></h4>
+<p>parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">acoustic_pulse.h0</span></code></p></td>
+<td><p>1.4</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">acoustic_pulse.dh0</span></code></p></td>
+<td><p>0.14</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="logo">
+<h4><code class="docutils literal notranslate"><span class="pre">logo</span></code><a class="headerlink" href="#logo" title="Link to this heading">#</a></h4>
+</section>
+<section id="test">
+<h4><code class="docutils literal notranslate"><span class="pre">test</span></code><a class="headerlink" href="#test" title="Link to this heading">#</a></h4>
+</section>
 <section id="dam">
-<h3>dam<a class="headerlink" href="#dam" title="Link to this heading">#</a></h3>
-<p>The dam break problem is a standard hydrodynamics problem, analogous to the Sod
-shock tube problem in compressible hydrodynamics. It considers a one-multidimensional
-problem of two regions of fluid at different heights, initially separated by a dam.
-The problem then models the evolution of the system when this dam is removed.
-As for the Sod problem, there exists an exact solution for the dam break problem,
-so we can check our solution against the exact solutions. See Toro’s shallow water
-equations book for details on this problem and the exact Riemann solver.</p>
+<h4><code class="docutils literal notranslate"><span class="pre">dam</span></code><a class="headerlink" href="#dam" title="Link to this heading">#</a></h4>
+<p>parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dam.direction</span></code></p></td>
+<td><p>x</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dam.h_left</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dam.h_right</span></code></p></td>
+<td><p>0.125</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dam.u_left</span></code></p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dam.u_right</span></code></p></td>
+<td><p>0.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
+<section id="id1">
+<h3>dam<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<p>The dam break problem is a standard hydrodynamics problem, analogous
+to the Sod shock tube problem in compressible hydrodynamics. It
+considers a one-multidimensional problem of two regions of fluid at
+different heights, initially separated by a dam.  The problem then
+models the evolution of the system when this dam is removed.  As for
+the Sod problem, there exists an exact solution for the dam break
+problem, so we can check our solution against the exact solutions. See
+Toro’s shallow water equations book for details on this problem and
+the exact Riemann solver.</p>
 <p>Because it is one-dimensional, we run it in narrow domains in the x- or
 y-directions. It can be run as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
@@ -662,7 +820,7 @@ span.prompt1:before {
 <span class="prompt1">pyro_sim.py<span class="w"> </span>swe<span class="w"> </span>dam<span class="w"> </span>inputs.dam.y</span>
 </pre></div></div><p>A simple script, <code class="docutils literal notranslate"><span class="pre">dam_compare.py</span></code> in <code class="docutils literal notranslate"><span class="pre">analysis/</span></code> will read a pyro
 output file and plot the solution over the exact dam break solution
-(as given by <span id="id1">[<a class="reference internal" href="zreferences.html#id5" title="J. J. Stoker and R. Bruce Lindsay. Water waves. Physics Today, 11(8):28-30, 1958. URL: https://pubs.aip.org/physicstoday/article/11/8/28/927415/Water-Waves.">SL58</a>]</span> and <span id="id2">[<a class="reference internal" href="zreferences.html#id6" title="Chao Wu, Guofu Huang, and Yonghong Zheng. Theoretical solution of dam-break shock wave. Journal of Hydraulic Engineering, 125(11):1210-1215, 1999.">WHZ99</a>]</span>).  Below we see
+(as given by <span id="id2">[<a class="reference internal" href="zreferences.html#id5" title="J. J. Stoker and R. Bruce Lindsay. Water waves. Physics Today, 11(8):28-30, 1958. URL: https://pubs.aip.org/physicstoday/article/11/8/28/927415/Water-Waves.">SL58</a>]</span> and <span id="id3">[<a class="reference internal" href="zreferences.html#id6" title="Chao Wu, Guofu Huang, and Yonghong Zheng. Theoretical solution of dam-break shock wave. Journal of Hydraulic Engineering, 125(11):1210-1215, 1999.">WHZ99</a>]</span>).  Below we see
 the result for a dam break run with 128 points in the x-direction, and
 run until t = 0.3 s.</p>
 <img alt="_images/dam_compare.png" class="align-center" src="_images/dam_compare.png" />
@@ -671,24 +829,6 @@ steep, as expected. For this problem, the Roe-fix solver performs
 slightly better than the HLLC solver, with less smearing at the shock
 and head/tail of the rarefaction.</p>
 </section>
-<section id="quad">
-<h3>quad<a class="headerlink" href="#quad" title="Link to this heading">#</a></h3>
-<p>The quad problem sets up different states in four regions of the
-domain and watches the complex interfaces that develop as shocks
-interact. This problem has appeared in several places (and a <a class="reference external" href="http://planets.utsc.utoronto.ca/~pawel/Riemann.hydro.html">detailed
-investigation</a> is
-online by Pawel Artymowicz). It is run as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pyro_sim.py<span class="w"> </span>swe<span class="w"> </span>quad<span class="w"> </span>inputs.quad</span>
-</pre></div></div></section>
-<section id="kh">
-<h3>kh<a class="headerlink" href="#kh" title="Link to this heading">#</a></h3>
-<p>The Kelvin-Helmholtz problem models three layers of fluid: two at the top and
-bottom of the domain travelling in one direction, one in the central part of the
-domain travelling in the opposite direction. At the interface of the layers,
-shearing produces the characteristic Kelvin-Helmholtz instabilities, just as
-is seen in the standard compressible problem. It is run as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pyro_sim.py<span class="w"> </span>swe<span class="w"> </span>kh<span class="w"> </span>inputs.kh</span>
-</pre></div></div></section>
 </section>
 <section id="exercises">
 <h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
@@ -731,7 +871,7 @@ this change.)</p></li>
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Low Mach number hydrodynamics solver</p>
+        <p class="prev-next-title">Low Mach number hydrodynamics</p>
       </div>
     </a>
     <a class="right-next"
@@ -759,10 +899,21 @@ this change.)</p></li>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-problems">Example problems</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dam">dam</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quad">quad</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kh">kh</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#swe-solver"><code class="docutils literal notranslate"><span class="pre">swe</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-problems">supported problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#kh"><code class="docutils literal notranslate"><span class="pre">kh</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#quad"><code class="docutils literal notranslate"><span class="pre">quad</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#advect"><code class="docutils literal notranslate"><span class="pre">advect</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acoustic-pulse"><code class="docutils literal notranslate"><span class="pre">acoustic_pulse</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#logo"><code class="docutils literal notranslate"><span class="pre">logo</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#test"><code class="docutils literal notranslate"><span class="pre">test</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dam"><code class="docutils literal notranslate"><span class="pre">dam</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">dam</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a><ul class="nav section-nav flex-column">

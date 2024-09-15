@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Advection solvers &#8212; pyro 4.3.0.post6+g075ce404 documentation</title>
+    <title>Advection &#8212; pyro 4.3.0.post7+g903285ee documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=963e3132"></script>
+    <script src="_static/documentation_options.js?v=22c05107"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -190,14 +190,13 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Hydro Solvers</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Advection solvers</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Advection</a></li>
 <li class="toctree-l1"><a class="reference internal" href="burgers_basics.html">Burgers’ Equation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
-<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="incompressible_viscous_basics.html">Incompressible viscous hydrodynamics solver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water hydrodynamics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
@@ -524,7 +523,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Advection solvers</h1>
+    <h1>Advection</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -534,15 +533,38 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advection-solver"><code class="docutils literal notranslate"><span class="pre">advection</span></code> solver</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advection-fv4-solver"><code class="docutils literal notranslate"><span class="pre">advection_fv4</span></code> solver</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advection-nonuniform-solver"><code class="docutils literal notranslate"><span class="pre">advection_nonuniform</span></code> solver</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advection-rk-solver"><code class="docutils literal notranslate"><span class="pre">advection_rk</span></code> solver</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advection-weno-solver"><code class="docutils literal notranslate"><span class="pre">advection_weno</span></code> solver</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advection-solver"><code class="docutils literal notranslate"><span class="pre">advection</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-problems">supported problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smooth"><code class="docutils literal notranslate"><span class="pre">smooth</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#test"><code class="docutils literal notranslate"><span class="pre">test</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tophat"><code class="docutils literal notranslate"><span class="pre">tophat</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advection-fv4-solver"><code class="docutils literal notranslate"><span class="pre">advection_fv4</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">supported problems</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advection-nonuniform-solver"><code class="docutils literal notranslate"><span class="pre">advection_nonuniform</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">supported problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#slotted"><code class="docutils literal notranslate"><span class="pre">slotted</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6"><code class="docutils literal notranslate"><span class="pre">test</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advection-rk-solver"><code class="docutils literal notranslate"><span class="pre">advection_rk</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">supported problems</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advection-weno-solver"><code class="docutils literal notranslate"><span class="pre">advection_weno</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">supported problems</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-ideas">General ideas</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smooth">smooth</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tophat">tophat</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">smooth</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a><ul class="nav section-nav flex-column">
@@ -561,8 +583,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="advection-solvers">
-<h1>Advection solvers<a class="headerlink" href="#advection-solvers" title="Link to this heading">#</a></h1>
+  <section id="advection">
+<h1>Advection<a class="headerlink" href="#advection" title="Link to this heading">#</a></h1>
 <p>The linear advection equation:</p>
 <div class="math notranslate nohighlight">
 \[a_t + u a_x + v a_y = 0\]</div>
@@ -645,6 +667,18 @@ by</p>
 </div>
 </li>
 </ul>
+<section id="supported-problems">
+<h3>supported problems<a class="headerlink" href="#supported-problems" title="Link to this heading">#</a></h3>
+<section id="smooth">
+<h4><code class="docutils literal notranslate"><span class="pre">smooth</span></code><a class="headerlink" href="#smooth" title="Link to this heading">#</a></h4>
+</section>
+<section id="test">
+<h4><code class="docutils literal notranslate"><span class="pre">test</span></code><a class="headerlink" href="#test" title="Link to this heading">#</a></h4>
+</section>
+<section id="tophat">
+<h4><code class="docutils literal notranslate"><span class="pre">tophat</span></code><a class="headerlink" href="#tophat" title="Link to this heading">#</a></h4>
+</section>
+</section>
 </section>
 <section id="advection-fv4-solver">
 <h2><code class="docutils literal notranslate"><span class="pre">advection_fv4</span></code> solver<a class="headerlink" href="#advection-fv4-solver" title="Link to this heading">#</a></h2>
@@ -706,12 +740,16 @@ faces of the zones to achieve 4th order accuracy spatially.</p>
 </div>
 </li>
 </ul>
+<section id="id3">
+<h3>supported problems<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">advection_fv4</span></code> uses the problems defined by <code class="docutils literal notranslate"><span class="pre">advection</span></code>.</p>
+</section>
 </section>
 <section id="advection-nonuniform-solver">
 <h2><code class="docutils literal notranslate"><span class="pre">advection_nonuniform</span></code> solver<a class="headerlink" href="#advection-nonuniform-solver" title="Link to this heading">#</a></h2>
 <p><a class="reference internal" href="pyro.advection_nonuniform.html#module-pyro.advection_nonuniform" title="pyro.advection_nonuniform"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.advection_nonuniform</span></code></a> models advection with a non-uniform
 velocity field.  This is used to implement the slotted disk problem
-from <span id="id3">[<a class="reference internal" href="zreferences.html#id4" title="Steven T Zalesak. Fully multidimensional flux-corrected transport algorithms for fluids. Journal of Computational Physics, 31(3):335 - 362, 1979. doi:https://doi.org/10.1016/0021-9991(79)90051-2.">Zal79</a>]</span>.  The basic method is similar to the
+from <span id="id4">[<a class="reference internal" href="zreferences.html#id4" title="Steven T Zalesak. Fully multidimensional flux-corrected transport algorithms for fluids. Journal of Computational Physics, 31(3):335 - 362, 1979. doi:https://doi.org/10.1016/0021-9991(79)90051-2.">Zal79</a>]</span>.  The basic method is similar to the
 algorithm used by the main <code class="docutils literal notranslate"><span class="pre">advection</span></code> solver.</p>
 <p>The parameters for this solver are:</p>
 <ul>
@@ -779,6 +817,32 @@ algorithm used by the main <code class="docutils literal notranslate"><span clas
 </div>
 </li>
 </ul>
+<section id="id5">
+<h3>supported problems<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<section id="slotted">
+<h4><code class="docutils literal notranslate"><span class="pre">slotted</span></code><a class="headerlink" href="#slotted" title="Link to this heading">#</a></h4>
+<p>parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">slotted.omega</span></code></p></td>
+<td><p>0.5</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">slotted.offset</span></code></p></td>
+<td><p>0.25</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id6">
+<h4><code class="docutils literal notranslate"><span class="pre">test</span></code><a class="headerlink" href="#id6" title="Link to this heading">#</a></h4>
+</section>
+</section>
 </section>
 <section id="advection-rk-solver">
 <h2><code class="docutils literal notranslate"><span class="pre">advection_rk</span></code> solver<a class="headerlink" href="#advection-rk-solver" title="Link to this heading">#</a></h2>
@@ -837,6 +901,10 @@ order).</p>
 </div>
 </li>
 </ul>
+<section id="id7">
+<h3>supported problems<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">advection_rk</span></code> uses the problems defined by <code class="docutils literal notranslate"><span class="pre">advection</span></code>.</p>
+</section>
 </section>
 <section id="advection-weno-solver">
 <h2><code class="docutils literal notranslate"><span class="pre">advection_weno</span></code> solver<a class="headerlink" href="#advection-weno-solver" title="Link to this heading">#</a></h2>
@@ -896,6 +964,10 @@ base class</p></td>
 </div>
 </li>
 </ul>
+<section id="id8">
+<h3>supported problems<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">advection_weno</span></code> uses the problems defined by <code class="docutils literal notranslate"><span class="pre">advection</span></code>.</p>
+</section>
 </section>
 <section id="general-ideas">
 <h2>General ideas<a class="headerlink" href="#general-ideas" title="Link to this heading">#</a></h2>
@@ -909,8 +981,8 @@ reconstruction, evolution, and averaging steps:</p>
 </div><br></section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
-<section id="smooth">
-<h3>smooth<a class="headerlink" href="#smooth" title="Link to this heading">#</a></h3>
+<section id="id9">
+<h3>smooth<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
 <p>The smooth problem initializes a Gaussian profile and advects it with
 <span class="math notranslate nohighlight">\(u = v = 1\)</span> through periodic boundaries for a period. The result is that
 the final state should be identical to the initial state—any
@@ -934,12 +1006,6 @@ lines show ideal scaling.  We see that we achieve nearly 2nd order
 convergence for the <code class="docutils literal notranslate"><span class="pre">advection</span></code> solver and 4th order convergence
 with the <code class="docutils literal notranslate"><span class="pre">advection_fv4</span></code> solver.  Departures from perfect scaling
 are likely due to the use of limiters.</p>
-</section>
-<section id="tophat">
-<h3>tophat<a class="headerlink" href="#tophat" title="Link to this heading">#</a></h3>
-<p>The tophat problem initializes a circle in the center of the domain
-with value 1, and 0 outside. This has very steep jumps, and the
-limiters will kick in strongly here.</p>
 </section>
 </section>
 <section id="exercises">
@@ -1026,15 +1092,38 @@ rarefactions, so some very interesting flow problems can be setup.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advection-solver"><code class="docutils literal notranslate"><span class="pre">advection</span></code> solver</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advection-fv4-solver"><code class="docutils literal notranslate"><span class="pre">advection_fv4</span></code> solver</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advection-nonuniform-solver"><code class="docutils literal notranslate"><span class="pre">advection_nonuniform</span></code> solver</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advection-rk-solver"><code class="docutils literal notranslate"><span class="pre">advection_rk</span></code> solver</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advection-weno-solver"><code class="docutils literal notranslate"><span class="pre">advection_weno</span></code> solver</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advection-solver"><code class="docutils literal notranslate"><span class="pre">advection</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-problems">supported problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#smooth"><code class="docutils literal notranslate"><span class="pre">smooth</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#test"><code class="docutils literal notranslate"><span class="pre">test</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tophat"><code class="docutils literal notranslate"><span class="pre">tophat</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advection-fv4-solver"><code class="docutils literal notranslate"><span class="pre">advection_fv4</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">supported problems</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advection-nonuniform-solver"><code class="docutils literal notranslate"><span class="pre">advection_nonuniform</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">supported problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#slotted"><code class="docutils literal notranslate"><span class="pre">slotted</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6"><code class="docutils literal notranslate"><span class="pre">test</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advection-rk-solver"><code class="docutils literal notranslate"><span class="pre">advection_rk</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">supported problems</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advection-weno-solver"><code class="docutils literal notranslate"><span class="pre">advection_weno</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">supported problems</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-ideas">General ideas</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smooth">smooth</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tophat">tophat</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">smooth</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a><ul class="nav section-nav flex-column">

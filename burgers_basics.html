@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Burgers’ Equation &#8212; pyro 4.3.0.post6+g075ce404 documentation</title>
+    <title>Burgers’ Equation &#8212; pyro 4.3.0.post7+g903285ee documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=963e3132"></script>
+    <script src="_static/documentation_options.js?v=22c05107"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -51,8 +51,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'burgers_basics';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Compressible hydrodynamics solvers" href="compressible_basics.html" />
-    <link rel="prev" title="Advection solvers" href="advection_basics.html" />
+    <link rel="next" title="Compressible hydrodynamics" href="compressible_basics.html" />
+    <link rel="prev" title="Advection" href="advection_basics.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -190,14 +190,13 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Hydro Solvers</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Burgers’ Equation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
-<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="incompressible_viscous_basics.html">Incompressible viscous hydrodynamics solver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water hydrodynamics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
@@ -534,8 +533,26 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inviscid-burgers"><code class="docutils literal notranslate"><span class="pre">Inviscid</span> <span class="pre">Burgers</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#viscous-burgers"><code class="docutils literal notranslate"><span class="pre">Viscous</span> <span class="pre">Burgers</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inviscid-burgers"><code class="docutils literal notranslate"><span class="pre">Inviscid</span> <span class="pre">Burgers</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-problems">supported problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#converge"><code class="docutils literal notranslate"><span class="pre">converge</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#test"><code class="docutils literal notranslate"><span class="pre">test</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tophat"><code class="docutils literal notranslate"><span class="pre">tophat</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#viscous-burgers"><code class="docutils literal notranslate"><span class="pre">Viscous</span> <span class="pre">Burgers</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">supported problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><code class="docutils literal notranslate"><span class="pre">converge</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3"><code class="docutils literal notranslate"><span class="pre">test</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4"><code class="docutils literal notranslate"><span class="pre">tophat</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Example</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -549,7 +566,9 @@ document.write(`
                   
   <section id="burgers-equation">
 <h1>Burgers’ Equation<a class="headerlink" href="#burgers-equation" title="Link to this heading">#</a></h1>
-<p>Burgers’ Equation is a nonlinear hyperbolic equation. It has the same form as the advection equation, except that the quantity being advected is the velocity itself.</p>
+<p>Burgers’ Equation is a nonlinear hyperbolic equation. It has the same
+form as the advection equation, except that the quantity being
+advected is the velocity itself.</p>
 <section id="inviscid-burgers">
 <h2><code class="docutils literal notranslate"><span class="pre">Inviscid</span> <span class="pre">Burgers</span></code><a class="headerlink" href="#inviscid-burgers" title="Link to this heading">#</a></h2>
 <p>A 2D inviscid Burgers’ Equation has the following form:</p>
@@ -620,8 +639,30 @@ v_t + u v_x + v v_y = 0\end{split}\]</div>
 </div>
 </li>
 </ul>
+<section id="supported-problems">
+<h3>supported problems<a class="headerlink" href="#supported-problems" title="Link to this heading">#</a></h3>
+<section id="converge">
+<h4><code class="docutils literal notranslate"><span class="pre">converge</span></code><a class="headerlink" href="#converge" title="Link to this heading">#</a></h4>
+</section>
+<section id="test">
+<h4><code class="docutils literal notranslate"><span class="pre">test</span></code><a class="headerlink" href="#test" title="Link to this heading">#</a></h4>
+</section>
+<section id="tophat">
+<h4><code class="docutils literal notranslate"><span class="pre">tophat</span></code><a class="headerlink" href="#tophat" title="Link to this heading">#</a></h4>
+</section>
+</section>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h3>
 <img alt="_images/burgers.png" class="align-center" src="_images/burgers.png" />
-<p>The figure above is generated using <code class="docutils literal notranslate"><span class="pre">burgers/problems/test.py</span></code>, which is used to test the validity of the solver. Bottom-left of the domain has a higher velocity than the top-right domain. With <span class="math notranslate nohighlight">\(u_{i,j}=v_{i,j}\)</span>, the wave travels diagonally to the top-right with a constant velocity that is equal to the shock speed. <code class="docutils literal notranslate"><span class="pre">burgers/problem/verify.py</span></code> can be used to calculate the wave speed using outputs from <code class="docutils literal notranslate"><span class="pre">test.py</span></code> and compare to the theoretical shock speed.</p>
+<p>The figure above is generated using <code class="docutils literal notranslate"><span class="pre">burgers/problems/test.py</span></code>,
+which is used to test the validity of the solver. Bottom-left of the
+domain has a higher velocity than the top-right domain. With
+<span class="math notranslate nohighlight">\(u_{i,j}=v_{i,j}\)</span>, the wave travels diagonally to the top-right
+with a constant velocity that is equal to the shock
+speed. <code class="docutils literal notranslate"><span class="pre">burgers/problem/verify.py</span></code> can be used to calculate the wave
+speed using outputs from <code class="docutils literal notranslate"><span class="pre">test.py</span></code> and compare to the theoretical
+shock speed.</p>
+</section>
 </section>
 <section id="viscous-burgers">
 <h2><code class="docutils literal notranslate"><span class="pre">Viscous</span> <span class="pre">Burgers</span></code><a class="headerlink" href="#viscous-burgers" title="Link to this heading">#</a></h2>
@@ -638,11 +679,26 @@ when constructing the interface states. We then solve for diffusion
 along with the extra advective source to the Helmholtz equation by
 using the Crank-Nicolson discretization and multigrid solvers.</p>
 <p>The parameters for this solver are:</p>
+<section id="id1">
+<h3>supported problems<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<section id="id2">
+<h4><code class="docutils literal notranslate"><span class="pre">converge</span></code><a class="headerlink" href="#id2" title="Link to this heading">#</a></h4>
+</section>
+<section id="id3">
+<h4><code class="docutils literal notranslate"><span class="pre">test</span></code><a class="headerlink" href="#id3" title="Link to this heading">#</a></h4>
+</section>
+<section id="id4">
+<h4><code class="docutils literal notranslate"><span class="pre">tophat</span></code><a class="headerlink" href="#id4" title="Link to this heading">#</a></h4>
+</section>
+</section>
+<section id="id5">
+<h3>Example<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
 <img alt="_images/viscous_burgers.png" class="align-center" src="_images/viscous_burgers.png" />
 <p>The figure above is generated using
 <code class="docutils literal notranslate"><span class="pre">burgers_viscous/problems/test.py</span></code>, which has the identical setup as
 in <code class="docutils literal notranslate"><span class="pre">burgers/problems/test.py</span></code>. With diffusion added to the system,
 we see the shock (discontinuity) is smeared out as system evolves.</p>
+</section>
 </section>
 </section>
 
@@ -663,7 +719,7 @@ we see the shock (discontinuity) is smeared out as system evolves.</p>
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Advection solvers</p>
+        <p class="prev-next-title">Advection</p>
       </div>
     </a>
     <a class="right-next"
@@ -671,7 +727,7 @@ we see the shock (discontinuity) is smeared out as system evolves.</p>
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Compressible hydrodynamics solvers</p>
+        <p class="prev-next-title">Compressible hydrodynamics</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -691,8 +747,26 @@ we see the shock (discontinuity) is smeared out as system evolves.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inviscid-burgers"><code class="docutils literal notranslate"><span class="pre">Inviscid</span> <span class="pre">Burgers</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#viscous-burgers"><code class="docutils literal notranslate"><span class="pre">Viscous</span> <span class="pre">Burgers</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inviscid-burgers"><code class="docutils literal notranslate"><span class="pre">Inviscid</span> <span class="pre">Burgers</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-problems">supported problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#converge"><code class="docutils literal notranslate"><span class="pre">converge</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#test"><code class="docutils literal notranslate"><span class="pre">test</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tophat"><code class="docutils literal notranslate"><span class="pre">tophat</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#viscous-burgers"><code class="docutils literal notranslate"><span class="pre">Viscous</span> <span class="pre">Burgers</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">supported problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><code class="docutils literal notranslate"><span class="pre">converge</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3"><code class="docutils literal notranslate"><span class="pre">test</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4"><code class="docutils literal notranslate"><span class="pre">tophat</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Example</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 

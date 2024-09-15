@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyro.compressible package &#8212; pyro 4.3.0.post6+g075ce404 documentation</title>
+    <title>pyro.compressible package &#8212; pyro 4.3.0.post7+g903285ee documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=963e3132"></script>
+    <script src="_static/documentation_options.js?v=22c05107"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -190,14 +190,13 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Hydro Solvers</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection</a></li>
 <li class="toctree-l1"><a class="reference internal" href="burgers_basics.html">Burgers’ Equation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
-<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="incompressible_viscous_basics.html">Incompressible viscous hydrodynamics solver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water hydrodynamics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
@@ -1254,7 +1253,7 @@ discussed in the Colella paper).</p>
 <li><p>use_flattening: set to 1 to use the multidimensional flattening at shocks</p></li>
 <li><p>delta, z0, z1: flattening parameters (we use Colella 1990 defaults)</p></li>
 </ul>
-<p>The grid indices look like:</p>
+<p>The grid indices look like</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">j</span><span class="o">+</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="o">--+---------+---------+---------+</span>
        <span class="o">|</span>         <span class="o">|</span>         <span class="o">|</span>         <span class="o">|</span>
   <span class="n">j</span><span class="o">+</span><span class="mi">1</span> <span class="n">_</span><span class="o">|</span>         <span class="o">|</span>         <span class="o">|</span>         <span class="o">|</span>
@@ -1438,67 +1437,38 @@ by adding the central difference part to the transverse flux
 difference.</p>
 <p>The states that we represent by indices i,j are shown below
 (1,2,3,4):</p>
-<blockquote>
-<div><dl>
-<dt>j+3/2–+———-+———-+———-+</dt><dd><blockquote>
-<div><div class="line-block">
-<div class="line">|          |          |</div>
-<div class="line">|          |          |</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">j</span><span class="o">+</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="o">--+----------+----------+----------+</span>
+       <span class="o">|</span>          <span class="o">|</span>          <span class="o">|</span>          <span class="o">|</span>
+       <span class="o">|</span>          <span class="o">|</span>          <span class="o">|</span>          <span class="o">|</span>
+  <span class="n">j</span><span class="o">+</span><span class="mi">1</span> <span class="o">-+</span>          <span class="o">|</span>          <span class="o">|</span>          <span class="o">|</span>
+       <span class="o">|</span>          <span class="o">|</span>          <span class="o">|</span>          <span class="o">|</span>
+       <span class="o">|</span>          <span class="o">|</span>          <span class="o">|</span>          <span class="o">|</span>    <span class="mi">1</span><span class="p">:</span> <span class="n">U_xl</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">U</span>
+<span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="o">--+----------</span><span class="n">XXXXXXXXXXXX</span><span class="o">----------+</span>                      <span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">L</span>
+       <span class="o">|</span>          <span class="n">X</span>          <span class="n">X</span>          <span class="o">|</span>
+       <span class="o">|</span>          <span class="n">X</span>          <span class="n">X</span>          <span class="o">|</span>
+    <span class="n">j</span> <span class="o">-+</span>        <span class="mi">1</span> <span class="n">X</span> <span class="mi">2</span>        <span class="n">X</span>          <span class="o">|</span>    <span class="mi">2</span><span class="p">:</span> <span class="n">U_xr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">U</span>
+       <span class="o">|</span>          <span class="n">X</span>          <span class="n">X</span>          <span class="o">|</span>                      <span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">R</span>
+       <span class="o">|</span>          <span class="n">X</span>    <span class="mi">4</span>     <span class="n">X</span>          <span class="o">|</span>
+<span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="o">--+----------</span><span class="n">XXXXXXXXXXXX</span><span class="o">----------+</span>
+       <span class="o">|</span>          <span class="o">|</span>    <span class="mi">3</span>     <span class="o">|</span>          <span class="o">|</span>    <span class="mi">3</span><span class="p">:</span> <span class="n">U_yl</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">U</span>
+       <span class="o">|</span>          <span class="o">|</span>          <span class="o">|</span>          <span class="o">|</span>                      <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">L</span>
+  <span class="n">j</span><span class="o">-</span><span class="mi">1</span> <span class="o">-+</span>          <span class="o">|</span>          <span class="o">|</span>          <span class="o">|</span>
+       <span class="o">|</span>          <span class="o">|</span>          <span class="o">|</span>          <span class="o">|</span>
+       <span class="o">|</span>          <span class="o">|</span>          <span class="o">|</span>          <span class="o">|</span>    <span class="mi">4</span><span class="p">:</span> <span class="n">U_yr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">U</span>
+<span class="n">j</span><span class="o">-</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="o">--+----------+----------+----------+</span>                      <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">R</span>
+       <span class="o">|</span>    <span class="o">|</span>     <span class="o">|</span>    <span class="o">|</span>     <span class="o">|</span>    <span class="o">|</span>     <span class="o">|</span>
+           <span class="n">i</span><span class="o">-</span><span class="mi">1</span>         <span class="n">i</span>         <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+     <span class="n">i</span><span class="o">-</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span>      <span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span>      <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span>      <span class="n">i</span><span class="o">+</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span>
+</pre></div>
 </div>
-</div></blockquote>
-<dl>
-<dt>j+1 -+          |          |          |</dt><dd><div class="line-block">
-<div class="line">|          |          |</div>
-<div class="line">|          |          |    1: U_xl[i,j,:] = U</div>
+<p>remember that the fluxes are stored on the left edge, so:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">F_x</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">F_x</span>
+                <span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">j</span>
+
+<span class="n">F_y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">F_y</span>
+                <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span>
+</pre></div>
 </div>
-</dd>
-</dl>
-</dd>
-<dt>j+1/2–+———-XXXXXXXXXXXX———-+                      i-1/2,j,L</dt><dd><blockquote>
-<div><div class="line-block">
-<div class="line">X          X          |</div>
-<div class="line">X          X          |</div>
-</div>
-</div></blockquote>
-<dl>
-<dt>j -+        1 X 2        X          |    2: U_xr[i,j,:] = U</dt><dd><div class="line-block">
-<div class="line">X          X          |                      i-1/2,j,R</div>
-<div class="line">X    4     X          |</div>
-</div>
-</dd>
-</dl>
-</dd>
-<dt>j-1/2–+———-XXXXXXXXXXXX———-+</dt><dd><blockquote>
-<div><div class="line-block">
-<div class="line">|    3     |          |    3: U_yl[i,j,:] = U</div>
-<div class="line">|          |          |                      i,j-1/2,L</div>
-</div>
-</div></blockquote>
-<dl>
-<dt>j-1 -+          |          |          |</dt><dd><div class="line-block">
-<div class="line">|          |          |</div>
-<div class="line">|          |          |    4: U_yr[i,j,:] = U</div>
-</div>
-</dd>
-</dl>
-</dd>
-<dt>j-3/2–+———-+———-+———-+                      i,j-1/2,R</dt><dd><blockquote>
-<div><div class="line-block">
-<div class="line">|     |    |     |    |     |
-i-1         i         i+1</div>
-</div>
-</div></blockquote>
-<p>i-3/2      i-1/2      i+1/2      i+3/2</p>
-</dd>
-</dl>
-</div></blockquote>
-<p>remember that the fluxes are stored on the left edge, so</p>
-<dl class="simple">
-<dt>F_x[i,j,:] = F_x</dt><dd><p>i-1/2, j</p>
-</dd>
-<dt>F_y[i,j,:] = F_y</dt><dd><p>i, j-1/2</p>
-</dd>
-</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">

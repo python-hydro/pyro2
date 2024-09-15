@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Compressible hydrodynamics solvers &#8212; pyro 4.3.0.post6+g075ce404 documentation</title>
+    <title>Compressible hydrodynamics &#8212; pyro 4.3.0.post7+g903285ee documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=963e3132"></script>
+    <script src="_static/documentation_options.js?v=22c05107"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -190,14 +190,13 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Hydro Solvers</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection</a></li>
 <li class="toctree-l1"><a class="reference internal" href="burgers_basics.html">Burgers’ Equation</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Compressible hydrodynamics solvers</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Compressible hydrodynamics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
-<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics solver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="incompressible_viscous_basics.html">Incompressible viscous hydrodynamics solver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics solver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swe_basics.html">Shallow water hydrodynamics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="particles_basics.html">Particles</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
@@ -524,7 +523,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Compressible hydrodynamics solvers</h1>
+    <h1>Compressible hydrodynamics</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -534,16 +533,44 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compressible-solver"><code class="docutils literal notranslate"><span class="pre">compressible</span></code> solver</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compressible-rk-solver"><code class="docutils literal notranslate"><span class="pre">compressible_rk</span></code> solver</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compressible-fv4-solver"><code class="docutils literal notranslate"><span class="pre">compressible_fv4</span></code> solver</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compressible-sdc-solver"><code class="docutils literal notranslate"><span class="pre">compressible_sdc</span></code> solver</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compressible-solver"><code class="docutils literal notranslate"><span class="pre">compressible</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-problems">supported problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#kh"><code class="docutils literal notranslate"><span class="pre">kh</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#quad"><code class="docutils literal notranslate"><span class="pre">quad</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#advect"><code class="docutils literal notranslate"><span class="pre">advect</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acoustic-pulse"><code class="docutils literal notranslate"><span class="pre">acoustic_pulse</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sod"><code class="docutils literal notranslate"><span class="pre">sod</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#logo"><code class="docutils literal notranslate"><span class="pre">logo</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#rt"><code class="docutils literal notranslate"><span class="pre">rt</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bubble"><code class="docutils literal notranslate"><span class="pre">bubble</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#test"><code class="docutils literal notranslate"><span class="pre">test</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sedov"><code class="docutils literal notranslate"><span class="pre">sedov</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#hse"><code class="docutils literal notranslate"><span class="pre">hse</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ramp"><code class="docutils literal notranslate"><span class="pre">ramp</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gresho"><code class="docutils literal notranslate"><span class="pre">gresho</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#rt2"><code class="docutils literal notranslate"><span class="pre">rt2</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compressible-rk-solver"><code class="docutils literal notranslate"><span class="pre">compressible_rk</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">supported problems</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compressible-fv4-solver"><code class="docutils literal notranslate"><span class="pre">compressible_fv4</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">supported problems</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compressible-sdc-solver"><code class="docutils literal notranslate"><span class="pre">compressible_sdc</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">supported problems</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-problems">Example problems</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sod">Sod</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sedov">Sedov</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quad">quad</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rt">rt</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bubble">bubble</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Sod</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Sedov</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">quad</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">rt</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">bubble</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a><ul class="nav section-nav flex-column">
@@ -551,7 +578,6 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extensions">Extensions</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#going-further">Going further</a></li>
 </ul>
             </nav>
         </div>
@@ -563,8 +589,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="compressible-hydrodynamics-solvers">
-<h1>Compressible hydrodynamics solvers<a class="headerlink" href="#compressible-hydrodynamics-solvers" title="Link to this heading">#</a></h1>
+  <section id="compressible-hydrodynamics">
+<h1>Compressible hydrodynamics<a class="headerlink" href="#compressible-hydrodynamics" title="Link to this heading">#</a></h1>
 <p>The Euler equations of compressible hydrodynamics take the form:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho U) &amp;= 0 \\
@@ -694,6 +720,370 @@ accurate.</p>
 </div>
 </li>
 </ul>
+<section id="supported-problems">
+<h3>supported problems<a class="headerlink" href="#supported-problems" title="Link to this heading">#</a></h3>
+<section id="kh">
+<h4><code class="docutils literal notranslate"><span class="pre">kh</span></code><a class="headerlink" href="#kh" title="Link to this heading">#</a></h4>
+<p>parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kh.rho_1</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">kh.u_1</span></code></p></td>
+<td><p>-1.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kh.rho_2</span></code></p></td>
+<td><p>2.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">kh.u_2</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kh.bulk_velocity</span></code></p></td>
+<td><p>0.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="quad">
+<h4><code class="docutils literal notranslate"><span class="pre">quad</span></code><a class="headerlink" href="#quad" title="Link to this heading">#</a></h4>
+<p>parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.rho1</span></code></p></td>
+<td><p>1.5</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.u1</span></code></p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.v1</span></code></p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.p1</span></code></p></td>
+<td><p>1.5</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.rho2</span></code></p></td>
+<td><p>0.532258064516129</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.u2</span></code></p></td>
+<td><p>1.206045378311055</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.v2</span></code></p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.p2</span></code></p></td>
+<td><p>0.3</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.rho3</span></code></p></td>
+<td><p>0.137992831541219</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.u3</span></code></p></td>
+<td><p>1.206045378311055</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.v3</span></code></p></td>
+<td><p>1.206045378311055</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.p3</span></code></p></td>
+<td><p>0.029032258064516</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.rho4</span></code></p></td>
+<td><p>0.532258064516129</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.u4</span></code></p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.v4</span></code></p></td>
+<td><p>1.206045378311055</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.p4</span></code></p></td>
+<td><p>0.3</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.cx</span></code></p></td>
+<td><p>0.5</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">quadrant.cy</span></code></p></td>
+<td><p>0.5</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="advect">
+<h4><code class="docutils literal notranslate"><span class="pre">advect</span></code><a class="headerlink" href="#advect" title="Link to this heading">#</a></h4>
+</section>
+<section id="acoustic-pulse">
+<h4><code class="docutils literal notranslate"><span class="pre">acoustic_pulse</span></code><a class="headerlink" href="#acoustic-pulse" title="Link to this heading">#</a></h4>
+<p>parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">acoustic_pulse.rho0</span></code></p></td>
+<td><p>1.4</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">acoustic_pulse.drho0</span></code></p></td>
+<td><p>0.14</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="sod">
+<h4><code class="docutils literal notranslate"><span class="pre">sod</span></code><a class="headerlink" href="#sod" title="Link to this heading">#</a></h4>
+<p>parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sod.direction</span></code></p></td>
+<td><p>x</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sod.dens_left</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sod.dens_right</span></code></p></td>
+<td><p>0.125</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sod.u_left</span></code></p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sod.u_right</span></code></p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sod.p_left</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sod.p_right</span></code></p></td>
+<td><p>0.1</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="logo">
+<h4><code class="docutils literal notranslate"><span class="pre">logo</span></code><a class="headerlink" href="#logo" title="Link to this heading">#</a></h4>
+</section>
+<section id="rt">
+<h4><code class="docutils literal notranslate"><span class="pre">rt</span></code><a class="headerlink" href="#rt" title="Link to this heading">#</a></h4>
+<p>parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt.dens1</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt.dens2</span></code></p></td>
+<td><p>2.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt.amp</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt.sigma</span></code></p></td>
+<td><p>0.1</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt.p0</span></code></p></td>
+<td><p>10.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="bubble">
+<h4><code class="docutils literal notranslate"><span class="pre">bubble</span></code><a class="headerlink" href="#bubble" title="Link to this heading">#</a></h4>
+<p>parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.dens_base</span></code></p></td>
+<td><p>10.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.scale_height</span></code></p></td>
+<td><p>2.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.x_pert</span></code></p></td>
+<td><p>2.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.y_pert</span></code></p></td>
+<td><p>2.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.r_pert</span></code></p></td>
+<td><p>0.25</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.pert_amplitude_factor</span></code></p></td>
+<td><p>5.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.dens_cutoff</span></code></p></td>
+<td><p>0.01</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="test">
+<h4><code class="docutils literal notranslate"><span class="pre">test</span></code><a class="headerlink" href="#test" title="Link to this heading">#</a></h4>
+</section>
+<section id="sedov">
+<h4><code class="docutils literal notranslate"><span class="pre">sedov</span></code><a class="headerlink" href="#sedov" title="Link to this heading">#</a></h4>
+<p>parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sedov.r_init</span></code></p></td>
+<td><p>0.1</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sedov.nsub</span></code></p></td>
+<td><p>4</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="hse">
+<h4><code class="docutils literal notranslate"><span class="pre">hse</span></code><a class="headerlink" href="#hse" title="Link to this heading">#</a></h4>
+<p>parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hse.dens0</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">hse.h</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="ramp">
+<h4><code class="docutils literal notranslate"><span class="pre">ramp</span></code><a class="headerlink" href="#ramp" title="Link to this heading">#</a></h4>
+<p>parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ramp.rhol</span></code></p></td>
+<td><p>8.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ramp.ul</span></code></p></td>
+<td><p>7.1447096</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ramp.vl</span></code></p></td>
+<td><p>-4.125</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ramp.pl</span></code></p></td>
+<td><p>116.5</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ramp.rhor</span></code></p></td>
+<td><p>1.4</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ramp.ur</span></code></p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ramp.vr</span></code></p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ramp.pr</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="gresho">
+<h4><code class="docutils literal notranslate"><span class="pre">gresho</span></code><a class="headerlink" href="#gresho" title="Link to this heading">#</a></h4>
+<p>parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gresho.rho0</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gresho.r</span></code></p></td>
+<td><p>0.2</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gresho.p0</span></code></p></td>
+<td><p>59.5</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gresho.t_r</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="rt2">
+<h4><code class="docutils literal notranslate"><span class="pre">rt2</span></code><a class="headerlink" href="#rt2" title="Link to this heading">#</a></h4>
+<p>A RT problem with two distinct modes: short wave length on the
+left and long wavelength on the right.  This allows one to see
+how the growth rate depends on wavenumber.</p>
+<p>parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt2.dens1</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt2.dens2</span></code></p></td>
+<td><p>2.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt2.amp</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt2.sigma</span></code></p></td>
+<td><p>0.1</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt2.p0</span></code></p></td>
+<td><p>10.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
 </section>
 <section id="compressible-rk-solver">
 <h2><code class="docutils literal notranslate"><span class="pre">compressible_rk</span></code> solver<a class="headerlink" href="#compressible-rk-solver" title="Link to this heading">#</a></h2>
@@ -791,11 +1181,15 @@ hydrostatic equilibrium</p></td>
 </div>
 </li>
 </ul>
+<section id="id2">
+<h3>supported problems<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">compressible_rk</span></code> uses the problems defined by <code class="docutils literal notranslate"><span class="pre">compressible</span></code>.</p>
+</section>
 </section>
 <section id="compressible-fv4-solver">
 <h2><code class="docutils literal notranslate"><span class="pre">compressible_fv4</span></code> solver<a class="headerlink" href="#compressible-fv4-solver" title="Link to this heading">#</a></h2>
 <p><a class="reference internal" href="pyro.compressible_fv4.html#module-pyro.compressible_fv4" title="pyro.compressible_fv4"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.compressible_fv4</span></code></a> uses a 4th order accurate method with RK4
-time integration, following <span id="id2">[<a class="reference internal" href="zreferences.html#id3" title="P. McCorquodale and P. Colella. A high-order finite-volume method for conservation laws on locally refined grids. Communication in Applied Mathematics and Computational Science, 6(1):1–25, 2011.">McCorquodaleColella11</a>]</span>.</p>
+time integration, following <span id="id3">[<a class="reference internal" href="zreferences.html#id3" title="P. McCorquodale and P. Colella. A high-order finite-volume method for conservation laws on locally refined grids. Communication in Applied Mathematics and Computational Science, 6(1):1–25, 2011.">McCorquodaleColella11</a>]</span>.</p>
 <p>The parameter for this solver are:</p>
 <ul>
 <li><p>section: <code class="docutils literal notranslate"><span class="pre">[compressible]</span></code></p>
@@ -882,6 +1276,10 @@ time integration, following <span id="id2">[<a class="reference internal" href="
 </div>
 </li>
 </ul>
+<section id="id4">
+<h3>supported problems<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">compressible_fv4</span></code> uses the problems defined by <code class="docutils literal notranslate"><span class="pre">compressible</span></code>.</p>
+</section>
 </section>
 <section id="compressible-sdc-solver">
 <h2><code class="docutils literal notranslate"><span class="pre">compressible_sdc</span></code> solver<a class="headerlink" href="#compressible-sdc-solver" title="Link to this heading">#</a></h2>
@@ -975,6 +1373,10 @@ how the time-integration is handled.</p>
 </div>
 </li>
 </ul>
+<section id="id5">
+<h3>supported problems<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">compressible_sdc</span></code> uses the problems defined by <code class="docutils literal notranslate"><span class="pre">compressible</span></code>.</p>
+</section>
 </section>
 <section id="example-problems">
 <h2>Example problems<a class="headerlink" href="#example-problems" title="Link to this heading">#</a></h2>
@@ -988,8 +1390,8 @@ fine for 2nd-order accuracy), and the
 <a class="reference internal" href="pyro.compressible_fv4.html#pyro.compressible_fv4.simulation.Simulation.preevolve" title="pyro.compressible_fv4.simulation.Simulation.preevolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">preevolve()</span></code></a> method will convert
 these to cell-averages automatically after initialization.</p>
 </div>
-<section id="sod">
-<h3>Sod<a class="headerlink" href="#sod" title="Link to this heading">#</a></h3>
+<section id="id6">
+<h3>Sod<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
 <p>The Sod problem is a standard hydrodynamics problem. It is a
 one-dimensional shock tube (two states separated by an interface),
 that exhibits all three hydrodynamic waves: a shock, contact, and
@@ -1014,8 +1416,8 @@ steep, as expected. The contact wave is smeared out over ~5 zones—this
 is discussed in the notes above, and can be improved in the PPM method
 with contact steepening.</p>
 </section>
-<section id="sedov">
-<h3>Sedov<a class="headerlink" href="#sedov" title="Link to this heading">#</a></h3>
+<section id="id7">
+<h3>Sedov<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
 <p>The Sedov blast wave problem is another standard test with an analytic
 solution (Sedov 1959). A lot of energy is point into a point in a
 uniform medium and a blast wave propagates outward. The Sedov problem
@@ -1035,8 +1437,8 @@ binning is done with the <code class="docutils literal notranslate"><span class=
 <img alt="_images/sedov_compare.png" class="align-center" src="_images/sedov_compare.png" />
 <p>This shows good agreement with the analytic solution.</p>
 </section>
-<section id="quad">
-<h3>quad<a class="headerlink" href="#quad" title="Link to this heading">#</a></h3>
+<section id="id8">
+<h3>quad<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
 <p>The quad problem sets up different states in four regions of the
 domain and watches the complex interfaces that develop as shocks
 interact. This problem has appeared in several places (and a <a class="reference external" href="http://planets.utsc.utoronto.ca/~pawel/Riemann.hydro.html">detailed
@@ -1045,8 +1447,8 @@ online by Pawel Artymowicz). It is run as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pyro_sim.py<span class="w"> </span>compressible<span class="w"> </span>quad<span class="w"> </span>inputs.quad</span>
 </pre></div></div><img alt="_images/quad.png" class="align-center" src="_images/quad.png" />
 </section>
-<section id="rt">
-<h3>rt<a class="headerlink" href="#rt" title="Link to this heading">#</a></h3>
+<section id="id9">
+<h3>rt<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
 <p>The Rayleigh-Taylor problem puts a dense fluid over a lighter one and
 perturbs the interface with a sinusoidal velocity. Hydrostatic
 boundary conditions are used to ensure any initial pressure waves can
@@ -1055,8 +1457,8 @@ escape the domain. It is run as:</p>
 </pre></div></div><div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
     <iframe src="https://www.youtube.com/embed/P4zmObEYCOs?rel=0" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
 </div><br></section>
-<section id="bubble">
-<h3>bubble<a class="headerlink" href="#bubble" title="Link to this heading">#</a></h3>
+<section id="id10">
+<h3>bubble<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
 <p>The bubble problem initializes a hot spot in a stratified domain and
 watches it buoyantly rise and roll up. This is run as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pyro_sim.py<span class="w"> </span>compressible<span class="w"> </span>bubble<span class="w"> </span>inputs.bubble</span>
@@ -1098,16 +1500,6 @@ sedov explosion instead of the cylindrical explosion.</p></li>
 for this.  Research the Roe Riemann solver and implement it in pyro.</p></li>
 </ul>
 </section>
-</section>
-<section id="going-further">
-<h2>Going further<a class="headerlink" href="#going-further" title="Link to this heading">#</a></h2>
-<p>The compressible algorithm presented here is essentially the
-single-grid hydrodynamics algorithm used in the <a class="reference external" href="https://amrex-astro.github.io/Castro/">Castro code</a>—an
-adaptive mesh radiation hydrodynamics code developed at
-CCSE/LBNL. <a class="reference external" href="https://github.com/AMReX-Astro/Castro">Castro is freely available for download</a>.</p>
-<p>A simple, pure Fortran, 1-d compressible hydrodynamics code that does
-piecewise constant, linear, or parabolic (PPM) reconstruction is also
-available. See the <a class="reference external" href="https://zingale.github.io/hydro1d/">hydro1d</a> page.</p>
 </section>
 </section>
 
@@ -1156,16 +1548,44 @@ available. See the <a class="reference external" href="https://zingale.github.io
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compressible-solver"><code class="docutils literal notranslate"><span class="pre">compressible</span></code> solver</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compressible-rk-solver"><code class="docutils literal notranslate"><span class="pre">compressible_rk</span></code> solver</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compressible-fv4-solver"><code class="docutils literal notranslate"><span class="pre">compressible_fv4</span></code> solver</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compressible-sdc-solver"><code class="docutils literal notranslate"><span class="pre">compressible_sdc</span></code> solver</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compressible-solver"><code class="docutils literal notranslate"><span class="pre">compressible</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-problems">supported problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#kh"><code class="docutils literal notranslate"><span class="pre">kh</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#quad"><code class="docutils literal notranslate"><span class="pre">quad</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#advect"><code class="docutils literal notranslate"><span class="pre">advect</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acoustic-pulse"><code class="docutils literal notranslate"><span class="pre">acoustic_pulse</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sod"><code class="docutils literal notranslate"><span class="pre">sod</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#logo"><code class="docutils literal notranslate"><span class="pre">logo</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#rt"><code class="docutils literal notranslate"><span class="pre">rt</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bubble"><code class="docutils literal notranslate"><span class="pre">bubble</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#test"><code class="docutils literal notranslate"><span class="pre">test</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sedov"><code class="docutils literal notranslate"><span class="pre">sedov</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#hse"><code class="docutils literal notranslate"><span class="pre">hse</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ramp"><code class="docutils literal notranslate"><span class="pre">ramp</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gresho"><code class="docutils literal notranslate"><span class="pre">gresho</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#rt2"><code class="docutils literal notranslate"><span class="pre">rt2</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compressible-rk-solver"><code class="docutils literal notranslate"><span class="pre">compressible_rk</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">supported problems</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compressible-fv4-solver"><code class="docutils literal notranslate"><span class="pre">compressible_fv4</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">supported problems</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compressible-sdc-solver"><code class="docutils literal notranslate"><span class="pre">compressible_sdc</span></code> solver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">supported problems</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-problems">Example problems</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sod">Sod</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sedov">Sedov</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quad">quad</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rt">rt</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bubble">bubble</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Sod</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Sedov</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">quad</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">rt</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">bubble</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a><ul class="nav section-nav flex-column">
@@ -1173,7 +1593,6 @@ available. See the <a class="reference external" href="https://zingale.github.io
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extensions">Extensions</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#going-further">Going further</a></li>
 </ul>
   </nav></div>
 
