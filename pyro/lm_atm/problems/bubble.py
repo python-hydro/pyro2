@@ -1,3 +1,8 @@
+"""Initialize a buoyant bubble in a hydrostatic atmosphere.  This is
+meant to be used to compare with the compressible solver bubble
+problem.
+"""
+
 import numpy
 
 from pyro.util import msg
@@ -14,7 +19,8 @@ PROBLEM_PARAMS = {"bubble.dens_base": 10.0,  # density at the base of the atmosp
 
 
 def init_data(my_data, base, rp):
-    """ initialize the bubble problem """
+
+""" initialize the bubble problem """
 
     if rp.get_param("driver.verbose"):
         msg.bold("initializing the bubble problem...")
