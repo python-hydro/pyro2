@@ -1,3 +1,8 @@
+"""Initialize a buoyant bubble in a hydrostatic atmosphere.  This is
+meant to be used to compare with the compressible solver bubble
+problem.
+"""
+
 import numpy
 
 from pyro.util import msg
