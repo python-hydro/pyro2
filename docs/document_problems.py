@@ -41,7 +41,7 @@ def doit(pyro_home):
             if (parent_solver := p.parts[-2]) == s:
 
                 # find all the problems
-                for prob in p.glob("*.py"):
+                for prob in sorted(p.glob("*.py")):
                     if prob.name == "__init__.py":
                         continue
 
