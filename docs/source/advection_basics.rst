@@ -1,5 +1,6 @@
-Advection solvers
-=================
+*********
+Advection
+*********
 
 The linear advection equation:
 
@@ -14,7 +15,7 @@ pyro has several solvers for linear advection, which solve the equation
 with different spatial and temporal integration schemes.
 
 ``advection`` solver
---------------------
+====================
 
 :py:mod:`pyro.advection` implements the directionally unsplit corner
 transport upwind algorithm :cite:`colella:1990` with piecewise linear reconstruction.
@@ -29,9 +30,10 @@ The parameters for this solver are:
 
 .. include:: advection_defaults.inc
 
+.. include:: advection_problems.inc
 
 ``advection_fv4`` solver
-------------------------
+========================
 
 :py:mod:`pyro.advection_fv4` uses a fourth-order accurate finite-volume
 method with RK4 time integration, following the ideas in
@@ -50,8 +52,10 @@ The parameters for this solver are:
 
 .. include:: advection_fv4_defaults.inc
 
+.. include:: advection_fv4_problems.inc
+
 ``advection_nonuniform`` solver
--------------------------------
+===============================
 
 :py:mod:`pyro.advection_nonuniform` models advection with a non-uniform
 velocity field.  This is used to implement the slotted disk problem
@@ -62,8 +66,11 @@ The parameters for this solver are:
 
 .. include:: advection_nonuniform_defaults.inc
 
+.. include:: advection_nonuniform_problems.inc
+
+
 ``advection_rk`` solver
------------------------
+=======================
 
 :py:mod:`pyro.advection_rk` uses a method of lines time-integration
 approach with piecewise linear spatial reconstruction for linear
@@ -76,8 +83,10 @@ The parameter for this solver are:
 
 .. include:: advection_rk_defaults.inc
 
+.. include:: advection_rk_problems.inc
+
 ``advection_weno`` solver
--------------------------
+=========================
 
 :py:mod:`pyro.advection_weno` uses a WENO reconstruction and method of
 lines time-integration
@@ -87,9 +96,11 @@ The main parameters that affect this solver are:
 
 .. include:: advection_weno_defaults.inc
 
+.. include:: advection_weno_problems.inc
+
 
 General ideas
--------------
+=============
 
 The main use for the advection solver is to understand how Godunov
 techniques work for hyperbolic problems. These same ideas will be used
@@ -108,10 +119,10 @@ reconstruction, evolution, and averaging steps:
 
 
 Examples
---------
+========
 
 smooth
-^^^^^^
+------
 
 The smooth problem initializes a Gaussian profile and advects it with
 :math:`u = v = 1` through periodic boundaries for a period. The result is that
@@ -147,22 +158,15 @@ with the ``advection_fv4`` solver.  Departures from perfect scaling
 are likely due to the use of limiters.
 
 
-tophat
-^^^^^^
-
-The tophat problem initializes a circle in the center of the domain
-with value 1, and 0 outside. This has very steep jumps, and the
-limiters will kick in strongly here.
-
 Exercises
----------
+=========
 
 The best way to learn these methods is to play with them yourself. The
 exercises below are suggestions for explorations and features to add
 to the advection solver.
 
 Explorations
-^^^^^^^^^^^^
+------------
 
 * Test the convergence of the solver for a variety of initial
   conditions (tophat hat will differ from the smooth case because of
@@ -175,7 +179,7 @@ Explorations
   problem?)
 
 Extensions
-^^^^^^^^^^
+----------
 
 * Implement a dimensionally split version of the advection
   algorithm. How does the solution compare between the unsplit and

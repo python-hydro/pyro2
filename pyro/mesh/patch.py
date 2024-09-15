@@ -943,10 +943,6 @@ def cell_center_data_clone(old):
     old : CellCenterData2d object
         The CellCenterData2d object we wish to copy
 
-    Note
-    ----
-    It may be that this whole thing can be replaced with a copy.deepcopy()
-
     """
 
     if not isinstance(old, CellCenterData2d):
