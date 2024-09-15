@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.incompressible_viscous.problems.shear &#8212; pyro 4.3.0.post14+gb23588dd documentation</title>
+    <title>pyro.incompressible_viscous.problems.shear &#8212; pyro 4.3.0.post15+g1520ff01 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../../_static/documentation_options.js?v=dc8e7f48"></script>
+    <script src="../../../../_static/documentation_options.js?v=40eb7768"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -455,15 +455,18 @@ document.write(`
 <span class="sd">Initialize the doubly periodic shear layer (see, for example, Martin</span>
 <span class="sd">and Colella, 2000, JCP, 163, 271).  This is run in a unit square</span>
 <span class="sd">domain, with periodic boundary conditions on all sides.  Here, the</span>
-<span class="sd">initial velocity is::</span>
+<span class="sd">initial velocity is:</span>
 
-<span class="sd">                 / tanh(rho_s (y-0.25))   if y &lt;= 0.5</span>
-<span class="sd">   u(x,y,t=0) = &lt;</span>
-<span class="sd">                 \ tanh(rho_s (0.75-y))   if y &gt; 0.5</span>
+<span class="sd">.. math::</span>
 
-<span class="sd">   v(x,y,t=0) = delta_s sin(2 pi x)</span>
+<span class="sd">   u(x,y,t=0) = \begin{cases}</span>
+<span class="sd">                \tanh(\rho_s (y - 1/4)) &amp;  \mbox{if}~ y \le 1/2 \\</span>
+<span class="sd">                \tanh(\rho_s (3/4 - y)) &amp;  \mbox{if}~ y &gt; 1/2</span>
+<span class="sd">                \end{cases}</span>
 
+<span class="sd">.. math::</span>
 
+<span class="sd">   v(x,y,t=0) = \delta_s \sin(2 \pi x)</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 

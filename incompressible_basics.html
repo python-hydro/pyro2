@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Incompressible hydrodynamics &#8212; pyro 4.3.0.post14+gb23588dd documentation</title>
+    <title>Incompressible hydrodynamics &#8212; pyro 4.3.0.post15+g1520ff01 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=dc8e7f48"></script>
+    <script src="_static/documentation_options.js?v=40eb7768"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -667,7 +667,8 @@ velocities are initialized as</p>
 <div class="math notranslate nohighlight">
 \[ \begin{align}\begin{aligned}u(x,y,t) = 1 - 2 \cos(2 \pi (x - t)) \sin(2 \pi (y - t))\\v(x,y,t) = 1 + 2 \sin(2 \pi (x - t)) \cos(2 \pi (y - t))\\p(x,y,t) = -\cos(4 \pi (x - t)) - \cos(4 \pi (y - t))\end{aligned}\end{align} \]</div>
 <p>The numerical solution can be compared to the exact solution to
-measure the convergence rate of the algorithm.</p>
+measure the convergence rate of the algorithm.  These initial
+conditions come from Minion 1996.</p>
 </section>
 <section id="shear">
 <h4><code class="docutils literal notranslate"><span class="pre">shear</span></code><a class="headerlink" href="#shear" title="Link to this heading">#</a></h4>
@@ -675,13 +676,13 @@ measure the convergence rate of the algorithm.</p>
 and Colella, 2000, JCP, 163, 271).  This is run in a unit square
 domain, with periodic boundary conditions on all sides.  Here, the
 initial velocity is:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>              <span class="o">/</span> <span class="n">tanh</span><span class="p">(</span><span class="n">rho_s</span> <span class="p">(</span><span class="n">y</span><span class="o">-</span><span class="mf">0.25</span><span class="p">))</span>   <span class="k">if</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="mf">0.5</span>
-<span class="n">u</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="o">&lt;</span>
-              \ <span class="n">tanh</span><span class="p">(</span><span class="n">rho_s</span> <span class="p">(</span><span class="mf">0.75</span><span class="o">-</span><span class="n">y</span><span class="p">))</span>   <span class="k">if</span> <span class="n">y</span> <span class="o">&gt;</span> <span class="mf">0.5</span>
-
-<span class="n">v</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">delta_s</span> <span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="n">pi</span> <span class="n">x</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}u(x,y,t=0) = \begin{cases}
+             \tanh(\rho_s (y - 1/4)) &amp;  \mbox{if}~ y \le 1/2 \\
+             \tanh(\rho_s (3/4 - y)) &amp;  \mbox{if}~ y &gt; 1/2
+             \end{cases}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[v(x,y,t=0) = \delta_s \sin(2 \pi x)\]</div>
 <p>parameters:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -863,13 +864,13 @@ measure the convergence rate of the algorithm.</p>
 and Colella, 2000, JCP, 163, 271).  This is run in a unit square
 domain, with periodic boundary conditions on all sides.  Here, the
 initial velocity is:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>              <span class="o">/</span> <span class="n">tanh</span><span class="p">(</span><span class="n">rho_s</span> <span class="p">(</span><span class="n">y</span><span class="o">-</span><span class="mf">0.25</span><span class="p">))</span>   <span class="k">if</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="mf">0.5</span>
-<span class="n">u</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="o">&lt;</span>
-              \ <span class="n">tanh</span><span class="p">(</span><span class="n">rho_s</span> <span class="p">(</span><span class="mf">0.75</span><span class="o">-</span><span class="n">y</span><span class="p">))</span>   <span class="k">if</span> <span class="n">y</span> <span class="o">&gt;</span> <span class="mf">0.5</span>
-
-<span class="n">v</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">delta_s</span> <span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="n">pi</span> <span class="n">x</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}u(x,y,t=0) = \begin{cases}
+             \tanh(\rho_s (y - 1/4)) &amp;  \mbox{if}~ y \le 1/2 \\
+             \tanh(\rho_s (3/4 - y)) &amp;  \mbox{if}~ y &gt; 1/2
+             \end{cases}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[v(x,y,t=0) = \delta_s \sin(2 \pi x)\]</div>
 <p>parameters:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
