@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyro.diffusion.problems package &#8212; pyro 4.3.0.post10+g1649759e documentation</title>
+    <title>pyro.diffusion.problems package &#8212; pyro 4.3.0.post11+gc737549c documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=72063487"></script>
+    <script src="_static/documentation_options.js?v=591f2128"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -561,6 +561,10 @@ document.write(`
 </section>
 <section id="module-pyro.diffusion.problems.gaussian">
 <span id="pyro-diffusion-problems-gaussian-module"></span><h2>pyro.diffusion.problems.gaussian module<a class="headerlink" href="#module-pyro.diffusion.problems.gaussian" title="Link to this heading">#</a></h2>
+<p>Initialize the profile to a Gaussian.  With a constant
+conductivity, an initial Gaussian profile remains Gaussian, with the
+peak lowering and width increasing with time.  This allows this
+problem to be used for verification.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.diffusion.problems.gaussian.finalize">
 <span class="sig-prename descclassname"><span class="pre">pyro.diffusion.problems.gaussian.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/diffusion/problems/gaussian.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.diffusion.problems.gaussian.finalize" title="Link to this definition">#</a></dt>
@@ -582,6 +586,7 @@ document.write(`
 </section>
 <section id="module-pyro.diffusion.problems.test">
 <span id="pyro-diffusion-problems-test-module"></span><h2>pyro.diffusion.problems.test module<a class="headerlink" href="#module-pyro.diffusion.problems.test" title="Link to this heading">#</a></h2>
+<p>A problem setup used for unit testing.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.diffusion.problems.test.finalize">
 <span class="sig-prename descclassname"><span class="pre">pyro.diffusion.problems.test.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/diffusion/problems/test.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.diffusion.problems.test.finalize" title="Link to this definition">#</a></dt>
