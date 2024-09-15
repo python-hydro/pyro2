@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Running &#8212; pyro 4.3.0.post11+gc737549c documentation</title>
+    <title>Running &#8212; pyro 4.3.0.post12+g3e0ed348 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=591f2128"></script>
+    <script src="_static/documentation_options.js?v=23ff21c1"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -603,12 +603,25 @@ Kelvin-Helmholtz problem <code class="docutils literal notranslate"><span class=
 <p>This will use the default set of parameters for the problem specified
 in the inputs file defined by <code class="docutils literal notranslate"><span class="pre">DEFAULT_INPUTS</span></code> in the problem
 initialization module.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>By default, I/O, visualization, and verbosity are disabled when we run in Jupyter.</p>
+</div>
 <p>Instead of using an inputs file to define the problem parameters, we can define a
 dictionary of parameters and pass them into the <a class="reference internal" href="pyro.html#pyro.pyro_sim.Pyro.initialize_problem" title="pyro.pyro_sim.Pyro.initialize_problem"><code class="xref py py-func docutils literal notranslate"><span class="pre">initialize_problem</span></code></a> function using the keyword argument <code class="docutils literal notranslate"><span class="pre">inputs_dict</span></code>.
 If an inputs file is also passed into the function, the parameters in the dictionary
-will override any parameters in the file. For example, if we wished to turn off
-visualization for the previous example, we would do:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;vis.dovis&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+will override any parameters in the file.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If you want to see all of the runtime parameters and their current values, you can
+simply print the <code class="docutils literal notranslate"><span class="pre">Pyro</span></code> object:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>For example, if we wished to turn on
+verbosity for the previous example, we would do:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;driver.verbose&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
 <span class="n">p</span><span class="o">.</span><span class="n">initialize_problem</span><span class="p">(</span><span class="n">problem_name</span><span class="o">=</span><span class="s2">&quot;kh&quot;</span><span class="p">,</span>
                      <span class="n">inputs_dict</span><span class="o">=</span><span class="n">parameters</span><span class="p">)</span>
 </pre></div>
@@ -634,15 +647,17 @@ parameters are stored in three places:</p>
 <ul class="simple">
 <li><p>the <code class="docutils literal notranslate"><span class="pre">pyro/_defaults</span></code> file</p></li>
 <li><p>the solver’s <code class="docutils literal notranslate"><span class="pre">_defaults</span></code> file</p></li>
-<li><p>problem’s <code class="docutils literal notranslate"><span class="pre">_defaults</span></code> file (named <code class="docutils literal notranslate"><span class="pre">_problem-name.defaults</span></code> in the
-solver’s <code class="docutils literal notranslate"><span class="pre">problem/</span></code> sub-directory).</p></li>
+<li><p>problem-specific parameters: each problem module provides a dictionary
+called <code class="docutils literal notranslate"><span class="pre">PROBLEM_PARAMS</span></code> that is used to define the problem-specific
+parameters and their defaults.</p></li>
 </ul>
-<p>These three files are parsed at runtime to define the list of valid
+<p>These defaults are parsed at runtime to define the list of valid
 parameters. The inputs file is read next and used to override the
 default value of any of these previously defined
-parameters. Additionally, any parameter can be specified at the end of
-the commandline, and these will be used to override the defaults. The
-collection of runtime parameters is stored in a
+parameters.  Then any parameters passed to <code class="docutils literal notranslate"><span class="pre">Pyro</span></code> via a dictionary
+or added to the commandline when using <code class="docutils literal notranslate"><span class="pre">pyro_sim.py</span></code> are parsed
+and override the current values.</p>
+<p>The collection of runtime parameters is stored in a
 <a class="reference internal" href="pyro.util.html#pyro.util.runparams.RuntimeParameters" title="pyro.util.runparams.RuntimeParameters"><code class="xref py py-func docutils literal notranslate"><span class="pre">RuntimeParameters</span></code></a> object.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">runparams.py</span></code> module in <code class="docutils literal notranslate"><span class="pre">util/</span></code> controls access to the runtime
 parameters. You can setup the runtime parameters, parse an inputs
