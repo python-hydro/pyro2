@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyro.lm_atm.problems package &#8212; pyro 4.3.0.post15+g1520ff01 documentation</title>
+    <title>pyro.lm_atm.problems package &#8212; pyro 4.3.0.post16+g47fb8a9e documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=40eb7768"></script>
+    <script src="_static/documentation_options.js?v=6a0f5c0b"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -537,11 +537,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.lm_atm.problems.bubble.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.lm_atm.problems.gresho">pyro.lm_atm.problems.gresho module</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.lm_atm.problems.gresho.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.lm_atm.problems.gresho.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro-lm-atm-problems-gresho-module">pyro.lm_atm.problems.gresho module</a></li>
 </ul>
             </nav>
         </div>
@@ -560,6 +556,9 @@ document.write(`
 </section>
 <section id="module-pyro.lm_atm.problems.bubble">
 <span id="pyro-lm-atm-problems-bubble-module"></span><h2>pyro.lm_atm.problems.bubble module<a class="headerlink" href="#module-pyro.lm_atm.problems.bubble" title="Link to this heading">#</a></h2>
+<p>Initialize a buoyant bubble in a hydrostatic atmosphere.  This is
+meant to be used to compare with the compressible solver bubble
+problem.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.lm_atm.problems.bubble.finalize">
 <span class="sig-prename descclassname"><span class="pre">pyro.lm_atm.problems.bubble.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/lm_atm/problems/bubble.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.lm_atm.problems.bubble.finalize" title="Link to this definition">#</a></dt>
@@ -573,20 +572,8 @@ document.write(`
 </dd></dl>
 
 </section>
-<section id="module-pyro.lm_atm.problems.gresho">
-<span id="pyro-lm-atm-problems-gresho-module"></span><h2>pyro.lm_atm.problems.gresho module<a class="headerlink" href="#module-pyro.lm_atm.problems.gresho" title="Link to this heading">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="pyro.lm_atm.problems.gresho.finalize">
-<span class="sig-prename descclassname"><span class="pre">pyro.lm_atm.problems.gresho.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/lm_atm/problems/gresho.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.lm_atm.problems.gresho.finalize" title="Link to this definition">#</a></dt>
-<dd><p>print out any information to the user at the end of the run</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyro.lm_atm.problems.gresho.init_data">
-<span class="sig-prename descclassname"><span class="pre">pyro.lm_atm.problems.gresho.</span></span><span class="sig-name descname"><span class="pre">init_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/lm_atm/problems/gresho.html#init_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.lm_atm.problems.gresho.init_data" title="Link to this definition">#</a></dt>
-<dd><p>initialize the Gresho vortex problem</p>
-</dd></dl>
-
+<section id="pyro-lm-atm-problems-gresho-module">
+<h2>pyro.lm_atm.problems.gresho module<a class="headerlink" href="#pyro-lm-atm-problems-gresho-module" title="Link to this heading">#</a></h2>
 </section>
 </section>
 
@@ -641,11 +628,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.lm_atm.problems.bubble.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.lm_atm.problems.gresho">pyro.lm_atm.problems.gresho module</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.lm_atm.problems.gresho.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.lm_atm.problems.gresho.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro-lm-atm-problems-gresho-module">pyro.lm_atm.problems.gresho module</a></li>
 </ul>
   </nav></div>
 
