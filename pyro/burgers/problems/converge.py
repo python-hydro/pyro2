@@ -1,3 +1,6 @@
+"""Setup a smooth velocity field (each component is an exponential).  This can
+be used to test convergence of the solver."""
+
 import numpy
 
 from pyro.util import msg
