@@ -1,3 +1,10 @@
+"""Initialize the profile to a Gaussian.  With a constant
+conductivity, an initial Gaussian profile remains Gaussian, with the
+peak lowering and width increasing with time.  This allows this
+problem to be used for verification.
+
+"""
+
 import numpy
 
 from pyro.util import msg
