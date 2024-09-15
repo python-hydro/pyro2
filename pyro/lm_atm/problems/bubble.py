@@ -19,8 +19,7 @@ PROBLEM_PARAMS = {"bubble.dens_base": 10.0,  # density at the base of the atmosp
 
 
 def init_data(my_data, base, rp):
-
-""" initialize the bubble problem """
+    """ initialize the bubble problem """
 
     if rp.get_param("driver.verbose"):
         msg.bold("initializing the bubble problem...")
