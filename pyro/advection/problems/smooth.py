@@ -1,3 +1,7 @@
+"""Initialize a Gaussian profile (shifted so the minimum value is 1.0).  This
+is smooth and the limiters should not kick in too much, so this can be used
+for testing convergence."""
+
 import numpy
 
 from pyro.util import msg
