@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Incompressible hydrodynamics &#8212; pyro 4.3.0.post8+g7e2f49fc documentation</title>
+    <title>Incompressible hydrodynamics &#8212; pyro 4.3.0.post9+gfc040ed0 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=f3c3fc77"></script>
+    <script src="_static/documentation_options.js?v=fe4d1ddf"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -548,9 +548,9 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#incompressible-viscous-solver"><code class="docutils literal notranslate"><span class="pre">incompressible_viscous</span></code> solver</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">supported problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cavity"><code class="docutils literal notranslate"><span class="pre">cavity</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6"><code class="docutils literal notranslate"><span class="pre">converge</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7"><code class="docutils literal notranslate"><span class="pre">shear</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cavity"><code class="docutils literal notranslate"><span class="pre">cavity</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Examples</a><ul class="nav section-nav flex-column">
@@ -835,6 +835,16 @@ parabolic equations (one for each velocity component) using multigrid.</p>
 </ul>
 <section id="id5">
 <h3>supported problems<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<section id="cavity">
+<h4><code class="docutils literal notranslate"><span class="pre">cavity</span></code><a class="headerlink" href="#cavity" title="Link to this heading">#</a></h4>
+<p>Initialize the lid-driven cavity problem. Run on a unit square with the top wall
+moving to the right with unit velocity, driving the flow. The other three walls
+are no-slip boundary conditions. The initial velocity of the fluid is zero.</p>
+<p>Since the length and velocity scales are both 1, the Reynolds number is 1/viscosity.</p>
+<p>References:
+<a class="reference external" href="https://doi.org/10.1007/978-3-319-91494-7_8">https://doi.org/10.1007/978-3-319-91494-7_8</a>
+<a class="reference external" href="https://www.fluid.tuwien.ac.at/HendrikKuhlmann?action=AttachFile&amp;do=get&amp;target=LidDrivenCavity.pdf">https://www.fluid.tuwien.ac.at/HendrikKuhlmann?action=AttachFile&amp;do=get&amp;target=LidDrivenCavity.pdf</a></p>
+</section>
 <section id="id6">
 <h4><code class="docutils literal notranslate"><span class="pre">converge</span></code><a class="headerlink" href="#id6" title="Link to this heading">#</a></h4>
 <p>Initialize a smooth incompressible+viscous convergence test.  Here, the
@@ -877,16 +887,6 @@ initial velocity is:</p>
 </tbody>
 </table>
 </div>
-</section>
-<section id="cavity">
-<h4><code class="docutils literal notranslate"><span class="pre">cavity</span></code><a class="headerlink" href="#cavity" title="Link to this heading">#</a></h4>
-<p>Initialize the lid-driven cavity problem. Run on a unit square with the top wall
-moving to the right with unit velocity, driving the flow. The other three walls
-are no-slip boundary conditions. The initial velocity of the fluid is zero.</p>
-<p>Since the length and velocity scales are both 1, the Reynolds number is 1/viscosity.</p>
-<p>References:
-<a class="reference external" href="https://doi.org/10.1007/978-3-319-91494-7_8">https://doi.org/10.1007/978-3-319-91494-7_8</a>
-<a class="reference external" href="https://www.fluid.tuwien.ac.at/HendrikKuhlmann?action=AttachFile&amp;do=get&amp;target=LidDrivenCavity.pdf">https://www.fluid.tuwien.ac.at/HendrikKuhlmann?action=AttachFile&amp;do=get&amp;target=LidDrivenCavity.pdf</a></p>
 </section>
 </section>
 <section id="id8">
@@ -1024,9 +1024,9 @@ to a variable-coefficient form (since ρ now enters).</p></li>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#incompressible-viscous-solver"><code class="docutils literal notranslate"><span class="pre">incompressible_viscous</span></code> solver</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">supported problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cavity"><code class="docutils literal notranslate"><span class="pre">cavity</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6"><code class="docutils literal notranslate"><span class="pre">converge</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7"><code class="docutils literal notranslate"><span class="pre">shear</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cavity"><code class="docutils literal notranslate"><span class="pre">cavity</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Examples</a><ul class="nav section-nav flex-column">

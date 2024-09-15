@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Compressible hydrodynamics &#8212; pyro 4.3.0.post8+g7e2f49fc documentation</title>
+    <title>Compressible hydrodynamics &#8212; pyro 4.3.0.post9+gfc040ed0 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=f3c3fc77"></script>
+    <script src="_static/documentation_options.js?v=fe4d1ddf"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -535,20 +535,20 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compressible-solver"><code class="docutils literal notranslate"><span class="pre">compressible</span></code> solver</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-problems">supported problems</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#kh"><code class="docutils literal notranslate"><span class="pre">kh</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#quad"><code class="docutils literal notranslate"><span class="pre">quad</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#advect"><code class="docutils literal notranslate"><span class="pre">advect</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acoustic-pulse"><code class="docutils literal notranslate"><span class="pre">acoustic_pulse</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sod"><code class="docutils literal notranslate"><span class="pre">sod</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#logo"><code class="docutils literal notranslate"><span class="pre">logo</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#rt"><code class="docutils literal notranslate"><span class="pre">rt</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#advect"><code class="docutils literal notranslate"><span class="pre">advect</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bubble"><code class="docutils literal notranslate"><span class="pre">bubble</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#test"><code class="docutils literal notranslate"><span class="pre">test</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sedov"><code class="docutils literal notranslate"><span class="pre">sedov</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#hse"><code class="docutils literal notranslate"><span class="pre">hse</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ramp"><code class="docutils literal notranslate"><span class="pre">ramp</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gresho"><code class="docutils literal notranslate"><span class="pre">gresho</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#hse"><code class="docutils literal notranslate"><span class="pre">hse</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#kh"><code class="docutils literal notranslate"><span class="pre">kh</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#logo"><code class="docutils literal notranslate"><span class="pre">logo</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#quad"><code class="docutils literal notranslate"><span class="pre">quad</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ramp"><code class="docutils literal notranslate"><span class="pre">ramp</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#rt"><code class="docutils literal notranslate"><span class="pre">rt</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#rt2"><code class="docutils literal notranslate"><span class="pre">rt2</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sedov"><code class="docutils literal notranslate"><span class="pre">sedov</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sod"><code class="docutils literal notranslate"><span class="pre">sod</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#test"><code class="docutils literal notranslate"><span class="pre">test</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -722,6 +722,128 @@ accurate.</p>
 </ul>
 <section id="supported-problems">
 <h3>supported problems<a class="headerlink" href="#supported-problems" title="Link to this heading">#</a></h3>
+<section id="acoustic-pulse">
+<h4><code class="docutils literal notranslate"><span class="pre">acoustic_pulse</span></code><a class="headerlink" href="#acoustic-pulse" title="Link to this heading">#</a></h4>
+<p>The acoustic pulse problem described in McCorquodale &amp; Colella
+2011.  This uses a uniform background and a small pressure
+perturbation that drives a low Mach number soundwave.  This problem is
+useful for testing convergence of a compressible solver.</p>
+<p>parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">acoustic_pulse.rho0</span></code></p></td>
+<td><p>1.4</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">acoustic_pulse.drho0</span></code></p></td>
+<td><p>0.14</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="advect">
+<h4><code class="docutils literal notranslate"><span class="pre">advect</span></code><a class="headerlink" href="#advect" title="Link to this heading">#</a></h4>
+<p>A simple advection test.  A density perturbation is set with a
+constant pressure in the domain and a velocity field is set to advect
+the profile across the domain.  This is useful for testing
+convergence.</p>
+</section>
+<section id="bubble">
+<h4><code class="docutils literal notranslate"><span class="pre">bubble</span></code><a class="headerlink" href="#bubble" title="Link to this heading">#</a></h4>
+<p>A buoyant perturbation (bubble) is placed in an isothermal
+hydrostatic atmosphere (plane-parallel).  It will rise and deform (due
+to shear)
+parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.dens_base</span></code></p></td>
+<td><p>10.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.scale_height</span></code></p></td>
+<td><p>2.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.x_pert</span></code></p></td>
+<td><p>2.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.y_pert</span></code></p></td>
+<td><p>2.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.r_pert</span></code></p></td>
+<td><p>0.25</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.pert_amplitude_factor</span></code></p></td>
+<td><p>5.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.dens_cutoff</span></code></p></td>
+<td><p>0.01</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="gresho">
+<h4><code class="docutils literal notranslate"><span class="pre">gresho</span></code><a class="headerlink" href="#gresho" title="Link to this heading">#</a></h4>
+<p>The Gresho vortex problem sets up a toroidal velocity field that is
+balanced by a radial pressure gradient.  This is in equilibrium and
+the state should remain unchanged in time.  This version of the problem
+is based on Miczek, Roepke, and Edelmann 2014.
+parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gresho.rho0</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gresho.r</span></code></p></td>
+<td><p>0.2</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gresho.p0</span></code></p></td>
+<td><p>59.5</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gresho.t_r</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="hse">
+<h4><code class="docutils literal notranslate"><span class="pre">hse</span></code><a class="headerlink" href="#hse" title="Link to this heading">#</a></h4>
+<p>Initialize an isothermal hydrostatic atmosphere.  It should remain
+static.  This is a test of our treatment of the gravitational source
+term.
+parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hse.dens0</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">hse.h</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 <section id="kh">
 <h4><code class="docutils literal notranslate"><span class="pre">kh</span></code><a class="headerlink" href="#kh" title="Link to this heading">#</a></h4>
 <p>A Kelvin-Helmholtz shear problem.  There are 2 shear layers, with the and an optional
@@ -753,6 +875,12 @@ parameters:</p>
 </tbody>
 </table>
 </div>
+</section>
+<section id="logo">
+<h4><code class="docutils literal notranslate"><span class="pre">logo</span></code><a class="headerlink" href="#logo" title="Link to this heading">#</a></h4>
+<p>Generate the pyro logo!  The word “pyro” is written in the center
+of the domain and perturbations are placed in the 4 corners to drive
+converging shocks inward to scramble the logo.</p>
 </section>
 <section id="quad">
 <h4><code class="docutils literal notranslate"><span class="pre">quad</span></code><a class="headerlink" href="#quad" title="Link to this heading">#</a></h4>
@@ -826,19 +954,81 @@ test the symmetry of the solver.</p>
 </table>
 </div>
 </section>
-<section id="advect">
-<h4><code class="docutils literal notranslate"><span class="pre">advect</span></code><a class="headerlink" href="#advect" title="Link to this heading">#</a></h4>
-<p>A simple advection test.  A density perturbation is set with a
-constant pressure in the domain and a velocity field is set to advect
-the profile across the domain.  This is useful for testing
-convergence.</p>
+<section id="ramp">
+<h4><code class="docutils literal notranslate"><span class="pre">ramp</span></code><a class="headerlink" href="#ramp" title="Link to this heading">#</a></h4>
+<p>A shock hitting a ramp at an oblique angle.  This is based on
+Woodward &amp; Colella 1984.
+parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ramp.rhol</span></code></p></td>
+<td><p>8.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ramp.ul</span></code></p></td>
+<td><p>7.1447096</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ramp.vl</span></code></p></td>
+<td><p>-4.125</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ramp.pl</span></code></p></td>
+<td><p>116.5</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ramp.rhor</span></code></p></td>
+<td><p>1.4</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ramp.ur</span></code></p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ramp.vr</span></code></p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ramp.pr</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
-<section id="acoustic-pulse">
-<h4><code class="docutils literal notranslate"><span class="pre">acoustic_pulse</span></code><a class="headerlink" href="#acoustic-pulse" title="Link to this heading">#</a></h4>
-<p>The acoustic pulse problem described in McCorquodale &amp; Colella
-2011.  This uses a uniform background and a small pressure
-perturbation that drives a low Mach number soundwave.  This problem is
-useful for testing convergence of a compressible solver.</p>
+<section id="rt">
+<h4><code class="docutils literal notranslate"><span class="pre">rt</span></code><a class="headerlink" href="#rt" title="Link to this heading">#</a></h4>
+<p>A single-mode Rayleigh-Taylor instability.
+parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt.dens1</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt.dens2</span></code></p></td>
+<td><p>2.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt.amp</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt.sigma</span></code></p></td>
+<td><p>0.1</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt.p0</span></code></p></td>
+<td><p>10.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="rt2">
+<h4><code class="docutils literal notranslate"><span class="pre">rt2</span></code><a class="headerlink" href="#rt2" title="Link to this heading">#</a></h4>
+<p>A RT problem with two distinct modes: short wavelength on the
+left and long wavelength on the right.  This allows one to see
+how the growth rate depends on wavenumber.</p>
 <p>parameters:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -847,11 +1037,41 @@ useful for testing convergence of a compressible solver.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">acoustic_pulse.rho0</span></code></p></td>
-<td><p>1.4</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt2.dens1</span></code></p></td>
+<td><p>1.0</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">acoustic_pulse.drho0</span></code></p></td>
-<td><p>0.14</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt2.dens2</span></code></p></td>
+<td><p>2.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt2.amp</span></code></p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt2.sigma</span></code></p></td>
+<td><p>0.1</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt2.p0</span></code></p></td>
+<td><p>10.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="sedov">
+<h4><code class="docutils literal notranslate"><span class="pre">sedov</span></code><a class="headerlink" href="#sedov" title="Link to this heading">#</a></h4>
+<p>The classic Sedov problem.
+parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sedov.r_init</span></code></p></td>
+<td><p>0.1</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sedov.nsub</span></code></p></td>
+<td><p>4</p></td>
 </tr>
 </tbody>
 </table>
@@ -894,229 +1114,9 @@ parameters:</p>
 </table>
 </div>
 </section>
-<section id="logo">
-<h4><code class="docutils literal notranslate"><span class="pre">logo</span></code><a class="headerlink" href="#logo" title="Link to this heading">#</a></h4>
-<p>Generate the pyro logo!  The word “pyro” is written in the center
-of the domain and perturbations are placed in the 4 corners to drive
-converging shocks inward to scramble the logo.</p>
-</section>
-<section id="rt">
-<h4><code class="docutils literal notranslate"><span class="pre">rt</span></code><a class="headerlink" href="#rt" title="Link to this heading">#</a></h4>
-<p>A single-mode Rayleigh-Taylor instability.
-parameters:</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>name</p></th>
-<th class="head"><p>default</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt.dens1</span></code></p></td>
-<td><p>1.0</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt.dens2</span></code></p></td>
-<td><p>2.0</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt.amp</span></code></p></td>
-<td><p>1.0</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt.sigma</span></code></p></td>
-<td><p>0.1</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt.p0</span></code></p></td>
-<td><p>10.0</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="bubble">
-<h4><code class="docutils literal notranslate"><span class="pre">bubble</span></code><a class="headerlink" href="#bubble" title="Link to this heading">#</a></h4>
-<p>A buoyant perturbation (bubble) is placed in an isothermal
-hydrostatic atmosphere (plane-parallel).  It will rise and deform (due
-to shear)
-parameters:</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>name</p></th>
-<th class="head"><p>default</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.dens_base</span></code></p></td>
-<td><p>10.0</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.scale_height</span></code></p></td>
-<td><p>2.0</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.x_pert</span></code></p></td>
-<td><p>2.0</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.y_pert</span></code></p></td>
-<td><p>2.0</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.r_pert</span></code></p></td>
-<td><p>0.25</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.pert_amplitude_factor</span></code></p></td>
-<td><p>5.0</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.dens_cutoff</span></code></p></td>
-<td><p>0.01</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
 <section id="test">
 <h4><code class="docutils literal notranslate"><span class="pre">test</span></code><a class="headerlink" href="#test" title="Link to this heading">#</a></h4>
 <p>A setup intended for unit testing.</p>
-</section>
-<section id="sedov">
-<h4><code class="docutils literal notranslate"><span class="pre">sedov</span></code><a class="headerlink" href="#sedov" title="Link to this heading">#</a></h4>
-<p>The classic Sedov problem.
-parameters:</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>name</p></th>
-<th class="head"><p>default</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sedov.r_init</span></code></p></td>
-<td><p>0.1</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sedov.nsub</span></code></p></td>
-<td><p>4</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="hse">
-<h4><code class="docutils literal notranslate"><span class="pre">hse</span></code><a class="headerlink" href="#hse" title="Link to this heading">#</a></h4>
-<p>Initialize an isothermal hydrostatic atmosphere.  It should remain
-static.  This is a test of our treatment of the gravitational source
-term.
-parameters:</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>name</p></th>
-<th class="head"><p>default</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hse.dens0</span></code></p></td>
-<td><p>1.0</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">hse.h</span></code></p></td>
-<td><p>1.0</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="ramp">
-<h4><code class="docutils literal notranslate"><span class="pre">ramp</span></code><a class="headerlink" href="#ramp" title="Link to this heading">#</a></h4>
-<p>A shock hitting a ramp at an oblique angle.  This is based on
-Woodward &amp; Colella 1984.
-parameters:</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>name</p></th>
-<th class="head"><p>default</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ramp.rhol</span></code></p></td>
-<td><p>8.0</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ramp.ul</span></code></p></td>
-<td><p>7.1447096</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ramp.vl</span></code></p></td>
-<td><p>-4.125</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ramp.pl</span></code></p></td>
-<td><p>116.5</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ramp.rhor</span></code></p></td>
-<td><p>1.4</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ramp.ur</span></code></p></td>
-<td><p>0.0</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ramp.vr</span></code></p></td>
-<td><p>0.0</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ramp.pr</span></code></p></td>
-<td><p>1.0</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="gresho">
-<h4><code class="docutils literal notranslate"><span class="pre">gresho</span></code><a class="headerlink" href="#gresho" title="Link to this heading">#</a></h4>
-<p>The Gresho vortex problem sets up a toroidal velocity field that is
-balanced by a radial pressure gradient.  This is in equilibrium and
-the state should remain unchanged in time.  This version of the problem
-is based on Miczek, Roepke, and Edelmann 2014.
-parameters:</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>name</p></th>
-<th class="head"><p>default</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gresho.rho0</span></code></p></td>
-<td><p>1.0</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gresho.r</span></code></p></td>
-<td><p>0.2</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gresho.p0</span></code></p></td>
-<td><p>59.5</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gresho.t_r</span></code></p></td>
-<td><p>1.0</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="rt2">
-<h4><code class="docutils literal notranslate"><span class="pre">rt2</span></code><a class="headerlink" href="#rt2" title="Link to this heading">#</a></h4>
-<p>A RT problem with two distinct modes: short wavelength on the
-left and long wavelength on the right.  This allows one to see
-how the growth rate depends on wavenumber.</p>
-<p>parameters:</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>name</p></th>
-<th class="head"><p>default</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt2.dens1</span></code></p></td>
-<td><p>1.0</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt2.dens2</span></code></p></td>
-<td><p>2.0</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt2.amp</span></code></p></td>
-<td><p>1.0</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt2.sigma</span></code></p></td>
-<td><p>0.1</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt2.p0</span></code></p></td>
-<td><p>10.0</p></td>
-</tr>
-</tbody>
-</table>
-</div>
 </section>
 </section>
 </section>
@@ -1585,20 +1585,20 @@ for this.  Research the Roe Riemann solver and implement it in pyro.</p></li>
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compressible-solver"><code class="docutils literal notranslate"><span class="pre">compressible</span></code> solver</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-problems">supported problems</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#kh"><code class="docutils literal notranslate"><span class="pre">kh</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#quad"><code class="docutils literal notranslate"><span class="pre">quad</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#advect"><code class="docutils literal notranslate"><span class="pre">advect</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acoustic-pulse"><code class="docutils literal notranslate"><span class="pre">acoustic_pulse</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sod"><code class="docutils literal notranslate"><span class="pre">sod</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#logo"><code class="docutils literal notranslate"><span class="pre">logo</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#rt"><code class="docutils literal notranslate"><span class="pre">rt</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#advect"><code class="docutils literal notranslate"><span class="pre">advect</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bubble"><code class="docutils literal notranslate"><span class="pre">bubble</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#test"><code class="docutils literal notranslate"><span class="pre">test</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sedov"><code class="docutils literal notranslate"><span class="pre">sedov</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#hse"><code class="docutils literal notranslate"><span class="pre">hse</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ramp"><code class="docutils literal notranslate"><span class="pre">ramp</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gresho"><code class="docutils literal notranslate"><span class="pre">gresho</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#hse"><code class="docutils literal notranslate"><span class="pre">hse</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#kh"><code class="docutils literal notranslate"><span class="pre">kh</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#logo"><code class="docutils literal notranslate"><span class="pre">logo</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#quad"><code class="docutils literal notranslate"><span class="pre">quad</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ramp"><code class="docutils literal notranslate"><span class="pre">ramp</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#rt"><code class="docutils literal notranslate"><span class="pre">rt</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#rt2"><code class="docutils literal notranslate"><span class="pre">rt2</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sedov"><code class="docutils literal notranslate"><span class="pre">sedov</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sod"><code class="docutils literal notranslate"><span class="pre">sod</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#test"><code class="docutils literal notranslate"><span class="pre">test</span></code></a></li>
 </ul>
 </li>
 </ul>
