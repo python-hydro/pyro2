@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyro.advection.problems package &#8212; pyro 4.3.0.post9+gfc040ed0 documentation</title>
+    <title>pyro.advection.problems package &#8212; pyro 4.3.0.post10+g1649759e documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=fe4d1ddf"></script>
+    <script src="_static/documentation_options.js?v=72063487"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -565,6 +565,9 @@ document.write(`
 </section>
 <section id="module-pyro.advection.problems.smooth">
 <span id="pyro-advection-problems-smooth-module"></span><h2>pyro.advection.problems.smooth module<a class="headerlink" href="#module-pyro.advection.problems.smooth" title="Link to this heading">#</a></h2>
+<p>Initialize a Gaussian profile (shifted so the minimum value is 1.0).  This
+is smooth and the limiters should not kick in too much, so this can be used
+for testing convergence.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.advection.problems.smooth.finalize">
 <span class="sig-prename descclassname"><span class="pre">pyro.advection.problems.smooth.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection/problems/smooth.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection.problems.smooth.finalize" title="Link to this definition">#</a></dt>
@@ -580,6 +583,7 @@ document.write(`
 </section>
 <section id="module-pyro.advection.problems.test">
 <span id="pyro-advection-problems-test-module"></span><h2>pyro.advection.problems.test module<a class="headerlink" href="#module-pyro.advection.problems.test" title="Link to this heading">#</a></h2>
+<p>A problem setup for the unit testing.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.advection.problems.test.finalize">
 <span class="sig-prename descclassname"><span class="pre">pyro.advection.problems.test.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection/problems/test.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection.problems.test.finalize" title="Link to this definition">#</a></dt>
@@ -595,6 +599,9 @@ document.write(`
 </section>
 <section id="module-pyro.advection.problems.tophat">
 <span id="pyro-advection-problems-tophat-module"></span><h2>pyro.advection.problems.tophat module<a class="headerlink" href="#module-pyro.advection.problems.tophat" title="Link to this heading">#</a></h2>
+<p>Initialize a tophat profile—the value inside a small circular
+regions is set to 1.0 and is zero otherwise.  This will exercise the
+limiters significantly.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.advection.problems.tophat.finalize">
 <span class="sig-prename descclassname"><span class="pre">pyro.advection.problems.tophat.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection/problems/tophat.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection.problems.tophat.finalize" title="Link to this definition">#</a></dt>
