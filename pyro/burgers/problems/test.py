@@ -1,3 +1,6 @@
+"""Create a shock moving diagonally (from lower-left to upper-right)
+through the domain."""
+
 from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.test"

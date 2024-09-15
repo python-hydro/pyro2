@@ -1,3 +1,5 @@
+"""Initialize a circular "tophat" region that will drive a shock."""
+
 from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.tophat"
