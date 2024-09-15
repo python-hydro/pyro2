@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.compressible_rk.problems.kh &#8212; pyro 4.3.0.post7+g903285ee documentation</title>
+    <title>pyro.compressible_rk.problems.kh &#8212; pyro 4.3.0.post8+g7e2f49fc documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../../_static/documentation_options.js?v=22c05107"></script>
+    <script src="../../../../_static/documentation_options.js?v=f3c3fc77"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -451,7 +451,11 @@ document.write(`
                 <article class="bd-article">
                   
   <h1>Source code for pyro.compressible_rk.problems.kh</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="sd">&quot;&quot;&quot;A Kelvin-Helmholtz shear problem.  There are 2 shear layers, with the and an optional</span>
+<span class="sd">vertical bulk velocity.  This can be used to test the numerical dissipation in the solver.</span>
+<span class="sd">This setup is based on McNally et al. 2012.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">pyro.util</span> <span class="kn">import</span> <span class="n">msg</span>
 
@@ -523,7 +527,6 @@ document.write(`
     <span class="n">dens</span><span class="p">[</span><span class="n">idx4</span><span class="p">]</span> <span class="o">=</span> <span class="n">rho_1</span> <span class="o">-</span> <span class="n">rhom</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="mf">0.75</span> <span class="o">-</span> <span class="n">myg</span><span class="o">.</span><span class="n">y2d</span><span class="p">[</span><span class="n">idx4</span><span class="p">])</span><span class="o">/</span><span class="n">dy</span><span class="p">)</span>
     <span class="n">xmom</span><span class="p">[</span><span class="n">idx4</span><span class="p">]</span> <span class="o">=</span> <span class="n">u_1</span> <span class="o">-</span> <span class="n">vm</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="mf">0.75</span> <span class="o">-</span> <span class="n">myg</span><span class="o">.</span><span class="n">y2d</span><span class="p">[</span><span class="n">idx4</span><span class="p">])</span><span class="o">/</span><span class="n">dy</span><span class="p">)</span>
 
-    <span class="c1"># upper half</span>
     <span class="n">xmom</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">*=</span> <span class="n">dens</span>
     <span class="n">ymom</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">dens</span> <span class="o">*</span> <span class="p">(</span><span class="n">bulk_velocity</span> <span class="o">+</span> <span class="n">w0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">x2d</span><span class="p">))</span>
 

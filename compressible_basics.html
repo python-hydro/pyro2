@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Compressible hydrodynamics &#8212; pyro 4.3.0.post7+g903285ee documentation</title>
+    <title>Compressible hydrodynamics &#8212; pyro 4.3.0.post8+g7e2f49fc documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=22c05107"></script>
+    <script src="_static/documentation_options.js?v=f3c3fc77"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -724,7 +724,10 @@ accurate.</p>
 <h3>supported problems<a class="headerlink" href="#supported-problems" title="Link to this heading">#</a></h3>
 <section id="kh">
 <h4><code class="docutils literal notranslate"><span class="pre">kh</span></code><a class="headerlink" href="#kh" title="Link to this heading">#</a></h4>
-<p>parameters:</p>
+<p>A Kelvin-Helmholtz shear problem.  There are 2 shear layers, with the and an optional
+vertical bulk velocity.  This can be used to test the numerical dissipation in the solver.
+This setup is based on McNally et al. 2012.
+parameters:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>name</p></th>
@@ -753,6 +756,10 @@ accurate.</p>
 </section>
 <section id="quad">
 <h4><code class="docutils literal notranslate"><span class="pre">quad</span></code><a class="headerlink" href="#quad" title="Link to this heading">#</a></h4>
+<p>The quadrant problem from Shulz-Rinne et al. 1993; Lax and Lui 1998.
+Four different states are initialized in the quadrants of the domain, driving
+shocks and other hydrodynamic waves at the interfaces.  This can be used to
+test the symmetry of the solver.</p>
 <p>parameters:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -821,9 +828,17 @@ accurate.</p>
 </section>
 <section id="advect">
 <h4><code class="docutils literal notranslate"><span class="pre">advect</span></code><a class="headerlink" href="#advect" title="Link to this heading">#</a></h4>
+<p>A simple advection test.  A density perturbation is set with a
+constant pressure in the domain and a velocity field is set to advect
+the profile across the domain.  This is useful for testing
+convergence.</p>
 </section>
 <section id="acoustic-pulse">
 <h4><code class="docutils literal notranslate"><span class="pre">acoustic_pulse</span></code><a class="headerlink" href="#acoustic-pulse" title="Link to this heading">#</a></h4>
+<p>The acoustic pulse problem described in McCorquodale &amp; Colella
+2011.  This uses a uniform background and a small pressure
+perturbation that drives a low Mach number soundwave.  This problem is
+useful for testing convergence of a compressible solver.</p>
 <p>parameters:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -844,7 +859,9 @@ accurate.</p>
 </section>
 <section id="sod">
 <h4><code class="docutils literal notranslate"><span class="pre">sod</span></code><a class="headerlink" href="#sod" title="Link to this heading">#</a></h4>
-<p>parameters:</p>
+<p>A general shock tube problem for comparing the solver to an exact
+Riemann solution.
+parameters:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>name</p></th>
@@ -879,10 +896,14 @@ accurate.</p>
 </section>
 <section id="logo">
 <h4><code class="docutils literal notranslate"><span class="pre">logo</span></code><a class="headerlink" href="#logo" title="Link to this heading">#</a></h4>
+<p>Generate the pyro logo!  The word “pyro” is written in the center
+of the domain and perturbations are placed in the 4 corners to drive
+converging shocks inward to scramble the logo.</p>
 </section>
 <section id="rt">
 <h4><code class="docutils literal notranslate"><span class="pre">rt</span></code><a class="headerlink" href="#rt" title="Link to this heading">#</a></h4>
-<p>parameters:</p>
+<p>A single-mode Rayleigh-Taylor instability.
+parameters:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>name</p></th>
@@ -911,7 +932,10 @@ accurate.</p>
 </section>
 <section id="bubble">
 <h4><code class="docutils literal notranslate"><span class="pre">bubble</span></code><a class="headerlink" href="#bubble" title="Link to this heading">#</a></h4>
-<p>parameters:</p>
+<p>A buoyant perturbation (bubble) is placed in an isothermal
+hydrostatic atmosphere (plane-parallel).  It will rise and deform (due
+to shear)
+parameters:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>name</p></th>
@@ -946,10 +970,12 @@ accurate.</p>
 </section>
 <section id="test">
 <h4><code class="docutils literal notranslate"><span class="pre">test</span></code><a class="headerlink" href="#test" title="Link to this heading">#</a></h4>
+<p>A setup intended for unit testing.</p>
 </section>
 <section id="sedov">
 <h4><code class="docutils literal notranslate"><span class="pre">sedov</span></code><a class="headerlink" href="#sedov" title="Link to this heading">#</a></h4>
-<p>parameters:</p>
+<p>The classic Sedov problem.
+parameters:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>name</p></th>
@@ -969,7 +995,10 @@ accurate.</p>
 </section>
 <section id="hse">
 <h4><code class="docutils literal notranslate"><span class="pre">hse</span></code><a class="headerlink" href="#hse" title="Link to this heading">#</a></h4>
-<p>parameters:</p>
+<p>Initialize an isothermal hydrostatic atmosphere.  It should remain
+static.  This is a test of our treatment of the gravitational source
+term.
+parameters:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>name</p></th>
@@ -989,7 +1018,9 @@ accurate.</p>
 </section>
 <section id="ramp">
 <h4><code class="docutils literal notranslate"><span class="pre">ramp</span></code><a class="headerlink" href="#ramp" title="Link to this heading">#</a></h4>
-<p>parameters:</p>
+<p>A shock hitting a ramp at an oblique angle.  This is based on
+Woodward &amp; Colella 1984.
+parameters:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>name</p></th>
@@ -1027,7 +1058,11 @@ accurate.</p>
 </section>
 <section id="gresho">
 <h4><code class="docutils literal notranslate"><span class="pre">gresho</span></code><a class="headerlink" href="#gresho" title="Link to this heading">#</a></h4>
-<p>parameters:</p>
+<p>The Gresho vortex problem sets up a toroidal velocity field that is
+balanced by a radial pressure gradient.  This is in equilibrium and
+the state should remain unchanged in time.  This version of the problem
+is based on Miczek, Roepke, and Edelmann 2014.
+parameters:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>name</p></th>
@@ -1053,7 +1088,7 @@ accurate.</p>
 </section>
 <section id="rt2">
 <h4><code class="docutils literal notranslate"><span class="pre">rt2</span></code><a class="headerlink" href="#rt2" title="Link to this heading">#</a></h4>
-<p>A RT problem with two distinct modes: short wave length on the
+<p>A RT problem with two distinct modes: short wavelength on the
 left and long wavelength on the right.  This allows one to see
 how the growth rate depends on wavenumber.</p>
 <p>parameters:</p>

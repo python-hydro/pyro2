@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyro.compressible_rk.problems package &#8212; pyro 4.3.0.post7+g903285ee documentation</title>
+    <title>pyro.compressible_rk.problems package &#8212; pyro 4.3.0.post8+g7e2f49fc documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=22c05107"></script>
+    <script src="_static/documentation_options.js?v=f3c3fc77"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -620,6 +620,10 @@ document.write(`
 </section>
 <section id="module-pyro.compressible_rk.problems.acoustic_pulse">
 <span id="pyro-compressible-rk-problems-acoustic-pulse-module"></span><h2>pyro.compressible_rk.problems.acoustic_pulse module<a class="headerlink" href="#module-pyro.compressible_rk.problems.acoustic_pulse" title="Link to this heading">#</a></h2>
+<p>The acoustic pulse problem described in McCorquodale &amp; Colella
+2011.  This uses a uniform background and a small pressure
+perturbation that drives a low Mach number soundwave.  This problem is
+useful for testing convergence of a compressible solver.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.compressible_rk.problems.acoustic_pulse.finalize">
 <span class="sig-prename descclassname"><span class="pre">pyro.compressible_rk.problems.acoustic_pulse.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_rk/problems/acoustic_pulse.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_rk.problems.acoustic_pulse.finalize" title="Link to this definition">#</a></dt>
@@ -630,12 +634,16 @@ document.write(`
 <dt class="sig sig-object py" id="pyro.compressible_rk.problems.acoustic_pulse.init_data">
 <span class="sig-prename descclassname"><span class="pre">pyro.compressible_rk.problems.acoustic_pulse.</span></span><span class="sig-name descname"><span class="pre">init_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">myd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_rk/problems/acoustic_pulse.html#init_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_rk.problems.acoustic_pulse.init_data" title="Link to this definition">#</a></dt>
 <dd><p>initialize the acoustic_pulse problem.  This comes from
-McCourquodale &amp; Coella 2011</p>
+McCorquodale &amp; Coella 2011</p>
 </dd></dl>
 
 </section>
 <section id="module-pyro.compressible_rk.problems.advect">
 <span id="pyro-compressible-rk-problems-advect-module"></span><h2>pyro.compressible_rk.problems.advect module<a class="headerlink" href="#module-pyro.compressible_rk.problems.advect" title="Link to this heading">#</a></h2>
+<p>A simple advection test.  A density perturbation is set with a
+constant pressure in the domain and a velocity field is set to advect
+the profile across the domain.  This is useful for testing
+convergence.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.compressible_rk.problems.advect.finalize">
 <span class="sig-prename descclassname"><span class="pre">pyro.compressible_rk.problems.advect.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_rk/problems/advect.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_rk.problems.advect.finalize" title="Link to this definition">#</a></dt>
@@ -651,6 +659,9 @@ McCourquodale &amp; Coella 2011</p>
 </section>
 <section id="module-pyro.compressible_rk.problems.bubble">
 <span id="pyro-compressible-rk-problems-bubble-module"></span><h2>pyro.compressible_rk.problems.bubble module<a class="headerlink" href="#module-pyro.compressible_rk.problems.bubble" title="Link to this heading">#</a></h2>
+<p>A buoyant perturbation (bubble) is placed in an isothermal
+hydrostatic atmosphere (plane-parallel).  It will rise and deform (due
+to shear)</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.compressible_rk.problems.bubble.finalize">
 <span class="sig-prename descclassname"><span class="pre">pyro.compressible_rk.problems.bubble.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_rk/problems/bubble.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_rk.problems.bubble.finalize" title="Link to this definition">#</a></dt>
@@ -666,6 +677,10 @@ McCourquodale &amp; Coella 2011</p>
 </section>
 <section id="module-pyro.compressible_rk.problems.gresho">
 <span id="pyro-compressible-rk-problems-gresho-module"></span><h2>pyro.compressible_rk.problems.gresho module<a class="headerlink" href="#module-pyro.compressible_rk.problems.gresho" title="Link to this heading">#</a></h2>
+<p>The Gresho vortex problem sets up a toroidal velocity field that is
+balanced by a radial pressure gradient.  This is in equilibrium and
+the state should remain unchanged in time.  This version of the problem
+is based on Miczek, Roepke, and Edelmann 2014.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.compressible_rk.problems.gresho.finalize">
 <span class="sig-prename descclassname"><span class="pre">pyro.compressible_rk.problems.gresho.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_rk/problems/gresho.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_rk.problems.gresho.finalize" title="Link to this definition">#</a></dt>
@@ -681,6 +696,9 @@ McCourquodale &amp; Coella 2011</p>
 </section>
 <section id="module-pyro.compressible_rk.problems.hse">
 <span id="pyro-compressible-rk-problems-hse-module"></span><h2>pyro.compressible_rk.problems.hse module<a class="headerlink" href="#module-pyro.compressible_rk.problems.hse" title="Link to this heading">#</a></h2>
+<p>Initialize an isothermal hydrostatic atmosphere.  It should remain
+static.  This is a test of our treatment of the gravitational source
+term.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.compressible_rk.problems.hse.finalize">
 <span class="sig-prename descclassname"><span class="pre">pyro.compressible_rk.problems.hse.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_rk/problems/hse.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_rk.problems.hse.finalize" title="Link to this definition">#</a></dt>
@@ -696,6 +714,9 @@ McCourquodale &amp; Coella 2011</p>
 </section>
 <section id="module-pyro.compressible_rk.problems.kh">
 <span id="pyro-compressible-rk-problems-kh-module"></span><h2>pyro.compressible_rk.problems.kh module<a class="headerlink" href="#module-pyro.compressible_rk.problems.kh" title="Link to this heading">#</a></h2>
+<p>A Kelvin-Helmholtz shear problem.  There are 2 shear layers, with the and an optional
+vertical bulk velocity.  This can be used to test the numerical dissipation in the solver.
+This setup is based on McNally et al. 2012.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.compressible_rk.problems.kh.finalize">
 <span class="sig-prename descclassname"><span class="pre">pyro.compressible_rk.problems.kh.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_rk/problems/kh.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_rk.problems.kh.finalize" title="Link to this definition">#</a></dt>
@@ -711,6 +732,9 @@ McCourquodale &amp; Coella 2011</p>
 </section>
 <section id="module-pyro.compressible_rk.problems.logo">
 <span id="pyro-compressible-rk-problems-logo-module"></span><h2>pyro.compressible_rk.problems.logo module<a class="headerlink" href="#module-pyro.compressible_rk.problems.logo" title="Link to this heading">#</a></h2>
+<p>Generate the pyro logo!  The word “pyro” is written in the center
+of the domain and perturbations are placed in the 4 corners to drive
+converging shocks inward to scramble the logo.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.compressible_rk.problems.logo.finalize">
 <span class="sig-prename descclassname"><span class="pre">pyro.compressible_rk.problems.logo.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_rk/problems/logo.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_rk.problems.logo.finalize" title="Link to this definition">#</a></dt>
@@ -726,6 +750,10 @@ McCourquodale &amp; Coella 2011</p>
 </section>
 <section id="module-pyro.compressible_rk.problems.quad">
 <span id="pyro-compressible-rk-problems-quad-module"></span><h2>pyro.compressible_rk.problems.quad module<a class="headerlink" href="#module-pyro.compressible_rk.problems.quad" title="Link to this heading">#</a></h2>
+<p>The quadrant problem from Shulz-Rinne et al. 1993; Lax and Lui 1998.
+Four different states are initialized in the quadrants of the domain, driving
+shocks and other hydrodynamic waves at the interfaces.  This can be used to
+test the symmetry of the solver.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.compressible_rk.problems.quad.finalize">
 <span class="sig-prename descclassname"><span class="pre">pyro.compressible_rk.problems.quad.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_rk/problems/quad.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_rk.problems.quad.finalize" title="Link to this definition">#</a></dt>
@@ -741,6 +769,8 @@ McCourquodale &amp; Coella 2011</p>
 </section>
 <section id="module-pyro.compressible_rk.problems.ramp">
 <span id="pyro-compressible-rk-problems-ramp-module"></span><h2>pyro.compressible_rk.problems.ramp module<a class="headerlink" href="#module-pyro.compressible_rk.problems.ramp" title="Link to this heading">#</a></h2>
+<p>A shock hitting a ramp at an oblique angle.  This is based on
+Woodward &amp; Colella 1984.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.compressible_rk.problems.ramp.finalize">
 <span class="sig-prename descclassname"><span class="pre">pyro.compressible_rk.problems.ramp.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_rk/problems/ramp.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_rk.problems.ramp.finalize" title="Link to this definition">#</a></dt>
@@ -756,6 +786,7 @@ McCourquodale &amp; Coella 2011</p>
 </section>
 <section id="module-pyro.compressible_rk.problems.rt">
 <span id="pyro-compressible-rk-problems-rt-module"></span><h2>pyro.compressible_rk.problems.rt module<a class="headerlink" href="#module-pyro.compressible_rk.problems.rt" title="Link to this heading">#</a></h2>
+<p>A single-mode Rayleigh-Taylor instability.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.compressible_rk.problems.rt.finalize">
 <span class="sig-prename descclassname"><span class="pre">pyro.compressible_rk.problems.rt.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_rk/problems/rt.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_rk.problems.rt.finalize" title="Link to this definition">#</a></dt>
@@ -771,7 +802,7 @@ McCourquodale &amp; Coella 2011</p>
 </section>
 <section id="module-pyro.compressible_rk.problems.rt2">
 <span id="pyro-compressible-rk-problems-rt2-module"></span><h2>pyro.compressible_rk.problems.rt2 module<a class="headerlink" href="#module-pyro.compressible_rk.problems.rt2" title="Link to this heading">#</a></h2>
-<p>A RT problem with two distinct modes: short wave length on the
+<p>A RT problem with two distinct modes: short wavelength on the
 left and long wavelength on the right.  This allows one to see
 how the growth rate depends on wavenumber.</p>
 <dl class="py function">
@@ -789,6 +820,7 @@ how the growth rate depends on wavenumber.</p>
 </section>
 <section id="module-pyro.compressible_rk.problems.sedov">
 <span id="pyro-compressible-rk-problems-sedov-module"></span><h2>pyro.compressible_rk.problems.sedov module<a class="headerlink" href="#module-pyro.compressible_rk.problems.sedov" title="Link to this heading">#</a></h2>
+<p>The classic Sedov problem.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.compressible_rk.problems.sedov.finalize">
 <span class="sig-prename descclassname"><span class="pre">pyro.compressible_rk.problems.sedov.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_rk/problems/sedov.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_rk.problems.sedov.finalize" title="Link to this definition">#</a></dt>
@@ -804,6 +836,8 @@ how the growth rate depends on wavenumber.</p>
 </section>
 <section id="module-pyro.compressible_rk.problems.sod">
 <span id="pyro-compressible-rk-problems-sod-module"></span><h2>pyro.compressible_rk.problems.sod module<a class="headerlink" href="#module-pyro.compressible_rk.problems.sod" title="Link to this heading">#</a></h2>
+<p>A general shock tube problem for comparing the solver to an exact
+Riemann solution.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.compressible_rk.problems.sod.finalize">
 <span class="sig-prename descclassname"><span class="pre">pyro.compressible_rk.problems.sod.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_rk/problems/sod.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_rk.problems.sod.finalize" title="Link to this definition">#</a></dt>
@@ -819,6 +853,7 @@ how the growth rate depends on wavenumber.</p>
 </section>
 <section id="module-pyro.compressible_rk.problems.test">
 <span id="pyro-compressible-rk-problems-test-module"></span><h2>pyro.compressible_rk.problems.test module<a class="headerlink" href="#module-pyro.compressible_rk.problems.test" title="Link to this heading">#</a></h2>
+<p>A setup intended for unit testing.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.compressible_rk.problems.test.finalize">
 <span class="sig-prename descclassname"><span class="pre">pyro.compressible_rk.problems.test.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_rk/problems/test.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_rk.problems.test.finalize" title="Link to this definition">#</a></dt>

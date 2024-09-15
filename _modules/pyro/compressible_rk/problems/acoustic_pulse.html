@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.compressible_rk.problems.acoustic_pulse &#8212; pyro 4.3.0.post7+g903285ee documentation</title>
+    <title>pyro.compressible_rk.problems.acoustic_pulse &#8212; pyro 4.3.0.post8+g7e2f49fc documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../../_static/documentation_options.js?v=22c05107"></script>
+    <script src="../../../../_static/documentation_options.js?v=f3c3fc77"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -451,7 +451,14 @@ document.write(`
                 <article class="bd-article">
                   
   <h1>Source code for pyro.compressible_rk.problems.acoustic_pulse</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="sd">&quot;&quot;&quot;The acoustic pulse problem described in McCorquodale &amp; Colella</span>
+<span class="sd">2011.  This uses a uniform background and a small pressure</span>
+<span class="sd">perturbation that drives a low Mach number soundwave.  This problem is</span>
+<span class="sd">useful for testing convergence of a compressible solver.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">pyro.util</span> <span class="kn">import</span> <span class="n">msg</span>
 
@@ -465,7 +472,7 @@ document.write(`
 <a class="viewcode-back" href="../../../../pyro.compressible_rk.problems.html#pyro.compressible_rk.problems.acoustic_pulse.init_data">[docs]</a>
 <span class="k">def</span> <span class="nf">init_data</span><span class="p">(</span><span class="n">myd</span><span class="p">,</span> <span class="n">rp</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;initialize the acoustic_pulse problem.  This comes from</span>
-<span class="sd">    McCourquodale &amp; Coella 2011&quot;&quot;&quot;</span>
+<span class="sd">    McCorquodale &amp; Coella 2011&quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;driver.verbose&quot;</span><span class="p">):</span>
         <span class="n">msg</span><span class="o">.</span><span class="n">bold</span><span class="p">(</span><span class="s2">&quot;initializing the acoustic pulse problem...&quot;</span><span class="p">)</span>
