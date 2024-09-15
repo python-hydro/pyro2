@@ -1,3 +1,6 @@
+"""A shock hitting a ramp at an oblique angle.  This is based on
+Woodward & Colella 1984."""
+
 import math
 
 import numpy as np

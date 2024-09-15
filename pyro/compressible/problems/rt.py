@@ -1,3 +1,5 @@
+"""A single-mode Rayleigh-Taylor instability."""
+
 import numpy as np
 
 from pyro.util import msg

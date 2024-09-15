@@ -1,3 +1,10 @@
+"""The acoustic pulse problem described in McCorquodale & Colella
+2011.  This uses a uniform background and a small pressure
+perturbation that drives a low Mach number soundwave.  This problem is
+useful for testing convergence of a compressible solver.
+
+"""
+
 import numpy as np
 
 from pyro.util import msg
@@ -10,7 +17,7 @@ PROBLEM_PARAMS = {"acoustic_pulse.rho0": 1.4,
 
 def init_data(myd, rp):
     """initialize the acoustic_pulse problem.  This comes from
-    McCourquodale & Coella 2011"""
+    McCorquodale & Coella 2011"""
 
     if rp.get_param("driver.verbose"):
         msg.bold("initializing the acoustic pulse problem...")

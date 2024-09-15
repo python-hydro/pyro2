@@ -1,3 +1,8 @@
+"""The Gresho vortex problem sets up a toroidal velocity field that is
+balanced by a radial pressure gradient.  This is in equilibrium and
+the state should remain unchanged in time.  This version of the problem
+is based on Miczek, Roepke, and Edelmann 2014."""
+
 import numpy as np
 
 from pyro.util import msg

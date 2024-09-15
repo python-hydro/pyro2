@@ -1,3 +1,7 @@
+"""A buoyant perturbation (bubble) is placed in an isothermal
+hydrostatic atmosphere (plane-parallel).  It will rise and deform (due
+to shear)"""
+
 import numpy as np
 
 from pyro.util import msg
