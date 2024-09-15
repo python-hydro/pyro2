@@ -1,4 +1,4 @@
-"""A RT problem with two distinct modes: short wave length on the
+"""A RT problem with two distinct modes: short wavelength on the
 left and long wavelength on the right.  This allows one to see
 how the growth rate depends on wavenumber.
 """

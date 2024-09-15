@@ -1,3 +1,6 @@
+"""A general shock tube problem for comparing the solver to an exact
+Riemann solution."""
+
 from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.sod.x"

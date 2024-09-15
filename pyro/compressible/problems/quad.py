@@ -1,3 +1,9 @@
+"""The quadrant problem from Shulz-Rinne et al. 1993; Lax and Lui 1998.
+Four different states are initialized in the quadrants of the domain, driving
+shocks and other hydrodynamic waves at the interfaces.  This can be used to
+test the symmetry of the solver.
+"""
+
 import numpy as np
 
 from pyro.util import msg

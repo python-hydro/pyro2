@@ -1,3 +1,7 @@
+"""A Kelvin-Helmholtz shear problem.  There are 2 shear layers, with the and an optional
+vertical bulk velocity.  This can be used to test the numerical dissipation in the solver.
+This setup is based on McNally et al. 2012."""
+
 import numpy as np
 
 from pyro.util import msg
@@ -68,7 +72,6 @@ def init_data(my_data, rp):
     dens[idx4] = rho_1 - rhom*np.exp((0.75 - myg.y2d[idx4])/dy)
     xmom[idx4] = u_1 - vm*np.exp((0.75 - myg.y2d[idx4])/dy)
 
-    # upper half
     xmom[:, :] *= dens
     ymom[:, :] = dens * (bulk_velocity + w0 * np.sin(4*np.pi*myg.x2d))
 

@@ -1,3 +1,7 @@
+"""Initialize an isothermal hydrostatic atmosphere.  It should remain
+static.  This is a test of our treatment of the gravitational source
+term."""
+
 import numpy as np
 
 from pyro.util import msg
