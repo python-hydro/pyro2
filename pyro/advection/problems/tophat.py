@@ -1,3 +1,9 @@
+"""Initialize a tophat profile---the value inside a small circular
+regions is set to 1.0 and is zero otherwise.  This will exercise the
+limiters significantly.
+
+"""
+
 from pyro.util import msg
 
 DEFAULT_INPUTS = "inputs.tophat"

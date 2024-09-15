@@ -1,3 +1,9 @@
+"""A circular profile with a rectangular slot cut out of it.  This is
+meant to be run with the velocity field that causes it to rotate about
+the center, to understand how well we preserve symmetry.
+
+"""
+
 import numpy as np
 
 from pyro.util import msg
