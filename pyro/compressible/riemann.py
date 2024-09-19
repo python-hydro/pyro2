@@ -594,6 +594,91 @@ def riemann_prim(idir, ng,
 
 
 @njit(cache=True)
+def estimate_wave_speed(rho_l, u_l, p_l, c_l,
+                        rho_r, u_r, p_r, c_r,
+                        gamma):
+
+    # Estimate the star quantities -- use one of three methods to
+    # do this -- the primitive variable Riemann solver, the two
+    # shock approximation, or the two rarefaction approximation.
+    # Pick the method based on the pressure states at the
+    # interface.
+
+    p_max = max(p_l, p_r)
+    p_min = min(p_l, p_r)
+
+    Q = p_max / p_min
+
+    rho_avg = 0.5 * (rho_l + rho_r)
+    c_avg = 0.5 * (c_l + c_r)
+
+    # primitive variable Riemann solver (Toro, 9.3)
+    factor = rho_avg * c_avg
+
+    pstar = 0.5 * (p_l + p_r) + 0.5 * (u_l - u_r) * factor
+    ustar = 0.5 * (u_l + u_r) + 0.5 * (p_l - p_r) / factor
+
+    if Q > 2 and (pstar < p_min or pstar > p_max):
+
+        # use a more accurate Riemann solver for the estimate here
+
+        if pstar < p_min:
+
+            # 2-rarefaction Riemann solver
+            z = (gamma - 1.0) / (2.0 * gamma)
+            p_lr = (p_l / p_r)**z
+
+            ustar = (p_lr * u_l / c_l + u_r / c_r +
+                     2.0 * (p_lr - 1.0) / (gamma - 1.0)) / \
+                     (p_lr / c_l + 1.0 / c_r)
+
+            pstar = 0.5 * (p_l * (1.0 + (gamma - 1.0) * (u_l - ustar) /
+                                  (2.0 * c_l))**(1.0 / z) +
+                           p_r * (1.0 + (gamma - 1.0) * (ustar - u_r) /
+                                  (2.0 * c_r))**(1.0 / z))
+
+        else:
+
+            # 2-shock Riemann solver
+            A_r = 2.0 / ((gamma + 1.0) * rho_r)
+            B_r = p_r * (gamma - 1.0) / (gamma + 1.0)
+
+            A_l = 2.0 / ((gamma + 1.0) * rho_l)
+            B_l = p_l * (gamma - 1.0) / (gamma + 1.0)
+
+            # guess of the pressure
+            p_guess = max(0.0, pstar)
+
+            g_l = np.sqrt(A_l / (p_guess + B_l))
+            g_r = np.sqrt(A_r / (p_guess + B_r))
+
+            pstar = (g_l * p_l + g_r * p_r - (u_r - u_l)) / (g_l + g_r)
+
+            ustar = 0.5 * (u_l + u_r) + \
+                        0.5 * ((pstar - p_r) * g_r - (pstar - p_l) * g_l)
+
+    # estimate the nonlinear wave speeds
+
+    if pstar <= p_l:
+        # rarefaction
+        S_l = u_l - c_l
+    else:
+        # shock
+        S_l = u_l - c_l * np.sqrt(1.0 + ((gamma + 1.0) / (2.0 * gamma)) *
+                                  (pstar / p_l - 1.0))
+
+    if pstar <= p_r:
+        # rarefaction
+        S_r = u_r + c_r
+    else:
+        # shock
+        S_r = u_r + c_r * np.sqrt(1.0 + ((gamma + 1.0) / (2.0 / gamma)) *
+                                  (pstar / p_r - 1.0))
+
+    return S_l, S_r
+
+
+@njit(cache=True)
 def riemann_hllc(idir, ng,
                  idens, ixmom, iymom, iener, irhoX, nspec,
                  lower_solid, upper_solid,  # pylint: disable=unused-argument
@@ -683,96 +768,8 @@ def riemann_hllc(idir, ng,
             c_l = max(smallc, np.sqrt(gamma * p_l / rho_l))
             c_r = max(smallc, np.sqrt(gamma * p_r / rho_r))
 
-            # Estimate the star quantities -- use one of three methods to
-            # do this -- the primitive variable Riemann solver, the two
-            # shock approximation, or the two rarefaction approximation.
-            # Pick the method based on the pressure states at the
-            # interface.
-
-            p_max = max(p_l, p_r)
-            p_min = min(p_l, p_r)
-
-            Q = p_max / p_min
-
-            rho_avg = 0.5 * (rho_l + rho_r)
-            c_avg = 0.5 * (c_l + c_r)
-
-            # primitive variable Riemann solver (Toro, 9.3)
-            factor = rho_avg * c_avg
-            # factor2 = rho_avg / c_avg
-
-            pstar = 0.5 * (p_l + p_r) + 0.5 * (un_l - un_r) * factor
-            ustar = 0.5 * (un_l + un_r) + 0.5 * (p_l - p_r) / factor
-
-            # rhostar_l = rho_l + (un_l - ustar) * factor2
-            # rhostar_r = rho_r + (ustar - un_r) * factor2
-
-            if Q > 2 and (pstar < p_min or pstar > p_max):
-
-                # use a more accurate Riemann solver for the estimate here
-
-                if pstar < p_min:
-
-                    # 2-rarefaction Riemann solver
-                    z = (gamma - 1.0) / (2.0 * gamma)
-                    p_lr = (p_l / p_r)**z
-
-                    ustar = (p_lr * un_l / c_l + un_r / c_r +
-                             2.0 * (p_lr - 1.0) / (gamma - 1.0)) / \
-                            (p_lr / c_l + 1.0 / c_r)
-
-                    pstar = 0.5 * (p_l * (1.0 + (gamma - 1.0) * (un_l - ustar) /
-                                          (2.0 * c_l))**(1.0 / z) +
-                                   p_r * (1.0 + (gamma - 1.0) * (ustar - un_r) /
-                                          (2.0 * c_r))**(1.0 / z))
-
-                    # rhostar_l = rho_l * (pstar / p_l)**(1.0 / gamma)
-                    # rhostar_r = rho_r * (pstar / p_r)**(1.0 / gamma)
-
-                else:
-
-                    # 2-shock Riemann solver
-                    A_r = 2.0 / ((gamma + 1.0) * rho_r)
-                    B_r = p_r * (gamma - 1.0) / (gamma + 1.0)
-
-                    A_l = 2.0 / ((gamma + 1.0) * rho_l)
-                    B_l = p_l * (gamma - 1.0) / (gamma + 1.0)
-
-                    # guess of the pressure
-                    p_guess = max(0.0, pstar)
-
-                    g_l = np.sqrt(A_l / (p_guess + B_l))
-                    g_r = np.sqrt(A_r / (p_guess + B_r))
-
-                    pstar = (g_l * p_l + g_r * p_r -
-                             (un_r - un_l)) / (g_l + g_r)
-
-                    ustar = 0.5 * (un_l + un_r) + \
-                        0.5 * ((pstar - p_r) * g_r - (pstar - p_l) * g_l)
-
-                    # rhostar_l = rho_l * (pstar / p_l + (gamma - 1.0) / (gamma + 1.0)) / \
-                    #     ((gamma - 1.0) / (gamma + 1.0) * (pstar / p_l) + 1.0)
-                    #
-                    # rhostar_r = rho_r * (pstar / p_r + (gamma - 1.0) / (gamma + 1.0)) / \
-                    #     ((gamma - 1.0) / (gamma + 1.0) * (pstar / p_r) + 1.0)
-
-            # estimate the nonlinear wave speeds
-
-            if pstar <= p_l:
-                # rarefaction
-                S_l = un_l - c_l
-            else:
-                # shock
-                S_l = un_l - c_l * np.sqrt(1.0 + ((gamma + 1.0) / (2.0 * gamma)) *
-                                           (pstar / p_l - 1.0))
-
-            if pstar <= p_r:
-                # rarefaction
-                S_r = un_r + c_r
-            else:
-                # shock
-                S_r = un_r + c_r * np.sqrt(1.0 + ((gamma + 1.0) / (2.0 / gamma)) *
-                                           (pstar / p_r - 1.0))
+            S_l, S_r = estimate_wave_speed(rho_l, un_l, p_l, c_l,
+                                           rho_r, un_r, p_r, c_r, gamma)
 
             #  We could just take S_c = u_star as the estimate for the
             #  contact speed, but we can actually do this more accurately
@@ -956,34 +953,8 @@ def riemann_hllc_lowspeed(idir, ng,
             c_l = max(smallc, np.sqrt(gamma * p_l / rho_l))
             c_r = max(smallc, np.sqrt(gamma * p_r / rho_r))
 
-            # Estimate the star quantities -- we'll just do the PVRS
-            # estimate here.
-
-            rho_avg = 0.5 * (rho_l + rho_r)
-            c_avg = 0.5 * (c_l + c_r)
-
-            # primitive variable Riemann solver (Toro, 9.3)
-            factor = rho_avg * c_avg
-
-            pstar = 0.5 * (p_l + p_r) + 0.5 * (un_l - un_r) * factor
-
-            # estimate the nonlinear wave speeds
-
-            if pstar <= p_l:
-                # rarefaction
-                S_l = un_l - c_l
-            else:
-                # shock
-                S_l = un_l - c_l * np.sqrt(1.0 + ((gamma + 1.0) / (2.0 * gamma)) *
-                                           (pstar / p_l - 1.0))
-
-            if pstar <= p_r:
-                # rarefaction
-                S_r = un_r + c_r
-            else:
-                # shock
-                S_r = un_r + c_r * np.sqrt(1.0 + ((gamma + 1.0) / (2.0 / gamma)) *
-                                           (pstar / p_r - 1.0))
+            S_l, S_r = estimate_wave_speed(rho_l, un_l, p_l, c_l,
+                                           rho_r, un_r, p_r, c_r, gamma)
 
             # We could just take S_c = u_star as the estimate for the
             # contact speed, but we can actually do this more accurately
@@ -1022,7 +993,6 @@ def riemann_hllc_lowspeed(idir, ng,
             cs_max = max(c_l, c_r)
             chi = min(1.0, max(vmag_l, vmag_r) / cs_max)
             phi = chi * (2.0 - chi)
-
             pstar_lr = 0.5 * (p_l + p_r) + \
                 0.5 * phi * (rho_l * (S_l - un_l) * (S_c - un_l) +
                              rho_r * (S_r - un_r) * (S_c - un_r))
