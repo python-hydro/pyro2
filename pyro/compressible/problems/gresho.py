@@ -11,7 +11,7 @@ DEFAULT_INPUTS = "inputs.gresho"
 
 PROBLEM_PARAMS = {"gresho.rho0": 1.0,  # density in the domain
                   "gresho.r": 0.2,  # radial location of peak velocity
-                  "gresho.p0": 59.5,  # ambient pressure in the domain
+                  "gresho.M": 0.1,  # Mach number
                   "gresho.t_r": 1.0}  # reference time (used for setting peak velocity)
 
 
@@ -36,12 +36,25 @@ def init_data(my_data, rp):
     gamma = rp.get_param("eos.gamma")
 
     rho0 = rp.get_param("gresho.rho0")
-    p0 = rp.get_param("gresho.p0")
+    M = rp.get_param("gresho.M")
 
     rr = rp.get_param("gresho.r")
     t_r = rp.get_param("gresho.t_r")
 
     q_r = 0.4 * np.pi * L_x / t_r
+
+    # pressure peaks at r = rr, and has the value
+    # p0 + 12.5 * rr**2
+    #
+    # Mach number is M = q |u_phi| / sqrt(gamma p / rho),
+    #
+    # so p0 is found as:
+    #
+    # p0 + 12.5 rr**2 = rho q**2 |u_phi|**2 / (gamma M**2)
+    #
+    # where u_phi peaks at 5 * rr
+
+    p0 = rho0 * q_r**2 * (5 * rr)**2 / (gamma * M**2)
 
     pres = myg.scratch_array()
     u_phi = myg.scratch_array()
