@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Convergence of the compressible solvers &#8212; pyro 4.3.0.post19+gdfe5d1de documentation</title>
+    <title>Convergence of the compressible solvers &#8212; pyro 4.3.0.post20+gc07f6a4a documentation</title>
   
   
   
@@ -40,7 +40,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=d5d497d4"></script>
+    <script src="_static/documentation_options.js?v=c820cf9b"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -582,7 +582,7 @@ document.write(`
 
 <span class="k">for</span> <span class="n">N</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">256</span><span class="p">]:</span>
     <span class="n">dt</span> <span class="o">=</span> <span class="n">timestep</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;driver.fix_dt&quot;</span><span class="p">:</span> <span class="n">dt</span><span class="p">,</span> <span class="s2">&quot;mesh.nx&quot;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span> <span class="s2">&quot;mesh.ny&quot;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span> <span class="s2">&quot;driver.verbose&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;driver.fix_dt&quot;</span><span class="p">:</span> <span class="n">dt</span><span class="p">,</span> <span class="s2">&quot;mesh.nx&quot;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span> <span class="s2">&quot;mesh.ny&quot;</span><span class="p">:</span> <span class="n">N</span><span class="p">}</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">Pyro</span><span class="p">(</span><span class="s2">&quot;compressible&quot;</span><span class="p">)</span>
     <span class="n">p</span><span class="o">.</span><span class="n">initialize_problem</span><span class="p">(</span><span class="n">problem_name</span><span class="o">=</span><span class="s2">&quot;acoustic_pulse&quot;</span><span class="p">,</span> <span class="n">inputs_dict</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
     <span class="n">p</span><span class="o">.</span><span class="n">run_sim</span><span class="p">()</span>
@@ -635,7 +635,7 @@ document.write(`
 
 <span class="k">for</span> <span class="n">N</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">256</span><span class="p">]:</span>
     <span class="n">dt</span> <span class="o">=</span> <span class="n">timestep</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;driver.fix_dt&quot;</span><span class="p">:</span> <span class="n">dt</span><span class="p">,</span> <span class="s2">&quot;mesh.nx&quot;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span> <span class="s2">&quot;mesh.ny&quot;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span> <span class="s2">&quot;driver.verbose&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;driver.fix_dt&quot;</span><span class="p">:</span> <span class="n">dt</span><span class="p">,</span> <span class="s2">&quot;mesh.nx&quot;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span> <span class="s2">&quot;mesh.ny&quot;</span><span class="p">:</span> <span class="n">N</span><span class="p">}</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">Pyro</span><span class="p">(</span><span class="s2">&quot;compressible_fv4&quot;</span><span class="p">)</span>
     <span class="n">p</span><span class="o">.</span><span class="n">initialize_problem</span><span class="p">(</span><span class="n">problem_name</span><span class="o">=</span><span class="s2">&quot;acoustic_pulse&quot;</span><span class="p">,</span> <span class="n">inputs_dict</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
     <span class="n">p</span><span class="o">.</span><span class="n">run_sim</span><span class="p">()</span>

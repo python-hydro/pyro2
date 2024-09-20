@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Comparing the Compressible Solvers &#8212; pyro 4.3.0.post19+gdfe5d1de documentation</title>
+    <title>Comparing the Compressible Solvers &#8212; pyro 4.3.0.post20+gc07f6a4a documentation</title>
   
   
   
@@ -40,7 +40,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=d5d497d4"></script>
+    <script src="_static/documentation_options.js?v=c820cf9b"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -564,13 +564,13 @@ document.write(`
 <section id="Rayleigh-Taylor">
 <h2>Rayleigh-Taylor<a class="headerlink" href="#Rayleigh-Taylor" title="Link to this heading">#</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">rt</span></code> setup initializes a single-mode Rayleigh-Taylor instability.</p>
-<p>To start, let’s just run with problem with the <code class="docutils literal notranslate"><span class="pre">compressible</span></code> solver and look at the default parameters with one change–we’ll disable I/O</p>
+<p>To start, let’s just run with problem with the <code class="docutils literal notranslate"><span class="pre">compressible</span></code> solver and look at the default parameters.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">Pyro</span><span class="p">(</span><span class="s2">&quot;compressible&quot;</span><span class="p">)</span>
-<span class="n">p</span><span class="o">.</span><span class="n">initialize_problem</span><span class="p">(</span><span class="s2">&quot;rt&quot;</span><span class="p">,</span> <span class="n">inputs_dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;io.do_io&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+<span class="n">p</span><span class="o">.</span><span class="n">initialize_problem</span><span class="p">(</span><span class="s2">&quot;rt&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -685,7 +685,7 @@ vis.store_images = 0
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;mesh.nx&quot;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span> <span class="s2">&quot;mesh.ny&quot;</span><span class="p">:</span> <span class="mi">96</span><span class="p">,</span> <span class="s2">&quot;io.do_io&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;mesh.nx&quot;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span> <span class="s2">&quot;mesh.ny&quot;</span><span class="p">:</span> <span class="mi">96</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -753,7 +753,7 @@ vis.store_images = 0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.colorbar.Colorbar at 0x7fdca6ea8710&gt;
+&lt;matplotlib.colorbar.Colorbar at 0x7ff18f8a0750&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -886,7 +886,7 @@ vis.store_images = 0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.colorbar.Colorbar at 0x7fdca70f2410&gt;
+&lt;matplotlib.colorbar.Colorbar at 0x7ff18f768190&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
