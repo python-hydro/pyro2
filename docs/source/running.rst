@@ -52,8 +52,7 @@ Pyro class
 ----------
 
 Alternatively, pyro can be run using the :func:`Pyro <pyro.pyro_sim.Pyro>` class. This provides
-an interface that enables simulations to be set up and run in a Jupyter notebook -- see
-``examples/examples.ipynb`` for an example notebook. A simulation can be set up and run
+an interface that enables simulations to be set up and run in a Jupyter notebook. A simulation can be set up and run
 by carrying out the following steps:
 
 * create a :func:`Pyro <pyro.pyro_sim.Pyro>` object, initializing it with a specific solver
@@ -67,7 +66,7 @@ Kelvin-Helmholtz problem ``kh``, we would do the following:
 
     from pyro import Pyro
     p = Pyro("compressible")
-    p.initialize_problem(problem_name="kh")
+    p.initialize_problem("kh")
     p.run_sim()
 
 This will use the default set of parameters for the problem specified
@@ -99,8 +98,7 @@ verbosity for the previous example, we would do:
 .. code-block:: python
 
     parameters = {"driver.verbose": 1}
-    p.initialize_problem(problem_name="kh",
-                         inputs_dict=parameters)
+    p.initialize_problem("kh", inputs_dict=parameters)
 
 It's possible to evolve the simulation forward timestep by timestep manually using
 the :func:`single_step <pyro.pyro_sim.Pyro.single_step>` function (rather than allowing
