@@ -27,7 +27,7 @@ yrboundary = periodic
 [gresho]
 r = 0.2
 rho0 = 1.0
-p0 = 59.5
+M = 0.1
 t_r = 1.0
 
 [compressible]
