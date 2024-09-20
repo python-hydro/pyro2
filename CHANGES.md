@@ -1,3 +1,23 @@
+# 4.4.0
+
+  * the gresho problem (compressible) now takes Mach number as input
+    instead of pressure (#287, #288)
+
+  * doc updates to reflect how we run with the Pyro class (#266, #276,
+    #284, #285) and other general docs cleaning (#265, #268, #270,
+    #271)
+
+  * pylint CI update (#283); python version bump in actions (#281)
+
+  * a new HLLC solver with corrections for low Mach number was added
+    (based on Minioshima & Miyoshi 2021) (#282)
+
+  * documenting and clean-ups of problem setups for each of the
+    solvers (adding docstrings that appear in the docs) (#272, #273,
+    #274, #275, #277, #279, #280)
+
+  * `viscous_burgers` was renamed `burgers_viscous` (#267, #278)
+
 # 4.3.0
 
   * it is now possible to define a problem setup in a Jupyter
