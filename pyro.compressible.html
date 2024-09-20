@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyro.compressible package &#8212; pyro 4.3.0.post17+gd058c7bb documentation</title>
+    <title>pyro.compressible package &#8212; pyro 4.3.0.post18+ga7532c48 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=f6dbf461"></script>
+    <script src="_static/documentation_options.js?v=d4f18843"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -558,9 +558,11 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.compressible.riemann">pyro.compressible.riemann module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible.riemann.consFlux"><code class="docutils literal notranslate"><span class="pre">consFlux()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible.riemann.estimate_wave_speed"><code class="docutils literal notranslate"><span class="pre">estimate_wave_speed()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible.riemann.riemann_cgf"><code class="docutils literal notranslate"><span class="pre">riemann_cgf()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible.riemann.riemann_flux"><code class="docutils literal notranslate"><span class="pre">riemann_flux()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible.riemann.riemann_hllc"><code class="docutils literal notranslate"><span class="pre">riemann_hllc()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible.riemann.riemann_hllc_lowspeed"><code class="docutils literal notranslate"><span class="pre">riemann_hllc_lowspeed()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible.riemann.riemann_prim"><code class="docutils literal notranslate"><span class="pre">riemann_prim()</span></code></a></li>
 </ul>
 </li>
@@ -986,6 +988,11 @@ and species partial densities in the conserved state vector.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="pyro.compressible.riemann.estimate_wave_speed">
+<span class="sig-prename descclassname"><span class="pre">pyro.compressible.riemann.</span></span><span class="sig-name descname"><span class="pre">estimate_wave_speed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible/riemann.html#estimate_wave_speed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible.riemann.estimate_wave_speed" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="pyro.compressible.riemann.riemann_cgf">
 <span class="sig-prename descclassname"><span class="pre">pyro.compressible.riemann.</span></span><span class="sig-name descname"><span class="pre">riemann_cgf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idens</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ixmom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iymom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iener</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">irhoX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nspec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_solid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_solid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U_r</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible/riemann.html#riemann_cgf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible.riemann.riemann_cgf" title="Link to this definition">#</a></dt>
 <dd><p>Solve riemann shock tube problem for a general equation of
@@ -1085,6 +1092,41 @@ variables</p>
 <dd><p>This is the HLLC Riemann solver.  The implementation follows
 directly out of Toro’s book.  Note: this does not handle the
 transonic rarefaction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>idir</strong><span class="classifier">int</span></dt><dd><p>Are we predicting to the edges in the x-direction (1) or y-direction (2)?</p>
+</dd>
+<dt><strong>ng</strong><span class="classifier">int</span></dt><dd><p>The number of ghost cells</p>
+</dd>
+<dt><strong>nspec</strong><span class="classifier">int</span></dt><dd><p>The number of species</p>
+</dd>
+<dt><strong>idens, ixmom, iymom, iener, irhoX</strong><span class="classifier">int</span></dt><dd><p>The indices of the density, x-momentum, y-momentum, internal energy density
+and species partial densities in the conserved state vector.</p>
+</dd>
+<dt><strong>lower_solid, upper_solid</strong><span class="classifier">int</span></dt><dd><p>Are we at lower or upper solid boundaries?</p>
+</dd>
+<dt><strong>gamma</strong><span class="classifier">float</span></dt><dd><p>Adiabatic index</p>
+</dd>
+<dt><strong>U_l, U_r</strong><span class="classifier">ndarray</span></dt><dd><p>Conserved state on the left and right cell edges.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>Conserved flux</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.compressible.riemann.riemann_hllc_lowspeed">
+<span class="sig-prename descclassname"><span class="pre">pyro.compressible.riemann.</span></span><span class="sig-name descname"><span class="pre">riemann_hllc_lowspeed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idens</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ixmom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iymom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iener</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">irhoX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nspec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_solid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_solid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U_r</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible/riemann.html#riemann_hllc_lowspeed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible.riemann.riemann_hllc_lowspeed" title="Link to this definition">#</a></dt>
+<dd><p>This is the HLLC Riemann solver based on Toro (2009) alternate formulation
+(Eqs. 10.43 and 10.44) and the low Mach number asymptotic fix of
+Minoshima &amp; Miyoshi (2021).  It is also based on the Quokka implementation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -1606,9 +1648,11 @@ variables</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.compressible.riemann">pyro.compressible.riemann module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible.riemann.consFlux"><code class="docutils literal notranslate"><span class="pre">consFlux()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible.riemann.estimate_wave_speed"><code class="docutils literal notranslate"><span class="pre">estimate_wave_speed()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible.riemann.riemann_cgf"><code class="docutils literal notranslate"><span class="pre">riemann_cgf()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible.riemann.riemann_flux"><code class="docutils literal notranslate"><span class="pre">riemann_flux()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible.riemann.riemann_hllc"><code class="docutils literal notranslate"><span class="pre">riemann_hllc()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible.riemann.riemann_hllc_lowspeed"><code class="docutils literal notranslate"><span class="pre">riemann_hllc_lowspeed()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible.riemann.riemann_prim"><code class="docutils literal notranslate"><span class="pre">riemann_prim()</span></code></a></li>
 </ul>
 </li>
