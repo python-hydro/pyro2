@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.compressible_sdc.problems.gresho &#8212; pyro 4.3.0.post21+g91bc1c86 documentation</title>
+    <title>pyro.compressible_sdc.problems.gresho &#8212; pyro 4.3.0.post22+g1a76bf00 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../../_static/documentation_options.js?v=d8f4e29a"></script>
+    <script src="../../../../_static/documentation_options.js?v=f1fc9fb4"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -464,7 +464,7 @@ document.write(`
 
 <span class="n">PROBLEM_PARAMS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;gresho.rho0&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># density in the domain</span>
                   <span class="s2">&quot;gresho.r&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>  <span class="c1"># radial location of peak velocity</span>
-                  <span class="s2">&quot;gresho.p0&quot;</span><span class="p">:</span> <span class="mf">59.5</span><span class="p">,</span>  <span class="c1"># ambient pressure in the domain</span>
+                  <span class="s2">&quot;gresho.M&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>  <span class="c1"># Mach number</span>
                   <span class="s2">&quot;gresho.t_r&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}</span>  <span class="c1"># reference time (used for setting peak velocity)</span>
 
 
@@ -491,12 +491,25 @@ document.write(`
     <span class="n">gamma</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;eos.gamma&quot;</span><span class="p">)</span>
 
     <span class="n">rho0</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;gresho.rho0&quot;</span><span class="p">)</span>
-    <span class="n">p0</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;gresho.p0&quot;</span><span class="p">)</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;gresho.M&quot;</span><span class="p">)</span>
 
     <span class="n">rr</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;gresho.r&quot;</span><span class="p">)</span>
     <span class="n">t_r</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;gresho.t_r&quot;</span><span class="p">)</span>
 
     <span class="n">q_r</span> <span class="o">=</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">L_x</span> <span class="o">/</span> <span class="n">t_r</span>
+
+    <span class="c1"># pressure peaks at r = rr, and has the value</span>
+    <span class="c1"># p0 + 12.5 * rr**2</span>
+    <span class="c1">#</span>
+    <span class="c1"># Mach number is M = q |u_phi| / sqrt(gamma p / rho),</span>
+    <span class="c1">#</span>
+    <span class="c1"># so p0 is found as:</span>
+    <span class="c1">#</span>
+    <span class="c1"># p0 + 12.5 rr**2 = rho q**2 |u_phi|**2 / (gamma M**2)</span>
+    <span class="c1">#</span>
+    <span class="c1"># where u_phi peaks at 5 * rr</span>
+
+    <span class="n">p0</span> <span class="o">=</span> <span class="n">rho0</span> <span class="o">*</span> <span class="n">q_r</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="n">rr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">M</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
     <span class="n">pres</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
     <span class="n">u_phi</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
