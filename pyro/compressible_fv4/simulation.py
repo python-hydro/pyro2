@@ -6,9 +6,11 @@ from pyro.mesh import fv, integration
 class Simulation(compressible_rk.Simulation):
 
     def __init__(self, solver_name, problem_name, problem_func, rp, *,
-                 problem_finalize_func=None, timers=None, data_class=fv.FV2d):
+                 problem_finalize_func=None, problem_source_func=None,
+                 timers=None, data_class=fv.FV2d):
         super().__init__(solver_name, problem_name, problem_func, rp,
                          problem_finalize_func=problem_finalize_func,
+                         problem_sourcE_func=problem_source_func,
                          timers=timers, data_class=data_class)
 
     def substep(self, myd):
