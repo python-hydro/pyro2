@@ -91,26 +91,42 @@ def prim_to_cons(q, gamma, ivars, myg):
     return U
 
 
-def get_external_sources(t, U, ivars, rp, myg):
+def get_external_sources(t, dt, U, ivars, rp, myg, *, U_old=None):
     """compute the external sources, including gravity"""
 
     _ = t  # maybe unused
 
-    U_src = myg.scratch_array(nvar=ivars.nvar)
+    S = myg.scratch_array(nvar=ivars.nvar)
 
     grav = rp.get_param("compressible.grav")
 
-    if myg.coord_type == 1:
-        # gravity points in the radial direction for spherical
-        U_src[:, :, ivars.ixmom] = U[:, :, ivars.idens] * grav
-        U_src[:, :, ivars.iener] = U[:, :, ivars.ixmom] * grav
+    if U_old is None:
+        # we are just computing the sources from the current state U
+
+        if myg.coord_type == 1:
+            # gravity points in the radial direction for spherical
+            S[:, :, ivars.ixmom] = U[:, :, ivars.idens] * grav
+            S[:, :, ivars.iener] = U[:, :, ivars.ixmom] * grav
+
+        else:
+            # gravity points in the vertical (y) direction for Cartesian
+            S[:, :, ivars.iymom] = U[:, :, ivars.idens] * grav
+            S[:, :, ivars.iener] = U[:, :, ivars.iymom] * grav
 
     else:
-        # gravity points in the vertical (y) direction for Cartesian
-        U_src[:, :, ivars.iymom] = U[:, :, ivars.idens] * grav
-        U_src[:, :, ivars.iener] = U[:, :, ivars.iymom] * grav
+        # we want to compute gravity using the time-updated momentum
+        # we assume that U is an approximation to U^{n+1}, which includes
+        # a full dt * S_old
 
-    return U_src
+        S[:, :, ivars.iymom] = U[:, :, ivars.idens] * grav
+        S_old_ymom = U_old[:, :, ivars.idens] * grav
+
+        # we want the corrected ymom that has a time-centered source
+        ymom_new = U[:, :, ivars.iymom] + 0.5 * dt * (S[:, :, ivars.iymom] - S_old_ymom)
+
+        S[:, :, ivars.iener] = ymom_new * grav
+
+    return S
 
 
 class Simulation(NullSimulation):
@@ -315,13 +331,9 @@ class Simulation(NullSimulation):
         # terms and the pressure gradient since we don't include
         # pressure in xmom and ymom fluxes
 
-        # For Cartesian2d (coord_type == 0):
-        # There is only gravity sources.
-
         if myg.coord_type == 1:
             xmom.v()[:, :] += 0.5*self.dt * \
-                ((dens.v() + U_old.v(n=self.ivars.idens))*grav +
-                 (ymom.v()**2 / dens.v() +
+                ((ymom.v()**2 / dens.v() +
                   U_old.v(n=self.ivars.iymom)**2 / U_old(n=self.ivars.idens)) / myg.x2d.v()) - \
                 self.dt * (qx.ip(1, n=self.ivars.ip) - qx.v(n=self.ivars.ip)) / myg.Lx.v()
 
@@ -330,11 +342,30 @@ class Simulation(NullSimulation):
                  U_old.v(n=self.ivars.ixmom) * U_old.v(n=self.ivars.iymom) / U_old.v(n=self.ivars.idens)) / myg.x2d.v() - \
                 self.dt * (qy.jp(1, n=self.ivars.ip) - qy.v(n=self.ivars.ip)) / myg.Ly.v()
 
-            ener.v()[:, :] += 0.5 * self.dt * (xmom.v() + U_old.v(n=self.ivars.ixmom)) * grav
+        # now the external sources (including gravity).  We are going
+        # to do a predictor-corrector here:
+        #
+        # * compute old sources using old state: S^n = S(U^n)
+        # * update state full dt using old sources: U^{n+1,*} += dt * S^n
+        # * compute new sources using this updated state: S^{n+1) = S(U^{n+1,*})
+        # * correct: U^{n+1} = U^{n+1,*} + dt/2 (S^{n+1} - S^n)
 
-        else:
-            ymom.v()[:, :] += 0.5 * self.dt * (dens.v() + U_old.v(n=self.ivars.idens)) * grav
-            ener.v()[:, :] += 0.5 * self.dt * (ymom.v() + U_old.v(n=self.ivars.iymom)) * grav
+        S_old = get_external_sources(self.cc_data.t, self.dt, U_old,
+                                     self.ivars, self.rp, myg)
+
+        for n in range(self.ivars.nvar):
+            var = self.cc_data.get_var_by_index(n)
+            var.v()[:, :] += self.dt * S_old.v(n=n)
+
+        # now get the new time source
+
+        S_new = get_external_sources(self.cc_data.t, self.dt, self.cc_data.data,
+                                     self.ivars, self.rp, myg, U_old=U_old)
+
+        # and correct
+        for n in range(self.ivars.nvar):
+            var = self.cc_data.get_var_by_index(n)
+            var.v()[:, :] += 0.5 * self.dt * (S_new.v(n=n) - S_old.v(n=n))
 
         if self.particles is not None:
             self.particles.update_particles(self.dt)

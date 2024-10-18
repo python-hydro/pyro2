@@ -293,7 +293,7 @@ def apply_source_terms(U_xl, U_xr, U_yl, U_yr,
     ymom_src = my_aux.get_var("ymom_src")
     E_src = my_aux.get_var("E_src")
 
-    U_src = comp.get_external_sources(my_data.t, my_data.data, ivars, rp, myg)
+    U_src = comp.get_external_sources(my_data.t, dt, my_data.data, ivars, rp, myg)
 
     dens_src[:, :] = U_src[:, :, ivars.idens]
     xmom_src[:, :] = U_src[:, :, ivars.ixmom]
