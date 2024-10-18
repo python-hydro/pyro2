@@ -321,7 +321,7 @@ class Simulation(NullSimulation):
             xmom.v()[:, :] += 0.5*self.dt * \
                 ((dens.v() + U_old[:, :, self.ivars.ixmom])*grav +
                  (ymom.v()**2 / dens.v() +
-                  U_old[:, :, self.ivars.iymom]**2 / U_old[:. :, self.ivars.idens]) / myg.x2d.v()) - \
+                  U_old[:, :, self.ivars.iymom]**2 / U_old[:, :, self.ivars.idens]) / myg.x2d.v()) - \
                 self.dt * (qx.ip(1, n=self.ivars.ip) - qx.v(n=self.ivars.ip)) / myg.Lx.v()
 
             ymom.v()[:, :] += 0.5*self.dt * \
