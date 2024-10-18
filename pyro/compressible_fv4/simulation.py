@@ -10,7 +10,7 @@ class Simulation(compressible_rk.Simulation):
                  timers=None, data_class=fv.FV2d):
         super().__init__(solver_name, problem_name, problem_func, rp,
                          problem_finalize_func=problem_finalize_func,
-                         problem_sourcE_func=problem_source_func,
+                         problem_source_func=problem_source_func,
                          timers=timers, data_class=data_class)
 
     def substep(self, myd):
