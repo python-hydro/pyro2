@@ -7,7 +7,7 @@ import numpy as np
 
 from pyro.util import msg
 
-DEFAULT_INPUTS = "inputs.sedov"
+DEFAULT_INPUTS = "inputs.heating"
 
 PROBLEM_PARAMS = {"heating.rho_ambient": 1.0,  # ambient density
                   "heating.p_ambient": 10.0,  # ambient pressure
@@ -38,23 +38,22 @@ def init_data(my_data, rp):
     ener[:, :] = rp.get_param("heating.p_ambient") / (gamma - 1.0)
 
 
-def source_terms(my_data, rp):
+def source_terms(myg, U, ivars, rp):
     """source terms to be added to the evolution"""
 
-    e_src = my_data.get_var("E_src")
+    S = myg.scratch_array(nvar=ivars.nvar)
 
-    grid = my_data.grid
+    xctr = 0.5 * (myg.xmin + myg.xmax)
+    yctr = 0.5 * (myg.ymin + myg.ymax)
 
-    xctr = 0.5 * (grid.xmin + grid.xmax)
-    yctr = 0.5 * (grid.ymin + grid.ymax)
-
-    dist = np.sqrt((my_data.grid.x2d - xctr)**2 +
-                   (my_data.grid.y2d - yctr)**2)
+    dist = np.sqrt((myg.x2d - xctr)**2 +
+                   (myg.y2d - yctr)**2)
 
     e_rate = rp.get_param("heating.e_rate")
     r_src = rp.get_param("heating.r_src")
 
-    e_src[:, :] = e_rate * np.exp(-(dist / r_src)**2)
+    S[:, :, ivars.iener] = U[:, :, ivars.idens] * e_rate * np.exp(-(dist / r_src)**2)
+    return S
 
 
 def finalize():

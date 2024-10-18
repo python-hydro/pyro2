@@ -91,7 +91,7 @@ def prim_to_cons(q, gamma, ivars, myg):
     return U
 
 
-def get_external_sources(t, dt, U, ivars, rp, myg, *, U_old=None):
+def get_external_sources(t, dt, U, ivars, rp, myg, *, U_old=None, problem_source=None):
     """compute the external sources, including gravity"""
 
     _ = t  # maybe unused
@@ -125,6 +125,11 @@ def get_external_sources(t, dt, U, ivars, rp, myg, *, U_old=None):
         ymom_new = U[:, :, ivars.iymom] + 0.5 * dt * (S[:, :, ivars.iymom] - S_old_ymom)
 
         S[:, :, ivars.iener] = ymom_new * grav
+
+    # now add the heating
+    if problem_source:
+        S_heating = problem_source(myg, U, ivars, rp)
+        S[...] += S_heating
 
     return S
 
@@ -350,7 +355,8 @@ class Simulation(NullSimulation):
         # * correct: U^{n+1} = U^{n+1,*} + dt/2 (S^{n+1} - S^n)
 
         S_old = get_external_sources(self.cc_data.t, self.dt, U_old,
-                                     self.ivars, self.rp, myg)
+                                     self.ivars, self.rp, myg,
+                                     problem_source=self.problem_source)
 
         for n in range(self.ivars.nvar):
             var = self.cc_data.get_var_by_index(n)
@@ -359,7 +365,8 @@ class Simulation(NullSimulation):
         # now get the new time source
 
         S_new = get_external_sources(self.cc_data.t, self.dt, self.cc_data.data,
-                                     self.ivars, self.rp, myg, U_old=U_old)
+                                     self.ivars, self.rp, myg, U_old=U_old,
+                                     problem_source=self.problem_source)
 
         # and correct
         for n in range(self.ivars.nvar):
