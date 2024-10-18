@@ -245,7 +245,6 @@ class Simulation(NullSimulation):
         ymom = self.cc_data.get_var("y-momentum")
         ener = self.cc_data.get_var("energy")
 
-        grav = self.rp.get_param("compressible.grav")
         gamma = self.rp.get_param("eos.gamma")
 
         myg = self.cc_data.grid
