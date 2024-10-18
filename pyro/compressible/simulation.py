@@ -319,7 +319,7 @@ class Simulation(NullSimulation):
 
         if myg.coord_type == 1:
             xmom.v()[:, :] += 0.5*self.dt * \
-                ((dens.v() + U_old[:, :, self.ivars.ixmom])*grav +
+                ((dens.v() + U_old[:, :, self.ivars.idens])*grav +
                  (ymom.v()**2 / dens.v() +
                   U_old[:, :, self.ivars.iymom]**2 / U_old[:, :, self.ivars.idens]) / myg.x2d.v()) - \
                 self.dt * (qx.ip(1, n=self.ivars.ip) - qx.v(n=self.ivars.ip)) / myg.Lx.v()
